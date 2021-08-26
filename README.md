@@ -2,6 +2,44 @@
 
 A simple dashboard for real-time Kubtest results
 
+## Packaging / Running under Docker
+
+Package this into a Docker image using the provided [Dockerfile](Dockerfile) with
+
+```
+docker build -t kubtest-dashboard .    
+```
+
+Run locally on port 3001 with
+
+```
+docker run -it -p 3001:80 kubeshop/kubtest-dashboard:latest      
+```
+
+## Deploying under Kubernetes
+
+Push to DockerHub
+
+```
+docker push kubeshop/kubtest-dashboard    
+```
+
+Deploy the included manifest to your cluster:
+
+```
+kubectl apply -f manifests/deployment.yaml
+```
+
+Access using port-forwarding :
+
+```
+kubectl port-forward service/kubtest-dashboard 8080:8001
+```
+
+(this example forwards on port 8080)
+
+## Building
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
 ## Available Scripts

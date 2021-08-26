@@ -50,22 +50,5 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 5
             failureThreshold: 1
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: kubtest-dashboard-ingress
-  namespace: kubtest
-spec:
-  ingressClassName: nginx
-  rules:
-    - http:
-        paths:
-          - backend:
-              service:
-                name: kubtest-dashboard
-                port:
-                  number: 8001
-            path: /
-            pathType: Prefix
+
 
