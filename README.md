@@ -7,7 +7,7 @@ A simple dashboard for real-time Kubtest results
 Package this into a Docker image using the provided [Dockerfile](Dockerfile) with
 
 ```
-docker build -t kubtest-dashboard .    
+docker build -t kubeshop/kubtest-dashboard .    
 ```
 
 Run locally on port 3001 with
