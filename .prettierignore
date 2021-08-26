@@ -1,0 +1,5 @@
+.idea
+.git
+build
+.husky
+node_modules
