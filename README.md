@@ -1,6 +1,30 @@
 # Kubtest Dashboard 
 
-A simple dashboard for real-time Kubtest results
+A simple read-only dashboard for real-time Kubtest results.
+
+The Kubtest Dashboard is deployed as a standalone web application in a cluster running Kubtest. It runs in 
+the browser and communicates with the Kubtest api-server via an Ingress controller (either provided or bundled):
+
+![img.png](docs/images/very-high-level-architecture.png)
+
+Available operations for the api-server are in its [OpenAPI Definition](https://github.com/kubeshop/kubtest/blob/main/api/v1/kubtest.yaml)
+
+## Development setup
+
+During development one can bypass the Ingress and interact with the api-server directly:
+
+- Install Kubtest in your cluster - see [Kubtest Installation](https://kubeshop.github.io/kubtest/installing/) 
+- Expose the api-server with 
+
+```shell  
+➜  ~ kubectl port-forward service/kubtest-api-server 9090:8080 --namespace kubtest
+Forwarding from 127.0.0.1:9090 -> 8080
+Forwarding from [::1]:9090 -> 8080
+```
+
+(here we're exposing the kubtest-api-server running in the kubtest namespace on port 9090 locally)
+
+![img.png](docs/images/dev-architecture.png)
 
 ## Packaging / Running under Docker
 
