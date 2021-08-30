@@ -2,8 +2,8 @@
 
 A simple read-only dashboard for real-time Kubtest results.
 
-The Kubtest Dashboard is deployed as a standalone web application in a cluster running Kubtest. It communicates
-with the Kubtest api-server via an Ingress controller (either provided or bundled):
+The Kubtest Dashboard is deployed as a standalone web application in a cluster running Kubtest. It runs in 
+the browser and communicates with the Kubtest api-server via an Ingress controller (either provided or bundled):
 
 ![img.png](docs/images/very-high-level-architecture.png)
 
