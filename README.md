@@ -7,6 +7,8 @@ with the Kubtest api-server via an Ingress controller (either provided or bundle
 
 ![img.png](docs/images/very-high-level-architecture.png)
 
+Available operations for the api-server are in its [OpenAPI Definition](https://github.com/kubeshop/kubtest/blob/main/api/v1/kubtest.yaml)
+
 ## Development setup
 
 During development one can bypass the Ingress and interact with the api-server directly:
