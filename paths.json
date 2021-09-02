@@ -14,6 +14,8 @@
       "@organisms/*": ["src/components/organisms/*"],
       "@molecules": ["src/components/molecules/"],
       "@molecules/*": ["src/components/molecules/*"],
+      "@services": ["src/services/"],
+      "@services/*": ["src/services/*"]
     }
   }
 }
