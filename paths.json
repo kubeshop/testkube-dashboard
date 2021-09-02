@@ -7,7 +7,8 @@
       "@src/*": ["src/*"],
       "@src": ["src/"],
       "@root/*": ["./*"],
-      "@root": ["./"]
+      "@atoms": ["src/components/atoms/"],
+      "@atoms/*": ["src/components/atoms/*"],
     }
   }
 }
