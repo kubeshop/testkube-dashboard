@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
+  extends: ['plugin:react/recommended', 'airbnb', 'prettier', 'react-app', 'react-app/jest'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {jsx: true},
@@ -61,7 +61,7 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 'off', // TODO warn because, we should really be using buttons.
     'jsx-a11y/no-noninteractive-element-interactions': 'off',
     'jsx-a11y/alt-text': 'off',
-    "space-in-brackets": 'off',
+    'space-in-brackets': 'off',
     'jsx-a11y/label-has-associated-control': [
       'warn',
       {
@@ -70,11 +70,14 @@ module.exports = {
         depth: 3,
       },
     ],
-    "no-implicit-coercion": ['error', {
-      "boolean": true,
-      "number": true,
-      "string": true
-    }]
+    'no-implicit-coercion': [
+      'error',
+      {
+        boolean: true,
+        number: true,
+        string: true,
+      },
+    ],
   },
   ignorePatterns: ['package.json', './node_modules', './dist', '**/dist/*.js'],
 };
