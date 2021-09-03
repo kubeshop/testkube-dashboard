@@ -1,4 +1,4 @@
-export const testEndpoint = 'http://localhost:3000/';
+export const testEndpoint = 'http://localhost:4000/executions';
 
 export const getAllTests = async () => {
   try {
