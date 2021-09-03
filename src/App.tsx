@@ -4,6 +4,7 @@ import {useQuery} from 'react-query';
 
 import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {getAllTests} from '@services/Tests';
+import {TestsContext} from '@context/testsContext';
 
 const MainTableStyles = styled.table`
   position: relative;
@@ -32,23 +33,28 @@ const StyledTestSummary = styled.tr`
 function App() {
   const {data, error, isFetching} = useQuery('tests', getAllTests);
 
+  const tests = {
+    data,
+  };
+
   return (
     <>
       {error && 'Something went wrong'}
       {isFetching && 'Loading...'}
-      {console.log(data)}
-      <PageHeader />
-      <MainTableStyles>
-        <StyledTestResults>
-          <TestResults />
-        </StyledTestResults>
-        <StyledTestFilter>
-          <TestsFilter />
-        </StyledTestFilter>
-        <StyledTestSummary>
-          <TestsSummary />
-        </StyledTestSummary>
-      </MainTableStyles>
+      <TestsContext.Provider value={tests.data}>
+        <PageHeader />
+        <MainTableStyles>
+          <StyledTestResults>
+            <TestResults />
+          </StyledTestResults>
+          <StyledTestFilter>
+            <TestsFilter />
+          </StyledTestFilter>
+          <StyledTestSummary>
+            <TestsSummary />
+          </StyledTestSummary>
+        </MainTableStyles>
+      </TestsContext.Provider>
     </>
   );
 }
