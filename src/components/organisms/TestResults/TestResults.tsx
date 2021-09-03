@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 
 import {ResultDatePicker, TestStatus} from '@molecules';
+
+import {TestsContext} from '@context/testsContext';
 
 const StyledTestResults = styled.section`
   display: flex;
@@ -24,20 +26,28 @@ const StyledTableCell = styled.td`
 `;
 
 const TestResults = () => {
+  const tests: any = useContext(TestsContext);
+
+  const getTotalTestsByType = (testType: string) => {
+    const filteredTests = tests?.ExecutionSummary?.filter((test: any) => test.status === testType).length;
+    // eslint-disable-next-line
+    return filteredTests && filteredTests + ' / ' + tests?.ExecutionSummary?.length;
+  };
+
   return (
     <StyledTestResults>
       <ResultDatePicker />
       <StyledTableCell>
-        <TestStatus testTitle="Passed" totalTests="8/10" />
+        <TestStatus testTitle="Passed" totalTests={getTotalTestsByType('success')} />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Failed" totalTests="8/10" />
+        <TestStatus testTitle="Failed" totalTests={getTotalTestsByType('failed')} />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Test Running" totalTests="4/10" />
+        <TestStatus testTitle="Test Running" totalTests={getTotalTestsByType('running')} />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Total Tests Executed" totalTests="14" />
+        <TestStatus testTitle="Total Tests Executed" totalTests={tests && tests.ExecutionSummary.length} />
       </StyledTableCell>
     </StyledTestResults>
   );
