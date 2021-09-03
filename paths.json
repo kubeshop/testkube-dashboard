@@ -16,8 +16,12 @@
       "@molecules/*": ["src/components/molecules/*"],
       "@services": ["src/services/"],
       "@services/*": ["src/services/*"],
+      "@assets": ["src/assets/images/"],
+      "@assets/*": ["src/assets/images/*"],
       "@context": ["src/context/"],
       "@context/*": ["src/context/*"],
+      "@utils": ["src/utils/"],
+      "@utils/*": ["src/utils/*"]
     }
   }
 }
