@@ -14,6 +14,10 @@ const GlobalStyle = createGlobalStyle`
     td {
       border: 1px solid var(--color-gray-secondary);
     }
+
+    p {
+      margin-bottom: none;
+    }
   `;
 
 export default GlobalStyle;
