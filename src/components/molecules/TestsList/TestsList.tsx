@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import styled from 'styled-components';
 
 import {Typography, Image} from '@atoms';
 import RunningTestIcon from '@assets/testRunningIcon.svg';
 import FailedTestIcon from '@assets/testFailedIcon.svg';
 import SuccessTestIcon from '@assets/testSuccessIcon.svg';
+
+import {TestsContext} from '@context/testsContext';
+import {timeStampToDate} from '@utils/formatDate';
 
 interface ITestTypes {
   testStatus: 'running' | 'failed' | 'success';
@@ -55,21 +58,31 @@ const TestsList = () => {
   const [testTimeStamp, setTestTimeStamp] = useState<string>('Test TimeStamp');
   const [testStatus, setTestStatus] = useState<ITestTypes>({testStatus: 'success'});
 
+  const tests: any = useContext(TestsContext);
+
   return (
-    <ListItem>
-      <TestListInformation>
-        <Typography variant="secondary">{testName}</Typography>
-      </TestListInformation>
-      <TestListInformation>
-        <Typography variant="secondary">{testType}</Typography>
-      </TestListInformation>
-      <TestListInformation>
-        <Typography variant="secondary">{testTimeStamp}</Typography>
-      </TestListInformation>
-      <TestListInformation>
-        <RenderTestStatusSvgIcon testStatus={testStatus.testStatus} />
-      </TestListInformation>
-    </ListItem>
+    <>
+      {tests &&
+        tests.ExecutionSummary.map((test: any) => (
+          <ListItem>
+            <TestListInformation>
+              <Typography variant="secondary">{test['id']}</Typography>
+            </TestListInformation>
+            <TestListInformation>
+              <Typography variant="secondary">{test['script-type']}</Typography>
+            </TestListInformation>
+            <TestListInformation>
+              <Typography variant="secondary">
+                {timeStampToDate(test['start-time'])}
+                {timeStampToDate(test['start-time'])}
+              </Typography>
+            </TestListInformation>
+            <TestListInformation>
+              <RenderTestStatusSvgIcon testStatus={test.status} />
+            </TestListInformation>
+          </ListItem>
+        ))}
+    </>
   );
 };
 
