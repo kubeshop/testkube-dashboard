@@ -15,7 +15,9 @@
       "@molecules": ["src/components/molecules/"],
       "@molecules/*": ["src/components/molecules/*"],
       "@services": ["src/services/"],
-      "@services/*": ["src/services/*"]
+      "@services/*": ["src/services/*"],
+      "@assets": ["src/assets/"],
+      "@assets/*": ["src/assets/*"]
     }
   }
 }
