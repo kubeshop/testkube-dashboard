@@ -1,26 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Typography} from '@atoms';
+import {Typography, Image} from '@atoms';
+import MainLogo from '@assets/mainLogo.svg';
 
-const StyledMainTitle = styled.p`
+const StyledMainTitle = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  gap: 10px;
+  gap: var(--space-md);
   margin-left: var(--space-lg);
-`;
-
-const StyledHeadTitle = styled.p`
-  font-size: var(--font-size-xl);
-  text-transform: uppercase;
-  color: var(--color-light-primary);
 `;
 
 const PageTitle = () => {
   return (
     <StyledMainTitle>
-      <StyledHeadTitle>KubeTest</StyledHeadTitle>
+      <Image src={MainLogo} alt="Logo" type="svg" width={200} height={100} />
       <Typography variant="quaternary" color="secondary">
         Dashboard
       </Typography>
