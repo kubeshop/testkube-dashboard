@@ -48,6 +48,11 @@ const StyledButton = styled.button<IButton>`
       variant === 'selected' ? 'var(--color-dark-primary)' : 'var(--color-monokle-primary)'};
     color: ${({variant}) => (variant === 'selected' ? 'var(--color-monokle-primary) ' : 'var(--color-dark-primary)')};
   }
+
+  &:active {
+    color: var(--color-dark-primary);
+    background: var(--color-monokle-primary);
+  }
 `;
 
 const Button: React.FC<IButton> = ({children, variant = 'base', ...buttonProps}) => {
