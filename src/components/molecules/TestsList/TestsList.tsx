@@ -1,17 +1,10 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 
-import {Typography, Image} from '@atoms';
-import RunningTestIcon from '@assets/testRunningIcon.svg';
-import FailedTestIcon from '@assets/testFailedIcon.svg';
-import SuccessTestIcon from '@assets/testSuccessIcon.svg';
+import {Typography, RenderTestStatusSvgIcon} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
 import {timeStampToDate} from '@utils/formatDate';
-
-interface ITestTypes {
-  testStatus: 'running' | 'failed' | 'success';
-}
 
 const ListItem = styled.div`
   display: flex;
@@ -32,39 +25,19 @@ const TestListInformation = styled.div`
   margin: 10px;
 `;
 
-function RenderTestStatusSvgIcon({testStatus}: ITestTypes) {
-  return (
-    <Image
-      src={
-        testStatus === 'running'
-          ? RunningTestIcon
-          : testStatus === 'failed'
-          ? FailedTestIcon
-          : testStatus === 'success'
-          ? SuccessTestIcon
-          : ''
-      }
-      alt="testStatus"
-      type="svg"
-      width={20}
-      height={20}
-    />
-  );
-}
-
 const TestsList = () => {
-  const [testName, setTestName] = useState<string>('Test Name');
-  const [testType, setTestType] = useState<string>('Test Type');
-  const [testTimeStamp, setTestTimeStamp] = useState<string>('Test TimeStamp');
-  const [testStatus, setTestStatus] = useState<ITestTypes>({testStatus: 'success'});
-
   const tests: any = useContext(TestsContext);
+
+  const handleSelectedTest = (test: any) => {
+    tests?.setSelectedTest(test);
+  };
 
   return (
     <>
-      {tests &&
-        tests.ExecutionSummary.map((test: any) => (
-          <ListItem>
+      {/* {console.log('HELLO', tests)} */}
+      {tests.datas &&
+        tests?.datas?.map((test: any) => (
+          <ListItem onClick={() => handleSelectedTest(test.id)}>
             <TestListInformation>
               <Typography variant="secondary">{test['id']}</Typography>
             </TestListInformation>
@@ -72,13 +45,10 @@ const TestsList = () => {
               <Typography variant="secondary">{test['script-type']}</Typography>
             </TestListInformation>
             <TestListInformation>
-              <Typography variant="secondary">
-                {timeStampToDate(test['start-time'])}
-                {timeStampToDate(test['start-time'])}
-              </Typography>
+              <Typography variant="secondary">{timeStampToDate(test['end-time'])}</Typography>
             </TestListInformation>
             <TestListInformation>
-              <RenderTestStatusSvgIcon testStatus={test.status} />
+              <RenderTestStatusSvgIcon testStatus={test.status} width={20} height={20} />
             </TestListInformation>
           </ListItem>
         ))}
