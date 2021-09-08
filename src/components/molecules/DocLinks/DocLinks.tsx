@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Typography} from '@atoms';
+import {Image} from '@atoms';
+
+import docsIcon from '@assets/docs.svg';
+import githubIcon from '@assets/githubIcon.svg';
 
 const StyledDocHead = styled.div`
   display: flex;
@@ -11,23 +14,15 @@ const StyledDocHead = styled.div`
   margin-right: var(--space-lg);
 `;
 
-const StyledLink = styled.a`
-  text-decoration: none;
-`;
-
 const DocLinks = () => {
   return (
     <StyledDocHead>
-      <StyledLink href="https://github.com/kubeshop/kubtest" target="_blank">
-        <Typography variant="secondary" color="quinary">
-          Github
-        </Typography>
-      </StyledLink>
-      <StyledLink href="https://kubeshop.github.io/kubtest/" target="_blank">
-        <Typography variant="secondary" color="quinary">
-          Docs
-        </Typography>
-      </StyledLink>
+      <a href="https://kubeshop.github.io/kubtest/" target="_blank">
+        <Image src={docsIcon} alt="Docs" type="svg" width={30} height={30} />
+      </a>
+      <a href="https://github.com/kubeshop/kubtest" target="_blank">
+        <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} />
+      </a>
     </StyledDocHead>
   );
 };
