@@ -2,17 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import {DatePicker} from 'antd';
 
-import {Typography} from '@atoms';
+import {Typography, Button} from '@atoms';
+
+import {TestsContext} from '@context/testsContext';
 
 const StyledDatePicker = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: baseline;
   justify-content: left;
   gap: var(--space-md);
 `;
 
 const datePickerStyles = {
-  background: 'var(--color-dark-primary)',
   color: 'var(--color-light-primary)',
   'border-left': 'none',
   'border-top': 'none',
@@ -21,11 +22,20 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
+  const tests: any = React.useContext(TestsContext);
+
+  const handleDatePicker = (date: any, dateString: any) => {
+    tests.setSelectedTimeIntervalTests(dateString);
+  };
+
   return (
-    <StyledDatePicker>
-      <Typography variant="quaternary">Results for</Typography>
-      <DatePicker size="large" style={datePickerStyles} />
-    </StyledDatePicker>
+    <>
+      <StyledDatePicker>
+        <Typography variant="quaternary">Results for</Typography>
+        <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} />
+        <Button>Latest</Button>
+      </StyledDatePicker>
+    </>
   );
 };
 
