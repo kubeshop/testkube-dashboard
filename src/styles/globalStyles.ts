@@ -18,6 +18,29 @@ const GlobalStyle = createGlobalStyle`
     p {
       margin-bottom: none;
     }
+
+    .ant-picker-input > input {
+      color: var(--color-light-primary);
+    }
+
+    .ant-picker-panel-container {
+      background: var(--color-dark-primary);
+      color: var(--color-light-primary);
+    }
+
+    .ant-picker-header-view,
+    .ant-picker-cell-inner,
+    .ant-picker-header-super-next-btn,
+    .ant-picker-super-next-icon,
+    .ant-picker-super-prev-icon,
+    .ant-picker-today-btn {
+       color: var(--color-light-primary);
+    }
+
+    .ant-picker-content > thead > tr > th {
+      color: var(--color-light-primary);
+    }
+
   `;
 
 export default GlobalStyle;

@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import {Typography} from '@atoms';
 
@@ -7,15 +8,24 @@ interface ITestStatusProps {
   totalTests: string;
 }
 
+const StyledTestTitleResult = styled.div`
+  position: relative;
+  left: 50px;
+`;
+
 const TestStatus: React.FC<ITestStatusProps> = ({testTitle, totalTests}) => {
   return (
     <>
-      <Typography variant="secondary" color="tertiary">
-        {testTitle}
-      </Typography>
-      <Typography variant="quinary" color="quaternary">
-        {totalTests}
-      </Typography>
+      <StyledTestTitleResult>
+        <Typography variant="secondary" color="tertiary">
+          {testTitle}
+        </Typography>
+      </StyledTestTitleResult>
+      <StyledTestTitleResult>
+        <Typography variant="quinary" color="quaternary">
+          {totalTests}
+        </Typography>
+      </StyledTestTitleResult>
     </>
   );
 };

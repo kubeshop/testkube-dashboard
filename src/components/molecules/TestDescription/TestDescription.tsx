@@ -9,50 +9,21 @@ const StyledTestDescriptionContainer = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-`;
-
-const StyledTestDescriptionIcon = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   top: var(--space-md);
   left: var(--space-md);
 `;
 
-const StyledTestStatus = styled.div`
-  margin-left: var(--space-md);
-`;
-
-const StyledTestName = styled.div`
-  /* position: relative;
-  top: 20px;
-  left: 60px; */
-`;
-
-const StyledTestTimes = styled.div`
-  display: flex;
-
-  /* &:nth-child(1) {
-    margin-left: 20px;
-  } */
-`;
-
-const StyledEndedAt = styled.div``;
-
-const StyledDuration = styled.div`
-  margin-left: 20px;
+const StyledTestDescriptionIcon = styled.div`
+  position: relative;
+  top: -100px;
 `;
 
 const StyledTestDescription = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: baseline;
-  justify-content: center;
   position: relative;
-  top: 20px;
-  left: 85px;
+  margin-left: var(--space-md);
 `;
 
 const TestDescription = () => {
@@ -84,26 +55,33 @@ const TestDescription = () => {
         <StyledTestDescriptionContainer>
           <StyledTestDescriptionIcon>
             <RenderTestStatusSvgIcon testStatus={testDescription.status} width={50} height={50} />
-            <StyledTestStatus>
-              <Typography variant="secondary"> TEST {renderTestStatus(testDescription.status)}</Typography>
-            </StyledTestStatus>
           </StyledTestDescriptionIcon>
           <StyledTestDescription>
-            <StyledTestName>
-              <Typography variant="secondary"> Name</Typography>
-              <Typography variant="secondary">{testDescription['script-name']}</Typography>
-            </StyledTestName>
-
-            <StyledTestTimes>
-              <StyledEndedAt>
-                <Typography variant="secondary">Ended At</Typography>
-                <Typography variant="secondary">{timeStampToDate(testDescription['end-time'])}</Typography>
-              </StyledEndedAt>
-              <StyledDuration>
-                <Typography variant="secondary">Duration</Typography>
-                <Typography variant="secondary">{getDuration(testDescription['end-time'])}</Typography>
-              </StyledDuration>
-            </StyledTestTimes>
+            <Typography variant="secondary"> TEST {renderTestStatus(testDescription.status)}</Typography>
+            <div>
+              <Typography variant="secondary" font="bold">
+                Name
+              </Typography>
+              <Typography variant="secondary" style={{marginTop: '-15px'}}>
+                {testDescription['script-name']}
+              </Typography>
+            </div>
+            <div>
+              <Typography variant="secondary" font="bold">
+                Ended At
+              </Typography>
+              <Typography variant="secondary" style={{marginTop: '-15px'}}>
+                {timeStampToDate(testDescription['end-time'])}
+              </Typography>
+            </div>
+            <div>
+              <Typography variant="secondary" font="bold">
+                Duration
+              </Typography>
+              <Typography variant="secondary" style={{marginTop: '-15px'}}>
+                {getDuration(testDescription['end-time'])}
+              </Typography>
+            </div>
           </StyledTestDescription>
         </StyledTestDescriptionContainer>
       )}

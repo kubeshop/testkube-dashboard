@@ -55,6 +55,8 @@
   --space-xxl: calc(5.25 * var(--space-unit));
   --space-xxxl: calc(8.5 * var(--space-unit));
   --space-xxxxl: calc(13.75 * var(--space-unit));
+  --space-5xl: calc(18.75 * var(--space-unit));
+  --space-6xl: calc(24.75 * var(--space-unit));
 }
 
 @media screen and (min-width: 56em) {

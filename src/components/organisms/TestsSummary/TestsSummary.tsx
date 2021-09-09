@@ -12,6 +12,7 @@ const StyledTestSummaryContainer = styled.td`
 
   &:first-child {
     border-right: 1px solid var(--color-gray-secondary);
+    width: 35%;
   }
 `;
 

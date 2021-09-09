@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface ITypography extends React.HTMLAttributes<HTMLParagraphElement> {
   variant?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary';
   color?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary';
+  font?: 'bold' | 'light' | 'normal';
 }
 
 const StyledTypography = styled.p<ITypography>`
@@ -20,7 +21,14 @@ const StyledTypography = styled.p<ITypography>`
       : props.variant === 'quinary'
       ? 'var(--font-size-mid-4xl)'
       : 'var(--font-size-md)'};
-  font-weight: ${props => (props.variant === 'primary' ? 'var(--font-weight-bold)' : 'var(--font-weight-small)')};
+  font-weight: ${props =>
+    props.font === 'bold'
+      ? 'var(--font-weight-bold)'
+      : props.font === 'normal'
+      ? 'var(--font-weight-regular)'
+      : props.font === 'light'
+      ? 'var(--font-weight-small)'
+      : 'var(--font-weight-regular)'};
   color: ${props =>
     props.color === 'primary'
       ? 'var(--color-light-primary)'
@@ -34,12 +42,18 @@ const StyledTypography = styled.p<ITypography>`
       ? 'var(--color-monokle-primary)'
       : 'var(--color-light-primary)'};
   letter-spacing: 0;
-  word-wrap: no-wrap;
+  word-wrap: break-word;
 `;
 
-const Typography: React.FC<ITypography> = ({children, color = 'primary', variant = 'primary', ...typographyProps}) => {
+const Typography: React.FC<ITypography> = ({
+  children,
+  color = 'primary',
+  variant = 'primary',
+  font = 'normal',
+  ...typographyProps
+}) => {
   return (
-    <StyledTypography variant={variant} color={color} {...typographyProps}>
+    <StyledTypography variant={variant} color={color} font={font} {...typographyProps}>
       {children}
     </StyledTypography>
   );

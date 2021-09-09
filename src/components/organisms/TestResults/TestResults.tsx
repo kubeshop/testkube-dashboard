@@ -5,24 +5,17 @@ import {ResultDatePicker, TestStatus} from '@molecules';
 
 import {TestsContext} from '@context/testsContext';
 
-const StyledTestResults = styled.section`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
 const StyledTableCell = styled.td`
   border-right-style: hidden;
   border-bottom-style: hidden;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  border-top-style: hidden;
+  width: 16%;
+  word-wrap: break-word;
 
   &:first-child {
     border-left-style: hidden;
+    width: 35%;
   }
-
-  display: flex;
 `;
 
 const TestResults = () => {
@@ -35,8 +28,10 @@ const TestResults = () => {
   };
 
   return (
-    <StyledTestResults>
-      <ResultDatePicker />
+    <>
+      <StyledTableCell>
+        <ResultDatePicker />
+      </StyledTableCell>
       <StyledTableCell>
         <TestStatus testTitle="Passed" totalTests={getTotalTestsByType('success')} />
       </StyledTableCell>
@@ -49,7 +44,7 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus testTitle="Total Tests Executed" totalTests={tests && tests?.data?.ExecutionSummary?.length} />
       </StyledTableCell>
-    </StyledTestResults>
+    </>
   );
 };
 

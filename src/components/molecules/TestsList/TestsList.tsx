@@ -1,16 +1,32 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
 
-import {Typography, RenderTestStatusSvgIcon} from '@atoms';
+import {RenderTestStatusSvgIcon, Typography} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
-import {timeStampToDate} from '@utils/formatDate';
+import {timeStampToDate, getDuration} from '@utils/formatDate';
 
-const ListItem = styled.div`
-  display: flex;
-  overflow: hidden;
-  align-items: flex-start;
-  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+const StyledListTestTable = styled.table`
+  border: none;
+  width: 100%;
+`;
+
+const StyledTableHead = styled.tr`
+  border: none;
+`;
+
+const StyledTableHeadCell = styled.th`
+  border: none;
+  width: 25%;
+`;
+
+const StyledTableDataCell = styled.tr`
+  border: none;
+
+  & > td {
+    text-align: center;
+    vertical-align: middle;
+  }
 
   &:hover {
     cursor: pointer;
@@ -18,11 +34,9 @@ const ListItem = styled.div`
   }
 `;
 
-const TestListInformation = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
+const StyledTableDataCellTest = styled.td`
+  border: none;
+  width: 25%;
 `;
 
 const TestsList = () => {
@@ -33,26 +47,53 @@ const TestsList = () => {
   };
 
   return (
-    <>
-      {/* {console.log('HELLO', tests)} */}
+    <StyledListTestTable>
+      <StyledTableHead>
+        <StyledTableHeadCell>
+          <Typography variant="secondary" font="bold">
+            Name
+          </Typography>
+        </StyledTableHeadCell>
+        <StyledTableHeadCell>
+          <Typography variant="secondary" font="bold">
+            Ended at
+          </Typography>
+        </StyledTableHeadCell>
+        <StyledTableHeadCell>
+          <Typography variant="secondary" font="bold">
+            Duration
+          </Typography>
+        </StyledTableHeadCell>
+        <StyledTableHeadCell>
+          <Typography variant="secondary" font="bold">
+            Status
+          </Typography>
+        </StyledTableHeadCell>
+      </StyledTableHead>
       {tests.datas &&
         tests?.datas?.map((test: any) => (
-          <ListItem onClick={() => handleSelectedTest(test.id)}>
-            <TestListInformation>
-              <Typography variant="secondary">{test['id']}</Typography>
-            </TestListInformation>
-            <TestListInformation>
-              <Typography variant="secondary">{test['script-type']}</Typography>
-            </TestListInformation>
-            <TestListInformation>
-              <Typography variant="secondary">{timeStampToDate(test['end-time'])}</Typography>
-            </TestListInformation>
-            <TestListInformation>
-              <RenderTestStatusSvgIcon testStatus={test.status} width={20} height={20} />
-            </TestListInformation>
-          </ListItem>
+          <StyledTableDataCell onClick={() => handleSelectedTest(test.id)}>
+            <StyledTableDataCellTest>
+              <Typography variant="secondary" font="light">
+                {test['script-name']}
+              </Typography>
+            </StyledTableDataCellTest>
+            <StyledTableDataCellTest>
+              <Typography variant="secondary" font="light">
+                {test['end-time'] ? timeStampToDate(test['end-time']) : '-'}
+              </Typography>
+            </StyledTableDataCellTest>
+            <StyledTableDataCellTest>
+              <Typography variant="secondary" font="light">
+                {test['end-time'] ? getDuration(test['end-time']) : '-'}
+              </Typography>
+            </StyledTableDataCellTest>
+            <StyledTableDataCellTest>
+              <RenderTestStatusSvgIcon testStatus={test.status} width={25} height={25} />
+            </StyledTableDataCellTest>
+          </StyledTableDataCell>
         ))}
-    </>
+    </StyledListTestTable>
   );
 };
 
