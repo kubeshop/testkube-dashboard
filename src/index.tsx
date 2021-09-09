@@ -9,9 +9,9 @@ import GlobalStyle from './styles/globalStyles';
 const queryCache = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       retry: false,
-      staleTime: 20000,
+      staleTime: 5000,
     },
   },
 });
