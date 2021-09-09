@@ -6,21 +6,23 @@ import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {getAllTests} from '@services/Tests';
 import {TestsContext} from '@context/testsContext';
 
-// import {Tests} from '@types';
-import {getDate} from '@utils/formatDate';
+import {getDate, getLatestDate} from '@utils/formatDate';
 
 const MainTableStyles = styled.table`
   position: relative;
   top: 0;
   left: var(--font-size-6xl);
   width: 90%;
-  border: 1px solid var(--color-gray-secondary);
   border-top-style: hidden;
+  table-layout: fixed;
 `;
 
 const StyledTestResults = styled.tr`
+  display: flex;
+  align-items: center;
   border-left-style: hidden;
   border-bottom-style: 1px solid var(--color-gray-secondary);
+  word-wrap: break-word;
 `;
 
 const StyledTestFilter = styled.tr`
@@ -31,6 +33,14 @@ const StyledTestFilter = styled.tr`
 const StyledTestSummary = styled.tr`
   border-right-style: hidden;
   height: 100%;
+  max-height: 350px;
+  overflow-y: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 `;
 
 function App() {
@@ -38,8 +48,8 @@ function App() {
   const [selectedTest, setSelectedTest] = useState<number | undefined>();
   const [datas, setDatas] = useState([]);
   const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
-  const [latestDateTests, setLatestDateTests] = useState();
-  const {data, error, isFetching} = useQuery('tests', getAllTests, {refetchInterval: 60000});
+  const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
+  const {data, error, isFetching} = useQuery('tests', getAllTests, {refetchInterval: 5000});
 
   const tests = {
     data,
@@ -74,7 +84,15 @@ function App() {
   }, [selectedTimeIntervalTests]);
 
   React.useEffect(() => {
-    // connect
+    if (latestDateTests) {
+      const latestdate = getLatestDate(data.ExecutionSummary);
+
+      const lastTests = data?.ExecutionSummary.filter(
+        (test: any) => getDate(test['start-time']) === getDate(latestdate)
+      );
+
+      setDatas(lastTests);
+    }
   }, [latestDateTests]);
 
   return (
@@ -84,15 +102,19 @@ function App() {
       <TestsContext.Provider value={tests}>
         <PageHeader />
         <MainTableStyles>
-          <StyledTestResults>
-            <TestResults />
-          </StyledTestResults>
-          <StyledTestFilter>
-            <TestsFilter />
-          </StyledTestFilter>
-          <StyledTestSummary>
-            <TestsSummary />
-          </StyledTestSummary>
+          <thead>
+            <StyledTestResults>
+              <TestResults />
+            </StyledTestResults>
+          </thead>
+          <tbody>
+            <StyledTestFilter>
+              <TestsFilter />
+            </StyledTestFilter>
+            <StyledTestSummary>
+              <TestsSummary />
+            </StyledTestSummary>
+          </tbody>
         </MainTableStyles>
       </TestsContext.Provider>
     </>
