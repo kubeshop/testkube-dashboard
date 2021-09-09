@@ -16,7 +16,7 @@ const StyledTestDescriptionContainer = styled.section`
 
 const StyledTestDescriptionIcon = styled.div`
   position: relative;
-  top: -100px;
+  top: -135px;
 `;
 
 const StyledTestDescription = styled.div`
@@ -80,6 +80,14 @@ const TestDescription = () => {
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
                 {getDuration(testDescription['end-time'])}
+              </Typography>
+            </div>
+            <div>
+              <Typography variant="secondary" font="bold">
+                Type
+              </Typography>
+              <Typography variant="secondary" style={{marginTop: '-15px'}}>
+                {testDescription['script-type']}
               </Typography>
             </div>
           </StyledTestDescription>

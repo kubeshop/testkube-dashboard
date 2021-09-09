@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
 
-import {RenderTestStatusSvgIcon, Typography} from '@atoms';
+import {RenderTestStatusSvgIcon, Typography, TestTypeIcon} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
@@ -17,7 +17,7 @@ const StyledTableHead = styled.tr`
 
 const StyledTableHeadCell = styled.th`
   border: none;
-  width: 25%;
+  width: 20%;
 `;
 
 const StyledTableDataCell = styled.tr`
@@ -69,6 +69,11 @@ const TestsList = () => {
             Status
           </Typography>
         </StyledTableHeadCell>
+        <StyledTableHeadCell>
+          <Typography variant="secondary" font="bold">
+            Type
+          </Typography>
+        </StyledTableHeadCell>
       </StyledTableHead>
       {tests.datas &&
         tests?.datas?.map((test: any) => (
@@ -90,6 +95,9 @@ const TestsList = () => {
             </StyledTableDataCellTest>
             <StyledTableDataCellTest>
               <RenderTestStatusSvgIcon testStatus={test.status} width={25} height={25} />
+            </StyledTableDataCellTest>
+            <StyledTableDataCellTest>
+              <TestTypeIcon testType={test['script-type']} width={25} height={25} />
             </StyledTableDataCellTest>
           </StyledTableDataCell>
         ))}
