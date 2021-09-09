@@ -17,7 +17,7 @@ export const getDuration = (timeStamp: string) => {
   return `${hour}:${minute}:${second}`;
 };
 
-export const getDate = (timeStamp: string) => {
+export const getDate = (timeStamp: string | any) => {
   const date = new Date(timeStamp);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
