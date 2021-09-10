@@ -71,7 +71,7 @@ const TestDescription = () => {
                 Ended At
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {timeStampToDate(testDescription['end-time'])}
+                {testDescription['end-time'] ? timeStampToDate(testDescription['end-time']) : '-'}
               </Typography>
             </div>
             <div>
@@ -79,7 +79,7 @@ const TestDescription = () => {
                 Duration
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {getDuration(testDescription['end-time'])}
+                {testDescription['end-time'] ? getDuration(testDescription['end-time']) : '-'}
               </Typography>
             </div>
             <div>
