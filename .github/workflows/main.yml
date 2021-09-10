@@ -68,12 +68,4 @@ jobs:
         run: |
           npm install
       - name: Test and Generate Coverage
-        run: npm run test:coverage
-
-      - name: Coverage check
-        uses: devmasx/coverage-check-action@v1.2.0
-        with:
-          type: lcov
-          result_path: coverage/lcov.info
-          min_coverage: 20
-          token: ${{ github.token }}
+        run: npm run test
