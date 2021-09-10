@@ -49,7 +49,7 @@ function App() {
   const [datas, setDatas] = useState([]);
   const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
   const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
-  const {data, error, isFetching} = useQuery('tests', getAllTests, {refetchInterval: 5000});
+  const {data, error} = useQuery('tests', getAllTests, {refetchInterval: 5000});
 
   const tests = {
     data,
@@ -98,7 +98,6 @@ function App() {
   return (
     <>
       {error && 'Something went wrong'}
-      {isFetching && 'Loading...'}
       <TestsContext.Provider value={tests}>
         <PageHeader />
         <MainTableStyles>
