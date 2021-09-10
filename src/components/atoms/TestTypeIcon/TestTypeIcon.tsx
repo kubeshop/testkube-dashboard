@@ -2,6 +2,8 @@ import React from 'react';
 
 import {Image} from '@atoms';
 
+import PostmanIcon from '@assets/postmanLogo.png';
+
 interface ITestIconType {
   testType: 'cypress' | 'postman' | '';
   width: number;
@@ -11,7 +13,7 @@ interface ITestIconType {
 const TestTypeIcon = ({testType = '', height, width}: ITestIconType) => {
   return (
     <Image
-      src={testType === 'cypress' ? 'Cypress' : testType === 'postman' ? 'Postman' : ''}
+      src={testType === 'cypress' ? 'Cypress' : testType === 'postman' ? PostmanIcon : ''}
       alt={testType}
       type="svg"
       height={height}
