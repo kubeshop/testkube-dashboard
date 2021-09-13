@@ -49,7 +49,7 @@ jobs:
             ${{ runner.os }}-node-
 
     - name: Install dependencies packages
-      run: npm run install
+      run: npm install
 
     - name: Testing dashboard
       if: always()
