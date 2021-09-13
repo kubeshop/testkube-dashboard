@@ -1,8 +1,8 @@
 name: Publish Docker image
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ main ]
 # https://docs.github.com/en/actions/guides/publishing-docker-images
 jobs:
   push_to_registry:
