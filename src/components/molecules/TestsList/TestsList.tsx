@@ -97,7 +97,7 @@ const TestsList = () => {
               <RenderTestStatusSvgIcon testStatus={test.status} width={25} height={25} />
             </StyledTableDataCellTest>
             <StyledTableDataCellTest>
-              <TestTypeIcon testType={test['script-type']} width={25} height={25} />
+              <TestTypeIcon testType={test['script-type']} width={30} height={30} />
             </StyledTableDataCellTest>
           </StyledTableDataCell>
         ))}
