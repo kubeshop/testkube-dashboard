@@ -1,0 +1,57 @@
+name: Testing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  triage:
+    if: github.event_name == 'pull_request'
+
+    name: 'Triage'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v3
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+
+  unit-testing:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: [16]
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+    - uses: actions/cache@v2
+      id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+      with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+    - name: Install dependencies packages
+      run: npm run install
+
+    - name: Testing dashboard
+      if: always()
+      run: npm run test
+

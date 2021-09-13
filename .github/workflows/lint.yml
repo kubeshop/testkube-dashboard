@@ -1,10 +1,10 @@
-name: CI
+name: Linting
 
 on:
   push:
-    branches: [master]
+    branches: [ main ]
   pull_request:
-    branches: [master]
+    branches: [ main ]
 
 jobs:
   triage:
@@ -17,41 +17,25 @@ jobs:
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
 
-  lint:
-    name: Lint Code Base
+
+  Lint:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: github/super-linter@v3
-        env:
-          DEFAULT_BRANCH: master
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: /
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_CSS: true
-          VALIDATE_HTML: true
-          VALIDATE_TYPESCRIPT_ES: true
-          VALIDATE_TYPESCRIPT_STANDARD: true
-          VALIDATE_JAVASCRIPT_ES: true
-          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.js
-
-  unit-tests:
     strategy:
       fail-fast: true
       matrix:
         node-version: [16]
-    name: Unit tests
-    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
 
-      # https://github.com/actions/cache/blob/main/examples.md#using-multiple-systems-and-npm-config
       - name: Get npm cache directory
         id: npm-cache-dir
         run: |
@@ -64,8 +48,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install Project Dependencies
-        run: |
-          npm install
-      - name: Test and Generate Coverage
-        run: npm run test
+      - name: Install Project dependencies
+        run: npm install
+
+      - name: ESLint Checking
+        if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
+        run: npm run lint
+
+      - name: StyleLint Checking
+        if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
+        run: npm run style:lint
