@@ -22,7 +22,9 @@ const TestsFilter = () => {
 
   return (
     <StyleTestsFilterContainer>
-      <Typography variant="secondary">Tests</Typography>
+      <Typography variant="secondary" data-testid="Test filters">
+        Tests
+      </Typography>
       <StyleTestFilterButtons>
         <Typography variant="secondary">Show: </Typography>
         <Button onClick={() => tests.setSelectedTestTypes('all')}>All</Button>
