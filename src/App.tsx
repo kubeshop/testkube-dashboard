@@ -7,6 +7,7 @@ import {getAllTests} from '@services/Tests';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
+import {getQueryStringFromUrl} from '@utils/validate';
 
 const MainTableStyles = styled.table`
   position: relative;
@@ -49,7 +50,8 @@ function App() {
   const [datas, setDatas] = useState([]);
   const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
   const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
-  const {data, error} = useQuery('tests', getAllTests, {refetchInterval: 5000});
+  const [urlEndpoint, setUrlEndpoint] = useState<string>('');
+  const {data, error} = useQuery('tests', () => getAllTests(urlEndpoint), {refetchInterval: 5000});
 
   const tests = {
     data,
@@ -66,18 +68,25 @@ function App() {
   };
 
   React.useEffect(() => {
+    const urlEndpointFromUser = getQueryStringFromUrl(window.location.href);
+    if (urlEndpointFromUser) {
+      setUrlEndpoint(urlEndpointFromUser);
+    }
+  }, []);
+
+  React.useEffect(() => {
     if (data) {
       const filteredTests =
         selectedTestTypes === 'all'
           ? data.ExecutionSummary
-          : data.ExecutionSummary.filter((test: any) => test.status === selectedTestTypes);
+          : data.ExecutionSummary?.filter((test: any) => test.status === selectedTestTypes);
 
       setDatas(filteredTests);
     }
   }, [selectedTestTypes]);
 
   React.useEffect(() => {
-    const filteredTestsIntervals = data?.ExecutionSummary.filter(
+    const filteredTestsIntervals = data?.ExecutionSummary?.filter(
       (test: any) => getDate(test['start-time']) === getDate(selectedTimeIntervalTests)
     );
     setDatas(filteredTestsIntervals);

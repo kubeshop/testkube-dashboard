@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {Typography, Button, LabelInput} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
-import {validateUrl} from '@utils/validate';
+// import {validateUrl} from '@utils/validate';
 
 interface IUrlEndpoint {
   apiEndpoint: string;
@@ -33,14 +33,16 @@ const TestsFilter = () => {
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const urlParams = window.location.href;
+    const urlParams = window.location;
 
-    if (validateUrl(apiEndpoint.apiEndpoint)) {
-      // eslint-disable-next-line
-      window.open(urlParams + `?apiEndpoint=${apiEndpoint.apiEndpoint}`);
-    } else {
-      alert('Invalid URL');
-    }
+    // if (validateUrl(apiEndpoint.apiEndpoint)) {
+    // eslint-disable-next-line
+    window.open(urlParams + `?apiEndpoint=${apiEndpoint.apiEndpoint}`);
+    // eslint-disable-next-line
+    console.log('Here', urlParams + `?apiEndpoint=${apiEndpoint.apiEndpoint}`);
+    // } else {
+    //   alert('Invalid URL');
+    // }
   };
 
   const handleChangeApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
