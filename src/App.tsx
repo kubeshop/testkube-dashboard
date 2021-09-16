@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {useQuery} from 'react-query';
 
 import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
-import {getAllTests} from '@services/Tests';
+// import {getAllTests} from '@services/Tests';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
@@ -50,8 +50,17 @@ function App() {
   const [datas, setDatas] = useState([]);
   const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
   const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
-  const [urlEndpoint, setUrlEndpoint] = useState<string>('');
-  const {data, error} = useQuery('tests', () => getAllTests(urlEndpoint), {refetchInterval: 5000});
+
+  const {data, error} = useQuery(
+    'tests',
+    () => {
+      const url = getQueryStringFromUrl(window.location.href);
+      if (url) {
+        return fetch(url).then(res => res.json());
+      }
+    },
+    {refetchInterval: 5000}
+  );
 
   const tests = {
     data,
@@ -68,25 +77,14 @@ function App() {
   };
 
   React.useEffect(() => {
-    const urlEndpointFromUser = getQueryStringFromUrl(window.location.href);
-    if (urlEndpointFromUser) {
-      setUrlEndpoint(urlEndpointFromUser);
-    }
-  }, []);
+    const filteredTests =
+      selectedTestTypes === 'all' ? data : data?.filter((test: any) => test.status === selectedTestTypes);
 
-  React.useEffect(() => {
-    if (data) {
-      const filteredTests =
-        selectedTestTypes === 'all'
-          ? data.ExecutionSummary
-          : data.ExecutionSummary?.filter((test: any) => test.status === selectedTestTypes);
-
-      setDatas(filteredTests);
-    }
+    setDatas(filteredTests);
   }, [selectedTestTypes]);
 
   React.useEffect(() => {
-    const filteredTestsIntervals = data?.ExecutionSummary?.filter(
+    const filteredTestsIntervals = data?.filter(
       (test: any) => getDate(test['start-time']) === getDate(selectedTimeIntervalTests)
     );
     setDatas(filteredTestsIntervals);
@@ -94,11 +92,9 @@ function App() {
 
   React.useEffect(() => {
     if (latestDateTests) {
-      const latestdate = getLatestDate(data.ExecutionSummary);
+      const latestdate = getLatestDate(data);
 
-      const lastTests = data?.ExecutionSummary.filter(
-        (test: any) => getDate(test['start-time']) === getDate(latestdate)
-      );
+      const lastTests = data?.filter((test: any) => getDate(test['start-time']) === getDate(latestdate));
 
       setDatas(lastTests);
     }
@@ -106,7 +102,7 @@ function App() {
 
   return (
     <>
-      {error && 'Something went wrong'}
+      {error && 'Something went wrong...'}
       <TestsContext.Provider value={tests}>
         <PageHeader />
         <MainTableStyles>

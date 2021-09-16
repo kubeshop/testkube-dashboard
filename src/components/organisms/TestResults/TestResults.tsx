@@ -22,9 +22,12 @@ const TestResults = () => {
   const tests: any = useContext(TestsContext);
 
   const getTotalTestsByType = (testType: string) => {
-    const filteredTests = tests?.data?.ExecutionSummary?.filter((test: any) => test.status === testType).length;
-    // eslint-disable-next-line
-    return filteredTests && filteredTests + ' / ' + tests?.data?.ExecutionSummary?.length;
+    if (tests.data) {
+      const filteredTests = tests.data.filter((test: any) => test.status === testType).length;
+
+      // eslint-disable-next-line
+      return filteredTests && filteredTests + ' / ' + tests?.data?.length;
+    }
   };
 
   return (
@@ -42,7 +45,7 @@ const TestResults = () => {
         <TestStatus testTitle="Test Running" totalTests={getTotalTestsByType('pending')} />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Total Tests Executed" totalTests={tests && tests?.data?.ExecutionSummary?.length} />
+        <TestStatus testTitle="Total Tests Executed" totalTests={tests && tests?.data?.length} />
       </StyledTableCell>
     </>
   );

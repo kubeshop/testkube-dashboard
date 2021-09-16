@@ -32,7 +32,7 @@ const TestDescription = () => {
 
   useEffect(() => {
     if (tests.selectedTest) {
-      const test = tests.data.ExecutionSummary.find((t: any) => tests.selectedTest === t['id']);
+      const test = tests.data.find((t: any) => tests.selectedTest === t['id']);
       setTestDescription(test);
     }
   }, [tests.selectedTest]);
