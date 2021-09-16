@@ -1,8 +1,6 @@
-export const testEndpoint = 'http://localhost:4000/executions';
-
-export const getAllTests = async () => {
+export const getAllTests = async (url: string) => {
   try {
-    const response = await fetch(testEndpoint);
+    const response = await fetch(url);
     if (response.status >= 500) {
       throw new Error('Server down');
     }
