@@ -1,9 +1,12 @@
 import React, {useContext, useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {useQuery} from 'react-query';
+// import * as queryString from 'query-string';
 
 import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
 import {RenderTestStatusSvgIcon, Typography} from '@atoms';
+// import {getQueryStringFromUrl} from '@utils/validate';
 
 const StyledTestDescriptionContainer = styled.section`
   display: flex;
@@ -28,7 +31,33 @@ const StyledTestDescription = styled.div`
 
 const TestDescription = () => {
   const [testDescription, setTestDescription] = useState<any>({});
+  const [api, setApi] = useState<string>(localStorage.getItem('apiEndpoint') || '');
   const tests: any = useContext(TestsContext);
+
+  const {data, error} = useQuery(['test', tests.selectedTest], () => {
+    // const url = getQueryStringFromUrl(window.location.href);
+    // console.log('URL', url);
+
+    // const params = new URL(window.location.href).searchParams;
+    // console.log('PARAMS', params.get('apiEndpoint'));
+
+    // localStorage.getItem('apiEndpoint');
+    // const parsed = queryString.parse(window.location.search);
+    // console.log(parsed);
+
+    // console.log('PARAMS', params);
+
+    if (api) {
+      return fetch(`${api}/${tests.selectedTest}`).then(res => res.json());
+    }
+  });
+
+  React.useEffect(() => {
+    const apiFromUser = localStorage.getItem('apiEndpoint');
+    if (apiFromUser) {
+      setApi(apiFromUser);
+    }
+  }, []);
 
   useEffect(() => {
     if (tests.selectedTest) {
@@ -40,8 +69,8 @@ const TestDescription = () => {
   const renderTestStatus = (testStatus: string) => {
     return testStatus === 'pending'
       ? 'PENDING'
-      : testStatus === 'failed'
-      ? 'FAILED'
+      : testStatus === 'error'
+      ? 'ERROR'
       : testStatus === 'success'
       ? 'SUCCESS'
       : testStatus === 'queued'
@@ -51,6 +80,10 @@ const TestDescription = () => {
 
   return (
     <>
+      {/* {console.log('script name', data['script-name'])} */}
+      {/* {console.log('Ended At', data.execution['end-time'])}
+      {console.log('Duration', data.execution['script-name'])}
+      {console.log('script type', data['script-type'])} */}
       {tests.selectedTest && (
         <StyledTestDescriptionContainer>
           <StyledTestDescriptionIcon>
@@ -63,7 +96,8 @@ const TestDescription = () => {
                 Name
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {testDescription['script-name']}
+                {/* {testDescription['script-name']} */}
+                {testDescription['script-name'] && testDescription['script-name']}
               </Typography>
             </div>
             <div>
@@ -79,7 +113,9 @@ const TestDescription = () => {
                 Duration
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {testDescription['end-time'] ? getDuration(testDescription['end-time']) : '-'}
+                {testDescription['end-time']
+                  ? getDuration(testDescription['start-time'], testDescription['end-time'])
+                  : '-'}
               </Typography>
             </div>
             <div>

@@ -1,5 +1,5 @@
 export type ITestStatus = {
-  status: 'queued' | 'failed' | 'success' | 'pending';
+  status: 'queued' | 'error' | 'success' | 'pending';
 };
 
 export interface ITests {

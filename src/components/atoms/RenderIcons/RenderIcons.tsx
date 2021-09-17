@@ -8,7 +8,7 @@ import SuccessTestIcon from '@assets/testSuccessIcon.svg';
 import QueuedTestIcon from '@assets/testQueuedIcon.svg';
 
 interface ITestTypes {
-  testStatus: 'queued' | 'failed' | 'success' | 'pending';
+  testStatus: 'queued' | 'error' | 'success' | 'pending';
   width: number;
   height: number;
 }
@@ -19,7 +19,7 @@ const RenderTestStatusSvgIcon = ({testStatus, width, height}: ITestTypes) => {
       src={
         testStatus === 'pending'
           ? RunningTestIcon
-          : testStatus === 'failed'
+          : testStatus === 'error'
           ? FailedTestIcon
           : testStatus === 'success'
           ? SuccessTestIcon

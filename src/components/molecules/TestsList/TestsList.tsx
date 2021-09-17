@@ -90,7 +90,7 @@ const TestsList = () => {
             </StyledTableDataCellTest>
             <StyledTableDataCellTest>
               <Typography variant="secondary" font="light">
-                {test['end-time'] ? getDuration(test['end-time']) : '-'}
+                {test['end-time'] ? getDuration(test['start-time'], test['end-time']) : '-'}
               </Typography>
             </StyledTableDataCellTest>
             <StyledTableDataCellTest>

@@ -12,6 +12,7 @@ export const validateUrl = (url: string): boolean => {
 };
 
 export const getQueryStringFromUrl = (url: string) => {
+
   const params = new URL(url).searchParams;
   return params.get('apiEndpoint');
 };

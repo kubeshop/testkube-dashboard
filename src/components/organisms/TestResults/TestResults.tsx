@@ -39,7 +39,7 @@ const TestResults = () => {
         <TestStatus testTitle="Passed" totalTests={getTotalTestsByType('success')} />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Failed" totalTests={getTotalTestsByType('failed')} />
+        <TestStatus testTitle="Error" totalTests={getTotalTestsByType('error')} />
       </StyledTableCell>
       <StyledTableCell>
         <TestStatus testTitle="Test Running" totalTests={getTotalTestsByType('pending')} />

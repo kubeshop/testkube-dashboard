@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useQuery} from 'react-query';
 
@@ -55,6 +55,8 @@ function App() {
     'tests',
     () => {
       const url = getQueryStringFromUrl(window.location.href);
+      // console.log('URL', url);
+      // console.log('Location', window.location.href);
       if (url) {
         return fetch(url).then(res => res.json());
       }
@@ -76,21 +78,21 @@ function App() {
     setLatestDateTests,
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const filteredTests =
       selectedTestTypes === 'all' ? data : data?.filter((test: any) => test.status === selectedTestTypes);
 
     setDatas(filteredTests);
   }, [selectedTestTypes]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const filteredTestsIntervals = data?.filter(
       (test: any) => getDate(test['start-time']) === getDate(selectedTimeIntervalTests)
     );
     setDatas(filteredTestsIntervals);
   }, [selectedTimeIntervalTests]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (latestDateTests) {
       const latestdate = getLatestDate(data);
 
