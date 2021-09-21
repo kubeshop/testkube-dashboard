@@ -70,6 +70,37 @@
   }
 }
 
+/* Responsive Font families. */
+@media screen and (min-width: 26.5rem) {
+  html {
+    font-size: var(--font-size-ssm);
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media screen and (min-width: 64rem) {
+  html {
+    font-size: var(--font-size-md);
+  }
+}
+
+@media screen and (min-width: 90rem) {
+  html {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media screen and (min-width: 160rem) {
+  html {
+    font-size: var(--font-size-xl);
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
