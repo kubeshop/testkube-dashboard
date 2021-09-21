@@ -13,6 +13,7 @@ export const GlobalStyle = createGlobalStyle`
     tr,
     td {
       border: 1px solid var(--color-gray-secondary);
+      overflow: hidden;
     }
 
     p {
