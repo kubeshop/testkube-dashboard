@@ -17,10 +17,10 @@ const StyledDocHead = styled.div`
 const DocLinks = () => {
   return (
     <StyledDocHead>
-      <a href="https://kubeshop.github.io/kubtest/" target="_blank">
+      <a href="https://kubeshop.github.io/kubtest/" target="_blank" rel="noopener">
         <Image src={docsIcon} alt="Docs" type="svg" width={30} height={30} />
       </a>
-      <a href="https://github.com/kubeshop/kubtest" target="_blank">
+      <a href="https://github.com/kubeshop/kubtest" target="_blank" rel="noopener">
         <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} />
       </a>
     </StyledDocHead>
