@@ -1,42 +1,32 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
+import {nanoid} from 'nanoid';
 
 import {RenderTestStatusSvgIcon, Typography, TestTypeIcon} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
 
-const StyledListTestTable = styled.table`
-  border: none;
+const StyledTestListContainer = styled.div`
+  display: block;
   width: 100%;
 `;
 
-const StyledTableHead = styled.tr`
-  border: none;
-`;
+const StyledTestListRow = styled.div`
+  display: flex;
+  align-items: center;
+  flex-flow: row wrap;
+  transition: 0.5s;
 
-const StyledTableHeadCell = styled.th`
-  border: none;
-  width: 20%;
-`;
-
-const StyledTableDataCell = styled.tr`
-  border: none;
-
-  & > td {
-    text-align: center;
-    vertical-align: middle;
-  }
-
-  &:hover {
+  &:not(:first-child):hover {
     cursor: pointer;
     background: transparent linear-gradient(90deg, #1890fc 0%, #5bdad3 100%);
   }
 `;
 
-const StyledTableDataCellTest = styled.td`
-  border: none;
-  width: 25%;
+const StyledTestListCell = styled.div`
+  width: calc(100% / 5);
+  text-align: center;
 `;
 
 const TestsList = () => {
@@ -47,61 +37,66 @@ const TestsList = () => {
   };
 
   return (
-    <StyledListTestTable>
-      <StyledTableHead>
-        <StyledTableHeadCell>
+    <StyledTestListContainer>
+      <StyledTestListRow>
+        <StyledTestListCell>
           <Typography variant="secondary" font="bold">
             Name
           </Typography>
-        </StyledTableHeadCell>
-        <StyledTableHeadCell>
+        </StyledTestListCell>
+
+        <StyledTestListCell>
           <Typography variant="secondary" font="bold">
-            Ended at
+            Started At
           </Typography>
-        </StyledTableHeadCell>
-        <StyledTableHeadCell>
+        </StyledTestListCell>
+
+        <StyledTestListCell>
           <Typography variant="secondary" font="bold">
             Duration
           </Typography>
-        </StyledTableHeadCell>
-        <StyledTableHeadCell>
+        </StyledTestListCell>
+
+        <StyledTestListCell>
           <Typography variant="secondary" font="bold">
             Status
           </Typography>
-        </StyledTableHeadCell>
-        <StyledTableHeadCell>
+        </StyledTestListCell>
+
+        <StyledTestListCell>
           <Typography variant="secondary" font="bold">
             Type
           </Typography>
-        </StyledTableHeadCell>
-      </StyledTableHead>
+        </StyledTestListCell>
+      </StyledTestListRow>
+
       {tests.datas &&
         tests?.datas?.map((test: any) => (
-          <StyledTableDataCell onClick={() => handleSelectedTest(test.id)}>
-            <StyledTableDataCellTest>
+          <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id)}>
+            <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
                 {test['script-name']}
               </Typography>
-            </StyledTableDataCellTest>
-            <StyledTableDataCellTest>
+            </StyledTestListCell>
+            <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
-                {test['end-time'] ? timeStampToDate(test['end-time']) : '-'}
+                {test['start-time'] ? timeStampToDate(test['start-time']) : '-'}
               </Typography>
-            </StyledTableDataCellTest>
-            <StyledTableDataCellTest>
+            </StyledTestListCell>
+            <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
                 {test['end-time'] ? getDuration(test['start-time'], test['end-time']) : '-'}
               </Typography>
-            </StyledTableDataCellTest>
-            <StyledTableDataCellTest>
+            </StyledTestListCell>
+            <StyledTestListCell role="cell">
               <RenderTestStatusSvgIcon testStatus={test.status} width={25} height={25} />
-            </StyledTableDataCellTest>
-            <StyledTableDataCellTest>
+            </StyledTestListCell>
+            <StyledTestListCell role="cell">
               <TestTypeIcon testType={test['script-type']} width={30} height={30} />
-            </StyledTableDataCellTest>
-          </StyledTableDataCell>
+            </StyledTestListCell>
+          </StyledTestListRow>
         ))}
-    </StyledListTestTable>
+    </StyledTestListContainer>
   );
 };
 
