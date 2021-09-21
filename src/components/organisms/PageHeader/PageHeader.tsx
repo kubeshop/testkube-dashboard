@@ -32,18 +32,9 @@ const PageHeader = () => {
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
     const urlParams = window.location;
-
-    // http://localhost:3000/?apiEndpoint=https://34.132.74.196/kubtest-dash/v1/executions/?apiEndpoint=https://34.132.74.196/kubtest-dash/v1/executions/?apiEndpoint=http://localhost:4000/executions
-    // console.log('APP LOCATION: ', urlParams);
-    // if (validateUrl(apiEndpoint.apiEndpoint)) {
     // eslint-disable-next-line
     window.open(urlParams + `?apiEndpoint=${apiEndpoint.apiEndpoint}`);
     localStorage.setItem('apiEndpoint', apiEndpoint.apiEndpoint);
-    // eslint-disable-next-line
-    // console.log('Here', urlParams + `?apiEndpoint=${apiEndpoint.apiEndpoint}`);
-    // } else {
-    //   alert('Invalid URL');
-    // }
   };
 
   const handleChangeApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
