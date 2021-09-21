@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import {useQuery} from 'react-query';
 
 import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
-// import {getAllTests} from '@services/Tests';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
@@ -11,37 +10,36 @@ import {getQueryStringFromUrl} from '@utils/validate';
 
 const MainTableStyles = styled.table`
   position: relative;
-  top: 0;
   left: var(--font-size-6xl);
+  display: flex;
+  flex-direction: column;
   width: 90%;
+  height: auto;
   border-top-style: hidden;
   table-layout: fixed;
+  text-align: center;
 `;
 
 const StyledTestResults = styled.tr`
   display: flex;
-  align-items: center;
   border-left-style: hidden;
+  border-top-style: none;
   border-bottom-style: 1px solid var(--color-gray-secondary);
   word-wrap: break-word;
 `;
 
 const StyledTestFilter = styled.tr`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   border-right-style: hidden;
   border-left-style: hidden;
 `;
 
 const StyledTestSummary = styled.tr`
   border-right-style: hidden;
-  height: 100%;
-  max-height: 350px;
-  overflow-y: hidden;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
+  border-top-style: hidden;
+  display: flex;
 `;
 
 function App() {
@@ -55,8 +53,6 @@ function App() {
     'tests',
     () => {
       const url = getQueryStringFromUrl(window.location.href);
-      // console.log('URL', url);
-      // console.log('Location', window.location.href);
       if (url) {
         return fetch(url).then(res => res.json());
       }
@@ -81,7 +77,6 @@ function App() {
   useEffect(() => {
     const filteredTests =
       selectedTestTypes === 'all' ? data : data?.filter((test: any) => test.status === selectedTestTypes);
-
     setDatas(filteredTests);
   }, [selectedTestTypes]);
 
