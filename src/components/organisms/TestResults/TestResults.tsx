@@ -8,13 +8,15 @@ import {TestsContext} from '@context/testsContext';
 const StyledTableCell = styled.td`
   border-right-style: hidden;
   border-bottom-style: hidden;
-  border-top-style: hidden;
-  width: 16%;
   word-wrap: break-word;
+  flex-grow: 1;
 
   &:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
     border-left-style: hidden;
-    width: 35%;
+    flex-grow: 2;
   }
 `;
 
