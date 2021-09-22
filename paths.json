@@ -3,7 +3,7 @@
     "baseUrl": "./",
     "paths": {
       "@redux/*": ["src/redux/*"],
-      "@styles": ["src/styles/"],
+      "@styles/*": ["src/styles/*"],
       "@src/*": ["src/*"],
       "@src": ["src/"],
       "@root/*": ["./*"],

@@ -1,46 +1,44 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useQuery} from 'react-query';
 
 import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
-import {getAllTests} from '@services/Tests';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
 
 const MainTableStyles = styled.table`
   position: relative;
-  top: 0;
   left: var(--font-size-6xl);
+  display: flex;
+  flex-direction: column;
   width: 90%;
+  height: auto;
   border-top-style: hidden;
   table-layout: fixed;
+  text-align: center;
 `;
 
 const StyledTestResults = styled.tr`
   display: flex;
-  align-items: center;
   border-left-style: hidden;
+  border-top-style: none;
   border-bottom-style: 1px solid var(--color-gray-secondary);
   word-wrap: break-word;
 `;
 
 const StyledTestFilter = styled.tr`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   border-right-style: hidden;
   border-left-style: hidden;
 `;
 
 const StyledTestSummary = styled.tr`
   border-right-style: hidden;
-  height: 100%;
-  max-height: 350px;
-  overflow-y: hidden;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
+  border-top-style: hidden;
+  display: flex;
 `;
 
 function App() {
@@ -49,7 +47,17 @@ function App() {
   const [datas, setDatas] = useState([]);
   const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
   const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
-  const {data, error} = useQuery('tests', getAllTests, {refetchInterval: 5000});
+
+  const {data, error} = useQuery(
+    'tests',
+    () => {
+      const url = localStorage.getItem('apiEndpoint');
+      if (url) {
+        return fetch(url).then(res => res.json());
+      }
+    },
+    {refetchInterval: 5000}
+  );
 
   const tests = {
     data,
@@ -65,31 +73,24 @@ function App() {
     setLatestDateTests,
   };
 
-  React.useEffect(() => {
-    if (data) {
-      const filteredTests =
-        selectedTestTypes === 'all'
-          ? data.ExecutionSummary
-          : data.ExecutionSummary.filter((test: any) => test.status === selectedTestTypes);
-
-      setDatas(filteredTests);
-    }
+  useEffect(() => {
+    const filteredTests =
+      selectedTestTypes === 'all' ? data : data?.filter((test: any) => test.status === selectedTestTypes);
+    setDatas(filteredTests);
   }, [selectedTestTypes]);
 
-  React.useEffect(() => {
-    const filteredTestsIntervals = data?.ExecutionSummary.filter(
-      (test: any) => getDate(test['start-time']) === getDate(selectedTimeIntervalTests)
+  useEffect(() => {
+    const filteredTestsIntervals = data?.filter(
+      (test: any) => getDate(test.startTime) === getDate(selectedTimeIntervalTests)
     );
     setDatas(filteredTestsIntervals);
   }, [selectedTimeIntervalTests]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (latestDateTests) {
-      const latestdate = getLatestDate(data.ExecutionSummary);
+      const latestdate = getLatestDate(data);
 
-      const lastTests = data?.ExecutionSummary.filter(
-        (test: any) => getDate(test['start-time']) === getDate(latestdate)
-      );
+      const lastTests = data?.filter((test: any) => getDate(test.startTime) === getDate(latestdate));
 
       setDatas(lastTests);
     }
@@ -97,7 +98,7 @@ function App() {
 
   return (
     <>
-      {error && 'Something went wrong'}
+      {error && 'Something went wrong...'}
       <TestsContext.Provider value={tests}>
         <PageHeader />
         <MainTableStyles>

@@ -4,7 +4,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import App from './App';
 import './styles/variables.css';
 import 'antd/dist/antd.css';
-import GlobalStyle from './styles/globalStyles';
+import {GlobalStyle} from './styles/globalStyles';
 
 const queryCache = new QueryClient({
   defaultOptions: {
