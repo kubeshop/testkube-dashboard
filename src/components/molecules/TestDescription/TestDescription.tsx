@@ -7,8 +7,13 @@ import {timeStampToDate, getDuration} from '@utils/formatDate';
 import {RenderTestStatusSvgIcon, Typography} from '@atoms';
 
 import {config} from '@constants/config';
+
 const StyledTestDescriptionIcon = styled.div`
   position: relative;
+`;
+
+const StyledTestStatusDescription = styled.div`
+  margin-left: -15px;
 `;
 
 const StyledTestDescription = styled.div`
@@ -16,6 +21,30 @@ const StyledTestDescription = styled.div`
   flex-direction: column;
   position: relative;
   margin-left: var(--space-md);
+`;
+
+const StyledTestDescriptionName = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const StyledTestDescriptionEndedAt = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const StyledTestDescriptionDuration = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const StyledTestDescriptionType = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const TestDescription = () => {
@@ -56,39 +85,41 @@ const TestDescription = () => {
             <RenderTestStatusSvgIcon testStatus={data.execution.status} width={50} height={50} />
           </StyledTestDescriptionIcon>
           <StyledTestDescription>
-            <Typography variant="secondary"> TEST {renderTestStatus(data.execution.status)}</Typography>
-            <div>
+            <StyledTestStatusDescription>
+              <Typography variant="secondary">TEST {renderTestStatus(data.execution.status)}</Typography>
+            </StyledTestStatusDescription>
+            <StyledTestDescriptionName>
               <Typography variant="secondary" font="bold">
                 Name
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
                 {data.scriptName ? data.scriptName : '-'}
               </Typography>
-            </div>
-            <div>
+            </StyledTestDescriptionName>
+            <StyledTestDescriptionEndedAt>
               <Typography variant="secondary" font="bold">
                 Ended At
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
                 {data.execution.endTime ? timeStampToDate(data.execution.endTime) : '-'}
               </Typography>
-            </div>
-            <div>
+            </StyledTestDescriptionEndedAt>
+            <StyledTestDescriptionDuration>
               <Typography variant="secondary" font="bold">
                 Duration
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
                 {data.execution.endTime ? getDuration(data.execution.startTime, data.execution.endTime) : '-'}
               </Typography>
-            </div>
-            <div>
+            </StyledTestDescriptionDuration>
+            <StyledTestDescriptionType>
               <Typography variant="secondary" font="bold">
                 Type
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
                 {data.scriptType}
               </Typography>
-            </div>
+            </StyledTestDescriptionType>
           </StyledTestDescription>
         </>
       )}
