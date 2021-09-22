@@ -6,6 +6,13 @@ import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
+import {
+  cleanStorageWhenApiEndpointQueryStringIsAbsent,
+  getApiEndpointOnPageLoad,
+  // removeDuplicatesInQueryString,
+} from '@utils/validate';
+
+import {config} from '@constants/config';
 
 const MainTableStyles = styled.table`
   position: relative;
@@ -51,7 +58,7 @@ function App() {
   const {data, error} = useQuery(
     'tests',
     () => {
-      const url = localStorage.getItem('apiEndpoint');
+      const url = localStorage.getItem(config.apiEndpoint);
       if (url) {
         return fetch(url).then(res => res.json());
       }
@@ -95,6 +102,11 @@ function App() {
       setDatas(lastTests);
     }
   }, [latestDateTests]);
+
+  useEffect(() => {
+    getApiEndpointOnPageLoad();
+    cleanStorageWhenApiEndpointQueryStringIsAbsent();
+  }, []);
 
   return (
     <>

@@ -4,7 +4,12 @@ import styled from 'styled-components';
 import {DocLinks, PageTitle} from '@molecules';
 import {Button, LabelInput} from '@atoms';
 
-import {matchUrlProtocol, validateUrl} from '@utils/validate';
+import {
+  matchEndpointProtocolWithHostProtocol,
+  validateUrl,
+  removeDuplicatesInQueryString,
+  checkApiEndpointProtocol,
+} from '@utils/validate';
 
 interface IUrlEndpoint {
   apiEndpoint: string;
@@ -32,11 +37,13 @@ const PageHeader = () => {
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const urlParams = window.location;
 
-    matchUrlProtocol(apiEndpoint.apiEndpoint);
-    // eslint-disable-next-line
-    window.open(urlParams + `?apiEndpoint=${apiEndpoint.apiEndpoint}`);
+    removeDuplicatesInQueryString(window.location.href);
+    matchEndpointProtocolWithHostProtocol(apiEndpoint.apiEndpoint);
+
+    const checked = checkApiEndpointProtocol(apiEndpoint.apiEndpoint);
+
+    window.open(`${window.location.origin}/?apiEndpoint=${checked}`);
   };
 
   const handleChangeApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
