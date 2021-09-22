@@ -53,11 +53,17 @@ const StyledButton = styled.button<IButton>`
     color: var(--color-dark-primary);
     background: var(--color-monokle-primary);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background: var(--color-gray-secondary);
+    color: var(--color-light-secondary);
+  }
 `;
 
-const Button: React.FC<IButton> = ({children, variant = 'base', ...buttonProps}) => {
+const Button: React.FC<IButton> = ({children, variant = 'base', disabled, ...buttonProps}) => {
   return (
-    <StyledButton variant={variant} {...buttonProps}>
+    <StyledButton variant={variant} {...buttonProps} disabled={disabled}>
       {children}
     </StyledButton>
   );
