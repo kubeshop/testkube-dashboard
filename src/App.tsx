@@ -6,7 +6,6 @@ import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
-import {getQueryStringFromUrl} from '@utils/validate';
 
 const MainTableStyles = styled.table`
   position: relative;
@@ -52,7 +51,7 @@ function App() {
   const {data, error} = useQuery(
     'tests',
     () => {
-      const url = getQueryStringFromUrl(window.location.href);
+      const url = localStorage.getItem('apiEndpoint');
       if (url) {
         return fetch(url).then(res => res.json());
       }
