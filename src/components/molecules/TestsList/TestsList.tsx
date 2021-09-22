@@ -75,7 +75,7 @@ const TestsList = () => {
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id)}>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
-                {test.scriptName}
+                {test.scriptName ? test.scriptName : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
