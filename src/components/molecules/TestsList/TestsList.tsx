@@ -75,24 +75,24 @@ const TestsList = () => {
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id)}>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
-                {test['script-name']}
+                {test.scriptName}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
-                {test['start-time'] ? timeStampToDate(test['start-time']) : '-'}
+                {test.startTime ? timeStampToDate(test.startTime) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
-                {test['end-time'] ? getDuration(test['start-time'], test['end-time']) : '-'}
+                {test.endTime ? getDuration(test.startTime, test.endTime) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
               <RenderTestStatusSvgIcon testStatus={test.status} width={25} height={25} />
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <TestTypeIcon testType={test['script-type']} width={30} height={30} />
+              <TestTypeIcon testType={test.scriptType} width={30} height={30} />
             </StyledTestListCell>
           </StyledTestListRow>
         ))}

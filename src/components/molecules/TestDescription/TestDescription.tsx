@@ -52,16 +52,16 @@ const TestDescription = () => {
       {tests.selectedTest && data && (
         <>
           <StyledTestDescriptionIcon>
-            <RenderTestStatusSvgIcon testStatus={data.execution.status} width={50} height={50} />
+            <RenderTestStatusSvgIcon testStatus={data.result.status} width={50} height={50} />
           </StyledTestDescriptionIcon>
           <StyledTestDescription>
-            <Typography variant="secondary"> TEST {renderTestStatus(data.execution.status)}</Typography>
+            <Typography variant="secondary"> TEST {renderTestStatus(data.result.status)}</Typography>
             <div>
               <Typography variant="secondary" font="bold">
                 Name
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data['script-name']}
+                {data.scriptName}
               </Typography>
             </div>
             <div>
@@ -69,7 +69,7 @@ const TestDescription = () => {
                 Ended At
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.execution['end-time'] ? timeStampToDate(data.execution['end-time']) : '-'}
+                {data.result.endTime ? timeStampToDate(data.result.endTime) : '-'}
               </Typography>
             </div>
             <div>
@@ -77,9 +77,7 @@ const TestDescription = () => {
                 Duration
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.execution['end-time']
-                  ? getDuration(data.execution['start-time'], data.execution['end-time'])
-                  : '-'}
+                {data.result.endTime ? getDuration(data.result.startTime, data.result.endTime) : '-'}
               </Typography>
             </div>
             <div>
@@ -87,7 +85,7 @@ const TestDescription = () => {
                 Type
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data['script-type']}
+                {data.scriptType}
               </Typography>
             </div>
           </StyledTestDescription>

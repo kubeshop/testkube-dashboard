@@ -28,5 +28,5 @@ export const getDate = (timeStamp: string | any) => {
 };
 
 export const getLatestDate = (timeStamp: any) => {
-  return new Date(Math.max(...timeStamp.map((t: any) => new Date(t['start-time']))));
+  return new Date(Math.max(...timeStamp.map((t: any) => new Date(t.startTime))));
 };

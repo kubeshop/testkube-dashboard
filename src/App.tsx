@@ -82,7 +82,7 @@ function App() {
 
   useEffect(() => {
     const filteredTestsIntervals = data?.filter(
-      (test: any) => getDate(test['start-time']) === getDate(selectedTimeIntervalTests)
+      (test: any) => getDate(test.startTime) === getDate(selectedTimeIntervalTests)
     );
     setDatas(filteredTestsIntervals);
   }, [selectedTimeIntervalTests]);
@@ -91,7 +91,7 @@ function App() {
     if (latestDateTests) {
       const latestdate = getLatestDate(data);
 
-      const lastTests = data?.filter((test: any) => getDate(test['start-time']) === getDate(latestdate));
+      const lastTests = data?.filter((test: any) => getDate(test.startTime) === getDate(latestdate));
 
       setDatas(lastTests);
     }

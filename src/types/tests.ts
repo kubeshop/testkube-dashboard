@@ -3,11 +3,10 @@ export type ITestStatus = {
 };
 
 export interface ITests {
-  'end-time': string;
-  executionresults: string;
   id: number;
-  'script-name': string;
-  'script-type': string;
-  'start-time': string;
+  scriptName: string;
+  scriptType: string;
+  startTime: string;
+  endTime: string;
   status: ITestStatus;
 }
