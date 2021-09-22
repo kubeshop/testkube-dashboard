@@ -7,6 +7,7 @@ import {timeStampToDate, getDuration} from '@utils/formatDate';
 import {RenderTestStatusSvgIcon, Typography} from '@atoms';
 
 import {config} from '@constants/config';
+
 const StyledTestDescriptionIcon = styled.div`
   position: relative;
 `;
