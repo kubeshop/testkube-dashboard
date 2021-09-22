@@ -17,19 +17,74 @@ export const getQueryStringFromUrl = (url: string) => {
   return params.get('apiEndpoint');
 };
 
-export const matchUrlProtocol = (url: string) => {
+export const removeSpaceFromString = (url: string) => {
+  return url.replace(/\s/g, '');
+};
+
+export const matchEndpointProtocolWithHostProtocol = (url: string) => {
   const hostProtocol = window.location.protocol;
   if (!url) {
     alert("Invalid URL, You are trying to manipulate the url, please provide a correct url endpoint");
   }
 
+  if (!validateUrl(url)) {
+    return;
+  }
+
   const apiEndpointProtocol = new URL(url).protocol;
+
+  if (!apiEndpointProtocol) {
+    const newApiEndpointWithProtocol  = `${hostProtocol}//${url}`;
+     const cleanURL = removeSpaceFromString(newApiEndpointWithProtocol);
+     localStorage.setItem('apiEndpoint', cleanURL);
+  }
 
   if (hostProtocol !== apiEndpointProtocol) {
     const matchedUrlProtocol = url.replace(apiEndpointProtocol, hostProtocol);
-    localStorage.setItem('apiEndpoint', matchedUrlProtocol);
+    const cleanURL = removeSpaceFromString(matchedUrlProtocol);
+    localStorage.setItem('apiEndpoint', cleanURL);
     return;
   }
 
   localStorage.setItem('apiEndpoint', url);
+};
+
+export const removeDuplicatesInQueryString = (originLocation: string) => {
+
+  const queryString = getQueryStringFromUrl(originLocation);
+  if (!queryString) {
+    return;
+  }
+
+  const queryStringArray = queryString.split('apiEndpoint=');
+
+  const uniqueQueryStringArray = [...new Set(queryStringArray)];
+
+  const uniqueQueryString = uniqueQueryStringArray.join('&');
+
+  // window.location.replace(`${window.location.origin}/?apiEndpoint=${uniqueQueryString}`);
+
+};
+
+export const cleanStorageWhenApiEndpointQueryStringIsAbsent = () => {
+  const url = window.location.href;
+  const apiEndpointQueryString = getQueryStringFromUrl(url);
+  if (!apiEndpointQueryString) {
+    localStorage.removeItem('apiEndpoint');
+  }
+};
+
+export const getApiEndpointOnPageLoad = () => {
+  const url = window.location.href;
+  const queryString = getQueryStringFromUrl(url);
+  if (!queryString) {
+    localStorage.removeItem('apiEndpoint');
+    return;
+  }
+
+  matchEndpointProtocolWithHostProtocol(queryString);
+};
+
+export const checkApiEndpointProtocol = (apiEndpoint: string) => {
+  return apiEndpoint.includes('http') ? apiEndpoint : `${window.location.protocol}//${apiEndpoint}`;
 };
