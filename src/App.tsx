@@ -12,6 +12,8 @@ import {
   // removeDuplicatesInQueryString,
 } from '@utils/validate';
 
+import {config} from '@constants/config';
+
 const MainTableStyles = styled.table`
   position: relative;
   left: var(--font-size-6xl);
@@ -56,7 +58,7 @@ function App() {
   const {data, error} = useQuery(
     'tests',
     () => {
-      const url = localStorage.getItem('apiEndpoint');
+      const url = localStorage.getItem(config.apiEndpoint);
       if (url) {
         return fetch(url).then(res => res.json());
       }

@@ -1,3 +1,5 @@
+import {config} from '@constants/config';
+
 export const validateUrl = (url: string): boolean => {
   const pattern = new RegExp(
     "^(https?:\\/\\/)?" +
@@ -14,7 +16,7 @@ export const validateUrl = (url: string): boolean => {
 export const getQueryStringFromUrl = (url: string) => {
 
   const params = new URL(url).searchParams;
-  return params.get('apiEndpoint');
+  return params.get(config.apiEndpoint);
 };
 
 export const removeSpaceFromString = (url: string) => {
@@ -36,17 +38,17 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
   if (!apiEndpointProtocol) {
     const newApiEndpointWithProtocol  = `${hostProtocol}//${url}`;
      const cleanURL = removeSpaceFromString(newApiEndpointWithProtocol);
-     localStorage.setItem('apiEndpoint', cleanURL);
+     localStorage.setItem(config.apiEndpoint, cleanURL);
   }
 
   if (hostProtocol !== apiEndpointProtocol) {
     const matchedUrlProtocol = url.replace(apiEndpointProtocol, hostProtocol);
     const cleanURL = removeSpaceFromString(matchedUrlProtocol);
-    localStorage.setItem('apiEndpoint', cleanURL);
+    localStorage.setItem(config.apiEndpoint, cleanURL);
     return;
   }
 
-  localStorage.setItem('apiEndpoint', url);
+  localStorage.setItem(config.apiEndpoint, url);
 };
 
 export const removeDuplicatesInQueryString = (originLocation: string) => {
@@ -70,7 +72,7 @@ export const cleanStorageWhenApiEndpointQueryStringIsAbsent = () => {
   const url = window.location.href;
   const apiEndpointQueryString = getQueryStringFromUrl(url);
   if (!apiEndpointQueryString) {
-    localStorage.removeItem('apiEndpoint');
+    localStorage.removeItem(config.apiEndpoint);
   }
 };
 
@@ -78,7 +80,7 @@ export const getApiEndpointOnPageLoad = () => {
   const url = window.location.href;
   const queryString = getQueryStringFromUrl(url);
   if (!queryString) {
-    localStorage.removeItem('apiEndpoint');
+    localStorage.removeItem(config.apiEndpoint);
     return;
   }
 

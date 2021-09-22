@@ -6,6 +6,7 @@ import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
 import {RenderTestStatusSvgIcon, Typography} from '@atoms';
 
+import {config} from '@constants/config';
 const StyledTestDescriptionIcon = styled.div`
   position: relative;
 `;
@@ -18,7 +19,7 @@ const StyledTestDescription = styled.div`
 `;
 
 const TestDescription = () => {
-  const [api, setApi] = useState<string>(localStorage.getItem('apiEndpoint') || '');
+  const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
 
   const {data, error} = useQuery(['test', tests.selectedTest], () => {
@@ -28,7 +29,7 @@ const TestDescription = () => {
   });
 
   React.useEffect(() => {
-    const apiFromUser = localStorage.getItem('apiEndpoint');
+    const apiFromUser = localStorage.getItem(config.apiEndpoint);
     if (apiFromUser) {
       setApi(apiFromUser);
     }
@@ -49,19 +50,19 @@ const TestDescription = () => {
   return (
     <>
       {error && <Typography variant="secondary">Something went wrong...</Typography>}
-      {tests.selectedTest && data && (
+      {tests?.selectedTest && data && (
         <>
           <StyledTestDescriptionIcon>
-            <RenderTestStatusSvgIcon testStatus={data.result.status} width={50} height={50} />
+            <RenderTestStatusSvgIcon testStatus={data.execution.status} width={50} height={50} />
           </StyledTestDescriptionIcon>
           <StyledTestDescription>
-            <Typography variant="secondary"> TEST {renderTestStatus(data.result.status)}</Typography>
+            <Typography variant="secondary"> TEST {renderTestStatus(data.execution.status)}</Typography>
             <div>
               <Typography variant="secondary" font="bold">
                 Name
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.scriptName}
+                {data.scriptName ? data.scriptName : '-'}
               </Typography>
             </div>
             <div>
@@ -69,7 +70,7 @@ const TestDescription = () => {
                 Ended At
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.result.endTime ? timeStampToDate(data.result.endTime) : '-'}
+                {data.execution.endTime ? timeStampToDate(data.execution.endTime) : '-'}
               </Typography>
             </div>
             <div>
@@ -77,7 +78,7 @@ const TestDescription = () => {
                 Duration
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.result.endTime ? getDuration(data.result.startTime, data.result.endTime) : '-'}
+                {data.execution.endTime ? getDuration(data.execution.startTime, data.execution.endTime) : '-'}
               </Typography>
             </div>
             <div>
