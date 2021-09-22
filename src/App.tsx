@@ -6,6 +6,11 @@ import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
+import {
+  cleanStorageWhenApiEndpointQueryStringIsAbsent,
+  getApiEndpointOnPageLoad,
+  // removeDuplicatesInQueryString,
+} from '@utils/validate';
 
 const MainTableStyles = styled.table`
   position: relative;
@@ -95,6 +100,11 @@ function App() {
       setDatas(lastTests);
     }
   }, [latestDateTests]);
+
+  useEffect(() => {
+    getApiEndpointOnPageLoad();
+    cleanStorageWhenApiEndpointQueryStringIsAbsent();
+  }, []);
 
   return (
     <>
