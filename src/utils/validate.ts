@@ -58,7 +58,7 @@ export const removeDuplicatesInQueryString = (originLocation: string) => {
     return;
   }
 
-  const queryStringArray = queryString.split('apiEndpoint=');
+  const queryStringArray = queryString.split(`${config.apiEndpoint}=`);
 
   const uniqueQueryStringArray = [...new Set(queryStringArray)];
 
