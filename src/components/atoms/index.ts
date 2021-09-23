@@ -4,3 +4,4 @@ export { default as Image } from './Image/Image';
 export { default as RenderTestStatusSvgIcon } from './RenderIcons/RenderIcons';
 export { default as TestTypeIcon } from './TestTypeIcon/TestTypeIcon';
 export { default as LabelInput } from './LabelledInput/LabelledInput';
+export { default as KbModal } from './KbModal/KbModal';
