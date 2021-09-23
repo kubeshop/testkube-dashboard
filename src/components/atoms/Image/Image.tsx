@@ -8,6 +8,7 @@ interface IImage {
   size?: number | null;
   width?: number;
   height?: number;
+  onClick?: () => void;
 }
 
 const StyledImage = styled.img<IImage>`
@@ -17,8 +18,8 @@ const StyledImage = styled.img<IImage>`
   border-radius: ${props => (props.size ? '50%' : '0')};
 `;
 
-const Image = ({src, alt, type, size, width, height}: IImage) => {
-  return <StyledImage src={src} alt={alt} type={type} size={size} width={width} height={height} />;
+const Image = ({src, alt, type, size, width, height, onClick}: IImage) => {
+  return <StyledImage src={src} alt={alt} type={type} size={size} width={width} height={height} onClick={onClick} />;
 };
 
 export default Image;
