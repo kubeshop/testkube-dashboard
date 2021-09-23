@@ -2,7 +2,6 @@
   "executions": [
     {
       "id": 1,
-      "name": "script 1",
       "scriptType": "cypress",
       "scriptName": "script 1",
       "status": "success",
@@ -11,7 +10,6 @@
     },
     {
       "id": 2,
-      "name": "script 2",
       "scriptType": "postman",
       "scriptName": "script 2",
       "status": "pending",
@@ -20,7 +18,6 @@
     },
     {
       "id": 3,
-      "name": "script 3",
       "scriptType": "cypress",
       "scriptName": "script 3",
       "status": "queued",
@@ -29,7 +26,6 @@
     },
     {
       "id": 4,
-      "name": "script 4",
       "scriptType": "postman",
       "scriptName": "script 4",
       "status": "success",
@@ -38,7 +34,6 @@
     },
     {
       "id": 5,
-      "name": "script 5",
       "scriptType": "cypress",
       "scriptName": "script 5",
       "status": "error",
@@ -47,7 +42,6 @@
     },
     {
       "id": 6,
-      "name": "script 6",
       "scriptType": "postman",
       "scriptName": "script 6",
       "status": "pending",
@@ -56,7 +50,6 @@
     },
     {
       "id": 7,
-      "name": "script 7",
       "scriptType": "postman",
       "scriptName": "script 7",
       "status": "pending",

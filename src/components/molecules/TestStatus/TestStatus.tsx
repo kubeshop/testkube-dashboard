@@ -14,7 +14,7 @@ const TestStatus: React.FC<ITestStatusProps> = ({testTitle, totalTests}) => {
         {testTitle}
       </Typography>
       <Typography variant="quinary" color="quaternary">
-        {totalTests}
+        {totalTests || '0'}
       </Typography>
     </>
   );

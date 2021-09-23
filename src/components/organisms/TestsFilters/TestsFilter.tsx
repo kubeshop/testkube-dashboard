@@ -28,10 +28,18 @@ const TestsFilter = () => {
       </StyledTestTextDescription>
       <StyleTestFilterButtons>
         <Typography variant="secondary">Show: </Typography>
-        <Button onClick={() => tests.setSelectedTestTypes('all')}>All</Button>
-        <Button onClick={() => tests.setSelectedTestTypes('pending')}>Running</Button>
-        <Button onClick={() => tests.setSelectedTestTypes('success')}>Passed</Button>
-        <Button onClick={() => tests.setSelectedTestTypes('error')}>Failed</Button>
+        <Button disabled={!tests.data} onClick={() => tests.setSelectedTestTypes('all')}>
+          All
+        </Button>
+        <Button disabled={!tests.data} onClick={() => tests.setSelectedTestTypes('pending')}>
+          Running
+        </Button>
+        <Button disabled={!tests.data} onClick={() => tests.setSelectedTestTypes('success')}>
+          Passed
+        </Button>
+        <Button disabled={!tests.data} onClick={() => tests.setSelectedTestTypes('error')}>
+          Failed
+        </Button>
       </StyleTestFilterButtons>
     </>
   );

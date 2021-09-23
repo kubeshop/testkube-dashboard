@@ -56,7 +56,6 @@ const PageHeader = () => {
   return (
     <StyledPAgeHeader>
       <PageTitle />
-
       <StyledHeaderTests>
         <KbModal>
           <StyledSearchUrlForm onSubmit={handleOpenUrl}>
@@ -66,7 +65,7 @@ const PageHeader = () => {
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
               defaultValue={apiEndpoint.apiEndpoint}
             />
-            <Button type="submit" disabled={!validUrl}>
+            <Button type="submit" disabled={!validUrl} onClick={handleOpenUrl} disableFilter>
               Get tests
             </Button>
           </StyledSearchUrlForm>
