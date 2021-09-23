@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {DocLinks, PageTitle} from '@molecules';
-import {Button, LabelInput} from '@atoms';
+import {Button, LabelInput, KbModal} from '@atoms';
 
 import {
   matchEndpointProtocolWithHostProtocol,
@@ -24,11 +24,12 @@ const StyledPAgeHeader = styled.header`
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
-  align-items: baseline;
+  align-items: center;
 `;
 
 const StyledHeaderTests = styled.div`
   display: flex;
+  flex-flow: row;
 `;
 
 const PageHeader = () => {
@@ -55,20 +56,21 @@ const PageHeader = () => {
   return (
     <StyledPAgeHeader>
       <PageTitle />
-      <StyledHeaderTests>
-        <StyledSearchUrlForm onSubmit={handleOpenUrl}>
-          <LabelInput
-            id="url"
-            name="url"
-            labelText="Test Endpoint "
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
-            defaultValue={apiEndpoint.apiEndpoint}
-          />
 
-          <Button type="submit" disabled={!validUrl} onClick={handleOpenUrl}>
-            Get tests
-          </Button>
-        </StyledSearchUrlForm>
+      <StyledHeaderTests>
+        <KbModal>
+          <StyledSearchUrlForm onSubmit={handleOpenUrl}>
+            <LabelInput
+              id="url"
+              name="url"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
+              defaultValue={apiEndpoint.apiEndpoint}
+            />
+            <Button type="submit" disabled={!validUrl}>
+              Get tests
+            </Button>
+          </StyledSearchUrlForm>
+        </KbModal>
         <DocLinks />
       </StyledHeaderTests>
     </StyledPAgeHeader>
