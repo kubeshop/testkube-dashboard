@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {DatePicker} from 'antd';
 
 import {Typography, Button} from '@atoms';
@@ -15,7 +15,8 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
-  const [latestDate, setLatestDate] = React.useState<boolean>(false);
+  const [latestDate, setLatestDate] = useState<boolean>(false);
+  const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
   const tests: any = React.useContext(TestsContext);
 
   const handleDatePicker = (date: any, dateString: any) => {
@@ -27,11 +28,19 @@ const ResultDatePicker = () => {
     setLatestDate(!latestDate);
   }, [latestDate]);
 
+  React.useEffect(() => {
+    if (tests.data) {
+      setToggleGetTest(true);
+    }
+  }, [tests.data]);
+
   return (
     <>
       <Typography variant="quaternary">Results for</Typography>
       <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} />
-      <Button onClick={getLatestDateTest}>Latest</Button>
+      <Button disabled={!toggleGetTest} onClick={getLatestDateTest}>
+        Latest
+      </Button>
     </>
   );
 };
