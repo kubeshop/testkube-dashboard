@@ -90,3 +90,7 @@ export const getApiEndpointOnPageLoad = () => {
 export const checkApiEndpointProtocol = (apiEndpoint: string) => {
   return apiEndpoint.includes('http') ? apiEndpoint : `${window.location.protocol}//${apiEndpoint}`;
 };
+
+export const findMatchWordInString = (word: string, string: string) => {
+  return string.match(new RegExp(word, 'gi'));
+};
