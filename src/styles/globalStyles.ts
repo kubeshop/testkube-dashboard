@@ -35,12 +35,25 @@ export const GlobalStyle = createGlobalStyle`
     .ant-picker-super-next-icon,
     .ant-picker-super-prev-icon,
     .ant-picker-today-btn {
-       color: var(--color-light-primary);
+      color: var(--color-light-primary);
     }
 
     .ant-picker-content > thead > tr > th {
       color: var(--color-light-primary);
     }
+
+    .ant-modal-footer {
+      background: var(--color-dark-primary);
+    }
+
+    .ant-modal-close {
+      color: var(--color-light-primary);
+    }
+
+    .ant-modal-close:hover {
+      color: var(--color-monokle-primary);
+    }
+
   `;
 
 /* Media Sizes */
