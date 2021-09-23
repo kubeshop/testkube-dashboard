@@ -6,13 +6,10 @@ import {PageHeader, TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
-import {
-  cleanStorageWhenApiEndpointQueryStringIsAbsent,
-  getApiEndpointOnPageLoad,
-  // removeDuplicatesInQueryString,
-} from '@utils/validate';
+import {cleanStorageWhenApiEndpointQueryStringIsAbsent, getApiEndpointOnPageLoad} from '@utils/validate';
 
 import {config} from '@constants/config';
+import {Tests} from '@types';
 
 const MainTableStyles = styled.table`
   position: relative;
@@ -51,9 +48,9 @@ const StyledTestSummary = styled.tr`
 function App() {
   const [selectedTestTypes, setSelectedTestTypes] = useState<string>('');
   const [selectedTest, setSelectedTest] = useState<number | undefined>();
-  const [datas, setDatas] = useState([]);
   const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
   const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
+  const [testsExecution, setTestsExecution] = useState<Tests[]>([]);
 
   const {data, error} = useQuery(
     'tests',
@@ -72,25 +69,25 @@ function App() {
     setSelectedTest,
     selectedTestTypes,
     setSelectedTestTypes,
-    datas,
-    setDatas,
     selectedTimeIntervalTests,
     setSelectedTimeIntervalTests,
     latestDateTests,
     setLatestDateTests,
+    testsExecution,
   };
 
   useEffect(() => {
     const filteredTests =
       selectedTestTypes === 'all' ? data : data?.filter((test: any) => test.status === selectedTestTypes);
-    setDatas(filteredTests);
+
+    setTestsExecution(filteredTests);
   }, [selectedTestTypes]);
 
   useEffect(() => {
     const filteredTestsIntervals = data?.filter(
       (test: any) => getDate(test.startTime) === getDate(selectedTimeIntervalTests)
     );
-    setDatas(filteredTestsIntervals);
+    setTestsExecution(filteredTestsIntervals);
   }, [selectedTimeIntervalTests]);
 
   useEffect(() => {
@@ -99,9 +96,15 @@ function App() {
 
       const lastTests = data?.filter((test: any) => getDate(test.startTime) === getDate(latestdate));
 
-      setDatas(lastTests);
+      setTestsExecution(lastTests);
     }
   }, [latestDateTests]);
+
+  useEffect(() => {
+    if (data) {
+      setTestsExecution(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     getApiEndpointOnPageLoad();
