@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {DocLinks, PageTitle} from '@molecules';
-import {Button, LabelInput, KbModal} from '@atoms';
+import {KbModal, Button, LabelInput} from '@atoms';
 
 import {
   matchEndpointProtocolWithHostProtocol,
@@ -65,7 +65,7 @@ const PageHeader = () => {
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
               defaultValue={apiEndpoint.apiEndpoint}
             />
-            <Button type="submit" disabled={!validUrl} onClick={handleOpenUrl} disableFilter>
+            <Button type="submit" disabled={!validUrl} disableFilter>
               Get tests
             </Button>
           </StyledSearchUrlForm>

@@ -21,7 +21,7 @@ const DocLinks = () => {
         <Image src={docsIcon} alt="Docs" type="svg" width={30} height={30} />
       </a>
       <a href="https://github.com/kubeshop/kubtest" target="_blank" rel="noopener">
-        <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} style={{color: 'blue'}} />
+        <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} />
       </a>
     </StyledDocHead>
   );
