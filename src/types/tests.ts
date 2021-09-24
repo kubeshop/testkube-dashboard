@@ -4,6 +4,7 @@ export type ITestStatus = {
 
 export interface ITests {
   id: number;
+  name: string;
   scriptName: string;
   scriptType: string;
   status: ITestStatus;
@@ -12,12 +13,19 @@ export interface ITests {
 }
 
 export interface ITest {
+  id: string;
+  scriptName: string;
+  scriptType: string;
+  name: string;
+  executionResult: IExecutionResult;
+}
+
+export interface IExecutionResult {
   status: string;
   startTime: string;
   endTime: string;
   output: string;
   outputType: string;
-  errorMessage: string;
   steps: IStep[];
 }
 
@@ -31,5 +39,4 @@ export interface IStep {
 export interface IAssertionResult {
   name: string;
   status: string;
-  errorMessage: string;
 }
