@@ -19,6 +19,10 @@ export const getQueryStringFromUrl = (url: string) => {
   return params.get(config.apiEndpoint);
 };
 
+export const RemoveLastTrailingSlashFromString = (word: string) => {
+  return word.replace(/\/$/, '');
+};
+
 export const removeSpaceFromString = (url: string) => {
   return url.replace(/\s/g, '');
 };
@@ -37,14 +41,16 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
 
   if (!apiEndpointProtocol) {
     const newApiEndpointWithProtocol  = `${hostProtocol}//${url}`;
-     const cleanURL = removeSpaceFromString(newApiEndpointWithProtocol);
-     localStorage.setItem(config.apiEndpoint, cleanURL);
+    const trimmedUrl = removeSpaceFromString(newApiEndpointWithProtocol);
+    const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
+     localStorage.setItem(config.apiEndpoint, cleanUrl);
   }
 
   if (hostProtocol !== apiEndpointProtocol) {
     const matchedUrlProtocol = url.replace(apiEndpointProtocol, hostProtocol);
-    const cleanURL = removeSpaceFromString(matchedUrlProtocol);
-    localStorage.setItem(config.apiEndpoint, cleanURL);
+     const trimmedUrl = removeSpaceFromString(matchedUrlProtocol);
+    const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
+     localStorage.setItem(config.apiEndpoint, cleanUrl);
     return;
   }
 
