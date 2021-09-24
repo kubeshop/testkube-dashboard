@@ -1,50 +1,52 @@
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 import {useQuery} from 'react-query';
+import {nanoid} from 'nanoid';
 
 import {TestsContext} from '@context/testsContext';
-import {timeStampToDate, getDuration} from '@utils/formatDate';
 import {RenderTestStatusSvgIcon, Typography} from '@atoms';
 
 import {config} from '@constants/config';
 
-const StyledTestDescriptionIcon = styled.div`
+const StyledTestStatus = styled.div`
+  display: flex;
+  text-align: justify;
   position: relative;
-`;
-
-const StyledTestStatusDescription = styled.div`
-  margin-left: -15px;
+  left: var(--space-md);
+  top: var(--space-md);
 `;
 
 const StyledTestDescription = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   position: relative;
-  margin-left: var(--space-md);
+  left: var(--space-lg);
 `;
 
-const StyledTestDescriptionName = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+const StyledOutputContainer = styled.div`
+  position: relative;
+  top: var(--space-md);
+  width: 100%;
+  max-height: 400px;
+  overflow: scroll;
+  background-color: black;
+  background-image: radial-gradient(rgba(0, 32, 150, 0.75), black 120%);
 `;
 
-const StyledTestDescriptionEndedAt = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+const StyledTestOutput = styled.span`
+  white-space: pre-line;
+  color: white;
+  text-shadow: 0 0 5px #c8c8c8;
+
+  &::selection {
+    background: #0080ff;
+    text-shadow: none;
+  }
 `;
 
-const StyledTestDescriptionDuration = styled.div`
+const StyledText = styled.span`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const StyledTestDescriptionType = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 `;
 
 const TestDescription = () => {
@@ -81,47 +83,18 @@ const TestDescription = () => {
       {error && <Typography variant="secondary">Something went wrong...</Typography>}
       {tests?.selectedTest && data && (
         <>
-          <StyledTestDescriptionIcon>
+          <StyledTestStatus>
             <RenderTestStatusSvgIcon testStatus={data.executionResult.status} width={50} height={50} />
-          </StyledTestDescriptionIcon>
+            <Typography variant="secondary">TEST {renderTestStatus(data.executionResult.status)}</Typography>
+          </StyledTestStatus>
           <StyledTestDescription>
-            <StyledTestStatusDescription>
-              <Typography variant="secondary">TEST {renderTestStatus(data.executionResult.status)}</Typography>
-            </StyledTestStatusDescription>
-            <StyledTestDescriptionName>
-              <Typography variant="secondary" font="bold">
-                Name
-              </Typography>
-              <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.scriptName ? data.scriptName : '-'}
-              </Typography>
-            </StyledTestDescriptionName>
-            <StyledTestDescriptionEndedAt>
-              <Typography variant="secondary" font="bold">
-                Ended At
-              </Typography>
-              <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.executionResult.endTime ? timeStampToDate(data.executionResult.endTime) : '-'}
-              </Typography>
-            </StyledTestDescriptionEndedAt>
-            <StyledTestDescriptionDuration>
-              <Typography variant="secondary" font="bold">
-                Duration
-              </Typography>
-              <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.executionResult.endTime
-                  ? getDuration(data.executionResult.startTime, data.executionResult.endTime)
-                  : '-'}
-              </Typography>
-            </StyledTestDescriptionDuration>
-            <StyledTestDescriptionType>
-              <Typography variant="secondary" font="bold">
-                Type
-              </Typography>
-              <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.scriptType}
-              </Typography>
-            </StyledTestDescriptionType>
+            <StyledOutputContainer>
+              <StyledTestOutput>
+                {data.executionResult.output.split('\n').map((i: any) => {
+                  return <StyledText key={nanoid()}>{i}</StyledText>;
+                })}
+              </StyledTestOutput>
+            </StyledOutputContainer>
           </StyledTestDescription>
         </>
       )}
