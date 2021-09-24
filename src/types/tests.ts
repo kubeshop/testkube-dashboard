@@ -17,26 +17,26 @@ export interface ITest {
   scriptName: string;
   scriptType: string;
   name: string;
-  executionResult: ExecutionResult;
+  executionResult: IExecutionResult;
 }
 
-export interface ExecutionResult {
+export interface IExecutionResult {
   status: string;
   startTime: string;
   endTime: string;
   output: string;
   outputType: string;
-  steps: Step[];
+  steps: IStep[];
 }
 
-export interface Step {
+export interface IStep {
   name: string;
   duration: string;
   status: string;
-  assertionResults: AssertionResult[];
+  assertionResults: IAssertionResult[];
 }
 
-export interface AssertionResult {
+export interface IAssertionResult {
   name: string;
   status: string;
 }
