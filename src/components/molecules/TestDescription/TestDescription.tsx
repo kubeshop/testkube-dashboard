@@ -82,11 +82,11 @@ const TestDescription = () => {
       {tests?.selectedTest && data && (
         <>
           <StyledTestDescriptionIcon>
-            <RenderTestStatusSvgIcon testStatus={data.execution.status} width={50} height={50} />
+            <RenderTestStatusSvgIcon testStatus={data.executionResult.status} width={50} height={50} />
           </StyledTestDescriptionIcon>
           <StyledTestDescription>
             <StyledTestStatusDescription>
-              <Typography variant="secondary">TEST {renderTestStatus(data.execution.status)}</Typography>
+              <Typography variant="secondary">TEST {renderTestStatus(data.executionResult.status)}</Typography>
             </StyledTestStatusDescription>
             <StyledTestDescriptionName>
               <Typography variant="secondary" font="bold">
@@ -101,7 +101,7 @@ const TestDescription = () => {
                 Ended At
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.execution.endTime ? timeStampToDate(data.execution.endTime) : '-'}
+                {data.executionResult.endTime ? timeStampToDate(data.executionResult.endTime) : '-'}
               </Typography>
             </StyledTestDescriptionEndedAt>
             <StyledTestDescriptionDuration>
@@ -109,7 +109,9 @@ const TestDescription = () => {
                 Duration
               </Typography>
               <Typography variant="secondary" style={{marginTop: '-15px'}}>
-                {data.execution.endTime ? getDuration(data.execution.startTime, data.execution.endTime) : '-'}
+                {data.executionResult.endTime
+                  ? getDuration(data.executionResult.startTime, data.executionResult.endTime)
+                  : '-'}
               </Typography>
             </StyledTestDescriptionDuration>
             <StyledTestDescriptionType>
