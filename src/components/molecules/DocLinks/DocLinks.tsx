@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import {Image} from '@atoms';
 
-import docsIcon from '@assets/docs.svg';
+import docsIcon from '@assets/docsIcon.svg';
 import githubIcon from '@assets/githubIcon.svg';
 
 const StyledDocHead = styled.div`
@@ -21,7 +21,7 @@ const DocLinks = () => {
         <Image src={docsIcon} alt="Docs" type="svg" width={30} height={30} />
       </a>
       <a href="https://github.com/kubeshop/kubtest" target="_blank" rel="noopener">
-        <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} />
+        <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} style={{color: 'blue'}} />
       </a>
     </StyledDocHead>
   );
