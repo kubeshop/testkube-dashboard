@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Modal} from 'antd';
 
-import {DocLinks, PageTitle} from '@molecules';
-import {KbModal, Button, LabelInput} from '@atoms';
+import {PageTitle} from '@molecules';
+import {Button, LabelInput, Image} from '@atoms';
 
 import {
   matchEndpointProtocolWithHostProtocol,
@@ -10,6 +11,10 @@ import {
   removeDuplicatesInQueryString,
   checkApiEndpointProtocol,
 } from '@utils/validate';
+
+import ParamsIcon from '@assets/docs.svg';
+import docsIcon from '@assets/docsIcon.svg';
+import githubIcon from '@assets/githubIcon.svg';
 
 interface IUrlEndpoint {
   apiEndpoint: string;
@@ -32,9 +37,23 @@ const StyledHeaderTests = styled.div`
   flex-flow: row;
 `;
 
+const StyledHeaderLinksButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-right: var(--space-lg);
+`;
+
 const PageHeader = () => {
   const [apiEndpoint, setApiEndpoint] = React.useState<IUrlEndpoint>({apiEndpoint: ''});
   const [validUrl, setVAlidUrl] = React.useState<boolean>(false);
+  const [visible, setVisible] = React.useState(false);
+
+  const modalStyles = {
+    backgroundColor: 'var(--color-dark-primary)',
+    height: '150px',
+  };
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -53,11 +72,27 @@ const PageHeader = () => {
     setVAlidUrl(validatedUrl);
   };
 
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = () => {
+    setVisible(false);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const StyledButton = styled.div`
+    cursor: pointer;
+  `;
+
   return (
     <StyledPAgeHeader>
       <PageTitle />
       <StyledHeaderTests>
-        <KbModal>
+        <Modal visible={visible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={modalStyles}>
           <StyledSearchUrlForm onSubmit={handleOpenUrl}>
             <LabelInput
               id="url"
@@ -69,8 +104,18 @@ const PageHeader = () => {
               Get tests
             </Button>
           </StyledSearchUrlForm>
-        </KbModal>
-        <DocLinks />
+        </Modal>
+        <StyledHeaderLinksButtons>
+          <StyledButton>
+            <Image src={ParamsIcon} alt="search tests" type="svg" width={30} height={30} onClick={showModal} />
+          </StyledButton>
+          <a href="https://kubeshop.github.io/kubtest/" target="_blank" rel="noopener">
+            <Image src={docsIcon} alt="Docs" type="svg" width={30} height={30} />
+          </a>
+          <a href="https://github.com/kubeshop/kubtest" target="_blank" rel="noopener">
+            <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} />
+          </a>
+        </StyledHeaderLinksButtons>
       </StyledHeaderTests>
     </StyledPAgeHeader>
   );
