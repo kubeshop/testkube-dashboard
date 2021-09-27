@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
-import {PageHeader} from '@organisms';
 
 import App from './App';
 import './styles/variables.css';
@@ -21,7 +20,6 @@ const queryCache = new QueryClient({
 
 ReactDOM.render(
   <React.StrictMode>
-    <PageHeader />
     <QueryClientProvider client={queryCache}>
       <GlobalStyle />
       <App />

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useQuery} from 'react-query';
 
-import {TestResults, TestsFilter, TestsSummary} from '@organisms';
+import {TestResults, TestsFilter, TestsSummary, PageHeader} from '@organisms';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
@@ -114,7 +114,7 @@ function App() {
   return (
     <>
       {error && 'Something went wrong...'}
-      {/* <PageHeader /> */}
+      <PageHeader />
       <TestsContext.Provider value={tests}>
         <MainTableStyles>
           <thead>
