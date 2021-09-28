@@ -65,7 +65,7 @@
     "web-vitals": "2.1.0"
   },
   "scripts": {
-    "mock-api": "json-server --watch src/assets/mockedData/testExecution.json --port 4000",
+    "mock-api": "json-server --watch src/assets/mockedData/executions.json --port 4000",
     "start": "craco start",
     "start:mock-app": "concurrently \"npm run mock-api\" \"npm start\"",
     "build": "craco --max_old_space_size=4096 build",
