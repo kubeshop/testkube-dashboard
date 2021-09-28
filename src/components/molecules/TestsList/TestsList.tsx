@@ -7,6 +7,8 @@ import {RenderTestStatusSvgIcon, Typography, TestTypeIcon} from '@atoms';
 import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
 
+import {Result} from '@types';
+
 const StyledTestListContainer = styled.div`
   display: block;
   width: 100%;
@@ -69,9 +71,8 @@ const TestsList = () => {
           </Typography>
         </StyledTestListCell>
       </StyledTestListRow>
-
-      {tests.testsExecution &&
-        tests?.testsExecution?.map((test: any) => (
+      {tests?.data?.results &&
+        tests?.data?.results?.map((test: Result) => (
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id)}>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">

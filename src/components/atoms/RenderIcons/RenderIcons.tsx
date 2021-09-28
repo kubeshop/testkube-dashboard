@@ -8,7 +8,7 @@ import SuccessTestIcon from '@assets/testSuccessIcon.svg';
 import QueuedTestIcon from '@assets/testQueuedIcon.svg';
 
 interface ITestTypes {
-  testStatus: 'queued' | 'error' | 'success' | 'pending';
+  testStatus: string;
   width: number;
   height: number;
 }

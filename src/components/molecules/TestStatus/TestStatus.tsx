@@ -4,7 +4,7 @@ import {Typography} from '@atoms';
 
 interface ITestStatusProps {
   testTitle: string;
-  totalTests: string;
+  totalTests: string | undefined;
 }
 
 const TestStatus: React.FC<ITestStatusProps> = ({testTitle, totalTests}) => {
