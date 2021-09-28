@@ -13,7 +13,7 @@ import {
 } from '@utils/validate';
 
 import ParamsIcon from '@assets/docs.svg';
-import docsIcon from '@assets/docsIcon.svg';
+import docsIcon from '@assets/questionIcon.svg';
 import githubIcon from '@assets/githubIcon.svg';
 
 interface IUrlEndpoint {
@@ -110,7 +110,7 @@ const PageHeader = () => {
             <Image src={ParamsIcon} alt="search tests" type="svg" width={30} height={30} onClick={showModal} />
           </StyledButton>
           <a href="https://kubeshop.github.io/kubtest/" target="_blank" rel="noopener">
-            <Image src={docsIcon} alt="Docs" type="svg" width={30} height={30} />
+            <Image src={docsIcon} alt="Docs" type="svg" width={25} height={30} />
           </a>
           <a href="https://github.com/kubeshop/kubtest" target="_blank" rel="noopener">
             <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} />
