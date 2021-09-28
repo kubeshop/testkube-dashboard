@@ -78,7 +78,7 @@ function App() {
 
   useEffect(() => {
     const filteredTests =
-      selectedTestTypes === 'all' ? data : data?.filter((test: any) => test.status === selectedTestTypes);
+      selectedTestTypes === 'all' ? data : data?.results?.filter((test: any) => test.status === selectedTestTypes);
 
     setTestsExecution(filteredTests);
   }, [selectedTestTypes]);

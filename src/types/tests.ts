@@ -1,15 +1,28 @@
 export type ITestStatus = {
-  status: 'queued' | 'error' | 'success' | 'pending';
+  testStatus: 'queued' | 'error' | 'success' | 'pending';
 };
 
 export interface ITests {
-  id: number;
+  totals: Totals;
+  results: IResult[];
+}
+
+export interface IResult {
+  id: string;
   name: string;
   scriptName: string;
   scriptType: string;
-  status: ITestStatus;
+  status: string;
   startTime: string;
   endTime: string;
+}
+
+export interface Totals {
+  results: number;
+  passed: number;
+  failed: number;
+  queued: number;
+  pending: number;
 }
 
 export interface ITest {
