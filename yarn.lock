@@ -4051,9 +4051,9 @@ craco-alias@3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/craco-alias/-/craco-alias-3.0.1.tgz"
 
-craco-less@1.18.0:
-  version "1.18.0"
-  resolved "https://registry.npmjs.org/craco-less/-/craco-less-1.18.0.tgz"
+craco-less@1.20.0:
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/craco-less/-/craco-less-1.20.0.tgz#7f68679b84c7756f785f9c5ee4e4f795662acad1"
   dependencies:
     less "^4.1.1"
     less-loader "^7.3.0"
