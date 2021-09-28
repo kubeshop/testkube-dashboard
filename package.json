@@ -61,11 +61,11 @@
     "react-query": "^3.21.1",
     "react-use": "17.2.4",
     "reselect": "4.0.0",
-    "styled-components": "5.3.0",
+    "styled-components": "5.3.1",
     "web-vitals": "2.1.0"
   },
   "scripts": {
-    "mock-api": "json-server --watch src/assets/mockedData/testExecution.json --port 4000",
+    "mock-api": "json-server --watch --routes routes.json src/assets/mockedData/executions.json --port 4000",
     "start": "craco start",
     "start:mock-app": "concurrently \"npm run mock-api\" \"npm start\"",
     "build": "craco --max_old_space_size=4096 build",

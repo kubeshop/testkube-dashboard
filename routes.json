@@ -1,0 +1,3 @@
+{
+  "/:executions/:id": "/results/:id"
+}
