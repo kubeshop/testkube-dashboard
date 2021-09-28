@@ -1,67 +1,126 @@
 {
-  "totals" : {
-    "results" : 7,
-    "passed" : 2,
-    "failed" : 1,
-    "queued" : 1,
-    "pending" : 3
+  "executions": {
+    "totals": {
+      "results": 7,
+      "passed": 2,
+      "failed": 1,
+      "queued": 1,
+      "pending": 3
+    },
+    "results": [
+      {
+        "id": 1,
+        "scriptType": "cypress",
+        "scriptName": "script 1",
+        "status": "success",
+        "startTime": "2021-09-01T12:00:00.000Z",
+        "endTime": "2021-09-02T12:00:00.000Z"
+      },
+      {
+        "id": 2,
+        "scriptType": "postman",
+        "scriptName": "script 2",
+        "status": "pending",
+        "startTime": "2021-09-03T12:00:00.000Z",
+        "endTime": "2021-09-04T12:00:00.000Z"
+      },
+      {
+        "id": 3,
+        "scriptType": "cypress",
+        "scriptName": "script 3",
+        "status": "queued",
+        "startTime": "2021-09-05T12:00:00.000Z",
+        "endTime": ""
+      },
+      {
+        "id": 4,
+        "scriptType": "postman",
+        "scriptName": "script 4",
+        "status": "success",
+        "startTime": "2021-09-07T12:00:00.000Z",
+        "endTime": "2021-09-08T12:00:00.000Z"
+      },
+      {
+        "id": 5,
+        "scriptType": "postman",
+        "scriptName": "script 5",
+        "status": "error",
+        "startTime": "2021-09-09T12:00:00.000Z",
+        "endTime": "2021-09-10T12:00:00.000Z"
+      },
+      {
+        "id": 6,
+        "scriptType": "postman",
+        "scriptName": "script 6",
+        "status": "pending",
+        "startTime": "2021-09-11T12:00:00.000Z",
+        "endTime": "2021-09-12T12:00:00.000Z"
+      },
+      {
+        "id": 7,
+        "scriptType": "postman",
+        "scriptName": "script 7",
+        "status": "pending",
+        "startTime": "2021-09-12T12:00:00.000Z",
+        "endTime": "2021-09-12T12:00:00.000Z"
+      }
+    ]
   },
   "results": [
     {
-      "id": 1,
-      "scriptType": "cypress",
-      "scriptName": "script 1",
-      "status": "success",
-      "startTime": "2021-09-01T12:00:00.000Z",
-      "endTime": "2021-09-02T12:00:00.000Z"
-    },
-    {
-      "id": 2,
-      "scriptType": "postman",
-      "scriptName": "script 2",
-      "status": "pending",
-      "startTime": "2021-09-03T12:00:00.000Z",
-      "endTime": "2021-09-04T12:00:00.000Z"
-    },
-    {
-      "id": 3,
-      "scriptType": "cypress",
-      "scriptName": "script 3",
-      "status": "queued",
-      "startTime": "2021-09-05T12:00:00.000Z",
-      "endTime": ""
-    },
-    {
-      "id": 4,
-      "scriptType": "postman",
-      "scriptName": "script 4",
-      "status": "success",
-      "startTime": "2021-09-07T12:00:00.000Z",
-      "endTime": "2021-09-08T12:00:00.000Z"
-    },
-    {
-      "id": 5,
-      "scriptType": "postman",
+      "id": "5",
       "scriptName": "script 5",
-      "status": "error",
-      "startTime": "2021-09-09T12:00:00.000Z",
-      "endTime": "2021-09-10T12:00:00.000Z"
-    },
-    {
-      "id": 6,
-      "scriptType": "postman",
-      "scriptName": "script 6",
-      "status": "pending",
-      "startTime": "2021-09-11T12:00:00.000Z",
-      "endTime": "2021-09-12T12:00:00.000Z"
-    },
-    {
-      "id": 7,
-      "scriptType": "postman",
-      "scriptName": "script 7",
-      "status": "pending",
-      "startTime": "2021-09-12T12:00:00.000Z",
-      "endTime": "2021-09-12T12:00:00.000Z"
+      "scriptType": "postman/collection",
+      "name": "violently-classic-deer",
+      "executionResult": {
+        "status": "success",
+        "startTime": "2021-09-27T12:10:31.581Z",
+        "endTime": "2021-09-27T12:10:32.105Z",
+        "output": "newman\n\nKubTest\n\n→ Health\n  GET http://kubtest-api-server:8088/health [200 OK, 124B, 309ms]\n  ✓  Status code is 200\n\n┌─────────────────────────┬────────────────────┬───────────────────┐\n│                         │           executed │            failed │\n├─────────────────────────┼────────────────────┼───────────────────┤\n│              iterations │                  1 │                 0 │\n├─────────────────────────┼────────────────────┼───────────────────┤\n│                requests │                  1 │                 0 │\n├─────────────────────────┼────────────────────┼───────────────────┤\n│            test-scripts │                  1 │                 0 │\n├─────────────────────────┼────────────────────┼───────────────────┤\n│      prerequest-scripts │                  0 │                 0 │\n├─────────────────────────┼────────────────────┼───────────────────┤\n│              assertions │                  1 │                 0 │\n├─────────────────────────┴────────────────────┴───────────────────┤\n│ total run duration: 500ms                                        │\n├──────────────────────────────────────────────────────────────────┤\n│ total data received: 8B (approx)                                 │\n├──────────────────────────────────────────────────────────────────┤\n│ average response time: 309ms [min: 309ms, max: 309ms, s.d.: 0µs] │\n└──────────────────────────────────────────────────────────────────┘\n",
+        "outputType": "text/plain",
+        "steps": [
+          {
+            "name": "Health",
+            "duration": "309ms",
+            "status": "success",
+            "assertionResults": [
+              {
+                "name": "Status code is 200",
+                "status": "success"
+              }
+            ]
+          },
+          {
+            "name": "Another Step",
+            "duration": "309ms",
+            "status": "success",
+            "assertionResults": [
+              {
+                "name": "Status code is 200",
+                "status": "success"
+              }
+            ]
+          },
+          {
+            "name": "Step without assertions",
+            "duration": "309ms",
+            "status": "success",
+            "assertionResults": []
+          },
+          {
+            "name": "Failed step",
+            "duration": "309ms",
+            "status": "error",
+            "assertionResults": [
+              {
+                "name": "Status code is 200",
+                "status": "error",
+                "errorMessage": "Status code was 404"
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }
