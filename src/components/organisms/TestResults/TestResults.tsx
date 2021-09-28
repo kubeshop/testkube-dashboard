@@ -25,10 +25,8 @@ const TestResults = () => {
 
   const getTotalTestsByType = (testType: string) => {
     if (tests.data) {
-      const filteredTests = tests.data.filter((test: any) => test.status === testType).length;
-
       // eslint-disable-next-line
-      return filteredTests && filteredTests + ' / ' + tests?.data?.length;
+      return testType + ' / ' + tests?.data?.totals?.results;
     }
   };
 
@@ -38,16 +36,19 @@ const TestResults = () => {
         <ResultDatePicker />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Passed" totalTests={getTotalTestsByType('success')} />
+        <TestStatus testTitle="Passed" totalTests={getTotalTestsByType(tests?.data?.totals?.passed.toString())} />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Error" totalTests={getTotalTestsByType('error')} />
+        <TestStatus testTitle="Error" totalTests={getTotalTestsByType(tests?.data?.totals?.failed.toString())} />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Test Running" totalTests={getTotalTestsByType('pending')} />
+        <TestStatus
+          testTitle="Test Running"
+          totalTests={getTotalTestsByType(tests?.data?.totals?.pending.toString())}
+        />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Total Tests Executed" totalTests={tests && tests?.data?.length} />
+        <TestStatus testTitle="Total Tests Executed" totalTests={tests?.data?.totals?.results.toString()} />
       </StyledTableCell>
     </>
   );
