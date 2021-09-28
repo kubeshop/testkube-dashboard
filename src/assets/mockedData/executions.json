@@ -1,0 +1,67 @@
+{
+  "totals" : {
+    "results" : 7,
+    "passed" : 2,
+    "failed" : 1,
+    "queued" : 1,
+    "pending" : 3
+  },
+  "results": [
+    {
+      "id": 1,
+      "scriptType": "cypress",
+      "scriptName": "script 1",
+      "status": "success",
+      "startTime": "2021-09-01T12:00:00.000Z",
+      "endTime": "2021-09-02T12:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "scriptType": "postman",
+      "scriptName": "script 2",
+      "status": "pending",
+      "startTime": "2021-09-03T12:00:00.000Z",
+      "endTime": "2021-09-04T12:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "scriptType": "cypress",
+      "scriptName": "script 3",
+      "status": "queued",
+      "startTime": "2021-09-05T12:00:00.000Z",
+      "endTime": ""
+    },
+    {
+      "id": 4,
+      "scriptType": "postman",
+      "scriptName": "script 4",
+      "status": "success",
+      "startTime": "2021-09-07T12:00:00.000Z",
+      "endTime": "2021-09-08T12:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "scriptType": "postman",
+      "scriptName": "script 5",
+      "status": "error",
+      "startTime": "2021-09-09T12:00:00.000Z",
+      "endTime": "2021-09-10T12:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "scriptType": "postman",
+      "scriptName": "script 6",
+      "status": "pending",
+      "startTime": "2021-09-11T12:00:00.000Z",
+      "endTime": "2021-09-12T12:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "scriptType": "postman",
+      "scriptName": "script 7",
+      "status": "pending",
+      "startTime": "2021-09-12T12:00:00.000Z",
+      "endTime": "2021-09-12T12:00:00.000Z"
+    }
+  ]
+}
