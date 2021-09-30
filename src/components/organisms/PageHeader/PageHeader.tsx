@@ -20,6 +20,7 @@ const StyledPAgeHeader = styled.header`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--color-light-primary);
+  overflow: hidden;
 `;
 
 const StyledSearchUrlForm = styled.form`
