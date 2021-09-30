@@ -2040,17 +2040,9 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "17.0.19"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.19.tgz"
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@17.0.18":
-  version "17.0.18"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.18.tgz"
+"@types/react@*", "@types/react@17.0.25":
+  version "17.0.25"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.25.tgz#8b88c226e54910762decc9de2aa36b4dc9240503"
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
