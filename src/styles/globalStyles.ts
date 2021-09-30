@@ -69,6 +69,10 @@ export const GlobalStyle = createGlobalStyle`
       position: absolute;
       top: 40%;
     }
+
+    .ant-collapse-content {
+      width: 100%;
+    }
   `;
 
 /* Media Sizes */
