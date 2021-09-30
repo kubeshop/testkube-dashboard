@@ -2,33 +2,45 @@ import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 import {useQuery} from 'react-query';
 import {nanoid} from 'nanoid';
+import {Collapse} from 'antd';
 
 import {TestsContext} from '@context/testsContext';
 import {RenderTestStatusSvgIcon, Typography} from '@atoms';
 
 import {config} from '@constants/config';
 
-const StyledTestStatus = styled.div`
-  display: flex;
-  text-align: justify;
-  position: relative;
-  left: var(--space-md);
-  top: var(--space-md);
-`;
+import {Step, AssertionResult} from '@types';
 
-const StyledTestDescription = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+const StyledTestStatusImage = styled.div`
   position: relative;
+  top: var(--space-lg);
   left: var(--space-lg);
 `;
 
-const StyledOutputContainer = styled.div`
+const StyledTestOutputsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+  margin-right: var(--space-lg);
+  margin-left: var(--space-md);
   position: relative;
-  top: var(--space-md);
+  top: var(--space-xl);
+  left: var(--space-lg);
+`;
+
+const StyledTestOutputDescription = styled.div`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  &:nth-child(1) {
+    margin-right: var(--space-md);
+  }
+`;
+
+const StyledPlainTextOutputContainer = styled.div`
   width: 100%;
-  max-height: 400px;
+  max-height: 300px;
   overflow: scroll;
   background-color: black;
   background-image: radial-gradient(rgba(0, 32, 150, 0.75), black 120%);
@@ -49,8 +61,82 @@ const StyledText = styled.span`
   display: flex;
 `;
 
+const StyledTestStepsOutPutContainer = styled.div`
+  width: 100%;
+  max-height: 300px;
+  overflow: scroll;
+`;
+
+const StyledTestStepNameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--space-x1l);
+  background: var(--color-gray-dark);
+  margin-bottom: var(--space-xxs);
+  color: var(--color-light-primary);
+`;
+
+const StyledTestStepName = styled.span`
+  margin-left: var(--space-xxs);
+  font-size: var(--font-size-sm);
+`;
+
+const StyledTestStepStatusContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--space-x1l);
+  background: var(--color-gray-dark);
+  margin-bottom: var(--space-xxs);
+  color: var(--color-light-primary);
+`;
+
+const StyledTestListStatusIcon = styled.div`
+  margin-left: var(--space-xxs);
+`;
+
+const StyledTestStepStatus = styled.span`
+  margin-left: var(--space-xxs);
+  font-size: var(--font-size-sm);
+`;
+
+const StyledTestAssertionResultsContainer = styled.div`
+  display: flex;
+  color: var(--color-light-primary);
+  margin-bottom: var(--space-md);
+`;
+
+const StyledTestStepStatusImageContainer = styled.div`
+  display: flex;
+`;
+
+const StyledTestOutputResult = styled.span`
+  margin-left: var(--space-xxs);
+  font-size: var(--font-size-xs);
+`;
+
+const StyledTestStepOutputStatusCode = styled.span`
+  display: flex;
+  font-size: var(--font-size-xs);
+  color: var(--color-light-primary);
+`;
+
+const StyledCollapse = styled(Collapse.Panel)`
+  &&& {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    border: none;
+    height: 100%;
+  }
+
+  background: var(--color-gray-dark);
+`;
+
 const TestDescription = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
+  const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
   const tests: any = useContext(TestsContext);
 
   const {data, error} = useQuery(['test', tests.selectedTest], () => {
@@ -68,14 +154,18 @@ const TestDescription = () => {
 
   const renderTestStatus = (testStatus: string) => {
     return testStatus === 'pending'
-      ? 'PENDING'
+      ? 'TEST PENDING'
       : testStatus === 'error'
-      ? 'ERROR'
+      ? 'TEST ERROR'
       : testStatus === 'success'
-      ? 'SUCCESS'
+      ? 'TEST SUCCESS'
       : testStatus === 'queued'
-      ? 'QUEUED'
+      ? 'TEST QUEUED'
       : '';
+  };
+
+  const handleOnClick = () => {
+    setTogglePlainTestTest(!togglePlainTestTest);
   };
 
   return (
@@ -83,19 +173,78 @@ const TestDescription = () => {
       {error && <Typography variant="secondary">Something went wrong...</Typography>}
       {tests?.selectedTest && data && (
         <>
-          <StyledTestStatus>
-            <RenderTestStatusSvgIcon testStatus={data.executionResult.status} width={50} height={50} />
-            <Typography variant="secondary">TEST {renderTestStatus(data.executionResult.status)}</Typography>
-          </StyledTestStatus>
-          <StyledTestDescription>
-            <StyledOutputContainer>
-              <StyledTestOutput>
-                {data.executionResult.output.split('\n').map((i: any) => {
-                  return <StyledText key={nanoid()}>{i}</StyledText>;
+          <StyledTestStatusImage>
+            <RenderTestStatusSvgIcon testStatus={data?.executionResult?.status} width={50} height={50} />
+          </StyledTestStatusImage>
+          <StyledTestOutputsContainer>
+            <StyledTestOutputDescription>
+              <Typography variant="secondary">{renderTestStatus(data?.executionResult?.status)}</Typography>
+              <Typography variant="secondary" color="quinary" cursor="pointer" onClick={handleOnClick}>
+                {togglePlainTestTest ? 'View plain text' : 'View steps'}
+              </Typography>
+            </StyledTestOutputDescription>
+            {!togglePlainTestTest ? (
+              <>
+                <StyledPlainTextOutputContainer>
+                  <StyledTestOutput>
+                    {data?.executionResult?.output.split('\n').map((i: any) => {
+                      return <StyledText key={nanoid()}>{i}</StyledText>;
+                    })}
+                  </StyledTestOutput>
+                </StyledPlainTextOutputContainer>
+              </>
+            ) : (
+              <StyledTestStepsOutPutContainer>
+                {data?.executionResult?.steps?.map((step: Step) => {
+                  return (
+                    <>
+                      <StyledTestStepNameContainer>
+                        <StyledTestStepName>Step Name: {step?.name}</StyledTestStepName>
+                      </StyledTestStepNameContainer>
+                      <StyledTestStepStatusContainer>
+                        <StyledTestListStatusIcon>
+                          <RenderTestStatusSvgIcon testStatus={step?.status} width={20} height={20} />
+                        </StyledTestListStatusIcon>
+                        <StyledTestStepStatus>{step?.status}</StyledTestStepStatus>
+                      </StyledTestStepStatusContainer>
+                      <StyledTestAssertionResultsContainer>
+                        {step?.assertionResults &&
+                          step?.assertionResults?.map((assertionResult: AssertionResult) => {
+                            return (
+                              <Collapse bordered={false} defaultActiveKey={nanoid()} expandIconPosition="right">
+                                <StyledCollapse
+                                  header={`Assertion Results (${step?.assertionResults?.length})`}
+                                  key={nanoid()}
+                                >
+                                  <StyledTestStepStatusContainer>
+                                    <StyledTestStepStatusImageContainer>
+                                      <RenderTestStatusSvgIcon
+                                        testStatus={assertionResult.status}
+                                        height={20}
+                                        width={20}
+                                      />
+                                      <StyledTestOutputResult>
+                                        {renderTestStatus(assertionResult?.status)}
+                                      </StyledTestOutputResult>
+                                    </StyledTestStepStatusImageContainer>
+                                  </StyledTestStepStatusContainer>
+                                  <StyledTestStepOutputStatusCode>
+                                    {assertionResult?.name}
+                                  </StyledTestStepOutputStatusCode>
+                                  <StyledTestStepOutputStatusCode>
+                                    {assertionResult?.errorMessage}
+                                  </StyledTestStepOutputStatusCode>
+                                </StyledCollapse>
+                              </Collapse>
+                            );
+                          })}
+                      </StyledTestAssertionResultsContainer>
+                    </>
+                  );
                 })}
-              </StyledTestOutput>
-            </StyledOutputContainer>
-          </StyledTestDescription>
+              </StyledTestStepsOutPutContainer>
+            )}
+          </StyledTestOutputsContainer>
         </>
       )}
     </>
