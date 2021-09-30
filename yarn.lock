@@ -2007,12 +2007,12 @@
   resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.2.tgz"
 
 "@types/node@*":
-  version "14.14.31"
-  resolved "https://registry.npmjs.org/@types/node/-/node-14.14.31.tgz"
+  version "16.10.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.1.tgz#f3647623199ca920960006b3dccf633ea905f243"
 
 "@types/node@16.6.1":
   version "16.6.1"
-  resolved "https://registry.npmjs.org/@types/node/-/node-16.6.1.tgz"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.6.1.tgz#aee62c7b966f55fc66c7b6dfa1d58db2a616da61"
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -2040,17 +2040,9 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "17.0.19"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.19.tgz"
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@17.0.18":
-  version "17.0.18"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.18.tgz"
+"@types/react@*", "@types/react@17.0.25":
+  version "17.0.25"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.25.tgz#8b88c226e54910762decc9de2aa36b4dc9240503"
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -4051,9 +4043,9 @@ craco-alias@3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/craco-alias/-/craco-alias-3.0.1.tgz"
 
-craco-less@1.18.0:
-  version "1.18.0"
-  resolved "https://registry.npmjs.org/craco-less/-/craco-less-1.18.0.tgz"
+craco-less@1.20.0:
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/craco-less/-/craco-less-1.20.0.tgz#7f68679b84c7756f785f9c5ee4e4f795662acad1"
   dependencies:
     less "^4.1.1"
     less-loader "^7.3.0"
@@ -6279,9 +6271,9 @@ human-signals@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz"
 
-husky@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/husky/-/husky-7.0.1.tgz"
+husky@7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-7.0.2.tgz#21900da0f30199acca43a46c043c4ad84ae88dff"
 
 hyphenate-style-name@^1.0.2:
   version "1.0.4"
@@ -9657,9 +9649,9 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@2.3.2:
-  version "2.3.2"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-2.3.2.tgz"
+prettier@2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.4.1.tgz#671e11c89c14a4cfc876ce564106c4a6726c9f5c"
 
 pretty-bytes@^5.3.0:
   version "5.6.0"
