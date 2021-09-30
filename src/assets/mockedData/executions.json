@@ -86,7 +86,8 @@
             "assertionResults": [
               {
                 "name": "Status code is 200",
-                "status": "success"
+                "status": "success",
+                "errorMessage": "Status code was 404"
               }
             ]
           },
@@ -97,7 +98,8 @@
             "assertionResults": [
               {
                 "name": "Status code is 200",
-                "status": "success"
+                "status": "success",
+                "errorMessage": "Status code was 404"
               }
             ]
           },
@@ -116,6 +118,11 @@
                 "name": "Status code is 200",
                 "status": "error",
                 "errorMessage": "Status code was 404"
+              },
+              {
+                "name": "Status code is 201",
+                "status": "error",
+                "errorMessage": "Status code was 400"
               }
             ]
           }
