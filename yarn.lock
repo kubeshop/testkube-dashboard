@@ -1248,9 +1248,9 @@
     resolve-global "1.0.0"
     yargs "^17.0.0"
 
-"@commitlint/config-conventional@^13.1.0":
-  version "13.1.0"
-  resolved "https://registry.npmjs.org/@commitlint/config-conventional/-/config-conventional-13.1.0.tgz"
+"@commitlint/config-conventional@^13.2.0":
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-13.2.0.tgz#2ad24fecc56ae9619dbe0934b98a98b18ace0bec"
   dependencies:
     conventional-changelog-conventionalcommits "^4.3.1"
 
@@ -2074,9 +2074,9 @@
   version "2.0.0"
   resolved "https://registry.npmjs.org/@types/stack-utils/-/stack-utils-2.0.0.tgz"
 
-"@types/styled-components@5.1.12":
-  version "5.1.12"
-  resolved "https://registry.npmjs.org/@types/styled-components/-/styled-components-5.1.12.tgz"
+"@types/styled-components@5.1.14":
+  version "5.1.14"
+  resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.14.tgz#e9cf8cdb5eef9d139628183a84c083f630635d67"
   dependencies:
     "@types/hoist-non-react-statics" "*"
     "@types/react" "*"
