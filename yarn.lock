@@ -1248,9 +1248,9 @@
     resolve-global "1.0.0"
     yargs "^17.0.0"
 
-"@commitlint/config-conventional@^13.1.0":
-  version "13.1.0"
-  resolved "https://registry.npmjs.org/@commitlint/config-conventional/-/config-conventional-13.1.0.tgz"
+"@commitlint/config-conventional@^13.2.0":
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-13.2.0.tgz#2ad24fecc56ae9619dbe0934b98a98b18ace0bec"
   dependencies:
     conventional-changelog-conventionalcommits "^4.3.1"
 
@@ -1973,9 +1973,9 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@*", "@types/jest@27.0.1":
-  version "27.0.1"
-  resolved "https://registry.npmjs.org/@types/jest/-/jest-27.0.1.tgz"
+"@types/jest@*", "@types/jest@27.0.2":
+  version "27.0.2"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-27.0.2.tgz#ac383c4d4aaddd29bbf2b916d8d105c304a5fcd7"
   dependencies:
     jest-diff "^27.0.0"
     pretty-format "^27.0.0"
@@ -2006,13 +2006,9 @@
   version "1.2.2"
   resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.2.tgz"
 
-"@types/node@*":
-  version "14.14.31"
-  resolved "https://registry.npmjs.org/@types/node/-/node-14.14.31.tgz"
-
-"@types/node@16.6.1":
-  version "16.6.1"
-  resolved "https://registry.npmjs.org/@types/node/-/node-16.6.1.tgz"
+"@types/node@*", "@types/node@16.10.2":
+  version "16.10.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.2.tgz#5764ca9aa94470adb4e1185fe2e9f19458992b2e"
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -2040,17 +2036,9 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "17.0.19"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.19.tgz"
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@17.0.18":
-  version "17.0.18"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.18.tgz"
+"@types/react@*", "@types/react@17.0.25":
+  version "17.0.25"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.25.tgz#8b88c226e54910762decc9de2aa36b4dc9240503"
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -2074,9 +2062,9 @@
   version "2.0.0"
   resolved "https://registry.npmjs.org/@types/stack-utils/-/stack-utils-2.0.0.tgz"
 
-"@types/styled-components@5.1.12":
-  version "5.1.12"
-  resolved "https://registry.npmjs.org/@types/styled-components/-/styled-components-5.1.12.tgz"
+"@types/styled-components@5.1.14":
+  version "5.1.14"
+  resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.14.tgz#e9cf8cdb5eef9d139628183a84c083f630635d67"
   dependencies:
     "@types/hoist-non-react-statics" "*"
     "@types/react" "*"
@@ -3431,14 +3419,7 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.npmjs.org/chalk/-/chalk-4.1.0.tgz"
-  dependencies:
-    ansi-styles "^4.1.0"
-    supports-color "^7.1.0"
-
-chalk@^4.1.0, chalk@^4.1.1:
+chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.1:
   version "4.1.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
   dependencies:
@@ -3733,14 +3714,13 @@ concat-stream@^2.0.0:
     readable-stream "^3.0.2"
     typedarray "^0.0.6"
 
-concurrently@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-6.2.1.tgz#d880fc1d77559084732fa514092a3d5109a0d5bf"
+concurrently@^6.2.2:
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-6.2.2.tgz#81c11b85d9a7de56ad4388ff6aab4a94ddea51f2"
   dependencies:
     chalk "^4.1.0"
     date-fns "^2.16.1"
     lodash "^4.17.21"
-    read-pkg "^5.2.0"
     rxjs "^6.6.3"
     spawn-command "^0.0.2-1"
     supports-color "^8.1.0"
@@ -4051,9 +4031,9 @@ craco-alias@3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/craco-alias/-/craco-alias-3.0.1.tgz"
 
-craco-less@1.18.0:
-  version "1.18.0"
-  resolved "https://registry.npmjs.org/craco-less/-/craco-less-1.18.0.tgz"
+craco-less@1.20.0:
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/craco-less/-/craco-less-1.20.0.tgz#7f68679b84c7756f785f9c5ee4e4f795662acad1"
   dependencies:
     less "^4.1.1"
     less-loader "^7.3.0"
@@ -4389,7 +4369,7 @@ dayjs@1.x:
   version "1.10.6"
   resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.10.6.tgz"
 
-debug@*, debug@^4.0.0, debug@^4.3.1:
+debug@*, debug@^4.0.0, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
   dependencies:
@@ -4412,12 +4392,6 @@ debug@^3.1.1, debug@^3.2.6, debug@^3.2.7:
   resolved "https://registry.npmjs.org/debug/-/debug-3.2.7.tgz"
   dependencies:
     ms "^2.1.1"
-
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
-  version "4.3.1"
-  resolved "https://registry.npmjs.org/debug/-/debug-4.3.1.tgz"
-  dependencies:
-    ms "2.1.2"
 
 decamelize-keys@^1.1.0:
   version "1.1.0"
@@ -4974,7 +4948,7 @@ eslint-config-react-app@^6.0.0:
   dependencies:
     confusing-browser-globals "^1.0.10"
 
-eslint-import-resolver-node@^0.3.5:
+eslint-import-resolver-node@^0.3.6:
   version "0.3.6"
   resolved "https://registry.npmjs.org/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.6.tgz"
   dependencies:
@@ -4995,25 +4969,25 @@ eslint-plugin-flowtype@^5.2.0:
     lodash "^4.17.15"
     string-natural-compare "^3.0.1"
 
-eslint-plugin-import@2.24.0, eslint-plugin-import@^2.22.1:
-  version "2.24.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.24.0.tgz"
+eslint-plugin-import@2.24.2, eslint-plugin-import@^2.22.1:
+  version "2.24.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.24.2.tgz#2c8cd2e341f3885918ee27d18479910ade7bb4da"
   dependencies:
     array-includes "^3.1.3"
     array.prototype.flat "^1.2.4"
     debug "^2.6.9"
     doctrine "^2.1.0"
-    eslint-import-resolver-node "^0.3.5"
+    eslint-import-resolver-node "^0.3.6"
     eslint-module-utils "^2.6.2"
     find-up "^2.0.0"
     has "^1.0.3"
-    is-core-module "^2.4.0"
+    is-core-module "^2.6.0"
     minimatch "^3.0.4"
-    object.values "^1.1.3"
+    object.values "^1.1.4"
     pkg-up "^2.0.0"
     read-pkg-up "^3.0.0"
     resolve "^1.20.0"
-    tsconfig-paths "^3.9.0"
+    tsconfig-paths "^3.11.0"
 
 eslint-plugin-jest@^24.1.0:
   version "24.1.5"
@@ -6279,9 +6253,9 @@ human-signals@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz"
 
-husky@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/husky/-/husky-7.0.1.tgz"
+husky@7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-7.0.2.tgz#21900da0f30199acca43a46c043c4ad84ae88dff"
 
 hyphenate-style-name@^1.0.2:
   version "1.0.4"
@@ -6556,15 +6530,9 @@ is-color-stop@^1.0.0:
     rgb-regex "^1.0.1"
     rgba-regex "^1.0.0"
 
-is-core-module@^2.0.0, is-core-module@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/is-core-module/-/is-core-module-2.2.0.tgz"
-  dependencies:
-    has "^1.0.3"
-
-is-core-module@^2.4.0, is-core-module@^2.5.0:
-  version "2.6.0"
-  resolved "https://registry.npmjs.org/is-core-module/-/is-core-module-2.6.0.tgz"
+is-core-module@^2.0.0, is-core-module@^2.2.0, is-core-module@^2.5.0, is-core-module@^2.6.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.7.0.tgz#3c0ef7d31b4acfc574f80c58409d568a836848e3"
   dependencies:
     has "^1.0.3"
 
@@ -8547,16 +8515,7 @@ object.pick@^1.3.0:
   dependencies:
     isobject "^3.0.1"
 
-object.values@^1.1.0:
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/object.values/-/object.values-1.1.2.tgz"
-  dependencies:
-    call-bind "^1.0.0"
-    define-properties "^1.1.3"
-    es-abstract "^1.18.0-next.1"
-    has "^1.0.3"
-
-object.values@^1.1.3, object.values@^1.1.4:
+object.values@^1.1.0, object.values@^1.1.4:
   version "1.1.4"
   resolved "https://registry.npmjs.org/object.values/-/object.values-1.1.4.tgz"
   dependencies:
@@ -9657,9 +9616,9 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@2.3.2:
-  version "2.3.2"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-2.3.2.tgz"
+prettier@2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.4.1.tgz#671e11c89c14a4cfc876ce564106c4a6726c9f5c"
 
 pretty-bytes@^5.3.0:
   version "5.6.0"
@@ -12046,9 +12005,9 @@ ts-pnp@1.2.0, ts-pnp@^1.1.6:
   version "1.2.0"
   resolved "https://registry.npmjs.org/ts-pnp/-/ts-pnp-1.2.0.tgz"
 
-tsconfig-paths@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.9.0.tgz"
+tsconfig-paths@^3.11.0:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.11.0.tgz#954c1fe973da6339c78e06b03ce2e48810b65f36"
   dependencies:
     "@types/json5" "^0.0.29"
     json5 "^1.0.1"
