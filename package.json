@@ -26,7 +26,7 @@
     "@types/uuid": "8.3.1",
     "concurrently": "^6.2.1",
     "craco-alias": "3.0.1",
-    "craco-less": "1.18.0",
+    "craco-less": "1.20.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.24.0",
