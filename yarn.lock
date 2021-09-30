@@ -2006,13 +2006,9 @@
   version "1.2.2"
   resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.2.tgz"
 
-"@types/node@*":
-  version "14.14.31"
-  resolved "https://registry.npmjs.org/@types/node/-/node-14.14.31.tgz"
-
-"@types/node@16.6.1":
-  version "16.6.1"
-  resolved "https://registry.npmjs.org/@types/node/-/node-16.6.1.tgz"
+"@types/node@*", "@types/node@16.10.1":
+  version "16.10.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.1.tgz#f3647623199ca920960006b3dccf633ea905f243"
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -4043,9 +4039,9 @@ craco-alias@3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/craco-alias/-/craco-alias-3.0.1.tgz"
 
-craco-less@1.18.0:
-  version "1.18.0"
-  resolved "https://registry.npmjs.org/craco-less/-/craco-less-1.18.0.tgz"
+craco-less@1.20.0:
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/craco-less/-/craco-less-1.20.0.tgz#7f68679b84c7756f785f9c5ee4e4f795662acad1"
   dependencies:
     less "^4.1.1"
     less-loader "^7.3.0"
@@ -6271,9 +6267,9 @@ human-signals@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz"
 
-husky@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/husky/-/husky-7.0.1.tgz"
+husky@7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-7.0.2.tgz#21900da0f30199acca43a46c043c4ad84ae88dff"
 
 hyphenate-style-name@^1.0.2:
   version "1.0.4"
