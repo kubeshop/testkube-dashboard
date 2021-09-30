@@ -215,7 +215,7 @@ const TestDescription = () => {
                   return (
                     <>
                       <StyledTestAssertionResultsContainer>
-                        {step.assertionResults.length !== 0 ? (
+                        {step.assertionResults && step.assertionResults.length !== 0 ? (
                           <Collapse bordered={false} defaultActiveKey={nanoid()} expandIconPosition="right">
                             <StyledCollapse
                               header={<StyledTestStepCollapseHeader name={step.name} status={step.status} />}
