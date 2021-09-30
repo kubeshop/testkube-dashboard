@@ -11,6 +11,11 @@ import {config} from '@constants/config';
 
 import {Step, AssertionResult} from '@types';
 
+interface IStepHeader {
+  name: string;
+  status: string;
+}
+
 const StyledTestStatusImage = styled.div`
   position: relative;
   top: var(--space-lg);
@@ -75,28 +80,10 @@ const StyledTestStepNameContainer = styled.div`
   background: var(--color-gray-dark);
   margin-bottom: var(--space-xxs);
   color: var(--color-light-primary);
+  cursor: pointer;
 `;
 
 const StyledTestStepName = styled.span`
-  margin-left: var(--space-xxs);
-  font-size: var(--font-size-sm);
-`;
-
-const StyledTestStepStatusContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: var(--space-x1l);
-  background: var(--color-gray-dark);
-  margin-bottom: var(--space-xxs);
-  color: var(--color-light-primary);
-`;
-
-const StyledTestListStatusIcon = styled.div`
-  margin-left: var(--space-xxs);
-`;
-
-const StyledTestStepStatus = styled.span`
   margin-left: var(--space-xxs);
   font-size: var(--font-size-sm);
 `;
@@ -107,18 +94,26 @@ const StyledTestAssertionResultsContainer = styled.div`
   margin-bottom: var(--space-md);
 `;
 
-const StyledTestStepStatusImageContainer = styled.div`
+const StyledTestStepAssertionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--font-size-sm);
+  margin-left: var(--space-md);
+`;
+
+const StyledTestOutputNameAndStatus = styled.div`
   display: flex;
 `;
 
-const StyledTestOutputResult = styled.span`
+const StyledTestOutputAssertionName = styled.span`
   margin-left: var(--space-xxs);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-light-primary);
 `;
 
-const StyledTestStepOutputStatusCode = styled.span`
-  display: flex;
-  font-size: var(--font-size-xs);
+const StyledTestOutputAssertionErrorMessage = styled.span`
+  font-size: var(--font-size-sm);
   color: var(--color-light-primary);
 `;
 
@@ -133,6 +128,27 @@ const StyledCollapse = styled(Collapse.Panel)`
 
   background: var(--color-gray-dark);
 `;
+
+const StyledTestWithoutAssertions = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--space-x1l);
+  background: var(--color-gray-dark);
+  margin-bottom: var(--space-xxs);
+  color: var(--color-light-primary);
+  cursor: pointer;
+  padding-left: var(--space-md);
+`;
+
+const StyledTestStepCollapseHeader = ({name, status}: IStepHeader) => {
+  return (
+    <StyledTestStepNameContainer>
+      <RenderTestStatusSvgIcon testStatus={status} width={20} height={20} />
+      <StyledTestStepName>{name}</StyledTestStepName>
+    </StyledTestStepNameContainer>
+  );
+};
 
 const TestDescription = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
@@ -198,46 +214,44 @@ const TestDescription = () => {
                 {data?.executionResult?.steps?.map((step: Step) => {
                   return (
                     <>
-                      <StyledTestStepNameContainer>
-                        <StyledTestStepName>Step Name: {step?.name}</StyledTestStepName>
-                      </StyledTestStepNameContainer>
-                      <StyledTestStepStatusContainer>
-                        <StyledTestListStatusIcon>
-                          <RenderTestStatusSvgIcon testStatus={step?.status} width={20} height={20} />
-                        </StyledTestListStatusIcon>
-                        <StyledTestStepStatus>{step?.status}</StyledTestStepStatus>
-                      </StyledTestStepStatusContainer>
                       <StyledTestAssertionResultsContainer>
-                        {step?.assertionResults &&
-                          step?.assertionResults?.map((assertionResult: AssertionResult) => {
-                            return (
-                              <Collapse bordered={false} defaultActiveKey={nanoid()} expandIconPosition="right">
-                                <StyledCollapse
-                                  header={`Assertion Results (${step?.assertionResults?.length})`}
-                                  key={nanoid()}
-                                >
-                                  <StyledTestStepStatusContainer>
-                                    <StyledTestStepStatusImageContainer>
-                                      <RenderTestStatusSvgIcon
-                                        testStatus={assertionResult.status}
-                                        height={20}
-                                        width={20}
-                                      />
-                                      <StyledTestOutputResult>
-                                        {renderTestStatus(assertionResult?.status)}
-                                      </StyledTestOutputResult>
-                                    </StyledTestStepStatusImageContainer>
-                                  </StyledTestStepStatusContainer>
-                                  <StyledTestStepOutputStatusCode>
-                                    {assertionResult?.name}
-                                  </StyledTestStepOutputStatusCode>
-                                  <StyledTestStepOutputStatusCode>
-                                    {assertionResult?.errorMessage}
-                                  </StyledTestStepOutputStatusCode>
-                                </StyledCollapse>
-                              </Collapse>
-                            );
-                          })}
+                        {step.assertionResults.length !== 0 ? (
+                          <Collapse bordered={false} defaultActiveKey={nanoid()} expandIconPosition="right">
+                            <StyledCollapse
+                              header={<StyledTestStepCollapseHeader name={step.name} status={step.status} />}
+                              key={nanoid()}
+                            >
+                              {step?.assertionResults &&
+                                step?.assertionResults?.map((assertionResult: AssertionResult) => {
+                                  return (
+                                    <StyledTestStepAssertionContainer>
+                                      <StyledTestOutputNameAndStatus>
+                                        <RenderTestStatusSvgIcon
+                                          testStatus={assertionResult.status}
+                                          height={20}
+                                          width={20}
+                                        />
+                                        <StyledTestOutputAssertionName>
+                                          {assertionResult?.name}
+                                        </StyledTestOutputAssertionName>
+                                      </StyledTestOutputNameAndStatus>
+
+                                      <StyledTestOutputAssertionErrorMessage>
+                                        {assertionResult?.errorMessage}
+                                      </StyledTestOutputAssertionErrorMessage>
+                                    </StyledTestStepAssertionContainer>
+                                  );
+                                })}
+                            </StyledCollapse>
+                          </Collapse>
+                        ) : (
+                          <StyledTestStepNameContainer>
+                            <StyledTestWithoutAssertions>
+                              <RenderTestStatusSvgIcon testStatus={step.status} width={20} height={20} />
+                              <StyledTestStepName>{step.name}</StyledTestStepName>
+                            </StyledTestWithoutAssertions>
+                          </StyledTestStepNameContainer>
+                        )}
                       </StyledTestAssertionResultsContainer>
                     </>
                   );
