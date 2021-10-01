@@ -25,7 +25,9 @@
       "@types": ["src/types/"],
       "@types/*": ["src/types/*"],
       "@constants": ["src/constants/"],
-      "@constants/*": ["src/constants/*"]
+      "@constants/*": ["src/constants/*"],
+      "@hooks": ["src/hooks/"],
+      "@hooks/*": ["src/hooks/*"]
     }
   }
 }
