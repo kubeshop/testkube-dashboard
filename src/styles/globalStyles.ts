@@ -85,6 +85,14 @@ export const GlobalStyle = createGlobalStyle`
     .ant-collapse-content {
       width: 100%;
     }
+
+    .ant-modal-header {
+      background: var(--color-dark-primary);
+   }
+
+    .ant-modal-title {
+      color: var(--color-light-primary);
+    }
   `;
 
 /* Media Sizes */
