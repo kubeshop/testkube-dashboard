@@ -95,6 +95,16 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+## Mock Server
+
+Use the following to run a simple mock-server
+
+```
+npm run mock-api
+```
+
+which will return results for /executions and /executions/5 - see [executions.json](src/assets/mockedData/executions.json)  
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

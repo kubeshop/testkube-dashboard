@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import {createGlobalStyle} from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
     body {
@@ -54,6 +54,37 @@ export const GlobalStyle = createGlobalStyle`
       color: var(--color-monokle-primary);
     }
 
+    .ant-collapse-header {
+      background: var(--color-gray-dark);
+    }
+
+    .ant-collapse-item {
+      border-bottom: hidden;
+    }
+
+    .ant-collapse {
+      width: 100%;
+    }
+
+    .ant-collapse-header {
+      color: var(--color-light-primary);
+    }
+
+    .ant-collapse-borderless > .ant-collapse-item:last-child .ant-collapse-header {
+      display: flex;
+      width: 100%;
+      color: var(--color-light-primary);
+    }
+
+    .ant-collapse-icon-position-right > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
+      transform: rotate(90deg);
+      position: absolute;
+      top: 40%;
+    }
+
+    .ant-collapse-content {
+      width: 100%;
+    }
   `;
 
 /* Media Sizes */
@@ -64,7 +95,7 @@ const size = {
   tablet: '768px',
   laptop: '1024px',
   laptopL: '1440px',
-  desktop: '2560px'
+  desktop: '2560px',
 };
 
 /* Devices */
@@ -77,5 +108,5 @@ export const device = {
   laptop: `(min-width: ${size.laptop})`,
   laptopL: `(min-width: ${size.laptopL})`,
   desktop: `(min-width: ${size.desktop})`,
-  desktopL: `(min-width: ${size.desktop})`
+  desktopL: `(min-width: ${size.desktop})`,
 };

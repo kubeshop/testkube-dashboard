@@ -12,15 +12,11 @@ import {config} from '@constants/config';
 import {Tests} from '@types';
 
 const MainTableStyles = styled.table`
-  position: relative;
-  left: var(--font-size-6xl);
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-  height: auto;
-  border-top-style: hidden;
   table-layout: fixed;
+  width: 80vw;
+  height: 100vh;
   text-align: center;
+  margin: 0 auto;
 `;
 
 const StyledTestResults = styled.tr`
