@@ -42,6 +42,18 @@ export const GlobalStyle = createGlobalStyle`
       color: var(--color-light-primary);
     }
 
+    .ant-modal-footer {
+      background: var(--color-dark-primary);
+    }
+
+    .ant-modal-close {
+      color: var(--color-light-primary);
+    }
+
+    .ant-modal-close:hover {
+      color: var(--color-monokle-primary);
+    }
+
     .ant-collapse-header {
       background: var(--color-gray-dark);
     }
@@ -72,6 +84,14 @@ export const GlobalStyle = createGlobalStyle`
 
     .ant-collapse-content {
       width: 100%;
+    }
+
+    .ant-modal-header {
+      background: var(--color-dark-primary);
+   }
+
+    .ant-modal-title {
+      color: var(--color-light-primary);
     }
   `;
 
