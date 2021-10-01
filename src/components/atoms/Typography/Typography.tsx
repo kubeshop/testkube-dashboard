@@ -2,9 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface ITypography extends React.HTMLAttributes<HTMLParagraphElement> {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary' | 'senary';
   color?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary';
   font?: 'bold' | 'light' | 'normal';
+  wrap?: boolean;
+  cursor?: 'pointer' | 'not-allowed' | 'wait' | 'pointer' | '';
 }
 
 const StyledTypography = styled.p<ITypography>`
@@ -20,6 +22,8 @@ const StyledTypography = styled.p<ITypography>`
       ? 'var(--font-size-xl)'
       : props.variant === 'quinary'
       ? 'var(--font-size-mid-4xl)'
+      : props.variant === 'senary'
+      ? 'var(--font-size-sm)'
       : 'var(--font-size-md)'};
   font-weight: ${props =>
     props.font === 'bold'
@@ -42,7 +46,18 @@ const StyledTypography = styled.p<ITypography>`
       ? 'var(--color-monokle-primary)'
       : 'var(--color-light-primary)'};
   letter-spacing: 0;
-  word-wrap: break-word;
+  word-wrap: ${props => (props.wrap ? 'break-word' : 'normal')};
+
+  &:hover {
+    cursor: ${props =>
+      props.cursor === 'pointer'
+        ? 'pointer'
+        : props.cursor === 'not-allowed'
+        ? 'not-allowed'
+        : props.cursor === 'wait'
+        ? 'wait'
+        : 'auto'};
+  }
 `;
 
 const Typography: React.FC<ITypography> = ({

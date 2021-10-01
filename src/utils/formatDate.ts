@@ -9,12 +9,14 @@ export const timeStampToDate = (timeStamp: string) => {
   return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
 };
 
-export const getDuration = (timeStamp: string) => {
-  const date = new Date(timeStamp);
-  const hour = date.getHours();
-  const minute = date.getMinutes();
-  const second = date.getSeconds();
-  return `${hour}:${minute}:${second}`;
+export const getDuration = (startTime: string, endTime: string) => {
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  const duration = end.getTime() - start.getTime();
+  const minutes = Math.floor(duration / 60000);
+  const seconds = ((duration % 60000) / 1000).toFixed(0);
+  // eslint-disable-next-line
+  return minutes + ":" + (parseInt(seconds) < 10 ? '0' : '') + seconds;
 };
 
 export const getDate = (timeStamp: string | any) => {
@@ -26,5 +28,5 @@ export const getDate = (timeStamp: string | any) => {
 };
 
 export const getLatestDate = (timeStamp: any) => {
-  return new Date(Math.max(...timeStamp.map((t: any) => new Date(t['start-time']))));
+  return new Date(Math.max(...timeStamp.map((t: any) => new Date(t.startTime))));
 };

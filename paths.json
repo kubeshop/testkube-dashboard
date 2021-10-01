@@ -3,7 +3,7 @@
     "baseUrl": "./",
     "paths": {
       "@redux/*": ["src/redux/*"],
-      "@styles": ["src/styles/"],
+      "@styles/*": ["src/styles/*"],
       "@src/*": ["src/*"],
       "@src": ["src/"],
       "@root/*": ["./*"],
@@ -23,7 +23,9 @@
       "@utils": ["src/utils/"],
       "@utils/*": ["src/utils/*"],
       "@types": ["src/types/"],
-      "@types/*": ["src/types/*"]
+      "@types/*": ["src/types/*"],
+      "@constants": ["src/constants/"],
+      "@constants/*": ["src/constants/*"]
     }
   }
 }

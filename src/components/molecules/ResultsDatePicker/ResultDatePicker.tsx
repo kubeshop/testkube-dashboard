@@ -1,17 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, {useState} from 'react';
 import {DatePicker} from 'antd';
 
 import {Typography, Button} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
-
-const StyledDatePicker = styled.div`
-  display: flex;
-  align-items: baseline;
-  justify-content: left;
-  gap: var(--space-md);
-`;
 
 const datePickerStyles = {
   color: 'var(--color-light-primary)',
@@ -23,7 +15,8 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
-  const [latestDate, setLatestDate] = React.useState<boolean>(false);
+  const [latestDate, setLatestDate] = useState<boolean>(false);
+  const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
   const tests: any = React.useContext(TestsContext);
 
   const handleDatePicker = (date: any, dateString: any) => {
@@ -35,13 +28,19 @@ const ResultDatePicker = () => {
     setLatestDate(!latestDate);
   }, [latestDate]);
 
+  React.useEffect(() => {
+    if (tests.data) {
+      setToggleGetTest(true);
+    }
+  }, [tests.data]);
+
   return (
     <>
-      <StyledDatePicker>
-        <Typography variant="quaternary">Results for</Typography>
-        <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} />
-        <Button onClick={getLatestDateTest}>Latest</Button>
-      </StyledDatePicker>
+      <Typography variant="quaternary">Results for</Typography>
+      <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} />
+      <Button disabled={!toggleGetTest} onClick={getLatestDateTest}>
+        Latest
+      </Button>
     </>
   );
 };

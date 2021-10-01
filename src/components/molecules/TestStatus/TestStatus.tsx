@@ -1,31 +1,21 @@
 import React from 'react';
-import styled from 'styled-components';
 
 import {Typography} from '@atoms';
 
 interface ITestStatusProps {
   testTitle: string;
-  totalTests: string;
+  totalTests: string | undefined;
 }
-
-const StyledTestTitleResult = styled.div`
-  position: relative;
-  left: 50px;
-`;
 
 const TestStatus: React.FC<ITestStatusProps> = ({testTitle, totalTests}) => {
   return (
     <>
-      <StyledTestTitleResult>
-        <Typography variant="secondary" color="tertiary">
-          {testTitle}
-        </Typography>
-      </StyledTestTitleResult>
-      <StyledTestTitleResult>
-        <Typography variant="quinary" color="quaternary">
-          {totalTests}
-        </Typography>
-      </StyledTestTitleResult>
+      <Typography variant="secondary" color="tertiary">
+        {testTitle}
+      </Typography>
+      <Typography variant="quinary" color="quaternary">
+        {totalTests || '0'}
+      </Typography>
     </>
   );
 };

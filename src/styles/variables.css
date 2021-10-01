@@ -10,6 +10,7 @@
 
   /* Font sizes. */
   --font-size-ssm: 0.438rem;
+  --font-size-xs: 0.688rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
@@ -29,7 +30,7 @@
 
   /* Colors: */
   --color-monokle-primary: #1890fc;
-  --color-monokle-secondary: #5bdad3;
+  --color-monokle-secondary: #0b467a;
   --color-light-primary: #ffffff;
   --color-light-secondary: #dedede;
   --color-gray-primary: #dbdbdb;
@@ -39,6 +40,9 @@
   --color-dark-primary: #121212;
   --color-dark-secondary: #000000;
   --color-yellow-primary: #ffa700;
+  --color-shadow-primary: rgba(0, 0, 0, 0.05);
+  --color-shadow-secondary: rgba(75, 87, 156, 0.5);
+  --color-gray-dark: #363636;
 
   /* Borders. */
   --button-border-radius-primary: 0.25rem;
@@ -52,6 +56,7 @@
   --space-md: calc(1.25 * var(--space-unit));
   --space-lg: calc(2 * var(--space-unit));
   --space-xl: calc(3.25 * var(--space-unit));
+  --space-x1l: calc(2.75 * var(--space-unit));
   --space-xxl: calc(5.25 * var(--space-unit));
   --space-xxxl: calc(8.5 * var(--space-unit));
   --space-xxxxl: calc(13.75 * var(--space-unit));
@@ -65,6 +70,37 @@
     --font-size-2xl: 2rem;
     --font-size-3xl: 2.5rem;
     --font-size-4xl: 3rem;
+  }
+}
+
+/* Responsive Font families. */
+@media screen and (min-width: 26.5rem) {
+  html {
+    font-size: var(--font-size-ssm);
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media screen and (min-width: 64rem) {
+  html {
+    font-size: var(--font-size-md);
+  }
+}
+
+@media screen and (min-width: 90rem) {
+  html {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media screen and (min-width: 160rem) {
+  html {
+    font-size: var(--font-size-xl);
   }
 }
 
