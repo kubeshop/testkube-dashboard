@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import {useQuery} from 'react-query';
 
 import {TestResults, TestsFilter, TestsSummary, PageHeader} from '@organisms';
 import {TestsContext} from '@context/testsContext';
@@ -8,8 +7,9 @@ import {TestsContext} from '@context/testsContext';
 import {getDate, getLatestDate} from '@utils/formatDate';
 import {cleanStorageWhenApiEndpointQueryStringIsAbsent, getApiEndpointOnPageLoad} from '@utils/validate';
 
-import {config} from '@constants/config';
 import {Tests} from '@types';
+
+import {useFetchTests} from '@hooks';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
@@ -48,16 +48,7 @@ function App() {
   const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
   const [testsExecution, setTestsExecution] = useState<Tests[]>([]);
 
-  const {data, error} = useQuery(
-    'tests',
-    () => {
-      const url = localStorage.getItem(config.apiEndpoint);
-      if (url) {
-        return fetch(url).then(res => res.json());
-      }
-    },
-    {refetchInterval: 5000}
-  );
+  const {data, error} = useFetchTests();
 
   const tests = {
     data,
@@ -80,7 +71,7 @@ function App() {
   }, [selectedTestTypes]);
 
   useEffect(() => {
-    const filteredTestsIntervals = data?.filter(
+    const filteredTestsIntervals = data?.results?.filter(
       (test: any) => getDate(test.startTime) === getDate(selectedTimeIntervalTests)
     );
     setTestsExecution(filteredTestsIntervals);
@@ -88,10 +79,11 @@ function App() {
 
   useEffect(() => {
     if (latestDateTests) {
-      const latestdate = getLatestDate(data);
+      const latestdate = getLatestDate(data?.results);
 
-      const lastTests = data?.filter((test: any) => getDate(test.startTime) === getDate(latestdate));
+      const lastTests = data?.results?.filter((test: any) => getDate(test.startTime) === getDate(latestdate));
 
+      console.log('SECOND RESULTS', {results: lastTests});
       setTestsExecution(lastTests);
     }
   }, [latestDateTests]);
