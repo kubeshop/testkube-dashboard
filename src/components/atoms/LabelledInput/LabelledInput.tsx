@@ -54,10 +54,15 @@ const StyledLabel = styled.label`
 
 const LabelInput = ({id, labelText, className, variant = 'primary', ...inputProps}: ILabelInputProps) => {
   return (
-    <StyledLabel htmlFor={id}>
-      <Typography variant="secondary">{labelText}</Typography>
-      <StyledInput {...inputProps} name={id} id={id} />
-    </StyledLabel>
+    <>
+      {labelText ? (
+        <StyledLabel htmlFor={id}>
+          <Typography variant="secondary">{labelText}</Typography>
+        </StyledLabel>
+      ) : (
+        <StyledInput {...inputProps} name={id} id={id} />
+      )}
+    </>
   );
 };
 
