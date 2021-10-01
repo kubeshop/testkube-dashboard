@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Modal} from 'antd';
 
 import {PageTitle} from '@molecules';
-import {Button, LabelInput, Image} from '@atoms';
+import {Button, LabelInput, Image, Typography} from '@atoms';
 
 import {
   matchEndpointProtocolWithHostProtocol,
@@ -30,6 +30,7 @@ const StyledPAgeHeader = styled.header`
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
+  flex-direction: column;
   align-items: center;
 `;
 
@@ -46,6 +47,11 @@ const StyledHeaderLinksButtons = styled.div`
   margin-right: var(--space-lg);
 `;
 
+const StyledFormContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const PageHeader = () => {
   const [apiEndpoint, setApiEndpoint] = React.useState<IUrlEndpoint>({apiEndpoint: ''});
   const [validUrl, setVAlidUrl] = React.useState<boolean>(false);
@@ -53,7 +59,8 @@ const PageHeader = () => {
 
   const modalStyles = {
     backgroundColor: 'var(--color-dark-primary)',
-    height: '150px',
+    height: '300px',
+    overflow: 'hidden',
   };
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
@@ -93,17 +100,33 @@ const PageHeader = () => {
     <StyledPAgeHeader>
       <PageTitle />
       <StyledHeaderTests>
-        <Modal visible={visible} onOk={handleOk} onCancel={handleCancel} footer={null} bodyStyle={modalStyles}>
+        <Modal
+          title="Kubtest API endpoint"
+          visible={visible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+          bodyStyle={modalStyles}
+        >
           <StyledSearchUrlForm onSubmit={handleOpenUrl}>
-            <LabelInput
-              id="url"
-              name="url"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
-              defaultValue={apiEndpoint.apiEndpoint}
-            />
-            <Button type="submit" disabled={!validUrl} disableFilter>
-              Get tests
-            </Button>
+            <Typography variant="secondary">
+              Please provide the Kubtest API endpoint for your installation, which will have been provided to you by the
+              kubtest installer.
+            </Typography>
+            <Typography variant="secondary">
+              The endpoint needs to be accessible from your browser and will be used to retrieve test results only.
+            </Typography>
+            <StyledFormContainer>
+              <LabelInput
+                id="url"
+                name="url"
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
+                defaultValue={apiEndpoint.apiEndpoint}
+              />
+              <Button type="submit" disabled={!validUrl} disableFilter>
+                Get tests
+              </Button>
+            </StyledFormContainer>
           </StyledSearchUrlForm>
         </Modal>
         <StyledHeaderLinksButtons>
