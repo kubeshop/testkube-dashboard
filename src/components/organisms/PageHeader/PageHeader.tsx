@@ -124,7 +124,7 @@ const PageHeader = () => {
                 defaultValue={apiEndpoint.apiEndpoint}
               />
               <Button type="submit" disabled={!validUrl} disableFilter>
-                Get tests
+                Get Results
               </Button>
             </StyledFormContainer>
           </StyledSearchUrlForm>
