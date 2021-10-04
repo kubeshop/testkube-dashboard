@@ -9,6 +9,8 @@ import {getDate, getLatestDate} from '@utils/formatDate';
 import {cleanStorageWhenApiEndpointQueryStringIsAbsent, getApiEndpointOnPageLoad} from '@utils/validate';
 
 import {config} from '@constants/config';
+import {isHostProtocolSecure, showSmallError} from '@utils';
+
 import {Tests} from '@types';
 
 const MainTableStyles = styled.table`
@@ -105,6 +107,10 @@ function App() {
   useEffect(() => {
     getApiEndpointOnPageLoad();
     cleanStorageWhenApiEndpointQueryStringIsAbsent();
+
+    if (!isHostProtocolSecure()) {
+      showSmallError('Dashboard is using non-secure protocol!');
+    }
   }, []);
 
   return (
