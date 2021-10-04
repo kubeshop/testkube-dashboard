@@ -35,11 +35,6 @@ const StyledInput = styled.input<ILabelInputProps>`
     outline: ${({variant}) => (variant === 'primary' ? 'none' : '')};
     box-shadow: inset 0 -1px 0 ${({variant}) => (variant === 'primary' ? 'var(--color-shadow-primary)' : '')};
   }
-
-  &:hover {
-    background: rgb(2, 0, 36);
-    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(8, 21, 179, 1) 41%, rgba(0, 212, 255, 1) 100%);
-  }
 `;
 
 const StyledLabel = styled.label`
