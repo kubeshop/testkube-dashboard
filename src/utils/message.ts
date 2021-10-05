@@ -10,11 +10,11 @@ const notyfOptions = {
     dismissible: true
 };
 
-export function showSmallError(e: any): void {
+export function showSmallError(e: any, pureText: boolean = false): void {
     const notyf = new Notyf();
 
     // @ts-ignore
-    notyf.error({ message: escapeHtml(e.message ? e.message : String(e)), ...notyfOptions });
+    notyf.error({ message: pureText ? escapeHtml(e.message ? e.message : String(e)) : e, ...notyfOptions });
 }
 
 export function showSmallSuccess(message: string) {
