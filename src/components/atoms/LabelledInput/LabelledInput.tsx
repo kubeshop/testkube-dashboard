@@ -26,20 +26,19 @@ const StyledInput = styled.input<ILabelInputProps>`
   font-weight: var(--font-weight-regular);
   border-radius: var(--space-md);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   color: ${({variant}) => (variant === 'primary' ? 'var(--color-light-primary)' : 'var(--color-light-primary)')};
   background: var(--color-dark-primary);
 
   &:focus {
-    background: ${({variant}) =>
-      variant === 'primary' ? 'var(--color-dark-primary)' : 'var(--color-monokle-primary)'};
+    background: ${({variant}) => (variant === 'primary' ? 'var(--color-dark-primary)' : '')};
     outline: ${({variant}) => (variant === 'primary' ? 'none' : '')};
     box-shadow: inset 0 -1px 0 ${({variant}) => (variant === 'primary' ? 'var(--color-shadow-primary)' : '')};
   }
 
   &:hover {
-    background: ${({variant}) => (variant === 'primary' ? 'var(--color-dark-primary)' : '')};
-    box-shadow: inset 0 -2px ${({variant}) => (variant === 'primary' ? 'var(--color-dark-primary)' : '')};
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(8, 21, 179, 1) 41%, rgba(0, 212, 255, 1) 100%);
   }
 `;
 
@@ -55,10 +54,15 @@ const StyledLabel = styled.label`
 
 const LabelInput = ({id, labelText, className, variant = 'primary', ...inputProps}: ILabelInputProps) => {
   return (
-    <StyledLabel htmlFor={id}>
-      <Typography variant="secondary">{labelText}</Typography>
-      <StyledInput {...inputProps} name={id} id={id} />
-    </StyledLabel>
+    <>
+      {labelText ? (
+        <StyledLabel htmlFor={id}>
+          <Typography variant="secondary">{labelText}</Typography>
+        </StyledLabel>
+      ) : (
+        <StyledInput {...inputProps} name={id} id={id} />
+      )}
+    </>
   );
 };
 

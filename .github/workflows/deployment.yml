@@ -3,7 +3,6 @@ name: Publish Docker image
 on:
   push:
     branches: [ main ]
-# https://docs.github.com/en/actions/guides/publishing-docker-images
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub

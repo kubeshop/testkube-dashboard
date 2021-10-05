@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Modal} from 'antd';
 
-import {DocLinks, PageTitle} from '@molecules';
-import {Button, LabelInput} from '@atoms';
+import {PageTitle} from '@molecules';
+import {Button, LabelInput, Image, Typography} from '@atoms';
 
 import {
   matchEndpointProtocolWithHostProtocol,
@@ -10,6 +11,10 @@ import {
   removeDuplicatesInQueryString,
   checkApiEndpointProtocol,
 } from '@utils/validate';
+
+import ParamsIcon from '@assets/docs.svg';
+import docsIcon from '@assets/questionIcon.svg';
+import githubIcon from '@assets/githubIcon.svg';
 
 interface IUrlEndpoint {
   apiEndpoint: string;
@@ -20,20 +25,43 @@ const StyledPAgeHeader = styled.header`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--color-light-primary);
+  overflow: hidden;
 `;
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const StyledHeaderTests = styled.div`
   display: flex;
+  flex-flow: row;
+`;
+
+const StyledHeaderLinksButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-right: var(--space-lg);
+`;
+
+const StyledFormContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const PageHeader = () => {
   const [apiEndpoint, setApiEndpoint] = React.useState<IUrlEndpoint>({apiEndpoint: ''});
   const [validUrl, setVAlidUrl] = React.useState<boolean>(false);
+  const [visible, setVisible] = React.useState(false);
+
+  const modalStyles = {
+    backgroundColor: 'var(--color-dark-primary)',
+    height: '300px',
+    overflow: 'hidden',
+  };
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -52,24 +80,66 @@ const PageHeader = () => {
     setVAlidUrl(validatedUrl);
   };
 
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = () => {
+    setVisible(false);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const StyledButton = styled.div`
+    cursor: pointer;
+  `;
+
   return (
     <StyledPAgeHeader>
       <PageTitle />
       <StyledHeaderTests>
-        <StyledSearchUrlForm onSubmit={handleOpenUrl}>
-          <LabelInput
-            id="url"
-            name="url"
-            labelText="Test Endpoint "
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
-            defaultValue={apiEndpoint.apiEndpoint}
-          />
-
-          <Button type="submit" disabled={!validUrl} onClick={handleOpenUrl} disableFilter>
-            Get tests
-          </Button>
-        </StyledSearchUrlForm>
-        <DocLinks />
+        <Modal
+          title="Kubtest API endpoint"
+          visible={visible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+          bodyStyle={modalStyles}
+        >
+          <StyledSearchUrlForm onSubmit={handleOpenUrl}>
+            <Typography variant="secondary">
+              Please provide the Kubtest API endpoint for your installation, which will have been provided to you by the
+              kubtest installer.
+            </Typography>
+            <Typography variant="secondary">
+              The endpoint needs to be accessible from your browser and will be used to retrieve test results only.
+            </Typography>
+            <StyledFormContainer>
+              <LabelInput
+                id="url"
+                name="url"
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
+                defaultValue={apiEndpoint.apiEndpoint}
+              />
+              <Button type="submit" disabled={!validUrl} disableFilter>
+                Get tests
+              </Button>
+            </StyledFormContainer>
+          </StyledSearchUrlForm>
+        </Modal>
+        <StyledHeaderLinksButtons>
+          <StyledButton>
+            <Image src={ParamsIcon} alt="search tests" type="svg" width={30} height={30} onClick={showModal} />
+          </StyledButton>
+          <a href="https://kubeshop.github.io/kubtest/" target="_blank" rel="noopener">
+            <Image src={docsIcon} alt="Docs" type="svg" width={25} height={30} />
+          </a>
+          <a href="https://github.com/kubeshop/kubtest" target="_blank" rel="noopener">
+            <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} />
+          </a>
+        </StyledHeaderLinksButtons>
       </StyledHeaderTests>
     </StyledPAgeHeader>
   );
