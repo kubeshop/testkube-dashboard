@@ -3709,9 +3709,9 @@ concat-stream@^2.0.0:
     readable-stream "^3.0.2"
     typedarray "^0.0.6"
 
-concurrently@^6.2.2:
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-6.2.2.tgz#81c11b85d9a7de56ad4388ff6aab4a94ddea51f2"
+concurrently@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-6.3.0.tgz#63128cb4a6ed54d3c0ed8528728590a5fe54582a"
   dependencies:
     chalk "^4.1.0"
     date-fns "^2.16.1"
@@ -5029,9 +5029,9 @@ eslint-plugin-jsx-a11y@6.4.1, eslint-plugin-jsx-a11y@^6.3.1:
     jsx-ast-utils "^3.1.0"
     language-tags "^1.0.5"
 
-eslint-plugin-prettier@3.4.0:
-  version "3.4.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-prettier/-/eslint-plugin-prettier-3.4.0.tgz"
+eslint-plugin-prettier@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-4.0.0.tgz#8b99d1e4b8b24a762472b4567992023619cb98e0"
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
@@ -8245,13 +8245,9 @@ nanocolors@^0.1.5:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/nanocolors/-/nanocolors-0.1.6.tgz#bc2350d3edfdbfadd7ac018c855ae7c13905a6ad"
 
-nanoid@^3.1.16, nanoid@^3.1.25:
-  version "3.1.25"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.25.tgz#09ca32747c0e543f0e1814b7d3793477f9c8e152"
-
-nanoid@^3.1.20:
-  version "3.1.20"
-  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.1.20.tgz"
+nanoid@^3.1.16, nanoid@^3.1.20, nanoid@^3.1.28:
+  version "3.1.28"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.28.tgz#3c01bac14cb6c5680569014cc65a2f26424c6bd4"
 
 nanomatch@^1.2.9:
   version "1.2.13"
