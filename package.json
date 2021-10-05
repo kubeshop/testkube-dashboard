@@ -51,7 +51,7 @@
     "wait-on": "6.0.0"
   },
   "dependencies": {
-    "@ant-design/icons": "4.6.3",
+    "@ant-design/icons": "4.7.0",
     "antd": "4.16.12",
     "loglevel": "1.7.1",
     "query-string": "^7.0.1",
