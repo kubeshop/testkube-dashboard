@@ -52,4 +52,5 @@ export interface IStep {
 export interface IAssertionResult {
   name: string;
   status: string;
+  errorMessage?: string;
 }

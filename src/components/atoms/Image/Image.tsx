@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/';
 
-interface IImage {
+interface IImage extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
   type: string;
   size?: number | null;
   width?: number;
   height?: number;
+  onClick?: () => void;
 }
 
 const StyledImage = styled.img<IImage>`
@@ -17,8 +18,19 @@ const StyledImage = styled.img<IImage>`
   border-radius: ${props => (props.size ? '50%' : '0')};
 `;
 
-const Image = ({src, alt, type, size, width, height}: IImage) => {
-  return <StyledImage src={src} alt={alt} type={type} size={size} width={width} height={height} />;
+const Image = ({src, alt, type, size, width, height, onClick, ...imageProps}: IImage) => {
+  return (
+    <StyledImage
+      src={src}
+      alt={alt}
+      type={type}
+      size={size}
+      width={width}
+      height={height}
+      onClick={onClick}
+      {...imageProps}
+    />
+  );
 };
 
 export default Image;
