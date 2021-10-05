@@ -109,7 +109,8 @@ function App() {
     cleanStorageWhenApiEndpointQueryStringIsAbsent();
 
     if (!isHostProtocolSecure()) {
-      showSmallError('Dashboard is using non-secure protocol!');
+      showSmallError(`Dashboard is using non-secure protocol! Read more
+      <a href='https://github.com/kubeshop/kubtest/blob/main/docs/getting-started.md' target="_blank" rel="noopener">Read more</a>`);
     }
   }, []);
 
