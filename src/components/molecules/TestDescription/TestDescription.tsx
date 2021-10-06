@@ -62,8 +62,9 @@ const StyledTestOutput = styled.span`
   }
 `;
 
-const StyledText = styled.span`
+const StyledText = styled.pre`
   display: flex;
+  align-items: flex-start;
 `;
 
 const StyledTestStepsOutPutContainer = styled.div`
