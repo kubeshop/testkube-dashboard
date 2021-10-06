@@ -17,12 +17,14 @@ const StyledTestStatus = styled.div`
 
 const StyledTestTitle = styled.span<ITestStatusStyles>`
   font-size: var(--font-size-md);
-  color: ${props => (props.testTitleColor === 'white' ? 'var(--color-light-primary)' : 'var(--color-yellow-primary)')};
+  color: ${props =>
+    props.testTitleColor === 'white' ? 'var(--color-light-secondary)' : 'var(--color-yellow-primary)'};
 `;
 
 const StyledTotalTests = styled.span<ITestStatusStyles>`
   font-size: var(--font-size-mid-4xl);
-  color: ${props => (props.totalTestsColor === 'white' ? 'var(--color-light-primary)' : 'var(--color-yellow-primary)')};
+  color: ${props =>
+    props.totalTestsColor === 'white' ? 'var(--color-light-secondary)' : 'var(--color-yellow-primary)'};
 `;
 
 const TestStatus: React.FC<ITestStatusProps & ITestStatusStyles> = ({

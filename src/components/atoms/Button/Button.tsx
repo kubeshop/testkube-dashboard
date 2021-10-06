@@ -30,8 +30,8 @@ const StyledButton = styled.button<IButton>`
   text-align: center;
 
   /* Sizes. */
-  margin: 0.9rem 10px;
-  padding: var(--font-size-ssm) var(--font-size-lg);
+  margin: 21px 10px;
+  padding: 6px 16px;
   border: 1px solid var(--color-monokle-primary);
 
   /* Color & Background */
