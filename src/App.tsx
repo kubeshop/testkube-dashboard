@@ -16,6 +16,8 @@ import {Modal} from '@atoms';
 import {config} from '@constants/config';
 import {isHostProtocolSecure, showSmallError, filterTestsExecution} from '@utils';
 
+import {SelectedTest} from '@types';
+
 const MainTableStyles = styled.table`
   table-layout: fixed;
   width: 80vw;
@@ -49,7 +51,10 @@ const StyledTestSummary = styled.tr`
 function App() {
   const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
   const [visible, setVisible] = useState<boolean>(false);
-  const [selectedTest, setSelectedTest] = useState<number | undefined>();
+  const [selectedTest, setSelectedTest] = useState<SelectedTest>({
+    id: '',
+    testName: '',
+  });
 
   const {data, error} = useFetchTests();
 
