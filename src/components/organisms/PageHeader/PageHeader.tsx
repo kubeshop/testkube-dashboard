@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Modal} from 'antd';
 
 import {PageTitle} from '@molecules';
-import {Button, LabelInput, Image, Typography} from '@atoms';
+import {Button, LabelInput, Typography} from '@atoms';
 
 import {
   matchEndpointProtocolWithHostProtocol,
@@ -12,9 +12,7 @@ import {
   checkApiEndpointProtocol,
 } from '@utils/validate';
 
-import ParamsIcon from '@assets/docs.svg';
-import docsIcon from '@assets/questionIcon.svg';
-import githubIcon from '@assets/githubIcon.svg';
+import {QuestionCircleOutlined, GithubOutlined, SettingOutlined} from '@ant-design/icons';
 
 interface IUrlEndpoint {
   apiEndpoint: string;
@@ -92,10 +90,12 @@ const PageHeader = () => {
     setVisible(false);
   };
 
-  const StyledButton = styled.div`
-    cursor: pointer;
-  `;
-
+  const showDocumentation = () => {
+    window.open('https://kubeshop.github.io/kubtest/');
+  };
+  const showGithubMainPage = () => {
+    window.open('https://github.com/kubeshop/kubtest');
+  };
   return (
     <StyledPAgeHeader>
       <PageTitle />
@@ -130,15 +130,21 @@ const PageHeader = () => {
           </StyledSearchUrlForm>
         </Modal>
         <StyledHeaderLinksButtons>
-          <StyledButton>
-            <Image src={ParamsIcon} alt="search tests" type="svg" width={30} height={30} onClick={showModal} />
-          </StyledButton>
-          <a href="https://kubeshop.github.io/kubtest/" target="_blank" rel="noopener">
-            <Image src={docsIcon} alt="Docs" type="svg" width={25} height={30} />
-          </a>
-          <a href="https://github.com/kubeshop/kubtest" target="_blank" rel="noopener">
-            <Image src={githubIcon} alt="Docs" type="svg" width={30} height={30} />
-          </a>
+          <SettingOutlined
+            size={80}
+            style={{color: 'var(--color-monokle-primary)', fontSize: '30px'}}
+            onClick={showModal}
+          />
+          <QuestionCircleOutlined
+            size={80}
+            style={{color: 'var(--color-monokle-primary)', fontSize: '30px'}}
+            onClick={showDocumentation}
+          />
+          <GithubOutlined
+            size={80}
+            style={{color: 'var(--color-monokle-primary)', fontSize: '30px'}}
+            onClick={showGithubMainPage}
+          />
         </StyledHeaderLinksButtons>
       </StyledHeaderTests>
     </StyledPAgeHeader>
