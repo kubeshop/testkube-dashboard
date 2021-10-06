@@ -7,6 +7,7 @@ import {PageHeader} from '@organisms';
 import App from './App';
 import './styles/variables.css';
 import 'antd/dist/antd.css';
+import './styles/global.css';
 import {GlobalStyle} from './styles/globalStyles';
 
 const queryCache = new QueryClient({
