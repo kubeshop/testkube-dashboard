@@ -110,7 +110,7 @@ function App() {
 
     if (!isHostProtocolSecure()) {
       showSmallError(`Dashboard is using non-secure protocol! Read more
-      <a href='https://github.com/kubeshop/kubtest/blob/main/docs/getting-started.md' target="_blank" rel="noopener">Read more</a>`);
+      <a href='https://kubeshop.github.io/kubtest/installing/' target="_blank" rel="noopener">Read more</a>`);
     }
   }, []);
 
