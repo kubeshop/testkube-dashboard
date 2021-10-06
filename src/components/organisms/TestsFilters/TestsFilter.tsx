@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Typography, Button } from '@atoms';
+import {Typography, Button} from '@atoms';
 
-import { TestsContext } from '@context/testsContext';
+import {TestsContext} from '@context/testsContext';
 
 const StyledTestTextDescription = styled.td`
   border: none;
@@ -26,27 +26,21 @@ const TestsFilter = () => {
     return tests?.filters?.filter?.indexOf(status) !== -1;
   };
   const filtersTests = (status: string) => {
-
     if (tests.filters?.filter?.indexOf(status) === -1) {
-
       tests.filters?.filter?.push(status);
 
       if (status === 'all') {
-
-        tests.setFilters({ filter: [], dateFilter: '' });
+        tests.setFilters({filter: [], dateFilter: ''});
       } else {
         const filtered = tests.filters?.filter?.filter((filter: any) => filter !== 'all');
 
-        tests.setFilters({ ...tests.filters, filter: filtered });
+        tests.setFilters({...tests.filters, filter: filtered});
         tests.setFilters(tests.filters);
       }
-
     } else {
-
       let filtered = tests?.filters?.filter?.filter((filter: any) => filter !== status);
 
-      tests.setFilters({ ...tests?.filters, filter: filtered });
-
+      tests.setFilters({...tests?.filters, filter: filtered});
     }
   };
   return (
