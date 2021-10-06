@@ -90,7 +90,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
             defaultValue={apiEndpoint.apiEndpoint}
           />
           <Button type="submit" disabled={!validUrl} disableFilter>
-            Get tests
+            Get Results
           </Button>
         </StyledFormContainer>
       </StyledSearchUrlForm>
