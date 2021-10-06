@@ -14,7 +14,7 @@ export const StyledTestOutputsContainer = styled.div`
   margin-right: var(--space-lg);
   margin-left: var(--space-md);
   position: relative;
-  top: var(--space-xl);
+  top: var(--space-lg2);
   left: var(--space-lg);
 `;
 
