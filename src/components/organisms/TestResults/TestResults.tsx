@@ -6,6 +6,9 @@ import {ResultDatePicker, TestStatus} from '@molecules';
 import {TestsContext} from '@context/testsContext';
 
 const StyledTableCell = styled.td`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-right-style: hidden;
   border-bottom-style: hidden;
   word-wrap: break-word;
@@ -14,7 +17,7 @@ const StyledTableCell = styled.td`
   &:first-child {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     border-left-style: hidden;
     flex-grow: 2;
   }
@@ -36,19 +39,36 @@ const TestResults = () => {
         <ResultDatePicker />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Passed" totalTests={getTotalTestsByType(tests?.data?.totals?.passed.toString())} />
+        <TestStatus
+          testTitle="Passed"
+          totalTests={getTotalTestsByType(tests?.data?.totals?.passed.toString())}
+          testTitleColor="white"
+          totalTestsColor="yellow"
+        />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Error" totalTests={getTotalTestsByType(tests?.data?.totals?.failed.toString())} />
+        <TestStatus
+          testTitle="Failed"
+          totalTests={getTotalTestsByType(tests?.data?.totals?.failed.toString())}
+          testTitleColor="white"
+          totalTestsColor="yellow"
+        />
       </StyledTableCell>
       <StyledTableCell>
         <TestStatus
           testTitle="Test Running"
           totalTests={getTotalTestsByType(tests?.data?.totals?.pending.toString())}
+          testTitleColor="white"
+          totalTestsColor="white"
         />
       </StyledTableCell>
       <StyledTableCell>
-        <TestStatus testTitle="Total Tests Executed" totalTests={tests?.data?.totals?.results.toString()} />
+        <TestStatus
+          testTitle="Total Tests Executed"
+          totalTests={tests?.data?.totals?.results.toString()}
+          testTitleColor="white"
+          totalTestsColor="white"
+        />
       </StyledTableCell>
     </>
   );
