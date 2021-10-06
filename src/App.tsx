@@ -21,6 +21,7 @@ const MainTableStyles = styled.table`
 
 const StyledTestResults = styled.tr`
   display: flex;
+  height: 150px;
   border-left-style: hidden;
   border-top-style: none;
   border-bottom-style: 1px solid var(--color-gray-secondary);
