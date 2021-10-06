@@ -1,0 +1,1 @@
+export { truncateText } from './strings';
