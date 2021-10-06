@@ -6,7 +6,7 @@ export const timeStampToDate = (timeStamp: string) => {
   const hour = date.getHours();
   const minute = date.getMinutes();
   const second = date.getSeconds();
-  return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
+  return `${month}/${day}/${year} ${hour}:${minute}:${second}`;
 };
 
 export const getDuration = (startTime: string, endTime: string) => {
