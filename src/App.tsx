@@ -3,10 +3,15 @@ import styled from 'styled-components';
 import {useQuery} from 'react-query';
 
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
+import {Modal} from '@atoms';
 import {TestsContext} from '@context/testsContext';
 
 import {getDate, getLatestDate} from '@utils/formatDate';
-import {cleanStorageWhenApiEndpointQueryStringIsAbsent, getApiEndpointOnPageLoad} from '@utils/validate';
+import {
+  cleanStorageWhenApiEndpointQueryStringIsAbsent,
+  getApiEndpointOnPageLoad,
+  CheckIfQueryParamsExistsInUrl,
+} from '@utils/validate';
 
 import {config} from '@constants/config';
 import {Tests} from '@types';
@@ -47,6 +52,7 @@ function App() {
   const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
   const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
   const [testsExecution, setTestsExecution] = useState<Tests[]>([]);
+  const [visible, setVisible] = useState<boolean>(false);
 
   const {data, error} = useQuery(
     'tests',
@@ -102,14 +108,24 @@ function App() {
     }
   }, [data]);
 
-  useEffect(() => {
+  const dashboardEndpointValidators = () => {
     getApiEndpointOnPageLoad();
     cleanStorageWhenApiEndpointQueryStringIsAbsent();
+
+    const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
+    if (!apiEndpointExist) {
+      setVisible(true);
+    }
+  };
+
+  useEffect(() => {
+    dashboardEndpointValidators();
   }, []);
 
   return (
     <>
       {error && 'Something went wrong...'}
+      {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
         <MainTableStyles>
           <thead>
