@@ -14,6 +14,8 @@ import {
 } from '@utils/validate';
 
 import {config} from '@constants/config';
+import {isHostProtocolSecure, showSmallError} from '@utils';
+
 import {Tests} from '@types';
 
 const MainTableStyles = styled.table`
@@ -112,6 +114,10 @@ function App() {
     getApiEndpointOnPageLoad();
     cleanStorageWhenApiEndpointQueryStringIsAbsent();
 
+    if (!isHostProtocolSecure()) {
+      showSmallError(`Dashboard is using non-secure protocol!
+      <a href='https://kubeshop.github.io/kubtest/installing/' target="_blank" rel="noopener">Read more</a>`);
+    }
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
     if (!apiEndpointExist) {
       setVisible(true);
