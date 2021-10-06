@@ -104,3 +104,12 @@ export const findMatchWordInString = (word: string, string: string) => {
 export const isHostProtocolSecure = () => {
   return window.location.protocol === 'https:';
 };
+
+export const CheckIfQueryParamsExistsInUrl = (queryParams: string) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const myParam = urlParams.get(queryParams);
+  if (!myParam) {
+    return;
+  }
+  return myParam;
+};
