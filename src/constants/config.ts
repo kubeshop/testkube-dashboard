@@ -1,3 +1,4 @@
 export const config = {
-  apiEndpoint: 'apiEndpoint'
+  apiEndpoint: 'apiEndpoint',
+  apiVersion: '/v1/executions'
 };
