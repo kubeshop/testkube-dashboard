@@ -49,11 +49,14 @@ const StyledTestSummary = styled.tr`
 function App() {
   const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
   const [visible, setVisible] = useState<boolean>(false);
+  const [selectedTest, setSelectedTest] = useState<number | undefined>();
 
   const {data, error} = useFetchTests();
 
   const tests = {
     data,
+    selectedTest,
+    setSelectedTest,
     setFilters,
     filters,
     testsExecution: filterTestsExecution(data, filters),
