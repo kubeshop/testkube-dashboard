@@ -8,6 +8,7 @@ import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
 
 import {Result} from '@types';
+import {truncateText} from '@utils';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -76,7 +77,7 @@ const TestsList = () => {
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id)}>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
-                {test.scriptName ? test.scriptName : '-'}
+                {test.scriptName ? truncateText(test.scriptName) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
