@@ -1,9 +1,20 @@
 import React, {useState} from 'react';
 import {DatePicker} from 'antd';
+import styled from 'styled-components';
 
 import {Typography, Button} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
+
+const StyledDateContainer = styled.div`
+  display: flex;
+  align-items: baseline;
+
+  & > * {
+    flex: 1 1 auto;
+    margin: 5px;
+  }
+`;
 
 const datePickerStyles = {
   color: 'var(--color-light-primary)',
@@ -35,13 +46,13 @@ const ResultDatePicker = () => {
   }, [tests.data]);
 
   return (
-    <>
+    <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
       <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} />
       <Button disabled={!toggleGetTest} onClick={getLatestDateTest}>
         Latest
       </Button>
-    </>
+    </StyledDateContainer>
   );
 };
 
