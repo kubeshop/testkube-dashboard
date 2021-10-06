@@ -34,8 +34,8 @@ const StyledTestListCell = styled.div`
 const TestsList = () => {
   const tests: any = useContext(TestsContext);
 
-  const handleSelectedTest = (test: any) => {
-    tests?.setSelectedTest(test);
+  const handleSelectedTest = (id: string, testName: string) => {
+    tests?.setSelectedTest({id, testName});
   };
 
   return (
@@ -73,7 +73,7 @@ const TestsList = () => {
       </StyledTestListRow>
       {tests?.testsExecution?.results &&
         tests?.testsExecution?.results?.map((test: Result) => (
-          <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id)}>
+          <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id, test.scriptName)}>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
                 {test.scriptName ? test.scriptName : '-'}
