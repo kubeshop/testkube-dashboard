@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import {DatePicker} from 'antd';
+import React, { useState } from 'react';
+import { DatePicker } from 'antd';
 
-import {Typography, Button} from '@atoms';
+import { Typography, Button } from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
+import { TestsContext } from '@context/testsContext';
 
 const datePickerStyles = {
   color: 'var(--color-light-primary)',
@@ -24,15 +24,27 @@ const ResultDatePicker = () => {
   };
 
   const getLatestDateTest = React.useCallback(() => {
-    tests.setLatestDateTests(!latestDate);
-    setLatestDate(!latestDate);
-  }, [latestDate]);
+
+
+    if (tests.filters.indexOf('latest') === -1) {
+
+      tests.filters.push('latest');
+
+    } else {
+
+      const filtered = tests.filters.filter((filter: string) => filter !== 'latest');
+      tests.setFilters(filtered);
+
+    };
+
+
+  }, [tests.filters]);
 
   React.useEffect(() => {
-    if (tests.data) {
+    if (tests.testsExecution) {
       setToggleGetTest(true);
     }
-  }, [tests.data]);
+  }, [tests.testsExecution]);
 
   return (
     <>

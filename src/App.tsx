@@ -1,15 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import {TestResults, TestsFilter, TestsSummary} from '@organisms';
-import {TestsContext} from '@context/testsContext';
+import { TestResults, TestsFilter, TestsSummary } from '@organisms';
+import { TestsContext } from '@context/testsContext';
 
-import {getDate, getLatestDate} from '@utils/formatDate';
-import {cleanStorageWhenApiEndpointQueryStringIsAbsent, getApiEndpointOnPageLoad} from '@utils/validate';
+import { getDate } from '@utils/formatDate';
+import { cleanStorageWhenApiEndpointQueryStringIsAbsent, getApiEndpointOnPageLoad } from '@utils/validate';
 
-import {Tests} from '@types';
+// import {Tests} from '@types';
 
-import {useFetchTests} from '@hooks';
+import { useFetchTests } from '@hooks';
+import { filterTestsExecution } from './utils';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
@@ -42,56 +43,44 @@ const StyledTestSummary = styled.tr`
 `;
 
 function App() {
-  const [selectedTestTypes, setSelectedTestTypes] = useState<string>('');
   const [selectedTest, setSelectedTest] = useState<number | undefined>();
   const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
   const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
-  const [testsExecution, setTestsExecution] = useState<Tests[]>([]);
+  const [testsExecution, setTestsExecution] = useState<any>();
+  const [filters, setFilters] = useState<string[]>([]);
 
-  const {data, error} = useFetchTests();
+
+  const { data, error } = useFetchTests();
 
   const tests = {
     data,
     selectedTest,
     setSelectedTest,
-    selectedTestTypes,
-    setSelectedTestTypes,
     selectedTimeIntervalTests,
     setSelectedTimeIntervalTests,
     latestDateTests,
     setLatestDateTests,
-    testsExecution,
+    setFilters,
+    filters,
+    testsExecution: filterTestsExecution(testsExecution, filters),
   };
 
+ 
   useEffect(() => {
-    const filteredTests =
-      selectedTestTypes === 'all' ? data : data?.results?.filter((test: any) => test.status === selectedTestTypes);
-
-    setTestsExecution(filteredTests);
-  }, [selectedTestTypes]);
-
-  useEffect(() => {
-    const filteredTestsIntervals = data?.results?.filter(
+    const filteredTestsIntervals = testsExecution?.results?.filter(
       (test: any) => getDate(test.startTime) === getDate(selectedTimeIntervalTests)
     );
-    setTestsExecution(filteredTestsIntervals);
+
+    setTestsExecution({
+      results: filteredTestsIntervals
+    });
   }, [selectedTimeIntervalTests]);
-
-  useEffect(() => {
-    if (latestDateTests) {
-      const latestdate = getLatestDate(data?.results);
-
-      const lastTests = data?.results?.filter((test: any) => getDate(test.startTime) === getDate(latestdate));
-
-      console.log('SECOND RESULTS', {results: lastTests});
-      setTestsExecution(lastTests);
-    }
-  }, [latestDateTests]);
-
+ 
   useEffect(() => {
     if (data) {
       setTestsExecution(data);
     }
+
   }, [data]);
 
   useEffect(() => {
@@ -124,3 +113,4 @@ function App() {
 }
 
 export default App;
+

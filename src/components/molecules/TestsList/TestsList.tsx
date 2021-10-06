@@ -71,8 +71,8 @@ const TestsList = () => {
           </Typography>
         </StyledTestListCell>
       </StyledTestListRow>
-      {tests?.data?.results &&
-        tests?.data?.results?.map((test: Result) => (
+      {tests?.testsExecution?.results &&
+        tests?.testsExecution?.results?.map((test: Result) => (
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id)}>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
