@@ -132,7 +132,9 @@ const TestDescription = () => {
           </StyledTestStatusImage>
           <StyledTestOutputsContainer>
             <StyledTestOutputDescription>
-              <Typography variant="secondary">{renderTestStatus(data?.executionResult?.status)}</Typography>
+              <Typography variant="tertiary" color="tertiary">
+                {tests?.selectedTest?.testName}
+              </Typography>
               <Typography variant="secondary" color="quinary" cursor="pointer" onClick={handleOnClick}>
                 {togglePlainTestTest ? 'View plain text' : 'View steps'}
               </Typography>
