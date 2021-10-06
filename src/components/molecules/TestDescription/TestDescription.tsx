@@ -204,7 +204,7 @@ const TestDescription = () => {
               <>
                 <StyledPlainTextOutputContainer>
                   <StyledTestOutput>
-                    {data?.executionResult?.output.split('\n').map((i: any) => {
+                    {data?.executionResult?.output?.split('\n').map((i: any) => {
                       return <StyledText key={nanoid()}>{i}</StyledText>;
                     })}
                   </StyledTestOutput>
