@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
-import { TestResults, TestsFilter, TestsSummary } from '@organisms';
-import { TestsContext } from '@context/testsContext';
+import {TestResults, TestsFilter, TestsSummary} from '@organisms';
+import {TestsContext} from '@context/testsContext';
 
-import { cleanStorageWhenApiEndpointQueryStringIsAbsent, getApiEndpointOnPageLoad } from '@utils/validate';
+import {
+  cleanStorageWhenApiEndpointQueryStringIsAbsent,
+  getApiEndpointOnPageLoad,
+  CheckIfQueryParamsExistsInUrl,
+} from '@utils/validate';
 
-import { useFetchTests } from '@hooks';
-import { filterTestsExecution } from './utils';
+import {useFetchTests} from '@hooks';
+import {Modal} from '@atoms';
+
+import {config} from '@constants/config';
+import {isHostProtocolSecure, showSmallError, filterTestsExecution} from '@utils';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
@@ -40,11 +47,10 @@ const StyledTestSummary = styled.tr`
 `;
 
 function App() {
+  const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
+  const [visible, setVisible] = useState<boolean>(false);
 
-  const [filters, setFilters] = useState<any>({ filter: [], dateFilter: '' });
-
-
-  const { data, error } = useFetchTests();
+  const {data, error} = useFetchTests();
 
   const tests = {
     data,
@@ -53,14 +59,28 @@ function App() {
     testsExecution: filterTestsExecution(data, filters),
   };
 
-  useEffect(() => {
+  const dashboardEndpointValidators = () => {
     getApiEndpointOnPageLoad();
     cleanStorageWhenApiEndpointQueryStringIsAbsent();
+
+    if (!isHostProtocolSecure()) {
+      showSmallError(`Dashboard is using non-secure protocol!
+      <a href='https://kubeshop.github.io/kubtest/installing/' target="_blank" rel="noopener">Read more</a>`);
+    }
+    const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
+    if (!apiEndpointExist) {
+      setVisible(true);
+    }
+  };
+
+  useEffect(() => {
+    dashboardEndpointValidators();
   }, []);
 
   return (
     <>
       {error && 'Something went wrong...'}
+      {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
         <MainTableStyles>
           <thead>
@@ -83,4 +103,3 @@ function App() {
 }
 
 export default App;
-

@@ -100,3 +100,16 @@ export const checkApiEndpointProtocol = (apiEndpoint: string) => {
 export const findMatchWordInString = (word: string, string: string) => {
   return string.match(new RegExp(word, 'gi'));
 };
+
+export const isHostProtocolSecure = () => {
+  return window.location.protocol === 'https:';
+};
+
+export const CheckIfQueryParamsExistsInUrl = (queryParams: string) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const myParam = urlParams.get(queryParams);
+  if (!myParam) {
+    return;
+  }
+  return myParam;
+};
