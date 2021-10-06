@@ -4,10 +4,7 @@ import styled from 'styled-components';
 import { TestResults, TestsFilter, TestsSummary } from '@organisms';
 import { TestsContext } from '@context/testsContext';
 
-import { getDate } from '@utils/formatDate';
 import { cleanStorageWhenApiEndpointQueryStringIsAbsent, getApiEndpointOnPageLoad } from '@utils/validate';
-
-// import {Tests} from '@types';
 
 import { useFetchTests } from '@hooks';
 import { filterTestsExecution } from './utils';
@@ -43,45 +40,18 @@ const StyledTestSummary = styled.tr`
 `;
 
 function App() {
-  const [selectedTest, setSelectedTest] = useState<number | undefined>();
-  const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
-  const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
-  const [testsExecution, setTestsExecution] = useState<any>();
-  const [filters, setFilters] = useState<string[]>([]);
+
+  const [filters, setFilters] = useState<any>({ filter: [], dateFilter: '' });
 
 
   const { data, error } = useFetchTests();
 
   const tests = {
     data,
-    selectedTest,
-    setSelectedTest,
-    selectedTimeIntervalTests,
-    setSelectedTimeIntervalTests,
-    latestDateTests,
-    setLatestDateTests,
     setFilters,
     filters,
-    testsExecution: filterTestsExecution(testsExecution, filters),
+    testsExecution: filterTestsExecution(data, filters),
   };
-
- 
-  useEffect(() => {
-    const filteredTestsIntervals = testsExecution?.results?.filter(
-      (test: any) => getDate(test.startTime) === getDate(selectedTimeIntervalTests)
-    );
-
-    setTestsExecution({
-      results: filteredTestsIntervals
-    });
-  }, [selectedTimeIntervalTests]);
- 
-  useEffect(() => {
-    if (data) {
-      setTestsExecution(data);
-    }
-
-  }, [data]);
 
   useEffect(() => {
     getApiEndpointOnPageLoad();

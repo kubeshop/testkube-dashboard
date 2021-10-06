@@ -15,30 +15,32 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
-  const [latestDate, setLatestDate] = useState<boolean>(false);
+ 
   const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
   const tests: any = React.useContext(TestsContext);
 
-  const handleDatePicker = (date: any, dateString: any) => {
-    tests.setSelectedTimeIntervalTests(dateString);
+  const handleDatePicker = (_value: any, dateString: any) => {
+ 
+    tests.filters.dateFilter = dateString;
+    tests.setFilters(tests.filters);
   };
 
   const getLatestDateTest = React.useCallback(() => {
 
 
-    if (tests.filters.indexOf('latest') === -1) {
+    if (tests.filters?.filter?.indexOf('latest') === -1) {
 
-      tests.filters.push('latest');
+      tests.filters?.filter?.push('latest');
 
     } else {
 
-      const filtered = tests.filters.filter((filter: string) => filter !== 'latest');
-      tests.setFilters(filtered);
+      const filtered = tests?.filters?.filter?.filter((filter: string) => filter !== 'latest');
+      tests.setFilters({ ...tests.filters, status: filtered });
 
     };
 
 
-  }, [tests.filters]);
+  }, [tests?.filters?.filter]);
 
   React.useEffect(() => {
     if (tests.testsExecution) {
@@ -49,7 +51,7 @@ const ResultDatePicker = () => {
   return (
     <>
       <Typography variant="quaternary">Results for</Typography>
-      <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} />
+      <DatePicker size="large" style={datePickerStyles}  onChange={handleDatePicker} />
       <Button disabled={!toggleGetTest} onClick={getLatestDateTest}>
         Latest
       </Button>
