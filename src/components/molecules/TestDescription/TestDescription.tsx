@@ -106,18 +106,6 @@ const TestDescription = () => {
 
   const {data, error} = useFetchTest();
 
-  const renderTestStatus = (testStatus: string) => {
-    return testStatus === 'pending'
-      ? 'TEST PENDING'
-      : testStatus === 'error'
-      ? 'TEST ERROR'
-      : testStatus === 'success'
-      ? 'TEST SUCCESS'
-      : testStatus === 'queued'
-      ? 'TEST QUEUED'
-      : '';
-  };
-
   const handleOnClick = () => {
     setTogglePlainTestTest(!togglePlainTestTest);
   };
@@ -125,7 +113,7 @@ const TestDescription = () => {
   return (
     <>
       {error && <Typography variant="secondary">Something went wrong...</Typography>}
-      {tests?.selectedTest && data && (
+      {tests?.selectedTest.id && data && (
         <>
           <StyledTestStatusImage>
             <RenderTestStatusSvgIcon testStatus={data?.executionResult?.status} width={50} height={50} />
@@ -133,7 +121,7 @@ const TestDescription = () => {
           <StyledTestOutputsContainer>
             <StyledTestOutputDescription>
               <Typography variant="tertiary" color="tertiary">
-                {tests?.selectedTest?.testName}
+                {tests?.selectedTest?.testName || ''}
               </Typography>
               <Typography variant="secondary" color="quinary" cursor="pointer" onClick={handleOnClick}>
                 {togglePlainTestTest ? 'View plain text' : 'View steps'}
