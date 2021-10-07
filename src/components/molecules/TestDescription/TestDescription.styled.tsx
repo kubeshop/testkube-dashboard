@@ -47,7 +47,7 @@ export const StyledTestOutput = styled.span`
   }
 `;
 
-export const StyledText = styled.span`
+export const StyledText = styled.pre`
   display: flex;
 `;
 
