@@ -2,7 +2,7 @@ import {config} from '@constants/config';
 
 export const validateUrl = (url: string): boolean => {
   const pattern = new RegExp(
-    'https?:\/\/(?:w{1,3}\.)?[^\s.]+(?:\.[a-z]+)*(?::\d+)?((?:\/\w+)|(?:-\w+))*\/?(?![^<]*(?:<\/\w+>|\/?>))',
+    '(https?:\/\/)?(?:w{1,3}\.)?[^\s.]+(?:\.[a-z]+)*(?::\d+)?((?:\/\w+)|(?:-\w+))*\/?(?![^<]*(?:<\/\w+>|\/?>))',
     'i'
   );
 
