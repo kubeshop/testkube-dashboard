@@ -14,9 +14,11 @@ const PageTitle = () => {
   return (
     <StyledMainTitle>
       <Image src={MainLogo} type="svg" alt="Logo" width={200} height={100} />
-      <Typography variant="secondary" color="primary" style={{position: 'relative', top: '45px'}}>
-        Dashboard
-      </Typography>
+      <>
+        <Typography variant="tertiary" color="tertiary" style={{position: 'relative', top: '40px'}}>
+          Dashboard
+        </Typography>
+      </>
     </StyledMainTitle>
   );
 };
