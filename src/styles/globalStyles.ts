@@ -92,6 +92,7 @@ export const GlobalStyle = createGlobalStyle`
 
     .ant-modal-title {
       color: var(--color-light-primary);
+      font-size: var(--font-size-lg);
     }
   `;
 

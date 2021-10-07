@@ -3,12 +3,7 @@ import styled from 'styled-components';
 import {Modal} from 'antd';
 
 import {Button, LabelInput, Typography} from '@atoms';
-import {
-  validateUrl,
-  matchEndpointProtocolWithHostProtocol,
-  removeDuplicatesInQueryString,
-  checkApiEndpointProtocol,
-} from '@utils/validate';
+import {validateUrl, matchEndpointProtocolWithHostProtocol, checkApiEndpointProtocol} from '@utils/validate';
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
@@ -42,14 +37,13 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
 
   const handleChangeApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
     setApiEndpoint({...apiEndpoint, [field]: event.target.value});
-    const validatedUrl = validateUrl(apiEndpoint.apiEndpoint);
+    const validatedUrl = validateUrl(event.target.value);
     setVAlidUrl(validatedUrl);
   };
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    removeDuplicatesInQueryString(window.location.href);
     matchEndpointProtocolWithHostProtocol(apiEndpoint.apiEndpoint);
 
     const checked = checkApiEndpointProtocol(apiEndpoint.apiEndpoint);
@@ -90,7 +84,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
             defaultValue={apiEndpoint.apiEndpoint}
           />
           <Button type="submit" disabled={!validUrl} disableFilter>
-            Get tests
+            Get Results
           </Button>
         </StyledFormContainer>
       </StyledSearchUrlForm>

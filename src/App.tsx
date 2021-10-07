@@ -1,22 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import {useQuery} from 'react-query';
 
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
-import {Modal} from '@atoms';
 import {TestsContext} from '@context/testsContext';
 
-import {getDate, getLatestDate} from '@utils/formatDate';
 import {
   cleanStorageWhenApiEndpointQueryStringIsAbsent,
   getApiEndpointOnPageLoad,
   CheckIfQueryParamsExistsInUrl,
 } from '@utils/validate';
 
-import {config} from '@constants/config';
-import {isHostProtocolSecure, showSmallError} from '@utils';
+import {useFetchTests} from '@hooks';
+import {Modal} from '@atoms';
 
-import {Tests} from '@types';
+import {config} from '@constants/config';
+import {isHostProtocolSecure, showSmallError, filterTestsExecution} from '@utils';
+
+import {SelectedTest} from '@types';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
@@ -50,66 +50,23 @@ const StyledTestSummary = styled.tr`
 `;
 
 function App() {
-  const [selectedTestTypes, setSelectedTestTypes] = useState<string>('');
-  const [selectedTest, setSelectedTest] = useState<number | undefined>();
-  const [selectedTimeIntervalTests, setSelectedTimeIntervalTests] = useState('');
-  const [latestDateTests, setLatestDateTests] = useState<boolean>(false);
-  const [testsExecution, setTestsExecution] = useState<Tests[]>([]);
+  const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
   const [visible, setVisible] = useState<boolean>(false);
+  const [selectedTest, setSelectedTest] = useState<SelectedTest>({
+    id: '',
+    testName: '',
+  });
 
-  const {data, error} = useQuery(
-    'tests',
-    () => {
-      const url = localStorage.getItem(config.apiEndpoint);
-      if (url) {
-        return fetch(url).then(res => res.json());
-      }
-    },
-    {refetchInterval: 5000}
-  );
+  const {data, error} = useFetchTests();
 
   const tests = {
     data,
     selectedTest,
     setSelectedTest,
-    selectedTestTypes,
-    setSelectedTestTypes,
-    selectedTimeIntervalTests,
-    setSelectedTimeIntervalTests,
-    latestDateTests,
-    setLatestDateTests,
-    testsExecution,
+    setFilters,
+    filters,
+    testsExecution: filterTestsExecution(data, filters),
   };
-
-  useEffect(() => {
-    const filteredTests =
-      selectedTestTypes === 'all' ? data : data?.results?.filter((test: any) => test.status === selectedTestTypes);
-
-    setTestsExecution(filteredTests);
-  }, [selectedTestTypes]);
-
-  useEffect(() => {
-    const filteredTestsIntervals = data?.filter(
-      (test: any) => getDate(test.startTime) === getDate(selectedTimeIntervalTests)
-    );
-    setTestsExecution(filteredTestsIntervals);
-  }, [selectedTimeIntervalTests]);
-
-  useEffect(() => {
-    if (latestDateTests) {
-      const latestdate = getLatestDate(data);
-
-      const lastTests = data?.filter((test: any) => getDate(test.startTime) === getDate(latestdate));
-
-      setTestsExecution(lastTests);
-    }
-  }, [latestDateTests]);
-
-  useEffect(() => {
-    if (data) {
-      setTestsExecution(data);
-    }
-  }, [data]);
 
   const dashboardEndpointValidators = () => {
     getApiEndpointOnPageLoad();

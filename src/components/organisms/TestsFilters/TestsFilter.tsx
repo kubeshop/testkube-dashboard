@@ -19,6 +19,30 @@ const StyleTestFilterButtons = styled.td`
 const TestsFilter = () => {
   const tests: any = React.useContext(TestsContext);
 
+  const isActive = (status: string) => {
+    if (tests?.filters?.filter?.length === 0 && status === 'all') {
+      return true;
+    }
+    return tests?.filters?.filter?.indexOf(status) !== -1;
+  };
+  const filtersTests = (status: string) => {
+    if (tests.filters?.filter?.indexOf(status) === -1) {
+      tests.filters?.filter?.push(status);
+
+      if (status === 'all') {
+        tests.setFilters({filter: [], dateFilter: ''});
+      } else {
+        const filtered = tests.filters?.filter?.filter((filter: any) => filter !== 'all');
+
+        tests.setFilters({...tests.filters, filter: filtered});
+        tests.setFilters(tests.filters);
+      }
+    } else {
+      let filtered = tests?.filters?.filter?.filter((filter: any) => filter !== status);
+
+      tests.setFilters({...tests?.filters, filter: filtered});
+    }
+  };
   return (
     <>
       <StyledTestTextDescription>
@@ -28,16 +52,16 @@ const TestsFilter = () => {
       </StyledTestTextDescription>
       <StyleTestFilterButtons>
         <Typography variant="secondary">Show: </Typography>
-        <Button disabled={!tests.data} onClick={() => tests.setSelectedTestTypes('all')}>
+        <Button disabled={!tests.testsExecution} active={isActive('all')} onClick={() => filtersTests('all')}>
           All
         </Button>
-        <Button disabled={!tests.data} onClick={() => tests.setSelectedTestTypes('pending')}>
+        <Button disabled={!tests.testsExecution} active={isActive('pending')} onClick={() => filtersTests('pending')}>
           Running
         </Button>
-        <Button disabled={!tests.data} onClick={() => tests.setSelectedTestTypes('success')}>
+        <Button disabled={!tests.testsExecution} active={isActive('success')} onClick={() => filtersTests('success')}>
           Passed
         </Button>
-        <Button disabled={!tests.data} onClick={() => tests.setSelectedTestTypes('error')}>
+        <Button disabled={!tests.testsExecution} active={isActive('error')} onClick={() => filtersTests('error')}>
           Failed
         </Button>
       </StyleTestFilterButtons>
