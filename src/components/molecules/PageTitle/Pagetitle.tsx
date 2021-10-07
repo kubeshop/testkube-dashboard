@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Typography, Image} from '@atoms';
+import {Image, Typography} from '@atoms';
 import MainLogo from '@assets/mainLogo.svg';
 
 const StyledMainTitle = styled.div`
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
   gap: var(--space-md);
   margin-left: var(--space-lg);
 `;
@@ -15,10 +13,12 @@ const StyledMainTitle = styled.div`
 const PageTitle = () => {
   return (
     <StyledMainTitle>
-      <Image src={MainLogo} alt="Logo" type="svg" width={200} height={100} />
-      <Typography variant="quaternary" color="secondary">
-        Dashboard
-      </Typography>
+      <Image src={MainLogo} type="svg" alt="Logo" width={200} height={100} />
+      <>
+        <Typography variant="tertiary" color="tertiary" style={{position: 'relative', top: '40px'}}>
+          Dashboard
+        </Typography>
+      </>
     </StyledMainTitle>
   );
 };
