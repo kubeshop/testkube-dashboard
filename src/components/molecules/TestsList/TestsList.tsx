@@ -8,10 +8,12 @@ import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
 
 import {Result} from '@types';
+import {truncateText} from '@utils';
 
 const StyledTestListContainer = styled.div`
   display: block;
   width: 100%;
+  margin-left: 25px;
 `;
 
 const StyledTestListRow = styled.div`
@@ -28,7 +30,7 @@ const StyledTestListRow = styled.div`
 
 const StyledTestListCell = styled.div`
   width: calc(100% / 5);
-  text-align: center;
+  text-align: left;
 `;
 
 const TestsList = () => {
@@ -42,31 +44,31 @@ const TestsList = () => {
     <StyledTestListContainer>
       <StyledTestListRow>
         <StyledTestListCell>
-          <Typography variant="secondary" font="bold">
+          <Typography variant="secondary" color="secondary" font="bold">
             Name
           </Typography>
         </StyledTestListCell>
 
         <StyledTestListCell>
-          <Typography variant="secondary" font="bold">
+          <Typography variant="secondary" color="secondary" font="bold">
             Started At
           </Typography>
         </StyledTestListCell>
 
         <StyledTestListCell>
-          <Typography variant="secondary" font="bold">
+          <Typography variant="secondary" color="secondary" font="bold">
             Duration
           </Typography>
         </StyledTestListCell>
 
         <StyledTestListCell>
-          <Typography variant="secondary" font="bold">
+          <Typography variant="secondary" color="secondary" font="bold">
             Status
           </Typography>
         </StyledTestListCell>
 
         <StyledTestListCell>
-          <Typography variant="secondary" font="bold">
+          <Typography variant="secondary" color="secondary" font="bold">
             Type
           </Typography>
         </StyledTestListCell>
@@ -76,7 +78,7 @@ const TestsList = () => {
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id, test.scriptName)}>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" font="light">
-                {test.scriptName ? test.scriptName : '-'}
+                {test.scriptName ? truncateText(test.scriptName) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">

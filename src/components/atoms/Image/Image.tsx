@@ -16,6 +16,11 @@ const StyledImage = styled.img<IImage>`
   height: ${props => props.height}px;
   background-repeat: no-repeat;
   border-radius: ${props => (props.size ? '50%' : '0')};
+
+  @media screen and (max-width: 26.5rem) {
+    width: 50px;
+    height: 50px;
+  }
 `;
 
 const Image = ({src, alt, type, size, width, height, onClick, ...imageProps}: IImage) => {

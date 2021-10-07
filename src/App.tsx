@@ -20,7 +20,7 @@ import {SelectedTest} from '@types';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
-  width: 80vw;
+  width: 90vw;
   height: 100vh;
   text-align: center;
   margin: 0 auto;
@@ -28,6 +28,7 @@ const MainTableStyles = styled.table`
 
 const StyledTestResults = styled.tr`
   display: flex;
+  height: 152px;
   border-left-style: hidden;
   border-top-style: none;
   border-bottom-style: 1px solid var(--color-gray-secondary);
