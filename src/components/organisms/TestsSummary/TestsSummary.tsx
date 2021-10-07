@@ -12,6 +12,9 @@ const StyledTestList = styled.td`
   overflow-y: scroll;
   border-right: 1px solid var(--color-gray-secondary);
   flex-grow: 1;
+  border-top-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: hidden;
 `;
 
 const StyledTestDescription = styled.td`
