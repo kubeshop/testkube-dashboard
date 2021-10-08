@@ -1,29 +1,29 @@
-# Kubtest Dashboard ![Netlify](https://img.shields.io/netlify/8cef7e08-ee34-4dd3-871a-27fb0c63a0c8?color=%231890fc&style=for-the-badge)
+# TestKube Dashboard ![Netlify](https://img.shields.io/netlify/8cef7e08-ee34-4dd3-871a-27fb0c63a0c8?color=%231890fc&style=for-the-badge)
 
-A simple read-only dashboard for real-time Kubtest results.
+A simple read-only dashboard for real-time TestKube results.
 
-The Kubtest Dashboard is deployed as a standalone web application in a cluster running Kubtest. It runs in the browser
-and communicates with the Kubtest api-server via an Ingress controller (either provided or bundled):
+The TestKube Dashboard is deployed as a standalone web application in a cluster running TestKube. It runs in the browser
+and communicates with the TestKube api-server via an Ingress controller (either provided or bundled):
 
 ![img.png](docs/images/very-high-level-architecture.png)
 
 Available operations for the api-server are in its
-[OpenAPI Definition](https://github.com/kubeshop/kubtest/blob/main/api/v1/kubtest.yaml)
+[OpenAPI Definition](https://github.com/kubeshop/testkube/blob/main/api/v1/testkube.yaml)
 
 ## Development setup
 
 During development one can bypass the Ingress and interact with the api-server directly:
 
-- Install Kubtest in your cluster - see [Kubtest Installation](https://kubeshop.github.io/kubtest/installing/)
+- Install TestKube in your cluster - see [TestKube Installation](https://kubeshop.github.io/testkube/installing/)
 - Expose the api-server with
 
 ```shell
-➜  ~ kubectl port-forward service/kubtest-api-server 9090:8080 --namespace kubtest
+➜  ~ kubectl port-forward service/testkube-api-server 9090:8080 --namespace testkube
 Forwarding from 127.0.0.1:9090 -> 8080
 Forwarding from [::1]:9090 -> 8080
 ```
 
-(here we're exposing the kubtest-api-server running in the kubtest namespace on port 9090 locally)
+(here we're exposing the testkube-api-server running in the TestKube namespace on port 9090 locally)
 
 ![img.png](docs/images/dev-architecture.png)
 
@@ -32,13 +32,13 @@ Forwarding from [::1]:9090 -> 8080
 Package this into a Docker image using the provided [Dockerfile](Dockerfile) with
 
 ```
-docker build -t kubeshop/kubtest-dashboard .
+docker build -t kubeshop/testkube-dashboard .
 ```
 
 Run locally on port 3001 with
 
 ```
-docker run -it -p 3001:80 kubeshop/kubtest-dashboard:latest
+docker run -it -p 3001:80 kubeshop/testkube-dashboard:latest
 ```
 
 ## Deploying under Kubernetes
@@ -46,7 +46,7 @@ docker run -it -p 3001:80 kubeshop/kubtest-dashboard:latest
 Push to DockerHub
 
 ```
-docker push kubeshop/kubtest-dashboard
+docker push testkube/testkube-dashboard
 ```
 
 Deploy the included manifest to your cluster:
@@ -58,7 +58,7 @@ kubectl apply -f manifests/deployment.yaml
 Access using port-forwarding :
 
 ```
-kubectl port-forward service/kubtest-dashboard 8080:8001
+kubectl port-forward service/testkube-dashboard 8080:8001
 ```
 
 (this example forwards on port 8080)
@@ -74,7 +74,7 @@ In order to be able to run this application locally without docker, just close t
 :fireworks: :tada:
 
 ```bash
-git clone git@github.com:kubeshop/kubtest-dashboard.git && cd kubetest-dashboard
+git clone git@github.com:kubeshop/testkube-dashboard.git && cd kubetest-dashboard
 npm install
 npm run start
 ```
@@ -107,4 +107,4 @@ After this, you should get an open navigator with the link: `http://localhost:30
 ## Deployment application
 
 This application is deployed with [Netlify](https://app.netlify.com/) where you can see it live using under this :link:
-[Kubtest-dashboard](https://cocky-northcutt-d5b913.netlify.app/) .
+[TestKube-dashboard](https://cocky-northcutt-d5b913.netlify.app/) .

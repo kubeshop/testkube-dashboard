@@ -1,14 +1,14 @@
 {
-  "name": "kubtest-dashboard",
+  "name": "TesKube-dashboard",
   "version": "0.0.1",
   "author": "Kubeshop",
-  "description": "Simple dashboard for Kubtest",
+  "description": "Simple dashboard for TesKube",
   "contributors": [
     "ole@kubeshop.io"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/kubeshop/kubtest-dashboard.git"
+    "url": "git@github.com:kubeshop/testkube-dashboard.git"
   },
   "private": true,
   "devDependencies": {

@@ -61,7 +61,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
 
   return (
     <Modal
-      title="Kubtest API endpoint"
+      title="TestKube API endpoint"
       visible={visible}
       onOk={handleOk}
       onCancel={handleCancel}
@@ -70,8 +70,8 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
     >
       <StyledSearchUrlForm onSubmit={handleOpenUrl}>
         <Typography variant="secondary">
-          Please provide the Kubtest API endpoint for your installation, which will have been provided to you by the
-          kubtest installer.
+          Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
+          TestKube installer.
         </Typography>
         <Typography variant="secondary">
           The endpoint needs to be accessible from your browser and will be used to retrieve test results only.

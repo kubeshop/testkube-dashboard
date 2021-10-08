@@ -74,7 +74,7 @@ function App() {
 
     if (!isHostProtocolSecure()) {
       showSmallError(`Dashboard is using non-secure protocol!
-      <a href='https://kubeshop.github.io/kubtest/installing/' target="_blank" rel="noopener">Read more</a>`);
+      <a href='https://kubeshop.github.io/testkube/installing/' target="_blank" rel="noopener">Read more</a>`);
     }
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
     if (!apiEndpointExist) {
