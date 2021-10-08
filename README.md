@@ -61,7 +61,7 @@ kubectl apply -f manifests/deployment.yaml
 Access using port-forwarding :
 
 ```
-kubectl port-forward service/testkube-dashboard 8080:8001
+kubectl port-forward service/testkube-dashboard 8080:80
 ```
 
 (this example forwards on port 8080)
