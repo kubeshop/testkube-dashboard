@@ -43,6 +43,7 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
     const finalUrl = `${cleanUrl}${config.apiVersion}`;
 
     localStorage.setItem(config.apiEndpoint, finalUrl);
+    console.log('API ENDPOINT', localStorage.getItem(config.apiEndpoint));
   }
 
   if (hostProtocol !== apiEndpointProtocol) {
@@ -52,6 +53,7 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
     const finalUrl = `${cleanUrl}${config.apiVersion}`;
 
     localStorage.setItem(config.apiEndpoint, finalUrl);
+    console.log('API ENDPOINT', localStorage.getItem(config.apiEndpoint));
   }
 
 };
