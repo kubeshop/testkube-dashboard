@@ -52,10 +52,8 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
     const finalUrl = `${cleanUrl}${config.apiVersion}`;
 
     localStorage.setItem(config.apiEndpoint, finalUrl);
-    return;
   }
 
-  localStorage.setItem(config.apiEndpoint, url);
 };
 
 export const cleanStorageWhenApiEndpointQueryStringIsAbsent = () => {
