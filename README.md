@@ -1,4 +1,7 @@
-# TestKube Dashboard ![Netlify](https://img.shields.io/netlify/8cef7e08-ee34-4dd3-871a-27fb0c63a0c8?color=%231890fc&style=for-the-badge)
+# TestKube Dashboard
+
+![Netlify](https://img.shields.io/netlify/8cef7e08-ee34-4dd3-871a-27fb0c63a0c8?color=%231890fc&style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kubeshop/testkube-dashboard/Publish%20Docker%20image?style=for-the-badge)
 
 A simple read-only dashboard for real-time TestKube results.
 
