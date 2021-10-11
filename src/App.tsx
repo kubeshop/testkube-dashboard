@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {Route} from 'react-router-dom';
 
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
@@ -86,26 +87,32 @@ function App() {
     dashboardEndpointValidators();
   }, []);
 
+  const RenderApp = () => {
+    return (
+      <MainTableStyles>
+        <thead>
+          <StyledTestResults>
+            <TestResults />
+          </StyledTestResults>
+        </thead>
+        <tbody>
+          <StyledTestFilter>
+            <TestsFilter />
+          </StyledTestFilter>
+          <StyledTestSummary>
+            <TestsSummary />
+          </StyledTestSummary>
+        </tbody>
+      </MainTableStyles>
+    );
+  };
+
   return (
     <>
       {error && 'Something went wrong...'}
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
-        <MainTableStyles>
-          <thead>
-            <StyledTestResults>
-              <TestResults />
-            </StyledTestResults>
-          </thead>
-          <tbody>
-            <StyledTestFilter>
-              <TestsFilter />
-            </StyledTestFilter>
-            <StyledTestSummary>
-              <TestsSummary />
-            </StyledTestSummary>
-          </tbody>
-        </MainTableStyles>
+        <Route path="/" component={RenderApp} />
       </TestsContext.Provider>
     </>
   );
