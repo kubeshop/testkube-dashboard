@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Modal} from 'antd';
+import {useHistory} from 'react-router-dom';
 
 import {Button, LabelInput, Typography} from '@atoms';
 import {validateUrl, matchEndpointProtocolWithHostProtocol, checkApiEndpointProtocol} from '@utils/validate';
@@ -34,6 +35,7 @@ interface IModal {
 const CustomModal = ({isModalVisible, visible}: IModal) => {
   const [apiEndpoint, setApiEndpoint] = React.useState<IUrlEndpoint>({apiEndpoint: ''});
   const [validUrl, setVAlidUrl] = React.useState<boolean>(false);
+  let history = useHistory();
 
   const handleChangeApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
     setApiEndpoint({...apiEndpoint, [field]: event.target.value});
@@ -48,7 +50,8 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
 
     const checked = checkApiEndpointProtocol(apiEndpoint.apiEndpoint);
 
-    window.open(`${window.location.origin}/?apiEndpoint=${checked}`);
+    history.push(`/?apiEndpoint=${checked}`);
+    isModalVisible(false);
   };
 
   const handleOk = () => {
