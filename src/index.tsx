@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
+import {BrowserRouter as Router} from 'react-router-dom';
 
 import {PageHeader} from '@organisms';
 import App from './App';
@@ -24,8 +25,10 @@ ReactDOM.render(
   <React.StrictMode>
     <PageHeader />
     <QueryClientProvider client={queryCache}>
-      <GlobalStyle />
-      <App />
+      <Router>
+        <GlobalStyle />
+        <App />
+      </Router>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>,
