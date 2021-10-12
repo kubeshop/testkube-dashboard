@@ -27,7 +27,8 @@ export const getDate = (timeStamp: string | any) => {
   return `${year}-${month}-${day}`;
 };
 
-export const getLatestDate = (timeStamp: any) => {
- 
-  return new Date(Math.max(...timeStamp?.results?.map((t: any) => new Date(t.startTime))));
+export const getTodayTests = (timeStamp: any) => {
+  const date = new Date();
+  const today = date.toISOString();
+  return timeStamp?.results?.filter((t: any) => t.startTime === today);
 };
