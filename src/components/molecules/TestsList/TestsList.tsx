@@ -73,7 +73,7 @@ const TestsList = () => {
           </Typography>
         </StyledTestListCell>
       </StyledTestListRow>
-      {tests?.testsExecution?.results && !tests?.testsExecution?.today ? (
+      {tests?.testsExecution?.results && !tests?.testsExecution?.errorMessage ? (
         tests?.testsExecution?.results?.map((test: Result) => (
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id, test.scriptName)}>
             <StyledTestListCell role="cell">
@@ -101,7 +101,7 @@ const TestsList = () => {
         ))
       ) : (
         <Typography variant="secondary" font="light">
-          {tests?.testsExecution?.today}
+          {tests?.testsExecution?.errorMessage}
         </Typography>
       )}
     </StyledTestListContainer>

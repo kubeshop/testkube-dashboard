@@ -11,7 +11,20 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
     const filteredTests = filteredTestsExecution?.results?.filter((test: any) =>
       _filters?.filter?.includes(test.status)
     );
-    filteredTestsExecution = {...filteredTestsExecution, results: filteredTests};
+
+    if (filteredTests.length > 0) {
+      filteredTestsExecution = {
+        ...filteredTestsExecution,
+        results: filteredTests,
+      };
+    } else {
+      const filtersNames = Object.values(_filters?.filter);
+      filteredTestsExecution = {
+        ...filteredTestsExecution,
+        results: filteredTests,
+        errorMessage: `No ${filtersNames} tests found!`,
+      };
+    }
   }
 
   if (_filters?.dateFilter) {
@@ -19,7 +32,15 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
       (test: any) => getDate(test.startTime) === getDate(_filters?.dateFilter)
     );
 
-    filteredTestsExecution = {...filteredTestsExecution, results: filteredTestsIntervals};
+    if (filteredTestsIntervals.length > 0) {
+      filteredTestsExecution = {...filteredTestsExecution, results: filteredTestsIntervals};
+    } else {
+      filteredTestsExecution = {
+        ...filteredTestsExecution,
+        results: filteredTestsIntervals,
+        errorMessage: 'No tests found for the selected date!',
+      };
+    }
   }
 
   if (_filters?.filter?.includes('today')) {
@@ -32,7 +53,11 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
     if (todayFilteredTests.length > 0) {
       filteredTestsExecution = {...filteredTestsExecution, results: todayFilteredTests};
     } else {
-      filteredTestsExecution = {...filteredTestsExecution, results: todayFilteredTests, today: 'No tests were executed today!'};
+      filteredTestsExecution = {
+        ...filteredTestsExecution,
+        results: todayFilteredTests,
+        errorMessage: 'No tests were executed today!',
+      };
     }
   }
 
