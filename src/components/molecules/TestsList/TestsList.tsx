@@ -73,7 +73,7 @@ const TestsList = () => {
           </Typography>
         </StyledTestListCell>
       </StyledTestListRow>
-      {tests?.testsExecution?.results &&
+      {tests?.testsExecution?.results && !tests?.testsExecution?.today ? (
         tests?.testsExecution?.results?.map((test: Result) => (
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id, test.scriptName)}>
             <StyledTestListCell role="cell">
@@ -98,7 +98,12 @@ const TestsList = () => {
               <TestTypeIcon testType={test.scriptType} width={30} height={30} />
             </StyledTestListCell>
           </StyledTestListRow>
-        ))}
+        ))
+      ) : (
+        <Typography variant="secondary" font="light">
+          {tests?.testsExecution?.today}
+        </Typography>
+      )}
     </StyledTestListContainer>
   );
 };

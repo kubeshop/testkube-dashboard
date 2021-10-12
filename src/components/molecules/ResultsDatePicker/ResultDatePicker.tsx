@@ -34,11 +34,11 @@ const ResultDatePicker = () => {
     tests.setFilters(tests.filters);
   };
 
-  const getLatestDateTest = React.useCallback(() => {
-    if (tests.filters?.filter?.indexOf('latest') === -1) {
-      tests.filters?.filter?.push('latest');
+  const getTodayTests = React.useCallback(() => {
+    if (tests.filters?.filter?.indexOf('today') === -1) {
+      tests.filters?.filter?.push('today');
     } else {
-      const filtered = tests?.filters?.filter?.filter((filter: string) => filter !== 'latest');
+      const filtered = tests?.filters?.filter?.filter((filter: string) => filter !== 'today');
       tests.setFilters({...tests.filters, status: filtered});
     }
   }, [tests?.filters?.filter]);
@@ -53,7 +53,7 @@ const ResultDatePicker = () => {
     <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
       <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} disabled={!tests.testsExecution} />
-      <Button disabled={!toggleGetTest} onClick={getLatestDateTest}>
+      <Button disabled={!toggleGetTest} onClick={getTodayTests}>
         Today
       </Button>
     </StyledDateContainer>
