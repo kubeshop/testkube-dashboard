@@ -125,3 +125,13 @@ export const StyledTestWithoutAssertions = styled.div`
   cursor: pointer;
   padding-left: var(--space-md);
 `;
+
+export const TestsWithoutStepsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-md);
+  height: var(--space-x1l);
+  background: #ff4d4fb3;
+  color: var(--color-light-primary);
+`;
