@@ -1,4 +1,4 @@
-import { getDate, getLatestDate } from "./formatDate";
+import { getDate, getTodayTests } from "./formatDate";
 
 export const filterTestsExecution = (tests: any, _filters: any) => {
     let filteredTestsExecution = tests;
@@ -19,7 +19,7 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
 
     if (_filters?.filter?.includes("latest")) {
 
-        const latestdate = getLatestDate(filteredTestsExecution);
+        const latestdate = getTodayTests(filteredTestsExecution);
 
         const lastTests = filteredTestsExecution?.results?.filter((test: any) => getDate(test.startTime) === getDate(latestdate));
 
