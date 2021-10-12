@@ -52,7 +52,13 @@ const ResultDatePicker = () => {
   return (
     <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
-      <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} disabled={!tests.testsExecution} />
+      <DatePicker
+        size="large"
+        style={datePickerStyles}
+        format="MM/DD/YYYY"
+        onChange={handleDatePicker}
+        disabled={!tests.testsExecution}
+      />
       <Button disabled={!toggleGetTest} onClick={getLatestDateTest}>
         Latest
       </Button>
