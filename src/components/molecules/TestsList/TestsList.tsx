@@ -1,14 +1,14 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
 
-import {RenderTestStatusSvgIcon, Typography, TestTypeIcon} from '@atoms';
+import { RenderTestStatusSvgIcon, Typography, TestTypeIcon } from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
-import {timeStampToDate, getDuration} from '@utils/formatDate';
+import { TestsContext } from '@context/testsContext';
+import { timeStampToDate, getDuration } from '@utils/formatDate';
 
-import {Result} from '@types';
-import {truncateText} from '@utils';
+import { Result } from '@types';
+import { truncateText } from '@utils';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -26,6 +26,8 @@ const StyledTestListRow = styled.div`
     cursor: pointer;
     background: transparent linear-gradient(90deg, #1890fc 0%, #5bdad3 100%);
   }
+
+  background: ${props => props?.className?.includes('selected') ? 'transparent linear-gradient(90deg, #1890fc 0%, #5bdad3 100%)' : ''}
 `;
 
 const StyledTestListCell = styled.div`
@@ -37,7 +39,7 @@ const TestsList = () => {
   const tests: any = useContext(TestsContext);
 
   const handleSelectedTest = (id: string, testName: string) => {
-    tests?.setSelectedTest({id, testName});
+    tests?.setSelectedTest({ id, testName });
   };
 
   return (
@@ -75,7 +77,8 @@ const TestsList = () => {
       </StyledTestListRow>
       {tests?.testsExecution?.results &&
         tests?.testsExecution?.results?.map((test: Result) => (
-          <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id, test.scriptName)}>
+          <StyledTestListRow className={tests?.selectedTest.id === test.id ? 'selected' : ''}
+            key={nanoid()} onClick={() => handleSelectedTest(test.id, test.scriptName)}>
             <StyledTestListCell role="cell">
               <Typography variant="secondary" color="secondary" font="light">
                 {test.scriptName ? truncateText(test.scriptName) : '-'}
