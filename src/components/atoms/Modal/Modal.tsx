@@ -13,7 +13,6 @@ const StyledSearchUrlForm = styled.form`
 
 const modalStyles = {
   backgroundColor: 'var(--color-dark-primary)',
-  height: '300px',
   overflow: 'hidden',
 };
 
