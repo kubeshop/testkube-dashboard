@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {DatePicker} from 'antd';
 import styled from 'styled-components';
+import moment from 'moment';
 
 import {Typography, Button} from '@atoms';
 
@@ -27,14 +28,22 @@ const datePickerStyles = {
 
 const ResultDatePicker = () => {
   const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
+  const [todayTests, setTodayTests] = useState('');
   const tests: any = React.useContext(TestsContext);
 
   const handleDatePicker = (_value: any, dateString: any) => {
     tests.filters.dateFilter = dateString;
+
     tests.setFilters(tests.filters);
+    setTodayTests(_value);
   };
 
   const getTodayTests = React.useCallback(() => {
+    const date = new Date();
+    const today = date.toISOString();
+
+    setTodayTests(today);
+
     if (tests.filters?.filter?.indexOf('today') === -1) {
       tests.filters?.filter?.push('today');
     } else {
@@ -52,7 +61,13 @@ const ResultDatePicker = () => {
   return (
     <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
-      <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} disabled={!tests.testsExecution} />
+      <DatePicker
+        value={todayTests ? moment(todayTests) : null}
+        size="large"
+        style={datePickerStyles}
+        onChange={handleDatePicker}
+        disabled={!tests.testsExecution}
+      />
       <Button disabled={!toggleGetTest} onClick={getTodayTests}>
         Today
       </Button>
