@@ -2,7 +2,7 @@ import {config} from '@constants/config';
 
 export const validateUrl = (url: string): boolean => {
   const pattern = new RegExp(
-    '(https?:\/\/)?(?:w{1,3}\.)?[^\s.]+(?:\.[a-z]+)*(?::\d+)?((?:\/\w+)|(?:-\w+))*\/?(?![^<]*(?:<\/\w+>|\/?>))',
+    '(https?://)?(?:w{1,3}.)?[^s.]+(?:.[a-z]+)*(?::d+)?((?:/w+)|(?:-w+))*/?(?![^<]*(?:</w+>|/?>))',
     'i'
   );
 
@@ -25,7 +25,7 @@ export const removeSpaceFromString = (url: string) => {
 
 export const matchEndpointProtocolWithHostProtocol = (url: string) => {
   const hostProtocol = window.location.protocol;
-  let finalUrl = '';
+  const apiEndpointProtocol = url.substring(0, url.indexOf('http') || url.indexOf('https')) || '';
 
   if (!url) {
     alert('Invalid URL, You are trying to manipulate the url, please provide a correct url endpoint');
@@ -35,28 +35,23 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
     return;
   }
 
-  const apiEndpointProtocol = new URL(url).protocol;
-
   if (!apiEndpointProtocol) {
-    const newApiEndpointWithProtocol = `${hostProtocol}//${url}`;
-    const trimmedUrl = removeSpaceFromString(newApiEndpointWithProtocol);
+    console.log('NOT FOUND');
+    const trimmedUrl = removeSpaceFromString(url);
     const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
-     finalUrl = `${cleanUrl}${config.apiVersion}`;
+    const finalUrl = `${cleanUrl}${config.apiVersion}`;
 
-    return localStorage.setItem(config.apiEndpoint, finalUrl);
-
+    localStorage.setItem(config.apiEndpoint, finalUrl);
   }
 
-  if (hostProtocol !== apiEndpointProtocol) {
-    const matchedUrlProtocol = url.replace(apiEndpointProtocol, hostProtocol);
-    const trimmedUrl = removeSpaceFromString(matchedUrlProtocol);
-    const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
-     finalUrl = `${cleanUrl}${config.apiVersion}`;
+  if (apiEndpointProtocol) {
+    if (apiEndpointProtocol !== hostProtocol) {
+      console.log('different', apiEndpointProtocol, hostProtocol);
 
-     return localStorage.setItem(config.apiEndpoint, finalUrl);
+    } else {
+      console.log('same', apiEndpointProtocol, hostProtocol);
+    }
   }
-
-  return localStorage.setItem(config.apiEndpoint, finalUrl);
 
 };
 
