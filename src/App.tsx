@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {Route, Switch} from 'react-router-dom';
 
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
@@ -62,11 +63,12 @@ function App() {
 
   const tests = {
     data,
+    error,
+    isLoading,
     selectedTest,
     setSelectedTest,
     setFilters,
     filters,
-    isLoading,
     testsExecution: filterTestsExecution(data, filters),
   };
 
@@ -88,26 +90,34 @@ function App() {
     dashboardEndpointValidators();
   }, []);
 
+  const RenderApp = () => {
+    return (
+      <MainTableStyles>
+        <thead>
+          <StyledTestResults>
+            <TestResults />
+          </StyledTestResults>
+        </thead>
+        <tbody>
+          <StyledTestFilter>
+            <TestsFilter />
+          </StyledTestFilter>
+          <StyledTestSummary>
+            <TestsSummary />
+          </StyledTestSummary>
+        </tbody>
+      </MainTableStyles>
+    );
+  };
+
   return (
     <>
-      {error && 'Something went wrong...'}
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
-        <MainTableStyles>
-          <thead>
-            <StyledTestResults>
-              <TestResults />
-            </StyledTestResults>
-          </thead>
-          <tbody>
-            <StyledTestFilter>
-              <TestsFilter />
-            </StyledTestFilter>
-            <StyledTestSummary>
-              <TestsSummary />
-            </StyledTestSummary>
-          </tbody>
-        </MainTableStyles>
+        <Switch>
+          <Route path="/?apiEndpoint=:apiEndpoint" exact component={RenderApp} />
+          <Route path="/" exact component={RenderApp} />
+        </Switch>
       </TestsContext.Provider>
     </>
   );

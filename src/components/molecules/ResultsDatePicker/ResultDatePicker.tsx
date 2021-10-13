@@ -59,9 +59,9 @@ const ResultDatePicker = () => {
         style={datePickerStyles}
         format="MM/DD/YYYY"
         onChange={handleDatePicker}
-        disabled={!tests.testsExecution}
+        disabled={!tests?.testsExecution !== undefined}
       />
-      <Button disabled={!toggleGetTest} onClick={getLatestDateTest}>
+      <Button disabled={!toggleGetTest || !tests?.testsExecution !== undefined} onClick={getLatestDateTest}>
         Latest
       </Button>
     </StyledDateContainer>
