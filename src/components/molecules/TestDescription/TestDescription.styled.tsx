@@ -29,11 +29,15 @@ export const StyledTestOutputDescription = styled.div`
 `;
 
 export const StyledPlainTextOutputContainer = styled.div`
-  width: 100%;
-  max-height: 300px;
+  width: 96%;
+  max-height: 65vh;
   overflow: scroll;
   background-color: black;
   background-image: radial-gradient(rgba(0, 32, 150, 0.75), black 120%);
+
+  @media screen and (min-width: 2500px) {
+    width: 98%;
+  }
 `;
 
 export const StyledTestOutput = styled.span`
