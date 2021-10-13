@@ -24,7 +24,6 @@ export const removeSpaceFromString = (url: string) => {
 };
 
 export const matchEndpointProtocolWithHostProtocol = (url: string) => {
-  const hostProtocol = window.location.protocol;
   const apiEndpointProtocol = url.substring(0, url.indexOf('http') || url.indexOf('https')) || '';
 
   if (!url) {
