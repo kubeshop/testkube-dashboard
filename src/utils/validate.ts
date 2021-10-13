@@ -36,21 +36,11 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
   }
 
   if (!apiEndpointProtocol) {
-    console.log('NOT FOUND');
     const trimmedUrl = removeSpaceFromString(url);
     const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
     const finalUrl = `${cleanUrl}${config.apiVersion}`;
 
     localStorage.setItem(config.apiEndpoint, finalUrl);
-  }
-
-  if (apiEndpointProtocol) {
-    if (apiEndpointProtocol !== hostProtocol) {
-      console.log('different', apiEndpointProtocol, hostProtocol);
-
-    } else {
-      console.log('same', apiEndpointProtocol, hostProtocol);
-    }
   }
 
 };
