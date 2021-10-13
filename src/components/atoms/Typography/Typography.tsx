@@ -46,7 +46,7 @@ const StyledTypography = styled.p<ITypography>`
       ? 'var(--color-monokle-primary)'
       : 'var(--color-light-primary)'};
   letter-spacing: 0;
-  word-wrap: ${props => (props.wrap ? 'break-word' : 'normal')};
+  white-space: ${props => (props.wrap ? 'nowrap' : 'normal')};
 
   &:hover {
     cursor: ${props =>

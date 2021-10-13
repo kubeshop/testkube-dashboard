@@ -13,7 +13,7 @@ const StyledPAgeHeader = styled.header`
   justify-content: space-between;
   border-bottom: 1px solid var(--color-light-primary);
   overflow: hidden;
-  height: 80px;
+  height: 70px;
 `;
 
 const StyledHeaderTests = styled.div`

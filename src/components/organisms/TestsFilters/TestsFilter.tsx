@@ -47,7 +47,7 @@ const TestsFilter = () => {
   return (
     <>
       <StyledTestTextDescription>
-        <Typography variant="secondary" data-testid="Test filters">
+        <Typography variant="secondary" color="secondary" font="light" data-testid="Test filters">
           Tests
         </Typography>
       </StyledTestTextDescription>
