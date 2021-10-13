@@ -26,7 +26,7 @@ const TestsFilter = () => {
     return tests?.filters?.filter?.indexOf(status) !== -1;
   };
   const filtersTests = (status: string) => {
-    tests.setSelectedTest({ id: null, testName: null });
+    tests.setSelectedTest({id: null, testName: null});
     if (tests.filters?.filter?.indexOf(status) === -1) {
       tests.filters?.filter?.push(status);
 
@@ -47,35 +47,35 @@ const TestsFilter = () => {
   return (
     <>
       <StyledTestTextDescription>
-        <Typography variant="secondary" data-testid="Test filters">
+        <Typography variant="secondary" color="secondary" font="light" data-testid="Test filters">
           Tests
         </Typography>
       </StyledTestTextDescription>
       <StyleTestFilterButtons>
         <Typography variant="secondary">Show: </Typography>
         <Button
-          disabled={!tests?.testsExecution !== undefined}
+          disabled={!tests?.testsExecution?.results}
           active={isActive('all')}
           onClick={() => filtersTests('all')}
         >
           All
         </Button>
         <Button
-          disabled={!tests?.testsExecution !== undefined}
+          disabled={!tests?.testsExecution?.results}
           active={isActive('pending')}
           onClick={() => filtersTests('pending')}
         >
           Running
         </Button>
         <Button
-          disabled={!tests?.testsExecution !== undefined}
+          disabled={!tests?.testsExecution?.results }
           active={isActive('success')}
           onClick={() => filtersTests('success')}
         >
           Passed
         </Button>
         <Button
-          disabled={!tests?.testsExecution !== undefined}
+          disabled={!tests?.testsExecution?.results }
           active={isActive('error')}
           onClick={() => filtersTests('error')}
         >
