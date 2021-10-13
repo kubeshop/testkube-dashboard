@@ -26,6 +26,7 @@ const TestsFilter = () => {
     return tests?.filters?.filter?.indexOf(status) !== -1;
   };
   const filtersTests = (status: string) => {
+    tests.setSelectedTest({id: null, testName: null});
     if (tests.filters?.filter?.indexOf(status) === -1) {
       tests.filters?.filter?.push(status);
 
@@ -51,19 +52,33 @@ const TestsFilter = () => {
         </Typography>
       </StyledTestTextDescription>
       <StyleTestFilterButtons>
-        <Typography variant="secondary" color="secondary" font="light">
-          Show:{' '}
-        </Typography>
-        <Button disabled={!tests.testsExecution} active={isActive('all')} onClick={() => filtersTests('all')}>
+        <Typography variant="secondary">Show: </Typography>
+        <Button
+          disabled={!tests?.testsExecution !== undefined}
+          active={isActive('all')}
+          onClick={() => filtersTests('all')}
+        >
           All
         </Button>
-        <Button disabled={!tests.testsExecution} active={isActive('pending')} onClick={() => filtersTests('pending')}>
+        <Button
+          disabled={!tests?.testsExecution !== undefined}
+          active={isActive('pending')}
+          onClick={() => filtersTests('pending')}
+        >
           Running
         </Button>
-        <Button disabled={!tests.testsExecution} active={isActive('success')} onClick={() => filtersTests('success')}>
+        <Button
+          disabled={!tests?.testsExecution !== undefined}
+          active={isActive('success')}
+          onClick={() => filtersTests('success')}
+        >
           Passed
         </Button>
-        <Button disabled={!tests.testsExecution} active={isActive('error')} onClick={() => filtersTests('error')}>
+        <Button
+          disabled={!tests?.testsExecution !== undefined}
+          active={isActive('error')}
+          onClick={() => filtersTests('error')}
+        >
           Failed
         </Button>
       </StyleTestFilterButtons>

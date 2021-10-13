@@ -5,3 +5,4 @@ export { default as RenderTestStatusSvgIcon } from './RenderIcons/RenderIcons';
 export { default as TestTypeIcon } from './TestTypeIcon/TestTypeIcon';
 export { default as LabelInput } from './LabelledInput/LabelledInput';
 export { default as Modal } from './Modal/Modal';
+export { default as Spinner } from './Spinner/Spinner';

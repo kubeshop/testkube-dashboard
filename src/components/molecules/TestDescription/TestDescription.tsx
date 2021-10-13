@@ -2,7 +2,7 @@
 import React, {useContext, useState} from 'react';
 import {nanoid} from 'nanoid';
 import {Collapse} from 'antd';
-import {RenderTestStatusSvgIcon, Typography} from '@atoms';
+import {RenderTestStatusSvgIcon, Typography, Spinner} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
 import {Step, AssertionResult, Test} from '@types';
@@ -102,7 +102,7 @@ const TestDescription = () => {
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
   const tests: any = useContext(TestsContext);
 
-  const {data, error} = useFetchTest();
+  const {data, error, isLoading} = useFetchTest();
 
   const handleOnClick = () => {
     setTogglePlainTestTest(!togglePlainTestTest);
@@ -111,6 +111,7 @@ const TestDescription = () => {
   return (
     <>
       {error && <Typography variant="secondary">Something went wrong...</Typography>}
+      {isLoading && <Spinner />}
       {tests?.selectedTest.id && data && (
         <>
           <StyledTestStatusImage>

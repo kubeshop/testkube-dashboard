@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {nanoid} from 'nanoid';
 
-import {RenderTestStatusSvgIcon, Typography, TestTypeIcon} from '@atoms';
+import {RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner} from '@atoms';
 
 import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
@@ -73,6 +73,7 @@ const TestsList = () => {
           </Typography>
         </StyledTestListCell>
       </StyledTestListRow>
+      {tests?.isLoading && <Spinner />}
       {tests?.testsExecution?.results &&
         tests?.testsExecution?.results?.map((test: Result) => (
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id, test.scriptName)}>
