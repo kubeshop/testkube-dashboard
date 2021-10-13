@@ -26,6 +26,7 @@ const TestsFilter = () => {
     return tests?.filters?.filter?.indexOf(status) !== -1;
   };
   const filtersTests = (status: string) => {
+    tests.setSelectedTest({ id: null, testName: null });
     if (tests.filters?.filter?.indexOf(status) === -1) {
       tests.filters?.filter?.push(status);
 
