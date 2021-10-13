@@ -46,12 +46,14 @@ const TestsFilter = () => {
   return (
     <>
       <StyledTestTextDescription>
-        <Typography variant="secondary" data-testid="Test filters">
+        <Typography variant="secondary" color="secondary" font="light" data-testid="Test filters">
           Tests
         </Typography>
       </StyledTestTextDescription>
       <StyleTestFilterButtons>
-        <Typography variant="secondary">Show: </Typography>
+        <Typography variant="secondary" color="secondary" font="light">
+          Show:{' '}
+        </Typography>
         <Button disabled={!tests.testsExecution} active={isActive('all')} onClick={() => filtersTests('all')}>
           All
         </Button>

@@ -77,17 +77,17 @@ const TestsList = () => {
         tests?.testsExecution?.results?.map((test: Result) => (
           <StyledTestListRow key={nanoid()} onClick={() => handleSelectedTest(test.id, test.scriptName)}>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" font="light">
+              <Typography variant="secondary" color="secondary" font="light">
                 {test.scriptName ? truncateText(test.scriptName) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" font="light">
+              <Typography variant="secondary" color="secondary" font="light">
                 {test.startTime ? timeStampToDate(test.startTime) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" font="light">
+              <Typography variant="secondary" color="secondary" font="light">
                 {test.endTime ? getDuration(test.startTime, test.endTime) : '-'}
               </Typography>
             </StyledTestListCell>

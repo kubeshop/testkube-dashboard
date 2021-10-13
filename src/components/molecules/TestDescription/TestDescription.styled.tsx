@@ -70,13 +70,13 @@ export const StyledTestStepNameContainer = styled.div`
 
 export const StyledTestStepName = styled.span`
   margin-left: var(--space-xxs);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
 `;
 
 export const StyledTestAssertionResultsContainer = styled.div`
   display: flex;
   color: var(--color-light-primary);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--font-size-3sm);
 `;
 
 export const StyledTestStepAssertionContainer = styled.div`
