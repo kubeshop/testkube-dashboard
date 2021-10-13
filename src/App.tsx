@@ -69,7 +69,6 @@ function App() {
     setSelectedTest,
     setFilters,
     filters,
-    isLoading,
     testsExecution: filterTestsExecution(data, filters),
   };
 

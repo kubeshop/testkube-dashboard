@@ -64,6 +64,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
       // eslint-disable-next-line
       search: '?' + new URLSearchParams({apiEndpoint: checked}).toString(),
     });
+    isModalVisible(false);
   };
 
   return (
