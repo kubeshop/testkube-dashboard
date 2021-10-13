@@ -53,8 +53,13 @@ export const StyledText = styled.pre`
 
 export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
-  max-height: 300px;
+  max-height: 65vh;
   overflow: scroll;
+  width: 96%;
+
+  @media screen and (min-width: 2500px) {
+    width: 98%;
+  }
 `;
 
 export const StyledTestStepNameContainer = styled.div`
