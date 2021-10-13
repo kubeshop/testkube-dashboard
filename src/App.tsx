@@ -28,7 +28,7 @@ const MainTableStyles = styled.table`
 
 const StyledTestResults = styled.tr`
   display: flex;
-  height: 152px;
+  height: 140px;
   border-top-style: none;
   border-bottom-style: 1px solid var(--color-gray-secondary);
   word-wrap: break-word;
@@ -40,6 +40,7 @@ const StyledTestFilter = styled.tr`
   justify-content: space-between;
   border-right-style: hidden;
   border-left-style: hidden;
+  height: 70px;
 `;
 
 const StyledTestSummary = styled.tr`
