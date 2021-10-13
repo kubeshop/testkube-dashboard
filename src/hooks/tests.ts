@@ -2,7 +2,15 @@ import React, {useContext, useState} from 'react';
 import {useQuery} from 'react-query';
 
 import {config} from '@constants/config';
-import {TestsContext} from '@context/testsContext';
+import { TestsContext } from '@context/testsContext';
+import {getAllTests} from '@services/Tests';
+
+export const Timeout = (time: number) => {
+	let controller = new AbortController();
+  setTimeout(() => controller.abort(), time * 1000);
+
+	return controller;
+};
 
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
@@ -24,16 +32,16 @@ export const useFetchTest = () => {
 };
 
 export const useFetchTests = () => {
-  const {data, error} = useQuery(
+  const {data, error, isLoading } = useQuery(
     ['tests', localStorage.getItem(config.apiEndpoint)],
     () => {
       const url = localStorage.getItem(config.apiEndpoint);
       if (url) {
-        return fetch(url).then(res => res.json());
+        return getAllTests(url);
       }
     },
     {refetchInterval: 5000}
   );
 
-  return {data, error};
+  return {data, error, isLoading};
 };

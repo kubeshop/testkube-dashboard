@@ -59,10 +59,12 @@ function App() {
     testName: '',
   });
 
-  const {data, error} = useFetchTests();
+  const {data, error, isLoading} = useFetchTests();
 
   const tests = {
     data,
+    error,
+    isLoading,
     selectedTest,
     setSelectedTest,
     setFilters,
@@ -110,7 +112,6 @@ function App() {
 
   return (
     <>
-      {error && 'Something went wrong...'}
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
         <Switch>
