@@ -25,6 +25,7 @@ export const removeSpaceFromString = (url: string) => {
 
 export const matchEndpointProtocolWithHostProtocol = (url: string) => {
   const hostProtocol = window.location.protocol;
+  let finalUrl = '';
 
   if (!url) {
     alert('Invalid URL, You are trying to manipulate the url, please provide a correct url endpoint');
@@ -40,7 +41,7 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
     const newApiEndpointWithProtocol = `${hostProtocol}//${url}`;
     const trimmedUrl = removeSpaceFromString(newApiEndpointWithProtocol);
     const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
-    const finalUrl = `${cleanUrl}${config.apiVersion}`;
+     finalUrl = `${cleanUrl}${config.apiVersion}`;
 
     return localStorage.setItem(config.apiEndpoint, finalUrl);
 
@@ -50,10 +51,12 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
     const matchedUrlProtocol = url.replace(apiEndpointProtocol, hostProtocol);
     const trimmedUrl = removeSpaceFromString(matchedUrlProtocol);
     const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
-    const finalUrl = `${cleanUrl}${config.apiVersion}`;
+     finalUrl = `${cleanUrl}${config.apiVersion}`;
 
-    return localStorage.setItem(config.apiEndpoint, finalUrl);
+     return localStorage.setItem(config.apiEndpoint, finalUrl);
   }
+
+  return localStorage.setItem(config.apiEndpoint, finalUrl);
 
 };
 
