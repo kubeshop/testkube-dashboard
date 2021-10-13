@@ -1,3 +1,5 @@
+const { createVerify } = require("crypto")
+
 describe('The Home Page', () => {
   it('homepage asks for URI', () => {
     cy.visit('https://dashboard.testkube.io') 
@@ -6,7 +8,13 @@ describe('The Home Page', () => {
     cy.get('#url').type('https://demo.testkube.io/results/v1/executions')
     cy.get("button[type='submit']").click()
 
-    cy.get('')
+    // check if there is some data on grid (need to be more sophisticated)
+    cy.get("div[role='cell'").then(cells => {
+      const count = Cypress.$(cells).length;
+      console.log("count", count);
+      expect(count).to.be.greaterThan(0);
+    });
 
+    cy.contains("long-1")
   })
 })
