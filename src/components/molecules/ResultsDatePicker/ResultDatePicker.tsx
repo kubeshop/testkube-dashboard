@@ -27,11 +27,12 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
-  const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
+  // const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
   const [todayTests, setTodayTests] = useState('');
   const tests: any = React.useContext(TestsContext);
 
   const handleDatePicker = (_value: any, dateString: any) => {
+    tests.setSelectedTest({id: null, testName: null});
     tests.filters.dateFilter = dateString;
 
     tests.setFilters(tests.filters);
@@ -39,6 +40,7 @@ const ResultDatePicker = () => {
   };
 
   const getTodayTests = React.useCallback(() => {
+    tests.setSelectedTest({id: null, testName: null});
     const date = new Date();
     const today = date.toISOString();
 
@@ -52,11 +54,11 @@ const ResultDatePicker = () => {
     }
   }, [tests?.filters?.filter]);
 
-  React.useEffect(() => {
-    if (tests.testsExecution) {
-      setToggleGetTest(true);
-    }
-  }, [tests.testsExecution]);
+  // React.useEffect(() => {
+  //   if (tests.testsExecution) {
+  //     setToggleGetTest(true);
+  //   }
+  // }, [tests.testsExecution]);
 
   return (
     <StyledDateContainer>
@@ -66,9 +68,10 @@ const ResultDatePicker = () => {
         size="large"
         style={datePickerStyles}
         onChange={handleDatePicker}
-        disabled={!tests.testsExecution}
+        format="MM/DD/YYYY"
+        disabled={!tests?.testsExecution?.results}
       />
-      <Button disabled={!toggleGetTest} onClick={getTodayTests}>
+      <Button disabled={!tests?.testsExecution?.results} onClick={getTodayTests}>
         Today
       </Button>
     </StyledDateContainer>
