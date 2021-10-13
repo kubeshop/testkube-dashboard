@@ -25,7 +25,7 @@ export const useFetchTest = () => {
 
 export const useFetchTests = () => {
   const {data, error} = useQuery(
-    'tests',
+    ['tests', localStorage.getItem(config.apiEndpoint)],
     () => {
       const url = localStorage.getItem(config.apiEndpoint);
       if (url) {
