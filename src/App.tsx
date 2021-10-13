@@ -1,21 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import {Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
-
-import {
-  cleanStorageWhenApiEndpointQueryStringIsAbsent,
-  getApiEndpointOnPageLoad,
-  CheckIfQueryParamsExistsInUrl,
-} from '@utils/validate';
 
 import {useFetchTests} from '@hooks';
 import {Modal} from '@atoms';
 
 import {config} from '@constants/config';
-import {isHostProtocolSecure, showSmallError, filterTestsExecution} from '@utils';
+import {
+  isHostProtocolSecure,
+  showSmallError,
+  filterTestsExecution,
+  cleanStorageWhenApiEndpointQueryStringIsAbsent,
+  getApiEndpointOnPageLoad,
+  CheckIfQueryParamsExistsInUrl,
+} from '@utils';
 
 import {SelectedTest} from '@types';
 
@@ -112,7 +113,10 @@ function App() {
       {error && 'Something went wrong...'}
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
-        <Route path="/" component={RenderApp} />
+        <Switch>
+          <Route path="/?apiEndpoint=:apiEndpoint" exact component={RenderApp} />
+          <Route path="/" exact component={RenderApp} />
+        </Switch>
       </TestsContext.Provider>
     </>
   );

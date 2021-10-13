@@ -2,9 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import {Modal} from 'antd';
 import {useHistory} from 'react-router-dom';
+// import qs from 'query-string';
 
 import {Button, LabelInput, Typography} from '@atoms';
-import {validateUrl, matchEndpointProtocolWithHostProtocol, checkApiEndpointProtocol} from '@utils/validate';
+import {
+  validateUrl,
+  matchEndpointProtocolWithHostProtocol,
+  checkApiEndpointProtocol,
+  // getQueryStringFromUrl,
+} from '@utils';
+
+// import {config} from '@constants/config';
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
@@ -35,7 +43,7 @@ interface IModal {
 const CustomModal = ({isModalVisible, visible}: IModal) => {
   const [apiEndpoint, setApiEndpoint] = React.useState<IUrlEndpoint>({apiEndpoint: ''});
   const [validUrl, setVAlidUrl] = React.useState<boolean>(false);
-  let history = useHistory();
+  const history = useHistory();
 
   const handleChangeApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
     setApiEndpoint({...apiEndpoint, [field]: event.target.value});
@@ -49,8 +57,15 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
     matchEndpointProtocolWithHostProtocol(apiEndpoint.apiEndpoint);
 
     const checked = checkApiEndpointProtocol(apiEndpoint.apiEndpoint);
+    console.log('History: ', history);
 
-    history.push(`/?apiEndpoint=${checked}`);
+    // history.replace(`/?${config.apiEndpoint}=${checked}`);
+
+    history.push({
+      pathname: '/',
+      // eslint-disable-next-line
+      search: '?' + new URLSearchParams({apiEndpoint: checked}).toString(),
+    });
     isModalVisible(false);
   };
 
