@@ -15,7 +15,7 @@ export const Timeout = (time: number) => {
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
-  const {data, error} = useQuery(['test', tests.selectedTest.id], () => {
+  const {data, error, isLoading} = useQuery(['test', tests.selectedTest.id], () => {
     if (api) {
       return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
     }
@@ -28,7 +28,7 @@ export const useFetchTest = () => {
     }
   }, []);
 
-  return {data, error};
+  return {data, error, isLoading};
 };
 
 export const useFetchTests = () => {
