@@ -44,8 +44,8 @@ const StyledTestFilter = styled.tr`
 `;
 
 const StyledTestSummary = styled.tr`
-  border-right-style: hidden;
   border-top-style: hidden;
+  height: 80vh;
   display: flex;
 `;
 
