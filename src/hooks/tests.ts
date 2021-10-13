@@ -7,7 +7,7 @@ import {TestsContext} from '@context/testsContext';
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
-  const {data, error} = useQuery(['test', tests.selectedTest.id], () => {
+  const {data, error, isLoading} = useQuery(['test', tests.selectedTest.id], () => {
     if (api) {
       return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
     }
@@ -20,11 +20,11 @@ export const useFetchTest = () => {
     }
   }, []);
 
-  return {data, error};
+  return {data, error, isLoading};
 };
 
 export const useFetchTests = () => {
-  const {data, error} = useQuery(
+  const {data, error, isLoading} = useQuery(
     'tests',
     () => {
       const url = localStorage.getItem(config.apiEndpoint);
@@ -35,5 +35,5 @@ export const useFetchTests = () => {
     {refetchInterval: 5000}
   );
 
-  return {data, error};
+  return {data, error, isLoading};
 };

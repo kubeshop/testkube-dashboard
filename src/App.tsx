@@ -4,17 +4,18 @@ import styled from 'styled-components';
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
 
-import {
-  cleanStorageWhenApiEndpointQueryStringIsAbsent,
-  getApiEndpointOnPageLoad,
-  CheckIfQueryParamsExistsInUrl,
-} from '@utils/validate';
-
 import {useFetchTests} from '@hooks';
 import {Modal} from '@atoms';
 
 import {config} from '@constants/config';
-import {isHostProtocolSecure, showSmallError, filterTestsExecution} from '@utils';
+import {
+  isHostProtocolSecure,
+  showSmallError,
+  filterTestsExecution,
+  cleanStorageWhenApiEndpointQueryStringIsAbsent,
+  getApiEndpointOnPageLoad,
+  CheckIfQueryParamsExistsInUrl,
+} from '@utils';
 
 import {SelectedTest} from '@types';
 
@@ -57,7 +58,7 @@ function App() {
     testName: '',
   });
 
-  const {data, error} = useFetchTests();
+  const {data, error, isLoading} = useFetchTests();
 
   const tests = {
     data,
@@ -65,6 +66,7 @@ function App() {
     setSelectedTest,
     setFilters,
     filters,
+    isLoading,
     testsExecution: filterTestsExecution(data, filters),
   };
 
