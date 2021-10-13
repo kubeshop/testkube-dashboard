@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {Image, Typography} from '@atoms';
-import MainLogo from '@assets/mainLogo.svg';
+import MainLogo from '@assets/logo.svg';
 
 const StyledMainTitle = styled.div`
   display: flex;
