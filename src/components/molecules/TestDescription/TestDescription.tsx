@@ -25,6 +25,7 @@ import {
   StyledTestOutputAssertionErrorMessage,
   StyledCollapse,
   StyledTestWithoutAssertions,
+  TestsWithoutStepsContainer,
 } from './TestDescription.styled';
 
 interface IStepHeader {
@@ -63,21 +64,18 @@ const RenderTestOutputWithAssertion = (step: Step) => {
             header={<RenderTestStepCollapseHeader name={step.name} status={step.status} />}
             key={nanoid()}
           >
-            {step?.assertionResults &&
-              step?.assertionResults?.map((assertionResult: AssertionResult) => {
-                return (
-                  <StyledTestStepAssertionContainer key={nanoid()}>
-                    <StyledTestOutputNameAndStatus>
-                      <RenderTestStatusSvgIcon testStatus={assertionResult.status} height={20} width={20} />
-                      <StyledTestOutputAssertionName>{assertionResult?.name}</StyledTestOutputAssertionName>
-                    </StyledTestOutputNameAndStatus>
+            {step?.assertionResults?.map((assertionResult: AssertionResult) => (
+              <StyledTestStepAssertionContainer key={nanoid()}>
+                <StyledTestOutputNameAndStatus>
+                  <RenderTestStatusSvgIcon testStatus={assertionResult.status} height={20} width={20} />
+                  <StyledTestOutputAssertionName>{assertionResult?.name}</StyledTestOutputAssertionName>
+                </StyledTestOutputNameAndStatus>
 
-                    <StyledTestOutputAssertionErrorMessage>
-                      {assertionResult?.errorMessage}
-                    </StyledTestOutputAssertionErrorMessage>
-                  </StyledTestStepAssertionContainer>
-                );
-              })}
+                <StyledTestOutputAssertionErrorMessage>
+                  {assertionResult?.errorMessage}
+                </StyledTestOutputAssertionErrorMessage>
+              </StyledTestStepAssertionContainer>
+            ))}
           </StyledCollapse>
         </Collapse>
       )}
@@ -131,8 +129,8 @@ const TestDescription = () => {
               <RenderPlainTestOutput {...data} />
             ) : (
               <StyledTestStepsOutPutContainer>
-                {data?.executionResult?.steps?.map((step: Step) => {
-                  return (
+                {data?.executionResult?.steps ? (
+                  data?.executionResult?.steps?.map((step: Step) => (
                     <>
                       <StyledTestAssertionResultsContainer>
                         {step.assertionResults && step.assertionResults.length !== 0 ? (
@@ -142,8 +140,12 @@ const TestDescription = () => {
                         )}
                       </StyledTestAssertionResultsContainer>
                     </>
-                  );
-                })}
+                  ))
+                ) : (
+                  <TestsWithoutStepsContainer>
+                    <span>This Execution has no steps!</span>
+                  </TestsWithoutStepsContainer>
+                )}
               </StyledTestStepsOutPutContainer>
             )}
           </StyledTestOutputsContainer>
