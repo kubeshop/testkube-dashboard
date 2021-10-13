@@ -134,4 +134,9 @@ export const TestsWithoutStepsContainer = styled.div`
   height: var(--space-x1l);
   background: #ff4d4fb3;
   color: var(--color-light-primary);
+  width: 400px;
+
+  @media screen and (min-width: 2560px) {
+    width: 95%;
+  }
 `;
