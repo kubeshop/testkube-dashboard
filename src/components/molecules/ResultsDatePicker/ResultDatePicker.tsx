@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import {DatePicker} from 'antd';
+import React, { useState } from 'react';
+import { DatePicker } from 'antd';
 import styled from 'styled-components';
 
-import {Typography, Button} from '@atoms';
+import { Typography, Button } from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
+import { TestsContext } from '@context/testsContext';
 
 const StyledDateContainer = styled.div`
   display: flex;
@@ -30,16 +30,18 @@ const ResultDatePicker = () => {
   const tests: any = React.useContext(TestsContext);
 
   const handleDatePicker = (_value: any, dateString: any) => {
+    tests.setSelectedTest({ id: null, testName: null });
     tests.filters.dateFilter = dateString;
     tests.setFilters(tests.filters);
   };
 
   const getLatestDateTest = React.useCallback(() => {
+    tests.setSelectedTest({ id: null, testName: null });
     if (tests.filters?.filter?.indexOf('latest') === -1) {
       tests.filters?.filter?.push('latest');
     } else {
       const filtered = tests?.filters?.filter?.filter((filter: string) => filter !== 'latest');
-      tests.setFilters({...tests.filters, status: filtered});
+      tests.setFilters({ ...tests.filters, status: filtered });
     }
   }, [tests?.filters?.filter]);
 
