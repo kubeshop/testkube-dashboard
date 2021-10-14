@@ -90,33 +90,54 @@ function App() {
     dashboardEndpointValidators();
   }, []);
 
-  const RenderApp = () => {
-    return (
-      <MainTableStyles>
-        <thead>
-          <StyledTestResults>
-            <TestResults />
-          </StyledTestResults>
-        </thead>
-        <tbody>
-          <StyledTestFilter>
-            <TestsFilter />
-          </StyledTestFilter>
-          <StyledTestSummary>
-            <TestsSummary />
-          </StyledTestSummary>
-        </tbody>
-      </MainTableStyles>
-    );
-  };
-
   return (
     <>
+      {error && 'Error...'}
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
         <Switch>
-          <Route path="/?apiEndpoint=:apiEndpoint" exact component={RenderApp} />
-          <Route path="/" exact component={RenderApp} />
+          <Route
+            path="/?apiEndpoint=:apiEndpoint"
+            exact
+            render={() => (
+              <MainTableStyles>
+                <thead>
+                  <StyledTestResults>
+                    <TestResults />
+                  </StyledTestResults>
+                </thead>
+                <tbody>
+                  <StyledTestFilter>
+                    <TestsFilter />
+                  </StyledTestFilter>
+                  <StyledTestSummary>
+                    <TestsSummary />
+                  </StyledTestSummary>
+                </tbody>
+              </MainTableStyles>
+            )}
+          />
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <MainTableStyles>
+                <thead>
+                  <StyledTestResults>
+                    <TestResults />
+                  </StyledTestResults>
+                </thead>
+                <tbody>
+                  <StyledTestFilter>
+                    <TestsFilter />
+                  </StyledTestFilter>
+                  <StyledTestSummary>
+                    <TestsSummary />
+                  </StyledTestSummary>
+                </tbody>
+              </MainTableStyles>
+            )}
+          />
         </Switch>
       </TestsContext.Provider>
     </>
