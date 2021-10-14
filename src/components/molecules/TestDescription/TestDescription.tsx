@@ -115,7 +115,7 @@ const TestDescription = () => {
       {tests?.selectedTest.id && data && (
         <>
           <StyledTestStatusImage>
-            <RenderTestStatusSvgIcon testStatus={data?.executionResult?.status} width={50} height={50} />
+            <RenderTestStatusSvgIcon testStatus={data?.executionResult?.status} width={32} height={32} />
           </StyledTestStatusImage>
           <StyledTestOutputsContainer>
             <StyledTestOutputDescription>

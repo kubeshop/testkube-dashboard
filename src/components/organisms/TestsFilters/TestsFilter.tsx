@@ -14,6 +14,7 @@ const StyleTestFilterButtons = styled.td`
   align-items: baseline;
   justify-content: center;
   border: none;
+  margin-right: -10px;
 `;
 
 const TestsFilter = () => {

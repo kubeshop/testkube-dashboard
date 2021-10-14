@@ -13,13 +13,15 @@ import {truncateText} from '@utils';
 const StyledTestListContainer = styled.div`
   display: block;
   width: 100%;
-  margin-left: 25px;
 `;
 
 const StyledTestListRow = styled.div`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   flex-flow: row wrap;
+  position: relative;
+  top: var(--space-md);
+  left: var(--space-md);
   transition: 0.5s;
 
   &:not(:first-child):hover {
@@ -32,7 +34,7 @@ const StyledTestListRow = styled.div`
 `;
 
 const StyledTestListCell = styled.div`
-  text-align: left;
+  /* text-align: left; */
   white-space: nowrap;
   padding-right: 10%;
   width: 15%;

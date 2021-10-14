@@ -13,12 +13,12 @@ const StyledPAgeHeader = styled.header`
   justify-content: space-between;
   border-bottom: 1px solid var(--color-light-primary);
   overflow: hidden;
-  height: 70px;
 `;
 
 const StyledHeaderTests = styled.div`
   display: flex;
   flex-flow: row;
+  margin-right: 30px;
 `;
 
 const StyledHeaderLinksButtons = styled.div`

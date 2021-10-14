@@ -90,7 +90,7 @@ function App() {
     dashboardEndpointValidators();
   }, []);
 
-  const RenderApp = () => {
+  const RenderApp = React.useCallback(() => {
     return (
       <MainTableStyles>
         <thead>
@@ -108,14 +108,14 @@ function App() {
         </tbody>
       </MainTableStyles>
     );
-  };
+  }, []);
 
   return (
     <>
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
         <Switch>
-          <Route path="/?apiEndpoint=:apiEndpoint" exact component={RenderApp} />
+          <Route path="/?apiEndpoint=:apiEndpoint" exact render={RenderApp} />
           <Route path="/" exact component={RenderApp} />
         </Switch>
       </TestsContext.Provider>

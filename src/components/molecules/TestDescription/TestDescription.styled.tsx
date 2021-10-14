@@ -3,8 +3,8 @@ import {Collapse} from 'antd';
 
 export const StyledTestStatusImage = styled.div`
   position: relative;
-  top: var(--space-lg);
-  left: var(--space-lg);
+  top: var(--space-xl);
+  left: var(--space-lg2);
 `;
 
 export const StyledTestOutputsContainer = styled.div`
@@ -14,8 +14,8 @@ export const StyledTestOutputsContainer = styled.div`
   margin-right: var(--space-lg);
   margin-left: var(--space-md);
   position: relative;
-  top: var(--space-lg2);
-  left: var(--space-lg);
+  top: var(--space-xl);
+  left: var(--space-lg2);
 `;
 
 export const StyledTestOutputDescription = styled.div`
@@ -143,7 +143,7 @@ export const TestsWithoutStepsContainer = styled.div`
   height: var(--space-x1l);
   background: #ff4d4fb3;
   color: var(--color-light-primary);
-  width: 400px;
+  width: 100%;
 
   @media screen and (min-width: 2560px) {
     width: 95%;
