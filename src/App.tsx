@@ -1,20 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {Route, Switch} from 'react-router-dom';
 
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
-
-import {
-  cleanStorageWhenApiEndpointQueryStringIsAbsent,
-  getApiEndpointOnPageLoad,
-  CheckIfQueryParamsExistsInUrl,
-} from '@utils/validate';
 
 import {useFetchTests} from '@hooks';
 import {Modal} from '@atoms';
 
 import {config} from '@constants/config';
-import {isHostProtocolSecure, showSmallError, filterTestsExecution} from '@utils';
+import {
+  isHostProtocolSecure,
+  showSmallError,
+  filterTestsExecution,
+  cleanStorageWhenApiEndpointQueryStringIsAbsent,
+  getApiEndpointOnPageLoad,
+  CheckIfQueryParamsExistsInUrl,
+} from '@utils';
 
 import {SelectedTest} from '@types';
 
@@ -28,8 +30,7 @@ const MainTableStyles = styled.table`
 
 const StyledTestResults = styled.tr`
   display: flex;
-  height: 152px;
-  border-left-style: hidden;
+  height: 140px;
   border-top-style: none;
   border-bottom-style: 1px solid var(--color-gray-secondary);
   word-wrap: break-word;
@@ -41,11 +42,12 @@ const StyledTestFilter = styled.tr`
   justify-content: space-between;
   border-right-style: hidden;
   border-left-style: hidden;
+  height: 70px;
 `;
 
 const StyledTestSummary = styled.tr`
-  border-right-style: hidden;
   border-top-style: hidden;
+  height: 80vh;
   display: flex;
 `;
 
@@ -57,10 +59,12 @@ function App() {
     testName: '',
   });
 
-  const {data, error} = useFetchTests();
+  const {data, error, isLoading} = useFetchTests();
 
   const tests = {
     data,
+    error,
+    isLoading,
     selectedTest,
     setSelectedTest,
     setFilters,
@@ -74,7 +78,7 @@ function App() {
 
     if (!isHostProtocolSecure()) {
       showSmallError(`Dashboard is using non-secure protocol!
-      <a href='https://kubeshop.github.io/kubtest/installing/' target="_blank" rel="noopener">Read more</a>`);
+      <a href='https://kubeshop.github.io/testkube/installing/' target="_blank" rel="noopener">Read more</a>`);
     }
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
     if (!apiEndpointExist) {
@@ -88,24 +92,53 @@ function App() {
 
   return (
     <>
-      {error && 'Something went wrong...'}
+      {error && 'Error...'}
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
-        <MainTableStyles>
-          <thead>
-            <StyledTestResults>
-              <TestResults />
-            </StyledTestResults>
-          </thead>
-          <tbody>
-            <StyledTestFilter>
-              <TestsFilter />
-            </StyledTestFilter>
-            <StyledTestSummary>
-              <TestsSummary />
-            </StyledTestSummary>
-          </tbody>
-        </MainTableStyles>
+        <Switch>
+          <Route
+            path="/?apiEndpoint=:apiEndpoint"
+            exact
+            render={() => (
+              <MainTableStyles>
+                <thead>
+                  <StyledTestResults>
+                    <TestResults />
+                  </StyledTestResults>
+                </thead>
+                <tbody>
+                  <StyledTestFilter>
+                    <TestsFilter />
+                  </StyledTestFilter>
+                  <StyledTestSummary>
+                    <TestsSummary />
+                  </StyledTestSummary>
+                </tbody>
+              </MainTableStyles>
+            )}
+          />
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <MainTableStyles>
+                <thead>
+                  <StyledTestResults>
+                    <TestResults />
+                  </StyledTestResults>
+                </thead>
+                <tbody>
+                  <StyledTestFilter>
+                    <TestsFilter />
+                  </StyledTestFilter>
+                  <StyledTestSummary>
+                    <TestsSummary />
+                  </StyledTestSummary>
+                </tbody>
+              </MainTableStyles>
+            )}
+          />
+        </Switch>
       </TestsContext.Provider>
     </>
   );

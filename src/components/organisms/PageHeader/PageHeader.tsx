@@ -13,7 +13,7 @@ const StyledPAgeHeader = styled.header`
   justify-content: space-between;
   border-bottom: 1px solid var(--color-light-primary);
   overflow: hidden;
-  height: 80px;
+  height: 70px;
 `;
 
 const StyledHeaderTests = styled.div`
@@ -37,10 +37,10 @@ const PageHeader = () => {
   };
 
   const showDocumentation = () => {
-    window.open('https://kubeshop.github.io/kubtest/');
+    window.open('https://kubeshop.github.io/testkube/');
   };
   const showGithubMainPage = () => {
-    window.open('https://github.com/kubeshop/kubtest');
+    window.open('https://github.com/kubeshop/testkube');
   };
   return (
     <StyledPAgeHeader>

@@ -30,11 +30,13 @@ const ResultDatePicker = () => {
   const tests: any = React.useContext(TestsContext);
 
   const handleDatePicker = (_value: any, dateString: any) => {
+    tests.setSelectedTest({id: null, testName: null});
     tests.filters.dateFilter = dateString;
     tests.setFilters(tests.filters);
   };
 
   const getLatestDateTest = React.useCallback(() => {
+    tests.setSelectedTest({id: null, testName: null});
     if (tests.filters?.filter?.indexOf('latest') === -1) {
       tests.filters?.filter?.push('latest');
     } else {
@@ -52,8 +54,14 @@ const ResultDatePicker = () => {
   return (
     <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
-      <DatePicker size="large" style={datePickerStyles} onChange={handleDatePicker} />
-      <Button disabled={!toggleGetTest} onClick={getLatestDateTest}>
+      <DatePicker
+        size="large"
+        style={datePickerStyles}
+        format="MM/DD/YYYY"
+        onChange={handleDatePicker}
+        disabled={!tests?.testsExecution?.results}
+      />
+      <Button disabled={!toggleGetTest || !tests?.testsExecution?.results} onClick={getLatestDateTest}>
         Latest
       </Button>
     </StyledDateContainer>

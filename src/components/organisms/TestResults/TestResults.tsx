@@ -41,7 +41,11 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Passed"
-          totalTests={getTotalTestsByType(tests?.data?.totals?.passed.toString())}
+          totalTests={
+            tests?.data?.totals?.passed.toString() !== undefined
+              ? getTotalTestsByType(tests?.data?.totals?.passed.toString())
+              : '0'
+          }
           testTitleColor="white"
           totalTestsColor="yellow"
         />
@@ -49,7 +53,11 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Failed"
-          totalTests={getTotalTestsByType(tests?.data?.totals?.failed.toString())}
+          totalTests={
+            tests?.data?.totals?.failed.toString() !== undefined
+              ? getTotalTestsByType(tests?.data?.totals?.failed.toString())
+              : '0'
+          }
           testTitleColor="white"
           totalTestsColor="yellow"
         />
@@ -57,7 +65,11 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Test Running"
-          totalTests={getTotalTestsByType(tests?.data?.totals?.pending.toString())}
+          totalTests={
+            tests?.data?.totals?.pending.toString() !== undefined
+              ? getTotalTestsByType(tests?.data?.totals?.pending.toString())
+              : '0'
+          }
           testTitleColor="white"
           totalTestsColor="white"
         />
