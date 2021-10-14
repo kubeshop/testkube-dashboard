@@ -1,8 +1,13 @@
 import {config} from '@constants/config';
 
 export const validateUrl = (url: string): boolean => {
-  const pattern = new RegExp(
-    '(https?:\/\/)?(?:w{1,3}\.)?[^\s.]+(?:\.[a-z]+)*(?::\d+)?((?:\/\w+)|(?:-\w+))*\/?(?![^<]*(?:<\/\w+>|\/?>))',
+    const pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
     'i'
   );
 
@@ -24,7 +29,7 @@ export const removeSpaceFromString = (url: string) => {
 };
 
 export const matchEndpointProtocolWithHostProtocol = (url: string) => {
-  const hostProtocol = window.location.protocol;
+  const apiEndpointProtocol = url.substring(0, url.indexOf('http') || url.indexOf('https')) || '';
 
   if (!url) {
     alert('Invalid URL, You are trying to manipulate the url, please provide a correct url endpoint');
@@ -34,28 +39,14 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
     return;
   }
 
-  const apiEndpointProtocol = new URL(url).protocol;
-
   if (!apiEndpointProtocol) {
-    const newApiEndpointWithProtocol = `${hostProtocol}//${url}`;
-    const trimmedUrl = removeSpaceFromString(newApiEndpointWithProtocol);
+    const trimmedUrl = removeSpaceFromString(url);
     const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
     const finalUrl = `${cleanUrl}${config.apiVersion}`;
 
     localStorage.setItem(config.apiEndpoint, finalUrl);
   }
 
-  if (hostProtocol !== apiEndpointProtocol) {
-    const matchedUrlProtocol = url.replace(apiEndpointProtocol, hostProtocol);
-    const trimmedUrl = removeSpaceFromString(matchedUrlProtocol);
-    const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
-    const finalUrl = `${cleanUrl}${config.apiVersion}`;
-
-    localStorage.setItem(config.apiEndpoint, finalUrl);
-    return;
-  }
-
-  localStorage.setItem(config.apiEndpoint, url);
 };
 
 export const cleanStorageWhenApiEndpointQueryStringIsAbsent = () => {

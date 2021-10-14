@@ -112,6 +112,7 @@ function App() {
 
   return (
     <>
+      {error && 'Error...'}
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
         <Switch>
