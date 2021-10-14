@@ -23,14 +23,17 @@ const queryCache = new QueryClient({
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <PageHeader />
-      <QueryClientProvider client={queryCache}>
+
+
+    <QueryClientProvider client={queryCache}>
+      <Router>
+        <PageHeader />
         <GlobalStyle />
         <App />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </Router>
+      </Router>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+
   </React.StrictMode>,
   document.getElementById('root')
 );
