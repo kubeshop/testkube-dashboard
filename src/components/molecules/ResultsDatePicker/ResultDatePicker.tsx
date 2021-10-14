@@ -27,16 +27,14 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
-  const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<Moment>();
   const tests: any = React.useContext(TestsContext);
 
   const handleDatePicker = (value: any, dateString: any) => {
     tests.setSelectedTest({ id: null, testName: null });
-    setSelectedDate(value);
-    tests.filters.dateFilter = dateString;
 
-    tests.setFilters(tests.filters);
+    setSelectedDate(value);
+    tests.setFilterByDate(dateString);
 
   };
 
@@ -44,11 +42,10 @@ const ResultDatePicker = () => {
     tests.setSelectedTest({ id: null, testName: null });
     let currentDate = moment();
     setSelectedDate(currentDate);
+    tests.setFilterByDate(currentDate.format('MM-DD-YYYY'));
 
-    tests.filters.dateFilter = currentDate;
 
-    tests.setFilters(tests.filters);
-  }, [tests?.filters?.filter]);
+  }, [tests.filterByDate]);
 
   return (
     <StyledDateContainer>

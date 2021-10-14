@@ -54,12 +54,10 @@ const StyledTestSummary = styled.tr`
 function App() {
   const [filters, setFilters] = useState<any>({ filter: [], dateFilter: '' });
   const [visible, setVisible] = useState<boolean>(false);
-  const [selectedTest, setSelectedTest] = useState<SelectedTest>({
-    id: '',
-    testName: '',
-  });
+  const [filterByDate, setFilterByDate] = useState<string | null>(null);
+  const [selectedTest, setSelectedTest] = useState<SelectedTest>({ id: '', testName: '', });
 
-  const { data, error, isLoading } = useFetchTests();
+  const { data, error, isLoading } = useFetchTests(filterByDate);
 
   const tests = {
     error,
@@ -68,6 +66,8 @@ function App() {
     setSelectedTest,
     setFilters,
     filters,
+    filterByDate,
+    setFilterByDate,
     testsExecution: filterTestsExecution(data, filters),
   };
 
