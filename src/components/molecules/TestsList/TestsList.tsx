@@ -17,12 +17,12 @@ const StyledTestListContainer = styled.div`
 
 const StyledTestListRow = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: center;
   flex-flow: row wrap;
   position: relative;
   top: var(--space-md);
-  left: var(--space-md);
   transition: 0.5s;
+  height: 50px;
 
   &:not(:first-child):hover {
     cursor: pointer;
@@ -34,7 +34,6 @@ const StyledTestListRow = styled.div`
 `;
 
 const StyledTestListCell = styled.div`
-  /* text-align: left; */
   white-space: nowrap;
   padding-right: 10%;
   width: 15%;
@@ -102,17 +101,17 @@ const TestsList = () => {
             onClick={() => handleSelectedTest(test.id, test.scriptName)}
           >
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light">
+              <Typography variant="secondary" color="secondary" font="light" withMargin>
                 {test.scriptName ? truncateText(test.scriptName) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light" wrap>
+              <Typography variant="secondary" color="secondary" font="light" wrap withMargin>
                 {test.startTime ? timeStampToDate(test.startTime) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light">
+              <Typography variant="secondary" color="secondary" font="light" withMargin>
                 {test.endTime ? getDuration(test.startTime, test.endTime) : '-'}
               </Typography>
             </StyledTestListCell>

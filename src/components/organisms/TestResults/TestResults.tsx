@@ -27,9 +27,9 @@ const TestResults = () => {
   const tests: any = useContext(TestsContext);
 
   const getTotalTestsByType = (testType: string) => {
-    if (tests.data) {
+    if (tests.testsExecution) {
       // eslint-disable-next-line
-      return testType + '/' + tests?.data?.totals?.results;
+      return testType + '/' + tests?.testsExecution?.totals?.results;
     }
   };
 
@@ -39,11 +39,12 @@ const TestResults = () => {
         <ResultDatePicker />
       </StyledTableCell>
       <StyledTableCell>
+        {console.log('')}
         <TestStatus
           testTitle="Passed"
           totalTests={
-            tests?.data?.totals?.passed.toString() !== undefined
-              ? getTotalTestsByType(tests?.data?.totals?.passed.toString())
+            tests?.testsExecution?.totals?.passed.toString() !== undefined
+              ? getTotalTestsByType(tests?.testsExecution?.totals?.passed.toString())
               : '0'
           }
           testTitleColor="white"
@@ -54,8 +55,8 @@ const TestResults = () => {
         <TestStatus
           testTitle="Failed"
           totalTests={
-            tests?.data?.totals?.failed.toString() !== undefined
-              ? getTotalTestsByType(tests?.data?.totals?.failed.toString())
+            tests?.testsExecution?.totals?.failed.toString() !== undefined
+              ? getTotalTestsByType(tests?.testsExecution?.totals?.failed.toString())
               : '0'
           }
           testTitleColor="white"
@@ -66,8 +67,8 @@ const TestResults = () => {
         <TestStatus
           testTitle="Test Running"
           totalTests={
-            tests?.data?.totals?.pending.toString() !== undefined
-              ? getTotalTestsByType(tests?.data?.totals?.pending.toString())
+            tests?.testsExecution?.totals?.pending.toString() !== undefined
+              ? getTotalTestsByType(tests?.testsExecution?.totals?.pending.toString())
               : '0'
           }
           testTitleColor="white"
@@ -77,7 +78,7 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Total Tests Executed"
-          totalTests={tests?.data?.totals?.results.toString()}
+          totalTests={tests?.testsExecution?.totals?.results.toString()}
           testTitleColor="white"
           totalTestsColor="white"
         />
