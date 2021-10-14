@@ -19,6 +19,19 @@ const StyledPAgeHeader = styled.header`
 const StyledHeaderTests = styled.div`
   display: flex;
   flex-flow: row;
+  margin-right: none;
+
+  @media only screen and (max-width: 1075px) {
+    margin-right: 10px;
+  }
+
+  @media only screen and (min-width: 1075px) {
+    margin-right: 50px;
+  }
+
+  @media only screen and (min-width: 2075px) {
+    margin-right: 100px;
+  }
 `;
 
 const StyledHeaderLinksButtons = styled.div`

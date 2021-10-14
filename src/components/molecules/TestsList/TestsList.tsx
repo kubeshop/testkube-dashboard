@@ -13,14 +13,16 @@ import {truncateText} from '@utils';
 const StyledTestListContainer = styled.div`
   display: block;
   width: 100%;
-  margin-left: 25px;
 `;
 
 const StyledTestListRow = styled.div`
   display: flex;
   align-items: center;
   flex-flow: row wrap;
+  position: relative;
+  top: var(--space-md);
   transition: 0.5s;
+  height: 50px;
 
   &:not(:first-child):hover {
     cursor: pointer;
@@ -32,7 +34,6 @@ const StyledTestListRow = styled.div`
 `;
 
 const StyledTestListCell = styled.div`
-  text-align: left;
   white-space: nowrap;
   padding-right: 10%;
   width: 15%;
@@ -92,7 +93,7 @@ const TestsList = () => {
         </StyledTestListCell>
       </StyledTestListRow>
       {tests?.isLoading && <Spinner />}
-      {tests?.testsExecution?.results &&
+      {tests?.testsExecution?.results && !tests?.testsExecution?.errorMessage ? (
         tests?.testsExecution?.results?.map((test: Result) => (
           <StyledTestListRow
             className={tests?.selectedTest.id === test.id ? 'selected' : ''}
@@ -100,17 +101,17 @@ const TestsList = () => {
             onClick={() => handleSelectedTest(test.id, test.scriptName)}
           >
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light">
+              <Typography variant="secondary" color="secondary" font="light" withMargin>
                 {test.scriptName ? truncateText(test.scriptName) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light" wrap>
+              <Typography variant="secondary" color="secondary" font="light" wrap withMargin>
                 {test.startTime ? timeStampToDate(test.startTime) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light">
+              <Typography variant="secondary" color="secondary" font="light" withMargin>
                 {test.endTime ? getDuration(test.startTime, test.endTime) : '-'}
               </Typography>
             </StyledTestListCell>
@@ -121,7 +122,12 @@ const TestsList = () => {
               <TestTypeIcon testType={test.scriptType} width={30} height={30} />
             </StyledTestListCell>
           </StyledTestListRow>
-        ))}
+        ))
+      ) : (
+        <Typography variant="secondary" font="light">
+          {tests?.testsExecution?.errorMessage}
+        </Typography>
+      )}
     </StyledTestListContainer>
   );
 };

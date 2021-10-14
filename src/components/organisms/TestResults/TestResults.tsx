@@ -29,7 +29,7 @@ const TestResults = () => {
   const getTotalTestsByType = (testType: string) => {
     if (tests.data) {
       // eslint-disable-next-line
-      return testType + ' / ' + tests?.data?.totals?.results;
+      return testType + '/' + tests?.data?.totals?.results;
     }
   };
 

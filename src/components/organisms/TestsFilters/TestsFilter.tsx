@@ -14,6 +14,7 @@ const StyleTestFilterButtons = styled.td`
   align-items: baseline;
   justify-content: center;
   border: none;
+  margin-right: -10px;
 `;
 
 const TestsFilter = () => {
@@ -53,11 +54,7 @@ const TestsFilter = () => {
       </StyledTestTextDescription>
       <StyleTestFilterButtons>
         <Typography variant="secondary">Show: </Typography>
-        <Button
-          disabled={!tests?.testsExecution?.results}
-          active={isActive('all')}
-          onClick={() => filtersTests('all')}
-        >
+        <Button disabled={!tests?.testsExecution?.results} active={isActive('all')} onClick={() => filtersTests('all')}>
           All
         </Button>
         <Button
@@ -68,14 +65,14 @@ const TestsFilter = () => {
           Running
         </Button>
         <Button
-          disabled={!tests?.testsExecution?.results }
+          disabled={!tests?.testsExecution?.results}
           active={isActive('success')}
           onClick={() => filtersTests('success')}
         >
           Passed
         </Button>
         <Button
-          disabled={!tests?.testsExecution?.results }
+          disabled={!tests?.testsExecution?.results}
           active={isActive('error')}
           onClick={() => filtersTests('error')}
         >
