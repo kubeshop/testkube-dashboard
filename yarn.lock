@@ -1967,9 +1967,9 @@
   version "2.0.1"
   resolved "https://registry.npmjs.org/@types/stack-utils/-/stack-utils-2.0.1.tgz"
 
-"@types/styled-components@5.1.14":
-  version "5.1.14"
-  resolved "https://registry.npmjs.org/@types/styled-components/-/styled-components-5.1.14.tgz"
+"@types/styled-components@5.1.15":
+  version "5.1.15"
+  resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.15.tgz#30855b40aa80b3b4e4c0e43a4af366e7c246d148"
   dependencies:
     "@types/hoist-non-react-statics" "*"
     "@types/react" "*"
@@ -7947,7 +7947,7 @@ modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/modify-values/-/modify-values-1.0.1.tgz"
 
-moment@^2.24.0, moment@^2.25.3:
+moment@^2.24.0, moment@^2.25.3, moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz"
 
