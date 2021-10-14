@@ -3,8 +3,8 @@ import {Collapse} from 'antd';
 
 export const StyledTestStatusImage = styled.div`
   position: relative;
-  top: var(--space-lg);
-  left: var(--space-lg);
+  top: var(--space-xl);
+  left: var(--space-lg2);
 `;
 
 export const StyledTestOutputsContainer = styled.div`
@@ -14,8 +14,8 @@ export const StyledTestOutputsContainer = styled.div`
   margin-right: var(--space-lg);
   margin-left: var(--space-md);
   position: relative;
-  top: var(--space-lg2);
-  left: var(--space-lg);
+  top: var(--space-xl);
+  left: var(--space-lg2);
 `;
 
 export const StyledTestOutputDescription = styled.div`
@@ -29,11 +29,15 @@ export const StyledTestOutputDescription = styled.div`
 `;
 
 export const StyledPlainTextOutputContainer = styled.div`
-  width: 100%;
-  max-height: 300px;
+  width: 96%;
+  max-height: 65vh;
   overflow: scroll;
   background-color: black;
   background-image: radial-gradient(rgba(0, 32, 150, 0.75), black 120%);
+
+  @media screen and (min-width: 2500px) {
+    width: 98%;
+  }
 `;
 
 export const StyledTestOutput = styled.span`
@@ -53,8 +57,13 @@ export const StyledText = styled.pre`
 
 export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
-  max-height: 300px;
+  max-height: 65vh;
   overflow: scroll;
+  width: 96%;
+
+  @media screen and (min-width: 2500px) {
+    width: 98%;
+  }
 `;
 
 export const StyledTestStepNameContainer = styled.div`
@@ -70,13 +79,13 @@ export const StyledTestStepNameContainer = styled.div`
 
 export const StyledTestStepName = styled.span`
   margin-left: var(--space-xxs);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
 `;
 
 export const StyledTestAssertionResultsContainer = styled.div`
   display: flex;
   color: var(--color-light-primary);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--font-size-3sm);
 `;
 
 export const StyledTestStepAssertionContainer = styled.div`
@@ -134,4 +143,9 @@ export const TestsWithoutStepsContainer = styled.div`
   height: var(--space-x1l);
   background: #ff4d4fb3;
   color: var(--color-light-primary);
+  width: 100%;
+
+  @media screen and (min-width: 2560px) {
+    width: 95%;
+  }
 `;

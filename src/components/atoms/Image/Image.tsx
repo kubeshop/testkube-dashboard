@@ -18,8 +18,8 @@ const StyledImage = styled.img<IImage>`
   border-radius: ${props => (props.size ? '50%' : '0')};
 
   @media screen and (max-width: 26.5rem) {
-    width: 50px;
-    height: 50px;
+    width: 32px;
+    height: 32px;
   }
 `;
 

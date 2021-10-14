@@ -7,6 +7,7 @@ interface ITypography extends React.HTMLAttributes<HTMLParagraphElement> {
   font?: 'bold' | 'light' | 'normal';
   wrap?: boolean;
   cursor?: 'pointer' | 'not-allowed' | 'wait' | 'pointer' | '';
+  withMargin?: boolean;
 }
 
 const StyledTypography = styled.p<ITypography>`
@@ -46,7 +47,8 @@ const StyledTypography = styled.p<ITypography>`
       ? 'var(--color-monokle-primary)'
       : 'var(--color-light-primary)'};
   letter-spacing: 0;
-  word-wrap: ${props => (props.wrap ? 'break-word' : 'normal')};
+  white-space: ${props => (props.wrap ? 'nowrap' : 'normal')};
+  margin-top: ${props => (props.withMargin ? '10px' : '0')};
 
   &:hover {
     cursor: ${props =>

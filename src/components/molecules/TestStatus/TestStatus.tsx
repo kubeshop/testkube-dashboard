@@ -19,6 +19,7 @@ const StyledTestTitle = styled.span<ITestStatusStyles>`
   font-size: var(--font-size-md);
   color: ${props =>
     props.testTitleColor === 'white' ? 'var(--color-light-secondary)' : 'var(--color-yellow-primary)'};
+  font-weight: var(--font-weight-small);
 `;
 
 const StyledTotalTests = styled.span<ITestStatusStyles>`

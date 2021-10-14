@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {Image, Typography} from '@atoms';
-import MainLogo from '@assets/mainLogo.svg';
+import MainLogo from '@assets/logo.svg';
 
 const StyledMainTitle = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const PageTitle = () => {
     <StyledMainTitle>
       <Image src={MainLogo} type="svg" alt="Logo" width={200} height={100} />
       <>
-        <Typography variant="tertiary" color="tertiary" style={{position: 'relative', top: '40px'}}>
+        <Typography variant="tertiary" color="tertiary" font="light" style={{position: 'relative', top: '40px'}}>
           Dashboard
         </Typography>
       </>

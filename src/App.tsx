@@ -30,8 +30,7 @@ const MainTableStyles = styled.table`
 
 const StyledTestResults = styled.tr`
   display: flex;
-  height: 152px;
-  border-left-style: hidden;
+  height: 140px;
   border-top-style: none;
   border-bottom-style: 1px solid var(--color-gray-secondary);
   word-wrap: break-word;
@@ -43,11 +42,12 @@ const StyledTestFilter = styled.tr`
   justify-content: space-between;
   border-right-style: hidden;
   border-left-style: hidden;
+  height: 70px;
 `;
 
 const StyledTestSummary = styled.tr`
-  border-right-style: hidden;
   border-top-style: hidden;
+  height: 80vh;
   display: flex;
 `;
 
@@ -62,7 +62,6 @@ function App() {
   const {data, error, isLoading} = useFetchTests();
 
   const tests = {
-    data,
     error,
     isLoading,
     selectedTest,
@@ -78,7 +77,7 @@ function App() {
 
     if (!isHostProtocolSecure()) {
       showSmallError(`Dashboard is using non-secure protocol!
-      <a href='https://kubeshop.github.io/testkube/installing/' target="_blank" rel="noopener">Read more</a>`);
+      <a href='https://kubeshop.github.io/testkube/dashboard/#httpstls-configuration' target="_blank" rel="noopener">Read more</a>`);
     }
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
     if (!apiEndpointExist) {
@@ -90,7 +89,7 @@ function App() {
     dashboardEndpointValidators();
   }, []);
 
-  const RenderApp = () => {
+  const RenderApp = React.useCallback(() => {
     return (
       <MainTableStyles>
         <thead>
@@ -108,14 +107,14 @@ function App() {
         </tbody>
       </MainTableStyles>
     );
-  };
+  }, []);
 
   return (
     <>
       {visible && <Modal visible isModalVisible={setVisible} />}
       <TestsContext.Provider value={tests}>
         <Switch>
-          <Route path="/?apiEndpoint=:apiEndpoint" exact component={RenderApp} />
+          <Route path="/?apiEndpoint=:apiEndpoint" exact render={RenderApp} />
           <Route path="/" exact component={RenderApp} />
         </Switch>
       </TestsContext.Provider>

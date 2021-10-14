@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DatePicker } from 'antd';
 import styled from 'styled-components';
+import moment, { Moment } from 'moment';
 
 import { Typography, Button } from '@atoms';
 
@@ -27,42 +28,41 @@ const datePickerStyles = {
 
 const ResultDatePicker = () => {
   const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<Moment>();
   const tests: any = React.useContext(TestsContext);
 
-  const handleDatePicker = (_value: any, dateString: any) => {
+  const handleDatePicker = (value: any, dateString: any) => {
     tests.setSelectedTest({ id: null, testName: null });
+    setSelectedDate(value);
     tests.filters.dateFilter = dateString;
+
     tests.setFilters(tests.filters);
+
   };
 
-  const getLatestDateTest = React.useCallback(() => {
+  const getTodayTests = React.useCallback(() => {
     tests.setSelectedTest({ id: null, testName: null });
-    if (tests.filters?.filter?.indexOf('latest') === -1) {
-      tests.filters?.filter?.push('latest');
-    } else {
-      const filtered = tests?.filters?.filter?.filter((filter: string) => filter !== 'latest');
-      tests.setFilters({ ...tests.filters, status: filtered });
-    }
-  }, [tests?.filters?.filter]);
+    let currentDate = moment();
+    setSelectedDate(currentDate);
 
-  React.useEffect(() => {
-    if (tests.testsExecution) {
-      setToggleGetTest(true);
-    }
-  }, [tests.testsExecution]);
+    tests.filters.dateFilter = currentDate;
+
+    tests.setFilters(tests.filters);
+  }, [tests?.filters?.filter]);
 
   return (
     <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
       <DatePicker
+        value={selectedDate}
         size="large"
         style={datePickerStyles}
-        format="MM/DD/YYYY"
         onChange={handleDatePicker}
-        disabled={!tests?.testsExecution !== undefined}
+        format="MM-DD-YYYY"
+        disabled={!tests?.testsExecution?.results}
       />
-      <Button disabled={!toggleGetTest || !tests?.testsExecution !== undefined} onClick={getLatestDateTest}>
-        Latest
+      <Button disabled={!tests?.testsExecution?.results} onClick={getTodayTests}>
+        Today
       </Button>
     </StyledDateContainer>
   );

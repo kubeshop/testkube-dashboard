@@ -5,13 +5,6 @@ import {config} from '@constants/config';
 import { TestsContext } from '@context/testsContext';
 import {getAllTests} from '@services/Tests';
 
-export const Timeout = (time: number) => {
-	let controller = new AbortController();
-  setTimeout(() => controller.abort(), time * 1000);
-
-	return controller;
-};
-
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
