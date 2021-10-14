@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {DatePicker} from 'antd';
+import React, { useState } from 'react';
+import { DatePicker } from 'antd';
 import styled from 'styled-components';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
-import {Typography, Button} from '@atoms';
+import { Typography, Button } from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
+import { TestsContext } from '@context/testsContext';
 
 const StyledDateContainer = styled.div`
   display: flex;
@@ -27,48 +27,38 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
-  // const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
-  const [todayTests, setTodayTests] = useState('');
+  const [toggleGetTest, setToggleGetTest] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<Moment>();
   const tests: any = React.useContext(TestsContext);
 
-  const handleDatePicker = (_value: any, dateString: any) => {
-    tests.setSelectedTest({id: null, testName: null});
+  const handleDatePicker = (value: any, dateString: any) => {
+    tests.setSelectedTest({ id: null, testName: null });
+    setSelectedDate(value);
     tests.filters.dateFilter = dateString;
 
     tests.setFilters(tests.filters);
-    setTodayTests(_value);
+
   };
 
   const getTodayTests = React.useCallback(() => {
-    tests.setSelectedTest({id: null, testName: null});
-    const date = new Date();
-    const today = date.toISOString();
+    tests.setSelectedTest({ id: null, testName: null });
+    let currentDate = moment();
+    setSelectedDate(currentDate);
 
-    setTodayTests(today);
+    tests.filters.dateFilter = currentDate;
 
-    if (tests.filters?.filter?.indexOf('today') === -1) {
-      tests.filters?.filter?.push('today');
-    } else {
-      const filtered = tests?.filters?.filter?.filter((filter: string) => filter !== 'today');
-      tests.setFilters({...tests.filters, status: filtered});
-    }
+    tests.setFilters(tests.filters);
   }, [tests?.filters?.filter]);
-
-  // React.useEffect(() => {
-  //   if (tests.testsExecution) {
-  //     setToggleGetTest(true);
-  //   }
-  // }, [tests.testsExecution]);
 
   return (
     <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
       <DatePicker
-        value={todayTests ? moment(todayTests) : null}
+        value={selectedDate}
         size="large"
         style={datePickerStyles}
         onChange={handleDatePicker}
-        format="MM/DD/YYYY"
+        format="MM-DD-YYYY"
         disabled={!tests?.testsExecution?.results}
       />
       <Button disabled={!tests?.testsExecution?.results} onClick={getTodayTests}>

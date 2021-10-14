@@ -1,4 +1,5 @@
-import {getDate, getTodayTests} from './formatDate';
+import moment from 'moment';
+import { getDate, getTodayTests } from './formatDate';
 
 export const filterTestsExecution = (tests: any, _filters: any) => {
   let filteredTestsExecution = tests;
@@ -33,7 +34,7 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
     );
 
     if (filteredTestsIntervals.length > 0) {
-      filteredTestsExecution = {...filteredTestsExecution, results: filteredTestsIntervals};
+      filteredTestsExecution = { ...filteredTestsExecution, results: filteredTestsIntervals };
     } else {
       filteredTestsExecution = {
         ...filteredTestsExecution,
@@ -44,14 +45,13 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
   }
 
   if (_filters?.filter?.includes('today')) {
-    const todayTests = getTodayTests(filteredTestsExecution);
 
     const todayFilteredTests = filteredTestsExecution?.results?.filter(
-      (test: any) => getDate(test.startTime) === getDate(todayTests)
+      (test: any) => getDate(test.startTime) === moment().toString()
     );
 
     if (todayFilteredTests.length > 0) {
-      filteredTestsExecution = {...filteredTestsExecution, results: todayFilteredTests};
+      filteredTestsExecution = { ...filteredTestsExecution, results: todayFilteredTests };
     } else {
       filteredTestsExecution = {
         ...filteredTestsExecution,
