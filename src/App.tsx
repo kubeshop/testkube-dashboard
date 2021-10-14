@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { Route, Switch } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
-import { TestResults, TestsFilter, TestsSummary } from '@organisms';
-import { TestsContext } from '@context/testsContext';
+import {TestResults, TestsFilter, TestsSummary} from '@organisms';
+import {TestsContext} from '@context/testsContext';
 
-import { useFetchTests } from '@hooks';
-import { Modal } from '@atoms';
+import {useFetchTests} from '@hooks';
+import {Modal} from '@atoms';
 
-import { config } from '@constants/config';
+import {config} from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
@@ -18,7 +18,7 @@ import {
   CheckIfQueryParamsExistsInUrl,
 } from '@utils';
 
-import { SelectedTest } from '@types';
+import {SelectedTest} from '@types';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
@@ -52,14 +52,14 @@ const StyledTestSummary = styled.tr`
 `;
 
 function App() {
-  const [filters, setFilters] = useState<any>({ filter: [], dateFilter: '' });
+  const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedTest, setSelectedTest] = useState<SelectedTest>({
     id: '',
     testName: '',
   });
 
-  const { data, error, isLoading } = useFetchTests();
+  const {data, error, isLoading} = useFetchTests();
 
   const tests = {
     error,
@@ -77,7 +77,7 @@ function App() {
 
     if (!isHostProtocolSecure()) {
       showSmallError(`Dashboard is using non-secure protocol!
-      <a href='https://kubeshop.github.io/testkube/installing/' target="_blank" rel="noopener">Read more</a>`);
+      <a href='https://kubeshop.github.io/testkube/dashboard/#httpstls-configuration' target="_blank" rel="noopener">Read more</a>`);
     }
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
     if (!apiEndpointExist) {
