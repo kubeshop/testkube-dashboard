@@ -21,7 +21,6 @@ const StyledTestListRow = styled.div`
   flex-flow: row wrap;
   position: relative;
   top: var(--space-md);
-  left: var(--space-md);
   transition: 0.5s;
 
   &:not(:first-child):hover {
