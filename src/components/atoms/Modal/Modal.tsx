@@ -81,7 +81,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
         <StyledSearchUrlForm onSubmit={handleOpenUrl}>
           <Typography variant="secondary" leftAlign>
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
-            TestKube installer - <a href="https://kubeshop.github.io/testkube/installing/" target="_blank">Read More...</a>
+            TestKube installer - <a href="https://kubeshop.github.io/testkube/dashboard/#dashboard-results-endpoint" target="_blank">Read More...</a>
           </Typography>
           <Typography variant="secondary" leftAlign>
             The endpoint needs to be accessible from your browser and will be used to retrieve test results only.
