@@ -19,7 +19,7 @@ export const useFetchTest = () => {
     if (apiFromUser) {
       setApi(apiFromUser);
     }
-  }, []);
+  }, [tests.selectedTest]);
 
   return {data, error, isLoading};
 };
