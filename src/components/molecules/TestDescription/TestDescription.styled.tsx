@@ -3,7 +3,7 @@ import {Collapse} from 'antd';
 
 export const StyledTestStatusImage = styled.div`
   position: relative;
-  top: var(--space-xl);
+  top: 70px;
   left: var(--space-lg2);
 `;
 
@@ -14,7 +14,7 @@ export const StyledTestOutputsContainer = styled.div`
   margin-right: var(--space-lg);
   margin-left: var(--space-md);
   position: relative;
-  top: var(--space-xl);
+  top: 60px;
   left: var(--space-lg2);
 `;
 
@@ -59,7 +59,6 @@ export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
   max-height: 65vh;
   overflow: scroll;
-  width: 96%;
 
   @media screen and (min-width: 2500px) {
     width: 98%;

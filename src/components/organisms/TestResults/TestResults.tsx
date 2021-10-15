@@ -39,9 +39,8 @@ const TestResults = () => {
         <ResultDatePicker />
       </StyledTableCell>
       <StyledTableCell>
-        {console.log('')}
         <TestStatus
-          testTitle="Passed"
+          testTitle="Total Passed"
           totalTests={
             tests?.testsExecution?.totals?.passed.toString() !== undefined
               ? getTotalTestsByType(tests?.testsExecution?.totals?.passed.toString())
@@ -53,7 +52,7 @@ const TestResults = () => {
       </StyledTableCell>
       <StyledTableCell>
         <TestStatus
-          testTitle="Failed"
+          testTitle="Total Failed"
           totalTests={
             tests?.testsExecution?.totals?.failed.toString() !== undefined
               ? getTotalTestsByType(tests?.testsExecution?.totals?.failed.toString())
@@ -65,7 +64,7 @@ const TestResults = () => {
       </StyledTableCell>
       <StyledTableCell>
         <TestStatus
-          testTitle="Test Running"
+          testTitle="Total Running"
           totalTests={
             tests?.testsExecution?.totals?.pending.toString() !== undefined
               ? getTotalTestsByType(tests?.testsExecution?.totals?.pending.toString())
@@ -77,7 +76,7 @@ const TestResults = () => {
       </StyledTableCell>
       <StyledTableCell>
         <TestStatus
-          testTitle="Total Tests Executed"
+          testTitle="Total Executed"
           totalTests={tests?.testsExecution?.totals?.results.toString()}
           testTitleColor="white"
           totalTestsColor="white"
