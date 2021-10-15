@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
-import { nanoid } from 'nanoid';
+import {nanoid} from 'nanoid';
 
-import { RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner } from '@atoms';
+import {RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner} from '@atoms';
 
-import { TestsContext } from '@context/testsContext';
-import { timeStampToDate, getDuration } from '@utils/formatDate';
+import {TestsContext} from '@context/testsContext';
+import {timeStampToDate, getDuration} from '@utils/formatDate';
 
-import { Result } from '@types';
-import { truncateText } from '@utils';
-import { useIntersectionObserver } from '@hooks';
+import {Result} from '@types';
+import {truncateText} from '@utils';
+import {useIntersectionObserver} from '@hooks';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -64,23 +64,20 @@ const TestsList = () => {
     onIntersect: tests.fetchNextPage,
     enabled: tests.hasNextPage,
   });
-  
+
   useIntersectionObserver({
     target: fetchPreviousPageRef,
     onIntersect: tests.fetchPreviousPage,
     enabled: tests.hasPreviousPage,
   });
 
-
   const handleSelectedTest = (id: string, testName: string) => {
-    tests?.setSelectedTest({ id, testName });
+    tests?.setSelectedTest({id, testName});
   };
   console.log(tests.hasNextPage);
   return (
     <>
       <StyledTestListContainer>
-        <div ref={fetchPreviousPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
-
         <StyledTestListRow>
           <StyledTestListCell>
             <Typography variant="secondary" color="secondary" font="bold" wrap>
@@ -112,7 +109,8 @@ const TestsList = () => {
             </Typography>
           </StyledTestListCell>
         </StyledTestListRow>
-        {tests?.isLoading && <Spinner />}
+
+        {/* {tests?.isLoading && <Spinner />} */}
         {tests?.testsExecution?.results ? (
           tests?.testsExecution?.results?.map((test: Result) => (
             <StyledTestListRow
@@ -144,16 +142,16 @@ const TestsList = () => {
             </StyledTestListRow>
           ))
         ) : (
-          <Typography variant="secondary" font="light">
-            {tests?.testsExecution?.errorMessage}
-          </Typography>
+          <>
+            <Typography variant="secondary" font="light">
+              {tests?.testsExecution?.errorMessage}
+              {/* <div ref={fetchPreviousPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div> */}
+            </Typography>
+          </>
         )}
-
 
         <div ref={fetchNextPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
       </StyledTestListContainer>
-
-
     </>
   );
 };

@@ -43,8 +43,11 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
   } = useInfiniteQuery(
     ['tests', localStorage.getItem(config.apiEndpoint)],
     async ({ pageParam = currentPage }) => {
+
       setCurrentPage(pageParam);
+
       const url = localStorage.getItem(config.apiEndpoint);
+
       if (startDate) {
         return fetch(`${url}?page=${pageParam}&startDate=${startDate}&endDate=${startDate}`).then(res => res.json());
       }
@@ -53,14 +56,26 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
         // eslint-disable-next-line
         return getAllTests(`${url}?page=${pageParam}`);
       }
+
     },
     {
-      getNextPageParam: (lastPage) => (lastPage?.results?.length > 0) ? currentPage + 1 : undefined,
+      getNextPageParam: (lastPage) => {
+        let totalPages = Math.trunc(lastPage.totals.results / 100); // total pages
+
+        if ((lastPage.totals.results % 100) > 0) {
+          totalPages + 1;
+        }
+
+        console.log('TOTAL', totalPages);
+        console.log('CURRENT', currentPage);
+
+          return (currentPage < totalPages) ? currentPage + 1 : undefined;
+      },
       getPreviousPageParam: (firstPage) => (firstPage?.results?.length > 0) ? currentPage + 1 : undefined,
       refetchInterval: 5000,
     }
   );
-    
+
   return {
     status,
     data : data?.pages[0],

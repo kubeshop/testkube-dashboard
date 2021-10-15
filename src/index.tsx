@@ -14,17 +14,15 @@ import {GlobalStyle} from './styles/globalStyles';
 const queryCache = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: true,
-      retry: true,
-      staleTime: 5000,
+      // refetchOnWindowFocus: true,
+      // retry: true,
+      // staleTime: 5000,
     },
   },
 });
 
 ReactDOM.render(
   <React.StrictMode>
-
-
     <QueryClientProvider client={queryCache}>
       <Router>
         <PageHeader />
@@ -33,7 +31,6 @@ ReactDOM.render(
       </Router>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-
   </React.StrictMode>,
   document.getElementById('root')
 );

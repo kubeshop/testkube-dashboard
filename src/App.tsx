@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { Route, Switch } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
-import { TestResults, TestsFilter, TestsSummary } from '@organisms';
-import { TestsContext } from '@context/testsContext';
+import {TestResults, TestsFilter, TestsSummary} from '@organisms';
+import {TestsContext} from '@context/testsContext';
 
-import { useFetchTestsWithPagination } from '@hooks';
-import { Modal } from '@atoms';
+import {useFetchTestsWithPagination} from '@hooks';
+import {Modal} from '@atoms';
 
-import { config } from '@constants/config';
+import {config} from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
@@ -18,7 +18,7 @@ import {
   CheckIfQueryParamsExistsInUrl,
 } from '@utils';
 
-import { SelectedTest } from '@types';
+import {SelectedTest} from '@types';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
@@ -52,10 +52,11 @@ const StyledTestSummary = styled.tr`
 `;
 
 function App() {
-  const [filters, setFilters] = useState<any>({ filter: [], dateFilter: '' });
+  const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
   const [visible, setVisible] = useState<boolean>(false);
   const [filterByDate, setFilterByDate] = useState<string | null>(null);
-  const [selectedTest, setSelectedTest] = useState<SelectedTest>({ id: '', testName: '' });
+  const [selectedTest, setSelectedTest] = useState<SelectedTest>({id: '', testName: ''});
+  // const [paginatedTests, setPaginatedResults] = useState<any>();
 
   const {
     fetchNextPage,
@@ -72,7 +73,6 @@ function App() {
     isSuccess,
   } = useFetchTestsWithPagination('');
 
- 
   const tests = {
     error,
     isLoading,
@@ -89,11 +89,19 @@ function App() {
     fetchPreviousPage,
     hasPreviousPage,
     status,
-    tests: { testExecutions: data  },
+    tests: {testExecutions: data},
     fetchNextPage,
     hasNextPage,
     isSuccess,
   };
+
+  // React.useEffect(() => {
+  //   // setPaginatedResults(oldData => {...oldData, data});
+  //   setPaginatedResults({
+  //     ...paginatedTests,
+  //     data,
+  //   });
+  // }, [data, paginatedTests]);
 
   const dashboardEndpointValidators = () => {
     getApiEndpointOnPageLoad();
