@@ -56,10 +56,10 @@ const StyledTestListCell = styled.div`
 const TestsList = () => {
   const tests: any = useContext(TestsContext);
 
-  const loadMoreButtonRef = React.useRef();
+  const loadMoreRef = React.useRef();
 
   useIntersectionObserver({
-    target: loadMoreButtonRef,
+    target: loadMoreRef,
     onIntersect: tests.fetchNextPage,
     enabled: tests.hasNextPage,
   });
@@ -71,14 +71,6 @@ const TestsList = () => {
   return (
     <>
       <StyledTestListContainer>
-        <button
-          type="button"
-          onClick={() => tests.fetchPreviousPage()}
-          disabled={!tests.hasPreviousPage || tests.isFetchingPreviousPage}
-        >
-          {tests.isFetchingNextPage ? 'Loading more...' : tests.hasNextPage ? 'Load Older' : 'Nothing more to load'}
-        </button>
-
         <StyledTestListRow>
           <StyledTestListCell>
             <Typography variant="secondary" color="secondary" font="bold" wrap>
@@ -146,17 +138,10 @@ const TestsList = () => {
             {tests?.testsExecution?.errorMessage}
           </Typography>
         )}
-        <div>
-          <button
-            type="button"
-            ref={tests.loadMoreButtonRef}
-            onClick={() => tests.fetchNextPage()}
-            disabled={!tests.hasNextPage || tests.isFetchingNextPage}
-          >
-            {tests.isFetchingNextPage ? <Spinner /> : tests.hasNextPage ? 'Load Newer' : 'Nothing more to load'}
-          </button>
+        <div ref={tests.loadMoreRef} className={`${!tests.hasNextPage ? 'hidden' : ''}`}>
+          {tests.isFetchingNextPage ? <Spinner /> : null}
         </div>
-        <div>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
+        {tests.isLoading && <Spinner />}
       </StyledTestListContainer>
     </>
   );

@@ -4,7 +4,7 @@ export const GlobalStyle = createGlobalStyle`
 body {
   margin: 0;
   padding: 0;
-  background: white;
+  background: var(--color-dark-primary);
   color: var(--color-gray-tertiary);
   font-family: var(--font-family-sans);
   box-sizing: border-box;

@@ -57,7 +57,6 @@ function App() {
   const [filterByDate, setFilterByDate] = useState<string | null>(null);
   const [selectedTest, setSelectedTest] = useState<SelectedTest>({id: '', testName: ''});
 
-  // const {data, error, isLoading} = useFetchTests();
   const {
     fetchNextPage,
     hasNextPage,
@@ -70,14 +69,8 @@ function App() {
     fetchPreviousPage,
     hasPreviousPage,
     isLoading,
+    isSuccess,
   } = useFetchTestsWithPagination('');
-  // const loadMoreButtonRef = React.useRef();
-
-  // useIntersectionObserver({
-  //   target: loadMoreButtonRef,
-  //   onIntersect: fetchNextPage,
-  //   enabled: hasNextPage,
-  // });
 
   const tests = {
     error,
@@ -98,6 +91,7 @@ function App() {
     tests: {testExecutions: data?.pages[0]},
     fetchNextPage,
     hasNextPage,
+    isSuccess,
   };
 
   const dashboardEndpointValidators = () => {
