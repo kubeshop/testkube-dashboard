@@ -69,7 +69,8 @@ function App() {
     fetchPreviousPage,
     hasPreviousPage,
     isLoading,
-  } = useFetchTestsWithPagination(filterByDate);
+    isSuccess,
+  } = useFetchTestsWithPagination('');
 
  
   const tests = {
@@ -91,6 +92,7 @@ function App() {
     tests: { testExecutions: data  },
     fetchNextPage,
     hasNextPage,
+    isSuccess,
   };
 
   const dashboardEndpointValidators = () => {

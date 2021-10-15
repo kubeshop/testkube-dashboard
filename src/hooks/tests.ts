@@ -1,14 +1,14 @@
-import React, { useContext, useState } from 'react';
-import { useQuery, useInfiniteQuery } from 'react-query';
+import React, {useContext, useState} from 'react';
+import {useQuery, useInfiniteQuery} from 'react-query';
 
-import { config } from '@constants/config';
-import { TestsContext } from '@context/testsContext';
-import { getAllTests } from '@services/Tests';
+import {config} from '@constants/config';
+import {TestsContext} from '@context/testsContext';
+import {getAllTests} from '@services/Tests';
 
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
-  const { data, error, isLoading } = useQuery(['test', tests.selectedTest.id], () => {
+  const {data, error, isLoading} = useQuery(['test', tests.selectedTest.id], () => {
     if (api && tests.selectedTest.id) {
       return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
     }
@@ -21,12 +21,16 @@ export const useFetchTest = () => {
     }
   }, []);
 
-  return { data, error, isLoading };
+  return {data, error, isLoading};
 };
 
+<<<<<<< HEAD
 export const useFetchTestsWithPagination = (startDate: string | null) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
 
+=======
+export const useFetchTestsWithPagination = (startDate: string) => {
+>>>>>>> 47f887480e40c406a856e51a193b14d0e477c626
   const {
     status,
     data,
@@ -39,6 +43,7 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
     hasNextPage,
     hasPreviousPage,
     isLoading,
+    isSuccess,
   } = useInfiniteQuery(
     ['tests', localStorage.getItem(config.apiEndpoint)],
     async ({ pageParam = currentPage }) => {
@@ -71,6 +76,7 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
     fetchPreviousPage,
     hasNextPage,
     isLoading,
-    hasPreviousPage
+    hasPreviousPage,
+    isSuccess,
   };
 };
