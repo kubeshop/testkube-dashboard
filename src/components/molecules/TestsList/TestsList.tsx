@@ -56,18 +56,11 @@ const StyledTestListCell = styled.div`
 const TestsList = () => {
   const tests: any = useContext(TestsContext);
 
-<<<<<<< HEAD
   const fetchNextPageRef = React.useRef(null);
   const fetchPreviousPageRef = React.useRef(null);
 
   useIntersectionObserver({
     target: fetchNextPageRef,
-=======
-  const loadMoreRef = React.useRef();
-
-  useIntersectionObserver({
-    target: loadMoreRef,
->>>>>>> 47f887480e40c406a856e51a193b14d0e477c626
     onIntersect: tests.fetchNextPage,
     enabled: tests.hasNextPage,
   });
@@ -86,11 +79,8 @@ const TestsList = () => {
   return (
     <>
       <StyledTestListContainer>
-<<<<<<< HEAD
         <div ref={fetchPreviousPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
 
-=======
->>>>>>> 47f887480e40c406a856e51a193b14d0e477c626
         <StyledTestListRow>
           <StyledTestListCell>
             <Typography variant="secondary" color="secondary" font="bold" wrap>
@@ -158,16 +148,9 @@ const TestsList = () => {
             {tests?.testsExecution?.errorMessage}
           </Typography>
         )}
-<<<<<<< HEAD
 
 
         <div ref={fetchNextPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
-=======
-        <div ref={tests.loadMoreRef} className={`${!tests.hasNextPage ? 'hidden' : ''}`}>
-          {tests.isFetchingNextPage ? <Spinner /> : null}
-        </div>
-        {tests.isLoading && <Spinner />}
->>>>>>> 47f887480e40c406a856e51a193b14d0e477c626
       </StyledTestListContainer>
 
 

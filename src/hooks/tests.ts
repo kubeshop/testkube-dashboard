@@ -24,13 +24,9 @@ export const useFetchTest = () => {
   return {data, error, isLoading};
 };
 
-<<<<<<< HEAD
 export const useFetchTestsWithPagination = (startDate: string | null) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
 
-=======
-export const useFetchTestsWithPagination = (startDate: string) => {
->>>>>>> 47f887480e40c406a856e51a193b14d0e477c626
   const {
     status,
     data,
