@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import {Route, Switch} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
-import {TestResults, TestsFilter, TestsSummary} from '@organisms';
-import {TestsContext} from '@context/testsContext';
+import { TestResults, TestsFilter, TestsSummary } from '@organisms';
+import { TestsContext } from '@context/testsContext';
 
-import {useFetchTestsWithPagination} from '@hooks';
-import {Modal} from '@atoms';
+import { useFetchTestsWithPagination } from '@hooks';
+import { Modal } from '@atoms';
 
-import {config} from '@constants/config';
+import { config } from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
@@ -18,7 +18,7 @@ import {
   CheckIfQueryParamsExistsInUrl,
 } from '@utils';
 
-import {SelectedTest} from '@types';
+import { SelectedTest } from '@types';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
@@ -52,12 +52,11 @@ const StyledTestSummary = styled.tr`
 `;
 
 function App() {
-  const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
+  const [filters, setFilters] = useState<any>({ filter: [], dateFilter: '' });
   const [visible, setVisible] = useState<boolean>(false);
   const [filterByDate, setFilterByDate] = useState<string | null>(null);
-  const [selectedTest, setSelectedTest] = useState<SelectedTest>({id: '', testName: ''});
+  const [selectedTest, setSelectedTest] = useState<SelectedTest>({ id: '', testName: '' });
 
-  // const {data, error, isLoading} = useFetchTests();
   const {
     fetchNextPage,
     hasNextPage,
@@ -70,15 +69,9 @@ function App() {
     fetchPreviousPage,
     hasPreviousPage,
     isLoading,
-  } = useFetchTestsWithPagination('');
-  // const loadMoreButtonRef = React.useRef();
+  } = useFetchTestsWithPagination(filterByDate);
 
-  // useIntersectionObserver({
-  //   target: loadMoreButtonRef,
-  //   onIntersect: fetchNextPage,
-  //   enabled: hasNextPage,
-  // });
-
+ 
   const tests = {
     error,
     isLoading,
@@ -95,7 +88,7 @@ function App() {
     fetchPreviousPage,
     hasPreviousPage,
     status,
-    tests: {testExecutions: data?.pages[0]},
+    tests: { testExecutions: data  },
     fetchNextPage,
     hasNextPage,
   };

@@ -1,15 +1,15 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
 
-import {RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner} from '@atoms';
+import { RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner } from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
-import {timeStampToDate, getDuration} from '@utils/formatDate';
+import { TestsContext } from '@context/testsContext';
+import { timeStampToDate, getDuration } from '@utils/formatDate';
 
-import {Result} from '@types';
-import {truncateText} from '@utils';
-import {useIntersectionObserver} from '@hooks';
+import { Result } from '@types';
+import { truncateText } from '@utils';
+import { useIntersectionObserver } from '@hooks';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -56,28 +56,30 @@ const StyledTestListCell = styled.div`
 const TestsList = () => {
   const tests: any = useContext(TestsContext);
 
-  const loadMoreButtonRef = React.useRef();
+  const fetchNextPageRef = React.useRef(null);
+  const fetchPreviousPageRef = React.useRef(null);
 
   useIntersectionObserver({
-    target: loadMoreButtonRef,
+    target: fetchNextPageRef,
     onIntersect: tests.fetchNextPage,
     enabled: tests.hasNextPage,
   });
+  
+  useIntersectionObserver({
+    target: fetchPreviousPageRef,
+    onIntersect: tests.fetchPreviousPage,
+    enabled: tests.hasPreviousPage,
+  });
+
 
   const handleSelectedTest = (id: string, testName: string) => {
-    tests?.setSelectedTest({id, testName});
+    tests?.setSelectedTest({ id, testName });
   };
-
+  console.log(tests.hasNextPage);
   return (
     <>
       <StyledTestListContainer>
-        <button
-          type="button"
-          onClick={() => tests.fetchPreviousPage()}
-          disabled={!tests.hasPreviousPage || tests.isFetchingPreviousPage}
-        >
-          {tests.isFetchingNextPage ? 'Loading more...' : tests.hasNextPage ? 'Load Older' : 'Nothing more to load'}
-        </button>
+        <div ref={fetchPreviousPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
 
         <StyledTestListRow>
           <StyledTestListCell>
@@ -111,8 +113,8 @@ const TestsList = () => {
           </StyledTestListCell>
         </StyledTestListRow>
         {tests?.isLoading && <Spinner />}
-        {tests?.testsExecution?.pages[0]?.results ? (
-          tests?.testsExecution?.pages[0]?.results?.map((test: Result) => (
+        {tests?.testsExecution?.results ? (
+          tests?.testsExecution?.results?.map((test: Result) => (
             <StyledTestListRow
               className={tests?.selectedTest.id === test.id ? 'selected' : ''}
               key={nanoid()}
@@ -146,18 +148,12 @@ const TestsList = () => {
             {tests?.testsExecution?.errorMessage}
           </Typography>
         )}
-        <div>
-          <button
-            type="button"
-            ref={tests.loadMoreButtonRef}
-            onClick={() => tests.fetchNextPage()}
-            disabled={!tests.hasNextPage || tests.isFetchingNextPage}
-          >
-            {tests.isFetchingNextPage ? <Spinner /> : tests.hasNextPage ? 'Load Newer' : 'Nothing more to load'}
-          </button>
-        </div>
-        <div>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
+
+
+        <div ref={fetchNextPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
       </StyledTestListContainer>
+
+
     </>
   );
 };

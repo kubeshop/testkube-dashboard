@@ -54,9 +54,9 @@ const ResultDatePicker = () => {
         style={datePickerStyles}
         onChange={handleDatePicker}
         format="MM-DD-YYYY"
-        disabled={!tests?.testsExecution?.pages[0]?.results}
+        disabled={!tests?.testsExecution?.results}
       />
-      <Button disabled={!tests?.testsExecution?.pages[0]?.results} onClick={getTodayTests}>
+      <Button disabled={!tests?.testsExecution?.results} onClick={getTodayTests}>
         Today
       </Button>
     </StyledDateContainer>

@@ -24,7 +24,8 @@ export const useFetchTest = () => {
   return { data, error, isLoading };
 };
 
-export const useFetchTestsWithPagination = (startDate: string) => {
+export const useFetchTestsWithPagination = (startDate: string | null) => {
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const {
     status,
@@ -39,26 +40,29 @@ export const useFetchTestsWithPagination = (startDate: string) => {
     hasPreviousPage,
     isLoading,
   } = useInfiniteQuery(
-    ['projects', localStorage.getItem(config.apiEndpoint)],
-    async ({pageParam = 1}) => {
+    ['tests', localStorage.getItem(config.apiEndpoint)],
+    async ({ pageParam = currentPage }) => {
+      setCurrentPage(pageParam);
       const url = localStorage.getItem(config.apiEndpoint);
       if (startDate) {
-        return fetch(`${url}?startDate=${startDate}`).then(res => res.json());
+        return fetch(`${url}?page=${pageParam}&startDate=${startDate}&endDate=${startDate}`).then(res => res.json());
       }
+
       if (url) {
         // eslint-disable-next-line
-        return getAllTests(`${url}?page=` + pageParam);
+        return getAllTests(`${url}?page=${pageParam}`);
       }
     },
     {
-      getPreviousPageParam: firstPage => firstPage.previousId ?? false,
-      getNextPageParam: lastPage => lastPage.nextId ?? false,
+      getNextPageParam: (lastPage) => (lastPage?.results?.length > 0) ? currentPage + 1 : undefined,
+      getPreviousPageParam: (firstPage) => (firstPage?.results?.length > 0) ? currentPage + 1 : undefined,
       refetchInterval: 5000,
     }
-    );
-
-  return {status,
-    data,
+  );
+    
+  return {
+    status,
+    data : data?.pages[0],
     error,
     isFetching,
     isFetchingNextPage,
@@ -67,5 +71,6 @@ export const useFetchTestsWithPagination = (startDate: string) => {
     fetchPreviousPage,
     hasNextPage,
     isLoading,
-    hasPreviousPage,};
+    hasPreviousPage
+  };
 };
