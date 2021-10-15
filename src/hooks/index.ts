@@ -1,1 +1,2 @@
-export {useFetchTest, useFetchTests} from './tests';
+export { useFetchTest, useFetchTestsWithPagination } from './tests';
+export { useIntersectionObserver } from "./intersectionObserver";

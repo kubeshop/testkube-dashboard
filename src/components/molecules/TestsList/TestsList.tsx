@@ -9,6 +9,7 @@ import {timeStampToDate, getDuration} from '@utils/formatDate';
 
 import {Result} from '@types';
 import {truncateText} from '@utils';
+import {useIntersectionObserver} from '@hooks';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -55,80 +56,109 @@ const StyledTestListCell = styled.div`
 const TestsList = () => {
   const tests: any = useContext(TestsContext);
 
+  const loadMoreButtonRef = React.useRef();
+
+  useIntersectionObserver({
+    target: loadMoreButtonRef,
+    onIntersect: tests.fetchNextPage,
+    enabled: tests.hasNextPage,
+  });
+
   const handleSelectedTest = (id: string, testName: string) => {
     tests?.setSelectedTest({id, testName});
   };
 
   return (
-    <StyledTestListContainer>
-      <StyledTestListRow>
-        <StyledTestListCell>
-          <Typography variant="secondary" color="secondary" font="bold" wrap>
-            Name
-          </Typography>
-        </StyledTestListCell>
+    <>
+      <StyledTestListContainer>
+        <button
+          type="button"
+          onClick={() => tests.fetchPreviousPage()}
+          disabled={!tests.hasPreviousPage || tests.isFetchingPreviousPage}
+        >
+          {tests.isFetchingNextPage ? 'Loading more...' : tests.hasNextPage ? 'Load Older' : 'Nothing more to load'}
+        </button>
 
-        <StyledTestListCell>
-          <Typography variant="secondary" color="secondary" font="bold">
-            Started At
-          </Typography>
-        </StyledTestListCell>
+        <StyledTestListRow>
+          <StyledTestListCell>
+            <Typography variant="secondary" color="secondary" font="bold" wrap>
+              Name
+            </Typography>
+          </StyledTestListCell>
 
-        <StyledTestListCell>
-          <Typography variant="secondary" color="secondary" font="bold">
-            Duration
-          </Typography>
-        </StyledTestListCell>
+          <StyledTestListCell>
+            <Typography variant="secondary" color="secondary" font="bold">
+              Started At
+            </Typography>
+          </StyledTestListCell>
 
-        <StyledTestListCell>
-          <Typography variant="secondary" color="secondary" font="bold">
-            Status
-          </Typography>
-        </StyledTestListCell>
+          <StyledTestListCell>
+            <Typography variant="secondary" color="secondary" font="bold">
+              Duration
+            </Typography>
+          </StyledTestListCell>
 
-        <StyledTestListCell>
-          <Typography variant="secondary" color="secondary" font="bold">
-            Type
+          <StyledTestListCell>
+            <Typography variant="secondary" color="secondary" font="bold">
+              Status
+            </Typography>
+          </StyledTestListCell>
+
+          <StyledTestListCell>
+            <Typography variant="secondary" color="secondary" font="bold">
+              Type
+            </Typography>
+          </StyledTestListCell>
+        </StyledTestListRow>
+        {tests?.isLoading && <Spinner />}
+        {tests?.testsExecution?.pages[0]?.results ? (
+          tests?.testsExecution?.pages[0]?.results?.map((test: Result) => (
+            <StyledTestListRow
+              className={tests?.selectedTest.id === test.id ? 'selected' : ''}
+              key={nanoid()}
+              onClick={() => handleSelectedTest(test.id, `${test.scriptName}/${test.name}`)}
+            >
+              <StyledTestListCell role="cell">
+                <Typography variant="secondary" color="secondary" font="light" withMargin>
+                  {test.scriptName ? truncateText(test.scriptName) : '-'}
+                </Typography>
+              </StyledTestListCell>
+              <StyledTestListCell role="cell">
+                <Typography variant="secondary" color="secondary" font="light" wrap withMargin>
+                  {test.startTime ? timeStampToDate(test.startTime) : '-'}
+                </Typography>
+              </StyledTestListCell>
+              <StyledTestListCell role="cell">
+                <Typography variant="secondary" color="secondary" font="light" withMargin>
+                  {test.endTime ? getDuration(test.startTime, test.endTime) : '-'}
+                </Typography>
+              </StyledTestListCell>
+              <StyledTestListCell role="cell">
+                <RenderTestStatusSvgIcon testStatus={test.status} width={25} height={25} />
+              </StyledTestListCell>
+              <StyledTestListCell role="cell">
+                <TestTypeIcon testType={test.scriptType} width={30} height={30} />
+              </StyledTestListCell>
+            </StyledTestListRow>
+          ))
+        ) : (
+          <Typography variant="secondary" font="light">
+            {tests?.testsExecution?.errorMessage}
           </Typography>
-        </StyledTestListCell>
-      </StyledTestListRow>
-      {tests?.isLoading && <Spinner />}
-      {tests?.testsExecution?.results && !tests?.testsExecution?.errorMessage ? (
-        tests?.testsExecution?.results?.map((test: Result) => (
-          <StyledTestListRow
-            className={tests?.selectedTest.id === test.id ? 'selected' : ''}
-            key={nanoid()}
-            onClick={() => handleSelectedTest(test.id, test.scriptName)}
+        )}
+        <div>
+          <button
+            type="button"
+            ref={tests.loadMoreButtonRef}
+            onClick={() => tests.fetchNextPage()}
+            disabled={!tests.hasNextPage || tests.isFetchingNextPage}
           >
-            <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light" withMargin>
-                {test.scriptName ? truncateText(test.scriptName) : '-'}
-              </Typography>
-            </StyledTestListCell>
-            <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light" wrap withMargin>
-                {test.startTime ? timeStampToDate(test.startTime) : '-'}
-              </Typography>
-            </StyledTestListCell>
-            <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light" withMargin>
-                {test.endTime ? getDuration(test.startTime, test.endTime) : '-'}
-              </Typography>
-            </StyledTestListCell>
-            <StyledTestListCell role="cell">
-              <RenderTestStatusSvgIcon testStatus={test.status} width={25} height={25} />
-            </StyledTestListCell>
-            <StyledTestListCell role="cell">
-              <TestTypeIcon testType={test.scriptType} width={30} height={30} />
-            </StyledTestListCell>
-          </StyledTestListRow>
-        ))
-      ) : (
-        <Typography variant="secondary" font="light">
-          {tests?.testsExecution?.errorMessage}
-        </Typography>
-      )}
-    </StyledTestListContainer>
+            {tests.isFetchingNextPage ? <Spinner /> : tests.hasNextPage ? 'Load Newer' : 'Nothing more to load'}
+          </button>
+        </div>
+        <div>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
+      </StyledTestListContainer>
+    </>
   );
 };
 

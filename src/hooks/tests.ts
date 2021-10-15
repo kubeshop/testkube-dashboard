@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useInfiniteQuery } from 'react-query';
 
 import { config } from '@constants/config';
 import { TestsContext } from '@context/testsContext';
@@ -24,23 +24,48 @@ export const useFetchTest = () => {
   return { data, error, isLoading };
 };
 
-export const useFetchTests = (startDate: string | null = null) => {
-  const { data, error, isLoading } = useQuery(
-    ['tests', localStorage.getItem(config.apiEndpoint)],
-    () => {
+export const useFetchTestsWithPagination = (startDate: string) => {
+
+  const {
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isLoading,
+  } = useInfiniteQuery(
+    ['projects', localStorage.getItem(config.apiEndpoint)],
+    async ({pageParam = 1}) => {
       const url = localStorage.getItem(config.apiEndpoint);
       if (startDate) {
         return fetch(`${url}?startDate=${startDate}`).then(res => res.json());
       }
       if (url) {
-        return getAllTests(url);
+        // eslint-disable-next-line
+        return getAllTests(`${url}?page=` + pageParam);
       }
     },
-    { refetchInterval: 5000 }
-  );
+    {
+      getPreviousPageParam: firstPage => firstPage.previousId ?? false,
+      getNextPageParam: lastPage => lastPage.nextId ?? false,
+      refetchInterval: 5000,
+    }
+    );
 
-  return { data, error, isLoading };
+  return {status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    isLoading,
+    hasPreviousPage,};
 };
-
-
- 

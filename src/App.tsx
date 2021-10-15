@@ -5,7 +5,7 @@ import {Route, Switch} from 'react-router-dom';
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
 import {TestsContext} from '@context/testsContext';
 
-import {useFetchTests} from '@hooks';
+import {useFetchTestsWithPagination} from '@hooks';
 import {Modal} from '@atoms';
 
 import {config} from '@constants/config';
@@ -57,7 +57,27 @@ function App() {
   const [filterByDate, setFilterByDate] = useState<string | null>(null);
   const [selectedTest, setSelectedTest] = useState<SelectedTest>({id: '', testName: ''});
 
-  const {data, error, isLoading} = useFetchTests(filterByDate);
+  // const {data, error, isLoading} = useFetchTests();
+  const {
+    fetchNextPage,
+    hasNextPage,
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchPreviousPage,
+    hasPreviousPage,
+    isLoading,
+  } = useFetchTestsWithPagination('');
+  // const loadMoreButtonRef = React.useRef();
+
+  // useIntersectionObserver({
+  //   target: loadMoreButtonRef,
+  //   onIntersect: fetchNextPage,
+  //   enabled: hasNextPage,
+  // });
 
   const tests = {
     error,
@@ -69,6 +89,15 @@ function App() {
     filterByDate,
     setFilterByDate,
     testsExecution: filterTestsExecution(data, filters),
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchPreviousPage,
+    hasPreviousPage,
+    status,
+    tests: {testExecutions: data?.pages[0]},
+    fetchNextPage,
+    hasNextPage,
   };
 
   const dashboardEndpointValidators = () => {

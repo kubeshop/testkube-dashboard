@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { DatePicker } from 'antd';
+import React, {useState} from 'react';
+import {DatePicker} from 'antd';
 import styled from 'styled-components';
-import moment, { Moment } from 'moment';
+import moment, {Moment} from 'moment';
 
-import { Typography, Button } from '@atoms';
+import {Typography, Button} from '@atoms';
 
-import { TestsContext } from '@context/testsContext';
+import {TestsContext} from '@context/testsContext';
 
 const StyledDateContainer = styled.div`
   display: flex;
@@ -31,20 +31,18 @@ const ResultDatePicker = () => {
   const tests: any = React.useContext(TestsContext);
 
   const handleDatePicker = (value: any, dateString: any) => {
-    tests.setSelectedTest({ id: null, testName: null });
-
+    tests.setSelectedTest({id: null, testName: null});
     setSelectedDate(value);
-    tests.setFilterByDate(dateString);
+    tests.filters.dateFilter = dateString;
 
+    tests.setFilters(tests.filters);
   };
 
   const getTodayTests = React.useCallback(() => {
-    tests.setSelectedTest({ id: null, testName: null });
+    tests.setSelectedTest({id: null, testName: null});
     let currentDate = moment();
     setSelectedDate(currentDate);
     tests.setFilterByDate(currentDate.format('MM-DD-YYYY'));
-
-
   }, [tests.filterByDate]);
 
   return (
@@ -56,9 +54,9 @@ const ResultDatePicker = () => {
         style={datePickerStyles}
         onChange={handleDatePicker}
         format="MM-DD-YYYY"
-        disabled={!tests?.testsExecution?.results}
+        disabled={!tests?.testsExecution?.pages[0]?.results}
       />
-      <Button disabled={!tests?.testsExecution?.results} onClick={getTodayTests}>
+      <Button disabled={!tests?.testsExecution?.pages[0]?.results} onClick={getTodayTests}>
         Today
       </Button>
     </StyledDateContainer>
