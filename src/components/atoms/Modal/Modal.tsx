@@ -79,11 +79,11 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
         bodyStyle={modalStyles}
       >
         <StyledSearchUrlForm onSubmit={handleOpenUrl}>
-          <Typography variant="secondary">
+          <Typography variant="secondary" leftAlign>
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
-            TestKube installer.
+            TestKube installer - <a href="https://kubeshop.github.io/testkube/installing/" target="_blank">Read More...</a>
           </Typography>
-          <Typography variant="secondary">
+          <Typography variant="secondary" leftAlign>
             The endpoint needs to be accessible from your browser and will be used to retrieve test results only.
           </Typography>
           <StyledFormContainer>

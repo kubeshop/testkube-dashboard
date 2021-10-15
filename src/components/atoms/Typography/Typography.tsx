@@ -7,6 +7,7 @@ interface ITypography extends React.HTMLAttributes<HTMLParagraphElement> {
   font?: 'bold' | 'light' | 'normal';
   cursor?: 'not-allowed' | 'wait' | 'pointer' | '';
   leftAlign?: boolean;
+  nowrap?: boolean;
 }
 
 const StyledTypography = styled.p<ITypography>`
@@ -48,7 +49,7 @@ const StyledTypography = styled.p<ITypography>`
   letter-spacing: 0;
   margin-top: 10px;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: ${props => (props.nowrap ? 'nowrap' : 'normal')};;
   text-overflow: ellipsis;
   text-align: ${props => (props.leftAlign ? 'left' : 'center')};
 
