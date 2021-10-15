@@ -98,7 +98,7 @@ const TestsList = () => {
           <StyledTestListRow
             className={tests?.selectedTest.id === test.id ? 'selected' : ''}
             key={nanoid()}
-            onClick={() => handleSelectedTest(test.id, test.scriptName)}
+            onClick={() => handleSelectedTest(test.id, `${test.scriptName}/${test.name}`)}
           >
             <StyledTestListCell role="cell">
               <Typography variant="secondary" color="secondary" font="light" withMargin>
