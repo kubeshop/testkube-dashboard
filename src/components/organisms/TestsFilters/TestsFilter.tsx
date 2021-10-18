@@ -60,7 +60,7 @@ const TestsFilter = () => {
           onClick={() => filtersTests('all')}
         >
           All
-        </Button>
+        </Button> 
         <Button
           disabled={!tests?.testsExecution?.results}
           active={isActive('pending')}

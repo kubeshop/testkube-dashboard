@@ -1,14 +1,14 @@
-import React, {useContext, useState} from 'react';
-import {useQuery, useInfiniteQuery} from 'react-query';
+import React, { useContext, useState } from 'react';
+import { useQuery, useInfiniteQuery } from 'react-query';
 
-import {config} from '@constants/config';
-import {TestsContext} from '@context/testsContext';
-import {getAllTests} from '@services/Tests';
+import { config } from '@constants/config';
+import { TestsContext } from '@context/testsContext';
+import { getAllTests } from '@services/Tests';
 
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
-  const {data, error, isLoading} = useQuery(['test', tests.selectedTest.id], () => {
+  const { data, error, isLoading } = useQuery(['test', tests.selectedTest.id], () => {
     if (api && tests.selectedTest.id) {
       return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
     }
@@ -21,11 +21,19 @@ export const useFetchTest = () => {
     }
   }, []);
 
-  return {data, error, isLoading};
+  return { data, error, isLoading };
 };
 
 export const useFetchTestsWithPagination = (startDate: string | null) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [paginatedResults, setPaginatedResults] = useState<any>({ totals: [], results: [] });
+
+  const merge = (first: [], second: []) => {
+    for (let i: number = 0; i < second?.length; i += 1) {
+      first?.push(second[i]);
+    }
+    return first;
+  };
 
   const {
     status,
@@ -59,26 +67,48 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
 
     },
     {
+      keepPreviousData: true,
       getNextPageParam: (lastPage) => {
-        let totalPages = Math.trunc(lastPage.totals.results / 100); // total pages
 
-        if ((lastPage.totals.results % 100) > 0) {
+        let totalPages = Math.trunc(lastPage?.totals?.results / 100); // total pages
+
+        if ((lastPage?.totals?.results % 100) > 0) {
+
           totalPages + 1;
         }
 
-        console.log('TOTAL', totalPages);
-        console.log('CURRENT', currentPage);
 
-          return (currentPage < totalPages) ? currentPage + 1 : undefined;
+
+        return (currentPage < totalPages) ? currentPage + 1 : undefined;
       },
-      getPreviousPageParam: (firstPage) => (firstPage?.results?.length > 0) ? currentPage + 1 : undefined,
-      refetchInterval: 5000,
+      getPreviousPageParam: (firstPage) => {
+        let totalPages = Math.trunc(firstPage?.totals?.results / 100); // total pages
+
+        if ((firstPage?.totals?.results % 100) > 0) {
+          totalPages + 1;
+        }
+
+
+        return (currentPage < 0) ? currentPage - 1 : undefined;
+      },
+       refetchInterval: 5000,
     }
   );
+  React.useEffect(() => {
+    if (data && data?.pages[currentPage]?.results) {
+
+      setPaginatedResults({
+        totals: data?.pages[currentPage]?.totals,
+        results: [...paginatedResults?.results, ...data?.pages[currentPage]?.results],
+      });
+    }
+
+ 
+  }, [data]);
 
   return {
     status,
-    data : data?.pages[0],
+    data: paginatedResults,
     error,
     isFetching,
     isFetchingNextPage,

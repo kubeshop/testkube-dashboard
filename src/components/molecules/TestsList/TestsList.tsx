@@ -1,15 +1,15 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
 
-import {RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner} from '@atoms';
+import { RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner } from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
-import {timeStampToDate, getDuration} from '@utils/formatDate';
+import { TestsContext } from '@context/testsContext';
+import { timeStampToDate, getDuration } from '@utils/formatDate';
 
-import {Result} from '@types';
-import {truncateText} from '@utils';
-import {useIntersectionObserver} from '@hooks';
+import { Result } from '@types';
+import { truncateText } from '@utils';
+import { useIntersectionObserver } from '@hooks';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -57,7 +57,6 @@ const TestsList = () => {
   const tests: any = useContext(TestsContext);
 
   const fetchNextPageRef = React.useRef(null);
-  const fetchPreviousPageRef = React.useRef(null);
 
   useIntersectionObserver({
     target: fetchNextPageRef,
@@ -65,16 +64,10 @@ const TestsList = () => {
     enabled: tests.hasNextPage,
   });
 
-  useIntersectionObserver({
-    target: fetchPreviousPageRef,
-    onIntersect: tests.fetchPreviousPage,
-    enabled: tests.hasPreviousPage,
-  });
 
   const handleSelectedTest = (id: string, testName: string) => {
-    tests?.setSelectedTest({id, testName});
+    tests?.setSelectedTest({ id, testName });
   };
-  console.log(tests.hasNextPage);
   return (
     <>
       <StyledTestListContainer>
@@ -110,17 +103,17 @@ const TestsList = () => {
           </StyledTestListCell>
         </StyledTestListRow>
 
-        {/* {tests?.isLoading && <Spinner />} */}
         {tests?.testsExecution?.results ? (
-          tests?.testsExecution?.results?.map((test: Result) => (
+          tests?.testsExecution?.results?.map((test: Result, index: number) => (
             <StyledTestListRow
               className={tests?.selectedTest.id === test.id ? 'selected' : ''}
               key={nanoid()}
-              onClick={() => handleSelectedTest(test.id, `${test.scriptName}/${test.name}`)}
+              onClick={() => handleSelectedTest(test.id, `${test.scriptName}/${test.name}-`)}
             >
+
               <StyledTestListCell role="cell">
                 <Typography variant="secondary" color="secondary" font="light" withMargin>
-                  {test.scriptName ? truncateText(test.scriptName) : '-'}
+                  {test.scriptName ? truncateText(`${index} ${test.scriptName}`) : '-'}
                 </Typography>
               </StyledTestListCell>
               <StyledTestListCell role="cell">
@@ -145,12 +138,11 @@ const TestsList = () => {
           <>
             <Typography variant="secondary" font="light">
               {tests?.testsExecution?.errorMessage}
-              {/* <div ref={fetchPreviousPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div> */}
-            </Typography>
+             </Typography>
           </>
         )}
 
-        <div ref={fetchNextPageRef}>{tests.isFetching && !tests.isFetchingNextPage ? <Spinner /> : null}</div>
+        <div ref={fetchNextPageRef}>{tests.isFetchingNextPage ? <Spinner /> : null}</div>
       </StyledTestListContainer>
     </>
   );

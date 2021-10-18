@@ -1,6 +1,4 @@
-import moment from 'moment';
-import {getDate} from './formatDate';
-
+  
 export const filterTestsExecution = (tests: any, _filters: any) => {
   let filteredTestsExecution = tests;
 
@@ -28,38 +26,8 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
     }
   }
 
-  if (_filters?.dateFilter) {
-    const filteredTestsIntervals = filteredTestsExecution?.results?.filter(
-      (test: any) => getDate(test.startTime) === getDate(_filters?.dateFilter)
-    );
 
-    if (filteredTestsIntervals.length > 0) {
-      filteredTestsExecution = {...filteredTestsExecution, results: filteredTestsIntervals};
-    } else {
-      filteredTestsExecution = {
-        ...filteredTestsExecution,
-        results: filteredTestsIntervals,
-        errorMessage: 'No tests found for the selected date!',
-      };
-    }
-  }
 
-  if (_filters?.filter?.includes('today')) {
- 
-    const todayFilteredTests = filteredTestsExecution?.results?.filter(
-      (test: any) => getDate(test.startTime) === moment().toString()
-    );
-
-    if (todayFilteredTests.length > 0) {
-      filteredTestsExecution = {...filteredTestsExecution, results: todayFilteredTests};
-    } else {
-      filteredTestsExecution = {
-        ...filteredTestsExecution,
-        results: todayFilteredTests,
-        errorMessage: 'No tests were executed today!',
-      };
-    }
-  }
 
   return filteredTestsExecution;
 };
