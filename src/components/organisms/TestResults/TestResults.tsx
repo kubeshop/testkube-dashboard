@@ -77,7 +77,7 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Total Executed"
-          totalTests={tests?.testsExecution?.totals?.results.toString()}
+          totalTests={tests?.testsExecution?.totals?.results?.toString()}
           testTitleColor="white"
           totalTestsColor="white"
         />
