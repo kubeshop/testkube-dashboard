@@ -2,17 +2,23 @@ import React, {useContext, useState} from 'react';
 import {useQuery} from 'react-query';
 
 import {config} from '@constants/config';
-import { TestsContext } from '@context/testsContext';
+import {TestsContext} from '@context/testsContext';
 import {getAllTests} from '@services/Tests';
 
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
-  const {data, error, isLoading} = useQuery(['test', tests.selectedTest.id], () => {
-    if (api) {
-      return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
+  const {data, error, isLoading} = useQuery(
+    ['test', tests.selectedTest.id],
+    () => {
+      if (api) {
+        return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
+      }
+    },
+    {
+      notifyOnChangeProps: ['data', 'isLoading'],
     }
-  });
+  );
 
   React.useEffect(() => {
     const apiFromUser = localStorage.getItem(config.apiEndpoint);
@@ -25,7 +31,7 @@ export const useFetchTest = () => {
 };
 
 export const useFetchTests = () => {
-  const {data, error, isLoading } = useQuery(
+  const {data, error, isLoading} = useQuery(
     ['tests', localStorage.getItem(config.apiEndpoint)],
     () => {
       const url = localStorage.getItem(config.apiEndpoint);
@@ -33,7 +39,10 @@ export const useFetchTests = () => {
         return getAllTests(url);
       }
     },
-    {refetchInterval: 5000}
+    {
+      refetchInterval: 5000,
+      notifyOnChangeProps: ['data', 'isLoading'],
+    }
   );
 
   return {data, error, isLoading};
