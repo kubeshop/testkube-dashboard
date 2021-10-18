@@ -10,6 +10,7 @@ import {TestsContext} from '@context/testsContext';
 const StyledDateContainer = styled.div`
   display: flex;
   align-items: baseline;
+  margin-left: 14px;
 
   & > * {
     flex: 1 1 auto;
