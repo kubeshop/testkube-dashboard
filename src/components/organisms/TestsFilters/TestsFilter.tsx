@@ -49,7 +49,8 @@ const TestsFilter = () => {
     <>
       <StyledTestTextDescription>
         <Typography variant="secondary" color="secondary" font="light" data-testid="Test filters">
-          Tests
+           {tests?.testsExecution?.filtered ? tests?.testsExecution?.filtered.results :
+            tests?.testsExecution?.totals ? tests?.testsExecution?.totals.results : ''} Test Results
         </Typography>
       </StyledTestTextDescription>
       <StyleTestFilterButtons>

@@ -3,7 +3,7 @@ import {Collapse} from 'antd';
 
 export const StyledTestStatusImage = styled.div`
   position: relative;
-  top: var(--space-xl);
+  top: 70px;
   left: var(--space-lg2);
 `;
 
@@ -14,7 +14,7 @@ export const StyledTestOutputsContainer = styled.div`
   margin-right: var(--space-lg);
   margin-left: var(--space-md);
   position: relative;
-  top: var(--space-xl);
+  top: 60px;
   left: var(--space-lg2);
 `;
 
@@ -59,7 +59,6 @@ export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
   max-height: 65vh;
   overflow: scroll;
-  width: 96%;
 
   @media screen and (min-width: 2500px) {
     width: 98%;
@@ -70,15 +69,15 @@ export const StyledTestStepNameContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: var(--space-x1l);
+  height: 49px;
   background: var(--color-gray-dark);
-  margin-bottom: var(--space-xxs);
+  margin-bottom: 1px;
   color: var(--color-light-primary);
   cursor: pointer;
 `;
 
 export const StyledTestStepName = styled.span`
-  margin-left: var(--space-xxs);
+  margin-left: 15px;
   font-size: var(--font-size-md);
 `;
 
@@ -129,6 +128,7 @@ export const StyledTestWithoutAssertions = styled.div`
   width: 100%;
   height: var(--space-x1l);
   background: var(--color-gray-dark);
+  margin-top: 5px;
   margin-bottom: var(--space-xxs);
   color: var(--color-light-primary);
   cursor: pointer;

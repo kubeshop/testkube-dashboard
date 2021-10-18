@@ -5,9 +5,9 @@ interface ITypography extends React.HTMLAttributes<HTMLParagraphElement> {
   variant?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary' | 'senary';
   color?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary';
   font?: 'bold' | 'light' | 'normal';
-  wrap?: boolean;
-  cursor?: 'pointer' | 'not-allowed' | 'wait' | 'pointer' | '';
-  withMargin?: boolean;
+  cursor?: 'not-allowed' | 'wait' | 'pointer' | '';
+  leftAlign?: boolean;
+  nowrap?: boolean;
 }
 
 const StyledTypography = styled.p<ITypography>`
@@ -47,8 +47,11 @@ const StyledTypography = styled.p<ITypography>`
       ? 'var(--color-monokle-primary)'
       : 'var(--color-light-primary)'};
   letter-spacing: 0;
-  white-space: ${props => (props.wrap ? 'nowrap' : 'normal')};
-  margin-top: ${props => (props.withMargin ? '10px' : '0')};
+  margin-top: 10px;
+  overflow: hidden;
+  white-space: ${props => (props.nowrap ? 'nowrap' : 'normal')};;
+  text-overflow: ellipsis;
+  text-align: ${props => (props.leftAlign ? 'left' : 'center')};
 
   &:hover {
     cursor: ${props =>
