@@ -84,7 +84,7 @@ export const StyledTestStepName = styled.span`
 export const StyledTestAssertionResultsContainer = styled.div`
   display: flex;
   color: var(--color-light-primary);
-  margin-bottom: var(--font-size-3sm);
+  margin-bottom: 3px;
 `;
 
 export const StyledTestStepAssertionContainer = styled.div`

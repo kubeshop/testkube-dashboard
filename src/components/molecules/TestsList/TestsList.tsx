@@ -8,6 +8,7 @@ import {TestsContext} from '@context/testsContext';
 import {timeStampToDate, getDuration} from '@utils/formatDate';
 
 import {Result} from '@types';
+import {useIntersectionObserver} from '@hooks';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -61,10 +62,17 @@ const StyledTestListCell = styled.div`
 const TestsList = () => {
   const tests: any = useContext(TestsContext);
 
+  const fetchNextPageRef = React.useRef(null);
+
+  useIntersectionObserver({
+    target: fetchNextPageRef,
+    onIntersect: tests.fetchNextPage,
+    enabled: tests.hasNextPage,
+  });
+
   const handleSelectedTest = (id: string, testName: string) => {
     tests?.setSelectedTest({id, testName});
   };
-
   return (
     <StyledTestListContainer>
       <StyledTestListRow>
@@ -134,6 +142,7 @@ const TestsList = () => {
           {tests?.testsExecution?.errorMessage}
         </Typography>
       )}
+      <div ref={fetchNextPageRef}>{tests.isFetchingNextPage ? <Spinner /> : null}</div>
     </StyledTestListContainer>
   );
 };

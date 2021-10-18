@@ -55,9 +55,13 @@ const TestsFilter = () => {
       </StyledTestTextDescription>
       <StyleTestFilterButtons>
         <Typography variant="secondary">Show: </Typography>
-        <Button disabled={!tests?.testsExecution?.results} active={isActive('all')} onClick={() => filtersTests('all')}>
+        <Button
+          disabled={!tests?.testsExecution?.results}
+          active={isActive('all')}
+          onClick={() => filtersTests('all')}
+        >
           All
-        </Button>
+        </Button> 
         <Button
           disabled={!tests?.testsExecution?.results}
           active={isActive('pending')}
