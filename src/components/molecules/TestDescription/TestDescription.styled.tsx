@@ -32,8 +32,7 @@ export const StyledPlainTextOutputContainer = styled.div`
   width: 96%;
   max-height: 65vh;
   overflow: scroll;
-  background-color: black;
-  background-image: radial-gradient(rgba(0, 32, 150, 0.75), black 120%);
+  background-color: var(--color-dark-secondary);
 
   @media screen and (min-width: 2500px) {
     width: 98%;
@@ -44,6 +43,7 @@ export const StyledTestOutput = styled.span`
   white-space: pre-line;
   color: white;
   text-shadow: 0 0 5px #c8c8c8;
+  text-align: left;
 
   &::selection {
     background: #0080ff;

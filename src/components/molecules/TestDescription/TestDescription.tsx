@@ -38,9 +38,10 @@ const RenderPlainTestOutput = (data: Test) => {
     <StyledPlainTextOutputContainer>
       <StyledTestOutput>
         {data &&
-          data?.executionResult?.output?.split('\n').map((i: any) => {
-            return <StyledText key={nanoid()}>{i}</StyledText>;
-          })}
+        <StyledText key={nanoid()}>
+          <pre>{data?.executionResult?.output}</pre>
+        </StyledText>
+        }
       </StyledTestOutput>
     </StyledPlainTextOutputContainer>
   );
@@ -110,7 +111,7 @@ const TestDescription = () => {
 
   return (
     <>
-      {error && <Typography variant="secondary">Something went wrong...</Typography>}
+      {error && <Typography variant='secondary'>Something went wrong...</Typography>}
       {isLoading && <Spinner />}
       {tests?.selectedTest.id && data && (
         <>
@@ -119,10 +120,10 @@ const TestDescription = () => {
           </StyledTestStatusImage>
           <StyledTestOutputsContainer>
             <StyledTestOutputDescription>
-              <Typography variant="tertiary" color="tertiary">
+              <Typography variant='tertiary' color='tertiary'>
                 {tests?.selectedTest?.testName || ''}
               </Typography>
-              <Typography variant="secondary" color="quinary" cursor="pointer" onClick={handleOnClick}>
+              <Typography variant='secondary' color='quinary' cursor='pointer' onClick={handleOnClick}>
                 {togglePlainTestTest ? 'View plain text' : 'View steps'}
               </Typography>
             </StyledTestOutputDescription>
