@@ -69,15 +69,15 @@ export const StyledTestStepNameContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: var(--space-x1l);
+  height: 49px;
   background: var(--color-gray-dark);
-  margin-bottom: var(--space-xxs);
+  margin-bottom: 1px;
   color: var(--color-light-primary);
   cursor: pointer;
 `;
 
 export const StyledTestStepName = styled.span`
-  margin-left: var(--space-xxs);
+  margin-left: 15px;
   font-size: var(--font-size-md);
 `;
 
@@ -128,6 +128,7 @@ export const StyledTestWithoutAssertions = styled.div`
   width: 100%;
   height: var(--space-x1l);
   background: var(--color-gray-dark);
+  margin-top: 5px;
   margin-bottom: var(--space-xxs);
   color: var(--color-light-primary);
   cursor: pointer;

@@ -107,7 +107,7 @@ const TestsList = () => {
             onClick={() => handleSelectedTest(test.id, `${test.scriptName}/${test.name}`)}
           >
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light" leftAlign>
+              <Typography variant="secondary" color="secondary" font="light" leftAlign nowrap>
                 {test.scriptName ? `${test.scriptName} - ${test.name}` : '-'}
               </Typography>
             </StyledTestListCell>
