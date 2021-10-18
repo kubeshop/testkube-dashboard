@@ -14,6 +14,8 @@ export const useFetchTest = () => {
     if (api && tests.selectedTest.id) {
       return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
     }
+  }, {
+    notifyOnChangeProps: ['data', 'isLoading'],
   });
 
   React.useEffect(() => {
@@ -85,6 +87,7 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
         return (currentPage < 0) ? currentPage - 1 : undefined;
       },
       refetchInterval: 5000,
+      notifyOnChangeProps: ['data', 'isLoading'],
     }
   );
   React.useEffect(() => {
