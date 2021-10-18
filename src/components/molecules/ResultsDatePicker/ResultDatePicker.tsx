@@ -32,21 +32,20 @@ const ResultDatePicker = () => {
 
   const handleDatePicker = (value: any, dateString: any) => {
     tests.setSelectedTest({ id: null, testName: null });
-
     setSelectedDate(value);
-    if (dateString === '') {
-      tests.setFilterByDate(null);
-    } else {
-      tests.setFilterByDate(dateString);
-    }
+    tests.filters.dateFilter = dateString;
 
+    tests.setFilters(tests.filters);
   };
 
   const getTodayTests = React.useCallback(() => {
-    tests.setSelectedTest({ id: null, testName: null });
+   tests.setSelectedTest({ id: null, testName: null });
     let currentDate = moment();
     setSelectedDate(currentDate);
-    tests.setFilterByDate(currentDate);
+
+    tests.filters.dateFilter = currentDate;
+
+    tests.setFilters(tests.filters);
     
   }, [tests.filterByDate]);
 
