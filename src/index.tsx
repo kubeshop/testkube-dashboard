@@ -14,9 +14,9 @@ import {GlobalStyle} from './styles/globalStyles';
 const queryCache = new QueryClient({
   defaultOptions: {
     queries: {
-      // refetchOnWindowFocus: true,
-      // retry: true,
-      // staleTime: 5000,
+      refetchOnWindowFocus: true,
+      retry: true,
+      staleTime: 30000,
     },
   },
 });

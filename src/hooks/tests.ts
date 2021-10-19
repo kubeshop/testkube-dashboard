@@ -9,10 +9,13 @@ import moment from 'moment';
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
-  const { data, error, isLoading } = useQuery(['test', tests.selectedTest.id], () => {
-    if (api && tests.selectedTest.id) {
+  const { data, error, isLoading } = useQuery(['test', tests.selectedTest], () => {
+
+    if (api && tests.selectedTest) {
       return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
     }
+  }, {
+    notifyOnChangeProps: ['data', 'isLoading'],
   });
 
   React.useEffect(() => {
@@ -20,7 +23,7 @@ export const useFetchTest = () => {
     if (apiFromUser) {
       setApi(apiFromUser);
     }
-  }, []);
+  }, [tests.selectedTest]);
 
   return { data, error, isLoading };
 };
@@ -52,7 +55,7 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
 
       if (startDate) {
         const formatedDate = moment(startDate).format('YYYY-MM-DD');
-        return fetch(`${url}?page=${pageParam}&startDate=${formatedDate}&endDate=${formatedDate}`).then(res => res.json());
+        fetch(`${url}?page=${pageParam}&startDate=${formatedDate}&endDate=${formatedDate}`).then(res => res.json());
       }
 
       if (url) {
@@ -72,8 +75,6 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
           totalPages + 1;
         }
 
-
-
         return (currentPage < totalPages) ? currentPage + 1 : undefined;
       },
       getPreviousPageParam: (firstPage) => {
@@ -83,15 +84,14 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
           totalPages + 1;
         }
 
-
         return (currentPage < 0) ? currentPage - 1 : undefined;
       },
       refetchInterval: 5000,
+      notifyOnChangeProps: ['data', 'isLoading'],
     }
   );
   React.useEffect(() => {
     if (data && data?.pages[currentPage]?.results) {
- 
 
       setPaginatedResults({
         totals: data?.pages[currentPage]?.totals,

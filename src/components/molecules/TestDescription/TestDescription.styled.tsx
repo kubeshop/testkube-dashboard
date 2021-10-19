@@ -32,8 +32,7 @@ export const StyledPlainTextOutputContainer = styled.div`
   width: 96%;
   max-height: 65vh;
   overflow: scroll;
-  background-color: black;
-  background-image: radial-gradient(rgba(0, 32, 150, 0.75), black 120%);
+  background-color: var(--color-dark-secondary);
 
   @media screen and (min-width: 2500px) {
     width: 98%;
@@ -44,6 +43,7 @@ export const StyledTestOutput = styled.span`
   white-space: pre-line;
   color: white;
   text-shadow: 0 0 5px #c8c8c8;
+  text-align: left;
 
   &::selection {
     background: #0080ff;
@@ -57,11 +57,12 @@ export const StyledText = styled.pre`
 
 export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
-  max-height: 65vh;
+  max-height: 65%;
   overflow: scroll;
 
   @media screen and (min-width: 2500px) {
     width: 98%;
+    max-height: 85%;
   }
 `;
 
@@ -69,9 +70,7 @@ export const StyledTestStepNameContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 49px;
   background: var(--color-gray-dark);
-  margin-bottom: 1px;
   color: var(--color-light-primary);
   cursor: pointer;
 `;
@@ -84,7 +83,8 @@ export const StyledTestStepName = styled.span`
 export const StyledTestAssertionResultsContainer = styled.div`
   display: flex;
   color: var(--color-light-primary);
-  margin-bottom: var(--font-size-3sm);
+  margin-bottom: 3px;
+  /* height: var(--custom-height-1); */
 `;
 
 export const StyledTestStepAssertionContainer = styled.div`
