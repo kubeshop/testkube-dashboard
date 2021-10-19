@@ -15,6 +15,17 @@ const StyledTestListContainer = styled.div`
   width: 100%;
   margin-top: 10px;
 `;
+const StyledTestListStickyRow = styled.div`
+  display: flex;
+  align-items: center;
+  flex-flow: row wrap;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-dark-primary);
+  transition: 0.5s;
+  height: 50px;
+`;
 
 const StyledTestListRow = styled.div`
   display: flex;
@@ -75,7 +86,7 @@ const TestsList = () => {
   };
   return (
     <StyledTestListContainer>
-      <StyledTestListRow>
+      <StyledTestListStickyRow>
         <StyledTestListCell>
           <Typography variant="secondary" color="secondary" font="bold" leftAlign>
             Name
@@ -105,7 +116,7 @@ const TestsList = () => {
             Type
           </Typography>
         </StyledTestListCell>
-      </StyledTestListRow>
+      </StyledTestListStickyRow>
       {tests?.isLoading && <Spinner />}
       {tests?.testsExecution?.results && !tests?.testsExecution?.errorMessage ? (
         tests?.testsExecution?.results?.map((test: Result) => (
