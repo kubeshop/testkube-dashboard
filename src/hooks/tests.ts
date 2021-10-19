@@ -9,9 +9,9 @@ import moment from 'moment';
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
   const tests: any = useContext(TestsContext);
-  const { data, error, isLoading } = useQuery(['test', tests.selectedTest.id], () => {
+  const { data, error, isLoading } = useQuery(['test', tests.selectedTest], () => {
 
-    if (api && tests.selectedTest.id) {
+    if (api && tests.selectedTest) {
       return fetch(`${api}/${tests.selectedTest.id}`).then(res => res.json());
     }
   }, {
@@ -23,7 +23,7 @@ export const useFetchTest = () => {
     if (apiFromUser) {
       setApi(apiFromUser);
     }
-  }, []);
+  }, [tests.selectedTest]);
 
   return { data, error, isLoading };
 };

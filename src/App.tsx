@@ -23,7 +23,7 @@ import { SelectedTest } from '@types';
 const MainTableStyles = styled.table`
   table-layout: fixed;
   width: 90vw;
-  height: 100vh;
+  height: 90vh;
   text-align: center;
   margin: 0 auto;
 `;
@@ -47,8 +47,12 @@ const StyledTestFilter = styled.tr`
 
 const StyledTestSummary = styled.tr`
   border-top-style: hidden;
-  height: 80vh;
+  height: 60vh;
   display: flex;
+
+  @media only screen and (min-width: 2500px) {
+    height: 75vh;
+  }
 `;
 
 function App() {
