@@ -57,11 +57,12 @@ export const StyledText = styled.pre`
 
 export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
-  max-height: 65vh;
+  max-height: 65%;
   overflow: scroll;
 
   @media screen and (min-width: 2500px) {
     width: 98%;
+    max-height: 85%;
   }
 `;
 
@@ -69,9 +70,7 @@ export const StyledTestStepNameContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 49px;
   background: var(--color-gray-dark);
-  margin-bottom: 1px;
   color: var(--color-light-primary);
   cursor: pointer;
 `;
@@ -85,6 +84,7 @@ export const StyledTestAssertionResultsContainer = styled.div`
   display: flex;
   color: var(--color-light-primary);
   margin-bottom: 3px;
+  /* height: var(--custom-height-1); */
 `;
 
 export const StyledTestStepAssertionContainer = styled.div`
