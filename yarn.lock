@@ -1942,9 +1942,9 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@17.0.30":
-  version "17.0.30"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.30.tgz"
+"@types/react@*", "@types/react@17.0.31":
+  version "17.0.31"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.31.tgz#fe05ebf91ff3ae35bb6b13f6c1b461db8089dff8"
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
