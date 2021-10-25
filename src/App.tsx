@@ -107,9 +107,11 @@ function App() {
       showSmallError(`Dashboard is using non-secure protocol!
       <a href='https://kubeshop.github.io/testkube/dashboard/#httpstls-configuration' target="_blank" rel="noopener">Read more</a>`);
     }
+
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
     const dashboardEnvVariable = process.env.REACT_APP_API_SERVER_ENDPOINT;
     const hostName = window.location.hostname;
+
     if (!apiEndpointExist && !dashboardEnvVariable) {
       setVisible(true);
     }
@@ -119,9 +121,10 @@ function App() {
       history.push({
         pathname: '/',
         // eslint-disable-next-line
-        search: '?' + new URLSearchParams({apiEndpoint: hostName + '/results'}).toString(),
+        search: '?' + new URLSearchParams({apiEndpoint: '/'}).toString(),
       });
     }
+
     if (dashboardEnvVariable) {
       setVisible(false);
       history.push({
