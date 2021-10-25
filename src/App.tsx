@@ -117,7 +117,7 @@ function App() {
       setVisible(true);
     }
 
-    if (hostName === 'deploy-preview-121--cocky-northcutt-d5b913.netlify.app') {
+    if (hostName === 'demo.testkube.io') {
       setVisible(false);
       history.push({
         pathname: '/',
@@ -138,7 +138,6 @@ function App() {
 
   useEffect(() => {
     dashboardEndpointValidators();
-    const dashboardEnvVariable = process.env.REACT_APP_API_SERVER_ENDPOINT;
   }, []);
 
   const RenderApp = React.useCallback(() => {
