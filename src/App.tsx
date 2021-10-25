@@ -116,7 +116,7 @@ function App() {
       setVisible(true);
     }
 
-    if (hostName === 'https://deploy-preview-121--cocky-northcutt-d5b913.netlify.app') {
+    if (hostName === 'deploy-preview-121--cocky-northcutt-d5b913.netlify.app') {
       setVisible(false);
       history.push({
         pathname: '/',
