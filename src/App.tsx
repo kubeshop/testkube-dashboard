@@ -109,11 +109,19 @@ function App() {
     }
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
     const dashboardEnvVariable = process.env.REACT_APP_API_SERVER_ENDPOINT;
-
+    const hostName = window.location.hostname;
     if (!apiEndpointExist && !dashboardEnvVariable) {
       setVisible(true);
     }
 
+    if (hostName === 'demo.testkube.io') {
+      setVisible(false);
+      history.push({
+        pathname: '/',
+        // eslint-disable-next-line
+        search: '?' + new URLSearchParams({apiEndpoint: hostName + '/results'}).toString(),
+      });
+    }
     if (dashboardEnvVariable) {
       setVisible(false);
       history.push({
@@ -126,6 +134,7 @@ function App() {
 
   useEffect(() => {
     dashboardEndpointValidators();
+    const dashboardEnvVariable = process.env.REACT_APP_API_SERVER_ENDPOINT;
   }, []);
 
   const RenderApp = React.useCallback(() => {
