@@ -111,6 +111,7 @@ function App() {
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
     const dashboardEnvVariable = process.env.REACT_APP_API_SERVER_ENDPOINT;
     const hostName = window.location.hostname;
+    const origin = window.location.origin;
 
     if (!apiEndpointExist && !dashboardEnvVariable) {
       setVisible(true);
@@ -121,7 +122,7 @@ function App() {
       history.push({
         pathname: '/',
         // eslint-disable-next-line
-        search: '?' + new URLSearchParams({apiEndpoint: '/'}).toString(),
+        search: '?' + new URLSearchParams({apiEndpoint: `${origin}/results`}).toString(),
       });
     }
 
