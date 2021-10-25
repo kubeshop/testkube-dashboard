@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { Route, Switch } from 'react-router-dom';
+import {Route, Switch, useHistory} from 'react-router-dom';
 
-import { TestResults, TestsFilter, TestsSummary } from '@organisms';
-import { TestsContext } from '@context/testsContext';
+import {TestResults, TestsFilter, TestsSummary} from '@organisms';
+import {TestsContext} from '@context/testsContext';
 
-import { useFetchTestsWithPagination } from '@hooks';
-import { Modal } from '@atoms';
+import {useFetchTestsWithPagination} from '@hooks';
+import {Modal} from '@atoms';
 
-import { config } from '@constants/config';
+import {config} from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
@@ -18,7 +18,7 @@ import {
   CheckIfQueryParamsExistsInUrl,
 } from '@utils';
 
-import { SelectedTest } from '@types';
+import {SelectedTest} from '@types';
 
 const MainTableStyles = styled.table`
   table-layout: fixed;
@@ -56,11 +56,11 @@ const StyledTestSummary = styled.tr`
 `;
 
 function App() {
-  const [filters, setFilters] = useState<any>({ filter: [], dateFilter: '' });
+  const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
   const [visible, setVisible] = useState<boolean>(false);
   const [filterByDate, setFilterByDate] = useState<string | null>(null);
-  const [selectedTest, setSelectedTest] = useState<SelectedTest>({ id: '', testName: '' });
- 
+  const [selectedTest, setSelectedTest] = useState<SelectedTest>({id: '', testName: ''});
+  const history = useHistory();
 
   const {
     fetchNextPage,
@@ -76,7 +76,6 @@ function App() {
     isLoading,
     isSuccess,
   } = useFetchTestsWithPagination(filterByDate);
-
 
   const tests = {
     error,
@@ -94,13 +93,11 @@ function App() {
     fetchPreviousPage,
     hasPreviousPage,
     status,
-    tests: { testExecutions: data },
+    tests: {testExecutions: data},
     fetchNextPage,
     hasNextPage,
     isSuccess,
   };
-
-
 
   const dashboardEndpointValidators = () => {
     getApiEndpointOnPageLoad();
@@ -111,8 +108,19 @@ function App() {
       <a href='https://kubeshop.github.io/testkube/dashboard/#httpstls-configuration' target="_blank" rel="noopener">Read more</a>`);
     }
     const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
-    if (!apiEndpointExist) {
+    const dashboardEnvVariable = process.env.REACT_APP_API_SERVER_ENDPOINT;
+
+    if (!apiEndpointExist && !dashboardEnvVariable) {
       setVisible(true);
+    }
+
+    if (dashboardEnvVariable) {
+      setVisible(false);
+      history.push({
+        pathname: '/',
+        // eslint-disable-next-line
+        search: '?' + new URLSearchParams({apiEndpoint: dashboardEnvVariable}).toString(),
+      });
     }
   };
 
