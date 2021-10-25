@@ -1,14 +1,14 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
 
-import {RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner} from '@atoms';
+import { RenderTestStatusSvgIcon, Typography, TestTypeIcon, Spinner } from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
-import {timeStampToDate, getDuration} from '@utils/formatDate';
+import { TestsContext } from '@context/testsContext';
+import { timeStampToDate, getDuration } from '@utils/formatDate';
 
-import {Result} from '@types';
-import {useIntersectionObserver} from '@hooks';
+import { Result } from '@types';
+import { useIntersectionObserver } from '@hooks';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -82,7 +82,7 @@ const TestsList = () => {
   });
 
   const handleSelectedTest = (id: string, testName: string) => {
-    tests?.setSelectedTest({id, testName});
+    tests?.setSelectedTest({ id, testName });
   };
   return (
     <StyledTestListContainer>
@@ -126,17 +126,17 @@ const TestsList = () => {
             onClick={() => handleSelectedTest(test.id, `${test.scriptName}/${test.name}`)}
           >
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light" leftAlign nowrap>
+              <Typography cursor='pointer' variant="secondary" color="secondary" font="light" leftAlign nowrap>
                 {test.scriptName ? `${test.scriptName} - ${test.name}` : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light" leftAlign>
+              <Typography cursor='pointer' variant="secondary" color="secondary" font="light" leftAlign>
                 {test.startTime ? timeStampToDate(test.startTime) : '-'}
               </Typography>
             </StyledTestListCell>
             <StyledTestListCell role="cell">
-              <Typography variant="secondary" color="secondary" font="light">
+              <Typography cursor='pointer' variant="secondary" color="secondary" font="light">
                 {test.endTime ? getDuration(test.startTime, test.endTime) : '-'}
               </Typography>
             </StyledTestListCell>
