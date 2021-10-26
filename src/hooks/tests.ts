@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { useQuery, useInfiniteQuery } from 'react-query';
+import moment from 'moment';
 
-import { config } from '@constants/config';
 import { TestsContext } from '@context/testsContext';
 import { getAllTests } from '@services/Tests';
-import moment from 'moment';
+import { config } from '@constants/config';
 
 export const useFetchTest = () => {
   const [api, setApi] = useState<string>(localStorage.getItem(config.apiEndpoint) || '');
@@ -28,7 +28,7 @@ export const useFetchTest = () => {
   return { data, error, isLoading };
 };
 
-export const useFetchTestsWithPagination = (startDate: string | null) => {
+export const useFetchTestsWithPagination = (startDate: string | null, apiEndpointOnpageLoad?: string) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [paginatedResults, setPaginatedResults] = useState<any>({ totals: [], results: [] });
 
@@ -58,7 +58,8 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
         fetch(`${url}?page=${pageParam}&startDate=${formatedDate}&endDate=${formatedDate}`).then(res => res.json());
       }
 
-      if (url) {
+      if (url && apiEndpointOnpageLoad) {
+
         // eslint-disable-next-line
         return getAllTests(`${url}?page=${pageParam}`);
       }
@@ -89,7 +90,8 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
       refetchInterval: 5000,
       notifyOnChangeProps: ['data', 'isLoading'],
     }
-  );
+    );
+
   React.useEffect(() => {
     if (data && data?.pages[currentPage]?.results) {
 

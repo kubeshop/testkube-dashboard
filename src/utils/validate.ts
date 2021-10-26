@@ -49,15 +49,6 @@ export const matchEndpointProtocolWithHostProtocol = (url: string) => {
 
 };
 
-export const cleanStorageWhenApiEndpointQueryStringIsAbsent = () => {
-  const url = window.location.href;
-  const apiEndpointQueryString = getQueryStringFromUrl(url);
-
-  if (!apiEndpointQueryString) {
-    localStorage.removeItem(config.apiEndpoint);
-  }
-};
-
 export const getApiEndpointOnPageLoad = () => {
   const url = window.location.href;
   const queryString = getQueryStringFromUrl(url);

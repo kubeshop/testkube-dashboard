@@ -16,7 +16,7 @@ const queryCache = new QueryClient({
     queries: {
       refetchOnWindowFocus: true,
       retry: true,
-      staleTime: 30000,
+      staleTime: 5000,
     },
   },
 });
