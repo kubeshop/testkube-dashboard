@@ -13,9 +13,9 @@ import {
   isHostProtocolSecure,
   showSmallError,
   filterTestsExecution,
-  cleanStorageWhenApiEndpointQueryStringIsAbsent,
   getApiEndpointOnPageLoad,
   CheckIfQueryParamsExistsInUrl,
+  getQueryStringFromUrl,
 } from '@utils';
 
 import {SelectedTest} from '@types';
@@ -60,48 +60,11 @@ function App() {
   const [visible, setVisible] = useState<boolean>(false);
   const [filterByDate, setFilterByDate] = useState<string | null>(null);
   const [selectedTest, setSelectedTest] = useState<SelectedTest>({id: '', testName: ''});
+  const [apiEndpointOnpageLoad, setApiEndpointOnpageLoad] = useState<string>('');
   const history = useHistory();
-
-  const {
-    fetchNextPage,
-    hasNextPage,
-    status,
-    data,
-    error,
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchPreviousPage,
-    hasPreviousPage,
-    isLoading,
-    isSuccess,
-  } = useFetchTestsWithPagination(filterByDate);
-
-  const tests = {
-    error,
-    isLoading,
-    selectedTest,
-    setSelectedTest,
-    setFilters,
-    filters,
-    filterByDate,
-    setFilterByDate,
-    testsExecution: filterTestsExecution(data, filters),
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchPreviousPage,
-    hasPreviousPage,
-    status,
-    tests: {testExecutions: data},
-    fetchNextPage,
-    hasNextPage,
-    isSuccess,
-  };
 
   const dashboardEndpointValidators = () => {
     getApiEndpointOnPageLoad();
-    cleanStorageWhenApiEndpointQueryStringIsAbsent();
 
     if (!isHostProtocolSecure()) {
       showSmallError(`Dashboard is using non-secure protocol!
@@ -138,7 +101,49 @@ function App() {
 
   useEffect(() => {
     dashboardEndpointValidators();
-  }, []);
+
+    const endpoint = getQueryStringFromUrl(window.location.href);
+    if (endpoint) {
+      setApiEndpointOnpageLoad(endpoint);
+    }
+  }, [apiEndpointOnpageLoad, localStorage.getItem(config.apiEndpoint)]);
+
+  const {
+    fetchNextPage,
+    hasNextPage,
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchPreviousPage,
+    hasPreviousPage,
+    isLoading,
+    isSuccess,
+  } = useFetchTestsWithPagination(filterByDate, apiEndpointOnpageLoad);
+
+  const tests = {
+    error,
+    isLoading,
+    selectedTest,
+    setSelectedTest,
+    setFilters,
+    filters,
+    filterByDate,
+    setFilterByDate,
+    testsExecution: filterTestsExecution(data, filters),
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchPreviousPage,
+    hasPreviousPage,
+    status,
+    tests: {testExecutions: data},
+    fetchNextPage,
+    hasNextPage,
+    isSuccess,
+  };
 
   const RenderApp = React.useCallback(() => {
     return (

@@ -5,7 +5,6 @@ export {
   isHostProtocolSecure,
   CheckIfQueryParamsExistsInUrl,
   getApiEndpointOnPageLoad,
-  cleanStorageWhenApiEndpointQueryStringIsAbsent,
   validateUrl,
   matchEndpointProtocolWithHostProtocol,
   checkApiEndpointProtocol,
