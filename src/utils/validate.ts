@@ -15,7 +15,7 @@ export const validateUrl = (url: string): boolean => {
   return pattern.test(url);
 };
 
-export const CheckIfQueryParamsExistsInUrl = (queryParams: string) => {
+export const checkIfQueryParamsExistsInUrl = (queryParams: string) => {
   const urlParams = new URLSearchParams(window.location.search);
   const myParam = urlParams.get(queryParams);
 
