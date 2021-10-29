@@ -3,7 +3,7 @@ export {truncateText, escapeHtml, findMatchWordInString} from './strings';
 export {showSmallError} from './message';
 export {
   isHostProtocolSecure,
-  CheckIfQueryParamsExistsInUrl,
+  checkIfQueryParamsExistsInUrl,
   getApiEndpointOnPageLoad,
   validateUrl,
   checkApiEndpointProtocol,

@@ -13,7 +13,7 @@ import {
   showSmallError,
   filterTestsExecution,
   getApiEndpointOnPageLoad,
-  CheckIfQueryParamsExistsInUrl,
+  checkIfQueryParamsExistsInUrl,
   FinalizedApiEndpoint,
 } from '@utils';
 
@@ -41,7 +41,7 @@ function App() {
 
     const dashboardEnvVariable = window?._env_?.REACT_APP_API_SERVER_ENDPOINT;
 
-    if (dashboardEnvVariable) {
+    if (dashboardEnvVariable && dashboardEnvVariable !== 'default') {
       setVisible(false);
       FinalizedApiEndpoint(dashboardEnvVariable, true);
 
@@ -52,7 +52,11 @@ function App() {
       });
     }
 
-    const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
+    if (dashboardEnvVariable === 'default') {
+      setVisible(true);
+    }
+
+    const apiEndpointExist = checkIfQueryParamsExistsInUrl(config.apiEndpoint);
 
     if (apiEndpointExist) {
       getApiEndpointOnPageLoad();
