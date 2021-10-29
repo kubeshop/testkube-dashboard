@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import {Modal} from 'antd';
 import {useHistory} from 'react-router-dom';
 
 import {Button, LabelInput, Typography, Spinner} from '@atoms';
-import {validateUrl, matchEndpointProtocolWithHostProtocol, checkApiEndpointProtocol} from '@utils';
+import {validateUrl, FinalizedApiEndpoint, showSmallError} from '@utils';
+import {config} from '@constants/config';
 import {TestsContext} from '@context/testsContext';
 
 const StyledSearchUrlForm = styled.form`
@@ -33,37 +34,55 @@ interface IModal {
 }
 
 const CustomModal = ({isModalVisible, visible}: IModal) => {
-  const [apiEndpoint, setApiEndpoint] = React.useState<IUrlEndpoint>({apiEndpoint: ''});
-  const [validUrl, setVAlidUrl] = React.useState<boolean>(false);
+  const [apiEndpoint, setApiEndpoint] = useState<IUrlEndpoint>({apiEndpoint: ''});
+  const [validUrl, setVAlidUrl] = useState<boolean>(false);
+  const [buttonLabelContent, setLabelButtonContent] = useState<string>('Get Results');
   const history = useHistory();
   const tests: any = React.useContext(TestsContext);
 
-  const handleChangeApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
+  const handleInputApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
     setApiEndpoint({...apiEndpoint, [field]: event.target.value});
+
     const validatedUrl = validateUrl(event.target.value);
+
     setVAlidUrl(validatedUrl);
-  };
-
-  const handleOk = () => {
-    isModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    isModalVisible(false);
   };
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    matchEndpointProtocolWithHostProtocol(apiEndpoint.apiEndpoint);
+    const validatedUrl = FinalizedApiEndpoint(apiEndpoint.apiEndpoint);
+    if (!validatedUrl) {
+      return;
+    }
 
-    const checked = checkApiEndpointProtocol(apiEndpoint.apiEndpoint);
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), 5000);
 
-    history.push({
-      pathname: '/',
-      // eslint-disable-next-line
-      search: '?' + new URLSearchParams({apiEndpoint: checked}).toString(),
-    });
+    setLabelButtonContent('Validating...');
+
+    return fetch(validatedUrl, {signal: controller.signal})
+      .then(res => res.json())
+      .then(res => {
+        if (res && res.results) {
+          localStorage.setItem(config.apiEndpoint, validatedUrl);
+          history.push({
+            pathname: '/',
+            // eslint-disable-next-line
+            search: '?' + new URLSearchParams({apiEndpoint: apiEndpoint.apiEndpoint}).toString(),
+          });
+          isModalVisible(false);
+        }
+      })
+      .catch(err => {
+        if (err) {
+          showSmallError('Failed to fetch test results, please try again...', true, 'center');
+          setLabelButtonContent('Get Results');
+        }
+      });
+  };
+
+  const handleCancel = () => {
     isModalVisible(false);
   };
 
@@ -73,15 +92,17 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
       <Modal
         title="TestKube API endpoint"
         visible={visible}
-        onOk={handleOk}
-        onCancel={handleCancel}
         footer={null}
+        onCancel={handleCancel}
         bodyStyle={modalStyles}
       >
         <StyledSearchUrlForm onSubmit={handleOpenUrl}>
           <Typography variant="secondary" leftAlign>
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
-            TestKube installer - <a href="https://kubeshop.github.io/testkube/dashboard/#dashboard-results-endpoint" target="_blank">Read More...</a>
+            TestKube installer -{' '}
+            <a href="https://kubeshop.github.io/testkube/dashboard/#dashboard-results-endpoint" target="_blank">
+              Read More...
+            </a>
           </Typography>
           <Typography variant="secondary" leftAlign>
             The endpoint needs to be accessible from your browser and will be used to retrieve test results only.
@@ -90,11 +111,11 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
             <LabelInput
               id="url"
               name="url"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeApiEndpoint(event, 'apiEndpoint')}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleInputApiEndpoint(event, 'apiEndpoint')}
               defaultValue={apiEndpoint.apiEndpoint}
             />
             <Button type="submit" disabled={!validUrl} disableFilter>
-              Get Results
+              {buttonLabelContent}
             </Button>
           </StyledFormContainer>
         </StyledSearchUrlForm>

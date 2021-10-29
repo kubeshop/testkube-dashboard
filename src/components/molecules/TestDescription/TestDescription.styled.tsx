@@ -30,13 +30,9 @@ export const StyledTestOutputDescription = styled.div`
 
 export const StyledPlainTextOutputContainer = styled.div`
   width: 96%;
-  max-height: 65vh;
+  height: 90%;
   overflow: scroll;
   background-color: var(--color-dark-secondary);
-
-  @media screen and (min-width: 2500px) {
-    width: 98%;
-  }
 `;
 
 export const StyledTestOutput = styled.span`
@@ -57,12 +53,18 @@ export const StyledText = styled.pre`
 
 export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
-  max-height: 65%;
+  height: 95%;
+  max-height: 97%;
   overflow: scroll;
 
+  @media screen and (min-width: 1024px) {
+    max-height: 90%;
+  }
+  @media screen and (min-width: 1440px) {
+    max-height: 92%;
+  }
   @media screen and (min-width: 2500px) {
-    width: 98%;
-    max-height: 85%;
+    max-height: 90%;
   }
 `;
 
