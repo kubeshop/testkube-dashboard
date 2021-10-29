@@ -87,7 +87,7 @@ export const useFetchTestsWithPagination = (startDate: string | null) => {
 
         return (currentPage < 0) ? currentPage - 1 : undefined;
       },
-      //  keepPreviousData: true,
+      keepPreviousData: true,
       refetchInterval: 5000,
       notifyOnChangeProps: ['data', 'isLoading'],
     }
