@@ -35,3 +35,6 @@ k8sdumps
 
 /test/node_modules
 .dccache
+
+/public/env-config.js
+env-config.js
