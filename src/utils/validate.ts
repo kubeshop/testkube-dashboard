@@ -1,4 +1,5 @@
 import {config} from '@constants/config';
+import { removeSpaceFromString, RemoveLastTrailingSlashFromString } from './strings';
 
 export const validateUrl = (url: string): boolean => {
     const pattern = new RegExp(
@@ -14,39 +15,49 @@ export const validateUrl = (url: string): boolean => {
   return pattern.test(url);
 };
 
+export const CheckIfQueryParamsExistsInUrl = (queryParams: string) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const myParam = urlParams.get(queryParams);
+
+  if (!myParam) {
+    localStorage.removeItem(config.apiEndpoint);
+    return;
+  }
+
+  return myParam;
+};
+
+export const isHostProtocolSecure = () => {
+  return window.location.protocol === 'https:';
+};
+
+export const checkApiEndpointProtocol = (apiEndpoint: string) => {
+  return apiEndpoint.includes('http') ? apiEndpoint : `${window.location.protocol}//${apiEndpoint}`;
+};
+
+export const AppendApiVersionToEndpoint = (apiEndpoint: string) => {
+  return `${apiEndpoint}${config.apiVersion}`;
+};
+
+export const FinalizedApiEndpoint = (apiEndpoint: string, storeData?: boolean) => {
+
+  const ApiEndpointWithoutSpace = removeSpaceFromString(apiEndpoint);
+  const ApiEndpointWithoutTrailingSlash = RemoveLastTrailingSlashFromString(ApiEndpointWithoutSpace);
+  const ApiEndpointWithProtocol = checkApiEndpointProtocol(ApiEndpointWithoutTrailingSlash);
+  const ApiEndpointWithVersion = AppendApiVersionToEndpoint(ApiEndpointWithProtocol);
+
+  if (storeData) {
+    localStorage.setItem(config.apiEndpoint, ApiEndpointWithVersion);
+    return;
+  }
+
+  return ApiEndpointWithVersion;
+};
+
 export const getQueryStringFromUrl = (url: string) => {
   const params = new URL(url).searchParams;
 
   return params.get(config.apiEndpoint);
-};
-
-export const RemoveLastTrailingSlashFromString = (word: string) => {
-  return word.replace(/\/$/, '');
-};
-
-export const removeSpaceFromString = (url: string) => {
-  return url.replace(/\s/g, '');
-};
-
-export const matchEndpointProtocolWithHostProtocol = (url: string) => {
-  const apiEndpointProtocol = url.substring(0, url.indexOf('http') || url.indexOf('https')) || '';
-
-  if (!url) {
-    alert('Invalid URL, You are trying to manipulate the url, please provide a correct url endpoint');
-  }
-
-  if (!validateUrl(url)) {
-    return;
-  }
-
-  if (!apiEndpointProtocol) {
-    const trimmedUrl = removeSpaceFromString(url);
-    const cleanUrl = RemoveLastTrailingSlashFromString(trimmedUrl);
-    const finalUrl = `${cleanUrl}${config.apiVersion}`;
-
-    localStorage.setItem(config.apiEndpoint, finalUrl);
-  }
-
 };
 
 export const getApiEndpointOnPageLoad = () => {
@@ -58,28 +69,10 @@ export const getApiEndpointOnPageLoad = () => {
     return;
   }
 
-  matchEndpointProtocolWithHostProtocol(queryString);
-};
-
-export const checkApiEndpointProtocol = (apiEndpoint: string) => {
-  return apiEndpoint.includes('http') ? apiEndpoint : `${window.location.protocol}//${apiEndpoint}`;
-};
-
-export const findMatchWordInString = (word: string, string: string) => {
-  return string.match(new RegExp(word, 'gi'));
-};
-
-export const isHostProtocolSecure = () => {
-  return window.location.protocol === 'https:';
-};
-
-export const CheckIfQueryParamsExistsInUrl = (queryParams: string) => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const myParam = urlParams.get(queryParams);
-
-  if (!myParam) {
+  const finalUrl = FinalizedApiEndpoint(queryString, true);
+  if (!finalUrl) {
     return;
   }
+  localStorage.setItem(config.apiEndpoint, finalUrl);
 
-  return myParam;
 };
