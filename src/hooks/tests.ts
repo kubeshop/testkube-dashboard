@@ -28,7 +28,7 @@ export const useFetchTest = () => {
   return { data, error, isLoading };
 };
 
-export const useFetchTestsWithPagination = (startDate: string | null, apiEndpointOnpageLoad?: string) => {
+export const useFetchTestsWithPagination = (startDate: string | null) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [paginatedResults, setPaginatedResults] = useState<any>({ totals: [], results: [] });
 
@@ -58,7 +58,7 @@ export const useFetchTestsWithPagination = (startDate: string | null, apiEndpoin
         fetch(`${url}?page=${pageParam}&startDate=${formatedDate}&endDate=${formatedDate}`).then(res => res.json());
       }
 
-      if (url && apiEndpointOnpageLoad) {
+      if (url) {
 
         // eslint-disable-next-line
         return getAllTests(`${url}?page=${pageParam}`);
@@ -66,7 +66,7 @@ export const useFetchTestsWithPagination = (startDate: string | null, apiEndpoin
 
     },
     {
-      keepPreviousData: true,
+
       getNextPageParam: (lastPage) => {
 
         let totalPages = Math.trunc(lastPage?.totals?.results / 100); // total pages
@@ -87,6 +87,7 @@ export const useFetchTestsWithPagination = (startDate: string | null, apiEndpoin
 
         return (currentPage < 0) ? currentPage - 1 : undefined;
       },
+      //  keepPreviousData: true,
       refetchInterval: 5000,
       notifyOnChangeProps: ['data', 'isLoading'],
     }
