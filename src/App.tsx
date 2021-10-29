@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
 import {Route, Switch, useHistory} from 'react-router-dom';
 
 import {TestResults, TestsFilter, TestsSummary} from '@organisms';
@@ -15,98 +14,60 @@ import {
   filterTestsExecution,
   getApiEndpointOnPageLoad,
   CheckIfQueryParamsExistsInUrl,
-  getQueryStringFromUrl,
+  FinalizedApiEndpoint,
 } from '@utils';
 
 import {SelectedTest} from '@types';
+import {MainTableStyles, StyledTestResults, StyledTestFilter, StyledTestSummary} from './App.styled';
 
-const MainTableStyles = styled.table`
-  table-layout: fixed;
-  width: 90vw;
-  height: 90vh;
-  text-align: center;
-  margin: 0 auto;
-`;
-
-const StyledTestResults = styled.tr`
-  display: flex;
-  height: 140px;
-  border-top-style: none;
-  border-bottom-style: 1px solid var(--color-gray-secondary);
-  word-wrap: break-word;
-`;
-
-const StyledTestFilter = styled.tr`
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-right-style: hidden;
-  border-left-style: hidden;
-  height: 70px;
-`;
-
-const StyledTestSummary = styled.tr`
-  border-top-style: hidden;
-  height: 60vh;
-  display: flex;
-
-  @media only screen and (min-width: 2500px) {
-    height: 75vh;
+declare global {
+  interface Window {
+    _env_: any;
   }
-`;
+}
 
 function App() {
   const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
   const [visible, setVisible] = useState<boolean>(false);
   const [filterByDate, setFilterByDate] = useState<string | null>(null);
   const [selectedTest, setSelectedTest] = useState<SelectedTest>({id: '', testName: ''});
-  const [apiEndpointOnpageLoad, setApiEndpointOnpageLoad] = useState<string>('');
   const history = useHistory();
 
   const dashboardEndpointValidators = () => {
-    getApiEndpointOnPageLoad();
-
     if (!isHostProtocolSecure()) {
       showSmallError(`Dashboard is using non-secure protocol!
       <a href='https://kubeshop.github.io/testkube/dashboard/#httpstls-configuration' target="_blank" rel="noopener">Read more</a>`);
     }
 
-    const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
-    const dashboardEnvVariable = process.env.REACT_APP_API_SERVER_ENDPOINT;
-    const hostName = window.location.hostname;
-    const origin = window.location.origin;
-
-    if (!apiEndpointExist && !dashboardEnvVariable) {
-      setVisible(true);
-    }
-
-    if (hostName === 'demo.testkube.io') {
-      setVisible(false);
-      history.push({
-        pathname: '/',
-        // eslint-disable-next-line
-        search: '?' + new URLSearchParams({apiEndpoint: `${origin}/results`}).toString(),
-      });
-    }
+    const dashboardEnvVariable = window?._env_?.REACT_APP_API_SERVER_ENDPOINT;
 
     if (dashboardEnvVariable) {
       setVisible(false);
+      FinalizedApiEndpoint(dashboardEnvVariable, true);
+
       history.push({
         pathname: '/',
         // eslint-disable-next-line
-        search: '?' + new URLSearchParams({apiEndpoint: dashboardEnvVariable}).toString(),
+        search: '?' + new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString(),
       });
+    }
+
+    const apiEndpointExist = CheckIfQueryParamsExistsInUrl(config.apiEndpoint);
+
+    if (apiEndpointExist) {
+      getApiEndpointOnPageLoad();
+      FinalizedApiEndpoint(dashboardEnvVariable, true);
+      setVisible(false);
+    }
+
+    if (!apiEndpointExist && !dashboardEnvVariable) {
+      setVisible(true);
     }
   };
 
   useEffect(() => {
     dashboardEndpointValidators();
-
-    const endpoint = getQueryStringFromUrl(window.location.href);
-    if (endpoint) {
-      setApiEndpointOnpageLoad(endpoint);
-    }
-  }, [apiEndpointOnpageLoad, localStorage.getItem(config.apiEndpoint)]);
+  }, []);
 
   const {
     fetchNextPage,
@@ -121,7 +82,7 @@ function App() {
     hasPreviousPage,
     isLoading,
     isSuccess,
-  } = useFetchTestsWithPagination(filterByDate, apiEndpointOnpageLoad);
+  } = useFetchTestsWithPagination(filterByDate);
 
   const tests = {
     error,
