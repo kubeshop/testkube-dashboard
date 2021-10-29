@@ -64,7 +64,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
     return fetch(validatedUrl, {signal: controller.signal})
       .then(res => res.json())
       .then(res => {
-        if (res && res.results.length !== 0) {
+        if (res && res.results) {
           localStorage.setItem(config.apiEndpoint, validatedUrl);
           history.push({
             pathname: '/',
