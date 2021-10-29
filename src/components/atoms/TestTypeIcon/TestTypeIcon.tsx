@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Image} from '@atoms';
-import {findMatchWordInString} from '@utils/validate';
+import {findMatchWordInString} from '@utils';
 
 import PostmanIcon from '@assets/postmanIcon.svg';
 import CypressIcon from '@assets/cypressIcon.svg';
