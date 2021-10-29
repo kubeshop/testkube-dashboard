@@ -13,3 +13,15 @@ export const escapeHtml = (text: string): string => {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 };
+
+export const findMatchWordInString = (word: string, string: string) => {
+  return string.match(new RegExp(word, 'gi'));
+};
+
+export const removeSpaceFromString = (url: string) => {
+  return url.replace(/\s/g, '');
+};
+
+export const RemoveLastTrailingSlashFromString = (word: string) => {
+  return word.replace(/\/$/, '');
+};
