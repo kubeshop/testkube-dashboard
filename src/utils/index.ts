@@ -1,12 +1,12 @@
 export {filterTestsExecution} from './testFilters';
-export {truncateText, escapeHtml} from './strings';
-export {showSmallError, showSmallSuccess} from './message';
+export {truncateText, escapeHtml, findMatchWordInString} from './strings';
+export {showSmallError} from './message';
 export {
   isHostProtocolSecure,
   CheckIfQueryParamsExistsInUrl,
   getApiEndpointOnPageLoad,
   validateUrl,
-  matchEndpointProtocolWithHostProtocol,
   checkApiEndpointProtocol,
   getQueryStringFromUrl,
+  FinalizedApiEndpoint
 } from './validate';
