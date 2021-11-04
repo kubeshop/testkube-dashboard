@@ -11,7 +11,7 @@ import {
   showSmallError,
   // getApiEndpointOnPageLoad,
   // checkIfQueryParamsExistsInUrl,
-  // FinalizedApiEndpoint,
+  FinalizedApiEndpoint,
 } from '@utils';
 
 import {MainTableStyles, StyledTestResults, StyledTestFilter, StyledTestSummary} from './App.styled';
@@ -34,16 +34,16 @@ function App() {
 
     const dashboardEnvVariable = window?._env_?.REACT_APP_API_SERVER_ENDPOINT;
 
-    // if (dashboardEnvVariable && dashboardEnvVariable !== 'default') {
-    //   setVisible(false);
-    //   FinalizedApiEndpoint(dashboardEnvVariable, true);
+    if (dashboardEnvVariable && dashboardEnvVariable !== 'default') {
+      // setVisible(false);
+      FinalizedApiEndpoint(dashboardEnvVariable, true);
 
-    //   history.push({
-    //     pathname: '/',
-    //     // eslint-disable-next-line
-    //     search: '?' + new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString(),
-    //   });
-    // }
+      // history.push({
+      //   pathname: '/',
+      //   // eslint-disable-next-line
+      //   search: '?' + new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString(),
+      // });
+    }
 
     // if (dashboardEnvVariable === 'default') {
     //   setVisible(true);

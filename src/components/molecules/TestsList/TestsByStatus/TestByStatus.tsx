@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
- 
-import { Spinner, Typography } from '@src/components/atoms';
-import styled from 'styled-components';
-import { TestListItem } from '@atoms';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 
-import { useGetTestsByStatusQuery } from '@services/tests';
+import {Spinner, Typography} from '@src/components/atoms';
+import styled from 'styled-components';
+import {TestListItem} from '@atoms';
+
+import {useGetTestsByStatusQuery} from '@services/tests';
 
 import {
   nextPage,
@@ -13,11 +13,11 @@ import {
   selectHasNext,
   selectTestsByStatus,
   updateFiltredDataByStatus,
-} from '@src/features/testsList/testsListSlice';
-import { useAppSelector } from '@src/app/hooks';
-import { getStatus } from '@src/app/utils';
-import { nanoid } from '@reduxjs/toolkit';
-import { useIntersectionObserver } from '@hooks/intersectionObserver';
+} from '@redux/reducers/testsListSlice';
+import {useAppSelector} from '@redux/hooks';
+import {getStatus} from '@redux/utils/requestFilters';
+import {nanoid} from '@reduxjs/toolkit';
+import {useIntersectionObserver} from '@src/hooks/intersectionObserver';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -31,7 +31,7 @@ const TestsByStatus = () => {
   const hasNext = useAppSelector(selectHasNext);
   const dispatch = useDispatch();
   const fetchNextPageRef = React.useRef(null);
-  const { data, isFetching } = useGetTestsByStatusQuery(filters, {
+  const {data, isFetching} = useGetTestsByStatusQuery(filters, {
     pollingInterval: 5000,
   });
 
@@ -43,7 +43,7 @@ const TestsByStatus = () => {
         dispatch(
           updateFiltredDataByStatus({
             data,
-            hasNext: filters.page <= totalPages
+            hasNext: filters.page <= totalPages,
           })
         );
       }
@@ -58,7 +58,6 @@ const TestsByStatus = () => {
   });
   return (
     <StyledTestListContainer>
-
       {tests ? (
         tests?.map((item: any, index: number) => <TestListItem key={nanoid()} index={index} item={item} />)
       ) : (
@@ -68,7 +67,6 @@ const TestsByStatus = () => {
       )}
       <div ref={fetchNextPageRef}>{isFetching ? <Spinner size="large" /> : null}</div>
     </StyledTestListContainer>
-
   );
 };
 

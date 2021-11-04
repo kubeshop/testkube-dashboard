@@ -1,14 +1,30 @@
-import { Space, Spin } from 'antd';
+import {Space, Spin, SpinProps} from 'antd';
 import React from 'react';
+import styled from 'styled-components';
 
+interface IStyledSpinnerWrapper extends SpinProps {
+  center?: boolean;
+}
 
+const StyledSpinnerWrapper = styled.div<IStyledSpinnerWrapper>`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  left: ${props => (props.center ? '50%' : '0')};
+`;
 
-const Spinner = (props: any) => {
+const Spinner = (props: IStyledSpinnerWrapper) => {
+  const {size, center} = props;
+
   return (
-    <Space size="middle">
-
-      <Spin {...props} />
-    </Space>
+    <StyledSpinnerWrapper center={center}>
+      {/* @ts-ignore-next-line */}
+      <Space size={size}>
+        <Spin {...props} />
+      </Space>
+    </StyledSpinnerWrapper>
   );
 };
 

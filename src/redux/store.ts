@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import testsListReducer from './features/testsList/testsListSlice';
-import { testsApi } from './services/tests';
+import testsListReducer from './reducers/testsListSlice';
+import { testsApi } from '../services/tests';
 
 export const store = configureStore({
   reducer: {

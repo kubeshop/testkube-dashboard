@@ -1,14 +1,14 @@
 /* eslint react/destructuring-assignment: 0 */
 import React, {useState} from 'react';
-import {nanoid} from 'nanoid';
+import {nanoid} from '@reduxjs/toolkit';
 import {Collapse} from 'antd';
 
 import {RenderTestStatusSvgIcon, Spinner, Typography} from '@atoms';
 import {Step, AssertionResult, Test} from '@types';
 
-import {selectedTestId} from '@src/features/testsList/testsListSlice';
+import {selectedTestId} from '@redux/reducers/testsListSlice';
 import {useGetTestByIdQuery} from '@src/services/tests';
-import {useAppSelector} from '@src/app/hooks';
+import {useAppSelector} from '@redux/hooks';
 import {
   StyledPlainTextOutputContainer,
   StyledTestOutput,
@@ -115,7 +115,7 @@ const TestDescription = () => {
   return (
     <>
       {error && <Typography variant="secondary">Something went wrong...</Typography>}
-      {isLoading && <Spinner />}
+      {isLoading && <Spinner size="large" center />}
       {data && (
         <>
           <StyledTestStatusImage>

@@ -1,20 +1,20 @@
- import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
 
-import { Spinner, Typography } from '@src/components/atoms';
-import { TestListItem } from '@atoms';
-import { useAppSelector } from '@src/app/hooks';
+import {Spinner, Typography} from '@src/components/atoms';
+import {TestListItem} from '@atoms';
+import {useAppSelector} from '@redux/hooks';
 import {
   nextPage,
   selectFilters,
   selectHasNext,
   selectTestsByDate,
   updateFiltredDataByDate,
-} from '@src/features/testsList/testsListSlice';
-import { useGetTestsByDateQuery } from '@src/services/tests';
-import { nanoid } from '@reduxjs/toolkit';
-import { useIntersectionObserver } from '@hooks/intersectionObserver';
+} from '@redux/reducers/testsListSlice';
+import {useGetTestsByDateQuery} from '@src/services/tests';
+import {nanoid} from '@reduxjs/toolkit';
+import {useIntersectionObserver} from '@src/hooks/intersectionObserver';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -29,11 +29,9 @@ const TestsByDate = () => {
   const dispatch = useDispatch();
   const fetchNextPageRef = React.useRef(null);
 
-  const { data,isFetching } = useGetTestsByDateQuery(filters, {
+  const {data, isFetching} = useGetTestsByDateQuery(filters, {
     pollingInterval: 5000,
   });
-
-
 
   useEffect(() => {
     const fetchData = () => {
@@ -43,14 +41,13 @@ const TestsByDate = () => {
         dispatch(
           updateFiltredDataByDate({
             data,
-            hasNext: filters.page <= totalPages
+            hasNext: filters.page <= totalPages,
           })
         );
       }
     };
     fetchData();
   }, [data, dispatch]);
-
 
   useIntersectionObserver({
     target: fetchNextPageRef,
@@ -59,7 +56,6 @@ const TestsByDate = () => {
   });
   return (
     <StyledTestListContainer>
-
       {tests ? (
         tests?.map((item: any, index: number) => <TestListItem key={nanoid()} index={index} item={item} />)
       ) : (
@@ -69,7 +65,6 @@ const TestsByDate = () => {
       )}
       <div ref={fetchNextPageRef}>{isFetching ? <Spinner size="large" /> : null}</div>
     </StyledTestListContainer>
-
   );
 };
 

@@ -5,8 +5,8 @@ import {memo} from 'react';
 
 import {RenderTestStatusSvgIcon, TestTypeIcon, Typography} from '@src/components/atoms';
 import {getDuration, timeStampToDate} from '@src/utils/formatDate';
-import {useAppSelector} from '@src/app/hooks';
-import {selectedTestId, updateSelectedTestId} from '@src/features/testsList/testsListSlice';
+import {useAppSelector} from '@redux/hooks';
+import {selectedTestId, updateSelectedTestId} from '@redux/reducers/testsListSlice';
 
 const StyledTestListRow = styled.div`
   display: flex;

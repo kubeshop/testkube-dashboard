@@ -2,8 +2,8 @@ import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import React from 'react';
 
-import {clearFiltredData, selectFilters} from '@src/features/testsList/testsListSlice';
-import {useAppSelector} from '@src/app/hooks';
+import {clearFiltredData, selectFilters} from '@redux/reducers/testsListSlice';
+import {useAppSelector} from '@redux/hooks';
 import {Typography, Button} from '@atoms';
 
 const StyledTestTextDescription = styled.td`

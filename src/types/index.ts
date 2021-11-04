@@ -1,10 +1,9 @@
-import { ITests, ITestStatus, ITest, IResult,IStep, IAssertionResult} from './tests';
-import { ISelectedTest} from './selectedTest';
+import { ITests, ITest, IResult,IStep, IAssertionResult} from './tests';
+import { ITestListState } from './testListState';
 
 export type Tests = ITests
 export type Test = ITest
-export type TestStatus = ITestStatus
 export type Result = IResult
 export type Step = IStep
 export type AssertionResult = IAssertionResult
-export type SelectedTest = ISelectedTest
+export type TestListState = ITestListState

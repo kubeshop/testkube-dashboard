@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import React from 'react';
 
-import {selectedTestId} from '@src/features/testsList/testsListSlice';
+import {selectedTestId} from '@redux/reducers/testsListSlice';
 import {TestsList, TestDescription} from '@molecules';
-import {useAppSelector} from '@src/app/hooks';
+import {useAppSelector} from '@redux/hooks';
 
 const StyledTestList = styled.td`
   min-width: 55%;

@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { useAppSelector } from '@src/app/hooks';
-import { TestsByStatus, TestsByDate, AllTests } from '@molecules';
-import { TestListHeader } from '@atoms';
-import { selectFilters } from '../../../features/testsList/testsListSlice';
-
+import {useAppSelector} from '@redux/hooks';
+import {TestsByStatus, TestsByDate, AllTests} from '@molecules';
+import {TestListHeader} from '@atoms';
+import {selectFilters} from '../../../redux/reducers/testsListSlice';
 
 const TestsList = () => {
   const filters = useAppSelector(selectFilters);

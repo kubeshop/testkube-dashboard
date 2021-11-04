@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {selectTotals} from '@src/features/testsList/testsListSlice';
+import {selectTotals} from '@redux/reducers/testsListSlice';
 import {ResultDatePicker, TestStatus} from '@molecules';
-import {useAppSelector} from '@src/app/hooks';
+import {useAppSelector} from '@redux/hooks';
 
 const StyledTableCell = styled.td`
   display: flex;
