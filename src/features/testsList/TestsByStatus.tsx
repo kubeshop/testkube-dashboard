@@ -1,22 +1,22 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {nanoid} from 'nanoid';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { nanoid } from 'nanoid';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import {Spinner, Typography} from '@src/components/atoms';
+import { Spinner, Typography } from '@src/components/atoms';
 import styled from 'styled-components';
 import Test from './Test';
 
-import {useGetTestsByStatusQuery} from '../../services/tests';
+import { useGetTestsByStatusQuery } from '../../services/tests';
 import {
   selectTestsByStatus,
   selectFilters,
   selectHasNext,
   updateFiltredDataByStatus,
-  updateFilter,
+  nextPage,
 } from './testsListSlice';
-import {useAppSelector} from '../../app/hooks';
-import {getStatus} from '../../app/utils';
+import { useAppSelector } from '../../app/hooks';
+import { getStatus } from '../../app/utils';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -66,7 +66,7 @@ const TestsByStatus = () => {
   const hasNext = useAppSelector(selectHasNext);
   const dispatch = useDispatch();
 
-  const {data} = useGetTestsByStatusQuery(filters, {
+  const { data } = useGetTestsByStatusQuery(filters, {
     pollingInterval: 5000,
   });
 
@@ -78,7 +78,7 @@ const TestsByStatus = () => {
         dispatch(
           updateFiltredDataByStatus({
             data,
-            hasNext: filters.page === 0 ? false : filters.page <= totalPages,
+            hasNext: filters.page < totalPages,
           })
         );
       }
@@ -92,7 +92,7 @@ const TestsByStatus = () => {
         overflow: 'hidden',
       }}
       dataLength={tests?.length}
-      next={() => dispatch(updateFilter({page: filters?.page + 1}))}
+      next={() => dispatch(nextPage())}
       hasMore={hasNext ?? false}
       loader={<Spinner />}
     >

@@ -4,7 +4,7 @@ import { TestListState } from '../../app/types';
 
 const initialState: TestListState = {
   filters: {
-    pageSize: 100,
+    pageSize: 10,
     page: 0,
     status: undefined,
     date: null,
@@ -49,8 +49,11 @@ export const testsListSlice = createSlice({
       state.totals = action.payload?.data?.totals;
     },
     clearFiltredData: (state, action: PayloadAction<any>) => {
+      state.filters = {
+        ...action.payload,
+        pageSize: state.filters.pageSize
+      };
 
-      state.filters = action.payload;
       state.selectedTestId = undefined;
       state.results = [];
       state.resultsByStatus = [];

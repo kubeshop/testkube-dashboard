@@ -1,13 +1,13 @@
 import InfiniteScroll from 'react-infinite-scroll-component';
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {nanoid} from '@reduxjs/toolkit';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { nanoid } from '@reduxjs/toolkit';
 import styled from 'styled-components';
 
-import {useAppSelector} from '@src/app/hooks';
-import {useGetTestsQuery} from '@src/services/tests';
-import {Spinner, Typography} from '@src/components/atoms';
-import {updateFilter, selectTests, selectFilters, updateData, selectHasNext} from './testsListSlice';
+import { useAppSelector } from '@src/app/hooks';
+import { useGetTestsQuery } from '@src/services/tests';
+import { Spinner, Typography } from '@src/components/atoms';
+import {  selectTests, selectFilters, updateData, selectHasNext, nextPage } from './testsListSlice';
 
 import Test from './Test';
 
@@ -61,7 +61,7 @@ const Tests = () => {
 
   const dispatch = useDispatch();
 
-  const {data} = useGetTestsQuery(filters, {
+  const { data } = useGetTestsQuery(filters, {
     pollingInterval: 5000,
   });
 
@@ -73,7 +73,7 @@ const Tests = () => {
         dispatch(
           updateData({
             data,
-            hasNext: filters.page === 0 ? false : filters.page <= totalPages,
+            hasNext: filters.page < totalPages,
           })
         );
       }
@@ -82,12 +82,14 @@ const Tests = () => {
   }, [data, dispatch]);
 
   return (
+
     <InfiniteScroll
       style={{
         overflow: 'hidden',
+
       }}
       dataLength={allTests?.length}
-      next={() => dispatch(updateFilter({page: filters?.page + 1}))}
+      next={() => dispatch(nextPage())}
       hasMore={hasNext ?? false}
       loader={<Spinner />}
     >
@@ -132,6 +134,7 @@ const Tests = () => {
         )}
       </StyledTestListContainer>
     </InfiniteScroll>
+
   );
 };
 

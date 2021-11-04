@@ -1,15 +1,15 @@
 import InfiniteScroll from 'react-infinite-scroll-component';
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
 
-import {Spinner, Typography} from '@src/components/atoms';
+import { Spinner, Typography } from '@src/components/atoms';
 import Test from './Test';
 
-import {useGetTestsByDateQuery} from '../../services/tests';
-import {selectTestsByDate, selectFilters, selectHasNext, updateFiltredDataByDate, updateFilter} from './testsListSlice';
-import {useAppSelector} from '../../app/hooks';
+import { useGetTestsByDateQuery } from '../../services/tests';
+import { selectTestsByDate, selectFilters, selectHasNext, updateFiltredDataByDate, nextPage } from './testsListSlice';
+import { useAppSelector } from '../../app/hooks';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -60,7 +60,7 @@ const TestsByDate = () => {
   const hasNext = useAppSelector(selectHasNext);
   const dispatch = useDispatch();
 
-  const {data} = useGetTestsByDateQuery(filters, {
+  const { data } = useGetTestsByDateQuery(filters, {
     pollingInterval: 5000,
   });
 
@@ -72,7 +72,7 @@ const TestsByDate = () => {
         dispatch(
           updateFiltredDataByDate({
             data,
-            hasNext: filters.page === 0 ? false : filters.page <= totalPages,
+            hasNext: filters.page < totalPages
           })
         );
       }
@@ -86,7 +86,7 @@ const TestsByDate = () => {
         overflow: 'hidden',
       }}
       dataLength={tests?.length}
-      next={() => dispatch(updateFilter({page: filters?.page + 1}))}
+      next={() => dispatch(nextPage())}
       hasMore={hasNext ?? false}
       loader={<Spinner />}
     >

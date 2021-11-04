@@ -17,14 +17,7 @@ export const testsApi = createApi({
       query: (testId) => `${testId}`,
     }),
     getTestsByDate: builder.query<any, any>({
-      query: (filters) => {
-
-        if (filters.date) {
-          return `?pageSize=${filters?.pageSize}&page=${filters?.page}&status=${filters?.status}&startDate=${filters?.date}&endDate=${filters?.date}`;
-        }
-
-        return `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${filters?.date}&endDate=${filters?.date}`;
-      }
+      query: (filters) => `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${filters?.date}&endDate=${filters?.date}`
     })
 
   }),
