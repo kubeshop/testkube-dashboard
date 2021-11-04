@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { nanoid } from 'nanoid';
-import InfiniteScroll from "react-infinite-scroll-component";
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {nanoid} from 'nanoid';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { Spinner, Typography } from '@src/components/atoms';
+import {Spinner, Typography} from '@src/components/atoms';
 import styled from 'styled-components';
 import Test from './Test';
 
-import { useGetTestsByStatusQuery, } from "../../services/tests";
-import { selectTestsByStatus, selectFilters, selectHasNext, updateFiltredDataByStatus, updateFilter } from './testsListSlice';
-import { useAppSelector } from '../../app/hooks';
-import { getStatus } from '../../app/utils';
+import {useGetTestsByStatusQuery} from '../../services/tests';
+import {
+  selectTestsByStatus,
+  selectFilters,
+  selectHasNext,
+  updateFiltredDataByStatus,
+  updateFilter,
+} from './testsListSlice';
+import {useAppSelector} from '../../app/hooks';
+import {getStatus} from '../../app/utils';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -28,8 +34,6 @@ const StyledTestListStickyRow = styled.div`
   transition: 0.5s;
   height: 50px;
 `;
-
-
 
 const StyledTestListCell = styled.div`
   white-space: nowrap;
@@ -62,37 +66,33 @@ const TestsByStatus = () => {
   const hasNext = useAppSelector(selectHasNext);
   const dispatch = useDispatch();
 
-  const {
-    data,
-  } = useGetTestsByStatusQuery(filters, {
-    pollingInterval: 5000
+  const {data} = useGetTestsByStatusQuery(filters, {
+    pollingInterval: 5000,
   });
 
   useEffect(() => {
-
     const fetchData = () => {
       if (data) {
-
         const totalPages = Math.trunc(data.filtered[getStatus(filters.status)] / filters.pageSize);
 
-        dispatch(updateFiltredDataByStatus({
-          data,
-          hasNext: filters.page === 0 ? false : filters.page <= totalPages
-        }));
+        dispatch(
+          updateFiltredDataByStatus({
+            data,
+            hasNext: filters.page === 0 ? false : filters.page <= totalPages,
+          })
+        );
       }
     };
     fetchData();
-
   }, [data, dispatch]);
 
   return (
     <InfiniteScroll
       style={{
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
       dataLength={tests?.length}
-      next={() => dispatch(updateFilter({ page: filters?.page + 1 }))}
-
+      next={() => dispatch(updateFilter({page: filters?.page + 1}))}
       hasMore={hasNext ?? false}
       loader={<Spinner />}
     >
@@ -128,23 +128,15 @@ const TestsByStatus = () => {
             </Typography>
           </StyledTestListCell>
         </StyledTestListStickyRow>
-        {
-          (tests?.length > 0) ?
-            tests?.map((item: any, index: number) => (
-
-              <Test key={nanoid()} index={index} item={item} />
-            ))
-            : (
-
-              <Typography variant="secondary" color="secondary" font="bold">
-                No {filters.status} tests were found
-              </Typography>
-
-            )
-        }
+        {tests?.length > 0 ? (
+          tests?.map((item: any, index: number) => <Test key={nanoid()} index={index} item={item} />)
+        ) : (
+          <Typography variant="secondary" color="secondary" font="bold">
+            No {filters.status} tests were found
+          </Typography>
+        )}
       </StyledTestListContainer>
     </InfiniteScroll>
-
   );
 };
 

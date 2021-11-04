@@ -18,7 +18,7 @@ const initialState: TestListState = {
     pending: 0
   },
   selectedTestId: undefined,
- 
+
   results: [],
   resultsByDate: [],
   resultsByStatus: [],
@@ -73,12 +73,10 @@ export const testsListSlice = createSlice({
     updateSelectedTestId: (state, action: PayloadAction<string>) => {
       state.selectedTestId = action.payload;
     },
-  
 
   },
 
 });
-
 
 export const selectTotals = (state: RootState) => state.testsList.totals;
 export const selectTests = (state: RootState) => state.testsList.results;
@@ -87,7 +85,7 @@ export const selectTestsByDate = (state: RootState) => state.testsList.resultsBy
 export const selectFilters = (state: RootState) => state.testsList.filters;
 export const selectHasNext = (state: RootState) => state.testsList.hasNext;
 export const selectedTestId = (state: RootState) => state.testsList.selectedTestId;
- 
+
 export const {
   updateData,
   updateFiltredDataByStatus,
@@ -99,6 +97,5 @@ export const {
   setPage,
   updateSelectedTestId
 } = testsListSlice.actions;
-
 
 export default testsListSlice.reducer;

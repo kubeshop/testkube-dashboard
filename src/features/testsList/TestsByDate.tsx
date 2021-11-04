@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { nanoid } from 'nanoid';
-import InfiniteScroll from "react-infinite-scroll-component";
-
+import InfiniteScroll from 'react-infinite-scroll-component';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
-import { Spinner, Typography } from '@src/components/atoms';
+import {nanoid} from 'nanoid';
+
+import {Spinner, Typography} from '@src/components/atoms';
 import Test from './Test';
 
-import { useGetTestsByDateQuery } from '../../services/tests';
-import { selectTestsByDate, selectFilters, selectHasNext, updateFiltredDataByDate, updateFilter } from './testsListSlice';
-import { useAppSelector } from '../../app/hooks';
-
+import {useGetTestsByDateQuery} from '../../services/tests';
+import {selectTestsByDate, selectFilters, selectHasNext, updateFiltredDataByDate, updateFilter} from './testsListSlice';
+import {useAppSelector} from '../../app/hooks';
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -28,8 +27,6 @@ const StyledTestListStickyRow = styled.div`
   transition: 0.5s;
   height: 50px;
 `;
-
-
 
 const StyledTestListCell = styled.div`
   white-space: nowrap;
@@ -63,37 +60,33 @@ const TestsByDate = () => {
   const hasNext = useAppSelector(selectHasNext);
   const dispatch = useDispatch();
 
-  const {
-    data,
-  } = useGetTestsByDateQuery(filters, {
+  const {data} = useGetTestsByDateQuery(filters, {
     pollingInterval: 5000,
   });
 
   useEffect(() => {
-
     const fetchData = () => {
       if (data) {
         const totalPages = Math.trunc(data.filtered.results / filters.pageSize);
 
-        dispatch(updateFiltredDataByDate({
-          data,
-          hasNext: filters.page === 0 ? false : filters.page <= totalPages
-        }));
+        dispatch(
+          updateFiltredDataByDate({
+            data,
+            hasNext: filters.page === 0 ? false : filters.page <= totalPages,
+          })
+        );
       }
     };
     fetchData();
-
   }, [data, dispatch]);
 
   return (
-
     <InfiniteScroll
       style={{
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
       dataLength={tests?.length}
-      next={() => dispatch(updateFilter({ page: filters?.page + 1 }))}
-
+      next={() => dispatch(updateFilter({page: filters?.page + 1}))}
       hasMore={hasNext ?? false}
       loader={<Spinner />}
     >
@@ -129,22 +122,15 @@ const TestsByDate = () => {
             </Typography>
           </StyledTestListCell>
         </StyledTestListStickyRow>
-        {
-          (tests?.length > 0) ?
-            tests?.map((item: any, index: number) => (
-
-              <Test key={nanoid()} index={index} item={item} />
-            ))
-            : (
-
-              <Typography variant="secondary" color="secondary" font="bold">
-                No tests were found in {filters.date}
-              </Typography>
-            )
-        }
+        {tests?.length > 0 ? (
+          tests?.map((item: any, index: number) => <Test key={nanoid()} index={index} item={item} />)
+        ) : (
+          <Typography variant="secondary" color="secondary" font="bold">
+            No tests were found in {filters.date}
+          </Typography>
+        )}
       </StyledTestListContainer>
     </InfiniteScroll>
-
   );
 };
 

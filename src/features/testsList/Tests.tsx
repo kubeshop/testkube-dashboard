@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-
-import InfiniteScroll from "react-infinite-scroll-component";
-
-import { useAppSelector } from '@src/app/hooks';
-import { useGetTestsQuery } from '@src/services/tests';
-import { nanoid } from '@reduxjs/toolkit';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {nanoid} from '@reduxjs/toolkit';
 import styled from 'styled-components';
-import { Spinner, Typography } from '@src/components/atoms';
-import { updateFilter, selectTests, selectFilters, updateData, selectHasNext } from './testsListSlice';
+
+import {useAppSelector} from '@src/app/hooks';
+import {useGetTestsQuery} from '@src/services/tests';
+import {Spinner, Typography} from '@src/components/atoms';
+import {updateFilter, selectTests, selectFilters, updateData, selectHasNext} from './testsListSlice';
 
 import Test from './Test';
-
 
 const StyledTestListContainer = styled.div`
   display: block;
@@ -29,8 +27,6 @@ const StyledTestListStickyRow = styled.div`
   transition: 0.5s;
   height: 50px;
 `;
-
-
 
 const StyledTestListCell = styled.div`
   white-space: nowrap;
@@ -59,16 +55,13 @@ const StyledTestListCell = styled.div`
 `;
 
 const Tests = () => {
-
   const allTests = useAppSelector(selectTests);
   const filters = useAppSelector(selectFilters);
   const hasNext = useAppSelector(selectHasNext);
 
   const dispatch = useDispatch();
 
-  const {
-    data
-  } = useGetTestsQuery(filters, {
+  const {data} = useGetTestsQuery(filters, {
     pollingInterval: 5000,
   });
 
@@ -77,30 +70,26 @@ const Tests = () => {
       if (data) {
         const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
 
-
-
-        dispatch(updateData({
-          data,
-          hasNext: filters.page === 0 ? false : filters.page <= totalPages
-        }));
+        dispatch(
+          updateData({
+            data,
+            hasNext: filters.page === 0 ? false : filters.page <= totalPages,
+          })
+        );
       }
     };
     fetchData();
-
   }, [data, dispatch]);
 
   return (
-
     <InfiniteScroll
       style={{
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
       dataLength={allTests?.length}
-      next={() => dispatch(updateFilter({ page: filters?.page + 1 }))}
-
+      next={() => dispatch(updateFilter({page: filters?.page + 1}))}
       hasMore={hasNext ?? false}
       loader={<Spinner />}
-
     >
       <StyledTestListContainer>
         <StyledTestListStickyRow>
@@ -134,19 +123,13 @@ const Tests = () => {
             </Typography>
           </StyledTestListCell>
         </StyledTestListStickyRow>
-        {
-          (allTests) ?
-            allTests?.map((item: any, index: number) => (
-
-              <Test key={nanoid()} index={index} item={item} />
-            ))
-            : (
-
-              <Typography variant="secondary" color="secondary" font="bold">
-                No tests were found in {filters.date}
-              </Typography>
-            )
-        }
+        {allTests ? (
+          allTests?.map((item: any, index: number) => <Test key={nanoid()} index={index} item={item} />)
+        ) : (
+          <Typography variant="secondary" color="secondary" font="bold">
+            No tests were found in {filters.date}
+          </Typography>
+        )}
       </StyledTestListContainer>
     </InfiniteScroll>
   );

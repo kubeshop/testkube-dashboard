@@ -1,10 +1,10 @@
-import React  from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
+import {selectTotals} from '@src/features/testsList/testsListSlice';
 import {ResultDatePicker, TestStatus} from '@molecules';
-import {   selectTotals } from '@src/features/testsList/testsListSlice';
-import { useAppSelector } from '@src/app/hooks';
- 
+import {useAppSelector} from '@src/app/hooks';
+
 const StyledTableCell = styled.td`
   display: flex;
   justify-content: center;
@@ -25,8 +25,7 @@ const StyledTableCell = styled.td`
 
 const TestResults = () => {
   const totals = useAppSelector(selectTotals);
-  
-  
+
   return (
     <>
       <StyledTableCell>

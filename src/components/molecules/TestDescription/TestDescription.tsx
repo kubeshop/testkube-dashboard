@@ -1,16 +1,15 @@
 /* eslint react/destructuring-assignment: 0 */
-import React, { useState } from 'react';
-import { nanoid } from 'nanoid';
-import { Collapse } from 'antd';
-import { RenderTestStatusSvgIcon, Spinner, Typography } from '@atoms';
+import React, {useState} from 'react';
+import {nanoid} from 'nanoid';
+import {Collapse} from 'antd';
 
-import { Step, AssertionResult, Test } from '@types';
+import {RenderTestStatusSvgIcon, Spinner, Typography} from '@atoms';
+import {Step, AssertionResult, Test} from '@types';
 
-import { selectedTestId } from '@src/features/testsList/testsListSlice';
-import { useGetTestByIdQuery } from '@src/services/tests';
-import { useAppSelector } from '@src/app/hooks';
+import {selectedTestId} from '@src/features/testsList/testsListSlice';
+import {useGetTestByIdQuery} from '@src/services/tests';
+import {useAppSelector} from '@src/app/hooks';
 import {
-
   StyledPlainTextOutputContainer,
   StyledTestOutput,
   StyledText,
@@ -39,17 +38,17 @@ const RenderPlainTestOutput = (data: Test) => {
   return (
     <StyledPlainTextOutputContainer>
       <StyledTestOutput>
-        {data &&
+        {data && (
           <StyledText key={nanoid()}>
             <pre>{data?.executionResult?.output}</pre>
           </StyledText>
-        }
+        )}
       </StyledTestOutput>
     </StyledPlainTextOutputContainer>
   );
 };
 
-const RenderTestStepCollapseHeader = ({ name, status }: IStepHeader) => {
+const RenderTestStepCollapseHeader = ({name, status}: IStepHeader) => {
   return (
     <StyledTestStepNameContainer>
       <RenderTestStatusSvgIcon testStatus={status} width={24} height={24} />
@@ -102,7 +101,6 @@ const RenderTestWithoutAssertion = (step: Step) => {
 };
 
 const TestDescription = () => {
-
   const testId = useAppSelector(selectedTestId);
 
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
@@ -110,18 +108,13 @@ const TestDescription = () => {
     setTogglePlainTestTest(!togglePlainTestTest);
   };
 
-  const {
-    data,
-    error,
-    isLoading
-  } = useGetTestByIdQuery(testId, {
+  const {data, error, isLoading} = useGetTestByIdQuery(testId, {
     pollingInterval: 5000,
   });
 
-
   return (
     <>
-      {error && <Typography variant='secondary'>Something went wrong...</Typography>}
+      {error && <Typography variant="secondary">Something went wrong...</Typography>}
       {isLoading && <Spinner />}
       {data && (
         <>
@@ -130,10 +123,10 @@ const TestDescription = () => {
           </StyledTestStatusImage>
           <StyledTestOutputsContainer>
             <StyledTestOutputDescription>
-              <Typography variant='tertiary' color='tertiary'>
+              <Typography variant="tertiary" color="tertiary">
                 {`${data?.scriptName}/${data?.name}`}
               </Typography>
-              <Typography variant='secondary' color='quinary' cursor='pointer' onClick={handleOnClick}>
+              <Typography variant="secondary" color="quinary" cursor="pointer" onClick={handleOnClick}>
                 {togglePlainTestTest ? 'View plain text' : 'View steps'}
               </Typography>
             </StyledTestOutputDescription>

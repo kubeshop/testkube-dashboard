@@ -1,26 +1,27 @@
-import { nanoid } from "@reduxjs/toolkit";
-import { useAppSelector } from "@src/app/hooks";
-import { RenderTestStatusSvgIcon, TestTypeIcon, Typography } from "@src/components/atoms";
-import { getDuration, timeStampToDate } from "@src/utils/formatDate";
-import { memo } from "react";
-import { useDispatch } from "react-redux";
-import styled from "styled-components";
-import { selectedTestId, updateSelectedTestId } from "./testsListSlice";
+import {nanoid} from '@reduxjs/toolkit';
+import {useDispatch} from 'react-redux';
+import styled from 'styled-components';
+import {memo} from 'react';
+
+import {RenderTestStatusSvgIcon, TestTypeIcon, Typography} from '@src/components/atoms';
+import {getDuration, timeStampToDate} from '@src/utils/formatDate';
+import {useAppSelector} from '@src/app/hooks';
+import {selectedTestId, updateSelectedTestId} from './testsListSlice';
 
 const StyledTestListRow = styled.div`
- display: flex;
- align-items: center;
- flex-flow: row wrap;
- position: relative;
- transition: 0.5s;
- height: 50px;
+  display: flex;
+  align-items: center;
+  flex-flow: row wrap;
+  position: relative;
+  transition: 0.5s;
+  height: 50px;
 
- &:not(:first-child):hover {
-   cursor: pointer;
-   background: transparent linear-gradient(90deg, #1890fc 0%, #5bdad3 100%);
- }
+  &:not(:first-child):hover {
+    cursor: pointer;
+    background: transparent linear-gradient(90deg, #1890fc 0%, #5bdad3 100%);
+  }
 
- background: ${props =>
+  background: ${props =>
     props?.className?.includes('selected') ? 'transparent linear-gradient(90deg, #1890fc 0%, #5bdad3 100%)' : ''};
 `;
 
@@ -49,12 +50,11 @@ const StyledTestListCell = styled.div`
     margin-right: 20px;
   }
 `;
-const Test = ({ index, item }: { index: number, item: any }) => {
+const Test = ({index, item}: {index: number; item: any}) => {
   const testId = useAppSelector(selectedTestId);
   const dispatch = useDispatch();
   const handleSelectedTest = (id: string) => {
     dispatch(updateSelectedTestId(id));
-
   };
   return (
     <StyledTestListRow
@@ -63,17 +63,17 @@ const Test = ({ index, item }: { index: number, item: any }) => {
       onClick={() => handleSelectedTest(item.id)}
     >
       <StyledTestListCell role="cell">
-        <Typography cursor='pointer' variant="secondary" color="secondary" font="light" leftAlign nowrap>
+        <Typography cursor="pointer" variant="secondary" color="secondary" font="light" leftAlign nowrap>
           {item.scriptName ? `${item.scriptName} - ${item.name}` : '-'}
         </Typography>
       </StyledTestListCell>
       <StyledTestListCell role="cell">
-        <Typography cursor='pointer' variant="secondary" color="secondary" font="light" leftAlign>
+        <Typography cursor="pointer" variant="secondary" color="secondary" font="light" leftAlign>
           {item.startTime ? timeStampToDate(item.startTime) : '-'}
         </Typography>
       </StyledTestListCell>
       <StyledTestListCell role="cell">
-        <Typography cursor='pointer' variant="secondary" color="secondary" font="light">
+        <Typography cursor="pointer" variant="secondary" color="secondary" font="light">
           {item.endTime ? getDuration(item.startTime, item.endTime) : '-'}
         </Typography>
       </StyledTestListCell>
@@ -88,7 +88,6 @@ const Test = ({ index, item }: { index: number, item: any }) => {
 };
 
 function testPropsAreEqual(prevTest: any, nextTest: any) {
-  return prevTest.item === nextTest.item
-    && prevTest.index === nextTest.index;
+  return prevTest.item === nextTest.item && prevTest.index === nextTest.index;
 }
 export default memo(Test, testPropsAreEqual);

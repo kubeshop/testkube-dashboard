@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Route, Switch, useHistory} from 'react-router-dom';
 
-import { TestResults, TestsFilter, TestsSummary } from '@organisms';
+import {TestResults, TestsFilter, TestsSummary} from '@organisms';
 
-import { Modal } from '@atoms';
+import {Modal} from '@atoms';
 
-import { config } from '@constants/config';
+import {config} from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
@@ -14,7 +14,7 @@ import {
   FinalizedApiEndpoint,
 } from '@utils';
 
-import { MainTableStyles, StyledTestResults, StyledTestFilter, StyledTestSummary } from './App.styled';
+import {MainTableStyles, StyledTestResults, StyledTestFilter, StyledTestSummary} from './App.styled';
 
 declare global {
   interface Window {
@@ -41,7 +41,7 @@ function App() {
       history.push({
         pathname: '/',
         // eslint-disable-next-line
-        search: '?' + new URLSearchParams({ apiEndpoint: `${dashboardEnvVariable}` }).toString(),
+        search: '?' + new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString(),
       });
     }
 

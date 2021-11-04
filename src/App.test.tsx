@@ -1,8 +1,10 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
 import {BrowserRouter as Router} from 'react-router-dom';
+import {Provider} from 'react-redux';
 
 import App from './App';
+import {store} from './store';
 
 beforeEach(() => {
   const mockIntersectionObserver = jest.fn();
@@ -15,13 +17,13 @@ beforeEach(() => {
 });
 
 describe('App component', () => {
-  const queryClient = new QueryClient();
-
   test('renders learn react link', () => {
     render(
+      <Provider store={store}>
         <Router>
           <App />
         </Router>
+      </Provider>
     );
 
     expect(screen.getByTestId(/Test filters/i)).toBeInTheDocument();

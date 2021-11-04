@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { DatePicker } from 'antd';
+import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
-import moment, { Moment } from 'moment';
+import React, {useState} from 'react';
+import moment, {Moment} from 'moment';
+import {DatePicker} from 'antd';
 
-import { Typography, Button } from '@atoms';
-import { clearFiltredData, selectFilters } from '@src/features/testsList/testsListSlice';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '@src/app/hooks';
+import {clearFiltredData, selectFilters} from '@src/features/testsList/testsListSlice';
+import {useAppSelector} from '@src/app/hooks';
+import {Typography, Button} from '@atoms';
 
 const StyledDateContainer = styled.div`
   display: flex;
@@ -36,10 +36,9 @@ const ResultDatePicker = () => {
   const handleDatePicker = (value: any, dateString: any) => {
     setSelectedDate(value);
 
-    const date = moment(dateString).format("YYYY-DD-MM");
+    const date = moment(dateString).format('YYYY-DD-MM');
 
-
-    dispatch(clearFiltredData({ page: 0, status: undefined, date: date === "Invalid date" ? undefined : date }));
+    dispatch(clearFiltredData({page: 0, status: undefined, date: date === 'Invalid date' ? undefined : date}));
   };
 
   const handleClick = () => {
@@ -47,14 +46,13 @@ const ResultDatePicker = () => {
     if (!clicked) {
       setSelectedDate(moment());
 
-      dispatch(clearFiltredData({ page: 0, status: undefined, date: moment().format("YYYY-DD-MM") }));
+      dispatch(clearFiltredData({page: 0, status: undefined, date: moment().format('YYYY-DD-MM')}));
     } else {
       setSelectedDate(null);
-      dispatch(clearFiltredData({ page: 0, status: undefined, date: undefined }));
-    };
+      dispatch(clearFiltredData({page: 0, status: undefined, date: undefined}));
+    }
   };
- 
-   
+
   return (
     <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
@@ -66,8 +64,11 @@ const ResultDatePicker = () => {
         format="MM-DD-YYYY"
       />
       <Button
-        active={moment(selectedDate).format("YYYY-DD-MM") === moment().format("YYYY-DD-MM")}
-        onClick={handleClick}>Today</Button>
+        active={moment(selectedDate).format('YYYY-DD-MM') === moment().format('YYYY-DD-MM')}
+        onClick={handleClick}
+      >
+        Today
+      </Button>
     </StyledDateContainer>
   );
 };

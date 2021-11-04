@@ -1,10 +1,9 @@
-import React from 'react';
 import styled from 'styled-components';
+import React from 'react';
 
-import { TestsList, TestDescription } from '@molecules';
-import { selectedTestId } from '@src/features/testsList/testsListSlice';
-import { useAppSelector } from '@src/app/hooks';
-
+import {selectedTestId} from '@src/features/testsList/testsListSlice';
+import {TestsList, TestDescription} from '@molecules';
+import {useAppSelector} from '@src/app/hooks';
 
 const StyledTestList = styled.td`
   min-width: 55%;
@@ -35,13 +34,9 @@ const TestsSummary = () => {
       <StyledTestList>
         <TestsList />
       </StyledTestList>
-      <StyledTestDescription>
-        {testId && <TestDescription />}
-      </StyledTestDescription>
+      <StyledTestDescription>{testId && <TestDescription />}</StyledTestDescription>
     </>
   );
 };
 
 export default TestsSummary;
-
-

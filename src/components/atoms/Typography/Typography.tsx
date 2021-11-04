@@ -49,7 +49,7 @@ const StyledTypography = styled.p<ITypography>`
   letter-spacing: 0;
   margin-top: 10px;
   overflow: hidden;
-  white-space: ${props => (props.nowrap ? 'nowrap' : 'normal')};;
+  white-space: ${props => (props.nowrap ? 'nowrap' : 'normal')};
   text-overflow: ellipsis;
   text-align: ${props => (props.leftAlign ? 'left' : 'center')};
 
