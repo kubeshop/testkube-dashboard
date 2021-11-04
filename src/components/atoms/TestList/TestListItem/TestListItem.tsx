@@ -6,7 +6,7 @@ import {memo} from 'react';
 import {RenderTestStatusSvgIcon, TestTypeIcon, Typography} from '@src/components/atoms';
 import {getDuration, timeStampToDate} from '@src/utils/formatDate';
 import {useAppSelector} from '@src/app/hooks';
-import {selectedTestId, updateSelectedTestId} from './testsListSlice';
+import {selectedTestId, updateSelectedTestId} from '@src/features/testsList/testsListSlice';
 
 const StyledTestListRow = styled.div`
   display: flex;
@@ -50,7 +50,7 @@ const StyledTestListCell = styled.div`
     margin-right: 20px;
   }
 `;
-const Test = ({index, item}: {index: number; item: any}) => {
+const TestListItem = ({index, item}: {index: number; item: any}) => {
   const testId = useAppSelector(selectedTestId);
   const dispatch = useDispatch();
   const handleSelectedTest = (id: string) => {
@@ -90,4 +90,4 @@ const Test = ({index, item}: {index: number; item: any}) => {
 function testPropsAreEqual(prevTest: any, nextTest: any) {
   return prevTest.item === nextTest.item && prevTest.index === nextTest.index;
 }
-export default memo(Test, testPropsAreEqual);
+export default memo(TestListItem, testPropsAreEqual);

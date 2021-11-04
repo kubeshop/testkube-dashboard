@@ -18,7 +18,6 @@ export const testsApi = createApi({
     }),
     getTestsByDate: builder.query<any, any>({
       query: (filters) => {
-
         if (filters.date) {
           return `?pageSize=${filters?.pageSize}&page=${filters?.page}&status=${filters?.status}&startDate=${filters?.date}&endDate=${filters?.date}`;
         }

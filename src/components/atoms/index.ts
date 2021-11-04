@@ -6,3 +6,5 @@ export { default as TestTypeIcon } from './TestTypeIcon/TestTypeIcon';
 export { default as LabelInput } from './LabelledInput/LabelledInput';
 export { default as Modal } from './Modal/Modal';
 export { default as Spinner } from './Spinner/Spinner';
+export { default as TestListItem } from './TestList/TestListItem/TestListItem';
+export { default as TestListHeader } from './TestList/TestListHeader/TestListHeader';

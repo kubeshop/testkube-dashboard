@@ -31,17 +31,14 @@ export const testsListSlice = createSlice({
   initialState,
   reducers: {
     updateData: (state, action: PayloadAction<any>,) => {
-
       state.hasNext = action.payload?.hasNext;
       state.results = [...state.results, ...action.payload?.data?.results];
       state.totals = action.payload?.data?.totals;
-
     },
     updateFiltredDataByStatus: (state, action: PayloadAction<any>,) => {
       state.hasNext = action.payload?.hasNext;
       state.resultsByStatus = [...state.resultsByStatus, ...action.payload?.data?.results];
       state.totals = action.payload?.data?.totals;
-
     },
     updateFiltredDataByDate: (state, action: PayloadAction<any>,) => {
       state.hasNext = action.payload?.hasNext;
@@ -49,7 +46,6 @@ export const testsListSlice = createSlice({
       state.totals = action.payload?.data?.totals;
     },
     clearFiltredData: (state, action: PayloadAction<any>) => {
-
       state.filters = action.payload;
       state.selectedTestId = undefined;
       state.results = [];
@@ -59,7 +55,6 @@ export const testsListSlice = createSlice({
     updateFilter: (state, action: PayloadAction<any>) => {
       state.filters = action.payload;
     },
-
     nextPage: (state) => {
       state.filters.page += 1;
     },
@@ -69,13 +64,10 @@ export const testsListSlice = createSlice({
     prevPage: (state) => {
       state.filters.page -= 1;
     },
-
     updateSelectedTestId: (state, action: PayloadAction<string>) => {
       state.selectedTestId = action.payload;
     },
-
   },
-
 });
 
 export const selectTotals = (state: RootState) => state.testsList.totals;
