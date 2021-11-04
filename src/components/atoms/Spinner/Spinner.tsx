@@ -6,6 +6,7 @@ import React from 'react';
 const Spinner = (props: any) => {
   return (
     <Space size="middle">
+
       <Spin {...props} />
     </Space>
   );

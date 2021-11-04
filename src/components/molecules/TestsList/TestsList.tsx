@@ -1,17 +1,18 @@
 import React from 'react';
 
-import {useAppSelector} from '@src/app/hooks';
-import Tests from '@src/features/testsList/Tests';
-import TestsByStatus from '@src/features/testsList/TestsByStatus';
-import TestsByDate from '@src/features/testsList/TestsByDate';
-import {selectFilters} from '../../../features/testsList/testsListSlice';
+import { useAppSelector } from '@src/app/hooks';
+import { TestsByStatus, TestsByDate, AllTests } from '@molecules';
+import { TestListHeader } from '@atoms';
+import { selectFilters } from '../../../features/testsList/testsListSlice';
+
 
 const TestsList = () => {
   const filters = useAppSelector(selectFilters);
 
   return (
     <>
-      {filters.status === undefined && !filters.date && <Tests />}
+      <TestListHeader />
+      {filters.status === undefined && !filters.date && <AllTests />}
       {filters.status && <TestsByStatus />}
       {filters.date && <TestsByDate />}
     </>
