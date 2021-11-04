@@ -1,30 +1,32 @@
 /* eslint react/destructuring-assignment: 0 */
-import React, {useContext, useState} from 'react';
-import {nanoid} from 'nanoid';
-import {Collapse} from 'antd';
-import {RenderTestStatusSvgIcon, Typography, Spinner} from '@atoms';
+import React, { useState } from 'react';
+import { nanoid } from 'nanoid';
+import { Collapse } from 'antd';
+import { RenderTestStatusSvgIcon, Spinner, Typography } from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
-import {Step, AssertionResult, Test} from '@types';
+import { Step, AssertionResult, Test } from '@types';
 
-import {useFetchTest} from '@hooks';
+import { selectedTestId } from '@src/features/testsList/testsListSlice';
+import { useGetTestByIdQuery } from '@src/services/tests';
+import { useAppSelector } from '@src/app/hooks';
 import {
-  StyledTestStatusImage,
-  StyledTestOutputsContainer,
-  StyledTestOutputDescription,
+
   StyledPlainTextOutputContainer,
   StyledTestOutput,
   StyledText,
-  StyledTestStepsOutPutContainer,
   StyledTestStepNameContainer,
   StyledTestStepName,
-  StyledTestAssertionResultsContainer,
   StyledTestStepAssertionContainer,
   StyledTestOutputNameAndStatus,
   StyledTestOutputAssertionName,
   StyledTestOutputAssertionErrorMessage,
   StyledCollapse,
   StyledTestWithoutAssertions,
+  StyledTestOutputDescription,
+  StyledTestOutputsContainer,
+  StyledTestStatusImage,
+  StyledTestStepsOutPutContainer,
+  StyledTestAssertionResultsContainer,
   TestsWithoutStepsContainer,
 } from './TestDescription.styled';
 
@@ -38,16 +40,16 @@ const RenderPlainTestOutput = (data: Test) => {
     <StyledPlainTextOutputContainer>
       <StyledTestOutput>
         {data &&
-        <StyledText key={nanoid()}>
-          <pre>{data?.executionResult?.output}</pre>
-        </StyledText>
+          <StyledText key={nanoid()}>
+            <pre>{data?.executionResult?.output}</pre>
+          </StyledText>
         }
       </StyledTestOutput>
     </StyledPlainTextOutputContainer>
   );
 };
 
-const RenderTestStepCollapseHeader = ({name, status}: IStepHeader) => {
+const RenderTestStepCollapseHeader = ({ name, status }: IStepHeader) => {
   return (
     <StyledTestStepNameContainer>
       <RenderTestStatusSvgIcon testStatus={status} width={24} height={24} />
@@ -100,20 +102,28 @@ const RenderTestWithoutAssertion = (step: Step) => {
 };
 
 const TestDescription = () => {
+
+  const testId = useAppSelector(selectedTestId);
+
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
-  const tests: any = useContext(TestsContext);
-
-  const {data, error, isLoading} = useFetchTest();
-
   const handleOnClick = () => {
     setTogglePlainTestTest(!togglePlainTestTest);
   };
+
+  const {
+    data,
+    error,
+    isLoading
+  } = useGetTestByIdQuery(testId, {
+    pollingInterval: 5000,
+  });
+
 
   return (
     <>
       {error && <Typography variant='secondary'>Something went wrong...</Typography>}
       {isLoading && <Spinner />}
-      {tests?.selectedTest.id && data && (
+      {data && (
         <>
           <StyledTestStatusImage>
             <RenderTestStatusSvgIcon testStatus={data?.executionResult?.status} width={32} height={32} />
@@ -121,7 +131,7 @@ const TestDescription = () => {
           <StyledTestOutputsContainer>
             <StyledTestOutputDescription>
               <Typography variant='tertiary' color='tertiary'>
-                {tests?.selectedTest?.testName || ''}
+                {`${data?.scriptName}/${data?.name}`}
               </Typography>
               <Typography variant='secondary' color='quinary' cursor='pointer' onClick={handleOnClick}>
                 {togglePlainTestTest ? 'View plain text' : 'View steps'}

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Typography, Button} from '@atoms';
-
-import {TestsContext} from '@context/testsContext';
+import { Typography, Button } from '@atoms';
+import { clearFiltredData, selectFilters } from '@src/features/testsList/testsListSlice';
+import { useAppSelector } from '@src/app/hooks';
+import { useDispatch } from 'react-redux';
 
 const StyledTestTextDescription = styled.td`
   border: none;
@@ -18,68 +19,50 @@ const StyleTestFilterButtons = styled.td`
 `;
 
 const TestsFilter = () => {
-  const tests: any = React.useContext(TestsContext);
 
-  const isActive = (status: string) => {
-    if (tests?.filters?.filter?.length === 0 && status === 'all') {
-      return true;
-    }
-    return tests?.filters?.filter?.indexOf(status) !== -1;
-  };
-  const filtersTests = (status: string) => {
-    tests.setSelectedTest({id: null, testName: null});
-    if (tests.filters?.filter?.indexOf(status) === -1) {
-      tests.filters?.filter?.push(status);
+  const filters = useAppSelector(selectFilters);
 
-      if (status === 'all') {
-        tests.setFilters({filter: [], dateFilter: ''});
-      } else {
-        const filtered = tests.filters?.filter?.filter((filter: any) => filter !== 'all');
+  const dispatch = useDispatch();
 
-        tests.setFilters({...tests.filters, filter: filtered});
-        tests.setFilters(tests.filters);
-      }
-    } else {
-      let filtered = tests?.filters?.filter?.filter((filter: any) => filter !== status);
+  const handleClick = (status: string | undefined) => {
 
-      tests.setFilters({...tests?.filters, filter: filtered});
-    }
+    dispatch(clearFiltredData({ page: 0, status }));
   };
   return (
     <>
       <StyledTestTextDescription>
         <Typography variant="secondary" color="secondary" font="light" data-testid="Test filters">
-           {tests?.testsExecution?.filtered ? tests?.testsExecution?.filtered.results :
-            tests?.testsExecution?.totals ? tests?.testsExecution?.totals.results : ''} Test Results
+          Tests
         </Typography>
       </StyledTestTextDescription>
       <StyleTestFilterButtons>
         <Typography variant="secondary">Show: </Typography>
         <Button
-          disabled={!tests?.testsExecution?.results}
-          active={isActive('all')}
-          onClick={() => filtersTests('all')}
+
+          active={filters.status === undefined}
+          disabled={filters.status === undefined && !filters.date}
+          onClick={() => handleClick(undefined)}
         >
           All
-        </Button> 
+        </Button>
         <Button
-          disabled={!tests?.testsExecution?.results}
-          active={isActive('pending')}
-          onClick={() => filtersTests('pending')}
+          active={filters.status === "pending"}
+          disabled={filters.status === "pending"}
+          onClick={() => handleClick('pending')}
         >
           Running
         </Button>
         <Button
-          disabled={!tests?.testsExecution?.results}
-          active={isActive('success')}
-          onClick={() => filtersTests('success')}
+          active={filters.status === "success"}
+          disabled={filters.status === "success"}
+          onClick={() => handleClick('success')}
         >
           Passed
         </Button>
         <Button
-          disabled={!tests?.testsExecution?.results}
-          active={isActive('error')}
-          onClick={() => filtersTests('error')}
+          active={filters.status === "error"}
+          disabled={filters.status === "error"}
+          onClick={() => handleClick('error')}
         >
           Failed
         </Button>

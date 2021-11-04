@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface ITestStatusProps {
   testTitle: string;
-  totalTests: string | undefined;
+  totalTests: number | undefined;
 }
 
 interface ITestStatusStyles {

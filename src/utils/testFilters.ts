@@ -1,6 +1,5 @@
 import moment from "moment";
 import { getDate } from "./formatDate";
-
   
 export const filterTestsExecution = (tests: any, _filters: any) => {
   let filteredTestsExecution = tests;
@@ -61,7 +60,6 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
       };
     }
   }
-
 
   return filteredTestsExecution;
 };

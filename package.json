@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "4.7.0",
+    "@reduxjs/toolkit": "^1.6.2",
     "antd": "4.16.13",
     "loglevel": "1.7.1",
     "moment": "^2.29.1",
@@ -61,7 +62,9 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hotkeys-hook": "3.4.4",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-query": "^3.26.0",
+    "react-redux": "^7.2.6",
     "react-router-dom": "^5.3.0",
     "react-use": "17.3.1",
     "reselect": "4.0.0",

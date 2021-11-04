@@ -26,8 +26,10 @@
       "@types/*": ["src/types/*"],
       "@constants": ["src/constants/"],
       "@constants/*": ["src/constants/*"],
-      "@hooks": ["src/hooks/"],
-      "@hooks/*": ["src/hooks/*"]
+      "@hooks": ["src/app/hooks/"],
+      "@hooks/*": ["src/app/hooks/*"],
+      "@features": ["src/features/"],
+      "@features/*": ["src/features/*"]
     }
   }
 }

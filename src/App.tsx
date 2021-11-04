@@ -1,24 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import {Route, Switch, useHistory} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
-import {TestResults, TestsFilter, TestsSummary} from '@organisms';
-import {TestsContext} from '@context/testsContext';
+import { TestResults, TestsFilter, TestsSummary } from '@organisms';
 
-import {useFetchTestsWithPagination} from '@hooks';
-import {Modal} from '@atoms';
+import { Modal } from '@atoms';
 
-import {config} from '@constants/config';
+import { config } from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
-  filterTestsExecution,
   getApiEndpointOnPageLoad,
   checkIfQueryParamsExistsInUrl,
   FinalizedApiEndpoint,
 } from '@utils';
 
-import {SelectedTest} from '@types';
-import {MainTableStyles, StyledTestResults, StyledTestFilter, StyledTestSummary} from './App.styled';
+import { MainTableStyles, StyledTestResults, StyledTestFilter, StyledTestSummary } from './App.styled';
 
 declare global {
   interface Window {
@@ -27,10 +23,7 @@ declare global {
 }
 
 function App() {
-  const [filters, setFilters] = useState<any>({filter: [], dateFilter: ''});
   const [visible, setVisible] = useState<boolean>(false);
-  const [filterByDate, setFilterByDate] = useState<string | null>(null);
-  const [selectedTest, setSelectedTest] = useState<SelectedTest>({id: '', testName: ''});
   const history = useHistory();
 
   const dashboardEndpointValidators = () => {
@@ -48,7 +41,7 @@ function App() {
       history.push({
         pathname: '/',
         // eslint-disable-next-line
-        search: '?' + new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString(),
+        search: '?' + new URLSearchParams({ apiEndpoint: `${dashboardEnvVariable}` }).toString(),
       });
     }
 
@@ -73,43 +66,6 @@ function App() {
     dashboardEndpointValidators();
   }, []);
 
-  const {
-    fetchNextPage,
-    hasNextPage,
-    status,
-    data,
-    error,
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchPreviousPage,
-    hasPreviousPage,
-    isLoading,
-    isSuccess,
-  } = useFetchTestsWithPagination(filterByDate);
-
-  const tests = {
-    error,
-    isLoading,
-    selectedTest,
-    setSelectedTest,
-    setFilters,
-    filters,
-    filterByDate,
-    setFilterByDate,
-    testsExecution: filterTestsExecution(data, filters),
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchPreviousPage,
-    hasPreviousPage,
-    status,
-    tests: {testExecutions: data},
-    fetchNextPage,
-    hasNextPage,
-    isSuccess,
-  };
-
   const RenderApp = React.useCallback(() => {
     return (
       <MainTableStyles>
@@ -133,12 +89,10 @@ function App() {
   return (
     <>
       {visible && <Modal visible isModalVisible={setVisible} />}
-      <TestsContext.Provider value={tests}>
-        <Switch>
-          <Route path="/?apiEndpoint=:apiEndpoint" exact render={RenderApp} />
-          <Route path="/" exact component={RenderApp} />
-        </Switch>
-      </TestsContext.Provider>
+      <Switch>
+        <Route path="/?apiEndpoint=:apiEndpoint" exact render={RenderApp} />
+        <Route path="/" exact component={RenderApp} />
+      </Switch>
     </>
   );
 }

@@ -1,10 +1,10 @@
-import React, {useContext} from 'react';
+import React  from 'react';
 import styled from 'styled-components';
 
 import {ResultDatePicker, TestStatus} from '@molecules';
-
-import {TestsContext} from '@context/testsContext';
-
+import {   selectTotals } from '@src/features/testsList/testsListSlice';
+import { useAppSelector } from '@src/app/hooks';
+ 
 const StyledTableCell = styled.td`
   display: flex;
   justify-content: center;
@@ -24,15 +24,9 @@ const StyledTableCell = styled.td`
 `;
 
 const TestResults = () => {
-  const tests: any = useContext(TestsContext);
-
-  const getTotalTestsByType = (testType: string) => {
-    if (tests.testsExecution) {
-      // eslint-disable-next-line
-      return testType + '/' + tests?.testsExecution?.totals?.results;
-    }
-  };
-
+  const totals = useAppSelector(selectTotals);
+  
+  
   return (
     <>
       <StyledTableCell>
@@ -41,11 +35,7 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Total Passed"
-          totalTests={
-            tests?.testsExecution?.totals?.passed?.toString() !== undefined
-              ? getTotalTestsByType(tests?.testsExecution?.totals?.passed?.toString())
-              : '0'
-          }
+          totalTests={totals?.passed}
           testTitleColor="white"
           totalTestsColor="yellow"
         />
@@ -53,11 +43,7 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Total Failed"
-          totalTests={
-            tests?.testsExecution?.totals?.failed?.toString() !== undefined
-              ? getTotalTestsByType(tests?.testsExecution?.totals?.failed?.toString())
-              : '0'
-          }
+          totalTests={totals?.failed}
           testTitleColor="white"
           totalTestsColor="yellow"
         />
@@ -65,11 +51,7 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Total Running"
-          totalTests={
-            tests?.testsExecution?.totals?.pending?.toString() !== undefined
-              ? getTotalTestsByType(tests?.testsExecution?.totals?.pending?.toString())
-              : '0'
-          }
+          totalTests={totals?.pending}
           testTitleColor="white"
           totalTestsColor="white"
         />
@@ -77,7 +59,7 @@ const TestResults = () => {
       <StyledTableCell>
         <TestStatus
           testTitle="Total Executed"
-          totalTests={tests?.testsExecution?.totals?.results?.toString()}
+          totalTests={totals?.results}
           testTitleColor="white"
           totalTestsColor="white"
         />

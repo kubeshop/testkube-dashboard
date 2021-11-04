@@ -27,10 +27,10 @@ export const StyledTestFilter = styled.tr`
 
 export const StyledTestSummary = styled.tr`
   border-top-style: hidden;
-  height: 85vh;
+  height: 55vh;
   display: flex;
 
-  @media only screen and (min-width: 2500px) {
-    height: 85vh;
-  }
+  // @media only screen and (min-width: 2500px) {
+  //   height: 85vh;
+  // }
 `;

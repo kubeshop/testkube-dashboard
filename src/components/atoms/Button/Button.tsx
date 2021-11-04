@@ -49,10 +49,11 @@ const StyledButton = styled.button<IButton>`
     color: ${({disableFilter}) => (disableFilter ? 'var(--color-monokle-primary) ' : '')};
   }
 
-  &:disabled {
+  &:disabled {  
     cursor: not-allowed;
-    background: var(--color-dark-primary);
-    color: var(--color-monokle-secondary);
+    color: var(--color-dark-primary);
+    background: var(--color-monokle-primary);
+   
   }
 `;
 
