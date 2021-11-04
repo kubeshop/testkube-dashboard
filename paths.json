@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@redux/*": ["src/redux/*"],
       "@styles/*": ["src/styles/*"],
       "@src/*": ["src/*"],
       "@src": ["src/"],
@@ -29,7 +28,9 @@
       "@hooks": ["src/app/hooks/"],
       "@hooks/*": ["src/app/hooks/*"],
       "@features": ["src/features/"],
-      "@features/*": ["src/features/*"]
+      "@features/*": ["src/features/*"],
+      "@redux": ["src/redux/"],
+      "@redux/*": ["src/redux/*"]
     }
   }
 }
