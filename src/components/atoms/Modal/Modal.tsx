@@ -71,6 +71,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
             // eslint-disable-next-line
             search: '?' + new URLSearchParams({apiEndpoint: apiEndpoint.apiEndpoint}).toString(),
           });
+          setLabelButtonContent('Get Results');
           isModalVisible(false);
         }
       })
