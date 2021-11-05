@@ -4,7 +4,7 @@ import { RootState } from "../store";
 
 const initialState: TestListState = {
   filters: {
-    pageSize: 10,
+    pageSize: 100,
     page: 0,
     status: undefined,
     date: null,
