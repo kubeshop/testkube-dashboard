@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { config } from '@src/constants/config';
+import moment from 'moment';
 
 const baseUrl = localStorage.getItem(config.apiEndpoint) ?? '';
 
@@ -17,7 +18,7 @@ export const testsApi = createApi({
       query: (testId) => `${testId}`,
     }),
     getTestsByDate: builder.query<any, any>({
-      query: (filters) => `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${filters?.date}&endDate=${filters?.date}`
+      query: (filters) =>  `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${moment(filters?.date).format('YYYY-DD-MM')}&endDate=${moment(filters?.date).format('YYYY-DD-MM')}`
     })
 
   }),

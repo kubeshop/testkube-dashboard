@@ -58,7 +58,7 @@ const TestsByStatus = () => {
   });
   return (
     <StyledTestListContainer>
-      {tests ? (
+      {tests?.length > 0  ? (
         tests?.map((item: any, index: number) => <TestListItem key={nanoid()} index={index} item={item} />)
       ) : (
         <Typography variant="secondary" color="secondary" font="bold">
