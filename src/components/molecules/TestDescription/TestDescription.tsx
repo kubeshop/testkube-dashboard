@@ -108,9 +108,7 @@ const TestDescription = () => {
     setTogglePlainTestTest(!togglePlainTestTest);
   };
 
-  const {data, error, isLoading} = useGetTestByIdQuery(testId, {
-    pollingInterval: 5000,
-  });
+  const {data, error, isLoading} = useGetTestByIdQuery(testId, {});
 
   return (
     <>
