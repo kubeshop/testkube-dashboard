@@ -108,6 +108,10 @@ p {
 height: 44px;
 }
 
+.ant-picker-footer {
+  display: none;
+}
+
   `;
 
 /* Media Sizes */
