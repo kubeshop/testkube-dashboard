@@ -16,7 +16,19 @@ beforeEach(() => {
   window.IntersectionObserver = mockIntersectionObserver;
 });
 
-describe('App component', () => {
+describe('App', () => {
+  window.matchMedia =
+    window.matchMedia ||
+    function () {
+      return {
+        matches: false,
+        // eslint-disable-next-line
+        addListener: function () {},
+        // eslint-disable-next-line
+        removeListener: function () {},
+      };
+    };
+
   test('renders learn react link', () => {
     render(
       <Provider store={store}>
