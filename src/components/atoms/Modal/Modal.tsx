@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import {Modal} from 'antd';
-import {useHistory} from 'react-router-dom';
+import { Modal } from 'antd';
+import { useHistory } from 'react-router-dom';
 
-import {Button, LabelInput, Typography, Spinner} from '@atoms';
-import {validateUrl, FinalizedApiEndpoint, showSmallError} from '@utils';
-import {config} from '@constants/config';
-import {TestsContext} from '@context/testsContext';
+import { Button, LabelInput, Typography, Spinner } from '@atoms';
+import { validateUrl, FinalizedApiEndpoint, showSmallError } from '@utils';
+import { config } from '@constants/config';
+import { TestsContext } from '@context/testsContext';
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
@@ -33,15 +33,15 @@ interface IModal {
   visible?: boolean;
 }
 
-const CustomModal = ({isModalVisible, visible}: IModal) => {
-  const [apiEndpoint, setApiEndpoint] = useState<IUrlEndpoint>({apiEndpoint: ''});
+const CustomModal = ({ isModalVisible, visible }: IModal) => {
+  const [apiEndpoint, setApiEndpoint] = useState<IUrlEndpoint>({ apiEndpoint: '' });
   const [validUrl, setVAlidUrl] = useState<boolean>(false);
   const [buttonLabelContent, setLabelButtonContent] = useState<string>('Get Results');
   const history = useHistory();
   const tests: any = React.useContext(TestsContext);
 
   const handleInputApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
-    setApiEndpoint({...apiEndpoint, [field]: event.target.value});
+    setApiEndpoint({ ...apiEndpoint, [field]: event.target.value });
 
     const validatedUrl = validateUrl(event.target.value);
 
@@ -61,15 +61,14 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
 
     setLabelButtonContent('Validating...');
 
-    return fetch(validatedUrl, {signal: controller.signal})
+    return fetch(validatedUrl, { signal: controller.signal })
       .then(res => res.json())
       .then(res => {
         if (res && res.results) {
           localStorage.setItem(config.apiEndpoint, validatedUrl);
           history.push({
             pathname: '/',
-            // eslint-disable-next-line
-            search: '?' + new URLSearchParams({apiEndpoint: apiEndpoint.apiEndpoint}).toString(),
+            search: `?${new URLSearchParams({ apiEndpoint: apiEndpoint.apiEndpoint }).toString()}`,
           });
           setLabelButtonContent('Get Results');
           isModalVisible(false);

@@ -46,11 +46,12 @@ export const testsListSlice = createSlice({
       state.totals = action.payload?.data?.totals;
     },
     clearFiltredData: (state, action: PayloadAction<any>) => {
+      
       state.filters = {
         ...action.payload,
         pageSize: state.filters.pageSize
       };
-
+      state.filters.page = 0;
       state.selectedTestId = undefined;
       state.results = [];
       state.resultsByStatus = [];

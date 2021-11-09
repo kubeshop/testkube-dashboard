@@ -1,12 +1,32 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { config } from '@src/constants/config';
 import moment from 'moment';
 
-const baseUrl = localStorage.getItem(config.apiEndpoint) ?? '';
+
+const rawBaseQuery = (baseUrl: string) => fetchBaseQuery({
+  baseUrl
+});
+
+const dynamicBaseQuery: BaseQueryFn<string | FetchArgs,
+  unknown,
+  FetchBaseQueryError> = async (args, api, extraOptions) => {
+    const baseUrl = localStorage.getItem(config.apiEndpoint);
+    if (!baseUrl) {
+      return {
+        error: {
+          status: 400,
+          statusText: 'Bad Request',
+          data: 'No Host found',
+        },
+      };
+    }
+
+    return rawBaseQuery(baseUrl)(args, api, extraOptions);
+  };
 
 export const testsApi = createApi({
   reducerPath: 'testsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://demo.testkube.io/results/v1/executions/' }),
+  baseQuery: dynamicBaseQuery,
   endpoints: (builder) => ({
     getTests: builder.query({
       query: (filters) => `?pageSize=${filters?.pageSize}&page=${filters?.page}`
@@ -18,11 +38,11 @@ export const testsApi = createApi({
       query: (testId) => `${testId}`,
     }),
     getTestsByDate: builder.query<any, any>({
-      query: (filters) =>  `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${moment(filters?.date).format('YYYY-DD-MM')}&endDate=${moment(filters?.date).format('YYYY-DD-MM')}`
+      query: (filters) => `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${moment(filters?.date).format('YYYY-MM-DD')}&endDate=${moment(filters?.date).format('YYYY-MM-DD')}`
     })
 
   }),
 });
 
-// Export hooks for usage in functional components
+
 export const { useGetTestsQuery, useGetTestsByStatusQuery, useGetTestsByDateQuery, useGetTestByIdQuery } = testsApi;

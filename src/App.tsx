@@ -5,12 +5,12 @@ import { TestResults, TestsFilter, TestsSummary } from '@organisms';
 
 import { Modal } from '@atoms';
 
-// import {config} from '@constants/config';
+import { config } from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
-  // getApiEndpointOnPageLoad,
-  // checkIfQueryParamsExistsInUrl,
+  getApiEndpointOnPageLoad,
+  checkIfQueryParamsExistsInUrl,
   FinalizedApiEndpoint,
 } from '@utils';
 
@@ -35,31 +35,27 @@ function App() {
     const dashboardEnvVariable = window?._env_?.REACT_APP_API_SERVER_ENDPOINT;
 
     if (dashboardEnvVariable && dashboardEnvVariable !== 'default') {
+
       setVisible(false);
       FinalizedApiEndpoint(dashboardEnvVariable, true);
-
-      // history.push({
-      //   pathname: '/',
-      //   // eslint-disable-next-line
-      //   search: '?' + new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString(),
-      // });
+      history.push({
+        pathname: '/',
+        search: `?${new URLSearchParams({ apiEndpoint: `${dashboardEnvVariable}` }).toString()}`,
+      });
+    }
+    if (dashboardEnvVariable === 'default') {
+      setVisible(true);
     }
 
-    // if (dashboardEnvVariable === 'default') {
-    //   setVisible(true);
-    // }
+    const apiEndpointExist = checkIfQueryParamsExistsInUrl(config.apiEndpoint);
 
-    // const apiEndpointExist = checkIfQueryParamsExistsInUrl(config.apiEndpoint);
 
-    // if (apiEndpointExist) {
-    //   getApiEndpointOnPageLoad();
-    //   FinalizedApiEndpoint(dashboardEnvVariable, true);
-    //   setVisible(false);
-    // }
+    if (apiEndpointExist) {
+      getApiEndpointOnPageLoad();
+      setVisible(false);
+    }
 
-    // if (!apiEndpointExist && !dashboardEnvVariable) {
-    //   setVisible(true);
-    // }
+
   };
 
   useEffect(() => {

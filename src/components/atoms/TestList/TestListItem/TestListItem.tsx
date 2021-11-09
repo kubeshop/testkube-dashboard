@@ -14,7 +14,7 @@ const StyledTestListRow = styled.div`
   flex-flow: row wrap;
   position: relative;
   transition: 0.5s;
-  height: 50px;
+  height: 100%;
 
   &:not(:first-child):hover {
     cursor: pointer;
