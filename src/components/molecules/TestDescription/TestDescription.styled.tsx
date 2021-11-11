@@ -53,19 +53,25 @@ export const StyledText = styled.pre`
 
 export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
-  height: 95%;
-  max-height: 97%;
+  height: 90%;
   overflow: scroll;
 
-  @media screen and (min-width: 1024px) {
-    max-height: 90%;
+  // TESTING MEDIA SCREENS
+  /* @media only screen and (min-width: 425px) {
+    height: 50vh;
+  }*/
+  /* @media only screen and (min-width: 768px) {
+    height: 50%;
   }
-  @media screen and (min-width: 1440px) {
-    max-height: 92%;
+  @media only screen and (min-width: 1024px) {
+    height: 70%;
   }
-  @media screen and (min-width: 2500px) {
-    max-height: 90%;
+  @media only screen and (min-width: 1440px) {
+    height: 85%;
   }
+  @media only screen and (min-width: 2500px) {
+    height: 90%;
+  } */
 `;
 
 export const StyledTestStepNameContainer = styled.div`

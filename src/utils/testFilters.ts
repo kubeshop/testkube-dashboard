@@ -1,7 +1,6 @@
 import moment from "moment";
 import { getDate } from "./formatDate";
 
-  
 export const filterTestsExecution = (tests: any, _filters: any) => {
   let filteredTestsExecution = tests;
 
@@ -46,7 +45,7 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
   }
 
   if (_filters?.filter?.includes('today')) {
- 
+
     const todayFilteredTests = filteredTestsExecution?.results?.filter(
       (test: any) => getDate(test.startTime) === moment().toString()
     );
@@ -61,7 +60,6 @@ export const filterTestsExecution = (tests: any, _filters: any) => {
       };
     }
   }
-
 
   return filteredTestsExecution;
 };

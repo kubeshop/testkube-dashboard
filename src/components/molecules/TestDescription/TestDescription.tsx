@@ -1,30 +1,31 @@
 /* eslint react/destructuring-assignment: 0 */
-import React, {useContext, useState} from 'react';
-import {nanoid} from 'nanoid';
+import React, {useState} from 'react';
+import {nanoid} from '@reduxjs/toolkit';
 import {Collapse} from 'antd';
-import {RenderTestStatusSvgIcon, Typography, Spinner} from '@atoms';
 
-import {TestsContext} from '@context/testsContext';
+import {RenderTestStatusSvgIcon, Spinner, Typography} from '@atoms';
 import {Step, AssertionResult, Test} from '@types';
 
-import {useFetchTest} from '@hooks';
+import {selectedTestId} from '@redux/reducers/testsListSlice';
+import {useGetTestByIdQuery} from '@src/services/tests';
+import {useAppSelector} from '@redux/hooks';
 import {
-  StyledTestStatusImage,
-  StyledTestOutputsContainer,
-  StyledTestOutputDescription,
   StyledPlainTextOutputContainer,
   StyledTestOutput,
   StyledText,
-  StyledTestStepsOutPutContainer,
   StyledTestStepNameContainer,
   StyledTestStepName,
-  StyledTestAssertionResultsContainer,
   StyledTestStepAssertionContainer,
   StyledTestOutputNameAndStatus,
   StyledTestOutputAssertionName,
   StyledTestOutputAssertionErrorMessage,
   StyledCollapse,
   StyledTestWithoutAssertions,
+  StyledTestOutputDescription,
+  StyledTestOutputsContainer,
+  StyledTestStatusImage,
+  StyledTestStepsOutPutContainer,
+  StyledTestAssertionResultsContainer,
   TestsWithoutStepsContainer,
 } from './TestDescription.styled';
 
@@ -37,11 +38,11 @@ const RenderPlainTestOutput = (data: Test) => {
   return (
     <StyledPlainTextOutputContainer>
       <StyledTestOutput>
-        {data &&
-        <StyledText key={nanoid()}>
-          <pre>{data?.executionResult?.output}</pre>
-        </StyledText>
-        }
+        {data && (
+          <StyledText key={nanoid()}>
+            <pre>{data?.executionResult?.output}</pre>
+          </StyledText>
+        )}
       </StyledTestOutput>
     </StyledPlainTextOutputContainer>
   );
@@ -100,30 +101,30 @@ const RenderTestWithoutAssertion = (step: Step) => {
 };
 
 const TestDescription = () => {
+  const testId = useAppSelector(selectedTestId);
+
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
-  const tests: any = useContext(TestsContext);
-
-  const {data, error, isLoading} = useFetchTest();
-
   const handleOnClick = () => {
     setTogglePlainTestTest(!togglePlainTestTest);
   };
 
+  const {data, error, isLoading} = useGetTestByIdQuery(testId, {});
+
   return (
     <>
-      {error && <Typography variant='secondary'>Something went wrong...</Typography>}
-      {isLoading && <Spinner />}
-      {tests?.selectedTest.id && data && (
+      {error && <Typography variant="secondary">Something went wrong...</Typography>}
+      {isLoading && <Spinner size="large" center />}
+      {data && (
         <>
           <StyledTestStatusImage>
             <RenderTestStatusSvgIcon testStatus={data?.executionResult?.status} width={32} height={32} />
           </StyledTestStatusImage>
           <StyledTestOutputsContainer>
             <StyledTestOutputDescription>
-              <Typography variant='tertiary' color='tertiary'>
-                {tests?.selectedTest?.testName || ''}
+              <Typography variant="tertiary" color="tertiary">
+                {`${data?.scriptName}/${data?.name}`}
               </Typography>
-              <Typography variant='secondary' color='quinary' cursor='pointer' onClick={handleOnClick}>
+              <Typography variant="secondary" color="quinary" cursor="pointer" onClick={handleOnClick}>
                 {togglePlainTestTest ? 'View plain text' : 'View steps'}
               </Typography>
             </StyledTestOutputDescription>

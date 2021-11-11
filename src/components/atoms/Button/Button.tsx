@@ -51,8 +51,8 @@ const StyledButton = styled.button<IButton>`
 
   &:disabled {
     cursor: not-allowed;
-    background: var(--color-dark-primary);
-    color: var(--color-monokle-secondary);
+    color: var(--color-dark-primary);
+    background: var(--color-monokle-primary);
   }
 `;
 

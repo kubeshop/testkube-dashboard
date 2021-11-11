@@ -1,10 +1,16 @@
-export type ITestStatus = {
-  testStatus: 'queued' | 'error' | 'success' | 'pending';
-};
+import { Moment } from "moment";
+
+export enum EStatus {
+  queued = 'queued',
+  pending = 'pending',
+  success = 'success',
+  error = 'error',
+}
 
 export interface ITests {
   totals: Totals;
   results: IResult[];
+  filtered: any;
 }
 
 export interface IResult {
@@ -13,8 +19,8 @@ export interface IResult {
   scriptName: string;
   scriptType: string;
   status: string;
-  startTime: string;
-  endTime: string;
+  startTime: Moment;
+  endTime: Moment;
 }
 
 export interface Totals {

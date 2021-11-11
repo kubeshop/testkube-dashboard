@@ -1,7 +1,9 @@
-import React from 'react';
 import styled from 'styled-components';
+import React from 'react';
 
+import {selectedTestId} from '@redux/reducers/testsListSlice';
 import {TestsList, TestDescription} from '@molecules';
+import {useAppSelector} from '@redux/hooks';
 
 const StyledTestList = styled.td`
   min-width: 55%;
@@ -25,14 +27,14 @@ const StyledTestDescription = styled.td`
 `;
 
 const TestsSummary = () => {
+  const testId = useAppSelector(selectedTestId);
+
   return (
     <>
       <StyledTestList>
         <TestsList />
       </StyledTestList>
-      <StyledTestDescription>
-        <TestDescription />
-      </StyledTestDescription>
+      <StyledTestDescription>{testId && <TestDescription />}</StyledTestDescription>
     </>
   );
 };

@@ -1,14 +1,14 @@
-import {config} from '@constants/config';
+import { config } from '@constants/config';
 import { removeSpaceFromString, RemoveLastTrailingSlashFromString } from './strings';
 
 export const validateUrl = (url: string): boolean => {
-    const pattern = new RegExp(
+  const pattern = new RegExp(
     '^(https?:\\/\\/)?' + // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
     '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
     '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
     '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$',
+    '(\\#[-a-z\\d_]*)?$',
     'i'
   );
 
@@ -40,17 +40,13 @@ export const AppendApiVersionToEndpoint = (apiEndpoint: string) => {
 };
 
 export const FinalizedApiEndpoint = (apiEndpoint: string, storeData?: boolean) => {
-
+ 
   const ApiEndpointWithoutSpace = removeSpaceFromString(apiEndpoint);
   const ApiEndpointWithoutTrailingSlash = RemoveLastTrailingSlashFromString(ApiEndpointWithoutSpace);
   const ApiEndpointWithProtocol = checkApiEndpointProtocol(ApiEndpointWithoutTrailingSlash);
   const ApiEndpointWithVersion = AppendApiVersionToEndpoint(ApiEndpointWithProtocol);
-
-  if (storeData) {
-    localStorage.setItem(config.apiEndpoint, ApiEndpointWithVersion);
-    return;
-  }
-
+ 
+   
   return ApiEndpointWithVersion;
 };
 
@@ -68,8 +64,8 @@ export const getApiEndpointOnPageLoad = () => {
     localStorage.removeItem(config.apiEndpoint);
     return;
   }
-
-  const finalUrl = FinalizedApiEndpoint(queryString, true);
+   const finalUrl = FinalizedApiEndpoint(queryString, true);
+ 
   if (!finalUrl) {
     return;
   }

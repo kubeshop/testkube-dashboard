@@ -107,6 +107,11 @@ p {
 .ant-collapse .ant-collapse-borderless .ant-collapse-icon-position-right {
 height: 44px;
 }
+
+.ant-picker-footer {
+  display: none;
+}
+
   `;
 
 /* Media Sizes */

@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
-import {DatePicker} from 'antd';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import moment, {Moment} from 'moment';
+import React, { useState } from 'react';
+import moment from 'moment';
+import { DatePicker } from 'antd';
 
-import {Typography, Button} from '@atoms';
-
-import {TestsContext} from '@context/testsContext';
+import { clearFiltredData, selectFilters } from '@redux/reducers/testsListSlice';
+import { useAppSelector } from '@redux/hooks';
+import { Typography, Button } from '@atoms';
 
 const StyledDateContainer = styled.div`
   display: flex;
@@ -28,40 +29,35 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
-  const [selectedDate, setSelectedDate] = useState<Moment>();
-  const tests: any = React.useContext(TestsContext);
-
+  const [clicked, setClicked] = useState<boolean>(false);
+  const filters = useAppSelector(selectFilters);
+  const dispatch = useDispatch();
   const handleDatePicker = (value: any, dateString: any) => {
-    tests.setSelectedTest({id: null, testName: null});
-    setSelectedDate(value);
-    tests.filters.dateFilter = dateString;
-
-    tests.setFilters(tests.filters);
-    tests.setFilterByDate(dateString);
+    dispatch(clearFiltredData({ status: undefined, date: dateString }));
   };
 
-  const getTodayTests = React.useCallback(() => {
-    tests.setSelectedTest({id: null, testName: null});
-    let currentDate = moment();
-    setSelectedDate(currentDate);
-
-    tests.filters.dateFilter = currentDate;
-
-    tests.setFilters(tests.filters);
-    tests.setFilterByDate(currentDate);
-  }, [tests.filterByDate]);
+  const handleClick = () => {
+    setClicked(!clicked);
+    if (!clicked) {
+      dispatch(clearFiltredData({ status: undefined, date: moment().toString() }));
+    } else {
+      dispatch(clearFiltredData({ status: undefined, date: null }));
+    }
+  };
 
   return (
     <StyledDateContainer>
       <Typography variant="quaternary">Results for</Typography>
       <DatePicker
-        value={selectedDate}
+        value={filters?.date ? moment(filters?.date) : null}
         size="large"
         style={datePickerStyles}
         onChange={handleDatePicker}
         format="MM-DD-YYYY"
       />
-      <Button onClick={getTodayTests}>Today</Button>
+      <Button active={filters?.date === moment().format('YYYY-DD-MM')} onClick={handleClick}>
+        Today
+      </Button>
     </StyledDateContainer>
   );
 };
