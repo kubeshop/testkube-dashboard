@@ -38,6 +38,6 @@ describe('App', () => {
       </Provider>
     );
 
-    expect(screen.getByTestId(/Test filters/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/Tests/i)).toBeInTheDocument();
   });
 });
