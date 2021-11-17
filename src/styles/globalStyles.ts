@@ -236,6 +236,9 @@ input[type=checkbox] {
   display:none;
 }
 
+thead[class*="ant-table-thead"] th:last-child{
+  font-size: 0;
+}
 
 `;
 
