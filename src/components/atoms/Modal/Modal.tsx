@@ -97,7 +97,11 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
           <Typography variant="secondary" leftAlign>
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
             TestKube installer -{' '}
-            <a href="https://kubeshop.github.io/testkube/dashboard/#dashboard-results-endpoint" target="_blank">
+            <a
+              href="https://kubeshop.github.io/testkube/dashboard/#dashboard-results-endpoint"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Read More...
             </a>
           </Typography>
