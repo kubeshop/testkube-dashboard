@@ -16,7 +16,6 @@ import {
 const TestDetailsDrawerHeader = (data: any) => {
   return (
     <StyledTestDetailsDrawerHeaderContainer>
-      {console.log('HEADER DATA', data)}
       <Typography color="tertiary" variant="tertiary">
         Cypress Test Name
       </Typography>
@@ -33,7 +32,7 @@ const TestDetailsDrawerHeader = (data: any) => {
       </StyledScriptNameType>
       <StyledTestScriptChartAndStatusAndDateContainer>
         <StyledScriptChartContainer>
-          <RingProgressChart testResultType="failed" height={100} width={100} />
+          <RingProgressChart testResultType="failed" height={100} width={100} fontSize="small" testStatus="failed" />
         </StyledScriptChartContainer>
         <StyledTestStatusAndDateContainer>
           <StyledTestStatusContainer>

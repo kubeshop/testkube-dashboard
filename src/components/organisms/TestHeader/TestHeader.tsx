@@ -42,7 +42,7 @@ const TestHeader = ({testHeaderLabel, showTestFilters}: ITestHeaderProps) => {
   return (
     <StyledTestHeaderContainer>
       <StyledHeaderTypographyContainer>
-        <Typography variant="quaternary" style={{marginBottom: '20px'}}>
+        <Typography variant="quaternary" style={{marginBottom: '20px'}} data-testid="Tests">
           {testHeaderLabel}
         </Typography>
       </StyledHeaderTypographyContainer>

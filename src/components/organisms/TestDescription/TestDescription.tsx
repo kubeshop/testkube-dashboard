@@ -28,7 +28,7 @@ const TestDescription = () => {
     <>
       {testId && (
         <Drawer
-          width="710px"
+          width="630px"
           onClose={onClose}
           visible={visible}
           bodyStyle={{display: 'flex', flexDirection: 'column', background: 'var(--color-dark-quinary)'}}

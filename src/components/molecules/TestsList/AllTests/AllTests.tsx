@@ -51,6 +51,8 @@ const AllTests = () => {
     enabled: hasNext,
   });
 
+  console.log('all tests', allTests);
+
   return (
     <StyledTestListContainer>
       {allTests?.length > 0 ? (

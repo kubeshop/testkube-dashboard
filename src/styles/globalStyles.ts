@@ -204,12 +204,12 @@ height: 44px;
 }
 
 .ring-progress-style {
-  color: white
+  color: white;
 }
 
 .g2-html-annotation {
   color: var(--color-light-primary) !important;
-  font-size: var(--font-size-lg) !important;
+  /* font-size: 56px!important; */
   word-break: break-all;
 }
 
@@ -232,6 +232,9 @@ input[type=checkbox] {
   filter: hue-rotate(0deg)
 }
 
+.ant-table-placeholder {
+  display:none;
+}
 
 
 `;

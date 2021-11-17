@@ -21,18 +21,18 @@ function TestListTable({data, onChange}: ITestListTable) {
     dispatch(updateSelectedTestId(id));
   };
 
-  const renderHeader = (props: any, columns: any) => {
-    return (
-      <tr>
-        {/* eslint-disable-next-line array-callback-return */}
-        {columns.map((item: any, idx: any) => {
-          if (item.visible) {
-            return props.children[idx];
-          }
-        })}
-      </tr>
-    );
-  };
+  // const renderHeader = (props: any, columns: any) => {
+  //   return (
+  //     <tr>
+  //       {/* eslint-disable-next-line array-callback-return */}
+  //       {columns.map((item: any, idx: any) => {
+  //         if (item.visible) {
+  //           return props.children[idx];
+  //         }
+  //       })}
+  //     </tr>
+  //   );
+  // };
 
   const columns = [
     {
@@ -113,7 +113,8 @@ function TestListTable({data, onChange}: ITestListTable) {
       id: '61927b0d45d766791f7a507e',
     },
   ];
-
+  console.log('data', data);
+  console.log('allTests', allTests);
   return (
     <Table
       columns={columns}

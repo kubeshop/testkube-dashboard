@@ -102,9 +102,30 @@ const RenderTestWithoutAssertion = (step?: Step) => {
   );
 };
 
+const RenderOnlyFailedTestCheckbox = () => {
+  const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowOnlyFailedSteps(event.target.checked);
+  };
+  return (
+    <StyledShowFailedStepsContainer>
+      <StyledLabelledFailedOnlyCheckbox htmlFor="failed">
+        <input
+          id="failed"
+          type="checkbox"
+          name="failed"
+          onChange={handleCheckboxChange}
+          className="filter-failed-checkbox"
+        />
+        <span>Show only failed steps</span>
+      </StyledLabelledFailedOnlyCheckbox>
+    </StyledShowFailedStepsContainer>
+  );
+};
+
 const ExecutionResultsOutputs = (data: any) => {
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
-  const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
 
   const {TabPane} = Tabs;
 
@@ -116,27 +137,21 @@ const ExecutionResultsOutputs = (data: any) => {
     console.log(key);
   }
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShowOnlyFailedSteps(event.target.checked);
-  };
-
   return (
     <StyledTestDescriptionContainer>
       {/* eslint-disable-next-line react/jsx-no-bind */}
-      <Tabs defaultActiveKey="1" onChange={callback}>
+      <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RenderOnlyFailedTestCheckbox />}>
         <TabPane tab="Steps" key="1">
           <StyledTestStepsOutPutContainer>
             {data?.executionResult?.steps ? (
               data?.executionResult?.steps?.map((step: Step) => (
-                <>
-                  <StyledTestAssertionResultsContainer>
-                    {step.assertionResults && step.assertionResults.length !== 0 ? (
-                      <RenderTestOutputWithAssertion {...step} />
-                    ) : (
-                      <RenderTestWithoutAssertion {...step} />
-                    )}
-                  </StyledTestAssertionResultsContainer>
-                </>
+                <StyledTestAssertionResultsContainer key={nanoid()}>
+                  {step.assertionResults && step.assertionResults.length !== 0 ? (
+                    <RenderTestOutputWithAssertion {...step} />
+                  ) : (
+                    <RenderTestWithoutAssertion {...step} />
+                  )}
+                </StyledTestAssertionResultsContainer>
               ))
             ) : (
               <TestsWithoutStepsContainer>
@@ -162,12 +177,6 @@ const ExecutionResultsOutputs = (data: any) => {
           </StyledArtifacts>
         </TabPane>
       </Tabs>
-      <StyledShowFailedStepsContainer>
-        <StyledLabelledFailedOnlyCheckbox htmlFor="failed">
-          <input type="checkbox" name="failed" onChange={handleCheckboxChange} className="filter-failed-checkbox" />
-          <span>Show only failed steps</span>
-        </StyledLabelledFailedOnlyCheckbox>
-      </StyledShowFailedStepsContainer>
     </StyledTestDescriptionContainer>
   );
 };

@@ -6,5 +6,5 @@ export const StyledTestDetailsDrawerPerformanceSection = styled(Row)`
   flex-direction: column;
   align-items: baseline;
   position: relative;
-  top: -20px;
+  top: -10px;
 `;

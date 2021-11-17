@@ -163,7 +163,7 @@ export const TestsWithoutStepsContainer = styled.div`
   height: var(--space-x1l);
   background: #ff4d4fb3;
   color: var(--color-light-primary);
-  width: 100%;
+  width: 550px;
 
   @media screen and (min-width: 2560px) {
     width: 95%;
@@ -172,6 +172,7 @@ export const TestsWithoutStepsContainer = styled.div`
 
 export const StyledShowFailedStepsContainer = styled.div`
   display: flex;
+  /* margin-left: 383px; */
 `;
 
 export const StyledLabelledFailedOnlyCheckbox = styled.label`
