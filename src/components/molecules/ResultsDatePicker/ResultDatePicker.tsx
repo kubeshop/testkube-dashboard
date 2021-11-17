@@ -1,64 +1,58 @@
-import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
-import React, { useState } from 'react';
+import {useDispatch} from 'react-redux';
+import React, {useState} from 'react';
 import moment from 'moment';
-import { DatePicker } from 'antd';
+import {DatePicker} from 'antd';
 
-import { clearFiltredData, selectFilters } from '@redux/reducers/testsListSlice';
-import { useAppSelector } from '@redux/hooks';
-import { Typography, Button } from '@atoms';
-
-const StyledDateContainer = styled.div`
-  display: flex;
-  align-items: baseline;
-  margin-left: 14px;
-
-  & > * {
-    flex: 1 1 auto;
-    margin: 5px;
-  }
-`;
+import {clearFiltredData, selectFilters} from '@redux/reducers/testsListSlice';
+import {useAppSelector} from '@redux/hooks';
 
 const datePickerStyles = {
-  color: 'var(--color-light-primary)',
+  color: 'var(--color-dark-quaternary)',
   backgroundColor: 'var(--color-dark-primary)',
-  borderLeft: 'none',
-  borderTop: 'none',
-  borderRight: 'none',
-  borderBottom: '1px solid var(--color-light-primary)',
+  border: '1px solid var(--color-dark-quaternary)',
+  width: '306px',
+  height: '40px',
 };
 
 const ResultDatePicker = () => {
   const [clicked, setClicked] = useState<boolean>(false);
   const filters = useAppSelector(selectFilters);
   const dispatch = useDispatch();
-  const handleDatePicker = (value: any, dateString: any) => {
-    dispatch(clearFiltredData({ status: undefined, date: dateString }));
+  const {RangePicker} = DatePicker;
+
+  // const handleDatePicker = (value: any, dateString: any) => {
+  //   dispatch(clearFiltredData({status: undefined, date: dateString}));
+  // };
+
+  const handleDateRange = (_: any, dateString: any) => {
+    dispatch(clearFiltredData({status: undefined, date: dateString}));
   };
 
   const handleClick = () => {
     setClicked(!clicked);
     if (!clicked) {
-      dispatch(clearFiltredData({ status: undefined, date: moment().toString() }));
+      dispatch(clearFiltredData({status: undefined, date: moment().toString()}));
     } else {
-      dispatch(clearFiltredData({ status: undefined, date: null }));
+      dispatch(clearFiltredData({status: undefined, date: null}));
     }
   };
 
   return (
-    <StyledDateContainer>
-      <Typography variant="quaternary">Results for</Typography>
-      <DatePicker
+    <>
+      {/* <DatePicker
         value={filters?.date ? moment(filters?.date) : null}
         size="large"
         style={datePickerStyles}
         onChange={handleDatePicker}
         format="MM-DD-YYYY"
+      /> */}
+      <RangePicker
+        placeholder={['Select time', 'Select time']}
+        style={datePickerStyles}
+        onChange={handleDateRange}
+        format="MM-DD-YYYY"
       />
-      <Button active={filters?.date === moment().format('YYYY-DD-MM')} onClick={handleClick}>
-        Today
-      </Button>
-    </StyledDateContainer>
+    </>
   );
 };
 

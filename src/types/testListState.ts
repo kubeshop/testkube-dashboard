@@ -19,6 +19,7 @@ export interface ITestListState {
     queued?: number,
     pending?: number
   }
+  // toggleDrawer: boolean
 }
 
 export interface ITestFilter {

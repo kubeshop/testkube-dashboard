@@ -2,7 +2,6 @@ import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError 
 import { config } from '@src/constants/config';
 import moment from 'moment';
 
-
 const rawBaseQuery = (baseUrl: string) => fetchBaseQuery({
   baseUrl
 });
@@ -43,6 +42,5 @@ export const testsApi = createApi({
 
   }),
 });
-
 
 export const { useGetTestsQuery, useGetTestsByStatusQuery, useGetTestsByDateQuery, useGetTestByIdQuery } = testsApi;

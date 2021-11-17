@@ -53,9 +53,11 @@ const StyledTestListCell = styled.div`
 const TestListItem = ({index, item}: {index: number; item: any}) => {
   const testId = useAppSelector(selectedTestId);
   const dispatch = useDispatch();
+
   const handleSelectedTest = (id: string) => {
     dispatch(updateSelectedTestId(id));
   };
+
   return (
     <StyledTestListRow
       className={testId === item.id ? 'selected' : ''}

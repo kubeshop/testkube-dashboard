@@ -23,7 +23,7 @@ const initialState: TestListState = {
   resultsByDate: [],
   resultsByStatus: [],
   isLoading: false,
-  hasNext: false
+  hasNext: false,
 };
 
 export const testsListSlice = createSlice({
@@ -46,11 +46,12 @@ export const testsListSlice = createSlice({
       state.totals = action.payload?.data?.totals;
     },
     clearFiltredData: (state, action: PayloadAction<any>) => {
-      
+
       state.filters = {
         ...action.payload,
         pageSize: state.filters.pageSize
       };
+
       state.filters.page = 0;
       state.selectedTestId = undefined;
       state.results = [];
@@ -72,6 +73,7 @@ export const testsListSlice = createSlice({
     updateSelectedTestId: (state, action: PayloadAction<string>) => {
       state.selectedTestId = action.payload;
     },
+
   },
 });
 
@@ -92,7 +94,7 @@ export const {
   nextPage,
   prevPage,
   setPage,
-  updateSelectedTestId
+  updateSelectedTestId,
 } = testsListSlice.actions;
 
 export default testsListSlice.reducer;

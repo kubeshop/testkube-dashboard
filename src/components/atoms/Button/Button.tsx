@@ -5,6 +5,7 @@ export interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;
   onClick?: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
   disableFilter?: boolean;
+  variant?: 'primary' | 'secondary';
 }
 
 const StyledButton = styled.button<IButton>`
@@ -15,14 +16,14 @@ const StyledButton = styled.button<IButton>`
 
   /* Fonts and Text. */
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-md);
+  font-size: 14px;
   font-style: normal;
   font-variant: normal;
   font-weight: var(--font-weight-regular);
   letter-spacing: normal;
   line-height: normal;
   text-decoration: none solid rgb(0, 0, 0);
-  border-radius: var(--font-size-xl);
+  border-radius: 3px;
   text-transform: none;
   vertical-align: baseline;
   white-space: normal;
@@ -30,12 +31,15 @@ const StyledButton = styled.button<IButton>`
   text-align: center;
 
   /* Sizes. */
-  margin: 15px 10px;
-  padding: 5px 16px;
+  margin: 15px 5px;
+  padding: ${props =>
+    props.variant === 'primary' ? '5px 16px' : props.variant === 'secondary' ? '15px ​25px' : '15px ​25px'};
   border: 1px solid var(--color-monokle-primary);
+  width: ${props => (props.variant === 'primary' ? '60px' : props.variant === 'secondary' ? '65px' : '35px')};
+  height: ${props => (props.variant === 'primary' ? '24px' : props.variant === 'secondary' ? '35px' : '24px')};
 
   /* Color & Background */
-  color: ${({active}) => (active ? 'var(--color-dark-primary)' : 'var(--color-monokle-primary)')};
+  color: ${({active}) => (active ? 'var(--color-gray-primary)' : 'var(--color-monokle-primary)')};
   background: ${({active}) => (active ? 'var(--color-monokle-primary) ' : 'var(--color-dark-primary)')};
 
   /* Effects. */
@@ -56,7 +60,7 @@ const StyledButton = styled.button<IButton>`
   }
 `;
 
-const Button: React.FC<IButton> = ({children, disabled, disableFilter, onClick, ...buttonProps}) => {
+const Button: React.FC<IButton> = ({children, disabled, disableFilter, onClick, variant, ...buttonProps}) => {
   const [active, setActive] = React.useState(false);
 
   const handleOnclick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
@@ -65,7 +69,7 @@ const Button: React.FC<IButton> = ({children, disabled, disableFilter, onClick, 
   };
 
   return (
-    <StyledButton active={active} disabled={disabled} onClick={handleOnclick} {...buttonProps}>
+    <StyledButton active={active} disabled={disabled} onClick={handleOnclick} variant={variant} {...buttonProps}>
       {children}
     </StyledButton>
   );

@@ -1,4 +1,3 @@
-export { default as TestResults } from './TestResults/TestResults';
-export { default as TestsFilter } from './TestsFilters/TestsFilter';
-export { default as TestsSummary } from './TestsSummary/TestsSummary';
-export { default as PageHeader } from './PageHeader/PageHeader';
+export { default as SideBar } from './SideBar/SideBar';
+export { default as TestHeader } from './TestHeader/TestHeader';
+export { default as TestListTable } from './TestListTable/TestListTable';
