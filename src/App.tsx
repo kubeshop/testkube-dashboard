@@ -12,6 +12,7 @@ import {
   checkIfQueryParamsExistsInUrl,
   FinalizedApiEndpoint,
 } from '@utils';
+import {Content} from 'antd/lib/layout/layout';
 import {Layout} from 'antd';
 import {SideBar} from './components/organisms';
 
@@ -62,11 +63,13 @@ function App() {
       {visible && <Modal visible isModalVisible={setVisible} />}
       <Layout>
         <SideBar />
-        <Switch>
-          <Route path="/?apiEndpoint=:apiEndpoint" exact render={Main} />
-          <Route path="/statistics" exact component={Statistics} />
-          <Route path="/" exact component={Main} />
-        </Switch>
+        <Content>
+          <Switch>
+            <Route path="/?apiEndpoint=:apiEndpoint" exact render={Main} />
+            <Route path="/statistics" exact component={Statistics} />
+            <Route path="/" exact component={Main} />
+          </Switch>
+        </Content>
       </Layout>
     </>
   );

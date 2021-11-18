@@ -20,7 +20,7 @@ const TestDescription = () => {
 
   React.useEffect(() => {
     if (testId) {
-      if (testId) setVisible(true);
+      setVisible(!visible);
     }
   }, [testId]);
 

@@ -1,6 +1,7 @@
 import React from 'react';
-import {TestHeader, TestListTable} from '@organisms';
-import {TestDescription} from '@src/components/molecules';
+// import {TestHeader, TestListTable} from '@organisms';
+import {TestHeader} from '@organisms';
+import {TestDescription, TestsList} from '@src/components/molecules';
 import {StyledMainContent, StyledTestHeader, StyledTestSummary} from './Main.styled';
 
 const Main = () => {
@@ -11,7 +12,7 @@ const Main = () => {
           <TestHeader testHeaderLabel="Tests" showTestFilters />
         </StyledTestHeader>
         <StyledTestSummary>
-          <TestListTable />
+          <TestsList />
         </StyledTestSummary>
       </StyledMainContent>
       <TestDescription />

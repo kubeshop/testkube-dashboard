@@ -16,3 +16,4 @@ export { default as TestStatisticsStats } from "./TestStatisticsStats/TestStatis
 export { default as TestDetailsLineChart } from "./Charts/TestDetailsLineChart/TestDetailsLineChart";
 export { default as RingProgressChart } from "./Charts/TestDetailsRingProgressChart/TestDetailsRingProgressChart";
 export { default as AreaChart } from "./Charts/AreaChart/AreaChart";
+export { default as TableHeader } from "./Table/TableHeader";
