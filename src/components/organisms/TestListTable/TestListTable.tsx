@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 import {Table} from 'antd';
 import {useDispatch} from 'react-redux';
 
@@ -10,14 +10,17 @@ import {
   selectHasNext,
   selectTests,
   selectTestsByStatus,
-  updateData,
-  updateFiltredDataByStatus,
+  // updateData,
+  // updateFiltredDataByStatus,
   updateSelectedTestId,
 } from '@src/redux/reducers/testsListSlice';
 import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
 import {getDuration, timeStampToDate} from '@src/utils/formatDate';
-import {useGetTestsByStatusQuery, useGetTestsQuery} from '@src/services/tests';
-import {getStatus} from '@src/redux/utils/requestFilters';
+// import {useGetTestsQuery} from '@src/services/tests';
+// import {skipToken} from '@reduxjs/toolkit/dist/query';
+// import {skipToken} from '@reduxjs/toolkit/dist/query';
+// import {getStatus} from '@src/redux/utils/requestFilters';
+// import {skipToken} from '@reduxjs/toolkit/dist/query';
 // import {useIntersectionObserver} from '@src/hooks/intersectionObserver';
 
 interface ITestListTable {
@@ -27,6 +30,7 @@ interface ITestListTable {
 
 function TestListTable({onChange}: ITestListTable) {
   const dispatch = useDispatch();
+  const [finalData, setFinalData] = useState<any>([]);
 
   const handleSelectedTest = (id: string) => {
     dispatch(updateSelectedTestId(id));
@@ -38,46 +42,52 @@ function TestListTable({onChange}: ITestListTable) {
   const filters = useAppSelector(selectFilters);
   const hasNext = useAppSelector(selectHasNext);
 
-  const {data, isFetching} = useGetTestsQuery(filters, {
-    pollingInterval: 5000,
-  });
+  // const {data, isFetching} = useGetTestsQuery(filters, {
+  //   pollingInterval: 5000,
+  // });
 
-  useEffect(() => {
-    const fetchData = () => {
-      if (data) {
-        const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
-        // totalData.push(data);
-        dispatch(
-          updateData({
-            data,
-            hasNext: filters.page <= totalPages,
-          })
-        );
-      }
-    };
-    fetchData();
-  }, [data, dispatch]);
+  // const {data: testsByStatus, isFetching: fetchDataByStatus} = useGetTestsByStatusQuery(filters, {
+  //   pollingInterval: 5000,
+  //   skip: !data,
+  // });
 
-  const {data: testsByStatus, isFetching: fetchDataByStatus} = useGetTestsByStatusQuery(filters, {
-    pollingInterval: 5000,
-    skip: data,
-  });
+  // useEffect(() => {
+  //   if (data) {
+  //     setFinalData(data);
+  //   }
+  // }, [data]);
 
-  useEffect(() => {
-    const fetchData = () => {
-      if (testsByStatus) {
-        const totalPages = Math.trunc(testsByStatus.filtered[getStatus(filters.status)] / filters.pageSize);
+  // useEffect(() => {
+  //   const fetchData = () => {
+  //     if (data) {
+  //       const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
+  //       // totalData.push(data);
+  //       dispatch(
+  //         updateData({
+  //           data,
+  //           hasNext: filters.page <= totalPages,
+  //         })
+  //       );
+  //     }
+  //   };
+  //   fetchData();
+  // }, [data, dispatch]);
 
-        dispatch(
-          updateFiltredDataByStatus({
-            testsByStatus,
-            hasNext: filters.page <= totalPages,
-          })
-        );
-      }
-    };
-    fetchData();
-  }, [testsByStatus, dispatch]);
+  // useEffect(() => {
+  //   const fetchData = () => {
+  //     if (testsByStatus) {
+  //       const totalPages = Math.trunc(testsByStatus.filtered[getStatus(filters.status)] / filters.pageSize);
+
+  //       dispatch(
+  //         updateFiltredDataByStatus({
+  //           testsByStatus,
+  //           hasNext: filters.page <= totalPages,
+  //         })
+  //       );
+  //     }
+  //   };
+  //   fetchData();
+  // }, [testsByStatus, dispatch]);
 
   // useIntersectionObserver({
   //   target: fetchNextPageRef,
@@ -142,32 +152,33 @@ function TestListTable({onChange}: ITestListTable) {
     },
   ];
 
-  // const dataSource = [
-  //   {
-  //     scriptType: 'cypress',
-  //     scriptName: 'My Script 1',
-  //     name: 'Long script 1',
-  //     startTime: '2021-11-15T15:21:49.229Z',
-  //     endTime: '0001-01-01T00:00:00Z',
-  //     duration: '2021-11-15T15:21:49.229Z',
-  //     status: 'pending',
-  //     id: '618e5291d88b39735423e0c6',
-  //   },
-  //   {
-  //     scriptType: 'postman',
-  //     scriptName: 'My script 2',
-  //     name: 'long script 2',
-  //     startTime: '2021-11-15T15:21:49.229Z',
-  //     endTime: '0001-01-01T00:00:00Z',
-  //     duration: '2021-11-15T15:21:49.229Z',
-  //     status: 'success',
-  //     id: '61927b0d45d766791f7a507e',
-  //   },
-  // ];
+  const dataSource = [
+    {
+      scriptType: 'cypress',
+      scriptName: 'My Script 1',
+      name: 'Long script 1',
+      startTime: '2021-11-15T15:21:49.229Z',
+      endTime: '0001-01-01T00:00:00Z',
+      duration: '2021-11-15T15:21:49.229Z',
+      status: 'pending',
+      id: '618e5291d88b39735423e0c6',
+    },
+    {
+      scriptType: 'postman',
+      scriptName: 'My script 2',
+      name: 'long script 2',
+      startTime: '2021-11-15T15:21:49.229Z',
+      endTime: '0001-01-01T00:00:00Z',
+      duration: '2021-11-15T15:21:49.229Z',
+      status: 'success',
+      id: '61927b0d45d766791f7a507e',
+    },
+  ];
 
   // console.log('data', data);
   // console.log('allTests', allTests);
-  return <Table columns={columns} dataSource={allTests || tests} rowClassName="table-row-dark" />;
+
+  return <Table columns={columns} dataSource={dataSource} rowClassName="table-row-dark" />;
 }
 
 export default TestListTable;

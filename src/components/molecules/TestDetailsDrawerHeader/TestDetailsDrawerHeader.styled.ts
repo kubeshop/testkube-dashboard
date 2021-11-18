@@ -42,6 +42,7 @@ export const StyledTestStatusContainer = styled.div`
 
 export const StyledTestDates = styled.div`
   display: flex;
+  margin-top: 2px;
 `;
 
 export const StyledScriptChartContainer = styled.div`
