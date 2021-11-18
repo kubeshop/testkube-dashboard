@@ -25,6 +25,7 @@ const ResultDatePicker = () => {
   // };
 
   const handleDateRange = (_: any, dateString: any) => {
+     
     dispatch(clearFiltredData({status: undefined, date: dateString}));
   };
 
