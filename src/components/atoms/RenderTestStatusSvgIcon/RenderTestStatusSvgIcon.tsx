@@ -14,14 +14,15 @@ interface ITestTypes {
 }
 
 const RenderTestStatusSvgIcon = ({testStatus, width, height}: ITestTypes) => {
+   
   return (
     <Image
       src={
         testStatus === 'pending'
           ? RunningTestIcon
-          : testStatus === 'error'
+          : testStatus === 'failed'
           ? FailedTestIcon
-          : testStatus === 'success'
+          : testStatus === 'passed'
           ? SuccessTestIcon
           : testStatus === 'queued'
           ? QueuedTestIcon

@@ -1,7 +1,9 @@
 import React from 'react';
 
-import {Typography, TestTypeIcon, RenderTestStatusSvgIcon, TKubeDivider, RingProgressChart} from '@atoms';
+import { Typography, TestTypeIcon, RenderTestStatusSvgIcon, TKubeDivider, RingProgressChart } from '@atoms';
 
+import { timeStampToDate } from '@src/utils/formatDate';
+import { getStatus } from '@src/redux/utils/requestFilters';
 import {
   StyledTestDetailsDrawerHeaderContainer,
   StyledScriptNameType,
@@ -13,32 +15,37 @@ import {
   StyledTestDates,
 } from './TestDetailsDrawerHeader.styled';
 
-const TestDetailsDrawerHeader = (data: any) => {
+const TestDetailsDrawerHeader = ({ data }: { data: any }) => {
+
+
+  const { id, scriptName, name, scriptType, startTime, endTime ,executionResult } = data;
+  
+   
   return (
     <StyledTestDetailsDrawerHeaderContainer>
       <Typography color="tertiary" variant="tertiary">
-        Cypress Test Name
+        {scriptName}
       </Typography>
       <StyledScriptNameType>
         <Typography color="tertiary" variant="quaternary">
-          Long cypress Test
+          {name}
         </Typography>
         <StyledSCriptNameDescriptionContainer>
-          <Typography color="secondary" variant="secondary" style={{marginRight: '10px'}}>
-            postman
+          <Typography color="secondary" variant="secondary" style={{ marginRight: '10px' }}>
+            {scriptType}
           </Typography>
-          <TestTypeIcon testType="cypress" width={26} height={26} />
+          <TestTypeIcon testType={scriptType} width={26} height={26} />
         </StyledSCriptNameDescriptionContainer>
       </StyledScriptNameType>
       <StyledTestScriptChartAndStatusAndDateContainer>
         <StyledScriptChartContainer>
-          <RingProgressChart testResultType="failed" height={100} width={100} fontSize="small" testStatus="failed" />
+          <RingProgressChart steps={executionResult?.steps} testStatus={getStatus(executionResult?.status)} height={100} width={100} fontSize="small"  />
         </StyledScriptChartContainer>
         <StyledTestStatusAndDateContainer>
           <StyledTestStatusContainer>
-            <RenderTestStatusSvgIcon testStatus="error" />
-            <Typography color="tertiary" variant="quaternary" style={{marginLeft: '10px'}}>
-              Failed
+            <RenderTestStatusSvgIcon testStatus={getStatus(executionResult?.status)} />
+            <Typography color="tertiary" variant="quaternary" style={{ marginLeft: '10px' }}>
+              {getStatus(executionResult?.status)}
             </Typography>
           </StyledTestStatusContainer>
 
@@ -47,21 +54,21 @@ const TestDetailsDrawerHeader = (data: any) => {
               color="secondary"
               variant="secondary"
               font="bold"
-              style={{marginRight: '10px', marginTop: '10px'}}
+              style={{ marginRight: '10px', marginTop: '10px' }}
             >
               Start
             </Typography>
-            <Typography color="secondary" variant="secondary" style={{marginRight: '10px', marginTop: '10px'}}>
-              09/12/2021 24:00:00
+            <Typography color="secondary" variant="secondary" style={{ marginRight: '10px', marginTop: '10px' }}>
+              {timeStampToDate(startTime)}
             </Typography>
           </StyledTestDates>
 
           <StyledTestDates>
-            <Typography color="secondary" variant="secondary" font="bold" style={{marginRight: '10px'}}>
+            <Typography color="secondary" variant="secondary" font="bold" style={{ marginRight: '10px' }}>
               End
             </Typography>
-            <Typography color="secondary" variant="secondary" style={{marginRight: '10px'}}>
-              09/12/2021 24:00:00
+            <Typography color="secondary" variant="secondary" style={{ marginRight: '10px' }}>
+              {timeStampToDate(endTime)}
             </Typography>
           </StyledTestDates>
         </StyledTestStatusAndDateContainer>

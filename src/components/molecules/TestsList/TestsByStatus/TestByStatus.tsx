@@ -105,7 +105,7 @@ const TestsByStatus = () => {
       dataIndex: 'status',
       key: 'status',
       width: '5%',
-      render: (testStatus: string) => <RenderTestStatusSvgIcon testStatus={testStatus} />,
+      render: (testStatus: string) => <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
       visible: true,
     },
     {

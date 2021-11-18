@@ -1,21 +1,24 @@
-import React, {useState} from 'react';
-import {Table} from 'antd';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Table } from 'antd';
+import { useDispatch } from 'react-redux';
 
-import {TestTypeIcon, RenderTestStatusSvgIcon} from '@atoms';
-import {useAppSelector} from '@src/redux/hooks';
+import { TestTypeIcon, RenderTestStatusSvgIcon } from '@atoms';
+import { useAppSelector } from '@src/redux/hooks';
 import {
   // nextPage,
   selectFilters,
   selectHasNext,
   selectTests,
   selectTestsByStatus,
+  updateData,
   // updateData,
   // updateFiltredDataByStatus,
   updateSelectedTestId,
 } from '@src/redux/reducers/testsListSlice';
-import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
-import {getDuration, timeStampToDate} from '@src/utils/formatDate';
+import { ReactComponent as LeftArrowIcon } from '@assets/arrowIcon.svg';
+import { getDuration, timeStampToDate } from '@src/utils/formatDate';
+import { useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery } from '@src/services/tests';
+import { getStatus } from '@src/redux/utils/requestFilters';
 // import {useGetTestsQuery} from '@src/services/tests';
 // import {skipToken} from '@reduxjs/toolkit/dist/query';
 // import {skipToken} from '@reduxjs/toolkit/dist/query';
@@ -28,10 +31,9 @@ interface ITestListTable {
   onChange?: () => void;
 }
 
-function TestListTable({onChange}: ITestListTable) {
+function TestListTable() {
   const dispatch = useDispatch();
   const [finalData, setFinalData] = useState<any>([]);
-
   const handleSelectedTest = (id: string) => {
     dispatch(updateSelectedTestId(id));
   };
@@ -42,36 +44,40 @@ function TestListTable({onChange}: ITestListTable) {
   const filters = useAppSelector(selectFilters);
   const hasNext = useAppSelector(selectHasNext);
 
-  // const {data, isFetching} = useGetTestsQuery(filters, {
-  //   pollingInterval: 5000,
-  // });
+  const testsQuery = useGetTestsQuery(filters, {
+    pollingInterval: 5000,
+    skip: !((filters.status === undefined && !filters.date))
+  });
 
-  // const {data: testsByStatus, isFetching: fetchDataByStatus} = useGetTestsByStatusQuery(filters, {
-  //   pollingInterval: 5000,
-  //   skip: !data,
-  // });
+  const testsQueryByStatus = useGetTestsByStatusQuery(filters, {
+    pollingInterval: 5000,
+    skip: filters.status === undefined
+  });
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setFinalData(data);
-  //   }
-  // }, [data]);
+  const testsQueryByDate = useGetTestsByDateQuery(filters, {
+    pollingInterval: 5000,
+    skip: !filters.date
+  });
 
-  // useEffect(() => {
-  //   const fetchData = () => {
-  //     if (data) {
-  //       const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
-  //       // totalData.push(data);
-  //       dispatch(
-  //         updateData({
-  //           data,
-  //           hasNext: filters.page <= totalPages,
-  //         })
-  //       );
-  //     }
-  //   };
-  //   fetchData();
-  // }, [data, dispatch]);
+  const results = testsQuery.isSuccess ? testsQuery : testsQueryByStatus.isSuccess ? testsQueryByStatus : testsQueryByDate;
+  const { data, isSuccess } = results;
+
+  useEffect(() => {
+    const fetchData = () => {
+      if (isSuccess) {
+        const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
+
+        dispatch(
+          updateData({
+            data,
+            hasNext: filters.page <= totalPages,
+          })
+        );
+
+      }
+    };
+    fetchData();
+  }, [data, dispatch ]);
 
   // useEffect(() => {
   //   const fetchData = () => {
@@ -139,7 +145,7 @@ function TestListTable({onChange}: ITestListTable) {
       dataIndex: 'status',
       key: 'status',
       width: '5%',
-      render: (testStatus: string) => <RenderTestStatusSvgIcon testStatus={testStatus} />,
+      render: (testStatus: string) => <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
       visible: true,
     },
     {
@@ -152,33 +158,12 @@ function TestListTable({onChange}: ITestListTable) {
     },
   ];
 
-  const dataSource = [
-    {
-      scriptType: 'cypress',
-      scriptName: 'My Script 1',
-      name: 'Long script 1',
-      startTime: '2021-11-15T15:21:49.229Z',
-      endTime: '0001-01-01T00:00:00Z',
-      duration: '2021-11-15T15:21:49.229Z',
-      status: 'pending',
-      id: '618e5291d88b39735423e0c6',
-    },
-    {
-      scriptType: 'postman',
-      scriptName: 'My script 2',
-      name: 'long script 2',
-      startTime: '2021-11-15T15:21:49.229Z',
-      endTime: '0001-01-01T00:00:00Z',
-      duration: '2021-11-15T15:21:49.229Z',
-      status: 'success',
-      id: '61927b0d45d766791f7a507e',
-    },
-  ];
 
-  // console.log('data', data);
-  // console.log('allTests', allTests);
 
-  return <Table columns={columns} dataSource={dataSource} rowClassName="table-row-dark" />;
+  //  console.log('data', data);
+  //  console.log('allTests', allTests);
+
+  return <Table columns={columns} dataSource={allTests} rowClassName="table-row-dark" />;
 }
 
 export default TestListTable;

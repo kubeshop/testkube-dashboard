@@ -1,14 +1,14 @@
-/* eslint react/destructuring-assignment: 0 */
-import React, {useState} from 'react';
-import {Collapse, Tabs} from 'antd';
-import {nanoid} from '@reduxjs/toolkit';
+import React, { useState } from 'react';
+import { Collapse, Tabs } from 'antd';
+import { nanoid } from '@reduxjs/toolkit';
 
-import {RenderTestStatusSvgIcon} from '@atoms';
+import { RenderTestStatusSvgIcon } from '@atoms';
 
-import {ReactComponent as DownloadIcon} from '@assets/downloadFileIcon.svg';
-import {ReactComponent as FileIcon} from '@assets/fileIcon.svg';
-import {Step, AssertionResult, Test} from '@types';
+import { ReactComponent as DownloadIcon } from '@assets/downloadFileIcon.svg';
+import { ReactComponent as FileIcon } from '@assets/fileIcon.svg';
+import { Step, AssertionResult, Test } from '@types';
 
+import { getStatus } from '@src/redux/utils/requestFilters';
 import {
   StyledTestDescriptionContainer,
   StyledPlainTextOutputContainer,
@@ -37,12 +37,13 @@ interface IStepHeader {
 }
 
 const RenderPlainTestOutput = (data: Test) => {
+  const { executionResult } = data;
   return (
     <StyledPlainTextOutputContainer>
       <StyledTestOutput>
         {data && (
           <StyledText key={nanoid()}>
-            <pre>{data?.executionResult?.output}</pre>
+            <pre>{executionResult?.output}</pre>
           </StyledText>
         )}
       </StyledTestOutput>
@@ -50,28 +51,29 @@ const RenderPlainTestOutput = (data: Test) => {
   );
 };
 
-const RenderTestStepCollapseHeader = ({name, status}: IStepHeader) => {
+const RenderTestStepCollapseHeader = ({ name, status }: IStepHeader) => {
   return (
     <StyledTestStepNameContainer>
-      <RenderTestStatusSvgIcon testStatus={status} width={24} height={24} />
+      <RenderTestStatusSvgIcon testStatus={getStatus(status)} width={24} height={24} />
       <StyledTestStepName>{name}</StyledTestStepName>
     </StyledTestStepNameContainer>
   );
 };
 
 const RenderTestOutputWithAssertion = (step: Step) => {
+  const  {name,status,assertionResults} = step;
   return (
     <>
       {step && (
         <Collapse bordered={false} defaultActiveKey={nanoid()} expandIconPosition="right">
           <StyledCollapse
-            header={<RenderTestStepCollapseHeader name={step.name} status={step.status} />}
+            header={<RenderTestStepCollapseHeader name={name} status={status} />}
             key={nanoid()}
           >
-            {step?.assertionResults?.map((assertionResult: AssertionResult) => (
+            {assertionResults?.map((assertionResult: AssertionResult) => (
               <StyledTestStepAssertionContainer key={nanoid()}>
                 <StyledTestOutputNameAndStatus>
-                  <RenderTestStatusSvgIcon testStatus={assertionResult.status} height={24} width={24} />
+                  <RenderTestStatusSvgIcon testStatus={getStatus(assertionResult.status)} height={24} width={24} />
                   <StyledTestOutputAssertionName>{assertionResult?.name}</StyledTestOutputAssertionName>
                 </StyledTestOutputNameAndStatus>
 
@@ -87,14 +89,15 @@ const RenderTestOutputWithAssertion = (step: Step) => {
   );
 };
 
-const RenderTestWithoutAssertion = (step?: Step) => {
+const RenderTestWithoutAssertion = (step: Step) => {
+  const  {name,status} = step;
   return (
     <>
       {step && (
         <StyledTestStepNameContainer>
           <StyledTestWithoutAssertions>
-            <RenderTestStatusSvgIcon testStatus={step.status} width={24} height={24} />
-            <StyledTestStepName>{step.name}</StyledTestStepName>
+            <RenderTestStatusSvgIcon testStatus={getStatus(status)} width={24} height={24} />
+            <StyledTestStepName>{name}</StyledTestStepName>
           </StyledTestWithoutAssertions>
         </StyledTestStepNameContainer>
       )}
@@ -124,10 +127,10 @@ const RenderOnlyFailedTestCheckbox = () => {
   );
 };
 
-const ExecutionResultsOutputs = (data: any) => {
+const ExecutionResultsOutputs = ({ data }: { data: any }) => {
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
-
-  const {TabPane} = Tabs;
+  const {executionResult } = data;
+  const { TabPane } = Tabs;
 
   const handleOnClick = () => {
     setTogglePlainTestTest(!togglePlainTestTest);
@@ -143,8 +146,8 @@ const ExecutionResultsOutputs = (data: any) => {
       <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RenderOnlyFailedTestCheckbox />}>
         <TabPane tab="Steps" key="1">
           <StyledTestStepsOutPutContainer>
-            {data?.executionResult?.steps ? (
-              data?.executionResult?.steps?.map((step: Step) => (
+            {executionResult?.steps ? (
+              executionResult?.steps?.map((step: Step) => (
                 <StyledTestAssertionResultsContainer key={nanoid()}>
                   {step.assertionResults && step.assertionResults.length !== 0 ? (
                     <RenderTestOutputWithAssertion {...step} />
@@ -168,11 +171,11 @@ const ExecutionResultsOutputs = (data: any) => {
         <TabPane tab="Artifacts" key="Artifacts">
           <StyledArtifacts>
             <StyledFileArtifactsFileName>
-              <FileIcon style={{marginRight: '10px', marginLeft: '20px'}} />
+              <FileIcon style={{ marginRight: '10px', marginLeft: '20px' }} />
               <span>File 1</span>
             </StyledFileArtifactsFileName>
             <a href="https://assets.website-files.com/611f279603d61242ae80e191/61663e5db099f6a0cd003323_testkube-logo.svg">
-              <DownloadIcon style={{marginRight: '12px', cursor: 'pointer'}} />
+              <DownloadIcon style={{ marginRight: '12px', cursor: 'pointer' }} />
             </a>
           </StyledArtifacts>
         </TabPane>

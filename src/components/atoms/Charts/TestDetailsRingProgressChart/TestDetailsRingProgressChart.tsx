@@ -1,23 +1,28 @@
 import React from 'react';
-import {RingProgress} from '@ant-design/charts';
+import { RingProgress } from '@ant-design/charts';
 
 interface ITestCircleChart {
-  testResultType: 'failed' | 'success';
   height: number;
   width: number;
-  testPercentage?: number;
   fontSize?: 'small' | 'medium' | 'large';
-  testStatus: 'passed' | 'failed' | 'queued' | 'pending';
+  testStatus: string;
+  steps?: any
 }
 
 const RingProgressChart = ({
-  testResultType,
   height,
   width,
   fontSize,
   testStatus,
-  testPercentage = 0.8,
+  steps,
 }: ITestCircleChart) => {
+  const getpercentage  = () : number => {
+    if (steps) {
+      const occurrence = steps?.reduce((occ: number, step: { status: string; }) => (step?.status === "success" ? occ + 1 : occ), 0);
+      return occurrence / steps?.length;
+    }
+    return 0;
+  };
   const config = {
     height,
     width,
@@ -36,11 +41,12 @@ const RingProgressChart = ({
         },
       },
     },
-    percent: testPercentage,
-    color: [testResultType === 'failed' ? ' #eb2424 ' : '#94D89C', '#121212'],
+    percent: getpercentage(),
+    color: [testStatus === 'failed' ? ' #eb2424 ' : '#94D89C', '#121212'],
   };
-
+ 
   return <RingProgress {...config} className="ring-progress-style" />;
+
 };
 
 export default RingProgressChart;

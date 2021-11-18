@@ -39,10 +39,10 @@ const Statistics = () => {
       </StyledTestStatisticsCharts>
       <StyledTestStatisticsCircularCharts>
         <StyledTotalTestCurrentStatusChart>
-          <RingProgressChart testResultType="success" height={250} width={250} fontSize="large" testStatus="passed" />
+          <RingProgressChart  height={250} width={250} fontSize="large" testStatus="passed" />
         </StyledTotalTestCurrentStatusChart>
         <StyledTotalTestCurrentStatusChart>
-          <RingProgressChart testResultType="success" height={250} width={250} fontSize="large" testStatus="passed" />
+          <RingProgressChart   height={250} width={250} fontSize="large" testStatus="passed" />
         </StyledTotalTestCurrentStatusChart>
       </StyledTestStatisticsCircularCharts>
     </StyledStatisticsContainer>
