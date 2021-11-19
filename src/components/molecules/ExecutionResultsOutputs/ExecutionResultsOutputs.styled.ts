@@ -64,7 +64,7 @@ export const StyledText = styled.pre`
 `;
 
 export const StyledTestStepsOutPutContainer = styled.div`
-  width: 100%;
+  width: 550px;
   height: 90%;
   overflow: scroll;
 
@@ -89,7 +89,10 @@ export const StyledTestStepsOutPutContainer = styled.div`
 export const StyledTestStepNameContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 550px;
+  height: 38px;
+  border: 1px solid var(--color-gray-senary);
+  border-radius: 3px;
   background: var(--color-gray-dark);
   color: var(--color-light-primary);
   cursor: pointer;
@@ -97,14 +100,15 @@ export const StyledTestStepNameContainer = styled.div`
 
 export const StyledTestStepName = styled.span`
   margin-left: 15px;
-  font-size: var(--font-size-md);
+  font-size: 14px;
 `;
 
 export const StyledTestAssertionResultsContainer = styled.div`
   display: flex;
   color: var(--color-light-primary);
-  margin-bottom: 3px;
-  /* height: var(--custom-height-1); */
+  margin-bottom: 5px;
+  overflow: hidden;
+  background: var(--color-dark-tertiary)
 `;
 
 export const StyledTestStepAssertionContainer = styled.div`
@@ -146,8 +150,8 @@ export const StyledTestWithoutAssertions = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: var(--space-x1l);
-  background: var(--color-gray-dark);
+  height: 38px;
+  background: var(--color-dark-tertiary);
   margin-top: 5px;
   margin-bottom: var(--space-xxs);
   color: var(--color-light-primary);
@@ -182,19 +186,4 @@ export const StyledLabelledFailedOnlyCheckbox = styled.label`
 
 export const StyledFailedOnlyCheckbox = styled.input`
 
-`;
-
-export const StyledArtifacts = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 550px;
-  height: 38px;
-  color: var(--color-light-primary);
-  background: var(--color-dark-tertiary);
-  border: 1px solid var(--color-gray-senary);
-`;
-
-export const StyledFileArtifactsFileName = styled.div`
-  display: flex;
 `;

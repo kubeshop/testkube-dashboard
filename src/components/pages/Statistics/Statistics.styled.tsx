@@ -49,7 +49,7 @@ export const StyledTestStatisticsCircularCharts = styled.div`
 
 export const StyledTotalTestCurrentStatusChart = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
   position: relative;
   flex-direction: column;

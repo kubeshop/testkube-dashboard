@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {Table} from 'antd';
+import {useDispatch} from 'react-redux';
 
-import { TestTypeIcon, RenderTestStatusSvgIcon } from '@atoms';
-import { useAppSelector } from '@src/redux/hooks';
+import {TestTypeIcon, RenderTestStatusSvgIcon} from '@atoms';
+import {useAppSelector} from '@src/redux/hooks';
 import {
   // nextPage,
   selectFilters,
@@ -11,23 +11,14 @@ import {
   selectTests,
   selectTestsByStatus,
   updateData,
-  // updateData,
-  // updateFiltredDataByStatus,
   updateSelectedTestId,
 } from '@src/redux/reducers/testsListSlice';
-import { ReactComponent as LeftArrowIcon } from '@assets/arrowIcon.svg';
-import { getDuration, timeStampToDate } from '@src/utils/formatDate';
-import { useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery } from '@src/services/tests';
-import { getStatus } from '@src/redux/utils/requestFilters';
-// import {useGetTestsQuery} from '@src/services/tests';
-// import {skipToken} from '@reduxjs/toolkit/dist/query';
-// import {skipToken} from '@reduxjs/toolkit/dist/query';
-// import {getStatus} from '@src/redux/utils/requestFilters';
-// import {skipToken} from '@reduxjs/toolkit/dist/query';
-// import {useIntersectionObserver} from '@src/hooks/intersectionObserver';
+import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
+import {getDuration, timeStampToDate} from '@src/utils/formatDate';
+import {useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery} from '@src/services/tests';
+import {getStatus} from '@src/redux/utils/requestFilters';
 
 interface ITestListTable {
-  // data?: any;
   onChange?: () => void;
 }
 
@@ -46,21 +37,25 @@ function TestListTable() {
 
   const testsQuery = useGetTestsQuery(filters, {
     pollingInterval: 5000,
-    skip: !((filters.status === undefined && !filters.date))
+    skip: !(filters.status === undefined && !filters.date),
   });
 
   const testsQueryByStatus = useGetTestsByStatusQuery(filters, {
     pollingInterval: 5000,
-    skip: filters.status === undefined
+    skip: filters.status === undefined,
   });
 
   const testsQueryByDate = useGetTestsByDateQuery(filters, {
     pollingInterval: 5000,
-    skip: !filters.date
+    skip: !filters.date,
   });
 
-  const results = testsQuery.isSuccess ? testsQuery : testsQueryByStatus.isSuccess ? testsQueryByStatus : testsQueryByDate;
-  const { data, isSuccess } = results;
+  const results = testsQuery.isSuccess
+    ? testsQuery
+    : testsQueryByStatus.isSuccess
+    ? testsQueryByStatus
+    : testsQueryByDate;
+  const {data, isSuccess} = results;
 
   useEffect(() => {
     const fetchData = () => {
@@ -73,11 +68,10 @@ function TestListTable() {
             hasNext: filters.page <= totalPages,
           })
         );
-
       }
     };
     fetchData();
-  }, [data, dispatch ]);
+  }, [data, dispatch]);
 
   // useEffect(() => {
   //   const fetchData = () => {
@@ -158,12 +152,7 @@ function TestListTable() {
     },
   ];
 
-
-
-  //  console.log('data', data);
-  //  console.log('allTests', allTests);
-
-  return <Table columns={columns} dataSource={allTests} rowClassName="table-row-dark" />;
+  return <Table columns={columns} dataSource={allTests} loading={results.isLoading} rowClassName="table-row-dark" />;
 }
 
 export default TestListTable;

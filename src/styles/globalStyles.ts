@@ -106,8 +106,11 @@ border: 1px solid var(--color-gray-nonary);
   overflow: unset !important;
 }
 
+.ant-collapse {
+  background: red;
+}
 .ant-collapse .ant-collapse-borderless .ant-collapse-icon-position-right {
-height: 44px;
+height: 38px;
 }
 
 .ant-picker-footer {
@@ -204,6 +207,9 @@ height: 44px;
 }
 
 .ring-progress-style {
+   display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
 }
 
@@ -238,6 +244,10 @@ input[type=checkbox] {
 
 thead[class*="ant-table-thead"] th:last-child{
   font-size: 0;
+}
+
+.ant-tabs-tabpane:last-child {
+  flex-direction: column;
 }
 
 `;

@@ -10,6 +10,7 @@ interface ITestDetailsDrawerPerformanceSection {
   showOverView?: boolean;
   bordered?: boolean;
   main?: boolean;
+  testDescriptionData?: any;
 }
 
 export const StyledTestDetailsDrawerPerformanceChart = styled.div<ITestDetailsDrawerPerformanceSection>`
@@ -23,6 +24,7 @@ const TestDetailsDrawerPerformanceSection = ({
   showOverView,
   main,
   bordered = true,
+  testDescriptionData,
 }: ITestDetailsDrawerPerformanceSection) => {
   return (
     <>
@@ -31,7 +33,7 @@ const TestDetailsDrawerPerformanceSection = ({
           Performance over Time
         </Typography>
         <StyledTestDetailsDrawerPerformanceChart bordered={bordered}>
-          <TestDetailsLineChart />
+          <TestDetailsLineChart performanceOverTime={testDescriptionData} />
         </StyledTestDetailsDrawerPerformanceChart>
       </StyledTestDetailsDrawerPerformanceSection>
       {showOverView && <TKubeDivider />}

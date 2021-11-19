@@ -42,6 +42,7 @@ function App() {
         search: `?${new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString()}`,
       });
     }
+
     if (dashboardEnvVariable === 'default') {
       setVisible(true);
     }

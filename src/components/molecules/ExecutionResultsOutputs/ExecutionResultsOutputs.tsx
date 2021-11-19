@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import { Collapse, Tabs } from 'antd';
-import { nanoid } from '@reduxjs/toolkit';
+import React, {useState} from 'react';
+import {Collapse, Tabs} from 'antd';
+import {nanoid} from '@reduxjs/toolkit';
 
-import { RenderTestStatusSvgIcon } from '@atoms';
+import {RenderTestStatusSvgIcon} from '@atoms';
 
-import { ReactComponent as DownloadIcon } from '@assets/downloadFileIcon.svg';
-import { ReactComponent as FileIcon } from '@assets/fileIcon.svg';
-import { Step, AssertionResult, Test } from '@types';
+import {Step, AssertionResult, Test} from '@types';
 
-import { getStatus } from '@src/redux/utils/requestFilters';
+import {getStatus} from '@src/redux/utils/requestFilters';
 import {
   StyledTestDescriptionContainer,
   StyledPlainTextOutputContainer,
@@ -27,9 +25,8 @@ import {
   TestsWithoutStepsContainer,
   StyledShowFailedStepsContainer,
   StyledLabelledFailedOnlyCheckbox,
-  StyledArtifacts,
-  StyledFileArtifactsFileName,
 } from './ExecutionResultsOutputs.styled';
+import Artifacts from './Artifacts/Artifacts';
 
 interface IStepHeader {
   name: string;
@@ -37,7 +34,7 @@ interface IStepHeader {
 }
 
 const RenderPlainTestOutput = (data: Test) => {
-  const { executionResult } = data;
+  const {executionResult} = data;
   return (
     <StyledPlainTextOutputContainer>
       <StyledTestOutput>
@@ -51,7 +48,7 @@ const RenderPlainTestOutput = (data: Test) => {
   );
 };
 
-const RenderTestStepCollapseHeader = ({ name, status }: IStepHeader) => {
+const RenderTestStepCollapseHeader = ({name, status}: IStepHeader) => {
   return (
     <StyledTestStepNameContainer>
       <RenderTestStatusSvgIcon testStatus={getStatus(status)} width={24} height={24} />
@@ -61,15 +58,12 @@ const RenderTestStepCollapseHeader = ({ name, status }: IStepHeader) => {
 };
 
 const RenderTestOutputWithAssertion = (step: Step) => {
-  const  {name,status,assertionResults} = step;
+  const {name, status, assertionResults} = step;
   return (
     <>
       {step && (
         <Collapse bordered={false} defaultActiveKey={nanoid()} expandIconPosition="right">
-          <StyledCollapse
-            header={<RenderTestStepCollapseHeader name={name} status={status} />}
-            key={nanoid()}
-          >
+          <StyledCollapse header={<RenderTestStepCollapseHeader name={name} status={status} />} key={nanoid()}>
             {assertionResults?.map((assertionResult: AssertionResult) => (
               <StyledTestStepAssertionContainer key={nanoid()}>
                 <StyledTestOutputNameAndStatus>
@@ -90,7 +84,7 @@ const RenderTestOutputWithAssertion = (step: Step) => {
 };
 
 const RenderTestWithoutAssertion = (step: Step) => {
-  const  {name,status} = step;
+  const {name, status} = step;
   return (
     <>
       {step && (
@@ -105,49 +99,56 @@ const RenderTestWithoutAssertion = (step: Step) => {
   );
 };
 
-const RenderOnlyFailedTestCheckbox = () => {
-  const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
-
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShowOnlyFailedSteps(event.target.checked);
-  };
-  return (
-    <StyledShowFailedStepsContainer>
-      <StyledLabelledFailedOnlyCheckbox htmlFor="failed">
-        <input
-          id="failed"
-          type="checkbox"
-          name="failed"
-          onChange={handleCheckboxChange}
-          className="filter-failed-checkbox"
-        />
-        <span>Show only failed steps</span>
-      </StyledLabelledFailedOnlyCheckbox>
-    </StyledShowFailedStepsContainer>
-  );
-};
-
-const ExecutionResultsOutputs = ({ data }: { data: any }) => {
+const ExecutionResultsOutputs = ({data}: {data: any}) => {
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
-  const {executionResult } = data;
-  const { TabPane } = Tabs;
+  const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
+  const [filteredExecutionResults, setFilteredExecutionResults] = useState<any[]>([]);
+  const {TabPane} = Tabs;
 
   const handleOnClick = () => {
     setTogglePlainTestTest(!togglePlainTestTest);
   };
 
-  function callback(key: any) {
-    console.log(key);
-  }
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowOnlyFailedSteps(event.target.checked);
+  };
+
+  React.useEffect(() => {
+    if (showOnlyFailedSteps) {
+      const filtered = data?.executionResult?.steps?.filter((step: Step) => {
+        return step.status === 'failed';
+      });
+      setFilteredExecutionResults(filtered);
+    } else {
+      setFilteredExecutionResults(data?.executionResult?.steps);
+    }
+  }, [showOnlyFailedSteps]);
 
   return (
     <StyledTestDescriptionContainer>
       {/* eslint-disable-next-line react/jsx-no-bind */}
-      <Tabs defaultActiveKey="1" onChange={callback} tabBarExtraContent={<RenderOnlyFailedTestCheckbox />}>
+      <Tabs
+        defaultActiveKey="1"
+        // onChange={callback}
+        tabBarExtraContent={
+          <StyledShowFailedStepsContainer>
+            <StyledLabelledFailedOnlyCheckbox htmlFor="failed">
+              <input
+                id="failed"
+                type="checkbox"
+                name="failed"
+                onChange={handleCheckboxChange}
+                className="filter-failed-checkbox"
+              />
+              <span>Show only failed steps</span>
+            </StyledLabelledFailedOnlyCheckbox>
+          </StyledShowFailedStepsContainer>
+        }
+      >
         <TabPane tab="Steps" key="1">
           <StyledTestStepsOutPutContainer>
-            {executionResult?.steps ? (
-              executionResult?.steps?.map((step: Step) => (
+            {filteredExecutionResults ? (
+              filteredExecutionResults?.map((step: Step) => (
                 <StyledTestAssertionResultsContainer key={nanoid()}>
                   {step.assertionResults && step.assertionResults.length !== 0 ? (
                     <RenderTestOutputWithAssertion {...step} />
@@ -169,15 +170,7 @@ const ExecutionResultsOutputs = ({ data }: { data: any }) => {
         </TabPane>
 
         <TabPane tab="Artifacts" key="Artifacts">
-          <StyledArtifacts>
-            <StyledFileArtifactsFileName>
-              <FileIcon style={{ marginRight: '10px', marginLeft: '20px' }} />
-              <span>File 1</span>
-            </StyledFileArtifactsFileName>
-            <a href="https://assets.website-files.com/611f279603d61242ae80e191/61663e5db099f6a0cd003323_testkube-logo.svg">
-              <DownloadIcon style={{ marginRight: '12px', cursor: 'pointer' }} />
-            </a>
-          </StyledArtifacts>
+          <Artifacts />
         </TabPane>
       </Tabs>
     </StyledTestDescriptionContainer>

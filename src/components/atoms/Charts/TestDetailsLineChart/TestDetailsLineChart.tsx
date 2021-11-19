@@ -1,7 +1,17 @@
 import React from 'react';
 import {Column} from '@ant-design/charts';
+// import moment from 'moment';
 
-const TestDetailsLineChart = () => {
+interface ITestDetailsLineChart {
+  performanceOverTime?: any;
+}
+
+const TestDetailsLineChart = ({performanceOverTime}: ITestDetailsLineChart) => {
+  // console.log('PERFORMANCE', performanceOverTime);
+  // console.log('startTime', moment(performanceOverTime.startTime).seconds());
+  // console.log('endTime', moment(performanceOverTime.startTime).seconds());
+  console.log('duration', performanceOverTime);
+
   const data = [
     {
       year: '1991',
