@@ -1,5 +1,5 @@
 import React from 'react';
-import {AreaChart, RingProgressChart, TestStatisticsStats, Typography} from '@atoms';
+import {AreaChart, PieChart, RingProgressChart, TestStatisticsStats, Typography} from '@atoms';
 import {TestHeader} from '@organisms';
 import {TestDetailsDrawerPerformanceSection} from '@molecules';
 
@@ -15,7 +15,7 @@ import {
   StyledTotalTestCurrentStatusChart,
   StyledAreaChart,
 } from './Statistics.styled';
-
+// @ts-nocheck
 const Statistics = () => {
   const [totalPercentage, setTotalPercentage] = React.useState<number>();
 
@@ -74,7 +74,7 @@ const Statistics = () => {
           />
         </StyledTotalTestCurrentStatusChart>
         <StyledTotalTestCurrentStatusChart>
-          <RingProgressChart height={250} width={250} fontSize="large" testStatus="" />
+          <PieChart />
         </StyledTotalTestCurrentStatusChart>
       </StyledTestStatisticsCircularCharts>
     </StyledStatisticsContainer>

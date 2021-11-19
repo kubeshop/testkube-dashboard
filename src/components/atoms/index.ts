@@ -17,3 +17,4 @@ export { default as TestDetailsLineChart } from "./Charts/TestDetailsLineChart/T
 export { default as RingProgressChart } from "./Charts/TestDetailsRingProgressChart/TestDetailsRingProgressChart";
 export { default as AreaChart } from "./Charts/AreaChart/AreaChart";
 export { default as TableHeader } from "./Table/TableHeader";
+export { default as PieChart } from "./Charts/PieChart/PieChart";
