@@ -40,8 +40,8 @@ export const testsApi = createApi({
       query: (filters) => `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${moment(filters?.date[0]).format('YYYY-MM-DD')}&endDate=${moment(filters?.date[1]).format('YYYY-MM-DD')}`
     }),
     getArtifacts: builder.query<any, any>({
-      // query: (testId) => `${testId}/artifacts`
-      query: (testId) => `618e5291d88b39735423e0c6/artifacts`
+      query: (testId) => `${testId}/artifacts`
+      // query: (testId) => `618e5291d88b39735423e0c6/artifacts`
     })
 
   }),

@@ -52,7 +52,9 @@ export const StyledTestStepNameContainer = styled.div`
   display: flex;
   align-items: center;
   width: 550px;
+  height: 38px;
   border-radius: 3px;
+  border: 1px solid var(--color-gray-senary);
   background: var(--color-dark-tertiary);
   color: var(--color-light-primary);
   cursor: pointer;
@@ -113,7 +115,7 @@ export const StyledTestWithoutAssertions = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 38px;
+  /* height: 38px; */
   background: var(--color-dark-tertiary);
   margin-top: 5px;
   margin-bottom: var(--space-xxs);
