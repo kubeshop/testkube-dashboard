@@ -75,13 +75,16 @@ border: 1px solid var(--color-gray-nonary);
 .ant-collapse-borderless > .ant-collapse-item:last-child .ant-collapse-header {
   display: flex;
   width: 100%;
+  height: 38px;
   color: var(--color-light-primary);
+  background: var(--color-dark-tertiary);
 }
 
 .ant-collapse-icon-position-right > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
   transform: rotate(90deg);
   position: absolute;
   top: 40%;
+  color: var(--color-light-primary);
 }
 
 .ant-collapse-content {
@@ -107,8 +110,9 @@ border: 1px solid var(--color-gray-nonary);
 }
 
 .ant-collapse {
-  background: red;
+  background: inherit;
 }
+
 .ant-collapse .ant-collapse-borderless .ant-collapse-icon-position-right {
 height: 38px;
 }
@@ -248,6 +252,11 @@ thead[class*="ant-table-thead"] th:last-child{
 
 .ant-tabs-tabpane:last-child {
   flex-direction: column;
+}
+
+.g2-tooltip {
+  background: var(--color-dark-primary) !important;
+  color: var(--color-gray-primary) !important;
 }
 
 `;

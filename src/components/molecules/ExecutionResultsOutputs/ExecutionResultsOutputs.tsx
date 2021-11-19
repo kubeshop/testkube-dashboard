@@ -51,7 +51,7 @@ const RenderPlainTestOutput = (data: Test) => {
 const RenderTestStepCollapseHeader = ({name, status}: IStepHeader) => {
   return (
     <StyledTestStepNameContainer>
-      <RenderTestStatusSvgIcon testStatus={getStatus(status)} width={24} height={24} />
+      <RenderTestStatusSvgIcon testStatus={getStatus(status)} width={18} height={18} />
       <StyledTestStepName>{name}</StyledTestStepName>
     </StyledTestStepNameContainer>
   );
@@ -67,7 +67,7 @@ const RenderTestOutputWithAssertion = (step: Step) => {
             {assertionResults?.map((assertionResult: AssertionResult) => (
               <StyledTestStepAssertionContainer key={nanoid()}>
                 <StyledTestOutputNameAndStatus>
-                  <RenderTestStatusSvgIcon testStatus={getStatus(assertionResult.status)} height={24} width={24} />
+                  <RenderTestStatusSvgIcon testStatus={getStatus(assertionResult.status)} height={18} width={18} />
                   <StyledTestOutputAssertionName>{assertionResult?.name}</StyledTestOutputAssertionName>
                 </StyledTestOutputNameAndStatus>
 
@@ -90,7 +90,7 @@ const RenderTestWithoutAssertion = (step: Step) => {
       {step && (
         <StyledTestStepNameContainer>
           <StyledTestWithoutAssertions>
-            <RenderTestStatusSvgIcon testStatus={getStatus(status)} width={24} height={24} />
+            <RenderTestStatusSvgIcon testStatus={getStatus(status)} width={18} height={18} />
             <StyledTestStepName>{name}</StyledTestStepName>
           </StyledTestWithoutAssertions>
         </StyledTestStepNameContainer>
