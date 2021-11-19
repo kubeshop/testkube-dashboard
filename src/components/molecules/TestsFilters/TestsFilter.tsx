@@ -30,6 +30,7 @@ const TestsFilter = () => {
         active={filters.status === undefined}
         disabled={filters.status === undefined && !filters.date}
         onClick={() => handleClick(undefined)}
+        variant="primary"
       >
         All
       </Button>

@@ -23,7 +23,7 @@ const StyledButton = styled.button<IButton>`
   letter-spacing: normal;
   line-height: normal;
   text-decoration: none solid rgb(0, 0, 0);
-  border-radius: 3px;
+  border-radius: ${props => (props.variant === 'primary' ? '3px' : 'var(--space-md)')};
   text-transform: none;
   vertical-align: baseline;
   white-space: normal;
@@ -35,7 +35,7 @@ const StyledButton = styled.button<IButton>`
   padding: ${props =>
     props.variant === 'primary' ? '5px 16px' : props.variant === 'secondary' ? '15px ​25px' : '15px ​25px'};
   border: 1px solid var(--color-monokle-primary);
-  width: ${props => (props.variant === 'primary' ? '60px' : props.variant === 'secondary' ? '65px' : '35px')};
+  width: ${props => (props.variant === 'primary' ? '60px' : props.variant === 'secondary' ? '100px' : '35px')};
   height: ${props => (props.variant === 'primary' ? '24px' : props.variant === 'secondary' ? '35px' : '24px')};
 
   /* Color & Background */
