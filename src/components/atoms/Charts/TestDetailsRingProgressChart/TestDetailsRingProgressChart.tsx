@@ -32,6 +32,11 @@ const RingProgressChart = ({
   };
 
   const config = {
+    follow: true,
+    enterable: true,
+    TextBackgroundStyle: {
+      style: {fontSize: '52px'},
+    },
     height,
     width,
     autoFit: false,
