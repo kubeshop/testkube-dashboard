@@ -60,6 +60,7 @@ const TestDetailsLineChart = ({performanceOverTime}: ITestDetailsLineChart) => {
   ];
 
   const config = {
+    color: '#94D89C',
     meta: {
       count: {min: 0},
     },
