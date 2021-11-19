@@ -146,13 +146,25 @@ function TestListTable() {
       title: 'id',
       dataIndex: 'id',
       key: 'id',
-      render: (id: string) => <LeftArrowIcon height="13px" width="8x" onClick={() => handleSelectedTest(id)} />,
+      render: (id: string) => <LeftArrowIcon height="13px" width="8x" />,
       width: '5%',
       visible: false,
     },
   ];
 
-  return <Table columns={columns} dataSource={allTests} loading={results.isLoading} rowClassName="table-row-dark" />;
+  return (
+    <Table
+      columns={columns}
+      dataSource={allTests}
+      loading={results.isLoading}
+      rowClassName="table-row-dark"
+      onRow={(record, _) => {
+        return {
+          onClick: event => handleSelectedTest(record.id),
+        };
+      }}
+    />
+  );
 }
 
 export default TestListTable;
