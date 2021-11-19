@@ -4,7 +4,7 @@ import {Col, Layout, Menu, Row} from 'antd';
 import {useLocation} from 'react-router';
 import {Link} from 'react-router-dom';
 
-import {Icon, MenuItem} from '@atoms';
+import {Icon, MenuItem, Modal} from '@atoms';
 import {QuestionCircleOutlined, SettingFilled, GithubFilled} from '@ant-design/icons';
 import {ReactComponent as ChartIcon} from '../../../assets/images/chartIcon.svg';
 import {ReactComponent as ListIcon} from '../../../assets/images/listIcon.svg';
@@ -45,6 +45,7 @@ const SideBar = () => {
   };
   return (
     <StyledSideBar width="80px" collapsed>
+      {visible && <Modal visible isModalVisible={setVisible} />}
       <StyledLogo>
         <Link to="/">
           <Logo />
