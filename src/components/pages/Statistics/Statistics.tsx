@@ -1,16 +1,16 @@
 import React from 'react';
 import {PieChart, RingProgressChart, TestStatisticsStats} from '@atoms';
 import {TestHeader} from '@organisms';
-import {TestDetailsDrawerPerformanceSection} from '@molecules';
+// import {TestDetailsDrawerPerformanceSection} from '@molecules';
 
 import {useAppSelector} from '@src/redux/hooks';
 import {selectTests} from '@src/redux/reducers/testsListSlice';
 import {
   StyledStatisticsContainer,
   StyledStatisticsHeader,
-  StyledTestStatisticsCharts,
+  // StyledTestStatisticsCharts,
   StyledTestStatisticsStatsContainer,
-  StyledTestStatisticsChart,
+  // StyledTestStatisticsChart,
   StyledTestStatisticsCircularCharts,
   StyledTotalTestCurrentStatusChart,
   // StyledAreaChart,
@@ -49,12 +49,12 @@ const Statistics = () => {
         // runningTests={testsStats.runningTests}
         />
       </StyledTestStatisticsStatsContainer>
-      <StyledTestStatisticsCharts>
+      {/* <StyledTestStatisticsCharts>
         <StyledTestStatisticsChart>
           <TestDetailsDrawerPerformanceSection bordered={false} main />
-        </StyledTestStatisticsChart>
+        </StyledTestStatisticsChart> */}
 
-        {/* <StyledTestStatisticsChart>
+      {/* <StyledTestStatisticsChart>
           <Typography variant="tertiary" color="tertiary">
             Simple Line chart
           </Typography>
@@ -62,7 +62,7 @@ const Statistics = () => {
             <AreaChart />
           </StyledAreaChart>
         </StyledTestStatisticsChart> */}
-      </StyledTestStatisticsCharts>
+      {/* </StyledTestStatisticsCharts> */}
       <StyledTestStatisticsCircularCharts>
         <StyledTotalTestCurrentStatusChart>
           <RingProgressChart

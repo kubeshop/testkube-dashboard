@@ -177,7 +177,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
           <RenderPlainTestOutput {...data} />
         </TabPane>
 
-        <TabPane tab={`Artifacts(${artifacts?.length})`} key="Artifacts">
+        <TabPane tab={`Artifacts(${artifacts ? artifacts?.length : 0})`} key="Artifacts">
           <Artifacts artifacts={artifacts} testId={testId && testId} />
         </TabPane>
       </Tabs>
