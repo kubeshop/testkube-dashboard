@@ -7,6 +7,10 @@ import {RenderTestStatusSvgIcon} from '@atoms';
 import {Step, AssertionResult, Test} from '@types';
 
 import {getStatus} from '@src/redux/utils/requestFilters';
+import {useAppSelector} from '@src/redux/hooks';
+import {selectedTestId} from '@src/redux/reducers/testsListSlice';
+import {useGetArtifactsQuery} from '@src/services/tests';
+import Artifacts from './Artifacts/Artifacts';
 import {
   StyledTestDescriptionContainer,
   StyledPlainTextOutputContainer,
@@ -26,7 +30,6 @@ import {
   StyledShowFailedStepsContainer,
   StyledLabelledFailedOnlyCheckbox,
 } from './ExecutionResultsOutputs.styled';
-import Artifacts from './Artifacts/Artifacts';
 
 interface IStepHeader {
   name: string;
@@ -113,6 +116,11 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
     setShowOnlyFailedSteps(event.target.checked);
   };
 
+  const testId = useAppSelector(selectedTestId);
+  const {data: artifacts} = useGetArtifactsQuery(testId, {
+    skip: !testId,
+  });
+
   React.useEffect(() => {
     if (showOnlyFailedSteps) {
       const filtered = data?.executionResult?.steps?.filter((step: Step) => {
@@ -169,8 +177,8 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
           <RenderPlainTestOutput {...data} />
         </TabPane>
 
-        <TabPane tab="Artifacts" key="Artifacts">
-          <Artifacts />
+        <TabPane tab={`Artifacts(${artifacts?.length})`} key="Artifacts">
+          <Artifacts artifacts={artifacts} testId={testId && testId} />
         </TabPane>
       </Tabs>
     </StyledTestDescriptionContainer>
