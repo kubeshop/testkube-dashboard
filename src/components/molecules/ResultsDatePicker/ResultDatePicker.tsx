@@ -53,7 +53,8 @@ const ResultDatePicker = () => {
         style={datePickerStyles}
         onChange={handleDateRange}
         format="MM-DD-YYYY"
-       />
+        value={filters?.date ? [moment(filters?.date[0]), moment(filters?.date[1])] : null}
+      />
     </>
   );
 };
