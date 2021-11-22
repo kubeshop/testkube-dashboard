@@ -7,11 +7,6 @@ interface ITestDetailsLineChart {
 }
 
 const TestDetailsLineChart = ({performanceOverTime}: ITestDetailsLineChart) => {
-  // console.log('PERFORMANCE', performanceOverTime);
-  // console.log('startTime', moment(performanceOverTime.startTime).seconds());
-  // console.log('endTime', moment(performanceOverTime.startTime).seconds());
-  console.log('duration', performanceOverTime);
-
   const data = [
     {
       year: 'Jan',

@@ -122,7 +122,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
     } else {
       setFilteredExecutionResults(data?.executionResult?.steps);
     }
-  }, [showOnlyFailedSteps]);
+  }, [data?.executionResult?.steps, showOnlyFailedSteps]);
 
   return (
     <StyledTestDescriptionContainer>

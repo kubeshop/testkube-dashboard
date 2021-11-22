@@ -1,27 +1,26 @@
-import React, {ReactElement, useEffect} from 'react';
-import {Table, Button} from 'antd';
+import React, {  useEffect} from 'react';
+import {Table} from 'antd';
 import {useDispatch} from 'react-redux';
 
 import {TestTypeIcon, RenderTestStatusSvgIcon} from '@atoms';
 import {useAppSelector} from '@src/redux/hooks';
 import {
   changePageSize,
-  nextPage,
+ 
   selectFilters,
   selectHasNext,
   selectTests,
   selectFiltered,
   updateData,
   updateSelectedTestId,
-  prevPage,
+ 
   paginateTo,
 } from '@src/redux/reducers/testsListSlice';
 import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
 import {getDuration, timeStampToDate} from '@src/utils/formatDate';
 import {useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery} from '@src/services/tests';
 import {getStatus} from '@src/redux/utils/requestFilters';
-import {LeftOutlined, RightOutlined} from '@ant-design/icons';
-
+ 
 interface ITestListTable {
   onChange?: () => void;
 }
@@ -130,19 +129,7 @@ function TestListTable() {
       visible: false,
     },
   ];
-  function itemRender(_current: number, type: string, originalElement: ReactElement) {
-    if (type === 'prev') {
-      return (
-        <Button className="ant-pagination-item-link" onClick={() => dispatch(prevPage())} icon={<LeftOutlined />} />
-      );
-    }
-    if (type === 'next') {
-      return (
-        <Button className="ant-pagination-item-link" onClick={() => dispatch(nextPage())} icon={<RightOutlined />} />
-      );
-    }
-    return originalElement;
-  }
+ 
   const paginationOptions = {
     onShowSizeChange: (_: any, pageSize: number) => dispatch(changePageSize(pageSize)),
     onChange: (page: number) => dispatch(paginateTo(page - 1)),
@@ -163,7 +150,8 @@ function TestListTable() {
       onRow={(record, _) => {
         return {
           style: {border: '1px solid #fff'},
-          onClick: event => handleSelectedTest(record.id),
+          onClick: () => handleSelectedTest(record.id),
+          onDoubleClick: () =>  null,
         };
       }}
       pagination={pagination}
