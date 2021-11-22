@@ -19,9 +19,7 @@ p {
   margin-bottom: none;
 }
 
-.ant-table-row .ant-table-row-level-0 .table-row-dark {
-border: 1px solid var(--color-gray-nonary);
-}
+
 .ant-picker-input > input {
   color: var(--color-light-primary);
 }
@@ -151,6 +149,7 @@ height: 38px;
       }
   .table-row-dark {
     background: var(--color-dark-tertiary);
+    border: 1px solid red !important;
     color: var(--color-gray-primary);
     font-size: 14px;
   }
@@ -207,7 +206,7 @@ height: 38px;
 }
 
 .ant-layout {
-  background: var(--color-dark-primary);
+  background: var(--color-dark-tertiary);
 }
 
 .ring-progress-style {
@@ -242,7 +241,16 @@ input[type=checkbox] {
   filter: hue-rotate(0deg)
 }
 
- 
+.ant-table-placeholder > .ant-table-cell:hover {
+  background: var(--color-gray-senary) !important;
+}
+.ant-table-empty .ant-table-tbody > tr.ant-table-placeholder {
+  background: var(--color-gray-senary);
+}
+
+.ant-empty-description {
+  color: var(--color-gray-primary);
+}
 
 thead[class*="ant-table-thead"] th:last-child{
   font-size: 0;
@@ -279,6 +287,14 @@ thead[class*="ant-table-thead"] th:last-child{
   display: flex;
   align-items: center;
 }
+
+.ant-table,
+.ant-table-thead > tr,
+.ant-table-row {
+  border: 1px solid var(--color-gray-nonary) !important;
+}
+
+
 `;
 
 /* Media Sizes */

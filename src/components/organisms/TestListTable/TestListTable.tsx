@@ -1,12 +1,11 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { Table,Button } from 'antd';
-import { useDispatch } from 'react-redux';
+import React, {ReactElement, useEffect} from 'react';
+import {Table, Button} from 'antd';
+import {useDispatch} from 'react-redux';
 
-import { TestTypeIcon, RenderTestStatusSvgIcon } from '@atoms';
-import { useAppSelector } from '@src/redux/hooks';
+import {TestTypeIcon, RenderTestStatusSvgIcon} from '@atoms';
+import {useAppSelector} from '@src/redux/hooks';
 import {
   changePageSize,
-  // paginateTo,
   nextPage,
   selectFilters,
   selectHasNext,
@@ -15,13 +14,13 @@ import {
   updateData,
   updateSelectedTestId,
   prevPage,
-  paginateTo
+  paginateTo,
 } from '@src/redux/reducers/testsListSlice';
-import { ReactComponent as LeftArrowIcon } from '@assets/arrowIcon.svg';
-import { getDuration, timeStampToDate } from '@src/utils/formatDate';
-import { useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery } from '@src/services/tests';
-import { getStatus } from '@src/redux/utils/requestFilters';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
+import {getDuration, timeStampToDate} from '@src/utils/formatDate';
+import {useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery} from '@src/services/tests';
+import {getStatus} from '@src/redux/utils/requestFilters';
+import {LeftOutlined, RightOutlined} from '@ant-design/icons';
 
 interface ITestListTable {
   onChange?: () => void;
@@ -29,12 +28,10 @@ interface ITestListTable {
 
 function TestListTable() {
   const dispatch = useDispatch();
-  const [finalData, setFinalData] = useState<any>([]);
   const handleSelectedTest = (id: string) => {
     dispatch(updateSelectedTestId(id));
   };
 
-  // const fetchNextPageRef = React.useRef(null);
   const allTests = useAppSelector(selectTests);
   const filters = useAppSelector(selectFilters);
   const hasNext = useAppSelector(selectHasNext);
@@ -58,9 +55,9 @@ function TestListTable() {
   const results = testsQuery.isSuccess
     ? testsQuery
     : testsQueryByStatus.isSuccess
-      ? testsQueryByStatus
-      : testsQueryByDate;
-  const { data, isSuccess, isLoading } = results;
+    ? testsQueryByStatus
+    : testsQueryByDate;
+  const {data, isSuccess, isLoading} = results;
 
   useEffect(() => {
     const fetchData = () => {
@@ -76,28 +73,6 @@ function TestListTable() {
     };
     fetchData();
   }, [data, dispatch, filters.page, filters?.pageSize, isSuccess]);
-
-  // useEffect(() => {
-  //   const fetchData = () => {
-  //     if (testsByStatus) {
-  //       const totalPages = Math.trunc(testsByStatus.filtered[getStatus(filters.status)] / filters.pageSize);
-
-  //       dispatch(
-  //         updateFiltredDataByStatus({
-  //           testsByStatus,
-  //           hasNext: filters.page <= totalPages,
-  //         })
-  //       );
-  //     }
-  //   };
-  //   fetchData();
-  // }, [testsByStatus, dispatch]);
-
-  // useIntersectionObserver({
-  //   target: fetchNextPageRef,
-  //   onIntersect: () => dispatch(nextPage()),
-  //   enabled: hasNext,
-  // });
 
   const columns = [
     {
@@ -156,35 +131,39 @@ function TestListTable() {
     },
   ];
   function itemRender(_current: number, type: string, originalElement: ReactElement) {
-    if (type === "prev") {
-      return <Button className="ant-pagination-item-link" onClick={() => dispatch(prevPage())}    icon={<LeftOutlined   />} />;
+    if (type === 'prev') {
+      return (
+        <Button className="ant-pagination-item-link" onClick={() => dispatch(prevPage())} icon={<LeftOutlined />} />
+      );
     }
-    if (type === "next") {
-      return <Button className="ant-pagination-item-link" onClick={() => dispatch(nextPage())}    icon={<RightOutlined   />} />;
+    if (type === 'next') {
+      return (
+        <Button className="ant-pagination-item-link" onClick={() => dispatch(nextPage())} icon={<RightOutlined />} />
+      );
     }
     return originalElement;
   }
   const paginationOptions = {
     onShowSizeChange: (_: any, pageSize: number) => dispatch(changePageSize(pageSize)),
-    onChange: (page:number) => dispatch(paginateTo(page - 1)),
-   };
+    onChange: (page: number) => dispatch(paginateTo(page - 1)),
+  };
   const pagination = {
     ...paginationOptions,
     total: filtered?.results,
-    current: filters.page+1,
+    current: filters.page + 1,
     pageSize: filters.pageSize,
     hideOnSinglePage: true,
-   };
+  };
   return (
     <Table
       columns={columns}
       dataSource={allTests}
       loading={isLoading}
       rowClassName="table-row-dark"
-      bordered
       onRow={(record, _) => {
         return {
-          onClick: () => handleSelectedTest(record.id),
+          style: {border: '1px solid #fff'},
+          onClick: event => handleSelectedTest(record.id),
         };
       }}
       pagination={pagination}
