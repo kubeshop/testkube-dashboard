@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {ReactComponent as DownloadIcon} from '@assets/downloadFileIcon.svg';
-import {ReactComponent as FileIcon} from '@assets/fileIcon.svg';
-import {selectedTestId} from '@src/redux/reducers/testsListSlice';
-import {useAppSelector} from '@src/redux/hooks';
-import {useGetArtifactsQuery} from '@src/services/tests';
-import {downloadFileName} from '@src/services/artifacts';
+import { ReactComponent as DownloadIcon } from '@assets/downloadFileIcon.svg';
+import { ReactComponent as FileIcon } from '@assets/fileIcon.svg';
+import { selectedTestId } from '@src/redux/reducers/testsListSlice';
+import { useAppSelector } from '@src/redux/hooks';
+import { useGetArtifactsQuery } from '@src/services/tests';
+import { downloadFileName } from '@src/services/artifacts';
 import {
   StyledArtifacts,
   StyledArtifactsContainer,
@@ -15,7 +15,7 @@ import {
 
 const Artifacts = () => {
   const testId = useAppSelector(selectedTestId);
-  const {data, error, isLoading} = useGetArtifactsQuery(testId, {
+  const { data, error, isLoading } = useGetArtifactsQuery(testId, {
     skip: !testId,
   });
 
@@ -26,16 +26,16 @@ const Artifacts = () => {
   return (
     <>
       {data ? (
-        data.map(({name, size}: any) => (
+        data.map(({ name, size }: any) => (
           <StyledArtifactsContainer>
             <StyledArtifacts>
               <StyledFileArtifactsFileName>
-                <FileIcon style={{marginRight: '10px', marginLeft: '20px'}} />
+                <FileIcon style={{ marginRight: '10px', marginLeft: '20px' }} />
                 <span>{name}</span>
               </StyledFileArtifactsFileName>
               <DownloadIcon
-                style={{marginRight: '12px', cursor: 'pointer'}}
-                onClick={name && testId && downloadFile(name, testId)}
+                style={{ marginRight: '12px', cursor: 'pointer' }}
+                onClick={() => name && testId && downloadFile(name, testId)}
               />
             </StyledArtifacts>
           </StyledArtifactsContainer>
