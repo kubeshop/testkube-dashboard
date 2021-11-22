@@ -1,11 +1,9 @@
 import React from 'react';
-// import {TestHeader, TestListTable} from '@organisms';
 import {TestHeader, TestListTable} from '@organisms';
 import {TestDescription} from '@src/components/molecules';
 import {StyledMainContent, StyledTestHeader, StyledTestSummary} from './Main.styled';
 
 const Main = () => {
- 
   return (
     <>
       <StyledMainContent>
@@ -13,7 +11,7 @@ const Main = () => {
           <TestHeader testHeaderLabel="Tests" showTestFilters />
         </StyledTestHeader>
         <StyledTestSummary>
-          <TestListTable  />
+          <TestListTable />
         </StyledTestSummary>
       </StyledMainContent>
       <TestDescription />
