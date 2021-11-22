@@ -72,8 +72,6 @@ const AllTests = () => {
   //   enabled: hasNext,
   // });
 
-  console.log('all tests', allTests);
-
   return (
     <Table rowClassName="table-row-dark">
       <TableHeader />

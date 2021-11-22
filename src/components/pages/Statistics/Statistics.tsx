@@ -1,5 +1,5 @@
 import React from 'react';
-import {AreaChart, PieChart, RingProgressChart, TestStatisticsStats, Typography} from '@atoms';
+import {PieChart, RingProgressChart, TestStatisticsStats} from '@atoms';
 import {TestHeader} from '@organisms';
 import {TestDetailsDrawerPerformanceSection} from '@molecules';
 
@@ -13,7 +13,7 @@ import {
   StyledTestStatisticsChart,
   StyledTestStatisticsCircularCharts,
   StyledTotalTestCurrentStatusChart,
-  StyledAreaChart,
+  // StyledAreaChart,
 } from './Statistics.styled';
 // @ts-nocheck
 const Statistics = () => {
@@ -54,14 +54,14 @@ const Statistics = () => {
           <TestDetailsDrawerPerformanceSection bordered={false} main />
         </StyledTestStatisticsChart>
 
-        <StyledTestStatisticsChart>
+        {/* <StyledTestStatisticsChart>
           <Typography variant="tertiary" color="tertiary">
             Simple Line chart
           </Typography>
           <StyledAreaChart>
             <AreaChart />
           </StyledAreaChart>
-        </StyledTestStatisticsChart>
+        </StyledTestStatisticsChart> */}
       </StyledTestStatisticsCharts>
       <StyledTestStatisticsCircularCharts>
         <StyledTotalTestCurrentStatusChart>

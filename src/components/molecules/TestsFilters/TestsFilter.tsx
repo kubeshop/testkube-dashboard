@@ -21,8 +21,6 @@ const TestsFilter = () => {
   const dispatch = useDispatch();
 
   const handleClick = (status: string | undefined) => {
-    console.log("CLICKED", status);
-    
     dispatch(clearFiltredData({page: 0, status}));
   };
   return (

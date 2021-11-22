@@ -5,6 +5,7 @@ import {ReactComponent as FileIcon} from '@assets/fileIcon.svg';
 import {selectedTestId} from '@src/redux/reducers/testsListSlice';
 import {useAppSelector} from '@src/redux/hooks';
 import {useGetArtifactsQuery} from '@src/services/tests';
+import {downloadFileName} from '@src/services/artifacts';
 import {
   StyledArtifacts,
   StyledArtifactsContainer,
@@ -18,9 +19,13 @@ const Artifacts = () => {
     skip: !testId,
   });
 
+  const downloadFile = (fileName: string, executionId: string) => {
+    downloadFileName(fileName, executionId);
+  };
+
   return (
     <>
-      {testId && data ? (
+      {data ? (
         data.map(({name, size}: any) => (
           <StyledArtifactsContainer>
             <StyledArtifacts>
@@ -28,9 +33,10 @@ const Artifacts = () => {
                 <FileIcon style={{marginRight: '10px', marginLeft: '20px'}} />
                 <span>{name}</span>
               </StyledFileArtifactsFileName>
-              <a href="https://assets.website-files.com/611f279603d61242ae80e191/61663e5db099f6a0cd003323_testkube-logo.svg">
-                <DownloadIcon style={{marginRight: '12px', cursor: 'pointer'}} />
-              </a>
+              <DownloadIcon
+                style={{marginRight: '12px', cursor: 'pointer'}}
+                onClick={name && testId && downloadFile(name, testId)}
+              />
             </StyledArtifacts>
           </StyledArtifactsContainer>
         ))

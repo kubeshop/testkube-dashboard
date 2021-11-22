@@ -36,7 +36,6 @@ const TestStatisticsStats = () => {
 
   return (
     <>
-      {/* {console.log(totalTests, failedTests, runningTests)} */}
       <StyledTestStatisticsContainer>
         <StyledTestStatistic>
           <Typography variant="secondary" color="tertiary">
