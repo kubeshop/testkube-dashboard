@@ -1,18 +1,20 @@
 /* eslint react/destructuring-assignment: 0 */
-import React, {useState} from 'react';
-import {Drawer} from 'antd';
+import React, { useState } from 'react';
+import { Drawer } from 'antd';
 
-import {Spinner} from '@atoms';
-import {TestDetailsDrawerHeader, TestDetailsDrawerPerformanceSection, ExecutionResultsOutputs} from '@molecules';
+import { Spinner } from '@atoms';
+import { TestDetailsDrawerHeader, TestDetailsDrawerPerformanceSection, ExecutionResultsOutputs } from '@molecules';
 
-import {selectedTestId} from '@redux/reducers/testsListSlice';
-import {useGetTestByIdQuery} from '@src/services/tests';
-import {useAppSelector} from '@redux/hooks';
+import { selectedTestId, updateSelectedTestId } from '@redux/reducers/testsListSlice';
+import { useGetTestByIdQuery } from '@src/services/tests';
+import { useAppSelector } from '@redux/hooks';
+import { useDispatch } from 'react-redux';
 
 const TestDescription = () => {
   const testId = useAppSelector(selectedTestId);
   const [visible, setVisible] = useState(false);
-  const {data, error, isLoading} = useGetTestByIdQuery(testId, {
+  const dispatch = useDispatch();
+  const { data, error, isLoading } = useGetTestByIdQuery(testId, {
     skip: !testId,
   });
 
@@ -25,15 +27,19 @@ const TestDescription = () => {
       setVisible(!visible);
     }
   }, [testId]);
+  
+  const afterVisibleChange = () => !visible ? dispatch(updateSelectedTestId(undefined)) : null;
 
   return (
     <>
       {testId && data && (
         <Drawer
+          afterVisibleChange={afterVisibleChange}
           width="630px"
           onClose={onClose}
           visible={visible}
-          bodyStyle={{display: 'flex', flexDirection: 'column', background: 'var(--color-dark-quinary)'}}
+
+          bodyStyle={{ display: 'flex', flexDirection: 'column', background: 'var(--color-dark-quinary)' }}
         >
           {/* {error && <Typography variant="secondary">Something went wrong...</Typography>} */}
           {isLoading && <Spinner size="large" center />}
