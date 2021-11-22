@@ -1,8 +1,11 @@
-import React from 'react';
-import {Typography} from '@atoms';
-import {selectTests} from '@src/redux/reducers/testsListSlice';
-import {useAppSelector} from '@src/redux/hooks';
-import {StyledTestStatistic, StyledTestStatisticsContainer, TestStatsSpan} from './TestStatisticsStats.styled';
+import React, { useEffect } from 'react';
+import { Typography } from '@atoms';
+import { selectTotals, selectFilters  } from '@src/redux/reducers/testsListSlice';
+import { useAppSelector } from '@src/redux/hooks';
+import { ITestTotals } from '@src/types/testListState';
+import { useDispatch } from 'react-redux';
+import { useGetTestsByDateQuery } from '@src/services/tests';
+import { StyledTestStatistic, StyledTestStatisticsContainer, TestStatsSpan } from './TestStatisticsStats.styled';
 
 interface ITesStatisticsStatsProps {
   totalTests: number;
@@ -11,28 +14,28 @@ interface ITesStatisticsStatsProps {
 }
 
 const TestStatisticsStats = () => {
-  const [testsStats, setTestsStats] = React.useState<ITesStatisticsStatsProps>({
-    totalTests: 0,
-    failedTests: 0,
-    runningTests: 0,
+  const dispatch = useDispatch();
+  const [testsStats, setTestsStats] = React.useState<ITestTotals>();
+  const filters = useAppSelector(selectFilters);
+  const totals = useAppSelector(selectTotals);
+  const { data, isSuccess } = useGetTestsByDateQuery(filters, {
+    skip: !filters.date,
   });
+  useEffect(() => {
+    const fetchData = () => {
+      if (isSuccess) {
+        setTestsStats(data?.filtered);
+      }
+    };
 
-  const allTests = useAppSelector(selectTests);
+    if (filters.date) {
+      fetchData();
+    }
+    else {
+      setTestsStats(totals);
+    }
+  }, [data?.filtered, filters.date, isSuccess, totals]);
 
-  const getTestsStatisticsStats = () => {
-    const totalTests = allTests.length;
-    const failedTests = allTests.filter((test: any) => test.status === 'error').length;
-    const runningTests = allTests.filter((test: any) => test.status === 'pending').length;
-    setTestsStats({
-      totalTests,
-      failedTests,
-      runningTests,
-    });
-  };
-
-  React.useEffect(() => {
-    getTestsStatisticsStats();
-  }, []);
 
   return (
     <>
@@ -41,19 +44,19 @@ const TestStatisticsStats = () => {
           <Typography variant="secondary" color="tertiary">
             Tests Executed
           </Typography>
-          <TestStatsSpan>{testsStats.totalTests || 0}</TestStatsSpan>
+          <TestStatsSpan>{testsStats?.results || 0}</TestStatsSpan>
         </StyledTestStatistic>
         <StyledTestStatistic>
           <Typography variant="secondary" color="tertiary">
             Tests Failed
           </Typography>
-          <TestStatsSpan>{testsStats.failedTests || 0}</TestStatsSpan>
+          <TestStatsSpan>{testsStats?.failed || 0}</TestStatsSpan>
         </StyledTestStatistic>
         <StyledTestStatistic>
           <Typography variant="secondary" color="tertiary">
             Tests Running
           </Typography>
-          <TestStatsSpan>{testsStats.runningTests || 0}</TestStatsSpan>
+          <TestStatsSpan>{testsStats?.pending || 0}</TestStatsSpan>
         </StyledTestStatistic>
       </StyledTestStatisticsContainer>
     </>

@@ -1,10 +1,10 @@
-import React from 'react';
-import {PieChart, RingProgressChart, TestStatisticsStats} from '@atoms';
-import {TestHeader} from '@organisms';
-import {TestDetailsDrawerPerformanceSection} from '@molecules';
+import React, { useEffect } from 'react';
+import { PieChart, RingProgressChart, TestStatisticsStats } from '@atoms';
+import { TestHeader } from '@organisms';
+import { TestDetailsDrawerPerformanceSection } from '@molecules';
 
-import {useAppSelector} from '@src/redux/hooks';
-import {selectTests} from '@src/redux/reducers/testsListSlice';
+import { useAppSelector } from '@src/redux/hooks';
+import { selectTotals } from '@src/redux/reducers/testsListSlice';
 import {
   StyledStatisticsContainer,
   StyledStatisticsHeader,
@@ -19,23 +19,17 @@ import {
 const Statistics = () => {
   const [totalPercentage, setTotalPercentage] = React.useState<number>();
 
-  const allTests = useAppSelector(selectTests);
+  const totals = useAppSelector(selectTotals);
 
-  const getPercentage = (): number => {
-    if (allTests) {
-      const occurrence = allTests?.reduce(
-        (occ: number, step: {status: string}) => (step?.status === 'success' ? occ + 1 : occ),
-        0
-      );
-      const total = occurrence / allTests?.length;
-      setTotalPercentage(total);
-    }
-    return 0;
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
+    const getPercentage = (): void => {
+      if (totals.passed && (totals.results !== undefined && totals.results > 0)) {
+        const total = totals.passed / totals.results;
+        setTotalPercentage(total);
+      }
+    };
     getPercentage();
-  }, [allTests]);
+  }, [totalPercentage, totals.passed, totals.results]);
 
   return (
     <StyledStatisticsContainer>

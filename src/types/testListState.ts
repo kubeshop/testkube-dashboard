@@ -2,6 +2,14 @@ import { EStatus, ITest } from "@src/types/tests";
 
 import { Moment } from "moment";
 
+export interface ITestTotals {
+  results?: number,
+  passed?: number,
+  failed?: number,
+  queued?: number,
+  pending?: number
+}
+
 export interface ITestListState {
   isLoading?: boolean,
   hasNext?: boolean
@@ -12,20 +20,8 @@ export interface ITestListState {
   resultsByStatus?: any,
   resultsByDate?: any,
   error?: any,
-  totals: {
-    results?: number,
-    passed?: number,
-    failed?: number,
-    queued?: number,
-    pending?: number
-  },
-  filtered: {
-    results?: number,
-    passed?: number,
-    failed?: number,
-    queued?: number,
-    pending?: number
-  }
+  totals: ITestTotals,
+  filtered: ITestTotals
   // toggleDrawer: boolean
 }
 
