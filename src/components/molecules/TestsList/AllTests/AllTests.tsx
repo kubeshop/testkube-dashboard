@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { nanoid } from '@reduxjs/toolkit';
-import styled from 'styled-components';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 
-import { useAppSelector } from '@redux/hooks';
-import { useGetTestsQuery } from '@src/services/tests';
-import { Spinner, Typography } from '@src/components/atoms';
-import { TestListItem } from '@atoms';
-import { useIntersectionObserver } from '@src/hooks/intersectionObserver';
+import {useAppSelector} from '@redux/hooks';
+import {useGetTestsByStatusQuery, useGetTestsQuery} from '@src/services/tests';
+// import {useIntersectionObserver} from '@src/hooks/intersectionObserver';
 
-import { nextPage, selectFilters, selectHasNext, selectTests, updateData } from '@redux/reducers/testsListSlice';
-
-const StyledTestListContainer = styled.div`
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-`;
+import {
+  // nextPage,
+  selectFilters,
+  selectHasNext,
+  selectTests,
+  updateData,
+  updateFiltredDataByStatus,
+} from '@redux/reducers/testsListSlice';
+import {TableHeader} from '@src/components/atoms';
+import {Table} from 'antd';
+import {getStatus} from '@src/redux/utils/requestFilters';
 
 const AllTests = () => {
   const allTests = useAppSelector(selectTests);
@@ -23,17 +23,18 @@ const AllTests = () => {
   const hasNext = useAppSelector(selectHasNext);
 
   const dispatch = useDispatch();
-  const fetchNextPageRef = React.useRef(null);
+  // const fetchNextPageRef = React.useRef(null);
 
-  const { data, isFetching } = useGetTestsQuery(filters, {
+  const {data, isFetching} = useGetTestsQuery(filters, {
     pollingInterval: 5000,
+    skip: !allTests.length,
   });
 
   useEffect(() => {
     const fetchData = () => {
       if (data) {
         const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
-
+        // totalData.push(data);
         dispatch(
           updateData({
             data,
@@ -45,23 +46,36 @@ const AllTests = () => {
     fetchData();
   }, [data, dispatch]);
 
-  useIntersectionObserver({
-    target: fetchNextPageRef,
-    onIntersect: () => dispatch(nextPage()),
-    enabled: hasNext,
+  const {data: testsByStatus, isFetching: isFetchingStatus} = useGetTestsByStatusQuery(filters, {
+    pollingInterval: 5000,
   });
 
+  useEffect(() => {
+    const fetchData = () => {
+      if (testsByStatus) {
+        const totalPages = Math.trunc(testsByStatus.filtered[getStatus(filters.status)] / filters.pageSize);
+
+        dispatch(
+          updateFiltredDataByStatus({
+            testsByStatus,
+            hasNext: filters.page <= totalPages,
+          })
+        );
+      }
+    };
+    fetchData();
+  }, [testsByStatus, dispatch]);
+
+  // useIntersectionObserver({
+  //   target: fetchNextPageRef,
+  //   onIntersect: () => dispatch(nextPage()),
+  //   enabled: hasNext,
+  // });
+
   return (
-    <StyledTestListContainer>
-      {allTests?.length > 0 ? (
-        allTests?.map((item: any, index: number) => <TestListItem key={nanoid()} index={index} item={item} />)
-      ) : (
-        <Typography variant="secondary" color="secondary" font="bold">
-          No tests were found in {filters.date}
-        </Typography>
-      )}
-      <div ref={fetchNextPageRef}>{isFetching ? <Spinner size="large" /> : null}</div>
-    </StyledTestListContainer>
+    <Table rowClassName="table-row-dark">
+      <TableHeader />
+    </Table>
   );
 };
 

@@ -1,0 +1,16 @@
+{
+    "presets": ["@babel/preset-env", "@babel/preset-react"],
+    "plugins": [
+      "@babel/plugin-syntax-dynamic-import",
+      "@babel/plugin-proposal-class-properties",
+      [
+        "styless",
+        {
+            "import": "~antd/lib/style/themes/default.less",
+            "lessOptions": {
+                "javascriptEnabled": true
+            }
+        }
+    ]
+    ]
+  }

@@ -7,6 +7,7 @@ import {RenderTestStatusSvgIcon, TestTypeIcon, Typography} from '@src/components
 import {getDuration, timeStampToDate} from '@src/utils/formatDate';
 import {useAppSelector} from '@redux/hooks';
 import {selectedTestId, updateSelectedTestId} from '@redux/reducers/testsListSlice';
+import { getStatus } from '@src/redux/utils/requestFilters';
 
 const StyledTestListRow = styled.div`
   display: flex;
@@ -53,9 +54,11 @@ const StyledTestListCell = styled.div`
 const TestListItem = ({index, item}: {index: number; item: any}) => {
   const testId = useAppSelector(selectedTestId);
   const dispatch = useDispatch();
+
   const handleSelectedTest = (id: string) => {
     dispatch(updateSelectedTestId(id));
   };
+
   return (
     <StyledTestListRow
       className={testId === item.id ? 'selected' : ''}
@@ -78,7 +81,7 @@ const TestListItem = ({index, item}: {index: number; item: any}) => {
         </Typography>
       </StyledTestListCell>
       <StyledTestListCell role="cell">
-        <RenderTestStatusSvgIcon testStatus={item.status} width={25} height={25} />
+        <RenderTestStatusSvgIcon testStatus={getStatus(item.status)} width={25} height={25} />
       </StyledTestListCell>
       <StyledTestListCell role="cell">
         <TestTypeIcon testType={item.scriptType} width={30} height={30} />

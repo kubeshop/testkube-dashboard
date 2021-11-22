@@ -25,3 +25,7 @@ export const removeSpaceFromString = (url: string) => {
 export const RemoveLastTrailingSlashFromString = (word: string) => {
   return word.replace(/\/$/, '');
 };
+
+export const getLastStringAfterTrailingSlash = (word: string) => {
+  return word.substring(word.lastIndexOf('/') + 1);
+};

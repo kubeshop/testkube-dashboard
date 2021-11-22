@@ -1,5 +1,6 @@
 :root {
   --space-unit: 1em;
+  font-size: 1rem;
 
   /* Font families. */
   --font-family-sans: 'Roboto', sans-serif;
@@ -14,7 +15,7 @@
   --font-size-xs: 0.688rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 18px;
-  --font-size-lg: 1.125rem;
+  --font-size-lg: 16px;
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 1.875rem;
@@ -38,12 +39,23 @@
   --color-gray-secondary: #646464;
   --color-gray-tertiary: #363636;
   --color-gray-quaternary: #646464;
+  --color-gray-quinary: #acacac;
+  --color-gray-senary: #1d1d1d;
+  --color-gray-senary: #393939;
+  --color-gray-octonary: #888888;
+  --color-gray-nonary: #262626;
   --color-dark-primary: #121212;
   --color-dark-secondary: #000000;
+  --color-dark-tertiary: #151515;
+  /* --color-dark-quaternary: #1D1D1D; */
+  --color-dark-quaternary: #434343;
+  --color-dark-quinary: #1d1d1d;
+  --color-dark-senary: #262626;
   --color-yellow-primary: #ffa700;
   --color-shadow-primary: rgba(0, 0, 0, 0.05);
   --color-shadow-secondary: rgba(75, 87, 156, 0.5);
   --color-gray-dark: #363636;
+  --color-purple-primary: #ad54f880;
 
   /* Borders. */
   --button-border-radius-primary: 0.25rem;

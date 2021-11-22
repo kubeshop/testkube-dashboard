@@ -16,11 +16,11 @@ const StyledTypography = styled.p<ITypography>`
     props.variant === 'primary'
       ? 'var(--font-size-3xl)'
       : props.variant === 'secondary'
-      ? 'var(--font-size-md)'
+      ? '14px'
       : props.variant === 'tertiary'
-      ? 'var(--font-size-lg)'
+      ? '16px'
       : props.variant === 'quaternary'
-      ? 'var(--font-size-xl)'
+      ? '20px'
       : props.variant === 'quinary'
       ? 'var(--font-size-mid-4xl)'
       : props.variant === 'senary'
@@ -47,7 +47,7 @@ const StyledTypography = styled.p<ITypography>`
       ? 'var(--color-monokle-primary)'
       : 'var(--color-light-primary)'};
   letter-spacing: 0;
-  margin-top: 10px;
+  margin-bottom: 3px;
   overflow: hidden;
   white-space: ${props => (props.nowrap ? 'nowrap' : 'normal')};
   text-overflow: ellipsis;

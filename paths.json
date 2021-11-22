@@ -30,7 +30,9 @@
       "@features": ["src/features/"],
       "@features/*": ["src/features/*"],
       "@redux": ["src/redux/"],
-      "@redux/*": ["src/redux/*"]
+      "@redux/*": ["src/redux/*"],
+      "@pages": ["src/components/pages/"],
+      "@pages/*": ["src/components/pages/*"]
     }
   }
 }
