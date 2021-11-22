@@ -16,6 +16,7 @@ const StyledSideBar = styled(Layout.Sider)`
   justify-content: space-between;
   flex-direction: column;
   height: 100vh;
+  position: fixed;
   overflow: hidden;
   z-index: 1000;
   background: var(--color-dark-secondary);
@@ -44,7 +45,7 @@ const SideBar = () => {
     window.open('https://github.com/kubeshop/testkube');
   };
   return (
-    <StyledSideBar width="80px" collapsed>
+    <StyledSideBar    width="80px" collapsed>
       {visible && <Modal visible isModalVisible={setVisible} />}
       <StyledLogo>
         <Link to="/">

@@ -18,6 +18,13 @@ export interface ITestListState {
     failed?: number,
     queued?: number,
     pending?: number
+  },
+  filtered: {
+    results?: number,
+    passed?: number,
+    failed?: number,
+    queued?: number,
+    pending?: number
   }
   // toggleDrawer: boolean
 }

@@ -242,9 +242,7 @@ input[type=checkbox] {
   filter: hue-rotate(0deg)
 }
 
-.ant-table-placeholder {
-  display:none;
-}
+ 
 
 thead[class*="ant-table-thead"] th:last-child{
   font-size: 0;

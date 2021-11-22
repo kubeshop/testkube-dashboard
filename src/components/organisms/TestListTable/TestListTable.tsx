@@ -1,22 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {Table} from 'antd';
-import {useDispatch} from 'react-redux';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { Table,Button } from 'antd';
+import { useDispatch } from 'react-redux';
 
-import {TestTypeIcon, RenderTestStatusSvgIcon} from '@atoms';
-import {useAppSelector} from '@src/redux/hooks';
+import { TestTypeIcon, RenderTestStatusSvgIcon } from '@atoms';
+import { useAppSelector } from '@src/redux/hooks';
 import {
-  // nextPage,
+  changePageSize,
+  // paginateTo,
+  nextPage,
   selectFilters,
   selectHasNext,
   selectTests,
-  selectTestsByStatus,
+  selectFiltered,
   updateData,
   updateSelectedTestId,
+  prevPage,
+  paginateTo
 } from '@src/redux/reducers/testsListSlice';
-import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
-import {getDuration, timeStampToDate} from '@src/utils/formatDate';
-import {useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery} from '@src/services/tests';
-import {getStatus} from '@src/redux/utils/requestFilters';
+import { ReactComponent as LeftArrowIcon } from '@assets/arrowIcon.svg';
+import { getDuration, timeStampToDate } from '@src/utils/formatDate';
+import { useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery } from '@src/services/tests';
+import { getStatus } from '@src/redux/utils/requestFilters';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 interface ITestListTable {
   onChange?: () => void;
@@ -31,9 +36,9 @@ function TestListTable() {
 
   // const fetchNextPageRef = React.useRef(null);
   const allTests = useAppSelector(selectTests);
-  const tests = useAppSelector(selectTestsByStatus);
   const filters = useAppSelector(selectFilters);
   const hasNext = useAppSelector(selectHasNext);
+  const filtered = useAppSelector(selectFiltered);
 
   const testsQuery = useGetTestsQuery(filters, {
     pollingInterval: 5000,
@@ -53,15 +58,14 @@ function TestListTable() {
   const results = testsQuery.isSuccess
     ? testsQuery
     : testsQueryByStatus.isSuccess
-    ? testsQueryByStatus
-    : testsQueryByDate;
-  const {data, isSuccess} = results;
+      ? testsQueryByStatus
+      : testsQueryByDate;
+  const { data, isSuccess, isLoading } = results;
 
   useEffect(() => {
     const fetchData = () => {
       if (isSuccess) {
         const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
-
         dispatch(
           updateData({
             data,
@@ -71,7 +75,7 @@ function TestListTable() {
       }
     };
     fetchData();
-  }, [data, dispatch]);
+  }, [data, dispatch, filters.page, filters?.pageSize, isSuccess]);
 
   // useEffect(() => {
   //   const fetchData = () => {
@@ -151,18 +155,39 @@ function TestListTable() {
       visible: false,
     },
   ];
-
+  function itemRender(_current: number, type: string, originalElement: ReactElement) {
+    if (type === "prev") {
+      return <Button className="ant-pagination-item-link" onClick={() => dispatch(prevPage())}    icon={<LeftOutlined   />} />;
+    }
+    if (type === "next") {
+      return <Button className="ant-pagination-item-link" onClick={() => dispatch(nextPage())}    icon={<RightOutlined   />} />;
+    }
+    return originalElement;
+  }
+  const paginationOptions = {
+    onShowSizeChange: (_: any, pageSize: number) => dispatch(changePageSize(pageSize)),
+    onChange: (page:number) => dispatch(paginateTo(page - 1)),
+   };
+  const pagination = {
+    ...paginationOptions,
+    total: filtered?.results,
+    current: filters.page+1,
+    pageSize: filters.pageSize,
+    hideOnSinglePage: true,
+   };
   return (
     <Table
       columns={columns}
       dataSource={allTests}
-      loading={results.isLoading}
+      loading={isLoading}
       rowClassName="table-row-dark"
+      bordered
       onRow={(record, _) => {
         return {
-          onClick: event => handleSelectedTest(record.id),
+          onClick: () => handleSelectedTest(record.id),
         };
       }}
+      pagination={pagination}
     />
   );
 }

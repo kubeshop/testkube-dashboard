@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {Route, Switch, useHistory} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
-import {Modal} from '@atoms';
-import {Statistics, Main} from '@pages';
+import { Modal } from '@atoms';
+import { Statistics, Main } from '@pages';
 
-import {config} from '@constants/config';
+import { config } from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
@@ -12,9 +12,9 @@ import {
   checkIfQueryParamsExistsInUrl,
   FinalizedApiEndpoint,
 } from '@utils';
-import {Content} from 'antd/lib/layout/layout';
-import {Layout} from 'antd';
-import {SideBar} from './components/organisms';
+import { Content } from 'antd/lib/layout/layout';
+import { Layout } from 'antd';
+import { SideBar } from './components/organisms';
 
 declare global {
   interface Window {
@@ -39,7 +39,7 @@ function App() {
       FinalizedApiEndpoint(dashboardEnvVariable, true);
       history.push({
         pathname: '/',
-        search: `?${new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString()}`,
+        search: `?${new URLSearchParams({ apiEndpoint: `${dashboardEnvVariable}` }).toString()}`,
       });
     }
 
@@ -64,13 +64,17 @@ function App() {
       {visible && <Modal visible isModalVisible={setVisible} />}
       <Layout>
         <SideBar />
-        <Content>
-          <Switch>
-            <Route path="/?apiEndpoint=:apiEndpoint" exact render={Main} />
-            <Route path="/statistics" exact component={Statistics} />
-            <Route path="/" exact component={Main} />
-          </Switch>
-        </Content>
+        <Layout style={{ marginLeft: 100 }}>
+          <Content >
+            <div className="site-layout-background" >
+              <Switch>
+                <Route path="/?apiEndpoint=:apiEndpoint" exact render={Main} />
+                <Route path="/statistics" exact component={Statistics} />
+                <Route path="/" exact component={Main} />
+              </Switch>
+            </div>
+          </Content>
+        </Layout>
       </Layout>
     </>
   );
