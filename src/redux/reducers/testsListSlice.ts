@@ -82,7 +82,7 @@ export const testsListSlice = createSlice({
     prevPage: (state) => {
       state.filters.page -= 1;
     },
-    updateSelectedTestId: (state, action: PayloadAction<string>) => {
+    updateSelectedTestId: (state, action: PayloadAction<string|undefined>) => {
       state.selectedTestId = action.payload;
     },
 
