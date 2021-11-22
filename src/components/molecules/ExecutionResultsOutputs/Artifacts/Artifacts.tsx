@@ -3,6 +3,7 @@ import React from 'react';
 import {ReactComponent as DownloadIcon} from '@assets/downloadFileIcon.svg';
 import {ReactComponent as FileIcon} from '@assets/fileIcon.svg';
 import {downloadFileName} from '@src/services/artifacts';
+import {getLastStringAfterTrailingSlash} from '@src/utils';
 import {
   StyledArtifacts,
   StyledArtifactsContainer,
@@ -28,7 +29,7 @@ const Artifacts = ({artifacts, testId}: IArtifactsProps) => {
             <StyledArtifacts>
               <StyledFileArtifactsFileName>
                 <FileIcon style={{marginRight: '10px', marginLeft: '20px'}} />
-                <span>{name}</span>
+                <span>{getLastStringAfterTrailingSlash(name)}</span>
               </StyledFileArtifactsFileName>
               <DownloadIcon
                 style={{marginRight: '12px', cursor: 'pointer'}}
