@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React, { useEffect } from 'react';
-import { Pie } from '@ant-design/charts';
+import React, {useEffect} from 'react';
+import {Pie} from '@ant-design/charts';
 
-import { useAppSelector } from '@src/redux/hooks';
-import { selectTotals } from '@src/redux/reducers/testsListSlice';
+import {useAppSelector} from '@src/redux/hooks';
+import {selectTotals} from '@src/redux/reducers/testsListSlice';
 
 const PieChart = () => {
   const [chartTestStatusData, setChartTestStatusData] = React.useState({
@@ -17,9 +17,14 @@ const PieChart = () => {
   useEffect(() => {
     function getPercentage(): void {
       if (totals) {
-        setChartTestStatusData({ success: totals.passed, error: totals.failed, queued: totals.queued, pending: totals.pending });
+        setChartTestStatusData({
+          success: totals.passed,
+          error: totals.failed,
+          queued: totals.queued,
+          pending: totals.pending,
+        });
       }
-    };
+    }
     getPercentage();
   }, [totals]);
 
@@ -54,13 +59,13 @@ const PieChart = () => {
       content: '{value}',
       style: {
         textAlign: 'center',
-        fontSize: 14,
+        fontSize: 0,
       },
     },
 
     showMarkers: false,
     colorField: 'type',
-    color: ({ type }: any) => {
+    color: ({type}: any) => {
       if (type === 'Success') {
         return '#94D89C';
       }
