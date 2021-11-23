@@ -140,7 +140,7 @@ function TestListTable() {
       dataIndex: 'duration',
       render: (duration: string, row: any) => {
         return {
-          children: row.endTime ? getDuration(duration, row.endTime) : '-',
+          children: row.endTime ? getDuration(row.startTime, row.endTime) : '-',
           props: {
             role: 'cell',
           },
