@@ -176,10 +176,15 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
         <TabPane tab="Plain Text" key="2">
           <RenderPlainTestOutput {...data} />
         </TabPane>
-
-        <TabPane tab={`Artifacts(${artifacts ? artifacts?.length : 0})`} key="Artifacts">
-          <Artifacts artifacts={artifacts} testId={testId && testId} />
-        </TabPane>
+        {artifacts && artifacts.length > 0 ? (
+          <TabPane tab={`Artifacts(${artifacts ? artifacts?.length : 0})`} key="Artifacts">
+            <Artifacts artifacts={artifacts} testId={testId && testId} />
+          </TabPane>
+        ) : (
+          <TabPane tab="Artifacts" key="Artifacts" disabled>
+            <Artifacts artifacts={artifacts} testId={testId && testId} />
+          </TabPane>
+        )}
       </Tabs>
     </StyledTestDescriptionContainer>
   );
