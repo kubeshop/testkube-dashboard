@@ -96,9 +96,9 @@ function TestListTable() {
       key: 'scriptName',
       width: '25%',
       visible: true,
-      render: () => {
+      render: (scriptName: string) => {
         return {
-          children: 'foo',
+          children: scriptName,
           props: {
             role: 'cell',
           },
@@ -111,9 +111,9 @@ function TestListTable() {
       key: 'name',
       width: '25%',
       visible: true,
-      render: () => {
+      render: (name: string) => {
         return {
-          children: 'foo',
+          children: name,
           props: {
             role: 'cell',
           },
