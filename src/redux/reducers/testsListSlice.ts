@@ -25,6 +25,7 @@ const initialState: TestListState = {
     pending: 0
   },
   selectedTestId: undefined,
+  status: undefined,
 
   results: [],
   resultsByDate: [],

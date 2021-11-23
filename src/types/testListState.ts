@@ -22,7 +22,7 @@ export interface ITestListState {
   error?: any,
   totals: ITestTotals,
   filtered: ITestTotals
-  // toggleDrawer: boolean
+  status?: string;
 }
 
 export interface ITestFilter {
