@@ -44,7 +44,6 @@ export const StyledText = styled.pre`
 export const StyledTestStepsOutPutContainer = styled.div`
   width: 550px;
   height: 90%;
-  overflow: scroll;
 
 `;
 
@@ -150,4 +149,17 @@ export const StyledLabelledFailedOnlyCheckbox = styled.label`
 
 export const StyledFailedOnlyCheckbox = styled.input`
 
+`;
+
+export const StyledPendingTestExecution = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-md);
+  color: var(--color-light-primary);
+  width: 550px;
+  height: 38px;
+  background: var(--color-gray-tertiary );
+  border: 1px solid var(--color-gray-secondary);
+  border-radius: 3px;
 `;
