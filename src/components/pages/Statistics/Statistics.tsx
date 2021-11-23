@@ -1,20 +1,17 @@
-import React, { useEffect } from 'react';
-import { PieChart, RingProgressChart, TestStatisticsStats } from '@atoms';
-import { TestHeader } from '@organisms';
+import React, {useEffect} from 'react';
+import {PieChart, RingProgressChart, TestStatisticsStats} from '@atoms';
+import {TestHeader} from '@organisms';
 
-import { useAppSelector } from '@src/redux/hooks';
-import { selectTotals } from '@src/redux/reducers/testsListSlice';
+import {useAppSelector} from '@src/redux/hooks';
+import {selectTotals} from '@src/redux/reducers/testsListSlice';
 import {
   StyledStatisticsContainer,
   StyledStatisticsHeader,
-  // StyledTestStatisticsCharts,
   StyledTestStatisticsStatsContainer,
-  // StyledTestStatisticsChart,
   StyledTestStatisticsCircularCharts,
   StyledTotalTestCurrentStatusChart,
-  // StyledAreaChart,
 } from './Statistics.styled';
-// @ts-nocheck
+
 const Statistics = () => {
   const [totalPercentage, setTotalPercentage] = React.useState<number>();
 
@@ -22,7 +19,7 @@ const Statistics = () => {
 
   useEffect(() => {
     const getPercentage = (): void => {
-      if (totals.passed && (totals.results !== undefined && totals.results > 0)) {
+      if (totals.passed && totals.results !== undefined && totals.results > 0) {
         const total = totals.passed / totals.results;
         setTotalPercentage(total);
       }
@@ -36,11 +33,7 @@ const Statistics = () => {
         <TestHeader testHeaderLabel="OverView" showTestFilters={false} />
       </StyledStatisticsHeader>
       <StyledTestStatisticsStatsContainer>
-        <TestStatisticsStats
-        // totalTests={testsStats.testsStats}
-        // failedTests={testsStats.failedTests}
-        // runningTests={testsStats.runningTests}
-        />
+        <TestStatisticsStats />
       </StyledTestStatisticsStatsContainer>
       {/* <StyledTestStatisticsCharts>
         <StyledTestStatisticsChart>

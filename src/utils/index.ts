@@ -1,4 +1,3 @@
-export {filterTestsExecution} from './testFilters';
 export {truncateText, escapeHtml, findMatchWordInString, getLastStringAfterTrailingSlash} from './strings';
 export {showSmallError} from './message';
 export {
