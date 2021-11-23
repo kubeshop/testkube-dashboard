@@ -13,6 +13,7 @@ import {
   updateData,
   updateSelectedTestId,
   paginateTo,
+  updateSelectedTestExecutionStatus,
 } from '@src/redux/reducers/testsListSlice';
 import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
 import {getDuration, timeStampToDate} from '@src/utils/formatDate';
@@ -25,8 +26,9 @@ interface ITestListTable {
 
 function TestListTable() {
   const dispatch = useDispatch();
-  const handleSelectedTest = (id: string) => {
+  const handleSelectedTest = (id: string, status: string) => {
     dispatch(updateSelectedTestId(id));
+    dispatch(updateSelectedTestExecutionStatus(status));
   };
 
   const allTests = useAppSelector(selectTests);
@@ -200,7 +202,7 @@ function TestListTable() {
       onRow={(record, _) => {
         return {
           style: {border: '1px solid #fff'},
-          onClick: () => handleSelectedTest(record.id),
+          onClick: () => handleSelectedTest(record.id, record.status),
           onDoubleClick: () => null,
           props: {
             role: 'row',

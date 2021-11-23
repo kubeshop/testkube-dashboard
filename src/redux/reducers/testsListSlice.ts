@@ -25,6 +25,7 @@ const initialState: TestListState = {
     pending: 0
   },
   selectedTestId: undefined,
+  status: undefined,
 
   results: [],
   resultsByDate: [],
@@ -85,8 +86,9 @@ export const testsListSlice = createSlice({
     updateSelectedTestId: (state, action: PayloadAction<string|undefined>) => {
       state.selectedTestId = action.payload;
     },
-
-  },
+    updateSelectedTestExecutionStatus: (state, action: PayloadAction<string>) => {
+      state.status = action.payload;
+    }  },
 });
 
 export const selectTotals = (state: RootState) => state.testsList.totals;
@@ -97,6 +99,7 @@ export const selectTestsByDate = (state: RootState) => state.testsList.resultsBy
 export const selectFilters = (state: RootState) => state.testsList.filters;
 export const selectHasNext = (state: RootState) => state.testsList.hasNext;
 export const selectedTestId = (state: RootState) => state.testsList.selectedTestId;
+export const selectedTestExecutionStatus = (state: RootState) => state.testsList.status;
 
 export const {
   updateData,
@@ -110,6 +113,7 @@ export const {
   setPage,
   changePageSize,
   updateSelectedTestId,
+  updateSelectedTestExecutionStatus
 } = testsListSlice.actions;
 
 export default testsListSlice.reducer;

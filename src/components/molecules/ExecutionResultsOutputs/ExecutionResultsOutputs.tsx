@@ -8,7 +8,7 @@ import {Step, AssertionResult, Test} from '@types';
 
 import {getStatus} from '@src/redux/utils/requestFilters';
 import {useAppSelector} from '@src/redux/hooks';
-import {selectedTestId} from '@src/redux/reducers/testsListSlice';
+import {selectedTestExecutionStatus, selectedTestId} from '@src/redux/reducers/testsListSlice';
 import {useGetArtifactsQuery} from '@src/services/tests';
 import Artifacts from './Artifacts/Artifacts';
 import {
@@ -29,6 +29,7 @@ import {
   TestsWithoutStepsContainer,
   StyledShowFailedStepsContainer,
   StyledLabelledFailedOnlyCheckbox,
+  StyledPendingTestExecution,
 } from './ExecutionResultsOutputs.styled';
 
 interface IStepHeader {
@@ -106,6 +107,9 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
   const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
   const [filteredExecutionResults, setFilteredExecutionResults] = useState<any[]>([]);
+  const testId = useAppSelector(selectedTestId);
+  const testExecutionStatus = useAppSelector(selectedTestExecutionStatus);
+
   const {TabPane} = Tabs;
 
   const handleOnClick = () => {
@@ -116,7 +120,6 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
     setShowOnlyFailedSteps(event.target.checked);
   };
 
-  const testId = useAppSelector(selectedTestId);
   const {data: artifacts} = useGetArtifactsQuery(testId, {
     skip: !testId,
   });
@@ -165,6 +168,10 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
                   )}
                 </StyledTestAssertionResultsContainer>
               ))
+            ) : testExecutionStatus === 'pending' ? (
+              <StyledPendingTestExecution>
+                <span>Pending...</span>
+              </StyledPendingTestExecution>
             ) : (
               <TestsWithoutStepsContainer>
                 <span>This Execution has no steps!</span>
