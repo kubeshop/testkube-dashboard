@@ -38,7 +38,7 @@ const PieChart = () => {
       value: chartTestStatusData.error,
     },
     {
-      type: 'Pending',
+      type: 'Running',
       value: chartTestStatusData.pending,
     },
     {
@@ -72,7 +72,7 @@ const PieChart = () => {
       if (type === 'Failed') {
         return '#DB5382';
       }
-      if (type === 'Pending') {
+      if (type === 'Running') {
         return '#FFCA00';
       }
       if (type === 'Queued') {
