@@ -48,13 +48,16 @@ const TestHeader = ({testHeaderLabel, showTestFilters}: ITestHeaderProps) => {
       </StyledHeaderTypographyContainer>
 
       <StyledDatePickerAndFiltersContainer>
-        <StyledTestFiltersCols span={12} xs={24} xl={12}>
-          <ResultDatePicker />
-        </StyledTestFiltersCols>
         {showTestFilters && (
-          <StyledTestFiltersCols span={12} xs={24} xl={12}>
-            <TestsFilter />
-          </StyledTestFiltersCols>
+          <>
+            <StyledTestFiltersCols span={12} xs={24} xl={12}>
+              <ResultDatePicker />
+            </StyledTestFiltersCols>
+
+            <StyledTestFiltersCols span={12} xs={24} xl={12}>
+              <TestsFilter />
+            </StyledTestFiltersCols>
+          </>
         )}
       </StyledDatePickerAndFiltersContainer>
     </StyledTestHeaderContainer>
