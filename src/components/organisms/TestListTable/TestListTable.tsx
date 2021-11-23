@@ -1,4 +1,4 @@
-import React, {  useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Table} from 'antd';
 import {useDispatch} from 'react-redux';
 
@@ -6,21 +6,19 @@ import {TestTypeIcon, RenderTestStatusSvgIcon} from '@atoms';
 import {useAppSelector} from '@src/redux/hooks';
 import {
   changePageSize,
- 
   selectFilters,
   selectHasNext,
   selectTests,
   selectFiltered,
   updateData,
   updateSelectedTestId,
- 
   paginateTo,
 } from '@src/redux/reducers/testsListSlice';
 import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
 import {getDuration, timeStampToDate} from '@src/utils/formatDate';
 import {useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery} from '@src/services/tests';
 import {getStatus} from '@src/redux/utils/requestFilters';
- 
+
 interface ITestListTable {
   onChange?: () => void;
 }
@@ -79,8 +77,16 @@ function TestListTable() {
       dataIndex: 'scriptType',
       key: 'scriptType',
       width: '10%',
-      render: (testType: string) => <TestTypeIcon testType={testType} width={30} height={30} />,
       visible: true,
+      // eslint-disable-next-line no-dupe-keys
+      render: (testType: string) => {
+        return {
+          children: <TestTypeIcon testType={testType} width={30} height={30} />,
+          props: {
+            role: 'cell',
+          },
+        };
+      },
     },
     {
       title: 'Script',
@@ -88,6 +94,14 @@ function TestListTable() {
       key: 'scriptName',
       width: '25%',
       visible: true,
+      render: () => {
+        return {
+          children: 'foo',
+          props: {
+            role: 'cell',
+          },
+        };
+      },
     },
     {
       title: 'Name',
@@ -95,11 +109,26 @@ function TestListTable() {
       key: 'name',
       width: '25%',
       visible: true,
+      render: () => {
+        return {
+          children: 'foo',
+          props: {
+            role: 'cell',
+          },
+        };
+      },
     },
     {
       title: 'Started At',
       dataIndex: 'startTime',
-      render: (startTime: string) => (startTime ? timeStampToDate(startTime) : '-'),
+      render: (startTime: string) => {
+        return {
+          children: startTime ? timeStampToDate(startTime) : '-',
+          props: {
+            role: 'cell',
+          },
+        };
+      },
       key: 'startTime',
       width: '15%',
       visible: true,
@@ -107,7 +136,14 @@ function TestListTable() {
     {
       title: 'Duration',
       dataIndex: 'duration',
-      render: (duration: string, row: any) => (row.endTime ? getDuration(duration, row.endTime) : '-'),
+      render: (duration: string, row: any) => {
+        return {
+          children: row.endTime ? getDuration(duration, row.endTime) : '-',
+          props: {
+            role: 'cell',
+          },
+        };
+      },
       key: 'duration',
       width: '15%',
       visible: true,
@@ -117,19 +153,33 @@ function TestListTable() {
       dataIndex: 'status',
       key: 'status',
       width: '5%',
-      render: (testStatus: string) => <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
+      render: (testStatus: string) => {
+        return {
+          children: <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
+          props: {
+            role: 'cell',
+          },
+        };
+      },
       visible: true,
     },
     {
       title: 'id',
       dataIndex: 'id',
       key: 'id',
-      render: (id: string) => <LeftArrowIcon height="13px" width="8x" />,
+      render: (id: string) => {
+        return {
+          children: <LeftArrowIcon height="13px" width="8x" />,
+          props: {
+            role: 'cell',
+          },
+        };
+      },
       width: '5%',
       visible: false,
     },
   ];
- 
+
   const paginationOptions = {
     onShowSizeChange: (_: any, pageSize: number) => dispatch(changePageSize(pageSize)),
     onChange: (page: number) => dispatch(paginateTo(page - 1)),
@@ -151,7 +201,10 @@ function TestListTable() {
         return {
           style: {border: '1px solid #fff'},
           onClick: () => handleSelectedTest(record.id),
-          onDoubleClick: () =>  null,
+          onDoubleClick: () => null,
+          props: {
+            role: 'row',
+          },
         };
       }}
       pagination={pagination}
