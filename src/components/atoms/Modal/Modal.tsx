@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import { Modal } from 'antd';
-import { useHistory } from 'react-router-dom';
+import {Modal} from 'antd';
+import {useHistory} from 'react-router-dom';
 
-import { Button, LabelInput, Typography, Spinner } from '@atoms';
-import { validateUrl, FinalizedApiEndpoint, showSmallError } from '@utils';
-import { config } from '@constants/config';
-import { TestsContext } from '@context/testsContext';
+import {Button, LabelInput, Typography} from '@atoms';
+import {validateUrl, FinalizedApiEndpoint, showSmallError} from '@utils';
+import {config} from '@constants/config';
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
@@ -33,15 +32,14 @@ interface IModal {
   visible?: boolean;
 }
 
-const CustomModal = ({ isModalVisible, visible }: IModal) => {
-  const [apiEndpoint, setApiEndpoint] = useState<IUrlEndpoint>({ apiEndpoint: '' });
+const CustomModal = ({isModalVisible, visible}: IModal) => {
+  const [apiEndpoint, setApiEndpoint] = useState<IUrlEndpoint>({apiEndpoint: ''});
   const [validUrl, setVAlidUrl] = useState<boolean>(false);
   const [buttonLabelContent, setLabelButtonContent] = useState<string>('Get Results');
   const history = useHistory();
-  const tests: any = React.useContext(TestsContext);
 
   const handleInputApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
-    setApiEndpoint({ ...apiEndpoint, [field]: event.target.value });
+    setApiEndpoint({...apiEndpoint, [field]: event.target.value});
 
     const validatedUrl = validateUrl(event.target.value);
 
@@ -61,14 +59,14 @@ const CustomModal = ({ isModalVisible, visible }: IModal) => {
 
     setLabelButtonContent('Validating...');
 
-    return fetch(validatedUrl, { signal: controller.signal })
+    return fetch(validatedUrl, {signal: controller.signal})
       .then(res => res.json())
       .then(res => {
         if (res && res.results) {
           localStorage.setItem(config.apiEndpoint, validatedUrl);
           history.push({
             pathname: '/',
-            search: `?${new URLSearchParams({ apiEndpoint: apiEndpoint.apiEndpoint }).toString()}`,
+            search: `?${new URLSearchParams({apiEndpoint: apiEndpoint.apiEndpoint}).toString()}`,
           });
           setLabelButtonContent('Get Results');
           isModalVisible(false);
@@ -88,7 +86,6 @@ const CustomModal = ({ isModalVisible, visible }: IModal) => {
 
   return (
     <>
-      {tests.isLoading && <Spinner />}
       <Modal
         title="TestKube API endpoint"
         visible={visible}
@@ -100,7 +97,11 @@ const CustomModal = ({ isModalVisible, visible }: IModal) => {
           <Typography variant="secondary" leftAlign>
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
             TestKube installer -{' '}
-            <a href="https://kubeshop.github.io/testkube/dashboard/#dashboard-results-endpoint" target="_blank">
+            <a
+              href="https://kubeshop.github.io/testkube/dashboard/#dashboard-results-endpoint"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Read More...
             </a>
           </Typography>
@@ -114,7 +115,7 @@ const CustomModal = ({ isModalVisible, visible }: IModal) => {
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleInputApiEndpoint(event, 'apiEndpoint')}
               defaultValue={apiEndpoint.apiEndpoint}
             />
-            <Button type="submit" disabled={!validUrl} disableFilter>
+            <Button type="submit" disabled={!validUrl} disableFilter variant="secondary">
               {buttonLabelContent}
             </Button>
           </StyledFormContainer>

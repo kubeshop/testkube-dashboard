@@ -46,3 +46,10 @@ jobs:
       if: always()
       run: npm run test
 
+    - name: E2E tests
+      working-directory: ./test
+      if: always()
+      run: |
+        npm install
+        npm run test
+

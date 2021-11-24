@@ -1,34 +1,17 @@
 import styled from 'styled-components';
+import {Layout} from 'antd';
 
-export const MainTableStyles = styled.table`
-  table-layout: fixed;
-  width: 90vw;
-  height: 90vh;
-  text-align: center;
-  margin: 0 auto;
+export const StyledMainContent = styled(Layout.Content)`
+  display: flex;
+  flex-direction: column;
+  background: var(--color-dark-tertiary);
 `;
 
-export const StyledTestResults = styled.tr`
-  display: flex;
-  height: 140px;
-  border-top-style: none;
-  border-bottom-style: 1px solid var(--color-gray-secondary);
-  word-wrap: break-word;
-`;
-
-export const StyledTestFilter = styled.tr`
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-right-style: hidden;
-  border-left-style: hidden;
-  height: 70px;
-`;
-
-export const StyledTestSummary = styled.tr`
-  border-top-style: hidden;
-  display: flex;
-  height: 85vh;
+export const StyledTestSummary = styled.div`
+  position: relative;
+  top: 24px;
+  left: 20px;
+  margin-right: 55px;
 
   // TESTING DIFFERENT SCREENS
 

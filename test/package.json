@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^8.5.0"
+    "@svgr/webpack": "^5.5.0",
+    "cypress": "^8.7.0"
+  },
+  "dependencies": {
+    "@ant-design/charts": "^1.2.14"
   }
 }

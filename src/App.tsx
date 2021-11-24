@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Route, Switch, useHistory} from 'react-router-dom';
 
-import { TestResults, TestsFilter, TestsSummary } from '@organisms';
+import {Modal} from '@atoms';
+import {Main} from '@pages';
 
-import { Modal } from '@atoms';
-
-import { config } from '@constants/config';
+import {config} from '@constants/config';
 import {
   isHostProtocolSecure,
   showSmallError,
@@ -13,8 +12,9 @@ import {
   checkIfQueryParamsExistsInUrl,
   FinalizedApiEndpoint,
 } from '@utils';
-
-import { MainTableStyles, StyledTestResults, StyledTestFilter, StyledTestSummary } from './App.styled';
+import {Content} from 'antd/lib/layout/layout';
+import {Layout} from 'antd';
+import {SideBar} from './components/organisms';
 
 declare global {
   interface Window {
@@ -35,60 +35,46 @@ function App() {
     const dashboardEnvVariable = window?._env_?.REACT_APP_API_SERVER_ENDPOINT;
 
     if (dashboardEnvVariable && dashboardEnvVariable !== 'default') {
-
       setVisible(false);
       FinalizedApiEndpoint(dashboardEnvVariable, true);
       history.push({
         pathname: '/',
-        search: `?${new URLSearchParams({ apiEndpoint: `${dashboardEnvVariable}` }).toString()}`,
+        search: `?${new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString()}`,
       });
     }
+
     if (dashboardEnvVariable === 'default') {
       setVisible(true);
     }
 
     const apiEndpointExist = checkIfQueryParamsExistsInUrl(config.apiEndpoint);
 
-
     if (apiEndpointExist) {
       getApiEndpointOnPageLoad();
       setVisible(false);
     }
-
-
   };
 
   useEffect(() => {
     dashboardEndpointValidators();
   }, []);
 
-  const RenderApp = React.useCallback(() => {
-    return (
-      <MainTableStyles>
-        <thead>
-          <StyledTestResults>
-            <TestResults />
-          </StyledTestResults>
-        </thead>
-        <tbody>
-          <StyledTestFilter>
-            <TestsFilter />
-          </StyledTestFilter>
-          <StyledTestSummary>
-            <TestsSummary />
-          </StyledTestSummary>
-        </tbody>
-      </MainTableStyles>
-    );
-  }, []);
-
   return (
     <>
       {visible && <Modal visible isModalVisible={setVisible} />}
-      <Switch>
-        <Route path="/?apiEndpoint=:apiEndpoint" exact render={RenderApp} />
-        <Route path="/" exact component={RenderApp} />
-      </Switch>
+      <Layout>
+        <SideBar />
+        <Layout style={{marginLeft: 100}}>
+          <Content>
+            <div className="site-layout-background">
+              <Switch>
+                <Route path="/?apiEndpoint=:apiEndpoint" exact render={Main} />
+                <Route path="/" exact component={Main} />
+              </Switch>
+            </div>
+          </Content>
+        </Layout>
+      </Layout>
     </>
   );
 }

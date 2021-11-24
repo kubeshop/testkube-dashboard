@@ -3,15 +3,15 @@ import React from 'react';
 import {Image} from '@atoms';
 import {findMatchWordInString} from '@utils';
 
-import PostmanIcon from '@assets/postmanIcon.svg';
+import PostmanIcon from '@assets/postmanIconV2.svg';
 import CypressIcon from '@assets/cypressIcon.svg';
 import CurlIcon from '@assets/curlIcon.svg';
-import genericTestTypeIcon from '@assets/genericTestTypeIcon.svg';
+import genericTestTypeIcon from '@assets/docIconV2.svg';
 
 interface ITestIconType {
   testType: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }
 
 const TestTypeIcon = ({testType, height, width}: ITestIconType) => {
