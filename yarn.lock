@@ -1570,10 +1570,12 @@
   dependencies:
     chalk "^4.0.0"
 
-"@craco/craco@6.3.0":
-  version "6.3.0"
-  resolved "https://registry.npmjs.org/@craco/craco/-/craco-6.3.0.tgz"
+"@craco/craco@6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@craco/craco/-/craco-6.4.1.tgz#222b0cd95a955935c5564aa7788a6c626e4d9bc4"
   dependencies:
+    "@endemolshinegroup/cosmiconfig-typescript-loader" "^3.0.2"
+    cosmiconfig "^7.0.1"
     cross-spawn "^7.0.0"
     lodash "^4.17.15"
     semver "^7.3.2"
@@ -5150,7 +5152,11 @@ eslint-plugin-prettier@4.0.0:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-plugin-react-hooks@4.3.0, eslint-plugin-react-hooks@^4.2.0:
+eslint-plugin-react-hooks@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.2.0.tgz#8c229c268d468956334c943bb45fc860280f5556"
+
+eslint-plugin-react-hooks@^4.2.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.3.0.tgz#318dbf312e06fab1c835a4abef00121751ac1172"
 
