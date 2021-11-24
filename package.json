@@ -12,7 +12,7 @@
   },
   "private": true,
   "devDependencies": {
-    "@commitlint/cli": "^13.2.1",
+    "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^13.2.0",
     "@craco/craco": "6.3.0",
     "@testing-library/jest-dom": "5.14.1",
@@ -52,7 +52,7 @@
     "@ant-design/icons": "4.7.0",
     "@reduxjs/toolkit": "^1.6.2",
     "antd": "4.16.13",
-    "loglevel": "1.7.1",
+    "loglevel": "1.8.0",
     "moment": "^2.29.1",
     "notyf": "^3.10.0",
     "react": "17.0.2",
