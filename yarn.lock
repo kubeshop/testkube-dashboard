@@ -1951,6 +1951,7 @@
 "@types/react@*", "@types/react@17.0.30":
   version "17.0.30"
   resolved "https://registry.npmjs.org/@types/react/-/react-17.0.30.tgz"
+
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"

@@ -2,7 +2,6 @@ import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError 
 import { config } from '@src/constants/config';
 import moment from 'moment';
 
-
 const rawBaseQuery = (baseUrl: string) => fetchBaseQuery({
   baseUrl
 });
@@ -38,11 +37,14 @@ export const testsApi = createApi({
       query: (testId) => `${testId}`,
     }),
     getTestsByDate: builder.query<any, any>({
-      query: (filters) => `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${moment(filters?.date).format('YYYY-MM-DD')}&endDate=${moment(filters?.date).format('YYYY-MM-DD')}`
+      query: (filters) => `?pageSize=${filters?.pageSize}&page=${filters?.page}&startDate=${moment(filters?.date[0]).format('YYYY-MM-DD')}&endDate=${moment(filters?.date[1]).format('YYYY-MM-DD')}`
+    }),
+    getArtifacts: builder.query<any, any>({
+      query: (testId) => `${testId}/artifacts`
+      // query: (testId) => `618e5291d88b39735423e0c6/artifacts`
     })
 
   }),
 });
 
-
-export const { useGetTestsQuery, useGetTestsByStatusQuery, useGetTestsByDateQuery, useGetTestByIdQuery } = testsApi;
+export const { useGetTestsQuery, useGetTestsByStatusQuery, useGetTestsByDateQuery, useGetTestByIdQuery, useGetArtifactsQuery } = testsApi;

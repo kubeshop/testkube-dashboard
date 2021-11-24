@@ -24,7 +24,7 @@ const StyledInput = styled.input<ILabelInputProps>`
   height: var(--space-lg);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
-  border-radius: var(--space-md);
+  border-radius: 3px;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
   color: ${({variant}) => (variant === 'primary' ? 'var(--color-light-primary)' : 'var(--color-light-primary)')};
