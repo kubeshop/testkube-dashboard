@@ -294,6 +294,9 @@ thead[class*="ant-table-thead"] th:last-child{
   border: 1px solid var(--color-gray-nonary) !important;
 }
 
+.ant-pagination-item-container {
+  display: none;
+}
 
 `;
 

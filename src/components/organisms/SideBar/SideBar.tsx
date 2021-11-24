@@ -1,15 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Col, Layout, Menu, Row } from 'antd';
-import { useLocation } from 'react-router';
-import { Link } from 'react-router-dom';
+import {Col, Layout, Menu, Row} from 'antd';
+import {useLocation} from 'react-router';
+import {Link} from 'react-router-dom';
 
-import { Icon, MenuItem, Modal } from '@atoms';
-import { QuestionCircleOutlined, SettingFilled, GithubFilled } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
-import { ReactComponent as ChartIcon } from '../../../assets/images/chartIcon.svg';
-import { ReactComponent as ListIcon } from '../../../assets/images/listIcon.svg';
-import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
+import {Icon, MenuItem, Modal} from '@atoms';
+import {QuestionCircleOutlined, SettingFilled, GithubFilled} from '@ant-design/icons';
+import {useDispatch} from 'react-redux';
+import {ReactComponent as ListIcon} from '../../../assets/images/listIcon.svg';
+import {ReactComponent as Logo} from '../../../assets/images/logo.svg';
 
 const StyledSideBar = styled(Layout.Sider)`
   display: flex;
@@ -34,7 +33,7 @@ const SideBar = () => {
   const dispatch = useDispatch();
   const [visible, setVisible] = React.useState(false);
   const location = useLocation();
-  const { pathname } = location;
+  const {pathname} = location;
 
   const showModal = () => {
     setVisible(!visible);
@@ -55,7 +54,7 @@ const SideBar = () => {
         </Link>
       </StyledLogo>
       <Menu
-        style={{ background: 'var(--color-dark-secondary)' }}
+        style={{background: 'var(--color-dark-secondary)'}}
         theme="dark"
         defaultSelectedKeys={['/']}
         mode="inline"
@@ -63,12 +62,6 @@ const SideBar = () => {
       >
         <Row justify="center" gutter={[0, 250]}>
           <Col>
-            <MenuItem key="/statistics">
-              <Link to="/statistics">
-                <Icon component={() => <ChartIcon />} />
-              </Link>
-            </MenuItem>
-
             <MenuItem key="/">
               <Link to="/">
                 <Icon component={() => <ListIcon />} />
@@ -77,13 +70,13 @@ const SideBar = () => {
           </Col>
           <Col>
             <MenuItem key="4">
-              <Icon onClick={showModal} component={() => <SettingFilled style={{ fontSize: 24 }} />} />
+              <Icon onClick={showModal} component={() => <SettingFilled style={{fontSize: 24}} />} />
             </MenuItem>
             <MenuItem key="5">
-              <Icon onClick={showGithubMainPage} component={() => <GithubFilled style={{ fontSize: 24 }} />} />
+              <Icon onClick={showGithubMainPage} component={() => <GithubFilled style={{fontSize: 24}} />} />
             </MenuItem>
             <MenuItem key="6">
-              <Icon onClick={showDocumentation} component={() => <QuestionCircleOutlined style={{ fontSize: 24 }} />} />
+              <Icon onClick={showDocumentation} component={() => <QuestionCircleOutlined style={{fontSize: 24}} />} />
             </MenuItem>
           </Col>
         </Row>

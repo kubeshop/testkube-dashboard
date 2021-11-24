@@ -23,7 +23,7 @@ const StyledButton = styled.button<IButton>`
   letter-spacing: normal;
   line-height: normal;
   text-decoration: none solid rgb(0, 0, 0);
-  border-radius: ${props => (props.variant === 'primary' ? '3px' : 'var(--space-md)')};
+  border-radius: 3px;
   text-transform: none;
   vertical-align: baseline;
   white-space: normal;
