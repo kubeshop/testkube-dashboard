@@ -30,7 +30,7 @@ const PieChart = () => {
 
   const data = [
     {
-      type: 'Success',
+      type: 'Passed',
       value: chartTestStatusData.success,
     },
     {
@@ -66,7 +66,7 @@ const PieChart = () => {
     showMarkers: false,
     colorField: 'type',
     color: ({type}: any) => {
-      if (type === 'Success') {
+      if (type === 'Passed') {
         return '#94D89C';
       }
       if (type === 'Failed') {
