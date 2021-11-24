@@ -12,7 +12,7 @@
   },
   "private": true,
   "devDependencies": {
-    "@commitlint/cli": "^13.2.1",
+    "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^13.2.0",
     "@craco/craco": "6.3.0",
     "@testing-library/jest-dom": "5.14.1",
