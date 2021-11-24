@@ -127,10 +127,11 @@ export const TestsWithoutStepsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-size-md);
-  height: var(--space-x1l);
-  background: #ff4d4fb3;
+  font-size: 14px;
+  background: #DB5382;
   color: var(--color-light-primary);
+  border: 1px solid var(--color-gray-senary);
+  height: 38px;
   width: 550px;
 
   @media screen and (min-width: 2560px) {

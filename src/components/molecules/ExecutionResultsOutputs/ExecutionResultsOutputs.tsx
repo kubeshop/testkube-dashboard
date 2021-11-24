@@ -112,10 +112,6 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
 
   const {TabPane} = Tabs;
 
-  const handleOnClick = () => {
-    setTogglePlainTestTest(!togglePlainTestTest);
-  };
-
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowOnlyFailedSteps(event.target.checked);
   };
@@ -180,7 +176,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
           </StyledTestStepsOutPutContainer>
         </TabPane>
 
-        <TabPane tab="Plain Text" key="2">
+        <TabPane tab="Plain Text" key="2" disabled={!data?.executionResult?.steps}>
           <RenderPlainTestOutput {...data} />
         </TabPane>
         {artifacts && artifacts.length > 0 ? (
