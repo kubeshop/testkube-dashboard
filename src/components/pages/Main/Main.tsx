@@ -8,19 +8,19 @@ const Main = () => {
   return (
     <>
       <StyledMainContent>
-        <StyledTestHeader>
-          <TestHeader testHeaderLabel="Tests" showTestFilters />
-        </StyledTestHeader>
-        <StyledTestSummary>
-          <Row gutter={[16, 16]}>
-            <Col span={12} >
-              <TestListTable />
+          <Row>
+            <Col flex="50%">
+              <StyledTestHeader>
+                <TestHeader testHeaderLabel="Tests" showTestFilters />
+              </StyledTestHeader>
+              <StyledTestSummary>
+                  <TestListTable />
+              </StyledTestSummary>
             </Col>
-            <Col span={12} >
+            <Col flex="auto">
               <TestDescription />
             </Col>
           </Row>
-        </StyledTestSummary>
       </StyledMainContent>
     </>
   );
