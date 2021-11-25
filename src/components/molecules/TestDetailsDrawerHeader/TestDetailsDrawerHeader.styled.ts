@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledTestDetailsDrawerHeaderContainer = styled.div`
+  padding-top: 2em;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
