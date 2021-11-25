@@ -1,6 +1,6 @@
 /* eslint react/destructuring-assignment: 0 */
 import React, {useState} from 'react';
-import {Drawer} from 'antd';
+import {Col} from 'antd';
 
 import {Spinner} from '@atoms';
 import {TestDetailsDrawerHeader, ExecutionResultsOutputs} from '@molecules';
@@ -26,20 +26,14 @@ const TestDescription = () => {
     if (testId) {
       setVisible(!visible);
     }
-  }, [testId, visible]);
+  }, [testId]);
 
   const afterVisibleChange = () => (!visible ? dispatch(updateSelectedTestId(undefined)) : null);
 
   return (
     <>
       {testId && data && (
-        <Drawer
-          afterVisibleChange={afterVisibleChange}
-          width="630px"
-          onClose={onClose}
-          visible={visible}
-          bodyStyle={{display: 'flex', flexDirection: 'column', background: 'var(--color-dark-quinary)'}}
-        >
+        <Col>
           {/* {error && <Typography variant="secondary">Something went wrong...</Typography>} */}
           {isLoading && <Spinner size="large" center />}
           <>
@@ -47,7 +41,7 @@ const TestDescription = () => {
             {/* <TestDetailsDrawerPerformanceSection showOverView bordered testDescriptionData={data} /> */}
             <ExecutionResultsOutputs data={data} />
           </>
-        </Drawer>
+        </Col>
       )}
     </>
   );
