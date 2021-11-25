@@ -10,7 +10,6 @@ export const StyledArtifacts = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 550px;
   height: 38px;
   color: var(--color-light-primary);
   background: var(--color-dark-tertiary);
@@ -26,7 +25,7 @@ export const StyledNoArtifactsFound = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 550px;
+  flex: 0 0 100%;
   height: 38px;
   color: var(--color-light-primary);
   background: #ff4d4fb3;

@@ -6,7 +6,6 @@ export interface ITestTotals {
   results?: number,
   passed?: number,
   failed?: number,
-  queued?: number,
   pending?: number
 }
 

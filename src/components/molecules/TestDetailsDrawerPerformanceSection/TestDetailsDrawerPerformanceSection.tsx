@@ -14,7 +14,7 @@ interface ITestDetailsDrawerPerformanceSection {
 }
 
 export const StyledTestDetailsDrawerPerformanceChart = styled.div<ITestDetailsDrawerPerformanceSection>`
-  width: 550px;
+  width: 100%;
   height: 190px;
   border-radius: 3px;
   border: ${props => (props.bordered ? '1px solid var(--color-gray-senary)' : 'none')};

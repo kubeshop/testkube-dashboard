@@ -48,27 +48,28 @@ const SideBar = () => {
   return (
     <StyledSideBar width="80px" collapsed>
       {visible && <Modal visible isModalVisible={setVisible} />}
-      <StyledLogo>
-        <Link to="/">
-          <Logo />
-        </Link>
-      </StyledLogo>
       <Menu
-        style={{background: 'var(--color-dark-secondary)'}}
+        style={{ height:'100vh', background: 'var(--color-dark-secondary)'}}
         theme="dark"
         defaultSelectedKeys={['/']}
         mode="inline"
         selectedKeys={[pathname]}
       >
-        <Row justify="center" gutter={[0, 250]}>
-          <Col>
+        <Row justify="center" style={{height:'100vh'}}>
+          <Col style={{alignSelf: 'flex-start'}}>
+            <StyledLogo>
+              <Link to="/">
+                <Logo />
+              </Link>
+            </StyledLogo>
             <MenuItem key="/">
               <Link to="/">
                 <Icon component={() => <ListIcon />} />
               </Link>
             </MenuItem>
           </Col>
-          <Col>
+
+          <Col style={{alignSelf: 'flex-end'}}>
             <MenuItem key="4">
               <Icon onClick={showModal} component={() => <SettingFilled style={{fontSize: 24}} />} />
             </MenuItem>
@@ -79,6 +80,7 @@ const SideBar = () => {
               <Icon onClick={showDocumentation} component={() => <QuestionCircleOutlined style={{fontSize: 24}} />} />
             </MenuItem>
           </Col>
+
         </Row>
       </Menu>
     </StyledSideBar>

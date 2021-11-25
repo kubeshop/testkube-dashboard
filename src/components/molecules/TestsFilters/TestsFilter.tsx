@@ -10,9 +10,6 @@ const StyleTestFilterButtons = styled.div`
   display: flex;
   align-items: baseline;
   justify-content: center;
-  &:last-child {
-    margin-right: 50px;
-  }
 `;
 
 const TestsFilter = () => {
@@ -41,14 +38,6 @@ const TestsFilter = () => {
         variant="primary"
       >
         Running
-      </Button>
-      <Button
-        active={filters.status === 'queued'}
-        disabled={filters.status === 'queued'}
-        onClick={() => handleClick('queued')}
-        variant="primary"
-      >
-        Waiting
       </Button>
       <Button
         active={filters.status === 'success'}

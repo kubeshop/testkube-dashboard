@@ -47,7 +47,7 @@ const StyledTypography = styled.p<ITypography>`
       ? 'var(--color-monokle-primary)'
       : 'var(--color-light-primary)'};
   letter-spacing: 0;
-  margin-bottom: 3px;
+  margin-bottom: 0;
   overflow: hidden;
   white-space: ${props => (props.nowrap ? 'nowrap' : 'normal')};
   text-overflow: ellipsis;

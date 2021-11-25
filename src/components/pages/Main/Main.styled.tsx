@@ -5,6 +5,7 @@ export const StyledMainContent = styled(Layout.Content)`
   display: flex;
   flex-direction: column;
   background: var(--color-dark-tertiary);
+  margin: 0 24px 0 0;
 `;
 
 export const StyledTestHeader = styled.div``;
@@ -12,8 +13,6 @@ export const StyledTestHeader = styled.div``;
 export const StyledTestSummary = styled.div`
   position: relative;
   top: 24px;
-  left: 20px;
-  margin-right: 55px;
 
   // TESTING DIFFERENT SCREENS
 

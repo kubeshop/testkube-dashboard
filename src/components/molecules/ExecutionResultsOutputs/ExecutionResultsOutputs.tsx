@@ -123,7 +123,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
   React.useEffect(() => {
     if (showOnlyFailedSteps) {
       const filtered = data?.executionResult?.steps?.filter((step: Step) => {
-        return step.status === 'failed';
+        return step.status === 'failed' || step.status === 'error';
       });
       setFilteredExecutionResults(filtered);
     } else {
@@ -135,6 +135,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
     <StyledTestDescriptionContainer>
       {/* eslint-disable-next-line react/jsx-no-bind */}
       <Tabs
+        style={{width:'100%'}}
         defaultActiveKey="1"
         // onChange={callback}
         tabBarExtraContent={
@@ -176,7 +177,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
           </StyledTestStepsOutPutContainer>
         </TabPane>
 
-        <TabPane tab="Plain Text" key="2" disabled={!data?.executionResult?.steps}>
+        <TabPane tab="Log output" key="2" disabled={!data?.executionResult?.steps}>
           <RenderPlainTestOutput {...data} />
         </TabPane>
         {artifacts && artifacts.length > 0 ? (

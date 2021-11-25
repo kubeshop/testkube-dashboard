@@ -4,7 +4,7 @@ import {Collapse} from 'antd';
 export const StyledTestDescriptionContainer = styled.div`
   display: flex;
   align-items: baseline;
-    justify-content: space-between;
+  justify-content: space-between;
 `;
 
 export const StyledTestOutputsContainer = styled.div`
@@ -19,7 +19,7 @@ export const StyledTestOutputsContainer = styled.div`
 `;
 
 export const StyledPlainTextOutputContainer = styled.div`
-  width: 550px;
+  width: 100%;
   height: 446px;
   overflow: scroll;
   background-color: var(--color-dark-secondary);
@@ -35,6 +35,11 @@ export const StyledTestOutput = styled.span`
     background: #0080ff;
     text-shadow: none;
   }
+
+  pre {
+    padding: 0.3em;
+    font-size: 0.9em;
+  }
 `;
 
 export const StyledText = styled.pre`
@@ -42,7 +47,7 @@ export const StyledText = styled.pre`
 `;
 
 export const StyledTestStepsOutPutContainer = styled.div`
-  width: 550px;
+  width: 100%;
   height: 90%;
 
 `;
@@ -50,7 +55,7 @@ export const StyledTestStepsOutPutContainer = styled.div`
 export const StyledTestStepNameContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 550px;
+  width: 100%;
   height: 38px;
   border-radius: 3px;
   border: 1px solid var(--color-gray-senary);
@@ -132,7 +137,7 @@ export const TestsWithoutStepsContainer = styled.div`
   color: var(--color-light-primary);
   border: 1px solid var(--color-gray-senary);
   height: 38px;
-  width: 550px;
+  width: 100%;
 
   @media screen and (min-width: 2560px) {
     width: 95%;
@@ -158,7 +163,7 @@ export const StyledPendingTestExecution = styled.div`
   justify-content: center;
   font-size: var(--font-size-md);
   color: var(--color-light-primary);
-  width: 550px;
+  width: 100%;
   height: 38px;
   background: var(--color-gray-tertiary );
   border: 1px solid var(--color-gray-secondary);

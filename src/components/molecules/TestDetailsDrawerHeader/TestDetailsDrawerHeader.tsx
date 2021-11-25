@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Typography, TestTypeIcon, RenderTestStatusSvgIcon, TKubeDivider, RingProgressChart} from '@atoms';
+import {Typography, TestTypeIcon, RenderTestStatusSvgIcon, RingProgressChart} from '@atoms';
 
 import {timeStampToDate} from '@src/utils/formatDate';
 import {getStatus} from '@src/redux/utils/requestFilters';
@@ -76,7 +76,6 @@ const TestDetailsDrawerHeader = ({data}: {data: any}) => {
           </StyledTestDates>
         </StyledTestStatusAndDateContainer>
       </StyledTestScriptChartAndStatusAndDateContainer>
-      <TKubeDivider />
     </StyledTestDetailsDrawerHeaderContainer>
   );
 };

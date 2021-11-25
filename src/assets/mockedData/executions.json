@@ -4,8 +4,7 @@
       "results": 7,
       "passed": 2,
       "failed": 1,
-      "queued": 1,
-      "pending": 3
+      "pending": 4
     },
     "results": [
       {
@@ -28,7 +27,7 @@
         "id": 3,
         "scriptType": "cypress",
         "scriptName": "script 3",
-        "status": "queued",
+        "status": "running",
         "startTime": "2021-09-05T12:00:00.000Z",
         "endTime": ""
       },

@@ -8,7 +8,7 @@ const Main = () => {
     <>
       <StyledMainContent>
         <StyledTestHeader>
-          <TestHeader testHeaderLabel="Tests" showTestFilters />
+          <TestHeader testHeaderLabel="Test Results" showTestFilters />
         </StyledTestHeader>
         <StyledTestSummary>
           <TestListTable />

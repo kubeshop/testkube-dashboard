@@ -5,7 +5,6 @@ import {Image} from '@atoms';
 import RunningTestIcon from '@assets/testIconRunningV2.svg';
 import FailedTestIcon from '@assets/testIconFailedV2.svg';
 import SuccessTestIcon from '@assets/testIconSuccessV2.svg';
-import QueuedTestIcon from '@assets/testIconPendingV2.svg';
 import genericTestTypeIcon from '@assets/docIconV2.svg';
 
 interface ITestTypes {
@@ -24,8 +23,6 @@ const RenderTestStatusSvgIcon = ({testStatus, width, height}: ITestTypes) => {
           ? FailedTestIcon
           : testStatus === 'passed'
           ? SuccessTestIcon
-          : testStatus === 'queued'
-          ? QueuedTestIcon
           : genericTestTypeIcon
       }
       alt={testStatus}

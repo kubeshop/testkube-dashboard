@@ -7,8 +7,7 @@ import {Typography} from '@atoms';
 
 const StyledHeaderTypographyContainer = styled(Row)`
   position: relative;
-  left: 20px;
-  top: 40px;
+  top: 30px;
 `;
 
 const StyledDatePickerAndFiltersContainer = styled(Row)`
@@ -16,7 +15,6 @@ const StyledDatePickerAndFiltersContainer = styled(Row)`
   align-items: center;
   width: 100%;
   position: relative;
-  left: 20px;
   top: 20px;
 `;
 
