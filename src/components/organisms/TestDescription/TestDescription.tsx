@@ -1,7 +1,7 @@
 /* eslint react/destructuring-assignment: 0 */
 import React, {useState} from 'react';
 import styled from 'styled-components';
-
+import {Drawer} from 'antd';
 import {Spinner, TKubeDivider} from '@atoms';
 import {TestDetailsDrawerHeader, ExecutionResultsOutputs} from '@molecules';
 
@@ -39,16 +39,25 @@ const TestDescription = () => {
   return (
     <>
       {testId && data && (
-        <Container>
-          {/* {error && <Typography variant="secondary">Something went wrong...</Typography>} */}
-          {isLoading && <Spinner size="large" center />}
-          <>
-            <TestDetailsDrawerHeader data={data} />
-            <TKubeDivider />
-            {/* <TestDetailsDrawerPerformanceSection showOverView bordered testDescriptionData={data} /> */}
-            <ExecutionResultsOutputs data={data} />
-          </>
-        </Container>
+        <Drawer
+          afterVisibleChange={afterVisibleChange}
+          width="630px"
+          onClose={onClose}
+          visible={visible}
+          bodyStyle={{padding: 0, display: 'flex', flexDirection: 'column', background: 'var(--color-dark-quinary)'}}
+        >
+            <Container>
+            {/* {error && <Typography variant="secondary">Something went wrong...</Typography>} */}
+            {isLoading && <Spinner size="large" center />}
+            <>
+              <TestDetailsDrawerHeader data={data} />
+              <TKubeDivider />
+              {/* <TestDetailsDrawerPerformanceSection showOverView bordered testDescriptionData={data} /> */}
+              <ExecutionResultsOutputs data={data} />
+            </>
+          </Container>
+       </Drawer>
+ 
       )}
     </>
   );
