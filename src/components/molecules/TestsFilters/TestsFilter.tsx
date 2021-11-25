@@ -43,14 +43,6 @@ const TestsFilter = () => {
         Running
       </Button>
       <Button
-        active={filters.status === 'queued'}
-        disabled={filters.status === 'queued'}
-        onClick={() => handleClick('queued')}
-        variant="primary"
-      >
-        Waiting
-      </Button>
-      <Button
         active={filters.status === 'success'}
         disabled={filters.status === 'success'}
         onClick={() => handleClick('success')}
