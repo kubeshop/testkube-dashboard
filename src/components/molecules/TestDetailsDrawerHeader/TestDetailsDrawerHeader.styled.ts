@@ -11,6 +11,7 @@ export const StyledScriptNameType = styled.div`
     align-items: baseline;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 1.5em;
 `;
 
 export const StyledSCriptNameDescriptionContainer = styled.div`

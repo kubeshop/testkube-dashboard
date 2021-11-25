@@ -12,8 +12,6 @@ export const StyledTestHeader = styled.div``;
 export const StyledTestSummary = styled.div`
   position: relative;
   top: 24px;
-  left: 20px;
-  margin-right: 55px;
 
   // TESTING DIFFERENT SCREENS
 

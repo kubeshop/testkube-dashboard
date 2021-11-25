@@ -46,7 +46,6 @@ export const FinalizedApiEndpoint = (apiEndpoint: string, storeData?: boolean) =
   const ApiEndpointWithProtocol = checkApiEndpointProtocol(ApiEndpointWithoutTrailingSlash);
   const ApiEndpointWithVersion = AppendApiVersionToEndpoint(ApiEndpointWithProtocol);
  
-   
   return ApiEndpointWithVersion;
 };
 

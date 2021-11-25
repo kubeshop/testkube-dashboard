@@ -2,7 +2,7 @@ import React from 'react';
 import {Divider} from 'antd';
 
 const DividerStyles = {
-  margin: '24px -30px',
+  marginLeft: '-1em',
   width: 'inherit',
   backgroundColor: 'var(--color-gray-senary)',
 };

@@ -10,8 +10,8 @@ const datePickerStyles = {
   color: 'var(--color-dark-quaternary)',
   backgroundColor: 'var(--color-dark-primary)',
   border: '1px solid var(--color-dark-quaternary)',
-  width: '306px',
-  height: '40px',
+  width: '250px',
+  height: '36px',
 };
 
 const ResultDatePicker = () => {
@@ -25,8 +25,6 @@ const ResultDatePicker = () => {
   // };
 
   const handleDateRange = (_: any, dateString: any) => {
-
-
     dispatch(clearFiltredData({ status: undefined, date: (dateString[0] === '' && dateString[1] === '') ? null : dateString }));
   };
 

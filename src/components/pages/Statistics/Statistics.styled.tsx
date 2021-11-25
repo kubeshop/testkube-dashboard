@@ -12,7 +12,6 @@ export const StyledStatisticsHeader = styled.div`
 export const StyledTestStatisticsStatsContainer = styled.div`
   position: relative;
   top: 20px;
-  left: 20px;
 `;
 
 export const StyledTestStatisticsCharts = styled.div`
@@ -27,7 +26,6 @@ export const StyledTestStatisticsChart = styled.div`
   flex-direction: column;
   position: relative;
   top: 40px;
-  left: 20px;
   width: 589px;
   height: 231px;
   background: var(--color-dark-tertiary);
@@ -54,7 +52,6 @@ export const StyledTotalTestCurrentStatusChart = styled.div`
   position: relative;
   flex-direction: column;
   top: 40px;
-  left: 20px;
   width: 271px;
   height: 271px;
   background: var(--color-dark-tertiary);

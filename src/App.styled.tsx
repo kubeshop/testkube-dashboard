@@ -10,8 +10,7 @@ export const StyledMainContent = styled(Layout.Content)`
 export const StyledTestSummary = styled.div`
   position: relative;
   top: 24px;
-  left: 20px;
-  margin-right: 55px;
+  margin-right: 10px;
 
   // TESTING DIFFERENT SCREENS
 
