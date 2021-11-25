@@ -7,7 +7,7 @@ import {Typography} from '@atoms';
 
 const StyledHeaderTypographyContainer = styled(Row)`
   position: relative;
-  top: 40px;
+  top: 30px;
 `;
 
 const StyledDatePickerAndFiltersContainer = styled(Row)`
