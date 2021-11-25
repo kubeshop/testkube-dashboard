@@ -4,7 +4,7 @@ import {Collapse} from 'antd';
 export const StyledTestDescriptionContainer = styled.div`
   display: flex;
   align-items: baseline;
-    justify-content: space-between;
+  justify-content: space-between;
 `;
 
 export const StyledTestOutputsContainer = styled.div`
@@ -34,6 +34,11 @@ export const StyledTestOutput = styled.span`
   &::selection {
     background: #0080ff;
     text-shadow: none;
+  }
+
+  pre {
+    padding: 0.3em;
+    font-size: 0.9em;
   }
 `;
 

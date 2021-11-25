@@ -26,7 +26,7 @@ const TestDescription = () => {
     if (testId) {
       setVisible(!visible);
     }
-  }, [testId]);
+  }, [testId, visible]);
 
   const afterVisibleChange = () => (!visible ? dispatch(updateSelectedTestId(undefined)) : null);
 
