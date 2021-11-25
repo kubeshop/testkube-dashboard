@@ -4,7 +4,7 @@ import React from 'react';
 
 import {clearFiltredData, selectFilters} from '@redux/reducers/testsListSlice';
 import {useAppSelector} from '@redux/hooks';
-import {Typography, Button} from '@atoms';
+import {Button} from '@atoms';
 
 const StyleTestFilterButtons = styled.div`
   display: flex;
@@ -25,7 +25,6 @@ const TestsFilter = () => {
   };
   return (
     <StyleTestFilterButtons>
-      <Typography variant="secondary">Show: </Typography>
       <Button
         active={filters.status === undefined}
         disabled={filters.status === undefined && !filters.date}
