@@ -9,7 +9,7 @@ const Main = () => {
     <>
       <StyledMainContent>
           <Row>
-            <Col flex="50%">
+            <Col flex="55%">
               <StyledTestHeader>
                 <TestHeader testHeaderLabel="Tests" showTestFilters />
               </StyledTestHeader>
