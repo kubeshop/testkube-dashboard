@@ -10,9 +10,6 @@ const StyleTestFilterButtons = styled.div`
   display: flex;
   align-items: baseline;
   justify-content: center;
-  &:last-child {
-    margin-right: 0px;
-  }
 `;
 
 const TestsFilter = () => {
