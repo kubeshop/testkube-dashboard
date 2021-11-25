@@ -8,8 +8,8 @@ const Main = () => {
   return (
     <>
       <StyledMainContent>
-          <Row>
-            <Col flex="55%">
+          <Row gutter={[16,16]}>
+            <Col flex="50%">
               <StyledTestHeader>
                 <TestHeader testHeaderLabel="Tests" showTestFilters />
               </StyledTestHeader>

@@ -11,7 +11,7 @@ const StyleTestFilterButtons = styled.div`
   align-items: baseline;
   justify-content: center;
   &:last-child {
-    margin-right: 50px;
+    margin-right: 0px;
   }
 `;
 
