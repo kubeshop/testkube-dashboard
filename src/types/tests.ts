@@ -1,7 +1,6 @@
 import { Moment } from "moment";
 
 export enum EStatus {
-  queued = 'queued',
   pending = 'pending',
   success = 'success',
   error = 'error',
@@ -27,7 +26,6 @@ export interface Totals {
   results: number;
   passed: number;
   failed: number;
-  queued: number;
   pending: number;
 }
 

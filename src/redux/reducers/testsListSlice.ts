@@ -14,14 +14,12 @@ const initialState: TestListState = {
     results: 0,
     passed: 0,
     failed: 0,
-    queued: 0,
     pending: 0
   },
   filtered: {
     results: 0,
     passed: 0,
     failed: 0,
-    queued: 0,
     pending: 0
   },
   selectedTestId: undefined,

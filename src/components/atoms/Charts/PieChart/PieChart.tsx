@@ -10,7 +10,6 @@ const PieChart = () => {
     success: 0,
     error: 0,
     pending: 0,
-    queued: 0,
   });
   const totals = useAppSelector(selectTotals);
 
@@ -20,7 +19,6 @@ const PieChart = () => {
         setChartTestStatusData({
           success: totals.passed,
           error: totals.failed,
-          queued: totals.queued,
           pending: totals.pending,
         });
       }
@@ -40,10 +38,6 @@ const PieChart = () => {
     {
       type: 'Running',
       value: chartTestStatusData.pending,
-    },
-    {
-      type: 'Queued',
-      value: chartTestStatusData.queued,
     },
   ];
 
@@ -74,9 +68,6 @@ const PieChart = () => {
       }
       if (type === 'Running') {
         return '#FFCA00';
-      }
-      if (type === 'Queued') {
-        return '#FF8C00';
       }
       return '#000';
     },
