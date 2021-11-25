@@ -13,10 +13,15 @@ const StyledSearchUrlForm = styled.form`
   align-items: center;
 `;
 
-const modalStyles = {
+const modalBodyStyles = {
   backgroundColor: 'var(--color-dark-primary)',
   overflow: 'hidden',
 };
+
+const modalWindowsStyles = {
+  border: '1px solid var(--color-light-primary)',
+};
+
 
 const StyledFormContainer = styled.div`
   display: flex;
@@ -91,7 +96,8 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
         visible={visible}
         footer={null}
         onCancel={handleCancel}
-        bodyStyle={modalStyles}
+        bodyStyle={modalBodyStyles}
+        style={modalWindowsStyles}
       >
         <StyledSearchUrlForm onSubmit={handleOpenUrl}>
           <Typography variant="secondary" leftAlign>
