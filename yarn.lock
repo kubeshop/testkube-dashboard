@@ -1463,6 +1463,7 @@
 "@commitlint/config-conventional@^13.2.0":
   version "13.2.0"
   resolved "https://registry.npmjs.org/@commitlint/config-conventional/-/config-conventional-13.2.0.tgz"
+
   dependencies:
     conventional-changelog-conventionalcommits "^4.3.1"
 
