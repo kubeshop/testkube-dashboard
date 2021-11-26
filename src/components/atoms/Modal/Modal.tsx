@@ -18,11 +18,6 @@ const modalBodyStyles = {
   overflow: 'hidden',
 };
 
-const modalWindowsStyles = {
-  border: '1px solid var(--color-light-primary)',
-};
-
-
 const StyledFormContainer = styled.div`
   display: flex;
   align-items: center;
@@ -41,6 +36,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
   const [apiEndpoint, setApiEndpoint] = useState<IUrlEndpoint>({apiEndpoint: ''});
   const [validUrl, setVAlidUrl] = useState<boolean>(false);
   const [buttonLabelContent, setLabelButtonContent] = useState<string>('Get Results');
+
   const history = useHistory();
 
   const handleInputApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
@@ -97,7 +93,6 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
         footer={null}
         onCancel={handleCancel}
         bodyStyle={modalBodyStyles}
-        style={modalWindowsStyles}
       >
         <StyledSearchUrlForm onSubmit={handleOpenUrl}>
           <Typography variant="secondary" leftAlign>
