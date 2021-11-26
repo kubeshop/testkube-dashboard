@@ -26,38 +26,37 @@ function App() {
   const [visible, setVisible] = useState<boolean>(true);
   const history = useHistory();
 
-  const dashboardEndpointValidators = () => {
-    if (!isHostProtocolSecure()) {
-      showSmallError(`Dashboard is using non-secure protocol!
-      <a href='https://kubeshop.github.io/testkube/dashboard/#httpstls-configuration' target="_blank" rel="noopener">Read more</a>`);
-    }
-
-    const dashboardEnvVariable = window?._env_?.REACT_APP_API_SERVER_ENDPOINT;
-
-    if (dashboardEnvVariable && dashboardEnvVariable !== 'default') {
-      setVisible(false);
-      FinalizedApiEndpoint(dashboardEnvVariable, true);
-      history.push({
-        pathname: '/',
-        search: `?${new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString()}`,
-      });
-    }
-
-    if (dashboardEnvVariable === 'default') {
-      setVisible(true);
-    }
-
-    const apiEndpointExist = checkIfQueryParamsExistsInUrl(config.apiEndpoint);
-
-    if (apiEndpointExist) {
-      getApiEndpointOnPageLoad();
-      setVisible(false);
-    }
-  };
-
   useEffect(() => {
+    const dashboardEndpointValidators = () => {
+      if (!isHostProtocolSecure()) {
+        showSmallError(`Dashboard is using non-secure protocol!
+      <a href='https://kubeshop.github.io/testkube/dashboard/#httpstls-configuration' target="_blank" rel="noopener">Read more</a>`);
+      }
+
+      const dashboardEnvVariable = window?._env_?.REACT_APP_API_SERVER_ENDPOINT;
+
+      if (dashboardEnvVariable && dashboardEnvVariable !== 'default') {
+        setVisible(false);
+        FinalizedApiEndpoint(dashboardEnvVariable, true);
+        history.push({
+          pathname: '/',
+          search: `?${new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString()}`,
+        });
+      }
+
+      if (dashboardEnvVariable === 'default') {
+        setVisible(true);
+      }
+
+      const apiEndpointExist = checkIfQueryParamsExistsInUrl(config.apiEndpoint);
+
+      if (apiEndpointExist) {
+        getApiEndpointOnPageLoad();
+        setVisible(false);
+      }
+    };
     dashboardEndpointValidators();
-  });
+  }, [history]);
 
   return (
     <>
