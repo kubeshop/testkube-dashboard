@@ -11,6 +11,8 @@ import {useAppSelector} from '@src/redux/hooks';
 import {selectedTestExecutionStatus, selectedTestId} from '@src/redux/reducers/testsListSlice';
 import {useGetArtifactsQuery} from '@src/services/tests';
 import Artifacts from './Artifacts/Artifacts';
+import Logs from '../Logs/Logs';
+
 import {
   StyledTestDescriptionContainer,
   StyledPlainTextOutputContainer,
@@ -118,6 +120,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
 
   const {data: artifacts} = useGetArtifactsQuery(testId, {
     skip: !testId,
+    pollingInterval: 5000,
   });
 
   React.useEffect(() => {
@@ -135,7 +138,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
     <StyledTestDescriptionContainer>
       {/* eslint-disable-next-line react/jsx-no-bind */}
       <Tabs
-        style={{width:'100%'}}
+        style={{width: '100%'}}
         defaultActiveKey="1"
         // onChange={callback}
         tabBarExtraContent={
@@ -177,9 +180,10 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
           </StyledTestStepsOutPutContainer>
         </TabPane>
 
-        <TabPane tab="Log output" key="2" disabled={!data?.executionResult?.steps}>
-          <RenderPlainTestOutput {...data} />
+        <TabPane tab="Log output" key="2">
+          {data?.executionResult.status === 'pending' ? <Logs id={data.id} /> : <RenderPlainTestOutput {...data} />}
         </TabPane>
+
         {artifacts && artifacts.length > 0 ? (
           <TabPane tab={`Artifacts(${artifacts ? artifacts?.length : 0})`} key="Artifacts">
             <Artifacts artifacts={artifacts} testId={testId && testId} />

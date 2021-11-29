@@ -5,7 +5,12 @@ export const timeStampToDate = (timeStamp: string) => {
 };
 
 export const getDuration = (startTime: string, endTime: string) => {
-  return  moment.utc(moment.duration(moment(endTime).diff(moment(startTime))).asMilliseconds()).format('mm:ss');
+  let duration = moment(endTime).diff(startTime);
+  // endTime already set to some value
+  if (duration < 0) {
+    duration = moment().diff(startTime);
+  }
+  return moment.utc(duration).format('mm:ss');
 };
 
 export const getDate = (timeStamp: string | any) => {
