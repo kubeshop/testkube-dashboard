@@ -1,0 +1,33 @@
+{
+  "importOrder": [
+    "^@kubernetes?.+$",
+    "^electron?.+$",
+    "^react?.+$",
+    "^antd?.+$",
+    "^@ant-design?.+$",
+    "^@reduxjs?.+$",
+    "^@rjsf?.+$",
+    "^(?![@\\.]).+$",
+    "^@constants",
+    "^@models",
+    "^@redux",
+    "^@organisms",
+    "^@molecules",
+    "^@atoms",
+    "^@components",
+    "^@hooks",
+    "^@utils",
+    "^@assets",
+    "^@styles",
+    "^@src",
+    "^(?!\\.+\\/styled)^[./]?.+$",
+    "^\\.+\\/styled$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "singleQuote": true,
+  "arrowParens": "avoid",
+  "bracketSpacing": false,
+  "semi": true,
+  "trailingComma": "es5"
+}

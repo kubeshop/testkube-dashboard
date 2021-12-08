@@ -1,7 +1,10 @@
 import React from 'react';
+
 import styled from 'styled-components';
-import {device} from '@styles/globalStyles';
+
 import {Typography} from '@atoms';
+
+import {device} from '@styles/globalStyles';
 
 export interface ILabelInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id?: string;
@@ -20,7 +23,7 @@ const StyledInput = styled.input<ILabelInputProps>`
   appearance: none;
   border: 1px solid var(--color-monokle-primary);
   font-family: inherit;
-  padding: var(--space-xxxs) var(--space-sm) 0 var(--space-md);
+  padding: 0 var(--space-sm) 0 var(--space-md);
   height: var(--space-lg);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);

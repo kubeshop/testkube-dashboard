@@ -1,11 +1,15 @@
 import React, {useState} from 'react';
-import styled from 'styled-components';
-import {Modal} from 'antd';
 import {useHistory} from 'react-router-dom';
 
-import {Button, LabelInput, Typography} from '@atoms';
-import {validateUrl, FinalizedApiEndpoint, showSmallError} from '@utils';
+import {Modal} from 'antd';
+
+import styled from 'styled-components';
+
 import {config} from '@constants/config';
+
+import {Button, LabelInput, Typography} from '@atoms';
+
+import {FinalizedApiEndpoint, showSmallError} from '@utils';
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
@@ -23,61 +27,53 @@ const StyledFormContainer = styled.div`
   align-items: center;
 `;
 
-interface IUrlEndpoint {
-  apiEndpoint: string;
-}
-
 interface IModal {
   isModalVisible: (isVisible: boolean) => void;
   visible?: boolean;
 }
 
 const CustomModal = ({isModalVisible, visible}: IModal) => {
-  const [apiEndpoint, setApiEndpoint] = useState<IUrlEndpoint>({apiEndpoint: ''});
-  const [validUrl, setVAlidUrl] = useState<boolean>(false);
-  const [buttonLabelContent, setLabelButtonContent] = useState<string>('Get Results');
+  const [apiEndpoint, setApiEndpoint] = useState('');
+  const [isLoading, setLoadingState] = useState(false);
 
   const history = useHistory();
-
-  const handleInputApiEndpoint = (event: React.ChangeEvent<HTMLInputElement>, field: keyof IUrlEndpoint) => {
-    setApiEndpoint({...apiEndpoint, [field]: event.target.value});
-
-    const validatedUrl = validateUrl(event.target.value);
-
-    setVAlidUrl(validatedUrl);
-  };
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    const validatedUrl = FinalizedApiEndpoint(apiEndpoint.apiEndpoint);
+    const validatedUrl = FinalizedApiEndpoint(apiEndpoint || `${window.location.host}/results`);
+
     if (!validatedUrl) {
       return;
     }
 
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), 5000);
+    setLoadingState(true);
 
-    setLabelButtonContent('Validating...');
+    const controller = new AbortController();
+
+    setTimeout(() => controller.abort(), 5000);
 
     return fetch(validatedUrl, {signal: controller.signal})
       .then(res => res.json())
       .then(res => {
         if (res && res.results) {
           localStorage.setItem(config.apiEndpoint, validatedUrl);
+
           history.push({
             pathname: '/',
-            search: `?${new URLSearchParams({apiEndpoint: apiEndpoint.apiEndpoint}).toString()}`,
+            search: `?${new URLSearchParams({apiEndpoint}).toString()}`,
           });
-          setLabelButtonContent('Get Results');
+
           isModalVisible(false);
         }
       })
       .catch(err => {
         if (err) {
           showSmallError('Failed to fetch test results, please try again...', true, 'center');
-          setLabelButtonContent('Get Results');
         }
+      })
+      .finally(() => {
+        setLoadingState(false);
       });
   };
 
@@ -113,11 +109,13 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
             <LabelInput
               id="url"
               name="url"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleInputApiEndpoint(event, 'apiEndpoint')}
-              defaultValue={apiEndpoint.apiEndpoint}
+              onChange={event => {
+                setApiEndpoint(event.target.value);
+              }}
+              defaultValue={apiEndpoint}
             />
-            <Button type="submit" disabled={!validUrl} disableFilter variant="secondary">
-              {buttonLabelContent}
+            <Button type="submit" disableFilter variant="secondary">
+              {isLoading ? 'Loading...' : 'Get results'}
             </Button>
           </StyledFormContainer>
         </StyledSearchUrlForm>
