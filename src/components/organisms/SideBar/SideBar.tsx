@@ -9,6 +9,7 @@ import {QuestionCircleOutlined, SettingFilled, GithubFilled} from '@ant-design/i
 import {useDispatch} from 'react-redux';
 import {ReactComponent as ListIcon} from '../../../assets/images/listIcon.svg';
 import {ReactComponent as Logo} from '../../../assets/images/logo.svg';
+import {ReactComponent as DiscordLogo} from '../../../assets/images/DiscordLogo.svg';
 
 const StyledSideBar = styled(Layout.Sider)`
   display: flex;
@@ -45,6 +46,11 @@ const SideBar = () => {
   const showGithubMainPage = () => {
     window.open('https://github.com/kubeshop/testkube');
   };
+  
+  const showDiscord = () => {
+    window.open('https://discord.gg/QApFANbj');
+  };
+
   return (
     <StyledSideBar width="80px" collapsed>
       {visible && <Modal visible isModalVisible={setVisible} />}
@@ -62,7 +68,7 @@ const SideBar = () => {
                 <Logo />
               </Link>
             </StyledLogo>
-            <MenuItem key="/">
+            <MenuItem key="3">
               <Link to="/">
                 <Icon component={() => <ListIcon />} />
               </Link>
@@ -77,10 +83,12 @@ const SideBar = () => {
               <Icon onClick={showGithubMainPage} component={() => <GithubFilled style={{fontSize: 24}} />} />
             </MenuItem>
             <MenuItem key="6">
+              <Icon onClick={showDiscord} component={() => <DiscordLogo style={{width: 24, height: 24}} />} />
+            </MenuItem>
+            <MenuItem key="7">
               <Icon onClick={showDocumentation} component={() => <QuestionCircleOutlined style={{fontSize: 24}} />} />
             </MenuItem>
           </Col>
-
         </Row>
       </Menu>
     </StyledSideBar>

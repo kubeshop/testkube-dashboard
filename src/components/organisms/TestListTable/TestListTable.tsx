@@ -171,7 +171,7 @@ function TestListTable() {
       key: 'id',
       render: (id: string) => {
         return {
-          children: <LeftArrowIcon height="13px" width="8x" />,
+          children: <LeftArrowIcon height="13px" width="8px" />,
           props: {
             role: 'cell',
           },
