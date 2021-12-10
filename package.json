@@ -15,7 +15,7 @@
     "@commitlint/cli": "^15.0.0",
     "@trivago/prettier-plugin-sort-imports": "3.1.0",
     "@commitlint/config-conventional": "^15.0.0",
-    "@craco/craco": "6.3.0",
+    "@craco/craco": "6.4.3",
     "@testing-library/jest-dom": "5.15.1",
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
