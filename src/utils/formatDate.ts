@@ -10,7 +10,7 @@ export const timeStampToDate = (timeStamp: string) => {
 
 export const getDuration = (startTime: string, endTime: string) => {
   let duration = moment(endTime).diff(startTime);
-  // endTime already set to some value
+
   if (duration < 0) {
     duration = moment().diff(startTime);
   }

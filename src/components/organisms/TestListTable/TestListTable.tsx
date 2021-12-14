@@ -5,7 +5,6 @@ import {Table} from 'antd';
 
 import {SearchParams} from '@models/searchParams';
 
-// import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
 import {useAppSelector} from '@redux/hooks';
 import {
   changePageSize,
@@ -121,21 +120,6 @@ const columns = [
     },
     visible: true,
   },
-  // {
-  //   title: 'id',
-  //   dataIndex: 'id',
-  //   key: 'id',
-  //   render: (id: string) => {
-  //     return {
-  //       children: <LeftArrowIcon height="13px" width="8px" />,
-  //       props: {
-  //         role: 'cell',
-  //       },
-  //     };
-  //   },
-  //   width: '5%',
-  //   visible: false,
-  // },
 ];
 
 const TestListTable = () => {
