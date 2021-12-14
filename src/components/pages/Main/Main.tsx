@@ -1,6 +1,7 @@
-import React from 'react';
+import {TestDescription} from '@molecules';
+
 import {TestHeader, TestListTable} from '@organisms';
-import {TestDescription} from '@src/components/molecules';
+
 import {StyledMainContent, StyledTestHeader, StyledTestSummary} from './Main.styled';
 
 const Main = () => {

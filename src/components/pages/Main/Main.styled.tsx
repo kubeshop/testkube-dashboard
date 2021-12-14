@@ -5,7 +5,6 @@ export const StyledMainContent = styled(Layout.Content)`
   display: flex;
   flex-direction: column;
   background: var(--color-dark-tertiary);
-  margin: 0 24px 0 0;
 `;
 
 export const StyledTestHeader = styled.div``;

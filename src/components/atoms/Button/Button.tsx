@@ -31,7 +31,7 @@ const StyledButton = styled.button<IButton>`
   text-align: center;
 
   /* Sizes. */
-  margin: 15px 5px;
+  // margin: 15px 5px;
   padding: ${props =>
     props.variant === 'primary' ? '5px 16px' : props.variant === 'secondary' ? '15px ​25px' : '15px ​25px'};
   border: 1px solid var(--color-monokle-primary);

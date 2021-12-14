@@ -41,7 +41,9 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    const validatedUrl = FinalizedApiEndpoint(apiEndpoint || `${window.location.host}/results`);
+    const validatedUrl = FinalizedApiEndpoint(
+      apiEndpoint || `${window.location.host.replace(':3000', ':8088')}/results`
+    );
 
     if (!validatedUrl) {
       return;

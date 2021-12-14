@@ -1,9 +1,9 @@
-// @ts-nocheck
 import React, {useEffect} from 'react';
+
 import {Pie} from '@ant-design/charts';
 
-import {useAppSelector} from '@src/redux/hooks';
-import {selectTotals} from '@src/redux/reducers/testsListSlice';
+import {useAppSelector} from '@redux/hooks';
+import {selectTotals} from '@redux/reducers/testsListSlice';
 
 const PieChart = () => {
   const [chartTestStatusData, setChartTestStatusData] = React.useState({
@@ -17,9 +17,9 @@ const PieChart = () => {
     function getPercentage(): void {
       if (totals) {
         setChartTestStatusData({
-          success: totals.passed,
-          error: totals.failed,
-          pending: totals.pending,
+          success: totals.passed || 0,
+          error: totals.failed || 0,
+          pending: totals.pending || 0,
         });
       }
     }
@@ -71,7 +71,7 @@ const PieChart = () => {
       }
       return '#000';
     },
-    legend: false,
+    legend: undefined,
     statistic: {
       title: false,
       content: {

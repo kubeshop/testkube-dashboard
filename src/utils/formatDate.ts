@@ -1,6 +1,10 @@
-import moment from "moment";
+import moment from 'moment';
 
 export const timeStampToDate = (timeStamp: string) => {
+  if (!timeStamp) {
+    return '';
+  }
+
   return moment(timeStamp).format('MM-DD-YYYY hh:mm:ss').toString();
 };
 

@@ -1,9 +1,10 @@
-import React from 'react';
+import {getLastStringAfterTrailingSlash} from '@utils';
 
 import {ReactComponent as DownloadIcon} from '@assets/downloadFileIcon.svg';
 import {ReactComponent as FileIcon} from '@assets/fileIcon.svg';
-import {downloadFileName} from '@src/services/artifacts';
-import {getLastStringAfterTrailingSlash} from '@src/utils';
+
+import {downloadFileName} from '@services/artifacts';
+
 import {
   StyledArtifacts,
   StyledArtifactsContainer,

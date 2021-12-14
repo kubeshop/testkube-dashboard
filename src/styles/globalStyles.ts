@@ -19,7 +19,6 @@ p {
   margin-bottom: none;
 }
 
-
 .ant-picker-input > input {
   color: var(--color-light-primary);
 }
@@ -252,10 +251,6 @@ input[type=checkbox] {
   color: var(--color-gray-primary);
 }
 
-thead[class*="ant-table-thead"] th:last-child{
-  font-size: 0;
-}
-
 .ant-tabs-tabpane:last-child {
   flex-direction: column;
 }
@@ -288,6 +283,10 @@ thead[class*="ant-table-thead"] th:last-child{
   align-items: center;
 }
 
+.ant-table {
+  background: transparent;
+}
+
 .ant-table,
 .ant-table-thead > tr,
 .ant-table-row {
@@ -297,7 +296,6 @@ thead[class*="ant-table-thead"] th:last-child{
 .ant-pagination-item-container {
   display: none;
 }
-
 `;
 
 /* Media Sizes */

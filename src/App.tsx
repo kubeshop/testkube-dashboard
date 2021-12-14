@@ -1,20 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {Route, Switch, useHistory} from 'react-router-dom';
+/* eslint-disable unused-imports/no-unused-imports-ts */
+import {useEffect, useState} from 'react';
+import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
 
-import {Modal} from '@atoms';
-import {Main} from '@pages';
+import {Layout} from 'antd';
+import {Content} from 'antd/lib/layout/layout';
+
+import styled from 'styled-components';
 
 import {config} from '@constants/config';
+
+import {Modal} from '@atoms';
+
+import {SideBar} from '@organisms';
+
+import {NotFound} from '@pages';
+
 import {
-  isHostProtocolSecure,
-  showSmallError,
-  getApiEndpointOnPageLoad,
-  checkIfQueryParamsExistsInUrl,
   FinalizedApiEndpoint,
+  checkIfQueryParamsExistsInUrl,
+  getApiEndpointOnPageLoad,
+  isHostProtocolSecure,
+  routes,
+  showSmallError,
 } from '@utils';
-import {Content} from 'antd/lib/layout/layout';
-import {Layout} from 'antd';
-import {SideBar} from './components/organisms';
 
 declare global {
   interface Window {
@@ -22,8 +30,13 @@ declare global {
   }
 }
 
-function App() {
-  const [visible, setVisible] = useState<boolean>(true);
+const StyledLayoutContentWrapper = styled(Layout)`
+  min-height: 100vh;
+  padding: 50px 35px 50px 115px;
+`;
+
+const App = () => {
+  const [visible, setVisible] = useState<boolean>(false);
   const history = useHistory();
 
   const dashboardEndpointValidators = () => {
@@ -37,22 +50,22 @@ function App() {
     if (dashboardEnvVariable && dashboardEnvVariable !== 'default') {
       setVisible(false);
       FinalizedApiEndpoint(dashboardEnvVariable, true);
-      history.push({
-        pathname: '/',
-        search: `?${new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString()}`,
-      });
+      // history.push({
+      //   pathname: '/',
+      //   search: `?${new URLSearchParams({apiEndpoint: `${dashboardEnvVariable}`}).toString()}`,
+      // });
     }
 
     if (dashboardEnvVariable === 'default') {
       setVisible(true);
     }
 
-    const apiEndpointExist = checkIfQueryParamsExistsInUrl(config.apiEndpoint);
+    // const apiEndpointExist = checkIfQueryParamsExistsInUrl(config.apiEndpoint);
 
-    if (apiEndpointExist) {
-      getApiEndpointOnPageLoad();
-      setVisible(false);
-    }
+    // if (apiEndpointExist) {
+    // getApiEndpointOnPageLoad();
+    setVisible(false);
+    // }
   };
 
   useEffect(() => {
@@ -60,23 +73,22 @@ function App() {
   });
 
   return (
-    <>
+    <Layout>
+      <SideBar />
+      <StyledLayoutContentWrapper>
+        <Content>
+          <Switch>
+            {routes.map(route => {
+              return <Route {...route} />;
+            })}
+            <Redirect exact from="/" to="/dashboard/tests" />
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Content>
+      </StyledLayoutContentWrapper>
       {visible && <Modal visible isModalVisible={setVisible} />}
-      <Layout>
-        <SideBar />
-        <Layout style={{marginLeft: 100}}>
-          <Content>
-            <div className="site-layout-background">
-              <Switch>
-                <Route path="/?apiEndpoint=:apiEndpoint" exact render={Main} />
-                <Route path="/" exact component={Main} />
-              </Switch>
-            </div>
-          </Content>
-        </Layout>
-      </Layout>
-    </>
+    </Layout>
   );
-}
+};
 
 export default App;

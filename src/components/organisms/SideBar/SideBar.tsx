@@ -1,97 +1,88 @@
-import React from 'react';
-import styled from 'styled-components';
-import {Col, Layout, Menu, Row} from 'antd';
+import {useState} from 'react';
 import {useLocation} from 'react-router';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
-import {Icon, MenuItem, Modal} from '@atoms';
-import {QuestionCircleOutlined, SettingFilled, GithubFilled} from '@ant-design/icons';
-import {useDispatch} from 'react-redux';
-import {ReactComponent as ListIcon} from '../../../assets/images/listIcon.svg';
-import {ReactComponent as Logo} from '../../../assets/images/logo.svg';
-import {ReactComponent as DiscordLogo} from '../../../assets/images/DiscordLogo.svg';
+import {Tooltip} from 'antd';
 
-const StyledSideBar = styled(Layout.Sider)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  height: 100vh;
-  position: fixed;
-  overflow: hidden;
-  z-index: 1000;
-  background: var(--color-dark-secondary);
-`;
+import {
+  BarChartOutlined,
+  BarsOutlined,
+  DashboardOutlined,
+  GithubFilled,
+  QuestionCircleOutlined,
+  SettingFilled,
+} from '@ant-design/icons';
 
-const StyledLogo = styled.div`
-  margin: 20px 20px 40px;
-  width: 42px;
-  height: 48px;
-  opacity: 1;
-`;
+import {Modal} from '@atoms';
+
+import {openDiscord, openDocumentation, openGithub} from '@utils/externalLinks';
+
+import {ReactComponent as DiscordLogo} from '@assets/DiscordLogo.svg';
+import {ReactComponent as Logo} from '@assets/logo.svg';
+
+import {
+  StyledCol,
+  StyledLogo,
+  StyledMenu,
+  StyledMenuItem,
+  StyledNavigation,
+  StyledOther,
+  StyledSider,
+} from './SideBar.styled';
+
+const ICON_STYLE = {
+  fontSize: 24,
+};
 
 const SideBar = () => {
-  const dispatch = useDispatch();
-  const [visible, setVisible] = React.useState(false);
+  const [isModalVisible, toggleModal] = useState(false);
+
   const location = useLocation();
+
   const {pathname} = location;
 
-  const showModal = () => {
-    setVisible(!visible);
-  };
-
-  const showDocumentation = () => {
-    window.open('https://kubeshop.github.io/testkube/');
-  };
-  const showGithubMainPage = () => {
-    window.open('https://github.com/kubeshop/testkube');
-  };
-  
-  const showDiscord = () => {
-    window.open('https://discord.gg/QApFANbj');
-  };
-
   return (
-    <StyledSideBar width="80px" collapsed>
-      {visible && <Modal visible isModalVisible={setVisible} />}
-      <Menu
-        style={{ height:'100vh', background: 'var(--color-dark-secondary)'}}
-        theme="dark"
-        defaultSelectedKeys={['/']}
-        mode="inline"
-        selectedKeys={[pathname]}
-      >
-        <Row justify="center" style={{height:'100vh'}}>
-          <Col style={{alignSelf: 'flex-start'}}>
-            <StyledLogo>
-              <Link to="/">
-                <Logo />
-              </Link>
-            </StyledLogo>
-            <MenuItem key="3">
-              <Link to="/">
-                <Icon component={() => <ListIcon />} />
-              </Link>
-            </MenuItem>
-          </Col>
-
-          <Col style={{alignSelf: 'flex-end'}}>
-            <MenuItem key="4">
-              <Icon onClick={showModal} component={() => <SettingFilled style={{fontSize: 24}} />} />
-            </MenuItem>
-            <MenuItem key="5">
-              <Icon onClick={showGithubMainPage} component={() => <GithubFilled style={{fontSize: 24}} />} />
-            </MenuItem>
-            <MenuItem key="6">
-              <Icon onClick={showDiscord} component={() => <DiscordLogo style={{width: 24, height: 24}} />} />
-            </MenuItem>
-            <MenuItem key="7">
-              <Icon onClick={showDocumentation} component={() => <QuestionCircleOutlined style={{fontSize: 24}} />} />
-            </MenuItem>
-          </Col>
-        </Row>
-      </Menu>
-    </StyledSideBar>
+    <StyledSider width={80} collapsed>
+      {isModalVisible && <Modal visible isModalVisible={() => toggleModal(prev => !prev)} />}
+      <StyledMenu theme="dark" defaultSelectedKeys={['/dashboard/tests']} mode="inline" selectedKeys={[pathname]}>
+        <StyledLogo>
+          <NavLink to="/dashboard/tests">
+            <Logo />
+          </NavLink>
+        </StyledLogo>
+        <StyledCol>
+          <StyledNavigation>
+            <Tooltip title="Tests" placement="right" color="#1890fc">
+              <NavLink to="/dashboard/tests">
+                <StyledMenuItem icon={<BarsOutlined style={ICON_STYLE} key="/dashboard/tests" />} />
+              </NavLink>
+            </Tooltip>
+            <Tooltip title="Scripts" placement="right" color="#1890fc">
+              <NavLink to="/dashboard/scripts">
+                <StyledMenuItem icon={<BarChartOutlined style={ICON_STYLE} />} key="/dashboard/scripts" />
+              </NavLink>
+            </Tooltip>
+            <Tooltip title="Executions" placement="right" color="#1890fc">
+              <NavLink to="/dashboard/executions">
+                <StyledMenuItem icon={<DashboardOutlined style={ICON_STYLE} />} key="/dashboard/executions" />
+              </NavLink>
+            </Tooltip>
+          </StyledNavigation>
+          <StyledOther>
+            <StyledMenuItem onClick={() => toggleModal(prev => !prev)} icon={<SettingFilled style={ICON_STYLE} />} />
+            <Tooltip title="Github" placement="right" color="#1890fc">
+              <StyledMenuItem onClick={openGithub} icon={<GithubFilled style={ICON_STYLE} />} />
+            </Tooltip>
+            <Tooltip title="Discord" placement="right" color="#1890fc">
+              <StyledMenuItem onClick={openDiscord} icon={<DiscordLogo style={{width: 24, height: 24}} />} />
+            </Tooltip>
+            <Tooltip title="Documentation" placement="right" color="#1890fc">
+              <StyledMenuItem onClick={openDocumentation} icon={<QuestionCircleOutlined style={ICON_STYLE} />} />
+            </Tooltip>
+          </StyledOther>
+        </StyledCol>
+      </StyledMenu>
+    </StyledSider>
   );
 };
 

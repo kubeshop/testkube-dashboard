@@ -1,10 +1,12 @@
-import { useDispatch } from 'react-redux';
-import React, { useState } from 'react';
-import moment from 'moment';
-import { DatePicker } from 'antd';
+import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
 
-import { clearFiltredData, selectFilters } from '@redux/reducers/testsListSlice';
-import { useAppSelector } from '@redux/hooks';
+import {DatePicker} from 'antd';
+
+import moment from 'moment';
+
+import {useAppSelector} from '@redux/hooks';
+import {clearFiltredData, selectFilters} from '@redux/reducers/testsListSlice';
 
 const datePickerStyles = {
   color: 'var(--color-dark-quaternary)',
@@ -18,22 +20,26 @@ const ResultDatePicker = () => {
   const [clicked, setClicked] = useState<boolean>(false);
   const filters = useAppSelector(selectFilters);
   const dispatch = useDispatch();
-  const { RangePicker } = DatePicker;
+  const {RangePicker} = DatePicker;
 
   // const handleDatePicker = (value: any, dateString: any) => {
   //   dispatch(clearFiltredData({status: undefined, date: dateString}));
   // };
 
   const handleDateRange = (_: any, dateString: any) => {
-    dispatch(clearFiltredData({ status: undefined, date: (dateString[0] === '' && dateString[1] === '') ? null : dateString }));
+    if (!dateString) {
+      dispatch(clearFiltredData({...filters, startDate: null, endDate: null}));
+    } else {
+      dispatch(clearFiltredData({...filters, startDate: dateString[0], endDate: dateString[1]}));
+    }
   };
 
   const handleClick = () => {
     setClicked(!clicked);
     if (!clicked) {
-      dispatch(clearFiltredData({ status: undefined, date: moment().toString() }));
+      dispatch(clearFiltredData({status: undefined, date: moment().toString()}));
     } else {
-      dispatch(clearFiltredData({ status: undefined, date: null }));
+      dispatch(clearFiltredData({status: undefined, date: null}));
     }
   };
 
@@ -50,8 +56,8 @@ const ResultDatePicker = () => {
         placeholder={['Select time', 'Select time']}
         style={datePickerStyles}
         onChange={handleDateRange}
-        format="MM-DD-YYYY"
-        value={filters?.date ? [moment(filters?.date[0]), moment(filters?.date[1])] : null}
+        format="YYYY-MM-DD"
+        value={[filters?.startDate && moment(filters?.startDate), filters?.endDate && moment(filters?.endDate)]}
       />
     </>
   );
