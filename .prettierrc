@@ -1,7 +1,6 @@
 {
   "importOrder": [
     "^@kubernetes?.+$",
-    "^electron?.+$",
     "^react?.+$",
     "^antd?.+$",
     "^@ant-design?.+$",
@@ -11,14 +10,16 @@
     "^@constants",
     "^@models",
     "^@redux",
-    "^@organisms",
-    "^@molecules",
     "^@atoms",
-    "^@components",
+    "^@molecules",
+    "^@organisms",
+    "^@pages",
     "^@hooks",
     "^@utils",
     "^@assets",
+    "^@services",
     "^@styles",
+    "^@types",
     "^@src",
     "^(?!\\.+\\/styled)^[./]?.+$",
     "^\\.+\\/styled$"

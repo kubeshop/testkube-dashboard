@@ -1,13 +1,12 @@
-import React from 'react';
+/* eslint-disable unused-imports/no-unused-imports-ts */
+import {Col, Row} from 'antd';
+
 import styled from 'styled-components';
-import {Row, Col} from 'antd';
 
 import {ResultDatePicker, TestsFilter} from '@molecules';
-import {Typography} from '@atoms';
 
 const StyledHeaderTypographyContainer = styled(Row)`
   position: relative;
-  top: 30px;
 `;
 
 const StyledDatePickerAndFiltersContainer = styled(Row)`
@@ -15,7 +14,6 @@ const StyledDatePickerAndFiltersContainer = styled(Row)`
   align-items: center;
   width: 100%;
   position: relative;
-  top: 20px;
 `;
 
 const StyledTestHeaderContainer = styled.div`
@@ -39,12 +37,6 @@ interface ITestHeaderProps {
 const TestHeader = ({testHeaderLabel, showTestFilters}: ITestHeaderProps) => {
   return (
     <StyledTestHeaderContainer>
-      <StyledHeaderTypographyContainer>
-        <Typography variant="quaternary" style={{marginBottom: '20px'}} data-testid="Tests">
-          {testHeaderLabel}
-        </Typography>
-      </StyledHeaderTypographyContainer>
-
       <StyledDatePickerAndFiltersContainer>
         {showTestFilters && (
           <>

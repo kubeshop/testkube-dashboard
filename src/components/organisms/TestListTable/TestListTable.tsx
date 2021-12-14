@@ -1,62 +1,158 @@
-import React, {useEffect} from 'react';
-import {Table} from 'antd';
+import {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {TestTypeIcon, RenderTestStatusSvgIcon} from '@atoms';
-import {useAppSelector} from '@src/redux/hooks';
+import {Table} from 'antd';
+
+import {SearchParams} from '@models/searchParams';
+
+import {useAppSelector} from '@redux/hooks';
 import {
   changePageSize,
+  paginateTo,
+  selectFiltered,
   selectFilters,
   selectHasNext,
   selectTests,
-  selectFiltered,
+  setFilters,
   updateData,
-  updateSelectedTestId,
-  paginateTo,
   updateSelectedTestExecutionStatus,
-} from '@src/redux/reducers/testsListSlice';
-import {ReactComponent as LeftArrowIcon} from '@assets/arrowIcon.svg';
-import {getDuration, timeStampToDate} from '@src/utils/formatDate';
-import {useGetTestsByDateQuery, useGetTestsByStatusQuery, useGetTestsQuery} from '@src/services/tests';
-import {getStatus} from '@src/redux/utils/requestFilters';
+  updateSelectedTestId,
+} from '@redux/reducers/testsListSlice';
+import {getStatus} from '@redux/utils/requestFilters';
 
-interface ITestListTable {
-  onChange?: () => void;
-}
+import {RenderTestStatusSvgIcon, TestTypeIcon} from '@atoms';
 
-function TestListTable() {
+import useURLSearchParams from '@hooks/useURLSearchParams';
+
+import {validateSearchParams} from '@utils/fetchUtils';
+import {getDuration, timeStampToDate} from '@utils/formatDate';
+
+import {useGetTestsQuery} from '@services/tests';
+
+const columns = [
+  {
+    title: 'Type',
+    dataIndex: 'scriptType',
+    key: 'scriptType',
+    width: '10%',
+    visible: true,
+    render: (testType: string) => {
+      return {
+        children: <TestTypeIcon testType={testType} width={30} height={30} />,
+        props: {
+          role: 'cell',
+        },
+      };
+    },
+  },
+  {
+    title: 'Script',
+    dataIndex: 'scriptName',
+    key: 'scriptName',
+    width: '25%',
+    visible: true,
+    render: (scriptName: string) => {
+      return {
+        children: scriptName,
+        props: {
+          role: 'cell',
+        },
+      };
+    },
+  },
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    width: '25%',
+    visible: true,
+    render: (name: string) => {
+      return {
+        children: name,
+        props: {
+          role: 'cell',
+        },
+      };
+    },
+  },
+  {
+    title: 'Started At',
+    dataIndex: 'startTime',
+    render: (startTime: string) => {
+      return {
+        children: startTime ? timeStampToDate(startTime) : '-',
+        props: {
+          role: 'cell',
+        },
+      };
+    },
+    key: 'startTime',
+    width: '15%',
+    visible: true,
+  },
+  {
+    title: 'Duration',
+    dataIndex: 'duration',
+    render: (duration: string, row: any) => {
+      return {
+        children: row.endTime ? getDuration(row.startTime, row.endTime) : '-',
+        props: {
+          role: 'cell',
+        },
+      };
+    },
+    key: 'duration',
+    width: '15%',
+    visible: true,
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    width: '5%',
+    render: (testStatus: string) => {
+      return {
+        children: <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
+        props: {
+          role: 'cell',
+        },
+      };
+    },
+    visible: true,
+  },
+];
+
+const TestListTable = () => {
   const dispatch = useDispatch();
-  const handleSelectedTest = (id: string, status: string) => {
-    dispatch(updateSelectedTestId(id));
-    dispatch(updateSelectedTestExecutionStatus(status));
-  };
 
   const allTests = useAppSelector(selectTests);
   const filters = useAppSelector(selectFilters);
   const hasNext = useAppSelector(selectHasNext);
   const filtered = useAppSelector(selectFiltered);
 
-  const testsQuery = useGetTestsQuery(filters, {
+  const {data, isSuccess, isLoading} = useGetTestsQuery(filters, {
     pollingInterval: 5000,
-    skip: !(filters.status === undefined && !filters.date),
   });
 
-  const testsQueryByStatus = useGetTestsByStatusQuery(filters, {
-    pollingInterval: 5000,
-    skip: filters.status === undefined,
-  });
+  const searchParams = useURLSearchParams();
 
-  const testsQueryByDate = useGetTestsByDateQuery(filters, {
-    pollingInterval: 5000,
-    skip: !filters.date,
-  });
+  const paginationOptions = {
+    onShowSizeChange: (_: any, pageSize: number) => dispatch(changePageSize(pageSize)),
+    onChange: (page: number) => dispatch(paginateTo(page - 1)),
+  };
 
-  const results = testsQuery.isSuccess
-    ? testsQuery
-    : testsQueryByStatus.isSuccess
-    ? testsQueryByStatus
-    : testsQueryByDate;
-  const {data, isSuccess, isLoading} = results;
+  const pagination = {
+    ...paginationOptions,
+    total: filtered?.results,
+    current: filters.page + 1,
+    pageSize: filters.pageSize,
+    hideOnSinglePage: true,
+  };
+
+  const handleSelectedTest = (id: string, status: string) => {
+    dispatch(updateSelectedTestId(id));
+    dispatch(updateSelectedTestExecutionStatus(status));
+  };
 
   useEffect(() => {
     const fetchData = () => {
@@ -73,126 +169,12 @@ function TestListTable() {
     fetchData();
   }, [data, dispatch, filters.page, filters?.pageSize, isSuccess]);
 
-  const columns = [
-    {
-      title: 'Type',
-      dataIndex: 'scriptType',
-      key: 'scriptType',
-      width: '10%',
-      visible: true,
-      // eslint-disable-next-line no-dupe-keys
-      render: (testType: string) => {
-        return {
-          children: <TestTypeIcon testType={testType} width={30} height={30} />,
-          props: {
-            role: 'cell',
-          },
-        };
-      },
-    },
-    {
-      title: 'Script',
-      dataIndex: 'scriptName',
-      key: 'scriptName',
-      width: '25%',
-      visible: true,
-      render: (scriptName: string) => {
-        return {
-          children: scriptName,
-          props: {
-            role: 'cell',
-          },
-        };
-      },
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      width: '25%',
-      visible: true,
-      render: (name: string) => {
-        return {
-          children: name,
-          props: {
-            role: 'cell',
-          },
-        };
-      },
-    },
-    {
-      title: 'Started At',
-      dataIndex: 'startTime',
-      render: (startTime: string) => {
-        return {
-          children: startTime ? timeStampToDate(startTime) : '-',
-          props: {
-            role: 'cell',
-          },
-        };
-      },
-      key: 'startTime',
-      width: '15%',
-      visible: true,
-    },
-    {
-      title: 'Duration',
-      dataIndex: 'duration',
-      render: (duration: string, row: any) => {
-        return {
-          children: row.endTime ? getDuration(row.startTime, row.endTime) : '-',
-          props: {
-            role: 'cell',
-          },
-        };
-      },
-      key: 'duration',
-      width: '15%',
-      visible: true,
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      width: '5%',
-      render: (testStatus: string) => {
-        return {
-          children: <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
-          props: {
-            role: 'cell',
-          },
-        };
-      },
-      visible: true,
-    },
-    {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
-      render: (id: string) => {
-        return {
-          children: <LeftArrowIcon height="13px" width="8px" />,
-          props: {
-            role: 'cell',
-          },
-        };
-      },
-      width: '5%',
-      visible: false,
-    },
-  ];
+  useEffect(() => {
+    if (Object.entries(searchParams).length) {
+      dispatch(setFilters({...filters, ...validateSearchParams(searchParams, SearchParams.executions)}));
+    }
+  }, []);
 
-  const paginationOptions = {
-    onShowSizeChange: (_: any, pageSize: number) => dispatch(changePageSize(pageSize)),
-    onChange: (page: number) => dispatch(paginateTo(page - 1)),
-  };
-  const pagination = {
-    ...paginationOptions,
-    total: filtered?.results,
-    current: filters.page + 1,
-    pageSize: filters.pageSize,
-    hideOnSinglePage: true,
-  };
   return (
     <Table
       columns={columns}
@@ -212,6 +194,6 @@ function TestListTable() {
       pagination={pagination}
     />
   );
-}
+};
 
 export default TestListTable;

@@ -1,26 +1,29 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TestListState } from '@types';
-import { RootState } from "../store";
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+
+import {TestListState} from '@types';
+
+import {RootState} from '../store';
 
 const initialState: TestListState = {
   filters: {
     pageSize: 10,
     page: 0,
     status: undefined,
-    date: null,
+    startDate: null,
+    endDate: null,
   },
   error: null,
   totals: {
     results: 0,
     passed: 0,
     failed: 0,
-    pending: 0
+    pending: 0,
   },
   filtered: {
     results: 0,
     passed: 0,
     failed: 0,
-    pending: 0
+    pending: 0,
   },
   selectedTestId: undefined,
   status: undefined,
@@ -36,40 +39,41 @@ export const testsListSlice = createSlice({
   name: 'testsList',
   initialState,
   reducers: {
-    updateData: (state, action: PayloadAction<any>,) => {
+    updateData: (state, action: PayloadAction<any>) => {
       state.hasNext = action.payload?.hasNext;
       state.results = [...action.payload?.data?.results];
       state.totals = action.payload?.data?.totals;
       state.filtered = action.payload?.data?.filtered;
     },
-    updateFiltredDataByStatus: (state, action: PayloadAction<any>,) => {
+    updateFiltredDataByStatus: (state, action: PayloadAction<any>) => {
       state.hasNext = action.payload?.hasNext;
       state.resultsByStatus = [...state.resultsByStatus, ...action.payload?.data?.results];
       state.totals = action.payload?.data?.totals;
     },
-    updateFiltredDataByDate: (state, action: PayloadAction<any>,) => {
+    updateFiltredDataByDate: (state, action: PayloadAction<any>) => {
       state.hasNext = action.payload?.hasNext;
       state.resultsByDate = [...state.resultsByDate, ...action.payload?.data?.results];
       state.totals = action.payload?.data?.totals;
     },
     clearFiltredData: (state, action: PayloadAction<any>) => {
-
       state.filters = {
-        ...action.payload,
+        status: action.payload.status,
+        startDate: action.payload?.startDate || null,
+        endDate: action.payload?.endDate || null,
         pageSize: state.filters.pageSize,
+        scriptName: action.payload.scriptName,
       };
 
       state.filters.page = 0;
       state.selectedTestId = undefined;
-
     },
-    updateFilter: (state, action: PayloadAction<any>) => {
+    setFilters: (state, action: PayloadAction<any>) => {
       state.filters = action.payload;
     },
     paginateTo: (state, action: PayloadAction<any>) => {
       state.filters.page = action.payload;
     },
-    nextPage: (state) => {
+    nextPage: state => {
       state.filters.page += 1;
     },
     setPage: (state, action: PayloadAction<number>) => {
@@ -78,15 +82,16 @@ export const testsListSlice = createSlice({
     changePageSize: (state, action: PayloadAction<number>) => {
       state.filters.pageSize = action.payload;
     },
-    prevPage: (state) => {
+    prevPage: state => {
       state.filters.page -= 1;
     },
-    updateSelectedTestId: (state, action: PayloadAction<string|undefined>) => {
+    updateSelectedTestId: (state, action: PayloadAction<string | undefined>) => {
       state.selectedTestId = action.payload;
     },
     updateSelectedTestExecutionStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload;
-    }  },
+    },
+  },
 });
 
 export const selectTotals = (state: RootState) => state.testsList.totals;
@@ -104,14 +109,14 @@ export const {
   updateFiltredDataByStatus,
   updateFiltredDataByDate,
   clearFiltredData,
-  updateFilter,
+  setFilters,
   paginateTo,
   nextPage,
   prevPage,
   setPage,
   changePageSize,
   updateSelectedTestId,
-  updateSelectedTestExecutionStatus
+  updateSelectedTestExecutionStatus,
 } = testsListSlice.actions;
 
 export default testsListSlice.reducer;

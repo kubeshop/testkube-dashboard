@@ -1,28 +1,49 @@
+import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import styled from 'styled-components';
-import React from 'react';
+import {useDebounce} from 'react-use';
 
-import {clearFiltredData, selectFilters} from '@redux/reducers/testsListSlice';
+import {Space} from 'antd';
+
 import {useAppSelector} from '@redux/hooks';
-import {Typography, Button} from '@atoms';
+import {clearFiltredData, selectFilters} from '@redux/reducers/testsListSlice';
 
-const StyleTestFilterButtons = styled.div`
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-`;
+import {Button, LabelInput, Typography} from '@atoms';
+
+import useUpdateURLSearchParams from '@hooks/useUpdateURLSearchParams';
 
 const TestsFilter = () => {
   const filters = useAppSelector(selectFilters);
 
+  useUpdateURLSearchParams(filters);
+
+  const [scriptName, setScriptName] = useState(filters.scriptName);
+
   const dispatch = useDispatch();
 
   const handleClick = (status: string | undefined) => {
-    dispatch(clearFiltredData({page: 0, status}));
+    dispatch(clearFiltredData({...filters, page: 0, status, date: []}));
   };
+
+  const handleChange = (e: any) => {
+    setScriptName(e.target.value);
+  };
+
+  useDebounce(
+    () => {
+      dispatch(clearFiltredData({...filters, page: 0, date: [], scriptName}));
+    },
+    300,
+    [scriptName]
+  );
+
+  useEffect(() => {
+    setScriptName(filters.scriptName);
+  }, [filters]);
+
   return (
-    <StyleTestFilterButtons>
+    <Space>
       <Typography variant="secondary">Show: </Typography>
+      <LabelInput placeholder="Script name" value={scriptName} onChange={handleChange} />
       <Button
         active={filters.status === undefined}
         disabled={filters.status === undefined && !filters.date}
@@ -55,7 +76,7 @@ const TestsFilter = () => {
       >
         Failed
       </Button>
-    </StyleTestFilterButtons>
+    </Space>
   );
 };
 

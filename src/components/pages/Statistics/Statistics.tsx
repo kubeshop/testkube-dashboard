@@ -1,13 +1,15 @@
 import React, {useEffect} from 'react';
-import {PieChart, RingProgressChart, TestStatisticsStats} from '@atoms';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectTotals} from '@redux/reducers/testsListSlice';
+
+import {PieChart, RingProgressChart} from '@atoms';
+
 import {TestHeader} from '@organisms';
 
-import {useAppSelector} from '@src/redux/hooks';
-import {selectTotals} from '@src/redux/reducers/testsListSlice';
 import {
   StyledStatisticsContainer,
-  StyledStatisticsHeader,
-  StyledTestStatisticsStatsContainer,
+  StyledStatisticsHeader, // StyledTestStatisticsStatsContainer,
   StyledTestStatisticsCircularCharts,
   StyledTotalTestCurrentStatusChart,
 } from './Statistics.styled';
@@ -32,9 +34,9 @@ const Statistics = () => {
       <StyledStatisticsHeader>
         <TestHeader testHeaderLabel="OverView" showTestFilters={false} />
       </StyledStatisticsHeader>
-      <StyledTestStatisticsStatsContainer>
+      {/* <StyledTestStatisticsStatsContainer>
         <TestStatisticsStats />
-      </StyledTestStatisticsStatsContainer>
+      </StyledTestStatisticsStatsContainer> */}
       {/* <StyledTestStatisticsCharts>
         <StyledTestStatisticsChart>
           <TestDetailsDrawerPerformanceSection bordered={false} main />

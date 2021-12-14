@@ -1,22 +1,22 @@
-import React from 'react';
+import {getStatus} from '@redux/utils/requestFilters';
 
-import {Typography, TestTypeIcon, RenderTestStatusSvgIcon, RingProgressChart} from '@atoms';
+import {RenderTestStatusSvgIcon, RingProgressChart, TestTypeIcon, Typography} from '@atoms';
 
-import {timeStampToDate} from '@src/utils/formatDate';
-import {getStatus} from '@src/redux/utils/requestFilters';
+import {timeStampToDate} from '@utils/formatDate';
+
 import {
-  StyledTestDetailsDrawerHeaderContainer,
-  StyledScriptNameType,
   StyledSCriptNameDescriptionContainer,
   StyledScriptChartContainer,
-  StyledTestScriptChartAndStatusAndDateContainer,
-  StyledTestStatusContainer,
-  StyledTestStatusAndDateContainer,
+  StyledScriptNameType,
   StyledTestDates,
+  StyledTestDetailsDrawerHeaderContainer,
+  StyledTestScriptChartAndStatusAndDateContainer,
+  StyledTestStatusAndDateContainer,
+  StyledTestStatusContainer,
 } from './TestDetailsDrawerHeader.styled';
 
 const TestDetailsDrawerHeader = ({data}: {data: any}) => {
-  const {id, scriptName, name, scriptType, startTime, endTime, executionResult} = data;
+  const {scriptName, name, scriptType, startTime, endTime, executionResult} = data;
 
   return (
     <StyledTestDetailsDrawerHeaderContainer>

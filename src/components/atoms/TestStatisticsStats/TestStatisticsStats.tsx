@@ -1,24 +1,23 @@
 import React, {useEffect} from 'react';
-import {Typography} from '@atoms';
-import {selectTotals, selectFilters} from '@src/redux/reducers/testsListSlice';
-import {useAppSelector} from '@src/redux/hooks';
-import {ITestTotals} from '@src/types/testListState';
 import {useDispatch} from 'react-redux';
-import {useGetTestsByDateQuery} from '@src/services/tests';
-import {StyledTestStatistic, StyledTestStatisticsContainer, TestStatsSpan} from './TestStatisticsStats.styled';
 
-interface ITesStatisticsStatsProps {
-  totalTests: number;
-  failedTests: number;
-  runningTests: number;
-}
+import {useAppSelector} from '@redux/hooks';
+import {selectFilters, selectTotals} from '@redux/reducers/testsListSlice';
+
+import {Typography} from '@atoms';
+
+import {useGetTestsQuery} from '@services/tests';
+
+import {TestTotals} from '@types';
+
+import {StyledTestStatistic, StyledTestStatisticsContainer, TestStatsSpan} from './TestStatisticsStats.styled';
 
 const TestStatisticsStats = () => {
   const dispatch = useDispatch();
-  const [testsStats, setTestsStats] = React.useState<ITestTotals>();
+  const [testsStats, setTestsStats] = React.useState<TestTotals>();
   const filters = useAppSelector(selectFilters);
   const totals = useAppSelector(selectTotals);
-  const {data, isSuccess} = useGetTestsByDateQuery(filters, {
+  const {data, isSuccess} = useGetTestsQuery(filters, {
     skip: !filters.date,
   });
   useEffect(() => {
@@ -33,7 +32,7 @@ const TestStatisticsStats = () => {
     } else {
       setTestsStats(totals);
     }
-  }, [data?.filtered, filters.date, isSuccess, totals]);
+  }, [filters.date, totals]);
 
   return (
     <>

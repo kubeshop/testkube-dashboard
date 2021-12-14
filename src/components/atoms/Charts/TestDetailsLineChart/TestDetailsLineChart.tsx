@@ -1,6 +1,4 @@
-import React from 'react';
 import {Column} from '@ant-design/charts';
-// import moment from 'moment';
 
 interface ITestDetailsLineChart {
   performanceOverTime?: any;

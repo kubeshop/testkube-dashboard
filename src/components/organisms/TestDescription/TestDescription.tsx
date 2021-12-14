@@ -1,14 +1,19 @@
 /* eslint react/destructuring-assignment: 0 */
 import React, {useState} from 'react';
-import styled from 'styled-components';
-import {Drawer} from 'antd';
-import {Spinner, TKubeDivider} from '@atoms';
-import {TestDetailsDrawerHeader, ExecutionResultsOutputs} from '@molecules';
-
-import {selectedTestId, updateSelectedTestId} from '@redux/reducers/testsListSlice';
-import {useGetTestByIdQuery} from '@src/services/tests';
-import {useAppSelector} from '@redux/hooks';
 import {useDispatch} from 'react-redux';
+
+import {Drawer} from 'antd';
+
+import styled from 'styled-components';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectedTestId, updateSelectedTestId} from '@redux/reducers/testsListSlice';
+
+import {Spinner, TKubeDivider} from '@atoms';
+
+import {ExecutionResultsOutputs, TestDetailsDrawerHeader} from '@molecules';
+
+import {useGetTestByIdQuery} from '@services/tests';
 
 const TestDescription = () => {
   const testId = useAppSelector(selectedTestId);
@@ -21,7 +26,7 @@ const TestDescription = () => {
   const Container = styled.div`
     background-color: #1d1d1d;
     padding: 1em;
-    height: 100%
+    height: 100%;
   `;
 
   const onClose = () => {
@@ -46,7 +51,7 @@ const TestDescription = () => {
           visible={visible}
           bodyStyle={{padding: 0, display: 'flex', flexDirection: 'column', background: 'var(--color-dark-quinary)'}}
         >
-            <Container>
+          <Container>
             {/* {error && <Typography variant="secondary">Something went wrong...</Typography>} */}
             {isLoading && <Spinner size="large" center />}
             <>
@@ -56,8 +61,7 @@ const TestDescription = () => {
               <ExecutionResultsOutputs data={data} />
             </>
           </Container>
-       </Drawer>
- 
+        </Drawer>
       )}
     </>
   );

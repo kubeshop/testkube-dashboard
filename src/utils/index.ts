@@ -7,5 +7,6 @@ export {
   validateUrl,
   checkApiEndpointProtocol,
   getQueryStringFromUrl,
-  FinalizedApiEndpoint
+  FinalizedApiEndpoint,
 } from './validate';
+export {routes} from './routes';
