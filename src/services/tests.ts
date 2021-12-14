@@ -12,7 +12,7 @@ export const testsApi = createApi({
       },
     }),
     getTestById: builder.query<any, any>({
-      query: testId => `${testId}`,
+      query: testId => `/executions/${testId}`,
     }),
     getArtifacts: builder.query<any, any>({
       query: testId => `${testId}/artifacts`,

@@ -9,8 +9,6 @@ import {config} from '@constants/config';
 
 import {Button, LabelInput, Typography} from '@atoms';
 
-// import {FinalizedApiEndpoint, showSmallError} from '@utils';
-
 const StyledSearchUrlForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -33,7 +31,7 @@ interface IModal {
 }
 
 const CustomModal = ({isModalVisible, visible}: IModal) => {
-  const [apiEndpoint, setApiEndpoint] = useState('https://demo.testkube.io/v1');
+  const [apiEndpoint, setApiEndpoint] = useState('https://demo.testkube.io/results/v1');
   const [isLoading, setLoadingState] = useState(false);
 
   const history = useHistory();
@@ -44,43 +42,6 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
     localStorage.setItem(config.apiEndpoint, apiEndpoint);
     history.push('/dashboard/tests');
     isModalVisible(false);
-
-    // const validatedUrl = FinalizedApiEndpoint(
-    //   apiEndpoint || `${window.location.host.replace(':3000', ':8088')}/results`
-    // );
-
-    // if (!validatedUrl) {
-    //   return;
-    // }
-
-    // setLoadingState(true);
-
-    // const controller = new AbortController();
-
-    // setTimeout(() => controller.abort(), 5000);
-
-    // return fetch(validatedUrl, {signal: controller.signal})
-    //   .then(res => res.json())
-    //   .then(res => {
-    //     if (res && res.results) {
-    //       localStorage.setItem(config.apiEndpoint, validatedUrl);
-
-    //       history.push({
-    //         pathname: '/',
-    //         search: `?${new URLSearchParams({apiEndpoint}).toString()}`,
-    //       });
-
-    //       isModalVisible(false);
-    //     }
-    //   })
-    //   .catch(err => {
-    //     if (err) {
-    //       showSmallError('Failed to fetch test results, please try again...', true, 'center');
-    //     }
-    //   })
-    //   .finally(() => {
-    //     setLoadingState(false);
-    //   });
   };
 
   const handleCancel = () => {
