@@ -1,4 +1,6 @@
+import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {useDebounce} from 'react-use';
 
 import {Space} from 'antd';
 
@@ -14,6 +16,8 @@ const TestsFilter = () => {
 
   useUpdateURLSearchParams(filters);
 
+  const [scriptName, setScriptName] = useState(filters.scriptName);
+
   const dispatch = useDispatch();
 
   const handleClick = (status: string | undefined) => {
@@ -21,13 +25,25 @@ const TestsFilter = () => {
   };
 
   const handleChange = (e: any) => {
-    dispatch(clearFiltredData({...filters, page: 0, date: [], scriptName: e.target.value}));
+    setScriptName(e.target.value);
   };
+
+  useDebounce(
+    () => {
+      dispatch(clearFiltredData({...filters, page: 0, date: [], scriptName}));
+    },
+    300,
+    [scriptName]
+  );
+
+  useEffect(() => {
+    setScriptName(filters.scriptName);
+  }, [filters]);
 
   return (
     <Space>
       <Typography variant="secondary">Show: </Typography>
-      <LabelInput placeholder="Script name" value={filters.scriptName} onChange={handleChange} />
+      <LabelInput placeholder="Script name" value={scriptName} onChange={handleChange} />
       <Button
         active={filters.status === undefined}
         disabled={filters.status === undefined && !filters.date}
