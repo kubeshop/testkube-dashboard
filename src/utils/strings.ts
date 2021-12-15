@@ -29,3 +29,7 @@ export const RemoveLastTrailingSlashFromString = (word: string) => {
 export const getLastStringAfterTrailingSlash = (word: string) => {
   return word.substring(word.lastIndexOf('/') + 1);
 };
+
+export const hasProtocol = (url: string) => {
+  return /^http(s)?:\/\/.*/.test(url);
+};
