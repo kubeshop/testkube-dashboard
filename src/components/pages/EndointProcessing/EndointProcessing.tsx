@@ -1,11 +1,13 @@
 import {useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 
+import {config} from '@constants/config';
+
 import {Title} from '@atoms';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
-import {config} from '@src/constants/config';
+import {hasProtocol} from '@utils/strings';
 
 import {EndpointProcessingContainer} from './EnpointProcessing.styled';
 
@@ -14,9 +16,21 @@ const EndointProcessing = () => {
 
   const history = useHistory();
 
+  const validateApiEndpoint = (apiEndpoint: string) => {
+    if (hasProtocol(apiEndpoint)) {
+      return apiEndpoint;
+    }
+
+    if (apiEndpoint.startsWith('localhost')) {
+      return `http://${apiEndpoint}`;
+    }
+
+    return apiEndpoint;
+  };
+
   useEffect(() => {
     if (searchParams.apiEndpoint) {
-      localStorage.setItem(config.apiEndpoint, searchParams.apiEndpoint.toString());
+      localStorage.setItem(config.apiEndpoint, validateApiEndpoint(searchParams.apiEndpoint.toString()));
     }
 
     history.push('/');
