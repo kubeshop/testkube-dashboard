@@ -1,9 +1,10 @@
 import {Title} from '@atoms';
 
-const Tests = () => {
+const Tests = (props: any) => {
+  console.log('props: ', props);
   return (
     <div>
-      <Title>Tests - to be implemented</Title>
+      <Title>Tests</Title>
     </div>
   );
 };

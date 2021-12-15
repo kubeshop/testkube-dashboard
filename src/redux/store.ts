@@ -8,7 +8,7 @@ import testsListReducer from '@redux/reducers/testsListSlice';
 import {scriptsApi} from '@services/scripts';
 import {testsApi} from '@services/tests';
 
-const middlewares: Middleware[] = [testsApi.middleware];
+const middlewares: Middleware[] = [testsApi.middleware, scriptsApi.middleware];
 
 if (process.env.NODE_ENV === `development`) {
   const reduxLoggerMiddleware = createLogger();
