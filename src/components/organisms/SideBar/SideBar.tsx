@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router';
 import {NavLink} from 'react-router-dom';
 
@@ -14,6 +14,8 @@ import {
 } from '@ant-design/icons';
 
 import {Modal} from '@atoms';
+
+import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {openDiscord, openDocumentation, openGithub} from '@utils/externalLinks';
 
@@ -40,6 +42,14 @@ const SideBar = () => {
   const location = useLocation();
 
   const {pathname} = location;
+
+  const searchParams = useURLSearchParams();
+
+  useEffect(() => {
+    if (!searchParams.apiEndpoint && !localStorage.getItem('apiEndpoint')) {
+      toggleModal(true);
+    }
+  }, []);
 
   return (
     <StyledSider width={80} collapsed>

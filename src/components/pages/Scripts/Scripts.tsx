@@ -35,7 +35,8 @@ const columns = [
   },
 ];
 
-const Scripts = () => {
+const Scripts = (props: any) => {
+  console.log('props: ', props);
   const dispatch = useDispatch();
 
   const scripts = useAppSelector(selectScripts);
