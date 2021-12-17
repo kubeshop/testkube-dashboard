@@ -3992,9 +3992,9 @@ concat-stream@^1.5.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-concurrently@^6.4.0:
-  version "6.4.0"
-  resolved "https://registry.npmjs.org/concurrently/-/concurrently-6.4.0.tgz"
+concurrently@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-6.5.0.tgz#57082bfe797f93cf4a437ce54742c56823a8ea05"
   dependencies:
     chalk "^4.1.0"
     date-fns "^2.16.1"
