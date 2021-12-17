@@ -1,9 +1,7 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
 import {RouteProps} from 'react-router';
 
-import {DashboardEntitiesTypesEnum} from '@models/dashboard';
-
-import {DashboardBlueprint} from '@organisms';
+import {DashboardBlueprintRenderer} from '@organisms';
 
 import {EndointProcessing, Executions, Scripts, Tests} from '@pages';
 
@@ -12,17 +10,17 @@ const routes: RouteProps[] = [
 
   {
     path: '/dashboard/tests',
-    render: props => <DashboardBlueprint {...props} entityType={DashboardEntitiesTypesEnum.Tests} />,
+    render: props => <DashboardBlueprintRenderer {...props} entityType="tests" />,
     exact: true,
   },
   {
     path: '/dashboard/scripts',
-    render: props => <DashboardBlueprint {...props} entityType={DashboardEntitiesTypesEnum.Scripts} />,
+    render: props => <DashboardBlueprintRenderer {...props} entityType="scripts" />,
     exact: true,
   },
   {
     path: '/dashboard/executions',
-    render: props => <DashboardBlueprint {...props} entityType={DashboardEntitiesTypesEnum.Executions} />,
+    render: props => <DashboardBlueprintRenderer {...props} entityType="executions" />,
     exact: true,
   },
 

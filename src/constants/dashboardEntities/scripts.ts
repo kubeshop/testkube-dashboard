@@ -1,9 +1,9 @@
-import {DashboardEntitiesTypesEnum, DashboardEntity} from '@models/dashboard';
+import {DashboardBlueprint} from '@models/dashboard';
 
 import {Scripts} from '@pages';
 
-export const ScriptsEntity: DashboardEntity = {
-  entityType: DashboardEntitiesTypesEnum.Scripts,
+export const ScriptsEntity: DashboardBlueprint = {
+  entityType: 'scripts',
   route: '/dashboard/scripts',
   reduxEntity: 'scripts',
   pageTitle: 'Scripts',

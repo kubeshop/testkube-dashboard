@@ -1,19 +1,13 @@
-export type DashboardEntityType = 'tests' | 'scripts' | 'executions';
-
-export enum DashboardEntitiesTypesEnum {
-  Tests = 'tests',
-  Scripts = 'scripts',
-  Executions = 'executions',
-}
+export type DashboardBlueprintType = 'tests' | 'scripts' | 'executions';
 
 export type DashboardBlueprintProps = {
-  entityType: DashboardEntityType;
+  entityType: DashboardBlueprintType;
 };
 
-export type DashboardEntity = {
+export type DashboardBlueprint = {
   route?: string;
   pageTitle?: string;
-  entityType?: DashboardEntityType;
+  entityType?: DashboardBlueprintType;
   reduxEntity?: string;
-  component: (props: Partial<DashboardEntity>) => JSX.Element;
+  component: (props: Omit<DashboardBlueprint, 'component'>) => JSX.Element;
 };

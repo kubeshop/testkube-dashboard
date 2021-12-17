@@ -4,15 +4,15 @@ import ExecutionsEntity from '@constants/dashboardEntities/executions';
 import ScriptsEntity from '@constants/dashboardEntities/scripts';
 import TestsEntity from '@constants/dashboardEntities/tests';
 
-import {DashboardBlueprintProps, DashboardEntity, DashboardEntityType} from '@models/dashboard';
+import {DashboardBlueprint, DashboardBlueprintProps, DashboardBlueprintType} from '@models/dashboard';
 
-const entities: {[key in DashboardEntityType]: DashboardEntity} = {
+const entities: {[key in DashboardBlueprintType]: DashboardBlueprint} = {
   tests: TestsEntity,
   scripts: ScriptsEntity,
   executions: ExecutionsEntity,
 };
 
-const DashboardBlueprint: React.FC<DashboardBlueprintProps> = props => {
+const DashboardBlueprintRenderer: React.FC<DashboardBlueprintProps> = props => {
   const {entityType} = props;
 
   const renderedView = useMemo(() => entities[entityType], [entityType]);
@@ -22,4 +22,4 @@ const DashboardBlueprint: React.FC<DashboardBlueprintProps> = props => {
   return <Component {...rest} />;
 };
 
-export default DashboardBlueprint;
+export default DashboardBlueprintRenderer;
