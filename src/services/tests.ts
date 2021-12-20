@@ -15,7 +15,7 @@ export const testsApi = createApi({
       query: testId => `/executions/${testId}`,
     }),
     getArtifacts: builder.query<any, any>({
-      query: testId => `${testId}/artifacts`,
+      query: testId => `/executions/${testId}/artifacts`,
       // query: (testId) => `618e5291d88b39735423e0c6/artifacts`
     }),
   }),
