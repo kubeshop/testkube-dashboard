@@ -30,7 +30,7 @@ const App = () => {
               return <Route {...route} />;
             })}
             <Redirect exact from="/" to="/dashboard/tests" />
-            <Route path="*" component={NotFound} />
+            <Route path="/dashboard/*" component={NotFound} />
           </Switch>
         </Content>
       </StyledLayoutContentWrapper>
