@@ -1,13 +1,11 @@
 import {getStatus} from '@redux/utils/requestFilters';
 
-import {RenderTestStatusSvgIcon, RingProgressChart, TestTypeIcon, Typography} from '@atoms';
+import {RenderTestStatusSvgIcon, RingProgressChart, Typography} from '@atoms';
 
 import {timeStampToDate} from '@utils/formatDate';
 
 import {
-  StyledSCriptNameDescriptionContainer,
   StyledScriptChartContainer,
-  StyledScriptNameType,
   StyledTestDates,
   StyledTestDetailsDrawerHeaderContainer,
   StyledTestScriptChartAndStatusAndDateContainer,
@@ -15,25 +13,11 @@ import {
   StyledTestStatusContainer,
 } from './TestDetailsDrawerHeader.styled';
 
-const TestDetailsDrawerHeader = ({data}: {data: any}) => {
-  const {scriptName, name, scriptType, startTime, endTime, executionResult} = data;
+const TestDetailsDrawerHeader = (props: any) => {
+  const {scriptName, name, scriptType, startTime, endTime, executionResult} = props;
 
   return (
     <StyledTestDetailsDrawerHeaderContainer>
-      <Typography color="tertiary" variant="tertiary">
-        {scriptName}
-      </Typography>
-      <StyledScriptNameType>
-        <Typography color="tertiary" variant="quaternary">
-          {name}
-        </Typography>
-        <StyledSCriptNameDescriptionContainer>
-          <Typography color="secondary" variant="secondary" style={{marginRight: '10px'}}>
-            {scriptType}
-          </Typography>
-          <TestTypeIcon testType={scriptType} width={26} height={26} />
-        </StyledSCriptNameDescriptionContainer>
-      </StyledScriptNameType>
       <StyledTestScriptChartAndStatusAndDateContainer>
         <StyledScriptChartContainer>
           <RingProgressChart

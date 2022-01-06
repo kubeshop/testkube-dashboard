@@ -1,5 +1,6 @@
 import React from 'react';
-import { RingProgress } from '@ant-design/charts';
+
+import {RingProgress} from '@ant-design/charts';
 
 interface ITestCircleChart {
   height: number;
@@ -22,7 +23,7 @@ const RingProgressChart = ({
     if (totalPercentageStaticPage) return totalPercentageStaticPage;
     if (steps) {
       const occurrence = steps?.reduce(
-        (occ: number, step: { status: string }) => (step?.status === 'success' ? occ + 1 : occ),
+        (occ: number, step: {status: string}) => (step?.status === 'success' ? occ + 1 : occ),
         0
       );
       return occurrence / steps?.length;
@@ -34,7 +35,7 @@ const RingProgressChart = ({
     follow: true,
     enterable: true,
     TextBackgroundStyle: {
-      style: { fontSize: '52px' },
+      style: {fontSize: '52px'},
     },
     height,
     width,

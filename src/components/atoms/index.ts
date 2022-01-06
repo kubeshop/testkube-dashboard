@@ -16,3 +16,4 @@ export {default as RingProgressChart} from './Charts/TestDetailsRingProgressChar
 export {default as AreaChart} from './Charts/AreaChart/AreaChart';
 export {default as PieChart} from './Charts/PieChart/PieChart';
 export {default as Title} from './Title';
+export {default as TestRunnerIcon} from './TestRunnerIcon';

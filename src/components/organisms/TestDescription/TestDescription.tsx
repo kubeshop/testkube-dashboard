@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
+
 /* eslint react/destructuring-assignment: 0 */
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
@@ -7,20 +9,23 @@ import {Drawer} from 'antd';
 import styled from 'styled-components';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectedTestId, updateSelectedTestId} from '@redux/reducers/testsListSlice';
+import {selectedTestId, updateSelectedTestId} from '@redux/reducers/executionsSlice';
 
 import {Spinner, TKubeDivider} from '@atoms';
 
 import {ExecutionResultsOutputs, TestDetailsDrawerHeader} from '@molecules';
 
-import {useGetTestByIdQuery} from '@services/tests';
+import {useGetScriptExecutionByIdQuery} from '@src/services/executions';
+
+// import {useGetTestByIdQuery} from '@services/executions';
 
 const TestDescription = () => {
   const testId = useAppSelector(selectedTestId);
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
-  const {data, error, isLoading} = useGetTestByIdQuery(testId, {
+  const {data, error, isLoading} = useGetScriptExecutionByIdQuery(testId, {
     skip: !testId,
+    pollingInterval: 500,
   });
 
   const Container = styled.div`

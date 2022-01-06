@@ -1,9 +1,9 @@
 import {StyledTitle} from './Title.styled';
 
 const Title = (props: any) => {
-  const {children} = props;
+  const {children, ...rest} = props;
 
-  return <StyledTitle>{children}</StyledTitle>;
+  return <StyledTitle {...rest}>{children}</StyledTitle>;
 };
 
 export default Title;

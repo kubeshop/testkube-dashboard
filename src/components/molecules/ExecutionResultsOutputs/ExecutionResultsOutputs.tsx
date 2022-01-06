@@ -1,37 +1,40 @@
+/* eslint-disable react/destructuring-assignment */
 import React, {useState} from 'react';
+
 import {Collapse, Tabs} from 'antd';
+
 import {nanoid} from '@reduxjs/toolkit';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectedTestExecutionStatus, selectedTestId} from '@redux/reducers/executionsSlice';
+import {getStatus} from '@redux/utils/requestFilters';
 
 import {RenderTestStatusSvgIcon} from '@atoms';
 
-import {Step, AssertionResult, Test} from '@types';
+// import {useGetArtifactsQuery} from '@services/executions';
+import {AssertionResult, Step, Test} from '@types';
 
-import {getStatus} from '@src/redux/utils/requestFilters';
-import {useAppSelector} from '@src/redux/hooks';
-import {selectedTestExecutionStatus, selectedTestId} from '@src/redux/reducers/testsListSlice';
-import {useGetArtifactsQuery} from '@src/services/tests';
-import Artifacts from './Artifacts/Artifacts';
 import Logs from '../Logs/Logs';
-
+// import Artifacts from './Artifacts/Artifacts';
 import {
-  StyledTestDescriptionContainer,
-  StyledPlainTextOutputContainer,
-  StyledTestOutput,
-  StyledText,
-  StyledTestStepNameContainer,
-  StyledTestStepName,
-  StyledTestStepAssertionContainer,
-  StyledTestOutputNameAndStatus,
-  StyledTestOutputAssertionName,
-  StyledTestOutputAssertionErrorMessage,
   StyledCollapse,
-  StyledTestWithoutAssertions,
-  StyledTestStepsOutPutContainer,
-  StyledTestAssertionResultsContainer,
-  TestsWithoutStepsContainer,
-  StyledShowFailedStepsContainer,
   StyledLabelledFailedOnlyCheckbox,
   StyledPendingTestExecution,
+  StyledPlainTextOutputContainer,
+  StyledShowFailedStepsContainer,
+  StyledTestAssertionResultsContainer,
+  StyledTestDescriptionContainer,
+  StyledTestOutput,
+  StyledTestOutputAssertionErrorMessage,
+  StyledTestOutputAssertionName,
+  StyledTestOutputNameAndStatus,
+  StyledTestStepAssertionContainer,
+  StyledTestStepName,
+  StyledTestStepNameContainer,
+  StyledTestStepsOutPutContainer,
+  StyledTestWithoutAssertions,
+  StyledText,
+  TestsWithoutStepsContainer,
 } from './ExecutionResultsOutputs.styled';
 
 interface IStepHeader {
@@ -105,7 +108,7 @@ const RenderTestWithoutAssertion = (step: Step) => {
   );
 };
 
-const ExecutionResultsOutputs = ({data}: {data: any}) => {
+const ExecutionResultsOutputs = (data: any) => {
   const [togglePlainTestTest, setTogglePlainTestTest] = useState<boolean>(true);
   const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
   const [filteredExecutionResults, setFilteredExecutionResults] = useState<any[]>([]);
@@ -118,10 +121,10 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
     setShowOnlyFailedSteps(event.target.checked);
   };
 
-  const {data: artifacts} = useGetArtifactsQuery(testId, {
-    skip: !testId,
-    pollingInterval: 5000,
-  });
+  // const {data: artifacts} = useGetArtifactsQuery(testId, {
+  //   skip: !testId,
+  //   pollingInterval: 5000,
+  // });
 
   React.useEffect(() => {
     if (showOnlyFailedSteps) {
@@ -184,7 +187,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
           {data?.executionResult.status === 'pending' ? <Logs id={data.id} /> : <RenderPlainTestOutput {...data} />}
         </TabPane>
 
-        {artifacts && artifacts.length > 0 ? (
+        {/* {artifacts && artifacts.length > 0 ? (
           <TabPane tab={`Artifacts(${artifacts ? artifacts?.length : 0})`} key="Artifacts">
             <Artifacts artifacts={artifacts} testId={testId && testId} />
           </TabPane>
@@ -192,7 +195,7 @@ const ExecutionResultsOutputs = ({data}: {data: any}) => {
           <TabPane tab="Artifacts" key="Artifacts" disabled>
             <Artifacts artifacts={artifacts} testId={testId && testId} />
           </TabPane>
-        )}
+        )} */}
       </Tabs>
     </StyledTestDescriptionContainer>
   );

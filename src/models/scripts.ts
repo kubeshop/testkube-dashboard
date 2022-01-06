@@ -1,23 +1,24 @@
-export type ScriptName = string;
-
-export type ScriptType = 'postman/collection';
-
-export type ScriptCreationDate = Date;
-
 export type Script = {
-  content: string;
+  content: ScriptContent;
   created: ScriptCreationDate;
   name: ScriptName;
   type: ScriptType;
 };
 
+export type ScriptName = string;
+export type ScriptContent = string;
+
+export type ScriptType = 'postman/collection' | 'cypress/project' | 'curl/test';
+
+export type ScriptCreationDate = Date;
+
 interface ScriptsState {
   isLoading?: boolean;
   scriptsList: Script[];
-  filters: {
-    page: number;
-    pageSize: number;
-  };
+  filters: {textSearch: string};
+  totals: {};
+  filtered: {};
+  selectedScript: Script | null;
 }
 
 export type {ScriptsState};
