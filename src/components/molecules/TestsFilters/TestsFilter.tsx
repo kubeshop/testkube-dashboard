@@ -5,7 +5,7 @@ import {useDebounce} from 'react-use';
 import {Space} from 'antd';
 
 import {useAppSelector} from '@redux/hooks';
-import {clearFiltredData, selectFilters} from '@redux/reducers/testsListSlice';
+import {clearFiltredData, selectFilters} from '@redux/reducers/executionsSlice';
 
 import {Button, LabelInput, Typography} from '@atoms';
 
@@ -44,12 +44,7 @@ const TestsFilter = () => {
     <Space>
       <Typography variant="secondary">Show: </Typography>
       <LabelInput placeholder="Script name" value={scriptName} onChange={handleChange} />
-      <Button
-        active={filters.status === undefined}
-        disabled={filters.status === undefined && !filters.date}
-        onClick={() => handleClick(undefined)}
-        variant="primary"
-      >
+      <Button active={filters.status === undefined} onClick={() => handleClick(undefined)} variant="primary">
         All
       </Button>
       <Button

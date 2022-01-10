@@ -48,7 +48,6 @@ export const paramsSerializer = (params: object) => {
     .filter(item => {
       return item !== '';
     })
-
     .join('&');
 };
 

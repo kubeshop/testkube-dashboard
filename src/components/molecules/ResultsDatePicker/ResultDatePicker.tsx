@@ -6,7 +6,7 @@ import {DatePicker} from 'antd';
 import moment from 'moment';
 
 import {useAppSelector} from '@redux/hooks';
-import {clearFiltredData, selectFilters} from '@redux/reducers/testsListSlice';
+import {clearFiltredData, selectFilters} from '@redux/reducers/executionsSlice';
 
 const datePickerStyles = {
   color: 'var(--color-dark-quaternary)',

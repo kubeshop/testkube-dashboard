@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectTotals} from '@redux/reducers/testsListSlice';
+import {selectTotals} from '@redux/reducers/executionsSlice';
 
 import {PieChart, RingProgressChart} from '@atoms';
 

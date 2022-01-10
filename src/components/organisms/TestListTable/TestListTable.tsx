@@ -9,15 +9,15 @@ import {useAppSelector} from '@redux/hooks';
 import {
   changePageSize,
   paginateTo,
+  selectExecutions,
   selectFiltered,
   selectFilters,
   selectHasNext,
-  selectTests,
   setFilters,
   updateData,
   updateSelectedTestExecutionStatus,
   updateSelectedTestId,
-} from '@redux/reducers/testsListSlice';
+} from '@redux/reducers/executionsSlice';
 import {getStatus} from '@redux/utils/requestFilters';
 
 import {RenderTestStatusSvgIcon, TestTypeIcon} from '@atoms';
@@ -27,7 +27,7 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 import {validateSearchParams} from '@utils/fetchUtils';
 import {getDuration, timeStampToDate} from '@utils/formatDate';
 
-import {useGetTestsQuery} from '@services/tests';
+import {useGetExecutionsQuery} from '@services/executions';
 
 const columns = [
   {
@@ -125,13 +125,13 @@ const columns = [
 const TestListTable = () => {
   const dispatch = useDispatch();
 
-  const allTests = useAppSelector(selectTests);
+  const allExecutions = useAppSelector(selectExecutions);
   const filters = useAppSelector(selectFilters);
   const hasNext = useAppSelector(selectHasNext);
   const filtered = useAppSelector(selectFiltered);
 
-  const {data, isSuccess, isLoading} = useGetTestsQuery(filters, {
-    pollingInterval: 5000,
+  const {data, isSuccess, isLoading} = useGetExecutionsQuery(filters, {
+    pollingInterval: 500,
   });
 
   const searchParams = useURLSearchParams();
@@ -158,9 +158,12 @@ const TestListTable = () => {
     const fetchData = () => {
       if (isSuccess) {
         const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
+
         dispatch(
           updateData({
-            data,
+            totals: data.totals,
+            filtered: data.filtered,
+            executionsList: data.results,
             hasNext: filters.page <= totalPages,
           })
         );
@@ -178,7 +181,7 @@ const TestListTable = () => {
   return (
     <Table
       columns={columns}
-      dataSource={allTests}
+      dataSource={allExecutions}
       loading={isLoading}
       rowClassName="table-row-dark"
       onRow={(record, _) => {

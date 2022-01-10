@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {Pie} from '@ant-design/charts';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectTotals} from '@redux/reducers/testsListSlice';
+import {selectTotals} from '@redux/reducers/executionsSlice';
 
 const PieChart = () => {
   const [chartTestStatusData, setChartTestStatusData] = React.useState({

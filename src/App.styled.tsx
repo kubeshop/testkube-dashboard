@@ -34,5 +34,5 @@ export const StyledTestSummary = styled.div`
 
 export const StyledLayoutContentWrapper = styled(Layout)`
   min-height: 100vh;
-  padding: 50px 35px 50px 115px;
+  padding-left: 115px;
 `;

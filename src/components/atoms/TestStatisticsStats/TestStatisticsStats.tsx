@@ -2,11 +2,11 @@ import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectFilters, selectTotals} from '@redux/reducers/testsListSlice';
+import {selectFilters, selectTotals} from '@redux/reducers/executionsSlice';
 
 import {Typography} from '@atoms';
 
-import {useGetTestsQuery} from '@services/tests';
+import {useGetExecutionsQuery} from '@services/executions';
 
 import {TestTotals} from '@types';
 
@@ -17,8 +17,8 @@ const TestStatisticsStats = () => {
   const [testsStats, setTestsStats] = React.useState<TestTotals>();
   const filters = useAppSelector(selectFilters);
   const totals = useAppSelector(selectTotals);
-  const {data, isSuccess} = useGetTestsQuery(filters, {
-    skip: !filters.date,
+  const {data, isSuccess} = useGetExecutionsQuery(filters, {
+    // skip: !filters.date,
   });
   useEffect(() => {
     const fetchData = () => {
@@ -26,13 +26,7 @@ const TestStatisticsStats = () => {
         setTestsStats(data?.filtered);
       }
     };
-
-    if (filters.date) {
-      fetchData();
-    } else {
-      setTestsStats(totals);
-    }
-  }, [filters.date, totals]);
+  }, [totals]);
 
   return (
     <>
