@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {Modal} from 'antd';
@@ -6,6 +6,9 @@ import {Modal} from 'antd';
 import styled from 'styled-components';
 
 import {config} from '@constants/config';
+
+import {useAppDispatch} from '@redux/hooks';
+import {setApiEndpoint} from '@redux/reducers/configSlice';
 
 import {Button, LabelInput, Typography} from '@atoms';
 
@@ -31,22 +34,35 @@ interface IModal {
 }
 
 const CustomModal = ({isModalVisible, visible}: IModal) => {
-  const [apiEndpoint, setApiEndpoint] = useState('https://demo.testkube.io/results/v1');
+  const defaultApiEndpoint = localStorage.getItem('apiEndpoint') || process.env.REACT_APP_API_SERVER_ENDPOINT || '';
+
+  const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
   const [isLoading, setLoadingState] = useState(false);
 
   const history = useHistory();
+
+  const dispatch = useAppDispatch();
 
   const handleOpenUrl = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     localStorage.setItem(config.apiEndpoint, apiEndpoint);
+
     history.push('/dashboard/tests');
+
     isModalVisible(false);
+    dispatch(setApiEndpoint(apiEndpoint));
   };
 
   const handleCancel = () => {
     isModalVisible(false);
   };
+
+  useEffect(() => {
+    if (defaultApiEndpoint) {
+      localStorage.setItem('apiEndpoint', defaultApiEndpoint);
+    }
+  }, [defaultApiEndpoint]);
 
   return (
     <>
@@ -77,7 +93,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
               id="url"
               name="url"
               onChange={event => {
-                setApiEndpoint(event.target.value);
+                setApiEndpointHook(event.target.value);
               }}
               defaultValue={apiEndpoint}
             />

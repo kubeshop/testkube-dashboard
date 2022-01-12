@@ -1,11 +1,33 @@
+import {ConfigState} from '@models/config';
 import {ExecutionsState} from '@models/executions';
 import {ScriptsState} from '@models/scripts';
+import {TagsState} from '@models/tags';
+import {TestExecutionsState} from '@models/testExecutions';
 import {TestsState} from '@models/tests';
+
+const initialTestExecutionsState: TestExecutionsState = {
+  isLoading: false,
+  testExecutionsList: [],
+  filters: {textSearch: '', pageSize: 10},
+  totals: {
+    results: 0,
+    passed: 0,
+    failed: 0,
+    pending: 0,
+  },
+  filtered: {
+    results: 0,
+    passed: 0,
+    failed: 0,
+    pending: 0,
+  },
+  selectedTestExecution: null,
+};
 
 const initialTestsState: TestsState = {
   isLoading: false,
   testsList: [],
-  filters: {},
+  filters: {textSearch: '', pageSize: 10},
   totals: {
     results: 0,
     passed: 0,
@@ -24,7 +46,7 @@ const initialTestsState: TestsState = {
 const initialScriptsState: ScriptsState = {
   isLoading: false,
   scriptsList: [],
-  filters: {textSearch: ''},
+  filters: {textSearch: '', pageSize: 10},
   totals: {
     results: 0,
     passed: 0,
@@ -73,8 +95,19 @@ const initialExecutionsState: ExecutionsState = {
   selectedExecutionInfo: null,
 };
 
+const initialTagsState: TagsState = {
+  tagsList: [],
+};
+
+const initialConfigState: ConfigState = {
+  apiEndpoint: null,
+};
+
 export default {
+  testExecutions: initialTestExecutionsState,
   tests: initialTestsState,
   scripts: initialScriptsState,
   executions: initialExecutionsState,
+  tags: initialTagsState,
+  config: initialConfigState,
 };

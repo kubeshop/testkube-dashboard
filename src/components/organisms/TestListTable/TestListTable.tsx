@@ -13,8 +13,8 @@ import {
   selectFiltered,
   selectFilters,
   selectHasNext,
+  setExecutions,
   setFilters,
-  updateData,
   updateSelectedTestExecutionStatus,
   updateSelectedTestId,
 } from '@redux/reducers/executionsSlice';
@@ -160,7 +160,7 @@ const TestListTable = () => {
         const totalPages = Math.trunc(data.totals.results / filters?.pageSize);
 
         dispatch(
-          updateData({
+          setExecutions({
             totals: data.totals,
             filtered: data.filtered,
             executionsList: data.results,

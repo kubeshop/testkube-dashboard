@@ -1,4 +1,4 @@
-import {Table} from 'antd';
+import {Spin, Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
 import {Title} from '@atoms';
@@ -11,7 +11,8 @@ const DashboardContent: React.FC<any> = props => {
     dataSource,
     columns,
     isLoading,
-    filtersComponent: Filters,
+    isFetching,
+    filtersComponent: FiltersComponent,
     canSelectRow,
     onRowSelect,
     selectedRecord,
@@ -33,8 +34,12 @@ const DashboardContent: React.FC<any> = props => {
       shouldInfoPanelBeShown={shouldInfoPanelBeShown}
       isInfoPanelExpanded={isInfoPanelExpanded}
     >
-      <Title>{pageTitle}</Title>
-      {Filters ? <Filters setSelectedRecord={setSelectedRecord} selectedRecord={selectedRecord} /> : null}
+      <Title>
+        {pageTitle} {isFetching && <Spin />}
+      </Title>
+      {FiltersComponent ? (
+        <FiltersComponent setSelectedRecord={setSelectedRecord} selectedRecord={selectedRecord} />
+      ) : null}
       <Table
         dataSource={dataSource}
         columns={columns}

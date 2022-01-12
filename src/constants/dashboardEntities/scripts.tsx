@@ -14,6 +14,7 @@ import {
   setSelectedScript,
 } from '@redux/reducers/scriptsSlice';
 
+import {InfoPanelHeader} from '@molecules';
 import {ScriptsFilters} from '@molecules/Filters';
 
 import ScriptsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/ScriptsInfoPanel';
@@ -72,6 +73,14 @@ export const ScriptsEntity: DashboardBlueprint = {
         );
       },
       width: '25%',
+    },
+  ],
+  infoPanelConfig: [
+    {type: 'header', name: 'Scripts', component: InfoPanelHeader},
+    {
+      type: 'summary',
+      name: 'summary',
+      component: ScriptsInfoPanel,
     },
   ],
 };

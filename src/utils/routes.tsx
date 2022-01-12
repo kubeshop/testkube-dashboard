@@ -7,10 +7,14 @@ import {EndointProcessing} from '@pages';
 const routes: RouteProps[] = [
   {path: '/apiEndpoint', component: EndointProcessing, exact: true},
 
-  // Tests route does not work at the moment
+  {
+    path: '/dashboard/tests',
+    render: props => <DashboardBlueprintRenderer {...props} entityType="tests" />,
+    exact: true,
+  },
   // {
-  //   path: '/dashboard/tests',
-  //   render: props => <DashboardBlueprintRenderer {...props} entityType="tests" />,
+  //   path: '/dashboard/test-executions',
+  //   render: props => <DashboardBlueprintRenderer {...props} entityType="testExecutions" />,
   //   exact: true,
   // },
   {

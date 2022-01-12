@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux';
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {useAppSelector} from '@redux/hooks';
+import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
 import {DashboardContent, DashboardInfoPanel} from '@organisms';
 
@@ -29,6 +30,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     scriptTypeFieldName,
     infoPanelComponent,
     setQueryFilters,
+    infoPanelConfig,
   } = props;
 
   const dispatch = useDispatch();
@@ -37,12 +39,13 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const selectedRecord: any = useAppSelector(selectSelectedRecord);
   const queryFilters: any = useAppSelector(selectQueryFilters);
   const allFilters: any = useAppSelector(selectAllFilters);
+  const apiEndpoint = useAppSelector(selectApiEndpoint);
 
   useUpdateURLSearchParams(queryFilters);
 
   const [isInfoPanelExpanded, setInfoPanelVisibility] = useState(true);
 
-  const {data, isLoading} = useGetData(queryFilters || null, {
+  const {data, isLoading, isFetching, refetch} = useGetData(queryFilters || null, {
     pollingInterval: 5000,
   });
 
@@ -55,14 +58,22 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   };
 
   useEffect(() => {
+    if (data === null) {
+      return dispatch(setData([]));
+    }
+
     if (setData && data) {
       dispatch(setData(data));
 
-      if (!selectedRecord) {
+      if (!selectedRecord && (data || data.length) && canSelectRow) {
         dispatch(setSelectedRecord(data));
       }
     }
   }, [data]);
+
+  useEffect(() => {
+    refetch();
+  }, [apiEndpoint]);
 
   const shouldInfoPanelBeShown = hasInfoPanel;
 
@@ -71,9 +82,11 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
       dispatch(setQueryFilters({...queryFilters, page: page - 1, pageSize}));
     },
 
-    total: allFilters?.filtered.results,
-    current: queryFilters.page + 1,
-    pageSize: queryFilters.pageSize,
+    ...(allFilters.filtered.results ? {total: allFilters?.filtered.results} : {}),
+
+    ...(queryFilters.page ? {current: queryFilters.page + 1} : {}),
+    ...(queryFilters.pageSize ? {pageSize: queryFilters.pageSize} : {}),
+
     hideOnSinglePage: true,
   };
 
@@ -84,6 +97,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
         dataSource={dataSource}
         columns={columns}
         isLoading={isLoading}
+        isFetching={isFetching}
         filtersComponent={filtersComponent}
         queryFilters={queryFilters}
         canSelectRow={canSelectRow}
@@ -95,15 +109,15 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
         setSelectedRecord={setSelectedRecord}
         paginationOptions={pagination}
       />
-      {shouldInfoPanelBeShown && selectedRecord && (
-        <DashboardInfoPanel
-          selectedRecord={selectedRecord}
-          scriptTypeFieldName={scriptTypeFieldName}
-          isInfoPanelExpanded={isInfoPanelExpanded}
-          setInfoPanelVisibility={setInfoPanelVisibility}
-          infoPanelComponent={infoPanelComponent}
-        />
-      )}
+      <DashboardInfoPanel
+        shouldInfoPanelBeShown={shouldInfoPanelBeShown}
+        selectedRecord={selectedRecord}
+        scriptTypeFieldName={scriptTypeFieldName}
+        isInfoPanelExpanded={isInfoPanelExpanded}
+        setInfoPanelVisibility={setInfoPanelVisibility}
+        infoPanelComponent={infoPanelComponent}
+        infoPanelConfig={infoPanelConfig}
+      />
     </StyledDashboardContainerWrapper>
   );
 };

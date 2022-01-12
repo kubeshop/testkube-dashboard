@@ -77,6 +77,11 @@ const SideBar = () => {
                 <StyledMenuItem icon={<DashboardOutlined style={ICON_STYLE} />} key="/dashboard/executions" />
               </NavLink>
             </Tooltip>
+            {/* <Tooltip title="Test executions" placement="right" color="#1890fc">
+              <NavLink to="/dashboard/test-executions">
+                <StyledMenuItem icon={<DashboardOutlined style={ICON_STYLE} />} key="/dashboard/test-executions" />
+              </NavLink>
+            </Tooltip> */}
           </StyledNavigation>
           <StyledOther>
             <StyledMenuItem onClick={() => toggleModal(prev => !prev)} icon={<SettingFilled style={ICON_STYLE} />} />

@@ -3,6 +3,9 @@ import {useHistory} from 'react-router-dom';
 
 import {config} from '@constants/config';
 
+import {useAppDispatch} from '@redux/hooks';
+import {setApiEndpoint} from '@redux/reducers/configSlice';
+
 import {Title} from '@atoms';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
@@ -12,6 +15,8 @@ import {hasProtocol} from '@utils/strings';
 import {EndpointProcessingContainer} from './EnpointProcessing.styled';
 
 const EndointProcessing = () => {
+  const dispatch = useAppDispatch();
+
   const searchParams = useURLSearchParams();
 
   const history = useHistory();
@@ -30,7 +35,10 @@ const EndointProcessing = () => {
 
   useEffect(() => {
     if (searchParams.apiEndpoint) {
-      localStorage.setItem(config.apiEndpoint, validateApiEndpoint(searchParams.apiEndpoint.toString()));
+      const validatedApiEndpoint = validateApiEndpoint(searchParams.apiEndpoint.toString());
+
+      localStorage.setItem(config.apiEndpoint, validatedApiEndpoint);
+      dispatch(setApiEndpoint(validatedApiEndpoint));
     }
 
     history.push('/');

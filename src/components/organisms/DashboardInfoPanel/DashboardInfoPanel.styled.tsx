@@ -1,8 +1,31 @@
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
-export const StyledDashboardInfoPanelContainer = styled.div<{isInfoPanelExpanded?: boolean}>`
+const fadeOut = keyframes`
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+`;
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+`;
+
+export const StyledDashboardInfoPanelContainer = styled.div<{
+  isInfoPanelExpanded?: boolean;
+  shouldInfoPanelBeShown: boolean;
+}>`
   position: fixed;
-  right: ${props => (props.isInfoPanelExpanded ? '0' : '-550px')};
+  right: ${props => (props.shouldInfoPanelBeShown ? (props.isInfoPanelExpanded ? '0' : '-550px') : '-630px')};
   overflow: auto;
 
   display: flex;
@@ -13,6 +36,8 @@ export const StyledDashboardInfoPanelContainer = styled.div<{isInfoPanelExpanded
 
   background: #1d1d1d;
 
+  // animation: ${props => (props.shouldInfoPanelBeShown ? fadeIn : fadeOut)} 0.2s linear;
+  // animation-fill-mode: forwards;
   transition: 0.5s all;
 `;
 
