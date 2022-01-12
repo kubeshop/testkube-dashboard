@@ -5,9 +5,9 @@ import {
   selectExecutions,
   selectFilters,
   selectSelectedExecution,
+  setExecutions,
   setFilters,
   setSelectedExecution,
-  updateData,
 } from '@redux/reducers/executionsSlice';
 import {getStatus} from '@redux/utils/requestFilters';
 
@@ -24,7 +24,7 @@ import {useGetExecutionsQuery} from '@services/executions';
 export const ExecutionsEntity: DashboardBlueprint = {
   entityType: 'executions',
   route: '/dashboard/executions',
-  reduxEntity: 'scripts',
+  reduxEntity: 'executions',
   pageTitle: 'Executions',
   hasInfoPanel: true,
   reduxListName: 'executionsList',
@@ -34,7 +34,7 @@ export const ExecutionsEntity: DashboardBlueprint = {
   infoPanelComponent: ExecutionsInfoPanel,
 
   useGetData: useGetExecutionsQuery,
-  setData: updateData,
+  setData: setExecutions,
   selectData: selectExecutions,
 
   setQueryFilters: setFilters,

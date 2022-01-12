@@ -1,13 +1,14 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import initialState from '../initialState';
+import initialState from '@redux/initialState';
+
 import {RootState} from '../store';
 
 export const executionsSlice = createSlice({
   name: 'executions',
   initialState: initialState.executions,
   reducers: {
-    updateData: (state, action: PayloadAction<any>) => {
+    setExecutions: (state, action: PayloadAction<any>) => {
       state.hasNext = action.payload?.hasNext;
       state.executionsList = action.payload.results;
       state.totals = action.payload.totals;
@@ -78,7 +79,7 @@ export const selectSelectedExecution = (state: RootState) => state.executions.se
 export const selectedSelectedExecutionInfo = (state: RootState) => state.executions.selectedExecutionInfo;
 
 export const {
-  updateData,
+  setExecutions,
   clearFiltredData,
   setFilters,
   paginateTo,

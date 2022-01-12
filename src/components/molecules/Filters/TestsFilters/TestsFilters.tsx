@@ -7,7 +7,7 @@ import {Space} from 'antd';
 import {SearchParams} from '@models/searchParams';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectFilters, setFilters} from '@redux/reducers/scriptsSlice';
+import {selectFilters, setFilters} from '@redux/reducers/testsSlice';
 
 import {LabelInput, Typography} from '@atoms';
 
@@ -15,7 +15,7 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {validateSearchParams} from '@utils/fetchUtils';
 
-const ScriptsFilters = (props: any) => {
+const TestsFilters = (props: any) => {
   const {setSelectedRecord, selectedRecord} = props;
 
   const dispatch = useDispatch();
@@ -24,34 +24,34 @@ const ScriptsFilters = (props: any) => {
 
   const searchParams = useURLSearchParams();
 
-  const [scriptName, setScriptName] = useState(filters.textSearch);
+  const [testName, setTestName] = useState(filters.textSearch);
 
   const handleChange = (e: any) => {
     dispatch(setSelectedRecord({selectedRecord: null}));
 
-    setScriptName(e.target.value);
+    setTestName(e.target.value);
   };
 
   useDebounce(
     () => {
-      dispatch(setFilters({...filters, page: 0, textSearch: scriptName}));
+      dispatch(setFilters({...filters, page: 0, textSearch: testName}));
     },
     300,
-    [scriptName]
+    [testName]
   );
 
   useEffect(() => {
     if (Object.entries(searchParams).length) {
-      dispatch(setFilters({...filters, ...validateSearchParams(searchParams, SearchParams.scripts)}));
+      dispatch(setFilters({...filters, ...validateSearchParams(searchParams, SearchParams.tests)}));
     }
   }, []);
 
   return (
     <Space>
       <Typography variant="secondary">Show: </Typography>
-      <LabelInput placeholder="Script name" value={scriptName} onChange={handleChange} />
+      <LabelInput placeholder="Test name" value={testName} onChange={handleChange} />
     </Space>
   );
 };
 
-export default ScriptsFilters;
+export default TestsFilters;

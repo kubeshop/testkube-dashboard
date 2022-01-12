@@ -3,7 +3,9 @@ import {ColumnsType} from 'antd/lib/table';
 import {QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-export type DashboardBlueprintType = 'tests' | 'scripts' | 'executions';
+import {InfoPanelConfig} from './infoPanel';
+
+export type DashboardBlueprintType = 'tests' | 'scripts' | 'executions' | 'testExecutions';
 
 export type DashboardBlueprintProps = {
   entityType: DashboardBlueprintType;
@@ -48,7 +50,7 @@ export type DashboardBlueprint = {
    * Whether to show InfoPanel component to the right
    */
 
-  hasInfoPanel?: boolean;
+  hasInfoPanel: boolean;
 
   /**
    * Whether the user can click on table row
@@ -61,6 +63,8 @@ export type DashboardBlueprint = {
    */
 
   columns?: ColumnsType;
+
+  infoPanelConfig?: InfoPanelConfig;
 
   filtersComponent?: ((props: any) => JSX.Element) | null;
   infoPanelComponent?: any;

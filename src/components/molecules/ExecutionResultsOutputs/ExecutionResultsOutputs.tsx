@@ -183,10 +183,11 @@ const ExecutionResultsOutputs = (props: any) => {
           </StyledTestStepsOutPutContainer>
         </TabPane>
 
-        <TabPane tab="Log output" key="2">
-          {executionResult.status === 'pending' ? <Logs id={id} /> : <RenderPlainTestOutput {...props} />}
-        </TabPane>
-
+        {executionResult && (
+          <TabPane tab="Log output" key="2">
+            {executionResult.status === 'pending' ? <Logs id={id} /> : <RenderPlainTestOutput {...props} />}
+          </TabPane>
+        )}
         {artifacts && artifacts.length > 0 ? (
           <TabPane tab={`Artifacts(${artifacts ? artifacts?.length : 0})`} key="Artifacts">
             <Artifacts artifacts={artifacts} testId={id} />
