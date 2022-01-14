@@ -6,7 +6,7 @@ import configSlice from '@redux/reducers/configSlice';
 import executionsSlice from '@redux/reducers/executionsSlice';
 import scriptsSlice from '@redux/reducers/scriptsSlice';
 import tagsSlice from '@redux/reducers/tagsSlice';
-import textExecutionsSlice from '@redux/reducers/testExecutions';
+import textExecutionsSlice from '@src/redux/reducers/testExecutionsSlice';
 import testsSlice from '@redux/reducers/testsSlice';
 
 import {executionsApi} from '@services/executions';
@@ -26,7 +26,7 @@ const middlewares: Middleware[] = [
 if (process.env.NODE_ENV === `development`) {
   const reduxLoggerMiddleware = createLogger();
 
-  // middlewares.push(reduxLoggerMiddleware);
+  middlewares.push(reduxLoggerMiddleware);
 }
 
 export const store = configureStore({

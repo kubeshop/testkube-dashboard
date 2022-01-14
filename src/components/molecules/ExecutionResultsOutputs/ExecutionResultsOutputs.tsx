@@ -111,7 +111,7 @@ const RenderTestWithoutAssertion = (step: Step) => {
 };
 
 const ExecutionResultsOutputs = (props: any) => {
-  const {id, executionResult} = props;
+  const {id, executionResult, execution} = props;
 
   const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
   const [filteredExecutionResults, setFilteredExecutionResults] = useState<any[]>([]);
@@ -123,19 +123,30 @@ const ExecutionResultsOutputs = (props: any) => {
   };
 
   const {data: artifacts} = useGetScriptExecutionArtifactsQuery(id, {
-    pollingInterval: 5000,
+    pollingInterval: 0,
   });
 
   useEffect(() => {
     if (showOnlyFailedSteps) {
-      const filtered = executionResult?.steps?.filter((step: Step) => {
-        return step.status === 'failed' || step.status === 'error';
-      });
-      setFilteredExecutionResults(filtered);
-    } else {
-      setFilteredExecutionResults(executionResult?.steps);
+      if (!execution) {
+        const filtered = executionResult?.steps?.filter((step: Step) => {
+          return step.status === 'failed' || step.status === 'error';
+        });
+        setFilteredExecutionResults(filtered);
+      } else {
+        const filtered = execution?.filter((step: Step) => {
+          return step.status === 'failed' || step.status === 'error';
+        });
+        setFilteredExecutionResults(filtered);
+      }
     }
-  }, [executionResult?.steps, showOnlyFailedSteps]);
+
+    if (!execution) {
+      setFilteredExecutionResults(executionResult?.steps);
+    } else {
+      setFilteredExecutionResults(execution);
+    }
+  }, [executionResult?.steps, execution, showOnlyFailedSteps]);
 
   return (
     <StyledTestDescriptionContainer>

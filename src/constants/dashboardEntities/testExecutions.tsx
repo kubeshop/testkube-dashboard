@@ -1,134 +1,99 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {
-  selectAllExecutionsFilters,
-  selectExecutions,
+  selectAllTestsFilters,
   selectFilters,
-  selectSelectedExecution,
-  setExecutions,
+  selectSelectedTestExecution,
+  selectTestExecutions,
   setFilters,
-  setSelectedExecution,
-} from '@redux/reducers/executionsSlice';
+  setSelectedTestExecution,
+  setTestExecutions,
+} from '@redux/reducers/testExecutionsSlice';
 import {getStatus} from '@redux/utils/requestFilters';
 
-import {RenderTestStatusSvgIcon, TestTypeIcon} from '@atoms';
+import {RenderTestStatusSvgIcon} from '@atoms';
 
-import {ExecutionsFilters} from '@molecules/Filters';
+import TestExecutionsFilters from '@molecules/Filters/TestExecutionsFilters';
 
-import ExecutionsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/ExecutionsInfoPanel';
+import TestExecutionsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestExecutionsInfoPanel/TestExecutionsInfoPanel';
 
 import {getDuration, timeStampToDate} from '@utils/formatDate';
 
-import {useGetExecutionsQuery} from '@services/executions';
+import {useGetTestExecutionsByTestIdQuery} from '@services/testExecutions';
 
 export const TestExecutionsEntity: DashboardBlueprint = {
-  entityType: 'testExecutions',
+  entityType: 'test-executions',
   route: '/dashboard/test-executions',
   reduxEntity: 'testExecutions',
-  pageTitle: 'Test executions',
-  hasInfoPanel: false,
+  pageTitle: 'Tests executions',
+  hasInfoPanel: true,
   reduxListName: 'executionsList',
-  canSelectRow: false,
+  canSelectRow: true,
 
-  filtersComponent: null,
-  infoPanelComponent: null,
+  filtersComponent: TestExecutionsFilters,
+  infoPanelComponent: TestExecutionsInfoPanel,
 
-  useGetData: useGetExecutionsQuery,
-  setData: setExecutions,
-  selectData: selectExecutions,
+  useGetData: useGetTestExecutionsByTestIdQuery,
+  setData: setTestExecutions,
+  selectData: selectTestExecutions,
 
   setQueryFilters: setFilters,
   selectQueryFilters: selectFilters,
-  selectAllFilters: selectAllExecutionsFilters,
+  selectAllFilters: selectAllTestsFilters,
 
-  setSelectedRecord: setSelectedExecution,
-  selectSelectedRecord: selectSelectedExecution,
+  setSelectedRecord: setSelectedTestExecution,
+  selectSelectedRecord: selectSelectedTestExecution,
 
   selectedRecordIdFieldName: 'id',
   scriptTypeFieldName: 'scriptType',
 
-  // columns: [
-  //   {
-  //     title: 'Type',
-  //     dataIndex: 'scriptType',
-  //     width: '10%',
-  //     render: (testType: string) => {
-  //       return {
-  //         children: <TestTypeIcon testType={testType} width={30} height={30} />,
-  //         props: {
-  //           role: 'cell',
-  //         },
-  //       };
-  //     },
-  //   },
-  //   {
-  //     title: 'Name',
-  //     dataIndex: 'name',
-  //     width: '25%',
-  //     render: (name: string) => {
-  //       return {
-  //         children: name,
-  //         props: {
-  //           role: 'cell',
-  //         },
-  //       };
-  //     },
-  //   },
-  //   {
-  //     title: 'Script',
-  //     dataIndex: 'scriptName',
-  //     width: '25%',
-  //     render: (scriptName: string) => {
-  //       return {
-  //         children: scriptName,
-  //         props: {
-  //           role: 'cell',
-  //         },
-  //       };
-  //     },
-  //   },
-  //   {
-  //     title: 'Started At',
-  //     dataIndex: 'startTime',
-  //     render: (startTime: string) => {
-  //       return {
-  //         children: startTime ? timeStampToDate(startTime) : '-',
-  //         props: {
-  //           role: 'cell',
-  //         },
-  //       };
-  //     },
-  //     width: '15%',
-  //   },
-  //   {
-  //     title: 'Duration',
-  //     dataIndex: 'duration',
-  //     render: (duration: string, row: any) => {
-  //       return {
-  //         children: row.endTime ? getDuration(row.startTime, row.endTime) : '-',
-  //         props: {
-  //           role: 'cell',
-  //         },
-  //       };
-  //     },
-  //     key: 'duration',
-  //     width: '15%',
-  //   },
-  //   {
-  //     title: 'Status',
-  //     dataIndex: 'status',
-  //     width: '5%',
-  //     render: (testStatus: string) => {
-  //       return {
-  //         children: <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
-  //         props: {
-  //           role: 'cell',
-  //         },
-  //       };
-  //     },
-  //   },
-  // ],
+  columns: [
+    {
+      title: 'Test execution name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Test name',
+      dataIndex: 'testName',
+    },
+    {
+      title: 'Number of steps executed',
+      dataIndex: 'execution',
+      render: (execution: any) => {
+        return {children: execution && execution.length};
+      },
+    },
+
+    {
+      title: 'Started At',
+      dataIndex: 'startTime',
+      render: (startTime: string) => {
+        return {
+          children: startTime ? timeStampToDate(startTime) : '-',
+        };
+      },
+    },
+    {
+      title: 'Duration',
+      dataIndex: 'duration',
+      render: (duration: string, row: any) => {
+        return {
+          children: row.endTime ? getDuration(row.startTime, row.endTime) : '-',
+        };
+      },
+      key: 'duration',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      width: '5%',
+      render: (testStatus: string) => {
+        return {
+          children: <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
+        };
+      },
+    },
+  ],
 };
 
 export default TestExecutionsEntity;

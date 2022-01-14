@@ -11,20 +11,24 @@ export const testExecutionsSlice = createSlice({
   initialState: initialState.testExecutions,
   reducers: {
     setTestExecutions: (state: Draft<TestExecutionsState>, action: PayloadAction<any>) => {
-      state.testExecutionsList = action.payload;
+      state.testExecutionsList = action.payload.results;
     },
     setFilters: (state: Draft<TestExecutionsState>, action: PayloadAction<any>) => {
       state.filters = action.payload;
     },
     setSelectedTestExecution: (state: Draft<TestExecutionsState>, action: PayloadAction<any>) => {
-      state.selectedTestExecution = action.payload[0] || action.payload.selectedRecord;
+      if (action.payload && action.payload.results) {
+        state.selectedTestExecution = action.payload.results[0];
+      } else {
+        state.selectedTestExecution = action.payload.selectedRecord;
+      }
     },
   },
 });
 
 export const selectTestExecutions = (state: RootState) => state.testExecutions.testExecutionsList;
 export const selectFilters = (state: RootState) => state.testExecutions.filters;
-export const selectSelectedTest = (state: RootState) => state.testExecutions.selectedTestExecution;
+export const selectSelectedTestExecution = (state: RootState) => state.testExecutions.selectedTestExecution;
 export const selectAllTestsFilters = (state: RootState) => ({
   filters: state.testExecutions.filters,
   filtered: state.testExecutions.filtered,

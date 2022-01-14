@@ -8,7 +8,7 @@ import {TestsState} from '@models/tests';
 const initialTestExecutionsState: TestExecutionsState = {
   isLoading: false,
   testExecutionsList: [],
-  filters: {textSearch: '', pageSize: 10},
+  filters: {pageSize: 10, textSearch: ''},
   totals: {
     results: 0,
     passed: 0,

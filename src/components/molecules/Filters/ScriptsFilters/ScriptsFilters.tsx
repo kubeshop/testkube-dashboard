@@ -41,6 +41,10 @@ const ScriptsFilters = (props: any) => {
   );
 
   useEffect(() => {
+    setScriptName(filters.textSearch);
+  }, [filters]);
+
+  useEffect(() => {
     if (Object.entries(searchParams).length) {
       dispatch(setFilters({...filters, ...validateSearchParams(searchParams, SearchParams.scripts)}));
     }

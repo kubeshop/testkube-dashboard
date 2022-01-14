@@ -12,11 +12,11 @@ const routes: RouteProps[] = [
     render: props => <DashboardBlueprintRenderer {...props} entityType="tests" />,
     exact: true,
   },
-  // {
-  //   path: '/dashboard/test-executions',
-  //   render: props => <DashboardBlueprintRenderer {...props} entityType="testExecutions" />,
-  //   exact: true,
-  // },
+  {
+    path: '/dashboard/test-executions',
+    render: props => <DashboardBlueprintRenderer {...props} entityType="test-executions" />,
+    exact: true,
+  },
   {
     path: '/dashboard/scripts',
     render: props => <DashboardBlueprintRenderer {...props} entityType="scripts" />,

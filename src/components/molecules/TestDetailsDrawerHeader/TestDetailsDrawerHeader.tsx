@@ -14,15 +14,15 @@ import {
 } from './TestDetailsDrawerHeader.styled';
 
 const TestDetailsDrawerHeader = (props: any) => {
-  const {scriptName, name, scriptType, startTime, endTime, executionResult} = props;
+  const {scriptName, name, scriptType, startTime, endTime, executionResult, execution, status} = props;
 
   return (
     <StyledTestDetailsDrawerHeaderContainer>
       <StyledTestScriptChartAndStatusAndDateContainer>
         <StyledScriptChartContainer>
           <RingProgressChart
-            steps={executionResult?.steps}
-            testStatus={getStatus(executionResult?.status)}
+            steps={!execution ? executionResult?.steps : execution}
+            testStatus={getStatus(!status ? executionResult?.status : status)}
             height={85}
             width={85}
             fontSize="small"
@@ -30,9 +30,9 @@ const TestDetailsDrawerHeader = (props: any) => {
         </StyledScriptChartContainer>
         <StyledTestStatusAndDateContainer>
           <StyledTestStatusContainer>
-            <RenderTestStatusSvgIcon testStatus={getStatus(executionResult?.status)} />
+            <RenderTestStatusSvgIcon testStatus={getStatus(!status ? executionResult?.status : status)} />
             <Typography color="tertiary" variant="quaternary" style={{marginLeft: '10px', textTransform: 'capitalize'}}>
-              {getStatus(executionResult?.status)}
+              {getStatus(!status ? executionResult?.status : status)}
             </Typography>
           </StyledTestStatusContainer>
 

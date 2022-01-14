@@ -51,16 +51,14 @@ export const ScriptsEntity: DashboardBlueprint = {
 
   columns: [
     {
-      title: 'Name',
+      title: 'Script name',
       dataIndex: 'name',
-      width: '25%',
     },
-    {title: 'Script type', dataIndex: 'type', key: 'type', width: '25%'},
+    {title: 'Script type', dataIndex: 'type', key: 'type'},
     {
       title: 'Created at',
       dataIndex: 'created',
-      render: (text: string) => timeStampToDate(text),
-      width: '25%',
+      render: (created: string) => timeStampToDate(created),
     },
     {
       title: '',
@@ -68,11 +66,10 @@ export const ScriptsEntity: DashboardBlueprint = {
       render: (name: any) => {
         return (
           <Button type="primary" ghost>
-            <NavLink to={`/dashboard/executions?scriptName=${name}`}>Show executions</NavLink>
+            <NavLink to={`/dashboard/executions?scriptName=${name}`}>Show script executions</NavLink>
           </Button>
         );
       },
-      width: '25%',
     },
   ],
   infoPanelConfig: [
