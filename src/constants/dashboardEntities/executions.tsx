@@ -25,7 +25,7 @@ export const ExecutionsEntity: DashboardBlueprint = {
   entityType: 'executions',
   route: '/dashboard/executions',
   reduxEntity: 'executions',
-  pageTitle: 'Executions',
+  pageTitle: 'Scripts executions',
   hasInfoPanel: true,
   reduxListName: 'executionsList',
   canSelectRow: true,
@@ -51,39 +51,28 @@ export const ExecutionsEntity: DashboardBlueprint = {
     {
       title: 'Type',
       dataIndex: 'scriptType',
-      width: '10%',
-      render: (testType: string) => {
+      render: (scriptType: string) => {
         return {
-          children: <TestTypeIcon testType={testType} width={30} height={30} />,
-          props: {
-            role: 'cell',
-          },
+          children: <TestTypeIcon testType={scriptType} width={30} height={30} />,
         };
       },
     },
     {
-      title: 'Name',
+      title: 'Execution name',
       dataIndex: 'name',
-      width: '25%',
       render: (name: string) => {
         return {
           children: name,
-          props: {
-            role: 'cell',
-          },
         };
       },
     },
     {
-      title: 'Script',
+      title: 'Script name',
       dataIndex: 'scriptName',
       width: '25%',
       render: (scriptName: string) => {
         return {
           children: scriptName,
-          props: {
-            role: 'cell',
-          },
         };
       },
     },
@@ -93,12 +82,8 @@ export const ExecutionsEntity: DashboardBlueprint = {
       render: (startTime: string) => {
         return {
           children: startTime ? timeStampToDate(startTime) : '-',
-          props: {
-            role: 'cell',
-          },
         };
       },
-      width: '15%',
     },
     {
       title: 'Duration',
@@ -106,24 +91,16 @@ export const ExecutionsEntity: DashboardBlueprint = {
       render: (duration: string, row: any) => {
         return {
           children: row.endTime ? getDuration(row.startTime, row.endTime) : '-',
-          props: {
-            role: 'cell',
-          },
         };
       },
       key: 'duration',
-      width: '15%',
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      width: '5%',
       render: (testStatus: string) => {
         return {
           children: <RenderTestStatusSvgIcon testStatus={getStatus(testStatus)} />,
-          props: {
-            role: 'cell',
-          },
         };
       },
     },

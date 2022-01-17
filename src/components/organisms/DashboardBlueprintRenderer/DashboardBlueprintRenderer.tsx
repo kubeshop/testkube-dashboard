@@ -11,7 +11,7 @@ const entities: {[key in DashboardBlueprintType]: DashboardBlueprint} = {
   tests: TestsEntity,
   scripts: ScriptsEntity,
   executions: ExecutionsEntity,
-  testExecutions: TestExecutionsEntity,
+  "test-executions": TestExecutionsEntity,
 };
 
 const DashboardBlueprintRenderer: React.FC<DashboardBlueprintProps> = props => {

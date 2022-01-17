@@ -5,7 +5,7 @@ import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {InfoPanelConfig} from './infoPanel';
 
-export type DashboardBlueprintType = 'tests' | 'scripts' | 'executions' | 'testExecutions';
+export type DashboardBlueprintType = 'tests' | 'scripts' | 'executions' | 'test-executions';
 
 export type DashboardBlueprintProps = {
   entityType: DashboardBlueprintType;

@@ -7,5 +7,5 @@ export const openGithub = () => {
 };
 
 export const openDiscord = () => {
-  window.open('https://discord.gg/QApFANbj');
+  window.open('https://discord.gg/6zupCZFQbe');
 };

@@ -7,7 +7,7 @@ import {Space} from 'antd';
 import {SearchParams} from '@models/searchParams';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectFilters, setFilters} from '@redux/reducers/testsSlice';
+import {selectFilters, setFilters} from '@redux/reducers/testExecutionsSlice';
 
 import {LabelInput, Typography} from '@atoms';
 
@@ -15,7 +15,7 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {validateSearchParams} from '@utils/fetchUtils';
 
-const TestsFilters = (props: any) => {
+const TestExecutionsFilters = (props: any) => {
   const {setSelectedRecord, selectedRecord} = props;
 
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const TestsFilters = (props: any) => {
       dispatch(setFilters({...filters, page: 0, textSearch: testName}));
     },
     300,
-    [testName]
+    [testName, filters.textSearch]
   );
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const TestsFilters = (props: any) => {
 
   useEffect(() => {
     if (Object.entries(searchParams).length) {
-      dispatch(setFilters({...filters, ...validateSearchParams(searchParams, SearchParams.tests)}));
+      dispatch(setFilters({...filters, ...validateSearchParams(searchParams, SearchParams['test-executions'])}));
     }
   }, []);
 
@@ -58,4 +58,4 @@ const TestsFilters = (props: any) => {
   );
 };
 
-export default TestsFilters;
+export default TestExecutionsFilters;

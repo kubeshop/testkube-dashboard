@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {
@@ -15,6 +14,8 @@ import {TestsFilters} from '@molecules/Filters';
 import TestsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestsInfoPanel';
 
 import {useGetTestsQuery} from '@services/tests';
+import { Button } from 'antd';
+import { NavLink } from 'react-router-dom';
 
 export const TestsEntity: DashboardBlueprint = {
   entityType: 'tests',
@@ -67,6 +68,18 @@ export const TestsEntity: DashboardBlueprint = {
       title: 'Number of executions',
       render: (data: any) => data?.repeats,
       key: 'testNumberOfExecutions',
+    },
+    {
+      title: '',
+      dataIndex: 'name',
+      render: (name: any) => {
+        return (
+          <Button type="primary" ghost>
+            <NavLink to={`/dashboard/test-executions?textSearch=${name}`}>Show test executions</NavLink>
+          </Button>
+        );
+      },
+      width: '25%',
     },
   ],
 };
