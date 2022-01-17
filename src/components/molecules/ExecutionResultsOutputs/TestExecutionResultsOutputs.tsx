@@ -10,21 +10,15 @@ import {getStatus} from '@redux/utils/requestFilters';
 
 import {RenderTestStatusSvgIcon} from '@atoms';
 
-import {useGetScriptExecutionArtifactsQuery} from '@services/executions';
+import {AssertionResult, Step} from '@types';
 
-import {AssertionResult, Step, Test} from '@types';
-
-import Logs from '../Logs/Logs';
-import Artifacts from './Artifacts/Artifacts';
 import {
   StyledCollapse,
   StyledLabelledFailedOnlyCheckbox,
   StyledPendingTestExecution,
-  StyledPlainTextOutputContainer,
   StyledShowFailedStepsContainer,
   StyledTestAssertionResultsContainer,
   StyledTestDescriptionContainer,
-  StyledTestOutput,
   StyledTestOutputAssertionErrorMessage,
   StyledTestOutputAssertionName,
   StyledTestOutputNameAndStatus,
@@ -33,7 +27,6 @@ import {
   StyledTestStepNameContainer,
   StyledTestStepsOutPutContainer,
   StyledTestWithoutAssertions,
-  StyledText,
   TestsWithoutStepsContainer,
 } from './ExecutionResultsOutputs.styled';
 
@@ -43,21 +36,6 @@ interface IStepHeader {
   name: string;
   status: string;
 }
-
-const RenderPlainTestOutput = (data: Test) => {
-  const {executionResult} = data;
-  return (
-    <StyledPlainTextOutputContainer>
-      <StyledTestOutput>
-        {data && (
-          <StyledText key={nanoid()}>
-            <pre>{executionResult?.output}</pre>
-          </StyledText>
-        )}
-      </StyledTestOutput>
-    </StyledPlainTextOutputContainer>
-  );
-};
 
 const RenderTestStepCollapseHeader = ({name, status}: IStepHeader) => {
   return (
@@ -110,8 +88,8 @@ const RenderTestWithoutAssertion = (step: Step) => {
   );
 };
 
-const ExecutionResultsOutputs = (props: any) => {
-  const {id, executionResult, execution} = props;
+const TestExecutionResultsOutputs = (props: any) => {
+  const {executionResult, execution} = props;
 
   const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
   const [filteredExecutionResults, setFilteredExecutionResults] = useState<any[]>([]);
@@ -121,10 +99,6 @@ const ExecutionResultsOutputs = (props: any) => {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowOnlyFailedSteps(event.target.checked);
   };
-
-  const {data: artifacts} = useGetScriptExecutionArtifactsQuery(id, {
-    pollingInterval: 0,
-  });
 
   useEffect(() => {
     if (showOnlyFailedSteps) {
@@ -150,11 +124,9 @@ const ExecutionResultsOutputs = (props: any) => {
 
   return (
     <StyledTestDescriptionContainer>
-      {/* eslint-disable-next-line react/jsx-no-bind */}
       <Tabs
         style={{width: '100%'}}
         defaultActiveKey="1"
-        // onChange={callback}
         tabBarExtraContent={
           <StyledShowFailedStepsContainer>
             <StyledLabelledFailedOnlyCheckbox htmlFor="failed">
@@ -193,24 +165,9 @@ const ExecutionResultsOutputs = (props: any) => {
             )}
           </StyledTestStepsOutPutContainer>
         </TabPane>
-
-        {executionResult && (
-          <TabPane tab="Log output" key="2">
-            {executionResult.status === 'pending' ? <Logs id={id} /> : <RenderPlainTestOutput {...props} />}
-          </TabPane>
-        )}
-        {artifacts && artifacts.length > 0 ? (
-          <TabPane tab={`Artifacts(${artifacts ? artifacts?.length : 0})`} key="Artifacts">
-            <Artifacts artifacts={artifacts} testId={id} />
-          </TabPane>
-        ) : (
-          <TabPane tab="Artifacts" key="Artifacts" disabled>
-            <Artifacts artifacts={artifacts} testId={id} />
-          </TabPane>
-        )}
       </Tabs>
     </StyledTestDescriptionContainer>
   );
 };
 
-export default ExecutionResultsOutputs;
+export default TestExecutionResultsOutputs;
