@@ -7,7 +7,7 @@ import {DashboardBlueprint} from '@models/dashboard';
 import {FilterProps, FilterType} from '@models/filters';
 import {SearchParams} from '@models/searchParams';
 
-import {DateRangeFilter, StatusFilter, TagsFilter, TextFilter} from '@molecules';
+import {DateFilter, DateRangeFilter, StatusFilter, TagsFilter, TextFilter} from '@molecules';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
@@ -18,6 +18,7 @@ import {StyledDashboardFiltersContainer} from './DashboardFilters.styled';
 const filtersComponents: {[key in FilterType]: React.FC<any>} = {
   status: StatusFilter,
   dateRange: DateRangeFilter,
+  date: DateFilter,
   textSearch: TextFilter,
   tags: TagsFilter,
 };

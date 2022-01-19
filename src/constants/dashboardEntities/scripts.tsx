@@ -84,7 +84,7 @@ export const ScriptsEntity: DashboardBlueprint = {
       },
     },
   ],
-  filtersComponentsIds: ['textSearch', 'dateRange', 'tags'],
+  filtersComponentsIds: ['textSearch', 'date', 'tags'],
   infoPanelConfig: [
     {type: 'header', name: 'Scripts', component: InfoPanelHeader},
     {

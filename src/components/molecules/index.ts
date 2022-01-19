@@ -10,3 +10,4 @@ export {default as TagsFilter} from './TagsFilter';
 export {default as StatusFilter} from './StatusFilter';
 export {default as DateRangeFilter} from './DateRangeFilter';
 export {default as TextFilter} from './TextFilter';
+export {default as DateFilter} from './DateFilter';

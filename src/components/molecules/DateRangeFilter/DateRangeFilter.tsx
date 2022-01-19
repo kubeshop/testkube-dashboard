@@ -21,7 +21,7 @@ const DateRangeFilter: React.FC<FilterProps> = props => {
 
   const dispatch = useDispatch();
 
-  const onDateRangeChage = (_: any, dateString: any) => {
+  const onDateRangeChange = (_: any, dateString: any) => {
     if (!dateString) {
       dispatch(setFilters({...filters, startDate: null, endDate: null}));
     } else {
@@ -31,9 +31,9 @@ const DateRangeFilter: React.FC<FilterProps> = props => {
 
   return (
     <RangePicker
-      placeholder={['Select time', 'Select time']}
+      placeholder={['Select date', 'Select date']}
       style={dateRangePickerStyles}
-      onChange={onDateRangeChage}
+      onChange={onDateRangeChange}
       format="YYYY-MM-DD"
       value={[filters?.startDate && moment(filters?.startDate), filters?.endDate && moment(filters?.endDate)]}
     />

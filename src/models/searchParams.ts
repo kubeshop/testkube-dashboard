@@ -6,7 +6,8 @@ export type SearchParamKey =
   | 'pageSize'
   | 'status'
   | 'page'
-  | 'scriptName';
+  | 'scriptName'
+  | 'createdAt';
 
 export type SearchParamValue = any;
 
