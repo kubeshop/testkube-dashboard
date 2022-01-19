@@ -43,7 +43,7 @@ const DashboardFilters = (
     if (Object.entries(searchParams).length) {
       dispatch(setFilters({...filters, ...validateSearchParams(searchParams, SearchParams[entityType])}));
     }
-  }, []);
+  }, [entityType]);
 
   return (
     <StyledDashboardFiltersContainer>
