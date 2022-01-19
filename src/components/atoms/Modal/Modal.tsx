@@ -26,6 +26,12 @@ const modalBodyStyles = {
 const StyledFormContainer = styled.div`
   display: flex;
   align-items: center;
+
+  margin-top: 10px;
+
+  input {
+    margin-right: 15px;
+  }
 `;
 
 interface IModal {

@@ -8,7 +8,7 @@ import {TestsState} from '@models/tests';
 const initialTestExecutionsState: TestExecutionsState = {
   isLoading: false,
   testExecutionsList: [],
-  filters: {pageSize: 10, textSearch: ''},
+  filters: {pageSize: 10, tags: '', textSearch: ''},
   totals: {
     results: 0,
     passed: 0,
@@ -27,7 +27,7 @@ const initialTestExecutionsState: TestExecutionsState = {
 const initialTestsState: TestsState = {
   isLoading: false,
   testsList: [],
-  filters: {textSearch: '', pageSize: 10},
+  filters: {textSearch: '', pageSize: 10, tags: '', startDate: null, endDate: null},
   totals: {
     results: 0,
     passed: 0,
@@ -46,7 +46,7 @@ const initialTestsState: TestsState = {
 const initialScriptsState: ScriptsState = {
   isLoading: false,
   scriptsList: [],
-  filters: {textSearch: '', pageSize: 10},
+  filters: {textSearch: '', pageSize: 10, tags: '', createdAt: null},
   totals: {
     results: 0,
     passed: 0,
@@ -72,6 +72,7 @@ const initialExecutionsState: ExecutionsState = {
     startDate: null,
     endDate: null,
     scriptName: '',
+    tags: '',
   },
   error: null,
   totals: {

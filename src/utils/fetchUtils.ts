@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery} from '@reduxjs/toolkit/dist/query';
 
 import {ParsedQuery} from 'query-string';
@@ -5,7 +6,9 @@ import {ParsedQuery} from 'query-string';
 import {config} from '@constants/config';
 import {searchParamsLists} from '@constants/searchParams';
 
-import {SearchParamsKeys, SearchParamsType, ValidatedSearchParams} from '@models/searchParams';
+import {SearchParamKey, SearchParamsKeys, SearchParamsType, ValidatedSearchParams} from '@models/searchParams';
+
+import {isArraylikeQueryParam} from '@utils/strings';
 
 const prohibitedValues = ['undefined', 'null'];
 
@@ -14,26 +17,35 @@ const prohibitedValues = ['undefined', 'null'];
  *
  * TODO: finish queryparams purifying
  */
+
 export const validateSearchParams = (params: ParsedQuery, paramsType: SearchParamsType): ValidatedSearchParams => {
   const possibleSearchParams: SearchParamsKeys = searchParamsLists[paramsType];
-  const unidentifiedSearchParams: SearchParamsKeys = [];
+  const unidentifiedSearchParams: string[] = [];
 
   const paramsList = Object.entries(params);
 
-  paramsList.map(([paramKey, paramValue]) => {
-    if (!possibleSearchParams.includes(paramKey)) {
-      unidentifiedSearchParams.push(paramKey);
-    }
+  const validatedParamsList = paramsList
+    .map(([paramKey, paramValue]) => {
+      // Negative lookahead: assume that paramKey is not a valid SearchParamKey
+      if (!possibleSearchParams.includes(paramKey as SearchParamKey)) {
+        unidentifiedSearchParams.push(paramKey);
+      }
 
-    return [paramKey, paramValue];
-  });
+      const finalParamValue =
+        isArraylikeQueryParam(paramKey) && typeof paramValue === 'string' ? paramValue.split(',') : paramValue;
 
-  const validatedParamsList = paramsList.filter(([paramKey]) => {
-    return !unidentifiedSearchParams.includes(paramKey);
-  });
+      return [paramKey, finalParamValue];
+    })
+    .filter(([paramKey]) => {
+      return !unidentifiedSearchParams.includes(paramKey as SearchParamKey);
+    });
 
-  // TODO: finish queryparams purifying
-  // purifyQueryParams(unidentifiedSearchParams);
+  /**
+   * TODO: finish queryparams purifying
+   * purifyQueryParams(unidentifiedSearchParams);
+   */
+
+  console.log('validatedParamsList: ', validatedParamsList);
 
   return Object.fromEntries(validatedParamsList);
 };
@@ -77,7 +89,7 @@ export const dynamicBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBas
 };
 
 // TODO: finish queryparams purifying
-const purifyQueryParams = (paramsToRemove: SearchParamsKeys) => {
+const purifyQueryParams = (paramsToRemove: string[]) => {
   let url = new URL(window.location.href);
   let params = new URLSearchParams(url.search);
 

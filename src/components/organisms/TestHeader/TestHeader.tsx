@@ -3,7 +3,7 @@ import {Col, Row} from 'antd';
 
 import styled from 'styled-components';
 
-import {ResultDatePicker, TestsFilter} from '@molecules';
+import {ResultDatePicker} from '@molecules';
 
 const StyledHeaderTypographyContainer = styled(Row)`
   position: relative;
@@ -42,10 +42,6 @@ const TestHeader = ({testHeaderLabel, showTestFilters}: ITestHeaderProps) => {
           <>
             <StyledTestFiltersCols span={12} xs={24} xl={12}>
               <ResultDatePicker />
-            </StyledTestFiltersCols>
-
-            <StyledTestFiltersCols span={12} xs={24} xl={12}>
-              <TestsFilter />
             </StyledTestFiltersCols>
           </>
         )}

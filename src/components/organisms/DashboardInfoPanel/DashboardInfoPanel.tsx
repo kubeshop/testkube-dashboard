@@ -7,6 +7,8 @@ import {InfoPanelConfig, InfoPanelType} from '@models/infoPanel';
 
 import {InfoPanelHeader} from '@molecules';
 
+import {DashboardBlueprint} from '@src/models/dashboard';
+
 import {
   StyledCollapseButtonContainer,
   StyledDashboardInfoPanelContainer,
@@ -20,15 +22,14 @@ const iconStyles: CSSProperties = {
 
 type DashboardInfoPanelProps = {
   setInfoPanelVisibility: React.Dispatch<React.SetStateAction<boolean>>;
-  scriptTypeFieldName?: string;
   shouldInfoPanelBeShown: boolean;
   isInfoPanelExpanded: boolean;
   selectedRecord: any;
-  infoPanelComponent: any;
-  infoPanelConfig?: InfoPanelConfig;
 };
 
-const DashboardInfoPanel: React.FC<DashboardInfoPanelProps> = memo(props => {
+const DashboardInfoPanel: React.FC<
+  Pick<DashboardBlueprint, 'infoPanelComponent' | 'infoPanelConfig' | 'scriptTypeFieldName'> & DashboardInfoPanelProps
+> = memo(props => {
   const {
     selectedRecord,
     scriptTypeFieldName,

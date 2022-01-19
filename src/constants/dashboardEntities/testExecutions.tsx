@@ -13,8 +13,6 @@ import {getStatus} from '@redux/utils/requestFilters';
 
 import {RenderTestStatusSvgIcon} from '@atoms';
 
-import TestExecutionsFilters from '@molecules/Filters/TestExecutionsFilters';
-
 import TestExecutionsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestExecutionsInfoPanel/TestExecutionsInfoPanel';
 
 import {getDuration, timeStampToDate} from '@utils/formatDate';
@@ -30,7 +28,6 @@ export const TestExecutionsEntity: DashboardBlueprint = {
   reduxListName: 'executionsList',
   canSelectRow: true,
 
-  filtersComponent: TestExecutionsFilters,
   infoPanelComponent: TestExecutionsInfoPanel,
 
   useGetData: useGetTestExecutionsByTestIdQuery,
@@ -94,6 +91,7 @@ export const TestExecutionsEntity: DashboardBlueprint = {
       },
     },
   ],
+  filtersComponentsIds: ['textSearch', 'tags'],
 };
 
 export default TestExecutionsEntity;

@@ -4,6 +4,7 @@ import {TableRowSelection} from 'antd/lib/table/interface';
 import {Title} from '@atoms';
 
 import {StyledDashboardContentContainer} from './DashboardContent.styled';
+import DashboardFilters from './DashboardFilters';
 
 const DashboardContent: React.FC<any> = props => {
   const {
@@ -12,7 +13,6 @@ const DashboardContent: React.FC<any> = props => {
     columns,
     isLoading,
     isFetching,
-    filtersComponent: FiltersComponent,
     canSelectRow,
     onRowSelect,
     selectedRecord,
@@ -21,6 +21,10 @@ const DashboardContent: React.FC<any> = props => {
     isInfoPanelExpanded,
     setSelectedRecord,
     paginationOptions,
+    setQueryFilters,
+    queryFilters,
+    filtersComponentsIds,
+    entityType,
   } = props;
 
   const rowSelection: TableRowSelection<any> = {
@@ -37,8 +41,15 @@ const DashboardContent: React.FC<any> = props => {
       <Title>
         {pageTitle} {isFetching && <Spin />}
       </Title>
-      {FiltersComponent ? (
-        <FiltersComponent setSelectedRecord={setSelectedRecord} selectedRecord={selectedRecord} />
+      {filtersComponentsIds && filtersComponentsIds.length ? (
+        <DashboardFilters
+          setSelectedRecord={setSelectedRecord}
+          selectedRecord={selectedRecord}
+          setFilters={setQueryFilters}
+          filters={queryFilters}
+          filtersComponentsIds={filtersComponentsIds}
+          entityType={entityType}
+        />
       ) : null}
       <Table
         dataSource={dataSource}

@@ -29,6 +29,7 @@ export const executionsSlice = createSlice({
         pageSize: state.filters.pageSize,
         scriptName: action.payload.scriptName,
         page: 0,
+        tags: action.payload.tags,
       };
 
       state.selectedTestId = undefined;

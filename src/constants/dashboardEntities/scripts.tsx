@@ -15,7 +15,6 @@ import {
 } from '@redux/reducers/scriptsSlice';
 
 import {InfoPanelHeader} from '@molecules';
-import {ScriptsFilters} from '@molecules/Filters';
 
 import ScriptsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/ScriptsInfoPanel';
 
@@ -32,7 +31,6 @@ export const ScriptsEntity: DashboardBlueprint = {
   reduxListName: 'scriptsList',
   canSelectRow: true,
 
-  filtersComponent: ScriptsFilters,
   infoPanelComponent: ScriptsInfoPanel,
 
   useGetData: useGetScriptsQuery,
@@ -56,6 +54,20 @@ export const ScriptsEntity: DashboardBlueprint = {
     },
     {title: 'Script type', dataIndex: 'type', key: 'type'},
     {
+      title: 'Script tags',
+      render: (data: any) => {
+        if (!data.tags) {
+          return <span> - </span>;
+        }
+
+        return (
+          <div>
+            <span>{data.tags.join(', ')}</span>
+          </div>
+        );
+      },
+    },
+    {
       title: 'Created at',
       dataIndex: 'created',
       render: (created: string) => timeStampToDate(created),
@@ -72,6 +84,7 @@ export const ScriptsEntity: DashboardBlueprint = {
       },
     },
   ],
+  filtersComponentsIds: ['textSearch', 'date', 'tags'],
   infoPanelConfig: [
     {type: 'header', name: 'Scripts', component: InfoPanelHeader},
     {
