@@ -22,7 +22,6 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     selectData,
     selectQueryFilters,
     selectAllFilters,
-    filtersComponent,
     setSelectedRecord,
     selectSelectedRecord,
     canSelectRow,
@@ -31,6 +30,8 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     infoPanelComponent,
     setQueryFilters,
     infoPanelConfig,
+    filtersComponentsIds,
+    entityType,
   } = props;
 
   const dispatch = useDispatch();
@@ -58,14 +59,20 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   };
 
   useEffect(() => {
-    if (data === null) {
-      return dispatch(setData([]));
+    if (data === null || data?.results === []) {
+      if (canSelectRow) {
+        dispatch(setSelectedRecord({selectedRecord: null}));
+      }
+
+      dispatch(setData([]));
+
+      return;
     }
 
     if (setData && data) {
       dispatch(setData(data));
 
-      if (!selectedRecord && (data || data.length) && canSelectRow) {
+      if (canSelectRow) {
         dispatch(setSelectedRecord(data));
       }
     }
@@ -90,6 +97,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     hideOnSinglePage: true,
   };
 
+  // TODO: get rid of this props drilling
   return (
     <StyledDashboardContainerWrapper>
       <DashboardContent
@@ -98,7 +106,6 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
         columns={columns}
         isLoading={isLoading}
         isFetching={isFetching}
-        filtersComponent={filtersComponent}
         queryFilters={queryFilters}
         canSelectRow={canSelectRow}
         onRowSelect={onRowSelect}
@@ -108,6 +115,9 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
         isInfoPanelExpanded={isInfoPanelExpanded}
         setSelectedRecord={setSelectedRecord}
         paginationOptions={pagination}
+        setQueryFilters={setQueryFilters}
+        filtersComponentsIds={filtersComponentsIds}
+        entityType={entityType}
       />
       <DashboardInfoPanel
         shouldInfoPanelBeShown={shouldInfoPanelBeShown}

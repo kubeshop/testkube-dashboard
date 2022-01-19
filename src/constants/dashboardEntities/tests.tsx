@@ -1,3 +1,7 @@
+import {NavLink} from 'react-router-dom';
+
+import {Button} from 'antd';
+
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {
@@ -5,17 +9,14 @@ import {
   selectFilters,
   selectSelectedTest,
   selectTests,
+  setFilters,
   setSelectedTest,
   setTests,
 } from '@redux/reducers/testsSlice';
 
-import {TestsFilters} from '@molecules/Filters';
-
 import TestsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestsInfoPanel';
 
 import {useGetTestsQuery} from '@services/tests';
-import { Button } from 'antd';
-import { NavLink } from 'react-router-dom';
 
 export const TestsEntity: DashboardBlueprint = {
   entityType: 'tests',
@@ -26,13 +27,13 @@ export const TestsEntity: DashboardBlueprint = {
   reduxListName: 'testsList',
   canSelectRow: true,
 
-  filtersComponent: TestsFilters,
   infoPanelComponent: TestsInfoPanel,
 
   useGetData: useGetTestsQuery,
   setData: setTests,
   selectData: selectTests,
 
+  setQueryFilters: setFilters,
   selectQueryFilters: selectFilters,
   selectAllFilters: selectAllTestsFilters,
 
@@ -56,6 +57,20 @@ export const TestsEntity: DashboardBlueprint = {
       title: 'Test description',
       render: (data: any) => data?.description,
       key: 'testDescription',
+    },
+    {
+      title: 'Test tags',
+      render: (data: any) => {
+        if (!data.tags) {
+          return <span> - </span>;
+        }
+
+        return (
+          <div>
+            <span>{data.tags.join(', ')}</span>
+          </div>
+        );
+      },
     },
     {
       title: 'Number of steps',
@@ -82,6 +97,7 @@ export const TestsEntity: DashboardBlueprint = {
       width: '25%',
     },
   ],
+  filtersComponentsIds: ['textSearch', 'tags'],
 };
 
 export default TestsEntity;

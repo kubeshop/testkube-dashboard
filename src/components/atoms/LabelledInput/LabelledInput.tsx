@@ -15,7 +15,6 @@ export interface ILabelInputProps extends React.InputHTMLAttributes<HTMLInputEle
 }
 
 const StyledInput = styled.input<ILabelInputProps>`
-  margin: var(--font-size-ssm) var(--font-size-ssm);
   width: var(--space-xxl);
   max-width: var(--space-5xl);
   min-width: var(--space-xxxxl);

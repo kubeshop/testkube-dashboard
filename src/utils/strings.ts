@@ -1,3 +1,5 @@
+import {FilterType} from '@src/models/filters';
+
 export const truncateText = (text: string) => {
   if (text.length > 10) {
     return `${text.substring(0, 10)}...`;
@@ -32,4 +34,15 @@ export const getLastStringAfterTrailingSlash = (word: string) => {
 
 export const hasProtocol = (url: string) => {
   return /^http(s)?:\/\/.*/.test(url);
+};
+
+const arraylikeQueryParams: {[key in FilterType | string]: boolean} = {
+  tags: true,
+  status: false,
+  dateRange: false,
+  textSearch: false,
+};
+
+export const isArraylikeQueryParam = (paramKey: FilterType | string) => {
+  return arraylikeQueryParams[paramKey];
 };
