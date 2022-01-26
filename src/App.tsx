@@ -1,8 +1,10 @@
 import {useEffect} from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch, useLocation} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
+
+import {useGA4React} from 'ga-4-react';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
@@ -21,7 +23,11 @@ const App = () => {
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const dispatch = useAppDispatch();
 
+  const ga4React = useGA4React();
+
   const {data, refetch} = useGetTagsQuery(null);
+
+  const {pathname} = useLocation();
 
   useEffect(() => {
     if (!isHostProtocolSecure()) {
@@ -37,6 +43,12 @@ const App = () => {
   useEffect(() => {
     dispatch(setTags(data));
   }, [data]);
+
+  useEffect(() => {
+    if (ga4React) {
+      ga4React.pageview(pathname);
+    }
+  }, [pathname]);
 
   return (
     <Layout>
