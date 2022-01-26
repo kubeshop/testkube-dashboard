@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
+import {useGA4React} from 'ga-4-react';
+
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {useAppSelector} from '@redux/hooks';
@@ -33,6 +35,8 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     filtersComponentsIds,
     entityType,
   } = props;
+
+  const ga4React = useGA4React();
 
   const dispatch = useDispatch();
 
@@ -96,6 +100,12 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
 
     hideOnSinglePage: true,
   };
+
+  useEffect(() => {
+    if (ga4React) {
+      ga4React.gtag('event', 'get_dashboard_results', {dashboard_entity: pageTitle});
+    }
+  }, [data, ga4React]);
 
   // TODO: get rid of this props drilling
   return (
