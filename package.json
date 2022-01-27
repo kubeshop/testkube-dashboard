@@ -25,7 +25,7 @@
     "@types/react-dom": "17.0.11",
     "@types/react-router-dom": "^5.3.3",
     "@types/redux-logger": "^3.0.9",
-    "@types/styled-components": "5.1.18",
+    "@types/styled-components": "5.1.21",
     "concurrently": "^6.5.0",
     "craco-alias": "3.0.1",
     "craco-less": "1.20.0",
