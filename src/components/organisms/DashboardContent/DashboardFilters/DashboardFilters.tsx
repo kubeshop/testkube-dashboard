@@ -1,8 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Space} from 'antd';
-
 import {DashboardBlueprint} from '@models/dashboard';
 import {FilterProps, FilterType} from '@models/filters';
 import {SearchParams} from '@models/searchParams';
@@ -13,7 +11,7 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {validateSearchParams} from '@utils/fetchUtils';
 
-import {StyledDashboardFiltersContainer} from './DashboardFilters.styled';
+import {StyledDashboardFiltersContainer, StyledSpace} from './DashboardFilters.styled';
 
 const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
   status: StatusFilter,
@@ -60,7 +58,7 @@ const DashboardFilters = (
 
   return (
     <StyledDashboardFiltersContainer>
-      <Space size={20}>{renderedFilters}</Space>;
+      <StyledSpace size={20}>{renderedFilters}</StyledSpace>
     </StyledDashboardFiltersContainer>
   );
 };
