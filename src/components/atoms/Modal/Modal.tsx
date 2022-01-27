@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import {Modal} from 'antd';
 
@@ -45,7 +45,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
   const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
   const [isLoading, setLoadingState] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
@@ -54,7 +54,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
 
     localStorage.setItem(config.apiEndpoint, apiEndpoint);
 
-    history.push('/dashboard/tests');
+    navigate('/dashboard/tests');
 
     isModalVisible(false);
     dispatch(setApiEndpoint(apiEndpoint));

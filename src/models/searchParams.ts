@@ -7,7 +7,8 @@ export type SearchParamKey =
   | 'status'
   | 'page'
   | 'scriptName'
-  | 'createdAt';
+  | 'createdAt'
+  | 'type';
 
 export type SearchParamValue = any;
 

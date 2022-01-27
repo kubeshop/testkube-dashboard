@@ -1,4 +1,4 @@
-import {NavLink} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import {Button} from 'antd';
 
@@ -93,7 +93,7 @@ const ScriptExecutionsSummaryBlock: React.FC<ScriptExecutionsSummaryProps> = pro
         </StyledSummaryItem>
         <StyledSummaryItem>
           <Button type="primary" ghost>
-            <NavLink to={`/dashboard/executions?scriptName=${scriptName}`}>Show all Executions</NavLink>
+            <Link to={`/dashboard/executions?scriptName=${scriptName}`}>Show all Executions</Link>
           </Button>
         </StyledSummaryItem>
       </StyledSummaryContainer>

@@ -116,7 +116,7 @@ export const ExecutionsEntity: DashboardBlueprint = {
       },
     },
   ],
-  filtersComponentsIds: ['textSearch', 'dateRange', 'status', 'tags'],
+  filtersComponentsIds: ['textSearch', 'scriptType', 'dateRange', 'status', 'tags'],
 };
 
 export default ExecutionsEntity;

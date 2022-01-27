@@ -1,32 +1,16 @@
-import {RouteProps} from 'react-router';
+import {Route} from 'react-router-dom';
 
 import {DashboardBlueprintRenderer} from '@organisms';
 
 import {EndointProcessing} from '@pages';
 
-const routes: RouteProps[] = [
-  {path: '/apiEndpoint', component: EndointProcessing, exact: true},
-
-  {
-    path: '/dashboard/tests',
-    render: props => <DashboardBlueprintRenderer {...props} entityType="tests" />,
-    exact: true,
-  },
-  {
-    path: '/dashboard/test-executions',
-    render: props => <DashboardBlueprintRenderer {...props} entityType="test-executions" />,
-    exact: true,
-  },
-  {
-    path: '/dashboard/scripts',
-    render: props => <DashboardBlueprintRenderer {...props} entityType="scripts" />,
-    exact: true,
-  },
-  {
-    path: '/dashboard/executions',
-    render: props => <DashboardBlueprintRenderer {...props} entityType="executions" />,
-    exact: true,
-  },
+// TODO: can't pass these Routes to the App.tsx for some reason after migrating from react-router v5 to v6.
+const routes = [
+  <Route path="apiEndpoint" element={<EndointProcessing />} />,
+  <Route path="dashboard/tests" element={<DashboardBlueprintRenderer entityType="tests" />} />,
+  <Route path="dashboard/test-executions" element={<DashboardBlueprintRenderer entityType="test-executions" />} />,
+  <Route path="dashboard/scripts" element={<DashboardBlueprintRenderer entityType="scripts" />} />,
+  <Route path="dashboard/executions" element={<DashboardBlueprintRenderer entityType="executions" />} />,
 ];
 
 export {routes};

@@ -15,12 +15,20 @@ import {validateSearchParams} from '@utils/fetchUtils';
 
 import {StyledDashboardFiltersContainer} from './DashboardFilters.styled';
 
-const filtersComponents: {[key in FilterType]: React.FC<any>} = {
+const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
   status: StatusFilter,
   dateRange: DateRangeFilter,
   date: DateFilter,
   textSearch: TextFilter,
   tags: TagsFilter,
+  scriptType: TextFilter,
+};
+
+const filterSpecificProps: Partial<Record<FilterType, any>> = {
+  scriptType: {
+    queryParam: 'type',
+    placeholderText: 'Script type',
+  },
 };
 
 const DashboardFilters = (
@@ -36,7 +44,12 @@ const DashboardFilters = (
   const renderedFilters = filtersComponentsIds?.map((filterComponentId: FilterType) => {
     const Component = filtersComponents[filterComponentId];
 
-    return <Component {...rest} />;
+    const componentProps = {
+      ...filterSpecificProps[filterComponentId],
+      ...rest,
+    };
+
+    return <Component {...componentProps} />;
   });
 
   useEffect(() => {
