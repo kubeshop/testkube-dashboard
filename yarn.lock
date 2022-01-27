@@ -2119,9 +2119,9 @@
     "chalk" "^4.0.0"
 
 "@jest/types@^27.2.4":
-  "integrity" "sha512-IDO2ezTxeMvQAHxzG/ZvEyA47q0aVfzT95rGFl7bZs/Go0aIucvfDbS2rmnoEdXxlLQhcolmoG/wvL/uKx4tKA=="
-  "resolved" "https://registry.npmjs.org/@jest/types/-/types-27.2.4.tgz"
-  "version" "27.2.4"
+  "integrity" "sha512-j35yw0PMTPpZsUoOBiuHzr1zTYoad1cVIE0ajEjcrJONxxrko/IRGKkXx3os0Nsi4Hu3+5VmDbVfq5WhG/pWAg=="
+  "resolved" "https://registry.npmjs.org/@jest/types/-/types-27.4.2.tgz"
+  "version" "27.4.2"
   dependencies:
     "@types/istanbul-lib-coverage" "^2.0.0"
     "@types/istanbul-reports" "^3.0.0"
@@ -7594,9 +7594,9 @@
     "resolve-cwd" "^2.0.0"
 
 "import-local@^3.0.2":
-  "integrity" "sha512-bE9iaUY3CXH8Cwfan/abDKAxe1KGT9kyGsBPqf6DMK/z0a2OzAsrukeYNgIH6cH5Xr452jb1TUL8rSfCLjZ9uA=="
-  "resolved" "https://registry.npmjs.org/import-local/-/import-local-3.0.3.tgz"
-  "version" "3.0.3"
+  "integrity" "sha512-ASB07uLtnDs1o6EHjKpX34BKYDSqnFerfTOJL2HvMqF70LnxpjkzDB8J44oT9pu4AMPkQwf8jl6szgvNd2tRIg=="
+  "resolved" "https://registry.npmjs.org/import-local/-/import-local-3.1.0.tgz"
+  "version" "3.1.0"
   dependencies:
     "pkg-dir" "^4.2.0"
     "resolve-cwd" "^3.0.0"
@@ -8185,18 +8185,18 @@
     "supports-color" "^7.1.0"
 
 "istanbul-lib-source-maps@^4.0.0":
-  "integrity" "sha512-c16LpFRkR8vQXyHZ5nLpY35JZtzj1PQY1iZmesUbf1FZHbIupcWfjgOXBY9YHkLEQ6puz1u4Dgj6qmU/DisrZg=="
-  "resolved" "https://registry.npmjs.org/istanbul-lib-source-maps/-/istanbul-lib-source-maps-4.0.0.tgz"
-  "version" "4.0.0"
+  "integrity" "sha512-n3s8EwkdFIJCG3BPKBYvskgXGoy88ARzvegkitk60NxRdwltLOTaH7CUiMRXvwYorl0Q712iEjcWB+fK/MrWVw=="
+  "resolved" "https://registry.npmjs.org/istanbul-lib-source-maps/-/istanbul-lib-source-maps-4.0.1.tgz"
+  "version" "4.0.1"
   dependencies:
     "debug" "^4.1.1"
     "istanbul-lib-coverage" "^3.0.0"
     "source-map" "^0.6.1"
 
 "istanbul-reports@^3.0.2":
-  "integrity" "sha512-0i77ZFLsb9U3DHi22WzmIngVzfoyxxbQcZRqlF3KoKmCJGq9nhFHoGi8FqBztN2rE8w6hURnZghetn0xpkVb6A=="
-  "resolved" "https://registry.npmjs.org/istanbul-reports/-/istanbul-reports-3.0.3.tgz"
-  "version" "3.0.3"
+  "integrity" "sha512-x9LtDVtfm/t1GFiLl3NffC7hz+I1ragvgX1P/Lg1NlIagifZDKUkuuaAxH/qpwj2IuEfD8G2Bs/UKp+sZ/pKkg=="
+  "resolved" "https://registry.npmjs.org/istanbul-reports/-/istanbul-reports-3.1.3.tgz"
+  "version" "3.1.3"
   dependencies:
     "html-escaper" "^2.0.0"
     "istanbul-lib-report" "^3.0.0"
@@ -8647,7 +8647,7 @@
     "merge-stream" "^2.0.0"
     "supports-color" "^7.0.0"
 
-"jest@^26.0.0", "jest@26.6.0":
+"jest@^26.0.0", "jest@^26.6.0", "jest@26.6.0":
   "integrity" "sha512-jxTmrvuecVISvKFFhOkjsWRZV7sFqdSUAd1ajOKY+/QE/aLBVstsJ/dX8GczLzwiT6ZEwwmZqtCUHLHHQVzcfA=="
   "resolved" "https://registry.npmjs.org/jest/-/jest-26.6.0.tgz"
   "version" "26.6.0"
