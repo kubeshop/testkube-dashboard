@@ -1,12 +1,12 @@
 import {useEffect} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 import {paramsSerializer} from '@utils/fetchUtils';
 
 const prohibitedSearchParams = ['page', 'pageSize'];
 
 const useUpdateURLSearchParams = (filters: any) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const {pathname, search} = useLocation();
 
   const updateURLQueryParams = () => {
@@ -20,7 +20,7 @@ const useUpdateURLSearchParams = (filters: any) => {
       searchParams.set(key, value);
     });
 
-    history.replace(`${pathname}?${paramsSerializer(Object.fromEntries(searchParams))}`);
+    navigate(`${pathname}?${paramsSerializer(Object.fromEntries(searchParams))}`, {replace: true});
   };
 
   useEffect(() => {

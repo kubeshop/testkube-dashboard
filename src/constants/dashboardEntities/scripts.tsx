@@ -1,4 +1,4 @@
-import {NavLink} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import {Button} from 'antd';
 
@@ -78,13 +78,13 @@ export const ScriptsEntity: DashboardBlueprint = {
       render: (name: any) => {
         return (
           <Button type="primary" ghost>
-            <NavLink to={`/dashboard/executions?scriptName=${name}`}>Show script executions</NavLink>
+            <Link to={`/dashboard/executions?scriptName=${name}`}>Show script executions</Link>
           </Button>
         );
       },
     },
   ],
-  filtersComponentsIds: ['textSearch', 'date', 'tags'],
+  filtersComponentsIds: ['textSearch', 'scriptType', 'date', 'tags'],
   infoPanelConfig: [
     {type: 'header', name: 'Scripts', component: InfoPanelHeader},
     {

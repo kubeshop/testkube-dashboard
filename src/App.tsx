@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {Redirect, Route, Switch, useLocation} from 'react-router-dom';
+import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -9,11 +9,11 @@ import {useGA4React} from 'ga-4-react';
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
-import {SideBar} from '@organisms';
+import {DashboardBlueprintRenderer, SideBar} from '@organisms';
 
-import {NotFound} from '@pages';
+import {EndpointProcessing, NotFound} from '@pages';
 
-import {isHostProtocolSecure, routes, showSmallError} from '@utils';
+import {isHostProtocolSecure, showSmallError} from '@utils';
 
 import {StyledLayoutContentWrapper} from './App.styled';
 import {setTags} from './redux/reducers/tagsSlice';
@@ -55,13 +55,18 @@ const App = () => {
       <SideBar />
       <StyledLayoutContentWrapper>
         <Content>
-          <Switch>
-            {routes.map(route => {
-              return <Route {...route} />;
-            })}
-            <Redirect exact from="/" to="/dashboard/tests" />
-            <Route path="/dashboard/*" component={NotFound} />
-          </Switch>
+          <Routes>
+            <Route path="apiEndpoint" element={<EndpointProcessing />} />
+            <Route path="dashboard/tests" element={<DashboardBlueprintRenderer entityType="tests" />} />
+            <Route
+              path="dashboard/test-executions"
+              element={<DashboardBlueprintRenderer entityType="test-executions" />}
+            />
+            <Route path="dashboard/scripts" element={<DashboardBlueprintRenderer entityType="scripts" />} />
+            <Route path="dashboard/executions" element={<DashboardBlueprintRenderer entityType="executions" />} />
+            <Route path="dashboard/*" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="dashboard/tests" />} />
+          </Routes>
         </Content>
       </StyledLayoutContentWrapper>
     </Layout>

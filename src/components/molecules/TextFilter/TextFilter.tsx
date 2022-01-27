@@ -22,13 +22,13 @@ const placeholders: any = {
 };
 
 const TextFilter: React.FC<FilterProps> = props => {
-  const {filters, setSelectedRecord, setFilters, entityType} = props;
+  const {filters, setSelectedRecord, setFilters, entityType, queryParam, placeholderText} = props;
 
-  const queryParamField = inputValueQueryParams[entityType];
+  const queryParamField = queryParam || inputValueQueryParams[entityType];
 
   const dispatch = useDispatch();
 
-  const [inputValue, setInputValue] = useState(filters[queryParamField]);
+  const [inputValue, setInputValue] = useState(filters[queryParam || queryParamField]);
 
   const onChange = (e: any) => {
     dispatch(setSelectedRecord({selectedRecord: null}));
@@ -38,7 +38,7 @@ const TextFilter: React.FC<FilterProps> = props => {
 
   useDebounce(
     () => {
-      dispatch(setFilters({...filters, page: 0, [queryParamField]: inputValue}));
+      dispatch(setFilters({...filters, page: 0, [queryParam || queryParamField]: inputValue}));
     },
     300,
     [inputValue]
@@ -48,7 +48,7 @@ const TextFilter: React.FC<FilterProps> = props => {
     setInputValue(filters[queryParamField]);
   }, [filters]);
 
-  const placeholder = `${placeholders[entityType]} name`;
+  const placeholder = placeholderText || `${placeholders[entityType]} name`;
 
   return <LabelInput placeholder={placeholder} value={inputValue} onChange={onChange} />;
 };

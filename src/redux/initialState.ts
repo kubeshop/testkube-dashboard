@@ -46,7 +46,7 @@ const initialTestsState: TestsState = {
 const initialScriptsState: ScriptsState = {
   isLoading: false,
   scriptsList: [],
-  filters: {textSearch: '', pageSize: 10, tags: '', createdAt: null},
+  filters: {textSearch: '', type: '', pageSize: 10, tags: '', createdAt: null},
   totals: {
     results: 0,
     passed: 0,
@@ -72,6 +72,7 @@ const initialExecutionsState: ExecutionsState = {
     startDate: null,
     endDate: null,
     scriptName: '',
+    type: '',
     tags: '',
   },
   error: null,

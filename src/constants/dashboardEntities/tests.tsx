@@ -1,4 +1,4 @@
-import {NavLink} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import {Button} from 'antd';
 
@@ -90,7 +90,7 @@ export const TestsEntity: DashboardBlueprint = {
       render: (name: any) => {
         return (
           <Button type="primary" ghost>
-            <NavLink to={`/dashboard/test-executions?textSearch=${name}`}>Show test executions</NavLink>
+            <Link to={`/dashboard/test-executions?textSearch=${name}`}>Show test executions</Link>
           </Button>
         );
       },

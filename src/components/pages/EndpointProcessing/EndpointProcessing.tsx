@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import {config} from '@constants/config';
 
@@ -14,12 +14,12 @@ import {hasProtocol} from '@utils/strings';
 
 import {EndpointProcessingContainer} from './EnpointProcessing.styled';
 
-const EndointProcessing = () => {
+const EndpointProcessing = () => {
   const dispatch = useAppDispatch();
 
   const searchParams = useURLSearchParams();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const validateApiEndpoint = (apiEndpoint: string) => {
     if (hasProtocol(apiEndpoint)) {
@@ -41,7 +41,7 @@ const EndointProcessing = () => {
       dispatch(setApiEndpoint(validatedApiEndpoint));
     }
 
-    history.push('/');
+    navigate('/');
   }, [searchParams]);
 
   return (
@@ -51,4 +51,4 @@ const EndointProcessing = () => {
   );
 };
 
-export default EndointProcessing;
+export default EndpointProcessing;
