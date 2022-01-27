@@ -47,7 +47,7 @@
     "stylelint-config-standard": "^24.0.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.10.0",
-    "typescript": "4.5.5"
+    "typescript": "4.5.4"
   },
   "dependencies": {
     "@ant-design/charts": "^1.2.14",
