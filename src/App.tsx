@@ -11,7 +11,7 @@ import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
 import {DashboardBlueprintRenderer, SideBar} from '@organisms';
 
-import {EndointProcessing, NotFound} from '@pages';
+import {EndpointProcessing, NotFound} from '@pages';
 
 import {isHostProtocolSecure, showSmallError} from '@utils';
 
@@ -56,7 +56,7 @@ const App = () => {
       <StyledLayoutContentWrapper>
         <Content>
           <Routes>
-            <Route path="apiEndpoint" element={<EndointProcessing />} />
+            <Route path="apiEndpoint" element={<EndpointProcessing />} />
             <Route path="dashboard/tests" element={<DashboardBlueprintRenderer entityType="tests" />} />
             <Route
               path="dashboard/test-executions"

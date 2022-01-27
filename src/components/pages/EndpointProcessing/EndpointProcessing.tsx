@@ -14,7 +14,7 @@ import {hasProtocol} from '@utils/strings';
 
 import {EndpointProcessingContainer} from './EnpointProcessing.styled';
 
-const EndointProcessing = () => {
+const EndpointProcessing = () => {
   const dispatch = useAppDispatch();
 
   const searchParams = useURLSearchParams();
@@ -51,4 +51,4 @@ const EndointProcessing = () => {
   );
 };
 
-export default EndointProcessing;
+export default EndpointProcessing;
