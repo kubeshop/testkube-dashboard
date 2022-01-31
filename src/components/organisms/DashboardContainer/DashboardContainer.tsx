@@ -1,7 +1,6 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-
-import {useGA4React} from 'ga-4-react';
 
 import {DashboardBlueprint} from '@models/dashboard';
 
@@ -18,7 +17,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const {
     hasInfoPanel,
     pageTitle,
-    useGetData,
+    // useGetData,
     setData,
     columns,
     selectData,
@@ -36,8 +35,6 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     entityType,
   } = props;
 
-  const ga4React = useGA4React();
-
   const dispatch = useDispatch();
 
   const dataSource: any = useAppSelector(selectData);
@@ -50,9 +47,9 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
 
   const [isInfoPanelExpanded, setInfoPanelVisibility] = useState(true);
 
-  const {data, isLoading, isFetching, refetch} = useGetData(queryFilters || null, {
-    pollingInterval: 5000,
-  });
+  // const {data, isLoading, isFetching, refetch} = useGetData(queryFilters || null, {
+  //   pollingInterval: 5000,
+  // });
 
   const onRowSelect = (rowRecord: any) => {
     if (!isInfoPanelExpanded) {
@@ -62,29 +59,33 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     dispatch(setSelectedRecord({selectedRecord: rowRecord}));
   };
 
-  useEffect(() => {
-    if (data === null || data?.results === []) {
-      if (canSelectRow) {
-        dispatch(setSelectedRecord({selectedRecord: null}));
-      }
+  // useEffect(() => {
+  //   if (!setData) {
+  //     return;
+  //   }
 
-      dispatch(setData([]));
+  //   if (data === null || data?.results === []) {
+  //     dispatch(setData([]));
 
-      return;
-    }
+  //     if (canSelectRow) {
+  //       dispatch(setSelectedRecord({selectedRecord: null}));
+  //     }
 
-    if (setData && data) {
-      dispatch(setData(data));
+  //     return;
+  //   }
 
-      if (canSelectRow) {
-        dispatch(setSelectedRecord(data));
-      }
-    }
-  }, [data]);
+  //   if (data) {
+  //     dispatch(setData(data));
 
-  useEffect(() => {
-    refetch();
-  }, [apiEndpoint]);
+  //     if (canSelectRow) {
+  //       dispatch(setSelectedRecord(data));
+  //     }
+  //   }
+  // }, [data]);
+
+  // useEffect(() => {
+  //   refetch();
+  // }, [apiEndpoint]);
 
   const shouldInfoPanelBeShown = hasInfoPanel;
 
@@ -101,12 +102,6 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     hideOnSinglePage: true,
   };
 
-  useEffect(() => {
-    if (ga4React) {
-      ga4React.gtag('event', 'get_dashboard_results', {dashboard_entity: pageTitle});
-    }
-  }, [data, ga4React]);
-
   // TODO: get rid of this props drilling
   return (
     <StyledDashboardContainerWrapper>
@@ -114,8 +109,8 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
         pageTitle={pageTitle}
         dataSource={dataSource}
         columns={columns}
-        isLoading={isLoading}
-        isFetching={isFetching}
+        // isLoading={isLoading}
+        // isFetching={isFetching}
         queryFilters={queryFilters}
         canSelectRow={canSelectRow}
         onRowSelect={onRowSelect}
@@ -128,6 +123,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
         setQueryFilters={setQueryFilters}
         filtersComponentsIds={filtersComponentsIds}
         entityType={entityType}
+        setData={setData}
       />
       <DashboardInfoPanel
         shouldInfoPanelBeShown={shouldInfoPanelBeShown}

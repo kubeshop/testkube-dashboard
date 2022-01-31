@@ -45,14 +45,20 @@ export const validateSearchParams = (params: ParsedQuery, paramsType: SearchPara
    * purifyQueryParams(unidentifiedSearchParams);
    */
 
-  console.log('validatedParamsList: ', validatedParamsList);
-
   return Object.fromEntries(validatedParamsList);
 };
 
 export const paramsSerializer = (params: object) => {
   return Object.entries(params)
     .map(([key, value]: any) => {
+      if (Array.isArray(value)) {
+        if (value.length > 0) {
+          return `${encodeURIComponent(key)}=${encodeURIComponent(value.join(','))}`;
+        }
+
+        return '';
+      }
+
       return (value || value === 0) && !prohibitedValues.includes(value)
         ? `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
         : '';

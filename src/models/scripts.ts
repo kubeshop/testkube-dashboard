@@ -15,7 +15,7 @@ export type ScriptCreationDate = Date;
 interface ScriptsState {
   isLoading?: boolean;
   scriptsList: Script[];
-  filters: {textSearch: string; type: string; pageSize: number; tags: string; createdAt: null};
+  filters: {textSearch: string; type: string; pageSize: number; page: number; tags: string; createdAt: null};
   totals: {};
   filtered: {};
   selectedScript: Script | null;

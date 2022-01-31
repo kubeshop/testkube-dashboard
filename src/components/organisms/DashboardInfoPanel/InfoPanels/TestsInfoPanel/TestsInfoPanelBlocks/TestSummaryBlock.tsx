@@ -63,7 +63,7 @@ const TestSummaryBlock: React.FC<any> = props => {
         </StyledSummaryItem>
         <StyledSummaryItem>
           <StyledSummaryItemTitle>Repeats</StyledSummaryItemTitle>
-          <StyledSummaryItemValue>{repeats ? repeats.toLocaleString() : 'never executed'}</StyledSummaryItemValue>
+          <StyledSummaryItemValue>{repeats ? repeats.toLocaleString() : '0'}</StyledSummaryItemValue>
         </StyledSummaryItem>
       </StyledSummaryContainer>
     </>
