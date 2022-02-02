@@ -1,11 +1,9 @@
 import {useEffect, useState} from 'react';
 
-import {Collapse, Tabs} from 'antd';
+import {Collapse, Spin, Tabs} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectedTestExecutionStatus} from '@redux/reducers/executionsSlice';
 import {getStatus} from '@redux/utils/requestFilters';
 
 import {RenderTestStatusSvgIcon} from '@atoms';
@@ -116,7 +114,7 @@ const ExecutionResultsOutputs = (props: any) => {
   const [showOnlyFailedSteps, setShowOnlyFailedSteps] = useState<boolean>(false);
   const [filteredExecutionResults, setFilteredExecutionResults] = useState<any[]>([]);
 
-  const testExecutionStatus = useAppSelector(selectedTestExecutionStatus);
+  const testExecutionStatus = executionResult.status;
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowOnlyFailedSteps(event.target.checked);
@@ -184,7 +182,9 @@ const ExecutionResultsOutputs = (props: any) => {
               ))
             ) : testExecutionStatus === 'pending' ? (
               <StyledPendingTestExecution>
-                <span>Pending...</span>
+                <span>
+                  Pending... <Spin />
+                </span>
               </StyledPendingTestExecution>
             ) : (
               <TestsWithoutStepsContainer>

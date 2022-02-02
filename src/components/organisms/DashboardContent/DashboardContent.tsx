@@ -9,10 +9,10 @@ import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
 import {Title} from '@atoms';
 
+import {useGetExecutionsQuery} from '@services/executions';
+import {useGetScriptsQuery} from '@services/scripts';
 import {useGetTestExecutionsByTestIdQuery} from '@services/testExecutions';
 import {useGetTestsQuery} from '@services/tests';
-
-import {useGetScriptExecutionsByIdQuery, useGetScriptsQuery} from '@src/services/scripts';
 
 import {StyledDashboardContentContainer} from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
@@ -58,7 +58,7 @@ const ScriptsDataLayer = ({onDataChange, queryFilters}: any) => {
 };
 
 const ScriptsExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetScriptExecutionsByIdQuery(queryFilters || null, {
+  const {data, isLoading, isFetching, refetch} = useGetExecutionsQuery(queryFilters || null, {
     pollingInterval,
   });
 
