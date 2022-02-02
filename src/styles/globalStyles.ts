@@ -169,7 +169,7 @@ height: 38px;
 }
 
 .anticon{
-  color: var(--color-gray-quinary);
+  color: white;
 }
 
 .ant-tabs-top > .ant-tabs-nav::before {
