@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Checkbox, Dropdown, Menu} from 'antd';
+import {Checkbox, Dropdown, Menu, Space} from 'antd';
 
 import {DownOutlined} from '@ant-design/icons';
 
@@ -11,6 +11,7 @@ import {Tag} from '@models/tags';
 import {useAppSelector} from '@redux/hooks';
 import {selectTags} from '@redux/reducers/tagsSlice';
 
+import AppliedTags from './AppliedTags';
 import {StyledTagsFilterMenu} from './TagsFilter.styled';
 
 const TagsFilter: React.FC<FilterProps> = props => {
@@ -18,7 +19,7 @@ const TagsFilter: React.FC<FilterProps> = props => {
 
   const dispatch = useDispatch();
 
-  const tags = useAppSelector(selectTags);
+  const tags: Tag[] = useAppSelector(selectTags);
 
   const defaultTags = useMemo(() => (filters && filters.tags) || [], [filters]);
 
@@ -40,12 +41,12 @@ const TagsFilter: React.FC<FilterProps> = props => {
       );
     }
 
-    return setTagsMapping([...tagsMapping, tag]);
+    setTagsMapping([...tagsMapping, tag]);
   };
 
   const renderedTags = useMemo(() => {
     if (!tags || !tags.length) {
-      return [];
+      return null;
     }
 
     return tags.map(tag => {
@@ -64,6 +65,18 @@ const TagsFilter: React.FC<FilterProps> = props => {
     });
   }, [tags, filters, tagsMapping, defaultTags]);
 
+  const appliedTags: Tag[] | null = useMemo(() => {
+    if (!tags || !tags.length) {
+      return null;
+    }
+
+    return tags
+      .map((tag: Tag) => {
+        return filters.tags.includes(tag) ? tag : '';
+      })
+      .filter(tag => tag);
+  }, [tags, filters, tagsMapping, defaultTags]);
+
   useEffect(() => {
     dispatch(setFilters({...filters, tags: tagsMapping}));
   }, [tagsMapping]);
@@ -75,17 +88,20 @@ const TagsFilter: React.FC<FilterProps> = props => {
   const menu = <StyledTagsFilterMenu onClick={onMenuClick}>{renderedTags}</StyledTagsFilterMenu>;
 
   return (
-    <Dropdown
-      overlay={menu}
-      trigger={['click']}
-      placement="bottomCenter"
-      onVisibleChange={onVisibleChange}
-      visible={isVisible}
-    >
-      <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-        Tag <DownOutlined />
-      </a>
-    </Dropdown>
+    <Space size={20}>
+      <Dropdown
+        overlay={menu}
+        trigger={['click']}
+        placement="bottomCenter"
+        onVisibleChange={onVisibleChange}
+        visible={isVisible}
+      >
+        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+          Tag <DownOutlined />
+        </a>
+      </Dropdown>
+      {appliedTags && appliedTags.length ? <AppliedTags appliedTags={appliedTags} onTagChange={onTagChange} /> : null}
+    </Space>
   );
 };
 
