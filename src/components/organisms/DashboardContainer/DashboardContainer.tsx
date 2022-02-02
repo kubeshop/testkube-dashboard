@@ -94,7 +94,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
       dispatch(setQueryFilters({...queryFilters, page: page - 1, pageSize}));
     },
 
-    ...(allFilters.filtered?.results ? {total: allFilters?.filtered.results} : {}),
+    ...(allFilters.totals?.results ? {total: allFilters.totals?.results} : {}),
 
     ...(queryFilters.page ? {current: queryFilters.page + 1} : {}),
     ...(queryFilters.pageSize ? {pageSize: queryFilters.pageSize} : {}),
