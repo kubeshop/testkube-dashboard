@@ -46,7 +46,7 @@ const initialTestsState: TestsState = {
 const initialScriptsState: ScriptsState = {
   isLoading: false,
   scriptsList: [],
-  filters: {textSearch: '', type: '', pageSize: 10, page: 0, tags: '', createdAt: null},
+  filters: {textSearch: '', type: '', pageSize: 10, page: 0, tags: [], createdAt: null},
   totals: {
     results: 0,
     passed: 0,
@@ -73,7 +73,7 @@ const initialExecutionsState: ExecutionsState = {
     endDate: null,
     scriptName: '',
     type: '',
-    tags: '',
+    tags: [],
   },
   error: null,
   totals: {
@@ -105,7 +105,7 @@ const initialConfigState: ConfigState = {
   apiEndpoint: null,
 };
 
-export default {
+const initialReduxState = {
   testExecutions: initialTestExecutionsState,
   tests: initialTestsState,
   scripts: initialScriptsState,
@@ -113,3 +113,5 @@ export default {
   tags: initialTagsState,
   config: initialConfigState,
 };
+
+export default initialReduxState;

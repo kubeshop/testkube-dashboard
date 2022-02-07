@@ -2,6 +2,8 @@ import {Col, Layout, Menu} from 'antd';
 
 import styled from 'styled-components';
 
+import Colors from '@styles/Colors';
+
 export const StyledMenu = styled(Menu)`
   display: flex;
   flex-direction: column;
@@ -65,7 +67,7 @@ export const StyledCol = styled(Col)`
 
   a.active {
     .ant-menu-item {
-      background: var(--color-monokle-primary);
+      background: ${Colors.blue6};
     }
   }
 

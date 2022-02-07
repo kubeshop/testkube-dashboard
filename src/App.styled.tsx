@@ -2,6 +2,8 @@ import {Layout} from 'antd';
 
 import styled from 'styled-components';
 
+import Colors from '@styles/Colors';
+
 export const StyledMainContent = styled(Layout.Content)`
   display: flex;
   flex-direction: column;
@@ -35,4 +37,22 @@ export const StyledTestSummary = styled.div`
 export const StyledLayoutContentWrapper = styled(Layout)`
   min-height: 100vh;
   padding-left: 115px;
+`;
+
+export const StyledCookiesContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+  padding: 10px 20px 10px 100px;
+
+  background: ${Colors.blue6};
+
+  p {
+    margin: 0;
+
+    color: white;
+
+    font-size: 16px;
+  }
 `;

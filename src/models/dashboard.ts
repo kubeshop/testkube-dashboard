@@ -8,6 +8,8 @@ import {InfoPanelConfig} from './infoPanel';
 
 export type DashboardBlueprintType = 'tests' | 'test-executions' | 'scripts' | 'executions';
 
+export type DashboardReduxEntities = 'tests' | 'scripts' | 'testExecutions' | 'executions' | 'tags' | 'config';
+
 export type DashboardBlueprintProps = {
   entityType: DashboardBlueprintType;
 };
@@ -33,7 +35,7 @@ export type DashboardBlueprint = {
    * Redux entity which reflects the provided dashboard entity
    */
 
-  reduxEntity: string;
+  reduxEntity: DashboardReduxEntities;
 
   /**
    * Name of a data list in the Redux store

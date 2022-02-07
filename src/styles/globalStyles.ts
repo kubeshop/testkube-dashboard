@@ -1,5 +1,7 @@
 import {createGlobalStyle} from 'styled-components';
 
+import Colors from './Colors';
+
 export const GlobalStyle = createGlobalStyle`
 
 html {
@@ -50,7 +52,7 @@ p {
 }
 
 .ant-modal-close:hover {
-  color: var(--color-monokle-primary);
+  color: ${Colors.blue6};
 }
 
 .ant-collapse-header {
@@ -119,7 +121,7 @@ height: 38px;
 }
 
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-    background:  var(--color-monokle-primary) !important;
+    background: ${Colors.blue6} !important;
   }
 
   .ant-menu-inline {
@@ -296,6 +298,11 @@ input[type=checkbox] {
 .ant-pagination-item-container {
   display: none;
 }
+
+.ant-table-row:hover .table-actions-dropdown-container {
+  display: block;
+}
+
 `;
 
 /* Media Sizes */

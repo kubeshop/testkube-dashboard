@@ -1,0 +1,43 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+items:
+- apiVersion: tests.testkube.io/v1
+  kind: Test
+  metadata:
+    creationTimestamp: "2022-01-17T10:47:15Z"
+    generation: 1
+    name: test-example-2
+    namespace: testkube
+    resourceVersion: "921364"
+    uid: 220eb992-72d4-4598-a6c7-0b8b3920e824
+  spec:
+    description: Example simple test orchestration
+    steps:
+    - {}
+    - {}
+    - {}
+- apiVersion: tests.testkube.io/v1
+  kind: Test
+  metadata:
+    creationTimestamp: "2022-01-26T22:03:03Z"
+    generation: 1
+    name: test-example-3
+    namespace: testkube
+    resourceVersion: "1414299"
+    uid: 1a1d6d49-970b-4f5e-8ed5-0c3f82a7eb05
+  spec:
+    description: Tests fast first
+    steps:
+    - execute:
+        name: testkube-params-test
+        namespace: testkube
+    - delay:
+        duration: 1000
+    - execute:
+        name: testkube-params-test
+        namespace: testkube
+kind: List
+metadata: {}

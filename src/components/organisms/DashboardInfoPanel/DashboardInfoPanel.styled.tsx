@@ -68,5 +68,5 @@ export const StyledInfoPanelSectionTitle = styled.span`
 
   color: #dbdbdb;
 
-  font-size: 20px;
+  font-size: 24px;
 `;

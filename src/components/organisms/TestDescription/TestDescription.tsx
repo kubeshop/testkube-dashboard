@@ -1,6 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
-
-/* eslint react/destructuring-assignment: 0 */
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 

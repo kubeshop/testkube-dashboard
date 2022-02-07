@@ -1,5 +1,8 @@
 import React from 'react';
+
 import styled from 'styled-components';
+
+import Colors from '@styles/Colors';
 
 export interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;
@@ -34,13 +37,13 @@ const StyledButton = styled.button<IButton>`
   // margin: 15px 5px;
   padding: ${props =>
     props.variant === 'primary' ? '5px 16px' : props.variant === 'secondary' ? '15px ​25px' : '15px ​25px'};
-  border: 1px solid var(--color-monokle-primary);
+  border: 1px solid ${Colors.blue6};
   width: ${props => (props.variant === 'primary' ? '60px' : props.variant === 'secondary' ? '100px' : '35px')};
   height: ${props => (props.variant === 'primary' ? '24px' : props.variant === 'secondary' ? '35px' : '24px')};
 
   /* Color & Background */
-  color: ${({active}) => (active ? 'var(--color-gray-primary)' : 'var(--color-monokle-primary)')};
-  background: ${({active}) => (active ? 'var(--color-monokle-primary) ' : 'var(--color-dark-primary)')};
+  color: ${({active}) => (active ? 'var(--color-gray-primary)' : Colors.blue6)};
+  background: ${({active}) => (active ? Colors.blue6 : 'var(--color-dark-primary)')};
 
   /* Effects. */
   transition: background 0.1s ease-in-out, color 0.3s ease-in-out;
@@ -50,13 +53,13 @@ const StyledButton = styled.button<IButton>`
   &:hover {
     cursor: pointer;
     background: ${({disableFilter}) => (disableFilter ? 'var(--color-dark-primary)' : '')};
-    color: ${({disableFilter}) => (disableFilter ? 'var(--color-monokle-primary) ' : '')};
+    color: ${({disableFilter}) => (disableFilter ? Colors.blue6 : '')};
   }
 
   &:disabled {
     cursor: not-allowed;
     color: var(--color-dark-primary);
-    background: var(--color-monokle-primary);
+    background: ${Colors.blue6};
   }
 `;
 

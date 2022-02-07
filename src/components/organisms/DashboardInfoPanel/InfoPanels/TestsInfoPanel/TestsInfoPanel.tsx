@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {CLICommands} from '@molecules';
+
 import {StyledInfoPanelSection} from '../../DashboardInfoPanel.styled';
 import TestSummaryBlock from './TestsInfoPanelBlocks';
 
@@ -13,6 +15,11 @@ const TestsInfoPanel = (props: any) => {
   const {selectedRecord} = props;
   const {name, namespace, description, steps} = selectedRecord;
 
+  const testCommands = [
+    {command: `kubectl testkube tests run ${name}`, label: 'Start test'},
+    {command: `kubectl testkube tests delete ${name}`, label: 'Delete test'},
+  ];
+
   return (
     <>
       <StyledInfoPanelSection>
@@ -21,6 +28,7 @@ const TestsInfoPanel = (props: any) => {
       <StyledInfoPanelSection>
         <TestSummaryBlock total={steps.length} />
       </StyledInfoPanelSection>
+      <CLICommands cliCommands={testCommands} />
     </>
   );
 };
