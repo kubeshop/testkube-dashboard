@@ -1,5 +1,8 @@
 import React from 'react';
+
 import styled from 'styled-components';
+
+import Colors from '@styles/Colors';
 
 interface ITypography extends React.HTMLAttributes<HTMLParagraphElement> {
   variant?: 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary' | 'senary';
@@ -44,7 +47,7 @@ const StyledTypography = styled.p<ITypography>`
       : props.color === 'quaternary'
       ? 'var(--color-yellow-primary)'
       : props.color === 'quinary'
-      ? 'var(--color-monokle-primary)'
+      ? Colors.blue6
       : 'var(--color-light-primary)'};
   letter-spacing: 0;
   margin-bottom: 0;

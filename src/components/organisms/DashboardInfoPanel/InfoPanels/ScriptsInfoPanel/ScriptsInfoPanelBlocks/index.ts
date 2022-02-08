@@ -1,3 +1,3 @@
-import ScriptExecutionsSummaryBlock from './ScriptExecutionsSummaryBlock';
+import ScriptExecutionSummaryBlock from './ScriptExecutionSummaryBlock';
 
-export {ScriptExecutionsSummaryBlock};
+export {ScriptExecutionSummaryBlock};

@@ -9,7 +9,6 @@ import GA4React from 'ga-4-react';
 
 import {store} from '@redux/store';
 
-import '@styles/global.css';
 import {GlobalStyle} from '@styles/globalStyles';
 import '@styles/variables.css';
 

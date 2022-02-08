@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import {StyledInfoPanelSection, StyledInfoPanelSectionTitle} from '../../../DashboardInfoPanel.styled';
 
-type ScriptExecutionsSummaryProps = {
+type ScriptExecutionSummaryProps = {
   total: number;
   failed: number;
   passed: number;
@@ -64,7 +64,7 @@ const StyledSummaryItemIconContainer = styled.div`
   }
 `;
 
-const ScriptExecutionsSummaryBlock: React.FC<ScriptExecutionsSummaryProps> = props => {
+const ScriptExecutionSummaryBlock: React.FC<ScriptExecutionSummaryProps> = props => {
   const {total, failed, passed, scriptName} = props;
 
   return (
@@ -101,4 +101,4 @@ const ScriptExecutionsSummaryBlock: React.FC<ScriptExecutionsSummaryProps> = pro
   );
 };
 
-export default ScriptExecutionsSummaryBlock;
+export default ScriptExecutionSummaryBlock;

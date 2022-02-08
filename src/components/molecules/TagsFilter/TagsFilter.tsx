@@ -20,6 +20,7 @@ const TagsFilter: React.FC<FilterProps> = props => {
   const dispatch = useDispatch();
 
   const tags: Tag[] = useAppSelector(selectTags);
+  console.log('tags: ', tags);
 
   const defaultTags = useMemo(() => (filters && filters.tags) || [], [filters]);
 
@@ -86,6 +87,10 @@ const TagsFilter: React.FC<FilterProps> = props => {
   }, [defaultTags]);
 
   const menu = <StyledTagsFilterMenu onClick={onMenuClick}>{renderedTags}</StyledTagsFilterMenu>;
+
+  if (!tags || !tags.length) {
+    return null;
+  }
 
   return (
     <Space size={20}>

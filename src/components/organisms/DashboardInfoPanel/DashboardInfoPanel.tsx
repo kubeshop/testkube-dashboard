@@ -7,6 +7,8 @@ import {InfoPanelConfig, InfoPanelType} from '@models/infoPanel';
 
 import {InfoPanelHeader} from '@molecules';
 
+import Colors from '@styles/Colors';
+
 import {DashboardBlueprint} from '@src/models/dashboard';
 
 import {
@@ -17,7 +19,7 @@ import {
 
 const iconStyles: CSSProperties = {
   fontSize: 26,
-  color: 'var(--color-monokle-primary)',
+  color: Colors.blue6,
 };
 
 type DashboardInfoPanelProps = {

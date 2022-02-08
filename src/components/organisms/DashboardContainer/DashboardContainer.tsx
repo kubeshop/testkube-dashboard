@@ -1,5 +1,4 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {DashboardBlueprint} from '@models/dashboard';
@@ -87,7 +86,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   //   refetch();
   // }, [apiEndpoint]);
 
-  const shouldInfoPanelBeShown = hasInfoPanel;
+  const shouldInfoPanelBeShown = hasInfoPanel && dataSource?.length;
 
   const pagination = {
     onChange: (page: number, pageSize: number) => {
@@ -97,6 +96,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     ...(allFilters.totals?.results ? {total: allFilters.totals?.results} : {}),
 
     ...(queryFilters.page ? {current: queryFilters.page + 1} : {}),
+
     ...(queryFilters.pageSize ? {pageSize: queryFilters.pageSize} : {}),
 
     hideOnSinglePage: true,

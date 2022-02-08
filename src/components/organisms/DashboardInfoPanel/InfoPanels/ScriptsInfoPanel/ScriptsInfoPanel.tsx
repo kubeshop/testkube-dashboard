@@ -1,30 +1,43 @@
+import {Script} from '@models/scripts';
+
 import {useAppDispatch} from '@redux/hooks';
+
+import {CLICommands} from '@molecules';
 
 import {useGetScriptExecutionsByIdQuery} from '@services/scripts';
 
-import {ScriptExecutionsSummaryBlock} from './ScriptsInfoPanelBlocks';
+import {ScriptExecutionSummaryBlock} from './ScriptsInfoPanelBlocks';
 
-const ScriptsInfoPanel = (props: any) => {
+type ScriptsInfoPanelProps = {
+  selectedRecord: Script;
+};
+
+const ScriptsInfoPanel: React.FC<ScriptsInfoPanelProps> = props => {
   const {selectedRecord} = props;
+  const {name, type, created, content} = selectedRecord;
 
   const dispatch = useAppDispatch();
 
-  const {data: scriptExecutionsData, isLoading, isFetching} = useGetScriptExecutionsByIdQuery(selectedRecord.name);
+  const {data: scriptExecutionData, isLoading, isFetching} = useGetScriptExecutionsByIdQuery(name);
 
-  if (isLoading || isFetching) {
-    return <div />;
-  }
+  const isQueryLoading = isLoading || isFetching;
+
+  const scriptCLICommands = [
+    {command: `kubectl testkube scripts start ${name}`, label: 'Start script'},
+    {command: `kubectl testkube scripts delete ${name}`, label: 'Delete script'},
+  ];
 
   return (
     <>
-      {scriptExecutionsData && (
-        <ScriptExecutionsSummaryBlock
-          total={scriptExecutionsData.filtered.results}
-          passed={scriptExecutionsData.filtered.passed}
-          failed={scriptExecutionsData.filtered.failed}
+      {scriptExecutionData && !isQueryLoading ? (
+        <ScriptExecutionSummaryBlock
+          total={scriptExecutionData.filtered.results}
+          passed={scriptExecutionData.filtered.passed}
+          failed={scriptExecutionData.filtered.failed}
           scriptName={selectedRecord.name}
         />
-      )}
+      ) : null}
+      <CLICommands cliCommands={scriptCLICommands} />
     </>
   );
 };

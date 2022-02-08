@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useEffect} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 
@@ -13,9 +14,7 @@ import {DashboardBlueprintRenderer, SideBar} from '@organisms';
 
 import {EndpointProcessing, NotFound} from '@pages';
 
-import {isHostProtocolSecure, showSmallError} from '@utils';
-
-import {StyledLayoutContentWrapper} from './App.styled';
+import {StyledCookiesContainer, StyledLayoutContentWrapper} from './App.styled';
 import {setTags} from './redux/reducers/tagsSlice';
 import {useGetTagsQuery} from './services/tags';
 
@@ -25,16 +24,9 @@ const App = () => {
 
   const ga4React = useGA4React();
 
-  const {data, refetch} = useGetTagsQuery(null);
+  const {data, refetch} = useGetTagsQuery(null, {pollingInterval: 10_000});
 
   const {pathname} = useLocation();
-
-  useEffect(() => {
-    if (!isHostProtocolSecure()) {
-      showSmallError(`Dashboard is using non-secure protocol!
-      <a href='https://kubeshop.github.io/testkube/dashboard/#httpstls-configuration' target="_blank" rel="noopener">Read more</a>`);
-    }
-  }, []);
 
   useEffect(() => {
     refetch();
@@ -49,6 +41,14 @@ const App = () => {
       ga4React.pageview(pathname);
     }
   }, [pathname]);
+
+  const onToggleCookies = async () => {
+    // @ts-ignore
+    const value = !window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`];
+
+    // @ts-ignore
+    window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = !value;
+  };
 
   return (
     <Layout>
@@ -69,6 +69,9 @@ const App = () => {
           </Routes>
         </Content>
       </StyledLayoutContentWrapper>
+      {/* <StyledCookiesContainer>
+        <Button onClick={onToggleCookies}>Toggle</Button>
+      </StyledCookiesContainer> */}
     </Layout>
   );
 };

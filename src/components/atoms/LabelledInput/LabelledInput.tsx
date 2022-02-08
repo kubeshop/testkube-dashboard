@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import {Typography} from '@atoms';
 
+import Colors from '@styles/Colors';
 import {device} from '@styles/globalStyles';
 
 export interface ILabelInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -20,7 +21,7 @@ const StyledInput = styled.input<ILabelInputProps>`
   min-width: var(--space-xxxxl);
   overflow: hidden;
   appearance: none;
-  border: 1px solid var(--color-monokle-primary);
+  border: 1px solid ${Colors.blue6};
   font-family: inherit;
   padding: 0 var(--space-sm) 0 var(--space-md);
   height: var(--space-lg);

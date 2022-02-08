@@ -53,7 +53,7 @@ interface ExecutionsState {
     endDate: null;
     scriptName: string;
     type: string;
-    tags: string;
+    tags: Array<any>;
   };
   error: null;
   totals: {
