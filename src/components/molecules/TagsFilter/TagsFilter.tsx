@@ -20,7 +20,6 @@ const TagsFilter: React.FC<FilterProps> = props => {
   const dispatch = useDispatch();
 
   const tags: Tag[] = useAppSelector(selectTags);
-  console.log('tags: ', tags);
 
   const defaultTags = useMemo(() => (filters && filters.tags) || [], [filters]);
 
