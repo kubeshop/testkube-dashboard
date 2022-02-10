@@ -21,7 +21,7 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 import {openDiscord, openDocumentation, openGithub} from '@utils/externalLinks';
 
 import {ReactComponent as DiscordLogo} from '@assets/DiscordLogo.svg';
-import {ReactComponent as Logo} from '@assets/logo.svg';
+import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 
 import Colors from '@styles/Colors';
 

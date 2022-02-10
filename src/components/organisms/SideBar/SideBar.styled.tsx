@@ -21,6 +21,14 @@ export const StyledLogo = styled.div`
   align-items: center;
 
   height: 120px;
+
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 80px;
+  }
 `;
 
 export const StyledNavigation = styled.div`

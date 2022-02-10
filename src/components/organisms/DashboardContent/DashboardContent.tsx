@@ -17,7 +17,7 @@ import {useGetTestsQuery} from '@services/tests';
 import {StyledDashboardContentContainer} from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
 
-const pollingInterval = 1000;
+const pollingInterval = 5000;
 
 // The reason I've done like this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
@@ -171,7 +171,9 @@ const DashboardContent: React.FC<any> = props => {
         loading={contentProps.isLoading}
         rowSelection={canSelectRow && rowSelection}
         rowClassName="table-row-dark"
-        rowKey={record => record[selectedRecordIdFieldName]}
+        rowKey={record => {
+          return `${entityType}-${record[selectedRecordIdFieldName]}`;
+        }}
         pagination={paginationOptions}
         onRow={record => ({
           onClick: () => {
