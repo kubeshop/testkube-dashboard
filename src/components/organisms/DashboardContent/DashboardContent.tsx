@@ -102,7 +102,7 @@ const DashboardContent: React.FC<any> = props => {
   });
 
   const rowSelection: TableRowSelection<any> = {
-    selectedRowKeys: selectedRecord ? [selectedRecord[selectedRecordIdFieldName]] : [],
+    selectedRowKeys: selectedRecord ? [`${entityType}-${selectedRecord[selectedRecordIdFieldName]}`] : [],
     columnWidth: 0,
     renderCell: () => null,
   };
