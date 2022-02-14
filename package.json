@@ -53,7 +53,7 @@
     "@ant-design/charts": "^1.2.14",
     "@ant-design/icons": "4.7.0",
     "@reduxjs/toolkit": "^1.7.1",
-    "antd": "4.16.13",
+    "antd": "4.18.7",
     "ga-4-react": "^0.1.281",
     "loglevel": "1.8.0",
     "moment": "^2.29.1",
