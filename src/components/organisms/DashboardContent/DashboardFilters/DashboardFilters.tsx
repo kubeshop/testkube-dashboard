@@ -25,7 +25,7 @@ const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
 const filterSpecificProps: Partial<Record<FilterType, any>> = {
   scriptType: {
     queryParam: 'type',
-    placeholderText: 'Script type',
+    placeholderText: 'Test type',
   },
 };
 

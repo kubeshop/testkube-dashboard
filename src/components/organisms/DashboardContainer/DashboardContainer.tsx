@@ -1,6 +1,8 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 
+import {TablePaginationConfig} from 'antd';
+
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {useAppSelector} from '@redux/hooks';
@@ -88,9 +90,13 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
 
   const shouldInfoPanelBeShown = hasInfoPanel && dataSource?.length;
 
-  const pagination = {
-    onChange: (page: number, pageSize: number) => {
+  const pagination: TablePaginationConfig = {
+    onChange: (page: number, pageSize?: number) => {
       dispatch(setQueryFilters({...queryFilters, page: page - 1, pageSize}));
+    },
+
+    onShowSizeChange: (page, pageSize) => {
+      dispatch(setQueryFilters({...queryFilters, page: 0, pageSize}));
     },
 
     ...(allFilters.totals?.results ? {total: allFilters.totals?.results} : {}),

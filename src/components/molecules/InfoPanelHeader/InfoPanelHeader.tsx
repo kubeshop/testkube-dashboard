@@ -1,4 +1,4 @@
-import {ScriptType} from '@models/scripts';
+import {ScriptType} from '@models/tests';
 
 import {Title} from '@atoms';
 

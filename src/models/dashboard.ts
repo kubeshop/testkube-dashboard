@@ -6,9 +6,16 @@ import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {FilterType} from './filters';
 import {InfoPanelConfig} from './infoPanel';
 
-export type DashboardBlueprintType = 'tests' | 'test-executions' | 'scripts' | 'executions';
+export type DashboardBlueprintType = 'tests-suites' | 'test-executions' | 'executions' | 'tests';
 
-export type DashboardReduxEntities = 'tests' | 'scripts' | 'testExecutions' | 'executions' | 'tags' | 'config';
+export type DashboardReduxEntities =
+  | 'tests'
+  | 'scripts'
+  | 'testExecutions'
+  | 'executions'
+  | 'tags'
+  | 'config'
+  | 'testsSuites';
 
 export type DashboardBlueprintProps = {
   entityType: DashboardBlueprintType;

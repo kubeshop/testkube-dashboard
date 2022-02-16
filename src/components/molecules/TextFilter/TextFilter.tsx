@@ -8,16 +8,16 @@ import {FilterProps} from '@models/filters';
 import {LabelInput} from '@atoms';
 
 const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
-  tests: 'textSearch',
+  'tests-suites': 'textSearch',
   'test-executions': 'textSearch',
-  scripts: 'textSearch',
+  tests: 'textSearch',
   executions: 'scriptName',
 };
 
 const placeholders: any = {
-  tests: 'Test',
+  'tests-suites': 'Test suite',
   'test-executions': 'Test',
-  scripts: 'Script',
+  tests: 'Test',
   executions: 'Script',
 };
 

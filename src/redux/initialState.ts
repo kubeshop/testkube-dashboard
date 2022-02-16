@@ -1,9 +1,10 @@
 import {ConfigState} from '@models/config';
 import {ExecutionsState} from '@models/executions';
-import {ScriptsState} from '@models/scripts';
 import {TagsState} from '@models/tags';
 import {TestExecutionsState} from '@models/testExecutions';
 import {TestsState} from '@models/tests';
+
+import {TestsSuitesState} from '@src/models/testsSuites';
 
 const initialTestExecutionsState: TestExecutionsState = {
   isLoading: false,
@@ -24,9 +25,9 @@ const initialTestExecutionsState: TestExecutionsState = {
   selectedTestExecution: null,
 };
 
-const initialTestsState: TestsState = {
+const initialTestsSuitesState: TestsSuitesState = {
   isLoading: false,
-  testsList: [],
+  dataList: [],
   filters: {textSearch: '', pageSize: 10, page: 0, tags: '', startDate: null, endDate: null},
   totals: {
     results: 0,
@@ -40,12 +41,12 @@ const initialTestsState: TestsState = {
     failed: 0,
     pending: 0,
   },
-  selectedTest: null,
+  selectedTestSuite: null,
 };
 
-const initialScriptsState: ScriptsState = {
+const initialTestsState: TestsState = {
   isLoading: false,
-  scriptsList: [],
+  dataList: [],
   filters: {textSearch: '', type: '', pageSize: 10, page: 0, tags: [], createdAt: null},
   totals: {
     results: 0,
@@ -59,7 +60,7 @@ const initialScriptsState: ScriptsState = {
     failed: 0,
     pending: 0,
   },
-  selectedScript: null,
+  selectedTest: null,
 };
 
 const initialExecutionsState: ExecutionsState = {
@@ -107,8 +108,8 @@ const initialConfigState: ConfigState = {
 
 const initialReduxState = {
   testExecutions: initialTestExecutionsState,
+  testsSuites: initialTestsSuitesState,
   tests: initialTestsState,
-  scripts: initialScriptsState,
   executions: initialExecutionsState,
   tags: initialTagsState,
   config: initialConfigState,

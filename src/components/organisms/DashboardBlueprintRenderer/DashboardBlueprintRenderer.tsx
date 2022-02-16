@@ -1,15 +1,15 @@
 import ExecutionsEntity from '@constants/dashboardEntities/executions';
-import ScriptsEntity from '@constants/dashboardEntities/scripts';
 import TestExecutionsEntity from '@constants/dashboardEntities/testExecutions';
-import TestsEntity from '@constants/dashboardEntities/tests';
+import ScriptsEntity from '@constants/dashboardEntities/tests';
+import TestsSuitesEntity from '@constants/dashboardEntities/testsSuites';
 
 import {DashboardBlueprint, DashboardBlueprintProps, DashboardBlueprintType} from '@models/dashboard';
 
 import {DashboardContainer} from '@organisms';
 
 const entities: {[key in DashboardBlueprintType]: DashboardBlueprint} = {
-  tests: TestsEntity,
-  scripts: ScriptsEntity,
+  'tests-suites': TestsSuitesEntity,
+  tests: ScriptsEntity,
   executions: ExecutionsEntity,
   'test-executions': TestExecutionsEntity,
 };

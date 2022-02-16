@@ -1,22 +1,87 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+import {useState} from 'react';
 import {Link} from 'react-router-dom';
 
-import {Button} from 'antd';
+import {Dropdown, Menu} from 'antd';
 
 import {DashboardBlueprint} from '@models/dashboard';
+import {MenuItem} from '@models/menu';
 
-import {
-  selectAllTestsFilters,
-  selectFilters,
-  selectSelectedTest,
-  selectTests,
-  setFilters,
-  setSelectedTest,
-  setTests,
-} from '@redux/reducers/testsSlice';
+import {Dots, TableActionsDropdownContainer} from '@atoms';
+
+import {InfoPanelHeader} from '@molecules';
 
 import TestsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestsInfoPanel';
 
-import {useGetTestsQuery} from '@services/tests';
+import {timeStampToDate} from '@utils/formatDate';
+
+import {
+  selectAllTestsFilters,
+  selectSelectedTest,
+  selectTests,
+  selectTestsFilters,
+  setSelectedTest,
+  setTests,
+  setTestsFilters,
+} from '@src/redux/reducers/testsSlice';
+import {useGetTestsQuery} from '@src/services/tests';
+
+const ScriptsActions: React.FC<any> = props => {
+  const {scriptName, setVisibilityState} = props;
+
+  const onMenuClick = () => {};
+
+  const menuActions: any = {
+    startScriptCommand: () => {
+      const textToCopy = `kubectl testkube scripts start  ${scriptName}`;
+
+      navigator.clipboard.writeText(textToCopy);
+    },
+    deleteScriptCommand: () => {
+      const textToCopy = `kubectl testkube scripts delete ${scriptName}`;
+
+      navigator.clipboard.writeText(textToCopy);
+    },
+  };
+
+  const onMenuItemClick = (menuItem: MenuItem) => {
+    const {domEvent, key} = menuItem;
+
+    domEvent.stopPropagation();
+
+    menuActions[key]();
+
+    setVisibilityState(false);
+  };
+
+  const onVisibleChange = (state: any) => {
+    setVisibilityState(state);
+  };
+
+  const menu = (
+    <Menu onClick={onMenuClick}>
+      <Menu.Item key="startScriptCommand" onClick={onMenuItemClick}>
+        Start script command
+      </Menu.Item>
+      <Menu.Item key="deleteScriptCommand" onClick={onMenuItemClick}>
+        Delete script command
+      </Menu.Item>
+      <Menu.Item key="showScriptExecutions">
+        <Link to={`/dashboard/executions?scriptName=${scriptName}`}>Show script executions</Link>
+      </Menu.Item>
+    </Menu>
+  );
+
+  return (
+    <Dropdown overlay={menu} trigger={['click']} placement="bottomCenter" onVisibleChange={onVisibleChange}>
+      <div onClick={e => e.stopPropagation()} style={{height: '100%', display: 'flex', justifyContent: 'center'}}>
+        <Dots />
+      </div>
+    </Dropdown>
+  );
+};
 
 export const TestsEntity: DashboardBlueprint = {
   entityType: 'tests',
@@ -24,7 +89,7 @@ export const TestsEntity: DashboardBlueprint = {
   reduxEntity: 'tests',
   pageTitle: 'Tests',
   hasInfoPanel: true,
-  reduxListName: 'testsList',
+  reduxListName: 'dataList',
   canSelectRow: true,
 
   infoPanelComponent: TestsInfoPanel,
@@ -33,31 +98,22 @@ export const TestsEntity: DashboardBlueprint = {
   setData: setTests,
   selectData: selectTests,
 
-  setQueryFilters: setFilters,
-  selectQueryFilters: selectFilters,
+  setQueryFilters: setTestsFilters,
+  selectQueryFilters: selectTestsFilters,
   selectAllFilters: selectAllTestsFilters,
 
   setSelectedRecord: setSelectedTest,
   selectSelectedRecord: selectSelectedTest,
 
   selectedRecordIdFieldName: 'name',
+  scriptTypeFieldName: 'type',
 
   columns: [
     {
       title: 'Test name',
-      render: (data: any) => data?.name,
-      key: 'testName',
+      dataIndex: 'name',
     },
-    {
-      title: 'Namespace',
-      render: (data: any) => data?.namespace,
-      key: 'testNamespace',
-    },
-    {
-      title: 'Test description',
-      render: (data: any) => data?.description,
-      key: 'testDescription',
-    },
+    {title: 'Test type', dataIndex: 'type', key: 'type'},
     {
       title: 'Test tags',
       render: (data: any) => {
@@ -73,31 +129,37 @@ export const TestsEntity: DashboardBlueprint = {
       },
     },
     {
-      title: 'Number of steps',
-      render: (data: any) => {
-        return <span>{data?.steps?.length}</span>;
-      },
-      key: 'testNumberOfSteps',
+      title: 'Created at',
+      dataIndex: 'created',
+      render: (created: string) => timeStampToDate(created),
     },
+    // {
+    //   title: 'Actions',
+    //   align: 'center',
+    //   render: (data: any) => {
+    //     const {name} = data;
+
+    //     const [isDropdownVisible, setVisibilityState] = useState(false);
+
+    //     return (
+    //       <TableActionsDropdownContainer isDropdownVisible={isDropdownVisible}>
+    //         <ScriptsActions scriptName={name} setVisibilityState={setVisibilityState} />
+    //       </TableActionsDropdownContainer>
+    //     );
+    //   },
+    //   className: 'dropdown-actions-menu',
+    // },
+    {},
+  ],
+  filtersComponentsIds: ['textSearch', 'scriptType', 'date', 'tags'],
+  infoPanelConfig: [
+    {type: 'header', name: 'Scripts', component: InfoPanelHeader},
     {
-      title: 'Number of executions',
-      render: (data: any) => data?.repeats,
-      key: 'testNumberOfExecutions',
-    },
-    {
-      title: '',
-      dataIndex: 'name',
-      render: (name: any) => {
-        return (
-          <Button type="primary" ghost>
-            <Link to={`/dashboard/test-executions?textSearch=${name}`}>Show test executions</Link>
-          </Button>
-        );
-      },
-      width: '25%',
+      type: 'summary',
+      name: 'summary',
+      component: TestsInfoPanel,
     },
   ],
-  filtersComponentsIds: ['textSearch', 'tags'],
 };
 
 export default TestsEntity;

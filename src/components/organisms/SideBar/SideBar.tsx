@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useCallback, useEffect, useState} from 'react';
 import {useLocation} from 'react-router';
 import {NavLink} from 'react-router-dom';
@@ -69,26 +70,26 @@ const SideBar = () => {
         </StyledLogo>
         <StyledCol>
           <StyledNavigation>
-            <Tooltip title="Tests" placement="right" color={Colors.blue6}>
-              <NavLink to="/dashboard/tests">
-                <StyledMenuItem icon={<BarsOutlined style={ICON_STYLE} key="/dashboard/tests" />} />
+            <Tooltip title="Test Suites" placement="right" color={Colors.blue6}>
+              <NavLink to="/dashboard/tests-suites">
+                <StyledMenuItem icon={<BarsOutlined style={ICON_STYLE} key="/dashboard/tests-suites" />} />
               </NavLink>
             </Tooltip>
-            <Tooltip title="Test executions" placement="right" color={Colors.blue6}>
+            {/* <Tooltip title="Test executions" placement="right" color={Colors.blue6}>
               <NavLink to="/dashboard/test-executions">
                 <StyledMenuItem icon={<UnorderedListOutlined style={ICON_STYLE} />} key="/dashboard/test-executions" />
               </NavLink>
-            </Tooltip>
-            <Tooltip title="Scripts" placement="right" color={Colors.blue6}>
-              <NavLink to="/dashboard/scripts">
-                <StyledMenuItem icon={<BarChartOutlined style={ICON_STYLE} />} key="/dashboard/scripts" />
+            </Tooltip> */}
+            <Tooltip title="Tests" placement="right" color={Colors.blue6}>
+              <NavLink to="/dashboard/tests">
+                <StyledMenuItem icon={<BarChartOutlined style={ICON_STYLE} />} key="/dashboard/tests" />
               </NavLink>
             </Tooltip>
-            <Tooltip title="Executions" placement="right" color={Colors.blue6}>
+            {/* <Tooltip title="Executions" placement="right" color={Colors.blue6}>
               <NavLink to="/dashboard/executions">
                 <StyledMenuItem icon={<DashboardOutlined style={ICON_STYLE} />} key="/dashboard/executions" />
               </NavLink>
-            </Tooltip>
+            </Tooltip> */}
           </StyledNavigation>
           <StyledOther>
             <StyledMenuItem onClick={onToggleModal} icon={<SettingFilled style={ICON_STYLE} />} />

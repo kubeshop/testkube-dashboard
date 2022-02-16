@@ -16,8 +16,28 @@ import App from './App';
 
 const ga4react = new GA4React(process.env.REACT_APP_GOOGLE_ANALYTICS_ID || '');
 
+const detectAdBlock = async () => {
+  const googleAdUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+
+  let isAdBlockEnabled = false;
+
+  try {
+    await fetch(new Request(googleAdUrl)).catch(() => {
+      isAdBlockEnabled = true;
+    });
+  } catch (e) {
+    isAdBlockEnabled = true;
+  }
+
+  return isAdBlockEnabled;
+};
+
 (async () => {
-  await ga4react.initialize();
+  const isAdBlockEnabled = await detectAdBlock();
+
+  if (!isAdBlockEnabled) {
+    await ga4react.initialize();
+  }
 
   ReactDOM.render(
     <React.StrictMode>

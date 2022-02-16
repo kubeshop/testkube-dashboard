@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {Link} from 'react-router-dom';
 
 import {Button} from 'antd';
@@ -64,7 +65,7 @@ const StyledSummaryItemIconContainer = styled.div`
   }
 `;
 
-const ScriptExecutionSummaryBlock: React.FC<ScriptExecutionSummaryProps> = props => {
+const TestExecutionSummaryBlock: React.FC<ScriptExecutionSummaryProps> = props => {
   const {total, failed, passed, scriptName} = props;
 
   return (
@@ -91,14 +92,14 @@ const ScriptExecutionSummaryBlock: React.FC<ScriptExecutionSummaryProps> = props
           </StyledSummaryItemTitle>
           <StyledSummaryItemValue>{passed.toLocaleString()}</StyledSummaryItemValue>
         </StyledSummaryItem>
-        <StyledSummaryItem>
+        {/* <StyledSummaryItem>
           <Button type="primary" ghost>
             <Link to={`/dashboard/executions?scriptName=${scriptName}`}>Show all Executions</Link>
           </Button>
-        </StyledSummaryItem>
+        </StyledSummaryItem> */}
       </StyledSummaryContainer>
     </StyledInfoPanelSection>
   );
 };
 
-export default ScriptExecutionSummaryBlock;
+export default TestExecutionSummaryBlock;

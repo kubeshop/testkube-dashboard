@@ -1,4 +1,4 @@
-import {ScriptContent, ScriptName, ScriptType} from '@models/scripts';
+import {ScriptContent, ScriptName, ScriptType} from '@models/tests';
 
 export type Execution = {
   scriptName: ScriptName;

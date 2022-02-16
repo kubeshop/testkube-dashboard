@@ -1,1 +1,3 @@
-export {default} from './TestSummaryBlock';
+import TestExecutionSummaryBlock from './TestExecutionSummaryBlock';
+
+export {TestExecutionSummaryBlock};

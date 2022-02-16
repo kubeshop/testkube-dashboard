@@ -10,9 +10,10 @@ import {selectApiEndpoint} from '@redux/reducers/configSlice';
 import {Title} from '@atoms';
 
 import {useGetExecutionsQuery} from '@services/executions';
-import {useGetScriptsQuery} from '@services/scripts';
 import {useGetTestExecutionsByTestIdQuery} from '@services/testExecutions';
 import {useGetTestsQuery} from '@services/tests';
+
+import {useGetTestsSuitesQuery} from '@src/services/testsSuites';
 
 import {StyledDashboardContentContainer} from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
@@ -21,8 +22,8 @@ const pollingInterval = 5000;
 
 // The reason I've done like this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
-const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetTestsQuery(queryFilters || null, {
+const TestsSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
+  const {data, isLoading, isFetching, refetch} = useGetTestsSuitesQuery(queryFilters || null, {
     pollingInterval,
   });
 
@@ -45,8 +46,8 @@ const TestsExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
   return <></>;
 };
 
-const ScriptsDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetScriptsQuery(queryFilters || null, {
+const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
+  const {data, isLoading, isFetching, refetch} = useGetTestsQuery(queryFilters || null, {
     pollingInterval,
   });
 
@@ -112,9 +113,9 @@ const DashboardContent: React.FC<any> = props => {
   };
 
   const dataLayers: any = {
-    Tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
+    'Tests Suites': <TestsSuitesDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
     'Tests executions': <TestsExecutionsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-    Scripts: <ScriptsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
+    Tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
     'Scripts executions': <ScriptsExecutionsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
   };
 
