@@ -1,6 +1,6 @@
 import {DashboardBlueprint} from './dashboard';
 
-export type FilterType = 'status' | 'dateRange' | 'date' | 'textSearch' | 'tags' | 'scriptType';
+export type FilterType = 'status' | 'dateRange' | 'date' | 'textSearch' | 'tags' | 'testType';
 
 export type FilterProps = {
   setSelectedRecord: any;

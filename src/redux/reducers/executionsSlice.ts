@@ -27,7 +27,7 @@ export const executionsSlice = createSlice({
         startDate: action.payload?.startDate || null,
         endDate: action.payload?.endDate || null,
         pageSize: state.filters.pageSize,
-        scriptName: action.payload.scriptName,
+        testName: action.payload.testName,
         type: action.payload.type,
         page: 0,
         tags: action.payload.tags,

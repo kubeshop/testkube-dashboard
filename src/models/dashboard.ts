@@ -6,22 +6,9 @@ import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {FilterType} from './filters';
 import {InfoPanelConfig} from './infoPanel';
 
-export type DashboardBlueprintType =
-  | 'test-suites'
-  | 'test-suite-executions'
-  | 'test-executions'
-  | 'executions'
-  | 'tests';
+export type DashboardBlueprintType = 'test-suites' | 'test-suite-executions' | 'tests' | 'executions';
 
-export type DashboardReduxEntities =
-  | 'tests'
-  | 'scripts'
-  | 'testExecutions'
-  | 'executions'
-  | 'tags'
-  | 'config'
-  | 'testSuites'
-  | 'testSuiteExecutions';
+export type DashboardReduxEntities = 'testSuites' | 'testSuiteExecutions' | 'tests' | 'executions' | 'tags' | 'config';
 
 export type DashboardBlueprintProps = {
   entityType: DashboardBlueprintType;
@@ -39,7 +26,7 @@ export type DashboardBlueprint = {
   route?: string;
 
   /**
-   * Page title e.g. 'Scripts'
+   * Page title e.g. 'Test Suites'
    */
 
   pageTitle?: string;
@@ -137,7 +124,7 @@ export type DashboardBlueprint = {
   selectedRecordIdFieldName?: string;
 
   /**
-   * The name of the field which reflects the script type fetched from the Backend
+   * The name of the field which reflects the test type fetched from the Backend
    */
 
   testTypeFieldName?: string;

@@ -11,5 +11,5 @@ export const searchParamsLists: SearchParamsTypes = {
   tests: ['textSearch', 'type', 'tags', 'createdAt'],
   'test-executions': ['textSearch', 'page', 'pageSize', 'tags'],
   'test-suite-executions': ['textSearch', 'page', 'pageSize', 'tags'],
-  executions: ['scriptName', 'type', 'status', 'page', 'pageSize', 'startDate', 'endDate', 'tags'],
+  executions: ['testName', 'type', 'status', 'page', 'pageSize', 'startDate', 'endDate', 'tags'],
 };

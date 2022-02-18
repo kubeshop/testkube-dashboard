@@ -1,4 +1,4 @@
-import {ScriptType} from '@models/tests';
+import {TestType} from '@models/tests';
 
 import {Title} from '@atoms';
 
@@ -7,7 +7,7 @@ import {TestRunner} from '@molecules';
 import {StyledInfoPanelHeaderContainer} from './InfoPanelHeader.styled';
 
 type InfoPanelHeaderProps = {
-  testType?: ScriptType;
+  testType?: TestType;
   title: string;
 };
 

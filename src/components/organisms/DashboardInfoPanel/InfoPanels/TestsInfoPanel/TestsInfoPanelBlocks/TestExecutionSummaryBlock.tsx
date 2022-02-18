@@ -9,11 +9,11 @@ import styled from 'styled-components';
 
 import {StyledInfoPanelSection, StyledInfoPanelSectionTitle} from '../../../DashboardInfoPanel.styled';
 
-type ScriptExecutionSummaryProps = {
+type TestExecutionSummaryProps = {
   total: number;
   failed: number;
   passed: number;
-  scriptName: string;
+  testName: string;
 };
 
 const StyledSummaryContainer = styled.ul`
@@ -65,8 +65,8 @@ const StyledSummaryItemIconContainer = styled.div`
   }
 `;
 
-const TestExecutionSummaryBlock: React.FC<ScriptExecutionSummaryProps> = props => {
-  const {total, failed, passed, scriptName} = props;
+const TestExecutionSummaryBlock: React.FC<TestExecutionSummaryProps> = props => {
+  const {total, failed, passed, testName} = props;
 
   return (
     <StyledInfoPanelSection>

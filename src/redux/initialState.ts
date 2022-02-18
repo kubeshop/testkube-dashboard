@@ -71,7 +71,7 @@ const initialExecutionsState: ExecutionsState = {
     status: undefined,
     startDate: null,
     endDate: null,
-    scriptName: '',
+    testName: '',
     type: '',
     tags: [],
   },

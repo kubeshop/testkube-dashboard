@@ -1,4 +1,4 @@
-import {Script} from '@models/tests';
+import {Test} from '@models/tests';
 
 import {useAppDispatch} from '@redux/hooks';
 
@@ -9,7 +9,7 @@ import {useGetTestExecutionsByIdQuery} from '@services/tests';
 import {TestExecutionSummaryBlock} from './TestsInfoPanelBlocks';
 
 type TestsInfoPanelProps = {
-  selectedRecord: Script;
+  selectedRecord: Test;
 };
 
 const TestsInfoPanel: React.FC<TestsInfoPanelProps> = props => {
@@ -22,9 +22,9 @@ const TestsInfoPanel: React.FC<TestsInfoPanelProps> = props => {
 
   const isQueryLoading = isLoading || isFetching;
 
-  const scriptCLICommands = [
-    {command: `kubectl testkube scripts start ${name}`, label: 'Start script'},
-    {command: `kubectl testkube scripts delete ${name}`, label: 'Delete script'},
+  const testsCLICommands = [
+    {command: `kubectl testkube test run ${name}`, label: 'Start test'},
+    {command: `kubectl testkube test delete ${name}`, label: 'Delete test'},
   ];
 
   return (
@@ -34,10 +34,10 @@ const TestsInfoPanel: React.FC<TestsInfoPanelProps> = props => {
           total={testExecutionData.filtered.results}
           passed={testExecutionData.filtered.passed}
           failed={testExecutionData.filtered.failed}
-          scriptName={selectedRecord.name}
+          testName={selectedRecord.name}
         />
       ) : null}
-      <CLICommands cliCommands={scriptCLICommands} />
+      <CLICommands cliCommands={testsCLICommands} />
     </>
   );
 };

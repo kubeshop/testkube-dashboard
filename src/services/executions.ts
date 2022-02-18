@@ -8,7 +8,7 @@ export const executionsApi = createApi({
   endpoints: builder => ({
     getExecutions: builder.query({
       query: (filters: any) => {
-        return `${filters.scriptName ? `/scripts/${filters.scriptName}` : ''}/executions?${paramsSerializer(filters)}`;
+        return `${filters.testName ? `/tests/${filters.testName}` : ''}/executions?${paramsSerializer(filters)}`;
       },
     }),
     getScriptExecutionById: builder.query({

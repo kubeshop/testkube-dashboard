@@ -1,28 +1,28 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {Script, TestsState} from '@models/tests';
+import {Test, TestsState} from '@models/tests';
 
 import initialState from '@redux/initialState';
 
 import {RootState} from '../store';
 
-type SetScriptsPayload = Script[];
+type SetTestsPayload = Test[];
 
-type SetSelectedScriptPayload = any;
+type SetSelectedTestPayload = any;
 
-type SetFiltersPayload = any;
+type SetTestsFiltersPayload = any;
 
 export const testsSlice = createSlice({
   name: 'testsSlice',
   initialState: initialState.tests,
   reducers: {
-    setTests: (state: Draft<TestsState>, action: PayloadAction<SetScriptsPayload>) => {
+    setTests: (state: Draft<TestsState>, action: PayloadAction<SetTestsPayload>) => {
       state.dataList = action.payload;
     },
-    setTestsFilters: (state: Draft<TestsState>, action: PayloadAction<SetFiltersPayload>) => {
+    setTestsFilters: (state: Draft<TestsState>, action: PayloadAction<SetTestsFiltersPayload>) => {
       state.filters = action.payload;
     },
-    setSelectedTest: (state: Draft<TestsState>, action: PayloadAction<SetSelectedScriptPayload>) => {
+    setSelectedTest: (state: Draft<TestsState>, action: PayloadAction<SetSelectedTestPayload>) => {
       state.selectedTest = action.payload[0] || action.payload.selectedRecord;
     },
   },

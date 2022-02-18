@@ -16,8 +16,8 @@ const TestSuitesInfoPanel = (props: any) => {
   const {name, namespace, description, steps} = selectedRecord;
 
   const testCommands = [
-    {command: `kubectl testkube tests run ${name}`, label: 'Start test'},
-    {command: `kubectl testkube tests delete ${name}`, label: 'Delete test'},
+    {command: `kubectl testkube testsuite run ${name}`, label: 'Start test suite'},
+    {command: `kubectl testkube testsuite delete ${name}`, label: 'Delete test suite'},
   ];
 
   return (

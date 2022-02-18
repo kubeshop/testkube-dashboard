@@ -14,7 +14,7 @@ import {
 } from './TestDetailsDrawerHeader.styled';
 
 const TestDetailsDrawerHeader = (props: any) => {
-  const {scriptName, name, scriptType, startTime, endTime, executionResult, execution, status} = props;
+  const {testName, name, testType, startTime, endTime, executionResult, execution, status} = props;
 
   return (
     <StyledTestDetailsDrawerHeaderContainer>

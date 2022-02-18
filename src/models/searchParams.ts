@@ -6,7 +6,7 @@ export type SearchParamKey =
   | 'pageSize'
   | 'status'
   | 'page'
-  | 'scriptName'
+  | 'testName'
   | 'createdAt'
   | 'type';
 

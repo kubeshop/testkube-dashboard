@@ -1,13 +1,13 @@
 import {testRunnerIcons, testRunnersNames} from '@constants/testRunners';
 
-import {ScriptType} from '@models/tests';
+import {TestType} from '@models/tests';
 
 import {TestRunnerIcon, Title} from '@atoms';
 
 import {StyledTestRunnerContainer} from './TestRunner.styled';
 
 type TestRunnerProps = {
-  testType: ScriptType;
+  testType: TestType;
 };
 
 const TestRunner: React.FC<TestRunnerProps> = props => {
