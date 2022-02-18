@@ -4,23 +4,23 @@ import {createLogger} from 'redux-logger';
 
 import configSlice from '@redux/reducers/configSlice';
 import executionsSlice from '@redux/reducers/executionsSlice';
-import scriptsSlice from '@redux/reducers/scriptsSlice';
 import tagsSlice from '@redux/reducers/tagsSlice';
-import textExecutionsSlice from '@src/redux/reducers/testExecutionsSlice';
+import testSuiteExecutionsSlice from '@redux/reducers/testSuiteExecutionsSlice';
+import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
 
 import {executionsApi} from '@services/executions';
-import {scriptsApi} from '@services/scripts';
 import {tagsApi} from '@services/tags';
-import {testExecutionsApi} from '@services/testExecutions';
+import {testSuiteExecutionsApi} from '@services/testSuiteExecutions';
+import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
 
 const middlewares: Middleware[] = [
   executionsApi.middleware,
-  scriptsApi.middleware,
   testsApi.middleware,
+  testSuitesApi.middleware,
   tagsApi.middleware,
-  testExecutionsApi.middleware,
+  testSuiteExecutionsApi.middleware,
 ];
 
 if (process.env.NODE_ENV === `development`) {
@@ -31,18 +31,18 @@ if (process.env.NODE_ENV === `development`) {
 
 export const store = configureStore({
   reducer: {
+    testSuites: testSuitesSlice,
     tests: testsSlice,
-    scripts: scriptsSlice,
     executions: executionsSlice,
     tags: tagsSlice,
     config: configSlice,
-    testExecutions: textExecutionsSlice,
+    testSuiteExecutions: testSuiteExecutionsSlice,
 
+    [testSuitesApi.reducerPath]: testSuitesApi.reducer,
     [testsApi.reducerPath]: testsApi.reducer,
-    [scriptsApi.reducerPath]: scriptsApi.reducer,
     [executionsApi.reducerPath]: executionsApi.reducer,
     [tagsApi.reducerPath]: tagsApi.reducer,
-    [testExecutionsApi.reducerPath]: testExecutionsApi.reducer,
+    [testSuiteExecutionsApi.reducerPath]: testSuiteExecutionsApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 });

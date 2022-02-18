@@ -1,13 +1,13 @@
 import {ConfigState} from '@models/config';
 import {ExecutionsState} from '@models/executions';
-import {ScriptsState} from '@models/scripts';
 import {TagsState} from '@models/tags';
-import {TestExecutionsState} from '@models/testExecutions';
+import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
+import {TestSuitesState} from '@models/testSuites';
 import {TestsState} from '@models/tests';
 
-const initialTestExecutionsState: TestExecutionsState = {
+const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
-  testExecutionsList: [],
+  dataList: [],
   filters: {pageSize: 10, page: 0, tags: '', textSearch: ''},
   totals: {
     results: 0,
@@ -21,13 +21,32 @@ const initialTestExecutionsState: TestExecutionsState = {
     failed: 0,
     pending: 0,
   },
-  selectedTestExecution: null,
+  selectedTestSuiteExecution: null,
+};
+
+const initialTestSuitesState: TestSuitesState = {
+  isLoading: false,
+  dataList: [],
+  filters: {textSearch: '', pageSize: 10, page: 0, tags: '', startDate: null, endDate: null},
+  totals: {
+    results: 0,
+    passed: 0,
+    failed: 0,
+    pending: 0,
+  },
+  filtered: {
+    results: 0,
+    passed: 0,
+    failed: 0,
+    pending: 0,
+  },
+  selectedTestSuite: null,
 };
 
 const initialTestsState: TestsState = {
   isLoading: false,
-  testsList: [],
-  filters: {textSearch: '', pageSize: 10, page: 0, tags: '', startDate: null, endDate: null},
+  dataList: [],
+  filters: {textSearch: '', type: '', pageSize: 10, page: 0, tags: [], createdAt: null},
   totals: {
     results: 0,
     passed: 0,
@@ -43,25 +62,6 @@ const initialTestsState: TestsState = {
   selectedTest: null,
 };
 
-const initialScriptsState: ScriptsState = {
-  isLoading: false,
-  scriptsList: [],
-  filters: {textSearch: '', type: '', pageSize: 10, page: 0, tags: [], createdAt: null},
-  totals: {
-    results: 0,
-    passed: 0,
-    failed: 0,
-    pending: 0,
-  },
-  filtered: {
-    results: 0,
-    passed: 0,
-    failed: 0,
-    pending: 0,
-  },
-  selectedScript: null,
-};
-
 const initialExecutionsState: ExecutionsState = {
   isLoading: false,
   executionsList: [],
@@ -71,7 +71,7 @@ const initialExecutionsState: ExecutionsState = {
     status: undefined,
     startDate: null,
     endDate: null,
-    scriptName: '',
+    testName: '',
     type: '',
     tags: [],
   },
@@ -106,9 +106,9 @@ const initialConfigState: ConfigState = {
 };
 
 const initialReduxState = {
-  testExecutions: initialTestExecutionsState,
+  testSuiteExecutions: initialTestSuiteExecutionsState,
+  testSuites: initialTestSuitesState,
   tests: initialTestsState,
-  scripts: initialScriptsState,
   executions: initialExecutionsState,
   tags: initialTagsState,
   config: initialConfigState,

@@ -6,13 +6,13 @@ export type SearchParamKey =
   | 'pageSize'
   | 'status'
   | 'page'
-  | 'scriptName'
+  | 'testName'
   | 'createdAt'
   | 'type';
 
 export type SearchParamValue = any;
 
-export type SearchParamsType = 'tests' | 'scripts' | 'executions' | 'test-executions';
+export type SearchParamsType = 'test-suites' | 'tests' | 'executions' | 'test-executions' | 'test-suite-executions';
 
 export type SearchParamsKeys = SearchParamKey[];
 
@@ -25,8 +25,9 @@ export type ValidatedSearchParams = {
 };
 
 export enum SearchParams {
+  'test-suites' = 'test-suites',
+  'test-suite-executions' = 'test-suite-executions',
   tests = 'tests',
-  scripts = 'scripts',
   'test-executions' = 'test-executions',
   executions = 'executions',
 }

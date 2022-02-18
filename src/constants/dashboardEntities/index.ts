@@ -1,6 +1,6 @@
 import ExecutionsEntity from './executions';
-import ScriptsEntity from './scripts';
-import TestExecutionsEntity from './testExecutions';
+import TestSuiteExecutionsEntity from './testSuiteExecutions';
+import TestSuitesEntity from './testSuites';
 import TestsEntity from './tests';
 
-export default {TestsEntity, ScriptsEntity, ExecutionsEntity, TestExecutionsEntity};
+export default {TestSuitesEntity, TestsEntity, ExecutionsEntity, TestSuiteExecutionsEntity};

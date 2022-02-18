@@ -19,13 +19,13 @@ const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
   date: DateFilter,
   textSearch: TextFilter,
   tags: TagsFilter,
-  scriptType: TextFilter,
+  testType: TextFilter,
 };
 
 const filterSpecificProps: Partial<Record<FilterType, any>> = {
-  scriptType: {
+  testType: {
     queryParam: 'type',
-    placeholderText: 'Script type',
+    placeholderText: 'Test type',
   },
 };
 

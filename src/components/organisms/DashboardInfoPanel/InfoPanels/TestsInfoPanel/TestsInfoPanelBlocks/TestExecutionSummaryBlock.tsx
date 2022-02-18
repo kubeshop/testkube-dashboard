@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {Link} from 'react-router-dom';
 
 import {Button} from 'antd';
@@ -8,11 +9,11 @@ import styled from 'styled-components';
 
 import {StyledInfoPanelSection, StyledInfoPanelSectionTitle} from '../../../DashboardInfoPanel.styled';
 
-type ScriptExecutionSummaryProps = {
+type TestExecutionSummaryProps = {
   total: number;
   failed: number;
   passed: number;
-  scriptName: string;
+  testName: string;
 };
 
 const StyledSummaryContainer = styled.ul`
@@ -64,8 +65,8 @@ const StyledSummaryItemIconContainer = styled.div`
   }
 `;
 
-const ScriptExecutionSummaryBlock: React.FC<ScriptExecutionSummaryProps> = props => {
-  const {total, failed, passed, scriptName} = props;
+const TestExecutionSummaryBlock: React.FC<TestExecutionSummaryProps> = props => {
+  const {total, failed, passed, testName} = props;
 
   return (
     <StyledInfoPanelSection>
@@ -91,14 +92,14 @@ const ScriptExecutionSummaryBlock: React.FC<ScriptExecutionSummaryProps> = props
           </StyledSummaryItemTitle>
           <StyledSummaryItemValue>{passed.toLocaleString()}</StyledSummaryItemValue>
         </StyledSummaryItem>
-        <StyledSummaryItem>
+        {/* <StyledSummaryItem>
           <Button type="primary" ghost>
             <Link to={`/dashboard/executions?scriptName=${scriptName}`}>Show all Executions</Link>
           </Button>
-        </StyledSummaryItem>
+        </StyledSummaryItem> */}
       </StyledSummaryContainer>
     </StyledInfoPanelSection>
   );
 };
 
-export default ScriptExecutionSummaryBlock;
+export default TestExecutionSummaryBlock;

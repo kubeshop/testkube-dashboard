@@ -1,22 +1,22 @@
 import {testRunnerIcons, testRunnersNames} from '@constants/testRunners';
 
-import {ScriptType} from '@models/scripts';
+import {TestType} from '@models/tests';
 
 import {TestRunnerIcon, Title} from '@atoms';
 
 import {StyledTestRunnerContainer} from './TestRunner.styled';
 
 type TestRunnerProps = {
-  scriptType: ScriptType;
+  testType: TestType;
 };
 
 const TestRunner: React.FC<TestRunnerProps> = props => {
-  const {scriptType} = props;
+  const {testType} = props;
 
   return (
     <StyledTestRunnerContainer>
-      <Title level={5}>{testRunnersNames[scriptType]}</Title>
-      <TestRunnerIcon icon={testRunnerIcons[scriptType]} />
+      <Title level={5}>{testRunnersNames[testType]}</Title>
+      <TestRunnerIcon icon={testRunnerIcons[testType]} />
     </StyledTestRunnerContainer>
   );
 };

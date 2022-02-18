@@ -1,6 +1,8 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 
+import {TablePaginationConfig} from 'antd';
+
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {useAppSelector} from '@redux/hooks';
@@ -26,7 +28,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     selectSelectedRecord,
     canSelectRow,
     selectedRecordIdFieldName,
-    scriptTypeFieldName,
+    testTypeFieldName,
     infoPanelComponent,
     setQueryFilters,
     infoPanelConfig,
@@ -37,8 +39,11 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const dispatch = useDispatch();
 
   const dataSource: any = useAppSelector(selectData);
+  console.log('dataSource: ', dataSource);
   const selectedRecord: any = useAppSelector(selectSelectedRecord);
+  console.log('selectedRecord: ', selectedRecord);
   const queryFilters: any = useAppSelector(selectQueryFilters);
+  console.log('queryFilters: ', queryFilters);
   const allFilters: any = useAppSelector(selectAllFilters);
   const apiEndpoint = useAppSelector(selectApiEndpoint);
 
@@ -88,9 +93,13 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
 
   const shouldInfoPanelBeShown = hasInfoPanel && dataSource?.length;
 
-  const pagination = {
-    onChange: (page: number, pageSize: number) => {
+  const pagination: TablePaginationConfig = {
+    onChange: (page: number, pageSize?: number) => {
       dispatch(setQueryFilters({...queryFilters, page: page - 1, pageSize}));
+    },
+
+    onShowSizeChange: (page, pageSize) => {
+      dispatch(setQueryFilters({...queryFilters, page: 0, pageSize}));
     },
 
     ...(allFilters.totals?.results ? {total: allFilters.totals?.results} : {}),
@@ -128,7 +137,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
       <DashboardInfoPanel
         shouldInfoPanelBeShown={shouldInfoPanelBeShown}
         selectedRecord={selectedRecord}
-        scriptTypeFieldName={scriptTypeFieldName}
+        testTypeFieldName={testTypeFieldName}
         isInfoPanelExpanded={isInfoPanelExpanded}
         setInfoPanelVisibility={setInfoPanelVisibility}
         infoPanelComponent={infoPanelComponent}

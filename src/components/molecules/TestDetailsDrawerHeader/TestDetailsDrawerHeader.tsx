@@ -14,7 +14,7 @@ import {
 } from './TestDetailsDrawerHeader.styled';
 
 const TestDetailsDrawerHeader = (props: any) => {
-  const {scriptName, name, scriptType, startTime, endTime, executionResult, execution, status} = props;
+  const {testName, name, testType, startTime, endTime, executionResult, execution, status} = props;
 
   return (
     <StyledTestDetailsDrawerHeaderContainer>
@@ -35,7 +35,6 @@ const TestDetailsDrawerHeader = (props: any) => {
               {getStatus(!status ? executionResult?.status : status)}
             </Typography>
           </StyledTestStatusContainer>
-
           <StyledTestDates>
             <Typography
               color="secondary"
@@ -49,7 +48,6 @@ const TestDetailsDrawerHeader = (props: any) => {
               {timeStampToDate(startTime)}
             </Typography>
           </StyledTestDates>
-
           <StyledTestDates>
             <Typography color="secondary" variant="secondary" font="bold" style={{marginRight: '10px'}}>
               End

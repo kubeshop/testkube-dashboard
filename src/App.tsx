@@ -57,15 +57,15 @@ const App = () => {
         <Content>
           <Routes>
             <Route path="apiEndpoint" element={<EndpointProcessing />} />
-            <Route path="dashboard/tests" element={<DashboardBlueprintRenderer entityType="tests" />} />
+            <Route path="dashboard/test-suites" element={<DashboardBlueprintRenderer entityType="test-suites" />} />
             <Route
-              path="dashboard/test-executions"
-              element={<DashboardBlueprintRenderer entityType="test-executions" />}
+              path="dashboard/test-suite-executions"
+              element={<DashboardBlueprintRenderer entityType="test-suite-executions" />}
             />
-            <Route path="dashboard/scripts" element={<DashboardBlueprintRenderer entityType="scripts" />} />
+            <Route path="dashboard/tests" element={<DashboardBlueprintRenderer entityType="tests" />} />
             <Route path="dashboard/executions" element={<DashboardBlueprintRenderer entityType="executions" />} />
             <Route path="dashboard/*" element={<NotFound />} />
-            <Route path="*" element={<Navigate to="dashboard/tests" />} />
+            <Route path="*" element={<Navigate to="dashboard/test-suites" />} />
           </Routes>
         </Content>
       </StyledLayoutContentWrapper>

@@ -10,8 +10,8 @@ import {selectApiEndpoint} from '@redux/reducers/configSlice';
 import {Title} from '@atoms';
 
 import {useGetExecutionsQuery} from '@services/executions';
-import {useGetScriptsQuery} from '@services/scripts';
-import {useGetTestExecutionsByTestIdQuery} from '@services/testExecutions';
+import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecutions';
+import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
 
 import {StyledDashboardContentContainer} from './DashboardContent.styled';
@@ -21,6 +21,30 @@ const pollingInterval = 5000;
 
 // The reason I've done like this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
+const TestSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
+  const {data, isLoading, isFetching, refetch} = useGetTestSuitesQuery(queryFilters || null, {
+    pollingInterval,
+  });
+
+  useEffect(() => {
+    onDataChange({data, isLoading, isFetching, refetch});
+  }, [data, isLoading, isFetching]);
+
+  return <></>;
+};
+
+const TestSuiteExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
+  const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionsByTestIdQuery(queryFilters || null, {
+    pollingInterval,
+  });
+
+  useEffect(() => {
+    onDataChange({data, isLoading, isFetching, refetch});
+  }, [data, isLoading, isFetching]);
+
+  return <></>;
+};
+
 const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetTestsQuery(queryFilters || null, {
     pollingInterval,
@@ -33,31 +57,7 @@ const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
   return <></>;
 };
 
-const TestsExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetTestExecutionsByTestIdQuery(queryFilters || null, {
-    pollingInterval,
-  });
-
-  useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch});
-  }, [data, isLoading, isFetching]);
-
-  return <></>;
-};
-
-const ScriptsDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetScriptsQuery(queryFilters || null, {
-    pollingInterval,
-  });
-
-  useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch});
-  }, [data, isLoading, isFetching]);
-
-  return <></>;
-};
-
-const ScriptsExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
+const ExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetExecutionsQuery(queryFilters || null, {
     pollingInterval,
   });
@@ -112,10 +112,10 @@ const DashboardContent: React.FC<any> = props => {
   };
 
   const dataLayers: any = {
+    'Test Suites': <TestSuitesDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
+    'Test Suite Executions': <TestSuiteExecutionsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
     Tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-    'Tests executions': <TestsExecutionsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-    Scripts: <ScriptsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-    'Scripts executions': <ScriptsExecutionsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
+    Executions: <ExecutionsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
   };
 
   useEffect(() => {

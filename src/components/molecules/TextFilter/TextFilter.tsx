@@ -8,17 +8,17 @@ import {FilterProps} from '@models/filters';
 import {LabelInput} from '@atoms';
 
 const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
+  'test-suites': 'textSearch',
+  'test-suite-executions': 'textSearch',
   tests: 'textSearch',
-  'test-executions': 'textSearch',
-  scripts: 'textSearch',
-  executions: 'scriptName',
+  executions: 'testName',
 };
 
-const placeholders: any = {
+const placeholders: {[key in DashboardBlueprintType]: string} = {
+  'test-suites': 'Test suite',
+  'test-suite-executions': 'Test suite execution',
   tests: 'Test',
-  'test-executions': 'Test',
-  scripts: 'Script',
-  executions: 'Script',
+  executions: 'Test',
 };
 
 const TextFilter: React.FC<FilterProps> = props => {

@@ -1,14 +1,24 @@
-export type Test = {};
+export type TestName = string;
+export type TestContent = string;
 
-export type TestRunners = 'Postman' | 'Cypress' | 'Curl';
+export type TestType = 'postman/collection' | 'cypress/project' | 'curl/test' | 'test/curl';
+
+export type TestCreationDate = Date;
+
+export type Test = {
+  content: TestContent;
+  created: TestCreationDate;
+  name: TestName;
+  type: TestType;
+};
 
 interface TestsState {
   isLoading?: boolean;
-  testsList: Test[];
-  filters: {textSearch: string; pageSize: number; page: number; tags: string; startDate: null; endDate: null};
+  dataList: Test[];
+  filters: {textSearch: string; type: string; pageSize: number; page: number; tags: []; createdAt: null};
   totals: {};
   filtered: {};
-  selectedTest?: any | null;
+  selectedTest: Test | null;
 }
 
 export type {TestsState};

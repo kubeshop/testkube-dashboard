@@ -1,9 +1,9 @@
-import {ScriptContent, ScriptName, ScriptType} from '@models/scripts';
+import {TestContent, TestName, TestType} from '@models/tests';
 
 export type Execution = {
-  scriptName: ScriptName;
-  scriptType: ScriptType;
-  scriptContent: ScriptContent;
+  testName: TestName;
+  testType: TestType;
+  testContent: TestContent;
   startTime: ExecutionStartTime;
   endTime: ExecutionEndTime;
   name: ExecutionName;
@@ -51,7 +51,7 @@ interface ExecutionsState {
     status: undefined;
     startDate: null;
     endDate: null;
-    scriptName: string;
+    testName: string;
     type: string;
     tags: Array<any>;
   };

@@ -1,22 +1,19 @@
-import {Link} from 'react-router-dom';
-
-import {Button} from 'antd';
-
 import {DashboardBlueprint} from '@models/dashboard';
-
-import {
-  selectAllTestsFilters,
-  selectFilters,
-  selectSelectedTest,
-  selectTests,
-  setFilters,
-  setSelectedTest,
-  setTests,
-} from '@redux/reducers/testsSlice';
 
 import TestsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestsInfoPanel';
 
-import {useGetTestsQuery} from '@services/tests';
+import {timeStampToDate} from '@utils/formatDate';
+
+import {
+  selectAllTestsFilters,
+  selectSelectedTest,
+  selectTests,
+  selectTestsFilters,
+  setSelectedTest,
+  setTests,
+  setTestsFilters,
+} from '@src/redux/reducers/testsSlice';
+import {useGetTestsQuery} from '@src/services/tests';
 
 export const TestsEntity: DashboardBlueprint = {
   entityType: 'tests',
@@ -24,7 +21,7 @@ export const TestsEntity: DashboardBlueprint = {
   reduxEntity: 'tests',
   pageTitle: 'Tests',
   hasInfoPanel: true,
-  reduxListName: 'testsList',
+  reduxListName: 'dataList',
   canSelectRow: true,
 
   infoPanelComponent: TestsInfoPanel,
@@ -33,31 +30,22 @@ export const TestsEntity: DashboardBlueprint = {
   setData: setTests,
   selectData: selectTests,
 
-  setQueryFilters: setFilters,
-  selectQueryFilters: selectFilters,
+  setQueryFilters: setTestsFilters,
+  selectQueryFilters: selectTestsFilters,
   selectAllFilters: selectAllTestsFilters,
 
   setSelectedRecord: setSelectedTest,
   selectSelectedRecord: selectSelectedTest,
 
   selectedRecordIdFieldName: 'name',
+  testTypeFieldName: 'type',
 
   columns: [
     {
       title: 'Test name',
-      render: (data: any) => data?.name,
-      key: 'testName',
+      dataIndex: 'name',
     },
-    {
-      title: 'Namespace',
-      render: (data: any) => data?.namespace,
-      key: 'testNamespace',
-    },
-    {
-      title: 'Test description',
-      render: (data: any) => data?.description,
-      key: 'testDescription',
-    },
+    {title: 'Test type', dataIndex: 'type', key: 'type'},
     {
       title: 'Test tags',
       render: (data: any) => {
@@ -73,31 +61,13 @@ export const TestsEntity: DashboardBlueprint = {
       },
     },
     {
-      title: 'Number of steps',
-      render: (data: any) => {
-        return <span>{data?.steps?.length}</span>;
-      },
-      key: 'testNumberOfSteps',
+      title: 'Created at',
+      dataIndex: 'created',
+      render: (created: string) => timeStampToDate(created),
     },
-    {
-      title: 'Number of executions',
-      render: (data: any) => data?.repeats,
-      key: 'testNumberOfExecutions',
-    },
-    {
-      title: '',
-      dataIndex: 'name',
-      render: (name: any) => {
-        return (
-          <Button type="primary" ghost>
-            <Link to={`/dashboard/test-executions?textSearch=${name}`}>Show test executions</Link>
-          </Button>
-        );
-      },
-      width: '25%',
-    },
+    {},
   ],
-  filtersComponentsIds: ['textSearch', 'tags'],
+  filtersComponentsIds: ['textSearch', 'testType', 'date', 'tags'],
 };
 
 export default TestsEntity;

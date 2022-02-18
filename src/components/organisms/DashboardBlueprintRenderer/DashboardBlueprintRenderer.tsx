@@ -1,6 +1,6 @@
 import ExecutionsEntity from '@constants/dashboardEntities/executions';
-import ScriptsEntity from '@constants/dashboardEntities/scripts';
-import TestExecutionsEntity from '@constants/dashboardEntities/testExecutions';
+import TestSuiteExecutionsEntity from '@constants/dashboardEntities/testSuiteExecutions';
+import TestSuitesEntity from '@constants/dashboardEntities/testSuites';
 import TestsEntity from '@constants/dashboardEntities/tests';
 
 import {DashboardBlueprint, DashboardBlueprintProps, DashboardBlueprintType} from '@models/dashboard';
@@ -8,10 +8,10 @@ import {DashboardBlueprint, DashboardBlueprintProps, DashboardBlueprintType} fro
 import {DashboardContainer} from '@organisms';
 
 const entities: {[key in DashboardBlueprintType]: DashboardBlueprint} = {
+  'test-suites': TestSuitesEntity,
   tests: TestsEntity,
-  scripts: ScriptsEntity,
   executions: ExecutionsEntity,
-  'test-executions': TestExecutionsEntity,
+  'test-suite-executions': TestSuiteExecutionsEntity,
 };
 
 const DashboardBlueprintRenderer: React.FC<DashboardBlueprintProps> = props => {

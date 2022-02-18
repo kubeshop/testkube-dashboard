@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useCallback, useEffect, useState} from 'react';
 import {useLocation} from 'react-router';
 import {NavLink} from 'react-router-dom';
@@ -69,19 +70,22 @@ const SideBar = () => {
         </StyledLogo>
         <StyledCol>
           <StyledNavigation>
+            <Tooltip title="Test Suites" placement="right" color={Colors.blue6}>
+              <NavLink to="/dashboard/test-suites">
+                <StyledMenuItem icon={<BarsOutlined style={ICON_STYLE} key="/dashboard/test-suites" />} />
+              </NavLink>
+            </Tooltip>
+            <Tooltip title="Test Suite Executions" placement="right" color={Colors.blue6}>
+              <NavLink to="/dashboard/test-suite-executions">
+                <StyledMenuItem
+                  icon={<UnorderedListOutlined style={ICON_STYLE} />}
+                  key="/dashboard/test-suite-executions"
+                />
+              </NavLink>
+            </Tooltip>
             <Tooltip title="Tests" placement="right" color={Colors.blue6}>
               <NavLink to="/dashboard/tests">
-                <StyledMenuItem icon={<BarsOutlined style={ICON_STYLE} key="/dashboard/tests" />} />
-              </NavLink>
-            </Tooltip>
-            <Tooltip title="Test executions" placement="right" color={Colors.blue6}>
-              <NavLink to="/dashboard/test-executions">
-                <StyledMenuItem icon={<UnorderedListOutlined style={ICON_STYLE} />} key="/dashboard/test-executions" />
-              </NavLink>
-            </Tooltip>
-            <Tooltip title="Scripts" placement="right" color={Colors.blue6}>
-              <NavLink to="/dashboard/scripts">
-                <StyledMenuItem icon={<BarChartOutlined style={ICON_STYLE} />} key="/dashboard/scripts" />
+                <StyledMenuItem icon={<BarChartOutlined style={ICON_STYLE} />} key="/dashboard/tests" />
               </NavLink>
             </Tooltip>
             <Tooltip title="Executions" placement="right" color={Colors.blue6}>
