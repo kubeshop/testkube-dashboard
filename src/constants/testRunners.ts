@@ -1,5 +1,5 @@
+import {TestRunners} from '@models/testSuites';
 import {ScriptType} from '@models/tests';
-import {TestRunners} from '@models/testsSuites';
 
 import CurlIcon from '@assets/curlIcon.svg';
 import CypressIcon from '@assets/cypressIcon.svg';

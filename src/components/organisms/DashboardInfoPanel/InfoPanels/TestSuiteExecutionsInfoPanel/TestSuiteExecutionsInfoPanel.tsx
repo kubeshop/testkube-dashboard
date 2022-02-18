@@ -1,15 +1,15 @@
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectSelectedTestExecution} from '@redux/reducers/testExecutionsSlice';
+import {selectSelectedTestSuiteExecution} from '@redux/reducers/testSuiteExecutionsSlice';
 
 import {TestDetailsDrawerHeader} from '@molecules';
 import TestExecutionResultsOutputs from '@molecules/ExecutionResultsOutputs/TestExecutionResultsOutputs';
 
-const TestExecutionsInfoPanel = (props: any) => {
+const TestSuiteExecutionsInfoPanel = (props: any) => {
   const {selectedRecord} = props;
 
   const dispatch = useAppDispatch();
 
-  const selectedTestExecutionInfo = useAppSelector(selectSelectedTestExecution);
+  const selectedTestExecutionInfo = useAppSelector(selectSelectedTestSuiteExecution);
 
   if (!selectedTestExecutionInfo) {
     return <div />;
@@ -24,4 +24,4 @@ const TestExecutionsInfoPanel = (props: any) => {
   );
 };
 
-export default TestExecutionsInfoPanel;
+export default TestSuiteExecutionsInfoPanel;

@@ -1,37 +1,37 @@
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {
-  selectAllTestsSuitesFilters,
+  selectAllTestSuitesFilters,
   selectSelectedTestSuite,
-  selectTestsSuites,
-  selectTestsSuitesFilters,
+  selectTestSuites,
+  selectTestSuitesFilters,
   setSelectedTestSuite,
-  setTestsSuites,
-  setTestsSuitesFilters,
-} from '@redux/reducers/testsSuitesSlice';
+  setTestSuites,
+  setTestSuitesFilters,
+} from '@redux/reducers/testSuitesSlice';
 
-import TestsSuitesInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestsSuitesInfoPanel';
+import TestSuitesInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestSuitesInfoPanel';
 
-import {useGetTestsSuitesQuery} from '@services/testsSuites';
+import {useGetTestSuitesQuery} from '@services/testSuites';
 
-export const TestsSuitesEntity: DashboardBlueprint = {
-  entityType: 'tests-suites',
-  route: '/dashboard/tests-suites',
-  reduxEntity: 'testsSuites',
-  pageTitle: 'Tests Suites',
+export const TestSuitesEntity: DashboardBlueprint = {
+  entityType: 'test-suites',
+  route: '/dashboard/test-suites',
+  reduxEntity: 'testSuites',
+  pageTitle: 'Test Suites',
   hasInfoPanel: true,
   reduxListName: 'dataList',
   canSelectRow: true,
 
-  infoPanelComponent: TestsSuitesInfoPanel,
+  infoPanelComponent: TestSuitesInfoPanel,
 
-  useGetData: useGetTestsSuitesQuery,
-  setData: setTestsSuites,
-  selectData: selectTestsSuites,
+  useGetData: useGetTestSuitesQuery,
+  setData: setTestSuites,
+  selectData: selectTestSuites,
 
-  setQueryFilters: setTestsSuitesFilters,
-  selectQueryFilters: selectTestsSuitesFilters,
-  selectAllFilters: selectAllTestsSuitesFilters,
+  setQueryFilters: setTestSuitesFilters,
+  selectQueryFilters: selectTestSuitesFilters,
+  selectAllFilters: selectAllTestSuitesFilters,
 
   setSelectedRecord: setSelectedTestSuite,
   selectSelectedRecord: selectSelectedTestSuite,
@@ -84,4 +84,4 @@ export const TestsSuitesEntity: DashboardBlueprint = {
   filtersComponentsIds: ['textSearch', 'tags'],
 };
 
-export default TestsSuitesEntity;
+export default TestSuitesEntity;

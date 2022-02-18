@@ -1,52 +1,52 @@
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {
-  selectAllTestsFilters,
-  selectFilters,
-  selectSelectedTestExecution,
-  selectTestExecutions,
-  setFilters,
-  setSelectedTestExecution,
-  setTestExecutions,
-} from '@redux/reducers/testExecutionsSlice';
+  selectAllTestSuiteExecutionsFilters,
+  selectSelectedTestSuiteExecution,
+  selectTestSuiteExecutions,
+  selectTestSuiteExecutionsFilters,
+  setSelectedTestSuiteExecution,
+  setTestSuiteExecutions,
+  setTestSuiteExecutionsFilters,
+} from '@redux/reducers/testSuiteExecutionsSlice';
 import {getStatus} from '@redux/utils/requestFilters';
 
 import {RenderTestStatusSvgIcon} from '@atoms';
 
-import TestExecutionsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestExecutionsInfoPanel/TestExecutionsInfoPanel';
+import TestSuiteExecutionsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestSuiteExecutionsInfoPanel/TestSuiteExecutionsInfoPanel';
 
 import {getDuration, timeStampToDate} from '@utils/formatDate';
 
-import {useGetTestExecutionsByTestIdQuery} from '@services/testExecutions';
+import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecutions';
 
-export const TestExecutionsEntity: DashboardBlueprint = {
-  entityType: 'test-executions',
-  route: '/dashboard/test-executions',
-  reduxEntity: 'testExecutions',
-  pageTitle: 'Tests executions',
+export const TestSuiteExecutionsEntity: DashboardBlueprint = {
+  entityType: 'test-suite-executions',
+  route: '/dashboard/test-suite-executions',
+  reduxEntity: 'testSuiteExecutions',
+  pageTitle: 'Test Suite Executions',
   hasInfoPanel: true,
-  reduxListName: 'executionsList',
+  reduxListName: 'dataList',
   canSelectRow: true,
 
-  infoPanelComponent: TestExecutionsInfoPanel,
+  infoPanelComponent: TestSuiteExecutionsInfoPanel,
 
-  useGetData: useGetTestExecutionsByTestIdQuery,
-  setData: setTestExecutions,
-  selectData: selectTestExecutions,
+  useGetData: useGetTestSuiteExecutionsByTestIdQuery,
+  setData: setTestSuiteExecutions,
+  selectData: selectTestSuiteExecutions,
 
-  setQueryFilters: setFilters,
-  selectQueryFilters: selectFilters,
-  selectAllFilters: selectAllTestsFilters,
+  setQueryFilters: setTestSuiteExecutionsFilters,
+  selectQueryFilters: selectTestSuiteExecutionsFilters,
+  selectAllFilters: selectAllTestSuiteExecutionsFilters,
 
-  setSelectedRecord: setSelectedTestExecution,
-  selectSelectedRecord: selectSelectedTestExecution,
+  setSelectedRecord: setSelectedTestSuiteExecution,
+  selectSelectedRecord: selectSelectedTestSuiteExecution,
 
   selectedRecordIdFieldName: 'id',
-  scriptTypeFieldName: 'scriptType',
+  testTypeFieldName: 'testType',
 
   columns: [
     {
-      title: 'Test execution name',
+      title: 'Test suite execution name',
       dataIndex: 'name',
     },
     {
@@ -94,4 +94,4 @@ export const TestExecutionsEntity: DashboardBlueprint = {
   filtersComponentsIds: ['textSearch', 'tags'],
 };
 
-export default TestExecutionsEntity;
+export default TestSuiteExecutionsEntity;

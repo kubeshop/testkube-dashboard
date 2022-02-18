@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {CLICommands} from '@molecules';
 
 import {StyledInfoPanelSection} from '../../DashboardInfoPanel.styled';
-import TestSummaryBlock from './TestsSuitesInfoPanelBlocks';
+import TestSummaryBlock from './TestSuitesInfoPanelBlocks';
 
 const StyledDescription = styled.span`
   color: #dbdbdb;
@@ -11,7 +11,7 @@ const StyledDescription = styled.span`
   font-size: 20px;
 `;
 
-const TestsSuitesInfoPanel = (props: any) => {
+const TestSuitesInfoPanel = (props: any) => {
   const {selectedRecord} = props;
   const {name, namespace, description, steps} = selectedRecord;
 
@@ -33,4 +33,4 @@ const TestsSuitesInfoPanel = (props: any) => {
   );
 };
 
-export default TestsSuitesInfoPanel;
+export default TestSuitesInfoPanel;

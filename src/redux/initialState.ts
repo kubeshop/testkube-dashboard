@@ -1,14 +1,13 @@
 import {ConfigState} from '@models/config';
 import {ExecutionsState} from '@models/executions';
 import {TagsState} from '@models/tags';
-import {TestExecutionsState} from '@models/testExecutions';
+import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
+import {TestSuitesState} from '@models/testSuites';
 import {TestsState} from '@models/tests';
 
-import {TestsSuitesState} from '@src/models/testsSuites';
-
-const initialTestExecutionsState: TestExecutionsState = {
+const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
-  testExecutionsList: [],
+  dataList: [],
   filters: {pageSize: 10, page: 0, tags: '', textSearch: ''},
   totals: {
     results: 0,
@@ -22,10 +21,10 @@ const initialTestExecutionsState: TestExecutionsState = {
     failed: 0,
     pending: 0,
   },
-  selectedTestExecution: null,
+  selectedTestSuiteExecution: null,
 };
 
-const initialTestsSuitesState: TestsSuitesState = {
+const initialTestSuitesState: TestSuitesState = {
   isLoading: false,
   dataList: [],
   filters: {textSearch: '', pageSize: 10, page: 0, tags: '', startDate: null, endDate: null},
@@ -107,8 +106,8 @@ const initialConfigState: ConfigState = {
 };
 
 const initialReduxState = {
-  testExecutions: initialTestExecutionsState,
-  testsSuites: initialTestsSuitesState,
+  testSuiteExecutions: initialTestSuiteExecutionsState,
+  testSuites: initialTestSuitesState,
   tests: initialTestsState,
   executions: initialExecutionsState,
   tags: initialTagsState,

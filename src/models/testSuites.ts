@@ -2,7 +2,7 @@ export type TestSuite = {};
 
 export type TestRunners = 'Postman' | 'Cypress' | 'Curl';
 
-interface TestsSuitesState {
+interface TestSuitesState {
   isLoading?: boolean;
   dataList: TestSuite[];
   filters: {textSearch: string; pageSize: number; page: number; tags: string; startDate: null; endDate: null};
@@ -11,4 +11,4 @@ interface TestsSuitesState {
   selectedTestSuite?: any | null;
 }
 
-export type {TestsSuitesState};
+export type {TestSuitesState};

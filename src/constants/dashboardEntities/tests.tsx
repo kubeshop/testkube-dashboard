@@ -106,7 +106,7 @@ export const TestsEntity: DashboardBlueprint = {
   selectSelectedRecord: selectSelectedTest,
 
   selectedRecordIdFieldName: 'name',
-  scriptTypeFieldName: 'type',
+  testTypeFieldName: 'type',
 
   columns: [
     {

@@ -71,25 +71,28 @@ const SideBar = () => {
         <StyledCol>
           <StyledNavigation>
             <Tooltip title="Test Suites" placement="right" color={Colors.blue6}>
-              <NavLink to="/dashboard/tests-suites">
-                <StyledMenuItem icon={<BarsOutlined style={ICON_STYLE} key="/dashboard/tests-suites" />} />
+              <NavLink to="/dashboard/test-suites">
+                <StyledMenuItem icon={<BarsOutlined style={ICON_STYLE} key="/dashboard/test-suites" />} />
               </NavLink>
             </Tooltip>
-            {/* <Tooltip title="Test executions" placement="right" color={Colors.blue6}>
-              <NavLink to="/dashboard/test-executions">
-                <StyledMenuItem icon={<UnorderedListOutlined style={ICON_STYLE} />} key="/dashboard/test-executions" />
+            <Tooltip title="Test Suite Executions" placement="right" color={Colors.blue6}>
+              <NavLink to="/dashboard/test-suite-executions">
+                <StyledMenuItem
+                  icon={<UnorderedListOutlined style={ICON_STYLE} />}
+                  key="/dashboard/test-suite-executions"
+                />
               </NavLink>
-            </Tooltip> */}
+            </Tooltip>
             <Tooltip title="Tests" placement="right" color={Colors.blue6}>
               <NavLink to="/dashboard/tests">
                 <StyledMenuItem icon={<BarChartOutlined style={ICON_STYLE} />} key="/dashboard/tests" />
               </NavLink>
             </Tooltip>
-            {/* <Tooltip title="Executions" placement="right" color={Colors.blue6}>
+            <Tooltip title="Executions" placement="right" color={Colors.blue6}>
               <NavLink to="/dashboard/executions">
                 <StyledMenuItem icon={<DashboardOutlined style={ICON_STYLE} />} key="/dashboard/executions" />
               </NavLink>
-            </Tooltip> */}
+            </Tooltip>
           </StyledNavigation>
           <StyledOther>
             <StyledMenuItem onClick={onToggleModal} icon={<SettingFilled style={ICON_STYLE} />} />

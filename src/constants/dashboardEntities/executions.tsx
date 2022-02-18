@@ -23,7 +23,7 @@ export const ExecutionsEntity: DashboardBlueprint = {
   entityType: 'executions',
   route: '/dashboard/executions',
   reduxEntity: 'executions',
-  pageTitle: 'Scripts executions',
+  pageTitle: 'Executions',
   hasInfoPanel: true,
   reduxListName: 'executionsList',
   canSelectRow: true,
@@ -42,15 +42,15 @@ export const ExecutionsEntity: DashboardBlueprint = {
   selectSelectedRecord: selectSelectedExecution,
 
   selectedRecordIdFieldName: 'id',
-  scriptTypeFieldName: 'scriptType',
+  testTypeFieldName: 'testType',
 
   columns: [
     {
       title: 'Type',
-      dataIndex: 'scriptType',
-      render: (scriptType: string) => {
+      dataIndex: 'testType',
+      render: (testType: string) => {
         return {
-          children: <TestTypeIcon testType={scriptType} width={30} height={30} />,
+          children: <TestTypeIcon testType={testType} width={30} height={30} />,
         };
       },
     },
@@ -78,12 +78,12 @@ export const ExecutionsEntity: DashboardBlueprint = {
       },
     },
     {
-      title: 'Script name',
-      dataIndex: 'scriptName',
+      title: 'Test name',
+      dataIndex: 'testName',
       width: '25%',
-      render: (scriptName: string) => {
+      render: (testName: string) => {
         return {
-          children: scriptName,
+          children: testName,
         };
       },
     },

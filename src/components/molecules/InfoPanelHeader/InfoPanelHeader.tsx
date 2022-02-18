@@ -7,17 +7,17 @@ import {TestRunner} from '@molecules';
 import {StyledInfoPanelHeaderContainer} from './InfoPanelHeader.styled';
 
 type InfoPanelHeaderProps = {
-  scriptType?: ScriptType;
+  testType?: ScriptType;
   title: string;
 };
 
 const InfoPanelHeader: React.FC<InfoPanelHeaderProps> = props => {
-  const {title, scriptType} = props;
+  const {title, testType} = props;
 
   return (
     <StyledInfoPanelHeaderContainer>
       <Title level={4}>{title}</Title>
-      {scriptType && <TestRunner scriptType={scriptType} />}
+      {testType && <TestRunner testType={testType} />}
     </StyledInfoPanelHeaderContainer>
   );
 };

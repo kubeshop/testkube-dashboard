@@ -33,11 +33,11 @@ const detectAdBlock = async () => {
 };
 
 (async () => {
-  const isAdBlockEnabled = await detectAdBlock();
+  // const isAdBlockEnabled = await detectAdBlock();
 
-  if (!isAdBlockEnabled) {
-    await ga4react.initialize();
-  }
+  // // if (!isAdBlockEnabled) {
+  // //   await ga4react.initialize();
+  // // }
 
   ReactDOM.render(
     <React.StrictMode>

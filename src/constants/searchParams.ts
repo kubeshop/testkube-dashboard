@@ -7,8 +7,9 @@ import {SearchParamsTypes} from '@models/searchParams';
  */
 
 export const searchParamsLists: SearchParamsTypes = {
-  "tests-suites": ['textSearch', 'tags'],
+  'test-suites': ['textSearch', 'tags'],
   tests: ['textSearch', 'type', 'tags', 'createdAt'],
   'test-executions': ['textSearch', 'page', 'pageSize', 'tags'],
+  'test-suite-executions': ['textSearch', 'page', 'pageSize', 'tags'],
   executions: ['scriptName', 'type', 'status', 'page', 'pageSize', 'startDate', 'endDate', 'tags'],
 };

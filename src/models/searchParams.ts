@@ -12,7 +12,7 @@ export type SearchParamKey =
 
 export type SearchParamValue = any;
 
-export type SearchParamsType = 'tests-suites' | 'tests' | 'executions' | 'test-executions';
+export type SearchParamsType = 'test-suites' | 'tests' | 'executions' | 'test-executions' | 'test-suite-executions';
 
 export type SearchParamsKeys = SearchParamKey[];
 
@@ -25,7 +25,8 @@ export type ValidatedSearchParams = {
 };
 
 export enum SearchParams {
-  'tests-suites' = 'tests-suites',
+  'test-suites' = 'test-suites',
+  'test-suite-executions' = 'test-suite-executions',
   tests = 'tests',
   'test-executions' = 'test-executions',
   executions = 'executions',

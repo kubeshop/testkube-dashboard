@@ -30,11 +30,11 @@ type DashboardInfoPanelProps = {
 };
 
 const DashboardInfoPanel: React.FC<
-  Pick<DashboardBlueprint, 'infoPanelComponent' | 'infoPanelConfig' | 'scriptTypeFieldName'> & DashboardInfoPanelProps
+  Pick<DashboardBlueprint, 'infoPanelComponent' | 'infoPanelConfig' | 'testTypeFieldName'> & DashboardInfoPanelProps
 > = memo(props => {
   const {
     selectedRecord,
-    scriptTypeFieldName,
+    testTypeFieldName,
     setInfoPanelVisibility,
     isInfoPanelExpanded,
     infoPanelComponent: InfoPanelComponent,
@@ -44,7 +44,7 @@ const DashboardInfoPanel: React.FC<
 
   const infoPanelHeaderProps = {
     title: selectedRecord && selectedRecord.name,
-    ...(scriptTypeFieldName && selectedRecord ? {scriptType: selectedRecord[scriptTypeFieldName]} : {}),
+    ...(testTypeFieldName && selectedRecord ? {testType: selectedRecord[testTypeFieldName]} : {}),
   };
 
   // const sectionProps: {[key in InfoPanelType]: any} = {

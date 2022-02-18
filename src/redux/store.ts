@@ -5,22 +5,22 @@ import {createLogger} from 'redux-logger';
 import configSlice from '@redux/reducers/configSlice';
 import executionsSlice from '@redux/reducers/executionsSlice';
 import tagsSlice from '@redux/reducers/tagsSlice';
-import textExecutionsSlice from '@redux/reducers/testExecutionsSlice';
+import testSuiteExecutionsSlice from '@redux/reducers/testSuiteExecutionsSlice';
+import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
-import testsSuitesSlice from '@redux/reducers/testsSuitesSlice';
 
 import {executionsApi} from '@services/executions';
 import {tagsApi} from '@services/tags';
-import {testExecutionsApi} from '@services/testExecutions';
+import {testSuiteExecutionsApi} from '@services/testSuiteExecutions';
+import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
-import {testsSuitesApi} from '@services/testsSuites';
 
 const middlewares: Middleware[] = [
   executionsApi.middleware,
   testsApi.middleware,
-  testsSuitesApi.middleware,
+  testSuitesApi.middleware,
   tagsApi.middleware,
-  testExecutionsApi.middleware,
+  testSuiteExecutionsApi.middleware,
 ];
 
 if (process.env.NODE_ENV === `development`) {
@@ -31,18 +31,18 @@ if (process.env.NODE_ENV === `development`) {
 
 export const store = configureStore({
   reducer: {
-    testsSuites: testsSuitesSlice,
+    testSuites: testSuitesSlice,
     tests: testsSlice,
     executions: executionsSlice,
     tags: tagsSlice,
     config: configSlice,
-    testExecutions: textExecutionsSlice,
+    testSuiteExecutions: testSuiteExecutionsSlice,
 
-    [testsSuitesApi.reducerPath]: testsSuitesApi.reducer,
+    [testSuitesApi.reducerPath]: testSuitesApi.reducer,
     [testsApi.reducerPath]: testsApi.reducer,
     [executionsApi.reducerPath]: executionsApi.reducer,
     [tagsApi.reducerPath]: tagsApi.reducer,
-    [testExecutionsApi.reducerPath]: testExecutionsApi.reducer,
+    [testSuiteExecutionsApi.reducerPath]: testSuiteExecutionsApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 });

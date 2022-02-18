@@ -28,7 +28,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     selectSelectedRecord,
     canSelectRow,
     selectedRecordIdFieldName,
-    scriptTypeFieldName,
+    testTypeFieldName,
     infoPanelComponent,
     setQueryFilters,
     infoPanelConfig,
@@ -39,8 +39,11 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const dispatch = useDispatch();
 
   const dataSource: any = useAppSelector(selectData);
+  console.log('dataSource: ', dataSource);
   const selectedRecord: any = useAppSelector(selectSelectedRecord);
+  console.log('selectedRecord: ', selectedRecord);
   const queryFilters: any = useAppSelector(selectQueryFilters);
+  console.log('queryFilters: ', queryFilters);
   const allFilters: any = useAppSelector(selectAllFilters);
   const apiEndpoint = useAppSelector(selectApiEndpoint);
 
@@ -134,7 +137,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
       <DashboardInfoPanel
         shouldInfoPanelBeShown={shouldInfoPanelBeShown}
         selectedRecord={selectedRecord}
-        scriptTypeFieldName={scriptTypeFieldName}
+        testTypeFieldName={testTypeFieldName}
         isInfoPanelExpanded={isInfoPanelExpanded}
         setInfoPanelVisibility={setInfoPanelVisibility}
         infoPanelComponent={infoPanelComponent}
