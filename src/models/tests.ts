@@ -15,7 +15,7 @@ export type Test = {
 interface TestsState {
   isLoading?: boolean;
   dataList: Test[];
-  filters: {textSearch: string; type: string; pageSize: number; page: number; tags: []; createdAt: null};
+  filters: {textSearch: string; type: string; pageSize: number; page: number; selector: []; createdAt: null};
   totals: {};
   filtered: {};
   selectedTest: Test | null;

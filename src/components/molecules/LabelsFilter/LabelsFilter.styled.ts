@@ -4,9 +4,9 @@ import {CloseOutlined} from '@ant-design/icons';
 
 import styled from 'styled-components';
 
-export const StyledTagsFilterMenu = styled(Menu)``;
+export const StyledLabelsFilterMenu = styled(Menu)``;
 
-export const StyledAppliedTagContainer = styled.div`
+export const StyledAppliedLabelContainer = styled.div`
   display: flex;
   align-items: center;
 
@@ -25,7 +25,7 @@ export const StyledAppliedTagContainer = styled.div`
   }
 `;
 
-export const StyledAppliedTag = styled.span`
+export const StyledAppliedLabel = styled.span`
   margin-right: 5px;
 
   color: white;

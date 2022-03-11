@@ -37,7 +37,7 @@ export const hasProtocol = (url: string) => {
 };
 
 const arraylikeQueryParams: {[key in FilterType | string]: boolean} = {
-  tags: true,
+  selector: true,
   status: false,
   dateRange: false,
   textSearch: false,

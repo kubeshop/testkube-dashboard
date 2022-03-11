@@ -1,6 +1,6 @@
 import {ConfigState} from '@models/config';
 import {ExecutionsState} from '@models/executions';
-import {TagsState} from '@models/tags';
+import {LabelsState} from '@models/labels';
 import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
 import {TestSuitesState} from '@models/testSuites';
 import {TestsState} from '@models/tests';
@@ -8,7 +8,7 @@ import {TestsState} from '@models/tests';
 const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
   dataList: [],
-  filters: {pageSize: 10, page: 0, tags: '', textSearch: ''},
+  filters: {pageSize: 10, page: 0, selector: '', textSearch: ''},
   totals: {
     results: 0,
     passed: 0,
@@ -27,7 +27,7 @@ const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
 const initialTestSuitesState: TestSuitesState = {
   isLoading: false,
   dataList: [],
-  filters: {textSearch: '', pageSize: 10, page: 0, tags: '', startDate: null, endDate: null},
+  filters: {textSearch: '', pageSize: 10, page: 0, selector: '', startDate: null, endDate: null},
   totals: {
     results: 0,
     passed: 0,
@@ -46,7 +46,7 @@ const initialTestSuitesState: TestSuitesState = {
 const initialTestsState: TestsState = {
   isLoading: false,
   dataList: [],
-  filters: {textSearch: '', type: '', pageSize: 10, page: 0, tags: [], createdAt: null},
+  filters: {textSearch: '', type: '', pageSize: 10, page: 0, selector: [], createdAt: null},
   totals: {
     results: 0,
     passed: 0,
@@ -73,7 +73,7 @@ const initialExecutionsState: ExecutionsState = {
     endDate: null,
     testName: '',
     type: '',
-    tags: [],
+    labels: [],
   },
   error: null,
   totals: {
@@ -97,8 +97,8 @@ const initialExecutionsState: ExecutionsState = {
   selectedExecutionInfo: null,
 };
 
-const initialTagsState: TagsState = {
-  tagsList: [],
+const initialLabelsState: LabelsState = {
+  labelsObject: {},
 };
 
 const initialConfigState: ConfigState = {
@@ -110,7 +110,7 @@ const initialReduxState = {
   testSuites: initialTestSuitesState,
   tests: initialTestsState,
   executions: initialExecutionsState,
-  tags: initialTagsState,
+  labels: initialLabelsState,
   config: initialConfigState,
 };
 

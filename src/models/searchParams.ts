@@ -1,6 +1,6 @@
 export type SearchParamKey =
   | 'textSearch'
-  | 'tags'
+  | 'selector'
   | 'startDate'
   | 'endDate'
   | 'pageSize'

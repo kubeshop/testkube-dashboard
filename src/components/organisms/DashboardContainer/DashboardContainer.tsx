@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {createContext, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {TablePaginationConfig} from 'antd';
@@ -14,46 +14,61 @@ import useUpdateURLSearchParams from '@hooks/useUpdateURLSearchParams';
 
 import {StyledDashboardContainerWrapper} from './DashboardContainer.styled';
 
+type DashboardInnerProps = {
+  dataSource: any;
+  selectedRecord: any;
+  queryFilters: any;
+  allFilters: any;
+};
+
+type DashboardInfoPanelProps = {
+  setInfoPanelVisibility?: React.Dispatch<React.SetStateAction<boolean>>;
+  shouldInfoPanelBeShown: boolean;
+  isInfoPanelExpanded: boolean;
+  selectedRecord: any;
+  setSecondLevelOpenState?: React.Dispatch<React.SetStateAction<boolean>>;
+  isSecondLevelOpen: boolean;
+};
+
+export const DashboardContext = createContext<DashboardBlueprint & DashboardInfoPanelProps & DashboardInnerProps>({
+  pageTitle: '',
+  entityType: 'test-suites',
+  hasInfoPanel: true,
+  canSelectRow: true,
+  columns: [],
+  shouldInfoPanelBeShown: false,
+  isInfoPanelExpanded: true,
+  selectedRecord: null,
+  isSecondLevelOpen: false,
+  dataSource: null,
+  queryFilters: null,
+  allFilters: null,
+});
+
 const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const {
     hasInfoPanel,
-    pageTitle,
-    // useGetData,
-    setData,
-    columns,
     selectData,
+    selectSelectedRecord,
     selectQueryFilters,
     selectAllFilters,
     setSelectedRecord,
-    selectSelectedRecord,
-    canSelectRow,
-    selectedRecordIdFieldName,
-    testTypeFieldName,
-    infoPanelComponent,
     setQueryFilters,
-    infoPanelConfig,
-    filtersComponentsIds,
-    entityType,
+    ...rest
   } = props;
 
   const dispatch = useDispatch();
 
   const dataSource: any = useAppSelector(selectData);
-  console.log('dataSource: ', dataSource);
   const selectedRecord: any = useAppSelector(selectSelectedRecord);
-  console.log('selectedRecord: ', selectedRecord);
   const queryFilters: any = useAppSelector(selectQueryFilters);
-  console.log('queryFilters: ', queryFilters);
   const allFilters: any = useAppSelector(selectAllFilters);
   const apiEndpoint = useAppSelector(selectApiEndpoint);
 
   useUpdateURLSearchParams(queryFilters);
 
   const [isInfoPanelExpanded, setInfoPanelVisibility] = useState(true);
-
-  // const {data, isLoading, isFetching, refetch} = useGetData(queryFilters || null, {
-  //   pollingInterval: 5000,
-  // });
+  const [isSecondLevelOpen, setSecondLevelOpenState] = useState(false);
 
   const onRowSelect = (rowRecord: any) => {
     if (!isInfoPanelExpanded) {
@@ -63,35 +78,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     dispatch(setSelectedRecord({selectedRecord: rowRecord}));
   };
 
-  // useEffect(() => {
-  //   if (!setData) {
-  //     return;
-  //   }
-
-  //   if (data === null || data?.results === []) {
-  //     dispatch(setData([]));
-
-  //     if (canSelectRow) {
-  //       dispatch(setSelectedRecord({selectedRecord: null}));
-  //     }
-
-  //     return;
-  //   }
-
-  //   if (data) {
-  //     dispatch(setData(data));
-
-  //     if (canSelectRow) {
-  //       dispatch(setSelectedRecord(data));
-  //     }
-  //   }
-  // }, [data]);
-
-  // useEffect(() => {
-  //   refetch();
-  // }, [apiEndpoint]);
-
-  const shouldInfoPanelBeShown = hasInfoPanel && dataSource?.length;
+  const shouldInfoPanelBeShown = hasInfoPanel;
 
   const pagination: TablePaginationConfig = {
     onChange: (page: number, pageSize?: number) => {
@@ -111,39 +98,30 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     hideOnSinglePage: true,
   };
 
-  // TODO: get rid of this props drilling
+  const dashboardContextValues = {
+    ...rest,
+    dataSource,
+    selectedRecord,
+    queryFilters,
+    allFilters,
+    apiEndpoint,
+    setSelectedRecord,
+    setInfoPanelVisibility,
+    isInfoPanelExpanded,
+    setSecondLevelOpenState,
+    isSecondLevelOpen,
+    setQueryFilters,
+    shouldInfoPanelBeShown,
+    hasInfoPanel,
+  };
+
   return (
-    <StyledDashboardContainerWrapper>
-      <DashboardContent
-        pageTitle={pageTitle}
-        dataSource={dataSource}
-        columns={columns}
-        // isLoading={isLoading}
-        // isFetching={isFetching}
-        queryFilters={queryFilters}
-        canSelectRow={canSelectRow}
-        onRowSelect={onRowSelect}
-        selectedRecord={selectedRecord}
-        selectedRecordIdFieldName={selectedRecordIdFieldName}
-        shouldInfoPanelBeShown={shouldInfoPanelBeShown}
-        isInfoPanelExpanded={isInfoPanelExpanded}
-        setSelectedRecord={setSelectedRecord}
-        paginationOptions={pagination}
-        setQueryFilters={setQueryFilters}
-        filtersComponentsIds={filtersComponentsIds}
-        entityType={entityType}
-        setData={setData}
-      />
-      <DashboardInfoPanel
-        shouldInfoPanelBeShown={shouldInfoPanelBeShown}
-        selectedRecord={selectedRecord}
-        testTypeFieldName={testTypeFieldName}
-        isInfoPanelExpanded={isInfoPanelExpanded}
-        setInfoPanelVisibility={setInfoPanelVisibility}
-        infoPanelComponent={infoPanelComponent}
-        infoPanelConfig={infoPanelConfig}
-      />
-    </StyledDashboardContainerWrapper>
+    <DashboardContext.Provider value={dashboardContextValues}>
+      <StyledDashboardContainerWrapper>
+        <DashboardContent onRowSelect={onRowSelect} paginationOptions={pagination} />
+        <DashboardInfoPanel />
+      </StyledDashboardContainerWrapper>
+    </DashboardContext.Provider>
   );
 };
 

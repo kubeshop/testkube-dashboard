@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react';
+/* eslint-disable unused-imports/no-unused-imports-ts */
+import {useContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {Spin, Table} from 'antd';
@@ -14,12 +15,20 @@ import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecuti
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
 
-import {StyledDashboardContentContainer} from './DashboardContent.styled';
+import Fonts from '@styles/Fonts';
+
+import {DashboardContext} from '../DashboardContainer/DashboardContainer';
+import {
+  StyledDashboardContent,
+  StyledDashboardContentContainer,
+  StyledDashboardContentTitleBottomGradient,
+  StyledDashboardContentTitleGradient,
+} from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
 
 const pollingInterval = 5000;
 
-// The reason I've done like this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
+// The reason I've done this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
 const TestSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetTestSuitesQuery(queryFilters || null, {
@@ -70,26 +79,27 @@ const ExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
 };
 
 const DashboardContent: React.FC<any> = props => {
+  const {onRowSelect, paginationOptions} = props;
+
   const {
+    selectedRecord,
+    entityType,
+    selectedRecordIdFieldName,
+    queryFilters,
+    setData,
+    canSelectRow,
+    setSelectedRecord,
+    shouldInfoPanelBeShown,
+    isInfoPanelExpanded,
+    isSecondLevelOpen,
+    filtersComponentsIds,
+    setQueryFilters,
     pageTitle,
     dataSource,
     columns,
-    // isLoading,
-    // isFetching,
-    canSelectRow,
-    onRowSelect,
-    selectedRecord,
-    selectedRecordIdFieldName,
-    shouldInfoPanelBeShown,
-    isInfoPanelExpanded,
-    setSelectedRecord,
-    paginationOptions,
-    setQueryFilters,
-    queryFilters,
-    filtersComponentsIds,
-    entityType,
-    setData,
-  } = props;
+    dashboardGradient,
+  } = useContext(DashboardContext);
+
   const dispatch = useDispatch();
 
   const apiEndpoint = useAppSelector(selectApiEndpoint);
@@ -102,7 +112,8 @@ const DashboardContent: React.FC<any> = props => {
   });
 
   const rowSelection: TableRowSelection<any> = {
-    selectedRowKeys: selectedRecord ? [`${entityType}-${selectedRecord[selectedRecordIdFieldName]}`] : [],
+    selectedRowKeys:
+      selectedRecord && selectedRecordIdFieldName ? [`${entityType}-${selectedRecord[selectedRecordIdFieldName]}`] : [],
     columnWidth: 0,
     renderCell: () => null,
   };
@@ -135,10 +146,6 @@ const DashboardContent: React.FC<any> = props => {
 
     if (contentProps.data) {
       dispatch(setData(contentProps.data));
-
-      if (canSelectRow) {
-        dispatch(setSelectedRecord(contentProps.data));
-      }
     }
   }, [contentProps.data]);
 
@@ -150,39 +157,51 @@ const DashboardContent: React.FC<any> = props => {
     <StyledDashboardContentContainer
       shouldInfoPanelBeShown={shouldInfoPanelBeShown}
       isInfoPanelExpanded={isInfoPanelExpanded}
+      isSecondLevelOpen={isSecondLevelOpen}
+      gradient={dashboardGradient}
     >
       {dataLayers[pageTitle]}
-      <Title>
-        {pageTitle} {contentProps.isFetching && <Spin />}
-      </Title>
-      {filtersComponentsIds && filtersComponentsIds.length ? (
-        <DashboardFilters
-          setSelectedRecord={setSelectedRecord}
-          selectedRecord={selectedRecord}
-          setFilters={setQueryFilters}
-          filters={queryFilters}
-          filtersComponentsIds={filtersComponentsIds}
-          entityType={entityType}
+      <StyledDashboardContentTitleGradient gradient={dashboardGradient}>
+        <StyledDashboardContentTitleBottomGradient />
+      </StyledDashboardContentTitleGradient>
+      <StyledDashboardContent>
+        <Title font={Fonts.ptSans}>
+          {pageTitle} {contentProps.isFetching && <Spin />}
+        </Title>
+        {filtersComponentsIds && filtersComponentsIds.length ? (
+          <DashboardFilters
+            setSelectedRecord={setSelectedRecord}
+            selectedRecord={selectedRecord}
+            setFilters={setQueryFilters}
+            filters={queryFilters}
+            filtersComponentsIds={filtersComponentsIds}
+            entityType={entityType}
+          />
+        ) : null}
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          loading={contentProps.isLoading}
+          rowSelection={canSelectRow ? rowSelection : undefined}
+          rowClassName="table-row-dark"
+          rowKey={record => {
+            return `${entityType}${
+              selectedRecordIdFieldName && record[selectedRecordIdFieldName]
+                ? `-${record[selectedRecordIdFieldName]}`
+                : ''
+            }`;
+          }}
+          pagination={paginationOptions}
+          onRow={record => ({
+            onClick: () => {
+              if (canSelectRow) {
+                onRowSelect(record);
+              }
+            },
+          })}
+          // showHeader={false}
         />
-      ) : null}
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        loading={contentProps.isLoading}
-        rowSelection={canSelectRow && rowSelection}
-        rowClassName="table-row-dark"
-        rowKey={record => {
-          return `${entityType}-${record[selectedRecordIdFieldName]}`;
-        }}
-        pagination={paginationOptions}
-        onRow={record => ({
-          onClick: () => {
-            if (canSelectRow) {
-              onRowSelect(record);
-            }
-          },
-        })}
-      />
+      </StyledDashboardContent>
     </StyledDashboardContentContainer>
   );
 };

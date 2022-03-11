@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git@github.com:kubeshop/testkube-dashboard.git"
   },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
+  },
   "private": true,
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
@@ -41,6 +44,7 @@
     "husky": "7.0.4",
     "json-server": "^0.17.0",
     "prettier": "2.4.1",
+    "react-error-overlay": "^6.0.9",
     "react-scripts": "4.0.3",
     "stylelint": "^14.1.0",
     "stylelint-config-recommended": "^6.0.0",

@@ -91,7 +91,7 @@ export const TestSuiteExecutionsEntity: DashboardBlueprint = {
       },
     },
   ],
-  filtersComponentsIds: ['textSearch', 'tags'],
+  filtersComponentsIds: ['textSearch', 'selector'],
 };
 
 export default TestSuiteExecutionsEntity;

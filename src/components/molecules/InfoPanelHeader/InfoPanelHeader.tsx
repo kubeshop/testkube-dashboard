@@ -1,23 +1,25 @@
-import {TestType} from '@models/tests';
+import {LabelsObject} from '@models/labels';
 
 import {Title} from '@atoms';
 
-import {TestRunner} from '@molecules';
+import {Labels} from '@molecules';
 
-import {StyledInfoPanelHeaderContainer} from './InfoPanelHeader.styled';
+import {StyledInfoPanelHeaderContainer, StyledInfoPanelHeaderLeftPart} from './InfoPanelHeader.styled';
 
 type InfoPanelHeaderProps = {
-  testType?: TestType;
   title: string;
+  labels: LabelsObject;
 };
 
 const InfoPanelHeader: React.FC<InfoPanelHeaderProps> = props => {
-  const {title, testType} = props;
+  const {title, labels} = props;
 
   return (
     <StyledInfoPanelHeaderContainer>
-      <Title level={4}>{title}</Title>
-      {testType && <TestRunner testType={testType} />}
+      <StyledInfoPanelHeaderLeftPart>
+        <Title level={4}>{title}</Title>
+        {labels ? <Labels labels={labels} /> : null}
+      </StyledInfoPanelHeaderLeftPart>
     </StyledInfoPanelHeaderContainer>
   );
 };

@@ -14,8 +14,11 @@ import TestSuitesInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestSu
 
 import {useGetTestSuitesQuery} from '@services/testSuites';
 
+import {testSuitesDashboardGradient} from '@styles/gradients';
+
 export const TestSuitesEntity: DashboardBlueprint = {
   entityType: 'test-suites',
+  dashboardGradient: testSuitesDashboardGradient,
   route: '/dashboard/test-suites',
   reduxEntity: 'testSuites',
   pageTitle: 'Test Suites',
@@ -55,15 +58,15 @@ export const TestSuitesEntity: DashboardBlueprint = {
       key: 'testDescription',
     },
     {
-      title: 'Test suite tags',
+      title: 'Test suite labels',
       render: (data: any) => {
-        if (!data.tags) {
+        if (!data.labels) {
           return <span> - </span>;
         }
 
         return (
           <div>
-            <span>{data.tags.join(', ')}</span>
+            <span>{data.labels.join(', ')}</span>
           </div>
         );
       },
@@ -81,7 +84,7 @@ export const TestSuitesEntity: DashboardBlueprint = {
       key: 'testNumberOfExecutions',
     },
   ],
-  filtersComponentsIds: ['textSearch', 'tags'],
+  filtersComponentsIds: ['textSearch', 'selector'],
 };
 
 export default TestSuitesEntity;

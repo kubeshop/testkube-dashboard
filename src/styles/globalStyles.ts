@@ -160,14 +160,8 @@ height: 38px;
   }
 
   tr.ant-table-row:hover > td {
-    background: var(--color-dark-senary) !important;
     font-size: 14px;
     cursor: pointer;
-}
-  tr.ant-table-row:active > td {
-    background: var(--color-dark-senary) !important;
-    color: var(--color-light-primary) !important;
-    font-size: 14px;
 }
 
 .anticon{
@@ -286,6 +280,8 @@ input[type=checkbox] {
 }
 
 .ant-table {
+  overflow: auto;
+  
   background: transparent;
 }
 

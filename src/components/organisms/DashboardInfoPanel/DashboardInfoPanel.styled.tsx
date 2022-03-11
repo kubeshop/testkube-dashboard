@@ -1,55 +1,34 @@
-import styled, {keyframes} from 'styled-components';
+import styled from 'styled-components';
 
-const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-`;
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-`;
+import {getInfoPanelFlexProperty} from './infoPanelStyleHelpers';
 
 export const StyledDashboardInfoPanelContainer = styled.div<{
   isInfoPanelExpanded?: boolean;
   shouldInfoPanelBeShown: boolean;
+  isSecondLevelOpen?: boolean;
+  isRecordSelected?: boolean;
 }>`
-  position: fixed;
-  right: ${props => (props.shouldInfoPanelBeShown ? (props.isInfoPanelExpanded ? '0' : '-550px') : '-630px')};
+  position: relative;
   overflow: auto;
 
   display: flex;
   flex-direction: column;
+  flex: ${props => getInfoPanelFlexProperty(props)};
 
-  width: 630px;
+  // width: ${props => (props.isSecondLevelOpen ? '1075px' : '630px')};
   height: 100%;
 
   background: #1d1d1d;
 
-  // animation: ${props => (props.shouldInfoPanelBeShown ? fadeIn : fadeOut)} 0.2s linear;
-  // animation-fill-mode: forwards;
-  transition: 0.5s all;
+  // transition: 0.5s flex;
 `;
 
 export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: boolean}>`
-  position: absolute;
-  top: 0;
-
   display: flex;
   justify-content: ${props => (props.isInfoPanelExpanded ? 'flex-end' : 'center')};
 
-  padding: 20px 20px 0 20px;
-  width: ${props => (props.isInfoPanelExpanded ? '630px' : '80px')};
+  padding: 15px;
+  width: ${props => (props.isInfoPanelExpanded ? '100%' : '80px')};
 
   cursor: pointer;
 `;
@@ -69,4 +48,37 @@ export const StyledInfoPanelSectionTitle = styled.span`
   color: #dbdbdb;
 
   font-size: 24px;
+`;
+
+export const StyledDashboardInfoPanelSecondLevelContainer = styled.div<{
+  isInfoPanelExpanded?: boolean;
+  shouldInfoPanelBeShown: boolean;
+  isSecondLevelOpen?: boolean;
+}>`
+  flex: ${props => (props.isSecondLevelOpen ? '3' : '0')};
+  // width: ${props => (props.isSecondLevelOpen ? '300px' : '0px')};
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #1c1c1c;
+
+  // transition: 0.5s all;
+`;
+
+export const StyledEmptyDashboardInfoPanel = styled.div`
+  display: flex;
+  justify-content: center;
+
+  height: 100%;
+  padding: 0 50px;
+  margin-top: 250px;
+`;
+
+export const StyledEmptyDashboardInfoPanelText = styled.span`
+  color: #adadad;
+
+  font-size: 20px;
+  text-align: center;
 `;

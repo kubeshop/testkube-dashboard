@@ -6,9 +6,12 @@ export {default as ExecutionResultsOutputs} from './ExecutionResultsOutputs/Exec
 export {default as TestDetailsDrawerPerformanceSection} from './TestDetailsDrawerPerformanceSection/TestDetailsDrawerPerformanceSection';
 export {default as InfoPanelHeader} from './InfoPanelHeader';
 export {default as TestRunner} from './TestRunner';
-export {default as TagsFilter} from './TagsFilter';
+export {default as LabelsFilter} from './LabelsFilter';
 export {default as StatusFilter} from './StatusFilter';
 export {default as DateRangeFilter} from './DateRangeFilter';
 export {default as TextFilter} from './TextFilter';
 export {default as DateFilter} from './DateFilter';
 export {default as CLICommands} from './CLICommands';
+export {default as TextSearchFilter} from './TextSearchFilter';
+export {default as Labels} from './Labels';
+export {default as LabelChild} from './LabelChild';

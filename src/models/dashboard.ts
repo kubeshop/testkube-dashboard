@@ -8,7 +8,13 @@ import {InfoPanelConfig} from './infoPanel';
 
 export type DashboardBlueprintType = 'test-suites' | 'test-suite-executions' | 'tests' | 'executions';
 
-export type DashboardReduxEntities = 'testSuites' | 'testSuiteExecutions' | 'tests' | 'executions' | 'tags' | 'config';
+export type DashboardReduxEntities =
+  | 'testSuites'
+  | 'testSuiteExecutions'
+  | 'tests'
+  | 'executions'
+  | 'labels'
+  | 'config';
 
 export type DashboardBlueprintProps = {
   entityType: DashboardBlueprintType;
@@ -24,18 +30,19 @@ export type DashboardBlueprint = {
    */
 
   route?: string;
+  dashboardGradient?: string;
 
   /**
    * Page title e.g. 'Test Suites'
    */
 
-  pageTitle?: string;
+  pageTitle: string;
 
   /**
    * Redux entity which reflects the provided dashboard entity
    */
 
-  reduxEntity: DashboardReduxEntities;
+  reduxEntity?: DashboardReduxEntities;
 
   /**
    * Name of a data list in the Redux store
@@ -59,13 +66,13 @@ export type DashboardBlueprint = {
    * Whether the user can click on table row
    */
 
-  canSelectRow?: boolean;
+  canSelectRow: boolean;
 
   /**
-   * List of columns of needed dashboard entity
+   * List of columns
    */
 
-  columns?: ColumnsType;
+  columns: ColumnsType<any>;
 
   filtersComponentsIds?: FilterType[];
 
@@ -77,7 +84,7 @@ export type DashboardBlueprint = {
    * Hook to get data using RTK approach.
    */
 
-  useGetData: UseQuery<QueryDefinition<any, any, any, any, any>>;
+  useGetData?: UseQuery<QueryDefinition<any, any, any, any, any>>;
 
   /**
    * RTK action to set data fetched from Backend to the Redux store

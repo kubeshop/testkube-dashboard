@@ -64,15 +64,15 @@ export const ExecutionsEntity: DashboardBlueprint = {
       },
     },
     {
-      title: 'Execution tags',
+      title: 'Execution labels',
       render: (data: any) => {
-        if (!data.tags) {
+        if (!data.labels) {
           return <span> - </span>;
         }
 
         return (
           <div>
-            <span>{data.tags.join(', ')}</span>
+            <span>{data.labels.join(', ')}</span>
           </div>
         );
       },
@@ -116,7 +116,7 @@ export const ExecutionsEntity: DashboardBlueprint = {
       },
     },
   ],
-  filtersComponentsIds: ['textSearch', 'testType', 'dateRange', 'status', 'tags'],
+  filtersComponentsIds: ['textSearch', 'testType', 'dateRange', 'status', 'selector'],
 };
 
 export default ExecutionsEntity;
