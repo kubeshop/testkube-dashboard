@@ -18,3 +18,4 @@ export {default as Title} from './Title';
 export {default as TestRunnerIcon} from './TestRunnerIcon';
 export {default as Dots} from './Dots';
 export {default as TableActionsDropdownContainer} from './TableActionsDropdownContainer';
+export {default as LabelListItem} from './LabelListItem';

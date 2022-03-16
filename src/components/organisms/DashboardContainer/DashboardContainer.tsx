@@ -22,12 +22,16 @@ type DashboardInnerProps = {
 };
 
 type DashboardInfoPanelProps = {
-  setInfoPanelVisibility?: React.Dispatch<React.SetStateAction<boolean>>;
+  setInfoPanelVisibility: React.Dispatch<React.SetStateAction<boolean>>;
   shouldInfoPanelBeShown: boolean;
   isInfoPanelExpanded: boolean;
   selectedRecord: any;
-  setSecondLevelOpenState?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSecondLevelOpenState: React.Dispatch<React.SetStateAction<boolean>>;
   isSecondLevelOpen: boolean;
+  selectedExecution: any;
+  setSelectedExecution: React.Dispatch<React.SetStateAction<any>>;
+  closeSecondLevel: () => void;
+  closeDrawer: () => void;
 };
 
 export const DashboardContext = createContext<DashboardBlueprint & DashboardInfoPanelProps & DashboardInnerProps>({
@@ -43,6 +47,12 @@ export const DashboardContext = createContext<DashboardBlueprint & DashboardInfo
   dataSource: null,
   queryFilters: null,
   allFilters: null,
+  setSecondLevelOpenState: () => {},
+  selectedExecution: null,
+  setSelectedExecution: () => {},
+  setInfoPanelVisibility: () => {},
+  closeSecondLevel: () => {},
+  closeDrawer: () => {},
 });
 
 const DashboardContainer: React.FC<DashboardBlueprint> = props => {
@@ -69,6 +79,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
 
   const [isInfoPanelExpanded, setInfoPanelVisibility] = useState(true);
   const [isSecondLevelOpen, setSecondLevelOpenState] = useState(false);
+  const [selectedExecution, setSelectedExecution] = useState<any>(null);
 
   const onRowSelect = (rowRecord: any) => {
     if (!isInfoPanelExpanded) {
@@ -98,6 +109,16 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     hideOnSinglePage: true,
   };
 
+  const closeSecondLevel = () => {
+    setSecondLevelOpenState(false);
+    setSelectedExecution(null);
+  };
+
+  const closeDrawer = () => {
+    closeSecondLevel();
+    setInfoPanelVisibility(false);
+  };
+
   const dashboardContextValues = {
     ...rest,
     dataSource,
@@ -113,6 +134,10 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     setQueryFilters,
     shouldInfoPanelBeShown,
     hasInfoPanel,
+    selectedExecution,
+    setSelectedExecution,
+    closeSecondLevel,
+    closeDrawer,
   };
 
   return (

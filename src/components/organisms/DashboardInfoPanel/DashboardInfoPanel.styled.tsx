@@ -1,3 +1,5 @@
+import {Table, Tabs} from 'antd';
+
 import styled from 'styled-components';
 
 import {getInfoPanelFlexProperty} from './infoPanelStyleHelpers';
@@ -15,7 +17,6 @@ export const StyledDashboardInfoPanelContainer = styled.div<{
   flex-direction: column;
   flex: ${props => getInfoPanelFlexProperty(props)};
 
-  // width: ${props => (props.isSecondLevelOpen ? '1075px' : '630px')};
   height: 100%;
 
   background: #1d1d1d;
@@ -23,19 +24,26 @@ export const StyledDashboardInfoPanelContainer = styled.div<{
   // transition: 0.5s flex;
 `;
 
-export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: boolean}>`
+export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: boolean; isSecondLevelOpen: boolean}>`
   display: flex;
   justify-content: ${props => (props.isInfoPanelExpanded ? 'flex-end' : 'center')};
 
   padding: 15px;
-  width: ${props => (props.isInfoPanelExpanded ? '100%' : '80px')};
+  width: ${props => (props.isInfoPanelExpanded ? (props.isSecondLevelOpen ? '40%' : '100%') : '80px')};
 
   cursor: pointer;
+
+  &:last-child {
+    width: ${props => (props.isInfoPanelExpanded ? (props.isSecondLevelOpen ? '60%' : '100%') : '80px')};
+
+    background: ${props => (props.isSecondLevelOpen ? '#262626' : '#1d1d1d')};
+  }
 `;
 
 export const StyledInfoPanelSection = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   padding: 20px 40px;
 
@@ -61,8 +69,9 @@ export const StyledDashboardInfoPanelSecondLevelContainer = styled.div<{
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
-  background: #1c1c1c;
+  background: #262626;
 
   // transition: 0.5s all;
 `;
@@ -81,4 +90,79 @@ export const StyledEmptyDashboardInfoPanelText = styled.span`
 
   font-size: 20px;
   text-align: center;
+`;
+
+export const StyledAntTabs = styled(Tabs)`
+  .ant-tabs-nav-wrap {
+    padding: 0 40px;
+    border-bottom: 1px solid #393939;
+
+    .ant-tabs-tab {
+      padding: 15px 0;
+
+      .ant-tabs-tab-btn {
+        color: #dbdbdb;
+
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      &-active {
+        .ant-tabs-tab-btn {
+          color: #7984f4;
+        }
+      }
+    }
+  }
+`;
+
+export const StyledTable = styled(Table)<{gradient?: string}>`
+  .ant-table {
+    border: unset !important;
+  }
+
+  .ant-table-tbody > tr.ant-table-row:hover {
+    background: ${props => props.gradient} !important;
+
+    & > td {
+      background: unset;
+    }
+  }
+
+  .ant-table-tbody > tr.ant-table-row-selected {
+    background: ${props => props.gradient};
+
+    .ant-btn {
+      color: white;
+      border-color: white;
+    }
+  }
+
+  .ant-table-tbody {
+    tr {
+      td.ant-table-selection-column {
+        display: none;
+      }
+
+      td {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid #393939;
+        border-radius: 3px;
+        padding: 10px 16px;
+
+        background: unset;
+      }
+    }
+  }
+
+  .ant-table-row {
+    border: unset !important;
+  }
+`;
+
+export const StyledCollapseButtonsContainer = styled.div`
+  display: flex;
 `;

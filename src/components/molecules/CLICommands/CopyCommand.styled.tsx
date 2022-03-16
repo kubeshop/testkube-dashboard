@@ -52,7 +52,7 @@ export const StyledCopyCommandPre = styled.pre`
 `;
 
 export const StyledCopyCommandCode = styled.code`
-  color: ${Colors.blue6};
+  color: ${Colors.purple};
 `;
 
 export const StyledCopyCommandIcon = styled(CopyOutlined)``;

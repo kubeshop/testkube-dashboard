@@ -1,28 +1,24 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
-import {CSSProperties, memo, useContext, useMemo, useState} from 'react';
+import {CSSProperties, useContext, useEffect} from 'react';
 
-import {CloseOutlined, LeftOutlined} from '@ant-design/icons';
-
-import {InfoPanelConfig, InfoPanelType} from '@models/infoPanel';
+import {CloseOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons';
 
 import {InfoPanelHeader} from '@molecules';
 
 import Colors from '@styles/Colors';
 
-import {DashboardBlueprint} from '@src/models/dashboard';
-
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {
   StyledCollapseButtonContainer,
+  StyledCollapseButtonsContainer,
   StyledDashboardInfoPanelContainer,
-  StyledInfoPanelSection,
 } from './DashboardInfoPanel.styled';
 import DashboardInfoPanelSecondLevel from './DashboardInfoPanelSecondLevel';
 import EmptyDashboardInfoPanel from './EmptyDashboardInfoPanel';
 
 const iconStyles: CSSProperties = {
   fontSize: 26,
-  color: Colors.blue6,
+  color: Colors.purple,
 };
 
 const DashboardInfoPanel: React.FC = () => {
@@ -33,38 +29,46 @@ const DashboardInfoPanel: React.FC = () => {
     isInfoPanelExpanded,
     infoPanelComponent: InfoPanelComponent,
     shouldInfoPanelBeShown,
-    infoPanelConfig,
     setSecondLevelOpenState,
     isSecondLevelOpen,
+    closeSecondLevel,
+    closeDrawer,
+    entityType,
   } = useContext(DashboardContext);
 
   const infoPanelHeaderProps = {
     title: selectedRecord && selectedRecord.name,
     ...(testTypeFieldName && selectedRecord ? {testType: selectedRecord[testTypeFieldName]} : {}),
-    labels: selectedRecord?.labels || {},
+    ...(selectedRecord?.labels ? {labels: selectedRecord?.labels} : {}),
   };
 
-  // const sectionProps: {[key in InfoPanelType]: any} = {
-  //   header: {
-  //     title: selectedRecord && selectedRecord.name,
-  //     ...(scriptTypeFieldName && selectedRecord ? {scriptType: selectedRecord[scriptTypeFieldName]} : {}),
-  //   },
-  //   summary: {
-  //     selectedRecord,
-  //   },
-  // };
+  const getCollapseButtonAction = () => {
+    if (isInfoPanelExpanded) {
+      if (isSecondLevelOpen) {
+        closeSecondLevel();
+      } else {
+        closeDrawer();
+      }
+    } else {
+      setInfoPanelVisibility(true);
+    }
+  };
 
-  // const renderedView = useMemo(() => {
-  //   return infoPanelConfig.map(infoPanel => {
-  //     const {type, name, component: Component} = infoPanel;
+  const getCollapseButtonIcon = () => {
+    if (isInfoPanelExpanded) {
+      if (isSecondLevelOpen) {
+        return <RightOutlined style={iconStyles} />;
+      }
 
-  //     return (
-  //       <StyledInfoPanelSection>
-  //         <Component {...sectionProps[type]} />
-  //       </StyledInfoPanelSection>
-  //     );
-  //   });
-  // }, [selectedRecord]);
+      return <CloseOutlined style={iconStyles} />;
+    }
+
+    return <LeftOutlined style={iconStyles} />;
+  };
+
+  useEffect(() => {
+    closeSecondLevel();
+  }, [entityType]);
 
   return (
     <StyledDashboardInfoPanelContainer
@@ -73,17 +77,26 @@ const DashboardInfoPanel: React.FC = () => {
       isSecondLevelOpen={isSecondLevelOpen}
       isRecordSelected={Boolean(selectedRecord)}
     >
-      <StyledCollapseButtonContainer
-        isInfoPanelExpanded={isInfoPanelExpanded}
-        onClick={() => {
-          if (setInfoPanelVisibility && setSecondLevelOpenState) {
-            setInfoPanelVisibility(prev => !prev);
-            setSecondLevelOpenState(false);
-          }
-        }}
-      >
-        {!isInfoPanelExpanded ? <LeftOutlined style={iconStyles} /> : <CloseOutlined style={iconStyles} />}
-      </StyledCollapseButtonContainer>
+      <StyledCollapseButtonsContainer>
+        <StyledCollapseButtonContainer
+          isInfoPanelExpanded={isInfoPanelExpanded}
+          isSecondLevelOpen={isSecondLevelOpen}
+          onClick={getCollapseButtonAction}
+        >
+          {getCollapseButtonIcon()}
+        </StyledCollapseButtonContainer>
+        {isSecondLevelOpen ? (
+          <StyledCollapseButtonContainer
+            isInfoPanelExpanded={isInfoPanelExpanded}
+            isSecondLevelOpen={isSecondLevelOpen}
+            onClick={() => {
+              closeDrawer();
+            }}
+          >
+            <CloseOutlined style={{fontSize: 26, color: '#acacac'}} />
+          </StyledCollapseButtonContainer>
+        ) : null}
+      </StyledCollapseButtonsContainer>
       {!selectedRecord && isInfoPanelExpanded ? (
         <EmptyDashboardInfoPanel />
       ) : (
@@ -93,12 +106,10 @@ const DashboardInfoPanel: React.FC = () => {
               <>
                 {isInfoPanelExpanded && selectedRecord && (
                   <>
-                    {/* {renderedView} */}
                     <InfoPanelHeader {...infoPanelHeaderProps} />
                     {InfoPanelComponent && <InfoPanelComponent selectedRecord={selectedRecord} />}
                   </>
                 )}
-                <p onClick={() => setSecondLevelOpenState && setSecondLevelOpenState(prev => !prev)}>Toggle!!!</p>
               </>
             ) : null}
           </div>

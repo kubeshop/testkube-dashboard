@@ -28,6 +28,7 @@ export const TestsEntity: DashboardBlueprint = {
   hasInfoPanel: true,
   reduxListName: 'dataList',
   canSelectRow: true,
+  emptyDrawerEntity: 'test',
 
   infoPanelComponent: TestsInfoPanel,
 
@@ -74,7 +75,7 @@ export const TestsEntity: DashboardBlueprint = {
     },
     {},
   ],
-  filtersComponentsIds: ['textSearch', 'selector'],
+  filtersComponentsIds: ['textSearch'],
 };
 
 export default TestsEntity;

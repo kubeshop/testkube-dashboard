@@ -44,6 +44,7 @@ export const StyledCookiesContainer = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
+  z-index: 3;
 
   display: flex;
   justify-content: center;

@@ -31,6 +31,7 @@ export type DashboardBlueprint = {
 
   route?: string;
   dashboardGradient?: string;
+  emptyDrawerEntity?: 'test' | 'test suite';
 
   /**
    * Page title e.g. 'Test Suites'

@@ -168,6 +168,10 @@ height: 38px;
   color: white;
 }
 
+.ant-tabs-top > .ant-tabs-nav {
+  margin: 0;
+}
+
 .ant-tabs-top > .ant-tabs-nav::before {
   border-bottom: none;
 }
@@ -177,7 +181,7 @@ height: 38px;
 }
 
  .ant-tabs-ink-bar {
-  background: var(--color-gray-octonary);
+  background: ${Colors.purple}
 }
 
 
