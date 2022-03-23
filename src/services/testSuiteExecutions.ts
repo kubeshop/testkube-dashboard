@@ -9,7 +9,10 @@ export const testSuiteExecutionsApi = createApi({
     getTestSuiteExecutionsByTestId: builder.query({
       query: (filters: any) => `/test-suite-executions?${paramsSerializer(filters)}`,
     }),
+    getTestSuiteExecutionById: builder.query({
+      query: (testSuiteExecutionId: string) => `/test-suite-executions/${testSuiteExecutionId}`,
+    }),
   }),
 });
 
-export const {useGetTestSuiteExecutionsByTestIdQuery} = testSuiteExecutionsApi;
+export const {useGetTestSuiteExecutionsByTestIdQuery, useGetTestSuiteExecutionByIdQuery} = testSuiteExecutionsApi;

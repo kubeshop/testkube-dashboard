@@ -21,6 +21,11 @@ enum Colors {
   yellow7 = '#E8D639',
   yellow10 = '#FAFAB5',
 
+  successGreen = '#94D89C',
+  errorRed = '#DB539C',
+  lightGrey = '#DEDEDE',
+  darkGrey = '#393939',
+
   redError = '#e65a6d',
   redErrorCompliment = '#F4BAB8',
 
@@ -64,5 +69,20 @@ export enum FontColors {
   afford = Colors.greenOkay,
   warning = Colors.yellowWarning,
 }
+
+export enum StatusColors {
+  success = Colors.successGreen,
+  error = Colors.errorRed,
+  pending = Colors.lightGrey,
+  queued = Colors.lightGrey,
+}
+
+export enum BorderColors {
+  greyBorder = Colors.darkGrey,
+}
+
+const borders = {
+  greyBorder: `1px solid ${BorderColors.greyBorder}`,
+};
 
 export default Colors;

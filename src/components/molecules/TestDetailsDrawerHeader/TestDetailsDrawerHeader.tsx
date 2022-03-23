@@ -21,8 +21,8 @@ const TestDetailsDrawerHeader = (props: any) => {
       <StyledTestScriptChartAndStatusAndDateContainer>
         <StyledScriptChartContainer>
           <RingProgressChart
-            steps={!execution ? executionResult?.steps : execution}
-            testStatus={getStatus(!status ? executionResult?.status : status)}
+            stepResults={!execution ? executionResult?.steps : execution}
+            status={status}
             height={85}
             width={85}
             fontSize="small"

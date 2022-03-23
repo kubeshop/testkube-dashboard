@@ -14,6 +14,8 @@ import {DashboardBlueprintRenderer, SideBar} from '@organisms';
 
 import {EndpointProcessing, NotFound} from '@pages';
 
+import {PollingIntervals} from '@utils/numbers';
+
 import Colors from '@styles/Colors';
 
 import {
@@ -32,7 +34,7 @@ const App = () => {
 
   const ga4React = useGA4React();
 
-  const {data, refetch} = useGetLabelsQuery(null, {pollingInterval: 10_000});
+  const {data, refetch} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.long});
 
   const {pathname} = useLocation();
 
@@ -80,12 +82,7 @@ const App = () => {
           <Routes>
             <Route path="apiEndpoint" element={<EndpointProcessing />} />
             <Route path="dashboard/test-suites" element={<DashboardBlueprintRenderer entityType="test-suites" />} />
-            <Route
-              path="dashboard/test-suite-executions"
-              element={<DashboardBlueprintRenderer entityType="test-suite-executions" />}
-            />
             <Route path="dashboard/tests" element={<DashboardBlueprintRenderer entityType="tests" />} />
-            <Route path="dashboard/executions" element={<DashboardBlueprintRenderer entityType="executions" />} />
             <Route path="dashboard/*" element={<NotFound />} />
             <Route path="*" element={<Navigate to="dashboard/test-suites" />} />
           </Routes>

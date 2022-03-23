@@ -10,8 +10,6 @@ import {
   setTestSuitesFilters,
 } from '@redux/reducers/testSuitesSlice';
 
-import TestSuitesInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestSuitesInfoPanel';
-
 import {useGetTestSuitesQuery} from '@services/testSuites';
 
 import {testSuitesDashboardGradient} from '@styles/gradients';
@@ -26,8 +24,6 @@ export const TestSuitesEntity: DashboardBlueprint = {
   reduxListName: 'dataList',
   canSelectRow: true,
   emptyDrawerEntity: 'test suite',
-
-  infoPanelComponent: TestSuitesInfoPanel,
 
   useGetData: useGetTestSuitesQuery,
   setData: setTestSuites,

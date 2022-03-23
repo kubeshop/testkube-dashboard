@@ -1,17 +1,22 @@
-const ExecutionDefinition = () => {
-  // const {selectedRecord} = useContext(DashboardContext);
-  // const {
-  //   content: {data},
-  // } = selectedRecord;
+import {useContext} from 'react';
 
-  return <span>dsad</span>;
-  // return (
-  //   <StyledInfoPanelSection>
-  //     <pre>
-  //       <code>{data}</code>
-  //     </pre>
-  //   </StyledInfoPanelSection>
-  // );
+import {DashboardBlueprintType} from '@models/dashboard';
+
+import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
+import {StyledInfoPanelSection} from '@organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
+
+import TestExecutionDefinition from './TestExecutionDefinition';
+import TestSuiteExecutionDefinitionsList from './TestSuiteExecutionDefinition';
+
+const executionDefinitions: {[key in DashboardBlueprintType]: any} = {
+  'test-suites': <TestSuiteExecutionDefinitionsList />,
+  tests: <TestExecutionDefinition />,
+};
+
+const ExecutionDefinition: React.FC = () => {
+  const {entityType} = useContext(DashboardContext);
+
+  return <StyledInfoPanelSection>{executionDefinitions[entityType]}</StyledInfoPanelSection>;
 };
 
 export default ExecutionDefinition;

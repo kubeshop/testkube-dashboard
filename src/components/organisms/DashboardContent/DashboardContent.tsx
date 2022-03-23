@@ -10,6 +10,8 @@ import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
 import {Title} from '@atoms';
 
+import {PollingIntervals} from '@utils/numbers';
+
 import {useGetExecutionsQuery} from '@services/executions';
 import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestSuitesQuery} from '@services/testSuites';
@@ -26,13 +28,11 @@ import {
 } from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
 
-const pollingInterval = 5000;
-
 // The reason I've done this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
 const TestSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetTestSuitesQuery(queryFilters || null, {
-    pollingInterval,
+    pollingInterval: PollingIntervals.default,
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const TestSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
 
 const TestSuiteExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionsByTestIdQuery(queryFilters || null, {
-    pollingInterval,
+    pollingInterval: PollingIntervals.default,
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const TestSuiteExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
 
 const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetTestsQuery(queryFilters || null, {
-    pollingInterval,
+    pollingInterval: PollingIntervals.default,
   });
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
 
 const ExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetExecutionsQuery(queryFilters || null, {
-    pollingInterval,
+    pollingInterval: PollingIntervals.default,
   });
 
   useEffect(() => {
@@ -98,6 +98,7 @@ const DashboardContent: React.FC<any> = props => {
     dataSource,
     columns,
     dashboardGradient,
+    setSelectedExecution,
   } = useContext(DashboardContext);
 
   const dispatch = useDispatch();
@@ -152,6 +153,10 @@ const DashboardContent: React.FC<any> = props => {
   useEffect(() => {
     contentProps?.refetch();
   }, [apiEndpoint]);
+
+  useEffect(() => {
+    dispatch(setSelectedRecord({selectedRecord: null}));
+  }, [queryFilters]);
 
   return (
     <StyledDashboardContentContainer

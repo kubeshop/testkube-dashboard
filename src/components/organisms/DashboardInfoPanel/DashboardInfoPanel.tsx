@@ -12,7 +12,10 @@ import {
   StyledCollapseButtonContainer,
   StyledCollapseButtonsContainer,
   StyledDashboardInfoPanelContainer,
+  StyledDashboardInfoPanelContent,
+  StyledDashboardInfoPanelContentContainer,
 } from './DashboardInfoPanel.styled';
+import DashboardInfoPanelContent from './DashboardInfoPanelContent';
 import DashboardInfoPanelSecondLevel from './DashboardInfoPanelSecondLevel';
 import EmptyDashboardInfoPanel from './EmptyDashboardInfoPanel';
 
@@ -29,18 +32,12 @@ const DashboardInfoPanel: React.FC = () => {
     isInfoPanelExpanded,
     infoPanelComponent: InfoPanelComponent,
     shouldInfoPanelBeShown,
-    setSecondLevelOpenState,
     isSecondLevelOpen,
     closeSecondLevel,
     closeDrawer,
     entityType,
+    emptyDrawerEntity,
   } = useContext(DashboardContext);
-
-  const infoPanelHeaderProps = {
-    title: selectedRecord && selectedRecord.name,
-    ...(testTypeFieldName && selectedRecord ? {testType: selectedRecord[testTypeFieldName]} : {}),
-    ...(selectedRecord?.labels ? {labels: selectedRecord?.labels} : {}),
-  };
 
   const getCollapseButtonAction = () => {
     if (isInfoPanelExpanded) {
@@ -98,30 +95,12 @@ const DashboardInfoPanel: React.FC = () => {
         ) : null}
       </StyledCollapseButtonsContainer>
       {!selectedRecord && isInfoPanelExpanded ? (
-        <EmptyDashboardInfoPanel />
+        <EmptyDashboardInfoPanel emptyDrawerEntity={emptyDrawerEntity} />
       ) : (
-        <div style={{display: 'flex', flex: 1, position: 'relative'}}>
-          <div style={{display: 'flex', flexDirection: 'column', flex: 2, position: 'relative', overflow: 'auto'}}>
-            {shouldInfoPanelBeShown ? (
-              <>
-                {isInfoPanelExpanded && selectedRecord && (
-                  <>
-                    <InfoPanelHeader {...infoPanelHeaderProps} />
-                    {InfoPanelComponent && <InfoPanelComponent selectedRecord={selectedRecord} />}
-                  </>
-                )}
-              </>
-            ) : null}
-          </div>
-          {isSecondLevelOpen ? (
-            <DashboardInfoPanelSecondLevel
-              isInfoPanelExpanded={isInfoPanelExpanded}
-              shouldInfoPanelBeShown={shouldInfoPanelBeShown}
-              setSecondLevelOpenState={setSecondLevelOpenState}
-              isSecondLevelOpen={isSecondLevelOpen}
-            />
-          ) : null}
-        </div>
+        <StyledDashboardInfoPanelContentContainer>
+          {selectedRecord && isInfoPanelExpanded ? <DashboardInfoPanelContent /> : null}
+          {isSecondLevelOpen ? <DashboardInfoPanelSecondLevel /> : null}
+        </StyledDashboardInfoPanelContentContainer>
       )}
     </StyledDashboardInfoPanelContainer>
   );

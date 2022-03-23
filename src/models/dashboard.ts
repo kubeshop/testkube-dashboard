@@ -6,7 +6,9 @@ import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {FilterType} from './filters';
 import {InfoPanelConfig} from './infoPanel';
 
-export type DashboardBlueprintType = 'test-suites' | 'test-suite-executions' | 'tests' | 'executions';
+export type DashboardBlueprintType = 'test-suites' | 'tests';
+
+export type DashboardEmptyDrawerEntity = 'test' | 'test suite';
 
 export type DashboardReduxEntities =
   | 'testSuites'
@@ -31,7 +33,7 @@ export type DashboardBlueprint = {
 
   route?: string;
   dashboardGradient?: string;
-  emptyDrawerEntity?: 'test' | 'test suite';
+  emptyDrawerEntity?: DashboardEmptyDrawerEntity;
 
   /**
    * Page title e.g. 'Test Suites'

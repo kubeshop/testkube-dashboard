@@ -2,6 +2,8 @@ import {Table, Tabs} from 'antd';
 
 import styled from 'styled-components';
 
+import Colors from '@styles/Colors';
+
 import {getInfoPanelFlexProperty} from './infoPanelStyleHelpers';
 
 export const StyledDashboardInfoPanelContainer = styled.div<{
@@ -11,7 +13,7 @@ export const StyledDashboardInfoPanelContainer = styled.div<{
   isRecordSelected?: boolean;
 }>`
   position: relative;
-  overflow: auto;
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
@@ -40,14 +42,14 @@ export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: bo
   }
 `;
 
-export const StyledInfoPanelSection = styled.div`
+export const StyledInfoPanelSection = styled.div<{isBorder?: boolean}>`
   display: flex;
   flex-direction: column;
   width: 100%;
 
   padding: 20px 40px;
 
-  border-bottom: 1px solid #393939;
+  ${props => (props.isBorder ? 'border-bottom: 1px solid #393939;' : '')}
 `;
 
 export const StyledInfoPanelSectionTitle = styled.span`
@@ -63,12 +65,11 @@ export const StyledDashboardInfoPanelSecondLevelContainer = styled.div<{
   shouldInfoPanelBeShown: boolean;
   isSecondLevelOpen?: boolean;
 }>`
+  overflow: auto;
+
   flex: ${props => (props.isSecondLevelOpen ? '3' : '0')};
-  // width: ${props => (props.isSecondLevelOpen ? '300px' : '0px')};
 
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
 
   background: #262626;
@@ -93,6 +94,10 @@ export const StyledEmptyDashboardInfoPanelText = styled.span`
 `;
 
 export const StyledAntTabs = styled(Tabs)`
+  .ant-tabs-content-holder {
+    overflow: auto;
+  }
+
   .ant-tabs-nav-wrap {
     padding: 0 40px;
     border-bottom: 1px solid #393939;
@@ -109,7 +114,7 @@ export const StyledAntTabs = styled(Tabs)`
 
       &-active {
         .ant-tabs-tab-btn {
-          color: #7984f4;
+          color: ${Colors.purple};
         }
       }
     }
@@ -119,6 +124,8 @@ export const StyledAntTabs = styled(Tabs)`
 export const StyledTable = styled(Table)<{gradient?: string}>`
   .ant-table {
     border: unset !important;
+
+    background: #151515;
   }
 
   .ant-table-tbody > tr.ant-table-row:hover {
@@ -165,4 +172,21 @@ export const StyledTable = styled(Table)<{gradient?: string}>`
 
 export const StyledCollapseButtonsContainer = styled.div`
   display: flex;
+`;
+
+export const StyledDashboardInfoPanelContentContainer = styled.div`
+  position: relative;
+  overflow: scroll;
+
+  display: flex;
+  flex: 1;
+`;
+
+export const StyledDashboardInfoPanelContent = styled.div`
+  position: relative;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  flex: 2;
 `;

@@ -89,6 +89,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     dispatch(setSelectedRecord({selectedRecord: rowRecord}));
   };
 
+  // Should we check any other conditions e.g. data.length?
   const shouldInfoPanelBeShown = hasInfoPanel;
 
   const pagination: TablePaginationConfig = {

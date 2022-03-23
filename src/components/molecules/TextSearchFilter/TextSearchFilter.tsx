@@ -9,9 +9,7 @@ import {StyledSearchInput, StyledSearchInputContainer} from './TextSearchFilter.
 
 const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
   'test-suites': 'textSearch',
-  'test-suite-executions': 'textSearch',
   tests: 'textSearch',
-  executions: 'testName',
 };
 const TextSearchFilter: React.FC<FilterProps> = props => {
   const {filters, setSelectedRecord, setFilters, entityType, queryParam} = props;

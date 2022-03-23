@@ -1,5 +1,7 @@
 import {FilterType} from '@src/models/filters';
 
+export const executionDateFormat = 'DD MMM, YYYY hh:mm:ss';
+
 export const truncateText = (text: string) => {
   if (text.length > 10) {
     return `${text.substring(0, 10)}...`;

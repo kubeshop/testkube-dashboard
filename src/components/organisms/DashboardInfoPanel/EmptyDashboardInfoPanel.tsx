@@ -1,10 +1,13 @@
-import {useContext} from 'react';
+import {DashboardBlueprint} from '@models/dashboard';
 
-import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {StyledEmptyDashboardInfoPanel, StyledEmptyDashboardInfoPanelText} from './DashboardInfoPanel.styled';
 
-const EmptyDashboardInfoPanel = () => {
-  const {emptyDrawerEntity} = useContext(DashboardContext);
+type EmptyDashboardInfoPanelProps = {
+  emptyDrawerEntity: DashboardBlueprint['emptyDrawerEntity'];
+};
+
+const EmptyDashboardInfoPanel: React.FC<EmptyDashboardInfoPanelProps> = props => {
+  const {emptyDrawerEntity} = props;
 
   return (
     <StyledEmptyDashboardInfoPanel>

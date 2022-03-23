@@ -41,7 +41,8 @@ export type ExecutionStepDuration = string;
 export type ExecutionStartTime = Date;
 export type ExecutionEndTime = Date;
 
-export type ExecutionStatuses = 'success' | 'pending';
+export type ExecutionStatuses = 'success' | 'pending' | 'queued' | 'error';
+export type ExecutionStepIconType = 'success' | 'pending' | 'error' | 'code';
 export type ExecutionOutputTypes = 'text/plain';
 
 interface ExecutionsState {

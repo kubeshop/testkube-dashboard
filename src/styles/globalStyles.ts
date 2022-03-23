@@ -3,10 +3,10 @@ import {createGlobalStyle} from 'styled-components';
 import Colors from './Colors';
 
 export const GlobalStyle = createGlobalStyle`
-
 html {
   font-size: 16px;
 }
+
 body {
   height: 100vh;
   margin: 0;
@@ -17,8 +17,18 @@ body {
   box-sizing: border-box;
 }
 
+::selection {
+  background: ${Colors.purple}
+}
+
 p {
   margin-bottom: none;
+}
+
+ul {
+  margin: 0;
+
+  list-style-type: none;
 }
 
 .ant-picker-input > input {
@@ -216,9 +226,10 @@ height: 38px;
 }
 
 .g2-html-annotation {
-  color: var(--color-light-primary) !important;
-  /* font-size: 56px!important; */
-  word-break: break-all;
+  top: 50% !important;
+  left: 50% !important;
+
+  width: unset !important;
 }
 
 .ant-tabs-tabpane {

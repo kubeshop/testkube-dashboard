@@ -1,64 +1,74 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {RingProgress} from '@ant-design/charts';
+import {RingProgress, RingProgressConfig} from '@ant-design/charts';
 
-interface ITestCircleChart {
-  height: number;
-  width: number;
+import {StatusColors} from '@styles/Colors';
+
+import {TestSuiteExecutionStatus} from '@src/models/testSuiteExecutions';
+
+type RingProgressChartProps = {
+  height?: number;
+  width?: number;
   fontSize?: 'small' | 'medium' | 'large';
-  testStatus: string;
-  steps?: any;
-  totalPercentageStaticPage?: number;
-}
+  status?: TestSuiteExecutionStatus;
+  stepResults?: Array<any>;
+};
 
-const RingProgressChart = ({
-  height,
-  width,
-  fontSize,
-  testStatus,
-  steps,
-  totalPercentageStaticPage,
-}: ITestCircleChart) => {
-  const getPercentage = (): number => {
-    if (totalPercentageStaticPage) return totalPercentageStaticPage;
-    if (steps) {
-      const occurrence = steps?.reduce(
-        (occ: number, step: {status: string}) => (step?.status === 'success' ? occ + 1 : occ),
-        0
-      );
-      return occurrence / steps?.length;
+const RingProgressChart: React.FC<RingProgressChartProps> = props => {
+  const {status = 'pending', stepResults = []} = props;
+
+  const [successfulStepsNumber, setSuccessfulStepsNumber] = useState(0);
+
+  const getSuccessfulStepsNumber = () => {
+    if (stepResults) {
+      const successfulSteps = stepResults?.reduce((occ: number, step) => {
+        const {
+          execution: {
+            executionResult: {status: stepStatus},
+          },
+        } = step;
+
+        return stepStatus === 'success' ? occ + 1 : occ;
+      }, 0);
+
+      return setSuccessfulStepsNumber(successfulSteps);
     }
-    return 0;
+
+    return setSuccessfulStepsNumber(0);
   };
 
-  const config = {
-    follow: true,
-    enterable: true,
-    TextBackgroundStyle: {
-      style: {fontSize: '52px'},
-    },
-    height,
-    width,
+  useEffect(() => {
+    getSuccessfulStepsNumber();
+  }, [stepResults]);
+
+  const chartColors = [StatusColors.success, StatusColors.error] as unknown as string[];
+
+  const config: RingProgressConfig = {
     autoFit: false,
-    innerRadius: 0.82,
-    radius: 0.98,
+    radius: 1,
     statistic: {
       title: {
         style: {
-          color: '#363636',
-          fontSize:
-            fontSize === 'small' ? '14px' : fontSize === 'medium' ? '28px' : fontSize === 'large' ? '52px' : '28px',
-          lineHeight: '56px',
-          textTransform: 'capitalize',
-          marginTop: fontSize === 'small' ? '20px' : fontSize === 'large' ? '0px' : '0px',
+          color: 'white',
+          fontSize: '16px',
         },
-        formatter: function formatter() {
-          return testStatus;
+        formatter: () => {
+          return status === 'error' ? `${successfulStepsNumber}/${stepResults.length}` : String(stepResults.length);
+        },
+      },
+      content: {
+        style: {
+          color: 'white',
+          fontSize: '16px',
+        },
+        customHtml: () => {
+          return status === 'error' ? 'Steps failed' : 'Steps';
         },
       },
     },
-    percent: getPercentage(),
-    color: [testStatus === 'failed' ? ' #eb2424 ' : '#94D89C', '#121212'],
+    animation: false,
+    percent: status === 'error' ? successfulStepsNumber / stepResults.length : stepResults.length,
+    color: chartColors,
   };
 
   return <RingProgress {...config} className="ring-progress-style" />;

@@ -10,9 +10,20 @@ export const testsApi = createApi({
       query: (filters: any) => `/tests?${paramsSerializer(filters)}`,
     }),
     getTestExecutionsById: builder.query({
-      query: testId => `/tests/${testId}/executions`,
+      query: ({name}) => `/tests/${name}/executions`,
+    }),
+    getTestExecutionById: builder.query({
+      query: (testExecutionId: string) => `/executions/${testExecutionId}`,
+    }),
+    getTestExecutionArtifacts: builder.query({
+      query: (testExecutionId: string) => `/executions/${testExecutionId}/artifacts`,
     }),
   }),
 });
 
-export const {useGetTestsQuery, useGetTestExecutionsByIdQuery} = testsApi;
+export const {
+  useGetTestsQuery,
+  useGetTestExecutionsByIdQuery,
+  useGetTestExecutionByIdQuery,
+  useGetTestExecutionArtifactsQuery,
+} = testsApi;

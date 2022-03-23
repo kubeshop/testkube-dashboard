@@ -11,8 +11,6 @@ import {
   setTestsFilters,
 } from '@redux/reducers/testsSlice';
 
-import TestsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestsInfoPanel';
-
 import {timeStampToDate} from '@utils/formatDate';
 
 import {useGetTestsQuery} from '@services/tests';
@@ -29,8 +27,6 @@ export const TestsEntity: DashboardBlueprint = {
   reduxListName: 'dataList',
   canSelectRow: true,
   emptyDrawerEntity: 'test',
-
-  infoPanelComponent: TestsInfoPanel,
 
   useGetData: useGetTestsQuery,
   setData: setTests,

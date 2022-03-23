@@ -1,30 +1,11 @@
-import {CSSProperties, useContext} from 'react';
-
-import Colors from '@styles/Colors';
+import {useContext} from 'react';
 
 import {DashboardContext} from '../../DashboardContainer/DashboardContainer';
 import {StyledDashboardInfoPanelSecondLevelContainer} from '../DashboardInfoPanel.styled';
+import DashboardInfoPanelSecondLevelContent from './DashboardInfoPanelSecondLevelContent';
 
-const iconStyles: CSSProperties = {
-  fontSize: 26,
-  color: Colors.purple,
-};
-
-const DashboardInfoPanelSecondLevel = (props: any) => {
-  const {
-    dashboardGradient,
-    selectedRecord,
-    setSecondLevelOpenState,
-    isInfoPanelExpanded,
-    shouldInfoPanelBeShown,
-    isSecondLevelOpen,
-    selectedExecution,
-    closeSecondLevel,
-    closeDrawer,
-    setInfoPanelVisibility,
-  } = useContext(DashboardContext);
-
-  console.log('selectedExecution: ', selectedExecution);
+const DashboardInfoPanelSecondLevel = () => {
+  const {isInfoPanelExpanded, shouldInfoPanelBeShown, isSecondLevelOpen} = useContext(DashboardContext);
 
   return (
     <StyledDashboardInfoPanelSecondLevelContainer
@@ -32,7 +13,7 @@ const DashboardInfoPanelSecondLevel = (props: any) => {
       isInfoPanelExpanded={isInfoPanelExpanded}
       isSecondLevelOpen={isSecondLevelOpen}
     >
-      dsadsa
+      <DashboardInfoPanelSecondLevelContent />
     </StyledDashboardInfoPanelSecondLevelContainer>
   );
 };

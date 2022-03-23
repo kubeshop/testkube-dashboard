@@ -15,3 +15,7 @@ export {default as CLICommands} from './CLICommands';
 export {default as TextSearchFilter} from './TextSearchFilter';
 export {default as LabelsList} from './LabelsList';
 export {default as ExecutionTableRow} from './ExecutionTableRow';
+export {default as ExecutionDefinition} from './ExecutionDefinition';
+export {default as ExecutionDetails} from './ExecutionDetails';
+export {default as ExecutionStepsList} from './ExecutionStepsList';
+export {default as ExecutionName} from './ExecutionName';

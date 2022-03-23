@@ -14,18 +14,14 @@ export const StyledExecutionStatus = styled.div`
 
 export const StyledExecutionStartDate = styled.span`
   color: ${Colors.whitePure};
+`;
 
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+export const StyledExecutionStartEndDate = styled.span`
+  color: ${Colors.whitePure};
 `;
 
 export const StyledExecutionName = styled.span`
   color: ${Colors.whitePure};
-
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 `;
 
 export const StyledChevronRightIcon = styled(RightOutlined)`
@@ -38,4 +34,10 @@ export const StyledSpace = styled(Space)`
   .ant-space-item:last-of-type {
     margin-left: auto;
   }
+`;
+
+export const StyledExecutionSequenceNumber = styled.span`
+  color: ${Colors.whitePure};
+
+  font-size: 14px;
 `;
