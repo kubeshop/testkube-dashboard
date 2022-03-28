@@ -16,18 +16,18 @@ type CLIScript = {
 };
 
 const testSuiteScripts: CLIScript[] = [
-  {label: 'Start test suite', command: (name: string) => `kubectl testkube testsuite run ${name}`},
+  {label: 'Start test suite', command: (name: string) => `kubectl testkube run testsuite ${name}`},
   {
     label: 'Delete test suite',
-    command: (name: string) => `kubectl testkube testsuite delete ${name}`,
+    command: (name: string) => `kubectl testkube delete testsuite ${name}`,
   },
 ];
 
 const testScripts: CLIScript[] = [
-  {label: 'Start test', command: (name: string) => `kubectl testkube test run ${name}`},
+  {label: 'Start test', command: (name: string) => `kubectl testkube run test ${name}`},
   {
     label: 'Delete test',
-    command: (name: string) => `kubectl testkube test delete ${name}`,
+    command: (name: string) => `kubectl testkube delete test ${name}`,
   },
 ];
 

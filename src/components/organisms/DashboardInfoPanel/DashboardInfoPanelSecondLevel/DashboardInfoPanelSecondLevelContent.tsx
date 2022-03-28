@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {Title} from '@atoms';
 
@@ -10,7 +10,7 @@ import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 import {DashboardContext} from '../../DashboardContainer/DashboardContainer';
 
 const DashboardInfoPanelSecondLevelContent = () => {
-  const {selectedExecution} = useContext(DashboardContext);
+  const {selectedExecution, entityType} = useContext(DashboardContext);
 
   const {index} = selectedExecution;
 
@@ -24,6 +24,10 @@ const DashboardInfoPanelSecondLevelContent = () => {
   const onDataChange = (data: any) => {
     setExecutionDetailsProps(data);
   };
+
+  useEffect(() => {
+    executionDetailsProps?.refetch();
+  }, [entityType]);
 
   return (
     <DashboardInfoPanelSecondLevelContext.Provider value={{onDataChange, ...executionDetailsProps}}>

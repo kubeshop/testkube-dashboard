@@ -34,8 +34,8 @@ export const StyledSpace = styled(Space)`
 `;
 
 export const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
-  width: 15px;
-  height: auto;
+  width: 20px;
+  height: 30px;
 
   cursor: pointer;
 `;

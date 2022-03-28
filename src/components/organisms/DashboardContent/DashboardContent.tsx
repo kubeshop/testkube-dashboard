@@ -2,7 +2,7 @@
 import {useContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Spin, Table} from 'antd';
+import {Spin} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
 import {useAppSelector} from '@redux/hooks';
@@ -21,12 +21,14 @@ import Fonts from '@styles/Fonts';
 
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {
+  StyledContentTable,
   StyledDashboardContent,
   StyledDashboardContentContainer,
   StyledDashboardContentTitleBottomGradient,
   StyledDashboardContentTitleGradient,
 } from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
+import DashboardTableRow from './DashboardTableRow';
 
 // The reason I've done this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
@@ -183,13 +185,21 @@ const DashboardContent: React.FC<any> = props => {
             entityType={entityType}
           />
         ) : null}
-        <Table
+        <StyledContentTable
           dataSource={dataSource}
-          columns={columns}
+          columns={[
+            {
+              render: (data: any) => {
+                const {name, labels} = data;
+
+                return <DashboardTableRow name={name} labels={labels} entityType={entityType} />;
+              },
+            },
+          ]}
           loading={contentProps.isLoading}
           rowSelection={canSelectRow ? rowSelection : undefined}
-          rowClassName="table-row-dark"
-          rowKey={record => {
+          rowClassName="dashboard-content-table"
+          rowKey={(record: any) => {
             return `${entityType}${
               selectedRecordIdFieldName && record[selectedRecordIdFieldName]
                 ? `-${record[selectedRecordIdFieldName]}`
@@ -204,7 +214,7 @@ const DashboardContent: React.FC<any> = props => {
               }
             },
           })}
-          // showHeader={false}
+          showHeader={false}
         />
       </StyledDashboardContent>
     </StyledDashboardContentContainer>

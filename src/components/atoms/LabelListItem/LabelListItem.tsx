@@ -3,16 +3,18 @@ import {LabelKey, LabelValue} from '@models/labels';
 import {StyledLabelListItem} from './LabelListItem.styled';
 
 type LabelListItemProps = {
-  labelKey: LabelKey;
-  labelValue: LabelValue;
+  labelKey?: LabelKey;
+  labelValue?: LabelValue;
+  isSkippedMode?: boolean;
+  skippedLabelsNumber?: number;
 };
 
 const LabelListItem: React.FC<LabelListItemProps> = props => {
-  const {labelKey, labelValue} = props;
+  const {labelKey = '', labelValue = '', isSkippedMode = false, skippedLabelsNumber = 0} = props;
 
-  const value = `${labelKey}: ${labelValue}`;
+  const value = isSkippedMode ? `+${skippedLabelsNumber}` : `${labelKey}: ${labelValue}`;
 
-  return <StyledLabelListItem>{value}</StyledLabelListItem>;
+  return <StyledLabelListItem isSkippedMode={isSkippedMode}>{value}</StyledLabelListItem>;
 };
 
 export default LabelListItem;

@@ -1,4 +1,8 @@
+import {Table} from 'antd';
+
 import styled from 'styled-components';
+
+import Colors from '@styles/Colors';
 
 export const StyledDashboardContentContainer = styled.div<{
   shouldInfoPanelBeShown: boolean;
@@ -14,10 +18,6 @@ export const StyledDashboardContentContainer = styled.div<{
   flex: 1;
 
   padding: 0;
-
-  .ant-table-row {
-    border: unset !important;
-  }
 
   .ant-table-tbody > tr.ant-table-row:hover {
     background: ${props => props.gradient} !important;
@@ -79,4 +79,62 @@ export const StyledDashboardContent = styled.div`
   z-index: 3;
 
   padding: 40px 20px 0px 20px;
+`;
+
+export const StyledDashboardTableRow = styled.div`
+  display: flex;
+`;
+
+export const StyledTableRowLeftPartContainer = styled.div<{isNameOnly: boolean}>`
+  display: flex;
+  flex-direction: column;
+  ${props => (props.isNameOnly ? 'justify-content: center;' : '')}
+  flex: 1;
+`;
+
+export const StyledTableRowRightPartContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const StyledTableRowTitle = styled.span`
+  color: ${Colors.whitePure};
+
+  font-weight: 400;
+  font-size: 16px;
+`;
+
+export const StyledContentTable = styled(Table)`
+  .ant-table {
+    border: 1px solid #262626;
+  }
+
+  .ant-table-tbody > tr > td {
+    border-bottom: 1px solid #262626;
+    // border: unset;
+  }
+
+  .ant-table-tbody > tr.ant-table-row-selected > td {
+    border-color: #262626;
+  }
+
+  .ant-pagination {
+    justify-content: center;
+  }
+
+  .dashboard-content-table {
+    background: var(--color-dark-tertiary);
+  }
+
+  .dashboard-content-table > td {
+    padding: 10px 25px;
+    border: 1px solid #262626;
+
+    cursor: pointer;
+  }
+
+  .dashboard-content-table > td:first-child {
+    border: unset;
+    padding: 0;
+  }
 `;

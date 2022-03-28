@@ -37,12 +37,9 @@ const adjustData = (results: any) => {
     return [];
   }
 
-  return results
-    .reverse()
-    .map((result: any, index: number) => {
-      return {...result, index: index + 1};
-    })
-    .reverse();
+  return results.reverse().map((result: any, index: number) => {
+    return {...result, index: results.length - index};
+  });
 };
 
 // The reason I've done this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
@@ -56,7 +53,7 @@ const TestSuiteExecutionsDataLayer = () => {
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionsByTestIdQuery(
     {textSearch: name},
     {
-      pollingInterval: PollingIntervals.default,
+      pollingInterval: PollingIntervals.everySecond,
     }
   );
 
@@ -76,7 +73,7 @@ const TestExecutionsDataLayer = () => {
   const {data, isLoading, isFetching, refetch} = useGetTestExecutionsByIdQuery(
     {name},
     {
-      pollingInterval: PollingIntervals.default,
+      pollingInterval: PollingIntervals.everySecond,
     }
   );
 
@@ -128,16 +125,43 @@ const DashboardInfoPanelContent = () => {
     renderCell: () => null,
   };
 
+  const onRunButtonClick = async () => {
+    try {
+      const result = await fetch(
+        `https://demo.testkube.io/results/v1/${entityType}/${selectedRecord?.name}/executions`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            namespace: 'testkube',
+          }),
+        }
+      );
+
+      if (result) {
+        infoPanelProps?.refetch();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     setSecondLevelOpenState(false);
     setSelectedExecution(null);
   }, [selectedRecord]);
 
+  useEffect(() => {
+    infoPanelProps?.refetch();
+  }, [entityType]);
+
   return (
     <StyledDashboardInfoPanelContent>
       <DashboardInfoPanelContext.Provider value={{onDataChange}}>
         {dataLayers[entityType]}
-        <InfoPanelHeader {...infoPanelHeaderProps} />
+        <InfoPanelHeader {...infoPanelHeaderProps} onRunButtonClick={onRunButtonClick} />
         <StyledAntTabs defaultActiveKey="1">
           <TabPane tab="Executions" key="ExecutionsPane">
             <StyledInfoPanelSection>
@@ -147,7 +171,7 @@ const DashboardInfoPanelContent = () => {
                 showHeader={false}
                 columns={executionsColumns}
                 gradient={dashboardGradient}
-                pagination={{hideOnSinglePage: true}}
+                pagination={{hideOnSinglePage: true, showSizeChanger: false}}
                 rowSelection={rowSelection}
                 rowKey={(record: any) => {
                   return record.id;

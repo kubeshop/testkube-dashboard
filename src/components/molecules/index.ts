@@ -18,4 +18,5 @@ export {default as ExecutionTableRow} from './ExecutionTableRow';
 export {default as ExecutionDefinition} from './ExecutionDefinition';
 export {default as ExecutionDetails} from './ExecutionDetails';
 export {default as ExecutionStepsList} from './ExecutionStepsList';
+export {default as ExecutionStepIcon} from './ExecutionStepIcon';
 export {default as ExecutionName} from './ExecutionName';

@@ -1,7 +1,7 @@
 export type TestName = string;
 export type TestContent = string;
 
-export type TestType = 'postman/collection' | 'cypress/project' | 'curl/test' | 'test/curl';
+export type TestType = 'postman/collection' | 'cypress/project' | 'curl/test' | 'test/curl' | 'postman/custom';
 
 export type TestCreationDate = Date;
 

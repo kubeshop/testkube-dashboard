@@ -21,17 +21,21 @@ const ExecutionDetailsGeneralInfo: React.FC = () => {
 
   const {startTime, endTime, duration} = data;
 
+  const formattedStartTime = formatExecutionDate(startTime);
+  const formattedEndTime = endTime !== '0001-01-01T00:00:00Z' ? formatExecutionDate(endTime) : 'In progress';
+  const formattedDuration = duration || 'In progress';
+
   return (
     <StyledExecutionDetailsGeneralInfoContainer>
       {entityType === 'test-suites' ? <TestSuiteExecutionDetailsHeader /> : null}
       <StyledGeneralInfoGrid>
         {entityType === 'tests' ? <TestExecutionDetailsHeader /> : null}
         <StyledGeneralInfoLabel>Start</StyledGeneralInfoLabel>
-        <StyledGeneralInfoValue>{formatExecutionDate(startTime)}</StyledGeneralInfoValue>
+        <StyledGeneralInfoValue>{formattedStartTime}</StyledGeneralInfoValue>
         <StyledGeneralInfoLabel>End</StyledGeneralInfoLabel>
-        <StyledGeneralInfoValue>{formatExecutionDate(endTime)}</StyledGeneralInfoValue>
+        <StyledGeneralInfoValue>{formattedEndTime}</StyledGeneralInfoValue>
         <StyledGeneralInfoLabel>Duration</StyledGeneralInfoLabel>
-        <StyledGeneralInfoValue>{duration || 'No duration'}</StyledGeneralInfoValue>
+        <StyledGeneralInfoValue>{formattedDuration}</StyledGeneralInfoValue>
       </StyledGeneralInfoGrid>
     </StyledExecutionDetailsGeneralInfoContainer>
   );

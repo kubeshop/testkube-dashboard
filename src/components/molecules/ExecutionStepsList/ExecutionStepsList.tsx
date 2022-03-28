@@ -1,3 +1,4 @@
+import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import {v4} from 'uuid';
@@ -27,7 +28,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const getExecutionStepIcon = (step: any) => {
     if (iconSet === 'definition') {
       if (step.delay) {
-        return 'pending';
+        return 'waiting';
       }
 
       return 'code';
@@ -58,41 +59,43 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     return navigate(`/dashboard/tests?textSearch=${testName}`);
   };
 
-  const renderedDefinitionsList = executionSteps?.map((step: any) => {
-    const icon = getExecutionStepIcon(step);
-    const executionName = getExecutionStepName(step);
+  const renderedDefinitionsList = useMemo(() => {
+    return executionSteps?.map((step: any) => {
+      const icon = getExecutionStepIcon(step);
+      const executionName = getExecutionStepName(step);
 
-    const {execute, delay, step: stepResult, execution: execitionResult} = step;
+      const {execute, delay, step: stepResult, execution: execitionResult} = step;
 
-    const listItemKey = execitionResult?.id || v4();
+      const listItemKey = execitionResult?.id || v4();
 
-    // TODO: improve this
-    return (
-      <StyledExecutionStepsListItem key={listItemKey}>
-        <StyledSpace size={15}>
-          <ExecutionStepIcon icon={icon} />
-          {execute || stepResult?.execute ? (
-            <>
-              <ExecutionName name={executionName} />
-              <StyledExternalLinkIcon
-                onClick={() => {
-                  if (executionName) {
-                    onShowTestClick(executionName);
-                  }
-                }}
-              />
-            </>
-          ) : null}
-          {delay || stepResult?.delay ? (
-            <>
-              <ExecutionName name={`Wait for ${delay?.duration || stepResult?.delay?.duration} ms`} />
-              <div />
-            </>
-          ) : null}
-        </StyledSpace>
-      </StyledExecutionStepsListItem>
-    );
-  });
+      // TODO: improve this
+      return (
+        <StyledExecutionStepsListItem key={listItemKey}>
+          <StyledSpace size={15}>
+            {icon ? <ExecutionStepIcon icon={icon} /> : null}
+            {execute || stepResult?.execute ? (
+              <>
+                <ExecutionName name={executionName} />
+                <StyledExternalLinkIcon
+                  onClick={() => {
+                    if (executionName) {
+                      onShowTestClick(executionName);
+                    }
+                  }}
+                />
+              </>
+            ) : null}
+            {delay || stepResult?.delay ? (
+              <>
+                <ExecutionName name={`Wait for ${delay?.duration || stepResult?.delay?.duration} ms`} />
+                <div />
+              </>
+            ) : null}
+          </StyledSpace>
+        </StyledExecutionStepsListItem>
+      );
+    });
+  }, [executionSteps]);
 
   return <StyledExecutionStepsList>{renderedDefinitionsList}</StyledExecutionStepsList>;
 };

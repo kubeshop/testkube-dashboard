@@ -20,10 +20,11 @@ type InfoPanelHeaderProps = {
   testType?: TestType;
   description?: string;
   isLoading?: boolean;
+  onRunButtonClick: () => void;
 };
 
 const InfoPanelHeader: React.FC<InfoPanelHeaderProps> = props => {
-  const {title, labels, testType, description, isLoading} = props;
+  const {title, labels, testType, description, isLoading, onRunButtonClick} = props;
 
   return (
     <StyledInfoPanelHeaderContainer>
@@ -34,7 +35,7 @@ const InfoPanelHeader: React.FC<InfoPanelHeaderProps> = props => {
         {labels ? <LabelsList labels={labels} /> : null}
       </StyledInfoPanelHeaderLeftPart>
       <StyledInfoPanelHeaderRightPart>
-        <StyledRunButton>Run</StyledRunButton>
+        <StyledRunButton onClick={onRunButtonClick}>Run</StyledRunButton>
       </StyledInfoPanelHeaderRightPart>
     </StyledInfoPanelHeaderContainer>
   );

@@ -1,10 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
-import {RingProgress, RingProgressConfig} from '@ant-design/charts';
+import {RingProgressConfig} from '@ant-design/charts';
 
 import {StatusColors} from '@styles/Colors';
 
 import {TestSuiteExecutionStatus} from '@src/models/testSuiteExecutions';
+
+import {StyledRingProgressChart} from './RingProgressChart.styled';
 
 type RingProgressChartProps = {
   height?: number;
@@ -62,7 +64,7 @@ const RingProgressChart: React.FC<RingProgressChartProps> = props => {
           fontSize: '16px',
         },
         customHtml: () => {
-          return status === 'error' ? 'Steps failed' : 'Steps';
+          return status === 'error' ? 'Steps passed' : 'Steps';
         },
       },
     },
@@ -71,7 +73,7 @@ const RingProgressChart: React.FC<RingProgressChartProps> = props => {
     color: chartColors,
   };
 
-  return <RingProgress {...config} className="ring-progress-style" />;
+  return <StyledRingProgressChart {...config} className="ring-progress-style" />;
 };
 
 export default RingProgressChart;

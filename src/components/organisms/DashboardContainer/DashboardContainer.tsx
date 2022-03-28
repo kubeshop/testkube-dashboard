@@ -108,6 +108,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     ...(queryFilters.pageSize ? {pageSize: queryFilters.pageSize} : {}),
 
     hideOnSinglePage: true,
+    showSizeChanger: false,
   };
 
   const closeSecondLevel = () => {

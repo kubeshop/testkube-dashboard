@@ -23,7 +23,7 @@ export const StyledDashboardInfoPanelContainer = styled.div<{
 
   background: #1d1d1d;
 
-  // transition: 0.5s flex;
+  transition: 0.3s flex;
 `;
 
 export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: boolean; isSecondLevelOpen: boolean}>`
@@ -123,9 +123,13 @@ export const StyledAntTabs = styled(Tabs)`
 
 export const StyledTable = styled(Table)<{gradient?: string}>`
   .ant-table {
-    border: unset !important;
+    // border: unset !important;
 
     background: #151515;
+  }
+
+  .ant-pagination {
+    justify-content: center;
   }
 
   .ant-table-tbody > tr.ant-table-row:hover {
@@ -133,6 +137,12 @@ export const StyledTable = styled(Table)<{gradient?: string}>`
 
     & > td {
       background: unset;
+    }
+
+    span {
+      path {
+        fill: ${Colors.whitePure};
+      }
     }
   }
 
@@ -142,6 +152,12 @@ export const StyledTable = styled(Table)<{gradient?: string}>`
     .ant-btn {
       color: white;
       border-color: white;
+    }
+
+    span {
+      path {
+        fill: ${Colors.whitePure};
+      }
     }
   }
 
@@ -163,10 +179,6 @@ export const StyledTable = styled(Table)<{gradient?: string}>`
         background: unset;
       }
     }
-  }
-
-  .ant-table-row {
-    border: unset !important;
   }
 `;
 

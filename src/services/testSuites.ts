@@ -9,7 +9,10 @@ export const testSuitesApi = createApi({
     getTestSuites: builder.query({
       query: (filters: any) => `/test-suites?${paramsSerializer(filters)}`,
     }),
+    runTestSuite: builder.query({
+      query: (testSuiteName: string) => `/test-suites/${testSuiteName}/run`,
+    }),
   }),
 });
 
-export const {useGetTestSuitesQuery} = testSuitesApi;
+export const {useGetTestSuitesQuery, useRunTestSuiteQuery} = testSuitesApi;

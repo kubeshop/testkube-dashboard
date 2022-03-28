@@ -3,9 +3,10 @@ import {useContext} from 'react';
 import {ExecutionStatuses} from '@models/executions';
 import {TestSuiteExecutionStatusesEnum} from '@models/testSuiteExecutions';
 
+import {ExecutionStepIcon} from '@molecules';
+
 import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 
-import {ExecutionStatus} from '../../ExecutionTableRow/ExecutionStatus';
 import {StyledExecutionStatus} from '../ExecutionDetails.styled';
 
 const TestExecutionDetailsStatus: React.FC = () => {
@@ -15,7 +16,7 @@ const TestExecutionDetailsStatus: React.FC = () => {
 
   return (
     <>
-      <ExecutionStatus icon={executionResult?.status} />
+      <ExecutionStepIcon icon={executionResult?.status} />
       {executionResult?.status ? (
         <StyledExecutionStatus status={executionResult?.status}>
           {TestSuiteExecutionStatusesEnum[executionResult?.status as ExecutionStatuses]}

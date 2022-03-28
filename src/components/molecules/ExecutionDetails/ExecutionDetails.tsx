@@ -26,7 +26,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {id} = selectedExecution;
 
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionByIdQuery(id, {
-    pollingInterval: PollingIntervals.long,
+    pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const TestExecutionDetailsDataLayer: React.FC = () => {
   const {id} = selectedExecution;
 
   const {data, isLoading, isFetching, refetch} = useGetTestExecutionByIdQuery(id, {
-    pollingInterval: PollingIntervals.long,
+    pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {

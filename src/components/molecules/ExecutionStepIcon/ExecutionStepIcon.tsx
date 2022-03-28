@@ -1,4 +1,7 @@
+// import {Spin} from 'antd';
 import {ExecutionStepIconType} from '@models/executions';
+
+import {Loader} from '@atoms';
 
 import {ReactComponent as SuccessStatusIcon} from '@assets/check.svg';
 import {ReactComponent as PendingStatusIcon} from '@assets/clock.svg';
@@ -10,8 +13,10 @@ import {StyledExecutionStepIcon} from './ExecutionStepIcon.styled';
 const icons: {[key in ExecutionStepIconType]: any} = {
   success: <SuccessStatusIcon />,
   error: <ErrorStatusIcon />,
-  pending: <PendingStatusIcon />,
+  pending: <Loader size="small" />,
   code: <CodeIcon />,
+  queued: <PendingStatusIcon />,
+  waiting: <PendingStatusIcon />,
 };
 
 type ExecutionStepIconProps = {
