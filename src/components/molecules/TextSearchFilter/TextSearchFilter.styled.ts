@@ -32,7 +32,9 @@ export const StyledSearchInput = styled(Input.Search)`
 
     &-group-addon {
       background: ${Colors.grey1000};
-
+      .anticon {
+        color: ${Colors.whitePure};
+      }
       .ant-btn {
         background: ${Colors.grey1000};
         border-color: ${Colors.grey3};
