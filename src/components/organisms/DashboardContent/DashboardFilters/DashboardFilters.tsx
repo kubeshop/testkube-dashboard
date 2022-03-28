@@ -17,7 +17,7 @@ const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
   status: StatusFilter,
   dateRange: DateRangeFilter,
   date: DateFilter,
-  textSearch: TextFilter,
+  textSearch: TextSearchFilter,
   selector: LabelsFilter,
   testType: TextFilter,
   search: TextSearchFilter,
@@ -48,7 +48,7 @@ const DashboardFilters = (
       ...rest,
     };
 
-    return <Component {...componentProps} />;
+    return <Component {...componentProps} key={filterComponentId} />;
   });
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const DashboardFilters = (
 
   return (
     <StyledDashboardFiltersContainer>
-      <StyledSpace size={20}>{renderedFilters}</StyledSpace>
+      <StyledSpace>{renderedFilters}</StyledSpace>
     </StyledDashboardFiltersContainer>
   );
 };

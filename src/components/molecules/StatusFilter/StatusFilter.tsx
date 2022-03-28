@@ -1,54 +1,71 @@
+import {useCallback, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Space} from 'antd';
+import {Checkbox, Dropdown, Menu, Space} from 'antd';
+
+import {FilterFilled} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
 
-import {Button} from '@atoms';
+import {StyledFilterLabel} from './StatusFilter.styled';
 
-const statuses = [
-  {
-    type: 'All',
-    value: undefined,
-  },
-  {
-    type: 'Pending',
-    value: 'pending',
-  },
-  {
-    type: 'Success',
-    value: 'success',
-  },
-  {
-    type: 'Error',
-    value: 'error',
-  },
-];
+const statusList = ['All', 'Pending', 'Success', 'Error'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
   const {filters, setSelectedRecord, setFilters} = props;
 
   const dispatch = useDispatch();
 
-  const handleClick = (status: string | undefined) => {
-    dispatch(setSelectedRecord({selectedRecord: null}));
-    dispatch(setFilters({...filters, page: 0, status}));
+  const [isVisible, setVisibilityState] = useState(false);
+
+  const onVisibleChange = (flag: boolean) => {
+    setVisibilityState(flag);
   };
 
-  const renderedStatuses = statuses.map(status => {
-    return (
-      <Button
-        active={filters.status === status.value}
-        disabled={filters.status === status.value}
-        onClick={() => handleClick(status.value)}
-        variant="primary"
-      >
-        {status.type}
-      </Button>
-    );
-  });
+  const handleClick = useCallback(
+    (status: string | undefined) => {
+      if (status === filters.status) {
+        dispatch(setSelectedRecord({selectedRecord: null}));
+        dispatch(setFilters({...filters, page: 0, status: undefined}));
+      } else {
+        dispatch(setSelectedRecord({selectedRecord: null}));
+        dispatch(setFilters({...filters, page: 0, status}));
+      }
+    },
+    [dispatch, setSelectedRecord, setFilters, filters]
+  );
 
-  return <Space>{renderedStatuses}</Space>;
+  const onMenuClick = () => {};
+
+  const renderedStatus = useMemo(() => {
+    return statusList.map(status => {
+      return (
+        <Menu.Item key={status}>
+          <Checkbox checked={filters.status === status} onChange={() => handleClick(status)}>
+            {status}
+          </Checkbox>
+        </Menu.Item>
+      );
+    });
+  }, [filters.status, handleClick]);
+
+  const menu = <Menu onClick={onMenuClick}>{renderedStatus}</Menu>;
+
+  return (
+    <Space>
+      <Dropdown
+        overlay={menu}
+        trigger={['click']}
+        placement="bottomCenter"
+        onVisibleChange={onVisibleChange}
+        visible={isVisible}
+      >
+        <StyledFilterLabel onClick={e => e.preventDefault()}>
+          Status <FilterFilled />
+        </StyledFilterLabel>
+      </Dropdown>
+    </Space>
+  );
 };
 
 export default StatusFilter;

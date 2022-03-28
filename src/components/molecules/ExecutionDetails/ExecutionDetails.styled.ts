@@ -93,7 +93,7 @@ export const StyledAntTabs = styled(Tabs)`
       padding: 15px 0;
 
       .ant-tabs-tab-btn {
-        color: #dbdbdb;
+        color: ${Colors.grey450};
 
         font-size: 16px;
         font-weight: 400;
