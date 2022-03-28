@@ -1,13 +1,18 @@
-import {LabelsList} from '@molecules';
+import {ExecutionStatuses} from '@models/executions';
+import {TestSuiteExecutionStatusesEnum} from '@models/testSuiteExecutions';
+
+import {ExecutionStepIcon, LabelsList} from '@molecules';
 
 import {
   StyledDashboardTableRow,
-  StyledTableRowLeftPartContainer, // StyledTableRowRightPartContainer,
+  StyledExecutionStatus,
+  StyledTableRowLeftPartContainer,
+  StyledTableRowRightPartContainer, // StyledTableRowRightPartContainer,
   StyledTableRowTitle,
 } from './DashboardContent.styled';
 
 const DashboardTableRow: React.FC<any> = props => {
-  const {name, labels} = props;
+  const {name, labels, status, recentDate} = props;
 
   return (
     <StyledDashboardTableRow>
@@ -15,7 +20,19 @@ const DashboardTableRow: React.FC<any> = props => {
         <StyledTableRowTitle>{name}</StyledTableRowTitle>
         {labels ? <LabelsList labels={labels} shouldSkipLabels /> : null}
       </StyledTableRowLeftPartContainer>
-      {/* <StyledTableRowRightPartContainer></StyledTableRowRightPartContainer> */}
+      <StyledTableRowRightPartContainer>
+        {status ? (
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <ExecutionStepIcon icon={status} />
+            <StyledExecutionStatus status={status}>
+              {TestSuiteExecutionStatusesEnum[status as ExecutionStatuses]}
+            </StyledExecutionStatus>
+          </div>
+        ) : null}
+        {recentDate ? (
+          <div style={{textAlign: 'right', color: 'white', fontSize: 14, marginTop: 10}}>{recentDate}</div>
+        ) : null}
+      </StyledTableRowRightPartContainer>
     </StyledDashboardTableRow>
   );
 };

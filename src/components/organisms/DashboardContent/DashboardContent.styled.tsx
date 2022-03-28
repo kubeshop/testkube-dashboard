@@ -2,7 +2,7 @@ import {Table} from 'antd';
 
 import styled from 'styled-components';
 
-import Colors from '@styles/Colors';
+import Colors, {StatusColors} from '@styles/Colors';
 
 export const StyledDashboardContentContainer = styled.div<{
   shouldInfoPanelBeShown: boolean;
@@ -137,4 +137,12 @@ export const StyledContentTable = styled(Table)`
     border: unset;
     padding: 0;
   }
+`;
+
+export const StyledExecutionStatus = styled.span<{status: 'success' | 'error' | 'pending' | 'queued'}>`
+  margin-left: 8px;
+
+  color: ${props => StatusColors[props.status]};
+
+  font-size: 16px;
 `;
