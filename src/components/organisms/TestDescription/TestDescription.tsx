@@ -3,8 +3,6 @@ import {useDispatch} from 'react-redux';
 
 import {Drawer} from 'antd';
 
-import styled from 'styled-components';
-
 import {useAppSelector} from '@redux/hooks';
 import {selectedTestId, updateSelectedTestId} from '@redux/reducers/executionsSlice';
 
@@ -14,7 +12,7 @@ import {ExecutionResultsOutputs, TestDetailsDrawerHeader} from '@molecules';
 
 import {useGetScriptExecutionByIdQuery} from '@src/services/executions';
 
-// import {useGetTestByIdQuery} from '@services/executions';
+import {Container} from './TestDescription.styled';
 
 const TestDescription = () => {
   const testId = useAppSelector(selectedTestId);
@@ -24,12 +22,6 @@ const TestDescription = () => {
     skip: !testId,
     pollingInterval: 500,
   });
-
-  const Container = styled.div`
-    background-color: #1d1d1d;
-    padding: 1em;
-    height: 100%;
-  `;
 
   const onClose = () => {
     setVisible(false);

@@ -13,10 +13,10 @@ enum Colors {
   grey3 = '#262626', // gray, gray 3
 
   // Notifications
-  greenOkay = '#09b89d',
+  greenOkay = '#09B89D',
   greenOkayCompliment = '#B2DFD3',
 
-  yellowWarning = '#ffe17f',
+  yellowWarning = '#FFE17F',
   yellowWarningCompliment = '#FFF3CA',
   yellow7 = '#E8D639',
   yellow10 = '#FAFAB5',
@@ -26,18 +26,18 @@ enum Colors {
   lightGrey = '#DEDEDE',
   darkGrey = '#393939',
 
-  redError = '#e65a6d',
+  redError = '#E65A6D',
   redErrorCompliment = '#F4BAB8',
 
-  whitePure = '#ffffff',
+  whitePure = '#FFFFFF',
   blackPure = '#000000',
-  blackPearl = '#111d2c',
+  blackPearl = '#111D2C',
 
   cyan = '#58D1C9',
   cyan7 = '#33BCB7',
   volcano = '#F3956A',
 
-  blue6 = '#1890fc', // Daybreak Blue
+  blue6 = '#1890FC', // Daybreak Blue
   blue10 = '#B7E3FA',
 
   highlightGreen = '#33BCB7',
@@ -49,7 +49,9 @@ enum Colors {
   highlightGradient = 'linear-gradient(90deg, #113536 0%, #000000 100%)',
   highlightGradientHover = 'linear-gradient(90deg, #113536 50%, #000000 100%)',
   diffBackground = '#2B2611',
-  diffBackgroundHover = '#27220f',
+  diffBackgroundHover = '#27220F',
+
+  dashboardTableBackground = '#1D1D1D',
 }
 
 export enum BackgroundColors {

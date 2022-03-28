@@ -1,17 +1,17 @@
-import {Space} from 'antd';
-
 import styled from 'styled-components';
 
-export const StyledDashboardFiltersContainer = styled.div`
-  // border-top-left-radius: 14px;
-  // border-top-right-radius: 14px;
-  // margin-top: 30px;
-  padding: 16px 0;
+import Colors from '@styles/Colors';
 
-  // background: #1d1d1d;
+export const StyledDashboardFiltersContainer = styled.div`
+  padding: 16px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+
+  background: ${Colors.dashboardTableBackground};
 `;
 
-export const StyledSpace = styled(Space)`
+export const StyledSpace = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: 16px;
 `;

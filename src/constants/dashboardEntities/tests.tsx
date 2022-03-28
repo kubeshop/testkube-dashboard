@@ -71,7 +71,7 @@ export const TestsEntity: DashboardBlueprint = {
     },
     {},
   ],
-  filtersComponentsIds: ['textSearch'],
+  filtersComponentsIds: ['textSearch', 'selector', 'status'],
 };
 
 export default TestsEntity;

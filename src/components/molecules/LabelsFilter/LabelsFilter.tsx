@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux';
 
 import {Checkbox, Dropdown, Menu, Space} from 'antd';
 
-import {DownOutlined} from '@ant-design/icons';
+import {FilterFilled} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
 import {LabelKey} from '@models/labels';
@@ -12,7 +12,7 @@ import {useAppSelector} from '@redux/hooks';
 import {selectLabels} from '@redux/reducers/labelsSlice';
 
 import AppliedLabels from './AppliedLabels';
-import {StyledLabelsFilterMenu} from './LabelsFilter.styled';
+import {StyledFilterLabel, StyledLabelsFilterMenu} from './LabelsFilter.styled';
 
 const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters} = props;
@@ -93,6 +93,9 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   return (
     <Space size={20}>
+      {appliedLabels && appliedLabels.length ? (
+        <AppliedLabels appliedLabels={appliedLabels} onLabelChange={onLabelChange} />
+      ) : null}
       <Dropdown
         overlay={menu}
         trigger={['click']}
@@ -100,13 +103,10 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         onVisibleChange={onVisibleChange}
         visible={isVisible}
       >
-        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-          Label <DownOutlined />
-        </a>
+        <StyledFilterLabel onClick={e => e.preventDefault()}>
+          Labels <FilterFilled />
+        </StyledFilterLabel>
       </Dropdown>
-      {appliedLabels && appliedLabels.length ? (
-        <AppliedLabels appliedLabels={appliedLabels} onLabelChange={onLabelChange} />
-      ) : null}
     </Space>
   );
 };

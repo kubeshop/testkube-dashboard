@@ -21,7 +21,7 @@ export const StyledDashboardInfoPanelContainer = styled.div<{
 
   height: 100%;
 
-  background: #1d1d1d;
+  background: ${Colors.dashboardTableBackground};
 
   transition: 0.3s flex;
 `;
@@ -38,7 +38,7 @@ export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: bo
   &:last-child {
     width: ${props => (props.isInfoPanelExpanded ? (props.isSecondLevelOpen ? '60%' : '100%') : '80px')};
 
-    background: ${props => (props.isSecondLevelOpen ? '#262626' : '#1d1d1d')};
+    background: ${props => (props.isSecondLevelOpen ? Colors.grey3 : Colors.dashboardTableBackground)};
   }
 `;
 
@@ -55,7 +55,7 @@ export const StyledInfoPanelSection = styled.div<{isBorder?: boolean}>`
 export const StyledInfoPanelSectionTitle = styled.span`
   padding-bottom: 10px;
 
-  color: #dbdbdb;
+  color: ${Colors.grey450};
 
   font-size: 24px;
 `;
@@ -72,7 +72,7 @@ export const StyledDashboardInfoPanelSecondLevelContainer = styled.div<{
   display: flex;
   flex-direction: column;
 
-  background: #262626;
+  background: ${Colors.grey3};
 
   // transition: 0.5s all;
 `;
@@ -106,7 +106,7 @@ export const StyledAntTabs = styled(Tabs)`
       padding: 15px 0;
 
       .ant-tabs-tab-btn {
-        color: #dbdbdb;
+        color: ${Colors.grey450};
 
         font-size: 16px;
         font-weight: 400;
