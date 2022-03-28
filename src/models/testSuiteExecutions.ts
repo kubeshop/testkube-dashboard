@@ -4,7 +4,7 @@ export type TestSuiteExecutionStatus = 'queued' | 'pending' | 'success' | 'error
 
 export enum TestSuiteExecutionStatusesEnum {
   success = 'Success',
-  pending = 'Pending',
+  pending = 'Running',
   error = 'Error',
   queued = 'Queued',
 }

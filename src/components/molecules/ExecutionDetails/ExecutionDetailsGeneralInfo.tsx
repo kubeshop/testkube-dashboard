@@ -22,8 +22,8 @@ const ExecutionDetailsGeneralInfo: React.FC = () => {
   const {startTime, endTime, duration} = data;
 
   const formattedStartTime = formatExecutionDate(startTime);
-  const formattedEndTime = endTime !== '0001-01-01T00:00:00Z' ? formatExecutionDate(endTime) : 'In progress';
-  const formattedDuration = duration || 'In progress';
+  const formattedEndTime = endTime !== '0001-01-01T00:00:00Z' ? formatExecutionDate(endTime) : 'Running';
+  const formattedDuration = duration || 'Running';
 
   return (
     <StyledExecutionDetailsGeneralInfoContainer>

@@ -38,6 +38,7 @@ export const StyledExecutionStatus = styled.span<{status: 'success' | 'error' | 
   color: ${props => StatusColors[props.status]};
 
   font-size: 16px;
+  line-height: 30px;
 `;
 
 export const StyledGeneralInfoItem = styled.div`
