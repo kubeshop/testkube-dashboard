@@ -1,14 +1,12 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Spin} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
-import {Title} from '@atoms';
+import {Loader, Title} from '@atoms';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -101,6 +99,7 @@ const DashboardContent: React.FC<any> = props => {
     columns,
     dashboardGradient,
     setSelectedExecution,
+    closeSecondLevel,
   } = useContext(DashboardContext);
 
   const dispatch = useDispatch();
@@ -158,6 +157,7 @@ const DashboardContent: React.FC<any> = props => {
 
   useEffect(() => {
     dispatch(setSelectedRecord({selectedRecord: null}));
+    closeSecondLevel();
   }, [queryFilters]);
 
   return (
@@ -173,7 +173,7 @@ const DashboardContent: React.FC<any> = props => {
       </StyledDashboardContentTitleGradient>
       <StyledDashboardContent>
         <Title font={Fonts.ptSans}>
-          {pageTitle} {contentProps.isFetching && <Spin />}
+          {pageTitle} {contentProps.isFetching ? <Loader isCentered={false} /> : null}
         </Title>
         {filtersComponentsIds && filtersComponentsIds.length ? (
           <DashboardFilters

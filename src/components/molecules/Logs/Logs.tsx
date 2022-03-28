@@ -13,6 +13,8 @@ const Logs: React.FC<any> = props => {
 
   useEffect(() => {
     if (!output) {
+      setLogs('');
+
       const sse = new EventSource(`${localStorage.getItem('apiEndpoint')}/executions/${executionId}/logs`);
 
       sse.onmessage = e => {

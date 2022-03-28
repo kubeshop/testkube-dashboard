@@ -30,6 +30,10 @@ export const StyledSpace = styled(Space)`
 
   .ant-space-item:last-of-type {
     margin-left: auto;
+
+    svg {
+      width: 16px;
+    }
   }
 `;
 

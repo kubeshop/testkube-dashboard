@@ -23,10 +23,12 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {selectedExecution} = useContext(DashboardContext);
   const {onDataChange} = useContext(DashboardInfoPanelSecondLevelContext);
 
-  const {id} = selectedExecution;
+  const {id, status} = selectedExecution;
+
+  const interval = status === 'success' ? 0 : PollingIntervals.everySecond;
 
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionByIdQuery(id, {
-    pollingInterval: PollingIntervals.everySecond,
+    pollingInterval: interval,
   });
 
   useEffect(() => {
@@ -38,12 +40,15 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
 const TestExecutionDetailsDataLayer: React.FC = () => {
   const {selectedExecution} = useContext(DashboardContext);
+
   const {onDataChange} = useContext(DashboardInfoPanelSecondLevelContext);
 
-  const {id} = selectedExecution;
+  const {id, status} = selectedExecution;
 
-  const {data, isLoading, isFetching, refetch} = useGetTestExecutionByIdQuery(id, {
-    pollingInterval: PollingIntervals.everySecond,
+  const interval = status === 'success' ? 0 : PollingIntervals.everySecond;
+
+  const {data, isLoading, isFetching, refetch, ...rest} = useGetTestExecutionByIdQuery(id, {
+    pollingInterval: interval,
   });
 
   useEffect(() => {
