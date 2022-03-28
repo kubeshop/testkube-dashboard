@@ -42,10 +42,11 @@ export const StyledCloseIcon = styled(CloseOutlined)`
 `;
 
 export const StyledFilterLabel = styled.div`
-  cursor: pointer;
   color: ${Colors.grey450};
 
+  font-family: ${Fonts.nunito};
   font-size: 14px;
   font-weight: 400;
-  font-family: ${Fonts.nunito};
+
+  cursor: pointer;
 `;
