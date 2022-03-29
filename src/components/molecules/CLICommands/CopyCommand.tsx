@@ -31,18 +31,23 @@ const CopyCommand = (props: any) => {
     color: Colors.blue6,
   };
 
-  const onHover = () => {
+  const onMouseOver = () => {
     setHoverState(true);
   };
 
-  const onUnhover = () => {
+  const onMouseOut = () => {
     setHoverState(true);
   };
 
   return (
     <>
       <StyledCopyCommandLabel>{label}</StyledCopyCommandLabel>
-      <StyledCopyCommandContainer onMouseOver={onHover} onMouseOut={onUnhover} isHovered={isHovered} onClick={onCopy}>
+      <StyledCopyCommandContainer
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut}
+        isHovered={isHovered}
+        onClick={onCopy}
+      >
         <StyledCopyCommandPre>
           <StyledCopyCommandCode>{command}</StyledCopyCommandCode>
         </StyledCopyCommandPre>

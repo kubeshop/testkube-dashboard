@@ -1,12 +1,17 @@
-import {Space} from 'antd';
-
 import styled from 'styled-components';
 
+import Colors from '@styles/Colors';
+
 export const StyledDashboardFiltersContainer = styled.div`
-  padding-bottom: 20px;
+  padding: 16px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+
+  background: ${Colors.dashboardTableBackground};
 `;
 
-export const StyledSpace = styled(Space)`
+export const StyledSpace = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: 16px;
 `;

@@ -1,6 +1,6 @@
 export type SearchParamKey =
   | 'textSearch'
-  | 'tags'
+  | 'selector'
   | 'startDate'
   | 'endDate'
   | 'pageSize'
@@ -12,7 +12,7 @@ export type SearchParamKey =
 
 export type SearchParamValue = any;
 
-export type SearchParamsType = 'test-suites' | 'tests' | 'executions' | 'test-executions' | 'test-suite-executions';
+export type SearchParamsType = 'test-suites' | 'tests';
 
 export type SearchParamsKeys = SearchParamKey[];
 
@@ -26,8 +26,5 @@ export type ValidatedSearchParams = {
 
 export enum SearchParams {
   'test-suites' = 'test-suites',
-  'test-suite-executions' = 'test-suite-executions',
   tests = 'tests',
-  'test-executions' = 'test-executions',
-  executions = 'executions',
 }

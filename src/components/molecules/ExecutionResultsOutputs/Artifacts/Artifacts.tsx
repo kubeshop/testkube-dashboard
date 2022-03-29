@@ -5,12 +5,7 @@ import {ReactComponent as FileIcon} from '@assets/fileIcon.svg';
 
 import {downloadFileName} from '@services/artifacts';
 
-import {
-  StyledArtifacts,
-  StyledArtifactsContainer,
-  StyledFileArtifactsFileName,
-  StyledNoArtifactsFound,
-} from './Artifacts.styled';
+import {StyledArtifacts, StyledArtifactsContainer, StyledFileArtifactsFileName} from './Artifacts.styled';
 
 interface IArtifactsProps {
   artifacts: any;
@@ -24,26 +19,20 @@ const Artifacts = ({artifacts, testId}: IArtifactsProps) => {
 
   return (
     <>
-      {artifacts ? (
-        artifacts.map(({name, size}: any) => (
-          <StyledArtifactsContainer>
-            <StyledArtifacts>
-              <StyledFileArtifactsFileName>
-                <FileIcon style={{marginRight: '10px', marginLeft: '20px'}} />
-                <span>{getLastStringAfterTrailingSlash(name)}</span>
-              </StyledFileArtifactsFileName>
-              <DownloadIcon
-                style={{marginRight: '12px', cursor: 'pointer'}}
-                onClick={() => name && testId && downloadFile(name, testId)}
-              />
-            </StyledArtifacts>
-          </StyledArtifactsContainer>
-        ))
-      ) : (
-        <StyledArtifacts>
-          <StyledNoArtifactsFound>No Artifacts found!</StyledNoArtifactsFound>
-        </StyledArtifacts>
-      )}
+      {artifacts.map(({name, size}: any) => (
+        <StyledArtifactsContainer>
+          <StyledArtifacts>
+            <StyledFileArtifactsFileName>
+              <FileIcon style={{marginRight: '10px', marginLeft: '20px'}} />
+              <span>{getLastStringAfterTrailingSlash(name)}</span>
+            </StyledFileArtifactsFileName>
+            <DownloadIcon
+              style={{marginRight: '12px', cursor: 'pointer'}}
+              onClick={() => name && testId && downloadFile(name, testId)}
+            />
+          </StyledArtifacts>
+        </StyledArtifactsContainer>
+      ))}
     </>
   );
 };

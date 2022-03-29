@@ -10,20 +10,20 @@ import {
   setTestSuitesFilters,
 } from '@redux/reducers/testSuitesSlice';
 
-import TestSuitesInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestSuitesInfoPanel';
-
 import {useGetTestSuitesQuery} from '@services/testSuites';
+
+import {testSuitesDashboardGradient} from '@styles/gradients';
 
 export const TestSuitesEntity: DashboardBlueprint = {
   entityType: 'test-suites',
+  dashboardGradient: testSuitesDashboardGradient,
   route: '/dashboard/test-suites',
   reduxEntity: 'testSuites',
   pageTitle: 'Test Suites',
   hasInfoPanel: true,
   reduxListName: 'dataList',
   canSelectRow: true,
-
-  infoPanelComponent: TestSuitesInfoPanel,
+  emptyDrawerEntity: 'test suite',
 
   useGetData: useGetTestSuitesQuery,
   setData: setTestSuites,
@@ -55,15 +55,15 @@ export const TestSuitesEntity: DashboardBlueprint = {
       key: 'testDescription',
     },
     {
-      title: 'Test suite tags',
+      title: 'Test suite labels',
       render: (data: any) => {
-        if (!data.tags) {
+        if (!data.labels) {
           return <span> - </span>;
         }
 
         return (
           <div>
-            <span>{data.tags.join(', ')}</span>
+            <span>{data.labels.join(', ')}</span>
           </div>
         );
       },
@@ -81,7 +81,7 @@ export const TestSuitesEntity: DashboardBlueprint = {
       key: 'testNumberOfExecutions',
     },
   ],
-  filtersComponentsIds: ['textSearch', 'tags'],
+  filtersComponentsIds: ['textSearch', 'selector', 'status'],
 };
 
 export default TestSuitesEntity;

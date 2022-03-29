@@ -9,16 +9,12 @@ import {LabelInput} from '@atoms';
 
 const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
   'test-suites': 'textSearch',
-  'test-suite-executions': 'textSearch',
   tests: 'textSearch',
-  executions: 'testName',
 };
 
 const placeholders: {[key in DashboardBlueprintType]: string} = {
   'test-suites': 'Test suite',
-  'test-suite-executions': 'Test suite execution',
   tests: 'Test',
-  executions: 'Test',
 };
 
 const TextFilter: React.FC<FilterProps> = props => {

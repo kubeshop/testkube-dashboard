@@ -64,11 +64,6 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
     isModalVisible(false);
   };
 
-  const toggleGA = () => {
-    const GA_MEASUREMENT_ID: string = process.env.REACT_APP_GOOGLE_ANALYTICS_ID || '';
-    const GA_KEY = `ga-disable-${GA_MEASUREMENT_ID}`;
-  };
-
   useEffect(() => {
     if (defaultApiEndpoint) {
       localStorage.setItem('apiEndpoint', defaultApiEndpoint);
@@ -112,9 +107,6 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
               {isLoading ? 'Loading...' : 'Get results'}
             </Button>
           </StyledFormContainer>
-          {/* <Button variant="secondary" onClick={toggleGA}>
-            Toggle GA
-          </Button> */}
         </StyledSearchUrlForm>
       </Modal>
     </>

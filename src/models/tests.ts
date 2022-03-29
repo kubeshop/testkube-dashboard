@@ -1,7 +1,7 @@
 export type TestName = string;
 export type TestContent = string;
 
-export type TestType = 'postman/collection' | 'cypress/project' | 'curl/test' | 'test/curl';
+export type TestType = 'postman/collection' | 'cypress/project' | 'curl/test' | 'test/curl' | 'postman/custom';
 
 export type TestCreationDate = Date;
 
@@ -15,7 +15,7 @@ export type Test = {
 interface TestsState {
   isLoading?: boolean;
   dataList: Test[];
-  filters: {textSearch: string; type: string; pageSize: number; page: number; tags: []; createdAt: null};
+  filters: {textSearch: string; type: string; pageSize: number; page: number; selector: []; createdAt: null};
   totals: {};
   filtered: {};
   selectedTest: Test | null;

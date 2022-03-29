@@ -5,7 +5,7 @@ import {DashboardBlueprint} from '@models/dashboard';
 import {FilterProps, FilterType} from '@models/filters';
 import {SearchParams} from '@models/searchParams';
 
-import {DateFilter, DateRangeFilter, StatusFilter, TagsFilter, TextFilter} from '@molecules';
+import {DateFilter, DateRangeFilter, LabelsFilter, StatusFilter, TextFilter, TextSearchFilter} from '@molecules';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
@@ -17,9 +17,10 @@ const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
   status: StatusFilter,
   dateRange: DateRangeFilter,
   date: DateFilter,
-  textSearch: TextFilter,
-  tags: TagsFilter,
+  textSearch: TextSearchFilter,
+  selector: LabelsFilter,
   testType: TextFilter,
+  search: TextSearchFilter,
 };
 
 const filterSpecificProps: Partial<Record<FilterType, any>> = {
@@ -47,7 +48,7 @@ const DashboardFilters = (
       ...rest,
     };
 
-    return <Component {...componentProps} />;
+    return <Component {...componentProps} key={filterComponentId} />;
   });
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const DashboardFilters = (
 
   return (
     <StyledDashboardFiltersContainer>
-      <StyledSpace size={20}>{renderedFilters}</StyledSpace>
+      <StyledSpace>{renderedFilters}</StyledSpace>
     </StyledDashboardFiltersContainer>
   );
 };

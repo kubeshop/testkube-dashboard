@@ -30,7 +30,7 @@ export const executionsSlice = createSlice({
         testName: action.payload.testName,
         type: action.payload.type,
         page: 0,
-        tags: action.payload.tags,
+        labels: action.payload.labels,
       };
 
       state.selectedTestId = undefined;

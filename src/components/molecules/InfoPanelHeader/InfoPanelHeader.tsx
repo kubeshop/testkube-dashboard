@@ -1,23 +1,42 @@
+import {LabelsObject} from '@models/labels';
 import {TestType} from '@models/tests';
 
 import {Title} from '@atoms';
 
-import {TestRunner} from '@molecules';
+import {LabelsList} from '@molecules';
 
-import {StyledInfoPanelHeaderContainer} from './InfoPanelHeader.styled';
+import TestRunner from '../TestRunner';
+import {
+  StyledInfoPanelHeaderContainer,
+  StyledInfoPanelHeaderDescription,
+  StyledInfoPanelHeaderLeftPart,
+  StyledInfoPanelHeaderRightPart,
+  StyledRunButton,
+} from './InfoPanelHeader.styled';
 
 type InfoPanelHeaderProps = {
+  title?: string;
+  labels?: LabelsObject;
   testType?: TestType;
-  title: string;
+  description?: string;
+  isLoading?: boolean;
+  onRunButtonClick: () => void;
 };
 
 const InfoPanelHeader: React.FC<InfoPanelHeaderProps> = props => {
-  const {title, testType} = props;
+  const {title, labels, testType, description, isLoading, onRunButtonClick} = props;
 
   return (
     <StyledInfoPanelHeaderContainer>
-      <Title level={4}>{title}</Title>
-      {testType && <TestRunner testType={testType} />}
+      <StyledInfoPanelHeaderLeftPart>
+        {title ? <Title level={4}>{title}</Title> : null}
+        {description ? <StyledInfoPanelHeaderDescription>{description}</StyledInfoPanelHeaderDescription> : null}
+        {testType ? <TestRunner testType={testType} /> : null}
+        {labels ? <LabelsList labels={labels} /> : null}
+      </StyledInfoPanelHeaderLeftPart>
+      <StyledInfoPanelHeaderRightPart>
+        <StyledRunButton onClick={onRunButtonClick}>Run</StyledRunButton>
+      </StyledInfoPanelHeaderRightPart>
     </StyledInfoPanelHeaderContainer>
   );
 };

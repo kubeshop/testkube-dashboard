@@ -1,8 +1,5 @@
 import {DashboardBlueprint} from '@models/dashboard';
-
-import TestsInfoPanel from '@organisms/DashboardInfoPanel/InfoPanels/TestsInfoPanel';
-
-import {timeStampToDate} from '@utils/formatDate';
+import {LabelKey} from '@models/labels';
 
 import {
   selectAllTestsFilters,
@@ -12,19 +9,24 @@ import {
   setSelectedTest,
   setTests,
   setTestsFilters,
-} from '@src/redux/reducers/testsSlice';
-import {useGetTestsQuery} from '@src/services/tests';
+} from '@redux/reducers/testsSlice';
+
+import {timeStampToDate} from '@utils/formatDate';
+
+import {useGetTestsQuery} from '@services/tests';
+
+import {testsDashboardGradient} from '@styles/gradients';
 
 export const TestsEntity: DashboardBlueprint = {
   entityType: 'tests',
   route: '/dashboard/tests',
+  dashboardGradient: testsDashboardGradient,
   reduxEntity: 'tests',
   pageTitle: 'Tests',
   hasInfoPanel: true,
   reduxListName: 'dataList',
   canSelectRow: true,
-
-  infoPanelComponent: TestsInfoPanel,
+  emptyDrawerEntity: 'test',
 
   useGetData: useGetTestsQuery,
   setData: setTests,
@@ -47,15 +49,17 @@ export const TestsEntity: DashboardBlueprint = {
     },
     {title: 'Test type', dataIndex: 'type', key: 'type'},
     {
-      title: 'Test tags',
+      title: 'Test labels',
       render: (data: any) => {
-        if (!data.tags) {
+        if (!data.labels) {
           return <span> - </span>;
         }
 
+        const labelKeys: LabelKey[] = Object.keys(data.labels);
+
         return (
           <div>
-            <span>{data.tags.join(', ')}</span>
+            <span>{labelKeys.join(', ')}</span>
           </div>
         );
       },
@@ -67,7 +71,7 @@ export const TestsEntity: DashboardBlueprint = {
     },
     {},
   ],
-  filtersComponentsIds: ['textSearch', 'testType', 'date', 'tags'],
+  filtersComponentsIds: ['textSearch', 'selector', 'status'],
 };
 
 export default TestsEntity;

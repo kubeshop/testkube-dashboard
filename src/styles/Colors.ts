@@ -13,36 +13,45 @@ enum Colors {
   grey3 = '#262626', // gray, gray 3
 
   // Notifications
-  greenOkay = '#09b89d',
+  greenOkay = '#09B89D',
   greenOkayCompliment = '#B2DFD3',
 
-  yellowWarning = '#ffe17f',
+  yellowWarning = '#FFE17F',
   yellowWarningCompliment = '#FFF3CA',
   yellow7 = '#E8D639',
   yellow10 = '#FAFAB5',
 
-  redError = '#e65a6d',
+  successGreen = '#94D89C',
+  errorRed = '#DB539C',
+  lightGrey = '#DEDEDE',
+  darkGrey = '#393939',
+
+  redError = '#E65A6D',
   redErrorCompliment = '#F4BAB8',
 
-  whitePure = '#ffffff',
+  whitePure = '#FFFFFF',
   blackPure = '#000000',
-  blackPearl = '#111d2c',
+  blackPearl = '#111D2C',
 
   cyan = '#58D1C9',
   cyan7 = '#33BCB7',
   volcano = '#F3956A',
 
-  blue6 = '#1890fc', // Daybreak Blue
+  blue6 = '#1890FC', // Daybreak Blue
   blue10 = '#B7E3FA',
 
   highlightGreen = '#33BCB7',
+
+  purple = '#7984F4',
 
   selectionGradient = 'linear-gradient(90deg, #3C9AE8 0%, #84E2D8 100%)',
   selectionGradientHover = 'linear-gradient(90deg, #3C9AE8 50%, #84E2D8 100%)',
   highlightGradient = 'linear-gradient(90deg, #113536 0%, #000000 100%)',
   highlightGradientHover = 'linear-gradient(90deg, #113536 50%, #000000 100%)',
   diffBackground = '#2B2611',
-  diffBackgroundHover = '#27220f',
+  diffBackgroundHover = '#27220F',
+
+  dashboardTableBackground = '#1D1D1D',
 }
 
 export enum BackgroundColors {
@@ -62,5 +71,20 @@ export enum FontColors {
   afford = Colors.greenOkay,
   warning = Colors.yellowWarning,
 }
+
+export enum StatusColors {
+  success = Colors.successGreen,
+  error = Colors.errorRed,
+  pending = Colors.lightGrey,
+  queued = Colors.lightGrey,
+}
+
+export enum BorderColors {
+  greyBorder = Colors.darkGrey,
+}
+
+const borders = {
+  greyBorder: `1px solid ${BorderColors.greyBorder}`,
+};
 
 export default Colors;

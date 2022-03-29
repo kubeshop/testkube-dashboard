@@ -1,8 +1,8 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 
-import {Layout} from 'antd';
+import {Button, Layout, Space} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
 import {useGA4React} from 'ga-4-react';
@@ -14,17 +14,27 @@ import {DashboardBlueprintRenderer, SideBar} from '@organisms';
 
 import {EndpointProcessing, NotFound} from '@pages';
 
-import {StyledCookiesContainer, StyledLayoutContentWrapper} from './App.styled';
-import {setTags} from './redux/reducers/tagsSlice';
-import {useGetTagsQuery} from './services/tags';
+import {PollingIntervals} from '@utils/numbers';
+
+import Colors from '@styles/Colors';
+
+import {
+  StyledCookiesButton,
+  StyledCookiesContainer,
+  StyledCookiesDisclaimer,
+  StyledLayoutContentWrapper,
+} from './App.styled';
+import {setLabels} from './redux/reducers/labelsSlice';
+import {useGetLabelsQuery} from './services/labels';
 
 const App = () => {
+  const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const dispatch = useAppDispatch();
 
   const ga4React = useGA4React();
 
-  const {data, refetch} = useGetTagsQuery(null, {pollingInterval: 10_000});
+  const {data, refetch} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.long});
 
   const {pathname} = useLocation();
 
@@ -33,7 +43,7 @@ const App = () => {
   }, [apiEndpoint]);
 
   useEffect(() => {
-    dispatch(setTags(data));
+    dispatch(setLabels(data));
   }, [data]);
 
   useEffect(() => {
@@ -42,13 +52,27 @@ const App = () => {
     }
   }, [pathname]);
 
-  const onToggleCookies = async () => {
+  const acceptCookies = () => {
     // @ts-ignore
-    const value = !window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`];
-
-    // @ts-ignore
-    window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = !value;
+    window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = false;
+    localStorage.setItem('isGADisabled', '0');
+    setCookiesVisibility(false);
   };
+
+  const declineCookies = () => {
+    // @ts-ignore
+    window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = true;
+    localStorage.setItem('isGADisabled', '1');
+    setCookiesVisibility(false);
+  };
+
+  useEffect(() => {
+    const isGADisabled = Boolean(Number(localStorage.getItem('isGADisabled')));
+
+    if (isGADisabled) {
+      declineCookies();
+    }
+  }, []);
 
   return (
     <Layout>
@@ -58,20 +82,28 @@ const App = () => {
           <Routes>
             <Route path="apiEndpoint" element={<EndpointProcessing />} />
             <Route path="dashboard/test-suites" element={<DashboardBlueprintRenderer entityType="test-suites" />} />
-            <Route
-              path="dashboard/test-suite-executions"
-              element={<DashboardBlueprintRenderer entityType="test-suite-executions" />}
-            />
             <Route path="dashboard/tests" element={<DashboardBlueprintRenderer entityType="tests" />} />
-            <Route path="dashboard/executions" element={<DashboardBlueprintRenderer entityType="executions" />} />
             <Route path="dashboard/*" element={<NotFound />} />
             <Route path="*" element={<Navigate to="dashboard/test-suites" />} />
           </Routes>
         </Content>
       </StyledLayoutContentWrapper>
-      {/* <StyledCookiesContainer>
-        <Button onClick={onToggleCookies}>Toggle</Button>
-      </StyledCookiesContainer> */}
+      {isCookiesVisible ? (
+        <StyledCookiesContainer>
+          <Space size={15}>
+            <StyledCookiesDisclaimer>
+              We use cookies to understand how users interact with Testkube by collecting and reporting information
+              <strong> anonymously</strong>
+            </StyledCookiesDisclaimer>
+            <StyledCookiesButton size="large" onClick={acceptCookies}>
+              Accept Cookies
+            </StyledCookiesButton>
+            <Button size="large" ghost type="text" style={{color: Colors.whitePure}} onClick={declineCookies}>
+              Decline
+            </Button>
+          </Space>
+        </StyledCookiesContainer>
+      ) : null}
     </Layout>
   );
 };

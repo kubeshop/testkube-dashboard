@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {useAppSelector} from '@redux/hooks';
 import {selectTotals} from '@redux/reducers/executionsSlice';
 
-import {PieChart, RingProgressChart} from '@atoms';
+import {PieChart} from '@atoms';
 
 import {TestHeader} from '@organisms';
 
@@ -53,13 +53,13 @@ const Statistics = () => {
       {/* </StyledTestStatisticsCharts> */}
       <StyledTestStatisticsCircularCharts>
         <StyledTotalTestCurrentStatusChart>
-          <RingProgressChart
+          {/* <RingProgressChart
             height={250}
             width={250}
             fontSize="large"
-            testStatus="passed"
+            testStatus="error"
             totalPercentageStaticPage={totalPercentage}
-          />
+          /> */}
         </StyledTotalTestCurrentStatusChart>
         <StyledTotalTestCurrentStatusChart>
           <PieChart />
