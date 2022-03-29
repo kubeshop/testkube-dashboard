@@ -34,15 +34,13 @@ const executionsColumns: ColumnsType<any> = [
 ];
 
 const addIndexes = (results: Array<any>) => {
-  'use strict';
-
   if (!results || !results.length) {
     return [];
   }
 
-  const reversedResultsArray = [...results];
+  const copyResultsArray = [...results];
 
-  return reversedResultsArray.reverse().map((result: any, index: number) => {
+  return copyResultsArray.map((result: any, index: number) => {
     return {...result, index: results.length - index};
   });
 };
