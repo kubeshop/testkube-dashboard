@@ -32,12 +32,14 @@ const executionsColumns: ColumnsType<any> = [
   },
 ];
 
-const adjustData = (results: any) => {
-  if (!results) {
+const addIndexes = (results: Array<any>) => {
+  if (!results || !results.length) {
     return [];
   }
 
-  return results.reverse().map((result: any, index: number) => {
+  const reversedResultsArray = [...results?.reverse()];
+
+  return reversedResultsArray.map((result: any, index: number) => {
     return {...result, index: results.length - index};
   });
 };
@@ -167,7 +169,7 @@ const DashboardInfoPanelContent = () => {
             <StyledInfoPanelSection>
               <StyledTable
                 loading={infoPanelProps.isLoading}
-                dataSource={adjustData(infoPanelProps.data?.results)}
+                dataSource={addIndexes(infoPanelProps.data?.results)}
                 showHeader={false}
                 columns={executionsColumns}
                 gradient={dashboardGradient}
