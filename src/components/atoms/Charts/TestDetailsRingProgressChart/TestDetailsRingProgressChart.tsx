@@ -2,9 +2,9 @@ import {useEffect, useState} from 'react';
 
 import {RingProgressConfig} from '@ant-design/charts';
 
-import {StatusColors} from '@styles/Colors';
+import {TestSuiteExecutionStatus, TestSuiteExecutionStatusesKeysEnum} from '@models/testSuiteExecutions';
 
-import {TestSuiteExecutionStatus} from '@src/models/testSuiteExecutions';
+import {StatusColors} from '@styles/Colors';
 
 import {StyledRingProgressChart} from './RingProgressChart.styled';
 
@@ -12,12 +12,12 @@ type RingProgressChartProps = {
   height?: number;
   width?: number;
   fontSize?: 'small' | 'medium' | 'large';
-  status?: TestSuiteExecutionStatus;
+  status: TestSuiteExecutionStatus;
   stepResults?: Array<any>;
 };
 
 const RingProgressChart: React.FC<RingProgressChartProps> = props => {
-  const {status = 'pending', stepResults = []} = props;
+  const {status, stepResults = []} = props;
 
   const [successfulStepsNumber, setSuccessfulStepsNumber] = useState(0);
 
@@ -30,7 +30,10 @@ const RingProgressChart: React.FC<RingProgressChartProps> = props => {
           },
         } = step;
 
-        return stepStatus === 'success' ? occ + 1 : occ;
+        return stepStatus === TestSuiteExecutionStatusesKeysEnum.passed ||
+          stepStatus === TestSuiteExecutionStatusesKeysEnum.success
+          ? occ + 1
+          : occ;
       }, 0);
 
       return setSuccessfulStepsNumber(successfulSteps);
@@ -43,7 +46,7 @@ const RingProgressChart: React.FC<RingProgressChartProps> = props => {
     getSuccessfulStepsNumber();
   }, [stepResults]);
 
-  const chartColors = [StatusColors.success, StatusColors.error] as unknown as string[];
+  const chartColors = [StatusColors.passed, StatusColors.failed] as unknown as string[];
 
   const config: RingProgressConfig = {
     autoFit: false,
@@ -55,7 +58,9 @@ const RingProgressChart: React.FC<RingProgressChartProps> = props => {
           fontSize: '16px',
         },
         formatter: () => {
-          return status === 'error' ? `${successfulStepsNumber}/${stepResults.length}` : String(stepResults.length);
+          return status === TestSuiteExecutionStatusesKeysEnum.failed || (status as any) === 'error'
+            ? `${successfulStepsNumber}/${stepResults.length}`
+            : String(stepResults.length);
         },
       },
       content: {
@@ -64,12 +69,17 @@ const RingProgressChart: React.FC<RingProgressChartProps> = props => {
           fontSize: '16px',
         },
         customHtml: () => {
-          return status === 'error' ? 'Steps passed' : 'Steps';
+          return status === TestSuiteExecutionStatusesKeysEnum.failed || (status as any) === 'error'
+            ? 'Steps passed'
+            : 'Steps';
         },
       },
     },
     animation: false,
-    percent: status === 'error' ? successfulStepsNumber / stepResults.length : stepResults.length,
+    percent:
+      status === TestSuiteExecutionStatusesKeysEnum.failed || (status as any) === 'error'
+        ? successfulStepsNumber / stepResults.length
+        : stepResults.length,
     color: chartColors,
   };
 

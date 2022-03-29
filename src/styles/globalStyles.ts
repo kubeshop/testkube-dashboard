@@ -364,9 +364,13 @@ ul {
 //   border: 1px solid var(--color-gray-nonary) !important;
 // }
 
-// .ant-pagination-item-container {
-//   display: none;
-// }
+
+.ant-pagination-item-container {
+  .ant-pagination-item-link-icon,
+  .ant-pagination-item-ellipsis {
+    color: ${Colors.purple} !important;
+  }
+}
 
 // .ant-table-row:hover .table-actions-dropdown-container {
 //   display: block;

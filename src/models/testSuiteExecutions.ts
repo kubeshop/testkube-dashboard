@@ -1,11 +1,24 @@
 import {Label} from './labels';
 
-export type TestSuiteExecutionStatus = 'queued' | 'pending' | 'success' | 'error';
+export type TestSuiteExecutionStatus = 'queued' | 'running' | 'passed' | 'failed';
+
+export enum TestSuiteExecutionStatusesKeysEnum {
+  passed = 'passed',
+  success = 'success',
+  pending = 'pending',
+  running = 'running',
+  failed = 'failed',
+  error = 'error',
+  queued = 'queued',
+}
 
 export enum TestSuiteExecutionStatusesEnum {
-  success = 'Success',
+  passed = 'Passed',
+  success = 'Passed',
+  running = 'Running',
   pending = 'Running',
-  error = 'Error',
+  failed = 'Failed',
+  error = 'Failed',
   queued = 'Queued',
 }
 

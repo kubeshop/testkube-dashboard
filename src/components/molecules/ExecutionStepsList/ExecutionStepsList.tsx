@@ -27,20 +27,12 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
 
   const getExecutionStepIcon = (step: any) => {
     if (iconSet === 'definition') {
-      if (step.delay) {
-        return 'waiting';
-      }
-
       return 'code';
     }
 
     const {execution} = step;
     const {executionResult} = execution;
     const {status} = executionResult;
-
-    if (!status) {
-      return 'pending';
-    }
 
     return status;
   };

@@ -32,10 +32,10 @@ export const StyledExecutionStatusContainer = styled.div`
   border-bottom: 1px solid #393939;
 `;
 
-export const StyledExecutionStatus = styled.span<{status: 'success' | 'error' | 'pending' | 'queued'}>`
+export const StyledExecutionStatus = styled.span<{status: any}>`
   margin-left: 8px;
 
-  color: ${props => StatusColors[props.status]};
+  color: ${props => StatusColors[props.status] || Colors.whitePure};
 
   font-size: 16px;
   line-height: 30px;

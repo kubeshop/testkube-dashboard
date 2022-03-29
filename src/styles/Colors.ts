@@ -73,8 +73,11 @@ export enum FontColors {
 }
 
 export enum StatusColors {
+  passed = Colors.successGreen,
   success = Colors.successGreen,
+  failed = Colors.errorRed,
   error = Colors.errorRed,
+  running = Colors.lightGrey,
   pending = Colors.lightGrey,
   queued = Colors.lightGrey,
 }
