@@ -81,7 +81,7 @@ export const TestSuitesEntity: DashboardBlueprint = {
       key: 'testNumberOfExecutions',
     },
   ],
-  filtersComponentsIds: ['textSearch', 'selector', 'status'],
+  filtersComponentsIds: ['textSearch'],
 };
 
 export default TestSuitesEntity;

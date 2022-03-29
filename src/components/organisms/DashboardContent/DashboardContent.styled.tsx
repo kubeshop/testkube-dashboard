@@ -139,7 +139,7 @@ export const StyledContentTable = styled(Table)`
   }
 `;
 
-export const StyledExecutionStatus = styled.span<{status: 'success' | 'error' | 'pending' | 'queued'}>`
+export const StyledExecutionStatus = styled.span<{status: 'passed' | 'failed' | 'running' | 'queued'}>`
   margin-left: 8px;
 
   color: ${props => StatusColors[props.status]};

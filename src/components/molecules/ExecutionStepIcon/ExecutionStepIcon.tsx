@@ -1,4 +1,3 @@
-// import {Spin} from 'antd';
 import {ExecutionStepIconType} from '@models/executions';
 
 import {Loader} from '@atoms';
@@ -10,13 +9,15 @@ import {ReactComponent as ErrorStatusIcon} from '@assets/times.svg';
 
 import {StyledExecutionStepIcon} from './ExecutionStepIcon.styled';
 
-const icons: {[key in ExecutionStepIconType]: any} = {
+const icons: {[key in ExecutionStepIconType | any]: any} = {
   success: <SuccessStatusIcon />,
+  passed: <SuccessStatusIcon />,
   error: <ErrorStatusIcon />,
+  failed: <ErrorStatusIcon />,
   pending: <Loader size="small" />,
+  running: <Loader size="small" />,
   code: <CodeIcon />,
   queued: <PendingStatusIcon />,
-  waiting: <PendingStatusIcon />,
 };
 
 type ExecutionStepIconProps = {
@@ -26,7 +27,7 @@ type ExecutionStepIconProps = {
 const ExecutionStepIcon: React.FC<ExecutionStepIconProps> = props => {
   const {icon} = props;
 
-  return <StyledExecutionStepIcon>{icons[icon]}</StyledExecutionStepIcon>;
+  return icons[icon] ? <StyledExecutionStepIcon>{icons[icon]}</StyledExecutionStepIcon> : null;
 };
 
 export default ExecutionStepIcon;
