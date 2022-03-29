@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 import {useContext, useEffect, useState} from 'react';
 
 import {Tabs} from 'antd';
@@ -33,13 +34,15 @@ const executionsColumns: ColumnsType<any> = [
 ];
 
 const addIndexes = (results: Array<any>) => {
+  'use strict';
+
   if (!results || !results.length) {
     return [];
   }
 
-  const reversedResultsArray = [...results?.reverse()];
+  const reversedResultsArray = [...results];
 
-  return reversedResultsArray.map((result: any, index: number) => {
+  return reversedResultsArray.reverse().map((result: any, index: number) => {
     return {...result, index: results.length - index};
   });
 };
