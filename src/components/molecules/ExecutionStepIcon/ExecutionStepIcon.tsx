@@ -11,9 +11,10 @@ import {ReactComponent as ErrorStatusIcon} from '@assets/times.svg';
 import {StyledExecutionStepIcon} from './ExecutionStepIcon.styled';
 
 const icons: {[key in ExecutionStepIconType]: any} = {
+  passed: <SuccessStatusIcon />,
   success: <SuccessStatusIcon />,
   error: <ErrorStatusIcon />,
-  pending: <Loader size="small" />,
+  running: <Loader size="small" />,
   code: <CodeIcon />,
   queued: <PendingStatusIcon />,
   waiting: <PendingStatusIcon />,
