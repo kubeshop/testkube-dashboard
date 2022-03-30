@@ -19,7 +19,7 @@ const ExecutionTableRow: React.FC<any> = props => {
       {status ? <ExecutionStepIcon icon={status} /> : null}
       <ExecutionSequenceNumber index={index} />
       {!isSecondLevelOpen ? (
-        <ExecutionStartEndTime startTime={startTime} endTime={endTime} duration={duration} />
+        <ExecutionStartEndTime status={status} startTime={startTime} endTime={endTime} duration={duration} />
       ) : null}
       <ExecutionName name={name} />
       <StyledChevronRightIcon />

@@ -30,7 +30,9 @@ const DashboardTableRow: React.FC<any> = props => {
           </div>
         ) : null}
         {recentDate ? (
-          <div style={{textAlign: 'right', color: 'white', fontSize: 14, marginTop: 10}}>{recentDate}</div>
+          <div style={{textAlign: 'right', color: 'white', fontSize: 14, marginTop: 10}}>
+            {status === 'running' ? 'In progress' : recentDate}
+          </div>
         ) : null}
       </StyledTableRowRightPartContainer>
     </StyledDashboardTableRow>
