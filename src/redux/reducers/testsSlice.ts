@@ -1,12 +1,12 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {Test, TestsState} from '@models/tests';
+import {TestsState} from '@models/tests';
 
 import initialState from '@redux/initialState';
 
 import {RootState} from '../store';
 
-type SetTestsPayload = Test[];
+type SetTestsPayload = any;
 
 type SetSelectedTestPayload = any;
 
@@ -17,7 +17,11 @@ export const testsSlice = createSlice({
   initialState: initialState.tests,
   reducers: {
     setTests: (state: Draft<TestsState>, action: PayloadAction<SetTestsPayload>) => {
-      state.dataList = action.payload;
+      const adjustedPayload = action.payload.map((testItem: any) => {
+        return {dataItem: testItem.test, latestExecution: testItem.latest_execution};
+      });
+
+      state.dataList = adjustedPayload;
     },
     setTestsFilters: (state: Draft<TestsState>, action: PayloadAction<SetTestsFiltersPayload>) => {
       state.filters = action.payload;

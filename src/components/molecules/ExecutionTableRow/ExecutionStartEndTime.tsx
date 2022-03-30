@@ -5,7 +5,7 @@ import {StyledExecutionStartEndDate} from './ExecutionTableRow.styled';
 export const ExecutionStartEndTime: React.FC<any> = props => {
   const {startTime, endTime, duration} = props;
 
-  const formattedStartTime = formatExecutionDate(startTime);
+  const formattedStartTime = `${formatExecutionDate(startTime)} | `;
   const formattedEndTime = formatExecutionDate(endTime);
   const formattedDuration = duration ? ` - ${duration}` : '';
 

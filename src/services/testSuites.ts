@@ -7,7 +7,7 @@ export const testSuitesApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTestSuites: builder.query({
-      query: (filters: any) => `/test-suites?${paramsSerializer(filters)}`,
+      query: (filters: any) => `/test-suite-with-executions?${paramsSerializer(filters)}`,
     }),
     runTestSuite: builder.query({
       query: (testSuiteName: string) => `/test-suites/${testSuiteName}/run`,

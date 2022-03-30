@@ -3,6 +3,8 @@ import {useDispatch} from 'react-redux';
 
 import {TableRowSelection} from 'antd/lib/table/interface';
 
+import moment from 'moment';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
@@ -32,7 +34,7 @@ import DashboardTableRow from './DashboardTableRow';
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
 const TestSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetTestSuitesQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.default,
+    pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
@@ -44,7 +46,7 @@ const TestSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
 
 const TestSuiteExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionsByTestIdQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.default,
+    pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const TestSuiteExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
 
 const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetTestsQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.default,
+    pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
@@ -68,7 +70,7 @@ const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
 
 const ExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
   const {data, isLoading, isFetching, refetch} = useGetExecutionsQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.default,
+    pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
@@ -190,9 +192,22 @@ const DashboardContent: React.FC<any> = props => {
           columns={[
             {
               render: (data: any) => {
-                const {name, labels} = data;
+                const {latestExecution, dataItem} = data;
 
-                return <DashboardTableRow name={name} labels={labels} entityType={entityType} />;
+                const status =
+                  entityType !== 'test-suites' ? latestExecution.executionResult.status : latestExecution.status;
+                const recentDate = latestExecution.endTime;
+
+                return (
+                  <DashboardTableRow
+                    name={dataItem.name}
+                    labels={dataItem.labels}
+                    latestExecution={latestExecution}
+                    entityType={entityType}
+                    status={status}
+                    recentDate={moment(recentDate).format('MMM D, HH:mm')}
+                  />
+                );
               },
             },
           ]}
@@ -201,16 +216,16 @@ const DashboardContent: React.FC<any> = props => {
           rowClassName="dashboard-content-table"
           rowKey={(record: any) => {
             return `${entityType}${
-              selectedRecordIdFieldName && record[selectedRecordIdFieldName]
-                ? `-${record[selectedRecordIdFieldName]}`
+              selectedRecordIdFieldName && record.dataItem[selectedRecordIdFieldName]
+                ? `-${record.dataItem[selectedRecordIdFieldName]}`
                 : ''
             }`;
           }}
           pagination={paginationOptions}
-          onRow={record => ({
+          onRow={(record: any) => ({
             onClick: () => {
               if (canSelectRow) {
-                onRowSelect(record);
+                onRowSelect(record.dataItem);
               }
             },
           })}

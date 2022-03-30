@@ -27,6 +27,7 @@ const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
 const initialTestSuitesState: TestSuitesState = {
   isLoading: false,
   dataList: [],
+  latestExecution: null,
   filters: {textSearch: '', pageSize: 10, page: 0, selector: '', startDate: null, endDate: null},
   totals: {
     results: 0,
@@ -46,6 +47,7 @@ const initialTestSuitesState: TestSuitesState = {
 const initialTestsState: TestsState = {
   isLoading: false,
   dataList: [],
+  latestExecution: null,
   filters: {textSearch: '', type: '', pageSize: 10, page: 0, selector: [], createdAt: null},
   totals: {
     results: 0,

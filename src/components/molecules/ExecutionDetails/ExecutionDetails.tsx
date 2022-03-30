@@ -25,7 +25,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
   const {id, status} = selectedExecution;
 
-  const interval = status === 'success' ? 0 : PollingIntervals.everySecond;
+  const interval = status !== 'running' ? 0 : PollingIntervals.everySecond;
 
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionByIdQuery(id, {
     pollingInterval: interval,
@@ -45,7 +45,7 @@ const TestExecutionDetailsDataLayer: React.FC = () => {
 
   const {id, status} = selectedExecution;
 
-  const interval = status === 'success' ? 0 : PollingIntervals.everySecond;
+  const interval = status !== 'running' ? 0 : PollingIntervals.everySecond;
 
   const {data, isLoading, isFetching, refetch, ...rest} = useGetTestExecutionByIdQuery(id, {
     pollingInterval: interval,

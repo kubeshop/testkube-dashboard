@@ -12,7 +12,7 @@ import {
 } from './DashboardContent.styled';
 
 const DashboardTableRow: React.FC<any> = props => {
-  const {name, labels, status, recentDate} = props;
+  const {name, labels, status, recentDate, latestExecution} = props;
 
   return (
     <StyledDashboardTableRow>
@@ -22,7 +22,7 @@ const DashboardTableRow: React.FC<any> = props => {
       </StyledTableRowLeftPartContainer>
       <StyledTableRowRightPartContainer>
         {status ? (
-          <div style={{display: 'flex', alignItems: 'center'}}>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
             <ExecutionStepIcon icon={status} />
             <StyledExecutionStatus status={status}>
               {TestSuiteExecutionStatusesEnum[status as ExecutionStatuses]}
