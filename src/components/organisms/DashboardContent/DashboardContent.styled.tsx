@@ -146,3 +146,18 @@ export const StyledExecutionStatus = styled.span<{status: 'passed' | 'failed' | 
 
   font-size: 16px;
 `;
+
+export const StatusContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+export const RecentDateContainer = styled.div`
+  margin-top: 10;
+
+  color: ${Colors.whitePure};
+
+  font-size: 14;
+  text-align: right;
+`;
