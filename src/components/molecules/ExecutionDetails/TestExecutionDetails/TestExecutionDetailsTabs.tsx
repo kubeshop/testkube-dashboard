@@ -4,10 +4,10 @@ import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer
 
 import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 
+import {CLICommands} from '../..';
 import {StyledAntTabPane, StyledAntTabs, StyledTestExecutionDetailsTabsContainer} from '../ExecutionDetails.styled';
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
 import TestExecutionDetailsLogOutput from './TestExecutionDetailsLogOutput';
-import TestExecutionDetailsResults from './TestExecutionDetailsResults';
 
 const TestExecutionDetailsTabs = () => {
   const {data} = useContext(DashboardInfoPanelSecondLevelContext);
@@ -16,9 +16,6 @@ const TestExecutionDetailsTabs = () => {
   return (
     <StyledTestExecutionDetailsTabsContainer>
       <StyledAntTabs>
-        <StyledAntTabPane tab="Results" key="ResultsPane">
-          <TestExecutionDetailsResults />
-        </StyledAntTabPane>
         {entityType !== 'test-suites' ? (
           <StyledAntTabPane tab="Log Output" key="LogOutputPane">
             <TestExecutionDetailsLogOutput />
@@ -29,6 +26,9 @@ const TestExecutionDetailsTabs = () => {
             <TestExecutionDetailsArtifacts />
           </StyledAntTabPane>
         ) : null}
+        <StyledAntTabPane tab="CLI Commands" key="CLICommands">
+          <CLICommands isExecutions />
+        </StyledAntTabPane>
       </StyledAntTabs>
     </StyledTestExecutionDetailsTabsContainer>
   );

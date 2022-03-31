@@ -1,6 +1,6 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
 import {useEffect, useState} from 'react';
-import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import {Button, Layout, Space} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -10,9 +10,7 @@ import {useGA4React} from 'ga-4-react';
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
-import {DashboardBlueprintRenderer, SideBar} from '@organisms';
-
-import {EndpointProcessing, NotFound} from '@pages';
+import {SideBar} from '@organisms';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -25,6 +23,7 @@ import {
   StyledLayoutContentWrapper,
 } from './App.styled';
 import {setLabels} from './redux/reducers/labelsSlice';
+import Routes from './routes';
 import {useGetLabelsQuery} from './services/labels';
 
 const App = () => {
@@ -79,13 +78,7 @@ const App = () => {
       <SideBar />
       <StyledLayoutContentWrapper>
         <Content>
-          <Routes>
-            <Route path="apiEndpoint" element={<EndpointProcessing />} />
-            <Route path="dashboard/test-suites" element={<DashboardBlueprintRenderer entityType="test-suites" />} />
-            <Route path="dashboard/tests" element={<DashboardBlueprintRenderer entityType="tests" />} />
-            <Route path="dashboard/*" element={<NotFound />} />
-            <Route path="*" element={<Navigate to="dashboard/test-suites" />} />
-          </Routes>
+          <Routes />
         </Content>
       </StyledLayoutContentWrapper>
       {isCookiesVisible ? (

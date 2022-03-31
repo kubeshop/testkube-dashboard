@@ -8,7 +8,7 @@ import moment from 'moment';
 import {useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
-import {Loader, Title} from '@atoms';
+import {Title} from '@atoms';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -174,9 +174,7 @@ const DashboardContent: React.FC<any> = props => {
         <StyledDashboardContentTitleBottomGradient />
       </StyledDashboardContentTitleGradient>
       <StyledDashboardContent>
-        <Title font={Fonts.ptSans}>
-          {pageTitle} {contentProps.isFetching ? <Loader isCentered={false} /> : null}
-        </Title>
+        <Title font={Fonts.ptSans}>{pageTitle}</Title>
         {filtersComponentsIds && filtersComponentsIds.length ? (
           <DashboardFilters
             setSelectedRecord={setSelectedRecord}
@@ -193,10 +191,17 @@ const DashboardContent: React.FC<any> = props => {
             {
               render: (data: any) => {
                 const {latestExecution, dataItem} = data;
+                let status = null;
+                let recentDate = null;
 
-                const status =
-                  entityType !== 'test-suites' ? latestExecution?.executionResult?.status : latestExecution?.status;
-                const recentDate = latestExecution?.endTime;
+                if (latestExecution) {
+                  status =
+                    entityType !== 'test-suites' ? latestExecution.executionResult?.status : latestExecution.status;
+                  recentDate = moment(latestExecution.endTime).format('MMM D, HH:mm');
+                } else {
+                  status = 'neverRun';
+                  recentDate = 'The Future';
+                }
 
                 return (
                   <DashboardTableRow
@@ -205,7 +210,7 @@ const DashboardContent: React.FC<any> = props => {
                     latestExecution={latestExecution}
                     entityType={entityType}
                     status={status}
-                    recentDate={moment(recentDate).format('MMM D, HH:mm')}
+                    recentDate={recentDate}
                   />
                 );
               },

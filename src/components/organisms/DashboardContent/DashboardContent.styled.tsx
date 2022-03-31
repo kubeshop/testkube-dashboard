@@ -156,8 +156,8 @@ export const StatusContainer = styled.div`
 export const RecentDateContainer = styled.div`
   margin-top: 10;
 
-  color: ${Colors.whitePure};
+  color: ${Colors.greySecondary};
 
-  font-size: 14;
+  font-size: 12px;
   text-align: right;
 `;

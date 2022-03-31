@@ -8,4 +8,3 @@ export {
   getQueryStringFromUrl,
   FinalizedApiEndpoint,
 } from './validate';
-export {routes} from './routes';

@@ -20,6 +20,7 @@ export enum TestSuiteExecutionStatusesEnum {
   failed = 'Failed',
   error = 'Failed',
   queued = 'Queued',
+  neverRun = 'Never Run',
 }
 
 export type TestSuiteExecution = {

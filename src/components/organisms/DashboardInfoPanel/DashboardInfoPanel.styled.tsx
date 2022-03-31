@@ -87,7 +87,7 @@ export const StyledEmptyDashboardInfoPanel = styled.div`
 `;
 
 export const StyledEmptyDashboardInfoPanelText = styled.span`
-  color: #adadad;
+  color: ${Colors.greySecondary};
 
   font-size: 20px;
   text-align: center;
@@ -188,7 +188,7 @@ export const StyledCollapseButtonsContainer = styled.div`
 
 export const StyledDashboardInfoPanelContentContainer = styled.div`
   position: relative;
-  overflow: scroll;
+  overflow: auto;
 
   display: flex;
   flex: 1;
