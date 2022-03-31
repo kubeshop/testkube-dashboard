@@ -195,8 +195,8 @@ const DashboardContent: React.FC<any> = props => {
                 const {latestExecution, dataItem} = data;
 
                 const status =
-                  entityType !== 'test-suites' ? latestExecution.executionResult.status : latestExecution.status;
-                const recentDate = latestExecution.endTime;
+                  entityType !== 'test-suites' ? latestExecution?.executionResult?.status : latestExecution?.status;
+                const recentDate = latestExecution?.endTime;
 
                 return (
                   <DashboardTableRow
