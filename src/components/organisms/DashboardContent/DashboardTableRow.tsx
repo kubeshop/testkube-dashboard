@@ -3,7 +3,11 @@ import {TestSuiteExecutionStatusesEnum} from '@models/testSuiteExecutions';
 
 import {ExecutionStepIcon, LabelsList} from '@molecules';
 
+import useIsRunning from '@src/hooks/useIsRunning';
+
 import {
+  RecentDateContainer,
+  StatusContainer,
   StyledDashboardTableRow,
   StyledExecutionStatus,
   StyledTableRowLeftPartContainer,
@@ -14,6 +18,8 @@ import {
 const DashboardTableRow: React.FC<any> = props => {
   const {name, labels, status, recentDate} = props;
 
+  const isRunning = useIsRunning(status);
+
   return (
     <StyledDashboardTableRow>
       <StyledTableRowLeftPartContainer isNameOnly={!labels}>
@@ -21,17 +27,15 @@ const DashboardTableRow: React.FC<any> = props => {
         {labels ? <LabelsList labels={labels} shouldSkipLabels /> : null}
       </StyledTableRowLeftPartContainer>
       <StyledTableRowRightPartContainer>
-        {status ? (
-          <div style={{display: 'flex', alignItems: 'center'}}>
+        {status && (
+          <StatusContainer>
             <ExecutionStepIcon icon={status} />
             <StyledExecutionStatus status={status}>
               {TestSuiteExecutionStatusesEnum[status as ExecutionStatuses]}
             </StyledExecutionStatus>
-          </div>
-        ) : null}
-        {recentDate ? (
-          <div style={{textAlign: 'right', color: 'white', fontSize: 14, marginTop: 10}}>{recentDate}</div>
-        ) : null}
+          </StatusContainer>
+        )}
+        {recentDate && <RecentDateContainer>{isRunning ? 'In progress' : recentDate}</RecentDateContainer>}
       </StyledTableRowRightPartContainer>
     </StyledDashboardTableRow>
   );

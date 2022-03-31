@@ -13,6 +13,8 @@ import {useGetTestExecutionByIdQuery} from '@services/tests';
 
 import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 
+import useIsRunning from '@src/hooks/useIsRunning';
+
 import {StyledExecutionDetailsContainer, StyledExecutionDetailsHeader} from './ExecutionDetails.styled';
 import ExecutionDetailsGeneralInfo from './ExecutionDetailsGeneralInfo';
 import ExecutionDetailsStatus from './ExecutionDetailsStatus';
@@ -25,7 +27,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
   const {id, status} = selectedExecution;
 
-  const interval = status === 'success' ? 0 : PollingIntervals.everySecond;
+  const interval = !useIsRunning(status) ? 0 : PollingIntervals.everySecond;
 
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionByIdQuery(id, {
     pollingInterval: interval,
@@ -45,7 +47,7 @@ const TestExecutionDetailsDataLayer: React.FC = () => {
 
   const {id, status} = selectedExecution;
 
-  const interval = status === 'success' ? 0 : PollingIntervals.everySecond;
+  const interval = !useIsRunning(status) ? 0 : PollingIntervals.everySecond;
 
   const {data, isLoading, isFetching, refetch, ...rest} = useGetTestExecutionByIdQuery(id, {
     pollingInterval: interval,

@@ -54,7 +54,7 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
 
     localStorage.setItem(config.apiEndpoint, apiEndpoint);
 
-    navigate('/dashboard/tests');
+    navigate('/dashboard/test-suites');
 
     isModalVisible(false);
     dispatch(setApiEndpoint(apiEndpoint));
