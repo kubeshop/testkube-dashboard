@@ -1,5 +1,14 @@
-import styled from 'styled-components';
 import {Collapse} from 'antd';
+
+import styled from 'styled-components';
+
+const invisibleScroll = `
+  &::-webkit-scrollbar {
+    display: none;
+  } /* Chrome, Safari and Opera */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+`;
 
 export const StyledTestDescriptionContainer = styled.div`
   display: flex;
@@ -21,8 +30,10 @@ export const StyledTestOutputsContainer = styled.div`
 export const StyledPlainTextOutputContainer = styled.div`
   width: 100%;
   height: 446px;
-  overflow: scroll;
+  overflow: auto;
   background-color: var(--color-dark-secondary);
+
+  ${invisibleScroll}
 `;
 
 export const StyledTestOutput = styled.span`
@@ -44,12 +55,13 @@ export const StyledTestOutput = styled.span`
 
 export const StyledText = styled.pre`
   display: flex;
+
+  ${invisibleScroll}
 `;
 
 export const StyledTestStepsOutPutContainer = styled.div`
   width: 100%;
   height: 90%;
-
 `;
 
 export const StyledTestStepNameContainer = styled.div`
@@ -112,7 +124,7 @@ export const StyledCollapse = styled(Collapse.Panel)`
     border: 1px solid var(--color-gray-senary);
     background: var(--color-dark-tertiary);
   }
-background: var(--color-dark-tertiary);
+  background: var(--color-dark-tertiary);
 `;
 
 export const StyledTestWithoutAssertions = styled.div`
@@ -133,7 +145,7 @@ export const TestsWithoutStepsContainer = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  background: #DB5382;
+  background: #db5382;
   color: var(--color-light-primary);
   border: 1px solid var(--color-gray-senary);
   height: 38px;
@@ -153,9 +165,7 @@ export const StyledLabelledFailedOnlyCheckbox = styled.label`
   color: var(--color-gray-primary);
 `;
 
-export const StyledFailedOnlyCheckbox = styled.input`
-
-`;
+export const StyledFailedOnlyCheckbox = styled.input``;
 
 export const StyledPendingTestExecution = styled.div`
   display: flex;
@@ -165,7 +175,7 @@ export const StyledPendingTestExecution = styled.div`
   color: var(--color-light-primary);
   width: 100%;
   height: 38px;
-  background: var(--color-gray-tertiary );
+  background: var(--color-gray-tertiary);
   border: 1px solid var(--color-gray-secondary);
   border-radius: 3px;
 `;

@@ -47,6 +47,11 @@ export const StyledCopyCommandLabel = styled.span`
 
 export const StyledCopyCommandPre = styled.pre`
   margin-bottom: 0;
+  &::-webkit-scrollbar {
+    display: none;
+  } /* Chrome, Safari and Opera */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const StyledCopyCommandCode = styled.code`
