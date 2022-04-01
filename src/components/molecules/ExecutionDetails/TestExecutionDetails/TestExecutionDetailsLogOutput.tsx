@@ -9,12 +9,11 @@ import Logs from '../../Logs/Logs';
 const TestExecutionDetailsLogOutput = () => {
   const {data} = useContext(DashboardInfoPanelSecondLevelContext);
 
-  const {executionResult, id, name} = data;
-  const {output} = executionResult;
+  const {executionResult, name} = data;
 
   return (
     <StyledInfoPanelSection isBorder={false}>
-      <Logs executionId={name} output={output} />
+      <Logs executionId={name} output={executionResult?.output} />
     </StyledInfoPanelSection>
   );
 };
