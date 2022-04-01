@@ -1,7 +1,7 @@
 import {TestRunners} from '@models/testSuites';
 import {TestType} from '@models/tests';
 
-import CurlIcon from '@assets/curlIcon.svg';
+import CurlIcon from '@assets/curlLogo.svg';
 import CypressIcon from '@assets/cypressIcon.svg';
 import PostmanIcon from '@assets/postmanIconV2.svg';
 
