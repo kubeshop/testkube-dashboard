@@ -24,7 +24,10 @@ type CLICommandsProps = {
 };
 
 const testSuiteScripts: CLIScript[] = [
-  {label: 'Start test suite', command: (name: string) => `kubectl testkube run testsuite ${name}`},
+  {
+    label: 'Start test suite',
+    command: (name: string) => `kubectl testkube run testsuite ${name}`,
+  },
   {
     label: 'Delete test suite',
     command: (name: string) => `kubectl testkube delete testsuite ${name}`,
@@ -32,7 +35,10 @@ const testSuiteScripts: CLIScript[] = [
 ];
 
 const testScripts: CLIScript[] = [
-  {label: 'Start test', command: (name: string) => `kubectl testkube run test ${name}`},
+  {
+    label: 'Start test',
+    command: (name: string) => `kubectl testkube run test ${name}`,
+  },
   {
     label: 'Delete test',
     command: (name: string) => `kubectl testkube delete test ${name}`,
@@ -41,10 +47,17 @@ const testScripts: CLIScript[] = [
     label: 'Get test',
     command: (name: string) => `kubectl testkube get test ${name}`,
   },
+  {
+    label: 'Get test executions',
+    command: (name: string) => `kubectl testkube get executions --test ${name}`,
+  },
 ];
 
 const executionsScripts: CLIScript[] = [
-  {label: 'Get execution', command: (name: string) => `kubectl testkube get execution ${name}`},
+  {
+    label: 'Get execution',
+    command: (name: string) => `kubectl testkube get execution ${name}`,
+  },
 ];
 
 const scriptsByEntityType: {[key in CLIScriptKey]: CLIScript[]} = {
