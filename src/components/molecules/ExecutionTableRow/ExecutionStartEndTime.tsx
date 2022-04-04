@@ -12,7 +12,7 @@ export const ExecutionStartEndTime: React.FC<any> = props => {
   const formattedEndTime = isRunning ? 'Still running...' : formatExecutionDate(endTime);
   const formattedDuration = duration ? ` - ${duration}` : '';
 
-  const value = `${formattedStartTime} | + ${formattedEndTime} + ${formattedDuration}`;
+  const value = `${formattedStartTime} | ${formattedEndTime} ${formattedDuration}`;
 
   return <StyledExecutionStartEndDate>{value}</StyledExecutionStartEndDate>;
 };
