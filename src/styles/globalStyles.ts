@@ -376,6 +376,11 @@ ul {
 //   display: block;
 // }
 
+  // <Spin /> dot item
+  .ant-spin-dot-item {
+    background: ${Colors.purple};
+  }
+
 `;
 
 /* Media Sizes */
