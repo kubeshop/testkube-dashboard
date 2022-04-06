@@ -8,7 +8,7 @@ type DotsProps = {
 };
 
 const Dots: React.FC<DotsProps> = props => {
-  const {dotNumber = 3, color = Colors.blue6} = props;
+  const {dotNumber = 3, color = Colors.purple} = props;
 
   const dots = Array.from({length: dotNumber}).map((_, index) => {
     const key = `dot_${index}`;

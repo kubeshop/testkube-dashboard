@@ -105,6 +105,10 @@ const initialLabelsState: LabelsState = {
 
 const initialConfigState: ConfigState = {
   apiEndpoint: null,
+  redirectTarget: {
+    targetTestExecutionId: null,
+    targetTestId: null,
+  },
 };
 
 const initialReduxState = {

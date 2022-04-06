@@ -51,7 +51,7 @@ export type DashboardBlueprint = {
    * Name of a data list in the Redux store
    */
 
-  reduxListName?: string;
+  reduxListName: string;
 
   /**
    * Dashboard entity type

@@ -1,7 +1,11 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useMemo} from 'react';
+import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
 import {v4} from 'uuid';
+
+import {setRedirectTarget} from '@redux/reducers/configSlice';
 
 import {ExecutionName} from '@molecules';
 
@@ -23,6 +27,7 @@ type ExecutionStepsListProps = {
 const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const {executionSteps, iconSet = 'default'} = props;
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const getExecutionStepIcon = (step: any) => {
@@ -47,8 +52,30 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     }
   };
 
-  const onShowTestClick = (testName: string) => {
-    return navigate(`/dashboard/tests?textSearch=${testName}`);
+  const onShowClick = (step: any) => {
+    const {executionName} = step;
+
+    if (iconSet === 'default') {
+      const {
+        execution: {id},
+      } = step;
+
+      dispatch(
+        setRedirectTarget({
+          targetTestId: executionName,
+          targetTestExecutionId: id,
+        })
+      );
+    } else if (iconSet === 'definition') {
+      dispatch(
+        setRedirectTarget({
+          targetTestId: executionName,
+          targetTestExecutionId: null,
+        })
+      );
+    }
+
+    return navigate(`/dashboard/tests?textSearch=${executionName}`);
   };
 
   const renderedDefinitionsList = useMemo(() => {
@@ -56,9 +83,9 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       const icon = getExecutionStepIcon(step);
       const executionName = getExecutionStepName(step);
 
-      const {execute, delay, step: stepResult, execution: execitionResult} = step;
+      const {execute, delay, step: stepResult, execution: executionResult} = step;
 
-      const listItemKey = execitionResult?.id || v4();
+      const listItemKey = executionResult?.id || v4();
 
       // TODO: improve this
       return (
@@ -70,9 +97,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
                 <ExecutionName name={executionName} />
                 <StyledExternalLinkIcon
                   onClick={() => {
-                    if (executionName) {
-                      onShowTestClick(executionName);
-                    }
+                    onShowClick({...step, executionName});
                   }}
                 />
               </>

@@ -28,7 +28,7 @@ const CopyCommand = (props: any) => {
   const tooltipProps: TooltipProps = {
     title: isCopied ? 'Copied' : 'Copy',
     placement: 'top',
-    color: Colors.blue6,
+    color: Colors.purple,
   };
 
   const onMouseOver = () => {

@@ -15,8 +15,8 @@ const TestRunner: React.FC<TestRunnerProps> = props => {
 
   return (
     <StyledTestRunnerContainer>
-      <TestRunnerIcon icon={testRunnerIcons[testType]} />
-      <Title level={5}>{testRunnersNames[testType]}</Title>
+      <TestRunnerIcon icon={testRunnerIcons[testType] || testRunnerIcons.unknown} />
+      <Title level={5}>{testRunnersNames[testType] || testRunnersNames.unknown}</Title>
     </StyledTestRunnerContainer>
   );
 };
