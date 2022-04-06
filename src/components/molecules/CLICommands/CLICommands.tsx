@@ -58,6 +58,14 @@ const executionsScripts: CLIScript[] = [
     label: 'Get execution',
     command: (name: string) => `kubectl testkube get execution ${name}`,
   },
+  {
+    label: 'Watch execution',
+    command: (name: string) => `kubectl testkube watch execution ${name}`,
+  },
+  {
+    label: 'Download artifacts',
+    command: (name: string) => `kubectl testkube download artifacts ${name}`,
+  },
 ];
 
 const scriptsByEntityType: {[key in CLIScriptKey]: CLIScript[]} = {
