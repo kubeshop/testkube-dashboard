@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {Navigate} from 'react-router-dom';
 
 import {DashboardBlueprintRenderer} from '@organisms';
@@ -27,13 +28,14 @@ const routesConfig = [
     path: 'dashboard/*',
     element: NotFound,
   },
-  {
-    path: '*',
-    element: Navigate,
-    props: {
-      to: 'dashboard/test-suites',
-    },
-  },
+  // DO NOT TOUCH THIS :)
+  // {
+  //   path: '*',
+  //   element: Navigate,
+  //   props: {
+  //     to: 'dashboard/test-suites',
+  //   },
+  // },
 ];
 
 export default routesConfig;
