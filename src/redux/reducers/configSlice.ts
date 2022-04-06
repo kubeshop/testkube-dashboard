@@ -13,11 +13,21 @@ export const configSlice = createSlice({
     setApiEndpoint: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.apiEndpoint = action.payload;
     },
+    setRedirectTarget: (state: Draft<ConfigState>, action: PayloadAction<any>) => {
+      state.redirectTarget = action.payload;
+    },
+    clearTargetTestId: (state: Draft<ConfigState>) => {
+      state.redirectTarget.targetTestId = null;
+    },
+    clearTargetTestExecutionId: (state: Draft<ConfigState>) => {
+      state.redirectTarget.targetTestExecutionId = null;
+    },
   },
 });
 
 export const selectApiEndpoint = (state: RootState) => state.config.apiEndpoint;
+export const selectRedirectTarget = (state: RootState) => state.config.redirectTarget;
 
-export const {setApiEndpoint} = configSlice.actions;
+export const {setApiEndpoint, setRedirectTarget, clearTargetTestId, clearTargetTestExecutionId} = configSlice.actions;
 
 export default configSlice.reducer;

@@ -127,7 +127,7 @@ export const StyledContentTable = styled(Table)`
   }
 
   .dashboard-content-table > td {
-    padding: 10px 25px;
+    padding: 10px 15px;
     border: 1px solid #262626;
 
     cursor: pointer;
@@ -156,8 +156,16 @@ export const StatusContainer = styled.div`
 export const RecentDateContainer = styled.div`
   margin-top: 10;
 
-  color: ${Colors.greySecondary};
+  color: ${Colors.whitePure};
 
   font-size: 12px;
   text-align: right;
+`;
+
+export const StyledTestRunnerType = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding-right: 15px;
 `;

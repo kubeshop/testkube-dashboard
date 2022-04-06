@@ -36,6 +36,7 @@ type DashboardInfoPanelProps = {
 
 export const DashboardContext = createContext<DashboardBlueprint & DashboardInfoPanelProps & DashboardInnerProps>({
   pageTitle: '',
+  reduxListName: '',
   entityType: 'test-suites',
   hasInfoPanel: true,
   canSelectRow: true,
@@ -113,7 +114,6 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
 
   const closeSecondLevel = () => {
     setSecondLevelOpenState(false);
-    setSelectedExecution(null);
   };
 
   const closeDrawer = () => {

@@ -1,6 +1,7 @@
 export type TestSuite = {};
 
-export type TestRunners = 'Postman' | 'Cypress' | 'Curl';
+export type UnknownTestRunner = 'Unknown test type';
+export type TestRunners = 'Postman' | 'Cypress' | 'Curl' | UnknownTestRunner;
 
 interface TestSuitesState {
   isLoading?: boolean;

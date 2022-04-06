@@ -4,6 +4,7 @@ import {TestType} from '@models/tests';
 import CurlIcon from '@assets/curlLogo.svg';
 import CypressIcon from '@assets/cypressIcon.svg';
 import PostmanIcon from '@assets/postmanIconV2.svg';
+import UnknownIcon from '@assets/unknownIcon.svg';
 
 export const testRunnersNames: {[key in TestType]: TestRunners} = {
   'postman/collection': 'Postman',
@@ -11,6 +12,7 @@ export const testRunnersNames: {[key in TestType]: TestRunners} = {
   'cypress/project': 'Cypress',
   'curl/test': 'Curl',
   'test/curl': 'Curl',
+  unknown: 'Unknown test type',
 };
 
 export const testRunnerIcons: {[key in TestType]: string} = {
@@ -19,4 +21,5 @@ export const testRunnerIcons: {[key in TestType]: string} = {
   'cypress/project': CypressIcon,
   'curl/test': CurlIcon,
   'test/curl': CurlIcon,
+  unknown: UnknownIcon,
 };

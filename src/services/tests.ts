@@ -1,5 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {addIndexes} from '@utils/array';
 import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
 
 export const testsApi = createApi({
@@ -11,6 +12,13 @@ export const testsApi = createApi({
     }),
     getTestExecutionsById: builder.query({
       query: ({name}) => `/tests/${name}/executions`,
+      transformResponse: (response: any, meta, arg) => {
+        const {results, ...rest} = response;
+
+        const indexedResults = addIndexes(results);
+
+        return {results: indexedResults, rest};
+      },
     }),
     getTestExecutionById: builder.query({
       query: (testExecutionId: string) => `/executions/${testExecutionId}`,

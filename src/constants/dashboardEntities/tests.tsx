@@ -24,7 +24,7 @@ export const TestsEntity: DashboardBlueprint = {
   reduxEntity: 'tests',
   pageTitle: 'Tests',
   hasInfoPanel: true,
-  reduxListName: 'dataList',
+  reduxListName: 'test',
   canSelectRow: true,
   emptyDrawerEntity: 'test',
 

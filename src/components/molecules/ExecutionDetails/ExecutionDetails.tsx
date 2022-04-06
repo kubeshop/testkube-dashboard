@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import React, {useContext, useEffect} from 'react';
 
 import {DashboardBlueprintType} from '@models/dashboard';
@@ -13,9 +12,7 @@ import {useGetTestExecutionByIdQuery} from '@services/tests';
 
 import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 
-import useIsRunning from '@src/hooks/useIsRunning';
-
-import {StyledExecutionDetailsContainer, StyledExecutionDetailsHeader} from './ExecutionDetails.styled';
+import {StyledExecutionDetailsHeader} from './ExecutionDetails.styled';
 import ExecutionDetailsGeneralInfo from './ExecutionDetailsGeneralInfo';
 import ExecutionDetailsStatus from './ExecutionDetailsStatus';
 import TestExecutionDetailsTabs from './TestExecutionDetails/TestExecutionDetailsTabs';
@@ -25,12 +22,10 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {selectedExecution} = useContext(DashboardContext);
   const {onDataChange} = useContext(DashboardInfoPanelSecondLevelContext);
 
-  const {id, status} = selectedExecution;
-
-  const interval = !useIsRunning(status) ? 0 : PollingIntervals.everySecond;
+  const {id} = selectedExecution;
 
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionByIdQuery(id, {
-    pollingInterval: interval,
+    pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
@@ -45,12 +40,10 @@ const TestExecutionDetailsDataLayer: React.FC = () => {
 
   const {onDataChange} = useContext(DashboardInfoPanelSecondLevelContext);
 
-  const {id, status} = selectedExecution;
+  const {id} = selectedExecution;
 
-  const interval = !useIsRunning(status) ? 0 : PollingIntervals.everySecond;
-
-  const {data, isLoading, isFetching, refetch, ...rest} = useGetTestExecutionByIdQuery(id, {
-    pollingInterval: interval,
+  const {data, isLoading, isFetching, refetch} = useGetTestExecutionByIdQuery(id, {
+    pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {

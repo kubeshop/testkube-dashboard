@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
@@ -6,7 +7,7 @@ import {TableRowSelection} from 'antd/lib/table/interface';
 import moment from 'moment';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint} from '@redux/reducers/configSlice';
+import {clearTargetTestId, selectApiEndpoint, selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import {Title} from '@atoms';
 
@@ -102,11 +103,13 @@ const DashboardContent: React.FC<any> = props => {
     dashboardGradient,
     setSelectedExecution,
     closeSecondLevel,
+    reduxListName,
   } = useContext(DashboardContext);
 
   const dispatch = useDispatch();
 
   const apiEndpoint = useAppSelector(selectApiEndpoint);
+  const {targetTestId, targetTestExecutionId} = useAppSelector(selectRedirectTarget);
 
   const [contentProps, setContentProps] = useState<any>({
     data: null,
@@ -138,18 +141,25 @@ const DashboardContent: React.FC<any> = props => {
       return;
     }
 
-    if (contentProps.data === null || contentProps.data?.results === []) {
-      dispatch(setData([]));
-
-      if (canSelectRow) {
-        dispatch(setSelectedRecord({selectedRecord: null}));
+    if (contentProps.data || contentProps.data?.length) {
+      if (targetTestId && contentProps.data[0][reduxListName].name === targetTestId) {
+        onRowSelect(contentProps.data[0][reduxListName]);
+        dispatch(clearTargetTestId());
       }
+
+      dispatch(setData(contentProps.data));
 
       return;
     }
 
-    if (contentProps.data) {
-      dispatch(setData(contentProps.data));
+    if (!contentProps.data) {
+      // if no results - set result as an empty array because not all the time we get an empty array from backend
+      dispatch(setData([]));
+
+      // if no results - deselect the row
+      if (canSelectRow) {
+        dispatch(setSelectedRecord({selectedRecord: null}));
+      }
     }
   }, [contentProps.data]);
 
@@ -158,9 +168,14 @@ const DashboardContent: React.FC<any> = props => {
   }, [apiEndpoint]);
 
   useEffect(() => {
+    if (!targetTestId && !targetTestExecutionId) {
+      closeSecondLevel();
+    }
+  }, [selectedRecord]);
+
+  useEffect(() => {
     dispatch(setSelectedRecord({selectedRecord: null}));
-    closeSecondLevel();
-  }, [queryFilters]);
+  }, [entityType]);
 
   return (
     <StyledDashboardContentContainer
@@ -208,9 +223,10 @@ const DashboardContent: React.FC<any> = props => {
                     name={dataItem.name}
                     labels={dataItem.labels}
                     latestExecution={latestExecution}
-                    entityType={entityType}
                     status={status}
                     recentDate={recentDate}
+                    entityType={entityType}
+                    type={dataItem.type}
                   />
                 );
               },

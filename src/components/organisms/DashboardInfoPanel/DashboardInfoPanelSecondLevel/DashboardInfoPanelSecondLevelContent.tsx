@@ -12,8 +12,6 @@ import {DashboardContext} from '../../DashboardContainer/DashboardContainer';
 const DashboardInfoPanelSecondLevelContent = () => {
   const {selectedExecution, entityType} = useContext(DashboardContext);
 
-  const {index} = selectedExecution;
-
   const [executionDetailsProps, setExecutionDetailsProps] = useState<any>({
     data: null,
     isLoading: false,
@@ -32,7 +30,7 @@ const DashboardInfoPanelSecondLevelContent = () => {
   return (
     <DashboardInfoPanelSecondLevelContext.Provider value={{onDataChange, ...executionDetailsProps}}>
       <StyledInfoPanelHeaderContainer>
-        <Title level={4}>Execution #{index}</Title>
+        <Title level={4}>Execution #{selectedExecution?.index}</Title>
       </StyledInfoPanelHeaderContainer>
       <ExecutionDetails />
     </DashboardInfoPanelSecondLevelContext.Provider>

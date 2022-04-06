@@ -1,10 +1,13 @@
-/* eslint-disable strict */
 import {useContext, useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 import {Tabs} from 'antd';
 import {ColumnsType, TableRowSelection} from 'antd/lib/table/interface';
 
 import {DashboardBlueprintType} from '@models/dashboard';
+
+import {useAppSelector} from '@redux/hooks';
+import {clearTargetTestExecutionId, selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import {CLICommands, ExecutionDefinition, ExecutionTableRow, InfoPanelHeader} from '@molecules';
 
@@ -33,18 +36,6 @@ const executionsColumns: ColumnsType<any> = [
   },
 ];
 
-const addIndexes = (results: Array<any>) => {
-  if (!results || !results.length) {
-    return [];
-  }
-
-  const copyResultsArray = [...results];
-
-  return copyResultsArray.map((result: any, index: number) => {
-    return {...result, index: results.length - index};
-  });
-};
-
 // The reason I've done this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
 const TestSuiteExecutionsDataLayer = () => {
@@ -54,7 +45,7 @@ const TestSuiteExecutionsDataLayer = () => {
   const {name} = selectedRecord;
 
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionsByTestIdQuery(
-    {textSearch: name},
+    {id: name},
     {
       pollingInterval: PollingIntervals.everySecond,
     }
@@ -103,12 +94,17 @@ const DashboardInfoPanelContent = () => {
     entityType,
   } = useContext(DashboardContext);
 
+  const dispatch = useDispatch();
+
+  const {targetTestExecutionId} = useAppSelector(selectRedirectTarget);
+
   const [infoPanelProps, setInfoPanelProps] = useState<any>({
     data: null,
     isLoading: false,
     isFetching: false,
     refetch: () => {},
   });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const infoPanelHeaderProps = {
     ...(selectedRecord?.name ? {title: selectedRecord?.name} : {}),
@@ -151,6 +147,11 @@ const DashboardInfoPanelContent = () => {
     }
   };
 
+  const onRowClick = (record: any) => {
+    setSecondLevelOpenState(true);
+    setSelectedExecution(record);
+  };
+
   useEffect(() => {
     setSecondLevelOpenState(false);
     setSelectedExecution(null);
@@ -159,6 +160,24 @@ const DashboardInfoPanelContent = () => {
   useEffect(() => {
     infoPanelProps?.refetch();
   }, [entityType]);
+
+  useEffect(() => {
+    if (infoPanelProps.data?.results || infoPanelProps.data?.results?.length) {
+      if (targetTestExecutionId) {
+        const targetTestExecution = infoPanelProps.data?.results.filter((result: any, index: number) => {
+          return result.id === targetTestExecutionId;
+        });
+
+        const targetExecutionArrayIndex = infoPanelProps.data?.results.indexOf(targetTestExecution[0]) + 1;
+
+        if (targetTestExecution.length) {
+          setCurrentPage(Math.ceil(targetExecutionArrayIndex / 10));
+          onRowClick(targetTestExecution[0]);
+          dispatch(clearTargetTestExecutionId());
+        }
+      }
+    }
+  }, [infoPanelProps?.data, targetTestExecutionId]);
 
   return (
     <StyledDashboardInfoPanelContent>
@@ -170,19 +189,25 @@ const DashboardInfoPanelContent = () => {
             <StyledInfoPanelSection>
               <StyledTable
                 loading={infoPanelProps.isLoading}
-                dataSource={addIndexes(infoPanelProps.data?.results)}
+                dataSource={infoPanelProps.data?.results}
                 showHeader={false}
                 columns={executionsColumns}
                 gradient={dashboardGradient}
-                pagination={{hideOnSinglePage: true, showSizeChanger: false}}
+                pagination={{
+                  hideOnSinglePage: true,
+                  showSizeChanger: false,
+                  current: currentPage,
+                  onChange: page => {
+                    setCurrentPage(page);
+                  },
+                }}
                 rowSelection={rowSelection}
                 rowKey={(record: any) => {
                   return record.id;
                 }}
                 onRow={(record: any) => ({
                   onClick: () => {
-                    setSecondLevelOpenState(true);
-                    setSelectedExecution(record);
+                    onRowClick(record);
                   },
                 })}
               />

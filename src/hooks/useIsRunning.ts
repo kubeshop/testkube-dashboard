@@ -1,4 +1,4 @@
-import {TestSuiteExecutionStatus} from '@src/models/testSuiteExecutions';
+import {TestSuiteExecutionStatus} from '@models/testSuiteExecutions';
 
 const useIsRunning = (status: TestSuiteExecutionStatus) => {
   return status === 'running';
