@@ -142,11 +142,9 @@ const DashboardContent: React.FC<any> = props => {
     }
 
     if (contentProps.data || contentProps.data?.length) {
-      if (targetTestId) {
-        if (contentProps.data[0][reduxListName].name === targetTestId) {
-          onRowSelect(contentProps.data[0][reduxListName]);
-          dispatch(clearTargetTestId());
-        }
+      if (targetTestId && contentProps.data[0][reduxListName].name === targetTestId) {
+        onRowSelect(contentProps.data[0][reduxListName]);
+        dispatch(clearTargetTestId());
       }
 
       dispatch(setData(contentProps.data));
