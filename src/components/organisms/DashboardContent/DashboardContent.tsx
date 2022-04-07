@@ -165,7 +165,7 @@ const DashboardContent: React.FC<any> = props => {
 
   useEffect(() => {
     contentProps?.refetch();
-  }, [apiEndpoint]);
+  }, [apiEndpoint, queryFilters]);
 
   useEffect(() => {
     if (!targetTestId && !targetTestExecutionId) {

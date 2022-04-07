@@ -1,13 +1,8 @@
-import {Menu} from 'antd';
-
 import {CloseOutlined} from '@ant-design/icons';
 
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
-import Fonts from '@styles/Fonts';
-
-export const StyledLabelsFilterMenu = styled(Menu)``;
 
 export const StyledAppliedLabelContainer = styled.div`
   display: flex;
@@ -39,14 +34,4 @@ export const StyledAppliedLabel = styled.span`
 
 export const StyledCloseIcon = styled(CloseOutlined)`
   color: ${Colors.whitePure};
-`;
-
-export const StyledFilterLabel = styled.div`
-  color: ${Colors.grey450};
-
-  font-family: ${Fonts.nunito};
-  font-size: 14px;
-  font-weight: 400;
-
-  cursor: pointer;
 `;
