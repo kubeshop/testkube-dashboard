@@ -1,15 +1,25 @@
 import {useCallback, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Checkbox, Dropdown, Menu, Space} from 'antd';
+import {Space} from 'antd';
 
 import {FilterFilled} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
 
-import {StyledFilterLabel} from './StatusFilter.styled';
+import {
+  AppliedFiltersNotification,
+  FilterMenuFooter,
+  StyledFilterCheckbox,
+  StyledFilterDropdown,
+  StyledFilterLabel,
+  StyledFilterMenu,
+  StyledFilterMenuItem,
+} from '@molecules/FilterMenu';
 
-const statusList = ['All', 'Pending', 'Success', 'Error'];
+import {uppercaseFirstSymbol} from '@src/utils/strings';
+
+const statusList = ['queued', 'running', 'passed', 'failed'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
   const {filters, setSelectedRecord, setFilters} = props;
@@ -37,23 +47,28 @@ const StatusFilter: React.FC<FilterProps> = props => {
 
   const onMenuClick = () => {};
 
-  const renderedStatus = useMemo(() => {
+  const renderedStatuses = useMemo(() => {
     return statusList.map(status => {
       return (
-        <Menu.Item key={status}>
-          <Checkbox checked={filters.status === status} onChange={() => handleClick(status)}>
-            {status}
-          </Checkbox>
-        </Menu.Item>
+        <StyledFilterMenuItem key={status}>
+          <StyledFilterCheckbox checked={filters.status === status} onChange={() => handleClick(status)}>
+            {uppercaseFirstSymbol(status)}
+          </StyledFilterCheckbox>
+        </StyledFilterMenuItem>
       );
     });
   }, [filters.status, handleClick]);
 
-  const menu = <Menu onClick={onMenuClick}>{renderedStatus}</Menu>;
+  const menu = (
+    <StyledFilterMenu onClick={onMenuClick}>
+      {renderedStatuses}
+      <FilterMenuFooter onReset={() => handleClick(filters.status)} onOk={() => onVisibleChange(false)} />
+    </StyledFilterMenu>
+  );
 
   return (
     <Space>
-      <Dropdown
+      <StyledFilterDropdown
         overlay={menu}
         trigger={['click']}
         placement="bottomCenter"
@@ -61,9 +76,10 @@ const StatusFilter: React.FC<FilterProps> = props => {
         visible={isVisible}
       >
         <StyledFilterLabel onClick={e => e.preventDefault()}>
+          {filters.status ? <AppliedFiltersNotification /> : null}
           Status <FilterFilled />
         </StyledFilterLabel>
-      </Dropdown>
+      </StyledFilterDropdown>
     </Space>
   );
 };

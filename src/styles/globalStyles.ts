@@ -216,7 +216,7 @@ ul {
 //   width: 15px !important;
 //   height: 15px !important;
 //   filter: grayscale(1);
-//   outline: 1px solid #434343;
+//   outline: 1px solid ${Colors.greyBorder};
 //   margin: 10px;
 //   cursor: pointer;
 //   margin-right: 10px;
@@ -275,7 +275,7 @@ ul {
 
 
 .ant-pagination-item {
-  border: 1px solid #434343;
+  border: 1px solid ${Colors.greyBorder};
 
   background: #141414;
 
@@ -303,7 +303,7 @@ ul {
 .ant-pagination-prev,
 .ant-pagination-next  {
   .ant-pagination-item-link {
-    border: 1px solid #434343;
+    border: 1px solid ${Colors.greyBorder};
 
     color: #DBDBDB;
     background: transparent;
@@ -333,13 +333,13 @@ ul {
 
 .ant-pagination-disabled {
   .ant-pagination-item-link {
-    border: 1px solid #434343 !important;
+    border: 1px solid ${Colors.greyBorder} !important;
 
     background: #262626 !important; 
 
     span {
       path {
-        fill: #434343;
+        fill: ${Colors.greyBorder};
       }
     }
   }

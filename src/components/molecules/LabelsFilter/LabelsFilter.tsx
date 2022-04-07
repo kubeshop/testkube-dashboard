@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {Checkbox, Dropdown, Menu, Space} from 'antd';
+import {Space} from 'antd';
 
 import {FilterFilled} from '@ant-design/icons';
 
@@ -11,8 +11,17 @@ import {LabelKey} from '@models/labels';
 import {useAppSelector} from '@redux/hooks';
 import {selectLabels} from '@redux/reducers/labelsSlice';
 
-import AppliedLabels from './AppliedLabels';
-import {StyledFilterLabel, StyledLabelsFilterMenu} from './LabelsFilter.styled';
+import {
+  AppliedFiltersNotification,
+  FilterMenuFooter,
+  StyledFilterCheckbox,
+  StyledFilterDropdown,
+  StyledFilterLabel,
+  StyledFilterMenu,
+  StyledFilterMenuItem,
+} from '@molecules/FilterMenu';
+
+import './LabelsFilter.styled';
 
 const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters} = props;
@@ -51,16 +60,16 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
     return labels.map(label => {
       return (
-        <Menu.Item key={label}>
-          <Checkbox
+        <StyledFilterMenuItem key={label}>
+          <StyledFilterCheckbox
             checked={filters.selector.includes(label)}
             onChange={() => {
               return onLabelChange(label);
             }}
           >
             {label}
-          </Checkbox>
-        </Menu.Item>
+          </StyledFilterCheckbox>
+        </StyledFilterMenuItem>
       );
     });
   }, [labels, filters, labelsMapping, defaultLabels]);
@@ -85,18 +94,22 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     setLabelsMapping(defaultLabels);
   }, [defaultLabels]);
 
-  const menu = <StyledLabelsFilterMenu onClick={onMenuClick}>{renderedLabels}</StyledLabelsFilterMenu>;
+  const menu = (
+    <StyledFilterMenu onClick={onMenuClick}>
+      {renderedLabels}
+      <FilterMenuFooter onOk={() => onVisibleChange(false)} onReset={() => setLabelsMapping([])} />
+    </StyledFilterMenu>
+  );
 
   if (!labels || !labels.length) {
     return null;
   }
 
+  const isLabelsApplied = appliedLabels && appliedLabels.length > 0;
+
   return (
     <Space size={20}>
-      {appliedLabels && appliedLabels.length ? (
-        <AppliedLabels appliedLabels={appliedLabels} onLabelChange={onLabelChange} />
-      ) : null}
-      <Dropdown
+      <StyledFilterDropdown
         overlay={menu}
         trigger={['click']}
         placement="bottomCenter"
@@ -104,9 +117,10 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         visible={isVisible}
       >
         <StyledFilterLabel onClick={e => e.preventDefault()}>
+          {isLabelsApplied ? <AppliedFiltersNotification /> : null}
           Labels <FilterFilled />
         </StyledFilterLabel>
-      </Dropdown>
+      </StyledFilterDropdown>
     </Space>
   );
 };

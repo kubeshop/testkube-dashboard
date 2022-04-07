@@ -53,6 +53,8 @@ enum Colors {
   diffBackgroundHover = '#27220F',
 
   dashboardTableBackground = '#1D1D1D',
+  greyBorder = '#434343',
+  greyHover = '#303030',
 }
 
 export enum BackgroundColors {
