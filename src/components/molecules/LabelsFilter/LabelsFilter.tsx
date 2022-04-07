@@ -117,7 +117,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         visible={isVisible}
       >
         <StyledFilterLabel onClick={e => e.preventDefault()}>
-          {isLabelsApplied && <AppliedFiltersNotification />}
+          {isLabelsApplied ? <AppliedFiltersNotification /> : null}
           Labels <FilterFilled />
         </StyledFilterLabel>
       </StyledFilterDropdown>

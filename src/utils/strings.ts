@@ -48,3 +48,7 @@ const arraylikeQueryParams: {[key in FilterType | string]: boolean} = {
 export const isArraylikeQueryParam = (paramKey: FilterType | string) => {
   return arraylikeQueryParams[paramKey];
 };
+
+export const uppercaseFirstSymbol = (word: string) => {
+  return word[0].toUpperCase() + word.slice(1);
+};

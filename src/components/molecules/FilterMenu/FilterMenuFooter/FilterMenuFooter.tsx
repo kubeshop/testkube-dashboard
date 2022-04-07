@@ -1,11 +1,12 @@
 import {StyledOkButton, StyledResetButton, StyledSpace} from './FilterMenuFooter.styled';
 
-type Props = {
+type FilterMenuFooterProps = {
   onReset: () => void;
   onOk: () => void;
 };
 
-const FilterMenuFooter: React.FC<Props> = ({onReset, onOk}) => {
+const FilterMenuFooter: React.FC<FilterMenuFooterProps> = props => {
+  const {onReset, onOk} = props;
   return (
     <StyledSpace align="center">
       <StyledResetButton onClick={onReset}>Reset</StyledResetButton>

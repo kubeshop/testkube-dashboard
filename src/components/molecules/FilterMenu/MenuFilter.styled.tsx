@@ -39,7 +39,7 @@ export const StyledFilterMenuItem = styled(Menu.Item)`
 export const StyledFilterDropdown = styled(Dropdown)`
   padding: 0 4px;
 
-  ${({visible}) => visible && `background-color: ${Colors.greyHover};`}
+  ${props => (props.visible ? `background-color: ${Colors.greyHover};` : '')}
   &:hover {
     background-color: ${Colors.greyHover};
   }

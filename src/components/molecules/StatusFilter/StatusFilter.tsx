@@ -17,6 +17,8 @@ import {
   StyledFilterMenuItem,
 } from '@molecules/FilterMenu';
 
+import {uppercaseFirstSymbol} from '@src/utils/strings';
+
 const statusList = ['queued', 'running', 'passed', 'failed'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
@@ -50,7 +52,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
       return (
         <StyledFilterMenuItem key={status}>
           <StyledFilterCheckbox checked={filters.status === status} onChange={() => handleClick(status)}>
-            {status[0].toUpperCase().concat(status.slice(1))}
+            {uppercaseFirstSymbol(status)}
           </StyledFilterCheckbox>
         </StyledFilterMenuItem>
       );
@@ -74,7 +76,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
         visible={isVisible}
       >
         <StyledFilterLabel onClick={e => e.preventDefault()}>
-          {filters.status && <AppliedFiltersNotification />}
+          {filters.status ? <AppliedFiltersNotification /> : null}
           Status <FilterFilled />
         </StyledFilterLabel>
       </StyledFilterDropdown>
