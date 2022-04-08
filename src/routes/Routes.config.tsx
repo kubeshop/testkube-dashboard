@@ -28,14 +28,13 @@ const routesConfig = [
     path: 'dashboard/*',
     element: NotFound,
   },
-  // DO NOT TOUCH THIS :)
-  // {
-  //   path: '*',
-  //   element: Navigate,
-  //   props: {
-  //     to: 'dashboard/test-suites',
-  //   },
-  // },
+  {
+    path: '*',
+    element: Navigate,
+    props: {
+      to: 'dashboard/test-suites',
+    },
+  },
 ];
 
 export default routesConfig;
