@@ -7,6 +7,7 @@ export type TestType =
   | 'curl/test'
   | 'test/curl'
   | 'postman/custom'
+  | 'k6/script'
   | 'unknown';
 
 export type TestCreationDate = Date;
