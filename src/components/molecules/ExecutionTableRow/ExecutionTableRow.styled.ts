@@ -1,4 +1,4 @@
-import {Space} from 'antd';
+import {Space, Typography} from 'antd';
 
 import {RightOutlined} from '@ant-design/icons';
 
@@ -16,11 +16,15 @@ export const StyledExecutionStartDate = styled.span`
   color: ${Colors.whitePure};
 `;
 
-export const StyledExecutionStartEndDate = styled.span`
+export const StyledExecutionStartEndDate = styled(Typography.Text)<{maxWidth: any}>`
+  max-width: ${props => props.maxWidth} !important;
+
   color: ${Colors.whitePure};
 `;
 
-export const StyledExecutionName = styled.span`
+export const StyledExecutionName = styled(Typography.Text)<{maxWidth: any}>`
+  max-width: ${props => props.maxWidth} !important;
+
   color: ${Colors.whitePure};
 `;
 

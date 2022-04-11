@@ -111,7 +111,15 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             {execute || stepResult?.execute ? (
               <>
                 <ExecutionName name={executionName} />
-                {executionResult?.id || iconSet === 'definition' ? <StyledExternalLinkIcon /> : <div />}
+                {(executionResult?.id && iconSet !== 'definition') || iconSet === 'definition' ? (
+                  <StyledExternalLinkIcon
+                    onClick={() => {
+                      onShowClick({...step, executionName});
+                    }}
+                  />
+                ) : (
+                  <div />
+                )}
               </>
             ) : null}
             {delay || stepResult?.delay ? (

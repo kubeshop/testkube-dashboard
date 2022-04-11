@@ -7,7 +7,7 @@ type ExecutionNameProps = {
 const ExecutionName: React.FC<ExecutionNameProps> = props => {
   const {name} = props;
 
-  return <StyledExecutionName>{name}</StyledExecutionName>;
+  return <StyledExecutionName ellipsis>{name}</StyledExecutionName>;
 };
 
 export default ExecutionName;
