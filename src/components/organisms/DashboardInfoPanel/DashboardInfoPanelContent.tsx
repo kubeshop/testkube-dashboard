@@ -9,6 +9,8 @@ import {DashboardBlueprintType} from '@models/dashboard';
 import {useAppSelector} from '@redux/hooks';
 import {clearTargetTestExecutionId, selectRedirectTarget} from '@redux/reducers/configSlice';
 
+import {Skeleton} from '@custom-antd';
+
 import {CLICommands, ExecutionDefinition, ExecutionTableRow, InfoPanelHeader} from '@molecules';
 
 import {PollingIntervals} from '@utils/numbers';
@@ -187,30 +189,31 @@ const DashboardInfoPanelContent = () => {
         <StyledAntTabs defaultActiveKey="1">
           <TabPane tab="Executions" key="ExecutionsPane">
             <StyledInfoPanelSection>
-              <StyledTable
-                loading={infoPanelProps.isLoading}
-                dataSource={infoPanelProps.data?.results}
-                showHeader={false}
-                columns={executionsColumns}
-                gradient={dashboardGradient}
-                pagination={{
-                  hideOnSinglePage: true,
-                  showSizeChanger: false,
-                  current: currentPage,
-                  onChange: page => {
-                    setCurrentPage(page);
-                  },
-                }}
-                rowSelection={rowSelection}
-                rowKey={(record: any) => {
-                  return record.id;
-                }}
-                onRow={(record: any) => ({
-                  onClick: () => {
-                    onRowClick(record);
-                  },
-                })}
-              />
+              <Skeleton paragraph={{rows: 5, width: '100%'}} loading={infoPanelProps.isLoading} title={false}>
+                <StyledTable
+                  dataSource={infoPanelProps.data?.results}
+                  showHeader={false}
+                  columns={executionsColumns}
+                  gradient={dashboardGradient}
+                  pagination={{
+                    hideOnSinglePage: true,
+                    showSizeChanger: false,
+                    current: currentPage,
+                    onChange: page => {
+                      setCurrentPage(page);
+                    },
+                  }}
+                  rowSelection={rowSelection}
+                  rowKey={(record: any) => {
+                    return record.id;
+                  }}
+                  onRow={(record: any) => ({
+                    onClick: () => {
+                      onRowClick(record);
+                    },
+                  })}
+                />
+              </Skeleton>
             </StyledInfoPanelSection>
           </TabPane>
           <TabPane tab="CLI Commands" key="CLICommandsPane">

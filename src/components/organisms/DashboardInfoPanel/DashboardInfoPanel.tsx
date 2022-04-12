@@ -1,9 +1,6 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {CSSProperties, useContext, useEffect} from 'react';
 
 import {CloseOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons';
-
-import {InfoPanelHeader} from '@molecules';
 
 import Colors from '@styles/Colors';
 
@@ -12,7 +9,6 @@ import {
   StyledCollapseButtonContainer,
   StyledCollapseButtonsContainer,
   StyledDashboardInfoPanelContainer,
-  StyledDashboardInfoPanelContent,
   StyledDashboardInfoPanelContentContainer,
 } from './DashboardInfoPanel.styled';
 import DashboardInfoPanelContent from './DashboardInfoPanelContent';
@@ -27,22 +23,22 @@ const iconStyles: CSSProperties = {
 const DashboardInfoPanel: React.FC = () => {
   const {
     selectedRecord,
-    testTypeFieldName,
     setInfoPanelVisibility,
     isInfoPanelExpanded,
-    infoPanelComponent: InfoPanelComponent,
     shouldInfoPanelBeShown,
     isSecondLevelOpen,
     closeSecondLevel,
     closeDrawer,
     entityType,
     emptyDrawerEntity,
+    setSelectedExecution,
   } = useContext(DashboardContext);
 
   const getCollapseButtonAction = () => {
     if (isInfoPanelExpanded) {
       if (isSecondLevelOpen) {
         closeSecondLevel();
+        setSelectedExecution(null);
       } else {
         closeDrawer();
       }

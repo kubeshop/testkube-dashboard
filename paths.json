@@ -9,6 +9,8 @@
       "@root": ["./"],
       "@atoms": ["src/components/atoms/"],
       "@atoms/*": ["src/components/atoms/*"],
+      "@custom-antd": ["src/components/custom-antd"],
+      "@custom-antd/*": ["src/components/custom-antd/*"],
       "@molecules": ["src/components/molecules/"],
       "@molecules/*": ["src/components/molecules/*"],
       "@organisms": ["src/components/organisms/"],

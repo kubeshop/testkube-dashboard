@@ -11,6 +11,7 @@
     "^@models",
     "^@redux",
     "^@atoms",
+    "^@custom-antd",
     "^@molecules",
     "^@organisms",
     "^@pages",
