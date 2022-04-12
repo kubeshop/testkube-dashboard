@@ -27,13 +27,13 @@ const LabelsList: React.FC<LabelsListProps> = props => {
     })
     .filter(labelComponent => labelComponent);
 
-  const skippedLabels = labelsInArray.length - renderedLabels.length;
+  const skippedLabelsNumber = labelsInArray.length - renderedLabels.length;
 
   return (
     <StyledLabelsList>
       {renderedLabels}
-      {skippedLabels ? (
-        <LabelListItem key="skipped-labels-number" isSkippedMode skippedLabelsNumber={skippedLabels} />
+      {skippedLabelsNumber ? (
+        <LabelListItem key="skipped-labels-number" isSkippedMode skippedLabelsNumber={skippedLabelsNumber} />
       ) : null}
     </StyledLabelsList>
   );
