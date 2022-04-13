@@ -16,7 +16,7 @@ export const StyledExecutionStartDate = styled.span`
   color: ${Colors.whitePure};
 `;
 
-export const StyledExecutionStartEndDate = styled(Typography.Text)<{maxWidth: any}>`
+export const StyledExecutionStartDateTime = styled(Typography.Text)<{maxWidth: any}>`
   max-width: ${props => props.maxWidth} !important;
 
   color: ${Colors.whitePure};
@@ -44,4 +44,10 @@ export const StyledExecutionSequenceNumber = styled.span`
   color: ${Colors.whitePure};
 
   font-size: 14px;
+`;
+
+export const StyledExecutionDuration = styled(Typography.Text)`
+  color: ${Colors.whitePure};
+
+  white-space: nowrap;
 `;

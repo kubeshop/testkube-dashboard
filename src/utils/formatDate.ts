@@ -29,6 +29,6 @@ export const getTodayTests = (timeStamp: any) => {
   return timeStamp?.results?.filter((t: any) => t.startTime === today);
 };
 
-export const formatExecutionDate = (date: moment.MomentInput) => {
-  return moment(date).format(executionDateFormat);
+export const formatExecutionDate = (date: moment.MomentInput, format = executionDateFormat) => {
+  return moment(date).format(format);
 };

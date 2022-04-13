@@ -2,20 +2,21 @@ import React, {useContext} from 'react';
 
 import {ExecutionStepIcon} from '@molecules';
 
-import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
-
 import {DashboardInfoPanelContext} from '@contexts';
 
+import ExecutionDuration from './ExecutionDuration';
 import {ExecutionName} from './ExecutionName';
 import {ExecutionSequenceNumber} from './ExecutionSequenceNumber';
-import {ExecutionStartEndTime} from './ExecutionStartEndTime';
+import ExecutionStartDateTime from './ExecutionStartDateTime';
 import {StyledChevronRightIcon, StyledSpace} from './ExecutionTableRow.styled';
 
 const leftPadding = 130;
 const rightPadding = 94;
 
+const gapWidth = 15;
+const durationTimeWidth = 60;
+
 const ExecutionTableRow: React.FC<any> = props => {
-  const {isSecondLevelOpen} = useContext(DashboardContext);
   const {
     size: {width},
   } = useContext(DashboardInfoPanelContext);
@@ -24,30 +25,40 @@ const ExecutionTableRow: React.FC<any> = props => {
 
   const spaceLeft = width ? width - leftPadding - rightPadding : 0;
 
-  const isExecutionStartEndTimeVisible = Boolean(width && width > 150 && !isSecondLevelOpen);
-  const isExecutionNameVisible = width && width > 250;
-  const spaceLeftDivCoef = isExecutionNameVisible ? 2 : 1;
-  const startEndTimeMaxWidth = isExecutionStartEndTimeVisible ? `${spaceLeft / spaceLeftDivCoef}px` : '0px';
-  const executionNameCoff = isExecutionStartEndTimeVisible ? 2 : 1;
-  const executionNameMaxWidth = isExecutionNameVisible ? `${spaceLeft / executionNameCoff}px` : '0px';
+  const isDurationTextVisible = spaceLeft > 600;
+  const isYearCollapsed = spaceLeft > 600;
+
+  const dateTimeWidth = isYearCollapsed ? 110 : 150;
+
+  const isExecutionNameVisible = spaceLeft > dateTimeWidth + gapWidth + durationTimeWidth;
+  const executionNameMaxWidth = `${spaceLeft - dateTimeWidth - durationTimeWidth + gapWidth}px`;
+
+  const isExecutionDurationVisible = spaceLeft > dateTimeWidth + gapWidth;
+
+  const isExecutionDateTimeVisible = spaceLeft > 40;
+  const startDateTimeMaxWidth = `${spaceLeft + gapWidth}px`;
 
   return (
     <StyledSpace size={15}>
       {status ? <ExecutionStepIcon icon={status} /> : null}
       <ExecutionSequenceNumber index={index} />
-      {!isSecondLevelOpen ? (
-        <ExecutionStartEndTime
+      {isExecutionDateTimeVisible ? (
+        <ExecutionStartDateTime
           status={status}
           startTime={startTime}
           endTime={endTime}
           duration={duration}
-          maxWidth={startEndTimeMaxWidth}
+          maxWidth={startDateTimeMaxWidth}
+          collapseYear={isYearCollapsed}
         />
       ) : null}
-      <ExecutionName name={name} maxWidth={executionNameMaxWidth} />
+      {isExecutionDurationVisible ? (
+        <ExecutionDuration duration={duration} status={status} isTextVisible={isDurationTextVisible} />
+      ) : null}
+      {isExecutionNameVisible ? <ExecutionName name={name} maxWidth={executionNameMaxWidth} /> : null}
       <StyledChevronRightIcon />
     </StyledSpace>
   );
 };
 
-export default ExecutionTableRow;
+export default React.memo(ExecutionTableRow);
