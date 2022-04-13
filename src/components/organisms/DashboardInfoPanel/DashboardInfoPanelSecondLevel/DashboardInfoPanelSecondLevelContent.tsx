@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 
-import {Title} from '@atoms';
+import {Title} from '@custom-antd';
 
 import {ExecutionDetails} from '@molecules';
 import {StyledInfoPanelHeaderContainer} from '@molecules/InfoPanelHeader/InfoPanelHeader.styled';

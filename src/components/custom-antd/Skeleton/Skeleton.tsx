@@ -1,17 +1,19 @@
-import {Skeleton as AntdSkeleton, SkeletonProps as AntdSkeletonProps} from 'antd';
+import {SkeletonProps as AntdSkeletonProps} from 'antd';
+
+import {StyledSkeleton} from './Skeleton.styled';
 
 const Skeleton: React.FC<AntdSkeletonProps> = props => {
   const {children, active = true} = props;
 
   if (children) {
     return (
-      <AntdSkeleton active={active} {...props}>
+      <StyledSkeleton active={active} {...props}>
         {children}
-      </AntdSkeleton>
+      </StyledSkeleton>
     );
   }
 
-  return <AntdSkeleton active={active} {...props} />;
+  return <StyledSkeleton active={active} {...props} />;
 };
 
 export default Skeleton;

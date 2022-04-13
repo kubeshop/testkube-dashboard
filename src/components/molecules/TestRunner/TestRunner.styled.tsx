@@ -8,12 +8,13 @@ export const StyledTestRunnerContainer = styled.div`
 
   padding-top: 12px;
 
-  h5 {
+  .test-runner-name {
     margin-left: 10px;
     margin-bottom: 0;
 
-    color: ${Colors.greySecondary} !important;
+    color: ${Colors.greySecondary};
 
     font-size: 14px;
+    font-weight: 300;
   }
 `;

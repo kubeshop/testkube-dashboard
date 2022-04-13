@@ -123,8 +123,6 @@ export const StyledAntTabs = styled(Tabs)`
 
 export const StyledTable = styled(Table)<{gradient?: string}>`
   .ant-table {
-    // border: unset !important;
-
     background: #151515;
   }
 

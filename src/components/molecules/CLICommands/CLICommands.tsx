@@ -6,10 +6,7 @@ import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer
 
 import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 
-import {
-  StyledInfoPanelSection,
-  StyledInfoPanelSectionTitle,
-} from '../../organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
+import {StyledInfoPanelSection} from '../../organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
 import CopyCommand from './CopyCommand';
 
 type CLIScript = {
@@ -82,18 +79,14 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const {name} = selectedRecord;
 
   const CLIEntityType = isExecutions ? 'executions' : entityType;
+
   const renderedCLICommands = scriptsByEntityType[CLIEntityType].map(value => {
     const commandString = isExecutions ? value.command(data?.id) : value.command(name);
 
     return <CopyCommand key={value.label} command={commandString} label={value.label} />;
   });
 
-  return (
-    <StyledInfoPanelSection>
-      <StyledInfoPanelSectionTitle>CLI Commands</StyledInfoPanelSectionTitle>
-      {renderedCLICommands}
-    </StyledInfoPanelSection>
-  );
+  return <StyledInfoPanelSection>{renderedCLICommands}</StyledInfoPanelSection>;
 };
 
 export default CLICommands;

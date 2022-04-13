@@ -8,7 +8,6 @@ export const StyledLabelListItem = styled.li<{isSkippedMode: boolean}>`
   border-radius: 12px;
 
   color: ${Colors.purple};
-  ${props => (props.isSkippedMode ? '' : 'background: #151515;')}
 
   font-size: 14px;
   font-weight: 400;
