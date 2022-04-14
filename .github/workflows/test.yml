@@ -40,7 +40,7 @@ jobs:
             ${{ runner.os }}-node-
 
     - name: Install dependencies packages
-      run: npm install
+      run: npm install --force
 
     - name: Testing dashboard
       if: always()
@@ -50,6 +50,6 @@ jobs:
       working-directory: ./test
       if: always()
       run: |
-        npm install
+        npm install --force
         npm run test
 

@@ -13,6 +13,8 @@ import {Skeleton} from '@custom-antd';
 
 import {CLICommands, ExecutionDefinition, ExecutionTableRow, InfoPanelHeader} from '@molecules';
 
+import useElementSize from '@hooks/useElementSize';
+
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecutions';
@@ -97,8 +99,8 @@ const DashboardInfoPanelContent = () => {
   } = useContext(DashboardContext);
 
   const dispatch = useDispatch();
-
   const {targetTestExecutionId} = useAppSelector(selectRedirectTarget);
+  const [ref, size] = useElementSize();
 
   const [infoPanelProps, setInfoPanelProps] = useState<any>({
     data: null,
@@ -182,8 +184,8 @@ const DashboardInfoPanelContent = () => {
   }, [infoPanelProps?.data, targetTestExecutionId]);
 
   return (
-    <StyledDashboardInfoPanelContent>
-      <DashboardInfoPanelContext.Provider value={{onDataChange}}>
+    <StyledDashboardInfoPanelContent ref={ref}>
+      <DashboardInfoPanelContext.Provider value={{onDataChange, size}}>
         {dataLayers[entityType]}
         <InfoPanelHeader {...infoPanelHeaderProps} onRunButtonClick={onRunButtonClick} />
         <StyledAntTabs defaultActiveKey="1">

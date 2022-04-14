@@ -37,6 +37,7 @@ const DashboardInfoPanel: React.FC = () => {
   const getCollapseButtonAction = () => {
     if (isInfoPanelExpanded) {
       if (isSecondLevelOpen) {
+        setSelectedExecution(null);
         closeSecondLevel();
         setSelectedExecution(null);
       } else {

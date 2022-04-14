@@ -111,7 +111,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             {execute || stepResult?.execute ? (
               <>
                 <ExecutionName name={executionName} />
-                {executionResult?.id || iconSet === 'definition' ? <StyledExternalLinkIcon /> : <div />}
+                <StyledExternalLinkIcon />
               </>
             ) : null}
             {delay || stepResult?.delay ? (

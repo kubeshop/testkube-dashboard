@@ -1,4 +1,4 @@
-name: Build
+rm -name: Build
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
             ${{ runner.os }}-node-
 
     - name: Install dependencies packages
-      run: npm install
+      run: npm install --force
 
     - name: Building
       if: always()

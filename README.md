@@ -78,7 +78,7 @@ In order to be able to run this application locally without docker, just close t
 
 ```bash
 git clone git@github.com:kubeshop/testkube-dashboard.git && cd kubetest-dashboard
-npm install
+npm install --force
 npm run start
 ```
 
