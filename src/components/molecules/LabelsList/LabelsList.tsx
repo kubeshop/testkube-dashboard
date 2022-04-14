@@ -8,10 +8,11 @@ type LabelsListProps = {
   labels: LabelsObject;
   howManyLabelsToShow?: number;
   shouldSkipLabels?: boolean;
+  className?: string;
 };
 
 const LabelsList: React.FC<LabelsListProps> = props => {
-  const {labels, howManyLabelsToShow = 3, shouldSkipLabels = false} = props;
+  const {labels, howManyLabelsToShow = 3, shouldSkipLabels = false, className = ''} = props;
 
   const labelsInArray = Object.keys(labels);
 
@@ -30,7 +31,7 @@ const LabelsList: React.FC<LabelsListProps> = props => {
   const skippedLabelsNumber = labelsInArray.length - renderedLabels.length;
 
   return (
-    <StyledLabelsList>
+    <StyledLabelsList className={className}>
       {renderedLabels}
       {skippedLabelsNumber ? (
         <LabelListItem key="skipped-labels-number" isSkippedMode skippedLabelsNumber={skippedLabelsNumber} />

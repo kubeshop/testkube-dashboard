@@ -6,7 +6,7 @@ import {config} from '@constants/config';
 import {useAppDispatch} from '@redux/hooks';
 import {setApiEndpoint} from '@redux/reducers/configSlice';
 
-import {Title} from '@atoms';
+import {Title} from '@custom-antd';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 

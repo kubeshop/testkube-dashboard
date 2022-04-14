@@ -1,6 +1,5 @@
 const CracoAlias = require('craco-alias');
-const CracoLessPlugin = require("craco-less");
-const {getThemeVariables} = require('antd/dist/theme');
+const CracoAntDesignPlugin = require('craco-antd');
 
 module.exports = {
   plugins: [
@@ -15,15 +14,16 @@ module.exports = {
       },
     },
     {
-      plugin: CracoLessPlugin,
+      plugin: CracoAntDesignPlugin,
       options: {
-        lessLoaderOptions: {
-          lessOptions: {
-            modifyVars: getThemeVariables({
-              'dark': true
-            }),
-            javascriptEnabled: true,
-          },
+        customizeTheme: {
+          '@primary-color': '#7984F4',
+          '@success-color': '#94D89C',
+          '@error-color': '#DB539C',
+          '@skeleton-color': '#303030',
+          '@skeleton-to-color': '#434343',
+          '@heading-color': '#fff',
+          '@text-color': '#fff',
         },
       },
     },

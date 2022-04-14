@@ -1,8 +1,6 @@
-import {Typography} from 'antd';
-
 import styled from 'styled-components';
 
-const {Title} = Typography;
+import {Title} from '@custom-antd';
 
 export const StyledNotFoundContainer = styled.div`
   display: flex;
@@ -13,7 +11,7 @@ export const StyledNotFoundContainer = styled.div`
 `;
 
 export const StyledNotFoundTitle = styled(Title)`
-  margin: 0 !important;
-
-  color: #fff !important;
+  &.not-found-title {
+    margin: 0;
+  }
 `;

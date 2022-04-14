@@ -18,6 +18,10 @@ export const StyledExecutionStepsListItem = styled.li`
   border: 1px solid #393939;
 
   color: ${Colors.whitePure};
+
+  &.clickable {
+    cursor: pointer;
+  }
 `;
 
 export const StyledSpace = styled(Space)`

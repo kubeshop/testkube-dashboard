@@ -1,7 +1,7 @@
 import {LabelsObject} from '@models/labels';
 import {TestType} from '@models/tests';
 
-import {Title} from '@atoms';
+import {Title} from '@custom-antd';
 
 import {LabelsList} from '@molecules';
 

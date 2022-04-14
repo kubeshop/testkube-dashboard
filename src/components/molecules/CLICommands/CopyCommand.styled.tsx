@@ -41,8 +41,10 @@ export const StyledCopyCommandContainer = styled.div<{isHovered: boolean}>`
 
 export const StyledCopyCommandLabel = styled.span`
   margin-bottom: 5px;
+
   color: ${Colors.grey450};
-  font-size: 18px;
+
+  font-size: 16px;
 `;
 
 export const StyledCopyCommandPre = styled.pre`

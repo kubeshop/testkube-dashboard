@@ -25,6 +25,26 @@ export const StyledDashboardContentContainer = styled.div<{
     & > td {
       background: unset;
     }
+
+    .labels-list {
+      li {
+        border-color: white;
+
+        color: white;
+      }
+    }
+
+    .execution-status-block {
+      svg {
+        path {
+          fill: white;
+        }
+      }
+
+      span {
+        color: white;
+      }
+    }
   }
 
   .ant-table-tbody > tr.ant-table-row-selected {
@@ -83,6 +103,28 @@ export const StyledDashboardContent = styled.div`
 
 export const StyledDashboardTableRow = styled.div`
   display: flex;
+
+  &.row-active {
+    .labels-list {
+      li {
+        border-color: white;
+
+        color: white;
+      }
+    }
+
+    .execution-status-block {
+      svg {
+        path {
+          fill: white;
+        }
+      }
+
+      span {
+        color: white;
+      }
+    }
+  }
 `;
 
 export const StyledTableRowLeftPartContainer = styled.div<{isNameOnly: boolean}>`
@@ -154,9 +196,7 @@ export const StatusContainer = styled.div`
 `;
 
 export const RecentDateContainer = styled.div`
-  margin-top: 10;
-
-  color: ${Colors.whitePure};
+  margin-top: 10px;
 
   font-size: 12px;
   text-align: right;

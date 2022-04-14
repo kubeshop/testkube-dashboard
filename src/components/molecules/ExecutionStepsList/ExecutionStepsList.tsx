@@ -3,6 +3,7 @@ import {useMemo} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 
+import classNames from 'classnames';
 import {v4} from 'uuid';
 
 import {setRedirectTarget} from '@redux/reducers/configSlice';
@@ -87,23 +88,30 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
 
       const listItemKey = executionResult?.id || v4();
 
+      const isClickable =
+        (executionResult?.id && iconSet === 'default') || (iconSet === 'definition' && (!delay || stepResult?.delay));
+
+      const listItemClassNames = classNames({
+        clickable: isClickable,
+      });
+
       // TODO: improve this
       return (
-        <StyledExecutionStepsListItem key={listItemKey}>
+        <StyledExecutionStepsListItem
+          key={listItemKey}
+          className={listItemClassNames}
+          onClick={() => {
+            if (isClickable) {
+              onShowClick({...step, executionName});
+            }
+          }}
+        >
           <StyledSpace size={15}>
             {icon ? <ExecutionStepIcon icon={icon} /> : null}
             {execute || stepResult?.execute ? (
               <>
                 <ExecutionName name={executionName} />
-                {executionResult?.id || iconSet === 'definition' ? (
-                  <StyledExternalLinkIcon
-                    onClick={() => {
-                      onShowClick({...step, executionName});
-                    }}
-                  />
-                ) : (
-                  <div />
-                )}
+                {executionResult?.id || iconSet === 'definition' ? <StyledExternalLinkIcon /> : <div />}
               </>
             ) : null}
             {delay || stepResult?.delay ? (

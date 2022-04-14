@@ -9,16 +9,12 @@ import moment from 'moment';
 import {useAppSelector} from '@redux/hooks';
 import {clearTargetTestId, selectApiEndpoint, selectRedirectTarget} from '@redux/reducers/configSlice';
 
-import {Title} from '@atoms';
-
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetExecutionsQuery} from '@services/executions';
 import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
-
-import Fonts from '@styles/Fonts';
 
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {
@@ -30,6 +26,7 @@ import {
 } from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
 import DashboardTableRow from './DashboardTableRow';
+import DashboardTitle from './DashboardTitle';
 
 // The reason I've done this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
 // Let's discuss if you have anything to add, maybe an idea how to rework it.
@@ -189,7 +186,7 @@ const DashboardContent: React.FC<any> = props => {
         <StyledDashboardContentTitleBottomGradient />
       </StyledDashboardContentTitleGradient>
       <StyledDashboardContent>
-        <Title font={Fonts.ptSans}>{pageTitle}</Title>
+        <DashboardTitle>{pageTitle}</DashboardTitle>
         {filtersComponentsIds && filtersComponentsIds.length ? (
           <DashboardFilters
             setSelectedRecord={setSelectedRecord}
@@ -227,6 +224,7 @@ const DashboardContent: React.FC<any> = props => {
                     recentDate={recentDate}
                     entityType={entityType}
                     type={dataItem.type}
+                    isRowActive={selectedRecord?.name === dataItem?.name}
                   />
                 );
               },

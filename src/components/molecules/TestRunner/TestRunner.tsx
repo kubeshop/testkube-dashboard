@@ -1,8 +1,10 @@
-import {testRunnerIcons, testRunnersNames} from '@constants/testRunners';
+import {testRunnersNames} from '@constants/testRunners';
 
 import {TestType} from '@models/tests';
 
-import {TestRunnerIcon, Title} from '@atoms';
+import {TestRunnerIcon} from '@atoms';
+
+import {Title} from '@custom-antd';
 
 import {StyledTestRunnerContainer} from './TestRunner.styled';
 
@@ -15,8 +17,8 @@ const TestRunner: React.FC<TestRunnerProps> = props => {
 
   return (
     <StyledTestRunnerContainer>
-      <TestRunnerIcon icon={testRunnerIcons[testType] || testRunnerIcons.unknown} />
-      <Title level={5}>{testRunnersNames[testType] || testRunnersNames.unknown}</Title>
+      <TestRunnerIcon icon={testType || 'unknown'} />
+      <Title className="test-runner-name" level={5}>{testRunnersNames[testType] || testRunnersNames.unknown}</Title>
     </StyledTestRunnerContainer>
   );
 };

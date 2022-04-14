@@ -2,7 +2,6 @@ export {default as Typography} from './Typography/Typography';
 export {default as Button} from './Button/Button';
 export {default as Image} from './Image/Image';
 export {default as RenderTestStatusSvgIcon} from './RenderTestStatusSvgIcon/RenderTestStatusSvgIcon';
-export {default as TestTypeIcon} from './TestTypeIcon/TestTypeIcon';
 export {default as LabelInput} from './LabelledInput/LabelledInput';
 export {default as Modal} from './Modal/Modal';
 export {default as Spinner} from './Spinner/Spinner';
@@ -14,7 +13,6 @@ export {default as TestDetailsLineChart} from './Charts/TestDetailsLineChart/Tes
 export {default as RingProgressChart} from './Charts/TestDetailsRingProgressChart/TestDetailsRingProgressChart';
 export {default as AreaChart} from './Charts/AreaChart/AreaChart';
 export {default as PieChart} from './Charts/PieChart/PieChart';
-export {default as Title} from './Title';
 export {default as TestRunnerIcon} from './TestRunnerIcon';
 export {default as Dots} from './Dots';
 export {default as TableActionsDropdownContainer} from './TableActionsDropdownContainer';

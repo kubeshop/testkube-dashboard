@@ -1,4 +1,4 @@
-import {testRunnerIcons} from '@constants/testRunners';
+import classNames from 'classnames';
 
 import {DashboardBlueprintType} from '@models/dashboard';
 import {ExecutionStatuses} from '@models/executions';
@@ -7,6 +7,8 @@ import {TestSuiteExecutionStatus, TestSuiteExecutionStatusesEnum} from '@models/
 import {TestType} from '@models/tests';
 
 import {TestRunnerIcon} from '@atoms';
+
+import {Text} from '@custom-antd';
 
 import {ExecutionStepIcon, LabelsList} from '@molecules';
 
@@ -32,35 +34,44 @@ type DashboardTableRowProps = {
   name: string;
   status: TestSuiteExecutionStatus;
   entityType: DashboardBlueprintType;
-  type: any;
+  type: TestType;
+  isRowActive?: boolean;
 };
 
 const DashboardTableRow: React.FC<DashboardTableRowProps> = props => {
-  const {name, labels, status, recentDate, latestExecution, entityType, type} = props;
+  const {name, labels, status, recentDate, latestExecution, entityType, type, isRowActive = false} = props;
 
   const isRunning = useIsRunning(status);
 
+  const rowClassNames = classNames({
+    'row-active': isRowActive,
+  });
+
   return (
-    <StyledDashboardTableRow>
+    <StyledDashboardTableRow className={rowClassNames}>
       {entityType === 'tests' ? (
         <StyledTestRunnerType>
-          <TestRunnerIcon icon={testRunnerIcons[latestExecution?.testType || type] || testRunnerIcons.unknown} />
+          <TestRunnerIcon icon={latestExecution?.testType || type || 'unknown'} />
         </StyledTestRunnerType>
       ) : null}
       <StyledTableRowLeftPartContainer isNameOnly={!labels}>
         <StyledTableRowTitle>{name}</StyledTableRowTitle>
-        {labels ? <LabelsList labels={labels} shouldSkipLabels /> : null}
+        {labels ? <LabelsList labels={labels} shouldSkipLabels className="labels-list" /> : null}
       </StyledTableRowLeftPartContainer>
       <StyledTableRowRightPartContainer>
-        {status && (
-          <StatusContainer>
+        {status ? (
+          <StatusContainer className="execution-status-block">
             <ExecutionStepIcon icon={status} />
             <StyledExecutionStatus status={status}>
               {TestSuiteExecutionStatusesEnum[status as ExecutionStatuses]}
             </StyledExecutionStatus>
           </StatusContainer>
-        )}
-        {recentDate && <RecentDateContainer>{isRunning ? 'In progress' : recentDate}</RecentDateContainer>}
+        ) : null}
+        {recentDate ? (
+          <RecentDateContainer>
+            <Text>{isRunning ? 'In progress' : recentDate}</Text>
+          </RecentDateContainer>
+        ) : null}
       </StyledTableRowRightPartContainer>
     </StyledDashboardTableRow>
   );
