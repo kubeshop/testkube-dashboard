@@ -13,8 +13,11 @@ import {StyledChevronRightIcon, StyledSpace} from './ExecutionTableRow.styled';
 const leftPadding = 130;
 const rightPadding = 94;
 
+const maxRowWidth = 600;
 const gapWidth = 15;
 const durationTimeWidth = 60;
+const defaultDateTimeWidth = 150;
+const dateTimeWidthWithoutYear = 110;
 
 const ExecutionTableRow: React.FC<any> = props => {
   const {
@@ -25,10 +28,10 @@ const ExecutionTableRow: React.FC<any> = props => {
 
   const spaceLeft = width ? width - leftPadding - rightPadding : 0;
 
-  const isDurationTextVisible = spaceLeft > 600;
-  const isYearCollapsed = spaceLeft > 600;
+  const isDurationTextVisible = spaceLeft > maxRowWidth;
+  const isYearCollapsed = spaceLeft > maxRowWidth;
 
-  const dateTimeWidth = isYearCollapsed ? 110 : 150;
+  const dateTimeWidth = isYearCollapsed ? dateTimeWidthWithoutYear : defaultDateTimeWidth;
 
   const isExecutionNameVisible = spaceLeft > dateTimeWidth + gapWidth + durationTimeWidth;
   const executionNameMaxWidth = `${spaceLeft - dateTimeWidth - durationTimeWidth + gapWidth}px`;
