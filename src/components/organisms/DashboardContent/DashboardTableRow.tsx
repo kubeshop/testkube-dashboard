@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 import {DashboardBlueprintType} from '@models/dashboard';
 import {ExecutionStatuses} from '@models/executions';
 import {LabelsObject} from '@models/labels';
@@ -41,8 +43,12 @@ const DashboardTableRow: React.FC<DashboardTableRowProps> = props => {
 
   const isRunning = useIsRunning(status);
 
+  const rowClassNames = classNames({
+    'row-active': isRowActive,
+  });
+
   return (
-    <StyledDashboardTableRow className={isRowActive ? 'row-active' : ''}>
+    <StyledDashboardTableRow className={rowClassNames}>
       {entityType === 'tests' ? (
         <StyledTestRunnerType>
           <TestRunnerIcon icon={latestExecution?.testType || type || 'unknown'} />
