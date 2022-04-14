@@ -8,12 +8,14 @@ import {StyledExecutionDefinitionCode, StyledExecutionDefinitionPre} from './Tes
 const TestExecutionDefinition = () => {
   const {selectedRecord} = useContext(DashboardContext);
 
-  const {content} = selectedRecord;
+  const {content, type} = selectedRecord;
+
+  const data = content?.data || content?.repository?.uri;
 
   return (
     <StyledExecutionDefinitionPre>
-      {content?.data ? (
-        <CopyCommand command={content?.data} />
+      {data ? (
+        <CopyCommand command={data} />
       ) : (
         <StyledExecutionDefinitionCode>No definition data</StyledExecutionDefinitionCode>
       )}
