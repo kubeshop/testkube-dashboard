@@ -43,8 +43,6 @@ export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: bo
 `;
 
 export const StyledInfoPanelSection = styled.div<{isBorder?: boolean}>`
-  overflow: hidden;
-
   display: flex;
   flex-direction: column;
   width: 100%;
