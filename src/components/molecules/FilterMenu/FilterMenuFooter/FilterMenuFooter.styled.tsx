@@ -56,6 +56,7 @@ export const StyledOkButton = styled(StyledButton)`
 `;
 
 export const StyledSpace = styled(Space)`
+  margin-top: 4px;
   padding: 8px 12px 4px;
 
   border-top: 1px solid ${Colors.greyBorder};
