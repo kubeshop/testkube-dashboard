@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux';
 
 import {TableRowSelection} from 'antd/lib/table/interface';
 
+import {useGA4React} from 'ga-4-react';
 import moment from 'moment';
 
 import {useAppSelector} from '@redux/hooks';
@@ -105,6 +106,8 @@ const DashboardContent: React.FC<any> = props => {
 
   const dispatch = useDispatch();
 
+  const ga4React = useGA4React();
+
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const {targetTestId, targetTestExecutionId} = useAppSelector(selectRedirectTarget);
 
@@ -173,6 +176,12 @@ const DashboardContent: React.FC<any> = props => {
   useEffect(() => {
     dispatch(setSelectedRecord({selectedRecord: null}));
   }, [entityType]);
+
+  useEffect(() => {
+    if (ga4React) {
+      ga4React.gtag('event', 'get_dashboard_results', {dashboard_entity: pageTitle});
+    }
+  }, [contentProps.data, ga4React]);
 
   return (
     <StyledDashboardContentContainer
