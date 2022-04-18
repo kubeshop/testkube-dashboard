@@ -21,12 +21,10 @@ During development one can bypass the Ingress and interact with the api-server d
 - Expose the api-server with
 
 ```shell
-➜  ~ kubectl port-forward service/testkube-api-server 9090:8080 --namespace testkube
-Forwarding from 127.0.0.1:9090 -> 8080
-Forwarding from [::1]:9090 -> 8080
+kubectl-testkube dashboard
 ```
 
-(here we're exposing the testkube-api-server running in the TestKube namespace on port 9090 locally)
+(here we're exposing the testkube-api-server running in the TestKube namespace on port 8080 locally)
 
 ![img.png](docs/images/dev-architecture.png)
 
