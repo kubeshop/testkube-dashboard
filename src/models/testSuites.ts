@@ -1,8 +1,5 @@
 export type TestSuite = {};
 
-export type UnknownTestRunner = 'Unknown test type';
-export type TestRunners = 'Postman' | 'Cypress' | 'Curl' | 'K6' | UnknownTestRunner;
-
 interface TestSuitesState {
   isLoading?: boolean;
   dataList: TestSuite[];
