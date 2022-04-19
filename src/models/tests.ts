@@ -1,14 +1,7 @@
+import {TestExecutor} from './testExecutors';
+
 export type TestName = string;
 export type TestContent = string;
-
-export type TestType =
-  | 'postman/collection'
-  | 'cypress/project'
-  | 'curl/test'
-  | 'test/curl'
-  | 'postman/custom'
-  | 'k6/script'
-  | 'unknown';
 
 export type TestCreationDate = Date;
 
@@ -16,7 +9,7 @@ export type Test = {
   content: TestContent;
   created: TestCreationDate;
   name: TestName;
-  type: TestType;
+  type: TestExecutor;
 };
 
 interface TestsState {

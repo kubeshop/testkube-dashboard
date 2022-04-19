@@ -1,8 +1,9 @@
-import {TestContent, TestName, TestType} from '@models/tests';
+import {TestExecutor} from '@models/testExecutors';
+import {TestContent, TestName} from '@models/tests';
 
 export type Execution = {
   testName: TestName;
-  testType: TestType;
+  testType: TestExecutor;
   testContent: TestContent;
   startTime: ExecutionStartTime;
   endTime: ExecutionEndTime;

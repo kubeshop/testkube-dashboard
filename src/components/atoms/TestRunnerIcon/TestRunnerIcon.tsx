@@ -1,4 +1,4 @@
-import {TestType} from '@models/tests';
+import {TestExecutor} from '@models/testExecutors';
 
 import {ReactComponent as CurlIcon} from '@assets/curlIcon.svg';
 import {ReactComponent as CypressIcon} from '@assets/cypressIcon.svg';
@@ -9,10 +9,10 @@ import {ReactComponent as UnknownIcon} from '@assets/unknownIcon.svg';
 import {StyledTestRunnerIcon} from './TestRunnerIcon.styled';
 
 type TestRunnerIconProps = {
-  icon: TestType;
+  icon: TestExecutor;
 };
 
-export const testRunnerIcons: {[key in TestType | any]: any} = {
+export const testRunnerIcons: {[key in TestExecutor]: any} = {
   'postman/collection': <PostmanIcon />,
   'postman/custom': <PostmanIcon />,
   'cypress/project': <CypressIcon />,
