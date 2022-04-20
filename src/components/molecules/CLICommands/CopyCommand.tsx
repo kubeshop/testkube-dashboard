@@ -19,7 +19,7 @@ type CopyCommandProps = {
   label?: string;
 };
 
-const CopyCommand: React.FC<CopyCommandProps> = (props: any) => {
+const CopyCommand: React.FC<CopyCommandProps> = props => {
   const {command, label} = props;
 
   const [isHovered, setHoverState] = useState(false);
@@ -46,7 +46,7 @@ const CopyCommand: React.FC<CopyCommandProps> = (props: any) => {
 
   return (
     <>
-      <StyledCopyCommandLabel>{label}</StyledCopyCommandLabel>
+      {label ? <StyledCopyCommandLabel>{label}</StyledCopyCommandLabel> : null}
       <StyledCopyCommandContainer
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
