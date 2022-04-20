@@ -5,6 +5,6 @@ export type Repository = {
   uri: string;
   branch: string;
   path: string;
-  username: string;
-  token: string;
+  username?: string;
+  token?: string;
 };

@@ -2,7 +2,7 @@ import {LabelMap} from '@models/labels';
 import {ParamMap} from '@models/param';
 import {Repository} from '@models/repository';
 
-export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | string;
+export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | 'string';
 
 export type TestContent = {
   type: TestContentTypeEnum;

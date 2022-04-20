@@ -1,21 +1,23 @@
 import {useContext} from 'react';
 
+import {CopyCommand} from '@molecules';
+
 import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
 
-import CopyCommand from '../../CLICommands/CopyCommand';
 import {StyledExecutionDefinitionCode, StyledExecutionDefinitionPre} from './TestExecutionDefinition.styled';
+import {getExecutionDefinitionData} from './utils';
 
-const TestExecutionDefinition = () => {
+const TestExecutionDefinition: React.FC = () => {
   const {selectedRecord} = useContext(DashboardContext);
 
-  const {content, type} = selectedRecord;
+  const {content} = selectedRecord;
 
-  const data = content?.data || content?.repository?.uri;
+  const command = getExecutionDefinitionData(content);
 
   return (
     <StyledExecutionDefinitionPre>
-      {data ? (
-        <CopyCommand command={data} />
+      {command ? (
+        <CopyCommand command={command} />
       ) : (
         <StyledExecutionDefinitionCode>No definition data</StyledExecutionDefinitionCode>
       )}
