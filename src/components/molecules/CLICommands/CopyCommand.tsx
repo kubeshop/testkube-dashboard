@@ -14,7 +14,12 @@ import {
   StyledCopyCommandPre,
 } from './CopyCommand.styled';
 
-const CopyCommand = (props: any) => {
+type CopyCommandProps = {
+  command: string;
+  label?: string;
+};
+
+const CopyCommand: React.FC<CopyCommandProps> = (props: any) => {
   const {command, label} = props;
 
   const [isHovered, setHoverState] = useState(false);

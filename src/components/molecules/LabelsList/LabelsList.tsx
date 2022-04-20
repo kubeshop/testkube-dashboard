@@ -1,11 +1,11 @@
-import {LabelsObject} from '@models/labels';
+import {LabelKey, LabelMap} from '@models/labels';
 
 import {LabelListItem} from '@atoms';
 
 import {StyledLabelsList} from './LabelsList.styled';
 
 type LabelsListProps = {
-  labels: LabelsObject;
+  labels: LabelMap;
   howManyLabelsToShow?: number;
   shouldSkipLabels?: boolean;
   className?: string;
@@ -14,10 +14,10 @@ type LabelsListProps = {
 const LabelsList: React.FC<LabelsListProps> = props => {
   const {labels, howManyLabelsToShow = 3, shouldSkipLabels = false, className = ''} = props;
 
-  const labelsInArray = Object.keys(labels);
+  const labelKeys: LabelKey[] = Object.keys(labels);
 
-  const renderedLabels = labelsInArray
-    .map((labelKey: string, index: number) => {
+  const renderedLabels = labelKeys
+    .map((labelKey, index) => {
       if (shouldSkipLabels) {
         if (howManyLabelsToShow < index + 1) {
           return null;
@@ -28,7 +28,7 @@ const LabelsList: React.FC<LabelsListProps> = props => {
     })
     .filter(labelComponent => labelComponent);
 
-  const skippedLabelsNumber = labelsInArray.length - renderedLabels.length;
+  const skippedLabelsNumber = labelKeys.length - renderedLabels.length;
 
   return (
     <StyledLabelsList className={className}>

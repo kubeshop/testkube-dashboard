@@ -2,7 +2,7 @@ import classNames from 'classnames';
 
 import {DashboardBlueprintType} from '@models/dashboard';
 import {ExecutionStatuses} from '@models/executions';
-import {LabelsObject} from '@models/labels';
+import {LabelMap} from '@models/labels';
 import {TestExecutor} from '@models/testExecutors';
 import {TestSuiteExecutionStatus, TestSuiteExecutionStatusesEnum} from '@models/testSuiteExecutions';
 
@@ -29,7 +29,7 @@ type DashboardTableRowProps = {
   latestExecution: {
     testType: TestExecutor;
   };
-  labels: LabelsObject;
+  labels: LabelMap;
   recentDate: string;
   name: string;
   status: TestSuiteExecutionStatus;

@@ -20,3 +20,4 @@ export {default as ExecutionDetails} from './ExecutionDetails';
 export {default as ExecutionStepsList} from './ExecutionStepsList';
 export {default as ExecutionStepIcon} from './ExecutionStepIcon';
 export {default as ExecutionName} from './ExecutionName';
+export {default as CookiesBanner} from './CookiesBanner';

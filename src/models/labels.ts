@@ -6,11 +6,12 @@ export type Label = {
   value: LabelValue;
 };
 
-export type LabelsObject = Record<LabelKey, LabelValue>;
-export type LabelsArray = Label[];
+export type LabelMap = Record<LabelKey, LabelValue>;
+
+export type LabelArray = Label[];
 
 interface LabelsState {
-  labelsObject: LabelsObject;
+  labelsObject: LabelMap;
 }
 
 export type {LabelsState};
