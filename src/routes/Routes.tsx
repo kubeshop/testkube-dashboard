@@ -8,7 +8,7 @@ type RouteConfigType = {
   props?: Record<string, unknown>;
 };
 
-const AppRoutes = () => {
+const AppRoutes: React.FC = () => {
   return (
     <Routes>
       {routesConfig.map(({path, element: Element, props}: RouteConfigType) => (

@@ -106,3 +106,19 @@ const purifyQueryParams = (paramsToRemove: string[]) => {
     }
   }
 };
+
+export const detectAdBlock = async () => {
+  const googleAdUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+
+  let isAdBlockEnabled = false;
+
+  try {
+    await fetch(new Request(googleAdUrl)).catch(() => {
+      isAdBlockEnabled = true;
+    });
+  } catch (e) {
+    isAdBlockEnabled = true;
+  }
+
+  return isAdBlockEnabled;
+};
