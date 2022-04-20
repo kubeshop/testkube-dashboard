@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {Space} from 'antd';
@@ -6,6 +6,7 @@ import {Space} from 'antd';
 import {FilterFilled} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
+import {Param, ParamArray} from '@models/param';
 
 import {Input} from '@custom-antd';
 
@@ -27,12 +28,7 @@ import {
   StyledTitle,
 } from './LabelsFilter.styled';
 
-type LabelFilterKeyValuePairType = {
-  key: string;
-  value: string;
-};
-
-const defaultKeyValuePair: LabelFilterKeyValuePairType = {
+const defaultKeyValuePair: Param = {
   key: '',
   value: '',
 };
@@ -44,10 +40,8 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const dispatch = useDispatch();
 
-  const defaultLabels = useMemo(() => (filters && filters.selector) || [], [filters]);
-
   const [isVisible, setVisibilityState] = useState(false);
-  const [labelsMapping, setLabelsMapping] = useState<LabelFilterKeyValuePairType[]>(defaultLabelsMapping);
+  const [labelsMapping, setLabelsMapping] = useState<ParamArray>(defaultLabelsMapping);
 
   const onVisibleChange = (flag: boolean) => {
     setVisibilityState(flag);
