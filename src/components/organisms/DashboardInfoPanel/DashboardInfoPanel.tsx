@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {CSSProperties, useContext, useEffect} from 'react';
 
 import {CloseOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons';
@@ -96,7 +97,7 @@ const DashboardInfoPanel: React.FC = () => {
       ) : (
         <StyledDashboardInfoPanelContentContainer>
           {selectedRecord && isInfoPanelExpanded ? <DashboardInfoPanelContent /> : null}
-          {isSecondLevelOpen ? <DashboardInfoPanelSecondLevel /> : null}
+          {/* {isSecondLevelOpen ? <DashboardInfoPanelSecondLevel /> : null} */}
         </StyledDashboardInfoPanelContentContainer>
       )}
     </StyledDashboardInfoPanelContainer>

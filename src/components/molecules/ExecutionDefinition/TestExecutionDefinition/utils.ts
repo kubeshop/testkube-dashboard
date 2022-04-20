@@ -2,8 +2,14 @@
 import {Repository} from '@models/repository';
 import {TestContent} from '@models/test';
 
-const purifyGitUriExtension = (gitUri: string) => {
-  return gitUri.replace('.git', '');
+import {githubUriRegex} from '@utils/strings';
+
+export const purifyGitUriExtension = (gitUri: string) => {
+  if (githubUriRegex.test(gitUri)) {
+    return gitUri.replace('.git', '');
+  }
+
+  return gitUri;
 };
 
 export const buildGitTestDirUrl = (repository: Repository) => {
