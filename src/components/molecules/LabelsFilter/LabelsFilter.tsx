@@ -56,6 +56,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       ...labelsMapping.slice(index + 1),
     ]);
   };
+
   const onValueChange = (value: string, index: number) => {
     setLabelsMapping([
       ...labelsMapping.slice(0, index),
@@ -63,6 +64,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       ...labelsMapping.slice(index + 1),
     ]);
   };
+
   const onDeleteRow = (index: number) => {
     setLabelsMapping([...labelsMapping.slice(0, index), ...labelsMapping.slice(index + 1)]);
   };
@@ -70,6 +72,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const onAddRow = () => {
     setLabelsMapping([...labelsMapping, defaultKeyValuePair]);
   };
+
   const renderKeyValueInputs = labelsMapping.map((item, index) => (
     <StyledKeyValueRow>
       <Input width="220px" onChange={event => onKeyChange(event.target.value, index)} value={item.key} />
@@ -98,6 +101,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     setLabelsMapping(defaultLabelsMapping);
     dispatch(setFilters({...filters, page: 0, selector: []}));
   };
+
   const menu = (
     <StyledFilterMenu onClick={onMenuClick}>
       <StyledLabelsMenuContainer>
