@@ -1,15 +1,17 @@
-import {StyledOkButton, StyledResetButton, StyledSpace} from './FilterMenuFooter.styled';
+import {StyledOkButton, StyledSecondaryButton, StyledSpace} from './FilterMenuFooter.styled';
 
 type FilterMenuFooterProps = {
   onReset: () => void;
   onOk: () => void;
+  onCancel?: () => void;
 };
 
 const FilterMenuFooter: React.FC<FilterMenuFooterProps> = props => {
-  const {onReset, onOk} = props;
+  const {onReset, onOk, onCancel} = props;
   return (
     <StyledSpace align="center">
-      <StyledResetButton onClick={onReset}>Reset</StyledResetButton>
+      {onCancel ? <StyledSecondaryButton onClick={onCancel}>Cancel</StyledSecondaryButton> : null}
+      <StyledSecondaryButton onClick={onReset}>Reset</StyledSecondaryButton>
       <StyledOkButton onClick={onOk}>Ok</StyledOkButton>
     </StyledSpace>
   );

@@ -14,7 +14,7 @@ const StyledButton = styled(Button)`
   text-align: center;
 `;
 
-export const StyledResetButton = styled(StyledButton)`
+export const StyledSecondaryButton = styled(StyledButton)`
   border: 1px solid ${Colors.grey450};
 
   color: ${Colors.grey450};
@@ -56,6 +56,11 @@ export const StyledOkButton = styled(StyledButton)`
 `;
 
 export const StyledSpace = styled(Space)`
+  width: 100%;
+
+  justify-content: end;
+
+  margin-top: 4px;
   padding: 8px 12px 4px;
 
   border-top: 1px solid ${Colors.greyBorder};

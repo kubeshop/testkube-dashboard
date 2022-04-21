@@ -22,7 +22,7 @@ import {uppercaseFirstSymbol} from '@src/utils/strings';
 const statusList = ['queued', 'running', 'passed', 'failed'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
-  const {filters, setSelectedRecord, setFilters} = props;
+  const {filters, setFilters} = props;
 
   const dispatch = useDispatch();
 
@@ -33,16 +33,22 @@ const StatusFilter: React.FC<FilterProps> = props => {
   };
 
   const handleClick = useCallback(
-    (status: string | undefined) => {
-      if (status === filters.status) {
-        dispatch(setSelectedRecord({selectedRecord: null}));
-        dispatch(setFilters({...filters, page: 0, status: undefined}));
+    (status: string) => {
+      if (filters.status.includes(status)) {
+        dispatch(
+          setFilters({
+            ...filters,
+            page: 0,
+            status: filters.status.filter((currentStatus: string) => {
+              return status !== currentStatus;
+            }),
+          })
+        );
       } else {
-        dispatch(setSelectedRecord({selectedRecord: null}));
-        dispatch(setFilters({...filters, page: 0, status}));
+        dispatch(setFilters({...filters, status: [...filters.status, status]}));
       }
     },
-    [dispatch, setSelectedRecord, setFilters, filters]
+    [dispatch, setFilters, filters]
   );
 
   const onMenuClick = () => {};
@@ -51,7 +57,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
     return statusList.map(status => {
       return (
         <StyledFilterMenuItem key={status}>
-          <StyledFilterCheckbox checked={filters.status === status} onChange={() => handleClick(status)}>
+          <StyledFilterCheckbox checked={filters.status.includes(status)} onChange={() => handleClick(status)}>
             {uppercaseFirstSymbol(status)}
           </StyledFilterCheckbox>
         </StyledFilterMenuItem>
@@ -62,7 +68,10 @@ const StatusFilter: React.FC<FilterProps> = props => {
   const menu = (
     <StyledFilterMenu onClick={onMenuClick}>
       {renderedStatuses}
-      <FilterMenuFooter onReset={() => handleClick(filters.status)} onOk={() => onVisibleChange(false)} />
+      <FilterMenuFooter
+        onReset={() => dispatch(setFilters({...filters, status: []}))}
+        onOk={() => onVisibleChange(false)}
+      />
     </StyledFilterMenu>
   );
 
@@ -76,7 +85,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
         visible={isVisible}
       >
         <StyledFilterLabel onClick={e => e.preventDefault()}>
-          {filters.status ? <AppliedFiltersNotification /> : null}
+          {filters.status.length > 0 ? <AppliedFiltersNotification /> : null}
           Status <FilterFilled />
         </StyledFilterLabel>
       </StyledFilterDropdown>

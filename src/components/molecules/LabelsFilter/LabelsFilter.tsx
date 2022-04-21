@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {Space} from 'antd';
@@ -6,34 +6,42 @@ import {Space} from 'antd';
 import {FilterFilled} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
-import {LabelKey} from '@models/labels';
+import {Param, ParamArray} from '@models/param';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectLabels} from '@redux/reducers/labelsSlice';
+import {Input} from '@custom-antd';
 
 import {
   AppliedFiltersNotification,
   FilterMenuFooter,
-  StyledFilterCheckbox,
   StyledFilterDropdown,
   StyledFilterLabel,
   StyledFilterMenu,
-  StyledFilterMenuItem,
 } from '@molecules/FilterMenu';
 
-import './LabelsFilter.styled';
+import {
+  EmptyButton,
+  StyledAddRowButton,
+  StyledDeleteRowButton,
+  StyledKeyValueLabel,
+  StyledKeyValueRow,
+  StyledLabelsMenuContainer,
+  StyledTitle,
+} from './LabelsFilter.styled';
+
+const defaultKeyValuePair: Param = {
+  key: '',
+  value: '',
+};
+
+const defaultLabelsMapping = Array(1).fill(defaultKeyValuePair);
 
 const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters} = props;
 
   const dispatch = useDispatch();
 
-  const labels: LabelKey[] = Object.keys(useAppSelector(selectLabels));
-
-  const defaultLabels = useMemo(() => (filters && filters.selector) || [], [filters]);
-
   const [isVisible, setVisibilityState] = useState(false);
-  const [labelsMapping, setLabelsMapping] = useState<LabelKey[]>(defaultLabels);
+  const [labelsMapping, setLabelsMapping] = useState<ParamArray>(defaultLabelsMapping);
 
   const onVisibleChange = (flag: boolean) => {
     setVisibilityState(flag);
@@ -41,71 +49,75 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const onMenuClick = () => {};
 
-  const onLabelChange = (label: LabelKey) => {
-    if (labelsMapping.includes(label)) {
-      return setLabelsMapping(
-        labelsMapping.filter(currentLabel => {
-          return label !== currentLabel;
-        })
-      );
-    }
-
-    setLabelsMapping([...labelsMapping, label]);
+  const onKeyChange = (key: string, index: number) => {
+    setLabelsMapping([
+      ...labelsMapping.slice(0, index),
+      {key, value: labelsMapping[index].value},
+      ...labelsMapping.slice(index + 1),
+    ]);
   };
 
-  const renderedLabels = useMemo(() => {
-    if (!labels || !labels.length) {
-      return null;
-    }
+  const onValueChange = (value: string, index: number) => {
+    setLabelsMapping([
+      ...labelsMapping.slice(0, index),
+      {key: labelsMapping[index].key, value},
+      ...labelsMapping.slice(index + 1),
+    ]);
+  };
 
-    return labels.map(label => {
-      return (
-        <StyledFilterMenuItem key={label}>
-          <StyledFilterCheckbox
-            checked={filters.selector.includes(label)}
-            onChange={() => {
-              return onLabelChange(label);
-            }}
-          >
-            {label}
-          </StyledFilterCheckbox>
-        </StyledFilterMenuItem>
-      );
+  const onDeleteRow = (index: number) => {
+    setLabelsMapping([...labelsMapping.slice(0, index), ...labelsMapping.slice(index + 1)]);
+  };
+
+  const onAddRow = () => {
+    setLabelsMapping([...labelsMapping, defaultKeyValuePair]);
+  };
+
+  const renderKeyValueInputs = labelsMapping.map((item, index) => (
+    <StyledKeyValueRow>
+      <Input width="220px" onChange={event => onKeyChange(event.target.value, index)} value={item.key} />
+      <Input width="220px" onChange={event => onValueChange(event.target.value, index)} value={item.value} />
+      {index > 0 ? <StyledDeleteRowButton onClick={() => onDeleteRow(index)} /> : <EmptyButton />}
+    </StyledKeyValueRow>
+  ));
+
+  const applyFilters = () => {
+    const resultedFilters: string[] = [];
+    labelsMapping.forEach(item => {
+      if (!item.key) {
+        return;
+      }
+      if (!item.value) {
+        resultedFilters.push(item.key);
+      } else {
+        resultedFilters.push(`${item.key}=${item.value}`);
+      }
     });
-  }, [labels, filters, labelsMapping, defaultLabels]);
+    dispatch(setFilters({...filters, page: 0, selector: resultedFilters}));
+    onVisibleChange(false);
+  };
 
-  const appliedLabels: LabelKey[] | null = useMemo(() => {
-    if (!labels || !labels.length) {
-      return null;
-    }
-
-    return labels
-      .map((label: LabelKey) => {
-        return filters.selector.includes(label) ? label : '';
-      })
-      .filter(label => label);
-  }, [labels, filters, labelsMapping, defaultLabels]);
-
-  useEffect(() => {
-    dispatch(setFilters({...filters, selector: labelsMapping}));
-  }, [labelsMapping]);
-
-  useEffect(() => {
-    setLabelsMapping(defaultLabels);
-  }, [defaultLabels]);
+  const resetFilters = () => {
+    setLabelsMapping(defaultLabelsMapping);
+    dispatch(setFilters({...filters, page: 0, selector: []}));
+  };
 
   const menu = (
     <StyledFilterMenu onClick={onMenuClick}>
-      {renderedLabels}
-      <FilterMenuFooter onOk={() => onVisibleChange(false)} onReset={() => setLabelsMapping([])} />
+      <StyledLabelsMenuContainer>
+        <StyledTitle>Filter tests by Key Value pairs.</StyledTitle>
+        <StyledKeyValueRow>
+          <StyledKeyValueLabel>Key</StyledKeyValueLabel>
+          <StyledKeyValueLabel>Value</StyledKeyValueLabel>
+        </StyledKeyValueRow>
+        {renderKeyValueInputs}
+        <StyledAddRowButton onClick={() => onAddRow()}>&#xFF0B; Add row</StyledAddRowButton>
+      </StyledLabelsMenuContainer>
+      <FilterMenuFooter onOk={applyFilters} onReset={resetFilters} onCancel={() => onVisibleChange(false)} />
     </StyledFilterMenu>
   );
 
-  if (!labels || !labels.length) {
-    return null;
-  }
-
-  const isLabelsApplied = appliedLabels && appliedLabels.length > 0;
+  const isFilterApplied = filters.selector.length > 0;
 
   return (
     <Space size={20}>
@@ -117,7 +129,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         visible={isVisible}
       >
         <StyledFilterLabel onClick={e => e.preventDefault()}>
-          {isLabelsApplied ? <AppliedFiltersNotification /> : null}
+          {isFilterApplied ? <AppliedFiltersNotification /> : null}
           Labels <FilterFilled />
         </StyledFilterLabel>
       </StyledFilterDropdown>

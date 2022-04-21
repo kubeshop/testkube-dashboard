@@ -16,7 +16,15 @@ interface TestsState {
   isLoading?: boolean;
   dataList: Test[];
   latestExecution: any;
-  filters: {textSearch: string; type: string; pageSize: number; page: number; selector: []; createdAt: null};
+  filters: {
+    textSearch: string;
+    type: string;
+    pageSize: number;
+    page: number;
+    selector: [];
+    createdAt: null;
+    status: Array<string>;
+  };
   totals: {};
   filtered: {};
   selectedTest: Test | null;
