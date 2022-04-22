@@ -1,6 +1,6 @@
-import {TestSuiteExecutionStatus} from '@models/testSuiteExecutions';
+import {ExecutionResultStatusEnum} from '@models/execution';
 
-const useIsRunning = (status: TestSuiteExecutionStatus) => {
+const useIsRunning = (status: ExecutionResultStatusEnum) => {
   return status === 'running';
 };
 

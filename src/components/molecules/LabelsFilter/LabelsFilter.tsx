@@ -6,7 +6,7 @@ import {Space} from 'antd';
 import {FilterFilled} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
-import {Param, ParamArray} from '@models/param';
+import {Label, LabelArray} from '@models/labels';
 
 import {Input} from '@custom-antd';
 
@@ -28,7 +28,7 @@ import {
   StyledTitle,
 } from './LabelsFilter.styled';
 
-const defaultKeyValuePair: Param = {
+const defaultKeyValuePair: Label = {
   key: '',
   value: '',
 };
@@ -41,7 +41,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const dispatch = useDispatch();
 
   const [isVisible, setVisibilityState] = useState(false);
-  const [labelsMapping, setLabelsMapping] = useState<ParamArray>(defaultLabelsMapping);
+  const [labelsMapping, setLabelsMapping] = useState<LabelArray>(defaultLabelsMapping);
 
   const onVisibleChange = (flag: boolean) => {
     setVisibilityState(flag);

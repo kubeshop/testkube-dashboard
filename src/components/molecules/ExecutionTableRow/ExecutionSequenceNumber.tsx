@@ -1,6 +1,10 @@
 import {StyledExecutionSequenceNumber} from './ExecutionTableRow.styled';
 
-export const ExecutionSequenceNumber: React.FC<any> = props => {
+type ExecutionSequenceNumberProps = {
+  index: number;
+};
+
+export const ExecutionSequenceNumber: React.FC<ExecutionSequenceNumberProps> = props => {
   const {index} = props;
 
   return <StyledExecutionSequenceNumber>#{index}</StyledExecutionSequenceNumber>;

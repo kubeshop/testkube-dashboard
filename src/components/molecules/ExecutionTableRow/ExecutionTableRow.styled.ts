@@ -16,15 +16,7 @@ export const StyledExecutionStartDate = styled.span`
   color: ${Colors.whitePure};
 `;
 
-export const StyledExecutionStartDateTime = styled(Typography.Text)<{maxWidth: any}>`
-  max-width: ${props => props.maxWidth} !important;
-
-  color: ${Colors.whitePure};
-`;
-
-export const StyledExecutionName = styled(Typography.Text)<{maxWidth: any}>`
-  max-width: ${props => props.maxWidth} !important;
-
+export const StyledExecutionStartDateTime = styled(Typography.Text)`
   color: ${Colors.whitePure};
 `;
 
