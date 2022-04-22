@@ -2,9 +2,16 @@ import {memo} from 'react';
 
 import useIsRunning from '@src/hooks/useIsRunning';
 
+import {ExecutionTableRowProps} from './ExecutionTableRow';
 import {StyledExecutionDuration} from './ExecutionTableRow.styled';
 
-const ExecutionDuration: React.FC<any> = props => {
+type ExecutionDurationProps = {
+  duration: ExecutionTableRowProps['duration'];
+  status: ExecutionTableRowProps['status'];
+  isTextVisible: boolean;
+};
+
+const ExecutionDuration: React.FC<ExecutionDurationProps> = props => {
   const {duration, status, isTextVisible} = props;
 
   const isRunning = useIsRunning(status);

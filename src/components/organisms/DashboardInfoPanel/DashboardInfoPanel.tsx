@@ -97,7 +97,7 @@ const DashboardInfoPanel: React.FC = () => {
       ) : (
         <StyledDashboardInfoPanelContentContainer>
           {selectedRecord && isInfoPanelExpanded ? <DashboardInfoPanelContent /> : null}
-          {/* {isSecondLevelOpen ? <DashboardInfoPanelSecondLevel /> : null} */}
+          {isSecondLevelOpen ? <DashboardInfoPanelSecondLevel /> : null}
         </StyledDashboardInfoPanelContentContainer>
       )}
     </StyledDashboardInfoPanelContainer>

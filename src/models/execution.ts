@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import {Args} from '@models/args';
 import {AssertionResult} from '@models/assertionResult';
 import {EnvMap} from '@models/env';
@@ -36,8 +38,8 @@ export type Execution = {
   params: ParamMap;
   paramsFile: string;
   content: TestContent;
-  startTime: string;
-  endTime: string;
+  startTime: moment.MomentInput;
+  endTime: moment.MomentInput;
   duration: string;
   executionResult: ExecutionResult;
   labels: LabelMap;
