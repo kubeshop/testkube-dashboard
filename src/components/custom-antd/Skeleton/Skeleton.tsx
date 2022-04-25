@@ -2,18 +2,29 @@ import {SkeletonProps as AntdSkeletonProps} from 'antd';
 
 import {StyledSkeleton} from './Skeleton.styled';
 
-const Skeleton: React.FC<AntdSkeletonProps> = props => {
+type AdditionalSkeletonStyles = {
+  lineHeight?: number;
+  container?: {
+    paddingTop?: number;
+  };
+};
+
+type CustomAntdSkeletonProps = {
+  additionalStyles?: AdditionalSkeletonStyles;
+};
+
+const Skeleton: React.FC<AntdSkeletonProps & CustomAntdSkeletonProps> = props => {
   const {children, active = true} = props;
 
   if (children) {
     return (
-      <StyledSkeleton active={active} {...props}>
+      <StyledSkeleton className="testkube-skeleton" active={active} {...props}>
         {children}
       </StyledSkeleton>
     );
   }
 
-  return <StyledSkeleton active={active} {...props} />;
+  return <StyledSkeleton className="testkube-skeleton" active={active} {...props} />;
 };
 
 export default Skeleton;

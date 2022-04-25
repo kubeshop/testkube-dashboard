@@ -1,5 +1,8 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {TestWithExecution} from '@models/test';
+import {TestFilters} from '@models/tests';
+
 import {addIndexes} from '@utils/array';
 import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
 
@@ -7,8 +10,8 @@ export const testsApi = createApi({
   reducerPath: 'testsApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
-    getTests: builder.query({
-      query: (filters: any) => `/test-with-executions?${paramsSerializer(filters)}`,
+    getTests: builder.query<TestWithExecution[], TestFilters>({
+      query: filters => `/test-with-executions?${paramsSerializer(filters)}`,
     }),
     getTestExecutionsById: builder.query({
       query: ({name}) => `/tests/${name}/executions`,
@@ -20,11 +23,11 @@ export const testsApi = createApi({
         return {results: indexedResults, rest};
       },
     }),
-    getTestExecutionById: builder.query({
-      query: (testExecutionId: string) => `/executions/${testExecutionId}`,
+    getTestExecutionById: builder.query<any, string>({
+      query: testExecutionId => `/executions/${testExecutionId}`,
     }),
-    getTestExecutionArtifacts: builder.query({
-      query: (testExecutionId: string) => `/executions/${testExecutionId}/artifacts`,
+    getTestExecutionArtifacts: builder.query<any, string>({
+      query: testExecutionId => `/executions/${testExecutionId}/artifacts`,
     }),
   }),
 });

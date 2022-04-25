@@ -21,5 +21,6 @@ export const testExecutorsNames: {[key in TestExecutor]: TestExecutorName} = {
   'curl/test': 'Curl',
   'test/curl': 'Curl',
   'k6/script': 'K6',
+  'soapui/xml': 'SoapUI',
   unknown: 'Unknown test type',
 };

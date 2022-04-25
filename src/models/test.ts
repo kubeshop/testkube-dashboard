@@ -1,3 +1,4 @@
+import {Execution} from '@models/execution';
 import {LabelMap} from '@models/labels';
 import {ParamMap} from '@models/param';
 import {Repository} from '@models/repository';
@@ -20,4 +21,9 @@ export type Test = {
   labels: LabelMap;
   schedule: string;
   params: ParamMap;
+};
+
+export type TestWithExecution = {
+  dataList: Test;
+  latestExecution?: Execution;
 };

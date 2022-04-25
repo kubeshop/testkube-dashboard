@@ -2,6 +2,8 @@ import {Table} from 'antd';
 
 import styled from 'styled-components';
 
+import {ExecutionStatusEnum} from '@models/execution';
+
 import Colors, {StatusColors} from '@styles/Colors';
 
 export const StyledDashboardContentContainer = styled.div<{
@@ -181,7 +183,7 @@ export const StyledContentTable = styled(Table)`
   }
 `;
 
-export const StyledExecutionStatus = styled.span<{status: 'passed' | 'failed' | 'running' | 'queued'}>`
+export const StyledExecutionStatus = styled.span<{status: ExecutionStatusEnum}>`
   margin-left: 8px;
 
   color: ${props => StatusColors[props.status]};

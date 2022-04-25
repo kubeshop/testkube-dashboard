@@ -7,15 +7,18 @@ import {TableRowSelection} from 'antd/lib/table/interface';
 import {useGA4React} from 'ga-4-react';
 import moment from 'moment';
 
+import {TestWithExecution} from '@models/test';
+
 import {useAppSelector} from '@redux/hooks';
 import {clearTargetTestId, selectApiEndpoint, selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import {PollingIntervals} from '@utils/numbers';
 
-import {useGetExecutionsQuery} from '@services/executions';
-import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
+
+import {Skeleton} from '@src/components/custom-antd';
+import {TestSuiteWithExecution} from '@src/models/testSuite';
 
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {
@@ -29,10 +32,27 @@ import DashboardFilters from './DashboardFilters';
 import DashboardTableRow from './DashboardTableRow';
 import DashboardTitle from './DashboardTitle';
 
-// The reason I've done this is here https://github.com/reduxjs/redux-toolkit/issues/1970.
-// Let's discuss if you have anything to add, maybe an idea how to rework it.
-const TestSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetTestSuitesQuery(queryFilters || null, {
+interface OnDataChangeInterface {
+  data: TestSuiteWithExecution[] | TestWithExecution[];
+  isLoading: boolean;
+  isFetching: boolean;
+  refetch: Function;
+}
+
+type DataLayerProps = {
+  onDataChange: (args: OnDataChangeInterface) => void;
+  queryFilters: any;
+};
+
+const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
+  const {onDataChange, queryFilters} = props;
+
+  const {
+    data = [],
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetTestSuitesQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
   });
 
@@ -43,32 +63,15 @@ const TestSuitesDataLayer = ({onDataChange, queryFilters}: any) => {
   return <></>;
 };
 
-const TestSuiteExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionsByTestIdQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.everySecond,
-  });
+const TestsDataLayer: React.FC<DataLayerProps> = props => {
+  const {onDataChange, queryFilters} = props;
 
-  useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch});
-  }, [data, isLoading, isFetching]);
-
-  return <></>;
-};
-
-const TestsDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetTestsQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.everySecond,
-  });
-
-  useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch});
-  }, [data, isLoading, isFetching]);
-
-  return <></>;
-};
-
-const ExecutionsDataLayer = ({onDataChange, queryFilters}: any) => {
-  const {data, isLoading, isFetching, refetch} = useGetExecutionsQuery(queryFilters || null, {
+  const {
+    data = [],
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetTestsQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
   });
 
@@ -111,8 +114,8 @@ const DashboardContent: React.FC<any> = props => {
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const {targetTestId, targetTestExecutionId} = useAppSelector(selectRedirectTarget);
 
-  const [contentProps, setContentProps] = useState<any>({
-    data: null,
+  const [contentProps, setContentProps] = useState<OnDataChangeInterface>({
+    data: [],
     isLoading: false,
     isFetching: false,
     refetch: () => {},
@@ -125,15 +128,13 @@ const DashboardContent: React.FC<any> = props => {
     renderCell: () => null,
   };
 
-  const onDataChange = (data: any) => {
-    setContentProps(data);
+  const onDataChange = (args: OnDataChangeInterface) => {
+    setContentProps(args);
   };
 
   const dataLayers: any = {
     'Test Suites': <TestSuitesDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-    'Test Suite Executions': <TestSuiteExecutionsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
     Tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-    Executions: <ExecutionsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
   };
 
   useEffect(() => {
@@ -141,10 +142,12 @@ const DashboardContent: React.FC<any> = props => {
       return;
     }
 
-    if (contentProps.data || contentProps.data?.length) {
-      if (targetTestId && contentProps.data[0][reduxListName].name === targetTestId) {
-        onRowSelect(contentProps.data[0][reduxListName]);
-        dispatch(clearTargetTestId());
+    if (contentProps.data && contentProps.data.length) {
+      if (contentProps.data[0]) {
+        if (targetTestId && contentProps.data[0].dataList?.name === targetTestId) {
+          onRowSelect(contentProps.data[0]?.dataList);
+          dispatch(clearTargetTestId());
+        }
       }
 
       dispatch(setData(contentProps.data));
@@ -152,7 +155,7 @@ const DashboardContent: React.FC<any> = props => {
       return;
     }
 
-    if (!contentProps.data) {
+    if (!contentProps.data || !contentProps.data.length) {
       // if no results - set result as an empty array because not all the time we get an empty array from backend
       dispatch(setData([]));
 
@@ -206,59 +209,71 @@ const DashboardContent: React.FC<any> = props => {
             entityType={entityType}
           />
         ) : null}
-        <StyledContentTable
-          dataSource={dataSource}
-          columns={[
-            {
-              render: (data: any) => {
-                const {latestExecution, dataItem} = data;
-                let status = null;
-                let recentDate = null;
-
-                if (latestExecution) {
-                  status =
-                    entityType !== 'test-suites' ? latestExecution.executionResult?.status : latestExecution.status;
-                  recentDate = moment(latestExecution.endTime).format('MMM D, HH:mm');
-                } else {
-                  status = 'neverRun';
-                  recentDate = 'The Future';
-                }
-
-                return (
-                  <DashboardTableRow
-                    name={dataItem.name}
-                    labels={dataItem.labels}
-                    latestExecution={latestExecution}
-                    status={status}
-                    recentDate={recentDate}
-                    entityType={entityType}
-                    type={dataItem.type}
-                    isRowActive={selectedRecord?.name === dataItem?.name}
-                  />
-                );
-              },
-            },
-          ]}
+        <Skeleton
           loading={contentProps.isLoading}
-          rowSelection={canSelectRow ? rowSelection : undefined}
-          rowClassName="dashboard-content-table"
-          rowKey={(record: any) => {
-            return `${entityType}${
-              selectedRecordIdFieldName && record.dataItem[selectedRecordIdFieldName]
-                ? `-${record.dataItem[selectedRecordIdFieldName]}`
-                : ''
-            }`;
-          }}
-          pagination={paginationOptions}
-          onRow={(record: any) => ({
-            onClick: () => {
-              if (canSelectRow) {
-                onRowSelect(record.dataItem);
-              }
+          paragraph={{rows: 5, width: '100%'}}
+          additionalStyles={{
+            lineHeight: 80,
+            container: {
+              paddingTop: 16,
             },
-          })}
-          showHeader={false}
-        />
+          }}
+          title={false}
+        >
+          <StyledContentTable
+            dataSource={dataSource}
+            columns={[
+              {
+                render: data => {
+                  const {latestExecution, dataItem} = data;
+                  let status = null;
+                  let recentDate = null;
+
+                  if (latestExecution) {
+                    status =
+                      entityType !== 'test-suites' ? latestExecution?.executionResult?.status : latestExecution.status;
+                    recentDate = moment(latestExecution.endTime).format('MMM D, HH:mm');
+                  } else {
+                    status = 'neverRun';
+                    recentDate = 'The Future';
+                  }
+
+                  return (
+                    <DashboardTableRow
+                      name={dataItem.name}
+                      labels={dataItem.labels}
+                      latestExecution={latestExecution}
+                      status={status}
+                      recentDate={recentDate}
+                      entityType={entityType}
+                      type={dataItem.type}
+                      isRowActive={selectedRecord?.name === dataItem?.name}
+                    />
+                  );
+                },
+              },
+            ]}
+            loading={contentProps.isLoading}
+            rowSelection={canSelectRow ? rowSelection : undefined}
+            rowClassName="dashboard-content-table"
+            rowKey={(record: any) => {
+              return `${entityType}${
+                selectedRecordIdFieldName && record.dataItem[selectedRecordIdFieldName]
+                  ? `-${record.dataItem[selectedRecordIdFieldName]}`
+                  : ''
+              }`;
+            }}
+            pagination={paginationOptions}
+            onRow={(record: any) => ({
+              onClick: () => {
+                if (canSelectRow) {
+                  onRowSelect(record.dataItem);
+                }
+              },
+            })}
+            showHeader={false}
+          />
+        </Skeleton>
       </StyledDashboardContent>
     </StyledDashboardContentContainer>
   );

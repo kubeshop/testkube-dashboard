@@ -191,7 +191,14 @@ const DashboardInfoPanelContent = () => {
         <StyledAntTabs defaultActiveKey="1">
           <TabPane tab="Executions" key="ExecutionsPane">
             <StyledInfoPanelSection>
-              <Skeleton paragraph={{rows: 5, width: '100%'}} loading={infoPanelProps.isLoading} title={false}>
+              <Skeleton
+                paragraph={{rows: 5, width: '100%'}}
+                loading={infoPanelProps.isLoading}
+                title={false}
+                additionalStyles={{
+                  lineHeight: 40,
+                }}
+              >
                 <StyledTable
                   dataSource={infoPanelProps.data?.results}
                   showHeader={false}
