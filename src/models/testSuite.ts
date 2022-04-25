@@ -1,6 +1,7 @@
 import {LabelMap} from '@models/labels';
 import {ObjectRef} from '@models/objectRef';
 import {ParamMap} from '@models/param';
+import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 export type TestSuiteStepTypeEnum = 'executeTest' | 'delay';
 
@@ -36,4 +37,9 @@ export type TestSuite = {
   schedule?: string;
   repeats?: number;
   params?: ParamMap;
+};
+
+export type TestSuiteWithExecution = {
+  dataList: TestSuite;
+  latestExecution?: TestSuiteExecution;
 };

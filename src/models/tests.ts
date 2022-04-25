@@ -12,19 +12,21 @@ export type Test = {
   type: TestExecutor;
 };
 
+export type TestFilters = {
+  textSearch: string;
+  type: string;
+  pageSize: number;
+  page: number;
+  selector: [];
+  createdAt: null;
+  status: Array<string>;
+};
+
 interface TestsState {
   isLoading?: boolean;
   dataList: Test[];
   latestExecution: any;
-  filters: {
-    textSearch: string;
-    type: string;
-    pageSize: number;
-    page: number;
-    selector: [];
-    createdAt: null;
-    status: Array<string>;
-  };
+  filters: TestFilters;
   totals: {};
   filtered: {};
   selectedTest: Test | null;

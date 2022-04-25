@@ -8,7 +8,7 @@ import {ParamMap} from '@models/param';
 import {TestContent} from '@models/test';
 import {TestExecutor} from '@models/testExecutors';
 
-export type ExecutionResultStatusEnum = 'running' | 'passed' | 'failed' | 'queued';
+export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued';
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
 export type ExecutionStepResultStatusEnum = 'success' | 'error';
 
@@ -20,7 +20,7 @@ export type ExecutionStepResult = {
 };
 
 export type ExecutionResult = {
-  status: ExecutionResultStatusEnum;
+  status: ExecutionStatusEnum;
   output?: string;
   outputType?: ExecutionResultOutputTypeEnum;
   errorMessage?: string;

@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 
-import {Execution, ExecutionResultStatusEnum} from '@models/execution';
+import {Execution, ExecutionStatusEnum} from '@models/execution';
 
 import {ExecutionStepIcon} from '@molecules';
 
@@ -21,7 +21,7 @@ const dateTimeWidthWithoutYear = 110;
 
 export type ExecutionTableRowProps = {
   index: number;
-  status: ExecutionResultStatusEnum;
+  status: ExecutionStatusEnum;
   startTime: Execution['startTime'];
   duration: Execution['duration'];
 };
