@@ -17,6 +17,7 @@ import {PollingIntervals} from '@utils/numbers';
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
 
+import {Skeleton} from '@src/components/custom-antd';
 import {TestSuiteWithExecution} from '@src/models/testSuite';
 
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
@@ -208,59 +209,71 @@ const DashboardContent: React.FC<any> = props => {
             entityType={entityType}
           />
         ) : null}
-        <StyledContentTable
-          dataSource={dataSource}
-          columns={[
-            {
-              render: data => {
-                const {latestExecution, dataItem} = data;
-                let status = null;
-                let recentDate = null;
-
-                if (latestExecution) {
-                  status =
-                    entityType !== 'test-suites' ? latestExecution?.executionResult?.status : latestExecution.status;
-                  recentDate = moment(latestExecution.endTime).format('MMM D, HH:mm');
-                } else {
-                  status = 'neverRun';
-                  recentDate = 'The Future';
-                }
-
-                return (
-                  <DashboardTableRow
-                    name={dataItem.name}
-                    labels={dataItem.labels}
-                    latestExecution={latestExecution}
-                    status={status}
-                    recentDate={recentDate}
-                    entityType={entityType}
-                    type={dataItem.type}
-                    isRowActive={selectedRecord?.name === dataItem?.name}
-                  />
-                );
-              },
-            },
-          ]}
+        <Skeleton
           loading={contentProps.isLoading}
-          rowSelection={canSelectRow ? rowSelection : undefined}
-          rowClassName="dashboard-content-table"
-          rowKey={(record: any) => {
-            return `${entityType}${
-              selectedRecordIdFieldName && record.dataItem[selectedRecordIdFieldName]
-                ? `-${record.dataItem[selectedRecordIdFieldName]}`
-                : ''
-            }`;
-          }}
-          pagination={paginationOptions}
-          onRow={(record: any) => ({
-            onClick: () => {
-              if (canSelectRow) {
-                onRowSelect(record.dataItem);
-              }
+          paragraph={{rows: 5, width: '100%'}}
+          additionalStyles={{
+            lineHeight: 80,
+            container: {
+              paddingTop: 16,
             },
-          })}
-          showHeader={false}
-        />
+          }}
+          title={false}
+        >
+          <StyledContentTable
+            dataSource={dataSource}
+            columns={[
+              {
+                render: data => {
+                  const {latestExecution, dataItem} = data;
+                  let status = null;
+                  let recentDate = null;
+
+                  if (latestExecution) {
+                    status =
+                      entityType !== 'test-suites' ? latestExecution?.executionResult?.status : latestExecution.status;
+                    recentDate = moment(latestExecution.endTime).format('MMM D, HH:mm');
+                  } else {
+                    status = 'neverRun';
+                    recentDate = 'The Future';
+                  }
+
+                  return (
+                    <DashboardTableRow
+                      name={dataItem.name}
+                      labels={dataItem.labels}
+                      latestExecution={latestExecution}
+                      status={status}
+                      recentDate={recentDate}
+                      entityType={entityType}
+                      type={dataItem.type}
+                      isRowActive={selectedRecord?.name === dataItem?.name}
+                    />
+                  );
+                },
+              },
+            ]}
+            loading={contentProps.isLoading}
+            rowSelection={canSelectRow ? rowSelection : undefined}
+            rowClassName="dashboard-content-table"
+            rowKey={(record: any) => {
+              return `${entityType}${
+                selectedRecordIdFieldName && record.dataItem[selectedRecordIdFieldName]
+                  ? `-${record.dataItem[selectedRecordIdFieldName]}`
+                  : ''
+              }`;
+            }}
+            pagination={paginationOptions}
+            onRow={(record: any) => ({
+              onClick: () => {
+                if (canSelectRow) {
+                  onRowSelect(record.dataItem);
+                }
+              },
+            })}
+            showHeader={false}
+          />
+        </Skeleton>
       </StyledDashboardContent>
     </StyledDashboardContentContainer>
   );
