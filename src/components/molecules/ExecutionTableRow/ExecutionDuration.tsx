@@ -6,13 +6,13 @@ import {ExecutionTableRowProps} from './ExecutionTableRow';
 import {StyledExecutionDuration} from './ExecutionTableRow.styled';
 
 type ExecutionDurationProps = {
-  duration: ExecutionTableRowProps['duration'];
+  duration?: ExecutionTableRowProps['duration'];
   status: ExecutionTableRowProps['status'];
   isTextVisible: boolean;
 };
 
 const ExecutionDuration: React.FC<ExecutionDurationProps> = props => {
-  const {duration, status, isTextVisible} = props;
+  const {duration = '', status, isTextVisible} = props;
 
   const isRunning = useIsRunning(status);
   const formattedDurationText = isRunning ? 'Still running...' : 'Duration: ';
