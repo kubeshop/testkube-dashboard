@@ -4,6 +4,8 @@ import {useDispatch} from 'react-redux';
 import {Tabs} from 'antd';
 import {ColumnsType, TableRowSelection} from 'antd/lib/table/interface';
 
+import axios from 'axios';
+
 import {DashboardBlueprintType} from '@models/dashboard';
 
 import {useAppSelector} from '@redux/hooks';
@@ -130,18 +132,15 @@ const DashboardInfoPanelContent = () => {
 
   const onRunButtonClick = async () => {
     try {
-      const result = await fetch(
-        `https://demo.testkube.io/results/v1/${entityType}/${selectedRecord?.name}/executions`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            namespace: 'testkube',
-          }),
-        }
-      );
+      const result = await axios(`/${entityType}/${selectedRecord?.name}/executions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+          namespace: 'testkube',
+        }),
+      });
 
       if (result) {
         infoPanelProps?.refetch();

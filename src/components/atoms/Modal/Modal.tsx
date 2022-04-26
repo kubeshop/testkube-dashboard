@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 
 import {Modal} from 'antd';
 
+import axios from 'axios';
 import styled from 'styled-components';
 
 import {config} from '@constants/config';
@@ -34,12 +35,16 @@ const StyledFormContainer = styled.div`
   }
 `;
 
-interface IModal {
+type ModalProps = {
   isModalVisible: (isVisible: boolean) => void;
   visible?: boolean;
-}
+};
 
-const CustomModal = ({isModalVisible, visible}: IModal) => {
+axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || process.env.REACT_APP_API_SERVER_ENDPOINT || '';
+
+const CustomModal: React.FC<ModalProps> = props => {
+  const {isModalVisible, visible} = props;
+
   const defaultApiEndpoint = localStorage.getItem('apiEndpoint') || process.env.REACT_APP_API_SERVER_ENDPOINT || '';
 
   const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
@@ -49,8 +54,10 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
 
   const dispatch = useAppDispatch();
 
-  const handleOpenUrl = (event: React.SyntheticEvent) => {
+  const handleOpenUrl = (event: React.FormEvent) => {
     event.preventDefault();
+
+    axios.defaults.baseURL = apiEndpoint;
 
     localStorage.setItem(config.apiEndpoint, apiEndpoint);
 
@@ -65,10 +72,8 @@ const CustomModal = ({isModalVisible, visible}: IModal) => {
   };
 
   useEffect(() => {
-    if (defaultApiEndpoint) {
-      localStorage.setItem('apiEndpoint', defaultApiEndpoint);
-    }
-  }, [defaultApiEndpoint]);
+    localStorage.setItem('apiEndpoint', defaultApiEndpoint);
+  }, []);
 
   return (
     <>
