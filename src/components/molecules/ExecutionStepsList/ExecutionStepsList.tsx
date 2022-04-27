@@ -76,7 +76,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       );
     }
 
-    return navigate(`/dashboard/tests?textSearch=${executionName}`);
+    return navigate('/dashboard/tests');
   };
 
   const renderedDefinitionsList = useMemo(() => {

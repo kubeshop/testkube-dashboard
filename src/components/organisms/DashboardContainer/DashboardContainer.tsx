@@ -94,8 +94,8 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const shouldInfoPanelBeShown = hasInfoPanel;
 
   const pagination: TablePaginationConfig = {
-    onChange: (page: number, pageSize?: number) => {
-      dispatch(setQueryFilters({...queryFilters, page: page - 1, pageSize}));
+    onChange: (page: number) => {
+      dispatch(setQueryFilters({...queryFilters, page: page - 1}));
     },
 
     onShowSizeChange: (page, pageSize) => {

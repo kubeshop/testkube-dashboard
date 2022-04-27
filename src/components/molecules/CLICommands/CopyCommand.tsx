@@ -2,6 +2,8 @@ import {useState} from 'react';
 
 import {Tooltip, TooltipProps} from 'antd';
 
+import {useGA4React} from 'ga-4-react';
+
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
 import Colors from '@styles/Colors';
@@ -26,7 +28,13 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
 
   const {isCopied, setCopyToClipboardState} = useCopyToClipboard(command);
 
+  const ga4React = useGA4React();
+
   const onCopy = () => {
+    if (ga4React) {
+      ga4React.gtag('event', 'copy_command', {command: label});
+    }
+
     setCopyToClipboardState(true);
   };
 

@@ -4,7 +4,7 @@ import {TestContent} from '@models/test';
 
 import {githubUriRegex} from '@utils/strings';
 
-export const purifyGitUriExtension = (gitUri: string) => {
+export const purifyGitUriExtension = (gitUri: Repository['uri']) => {
   if (githubUriRegex.test(gitUri)) {
     return gitUri.replace('.git', '');
   }

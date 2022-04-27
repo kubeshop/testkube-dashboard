@@ -1,13 +1,13 @@
 import {useContext} from 'react';
 
+import {testExecutorsConfigs} from '@constants/testExecutors';
+
 import {DashboardBlueprintType} from '@models/dashboard';
+import {TestExecutor} from '@models/testExecutors';
 
 import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
 
 import {DashboardInfoPanelSecondLevelContext} from '@contexts';
-
-import {testExecutorsConfigs} from '@src/constants/testExecutors';
-import {TestExecutor} from '@src/models/testExecutors';
 
 import {StyledInfoPanelSection} from '../../organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
 import CopyCommand from './CopyCommand';
