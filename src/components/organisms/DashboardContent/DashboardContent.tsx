@@ -8,17 +8,17 @@ import {useGA4React} from 'ga-4-react';
 import moment from 'moment';
 
 import {TestWithExecution} from '@models/test';
+import {TestSuiteWithExecution} from '@models/testSuite';
 
 import {useAppSelector} from '@redux/hooks';
 import {clearTargetTestId, selectApiEndpoint, selectRedirectTarget} from '@redux/reducers/configSlice';
+
+import {Skeleton} from '@custom-antd';
 
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
-
-import {Skeleton} from '@src/components/custom-antd';
-import {TestSuiteWithExecution} from '@src/models/testSuite';
 
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {
@@ -100,11 +100,8 @@ const DashboardContent: React.FC<any> = props => {
     setQueryFilters,
     pageTitle,
     dataSource,
-    columns,
     dashboardGradient,
-    setSelectedExecution,
     closeSecondLevel,
-    reduxListName,
   } = useContext(DashboardContext);
 
   const dispatch = useDispatch();
@@ -143,13 +140,6 @@ const DashboardContent: React.FC<any> = props => {
     }
 
     if (contentProps.data && contentProps.data.length) {
-      if (contentProps.data[0]) {
-        if (targetTestId && contentProps.data[0].dataList?.name === targetTestId) {
-          onRowSelect(contentProps.data[0]?.dataList);
-          dispatch(clearTargetTestId());
-        }
-      }
-
       dispatch(setData(contentProps.data));
 
       return;
@@ -185,6 +175,25 @@ const DashboardContent: React.FC<any> = props => {
       ga4React.gtag('event', 'get_dashboard_results', {dashboard_entity: pageTitle});
     }
   }, [contentProps.data, ga4React]);
+
+  useEffect(() => {
+    if (contentProps.data && contentProps.data?.length) {
+      if (targetTestId) {
+        // @ts-ignore
+        const targetTest = contentProps.data?.filter((result: any, index: number) => {
+          return result?.test?.name === targetTestId;
+        });
+
+        const targetTestArrayIndex = contentProps.data?.indexOf(targetTest[0]) + 1;
+
+        if (targetTest.length) {
+          paginationOptions.onChange(Math.ceil(targetTestArrayIndex / 10));
+          onRowSelect(targetTest[0].test);
+          dispatch(clearTargetTestId());
+        }
+      }
+    }
+  }, [contentProps?.data, targetTestId]);
 
   return (
     <StyledDashboardContentContainer

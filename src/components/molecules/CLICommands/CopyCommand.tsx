@@ -1,6 +1,8 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {Tooltip, TooltipProps} from 'antd';
+
+import {useGA4React} from 'ga-4-react';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
@@ -26,6 +28,8 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
 
   const {isCopied, setCopyToClipboardState} = useCopyToClipboard(command);
 
+  const ga4React = useGA4React();
+
   const onCopy = () => {
     setCopyToClipboardState(true);
   };
@@ -43,6 +47,12 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
   const onMouseOut = () => {
     setHoverState(true);
   };
+
+  useEffect(() => {
+    if (ga4React) {
+      ga4React.gtag('event', 'copy_command', {command: label});
+    }
+  }, [ga4React]);
 
   return (
     <>
