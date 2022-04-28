@@ -15,7 +15,9 @@ const EmptyDashboardInfoPanel: React.FC<EmptyDashboardInfoPanelProps> = props =>
 
   return (
     <StyledEmptyDashboardInfoPanel>
-      <StyledEmptyDashboardInfoPanelText>{emptyDrawerText}</StyledEmptyDashboardInfoPanelText>
+      <StyledEmptyDashboardInfoPanelText data-cy="empty-info-panel-text">
+        {emptyDrawerText}
+      </StyledEmptyDashboardInfoPanelText>
     </StyledEmptyDashboardInfoPanel>
   );
 };

@@ -70,7 +70,7 @@ const SideBar = () => {
     const {text, path, gradient} = route;
 
     return (
-      <StyledNavLink gradient={gradient} to={path}>
+      <StyledNavLink gradient={gradient} to={path} data-cy="navigation-tab">
         {text}
       </StyledNavLink>
     );
@@ -89,7 +89,7 @@ const SideBar = () => {
   });
 
   return (
-    <StyledSider width={80} collapsed>
+    <StyledSider width={80} collapsed data-cy="navigation-sider">
       {isModalVisible && <Modal visible isModalVisible={onToggleModal} />}
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
