@@ -81,7 +81,7 @@ const SideBar = () => {
 
     return (
       <Tooltip title={tooltipHint} placement="right" color={Colors.purple}>
-        <StyledOtherItem onClick={onClick}>
+        <StyledOtherItem onClick={onClick} data-cy={tooltipHint}>
           <Icon style={ICON_STYLE} />
         </StyledOtherItem>
       </Tooltip>

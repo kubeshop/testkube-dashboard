@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { getBaseUrl } from '../../support/utils';
+import {getBaseUrl} from '../../support/utils';
 
 const url = getBaseUrl();
 
@@ -11,7 +11,7 @@ describe('Test Suites Layout', () => {
   });
 
   it('location should contain test-suites', () => {
-    cy.url().should('equal', `${url}/dashboard/test-suites`);
+    cy.url().should('include', 'test-suites');
   });
 
   it('contains test-suites header', () => {
@@ -21,7 +21,7 @@ describe('Test Suites Layout', () => {
   it('should be selected test-suites navigation tab', () => {
     cy.get('[data-cy=navigation-tab]').contains('Test Suites').should('have.class', 'active');
   });
-  
+
   it('contains test-suites in empty info panel', () => {
     expect(cy.get('[data-cy=empty-info-panel-text]').contains('test suite'));
   });

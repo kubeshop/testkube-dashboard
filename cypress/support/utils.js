@@ -6,4 +6,5 @@ export function getBaseUrl() {
   if (env === 'dev') {
     return'http://localhost:3000';
   }
+  return '';
 }

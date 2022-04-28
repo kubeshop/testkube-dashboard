@@ -84,7 +84,7 @@ const CustomModal: React.FC<ModalProps> = props => {
         onCancel={handleCancel}
         bodyStyle={modalBodyStyles}
       >
-        <StyledSearchUrlForm onSubmit={handleOpenUrl}>
+        <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
           <Typography variant="secondary" leftAlign>
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
             TestKube installer -{' '}
