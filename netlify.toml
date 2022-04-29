@@ -11,7 +11,3 @@
 # run Cypress E2E tests
 [[plugins]]
 package = "netlify-plugin-cypress"
-  [plugins.inputs.postBuild]
-    # run tests after the deploy
-    enable = true
-    record = true
