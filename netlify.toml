@@ -11,9 +11,6 @@
 # run Cypress E2E tests
 [[plugins]]
 package = "netlify-plugin-cypress"
-  [plugins.inputs.preBuild]
-    # skip the default tests before the deploy
-    enable = false
   [plugins.inputs.postBuild]
     # run tests after the deploy
     enable = true
