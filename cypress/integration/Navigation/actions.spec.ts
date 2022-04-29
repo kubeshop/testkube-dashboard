@@ -15,7 +15,7 @@ describe('Navigation Actions', () => {
 
   it('redirects to tests', () => {
     cy.get('@navigation').contains('Tests').click();
-    cy.url().should('include', 'tests');
+    cy.url().should('include', 'tes3');
   });
 
   it('opens modal', () => {
