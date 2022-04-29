@@ -15,4 +15,3 @@ package = "netlify-plugin-cypress"
     # run tests after the deploy
     enable = true
     record = true
-    group = 'built'
