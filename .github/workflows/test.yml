@@ -43,7 +43,3 @@ jobs:
       - name: Testing dashboard
         if: always()
         run: npm run test
-
-      - name: E2E tests
-        if: always()
-        run: npm run cy:test:demo

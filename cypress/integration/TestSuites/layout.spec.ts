@@ -1,11 +1,8 @@
 /// <reference types="cypress" />
-import {getBaseUrl} from '../../support/utils';
-
-const url = getBaseUrl();
 
 describe('Test Suites Layout', () => {
   before(() => {
-    cy.visit(url).then(() => {
+    cy.visit('/').then(() => {
       window.localStorage.setItem('apiEndpoint', Cypress.env('endpoint'));
     });
   });
@@ -26,3 +23,5 @@ describe('Test Suites Layout', () => {
     expect(cy.get('[data-cy=empty-info-panel-text]').contains('test suite'));
   });
 });
+
+export {};

@@ -1,11 +1,8 @@
 /// <reference types="cypress" />
-import {getBaseUrl} from '../../support/utils';
-
-const url = getBaseUrl();
 
 describe('Navigation Actions', () => {
   beforeEach(() => {
-    cy.visit(url).then(() => {
+    cy.visit('/').then(() => {
       window.localStorage.setItem('apiEndpoint', Cypress.env('endpoint'));
     });
     cy.get('[data-cy=navigation-sider]').as('navigation').should('be.visible');
@@ -26,3 +23,5 @@ describe('Navigation Actions', () => {
     cy.get('[data-cy=modal-api-endpoint]').should('be.visible');
   });
 });
+
+export {};

@@ -1,11 +1,8 @@
 /// <reference types="cypress" />
-import { getBaseUrl } from '../../support/utils';
-
-const url = getBaseUrl();
 
 describe('Navigation Layout', () => {
   before(() => {
-    cy.visit(url).then(() => {
+    cy.visit('/').then(() => {
       window.localStorage.setItem('apiEndpoint', Cypress.env('endpoint'));
     });
   });
@@ -29,3 +26,5 @@ describe('Navigation Layout', () => {
     cy.get('@navigation').should('have.css', 'width', '80px').and('have.css', 'height', '1650px');
   });
 });
+
+export {};
