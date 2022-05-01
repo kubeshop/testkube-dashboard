@@ -89,7 +89,7 @@ const CustomModal: React.FC<ModalProps> = props => {
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
             TestKube installer -{' '}
             <a
-              href="https://kubeshop.github.io/testkube/dashboard/#dashboard-results-endpoint"
+              href="https://kubeshop.github.io/testkube/UI/#ui-results-endpoint"
               target="_blank"
               rel="noopener noreferrer"
             >
