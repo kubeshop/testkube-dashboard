@@ -18,10 +18,8 @@ const TestExecutionDetailsLogOutput = () => {
   const logOutput = isRunning ? null : executionResult?.output || executionResult?.errorMessage;
 
   return (
-    <StyledInfoPanelSection isBorder={false}>
-      <div style={{height: '500px'}}>
-        <LogOutput logOutput={logOutput} executionId={name} />
-      </div>
+    <StyledInfoPanelSection isBorder={false} containerHeight="500">
+      <LogOutput logOutput={logOutput} executionId={name} />
     </StyledInfoPanelSection>
   );
 };

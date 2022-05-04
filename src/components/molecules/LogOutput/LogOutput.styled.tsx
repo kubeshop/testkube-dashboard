@@ -1,14 +1,7 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
-
-const invisibleScroll = `
-  &::-webkit-scrollbar {
-    display: none;
-  } /* Chrome, Safari and Opera */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-`;
+import {invisibleScroll} from '@styles/globalStyles';
 
 export const StyledLogOutputContainer = styled.div<{$isFullScreen: boolean}>`
   ${({$isFullScreen}) =>

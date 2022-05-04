@@ -42,10 +42,11 @@ export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: bo
   }
 `;
 
-export const StyledInfoPanelSection = styled.div<{isBorder?: boolean}>`
+export const StyledInfoPanelSection = styled.div<{isBorder?: boolean; containerHeight?: string}>`
   display: flex;
   flex-direction: column;
   width: 100%;
+  ${({containerHeight}) => (containerHeight ? `height: ${containerHeight}px` : '')};
 
   padding: 20px 40px;
 
