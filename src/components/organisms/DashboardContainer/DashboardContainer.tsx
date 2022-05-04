@@ -152,7 +152,9 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   };
 
   useEffect(() => {
-    onCloseFullScreenOutput();
+    if (isFullScreenLogOutput) {
+      onCloseFullScreenOutput();
+    }
   }, [rest.entityType]);
 
   return (

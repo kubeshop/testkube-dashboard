@@ -54,7 +54,11 @@ const App = () => {
     setCookiesVisibility(false);
   };
 
-  const onDeclineCookies = () => {
+  const onDeclineCookies = (args?: {skipGAEvent?: boolean}) => {
+    if (!args?.skipGAEvent && ga4React) {
+      ga4React.gtag('event', 'disable_analytics', {disable_analytics: true});
+    }
+
     // @ts-ignore
     window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = true;
     localStorage.setItem('isGADisabled', '1');
@@ -65,9 +69,15 @@ const App = () => {
     const isGADisabled = Boolean(Number(localStorage.getItem('isGADisabled')));
 
     if (isGADisabled) {
-      onDeclineCookies();
+      onDeclineCookies({skipGAEvent: true});
     }
   }, []);
+
+  useEffect(() => {
+    if (ga4React) {
+      ga4React.gtag('event', 'user_info', {api_host: window.location.host, os: window.navigator.userAgent});
+    }
+  }, [ga4React]);
 
   return (
     <Layout>
