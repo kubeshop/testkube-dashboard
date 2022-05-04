@@ -12,7 +12,6 @@ import {
   StyledGeneralInfoLabel,
   StyledGeneralInfoValue,
 } from './ExecutionDetails.styled';
-import TestExecutionDetailsHeader from './TestExecutionDetails/TestExecutionDetailsHeader';
 import TestSuiteExecutionDetailsHeader from './TestSuiteExecutionDetails/TestSuiteExecutionDetailsHeader';
 
 const ExecutionDetailsGeneralInfo: React.FC = () => {
@@ -29,7 +28,6 @@ const ExecutionDetailsGeneralInfo: React.FC = () => {
     <StyledExecutionDetailsGeneralInfoContainer>
       {entityType === 'test-suites' ? <TestSuiteExecutionDetailsHeader /> : null}
       <StyledGeneralInfoGrid>
-        {entityType === 'tests' ? <TestExecutionDetailsHeader /> : null}
         <StyledGeneralInfoLabel>Start</StyledGeneralInfoLabel>
         <StyledGeneralInfoValue>{formattedStartTime}</StyledGeneralInfoValue>
         <StyledGeneralInfoLabel>End</StyledGeneralInfoLabel>

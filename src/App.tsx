@@ -27,7 +27,7 @@ const App = () => {
 
   const ga4React = useGA4React();
 
-  const {data, refetch} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.long});
+  const {data: labelsMap, refetch} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.long});
 
   const {pathname} = useLocation();
 
@@ -36,8 +36,10 @@ const App = () => {
   }, [apiEndpoint]);
 
   useEffect(() => {
-    dispatch(setLabels(data));
-  }, [data]);
+    if (labelsMap) {
+      dispatch(setLabels(labelsMap));
+    }
+  }, [labelsMap]);
 
   useEffect(() => {
     if (ga4React) {

@@ -103,7 +103,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
 
   const modificatorArgsMap: {[key in CLIScriptModificator]: any} = {
     canHaveArtifacts: testExecutorConfig.canHaveArtifacts,
-    isFinished: data?.executionResults?.status,
+    isFinished: data?.executionResult?.status,
   };
 
   const renderedCLICommands = scriptsByEntityType[CLIEntityType].map(cliCommand => {

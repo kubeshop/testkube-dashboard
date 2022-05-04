@@ -400,3 +400,11 @@ export const device = {
   desktop: `(min-width: ${size.desktop})`,
   desktopL: `(min-width: ${size.desktop})`,
 };
+
+export const invisibleScroll = `
+&::-webkit-scrollbar {
+  display: none;
+} /* Chrome, Safari and Opera */
+-ms-overflow-style: none; /* IE and Edge */
+scrollbar-width: none; /* Firefox */
+`;

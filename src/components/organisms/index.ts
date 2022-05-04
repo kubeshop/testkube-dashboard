@@ -1,5 +1,4 @@
 export {default as SideBar} from './SideBar';
-export {default as TestHeader} from './TestHeader/TestHeader';
 export {default as DashboardBlueprintRenderer} from './DashboardBlueprintRenderer';
 export {default as DashboardContainer} from './DashboardContainer';
 export {default as DashboardInfoPanel} from './DashboardInfoPanel';

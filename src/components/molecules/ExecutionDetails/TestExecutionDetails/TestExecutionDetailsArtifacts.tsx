@@ -6,7 +6,7 @@ import {useGetTestExecutionArtifactsQuery} from '@services/tests';
 
 import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 
-import Artifacts from '../../ExecutionResultsOutputs/Artifacts/Artifacts';
+import ArtifactsList from '../../ArtifactsList/ArtifactsList';
 
 const TestExecutionDetailsArtifacts = () => {
   const {data} = useContext(DashboardInfoPanelSecondLevelContext);
@@ -15,7 +15,7 @@ const TestExecutionDetailsArtifacts = () => {
 
   return (
     <StyledInfoPanelSection>
-      {artifactsData ? <Artifacts artifacts={artifactsData} testId={data.id} /> : null}
+      {artifactsData ? <ArtifactsList artifacts={artifactsData} testExecutionId={data.id} /> : null}
     </StyledInfoPanelSection>
   );
 };

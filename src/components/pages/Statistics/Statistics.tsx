@@ -5,11 +5,8 @@ import {selectTotals} from '@redux/reducers/executionsSlice';
 
 import {PieChart} from '@atoms';
 
-import {TestHeader} from '@organisms';
-
 import {
   StyledStatisticsContainer,
-  StyledStatisticsHeader, // StyledTestStatisticsStatsContainer,
   StyledTestStatisticsCircularCharts,
   StyledTotalTestCurrentStatusChart,
 } from './Statistics.styled';
@@ -31,9 +28,6 @@ const Statistics = () => {
 
   return (
     <StyledStatisticsContainer>
-      <StyledStatisticsHeader>
-        <TestHeader testHeaderLabel="OverView" showTestFilters={false} />
-      </StyledStatisticsHeader>
       {/* <StyledTestStatisticsStatsContainer>
         <TestStatisticsStats />
       </StyledTestStatisticsStatsContainer> */}

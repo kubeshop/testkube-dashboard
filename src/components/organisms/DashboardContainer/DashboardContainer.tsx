@@ -1,12 +1,15 @@
-import {createContext, useState} from 'react';
+import {createContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {CSSTransition} from 'react-transition-group';
 
 import {TablePaginationConfig} from 'antd';
 
 import {DashboardBlueprint} from '@models/dashboard';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint} from '@redux/reducers/configSlice';
+import {closeFullScreenLogOutput, selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
+
+import {LogOutput} from '@molecules';
 
 import {DashboardContent, DashboardInfoPanel} from '@organisms';
 
@@ -75,6 +78,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const queryFilters: any = useAppSelector(selectQueryFilters);
   const allFilters: any = useAppSelector(selectAllFilters);
   const apiEndpoint = useAppSelector(selectApiEndpoint);
+  const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   useUpdateURLSearchParams(queryFilters);
 
@@ -121,6 +125,10 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     setInfoPanelVisibility(false);
   };
 
+  const onCloseFullScreenOutput = () => {
+    dispatch(closeFullScreenLogOutput());
+  };
+
   const dashboardContextValues = {
     ...rest,
     dataSource,
@@ -140,13 +148,22 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     setSelectedExecution,
     closeSecondLevel,
     closeDrawer,
+    onCloseFullScreenOutput,
   };
+
+  useEffect(() => {
+    onCloseFullScreenOutput();
+  }, [rest.entityType]);
 
   return (
     <DashboardContext.Provider value={dashboardContextValues}>
       <StyledDashboardContainerWrapper>
         <DashboardContent onRowSelect={onRowSelect} paginationOptions={pagination} />
         <DashboardInfoPanel />
+        {/* That is for Fullscreen Log Output */}
+        <CSSTransition in={isFullScreenLogOutput} timeout={350} classNames="full-screen-log-output" unmountOnExit>
+          <LogOutput logOutput={logOutput} isFullScreen />
+        </CSSTransition>
       </StyledDashboardContainerWrapper>
     </DashboardContext.Provider>
   );
