@@ -1,19 +1,25 @@
 import {useContext} from 'react';
 
+import {LogOutput} from '@molecules';
+
 import {StyledInfoPanelSection} from '@organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
 
-import {DashboardInfoPanelSecondLevelContext} from '@contexts';
+import useIsRunning from '@hooks/useIsRunning';
 
-import Logs from '../../Logs/Logs';
+import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 
 const TestExecutionDetailsLogOutput = () => {
   const {data} = useContext(DashboardInfoPanelSecondLevelContext);
 
-  const {executionResult, name} = data;
+  const {executionResult, name, status} = data;
+
+  const isRunning = useIsRunning(status);
+
+  const logOutput = isRunning ? null : executionResult?.output || executionResult?.errorMessage;
 
   return (
-    <StyledInfoPanelSection isBorder={false}>
-      <Logs executionId={name} output={executionResult?.output} />
+    <StyledInfoPanelSection isBorder={false} containerHeight="500">
+      <LogOutput logOutput={logOutput} executionId={name} />
     </StyledInfoPanelSection>
   );
 };

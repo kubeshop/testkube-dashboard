@@ -6,7 +6,7 @@ import {StyledCookiesButton, StyledCookiesContainer, StyledCookiesDisclaimer} fr
 
 type CookiesBannerProps = {
   onAcceptCookies: () => void;
-  onDeclineCookies: () => void;
+  onDeclineCookies: (args?: {skipGAEvent?: boolean}) => void;
 };
 
 const CookiesBanner: React.FC<CookiesBannerProps> = props => {
@@ -22,7 +22,7 @@ const CookiesBanner: React.FC<CookiesBannerProps> = props => {
         <StyledCookiesButton size="large" onClick={onAcceptCookies}>
           Accept Cookies
         </StyledCookiesButton>
-        <Button size="large" ghost type="text" style={{color: Colors.whitePure}} onClick={onDeclineCookies}>
+        <Button size="large" type="text" style={{color: Colors.whitePure}} onClick={() => onDeclineCookies()}>
           Decline
         </Button>
       </Space>

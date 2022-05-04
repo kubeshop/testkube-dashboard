@@ -47,17 +47,12 @@ type DataLayerProps = {
 const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
   const {onDataChange, queryFilters} = props;
 
-  const {
-    data = [],
-    isLoading,
-    isFetching,
-    refetch,
-  } = useGetTestSuitesQuery(queryFilters || null, {
+  const {data, isLoading, isFetching, refetch} = useGetTestSuitesQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch});
+    onDataChange({data: data || [], isLoading, isFetching, refetch});
   }, [data, isLoading, isFetching]);
 
   return <></>;
@@ -66,17 +61,12 @@ const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
 const TestsDataLayer: React.FC<DataLayerProps> = props => {
   const {onDataChange, queryFilters} = props;
 
-  const {
-    data = [],
-    isLoading,
-    isFetching,
-    refetch,
-  } = useGetTestsQuery(queryFilters || null, {
+  const {data, isLoading, isFetching, refetch} = useGetTestsQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch});
+    onDataChange({data: data || [], isLoading, isFetching, refetch});
   }, [data, isLoading, isFetching]);
 
   return <></>;
@@ -135,7 +125,7 @@ const DashboardContent: React.FC<any> = props => {
   };
 
   useEffect(() => {
-    if (!setData) {
+    if (!setData || contentProps.isLoading || contentProps.isFetching) {
       return;
     }
 
@@ -150,11 +140,11 @@ const DashboardContent: React.FC<any> = props => {
       dispatch(setData([]));
 
       // if no results - deselect the row
-      if (canSelectRow) {
+      if (canSelectRow && selectedRecord) {
         dispatch(setSelectedRecord({selectedRecord: null}));
       }
     }
-  }, [contentProps.data]);
+  }, [contentProps.data, contentProps.isLoading, contentProps.isFetching]);
 
   useEffect(() => {
     contentProps?.refetch();
@@ -167,7 +157,9 @@ const DashboardContent: React.FC<any> = props => {
   }, [selectedRecord]);
 
   useEffect(() => {
-    dispatch(setSelectedRecord({selectedRecord: null}));
+    if (selectedRecord) {
+      dispatch(setSelectedRecord({selectedRecord: null}));
+    }
   }, [entityType]);
 
   useEffect(() => {

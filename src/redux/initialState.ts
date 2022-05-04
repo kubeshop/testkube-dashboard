@@ -109,6 +109,10 @@ const initialConfigState: ConfigState = {
     targetTestExecutionId: null,
     targetTestId: null,
   },
+  fullScreenLogOutput: {
+    isFullScreenLogOutput: false,
+    logOutput: '',
+  },
 };
 
 const initialReduxState = {

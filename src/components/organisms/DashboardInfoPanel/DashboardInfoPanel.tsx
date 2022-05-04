@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {CSSProperties, useContext, useEffect} from 'react';
 
 import {CloseOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons';

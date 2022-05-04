@@ -1,9 +1,4 @@
 export {default as ResultDatePicker} from './ResultsDatePicker/ResultDatePicker';
-export {default as TestDescription} from '../organisms/TestDescription/TestDescription';
-export {default as TestDetailsLineChart} from '../atoms/Charts/TestDetailsLineChart/TestDetailsLineChart';
-export {default as TestDetailsDrawerHeader} from './TestDetailsDrawerHeader/TestDetailsDrawerHeader';
-export {default as ExecutionResultsOutputs} from './ExecutionResultsOutputs/ExecutionResultsOutputs';
-export {default as TestDetailsDrawerPerformanceSection} from './TestDetailsDrawerPerformanceSection/TestDetailsDrawerPerformanceSection';
 export {default as InfoPanelHeader} from './InfoPanelHeader';
 export {default as TestRunner} from './TestRunner';
 export {default as LabelsFilter} from './LabelsFilter';
@@ -22,3 +17,4 @@ export {default as ExecutionStepsList} from './ExecutionStepsList';
 export {default as ExecutionStepIcon} from './ExecutionStepIcon';
 export {default as ExecutionName} from './ExecutionName';
 export {default as CookiesBanner} from './CookiesBanner';
+export {default as LogOutput} from './LogOutput';

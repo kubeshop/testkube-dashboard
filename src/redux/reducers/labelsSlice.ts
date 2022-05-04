@@ -1,12 +1,12 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {Label, LabelsState} from '@models/labels';
+import {LabelMap, LabelsState} from '@models/labels';
 
 import initialState from '@redux/initialState';
 
 import {RootState} from '../store';
 
-type SetLabelsPayload = Label;
+type SetLabelsPayload = LabelMap;
 
 export const labelsSlice = createSlice({
   name: 'labelsSlice',
