@@ -12,7 +12,7 @@ const AppRoutes: React.FC = () => {
   return (
     <Routes>
       {routesConfig.map(({path, element: Element, props}: RouteConfigType) => (
-        <Route path={path} element={<Element {...props} />} />
+        <Route path={path} element={<Element {...props} />} key={path} />
       ))}
     </Routes>
   );

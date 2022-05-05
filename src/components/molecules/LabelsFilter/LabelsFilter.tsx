@@ -74,7 +74,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   };
 
   const renderKeyValueInputs = labelsMapping.map((item, index) => (
-    <StyledKeyValueRow>
+    <StyledKeyValueRow key={item.key}>
       <Input width="220px" onChange={event => onKeyChange(event.target.value, index)} value={item.key} />
       <Input width="220px" onChange={event => onValueChange(event.target.value, index)} value={item.value} />
       {index > 0 ? <StyledDeleteRowButton onClick={() => onDeleteRow(index)} /> : <EmptyButton />}
