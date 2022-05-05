@@ -273,6 +273,7 @@ const DashboardContent: React.FC<any> = props => {
               },
             })}
             showHeader={false}
+            data-cy="content-table"
           />
         </Skeleton>
       </StyledDashboardContent>
