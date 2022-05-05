@@ -7,6 +7,8 @@ import {
   selectFullScreenLogOutput,
 } from '@redux/reducers/configSlice';
 
+import {Tooltip} from '@custom-antd';
+
 import {LogActionProps} from '../LogOutput';
 import {StyledActionIconContainer} from '../LogOutput.styled';
 
@@ -25,9 +27,13 @@ const FullScreenAction: React.FC<LogActionProps> = props => {
     }
   };
 
+  const tooltipTitle = isFullScreenLogOutput ? 'Close full screen' : 'Enter full screen';
+
   return (
     <StyledActionIconContainer onClick={onIconClick}>
-      {isFullScreenLogOutput ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+      <Tooltip title={tooltipTitle}>
+        {isFullScreenLogOutput ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+      </Tooltip>
     </StyledActionIconContainer>
   );
 };

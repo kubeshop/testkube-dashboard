@@ -1,8 +1,6 @@
-import {Tooltip, TooltipProps} from 'antd';
+import {Tooltip} from '@custom-antd';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
-
-import Colors from '@styles/Colors';
 
 import {StyledCopyCommandIcon} from '../../CLICommands/CopyCommand.styled';
 import {LogActionProps} from '../LogOutput';
@@ -17,15 +15,11 @@ const CopyAction: React.FC<LogActionProps> = props => {
     setCopyToClipboardState(true);
   };
 
-  const tooltipProps: TooltipProps = {
-    title: isCopied ? 'Copied' : 'Copy',
-    placement: 'top',
-    color: Colors.purple,
-  };
+  const tooltipTitle = isCopied ? 'Copied' : 'Copy';
 
   return (
     <StyledActionIconContainer onClick={onCopy}>
-      <Tooltip {...tooltipProps}>
+      <Tooltip title={tooltipTitle}>
         <StyledCopyCommandIcon />
       </Tooltip>
     </StyledActionIconContainer>

@@ -1,12 +1,10 @@
 import {useState} from 'react';
 
-import {Tooltip, TooltipProps} from 'antd';
-
 import {useGA4React} from 'ga-4-react';
 
-import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
+import {Tooltip} from '@custom-antd';
 
-import Colors from '@styles/Colors';
+import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
 import {
   StyledCopyCommandCode,
@@ -38,12 +36,6 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
     setCopyToClipboardState(true);
   };
 
-  const tooltipProps: TooltipProps = {
-    title: isCopied ? 'Copied' : 'Copy',
-    placement: 'top',
-    color: Colors.purple,
-  };
-
   const onMouseOver = () => {
     setHoverState(true);
   };
@@ -51,6 +43,8 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
   const onMouseOut = () => {
     setHoverState(true);
   };
+
+  const tooltipTitle = isCopied ? 'Copied' : 'Copy';
 
   return (
     <>
@@ -64,7 +58,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
         <StyledCopyCommandPre>
           <StyledCopyCommandCode>{command}</StyledCopyCommandCode>
         </StyledCopyCommandPre>
-        <Tooltip {...tooltipProps}>
+        <Tooltip title={tooltipTitle}>
           <StyledCopyCommandIcon onClick={onCopy} />
         </Tooltip>
       </StyledCopyCommandContainer>

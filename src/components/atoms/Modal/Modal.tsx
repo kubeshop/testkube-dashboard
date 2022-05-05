@@ -72,6 +72,7 @@ const CustomModal: React.FC<ModalProps> = props => {
   };
 
   useEffect(() => {
+    dispatch(setApiEndpoint(defaultApiEndpoint));
     localStorage.setItem('apiEndpoint', defaultApiEndpoint);
   }, []);
 

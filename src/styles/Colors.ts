@@ -13,6 +13,7 @@ enum Colors {
   grey3 = '#262626', // gray, gray 3
   greySecondary = '#ADADAD',
   greyCode = '#DADADA',
+  greyBG = '#434343',
 
   // Notifications
   greenOkay = '#09B89D',

@@ -2,9 +2,9 @@ import {useCallback, useEffect, useState} from 'react';
 import {useLocation} from 'react-router';
 import {NavLink} from 'react-router-dom';
 
-import {Tooltip} from 'antd';
-
 import {Modal} from '@atoms';
+
+import {Tooltip} from '@custom-antd';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
@@ -16,7 +16,6 @@ import {ReactComponent as DocumentationIcon} from '@assets/documentation-icon.sv
 import {ReactComponent as GitHubIcon} from '@assets/github-icon.svg';
 import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 
-import Colors from '@styles/Colors';
 import {testSuitesMenuButtonGradient, testsMenuButtonGradient} from '@styles/gradients';
 
 import {
@@ -70,7 +69,7 @@ const SideBar = () => {
     const {text, path, gradient} = route;
 
     return (
-      <StyledNavLink gradient={gradient} to={path} data-cy="navigation-tab">
+      <StyledNavLink key={path} gradient={gradient} to={path} data-cy="navigation-tab">
         {text}
       </StyledNavLink>
     );
@@ -80,7 +79,7 @@ const SideBar = () => {
     const {icon: Icon, onClick, tooltipHint} = otherMenuItem;
 
     return (
-      <Tooltip title={tooltipHint} placement="right" color={Colors.purple}>
+      <Tooltip key={tooltipHint} title={tooltipHint} placement="right">
         <StyledOtherItem onClick={onClick} data-cy={tooltipHint}>
           <Icon style={ICON_STYLE} />
         </StyledOtherItem>
@@ -90,7 +89,7 @@ const SideBar = () => {
 
   return (
     <StyledSider width={80} collapsed data-cy="navigation-sider">
-      {isModalVisible && <Modal visible isModalVisible={onToggleModal} />}
+      <Modal visible={isModalVisible} isModalVisible={onToggleModal} />
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <StyledLogo>
