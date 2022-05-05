@@ -21,7 +21,7 @@ const TestExecutionDetailsTabs = () => {
             <TestExecutionDetailsLogOutput />
           </StyledAntTabPane>
         ) : null}
-        {data.testType === 'cypress/project' ? (
+        {data.testType === 'cypress/project' || data.testType === 'soapui/xml' ? (
           <StyledAntTabPane tab="Artifacts" key="ArtifactsPane">
             <TestExecutionDetailsArtifacts />
           </StyledAntTabPane>
