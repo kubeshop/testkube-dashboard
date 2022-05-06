@@ -74,9 +74,19 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   };
 
   const renderKeyValueInputs = labelsMapping.map((item, index) => (
-    <StyledKeyValueRow key={item.key}>
-      <Input width="220px" onChange={event => onKeyChange(event.target.value, index)} value={item.key} />
-      <Input width="220px" onChange={event => onValueChange(event.target.value, index)} value={item.value} />
+    <StyledKeyValueRow>
+      <Input
+        width="220px"
+        onChange={event => onKeyChange(event.target.value, index)}
+        value={item.key}
+        data-cy={`key-input-${index}`}
+      />
+      <Input
+        width="220px"
+        onChange={event => onValueChange(event.target.value, index)}
+        value={item.value}
+        data-cy={`value-input-${index}`}
+      />
       {index > 0 ? <StyledDeleteRowButton onClick={() => onDeleteRow(index)} /> : <EmptyButton />}
     </StyledKeyValueRow>
   ));
@@ -103,7 +113,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   };
 
   const menu = (
-    <StyledFilterMenu onClick={onMenuClick}>
+    <StyledFilterMenu onClick={onMenuClick} data-cy="labels-filter-dropdown">
       <StyledLabelsMenuContainer>
         <StyledTitle>Filter tests by Key Value pairs.</StyledTitle>
         <StyledKeyValueRow>
@@ -128,7 +138,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         onVisibleChange={onVisibleChange}
         visible={isVisible}
       >
-        <StyledFilterLabel onClick={e => e.preventDefault()}>
+        <StyledFilterLabel onClick={e => e.preventDefault()} data-cy="labels-filter-button">
           {isFilterApplied ? <AppliedFiltersNotification /> : null}
           Labels <FilterFilled />
         </StyledFilterLabel>

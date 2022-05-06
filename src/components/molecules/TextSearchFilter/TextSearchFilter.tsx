@@ -40,7 +40,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
 
   return (
     <StyledSearchInputContainer>
-      <StyledSearchInput placeholder="Search" onChange={onChange} value={inputValue} />
+      <StyledSearchInput placeholder="Search" onChange={onChange} value={inputValue} data-cy="search-filter" />
     </StyledSearchInputContainer>
   );
 };

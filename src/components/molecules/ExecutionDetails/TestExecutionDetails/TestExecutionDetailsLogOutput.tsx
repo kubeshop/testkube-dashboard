@@ -15,7 +15,7 @@ const TestExecutionDetailsLogOutput = () => {
 
   const isRunning = useIsRunning(status);
 
-  const logOutput = isRunning ? null : executionResult?.output || executionResult?.errorMessage;
+  const logOutput = isRunning ? null : executionResult?.output || executionResult?.errorMessage || 'No log output';
 
   return (
     <StyledInfoPanelSection isBorder={false} containerHeight="500">

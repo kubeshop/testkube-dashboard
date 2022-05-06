@@ -1,0 +1,1613 @@
+[
+  {
+    "testSuite": {
+      "name": "kubeshop-sites-test",
+      "namespace": "testkube",
+      "description": "Tests fast first",
+      "steps": [
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "testkube-todo-api"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "testkube-todo-api"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "testkube-todo-api"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "testkube-dashboard"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 5000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "kubeshop-site"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "testkube-dashboard"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "kubeshop-site"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 3000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "testkube-dashboard"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "kubeshop-site"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 5000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "namespace": "testkube",
+            "name": "testkube-todo-frontend"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 5000
+          }
+        }
+      ],
+      "labels": {
+        "app": "sites"
+      }
+    },
+    "latestExecution": {
+      "id": "626f47296000346c798b5165",
+      "name": "kubeshop-sites-test.properly-touched-mackerel",
+      "testSuite": {
+        "namespace": "testkube",
+        "name": "kubeshop-sites-test"
+      },
+      "status": "failed",
+      "startTime": "2022-05-02T02:51:21.408Z",
+      "endTime": "2022-05-02T02:53:45.303Z",
+      "duration": "2m23.895269317s",
+      "stepResults": [
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "testkube-todo-api"
+            }
+          },
+          "execution": {
+            "id": "626f47296000346c798b5167",
+            "testName": "testkube-todo-api",
+            "testNamespace": "testkube",
+            "testType": "postman/collection",
+            "name": "kubeshop-sites-test-testkube-todo-api-qfsby",
+            "content": {
+              "type": "string",
+              "data": "data-step",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "Create TODO",
+                  "duration": "8ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 201 CREATED",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Check if todo item craeted successfully",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Create TODO",
+                  "duration": "8ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 201 CREATED",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Check if todo item craeted successfully",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Complete TODO item",
+                  "duration": "7ms",
+                  "status": "passed"
+                },
+                {
+                  "name": "Delete TODO item",
+                  "duration": "6ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 204 no content",
+                      "status": "passed"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "testkube-todo-api"
+            }
+          },
+          "execution": {
+            "id": "626f472d6000346c798b5169",
+            "testName": "testkube-todo-api",
+            "testNamespace": "testkube",
+            "testType": "postman/collection",
+            "name": "kubeshop-sites-test-testkube-todo-api-tCUuL",
+            "content": {
+              "type": "string",
+              "data": "info"
+            },
+            "startTime": "2022-05-02T02:51:25.441Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "newmanTODO",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "Create TODO",
+                  "duration": "7ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 201 CREATED",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Check if todo item craeted successfully",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Create TODO",
+                  "duration": "7ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 201 CREATED",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Check if todo item craeted successfully",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Complete TODO item",
+                  "duration": "10ms",
+                  "status": "passed"
+                },
+                {
+                  "name": "Delete TODO item",
+                  "duration": "7ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 204 no content",
+                      "status": "passed"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "testkube-todo-api"
+            }
+          },
+          "execution": {
+            "id": "626f47326000346c798b516b",
+            "testName": "testkube-todo-api",
+            "testNamespace": "testkube",
+            "testType": "postman/collection",
+            "name": "kubeshop-sites-test-testkube-todo-api-ohrno",
+            "content": {
+              "type": "string",
+              "data": "postman"
+            },
+            "startTime": "2022-05-02T02:51:30.466Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "newmanPOST",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "Create TODO",
+                  "duration": "9ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 201 CREATED",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Check if todo item craeted successfully",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Create TODO",
+                  "duration": "9ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 201 CREATED",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Check if todo item craeted successfully",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Complete TODO item",
+                  "duration": "6ms",
+                  "status": "passed"
+                },
+                {
+                  "name": "Delete TODO item",
+                  "duration": "6ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 204 no content",
+                      "status": "passed"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "testkube-dashboard"
+            }
+          },
+          "execution": {
+            "id": "626f47366000346c798b516d",
+            "testName": "testkube-dashboard",
+            "testNamespace": "testkube",
+            "testType": "cypress/project",
+            "name": "kubeshop-sites-test-testkube-dashboard-DKxll",
+            "content": {
+              "type": "git-dir",
+              "repository": {
+                "type": "git",
+                "uri": "https://github.com/kubeshop/testkube-dashboard.git",
+                "branch": "main",
+                "path": "test"
+              }
+            },
+            "startTime": "2022-05-02T02:51:34.485Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "errorMessage": "npm install error: could not start process: chdir /tmp/git-sparse-checkout108106106/repo/test: no such file or directory"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 5000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "kubeshop-site"
+            }
+          },
+          "execution": {
+            "id": "626f476e6000346c798b516f",
+            "testName": "kubeshop-site",
+            "testNamespace": "testkube",
+            "testType": "postman/collection",
+            "name": "kubeshop-sites-test-kubeshop-site-XHkhT",
+            "content": {
+              "type": "string",
+              "data": "{uis"
+            },
+            "startTime": "2022-05-02T02:52:30.505Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "output": "output",
+              "outputType": "text/plain",
+              "errorMessage": "process error: exit status 1",
+              "steps": [
+                {
+                  "name": "Home",
+                  "duration": "233ms",
+                  "status": "failed",
+                  "assertionResults": [
+                    {
+                      "name": "Body matches string",
+                      "status": "failed",
+                      "errorMessage": "expected"
+                    }
+                  ]
+                },
+                {
+                  "name": "Team",
+                  "duration": "31ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "passed"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "testkube-dashboard"
+            }
+          },
+          "execution": {
+            "id": "626f47736000346c798b5171",
+            "testName": "testkube-dashboard",
+            "testNamespace": "testkube",
+            "testType": "cypress/project",
+            "name": "kubeshop-sites-test-testkube-dashboard-gXNYP",
+            "content": {
+              "type": "git-dir",
+              "repository": {
+                "type": "git",
+                "uri": "https://github.com/kubeshop/testkube-dashboard.git",
+                "branch": "main",
+                "path": "test"
+              }
+            },
+            "startTime": "2022-05-02T02:52:35.568Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "errorMessage": "npm install error: could not start process: chdir /tmp/git-sparse-checkout98457902/repo/test: no such file or directory"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "kubeshop-site"
+            }
+          },
+          "execution": {
+            "id": "626f47786000346c798b5173",
+            "testName": "kubeshop-site",
+            "testNamespace": "testkube",
+            "testType": "postman/collection",
+            "name": "kubeshop-sites-test-kubeshop-site-doMRf",
+            "content": {
+              "type": "string",
+              "data": "info"
+            },
+            "startTime": "2022-05-02T02:52:40.582Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "output": "Kubeshop",
+              "outputType": "text/plain",
+              "errorMessage": "process error: exit status 1",
+              "steps": [
+                {
+                  "name": "Home",
+                  "duration": "216ms",
+                  "status": "failed",
+                  "assertionResults": [
+                    {
+                      "name": "Body matches string",
+                      "status": "failed",
+                      "errorMessage": "message"
+                    }
+                  ]
+                },
+                {
+                  "name": "Team",
+                  "duration": "33ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "passed"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 3000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "testkube-dashboard"
+            }
+          },
+          "execution": {
+            "id": "626f47806000346c798b5175",
+            "testName": "testkube-dashboard",
+            "testNamespace": "testkube",
+            "testType": "cypress/project",
+            "name": "kubeshop-sites-test-testkube-dashboard-gRWRk",
+            "content": {
+              "type": "git-dir",
+              "repository": {
+                "type": "git",
+                "uri": "https://github.com/kubeshop/testkube-dashboard.git",
+                "branch": "main",
+                "path": "test"
+              }
+            },
+            "startTime": "2022-05-02T02:52:48.673Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "errorMessage": "npm install error: could not start process: chdir /tmp/git-sparse-checkout1871119144/repo/test: no such file or directory"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "kubeshop-site"
+            }
+          },
+          "execution": {
+            "id": "626f47856000346c798b5177",
+            "testName": "kubeshop-site",
+            "testNamespace": "testkube",
+            "testType": "postman/collection",
+            "name": "kubeshop-sites-test-kubeshop-site-TvNry",
+            "content": {
+              "type": "string",
+              "data": "postman"
+            },
+            "startTime": "2022-05-02T02:52:53.687Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "output": "ss",
+              "outputType": "text/plain",
+              "errorMessage": "process error: exit status 1",
+              "steps": [
+                {
+                  "name": "Home",
+                  "duration": "227ms",
+                  "status": "failed",
+                  "assertionResults": [
+                    {
+                      "name": "Body matches string",
+                      "status": "failed",
+                      "errorMessage": "exp"
+                    }
+                  ]
+                },
+                {
+                  "name": "Team",
+                  "duration": "44ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "passed"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 5000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "namespace": "testkube",
+              "name": "testkube-todo-frontend"
+            }
+          },
+          "execution": {
+            "id": "626f478f6000346c798b5179",
+            "testName": "testkube-todo-frontend",
+            "testNamespace": "testkube",
+            "testType": "cypress/project",
+            "name": "kubeshop-sites-test-testkube-todo-frontend-Plkwd",
+            "content": {
+              "type": "git-dir",
+              "repository": {
+                "type": "git",
+                "uri": "https://github.com/kubeshop/testkube-example-cypress-project.git",
+                "branch": "main",
+                "path": "cypress"
+              }
+            },
+            "startTime": "2022-05-02T02:53:03.774Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "It looks like t",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "TODO list - TODO list opens todo list",
+                  "duration": "456ms",
+                  "status": "passed"
+                },
+                {
+                  "name": "TODO list - TODO list has no todo items",
+                  "duration": "16ms",
+                  "status": "passed"
+                },
+                {
+                  "name": "TODO list - TODO list adds todo item",
+                  "duration": "527ms",
+                  "status": "passed"
+                },
+                {
+                  "name": "TODO list - TODO list checks if added item exists",
+                  "duration": "25ms",
+                  "status": "passed"
+                },
+                {
+                  "name": "TODO list - TODO list toggle todo list item",
+                  "duration": "134ms",
+                  "status": "passed"
+                },
+                {
+                  "name": "TODO list - TODO list delete todo item",
+                  "duration": "117ms",
+                  "status": "passed"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 5000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "testSuite": {
+      "name": "testkube",
+      "namespace": "testkube",
+      "description": "Testkube test suite, api, dashboard and performance",
+      "steps": [
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-api"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-dashboard"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-api-performance"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-homepage-performance"
+          }
+        }
+      ],
+      "labels": {
+        "app": "testkube"
+      }
+    },
+    "latestExecution": {
+      "id": "62704cdb6000346c798b518d",
+      "name": "testkube.thoroughly-evolving-hippo",
+      "testSuite": {
+        "namespace": "testkube",
+        "name": "testkube"
+      },
+      "status": "failed",
+      "startTime": "2022-05-02T21:27:55.71Z",
+      "endTime": "2022-05-02T21:28:29.493Z",
+      "duration": "33.782793309s",
+      "stepResults": [
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-api"
+            }
+          },
+          "execution": {
+            "id": "62704cdb6000346c798b518f",
+            "testName": "testkube-api",
+            "testType": "postman/collection",
+            "name": "testkube-testkube-api-Owxlb",
+            "content": {
+              "type": "string",
+              "data": "sample-data"
+            },
+            "startTime": "2022-05-02T21:27:55.723Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "newman",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "Create postman/collection test",
+                  "duration": "140ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Check if test created successfully",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "List tests",
+                  "duration": "23ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Test is on the list",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Get test",
+                  "duration": "9ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Check response data",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "API Start Test",
+                  "duration": "618ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 201 CREATED",
+                      "status": "passed"
+                    },
+                    {
+                      "name": "Check execution is created",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Get created test execution by ID",
+                  "duration": "8ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Check successfull test execution",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Get created test execution by ID",
+                  "duration": "5ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Check successfull test execution",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Get created test execution by ID",
+                  "duration": "8ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Check successfull test execution",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Get created test execution by ID",
+                  "duration": "8ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Check successfull test execution",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "List test executions",
+                  "duration": "9ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Successfull test execution",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "List recent test executions",
+                  "duration": "45ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Most recent execution is that one recently run",
+                      "status": "passed"
+                    }
+                  ]
+                },
+                {
+                  "name": "Delete test",
+                  "duration": "27ms",
+                  "status": "passed",
+                  "assertionResults": [
+                    {
+                      "name": "Most recent execution is that one recently run",
+                      "status": "passed"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-dashboard"
+            }
+          },
+          "execution": {
+            "id": "62704ceb6000346c798b5197",
+            "testName": "testkube-dashboard",
+            "testType": "cypress/project",
+            "name": "testkube-testkube-dashboard-uIKbo",
+            "content": {
+              "type": "git-dir",
+              "repository": {
+                "type": "git",
+                "uri": "https://github.com/kubeshop/testkube-dashboard.git",
+                "branch": "main",
+                "path": "test"
+              }
+            },
+            "startTime": "2022-05-02T21:28:11.447Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "errorMessage": "npm install error: could not start process: chdir /tmp/git-sparse-checkout4088474646/repo/test: no such file or directory"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-api-performance"
+            }
+          },
+          "execution": {
+            "id": "62704cf26000346c798b519b",
+            "testName": "testkube-api-performance",
+            "testType": "k6/script",
+            "name": "testkube-testkube-api-performance-fUNOA",
+            "content": {
+              "type": "string",
+              "data": "import http from"
+            },
+            "startTime": "2022-05-02T21:28:18.466Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "default: 1 iterations for each of 1 VUs (maxDuration:",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)",
+                  "duration": "00m01.0s/10m0s",
+                  "status": "passed"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-homepage-performance"
+            }
+          },
+          "execution": {
+            "id": "62704cf86000346c798b519f",
+            "testName": "testkube-homepage-performance",
+            "testType": "k6/script",
+            "name": "testkube-testkube-homepage-performance-erXWw",
+            "content": {
+              "type": "string",
+              "data": "import http"
+            },
+            "startTime": "2022-05-02T21:28:24.485Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "execution: local",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)",
+                  "duration": "00m01.2s/10m0s",
+                  "status": "passed"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "testSuite": {
+      "name": "testkube-failing",
+      "namespace": "testkube",
+      "description": "Failing Testkube testsuite",
+      "steps": [
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-dashboard"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-api-performance"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-api-failing"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-homepage-performance"
+          }
+        }
+      ],
+      "labels": {
+        "app": "testkube"
+      }
+    },
+    "latestExecution": {
+      "id": "6250372b0a2bbdc1079cc6b2",
+      "name": "testkube-failing.preferably-rested-drum",
+      "testSuite": {
+        "namespace": "testkube",
+        "name": "testkube-failing"
+      },
+      "status": "failed",
+      "startTime": "2022-04-08T13:22:51.614Z",
+      "endTime": "2022-04-08T13:24:56.297Z",
+      "duration": "2m4.682802413s",
+      "stepResults": [
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-dashboard"
+            }
+          },
+          "execution": {
+            "id": "6250372b0a2bbdc1079cc6b4",
+            "testName": "testkube-dashboard",
+            "testType": "cypress/project",
+            "name": "testkube-failing-testkube-dashboard-OqbHR",
+            "content": {
+              "type": "git-dir",
+              "repository": {
+                "type": "git",
+                "uri": "https://github.com/kubeshop/testkube-dashboard.git",
+                "branch": "main",
+                "path": "test"
+              }
+            },
+            "startTime": "2022-04-08T13:22:51.621Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "It looks like this is your first time using Cypress",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "The Home Page - The Home Page Go to dashboard",
+                  "duration": "1.508s",
+                  "status": "passed"
+                },
+                {
+                  "name": "The Home Page - The Home Page Test suites should be shown as default view",
+                  "duration": "1.078s",
+                  "status": "passed"
+                },
+                {
+                  "name": "The Home Page - The Home Page Load tests list",
+                  "duration": "517ms",
+                  "status": "passed"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-api-performance"
+            }
+          },
+          "execution": {
+            "id": "625037960a2bbdc1079cc6c8",
+            "testName": "testkube-api-performance",
+            "testType": "k6/script",
+            "name": "testkube-failing-testkube-api-performance-YAwzr",
+            "content": {
+              "type": "string",
+              "data": "data"
+            },
+            "startTime": "2022-04-08T13:24:38.194Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "sfff",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)",
+                  "duration": "00m01.0s/10m0s",
+                  "status": "passed"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-api-failing"
+            }
+          },
+          "execution": {
+            "id": "6250379c0a2bbdc1079cc6cc",
+            "testName": "testkube-api-failing",
+            "testType": "postman/collection",
+            "name": "testkube-failing-testkube-api-failing-RnhMh",
+            "content": {
+              "type": "string",
+              "data": "string"
+            },
+            "startTime": "2022-04-08T13:24:44.159Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "output": "ne",
+              "outputType": "text/plain",
+              "errorMessage": "process error: exit status 1",
+              "steps": [
+                {
+                  "name": "List tests",
+                  "duration": "0s",
+                  "status": "failed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "failed",
+                      "errorMessage": "expected { Object (id, _details, ...) } to have property 'code'"
+                    },
+                    {
+                      "name": "Test is on the list",
+                      "status": "failed",
+                      "errorMessage": "Unexpected token u in JSON at position 0"
+                    }
+                  ]
+                },
+                {
+                  "name": "Create test with invalid body",
+                  "duration": "0s",
+                  "status": "failed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "failed",
+                      "errorMessage": "expected { Object (id, _details, ...) } to have property 'code'"
+                    },
+                    {
+                      "name": "Check if test created successfully",
+                      "status": "failed",
+                      "errorMessage": "Unexpected token u in JSON at position 0"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-homepage-performance"
+            }
+          },
+          "execution": {
+            "id": "625037a20a2bbdc1079cc6d4",
+            "testName": "testkube-homepage-performance",
+            "testType": "k6/script",
+            "name": "testkube-failing-testkube-homepage-performance-iqZef",
+            "content": {
+              "type": "string",
+              "data": "import"
+            },
+            "startTime": "2022-04-08T13:24:50.339Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "passed",
+              "output": "3ms",
+              "outputType": "text/plain",
+              "steps": [
+                {
+                  "name": "default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)",
+                  "duration": "00m01.2s/10m0s",
+                  "status": "passed"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "testSuite": {
+      "name": "testkube-failing-stop",
+      "namespace": "testkube",
+      "description": "Failing Testkube testsuite",
+      "steps": [
+        {
+          "stopTestOnFailure": true,
+          "execute": {
+            "name": "testkube-api-failing"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-dashboard"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-api-performance"
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "delay": {
+            "duration": 1000
+          }
+        },
+        {
+          "stopTestOnFailure": false,
+          "execute": {
+            "name": "testkube-homepage-performance"
+          }
+        }
+      ],
+      "labels": {
+        "app": "testkube"
+      }
+    },
+    "latestExecution": {
+      "id": "626a534d7ef1eab2ffd6968d",
+      "name": "testkube-failing-stop.poorly-perfect-kitten",
+      "testSuite": {
+        "namespace": "testkube",
+        "name": "testkube-failing-stop"
+      },
+      "status": "failed",
+      "startTime": "2022-04-28T08:41:49.738Z",
+      "endTime": "2022-04-28T08:41:53.884Z",
+      "duration": "4.146498875s",
+      "stepResults": [
+        {
+          "step": {
+            "stopTestOnFailure": true,
+            "execute": {
+              "name": "testkube-api-failing"
+            }
+          },
+          "execution": {
+            "id": "626a534d7ef1eab2ffd6968f",
+            "testName": "testkube-api-failing",
+            "testType": "postman/collection",
+            "name": "testkube-failing-stop-testkube-api-failing-PySEF",
+            "content": {
+              "type": "string",
+              "data": "Testkube"
+            },
+            "startTime": "2022-04-28T08:41:49.748Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "failed",
+              "output": "newms",
+              "outputType": "text/plain",
+              "errorMessage": "process error: exit status 1",
+              "steps": [
+                {
+                  "name": "List tests",
+                  "duration": "0s",
+                  "status": "failed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "failed",
+                      "errorMessage": "expected { Object (id, _details, ...) } to have property 'code'"
+                    },
+                    {
+                      "name": "Test is on the list",
+                      "status": "failed",
+                      "errorMessage": "Unexpected token u in JSON at position 0"
+                    }
+                  ]
+                },
+                {
+                  "name": "Create test with invalid body",
+                  "duration": "0s",
+                  "status": "failed",
+                  "assertionResults": [
+                    {
+                      "name": "Status code is 200",
+                      "status": "failed",
+                      "errorMessage": "expected { Object (id, _details, ...) } to have property 'code'"
+                    },
+                    {
+                      "name": "Check if test created successfully",
+                      "status": "failed",
+                      "errorMessage": "Unexpected token u in JSON at position 0"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "queued"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-dashboard"
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "queued"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "queued"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-api-performance"
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "queued"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "delay": {
+              "duration": 1000
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "queued"
+            }
+          }
+        },
+        {
+          "step": {
+            "stopTestOnFailure": false,
+            "execute": {
+              "name": "testkube-homepage-performance"
+            }
+          },
+          "execution": {
+            "startTime": "0001-01-01T00:00:00Z",
+            "endTime": "0001-01-01T00:00:00Z",
+            "executionResult": {
+              "status": "queued"
+            }
+          }
+        }
+      ],
+      "labels": {
+        "app": "testkube"
+      }
+    }
+  }
+]

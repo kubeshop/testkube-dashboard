@@ -59,7 +59,7 @@ const DashboardFilters = (
 
   return (
     <StyledDashboardFiltersContainer>
-      <StyledSpace>{renderedFilters}</StyledSpace>
+      <StyledSpace data-cy="filters-container">{renderedFilters}</StyledSpace>
     </StyledDashboardFiltersContainer>
   );
 };
