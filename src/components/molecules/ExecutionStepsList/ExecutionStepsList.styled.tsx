@@ -21,6 +21,10 @@ export const StyledExecutionStepsListItem = styled.li`
 
   &.clickable {
     cursor: pointer;
+
+    svg {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -44,6 +48,4 @@ export const StyledSpace = styled(Space)`
 export const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   width: 20px;
   height: 30px;
-
-  cursor: pointer;
 `;
