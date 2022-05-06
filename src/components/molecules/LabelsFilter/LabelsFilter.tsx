@@ -20,6 +20,7 @@ import {
 
 import {
   EmptyButton,
+  InputWrapper,
   StyledAddRowButton,
   StyledDeleteRowButton,
   StyledKeyValueLabel,
@@ -103,8 +104,8 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   };
 
   const menu = (
-    <StyledFilterMenu onClick={onMenuClick}>
-      <StyledLabelsMenuContainer>
+    <StyledFilterMenu onClick={onMenuClick} data-cy="labels-filter-dropdown">
+      <StyledLabelsMenuContainer data-cy="key-input">
         <StyledTitle>Filter tests by Key Value pairs.</StyledTitle>
         <StyledKeyValueRow>
           <StyledKeyValueLabel>Key</StyledKeyValueLabel>
@@ -128,7 +129,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         onVisibleChange={onVisibleChange}
         visible={isVisible}
       >
-        <StyledFilterLabel onClick={e => e.preventDefault()}>
+        <StyledFilterLabel onClick={e => e.preventDefault()} data-cy="labels-filter-button">
           {isFilterApplied ? <AppliedFiltersNotification /> : null}
           Labels <FilterFilled />
         </StyledFilterLabel>

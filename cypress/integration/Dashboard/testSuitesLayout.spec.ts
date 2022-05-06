@@ -7,11 +7,8 @@ describe('Test Suites Layout', () => {
     });
   });
 
-  it('location should contain test-suites', () => {
+  it('location and title should be test suites', () => {
     cy.url().should('include', 'test-suites');
-  });
-
-  it('contains test-suites header', () => {
     cy.get('[data-cy=dashboard-title]').should('have.text', 'Test Suites');
   });
 
@@ -19,7 +16,7 @@ describe('Test Suites Layout', () => {
     cy.get('[data-cy=navigation-tab]').contains('Test Suites').should('have.class', 'active');
   });
 
-  it('contains test-suites in empty info panel', () => {
+  it('should contain test-suites in empty info panel', () => {
     expect(cy.get('[data-cy=empty-info-panel-text]').contains('test suite'));
   });
 });
