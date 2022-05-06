@@ -85,7 +85,7 @@ export const StyledLogOutputHeaderContainer = styled.ul`
   display: flex;
   justify-content: space-between;
 
-  padding: 10px 25px;
+  padding: 8px 25px;
   border-radius: inherit;
 
   background: #303030;
@@ -94,13 +94,14 @@ export const StyledLogOutputHeaderContainer = styled.ul`
 export const StyledActionIconContainer = styled.li`
   padding: 0 4px;
   border: 1px solid #434343;
+  border-radius: 2px;
 
   background: #141414;
 
   cursor: pointer;
 
   &:not(:last-child) {
-    margin-right: 10px;
+    margin-right: 8px;
   }
 
   span {
