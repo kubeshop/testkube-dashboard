@@ -115,5 +115,3 @@ export const StyledDeleteRowButton = styled(StyledLabelFilterText)`
 export const EmptyButton = styled.div`
   width: 21px;
 `;
-
-export const InputWrapper = styled.div``;

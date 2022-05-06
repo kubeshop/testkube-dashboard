@@ -20,7 +20,6 @@ import {
 
 import {
   EmptyButton,
-  InputWrapper,
   StyledAddRowButton,
   StyledDeleteRowButton,
   StyledKeyValueLabel,
@@ -75,9 +74,19 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   };
 
   const renderKeyValueInputs = labelsMapping.map((item, index) => (
-    <StyledKeyValueRow key={item.key}>
-      <Input width="220px" onChange={event => onKeyChange(event.target.value, index)} value={item.key} />
-      <Input width="220px" onChange={event => onValueChange(event.target.value, index)} value={item.value} />
+    <StyledKeyValueRow>
+      <Input
+        width="220px"
+        onChange={event => onKeyChange(event.target.value, index)}
+        value={item.key}
+        data-cy={`key-input-${index}`}
+      />
+      <Input
+        width="220px"
+        onChange={event => onValueChange(event.target.value, index)}
+        value={item.value}
+        data-cy={`value-input-${index}`}
+      />
       {index > 0 ? <StyledDeleteRowButton onClick={() => onDeleteRow(index)} /> : <EmptyButton />}
     </StyledKeyValueRow>
   ));
@@ -105,7 +114,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const menu = (
     <StyledFilterMenu onClick={onMenuClick} data-cy="labels-filter-dropdown">
-      <StyledLabelsMenuContainer data-cy="key-input">
+      <StyledLabelsMenuContainer>
         <StyledTitle>Filter tests by Key Value pairs.</StyledTitle>
         <StyledKeyValueRow>
           <StyledKeyValueLabel>Key</StyledKeyValueLabel>
