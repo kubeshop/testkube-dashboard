@@ -13,7 +13,7 @@ const TestExecutionDetailsLogOutput = () => {
 
   const {executionResult, name, status} = data;
 
-  const isRunning = useIsRunning(status);
+  const isRunning = useIsRunning(status || executionResult.status);
 
   const logOutput = isRunning ? null : executionResult?.output || executionResult?.errorMessage || 'No log output';
 
