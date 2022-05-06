@@ -8,9 +8,14 @@ const cypressTestExecutorConfig: TestExecutorConfig = {
   canHaveArtifacts: true,
 };
 
+const soapuiTestExecutorConfig: TestExecutorConfig = {
+  canHaveArtifacts: true,
+};
+
 // @ts-ignore
 export const testExecutorsConfigs: {[key in TestExecutor]: TestExecutorConfig} = {
   'cypress/project': cypressTestExecutorConfig,
+  'soapui/xml': soapuiTestExecutorConfig,
   unknown: defaultTestExecutorConfig,
 };
 
