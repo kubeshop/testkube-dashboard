@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Test Suites Layout', () => {
+describe('Test Suites Dashboard Layout', () => {
   before(() => {
     cy.visit('/').then(() => {
       window.localStorage.setItem('apiEndpoint', Cypress.env('endpoint'));
