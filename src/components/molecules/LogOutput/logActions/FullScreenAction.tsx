@@ -1,4 +1,4 @@
-import {FullscreenExitOutlined, FullscreenOutlined} from '@ant-design/icons';
+import {ExpandAltOutlined, FullscreenExitOutlined} from '@ant-design/icons';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {
@@ -32,7 +32,7 @@ const FullScreenAction: React.FC<LogActionProps> = props => {
   return (
     <StyledActionIconContainer onClick={onIconClick}>
       <Tooltip title={tooltipTitle}>
-        {isFullScreenLogOutput ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+        {isFullScreenLogOutput ? <FullscreenExitOutlined /> : <ExpandAltOutlined />}
       </Tooltip>
     </StyledActionIconContainer>
   );
