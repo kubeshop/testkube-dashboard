@@ -57,7 +57,11 @@ const StatusFilter: React.FC<FilterProps> = props => {
     return statusList.map(status => {
       return (
         <StyledFilterMenuItem key={status}>
-          <StyledFilterCheckbox checked={filters.status.includes(status)} onChange={() => handleClick(status)}>
+          <StyledFilterCheckbox
+            checked={filters.status.includes(status)}
+            onChange={() => handleClick(status)}
+            data-cy={status}
+          >
             {uppercaseFirstSymbol(status)}
           </StyledFilterCheckbox>
         </StyledFilterMenuItem>
@@ -66,7 +70,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
   }, [filters.status, handleClick]);
 
   const menu = (
-    <StyledFilterMenu onClick={onMenuClick}>
+    <StyledFilterMenu onClick={onMenuClick} data-cy="status-filter-dropdown">
       {renderedStatuses}
       <FilterMenuFooter
         onReset={() => dispatch(setFilters({...filters, status: []}))}
@@ -84,7 +88,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
         onVisibleChange={onVisibleChange}
         visible={isVisible}
       >
-        <StyledFilterLabel onClick={e => e.preventDefault()}>
+        <StyledFilterLabel onClick={e => e.preventDefault()} data-cy="status-filter-button">
           {filters.status.length > 0 ? <AppliedFiltersNotification /> : null}
           Status <FilterFilled />
         </StyledFilterLabel>
