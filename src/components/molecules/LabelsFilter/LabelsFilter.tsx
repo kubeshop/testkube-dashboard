@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {Space} from 'antd';
@@ -33,15 +33,13 @@ const defaultKeyValuePair: Label = {
   value: '',
 };
 
-const defaultLabelsMapping = Array(1).fill(defaultKeyValuePair);
-
 const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters} = props;
 
   const dispatch = useDispatch();
 
   const [isVisible, setVisibilityState] = useState(false);
-  const [labelsMapping, setLabelsMapping] = useState<LabelArray>(defaultLabelsMapping);
+  const [labelsMapping, setLabelsMapping] = useState<LabelArray>([]);
 
   const onVisibleChange = (flag: boolean) => {
     setVisibilityState(flag);
@@ -73,6 +71,22 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     setLabelsMapping([...labelsMapping, defaultKeyValuePair]);
   };
 
+  useEffect(() => {
+    setLabelsMapping([]);
+    if (filters.selector.length === 0) {
+      setLabelsMapping([defaultKeyValuePair]);
+    }
+    filters.selector.forEach((item: string) => {
+      if (item.includes('=')) {
+        const [key, value] = item.split('=');
+        setLabelsMapping(currentLabels => [...currentLabels, {key, value}]);
+      } else {
+        setLabelsMapping(currentLabels => [...currentLabels, {key: item, value: ''}]);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters.selector]);
+
   const renderKeyValueInputs = labelsMapping.map((item, index) => (
     <StyledKeyValueRow>
       <Input
@@ -87,7 +101,11 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         value={item.value}
         data-cy={`value-input-${index}`}
       />
-      {index > 0 ? <StyledDeleteRowButton onClick={() => onDeleteRow(index)} /> : <EmptyButton />}
+      {index > 0 ? (
+        <StyledDeleteRowButton onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`} />
+      ) : (
+        <EmptyButton />
+      )}
     </StyledKeyValueRow>
   ));
 
@@ -108,7 +126,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   };
 
   const resetFilters = () => {
-    setLabelsMapping(defaultLabelsMapping);
+    setLabelsMapping([defaultKeyValuePair]);
     dispatch(setFilters({...filters, page: 0, selector: []}));
   };
 

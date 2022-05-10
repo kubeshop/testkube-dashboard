@@ -28,7 +28,7 @@ const initialTestSuitesState: TestSuitesState = {
   isLoading: false,
   dataList: [],
   latestExecution: null,
-  filters: {textSearch: '', pageSize: 10, page: 0, selector: '', startDate: null, endDate: null, status: []},
+  filters: {textSearch: '', pageSize: 10, page: 0, selector: [], startDate: null, endDate: null, status: []},
   totals: {
     results: 0,
     passed: 0,

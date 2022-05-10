@@ -4,7 +4,7 @@ export type TestSuiteFilters = {
   textSearch: string;
   pageSize: number;
   page: number;
-  selector: string;
+  selector: string[];
   startDate: null;
   endDate: null;
   status: Array<string>;
