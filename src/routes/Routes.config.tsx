@@ -1,7 +1,6 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {Navigate} from 'react-router-dom';
 
-import {DashboardBlueprintRenderer} from '@organisms';
+import {CreationBlueprintRenderer, DashboardBlueprintRenderer} from '@organisms';
 
 import {EndpointProcessing, NotFound} from '@pages';
 
@@ -33,6 +32,13 @@ const routesConfig = [
     element: Navigate,
     props: {
       to: 'dashboard/test-suites',
+    },
+  },
+  {
+    path: 'dashboard/tests/create',
+    element: CreationBlueprintRenderer,
+    props: {
+      entityType: 'test',
     },
   },
 ];

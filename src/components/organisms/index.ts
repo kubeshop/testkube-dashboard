@@ -3,3 +3,4 @@ export {default as DashboardBlueprintRenderer} from './DashboardBlueprintRendere
 export {default as DashboardContainer} from './DashboardContainer';
 export {default as DashboardInfoPanel} from './DashboardInfoPanel';
 export {default as DashboardContent} from './DashboardContent';
+export {default as CreationBlueprintRenderer} from './CreationBlueprintRenderer';
