@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 
-import 'antd/dist/antd.css';
-
 import GA4React from 'ga-4-react';
 
 import {store} from '@redux/store';
@@ -15,6 +13,7 @@ import {GlobalStyle} from '@styles/globalStyles';
 import '@styles/variables.css';
 
 import App from './App';
+import './antd-theme/antd-customized.css';
 
 (async () => {
   const isAdBlockEnabled = await detectAdBlock();

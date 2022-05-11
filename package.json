@@ -46,6 +46,7 @@
     "file-loader": "6.2.0",
     "husky": "7.0.4",
     "json-server": "^0.17.0",
+    "less": "^4.1.2",
     "netlify-plugin-cypress": "^2.2.0",
     "prettier": "2.4.1",
     "react-error-overlay": "^6.0.9",
@@ -64,7 +65,6 @@
     "antd": "4.16.13",
     "axios": "^0.26.1",
     "classnames": "^2.3.1",
-    "craco-antd": "^1.19.0",
     "ga-4-react": "^0.1.281",
     "loglevel": "1.8.0",
     "moment": "^2.29.1",
@@ -104,7 +104,8 @@
     "cy:test:demo": "cypress run",
     "cy:test:dev": "cypress run -c baseUrl=http://localhost:3000",
     "cy:open:demo": "cypress open",
-    "cy:open:dev": "cypress open -c baseUrl=http://localhost:3000"
+    "cy:open:dev": "cypress open -c baseUrl=http://localhost:3000",
+    "less": "lessc --js src/antd-theme/antd-customized.less src/antd-theme/antd-customized.css"
   },
   "lint-staged": {
     "\"{src,test}/**/*.{js,jsx,ts,tsx}\"": [
