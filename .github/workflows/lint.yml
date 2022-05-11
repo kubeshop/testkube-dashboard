@@ -39,7 +39,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install Project dependencies
-        run: npm install --force
+        run: npm install
 
       - name: ESLint Checking
         if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}

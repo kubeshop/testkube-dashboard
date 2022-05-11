@@ -6,7 +6,7 @@ COPY ./package.json /app/
 RUN apt update && apt install -y chromium
 
 # install  dependencies
-RUN npm install --force
+RUN npm install
 
 # copy everything to /app directory
 COPY . /app
