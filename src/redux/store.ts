@@ -1,7 +1,5 @@
 import {Action, Middleware, ThunkAction, configureStore} from '@reduxjs/toolkit';
 
-import {createLogger} from 'redux-logger';
-
 import configSlice from '@redux/reducers/configSlice';
 import executionsSlice from '@redux/reducers/executionsSlice';
 import labelsSlice from '@redux/reducers/labelsSlice';
@@ -22,12 +20,6 @@ const middlewares: Middleware[] = [
   labelsApi.middleware,
   testSuiteExecutionsApi.middleware,
 ];
-
-if (process.env.NODE_ENV === `development`) {
-  const reduxLoggerMiddleware = createLogger();
-
-  middlewares.push(reduxLoggerMiddleware);
-}
 
 export const store = configureStore({
   reducer: {
