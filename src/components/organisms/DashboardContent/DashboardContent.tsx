@@ -15,7 +15,6 @@ import {clearTargetTestId, selectApiEndpoint, selectRedirectTarget} from '@redux
 
 import {Skeleton} from '@custom-antd';
 
-import {deepEqual} from '@utils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetTestSuitesQuery} from '@services/testSuites';
@@ -212,9 +211,9 @@ const DashboardContent: React.FC<any> = props => {
       dispatch(setSelectedRecord({selectedRecord: null}));
     };
   }, []);
-  const isFiltersEmpty = deepEqual(initialTestsFiltersState, queryFilters);
 
-  const isEmptyTestsData = isFiltersEmpty && entityType === 'tests';
+  const isFiltersEmpty = compareFiltersObject(initialTestsFiltersState, queryFilters);
+  const isEmptyTestsData = isFiltersEmpty && entityType === 'tests' && !contentProps.isLoading;
 
   const isFiltersEmpty = compareFiltersObject(initialTestsFiltersState, queryFilters);
   const isEmptyTestsData =

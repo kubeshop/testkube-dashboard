@@ -8,4 +8,3 @@ export {
   getQueryStringFromUrl,
   FinalizedApiEndpoint,
 } from './validate';
-export {default as deepEqual} from './deepEqual';
