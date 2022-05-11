@@ -16,22 +16,22 @@ entities.forEach(entity => {
 
       cy.get('[data-cy=content-table]').get('tbody').as('table').should('be.visible');
       cy.get('[data-cy=filters-container').as('filters').should('be.visible');
-
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('suites-request');
     });
 
     it(`[${entity.baseName}] - should request correct text search`, () => {
       const searchText = 'fail';
       cy.get('[data-cy=search-filter]').type(searchText);
 
-      cy.wait('@suites-request').its('request.url').should('include', searchText);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
+      cy.wait('@request').its('request.url').should('include', searchText);
     });
 
     it(`[${entity.baseName}] - should clear search query when search field is cleared`, () => {
       cy.get('[data-cy=search-filter]').type('fail');
       cy.get('[data-cy=search-filter]').clear();
 
-      cy.wait('@suites-request').its('request.url').should('not.include', 'textSearch');
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
+      cy.wait('@request').its('request.url').should('not.include', 'textSearch');
     });
 
     it(`[${entity.baseName}] - should apply labels filters`, () => {
