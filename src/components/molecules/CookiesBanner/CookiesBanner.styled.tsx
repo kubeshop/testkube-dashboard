@@ -37,7 +37,10 @@ export const StyledCookiesDisclaimer = styled.p`
 `;
 
 export const StyledCookiesButton = styled(Button)`
+  border: 1px solid ${Colors.whitePure};
+
   color: ${Colors.purple};
+  background-color: ${Colors.whitePure};
 
   &:hover,
   &:focus {
