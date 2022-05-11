@@ -20,7 +20,7 @@ export const StyledSearchInput = styled(Input.Search)`
     &:focus,
     &:hover,
     &:active {
-      border-color: ${Colors.purple};
+      border-color: ${props => (props.disabled ? 'transparent' : Colors.purple)};
       box-shadow: none;
 
       &-group-addon {
