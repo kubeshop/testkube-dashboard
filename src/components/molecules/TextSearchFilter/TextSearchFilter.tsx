@@ -12,7 +12,7 @@ const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
   tests: 'textSearch',
 };
 const TextSearchFilter: React.FC<FilterProps> = props => {
-  const {filters, setSelectedRecord, setFilters, entityType, queryParam} = props;
+  const {filters, setSelectedRecord, setFilters, entityType, queryParam, isFiltersDisabled} = props;
 
   const queryParamField = queryParam || inputValueQueryParams[entityType];
 
@@ -40,7 +40,13 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
 
   return (
     <StyledSearchInputContainer>
-      <StyledSearchInput placeholder="Search" onChange={onChange} value={inputValue} data-cy="search-filter" />
+      <StyledSearchInput
+        placeholder="Search"
+        onChange={onChange}
+        value={inputValue}
+        data-cy="search-filter"
+        disabled={isFiltersDisabled}
+      />
     </StyledSearchInputContainer>
   );
 };

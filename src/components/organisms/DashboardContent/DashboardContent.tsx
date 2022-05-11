@@ -1,5 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 
 import {TableRowSelection} from 'antd/lib/table/interface';
 
@@ -14,17 +15,20 @@ import {clearTargetTestId, selectApiEndpoint, selectRedirectTarget} from '@redux
 
 import {Skeleton} from '@custom-antd';
 
+import {deepEqual} from '@utils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
 
+import {initialTestsFiltersState} from '../../../redux/initialState';
 import {StyledDashboardBottomGradient, StyledDashboardContent, StyledDashboardGradient} from '../Dashboard.styled';
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
-import {StyledContentTable, StyledDashboardContentContainer} from './DashboardContent.styled';
+import {AddTestButton, StyledContentTable, StyledDashboardContentContainer} from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
 import DashboardTableRow from './DashboardTableRow';
 import DashboardTitle from './DashboardTitle';
+import EmptyTestsDataContent from './EmptyTestsDataContent';
 
 interface OnDataChangeInterface {
   data: TestSuiteWithExecution[] | TestWithExecution[];
@@ -89,6 +93,8 @@ const DashboardContent: React.FC<any> = props => {
   } = useContext(DashboardContext);
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const ga4React = useGA4React();
 
@@ -173,7 +179,6 @@ const DashboardContent: React.FC<any> = props => {
         const targetTestArrayIndex = contentProps.data?.indexOf(targetTest[0]) + 1;
 
         if (targetTest.length) {
-          paginationOptions.onChange(Math.ceil(targetTestArrayIndex / 10));
           onRowSelect(targetTest[0].test);
           dispatch(clearTargetTestId());
         }
@@ -186,6 +191,9 @@ const DashboardContent: React.FC<any> = props => {
       dispatch(setSelectedRecord({selectedRecord: null}));
     };
   }, []);
+  const isFiltersEmpty = deepEqual(initialTestsFiltersState, queryFilters);
+
+  const isEmptyTestsData = isFiltersEmpty && entityType === 'tests';
 
   return (
     <StyledDashboardContentContainer
@@ -199,7 +207,12 @@ const DashboardContent: React.FC<any> = props => {
         <StyledDashboardBottomGradient />
       </StyledDashboardGradient>
       <StyledDashboardContent>
-        <DashboardTitle>{pageTitle}</DashboardTitle>
+        <DashboardTitle>
+          {pageTitle}
+          {entityType === 'tests' ? (
+            <AddTestButton onClick={() => navigate('/dashboard/tests/create')}>Add Test</AddTestButton>
+          ) : null}
+        </DashboardTitle>
         {filtersComponentsIds && filtersComponentsIds.length ? (
           <DashboardFilters
             setSelectedRecord={setSelectedRecord}
@@ -208,74 +221,81 @@ const DashboardContent: React.FC<any> = props => {
             filters={queryFilters}
             filtersComponentsIds={filtersComponentsIds}
             entityType={entityType}
+            isFiltersDisabled={isEmptyTestsData}
           />
         ) : null}
-        <Skeleton
-          loading={contentProps.isLoading}
-          paragraph={{rows: 5, width: '100%'}}
-          additionalStyles={{
-            lineHeight: 80,
-            container: {
-              paddingTop: 16,
-            },
-          }}
-          title={false}
-        >
-          <StyledContentTable
-            dataSource={dataSource}
-            columns={[
-              {
-                render: data => {
-                  const {latestExecution, dataItem} = data;
-                  let status = null;
-                  let recentDate = null;
-
-                  if (latestExecution) {
-                    status =
-                      entityType !== 'test-suites' ? latestExecution?.executionResult?.status : latestExecution.status;
-                    recentDate = moment(latestExecution.endTime).format('MMM D, HH:mm');
-                  } else {
-                    status = 'neverRun';
-                    recentDate = 'The Future';
-                  }
-
-                  return (
-                    <DashboardTableRow
-                      name={dataItem.name}
-                      labels={dataItem.labels}
-                      latestExecution={latestExecution}
-                      status={status}
-                      recentDate={recentDate}
-                      entityType={entityType}
-                      type={dataItem.type}
-                      isRowActive={selectedRecord?.name === dataItem?.name}
-                    />
-                  );
-                },
-              },
-            ]}
+        {isEmptyTestsData ? (
+          <EmptyTestsDataContent />
+        ) : (
+          <Skeleton
             loading={contentProps.isLoading}
-            rowSelection={canSelectRow ? rowSelection : undefined}
-            rowClassName="dashboard-content-table"
-            rowKey={(record: any) => {
-              return `${entityType}${
-                selectedRecordIdFieldName && record.dataItem[selectedRecordIdFieldName]
-                  ? `-${record.dataItem[selectedRecordIdFieldName]}`
-                  : ''
-              }`;
-            }}
-            pagination={paginationOptions}
-            onRow={(record: any) => ({
-              onClick: () => {
-                if (canSelectRow) {
-                  onRowSelect(record.dataItem);
-                }
+            paragraph={{rows: 5, width: '100%'}}
+            additionalStyles={{
+              lineHeight: 80,
+              container: {
+                paddingTop: 16,
               },
-            })}
-            showHeader={false}
-            data-cy="content-table"
-          />
-        </Skeleton>
+            }}
+            title={false}
+          >
+            <StyledContentTable
+              dataSource={dataSource}
+              columns={[
+                {
+                  render: data => {
+                    const {latestExecution, dataItem} = data;
+                    let status = null;
+                    let recentDate = null;
+
+                    if (latestExecution) {
+                      status =
+                        entityType !== 'test-suites'
+                          ? latestExecution?.executionResult?.status
+                          : latestExecution.status;
+                      recentDate = moment(latestExecution.endTime).format('MMM D, HH:mm');
+                    } else {
+                      status = 'neverRun';
+                      recentDate = 'The Future';
+                    }
+
+                    return (
+                      <DashboardTableRow
+                        name={dataItem.name}
+                        labels={dataItem.labels}
+                        latestExecution={latestExecution}
+                        status={status}
+                        recentDate={recentDate}
+                        entityType={entityType}
+                        type={dataItem.type}
+                        isRowActive={selectedRecord?.name === dataItem?.name}
+                      />
+                    );
+                  },
+                },
+              ]}
+              loading={contentProps.isLoading}
+              rowSelection={canSelectRow ? rowSelection : undefined}
+              rowClassName="dashboard-content-table"
+              rowKey={(record: any) => {
+                return `${entityType}${
+                  selectedRecordIdFieldName && record.dataItem[selectedRecordIdFieldName]
+                    ? `-${record.dataItem[selectedRecordIdFieldName]}`
+                    : ''
+                }`;
+              }}
+              pagination={paginationOptions}
+              onRow={(record: any) => ({
+                onClick: () => {
+                  if (canSelectRow) {
+                    onRowSelect(record.dataItem);
+                  }
+                },
+              })}
+              showHeader={false}
+              data-cy="content-table"
+            />
+          </Skeleton>
+        )}
       </StyledDashboardContent>
     </StyledDashboardContentContainer>
   );

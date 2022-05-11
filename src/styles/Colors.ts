@@ -58,6 +58,7 @@ enum Colors {
   dashboardTableBackground = '#1D1D1D',
   greyBorder = '#434343',
   greyHover = '#303030',
+  greyDisabled = '#5A5A5A',
 }
 
 export enum BackgroundColors {
