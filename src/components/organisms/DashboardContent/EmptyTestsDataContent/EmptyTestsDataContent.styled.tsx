@@ -91,4 +91,10 @@ export const StyledAddTestButton = styled(Button)`
   font-family: ${Fonts.nunito};
   line-height: 24px;
   color: ${Colors.whitePure};
+
+  &:hover {
+    border-color: transparent;
+    background-color: #4628af;
+    color: ${Colors.whitePure};
+  }
 `;
