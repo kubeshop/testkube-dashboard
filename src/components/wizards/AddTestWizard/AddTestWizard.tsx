@@ -79,7 +79,7 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
       name: values.name,
       type: testType,
       content: {
-        type: testSource,
+        type: testSource === 'file-uri' ? 'string' : testSource,
         ...testSourceSpecificFields,
       },
     };
