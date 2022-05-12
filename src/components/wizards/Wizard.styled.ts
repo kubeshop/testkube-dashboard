@@ -10,7 +10,7 @@ export const StyledWizardContainer = styled.div`
 
   max-width: 1240px;
   padding: 45px 25px 25px 25px;
-  border: 1px solid #262626;
+  border: 1px solid ${Colors.grey3};
   border-radius: 14px;
 
   background: ${Colors.greyBGSecondary};
@@ -27,9 +27,7 @@ export const StyledWizardTitle = styled.span`
   font-weight: 400;
   font-size: 24px;
 
-  /* Gray / gray-9 */
-
-  color: #dbdbdb;
+  color: ${Colors.grey450};
 `;
 
 export const StyledWizardBody = styled.div`
@@ -47,7 +45,7 @@ export const StyledWizardForm = styled.div`
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 
-  background: #262626;
+  background: ${Colors.grey3};
 `;
 
 export const StyledWizardHintContainer = styled.div`
@@ -61,7 +59,7 @@ export const StyledWizardHintContainer = styled.div`
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 
-  background: #303030;
+  background: ${Colors.greyHover};
 `;
 
 export const WizardHintText = styled.span<{fontWeight?: any; fontSize?: any}>`
@@ -74,9 +72,7 @@ export const WizardHintText = styled.span<{fontWeight?: any; fontSize?: any}>`
 
   text-align: center;
 
-  /* Gray / gray-9 */
-
-  color: #dbdbdb;
+  color: ${Colors.grey450};
 `;
 
 export const StyledWizardFooter = styled.div`
