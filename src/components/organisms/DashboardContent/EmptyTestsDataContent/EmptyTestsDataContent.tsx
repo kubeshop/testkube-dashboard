@@ -1,5 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 
+import useElementSize from '@hooks/useElementSize';
+
 import {ReactComponent as AddTestImage} from '@assets/addTest.svg';
 
 import {
@@ -13,10 +15,14 @@ import {
 
 const EmptyTestsDataContent = () => {
   const navigate = useNavigate();
+
+  const [ref, size] = useElementSize();
+
+  const isSVGVisible = size.width > 190;
   return (
-    <StyledEmptyTestsDataContainer>
-      <AddTestImage />
-      <StyledTitle>Add a test in a few easy steps.</StyledTitle>
+    <StyledEmptyTestsDataContainer ref={ref} isSVGVisible={isSVGVisible}>
+      {isSVGVisible ? <AddTestImage /> : null}
+      <StyledTitle isSVGVisible={isSVGVisible}>Add a test in a few easy steps.</StyledTitle>
       <StyledDescription>
         Simply define your test, add any variables, execute it and view the results!
       </StyledDescription>

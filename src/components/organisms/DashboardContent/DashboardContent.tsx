@@ -230,7 +230,9 @@ const DashboardContent: React.FC<any> = props => {
         <DashboardTitle>
           {pageTitle}
           {entityType === 'tests' ? (
-            <AddTestButton onClick={() => navigate('/dashboard/tests/create')}>Add Test</AddTestButton>
+            <AddTestButton onClick={() => navigate('/dashboard/tests/create')} data-cy="title-add-test-button">
+              Add Test
+            </AddTestButton>
           ) : null}
         </DashboardTitle>
         {filtersComponentsIds && filtersComponentsIds.length ? (

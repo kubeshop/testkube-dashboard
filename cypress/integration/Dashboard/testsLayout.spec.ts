@@ -10,7 +10,7 @@ describe('Tests Dashboard Layout', () => {
   });
   it('location and title should be tests', () => {
     cy.url().should('include', 'tests');
-    cy.get('[data-cy=dashboard-title]').should('have.text', 'Tests');
+    cy.get('[data-cy=dashboard-title]').should('include.text', 'Tests');
   });
 
   it('should not be selected tests navigation tab', () => {
@@ -19,6 +19,10 @@ describe('Tests Dashboard Layout', () => {
 
   it('should contain test-suites in empty info panel', () => {
     expect(cy.get('[data-cy=empty-info-panel-text]').contains('test'));
+  });
+
+  it('should contain Add Test button and redirect to test creation', () => {
+    cy.get('[data-cy=title-add-test-button]').should('be.visible');
   });
 });
 

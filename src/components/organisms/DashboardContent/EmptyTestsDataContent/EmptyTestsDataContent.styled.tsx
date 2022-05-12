@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-import {Button, Title} from '@custom-antd';
+import {Button} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 import Fonts from '@styles/Fonts';
 
-export const StyledEmptyTestsDataContainer = styled(Title)`
+export const StyledEmptyTestsDataContainer = styled.div<{isSVGVisible: boolean}>`
   height: 651px;
 
   padding-top: 40px;
@@ -17,17 +17,22 @@ export const StyledEmptyTestsDataContainer = styled(Title)`
   background-color: ${Colors.dashboardTableBackground};
 
   &::before {
-    content: '';
-    position: absolute;
+    ${props =>
+      props.isSVGVisible
+        ? `@media (min-width: 400px) {
+      content: '';
+      position: absolute;
 
-    width: 180px;
-    height: 180px;
+      width: 180px;
+      height: 180px;
 
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      border-radius: 50%;
 
-    background-color: ${Colors.greyHover};
+      background-color: ${Colors.greyHover};
+    }`
+        : ''}
   }
 
   & > svg {
@@ -36,15 +41,24 @@ export const StyledEmptyTestsDataContainer = styled(Title)`
   }
 `;
 
-export const StyledTitle = styled.h3`
-  margin-top: 62px;
+export const StyledTitle = styled.div<{isSVGVisible: boolean}>`
+  ${props =>
+    props.isSVGVisible
+      ? `
+  margin-top: 62px;`
+      : ''}
+  margin-bottom: 16px;
 
+  font-size: 24px;
+  font-weight: 400;
   font-family: ${Fonts.nunito};
+  line-height: 32px;
   color: ${Colors.whitePure};
+  text-align: center;
 `;
 
 export const StyledDescription = styled.div`
-  width: 290px;
+  max-width: 290px;
 
   margin-bottom: 24px;
 
@@ -58,6 +72,8 @@ export const StyledDescription = styled.div`
 
 export const StyledButtonContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
 `;
 

@@ -200,4 +200,9 @@ export const AddTestButton = styled(Button)`
   font-family: ${Fonts.nunito};
   line-height: 24px;
   color: ${Colors.whitePure};
+
+  &:hover {
+    border-color: transparent;
+    background-color: ${Colors.whitePure};
+  }
 `;
