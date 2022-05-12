@@ -317,7 +317,7 @@ mark {
 }
 .anticon {
   display: inline-block;
-  color: #7d7d7d;
+  color: inherit;
   font-style: normal;
   line-height: 0;
   text-align: center;
@@ -14572,7 +14572,7 @@ textarea.ant-input-number {
 .ant-input-number-handler-up-inner,
 .ant-input-number-handler-down-inner {
   display: inline-block;
-  color: #7d7d7d;
+  color: inherit;
   font-style: normal;
   line-height: 0;
   text-align: center;
@@ -18738,7 +18738,7 @@ span.ant-radio + * {
   text-overflow: ellipsis;
 }
 .ant-select-multiple .ant-select-selection-item-remove {
-  color: #7d7d7d;
+  color: inherit;
   font-style: normal;
   line-height: 0;
   text-align: center;
@@ -18954,7 +18954,7 @@ span.ant-radio + * {
 }
 .ant-select-arrow {
   display: inline-block;
-  color: #7d7d7d;
+  color: inherit;
   font-style: normal;
   line-height: 0;
   text-transform: none;

@@ -12,9 +12,9 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {hasProtocol} from '@utils/strings';
 
-import {EndpointProcessingContainer} from './EnpointProcessing.styled';
+import {EndpointProcessingContainer} from './EndpointProcessing.styled';
 
-const EndpointProcessing = () => {
+const EndpointProcessing: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const searchParams = useURLSearchParams();

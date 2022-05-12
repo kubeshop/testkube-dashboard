@@ -23,7 +23,7 @@ export const configSlice = createSlice({
       state.redirectTarget.targetTestExecutionId = null;
     },
     setLogOutput: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
-      state.fullScreenLogOutput.logOutput = action.payload;
+      state.fullScreenLogOutput.logOutput += action.payload;
     },
     openFullScreenLogOutput: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.fullScreenLogOutput.isFullScreenLogOutput = true;

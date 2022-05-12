@@ -1,6 +1,7 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
 import {useContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 
 import {TableRowSelection} from 'antd/lib/table/interface';
 
@@ -20,14 +21,9 @@ import {PollingIntervals} from '@utils/numbers';
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
 
+import {StyledDashboardBottomGradient, StyledDashboardContent, StyledDashboardGradient} from '../Dashboard.styled';
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
-import {
-  StyledContentTable,
-  StyledDashboardContent,
-  StyledDashboardContentContainer,
-  StyledDashboardContentTitleBottomGradient,
-  StyledDashboardContentTitleGradient,
-} from './DashboardContent.styled';
+import {StyledContentTable, StyledDashboardContentContainer} from './DashboardContent.styled';
 import DashboardFilters from './DashboardFilters';
 import DashboardTableRow from './DashboardTableRow';
 import DashboardTitle from './DashboardTitle';
@@ -97,6 +93,8 @@ const DashboardContent: React.FC<any> = props => {
   const dispatch = useDispatch();
 
   const ga4React = useGA4React();
+
+  const navigate = useNavigate();
 
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const {targetTestId, targetTestExecutionId} = useAppSelector(selectRedirectTarget);
@@ -195,10 +193,14 @@ const DashboardContent: React.FC<any> = props => {
       gradient={dashboardGradient}
     >
       {dataLayers[pageTitle]}
-      <StyledDashboardContentTitleGradient gradient={dashboardGradient}>
-        <StyledDashboardContentTitleBottomGradient />
-      </StyledDashboardContentTitleGradient>
-      <StyledDashboardContent>
+      <StyledDashboardGradient gradient={dashboardGradient}>
+        <StyledDashboardBottomGradient />
+      </StyledDashboardGradient>
+      <StyledDashboardContent
+        onClick={() => {
+          navigate('/dashboard/tests/add-test');
+        }}
+      >
         <DashboardTitle>{pageTitle}</DashboardTitle>
         {filtersComponentsIds && filtersComponentsIds.length ? (
           <DashboardFilters

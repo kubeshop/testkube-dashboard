@@ -17,3 +17,4 @@ export {default as Dots} from './Dots';
 export {default as TableActionsDropdownContainer} from './TableActionsDropdownContainer';
 export {default as LabelListItem} from './LabelListItem';
 export {default as Loader} from './Loader';
+export {default as UploadWithInput} from './UploadWithInput';

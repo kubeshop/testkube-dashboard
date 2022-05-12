@@ -17,7 +17,17 @@ export const buildGitTestDirUrl = (repository: Repository) => {
 
   const purifiedUri = purifyGitUriExtension(uri);
 
-  const gitHubUri = `${purifiedUri}/tree/${branch}/${path}`;
+  let stringAfterTree = '';
+
+  if (branch) {
+    stringAfterTree += branch;
+  }
+
+  if (path) {
+    stringAfterTree += `/${path}`;
+  }
+
+  const gitHubUri = `${purifiedUri}/tree/${stringAfterTree}`;
 
   return gitHubUri;
 };
