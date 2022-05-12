@@ -1,29 +1,12 @@
-import {Rule} from 'antd/lib/form';
+import {FormItem} from '@models/form';
 
-const requiredField: Rule = {required: true, message: 'This field is required'};
-const url: Rule = {type: 'url'};
-
-type Option = {
-  value: string;
-  label: string;
-};
-
-type FormItem = {
-  itemLabel: string;
-  tooltip?: string;
-  fieldName: string;
-  inputType: 'select' | 'radio' | 'default' | 'uploadWithInput' | 'textarea';
-  rules?: Array<Rule>;
-  options?: Array<Option>;
-  modificator?: 'password';
-  help?: string;
-};
+import {required, url} from '@utils/form';
 
 export const formStructure: Array<FormItem> = [
   {
     itemLabel: 'Name',
     tooltip: 'Enter the name of the test you wish to add.',
-    rules: [requiredField],
+    rules: [required],
     fieldName: 'name',
     inputType: 'default',
     help: 'Example: test-script-git',
@@ -34,7 +17,7 @@ export const formStructure: Array<FormItem> = [
       'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
     fieldName: 'testType',
     inputType: 'select',
-    rules: [requiredField],
+    rules: [required],
     options: [
       {
         value: 'curl/test',
@@ -62,7 +45,7 @@ export const formStructure: Array<FormItem> = [
     itemLabel: 'Test source',
     tooltip:
       'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
-    rules: [requiredField],
+    rules: [required],
     fieldName: 'testSource',
     inputType: 'radio',
     options: [
@@ -84,7 +67,7 @@ export const gitDirFormFields: Array<FormItem> = [
   },
   {
     itemLabel: 'Git URI',
-    rules: [requiredField, url],
+    rules: [required, url],
     fieldName: 'uri',
     inputType: 'default',
     help: 'Example: https://github.com/kubeshop/testkube-example.git',
@@ -97,7 +80,7 @@ export const gitDirFormFields: Array<FormItem> = [
   },
   {
     itemLabel: 'Repository Path',
-    rules: [requiredField],
+    rules: [required],
     fieldName: 'path',
     inputType: 'default',
     help: 'Example: test-directory',
@@ -114,7 +97,7 @@ export const gitFileFormFields: Array<FormItem> = [
   },
   {
     itemLabel: 'Git URI',
-    rules: [requiredField, url],
+    rules: [required, url],
     fieldName: 'uri',
     inputType: 'default',
     help: 'Example: https://github.com/kubeshop/testkube-example.git',
@@ -130,7 +113,7 @@ export const gitFileFormFields: Array<FormItem> = [
 export const fileContentFormFields: Array<FormItem> = [
   {
     itemLabel: 'Select file',
-    rules: [requiredField],
+    rules: [required],
     fieldName: 'file',
     inputType: 'uploadWithInput',
   },
@@ -139,8 +122,39 @@ export const fileContentFormFields: Array<FormItem> = [
 export const stringContentFormFields: Array<FormItem> = [
   {
     itemLabel: 'String content',
-    rules: [requiredField],
+    rules: [required],
     fieldName: 'string',
     inputType: 'textarea',
   },
 ];
+
+export const optionalFields = ['token', 'branch'];
+
+export const getTestSourceSpecificFields = (values: any) => {
+  const {testSource} = values;
+
+  if (testSource === 'string' || testSource === 'file-uri') {
+    return {data: values.string || values.file.fileContent};
+  }
+
+  if (testSource === 'git-file') {
+    return {
+      repository: {
+        type: testSource,
+        uri: values.uri,
+        ...(values.token ? {token: values.token} : {}),
+        ...(values.branch ? {branch: values.branch} : {}),
+      },
+    };
+  }
+
+  return {
+    repository: {
+      type: testSource,
+      uri: values.uri,
+      path: values.path,
+      ...(values.branch ? {branch: values.branch} : {}),
+      ...(values.token ? {token: values.token} : {}),
+    },
+  };
+};

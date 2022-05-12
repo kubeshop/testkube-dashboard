@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import Colors from '@styles/Colors';
+
 export const StyledUploadWithInputContainer = styled.div`
   display: flex;
 
@@ -19,24 +21,24 @@ export const StyledUploadWithInputContainer = styled.div`
     cursor: initial;
 
     &.has-error {
-      border-color: #db539c;
+      border-color: ${Colors.errorRed};
     }
 
     .ant-input {
-      color: #dbdbdb;
-      background-color: #141414;
+      color: ${Colors.grey450};
+      background-color: ${Colors.grey1000};
 
       cursor: default;
     }
 
     &.not-empty {
       .ant-input-clear-icon {
-        color: #7d7d7d;
+        color: ${Colors.grey7};
 
         visibility: visible;
 
         &:hover {
-          color: #303030;
+          color: ${Colors.greyHover};
         }
       }
     }

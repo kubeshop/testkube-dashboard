@@ -1,14 +1,16 @@
+import {openCustomExecutorDocumentation} from '@utils/externalLinks';
+
 import {ReactComponent as WizardHintImage} from '@assets/wizardHint.svg';
 
-import {StyledWizardHintContainer, WizardHintText} from '../Wizard.styled';
+import {StyledWizardButton, StyledWizardHintContainer, WizardHintText} from '../Wizard.styled';
 
 const WizardHint: React.FC = () => {
   return (
     <StyledWizardHintContainer>
       <WizardHintImage />
       <WizardHintText>Don’t see your test type listed?</WizardHintText>
-      <WizardHintText>Add an executor using our Testkube template.</WizardHintText>
-      <WizardHintText>Here’s how!</WizardHintText>
+      <WizardHintText fontWeight={300} fontSize={14}>Add an executor using our Testkube template.</WizardHintText>
+      <StyledWizardButton onClick={openCustomExecutorDocumentation}>Here is how!</StyledWizardButton>
     </StyledWizardHintContainer>
   );
 };

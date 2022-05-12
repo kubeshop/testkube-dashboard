@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {Button} from '@custom-antd';
+
 import Colors from '@styles/Colors';
 
 export const StyledWizardContainer = styled.div`
@@ -62,11 +64,11 @@ export const StyledWizardHintContainer = styled.div`
   background: #303030;
 `;
 
-export const WizardHintText = styled.span`
+export const WizardHintText = styled.span<{fontWeight?: any; fontSize?: any}>`
   text-align: center;
   font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: ${({fontWeight}) => fontWeight || 600};
+  font-size: ${({fontSize}) => `${fontSize || 16}px`};
   line-height: 32px;
   /* or 200% */
 
@@ -79,4 +81,10 @@ export const WizardHintText = styled.span`
 
 export const StyledWizardFooter = styled.div`
   padding: 24px;
+`;
+
+export const StyledWizardButton = styled(Button)`
+  color: ${Colors.purple};
+  background: transparent;
+  border: none;
 `;

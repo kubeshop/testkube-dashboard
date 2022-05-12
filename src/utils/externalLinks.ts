@@ -9,3 +9,7 @@ export const openGithub = () => {
 export const openDiscord = () => {
   window.open('https://discord.gg/6zupCZFQbe');
 };
+
+export const openCustomExecutorDocumentation = () => {
+  window.open('https://kubeshop.github.io/testkube/executor-custom/');
+};

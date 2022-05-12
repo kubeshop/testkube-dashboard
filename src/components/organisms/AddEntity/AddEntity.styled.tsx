@@ -17,7 +17,7 @@ export const StyledAddEntityContainer = styled.div`
 export const AddEntityWizardContainer = styled.div`
   max-width: 1240px;
   height: calc(100% - 250px);
-  border: 1px solid #262626;
+  border: 1px solid ${Colors.grey3};
   border-radius: 16px;
 
   background: ${Colors.greyBGSecondary};

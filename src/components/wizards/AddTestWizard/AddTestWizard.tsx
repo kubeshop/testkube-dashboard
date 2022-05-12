@@ -1,13 +1,13 @@
-/* eslint-disable no-unreachable */
 import {ReactElement, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
-import {Form, Input, Radio, Select, Space} from 'antd';
+import {Form, Input, Radio, Select, Space, notification} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
 import axios from 'axios';
 
 import {Nullable} from '@models/extendTS';
+import {WizardComponentProps} from '@models/wizard';
 
 import {useAppDispatch} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
@@ -27,40 +27,15 @@ import WizardHint from './WizardHint';
 import {
   fileContentFormFields,
   formStructure,
+  getTestSourceSpecificFields,
   gitDirFormFields,
   gitFileFormFields,
+  optionalFields,
   stringContentFormFields,
 } from './utils';
 
 const {Option} = Select;
 const {TextArea} = Input;
-
-type WizardProps = {
-  wizardTitle: string;
-  onCancel?: () => any;
-  onSave?: () => any;
-  onRun?: () => any;
-};
-
-interface AddTestWizardDefaultFormFields {
-  testType: string;
-  testSource: string;
-}
-
-interface AddTestWizardGitUriFormFields extends AddTestWizardDefaultFormFields {
-  token?: string;
-  uri: string;
-  branch?: string;
-  path: string;
-  test: string;
-}
-
-interface AddTestWizardFileContentFormFields extends AddTestWizardDefaultFormFields {
-  file: Nullable<{
-    fileName: string;
-    fileContent: string;
-  }>;
-}
 
 const additionalFields: any = {
   'git-dir': gitDirFormFields,
@@ -69,12 +44,13 @@ const additionalFields: any = {
   string: stringContentFormFields,
 };
 
-const AddTestWizard: React.FC<WizardProps> = props => {
-  const {wizardTitle, onCancel, onSave, onRun} = props;
+const AddTestWizard: React.FC<WizardComponentProps> = props => {
+  const {wizardTitle, onCancel} = props;
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [form] = Form.useForm<AddTestWizardGitUriFormFields | AddTestWizardFileContentFormFields>();
+
+  const [form] = Form.useForm();
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -82,11 +58,10 @@ const AddTestWizard: React.FC<WizardProps> = props => {
     const values = form.getFieldsValue();
 
     try {
-      const res = await onSaveClick(values, true);
+      const targetTestName = await onSaveClick(values, true);
 
-      const targetRedirectTestData = res?.data?.metadata?.name;
+      dispatch(setRedirectTarget({targetTestId: targetTestName, runTarget: true}));
 
-      dispatch(setRedirectTarget({targetTestId: targetRedirectTestData, runTarget: true}));
       navigate('/dashboard/tests');
     } catch (err) {
       console.log('err: ', err);
@@ -95,35 +70,17 @@ const AddTestWizard: React.FC<WizardProps> = props => {
 
   const onSaveClick = async (values: any, toRun: boolean = false) => {
     setIsLoading(true);
+
     const {testSource, testType} = values;
 
-    const neededFields =
-      testSource === 'string' || testSource === 'file-uri'
-        ? {data: values.string || values.file.fileContent}
-        : testSource === 'git-file'
-        ? {
-            repository: {
-              type: testSource,
-              uri: values.uri,
-              ...(values.token ? {token: values.token} : {}),
-            },
-          }
-        : {
-            repository: {
-              branch: values.branch,
-              type: testSource,
-              uri: values.uri,
-              ...(values.path ? {path: values.path} : {}),
-              ...(values.token ? {token: values.token} : {}),
-            },
-          };
+    const testSourceSpecificFields = getTestSourceSpecificFields(values);
 
     const requestBody = {
       name: values.name,
       type: testType,
       content: {
         type: testSource,
-        ...neededFields,
+        ...testSourceSpecificFields,
       },
     };
 
@@ -137,17 +94,20 @@ const AddTestWizard: React.FC<WizardProps> = props => {
       });
 
       if (res.status === 200) {
-        if (!toRun) {
-          const targetRedirectTestData = res?.data?.metadata?.name;
+        const targetTestName = res?.data?.metadata?.name;
 
-          dispatch(setRedirectTarget({targetTestId: targetRedirectTestData}));
+        if (!toRun) {
+          dispatch(setRedirectTarget({targetTestId: targetTestName}));
+
           return navigate('/dashboard/tests');
         }
 
-        return res;
+        return targetTestName;
       }
     } catch (err) {
-      console.log('err: ', err);
+      if (err instanceof Error) {
+        notification.error({message: 'Something went wrong', description: JSON.stringify(err), duration: 0});
+      }
     } finally {
       setIsLoading(false);
     }
@@ -162,6 +122,7 @@ const AddTestWizard: React.FC<WizardProps> = props => {
       form.setFieldsValue({
         file: null,
       });
+
       form.validateFields(['file']);
     } else {
       const readFile = new FileReader();
@@ -201,7 +162,6 @@ const AddTestWizard: React.FC<WizardProps> = props => {
         modificator = null,
         rules = [],
         help = null,
-        defaultValue = null,
       } = formItem;
 
       let children: Nullable<ReactElement<any, any>> = null;
@@ -249,7 +209,7 @@ const AddTestWizard: React.FC<WizardProps> = props => {
       }
 
       if (inputType === 'textarea') {
-        children = <TextArea rows={10} style={{resize: 'none', height: '100%'}} />;
+        children = <TextArea rows={10} />;
       }
 
       if (!children) {
@@ -263,8 +223,6 @@ const AddTestWizard: React.FC<WizardProps> = props => {
       );
     });
   };
-
-  const da = ['token', 'branch'];
 
   return (
     <StyledWizardContainer>
@@ -285,9 +243,10 @@ const AddTestWizard: React.FC<WizardProps> = props => {
               const isTouched = Object.keys(formFields).every(fieldKey => {
                 const isFieldTouched = form.isFieldTouched(fieldKey);
                 const fieldValue = form.getFieldValue(fieldKey);
-                const isFieldNotRequired = da.includes(fieldKey);
+                // Did not manage to get the metadata of the fields
+                const isFieldOptional = optionalFields.includes(fieldKey);
 
-                return isFieldNotRequired || Boolean(fieldValue) || isFieldTouched;
+                return isFieldOptional || Boolean(fieldValue) || isFieldTouched;
               });
 
               if (isTouched) {
