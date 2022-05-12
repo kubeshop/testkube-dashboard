@@ -106,6 +106,7 @@ const initialLabelsState: LabelsState = {
 const initialConfigState: ConfigState = {
   apiEndpoint: null,
   redirectTarget: {
+    runTarget: false,
     targetTestExecutionId: null,
     targetTestId: null,
   },

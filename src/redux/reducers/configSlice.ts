@@ -16,6 +16,9 @@ export const configSlice = createSlice({
     setRedirectTarget: (state: Draft<ConfigState>, action: PayloadAction<any>) => {
       state.redirectTarget = action.payload;
     },
+    clearRunTarget: (state: Draft<ConfigState>) => {
+      state.redirectTarget.runTarget = false;
+    },
     clearTargetTestId: (state: Draft<ConfigState>) => {
       state.redirectTarget.targetTestId = null;
     },
@@ -47,6 +50,7 @@ export const {
   setRedirectTarget,
   clearTargetTestId,
   clearTargetTestExecutionId,
+  clearRunTarget,
   setLogOutput,
 } = configSlice.actions;
 

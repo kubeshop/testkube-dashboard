@@ -441,6 +441,16 @@ ul {
       border: 1px solid #434343;
     }
   }
+
+  .ant-select-arrow,
+  .ant-input-password-icon {
+    color: #7D7D7D;
+
+    &:hover {
+      color: ${Colors.whitePure};
+    }
+  }
+
 `;
 
 /* Media Sizes */

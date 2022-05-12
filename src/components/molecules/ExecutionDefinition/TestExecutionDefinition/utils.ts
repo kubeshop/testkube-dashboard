@@ -45,9 +45,11 @@ export const getExecutionDefinitionData = (content: TestContent) => {
     return gitTestDirUri;
   }
 
-  // Will add later
   if (type === 'file-uri') {
+    return data;
   }
+
   if (type === 'git-file') {
+    return repository.uri;
   }
 };

@@ -1,7 +1,5 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useContext, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
 
 import {TableRowSelection} from 'antd/lib/table/interface';
 
@@ -94,8 +92,6 @@ const DashboardContent: React.FC<any> = props => {
 
   const ga4React = useGA4React();
 
-  const navigate = useNavigate();
-
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const {targetTestId, targetTestExecutionId} = useAppSelector(selectRedirectTarget);
 
@@ -185,6 +181,12 @@ const DashboardContent: React.FC<any> = props => {
     }
   }, [contentProps?.data, targetTestId]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(setSelectedRecord({selectedRecord: null}));
+    };
+  }, []);
+
   return (
     <StyledDashboardContentContainer
       shouldInfoPanelBeShown={shouldInfoPanelBeShown}
@@ -198,7 +200,7 @@ const DashboardContent: React.FC<any> = props => {
       </StyledDashboardGradient>
       <StyledDashboardContent
         onClick={() => {
-          navigate('/dashboard/tests/add-test');
+          // navigate('/dashboard/tests/add-test');
         }}
       >
         <DashboardTitle>{pageTitle}</DashboardTitle>

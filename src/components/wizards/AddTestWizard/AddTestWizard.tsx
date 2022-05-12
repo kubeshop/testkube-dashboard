@@ -1,10 +1,16 @@
-import {ReactElement} from 'react';
+/* eslint-disable no-unreachable */
+import {ReactElement, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
 import {Form, Input, Radio, Select, Space} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
-// import axios from 'axios';
+import axios from 'axios';
+
 import {Nullable} from '@models/extendTS';
+
+import {useAppDispatch} from '@redux/hooks';
+import {setRedirectTarget} from '@redux/reducers/configSlice';
 
 import {UploadWithInput} from '@atoms';
 
@@ -18,7 +24,13 @@ import {
   StyledWizardTitle,
 } from '../Wizard.styled';
 import WizardHint from './WizardHint';
-import {fileContentFormFields, formStructure, gitRepoFormFields, stringContentFormFields} from './utils';
+import {
+  fileContentFormFields,
+  formStructure,
+  gitDirFormFields,
+  gitFileFormFields,
+  stringContentFormFields,
+} from './utils';
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -51,8 +63,8 @@ interface AddTestWizardFileContentFormFields extends AddTestWizardDefaultFormFie
 }
 
 const additionalFields: any = {
-  'git-file': gitRepoFormFields,
-  'git-repo': gitRepoFormFields,
+  'git-dir': gitDirFormFields,
+  'git-file': gitFileFormFields,
   'file-uri': fileContentFormFields,
   string: stringContentFormFields,
 };
@@ -60,85 +72,84 @@ const additionalFields: any = {
 const AddTestWizard: React.FC<WizardProps> = props => {
   const {wizardTitle, onCancel, onSave, onRun} = props;
 
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [form] = Form.useForm<AddTestWizardGitUriFormFields | AddTestWizardFileContentFormFields>();
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onRunClick = async (values: any) => {
+  const onRunClick = async () => {
+    const values = form.getFieldsValue();
+
     try {
-      const res = 0;
+      const res = await onSaveClick(values, true);
+
+      const targetRedirectTestData = res?.data?.metadata?.name;
+
+      dispatch(setRedirectTarget({targetTestId: targetRedirectTestData, runTarget: true}));
+      navigate('/dashboard/tests');
     } catch (err) {
       console.log('err: ', err);
     }
   };
 
-  const onSaveClick = async (values: AddTestWizardGitUriFormFields | AddTestWizardFileContentFormFields) => {
+  const onSaveClick = async (values: any, toRun: boolean = false) => {
+    setIsLoading(true);
     const {testSource, testType} = values;
-    console.log('values: ', values);
 
-    // const requestBody =
-    //   testSource === 'git-uri'
-    //     ? {
-    //         branch: 'dasdasd',
-    //         gitUri: 'dasdas',
-    //         personalAccessToken: 'asdsa',
-    //         repository: 'asdasd',
-    //         name: 'asdasdsa',
-    //         testSource: 'git-dir',
-    //         type: 'k6',
-    //         content: {
-    //           type: 'git-uri',
-    //         },
-    //       }
-    //     : {
-    //         file: {
-    //           fileContent:
-    //             'AWSAccessKeyId=AKIA3N6VQVTPBEEUFJVN\r\nAWSSecretKey=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',
-    //           fileName: 'rootkey.csv',
-    //         },
-    //         testSource: 'file',
-    //         type: 'k6',
-    //       };
-    // {
-    //   "name": "string",
-    //   "namespace": "string",
-    //   "type": "string",
-    //   "content": {
-    //     "type": "string",
-    //     "repository": {
-    //       "type": "git",
-    //       "uri": "string",
-    //       "branch": "string",
-    //       "path": "string",
-    //       "username": "string",
-    //       "token": "string"
-    //     },
-    //     "data": "string",
-    //     "uri": "string"
-    //   },
-    //   "created": "2022-05-11T10:22:08.541Z",
-    //   "labels": {
-    //     "env": "prod",
-    //     "app": "backend"
-    //   },
-    //   "schedule": "string",
-    //   "params": {
-    //     "users": "3",
-    //     "prefix": "some-"
-    //   }
-    // }
+    const neededFields =
+      testSource === 'string' || testSource === 'file-uri'
+        ? {data: values.string || values.file.fileContent}
+        : testSource === 'git-file'
+        ? {
+            repository: {
+              type: testSource,
+              uri: values.uri,
+              ...(values.token ? {token: values.token} : {}),
+            },
+          }
+        : {
+            repository: {
+              branch: values.branch,
+              type: testSource,
+              uri: values.uri,
+              ...(values.path ? {path: values.path} : {}),
+              ...(values.token ? {token: values.token} : {}),
+            },
+          };
+
+    const requestBody = {
+      name: values.name,
+      type: testType,
+      content: {
+        type: testSource,
+        ...neededFields,
+      },
+    };
 
     try {
-      // const res = await axios('/tests', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   data: JSON.stringify({
-      //     namespace: 'testkube',
-      //   }),
-      // });
-      // return res;
+      const res = await axios('/tests', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify(requestBody),
+      });
+
+      if (res.status === 200) {
+        if (!toRun) {
+          const targetRedirectTestData = res?.data?.metadata?.name;
+
+          dispatch(setRedirectTarget({targetTestId: targetRedirectTestData}));
+          return navigate('/dashboard/tests');
+        }
+
+        return res;
+      }
     } catch (err) {
       console.log('err: ', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -166,14 +177,16 @@ const AddTestWizard: React.FC<WizardProps> = props => {
                 fileName: file.file.name,
               },
             });
+
+            form.validateFields(['file']);
           }
         }
       };
 
-      // @ts-ignore
-      readFile.readAsText(file.file);
-
-      form.validateFields(['file']);
+      if (file.file.type === 'application/json') {
+        // @ts-ignore
+        readFile.readAsText(file.file);
+      }
     }
   };
 
@@ -236,7 +249,7 @@ const AddTestWizard: React.FC<WizardProps> = props => {
       }
 
       if (inputType === 'textarea') {
-        children = <TextArea rows={8} />;
+        children = <TextArea rows={10} style={{resize: 'none', height: '100%'}} />;
       }
 
       if (!children) {
@@ -251,6 +264,8 @@ const AddTestWizard: React.FC<WizardProps> = props => {
     });
   };
 
+  const da = ['token', 'branch'];
+
   return (
     <StyledWizardContainer>
       <StyledWizardTitle>{wizardTitle}</StyledWizardTitle>
@@ -264,9 +279,26 @@ const AddTestWizard: React.FC<WizardProps> = props => {
             onFinish={onFinish}
             style={{paddingTop: 30}}
             initialValues={{testSource: '', testType: '', branch: 'main'}}
+            onFieldsChange={() => {
+              const formFields = form.getFieldsValue();
+
+              const isTouched = Object.keys(formFields).every(fieldKey => {
+                const isFieldTouched = form.isFieldTouched(fieldKey);
+                const fieldValue = form.getFieldValue(fieldKey);
+                const isFieldNotRequired = da.includes(fieldKey);
+
+                return isFieldNotRequired || Boolean(fieldValue) || isFieldTouched;
+              });
+
+              if (isTouched) {
+                return setButtonDisabled(form.getFieldsError().some(field => field.errors.length > 0));
+              }
+
+              return setButtonDisabled(true);
+            }}
           >
             {renderFormItems(formStructure)}
-            <Form.Item
+            <FormItem
               noStyle
               shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
             >
@@ -277,23 +309,29 @@ const AddTestWizard: React.FC<WizardProps> = props => {
                   return renderFormItems(additionalFields[testSourceValue]);
                 }
               }}
-            </Form.Item>
+            </FormItem>
           </Form>
         </StyledWizardForm>
         <WizardHint />
       </StyledWizardBody>
       <StyledWizardFooter>
         <Space>
-          <Button onClick={onCancel}>Cancel</Button>
+          <Button onClick={onCancel} disabled={isLoading}>
+            Cancel
+          </Button>
           <Button
             type="primary"
             onClick={() => {
               form.submit();
             }}
+            disabled={buttonDisabled}
+            loading={isLoading}
           >
             Save
           </Button>
-          {/* <Button type="primary">Save & Run</Button> */}
+          <Button type="primary" onClick={onRunClick} disabled={buttonDisabled}>
+            Save & Run
+          </Button>
         </Space>
       </StyledWizardFooter>
     </StyledWizardContainer>

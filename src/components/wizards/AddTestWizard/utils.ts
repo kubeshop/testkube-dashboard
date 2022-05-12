@@ -1,6 +1,7 @@
 import {Rule} from 'antd/lib/form';
 
-const requiredField = {required: true, message: 'This field is required'};
+const requiredField: Rule = {required: true, message: 'This field is required'};
+const url: Rule = {type: 'url'};
 
 type Option = {
   value: string;
@@ -23,12 +24,12 @@ export const formStructure: Array<FormItem> = [
     itemLabel: 'Name',
     tooltip: 'Enter the name of the test you wish to add.',
     rules: [requiredField],
-    fieldName: 'test',
+    fieldName: 'name',
     inputType: 'default',
     help: 'Example: test-script-git',
   },
   {
-    itemLabel: 'Test type',
+    itemLabel: 'Type',
     tooltip:
       'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
     fieldName: 'testType',
@@ -65,7 +66,7 @@ export const formStructure: Array<FormItem> = [
     fieldName: 'testSource',
     inputType: 'radio',
     options: [
-      {value: 'git-repo', label: 'Git repository'},
+      {value: 'git-dir', label: 'Git directory'},
       {value: 'git-file', label: 'Git file'},
       {value: 'file-uri', label: 'File'},
       {value: 'string', label: 'String'},
@@ -73,7 +74,7 @@ export const formStructure: Array<FormItem> = [
   },
 ];
 
-export const gitRepoFormFields: Array<FormItem> = [
+export const gitDirFormFields: Array<FormItem> = [
   {
     itemLabel: 'Personal Access Token',
     tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
@@ -83,7 +84,7 @@ export const gitRepoFormFields: Array<FormItem> = [
   },
   {
     itemLabel: 'Git URI',
-    rules: [requiredField],
+    rules: [requiredField, url],
     fieldName: 'uri',
     inputType: 'default',
     help: 'Example: https://github.com/kubeshop/testkube-example.git',
@@ -95,11 +96,34 @@ export const gitRepoFormFields: Array<FormItem> = [
     inputType: 'default',
   },
   {
-    itemLabel: 'Repository path',
+    itemLabel: 'Repository Path',
     rules: [requiredField],
     fieldName: 'path',
     inputType: 'default',
     help: 'Example: test-directory',
+  },
+];
+
+export const gitFileFormFields: Array<FormItem> = [
+  {
+    itemLabel: 'Personal Access Token',
+    tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    fieldName: 'token',
+    inputType: 'default',
+    modificator: 'password',
+  },
+  {
+    itemLabel: 'Git URI',
+    rules: [requiredField, url],
+    fieldName: 'uri',
+    inputType: 'default',
+    help: 'Example: https://github.com/kubeshop/testkube-example.git',
+  },
+  {
+    itemLabel: 'Branch Specifier',
+    tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    fieldName: 'branch',
+    inputType: 'default',
   },
 ];
 
