@@ -110,7 +110,7 @@ export const StyledAddTestButton = styled(Button)`
 
   &:hover {
     border-color: transparent;
-    background-color: #4628af;
+    background-color: ${Colors.purpleSecondary};
     color: ${Colors.whitePure};
   }
 `;

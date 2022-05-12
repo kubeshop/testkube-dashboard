@@ -47,6 +47,7 @@ enum Colors {
   highlightGreen = '#33BCB7',
 
   purple = '#7984F4',
+  purpleSecondary = '#4628AF',
 
   selectionGradient = 'linear-gradient(90deg, #3C9AE8 0%, #84E2D8 100%)',
   selectionGradientHover = 'linear-gradient(90deg, #3C9AE8 50%, #84E2D8 100%)',
