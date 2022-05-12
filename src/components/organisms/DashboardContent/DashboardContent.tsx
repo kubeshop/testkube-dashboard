@@ -213,7 +213,8 @@ const DashboardContent: React.FC<any> = props => {
   }, []);
 
   const isFiltersEmpty = compareFiltersObject(initialTestsFiltersState, queryFilters);
-  const isEmptyTestsData = isFiltersEmpty && entityType === 'tests' && !contentProps.isLoading;
+  const isEmptyTestsData =
+    (dataSource.length === 0 || !dataSource) && isFiltersEmpty && entityType === 'tests' && !contentProps.isLoading;
 
   const isFiltersEmpty = compareFiltersObject(initialTestsFiltersState, queryFilters);
   const isEmptyTestsData =
