@@ -216,10 +216,6 @@ const DashboardContent: React.FC<any> = props => {
   const isEmptyTestsData =
     (dataSource.length === 0 || !dataSource) && isFiltersEmpty && entityType === 'tests' && !contentProps.isLoading;
 
-  const isFiltersEmpty = compareFiltersObject(initialTestsFiltersState, queryFilters);
-  const isEmptyTestsData =
-    (dataSource.length === 0 || !dataSource) && isFiltersEmpty && entityType === 'tests' && !contentProps.isLoading;
-
   return (
     <StyledDashboardContentContainer
       shouldInfoPanelBeShown={shouldInfoPanelBeShown}
