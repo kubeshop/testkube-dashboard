@@ -198,11 +198,7 @@ const DashboardContent: React.FC<any> = props => {
       <StyledDashboardGradient gradient={dashboardGradient}>
         <StyledDashboardBottomGradient />
       </StyledDashboardGradient>
-      <StyledDashboardContent
-        onClick={() => {
-          // navigate('/dashboard/tests/add-test');
-        }}
-      >
+      <StyledDashboardContent>
         <DashboardTitle>{pageTitle}</DashboardTitle>
         {filtersComponentsIds && filtersComponentsIds.length ? (
           <DashboardFilters
