@@ -9,4 +9,6 @@ export const StyledDashboardTitle = styled(Title)`
     font-family: ${Fonts.ptSans};
     font-weight: 300;
   }
+  justify-content: space-between;
+  display: flex;
 `;

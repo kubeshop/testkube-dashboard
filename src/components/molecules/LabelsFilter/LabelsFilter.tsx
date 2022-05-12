@@ -34,7 +34,7 @@ const defaultKeyValuePair: Label = {
 };
 
 const LabelsFilter: React.FC<FilterProps> = props => {
-  const {setFilters, filters} = props;
+  const {setFilters, filters, isFiltersDisabled} = props;
 
   const dispatch = useDispatch();
 
@@ -155,8 +155,13 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         placement="bottomCenter"
         onVisibleChange={onVisibleChange}
         visible={isVisible}
+        disabled={isFiltersDisabled}
       >
-        <StyledFilterLabel onClick={e => e.preventDefault()} data-cy="labels-filter-button">
+        <StyledFilterLabel
+          onClick={e => e.preventDefault()}
+          data-cy="labels-filter-button"
+          isFiltersDisabled={isFiltersDisabled}
+        >
           {isFilterApplied ? <AppliedFiltersNotification /> : null}
           Labels <FilterFilled />
         </StyledFilterLabel>

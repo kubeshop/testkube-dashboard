@@ -40,9 +40,13 @@ export const StyledFilterDropdown = styled(Dropdown)`
   padding: 0 4px;
 
   ${props => (props.visible ? `background-color: ${Colors.greyHover};` : '')}
-  &:hover {
+
+  ${props =>
+    props.disabled === false
+      ? `&:hover {
     background-color: ${Colors.greyHover};
-  }
+  }`
+      : ''}
 `;
 
 export const AppliedFiltersNotification = styled.div`
@@ -57,11 +61,11 @@ export const AppliedFiltersNotification = styled.div`
   background-color: ${Colors.purple};
 `;
 
-export const StyledFilterLabel = styled.div`
+export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean}>`
   position: relative;
 
-  cursor: pointer;
-  color: ${Colors.grey450};
+  cursor: ${props => (props.isFiltersDisabled ? 'default' : 'pointer')};
+  color: ${props => (props.isFiltersDisabled ? Colors.greyDisabled : Colors.grey450)};
 
   font-size: 14px;
   font-weight: 400;

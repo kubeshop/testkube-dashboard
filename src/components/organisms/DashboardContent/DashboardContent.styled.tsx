@@ -4,7 +4,10 @@ import styled from 'styled-components';
 
 import {ExecutionStatusEnum} from '@models/execution';
 
+import {Button} from '@custom-antd';
+
 import Colors, {StatusColors} from '@styles/Colors';
+import Fonts from '@styles/Fonts';
 
 export const StyledDashboardContentContainer = styled.div<{
   shouldInfoPanelBeShown: boolean;
@@ -181,4 +184,25 @@ export const StyledTestRunnerType = styled.div`
   justify-content: flex-start;
 
   padding-right: 15px;
+`;
+
+export const AddTestButton = styled(Button)`
+  height: 40px;
+  width: 100px;
+
+  border: 1px solid ${Colors.whitePure};
+  border-radius: 20px;
+
+  background-color: transparent;
+
+  font-size: 14px;
+  font-weight: 400;
+  font-family: ${Fonts.nunito};
+  line-height: 24px;
+  color: ${Colors.whitePure};
+
+  &:hover {
+    border-color: transparent;
+    background-color: ${Colors.whitePure};
+  }
 `;
