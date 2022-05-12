@@ -128,8 +128,6 @@ const DashboardContent: React.FC<DashboardContentProps> = props => {
 
   const {dispatch, navigate, ga4React} = useContext(MainContext);
 
-  const navigate = useNavigate();
-
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const {targetTestId, targetTestExecutionId} = useAppSelector(selectRedirectTarget);
 
