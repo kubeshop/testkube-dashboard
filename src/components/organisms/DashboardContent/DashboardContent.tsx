@@ -213,7 +213,8 @@ const DashboardContent: React.FC<any> = props => {
   }, []);
 
   const isFiltersEmpty = compareFiltersObject(initialTestsFiltersState, queryFilters);
-  const isEmptyTestsData = isFiltersEmpty && entityType === 'tests' && !contentProps.isLoading;
+  const isEmptyTestsData =
+    (dataSource.length === 0 || !dataSource) && isFiltersEmpty && entityType === 'tests' && !contentProps.isLoading;
 
   return (
     <StyledDashboardContentContainer
@@ -230,7 +231,7 @@ const DashboardContent: React.FC<any> = props => {
         <DashboardTitle>
           {pageTitle}
           {entityType === 'tests' ? (
-            <AddTestButton onClick={() => navigate('/dashboard/tests/create')} data-cy="title-add-test-button">
+            <AddTestButton onClick={() => navigate('/dashboard/tests/add-test')} data-cy="title-add-test-button">
               Add Test
             </AddTestButton>
           ) : null}

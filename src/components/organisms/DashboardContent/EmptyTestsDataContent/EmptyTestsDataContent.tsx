@@ -30,7 +30,7 @@ const EmptyTestsDataContent = () => {
         <StyledLearnMoreButton onClick={() => window.open('https://kubeshop.github.io/testkube/', '_blank')}>
           Learn more
         </StyledLearnMoreButton>
-        <StyledAddTestButton onClick={() => navigate('/dashboard/tests/create')}>Add Test</StyledAddTestButton>
+        <StyledAddTestButton onClick={() => navigate('/dashboard/tests/add-test')}>Add Test</StyledAddTestButton>
       </StyledButtonContainer>
     </StyledEmptyTestsDataContainer>
   );
