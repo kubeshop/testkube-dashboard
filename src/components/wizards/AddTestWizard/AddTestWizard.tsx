@@ -134,7 +134,6 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
       form.setFieldsValue({
         file: null,
       });
-
       form.validateFields(['file']);
     } else {
       const readFile = new FileReader();
