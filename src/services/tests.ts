@@ -29,6 +29,13 @@ export const testsApi = createApi({
     getTestExecutionArtifacts: builder.query<any, string>({
       query: testExecutionId => `/executions/${testExecutionId}/artifacts`,
     }),
+    addTest: builder.mutation<void, any>({
+      query: body => ({
+        url: `/tests`,
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -37,4 +44,5 @@ export const {
   useGetTestExecutionsByIdQuery,
   useGetTestExecutionByIdQuery,
   useGetTestExecutionArtifactsQuery,
+  useAddTestMutation,
 } = testsApi;

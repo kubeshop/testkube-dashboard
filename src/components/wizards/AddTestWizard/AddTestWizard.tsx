@@ -4,8 +4,6 @@ import {useNavigate} from 'react-router-dom';
 import {Form, Input, Radio, Select, Space, notification} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
-import axios from 'axios';
-
 import {Nullable} from '@models/extendTS';
 import {WizardComponentProps} from '@models/wizard';
 
@@ -15,6 +13,8 @@ import {setRedirectTarget} from '@redux/reducers/configSlice';
 import {UploadWithInput} from '@atoms';
 
 import {Button, FormItem} from '@custom-antd';
+
+import {useAddTestMutation} from '@src/services/tests';
 
 import {
   StyledWizardBody,
@@ -54,6 +54,8 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [addTest] = useAddTestMutation();
+
   const onRunClick = async () => {
     const values = form.getFieldsValue();
 
@@ -84,16 +86,8 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
       },
     };
 
-    try {
-      const res = await axios('/tests', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: JSON.stringify(requestBody),
-      });
-
-      if (res.status === 200) {
+    return addTest(requestBody)
+      .then((res: any) => {
         const targetTestName = res?.data?.metadata?.name;
 
         if (!toRun) {
@@ -103,16 +97,16 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
         }
 
         return targetTestName;
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        notification.error({message: 'Something went wrong', description: JSON.stringify(err), duration: 0});
-      }
-    } finally {
-      setIsLoading(false);
-    }
+      })
+      .catch(err => {
+        if (err instanceof Error) {
+          notification.error({message: 'Something went wrong', description: JSON.stringify(err), duration: 0});
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
-
   const onFinish = (val: any) => {
     return onSaveClick(val);
   };
