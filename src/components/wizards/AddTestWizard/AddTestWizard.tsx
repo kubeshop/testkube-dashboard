@@ -107,6 +107,7 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
         setIsLoading(false);
       });
   };
+
   const onFinish = (val: any) => {
     return onSaveClick(val);
   };
