@@ -20,7 +20,7 @@ const EmptyTestsDataContent = () => {
 
   const isSVGVisible = size.width > 190;
   return (
-    <StyledEmptyTestsDataContainer ref={ref} isSVGVisible={isSVGVisible}>
+    <StyledEmptyTestsDataContainer ref={ref} isSVGVisible={isSVGVisible} data-cy="empty-tests-data">
       {isSVGVisible ? <AddTestImage /> : null}
       <StyledTitle isSVGVisible={isSVGVisible}>Add a test in a few easy steps.</StyledTitle>
       <StyledDescription>
@@ -30,7 +30,9 @@ const EmptyTestsDataContent = () => {
         <StyledLearnMoreButton onClick={() => window.open('https://kubeshop.github.io/testkube/', '_blank')}>
           Learn more
         </StyledLearnMoreButton>
-        <StyledAddTestButton onClick={() => navigate('/dashboard/tests/add-test')}>Add Test</StyledAddTestButton>
+        <StyledAddTestButton data-cy="add-test-button" onClick={() => navigate('/dashboard/tests/add-test')}>
+          Add Test
+        </StyledAddTestButton>
       </StyledButtonContainer>
     </StyledEmptyTestsDataContainer>
   );
