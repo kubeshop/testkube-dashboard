@@ -8,9 +8,6 @@ import {WizardComponentProps} from '@models/wizard';
 
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 
-import {useAppDispatch} from '@redux/hooks';
-import {setRedirectTarget} from '@redux/reducers/configSlice';
-
 import {UploadWithInput} from '@atoms';
 
 import {Button, FormItem} from '@custom-antd';
