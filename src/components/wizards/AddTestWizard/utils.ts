@@ -42,7 +42,7 @@ export const formStructure: Array<FormItem> = [
     ],
   },
   {
-    itemLabel: 'Test source',
+    itemLabel: 'Source',
     tooltip:
       'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
     rules: [required],
@@ -108,6 +108,13 @@ export const gitFileFormFields: Array<FormItem> = [
     fieldName: 'branch',
     inputType: 'default',
   },
+  {
+    itemLabel: 'Repository Path',
+    rules: [required],
+    fieldName: 'path',
+    inputType: 'default',
+    help: 'Example: test-directory',
+  },
 ];
 
 export const fileContentFormFields: Array<FormItem> = [
@@ -121,7 +128,7 @@ export const fileContentFormFields: Array<FormItem> = [
 
 export const stringContentFormFields: Array<FormItem> = [
   {
-    itemLabel: 'String content',
+    itemLabel: 'Enter string',
     rules: [required],
     fieldName: 'string',
     inputType: 'textarea',

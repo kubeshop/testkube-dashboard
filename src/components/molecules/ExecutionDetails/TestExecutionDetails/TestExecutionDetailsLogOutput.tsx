@@ -15,11 +15,11 @@ const TestExecutionDetailsLogOutput = () => {
 
   const isRunning = useIsRunning(status || executionResult.status);
 
-  const logOutput = isRunning ? null : executionResult?.output || executionResult?.errorMessage || 'No log output';
+  const logOutput = executionResult?.output || executionResult?.errorMessage || 'No log output';
 
   return (
     <StyledInfoPanelSection isBorder={false} containerHeight="500">
-      <LogOutput logOutput={logOutput} executionId={name} />
+      <LogOutput logOutput={logOutput} executionId={name} isRunning={isRunning} />
     </StyledInfoPanelSection>
   );
 };

@@ -139,10 +139,8 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
         }
       };
 
-      if (file.file.type === 'application/json') {
-        // @ts-ignore
-        readFile.readAsText(file.file);
-      }
+      // @ts-ignore
+      readFile.readAsText(file.file);
     }
   };
 
@@ -224,7 +222,7 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
       <StyledWizardTitle>{wizardTitle}</StyledWizardTitle>
       <StyledWizardBody>
         <StyledWizardForm>
-          <span>Create a new test based on file content or git based data.</span>
+          <span>Create a new test based on file content, string or git based data.</span>
           <Form
             form={form}
             name="add-test-form"
