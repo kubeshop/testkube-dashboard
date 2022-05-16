@@ -84,3 +84,5 @@ export const StyledWizardButton = styled(Button)`
   background: transparent;
   border: none;
 `;
+
+export const StyledWizardParagraph = styled.span``;

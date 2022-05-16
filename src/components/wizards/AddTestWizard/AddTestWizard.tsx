@@ -21,6 +21,7 @@ import {
   StyledWizardContainer,
   StyledWizardFooter,
   StyledWizardForm,
+  StyledWizardParagraph,
   StyledWizardTitle,
 } from '../Wizard.styled';
 import WizardHint from './WizardHint';
@@ -217,12 +218,33 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
     });
   };
 
+  const onFieldsChange = () => {
+    const formFields = form.getFieldsValue();
+
+    const isTouched = Object.keys(formFields).every(fieldKey => {
+      const isFieldTouched = form.isFieldTouched(fieldKey);
+      const fieldValue = form.getFieldValue(fieldKey);
+      // Did not manage to get the metadata of the fields
+      const isFieldOptional = optionalFields.includes(fieldKey);
+
+      return isFieldOptional || Boolean(fieldValue) || isFieldTouched;
+    });
+
+    if (isTouched) {
+      return setButtonDisabled(form.getFieldsError().some(field => field.errors.length > 0));
+    }
+
+    return setButtonDisabled(true);
+  };
+
   return (
     <StyledWizardContainer>
       <StyledWizardTitle>{wizardTitle}</StyledWizardTitle>
       <StyledWizardBody>
         <StyledWizardForm>
-          <span>Create a new test based on file content, string or git based data.</span>
+          <StyledWizardParagraph>
+            Create a new test based on file content, string or git based data.
+          </StyledWizardParagraph>
           <Form
             form={form}
             name="add-test-form"
@@ -230,24 +252,7 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
             onFinish={onFinish}
             style={{paddingTop: 30}}
             initialValues={{testSource: '', testType: '', branch: 'main'}}
-            onFieldsChange={() => {
-              const formFields = form.getFieldsValue();
-
-              const isTouched = Object.keys(formFields).every(fieldKey => {
-                const isFieldTouched = form.isFieldTouched(fieldKey);
-                const fieldValue = form.getFieldValue(fieldKey);
-                // Did not manage to get the metadata of the fields
-                const isFieldOptional = optionalFields.includes(fieldKey);
-
-                return isFieldOptional || Boolean(fieldValue) || isFieldTouched;
-              });
-
-              if (isTouched) {
-                return setButtonDisabled(form.getFieldsError().some(field => field.errors.length > 0));
-              }
-
-              return setButtonDisabled(true);
-            }}
+            onFieldsChange={onFieldsChange}
           >
             {renderFormItems(formStructure)}
             <FormItem

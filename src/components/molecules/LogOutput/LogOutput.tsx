@@ -66,7 +66,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   }, [logs, isFullScreenLogOutput]);
 
   return (
-    <StyledLogOutputContainer $isFullScreen={false}>
+    <StyledLogOutputContainer>
       <LogOutputHeader logOutput={logs} actions={actions} />
       <StyledLogTextContainer>{logs ? <StyledPreLogText>{logs}</StyledPreLogText> : null}</StyledLogTextContainer>
     </StyledLogOutputContainer>
