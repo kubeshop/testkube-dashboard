@@ -22,7 +22,7 @@ import {uppercaseFirstSymbol} from '@src/utils/strings';
 const statusList = ['queued', 'running', 'passed', 'failed'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters} = props;
+  const {filters, setFilters, isFiltersDisabled} = props;
 
   const dispatch = useDispatch();
 
@@ -87,8 +87,13 @@ const StatusFilter: React.FC<FilterProps> = props => {
         placement="bottomCenter"
         onVisibleChange={onVisibleChange}
         visible={isVisible}
+        disabled={isFiltersDisabled}
       >
-        <StyledFilterLabel onClick={e => e.preventDefault()} data-cy="status-filter-button">
+        <StyledFilterLabel
+          onClick={e => e.preventDefault()}
+          data-cy="status-filter-button"
+          isFiltersDisabled={isFiltersDisabled}
+        >
           {filters.status.length > 0 ? <AppliedFiltersNotification /> : null}
           Status <FilterFilled />
         </StyledFilterLabel>

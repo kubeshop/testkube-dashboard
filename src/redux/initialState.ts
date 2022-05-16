@@ -3,7 +3,7 @@ import {ExecutionsState} from '@models/executions';
 import {LabelsState} from '@models/labels';
 import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
 import {TestSuitesState} from '@models/testSuites';
-import {TestsState} from '@models/tests';
+import {TestFilters, TestsState} from '@models/tests';
 
 const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
@@ -44,11 +44,21 @@ const initialTestSuitesState: TestSuitesState = {
   selectedTestSuite: null,
 };
 
+export const initialTestsFiltersState: TestFilters = {
+  textSearch: '',
+  type: '',
+  pageSize: 10,
+  page: 0,
+  selector: [],
+  createdAt: null,
+  status: [],
+};
+
 const initialTestsState: TestsState = {
   isLoading: false,
   dataList: [],
   latestExecution: null,
-  filters: {textSearch: '', type: '', pageSize: 10, page: 0, selector: [], createdAt: null, status: []},
+  filters: initialTestsFiltersState,
   totals: {
     results: 0,
     passed: 0,
@@ -106,6 +116,7 @@ const initialLabelsState: LabelsState = {
 const initialConfigState: ConfigState = {
   apiEndpoint: null,
   redirectTarget: {
+    runTarget: false,
     targetTestExecutionId: null,
     targetTestId: null,
   },

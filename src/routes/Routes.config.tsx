@@ -1,11 +1,17 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {Navigate} from 'react-router-dom';
 
-import {DashboardBlueprintRenderer} from '@organisms';
+import {AddEntityBlueprintRenderer, DashboardBlueprintRenderer} from '@organisms';
 
 import {EndpointProcessing, NotFound} from '@pages';
 
 const routesConfig = [
+  {
+    path: 'dashboard/tests/add-test',
+    element: AddEntityBlueprintRenderer,
+    props: {
+      entityType: 'tests',
+    },
+  },
   {
     path: 'apiEndpoint',
     element: EndpointProcessing,

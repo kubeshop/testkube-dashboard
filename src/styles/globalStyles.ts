@@ -1,6 +1,7 @@
 import {createGlobalStyle} from 'styled-components';
 
 import Colors from './Colors';
+import Fonts from './Fonts';
 
 export const invisibleScroll = `
 &::-webkit-scrollbar {
@@ -391,6 +392,7 @@ ul {
   .ant-notification {
     .ant-notification-notice {
       background-color: ${Colors.grey900};
+
       svg {
         path {
           fill: ${Colors.purple};
@@ -398,6 +400,57 @@ ul {
       }
     }
   }
+
+  // <Form />
+
+  .ant-input[type="password"] {
+    font-family: ${Fonts.nunito} !important;
+  }
+
+  // .anticon {
+  //   color: #7D7D7D !important;
+  // }
+
+  .ant-form-item {
+    &-required {
+      &::before {
+        font-family: ${Fonts.nunito} !important;
+      }
+    }
+
+    &-tooltip {
+      color: ${Colors.grey7} !important;
+    }
+
+    &-with-help {
+      .ant-form-item-explain {
+        color: #7D7D7D !important;
+      }
+
+      .ant-form-item-explain-error {
+        color: #DB539C !important;
+      }
+    }
+    
+  }
+
+  .ant-select-dropdown {
+    padding: 0 !important;
+
+    .rc-virtual-list-holder-inner {
+      border: 1px solid #434343;
+    }
+  }
+
+  .ant-select-arrow,
+  .ant-input-password-icon {
+    color: #7D7D7D;
+
+    &:hover {
+      color: ${Colors.whitePure};
+    }
+  }
+
 `;
 
 /* Media Sizes */

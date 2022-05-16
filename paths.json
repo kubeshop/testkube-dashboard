@@ -17,6 +17,8 @@
       "@organisms/*": ["src/components/organisms/*"],
       "@pages": ["src/components/pages/"],
       "@pages/*": ["src/components/pages/*"],
+      "@wizards": ["src/components/wizards/"],
+      "@wizards/*": ["src/components/wizards/*"],
       "@services": ["src/services/"],
       "@services/*": ["src/services/*"],
       "@assets": ["src/assets/images/"],

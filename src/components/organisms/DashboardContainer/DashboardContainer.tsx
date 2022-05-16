@@ -9,7 +9,7 @@ import {DashboardBlueprint} from '@models/dashboard';
 import {useAppSelector} from '@redux/hooks';
 import {closeFullScreenLogOutput, selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 
-import {LogOutput} from '@molecules';
+import FullScreenLogOutput from '@molecules/LogOutput/FullScreenLogOutput';
 
 import {DashboardContent, DashboardInfoPanel} from '@organisms';
 
@@ -164,7 +164,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
         <DashboardInfoPanel />
         {/* That is for Fullscreen Log Output */}
         <CSSTransition in={isFullScreenLogOutput} timeout={350} classNames="full-screen-log-output" unmountOnExit>
-          <LogOutput logOutput={logOutput} isFullScreen />
+          <FullScreenLogOutput logOutput={logOutput} />
         </CSSTransition>
       </StyledDashboardContainerWrapper>
     </DashboardContext.Provider>

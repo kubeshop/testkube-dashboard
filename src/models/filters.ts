@@ -10,4 +10,5 @@ export type FilterProps = {
   entityType: DashboardBlueprint['entityType'];
   queryParam?: string;
   placeholderText?: string;
+  isFiltersDisabled: boolean;
 };

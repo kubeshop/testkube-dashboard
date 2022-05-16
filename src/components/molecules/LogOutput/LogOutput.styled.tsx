@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
-export const StyledLogOutputContainer = styled.div<{$isFullScreen: boolean}>`
+export const StyledLogOutputContainer = styled.div<{$isFullScreen?: boolean}>`
   ${({$isFullScreen}) =>
     $isFullScreen
       ? `

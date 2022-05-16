@@ -4,7 +4,10 @@ import styled from 'styled-components';
 
 import {ExecutionStatusEnum} from '@models/execution';
 
+import {Button} from '@custom-antd';
+
 import Colors, {StatusColors} from '@styles/Colors';
+import Fonts from '@styles/Fonts';
 
 export const StyledDashboardContentContainer = styled.div<{
   shouldInfoPanelBeShown: boolean;
@@ -72,35 +75,6 @@ export const StyledDashboardContentContainer = styled.div<{
       display: none;
     }
   }
-`;
-
-export const StyledDashboardContentTitleGradient = styled.div<{gradient?: string}>`
-  position: absolute;
-  top: 0;
-  z-index: 1;
-
-  height: 500px;
-  width: 100%;
-
-  background: ${props => props.gradient};
-`;
-
-export const StyledDashboardContentTitleBottomGradient = styled.div`
-  position: absolute;
-  bottom: 0;
-  z-index: 2;
-
-  height: 250px;
-  width: 100%;
-
-  background: linear-gradient(0.36deg, #151515 59.16%, rgba(21, 21, 21, 0) 96.43%);
-`;
-
-export const StyledDashboardContent = styled.div`
-  position: relative;
-  z-index: 3;
-
-  padding: 40px 20px 0px 20px;
 `;
 
 export const StyledDashboardTableRow = styled.div`
@@ -210,4 +184,25 @@ export const StyledTestRunnerType = styled.div`
   justify-content: flex-start;
 
   padding-right: 15px;
+`;
+
+export const AddTestButton = styled(Button)`
+  height: 40px;
+  width: 100px;
+
+  border: 1px solid ${Colors.whitePure};
+  border-radius: 20px;
+
+  background-color: transparent;
+
+  font-size: 14px;
+  font-weight: 400;
+  font-family: ${Fonts.nunito};
+  line-height: 24px;
+  color: ${Colors.whitePure};
+
+  &:hover {
+    border-color: transparent;
+    background-color: ${Colors.whitePure};
+  }
 `;

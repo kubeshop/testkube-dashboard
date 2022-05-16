@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 
 import {LogAction} from '@models/log';
 
-import {useAppDispatch} from '@redux/hooks';
-import {setLogOutput} from '@redux/reducers/configSlice';
+import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {selectFullScreenLogOutput, setLogOutput} from '@redux/reducers/configSlice';
 
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
@@ -12,42 +12,61 @@ export type LogActionProps = {
   logOutput: string;
 };
 
-type LogOutputProps = {
+export type LogOutputProps = {
   logOutput?: string;
   executionId?: string;
   actions?: Array<LogAction>;
   isFullScreen?: boolean;
+  isRunning?: boolean;
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = '', executionId, actions = ['copy', 'fullscreen'], isFullScreen = false} = props;
+  const {logOutput = '', executionId, actions = ['copy', 'fullscreen'], isRunning} = props;
 
   const dispatch = useAppDispatch();
+  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
-  const [logs, setLogs] = useState(logOutput);
+  const [logs, setLogs] = useState('');
 
   useEffect(() => {
-    if (!logOutput && executionId) {
-      const sse = new EventSource(`${localStorage.getItem('apiEndpoint')}/executions/${executionId}/logs`);
+    if (isRunning) {
+      const eventSource = new EventSource(`${localStorage.getItem('apiEndpoint')}/executions/${executionId}/logs`);
 
-      sse.onmessage = e => {
-        if (isFullScreen) {
-          dispatch(setLogOutput(e.data));
-        }
+      eventSource.addEventListener('message', e => {
+        setLogs(prev => {
+          if (prev) {
+            const dataToJSON = JSON.parse(e.data);
+            const finalString = `${prev}\n${dataToJSON.content}`;
 
-        setLogs(e.data);
-      };
+            return finalString;
+          }
+
+          return e.data;
+        });
+      });
 
       return () => {
-        sse.close();
+        eventSource.close();
       };
     }
 
     setLogs(logOutput);
-  }, [logOutput]);
+
+    return () => {
+      setLogs('');
+    };
+  }, [isRunning, logOutput]);
+
+  useEffect(() => {
+    if (isFullScreenLogOutput) {
+      dispatch(setLogOutput(logs));
+    } else {
+      dispatch(setLogOutput(''));
+    }
+  }, [logs, isFullScreenLogOutput]);
 
   return (
-    <StyledLogOutputContainer $isFullScreen={isFullScreen}>
+    <StyledLogOutputContainer>
       <LogOutputHeader logOutput={logs} actions={actions} />
       <StyledLogTextContainer>{logs ? <StyledPreLogText>{logs}</StyledPreLogText> : null}</StyledLogTextContainer>
     </StyledLogOutputContainer>

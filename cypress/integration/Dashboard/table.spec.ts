@@ -35,6 +35,17 @@ describe('Test Suites Content Table', () => {
 
     cy.get('@table').get('tbody').children().should('have.length', 2);
   });
+
+  it('should redirect to add test', () => {
+    cy.visit('/dashboard/tests');
+
+    cy.intercept(`${baseEndpointUrl}/test-with-executions?*`, []);
+    cy.get('[data-cy=empty-tests-data]').should('exist');
+
+    cy.get('[data-cy=empty-tests-data]').get('[data-cy=add-test-button]').click();
+
+    cy.url().should('include', 'add-test');
+  });
 });
 
 export {};

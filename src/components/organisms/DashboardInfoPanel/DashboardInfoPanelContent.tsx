@@ -9,7 +9,7 @@ import axios from 'axios';
 import {DashboardBlueprintType} from '@models/dashboard';
 
 import {useAppSelector} from '@redux/hooks';
-import {clearTargetTestExecutionId, selectRedirectTarget} from '@redux/reducers/configSlice';
+import {clearRunTarget, clearTargetTestExecutionId, selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import {Skeleton} from '@custom-antd';
 
@@ -101,7 +101,7 @@ const DashboardInfoPanelContent = () => {
   } = useContext(DashboardContext);
 
   const dispatch = useDispatch();
-  const {targetTestExecutionId} = useAppSelector(selectRedirectTarget);
+  const {targetTestExecutionId, runTarget} = useAppSelector(selectRedirectTarget);
   const [ref, size] = useElementSize();
 
   const [infoPanelProps, setInfoPanelProps] = useState<any>({
@@ -181,6 +181,13 @@ const DashboardInfoPanelContent = () => {
       }
     }
   }, [infoPanelProps?.data, targetTestExecutionId]);
+
+  useEffect(() => {
+    if (runTarget) {
+      onRunButtonClick();
+      dispatch(clearRunTarget());
+    }
+  }, [runTarget]);
 
   return (
     <StyledDashboardInfoPanelContent ref={ref}>

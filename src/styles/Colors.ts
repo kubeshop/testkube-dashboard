@@ -14,6 +14,7 @@ enum Colors {
   greySecondary = '#ADADAD',
   greyCode = '#DADADA',
   greyBG = '#434343',
+  greyBGSecondary = '#1d1d1d',
 
   // Notifications
   greenOkay = '#09B89D',
@@ -46,6 +47,7 @@ enum Colors {
   highlightGreen = '#33BCB7',
 
   purple = '#7984F4',
+  purpleSecondary = '#4628AF',
 
   selectionGradient = 'linear-gradient(90deg, #3C9AE8 0%, #84E2D8 100%)',
   selectionGradientHover = 'linear-gradient(90deg, #3C9AE8 50%, #84E2D8 100%)',
@@ -57,6 +59,7 @@ enum Colors {
   dashboardTableBackground = '#1D1D1D',
   greyBorder = '#434343',
   greyHover = '#303030',
+  greyDisabled = '#5A5A5A',
 }
 
 export enum BackgroundColors {
