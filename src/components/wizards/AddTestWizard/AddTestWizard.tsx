@@ -63,9 +63,11 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
     try {
       const targetTestName = await onSaveClick(values, true);
 
-      dispatch(setRedirectTarget({targetTestId: targetTestName, runTarget: true}));
+      if (targetTestName) {
+        dispatch(setRedirectTarget({targetTestId: targetTestName, runTarget: true}));
 
-      navigate('/dashboard/tests');
+        navigate('/dashboard/tests');
+      }
     } catch (err) {
       console.log('err: ', err);
     }
