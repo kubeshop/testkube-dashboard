@@ -89,15 +89,23 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
 
     return addTest(requestBody)
       .then((res: any) => {
-        const targetTestName = res?.data?.metadata?.name;
+        if (res.error) {
+          notification.error({
+            message: 'Something went wrong',
+            description: JSON.stringify(res.error?.status),
+            duration: 0,
+          });
+        } else {
+          const targetTestName = res?.data?.metadata?.name;
 
-        if (!toRun) {
-          dispatch(setRedirectTarget({targetTestId: targetTestName}));
+          if (!toRun) {
+            dispatch(setRedirectTarget({targetTestId: targetTestName}));
 
-          return navigate('/dashboard/tests');
+            return navigate('/dashboard/tests');
+          }
+
+          return targetTestName;
         }
-
-        return targetTestName;
       })
       .catch(err => {
         if (err instanceof Error) {
@@ -281,12 +289,12 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
             onClick={() => {
               form.submit();
             }}
-            disabled={buttonDisabled}
+            disabled={buttonDisabled || isLoading}
             loading={isLoading}
           >
             Save
           </Button>
-          <Button type="primary" onClick={onRunClick} disabled={buttonDisabled}>
+          <Button type="primary" onClick={onRunClick} disabled={buttonDisabled || isLoading}>
             Save & Run
           </Button>
         </Space>
