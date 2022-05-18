@@ -1,0 +1,38 @@
+name: Publish Docker image with a commit hash tag
+
+on:
+  push:
+    branches:
+#      - main
+      - trigger_deploy-to-stage
+
+jobs:
+  push_to_registry:
+    name: Build and push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out GitHub repo
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+#      - name: Docker meta for API Server
+#        id: meta_dashboard
+#        uses: docker/metadata-action@v3
+#        with:
+#          images: kubeshop/testkube-dashboard
+#          tags: type=sha
+
+      - name: Step
+        id: github_sha
+        run: echo "::set-output name=sha_short::${GITHUB_SHA::7}"
+
+      - name: Build image and push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ github.sha }}
