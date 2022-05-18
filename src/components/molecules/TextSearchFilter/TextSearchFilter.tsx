@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {useDebounce} from 'react-use';
 
 import {DashboardBlueprintType} from '@models/dashboard';
 import {FilterProps} from '@models/filters';
+
+import useDebounce from '@hooks/useDebounce';
 
 import {StyledSearchInput, StyledSearchInputContainer} from './TextSearchFilter.styled';
 

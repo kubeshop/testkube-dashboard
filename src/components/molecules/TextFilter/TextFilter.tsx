@@ -1,11 +1,12 @@
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {useDebounce} from 'react-use';
 
 import {DashboardBlueprintType} from '@models/dashboard';
 import {FilterProps} from '@models/filters';
 
 import {LabelInput} from '@atoms';
+
+import useDebounce from '@hooks/useDebounce';
 
 const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
   'test-suites': 'textSearch',
