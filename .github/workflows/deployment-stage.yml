@@ -20,14 +20,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#      - name: Docker meta for API Server
-#        id: meta_dashboard
-#        uses: docker/metadata-action@v3
-#        with:
-#          images: kubeshop/testkube-dashboard
-#          tags: type=sha
-
-      - name: Step
+      - name: Output commit sha
         id: github_sha
         run: echo "::set-output name=sha_short::${GITHUB_SHA::7}"
 
@@ -35,4 +28,13 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ github.sha }}
+          tags: sha-${{ steps.github_sha.outputs.sha_short }}
+
+      #Trigger Helm repo workflow to deploy Dashboard to Stage cluster
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.DEVOPS_GITHUB_TOKEN }}
+          repository: kubeshop/helm-charts
+          event-type: trigger-workflow-dashboard
+          client-payload: '{"image_tag_dashboard": "sha-${{ steps.github_sha.outputs.sha_short }}"}'
