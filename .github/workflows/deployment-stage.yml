@@ -3,8 +3,7 @@ name: Publish Docker image with a commit hash tag
 on:
   push:
     branches:
-#      - main
-      - trigger_deploy-to-stage
+      - main
 
 jobs:
   push_to_registry:
