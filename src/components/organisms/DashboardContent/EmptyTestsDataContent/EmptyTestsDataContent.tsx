@@ -29,7 +29,9 @@ const EmptyTestsDataContent = () => {
         Simply define your test, add any variables, execute it and view the results!
       </StyledDescription>
       <StyledButtonContainer>
-        <StyledLearnMoreButton onClick={() => window.open('https://kubeshop.github.io/testkube/', '_blank')}>
+        <StyledLearnMoreButton
+          onClick={() => window.open('https://kubeshop.github.io/testkube/tests-creating/', '_blank')}
+        >
           Learn more
         </StyledLearnMoreButton>
         <StyledAddTestButton data-cy="add-test-button" onClick={() => navigate('/dashboard/tests/add-test')}>

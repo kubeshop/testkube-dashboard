@@ -2,6 +2,8 @@ import {EntityMap} from '@models/entityMap';
 import {ObjectRef} from '@models/objectRef';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
+import {Variable} from './variable';
+
 export type TestSuiteStepTypeEnum = 'executeTest' | 'delay';
 
 export type TestSuiteStepDelay = {

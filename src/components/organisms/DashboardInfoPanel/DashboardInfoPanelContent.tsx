@@ -23,6 +23,8 @@ import {useGetTestExecutionsByIdQuery} from '@services/tests';
 
 import {DashboardInfoPanelContext, MainContext} from '@contexts';
 
+import Variables from '@src/components/molecules/Variables';
+
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {
   StyledAntTabs,
@@ -236,6 +238,9 @@ const DashboardInfoPanelContent = () => {
           </TabPane>
           <TabPane tab="Definition" key="ExecutionDefinitionPane">
             <ExecutionDefinition />
+          </TabPane>
+          <TabPane tab="Variables" key="VariablesPane">
+            <Variables />
           </TabPane>
         </StyledAntTabs>
       </DashboardInfoPanelContext.Provider>

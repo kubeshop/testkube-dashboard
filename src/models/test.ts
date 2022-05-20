@@ -2,6 +2,8 @@ import {EntityMap} from '@models/entityMap';
 import {Execution} from '@models/execution';
 import {Repository} from '@models/repository';
 
+import {Variable} from './variable';
+
 export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | 'string';
 
 export type TestContent = {
