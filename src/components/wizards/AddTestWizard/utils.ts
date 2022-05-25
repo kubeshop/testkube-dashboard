@@ -39,6 +39,10 @@ export const formStructure: Array<FormItem> = [
         value: 'soapui/xml',
         label: 'SoapUI',
       },
+      {
+        value: 'artillery/test',
+        label: 'Artillery',
+      },
     ],
   },
   {
