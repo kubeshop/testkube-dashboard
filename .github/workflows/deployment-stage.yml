@@ -1,0 +1,39 @@
+name: Publish Docker image with a commit hash tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push_to_registry:
+    name: Build and push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out GitHub repo
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Output commit sha
+        id: github_sha
+        run: echo "::set-output name=sha_short::${GITHUB_SHA::7}"
+
+      - name: Build image and push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ github.repository }}:sha-${{ steps.github_sha.outputs.sha_short }}
+
+      #Trigger Helm repo workflow to deploy Dashboard to Stage cluster
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.CI_BOT_TOKEN }}
+          repository: kubeshop/helm-charts
+          event-type: trigger-workflow-dashboard
+          client-payload: '{"image_tag_dashboard": "sha-${{ steps.github_sha.outputs.sha_short }}"}'
