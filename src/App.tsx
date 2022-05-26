@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -16,20 +16,23 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {useGetLabelsQuery} from '@services/labels';
 
+import {MainContext} from '@contexts';
+
 import {StyledLayoutContentWrapper} from './App.styled';
 import {CookiesBanner} from './components/molecules';
 import Routes from './routes';
 
-const App = () => {
-  const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
-  const apiEndpoint = useAppSelector(selectApiEndpoint);
+const App: React.FC = () => {
   const dispatch = useAppDispatch();
-
   const ga4React = useGA4React();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const apiEndpoint = useAppSelector(selectApiEndpoint);
+
+  const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
 
   const {data: labelsMap, refetch} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.long});
-
-  const {pathname} = useLocation();
 
   useEffect(() => {
     refetch();
@@ -43,9 +46,9 @@ const App = () => {
 
   useEffect(() => {
     if (ga4React) {
-      ga4React.pageview(pathname);
+      ga4React.pageview(location.pathname);
     }
-  }, [pathname]);
+  }, [location.pathname]);
 
   const onAcceptCookies = () => {
     // @ts-ignore
@@ -79,18 +82,27 @@ const App = () => {
     }
   }, [ga4React]);
 
+  const mainContextValue = {
+    ga4React,
+    dispatch,
+    location,
+    navigate,
+  };
+
   return (
-    <Layout>
-      <SideBar />
-      <StyledLayoutContentWrapper>
-        <Content>
-          <Routes />
-        </Content>
-      </StyledLayoutContentWrapper>
-      {isCookiesVisible ? (
-        <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
-      ) : null}
-    </Layout>
+    <MainContext.Provider value={mainContextValue}>
+      <Layout>
+        <SideBar />
+        <StyledLayoutContentWrapper>
+          <Content>
+            <Routes />
+          </Content>
+        </StyledLayoutContentWrapper>
+        {isCookiesVisible ? (
+          <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
+        ) : null}
+      </Layout>
+    </MainContext.Provider>
   );
 };
 

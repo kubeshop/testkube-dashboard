@@ -1,5 +1,5 @@
 import {DashboardBlueprint} from '@models/dashboard';
-import {LabelKey} from '@models/labels';
+import {EntityKey} from '@models/entityMap';
 
 import {
   selectAllTestsFilters,
@@ -55,7 +55,7 @@ export const TestsEntity: DashboardBlueprint = {
           return <span> - </span>;
         }
 
-        const labelKeys: LabelKey[] = Object.keys(data.labels);
+        const labelKeys: EntityKey[] = Object.keys(data.labels);
 
         return (
           <div>

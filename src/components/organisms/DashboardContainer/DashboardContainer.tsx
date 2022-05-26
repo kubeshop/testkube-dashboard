@@ -1,5 +1,4 @@
-import {createContext, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {createContext, useContext, useEffect, useState} from 'react';
 import {CSSTransition} from 'react-transition-group';
 
 import {TablePaginationConfig} from 'antd';
@@ -14,6 +13,8 @@ import FullScreenLogOutput from '@molecules/LogOutput/FullScreenLogOutput';
 import {DashboardContent, DashboardInfoPanel} from '@organisms';
 
 import useUpdateURLSearchParams from '@hooks/useUpdateURLSearchParams';
+
+import {MainContext} from '@contexts';
 
 import {StyledDashboardContainerWrapper} from './DashboardContainer.styled';
 
@@ -35,6 +36,8 @@ type DashboardInfoPanelProps = {
   setSelectedExecution: React.Dispatch<React.SetStateAction<any>>;
   closeSecondLevel: () => void;
   closeDrawer: () => void;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const DashboardContext = createContext<DashboardBlueprint & DashboardInfoPanelProps & DashboardInnerProps>({
@@ -57,6 +60,8 @@ export const DashboardContext = createContext<DashboardBlueprint & DashboardInfo
   setInfoPanelVisibility: () => {},
   closeSecondLevel: () => {},
   closeDrawer: () => {},
+  currentPage: 1,
+  setCurrentPage: () => {},
 });
 
 const DashboardContainer: React.FC<DashboardBlueprint> = props => {
@@ -71,7 +76,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     ...rest
   } = props;
 
-  const dispatch = useDispatch();
+  const {dispatch} = useContext(MainContext);
 
   const dataSource: any = useAppSelector(selectData);
   const selectedRecord: any = useAppSelector(selectSelectedRecord);
@@ -85,6 +90,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const [isInfoPanelExpanded, setInfoPanelVisibility] = useState(true);
   const [isSecondLevelOpen, setSecondLevelOpenState] = useState(false);
   const [selectedExecution, setSelectedExecution] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const onRowSelect = (rowRecord: any) => {
     if (!isInfoPanelExpanded) {
@@ -99,6 +105,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
 
   const pagination: TablePaginationConfig = {
     onChange: (page: number) => {
+      setCurrentPage(page);
       dispatch(setQueryFilters({...queryFilters, page: page - 1}));
     },
 
@@ -108,7 +115,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
 
     ...(allFilters.totals?.results ? {total: allFilters.totals?.results} : {}),
 
-    ...(queryFilters.page ? {current: queryFilters.page + 1} : {}),
+    current: currentPage,
 
     ...(queryFilters.pageSize ? {pageSize: queryFilters.pageSize} : {}),
 
@@ -149,6 +156,8 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
     closeSecondLevel,
     closeDrawer,
     onCloseFullScreenOutput,
+    currentPage,
+    setCurrentPage,
   };
 
   useEffect(() => {

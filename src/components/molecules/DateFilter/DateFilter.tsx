@@ -1,10 +1,12 @@
-import {useDispatch} from 'react-redux';
+import {useContext} from 'react';
 
 import {DatePicker} from 'antd';
 
 import moment from 'moment';
 
 import {FilterProps} from '@models/filters';
+
+import {MainContext} from '@contexts';
 
 const datePickerStyles = {
   color: 'var(--color-dark-quaternary)',
@@ -17,7 +19,7 @@ const datePickerStyles = {
 const DateFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters} = props;
 
-  const dispatch = useDispatch();
+  const {dispatch} = useContext(MainContext);
 
   const onDateChange = (_: any, dateString: any) => {
     if (!dateString) {

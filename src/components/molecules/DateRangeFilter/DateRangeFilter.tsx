@@ -1,10 +1,12 @@
-import {useDispatch} from 'react-redux';
+import {useContext} from 'react';
 
 import {DatePicker} from 'antd';
 
 import moment from 'moment';
 
 import {FilterProps} from '@models/filters';
+
+import {MainContext} from '@contexts';
 
 const {RangePicker} = DatePicker;
 
@@ -19,7 +21,7 @@ const dateRangePickerStyles = {
 const DateRangeFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters} = props;
 
-  const dispatch = useDispatch();
+  const {dispatch} = useContext(MainContext);
 
   const onDateRangeChange = (_: any, dateString: any) => {
     if (!dateString) {

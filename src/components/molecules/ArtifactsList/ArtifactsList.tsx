@@ -15,7 +15,7 @@ import {
 } from './ArtifactsList.styled';
 
 type ArtifactsListProps = {
-  artifacts: Array<Artifact>;
+  artifacts: Artifact[];
   testExecutionId: string;
 };
 

@@ -1,16 +1,14 @@
 import {useContext, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
 
 import {TableRowSelection} from 'antd/lib/table/interface';
 
-import {useGA4React} from 'ga-4-react';
 import moment from 'moment';
 
 import {TestWithExecution} from '@models/test';
 import {TestSuiteWithExecution} from '@models/testSuite';
 
 import {useAppSelector} from '@redux/hooks';
+import {initialTestsFiltersState} from '@redux/initialState';
 import {clearTargetTestId, selectApiEndpoint, selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import {Skeleton} from '@custom-antd';
@@ -20,7 +18,8 @@ import {PollingIntervals} from '@utils/numbers';
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
 
-import {initialTestsFiltersState} from '../../../redux/initialState';
+import {MainContext} from '@contexts';
+
 import {StyledDashboardBottomGradient, StyledDashboardContent, StyledDashboardGradient} from '../Dashboard.styled';
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {AddTestButton, StyledContentTable, StyledDashboardContentContainer} from './DashboardContent.styled';
@@ -110,13 +109,10 @@ const DashboardContent: React.FC<any> = props => {
     dataSource,
     dashboardGradient,
     closeSecondLevel,
+    setCurrentPage,
   } = useContext(DashboardContext);
 
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
-  const ga4React = useGA4React();
+  const {dispatch, navigate, ga4React} = useContext(MainContext);
 
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const {targetTestId, targetTestExecutionId} = useAppSelector(selectRedirectTarget);
@@ -199,6 +195,8 @@ const DashboardContent: React.FC<any> = props => {
         const targetTestArrayIndex = contentProps.data?.indexOf(targetTest[0]) + 1;
 
         if (targetTest.length) {
+          setCurrentPage(Math.ceil(targetTestArrayIndex / 10));
+
           onRowSelect(targetTest[0].test);
           dispatch(clearTargetTestId());
         }

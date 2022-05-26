@@ -1,6 +1,5 @@
+import {EntityMap} from '@models/entityMap';
 import {Execution} from '@models/execution';
-import {LabelMap} from '@models/labels';
-import {ParamMap} from '@models/param';
 import {Repository} from '@models/repository';
 
 export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | 'string';
@@ -18,9 +17,9 @@ export type Test = {
   type: string;
   content: TestContent;
   created: string;
-  labels: LabelMap;
+  labels: EntityMap;
   schedule: string;
-  params: ParamMap;
+  params: EntityMap;
 };
 
 export type TestWithExecution = {

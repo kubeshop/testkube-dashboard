@@ -1,13 +1,15 @@
-import {useEffect} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useContext, useEffect} from 'react';
 
 import {paramsSerializer} from '@utils/fetchUtils';
+
+import {MainContext} from '@contexts';
 
 const prohibitedSearchParams = ['page', 'pageSize'];
 
 const useUpdateURLSearchParams = (filters: any) => {
-  const navigate = useNavigate();
-  const {pathname, search} = useLocation();
+  const {navigate, location} = useContext(MainContext);
+
+  const {pathname, search} = location;
 
   const updateURLQueryParams = () => {
     const searchParams = new URLSearchParams(search);

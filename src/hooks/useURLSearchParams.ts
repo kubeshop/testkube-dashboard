@@ -1,10 +1,13 @@
-import {useMemo} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useContext, useMemo} from 'react';
 
 import qs from 'query-string';
 
+import {MainContext} from '@contexts';
+
 const useURLSearchParams = () => {
-  const {search} = useLocation();
+  const {location} = useContext(MainContext);
+
+  const {search} = location;
 
   const urlSearchParams = useMemo(() => new URLSearchParams(search), [search]);
 

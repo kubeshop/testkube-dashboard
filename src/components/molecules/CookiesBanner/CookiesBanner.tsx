@@ -3,11 +3,7 @@ import {Button, Space} from 'antd';
 import Colors from '@styles/Colors';
 
 import {StyledCookiesButton, StyledCookiesContainer, StyledCookiesDisclaimer} from './CookiesBanner.styled';
-
-type CookiesBannerProps = {
-  onAcceptCookies: () => void;
-  onDeclineCookies: (args?: {skipGAEvent?: boolean}) => void;
-};
+import {CookiesBannerProps} from './CookiesBanner.types';
 
 const CookiesBanner: React.FC<CookiesBannerProps> = props => {
   const {onAcceptCookies, onDeclineCookies} = props;

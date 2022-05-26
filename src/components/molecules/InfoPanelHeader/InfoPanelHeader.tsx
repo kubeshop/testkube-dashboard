@@ -1,4 +1,4 @@
-import {LabelMap} from '@models/labels';
+import {EntityMap} from '@models/entityMap';
 import {TestExecutor} from '@models/testExecutors';
 
 import {Title} from '@custom-antd';
@@ -16,7 +16,7 @@ import {
 
 type InfoPanelHeaderProps = {
   title?: string;
-  labels?: LabelMap;
+  labels?: EntityMap;
   testType?: TestExecutor;
   description?: string;
   isLoading?: boolean;

@@ -1,7 +1,4 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
-import {useMemo} from 'react';
-import {useDispatch} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import {useContext, useMemo} from 'react';
 
 import classNames from 'classnames';
 import {v4} from 'uuid';
@@ -9,6 +6,8 @@ import {v4} from 'uuid';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 
 import {ExecutionName} from '@molecules';
+
+import {MainContext} from '@contexts';
 
 import ExecutionStepIcon from '../ExecutionStepIcon';
 import {
@@ -28,8 +27,7 @@ type ExecutionStepsListProps = {
 const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const {executionSteps, iconSet = 'default'} = props;
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const {dispatch, navigate} = useContext(MainContext);
 
   const getExecutionStepIcon = (step: any) => {
     if (iconSet === 'definition') {

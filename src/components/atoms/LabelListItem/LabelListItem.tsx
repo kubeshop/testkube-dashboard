@@ -1,10 +1,10 @@
-import {LabelKey, LabelValue} from '@models/labels';
+import {EntityKey, EntityValue} from '@models/entityMap';
 
 import {StyledLabelListItem} from './LabelListItem.styled';
 
 type LabelListItemProps = {
-  labelKey?: LabelKey;
-  labelValue?: LabelValue;
+  labelKey?: EntityKey;
+  labelValue?: EntityValue;
   isSkippedMode?: boolean;
   skippedLabelsNumber?: number;
 };

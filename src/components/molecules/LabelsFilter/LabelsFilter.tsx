@@ -1,12 +1,11 @@
-import {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useContext, useEffect, useState} from 'react';
 
 import {Space} from 'antd';
 
 import {FilterFilled} from '@ant-design/icons';
 
+import {Entity, EntityArray} from '@models/entityMap';
 import {FilterProps} from '@models/filters';
-import {Label, LabelArray} from '@models/labels';
 
 import {Input} from '@custom-antd';
 
@@ -18,6 +17,8 @@ import {
   StyledFilterMenu,
 } from '@molecules/FilterMenu';
 
+import {MainContext} from '@contexts';
+
 import {
   EmptyButton,
   StyledAddRowButton,
@@ -28,7 +29,7 @@ import {
   StyledTitle,
 } from './LabelsFilter.styled';
 
-const defaultKeyValuePair: Label = {
+const defaultKeyValuePair: Entity = {
   key: '',
   value: '',
 };
@@ -36,10 +37,10 @@ const defaultKeyValuePair: Label = {
 const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters, isFiltersDisabled} = props;
 
-  const dispatch = useDispatch();
+  const {dispatch} = useContext(MainContext);
 
   const [isVisible, setVisibilityState] = useState(false);
-  const [labelsMapping, setLabelsMapping] = useState<LabelArray>([]);
+  const [labelsMapping, setLabelsMapping] = useState<EntityArray>([]);
 
   const onVisibleChange = (flag: boolean) => {
     setVisibilityState(flag);

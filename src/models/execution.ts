@@ -2,9 +2,7 @@ import moment from 'moment';
 
 import {Args} from '@models/args';
 import {AssertionResult} from '@models/assertionResult';
-import {EnvMap} from '@models/env';
-import {LabelMap} from '@models/labels';
-import {ParamMap} from '@models/param';
+import {EntityMap} from '@models/entityMap';
 import {TestContent} from '@models/test';
 import {TestExecutor} from '@models/testExecutors';
 
@@ -33,14 +31,14 @@ export type Execution = {
   testNamespace: string;
   testType: TestExecutor;
   name: string;
-  envs: EnvMap;
+  envs: EntityMap;
   args: Args;
-  params: ParamMap;
+  params: EntityMap;
   paramsFile: string;
   content: TestContent;
   startTime: moment.MomentInput;
   endTime: moment.MomentInput;
   duration: string;
   executionResult: ExecutionResult;
-  labels: LabelMap;
+  labels: EntityMap;
 };

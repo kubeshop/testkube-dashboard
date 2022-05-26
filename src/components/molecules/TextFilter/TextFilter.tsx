@@ -1,11 +1,13 @@
-import {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {useDebounce} from 'react-use';
+import {useContext, useEffect, useState} from 'react';
 
 import {DashboardBlueprintType} from '@models/dashboard';
 import {FilterProps} from '@models/filters';
 
 import {LabelInput} from '@atoms';
+
+import useDebounce from '@hooks/useDebounce';
+
+import {MainContext} from '@contexts';
 
 const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
   'test-suites': 'textSearch',
@@ -22,7 +24,7 @@ const TextFilter: React.FC<FilterProps> = props => {
 
   const queryParamField = queryParam || inputValueQueryParams[entityType];
 
-  const dispatch = useDispatch();
+  const {dispatch} = useContext(MainContext);
 
   const [inputValue, setInputValue] = useState(filters[queryParam || queryParamField]);
 

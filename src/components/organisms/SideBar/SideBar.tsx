@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useState} from 'react';
-import {useLocation} from 'react-router';
 import {NavLink} from 'react-router-dom';
 
 import {Modal} from '@atoms';
@@ -39,8 +38,6 @@ const routes = [
 
 const SideBar = () => {
   const [isModalVisible, toggleModal] = useState(false);
-
-  const location = useLocation();
 
   const searchParams = useURLSearchParams();
 
