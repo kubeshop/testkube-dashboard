@@ -11,11 +11,13 @@ export type TestExecutor =
   //
   | 'soapui/xml'
   //
+  | 'artillery/test'
+  //
   | 'unknown';
 
 export type UnknownTestExecutor = 'Unknown test type';
 
-export type TestExecutorName = 'Postman' | 'Cypress' | 'Curl' | 'K6' | 'SoapUI' | UnknownTestExecutor;
+export type TestExecutorName = 'Postman' | 'Cypress' | 'Curl' | 'K6' | 'SoapUI' | 'Artillery' | UnknownTestExecutor;
 
 export type TestExecutorConfig = {
   canHaveArtifacts: boolean;
