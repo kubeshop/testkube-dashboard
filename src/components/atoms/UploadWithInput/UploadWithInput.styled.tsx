@@ -31,11 +31,19 @@ export const StyledUploadWithInputContainer = styled.div`
       cursor: default;
     }
 
+    .ant-input-clear-icon {
+      color: ${Colors.grey7};
+
+      visibility: hidden;
+    }
+
     &.not-empty {
       .ant-input-clear-icon {
         color: ${Colors.grey7};
 
+        cursor: pointer;
         visibility: visible;
+        transition: 0.3s;
 
         &:hover {
           color: ${Colors.greyHover};

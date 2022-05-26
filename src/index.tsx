@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 
@@ -24,7 +24,10 @@ import './antd-theme/antd-customized.css';
     await ga4react.initialize();
   }
 
-  ReactDOM.render(
+  const container = document.getElementById('root');
+  const root = createRoot(container!);
+
+  root.render(
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter>
@@ -32,7 +35,6 @@ import './antd-theme/antd-customized.css';
           <App />
         </BrowserRouter>
       </Provider>
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>
   );
 })();

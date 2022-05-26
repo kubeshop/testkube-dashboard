@@ -85,7 +85,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
       <StyledFilterDropdown
         overlay={menu}
         trigger={['click']}
-        placement="bottomCenter"
+        placement="bottom"
         onVisibleChange={onVisibleChange}
         visible={isVisible}
         disabled={isFiltersDisabled}

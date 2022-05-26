@@ -1,6 +1,10 @@
+import React from 'react';
+
 import {StyledDashboardTitle} from './DashboardTitle.styled';
 
-type DashboardTitleProps = {};
+type DashboardTitleProps = {
+  children: any;
+};
 
 const DashboardTitle: React.FC<DashboardTitleProps> = props => {
   const {children} = props;
