@@ -1,10 +1,10 @@
-import {useState} from 'react';
-
-import {useGA4React} from 'ga-4-react';
+import {useContext, useState} from 'react';
 
 import {Tooltip} from '@custom-antd';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
+
+import {MainContext} from '@contexts';
 
 import {
   StyledCopyCommandCode,
@@ -22,11 +22,11 @@ type CopyCommandProps = {
 const CopyCommand: React.FC<CopyCommandProps> = props => {
   const {command, label} = props;
 
+  const {ga4React} = useContext(MainContext);
+
   const [isHovered, setHoverState] = useState(false);
 
   const {isCopied, setCopyToClipboardState} = useCopyToClipboard(command);
-
-  const ga4React = useGA4React();
 
   const onCopy = () => {
     if (ga4React) {

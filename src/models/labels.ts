@@ -1,17 +1,7 @@
-export type LabelKey = string;
-export type LabelValue = string;
-
-export type Label = {
-  key: LabelKey;
-  value: LabelValue;
-};
-
-export type LabelMap = Record<LabelKey, LabelValue>;
-
-export type LabelArray = Label[];
+import {EntityMap} from '@models/entityMap';
 
 interface LabelsState {
-  labelsObject: LabelMap;
+  labelsObject: EntityMap;
 }
 
 export type {LabelsState};

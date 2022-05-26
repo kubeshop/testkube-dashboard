@@ -8,7 +8,7 @@ import FullScreenAction from './logActions/FullScreenAction';
 
 type LogOutputActionsProps = {
   logOutput: string;
-  actions: Array<LogAction>;
+  actions: LogAction[];
 };
 
 const LogOutputActions: React.FC<LogOutputActionsProps> = props => {

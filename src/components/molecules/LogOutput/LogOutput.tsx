@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {LogAction} from '@models/log';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setLogOutput} from '@redux/reducers/configSlice';
+
+import {MainContext} from '@contexts';
 
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
@@ -15,7 +17,7 @@ export type LogActionProps = {
 export type LogOutputProps = {
   logOutput?: string;
   executionId?: string;
-  actions?: Array<LogAction>;
+  actions?: LogAction[];
   isFullScreen?: boolean;
   isRunning?: boolean;
 };
@@ -23,7 +25,8 @@ export type LogOutputProps = {
 const LogOutput: React.FC<LogOutputProps> = props => {
   const {logOutput = '', executionId, actions = ['copy', 'fullscreen'], isRunning} = props;
 
-  const dispatch = useAppDispatch();
+  const {dispatch} = useContext(MainContext);
+
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [logs, setLogs] = useState('');

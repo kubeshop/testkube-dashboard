@@ -1,11 +1,11 @@
-import {LabelKey, LabelMap} from '@models/labels';
+import {EntityKey, EntityMap} from '@models/entityMap';
 
 import {LabelListItem} from '@atoms';
 
 import {StyledLabelsList} from './LabelsList.styled';
 
 type LabelsListProps = {
-  labels: LabelMap;
+  labels: EntityMap;
   howManyLabelsToShow?: number;
   shouldSkipLabels?: boolean;
   className?: string;
@@ -14,7 +14,7 @@ type LabelsListProps = {
 const LabelsList: React.FC<LabelsListProps> = props => {
   const {labels, howManyLabelsToShow = 3, shouldSkipLabels = false, className = ''} = props;
 
-  const labelKeys: LabelKey[] = Object.keys(labels);
+  const labelKeys: EntityKey[] = Object.keys(labels);
 
   const renderedLabels = labelKeys
     .map((labelKey, index) => {

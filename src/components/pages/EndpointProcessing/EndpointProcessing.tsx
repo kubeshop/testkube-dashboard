@@ -1,9 +1,7 @@
-import {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useContext, useEffect} from 'react';
 
 import {config} from '@constants/config';
 
-import {useAppDispatch} from '@redux/hooks';
 import {setApiEndpoint} from '@redux/reducers/configSlice';
 
 import {Title} from '@custom-antd';
@@ -12,14 +10,14 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {hasProtocol} from '@utils/strings';
 
+import {MainContext} from '@contexts';
+
 import {EndpointProcessingContainer} from './EndpointProcessing.styled';
 
 const EndpointProcessing: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const {dispatch, navigate} = useContext(MainContext);
 
   const searchParams = useURLSearchParams();
-
-  const navigate = useNavigate();
 
   const validateApiEndpoint = (apiEndpoint: string) => {
     if (hasProtocol(apiEndpoint)) {

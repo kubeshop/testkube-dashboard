@@ -1,6 +1,5 @@
-import {LabelMap} from '@models/labels';
+import {EntityMap} from '@models/entityMap';
 import {ObjectRef} from '@models/objectRef';
-import {ParamMap} from '@models/param';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 export type TestSuiteStepTypeEnum = 'executeTest' | 'delay';
@@ -33,10 +32,10 @@ export type TestSuite = {
   before?: TestSuiteStep[];
   steps: TestSuiteStep[];
   after?: TestSuiteStep[];
-  labels?: LabelMap;
+  labels?: EntityMap;
   schedule?: string;
   repeats?: number;
-  params?: ParamMap;
+  params?: EntityMap;
 };
 
 export type TestSuiteWithExecution = {

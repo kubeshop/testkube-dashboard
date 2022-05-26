@@ -1,8 +1,10 @@
-import {useNavigate} from 'react-router-dom';
+import {useContext} from 'react';
 
 import useElementSize from '@hooks/useElementSize';
 
 import {ReactComponent as AddTestImage} from '@assets/addTest.svg';
+
+import {MainContext} from '@contexts';
 
 import {
   StyledAddTestButton,
@@ -14,7 +16,7 @@ import {
 } from './EmptyTestsDataContent.styled';
 
 const EmptyTestsDataContent = () => {
-  const navigate = useNavigate();
+  const {navigate} = useContext(MainContext);
 
   const [ref, size] = useElementSize();
 

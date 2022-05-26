@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
 
 import {Tabs} from 'antd';
 import {ColumnsType, TableRowSelection} from 'antd/lib/table/interface';
@@ -22,7 +21,7 @@ import {PollingIntervals} from '@utils/numbers';
 import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestExecutionsByIdQuery} from '@services/tests';
 
-import {DashboardInfoPanelContext} from '@contexts';
+import {DashboardInfoPanelContext, MainContext} from '@contexts';
 
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {
@@ -100,7 +99,8 @@ const DashboardInfoPanelContent = () => {
     entityType,
   } = useContext(DashboardContext);
 
-  const dispatch = useDispatch();
+  const {dispatch} = useContext(MainContext);
+
   const {targetTestExecutionId, runTarget} = useAppSelector(selectRedirectTarget);
   const [ref, size] = useElementSize();
 

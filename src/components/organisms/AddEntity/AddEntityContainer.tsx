@@ -1,10 +1,11 @@
-import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, {useContext} from 'react';
 
 import {AddEntityBlueprint} from '@models/addEntity';
 import {WizardType} from '@models/wizard';
 
 import {AddTestWizard} from '@wizards';
+
+import {MainContext} from '@contexts';
 
 import {StyledDashboardBottomGradient, StyledDashboardContent, StyledDashboardGradient} from '../Dashboard.styled';
 import DashboardTitle from '../DashboardContent/DashboardTitle';
@@ -22,9 +23,9 @@ const wizardsMap: {
 const AddEntityContainer: React.FC<AddEntityBlueprint> = props => {
   const {gradient, pageTitle, wizardType, wizardTitle} = props;
 
-  const WizardComponent = wizardsMap[wizardType];
+  const {navigate} = useContext(MainContext);
 
-  const navigate = useNavigate();
+  const WizardComponent = wizardsMap[wizardType];
 
   const onCancel = () => {
     navigate(-1);

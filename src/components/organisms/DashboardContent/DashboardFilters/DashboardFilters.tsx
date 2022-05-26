@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import React, {useContext, useEffect} from 'react';
 
 import {DashboardBlueprint} from '@models/dashboard';
 import {FilterProps, FilterType} from '@models/filters';
@@ -10,6 +9,8 @@ import {DateFilter, DateRangeFilter, LabelsFilter, StatusFilter, TextFilter, Tex
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {validateSearchParams} from '@utils/fetchUtils';
+
+import {MainContext} from '@contexts';
 
 import {StyledDashboardFiltersContainer, StyledSpace} from './DashboardFilters.styled';
 
@@ -36,9 +37,9 @@ const DashboardFilters = (
   const {filtersComponentsIds, ...rest} = props;
   const {setFilters, filters, entityType} = rest;
 
-  const searchParams = useURLSearchParams();
+  const {dispatch} = useContext(MainContext);
 
-  const dispatch = useDispatch();
+  const searchParams = useURLSearchParams();
 
   const renderedFilters = filtersComponentsIds?.map((filterComponentId: FilterType) => {
     const Component = filtersComponents[filterComponentId];

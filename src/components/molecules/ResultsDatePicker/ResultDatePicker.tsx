@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, {useContext, useState} from 'react';
 
 import {DatePicker} from 'antd';
 
@@ -7,6 +6,10 @@ import moment from 'moment';
 
 import {useAppSelector} from '@redux/hooks';
 import {clearFiltredData, selectFilters} from '@redux/reducers/executionsSlice';
+
+import {MainContext} from '@contexts';
+
+const {RangePicker} = DatePicker;
 
 const datePickerStyles = {
   color: 'var(--color-dark-quaternary)',
@@ -17,10 +20,11 @@ const datePickerStyles = {
 };
 
 const ResultDatePicker = () => {
-  const [clicked, setClicked] = useState<boolean>(false);
+  const {dispatch} = useContext(MainContext);
+
   const filters = useAppSelector(selectFilters);
-  const dispatch = useDispatch();
-  const {RangePicker} = DatePicker;
+
+  const [clicked, setClicked] = useState<boolean>(false);
 
   const handleDateRange = (_: any, dateString: any) => {
     if (!dateString) {

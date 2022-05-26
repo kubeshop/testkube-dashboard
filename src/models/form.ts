@@ -10,8 +10,8 @@ export type FormItem = {
   tooltip?: string;
   fieldName: string;
   inputType: 'select' | 'radio' | 'default' | 'uploadWithInput' | 'textarea';
-  rules?: Array<Rule>;
-  options?: Array<Option>;
+  rules?: Rule[];
+  options?: Option[];
   modificator?: 'password';
   help?: string;
 };

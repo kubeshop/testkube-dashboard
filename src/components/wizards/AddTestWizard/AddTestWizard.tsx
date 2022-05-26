@@ -1,5 +1,4 @@
-import {ReactElement, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {ReactElement, useContext, useState} from 'react';
 
 import {Form, Input, Radio, Select, Space, notification} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
@@ -7,14 +6,15 @@ import {UploadChangeParam} from 'antd/lib/upload';
 import {Nullable} from '@models/extendTS';
 import {WizardComponentProps} from '@models/wizard';
 
-import {useAppDispatch} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 
 import {UploadWithInput} from '@atoms';
 
 import {Button, FormItem} from '@custom-antd';
 
-import {useAddTestMutation} from '@src/services/tests';
+import {useAddTestMutation} from '@services/tests';
+
+import {MainContext} from '@contexts';
 
 import {
   StyledWizardBody,
@@ -26,8 +26,8 @@ import {
 } from '../Wizard.styled';
 import WizardHint from './WizardHint';
 import {
+  addTestFormStructure,
   fileContentFormFields,
-  formStructure,
   getTestSourceSpecificFields,
   gitDirFormFields,
   gitFileFormFields,
@@ -48,8 +48,7 @@ const additionalFields: any = {
 const AddTestWizard: React.FC<WizardComponentProps> = props => {
   const {wizardTitle, onCancel} = props;
 
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const {dispatch, navigate} = useContext(MainContext);
 
   const [form] = Form.useForm();
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -264,7 +263,7 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
             initialValues={{testSource: '', testType: '', branch: 'main'}}
             onFieldsChange={onFieldsChange}
           >
-            {renderFormItems(formStructure)}
+            {renderFormItems(addTestFormStructure)}
             <FormItem
               noStyle
               shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}

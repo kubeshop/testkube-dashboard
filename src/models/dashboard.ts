@@ -4,7 +4,6 @@ import {QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {FilterType} from './filters';
-import {InfoPanelConfig} from './infoPanel';
 
 export type DashboardBlueprintType = 'test-suites' | 'tests';
 
@@ -78,8 +77,6 @@ export type DashboardBlueprint = {
   columns: ColumnsType<any>;
 
   filtersComponentsIds?: FilterType[];
-
-  infoPanelConfig?: InfoPanelConfig;
 
   infoPanelComponent?: any;
 

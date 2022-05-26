@@ -1,5 +1,4 @@
-import {useCallback, useMemo, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useCallback, useContext, useMemo, useState} from 'react';
 
 import {Space} from 'antd';
 
@@ -17,14 +16,16 @@ import {
   StyledFilterMenuItem,
 } from '@molecules/FilterMenu';
 
-import {uppercaseFirstSymbol} from '@src/utils/strings';
+import {uppercaseFirstSymbol} from '@utils/strings';
+
+import {MainContext} from '@contexts';
 
 const statusList = ['queued', 'running', 'passed', 'failed'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, isFiltersDisabled} = props;
 
-  const dispatch = useDispatch();
+  const {dispatch} = useContext(MainContext);
 
   const [isVisible, setVisibilityState] = useState(false);
 

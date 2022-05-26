@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {Modal} from 'antd';
 
@@ -8,10 +7,11 @@ import styled from 'styled-components';
 
 import {config} from '@constants/config';
 
-import {useAppDispatch} from '@redux/hooks';
 import {setApiEndpoint} from '@redux/reducers/configSlice';
 
 import {Button, LabelInput, Typography} from '@atoms';
+
+import {MainContext} from '@contexts';
 
 const StyledSearchUrlForm = styled.form`
   display: flex;
@@ -45,14 +45,12 @@ axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || process.env.REAC
 const CustomModal: React.FC<ModalProps> = props => {
   const {isModalVisible, visible} = props;
 
+  const {dispatch, navigate} = useContext(MainContext);
+
   const defaultApiEndpoint = localStorage.getItem('apiEndpoint') || process.env.REACT_APP_API_SERVER_ENDPOINT || '';
 
   const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
   const [isLoading, setLoadingState] = useState(false);
-
-  const navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
 
   const handleOpenUrl = (event: React.FormEvent) => {
     event.preventDefault();

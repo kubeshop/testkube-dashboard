@@ -1,6 +1,8 @@
+import {useContext} from 'react';
+
 import {ExpandAltOutlined, FullscreenExitOutlined} from '@ant-design/icons';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {useAppSelector} from '@redux/hooks';
 import {
   closeFullScreenLogOutput,
   openFullScreenLogOutput,
@@ -9,13 +11,15 @@ import {
 
 import {Tooltip} from '@custom-antd';
 
+import {MainContext} from '@contexts';
+
 import {LogActionProps} from '../LogOutput';
 import {StyledActionIconContainer} from '../LogOutput.styled';
 
 const FullScreenAction: React.FC<LogActionProps> = props => {
   const {logOutput} = props;
 
-  const dispatch = useAppDispatch();
+  const {dispatch} = useContext(MainContext);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 

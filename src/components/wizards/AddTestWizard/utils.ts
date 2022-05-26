@@ -2,7 +2,7 @@ import {FormItem} from '@models/form';
 
 import {required, url} from '@utils/form';
 
-export const formStructure: Array<FormItem> = [
+export const addTestFormStructure: FormItem[] = [
   {
     itemLabel: 'Name',
     tooltip: 'Enter the name of the test you wish to add.',
@@ -61,7 +61,7 @@ export const formStructure: Array<FormItem> = [
   },
 ];
 
-export const gitDirFormFields: Array<FormItem> = [
+export const gitDirFormFields: FormItem[] = [
   {
     itemLabel: 'Personal Access Token',
     tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
@@ -91,7 +91,7 @@ export const gitDirFormFields: Array<FormItem> = [
   },
 ];
 
-export const gitFileFormFields: Array<FormItem> = [
+export const gitFileFormFields: FormItem[] = [
   {
     itemLabel: 'Personal Access Token',
     tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
@@ -121,7 +121,7 @@ export const gitFileFormFields: Array<FormItem> = [
   },
 ];
 
-export const fileContentFormFields: Array<FormItem> = [
+export const fileContentFormFields: FormItem[] = [
   {
     itemLabel: 'Select file',
     rules: [required],
@@ -130,7 +130,7 @@ export const fileContentFormFields: Array<FormItem> = [
   },
 ];
 
-export const stringContentFormFields: Array<FormItem> = [
+export const stringContentFormFields: FormItem[] = [
   {
     itemLabel: 'Enter string',
     rules: [required],

@@ -1,4 +1,4 @@
-import {Label} from './labels';
+import {Entity} from '@models/entityMap';
 
 export type TestSuiteExecutionStatus = 'queued' | 'running' | 'passed' | 'failed';
 
@@ -31,7 +31,7 @@ export type TestSuiteExecution = {
   startTime?: Date;
   endTime?: Date;
   duration?: string;
-  labels: Label[];
+  labels: Entity[];
   // TBD
   stepResults: any;
   // TBD
