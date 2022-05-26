@@ -67,7 +67,6 @@
     "ga-4-react": "0.1.281",
     "loglevel": "1.8.0",
     "moment": "2.29.3",
-    "npm-check-updates": "^13.0.3",
     "query-string": "7.1.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
