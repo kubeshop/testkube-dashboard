@@ -120,7 +120,11 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
       })
       .catch(err => {
         if (err instanceof Error) {
-          notification.error({message: 'Something went wrong', description: JSON.stringify(err), duration: 0});
+          notification.error({
+            message: 'Unknown error',
+            description: String(err) || 'Something went wrong',
+            duration: 0,
+          });
         }
       })
       .finally(() => {
