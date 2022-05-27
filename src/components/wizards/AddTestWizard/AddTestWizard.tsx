@@ -91,9 +91,19 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
     return addTest(requestBody)
       .then((res: any) => {
         if (res.error) {
+          const errorTitle = res.error?.data.title || 'Unknown error';
+          const errorDetails = res.error?.data.detail || 'Something went wrong';
+          const errorStatus = res.error?.status;
+
           notification.error({
-            message: 'Something went wrong',
-            description: JSON.stringify(res.error?.status),
+            message: errorTitle,
+            description: (
+              <span>
+                Status: {errorStatus}
+                <br />
+                Details: {errorDetails}
+              </span>
+            ),
             duration: 0,
           });
         } else {
