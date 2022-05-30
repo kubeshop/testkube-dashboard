@@ -2,8 +2,10 @@ name: Publish Docker image
 
 on:
   push:
-    tags:
-      - "v*.*.*"
+#    tags:
+#      - "v*.*.*"
+  branches:
+    - add_arm_image
 jobs:
   push_to_registry:
     name: Build and push Docker image to Docker Hub
