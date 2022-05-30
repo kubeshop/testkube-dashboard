@@ -59,8 +59,6 @@ const CustomModal: React.FC<ModalProps> = props => {
 
     localStorage.setItem(config.apiEndpoint, apiEndpoint);
 
-    navigate('/dashboard/test-suites');
-
     isModalVisible(false);
     dispatch(setApiEndpoint(apiEndpoint));
   };

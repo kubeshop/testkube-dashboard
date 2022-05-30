@@ -64,12 +64,16 @@ type DataLayerProps = {
 const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
   const {onDataChange, queryFilters} = props;
 
-  const {data, isLoading, isFetching, refetch} = useGetTestSuitesQuery(queryFilters || null, {
+  const {data, isLoading, isFetching, refetch, ...rest} = useGetTestSuitesQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
-    onDataChange({data: data || [], isLoading, isFetching, refetch});
+    if (rest.error) {
+      onDataChange({data: [], isLoading: false, isFetching: false, refetch});
+    } else {
+      onDataChange({data: data || [], isLoading, isFetching, refetch});
+    }
   }, [data, isLoading, isFetching]);
 
   return <></>;
@@ -78,13 +82,17 @@ const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
 const TestsDataLayer: React.FC<DataLayerProps> = props => {
   const {onDataChange, queryFilters} = props;
 
-  const {data, isLoading, isFetching, refetch} = useGetTestsQuery(queryFilters || null, {
+  const {data, isLoading, isFetching, refetch, ...rest} = useGetTestsQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
-    onDataChange({data: data || [], isLoading, isFetching, refetch});
-  }, [data, isLoading, isFetching]);
+    if (rest.error) {
+      onDataChange({data: [], isLoading: false, isFetching: false, refetch});
+    } else {
+      onDataChange({data: data || [], isLoading, isFetching, refetch});
+    }
+  }, [data, isLoading, isFetching, rest.error]);
 
   return <></>;
 };
