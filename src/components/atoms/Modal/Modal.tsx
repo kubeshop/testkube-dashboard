@@ -13,6 +13,8 @@ import {Button, LabelInput, Typography} from '@atoms';
 
 import {MainContext} from '@contexts';
 
+import env from '../../../env';
+
 const StyledSearchUrlForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -40,17 +42,16 @@ type ModalProps = {
   visible?: boolean;
 };
 
-axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || process.env.REACT_APP_API_SERVER_ENDPOINT || '';
+axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl || '';
 
 const CustomModal: React.FC<ModalProps> = props => {
   const {isModalVisible, visible} = props;
 
-  const {dispatch, navigate} = useContext(MainContext);
+  const defaultApiEndpoint = localStorage.getItem('apiEndpoint') || env?.apiUrl || '';
 
-  const defaultApiEndpoint = localStorage.getItem('apiEndpoint') || process.env.REACT_APP_API_SERVER_ENDPOINT || '';
+  const {dispatch} = useContext(MainContext);
 
   const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
-  const [isLoading, setLoadingState] = useState(false);
 
   const handleOpenUrl = (event: React.FormEvent) => {
     event.preventDefault();
@@ -60,6 +61,7 @@ const CustomModal: React.FC<ModalProps> = props => {
     localStorage.setItem(config.apiEndpoint, apiEndpoint);
 
     isModalVisible(false);
+
     dispatch(setApiEndpoint(apiEndpoint));
   };
 
@@ -69,6 +71,7 @@ const CustomModal: React.FC<ModalProps> = props => {
 
   useEffect(() => {
     dispatch(setApiEndpoint(defaultApiEndpoint));
+
     localStorage.setItem('apiEndpoint', defaultApiEndpoint);
   }, []);
 
@@ -106,7 +109,7 @@ const CustomModal: React.FC<ModalProps> = props => {
               defaultValue={apiEndpoint}
             />
             <Button type="submit" disableFilter variant="secondary">
-              {isLoading ? 'Loading...' : 'Get results'}
+              Get results
             </Button>
           </StyledFormContainer>
         </StyledSearchUrlForm>

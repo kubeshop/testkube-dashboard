@@ -46,7 +46,6 @@ export const DashboardContext = createContext<DashboardBlueprint & DashboardInfo
   entityType: 'test-suites',
   hasInfoPanel: true,
   canSelectRow: true,
-  columns: [],
   shouldInfoPanelBeShown: false,
   isInfoPanelExpanded: true,
   selectedRecord: null,

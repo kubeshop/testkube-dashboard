@@ -1,5 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 
+import {TablePaginationConfig} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
 import moment from 'moment';
@@ -97,7 +98,12 @@ const TestsDataLayer: React.FC<DataLayerProps> = props => {
   return <></>;
 };
 
-const DashboardContent: React.FC<any> = props => {
+interface DashboardContentProps {
+  paginationOptions: TablePaginationConfig;
+  onRowSelect: (row: any) => void;
+}
+
+const DashboardContent: React.FC<DashboardContentProps> = props => {
   const {onRowSelect, paginationOptions} = props;
 
   const {

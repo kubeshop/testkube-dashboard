@@ -41,7 +41,7 @@ const initialTestSuitesState: TestSuitesState = {
     failed: 0,
     pending: 0,
   },
-  selectedTestSuite: null,
+  selectedTestSuite: undefined,
 };
 
 export const initialTestsFiltersState: TestFilters = {

@@ -1,5 +1,4 @@
 import {DashboardBlueprint} from '@models/dashboard';
-import {EntityKey} from '@models/entityMap';
 
 import {
   selectAllTestsFilters,
@@ -10,8 +9,6 @@ import {
   setTests,
   setTestsFilters,
 } from '@redux/reducers/testsSlice';
-
-import {timeStampToDate} from '@utils/formatDate';
 
 import {useGetTestsQuery} from '@services/tests';
 
@@ -42,35 +39,6 @@ export const TestsEntity: DashboardBlueprint = {
   selectedRecordIdFieldName: 'name',
   testTypeFieldName: 'type',
 
-  columns: [
-    {
-      title: 'Test name',
-      dataIndex: 'name',
-    },
-    {title: 'Test type', dataIndex: 'type', key: 'type'},
-    {
-      title: 'Test labels',
-      render: (data: any) => {
-        if (!data.labels) {
-          return <span> - </span>;
-        }
-
-        const labelKeys: EntityKey[] = Object.keys(data.labels);
-
-        return (
-          <div>
-            <span>{labelKeys.join(', ')}</span>
-          </div>
-        );
-      },
-    },
-    {
-      title: 'Created at',
-      dataIndex: 'created',
-      render: (created: string) => timeStampToDate(created),
-    },
-    {},
-  ],
   filtersComponentsIds: ['textSearch', 'selector', 'status'],
 };
 

@@ -1,6 +1,6 @@
 import {memo} from 'react';
 
-import useIsRunning from '@src/hooks/useIsRunning';
+import useIsRunning from '@hooks/useIsRunning';
 
 import {ExecutionTableRowProps} from './ExecutionTableRow';
 import {StyledExecutionDuration} from './ExecutionTableRow.styled';
