@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {NavLink} from 'react-router-dom';
 
 import {Modal} from '@atoms';
@@ -41,9 +41,9 @@ const SideBar = () => {
 
   const searchParams = useURLSearchParams();
 
-  const onToggleModal = useCallback(() => {
+  const onToggleModal = () => {
     toggleModal(prev => !prev);
-  }, []);
+  };
 
   useEffect(() => {
     if (!searchParams.apiEndpoint && !localStorage.getItem('apiEndpoint')) {

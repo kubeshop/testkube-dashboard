@@ -38,49 +38,6 @@ export const TestSuitesEntity: DashboardBlueprint = {
 
   selectedRecordIdFieldName: 'name',
 
-  columns: [
-    {
-      title: 'Test suite name',
-      render: (data: any) => data?.name,
-      key: 'testName',
-    },
-    {
-      title: 'Namespace',
-      render: (data: any) => data?.namespace,
-      key: 'testNamespace',
-    },
-    {
-      title: 'Test suite description',
-      render: (data: any) => data?.description,
-      key: 'testDescription',
-    },
-    {
-      title: 'Test suite labels',
-      render: (data: any) => {
-        if (!data.labels) {
-          return <span> - </span>;
-        }
-
-        return (
-          <div>
-            <span>{data.labels.join(', ')}</span>
-          </div>
-        );
-      },
-    },
-    {
-      title: 'Number of steps',
-      render: (data: any) => {
-        return <span>{data?.steps?.length}</span>;
-      },
-      key: 'testNumberOfSteps',
-    },
-    {
-      title: 'Number of executions',
-      render: (data: any) => data?.repeats,
-      key: 'testNumberOfExecutions',
-    },
-  ],
   filtersComponentsIds: ['textSearch', 'selector', 'status'],
 };
 

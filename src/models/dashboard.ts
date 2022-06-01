@@ -1,5 +1,3 @@
-import {ColumnsType} from 'antd/lib/table';
-
 import {QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
@@ -70,15 +68,7 @@ export type DashboardBlueprint = {
 
   canSelectRow: boolean;
 
-  /**
-   * List of columns
-   */
-
-  columns: ColumnsType<any>;
-
   filtersComponentsIds?: FilterType[];
-
-  infoPanelComponent?: any;
 
   /**
    * Hook to get data using RTK approach.

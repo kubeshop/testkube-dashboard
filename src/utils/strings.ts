@@ -1,4 +1,4 @@
-import {FilterType} from '@src/models/filters';
+import {FilterType} from '@models/filters';
 
 export const executionDateFormat = 'DD MMM, YYYY hh:mm:ss';
 

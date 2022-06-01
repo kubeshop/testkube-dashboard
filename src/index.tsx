@@ -14,12 +14,13 @@ import '@styles/variables.css';
 
 import App from './App';
 import './antd-theme/antd-customized.css';
+import env from './env';
 
 (async () => {
   const isAdBlockEnabled = await detectAdBlock();
 
   if (!isAdBlockEnabled) {
-    const ga4react = new GA4React(process.env.REACT_APP_GOOGLE_ANALYTICS_ID || '');
+    const ga4react = new GA4React(env.ga || '');
 
     await ga4react.initialize();
   }

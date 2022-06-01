@@ -1,8 +1,8 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import initialState from '@redux/initialState';
+import {TestSuitesState} from '@models/testSuites';
 
-import {TestSuitesState} from '@src/models/testSuites';
+import initialState from '@redux/initialState';
 
 import {RootState} from '../store';
 

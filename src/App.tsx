@@ -20,6 +20,7 @@ import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
 import {CookiesBanner} from './components/molecules';
+import env from './env';
 import Routes from './routes';
 
 const App: React.FC = () => {
@@ -52,7 +53,7 @@ const App: React.FC = () => {
 
   const onAcceptCookies = () => {
     // @ts-ignore
-    window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = false;
+    window[`ga-disable-${env.ga}`] = false;
     localStorage.setItem('isGADisabled', '0');
     setCookiesVisibility(false);
   };
@@ -63,7 +64,7 @@ const App: React.FC = () => {
     }
 
     // @ts-ignore
-    window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = true;
+    window[`ga-disable-${env.ga}`] = true;
     localStorage.setItem('isGADisabled', '1');
     setCookiesVisibility(false);
   };
