@@ -42,12 +42,13 @@ type ModalProps = {
   visible?: boolean;
 };
 
-axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl || '';
+axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl || `${window.location.origin}/results/v1`;
 
 const CustomModal: React.FC<ModalProps> = props => {
   const {isModalVisible, visible} = props;
 
-  const defaultApiEndpoint = localStorage.getItem('apiEndpoint') || env?.apiUrl || '';
+  const defaultApiEndpoint =
+    localStorage.getItem('apiEndpoint') || env?.apiUrl || `${window.location.origin}/results/v1`;
 
   const {dispatch} = useContext(MainContext);
 
