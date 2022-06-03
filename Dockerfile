@@ -22,5 +22,5 @@ EXPOSE 80
 WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
 COPY .env .
-RUN chmod +x env.gssh
+RUN chmod +x env.sh
 CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
