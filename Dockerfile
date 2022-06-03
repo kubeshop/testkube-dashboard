@@ -1,4 +1,4 @@
-ARG target=arm64v8/nginx:alpine
+ARG TARGET=nginx:alpine
 
 FROM node:16 as build
 WORKDIR /app
@@ -11,7 +11,7 @@ RUN npm install
 COPY . /app
 RUN npm run build
 
-FROM $target
+FROM $TARGET
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/nginx.conf /etc/nginx/conf.d
 COPY --from=build /app/build /usr/share/nginx/html
