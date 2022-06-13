@@ -84,7 +84,6 @@ export const gitDirFormFields: FormItem[] = [
   },
   {
     itemLabel: 'Repository Path',
-    rules: [required],
     fieldName: 'path',
     inputType: 'default',
     help: 'Example: test-directory',
@@ -114,7 +113,6 @@ export const gitFileFormFields: FormItem[] = [
   },
   {
     itemLabel: 'Repository Path',
-    rules: [required],
     fieldName: 'path',
     inputType: 'default',
     help: 'Example: test-directory',
@@ -139,7 +137,7 @@ export const stringContentFormFields: FormItem[] = [
   },
 ];
 
-export const optionalFields = ['token', 'branch'];
+export const optionalFields = ['token', 'branch', 'path'];
 
 export const getTestSourceSpecificFields = (values: any) => {
   const {testSource} = values;
