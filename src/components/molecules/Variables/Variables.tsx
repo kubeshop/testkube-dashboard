@@ -1,8 +1,8 @@
 import React, {useContext, useEffect} from 'react';
 
-import {Variable} from '@models/variable';
-
 import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
+
+import {decomposeVariables, formatVariables} from '@utils/variables';
 
 import {MainContext} from '@contexts';
 
@@ -11,8 +11,7 @@ import {useGetTestSuiteExecutionQuery, useUpdateTestSuiteMutation} from '@src/se
 import {useGetTestExecutionByIdQuery, useUpdateTestMutation} from '@src/services/tests';
 
 import {StyledInfoPanelSection} from '../../organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
-import TestDescription from './TestDescription';
-import TestSuiteDescription from './TestSuiteDescription';
+import {TestDescription, TestSuiteDescription} from './VariablesDescriptions';
 import {ExecutionsVariablesList, VariablesList} from './VariablesLists';
 
 type VariablesProps = {
@@ -24,52 +23,37 @@ const descriptionTextComponents: {[key in DashboardBlueprintType]: any} = {
   tests: <TestDescription />,
 };
 
-const formatVariables = (list: Variable[]) => {
-  const variables: {[key in string]: any} = {};
-  list.forEach(item => {
-    variables[item.key] = {
-      name: item.key,
-      value: item.value,
-      type: item.type === 0 ? 'basic' : 'secret',
-      secretRef: {
-        name: item.key,
-        key: item.key,
-      },
-    };
-  });
-  return variables;
-};
-
-const decomposeVariables = (variables: any) => {
-  if (!variables) {
-    return [];
-  }
-  return Object.entries(variables).map(([key, value]: any[]) => ({
-    ...value,
-    key: value.name,
-    type: value.type === 'basic' ? 0 : 1,
-  }));
-};
-
 const Variables: React.FC<VariablesProps> = props => {
   const {dispatch} = useContext(MainContext);
   const {selectedRecord, selectedExecution, entityType, setSelectedRecord} = useContext(DashboardContext);
 
   const {isExecutions} = props;
 
-  const [updateTest] = useUpdateTestMutation();
-  const [updateTestSuite] = useUpdateTestSuiteMutation();
-
   const {data: selectedTestExecutionDetails, refetch: refetchTestExecution} = useGetTestExecutionByIdQuery(
-    selectedExecution?.id
+    selectedExecution?.id,
+    {skip: !selectedExecution}
   );
   const {data: selectedTestSuiteExecutionDetails, refetch: refetchTestSuiteExecution} = useGetTestSuiteExecutionQuery(
-    selectedExecution?.id
+    selectedExecution?.id,
+    {skip: !selectedExecution}
   );
 
   const executionVariables = decomposeVariables(
     entityType === 'tests' ? selectedTestExecutionDetails?.variables : selectedTestSuiteExecutionDetails?.variables
   );
+
+  useEffect(() => {
+    if (isExecutions) {
+      if (entityType === 'tests') {
+        refetchTestExecution();
+      } else {
+        refetchTestSuiteExecution();
+      }
+    }
+  }, [isExecutions, entityType, selectedExecution, refetchTestExecution, refetchTestSuiteExecution]);
+
+  const [updateTest] = useUpdateTestMutation();
+  const [updateTestSuite] = useUpdateTestSuiteMutation();
 
   const variables = decomposeVariables(selectedRecord?.variables);
 
@@ -93,16 +77,6 @@ const Variables: React.FC<VariablesProps> = props => {
       dispatch(setSelectedRecord({selectedRecord: successRecord}));
     });
   };
-
-  useEffect(() => {
-    if (isExecutions) {
-      if (entityType === 'tests') {
-        refetchTestExecution();
-      } else {
-        refetchTestSuiteExecution();
-      }
-    }
-  }, [isExecutions, entityType, selectedExecution, refetchTestExecution, refetchTestSuiteExecution]);
 
   return (
     <StyledInfoPanelSection>

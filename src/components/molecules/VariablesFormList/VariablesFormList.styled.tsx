@@ -1,4 +1,4 @@
-import {Button, Form, Space} from 'antd';
+import {Button, Form} from 'antd';
 
 import styled from 'styled-components';
 
@@ -28,23 +28,6 @@ export const Asterisk = styled.span`
   }
 
   color: ${Colors.errorRed};
-`;
-
-export const StyledSpace = styled(Space)`
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 16px !important;
-
-  margin-bottom: 8px;
-
-  &:first-child {
-    margin-top: 24px;
-  }
-
-  & > div:last-child {
-    margin-top: 4px;
-  }
 `;
 
 export const StyledLablesSpace = styled.div`
@@ -120,26 +103,4 @@ export const StyledButtonsContainer = styled.div`
   .ant-form-item {
     margin-bottom: 0;
   }
-`;
-
-export const ReadOnlyVariableRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-
-  margin-bottom: 13px;
-`;
-
-export const StyledReadOnlyLabel = styled.div<{width?: string}>`
-  flex: 1;
-
-  color: ${Colors.grey450};
-  font-family: ${Fonts.nunito};
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 22px;
-`;
-
-export const StyledReadOnlyVariableLabel = styled(StyledReadOnlyLabel)`
-  border-bottom: 1px solid ${Colors.greyHover};
 `;

@@ -31,7 +31,7 @@ export const StyledCollapseButtonContainer = styled.div<{isInfoPanelExpanded: bo
   justify-content: ${props => (props.isInfoPanelExpanded ? 'flex-end' : 'center')};
 
   padding: 15px;
-  width: ${props => (props.isInfoPanelExpanded ? (props.isSecondLevelOpen ? '40%' : '100%') : '80px')};
+  width: ${props => (props.isInfoPanelExpanded ? (props.isSecondLevelOpen ? '44%' : '100%') : '80px')};
 
   cursor: pointer;
 
@@ -199,5 +199,5 @@ export const StyledDashboardInfoPanelContent = styled.div`
 
   display: flex;
   flex-direction: column;
-  flex: 2;
+  flex: 2.2;
 `;

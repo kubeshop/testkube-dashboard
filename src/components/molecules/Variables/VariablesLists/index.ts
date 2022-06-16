@@ -1,2 +1,2 @@
 export {default as ExecutionsVariablesList} from './ExecutionsVariablesList';
-export {default as VariablesList} from './VariablesList';
+export {default as VariablesList} from './TestsVariablesList';

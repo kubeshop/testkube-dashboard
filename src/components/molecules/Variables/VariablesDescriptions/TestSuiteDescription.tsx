@@ -1,5 +1,4 @@
-// import {Link} from 'react-router-dom';
-import {StyledDescriptionText, StyledLink} from './Variables.styled';
+import {StyledDescriptionText, StyledLink} from './VariablesDescriptions.styled';
 
 const learnMoreLink = 'https://kubeshop.github.io/testkube/tests-running/#passing-parameters';
 

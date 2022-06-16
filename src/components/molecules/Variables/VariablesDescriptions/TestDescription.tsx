@@ -1,4 +1,4 @@
-import {StyledBoldDescription, StyledDescriptionText} from './Variables.styled';
+import {StyledBoldDescription, StyledDescriptionText} from './VariablesDescriptions.styled';
 
 const TestDescription = () => {
   return (
