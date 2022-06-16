@@ -23,33 +23,6 @@ const descriptionTextComponents: {[key in DashboardBlueprintType]: any} = {
   tests: <TestDescription />,
 };
 
-const formatVariables = (list: Variable[]) => {
-  const variables: {[key in string]: any} = {};
-  list.forEach(item => {
-    variables[item.key] = {
-      name: item.key,
-      value: item.value,
-      type: item.type === 0 ? 'basic' : 'secret',
-      secretRef: {
-        name: item.key,
-        key: item.key,
-      },
-    };
-  });
-  return variables;
-};
-
-const decomposeVariables = (variables: any) => {
-  if (!variables) {
-    return [];
-  }
-  return Object.entries(variables).map(([key, value]: any[]) => ({
-    ...value,
-    key: value.name,
-    type: value.type === 'basic' ? 0 : 1,
-  }));
-};
-
 const Variables: React.FC<VariablesProps> = props => {
   const {dispatch} = useContext(MainContext);
   const {selectedRecord, selectedExecution, entityType, setSelectedRecord} = useContext(DashboardContext);
