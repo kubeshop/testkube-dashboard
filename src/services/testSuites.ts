@@ -15,7 +15,18 @@ export const testSuitesApi = createApi({
     runTestSuite: builder.query<any, string>({
       query: testSuiteName => `/test-suites/${testSuiteName}/run`,
     }),
+    updateTestSuite: builder.mutation<void, any>({
+      query: body => ({
+        url: `/test-suites/${body.id}`,
+        method: 'PATCH',
+        body: body.data,
+      }),
+    }),
+    getTestSuiteExecution: builder.query<any, string>({
+      query: executionId => `/test-suites-executions/${executionId}`,
+    }),
   }),
 });
 
-export const {useGetTestSuitesQuery, useRunTestSuiteQuery} = testSuitesApi;
+export const {useGetTestSuitesQuery, useRunTestSuiteQuery, useUpdateTestSuiteMutation, useGetTestSuiteExecutionQuery} =
+  testSuitesApi;

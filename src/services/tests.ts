@@ -36,6 +36,13 @@ export const testsApi = createApi({
         body,
       }),
     }),
+    updateTest: builder.mutation<void, any>({
+      query: body => ({
+        url: `/tests/${body.id}`,
+        method: 'PATCH',
+        body: body.data,
+      }),
+    }),
   }),
 });
 
@@ -45,4 +52,5 @@ export const {
   useGetTestExecutionByIdQuery,
   useGetTestExecutionArtifactsQuery,
   useAddTestMutation,
+  useUpdateTestMutation,
 } = testsApi;
