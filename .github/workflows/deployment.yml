@@ -4,22 +4,63 @@ on:
   push:
     tags:
       - "v*.*.*"
+
 jobs:
-  push_to_registry:
+  build_multi_platform_images:
     name: Build and push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: "arm64"
+            path: arm64v8/nginx:alpine
+          - name: "amd64"
+            path: nginx:alpine
+
     steps:
       - name: Set environment variable
-        run: echo "RELEASE_VERSION=${GITHUB_REF:11}" >> $GITHUB_ENV
+        run: |
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          echo RELEASE_VERSION=${SOURCE_TAG:1} >> $GITHUB_ENV
+
       - name: Check out GitHub repo
         uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build image and push to Docker Hub
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ github.repository }}:${{ env.RELEASE_VERSION }}
+          build-args: TARGET=${{ matrix.path }}
+          tags: ${{ github.repository }}:${{ env.RELEASE_VERSION }}-${{ matrix.name }}
+
+  create_manifest:
+    needs: build_multi_platform_images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variable
+        run: |
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          echo RELEASE_VERSION=${SOURCE_TAG:1} >> $GITHUB_ENV
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create Docker manifest and push multi-arch image to Registry
+        run: |
+          docker manifest create ${{ github.repository }}:${{ env.RELEASE_VERSION }} --amend ${{ github.repository }}:${{ env.RELEASE_VERSION }}-arm64 --amend ${{ github.repository }}:${{ env.RELEASE_VERSION }}-amd64
+          docker manifest push -p ${{ github.repository }}:${{ env.RELEASE_VERSION }}
