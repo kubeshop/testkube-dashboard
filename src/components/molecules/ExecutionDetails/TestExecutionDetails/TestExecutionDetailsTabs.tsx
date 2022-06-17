@@ -5,6 +5,7 @@ import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer
 import {DashboardInfoPanelSecondLevelContext} from '@contexts';
 
 import {CLICommands} from '../..';
+import Variables from '../../Variables';
 import {StyledAntTabPane, StyledAntTabs, StyledTestExecutionDetailsTabsContainer} from '../ExecutionDetails.styled';
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
 import TestExecutionDetailsLogOutput from './TestExecutionDetailsLogOutput';
@@ -28,6 +29,9 @@ const TestExecutionDetailsTabs = () => {
         ) : null}
         <StyledAntTabPane tab="CLI Commands" key="CLICommands">
           <CLICommands isExecutions />
+        </StyledAntTabPane>
+        <StyledAntTabPane tab="Variables" key="Variables">
+          <Variables isExecutions />
         </StyledAntTabPane>
       </StyledAntTabs>
     </StyledTestExecutionDetailsTabsContainer>

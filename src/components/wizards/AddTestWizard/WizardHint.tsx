@@ -9,7 +9,9 @@ const WizardHint: React.FC = () => {
     <StyledWizardHintContainer>
       <WizardHintImage />
       <WizardHintText>Don’t see your test type listed?</WizardHintText>
-      <WizardHintText fontWeight={300} fontSize={14}>Add an executor using our Testkube template.</WizardHintText>
+      <WizardHintText fontWeight={300} fontSize={14}>
+        Add an executor using our Testkube template.
+      </WizardHintText>
       <StyledWizardButton onClick={openCustomExecutorDocumentation}>Here is how!</StyledWizardButton>
     </StyledWizardHintContainer>
   );
