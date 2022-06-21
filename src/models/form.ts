@@ -9,7 +9,7 @@ export type FormItem = {
   itemLabel: string;
   tooltip?: string;
   fieldName: string;
-  inputType: 'select' | 'radio' | 'default' | 'uploadWithInput' | 'textarea';
+  inputType: 'select' | 'radio' | 'default' | 'uploadWithInput' | 'textarea' | 'variables';
   rules?: Rule[];
   options?: Option[];
   modificator?: 'password';

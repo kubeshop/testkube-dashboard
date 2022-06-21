@@ -137,6 +137,15 @@ export const stringContentFormFields: FormItem[] = [
   },
 ];
 
+export const secondStepFormFields: FormItem[] = [
+  {
+    itemLabel: 'Variables',
+    rules: [required],
+    fieldName: 'variables',
+    inputType: 'variables',
+  },
+];
+
 export const optionalFields = ['token', 'branch', 'path'];
 
 export const getTestSourceSpecificFields = (values: any) => {

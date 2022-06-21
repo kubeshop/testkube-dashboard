@@ -443,12 +443,19 @@ ul {
   }
 
   .ant-select-arrow,
-  .ant-input-password-icon {
+  .ant-input-password-icon,
+  .ant-input-password-icon.anticon {
     color: #7D7D7D;
 
     &:hover {
       color: ${Colors.whitePure};
     }
+  }
+
+  // Radio
+
+  .ant-radio-input:focus + .ant-radio-inner {
+    box-shadow: none;
   }
 
 `;

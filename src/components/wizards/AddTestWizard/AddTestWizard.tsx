@@ -1,20 +1,46 @@
-import {ReactElement, useContext, useState} from 'react';
+/* eslint-disable unused-imports/no-unused-imports-ts */
+import {useContext, useEffect, useState} from 'react';
 
-import {Form, Input, Radio, Select, Space, notification} from 'antd';
+import {Form, Input, Popover, Select, Space, notification} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
+
+import {
+  ArrowLeftOutlined,
+  CloseCircleOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  QuestionCircleOutlined,
+} from '@ant-design/icons';
 
 import {Nullable} from '@models/extendTS';
 import {WizardComponentProps} from '@models/wizard';
 
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 
-import {UploadWithInput} from '@atoms';
-
-import {Button, FormItem} from '@custom-antd';
+import {Button, Step, Steps} from '@custom-antd';
 
 import {useAddTestMutation} from '@services/tests';
 
 import {MainContext} from '@contexts';
+
+import VariablesFormList from '@src/components/molecules/VariablesFormList';
+import {
+  duplicateKeyMessage,
+  emptyVariableObject,
+  popoverHelpContent,
+  typeOptions,
+} from '@src/components/molecules/VariablesFormList/VariablesFormList.constants';
+import {
+  Asterisk,
+  StyledAddButton,
+  StyledButtonsContainer,
+  StyledKeyFormItem,
+  StyledLabel,
+  StyledLablesSpace,
+  VariablesListContainer,
+} from '@src/components/molecules/VariablesFormList/VariablesFormList.styled';
+import {validateDuplicateValueByKey} from '@src/utils';
+import {required} from '@src/utils/form';
 
 import {
   StyledWizardBody,
@@ -22,42 +48,27 @@ import {
   StyledWizardFooter,
   StyledWizardForm,
   StyledWizardParagraph,
-  StyledWizardTitle,
 } from '../Wizard.styled';
+import FirstStep from './FirstStep';
+import SecondStep from './SecondStep';
 import WizardHint from './WizardHint';
-import {
-  addTestFormStructure,
-  fileContentFormFields,
-  getTestSourceSpecificFields,
-  gitDirFormFields,
-  gitFileFormFields,
-  optionalFields,
-  stringContentFormFields,
-} from './utils';
-
-const {Option} = Select;
-const {TextArea} = Input;
-
-const additionalFields: any = {
-  'git-dir': gitDirFormFields,
-  'git-file': gitFileFormFields,
-  'file-uri': fileContentFormFields,
-  string: stringContentFormFields,
-};
+import {getTestSourceSpecificFields, optionalFields} from './utils';
 
 const AddTestWizard: React.FC<WizardComponentProps> = props => {
-  const {wizardTitle, onCancel} = props;
+  const {onCancel} = props;
 
   const {dispatch, navigate} = useContext(MainContext);
 
-  const [form] = Form.useForm();
-  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [current, setCurrent] = useState(0);
 
   const [addTest] = useAddTestMutation();
 
+  const [form] = Form.useForm();
+
   const onRunClick = async () => {
-    const values = form.getFieldsValue();
+    const values = form.getFieldsValue(true);
 
     try {
       const targetTestName = await onSaveClick(values, true);
@@ -132,8 +143,15 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
       });
   };
 
-  const onFinish = (val: any) => {
-    return onSaveClick(val);
+  const onFinish = () => {
+    const values = form.getFieldsValue(true);
+    console.log('values: ', values);
+
+    if (current !== 2) {
+      return setCurrent(prev => prev + 1);
+    }
+
+    return onSaveClick(values);
   };
 
   const onFileChange = (file: Nullable<UploadChangeParam>) => {
@@ -168,128 +186,53 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
     }
   };
 
-  const renderFormItems = (array: any) => {
-    return array.map((formItem: any) => {
-      const {
-        options = null,
-        itemLabel,
-        tooltip,
-        fieldName,
-        inputType,
-        modificator = null,
-        rules = [],
-        help = null,
-      } = formItem;
-
-      let children: Nullable<ReactElement<any, any>> = null;
-
-      if (inputType === 'select') {
-        children = (
-          <Select>
-            {options.map((option: any) => {
-              return (
-                <Option value={option.value} key={option.value}>
-                  {option.label}
-                </Option>
-              );
-            })}
-          </Select>
-        );
-      }
-
-      if (inputType === 'radio') {
-        children = (
-          <Radio.Group>
-            {options.map((option: any) => {
-              return (
-                <Radio value={option.value} key={option.value}>
-                  {option.label}
-                </Radio>
-              );
-            })}
-          </Radio.Group>
-        );
-      }
-
-      if (inputType === 'default') {
-        if (modificator) {
-          if (modificator === 'password') {
-            children = <Input.Password />;
-          }
-        } else {
-          children = <Input />;
-        }
-      }
-
-      if (inputType === 'uploadWithInput') {
-        children = <UploadWithInput onFileChange={onFileChange} />;
-      }
-
-      if (inputType === 'textarea') {
-        children = <TextArea rows={10} />;
-      }
-
-      if (!children) {
-        return null;
-      }
-
-      return (
-        <FormItem rules={rules} label={itemLabel} name={fieldName} tooltip={tooltip} key={fieldName} help={help}>
-          {children}
-        </FormItem>
-      );
-    });
-  };
-
   const onFieldsChange = () => {
     const formFields = form.getFieldsValue();
+    const formFieldsKeys = Object.keys(formFields);
 
-    const isTouched = Object.keys(formFields).every(fieldKey => {
-      const isFieldTouched = form.isFieldTouched(fieldKey);
-      const fieldValue = form.getFieldValue(fieldKey);
-      // Did not manage to get the metadata of the fields
-      const isFieldOptional = optionalFields.includes(fieldKey);
-
-      return isFieldOptional || Boolean(fieldValue) || isFieldTouched;
-    });
-
-    if (isTouched) {
-      return setButtonDisabled(form.getFieldsError().some(field => field.errors.length > 0));
+    if (formFieldsKeys.length === 1 && !formFields[formFieldsKeys[0]].length) {
+      return setButtonDisabled(true);
     }
 
-    return setButtonDisabled(true);
+    setButtonDisabled(false);
   };
+
+  const steps: any = {
+    0: <FirstStep onFileChange={onFileChange} />,
+    1: <SecondStep form={form} />,
+  };
+
+  useEffect(() => {
+    onFieldsChange();
+  }, [current]);
 
   return (
     <StyledWizardContainer>
-      <StyledWizardTitle>{wizardTitle}</StyledWizardTitle>
+      <Steps current={current}>
+        <Step title="Step 1" description="This is a description." />
+        <Step title="Step 2" description="This is a description." />
+        <Step title="Step 3" description="This is a description." />
+      </Steps>
       <StyledWizardBody>
         <StyledWizardForm>
-          <StyledWizardParagraph>
-            Create a new test based on file content, string or git based data.
-          </StyledWizardParagraph>
           <Form
             form={form}
             name="add-test-form"
             labelCol={{span: 8}}
             onFinish={onFinish}
-            style={{paddingTop: 30}}
-            initialValues={{testSource: '', testType: '', branch: 'main'}}
+            initialValues={{
+              name: 'dasdas',
+              testSource: 'string',
+              testType: 'k6/script',
+              string: 'dsadsa',
+              branch: 'main',
+            }}
             onFieldsChange={onFieldsChange}
           >
-            {renderFormItems(addTestFormStructure)}
-            <FormItem
-              noStyle
-              shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
-            >
-              {({getFieldValue}) => {
-                const testSourceValue = getFieldValue('testSource');
-
-                if (testSourceValue) {
-                  return renderFormItems(additionalFields[testSourceValue]);
-                }
-              }}
-            </FormItem>
+            <StyledWizardParagraph style={{marginBottom: 30}}>
+              Create a new test based on file content, string or git based data.
+            </StyledWizardParagraph>
+            {steps[current]}
           </Form>
         </StyledWizardForm>
         <WizardHint />
@@ -300,18 +243,35 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
             Cancel
           </Button>
           <Button
+            type="dashed"
+            onClick={() => {
+              setCurrent(current - 1);
+            }}
+            disabled={current === 0}
+            loading={isLoading}
+            icon={<ArrowLeftOutlined />}
+          >
+            Back
+          </Button>
+          <Button
             type="primary"
             onClick={() => {
               form.submit();
             }}
-            disabled={buttonDisabled || isLoading}
-            loading={isLoading}
+            disabled={buttonDisabled}
           >
-            Save
+            {current === 2 ? 'Save' : 'Next'}
           </Button>
-          <Button type="primary" onClick={onRunClick} disabled={buttonDisabled || isLoading}>
-            Save & Run
-          </Button>
+          {current === 2 ? (
+            <Button
+              type="primary"
+              onClick={() => {
+                onRunClick();
+              }}
+            >
+              Save & Run
+            </Button>
+          ) : null}
         </Space>
       </StyledWizardFooter>
     </StyledWizardContainer>
