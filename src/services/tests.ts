@@ -48,13 +48,6 @@ export const testsApi = createApi({
         body: body.data,
       }),
     }),
-    updateTest: builder.mutation<void, any>({
-      query: body => ({
-        url: `/tests/${body.id}`,
-        method: 'PATCH',
-        body: body.data,
-      }),
-    }),
   }),
 });
 

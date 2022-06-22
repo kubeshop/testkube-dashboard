@@ -7,11 +7,6 @@ export const formatVariables = (list: Variable[]) => {
       name: item.key,
       value: item.value,
       type: item.type === 0 ? 'basic' : 'secret',
-      secretRef: {
-        name: item.key,
-        key: item.key,
-        namescpace: item.key,
-      },
     };
   });
   return variables;

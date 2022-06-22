@@ -33,18 +33,18 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
       {(fields, {add, remove}) => (
         <VariablesListContainer>
           {fields.length !== 0 ? (
-            <StyledLablesSpace>
-              <StyledLabel basis="100px">
+            <StyledLablesSpace noGap>
+              <StyledLabel flex="1">
                 Type
                 <Popover content={popoverHelpContent} placement="topLeft">
                   <QuestionCircleOutlined style={{marginLeft: '5px', fontSize: '14px'}} />
                 </Popover>
               </StyledLabel>
-              <StyledLabel basis="200px">
+              <StyledLabel flex="2">
                 <Asterisk />
                 Key
               </StyledLabel>
-              <StyledLabel basis="250px">Value</StyledLabel>
+              <StyledLabel flex="2">Value</StyledLabel>
             </StyledLablesSpace>
           ) : null}
           {fields.map(({key, name, ...restField}) => (
@@ -85,7 +85,7 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                       name={[name, 'value']}
                       style={{minWidth: '50px', flex: 2, marginBottom: '0'}}
                     >
-                      {form.getFieldValue('variables-list')[key]?.type === 1 ? (
+                      {form.getFieldValue('variables-list')[name]?.type === 1 ? (
                         <Input.Password
                           iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
                         />
@@ -103,7 +103,7 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
           ))}
           <StyledButtonsContainer>
             <StyledAddButton onClick={() => add(emptyVariableObject)}>Add Variable</StyledAddButton>
-            {fields.length > 0 && isSaveable ? (
+            {data.length > 0 || (fields.length > 0 && isSaveable) ? (
               <Form.Item>
                 <StyledSaveButton
                   type="primary"
