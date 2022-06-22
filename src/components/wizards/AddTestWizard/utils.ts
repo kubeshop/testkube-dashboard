@@ -1,6 +1,19 @@
 import {FormItem} from '@models/form';
+import {Step} from '@models/wizard';
 
 import {required, url} from '@utils/form';
+
+import FirstStepHint from './hints/FirstStepHint';
+import SecondStepHint from './hints/SecondStepHint';
+import ThirdStepHint from './hints/ThirdStepHint';
+
+export const addTestSteps: Step[] = [
+  {title: 'Test Details', description: 'Enter test information.'},
+  {title: 'Add Variables', description: 'Reuse values.'},
+  {title: 'Done', description: 'Save or run your test.'},
+];
+
+export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 
 export const addTestFormStructure: FormItem[] = [
   {

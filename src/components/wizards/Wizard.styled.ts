@@ -68,11 +68,26 @@ export const WizardHintText = styled.span<{fontWeight?: any; fontSize?: any}>`
   font-weight: ${({fontWeight}) => fontWeight || 600};
   font-size: ${({fontSize}) => `${fontSize || 16}px`};
   line-height: 32px;
+  font-family: 'Nunito';
   /* or 200% */
 
   text-align: center;
 
   color: ${Colors.grey450};
+`;
+
+export const WizardHintList = styled.ul`
+  margin-top: 10px;
+  padding: 0 30px;
+
+  list-style-type: initial;
+
+  li {
+    font-family: 'Nunito';
+    font-weight: 400;
+
+    color: #dbdbdb;
+  }
 `;
 
 export const StyledWizardFooter = styled.div`
@@ -83,6 +98,10 @@ export const StyledWizardButton = styled(Button)`
   color: ${Colors.purple};
   background: transparent;
   border: none;
+`;
+
+export const StyledWizardImage = styled.img`
+  margin-top: 10px;
 `;
 
 export const StyledWizardParagraph = styled.p``;

@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
+import {CSSTransition} from 'react-transition-group';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -7,7 +8,7 @@ import {Content} from 'antd/lib/layout/layout';
 import {useGA4React} from 'ga-4-react';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint} from '@redux/reducers/configSlice';
+import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setLabels} from '@redux/reducers/labelsSlice';
 
 import {SideBar} from '@organisms';
@@ -20,6 +21,7 @@ import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
 import {CookiesBanner} from './components/molecules';
+import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
 import env from './env';
 import Routes from './routes';
 
@@ -30,6 +32,7 @@ const App: React.FC = () => {
   const navigate = useNavigate();
 
   const apiEndpoint = useAppSelector(selectApiEndpoint);
+  const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
 
@@ -98,6 +101,9 @@ const App: React.FC = () => {
           <Content>
             <Routes />
           </Content>
+          <CSSTransition in={isFullScreenLogOutput} timeout={350} classNames="full-screen-log-output" unmountOnExit>
+            <FullScreenLogOutput logOutput={logOutput} />
+          </CSSTransition>
         </StyledLayoutContentWrapper>
         {isCookiesVisible ? (
           <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />

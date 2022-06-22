@@ -1,5 +1,5 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useMemo, useState} from 'react';
 
 import {Form, Input, Popover, Select, Space, notification} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
@@ -41,6 +41,7 @@ import {
 } from '@src/components/molecules/VariablesFormList/VariablesFormList.styled';
 import {validateDuplicateValueByKey} from '@src/utils';
 import {required} from '@src/utils/form';
+import {formatVariables} from '@src/utils/variables';
 
 import {
   StyledWizardBody,
@@ -51,8 +52,9 @@ import {
 } from '../Wizard.styled';
 import FirstStep from './FirstStep';
 import SecondStep from './SecondStep';
+import ThirdStep from './ThirdStep';
 import WizardHint from './WizardHint';
-import {getTestSourceSpecificFields, optionalFields} from './utils';
+import {addTestHints, addTestSteps, getTestSourceSpecificFields, optionalFields} from './utils';
 
 const AddTestWizard: React.FC<WizardComponentProps> = props => {
   const {onCancel} = props;
@@ -97,6 +99,7 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
         type: testSource === 'file-uri' ? 'string' : testSource,
         ...testSourceSpecificFields,
       },
+      variables: formatVariables(values['variables-list']),
     };
 
     return addTest(requestBody)
@@ -144,12 +147,11 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
   };
 
   const onFinish = () => {
-    const values = form.getFieldsValue(true);
-    console.log('values: ', values);
-
     if (current !== 2) {
       return setCurrent(prev => prev + 1);
     }
+
+    const values = form.getFieldsValue(true);
 
     return onSaveClick(values);
   };
@@ -186,33 +188,44 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
     }
   };
 
-  const onFieldsChange = () => {
-    const formFields = form.getFieldsValue();
-    const formFieldsKeys = Object.keys(formFields);
+  // const onFieldsChange = () => {
+  //   const formFields = form.getFieldsValue();
+  //   const formFieldsKeys = Object.keys(formFields);
 
-    if (formFieldsKeys.length === 1 && !formFields[formFieldsKeys[0]].length) {
-      return setButtonDisabled(true);
-    }
+  //   if (formFieldsKeys.length === 1 && !formFields[formFieldsKeys[0]].length) {
+  //     return setButtonDisabled(true);
+  //   }
 
-    setButtonDisabled(false);
-  };
+  //   setButtonDisabled(false);
+  // };
 
-  const steps: any = {
+  const formSteps: any = {
     0: <FirstStep onFileChange={onFileChange} />,
     1: <SecondStep form={form} />,
+    2: <ThirdStep form={form} />,
   };
 
-  useEffect(() => {
-    onFieldsChange();
-  }, [current]);
+  const renderedHeaderSteps = useMemo(() => {
+    return addTestSteps.map(step => {
+      const {title, description} = step;
+
+      return <Step title={title} description={description} />;
+    });
+  }, []);
+
+  const renderedHints = useMemo(() => {
+    return addTestHints.map(Component => {
+      return Component;
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   onFieldsChange();
+  // }, [current]);
 
   return (
     <StyledWizardContainer>
-      <Steps current={current}>
-        <Step title="Step 1" description="This is a description." />
-        <Step title="Step 2" description="This is a description." />
-        <Step title="Step 3" description="This is a description." />
-      </Steps>
+      <Steps current={current}>{renderedHeaderSteps}</Steps>
       <StyledWizardBody>
         <StyledWizardForm>
           <Form
@@ -221,21 +234,17 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
             labelCol={{span: 8}}
             onFinish={onFinish}
             initialValues={{
-              name: 'dasdas',
-              testSource: 'string',
-              testType: 'k6/script',
-              string: 'dsadsa',
               branch: 'main',
             }}
-            onFieldsChange={onFieldsChange}
+            // onFieldsChange={onFieldsChange}
           >
             <StyledWizardParagraph style={{marginBottom: 30}}>
               Create a new test based on file content, string or git based data.
             </StyledWizardParagraph>
-            {steps[current]}
+            {formSteps[current]}
           </Form>
         </StyledWizardForm>
-        <WizardHint />
+        {renderedHints[current]}
       </StyledWizardBody>
       <StyledWizardFooter>
         <Space>
@@ -245,7 +254,9 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
           <Button
             type="dashed"
             onClick={() => {
-              setCurrent(current - 1);
+              setCurrent(prev => {
+                return prev - 1;
+              });
             }}
             disabled={current === 0}
             loading={isLoading}

@@ -1,5 +1,4 @@
 import {createContext, useContext, useEffect, useState} from 'react';
-import {CSSTransition} from 'react-transition-group';
 
 import {TablePaginationConfig} from 'antd';
 
@@ -7,8 +6,6 @@ import {DashboardBlueprint} from '@models/dashboard';
 
 import {useAppSelector} from '@redux/hooks';
 import {closeFullScreenLogOutput, selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
-
-import FullScreenLogOutput from '@molecules/LogOutput/FullScreenLogOutput';
 
 import {DashboardContent, DashboardInfoPanel} from '@organisms';
 
@@ -82,7 +79,7 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
   const queryFilters: any = useAppSelector(selectQueryFilters);
   const allFilters: any = useAppSelector(selectAllFilters);
   const apiEndpoint = useAppSelector(selectApiEndpoint);
-  const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
+  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   useUpdateURLSearchParams(queryFilters);
 
@@ -170,10 +167,6 @@ const DashboardContainer: React.FC<DashboardBlueprint> = props => {
       <StyledDashboardContainerWrapper>
         <DashboardContent onRowSelect={onRowSelect} paginationOptions={pagination} />
         <DashboardInfoPanel />
-        {/* That is for Fullscreen Log Output */}
-        <CSSTransition in={isFullScreenLogOutput} timeout={350} classNames="full-screen-log-output" unmountOnExit>
-          <FullScreenLogOutput logOutput={logOutput} />
-        </CSSTransition>
       </StyledDashboardContainerWrapper>
     </DashboardContext.Provider>
   );

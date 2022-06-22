@@ -23683,7 +23683,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
   text-align: left;
   text-decoration: none;
   word-wrap: break-word;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: #000;
   border-radius: 2px;
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
 }
@@ -23698,7 +23698,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
   pointer-events: none;
 }
 .ant-tooltip-arrow-content {
-  --antd-arrow-background-color: linear-gradient(to right bottom, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.75));
+  --antd-arrow-background-color: linear-gradient(to right bottom, rgba(0, 0, 0, 0.9), #000);
   position: absolute;
   top: 0;
   right: 0;

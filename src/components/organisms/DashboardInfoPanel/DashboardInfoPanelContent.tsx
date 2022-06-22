@@ -104,6 +104,7 @@ const DashboardInfoPanelContent = () => {
   const {dispatch} = useContext(MainContext);
 
   const {targetTestExecutionId, runTarget} = useAppSelector(selectRedirectTarget);
+
   const [ref, size] = useElementSize();
 
   const [infoPanelProps, setInfoPanelProps] = useState<any>({
