@@ -10,6 +10,7 @@ export const formatVariables = (list: Variable[]) => {
       secretRef: {
         name: item.key,
         key: item.key,
+        namescpace: item.key,
       },
     };
   });
