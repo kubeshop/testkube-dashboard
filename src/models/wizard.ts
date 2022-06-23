@@ -2,5 +2,10 @@ export type WizardType = 'addTest';
 
 export type WizardComponentProps = {
   wizardTitle: string;
-  onCancel: () => any;
+  onCancel: () => void;
+};
+
+export type Step = {
+  title: string;
+  description?: string;
 };

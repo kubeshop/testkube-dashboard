@@ -1,14 +1,15 @@
 import React, {useContext, useEffect} from 'react';
 
+import {DashboardBlueprintType} from '@models/dashboard';
+
 import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
 
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
-import {MainContext} from '@contexts';
+import {useGetTestSuiteExecutionQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
+import {useGetTestExecutionByIdQuery, useUpdateTestMutation} from '@services/tests';
 
-import {DashboardBlueprintType} from '@src/models/dashboard';
-import {useGetTestSuiteExecutionQuery, useUpdateTestSuiteMutation} from '@src/services/testSuites';
-import {useGetTestExecutionByIdQuery, useUpdateTestMutation} from '@src/services/tests';
+import {MainContext} from '@contexts';
 
 import {StyledInfoPanelSection} from '../../organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
 import {TestDescription, TestSuiteDescription} from './VariablesDescriptions';

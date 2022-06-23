@@ -11,7 +11,7 @@ export const VariablesListContainer = styled.div`
 `;
 
 export const StyledLabel = styled.div<{basis?: string; flex?: string}>`
-  flex-basis: ${props => props.basis || 'auto'};
+  flex: ${props => props.flex || 'auto'};
   min-width: 50px;
 
   color: ${Colors.grey450};
@@ -30,10 +30,10 @@ export const Asterisk = styled.span`
   color: ${Colors.errorRed};
 `;
 
-export const StyledLablesSpace = styled.div`
+export const StyledLablesSpace = styled.div<{noGap?: boolean}>`
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: ${props => (props.noGap ? '0' : '16px')};
 
   min-width: 200px;
   margin-bottom: 8px;

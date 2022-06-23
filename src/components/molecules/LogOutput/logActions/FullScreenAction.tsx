@@ -5,8 +5,8 @@ import {ExpandAltOutlined, FullscreenExitOutlined} from '@ant-design/icons';
 import {useAppSelector} from '@redux/hooks';
 import {
   closeFullScreenLogOutput,
-  openFullScreenLogOutput,
   selectFullScreenLogOutput,
+  setIsFullScreenLogOutput,
 } from '@redux/reducers/configSlice';
 
 import {Tooltip} from '@custom-antd';
@@ -27,7 +27,7 @@ const FullScreenAction: React.FC<LogActionProps> = props => {
     if (isFullScreenLogOutput) {
       dispatch(closeFullScreenLogOutput());
     } else {
-      dispatch(openFullScreenLogOutput(logOutput));
+      dispatch(setIsFullScreenLogOutput(true));
     }
   };
 

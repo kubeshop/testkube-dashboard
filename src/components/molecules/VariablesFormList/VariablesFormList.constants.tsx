@@ -7,7 +7,7 @@ export const popoverHelpContent = (
 );
 
 export const emptyVariableObject: Variable = {
-  type: null,
+  type: 0,
   key: '',
   value: '',
 };

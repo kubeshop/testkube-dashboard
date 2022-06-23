@@ -28,6 +28,9 @@ export const configSlice = createSlice({
     setLogOutput: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.fullScreenLogOutput.logOutput += action.payload;
     },
+    setIsFullScreenLogOutput: (state: Draft<ConfigState>, action: PayloadAction<boolean>) => {
+      state.fullScreenLogOutput.isFullScreenLogOutput = action.payload;
+    },
     openFullScreenLogOutput: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.fullScreenLogOutput.isFullScreenLogOutput = true;
       state.fullScreenLogOutput.logOutput = action.payload;
@@ -45,6 +48,7 @@ export const selectFullScreenLogOutput = (state: RootState) => state.config.full
 
 export const {
   setApiEndpoint,
+  setIsFullScreenLogOutput,
   openFullScreenLogOutput,
   closeFullScreenLogOutput,
   setRedirectTarget,

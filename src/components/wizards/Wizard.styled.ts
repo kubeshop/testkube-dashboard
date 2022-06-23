@@ -9,7 +9,7 @@ export const StyledWizardContainer = styled.div`
   flex-direction: column;
 
   max-width: 1240px;
-  padding: 45px 25px 25px 25px;
+  padding: 40px 25px 25px 25px;
   border: 1px solid ${Colors.grey3};
   border-radius: 14px;
 
@@ -41,7 +41,7 @@ export const StyledWizardBody = styled.div`
 export const StyledWizardForm = styled.div`
   flex: 4;
 
-  padding: 30px 45px 30px 25px;
+  padding: 30px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 
@@ -68,11 +68,26 @@ export const WizardHintText = styled.span<{fontWeight?: any; fontSize?: any}>`
   font-weight: ${({fontWeight}) => fontWeight || 600};
   font-size: ${({fontSize}) => `${fontSize || 16}px`};
   line-height: 32px;
+  font-family: 'Nunito';
   /* or 200% */
 
   text-align: center;
 
   color: ${Colors.grey450};
+`;
+
+export const WizardHintList = styled.ul`
+  margin-top: 10px;
+  padding: 0 30px;
+
+  list-style-type: initial;
+
+  li {
+    font-family: 'Nunito';
+    font-weight: 400;
+
+    color: #dbdbdb;
+  }
 `;
 
 export const StyledWizardFooter = styled.div`
@@ -85,4 +100,8 @@ export const StyledWizardButton = styled(Button)`
   border: none;
 `;
 
-export const StyledWizardParagraph = styled.span``;
+export const StyledWizardImage = styled.img`
+  margin-top: 10px;
+`;
+
+export const StyledWizardParagraph = styled.p``;

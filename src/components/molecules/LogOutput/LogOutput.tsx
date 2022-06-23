@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {LogAction} from '@models/log';
 
@@ -20,10 +20,11 @@ export type LogOutputProps = {
   actions?: LogAction[];
   isFullScreen?: boolean;
   isRunning?: boolean;
+  title?: string;
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = '', executionId, actions = ['copy', 'fullscreen'], isRunning} = props;
+  const {logOutput = '', executionId, actions = ['copy', 'fullscreen'], isRunning, title} = props;
 
   const {dispatch} = useContext(MainContext);
 
@@ -70,7 +71,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   return (
     <StyledLogOutputContainer>
-      <LogOutputHeader logOutput={logs} actions={actions} />
+      <LogOutputHeader logOutput={logs} actions={actions} title={title} />
       <StyledLogTextContainer>{logs ? <StyledPreLogText>{logs}</StyledPreLogText> : null}</StyledLogTextContainer>
     </StyledLogOutputContainer>
   );

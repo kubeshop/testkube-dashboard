@@ -13,3 +13,7 @@ export const openDiscord = () => {
 export const openCustomExecutorDocumentation = () => {
   window.open('https://kubeshop.github.io/testkube/executor-custom/');
 };
+
+export const openTestkubeDashboardDocumentation = () => {
+  window.open('https://kubeshop.github.io/testkube/UI/');
+};

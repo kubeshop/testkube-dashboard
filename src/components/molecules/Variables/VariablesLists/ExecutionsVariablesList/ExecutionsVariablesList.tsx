@@ -40,8 +40,12 @@ const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props =>
               <StyledText>{item.key}</StyledText>
             </Popover>
           </StyledReadOnlyVariableLabel>
-          {item.type === 1 ? (
-            <StyledReadOnlyVariableLabel>{item.value}</StyledReadOnlyVariableLabel>
+          {item.type === 0 ? (
+            <StyledReadOnlyVariableLabel>
+              <Popover content={item.value} placement="topLeft" arrowPointAtCenter>
+                <StyledText>{item.value}</StyledText>
+              </Popover>
+            </StyledReadOnlyVariableLabel>
           ) : (
             <StyledReadOnlyVariableLabel>
               {secretValuesVisibility[index] ? (
