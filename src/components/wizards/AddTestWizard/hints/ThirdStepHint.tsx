@@ -1,6 +1,6 @@
-import ThirdStepImage from '@assets/addTestThirdStepImage.png';
+import {openTestkubeDashboardDocumentation} from '@utils/externalLinks';
 
-import {openTestkubeDashboardDocumentation} from '@src/utils/externalLinks';
+import ThirdStepImage from '@assets/addTestThirdStepImage.png';
 
 import {StyledWizardButton, StyledWizardHintContainer, StyledWizardImage, WizardHintText} from '../../Wizard.styled';
 

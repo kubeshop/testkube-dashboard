@@ -1,12 +1,12 @@
 import {useEffect, useState} from 'react';
 
+import {LogOutput} from '@molecules';
+
 import {formatVariables} from '@utils/variables';
 
 import {useAddTestMutation} from '@services/tests';
 
-import {LogOutput} from '@src/components/molecules';
-
-import {getTestSourceSpecificFields} from './utils';
+import {getTestSourceSpecificFields} from '../utils';
 
 const ThirdStep: React.FC<any> = props => {
   const {form} = props;

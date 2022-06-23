@@ -18,3 +18,4 @@ export {default as ExecutionStepIcon} from './ExecutionStepIcon';
 export {default as ExecutionName} from './ExecutionName';
 export {default as CookiesBanner} from './CookiesBanner';
 export {default as LogOutput} from './LogOutput';
+export {default as Variables} from './Variables';

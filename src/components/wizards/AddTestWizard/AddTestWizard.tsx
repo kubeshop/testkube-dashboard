@@ -1,16 +1,9 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
-import {useContext, useEffect, useMemo, useState} from 'react';
+import {useContext, useMemo, useState} from 'react';
 
-import {Form, Input, Popover, Select, Space, notification} from 'antd';
+import {Form, Space, notification} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
-import {
-  ArrowLeftOutlined,
-  CloseCircleOutlined,
-  EyeInvisibleOutlined,
-  EyeOutlined,
-  QuestionCircleOutlined,
-} from '@ant-design/icons';
+import {ArrowLeftOutlined} from '@ant-design/icons';
 
 import {Nullable} from '@models/extendTS';
 import {WizardComponentProps} from '@models/wizard';
@@ -23,24 +16,6 @@ import {useAddTestMutation} from '@services/tests';
 
 import {MainContext} from '@contexts';
 
-import VariablesFormList from '@src/components/molecules/VariablesFormList';
-import {
-  duplicateKeyMessage,
-  emptyVariableObject,
-  popoverHelpContent,
-  typeOptions,
-} from '@src/components/molecules/VariablesFormList/VariablesFormList.constants';
-import {
-  Asterisk,
-  StyledAddButton,
-  StyledButtonsContainer,
-  StyledKeyFormItem,
-  StyledLabel,
-  StyledLablesSpace,
-  VariablesListContainer,
-} from '@src/components/molecules/VariablesFormList/VariablesFormList.styled';
-import {validateDuplicateValueByKey} from '@src/utils';
-import {required} from '@src/utils/form';
 import {formatVariables} from '@src/utils/variables';
 
 import {
@@ -50,18 +25,16 @@ import {
   StyledWizardForm,
   StyledWizardParagraph,
 } from '../Wizard.styled';
-import FirstStep from './FirstStep';
-import SecondStep from './SecondStep';
-import ThirdStep from './ThirdStep';
-import WizardHint from './WizardHint';
-import {addTestHints, addTestSteps, getTestSourceSpecificFields, optionalFields} from './utils';
+import FirstStep from './steps/FirstStep';
+import SecondStep from './steps/SecondStep';
+import ThirdStep from './steps/ThirdStep';
+import {addTestHints, addTestSteps, getTestSourceSpecificFields} from './utils';
 
 const AddTestWizard: React.FC<WizardComponentProps> = props => {
   const {onCancel} = props;
 
   const {dispatch, navigate} = useContext(MainContext);
 
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [current, setCurrent] = useState(0);
 
@@ -188,17 +161,6 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
     }
   };
 
-  // const onFieldsChange = () => {
-  //   const formFields = form.getFieldsValue();
-  //   const formFieldsKeys = Object.keys(formFields);
-
-  //   if (formFieldsKeys.length === 1 && !formFields[formFieldsKeys[0]].length) {
-  //     return setButtonDisabled(true);
-  //   }
-
-  //   setButtonDisabled(false);
-  // };
-
   const formSteps: any = {
     0: <FirstStep onFileChange={onFileChange} />,
     1: <SecondStep form={form} />,
@@ -219,10 +181,6 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   onFieldsChange();
-  // }, [current]);
-
   return (
     <StyledWizardContainer>
       <Steps current={current}>{renderedHeaderSteps}</Steps>
@@ -236,7 +194,6 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
             initialValues={{
               branch: 'main',
             }}
-            // onFieldsChange={onFieldsChange}
           >
             <StyledWizardParagraph style={{marginBottom: 30}}>
               Create a new test based on file content, string or git based data.
@@ -269,7 +226,6 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
             onClick={() => {
               form.submit();
             }}
-            disabled={buttonDisabled}
           >
             {current === 2 ? 'Save' : 'Next'}
           </Button>

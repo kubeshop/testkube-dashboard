@@ -1,5 +1,6 @@
-import renderFormItems from './dada';
-import {secondStepFormFields} from './utils';
+import {renderFormItems} from '@utils/form';
+
+import {secondStepFormFields} from '../utils';
 
 const SecondStep: React.FC<any> = props => {
   const {form} = props;

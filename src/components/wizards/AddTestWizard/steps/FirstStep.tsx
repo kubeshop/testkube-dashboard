@@ -1,13 +1,14 @@
 import {FormItem} from '@custom-antd';
 
-import renderFormItems from './dada';
+import {renderFormItems} from '@utils/form';
+
 import {
   addTestFormStructure,
   fileContentFormFields,
   gitDirFormFields,
   gitFileFormFields,
   stringContentFormFields,
-} from './utils';
+} from '../utils';
 
 const additionalFields: any = {
   'git-dir': gitDirFormFields,

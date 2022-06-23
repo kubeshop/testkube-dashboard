@@ -1,22 +1,26 @@
 import {ReactElement} from 'react';
 
 import {Input, Radio, Select} from 'antd';
+import {Rule} from 'antd/lib/form';
 
 import {UploadWithInput} from '@atoms';
 
 import {FormItem} from '@custom-antd';
 
-import VariablesFormList from '@src/components/molecules/VariablesFormList';
+import VariablesFormList from '@molecules/VariablesFormList';
 
 const {Option} = Select;
 const {TextArea} = Input;
+
+export const required: Rule = {required: true, message: 'Required.'};
+export const url: Rule = {type: 'url'};
 
 type DefaultConfig = {
   onFileChange?: () => {};
   form?: null;
 };
 
-const renderFormItems = (array: any, config: DefaultConfig = {}) => {
+export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
   const {onFileChange, form} = config;
 
   return array.map((formItem: any) => {
@@ -94,5 +98,3 @@ const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     );
   });
 };
-
-export default renderFormItems;

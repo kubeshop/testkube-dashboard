@@ -12,7 +12,7 @@ import {clearRunTarget, clearTargetTestExecutionId, selectRedirectTarget} from '
 
 import {Skeleton} from '@custom-antd';
 
-import {CLICommands, ExecutionDefinition, ExecutionTableRow, InfoPanelHeader} from '@molecules';
+import {CLICommands, ExecutionDefinition, ExecutionTableRow, InfoPanelHeader, Variables} from '@molecules';
 
 import useElementSize from '@hooks/useElementSize';
 
@@ -22,8 +22,6 @@ import {useGetTestSuiteExecutionsByTestIdQuery} from '@services/testSuiteExecuti
 import {useGetTestExecutionsByIdQuery} from '@services/tests';
 
 import {DashboardInfoPanelContext, MainContext} from '@contexts';
-
-import Variables from '@src/components/molecules/Variables';
 
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
 import {
