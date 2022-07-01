@@ -39,3 +39,5 @@ k8sdumps
 
 /public/env-config.js
 env-config.js
+
+/src/antd-theme/antd-customized.css

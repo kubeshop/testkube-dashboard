@@ -80,9 +80,9 @@
   },
   "scripts": {
     "mock-api": "json-server --watch --routes routes.json src/assets/mockedData/executions.json --port 4000",
-    "start": "chmod +x scripts/env.sh && cp env-config.js ./public/ && craco start",
+    "start": "chmod +x scripts/env.sh && cp env-config.js ./public/ && npm run less && craco start",
     "start:mock-app": "concurrently \"npm run mock-api\" \"npm start\"",
-    "build": "CI=false && craco --max_old_space_size=4096 build",
+    "build": "CI=false && npm run less && craco --max_old_space_size=4096 build",
     "test": "craco test --watchAll=false",
     "test:watch": "jest  --watch --detectOpenHandles",
     "test:coverage": "jest -- --coverage --watchAll=false",
