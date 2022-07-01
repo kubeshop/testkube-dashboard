@@ -1,25 +1,52 @@
-import {useContext} from 'react';
+import {useContext, useEffect, useState} from 'react';
+
+import axios from 'axios';
 
 import {CopyCommand} from '@molecules';
 
 import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
 
 import {StyledExecutionDefinitionCode, StyledExecutionDefinitionPre} from './TestExecutionDefinition.styled';
-import {getExecutionDefinitionData} from './utils';
 
 const TestExecutionDefinition: React.FC = () => {
   const {selectedRecord} = useContext(DashboardContext);
 
-  const {content} = selectedRecord;
+  const {name} = selectedRecord;
 
-  const command = getExecutionDefinitionData(content);
+  const [testCRD, setTestCRD] = useState('');
+  const [isLoading, setLoading] = useState(false);
+
+  const onGetTestCRD = async () => {
+    setLoading(true);
+
+    try {
+      setTestCRD('');
+
+      const result = await axios(`/test-with-executions/${name}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'text/yaml',
+        },
+      });
+
+      setTestCRD(result.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    onGetTestCRD();
+  }, [name]);
 
   return (
     <StyledExecutionDefinitionPre>
-      {command ? (
-        <CopyCommand command={command} />
+      {testCRD ? (
+        <CopyCommand command={testCRD} />
       ) : (
-        <StyledExecutionDefinitionCode>No definition data</StyledExecutionDefinitionCode>
+        <StyledExecutionDefinitionCode>{isLoading ? 'Loading...' : 'No definition data'}</StyledExecutionDefinitionCode>
       )}
     </StyledExecutionDefinitionPre>
   );
