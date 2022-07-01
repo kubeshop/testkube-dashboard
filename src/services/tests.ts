@@ -1,16 +1,15 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-
-import {config} from '@constants/config';
+import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {TestWithExecution} from '@models/test';
 import {TestFilters} from '@models/tests';
 
 import {addIndexes} from '@utils/array';
-import {paramsSerializer} from '@utils/fetchUtils';
+import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
 
 export const testsApi = createApi({
   reducerPath: 'testsApi',
-  baseQuery: fetchBaseQuery({baseUrl: localStorage.getItem(config.apiEndpoint) || ''}),
+  baseQuery: dynamicBaseQuery,
+
   endpoints: builder => ({
     getTests: builder.query<TestWithExecution[], TestFilters>({
       query: filters => `/test-with-executions?${paramsSerializer(filters)}`,
