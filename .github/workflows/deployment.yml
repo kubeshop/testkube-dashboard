@@ -18,10 +18,15 @@ jobs:
             path: nginx:alpine
 
     steps:
-      - name: Set environment variable
-        run: |
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
-          echo RELEASE_VERSION=${SOURCE_TAG:1} >> $GITHUB_ENV
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          # Optionally strip `v` prefix
+          strip_v: true
+
+      - name: Use tag
+        run: echo ${{steps.tag.outputs.tag}}
 
       - name: Check out GitHub repo
         uses: actions/checkout@v2
@@ -43,16 +48,21 @@ jobs:
         with:
           push: true
           build-args: TARGET=${{ matrix.path }}
-          tags: ${{ github.repository }}:${{ env.RELEASE_VERSION }}-${{ matrix.name }}
+          tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
 
   create_manifest:
     needs: build_multi_platform_images
     runs-on: ubuntu-latest
     steps:
-      - name: Set environment variable
-        run: |
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
-          echo RELEASE_VERSION=${SOURCE_TAG:1} >> $GITHUB_ENV
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          # Optionally strip `v` prefix
+          strip_v: true
+
+      - name: Use tag
+        run: echo ${{steps.tag.outputs.tag}}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
@@ -62,5 +72,8 @@ jobs:
 
       - name: Create Docker manifest and push multi-arch image to Registry
         run: |
-          docker manifest create ${{ github.repository }}:${{ env.RELEASE_VERSION }} --amend ${{ github.repository }}:${{ env.RELEASE_VERSION }}-arm64 --amend ${{ github.repository }}:${{ env.RELEASE_VERSION }}-amd64
-          docker manifest push -p ${{ github.repository }}:${{ env.RELEASE_VERSION }}
+          docker manifest create ${{ github.repository }}:${{steps.tag.outputs.tag}} --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
+          docker manifest push -p ${{ github.repository }}:${{steps.tag.outputs.tag}}
+
+          docker manifest create ${{ github.repository }}:latest --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
+          docker manifest push -p ${{ github.repository }}:latest
