@@ -74,3 +74,6 @@ jobs:
         run: |
           docker manifest create ${{ github.repository }}:${{steps.tag.outputs.tag}} --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
           docker manifest push -p ${{ github.repository }}:${{steps.tag.outputs.tag}}
+
+          docker manifest create ${{ github.repository }}:latest --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
+          docker manifest push -p ${{ github.repository }}:latest
