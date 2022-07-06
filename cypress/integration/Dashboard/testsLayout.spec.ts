@@ -20,10 +20,6 @@ describe('Tests Dashboard Layout', () => {
   it('should contain test-suites in empty info panel', () => {
     expect(cy.get('[data-cy=empty-info-panel-text]').contains('test'));
   });
-
-  it('should contain Add Test button and redirect to test creation', () => {
-    cy.get('[data-cy=title-add-test-button]').should('be.visible');
-  });
 });
 
 export {};
