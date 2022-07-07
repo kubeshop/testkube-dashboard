@@ -14,7 +14,6 @@ entities.forEach(entity => {
         window.localStorage.setItem('apiEndpoint', baseEndpointUrl);
       });
 
-      cy.get('[data-cy=content-table]').get('tbody').as('table').should('be.visible');
       cy.get('[data-cy=filters-container').as('filters').should('be.visible');
     });
 
@@ -22,16 +21,20 @@ entities.forEach(entity => {
       const searchText = 'fail';
       cy.get('[data-cy=search-filter]').type(searchText);
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('include', searchText);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.contain(searchText);
+      });
+      // cy.wait('@request').its('request.url').should('include', searchText);
     });
 
     it(`[${entity.baseName}] - should clear search query when search field is cleared`, () => {
       cy.get('[data-cy=search-filter]').type('fail');
       cy.get('[data-cy=search-filter]').clear();
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('not.include', 'textSearch');
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.not.contain('textSearch');
+      });
+      // cy.wait('@request').its('request.url').should('not.include', 'textSearch');
     });
 
     it(`[${entity.baseName}] - should apply labels filters`, () => {
@@ -47,11 +50,13 @@ entities.forEach(entity => {
 
       cy.get('@dropdown').should('not.be.visible');
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('include', `selector=${key}%3D${value}`);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.contain(`selector=${key}%3D${value}`);
+      });
+      // cy.wait('@request').its('request.url').should('include', `selector=${key}%3D${value}`);
     });
 
-    it(`[${entity.baseName}] - should apply multiple labels and remove row`, () => {
+    it(`[${entity.baseName}] - should apply multiple labels`, () => {
       const key0 = 'app';
       const value0 = 'sites';
       const key1 = 'sample-key';
@@ -71,16 +76,28 @@ entities.forEach(entity => {
 
       cy.get('@dropdown').should('not.be.visible');
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('include', `selector=${key0}%3D${value0}%2C${key1}%3D${value1}`);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.contain(`selector=${key0}%3D${value0}%2C${key1}%3D${value1}`);
+      });
+    });
+
+    it(`[${entity.baseName}] - should remove labels when row is removed`, () => {
+      const key = 'app';
+      const value = 'sites';
+      const key1 = 'app1';
+      const value1 = 'sites1';
+
+      cy.visit(`/dashboard/${entity.baseName}?selector=${key}%3D${value}%2C${key1}%3D${value1}`).then(() => {
+        window.localStorage.setItem('apiEndpoint', baseEndpointUrl);
+      });
 
       cy.get('[data-cy=labels-filter-button]').click();
+      cy.get('[data-cy=labels-filter-dropdown]').as('dropdown').should('be.visible');
       cy.get('[data-cy=delete-row-1]').first().click();
       cy.get('@dropdown').contains('Ok').click();
 
-      cy.wait('@request').its('request.url').should('not.include', key1);
+      cy.url().should('not.include', key1);
     });
-
     it(`[${entity.baseName}] - should fulfill inputs when selector is provided with url`, () => {
       const key = 'app';
       const value = 'sites';
@@ -112,8 +129,10 @@ entities.forEach(entity => {
 
       cy.get('@dropdown').contains('Reset').click();
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('not.include', `selector=${key}%3D${value}`);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.not.contain(`selector=${key}%3D${value}`);
+      });
+      // cy.wait('@request').its('request.url').should('not.include', `selector=${key}%3D${value}`);
 
       cy.get('@dropdown').contains('Cancel').click();
       cy.get('@dropdown').should('not.be.visible');
@@ -130,8 +149,10 @@ entities.forEach(entity => {
 
       cy.get('@dropdown').should('not.be.visible');
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('include', `selector=${key}`);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.contain(`selector=${key}`);
+      });
+      // cy.wait('@request').its('request.url').should('include', `selector=${key}`);
     });
 
     it(`[${entity.baseName}] - should apply only key selector`, () => {
@@ -145,8 +166,10 @@ entities.forEach(entity => {
 
       cy.get('@dropdown').should('not.be.visible');
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('not.include', `selector=${value}`);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.not.contain(`selector=${value}`);
+      });
+      // cy.wait('@request').its('request.url').should('not.include', `selector=${value}`);
     });
 
     it(`[${entity.baseName}] - should apply status filter`, () => {
@@ -156,8 +179,10 @@ entities.forEach(entity => {
 
       cy.get(`[data-cy=${status}]`).check();
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('include', `status=${status}`);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.contain(`status=${status}`);
+      });
+      // cy.wait('@request').its('request.url').should('include', `status=${status}`);
 
       cy.get('@dropdown').contains('Ok').click();
       cy.get('@dropdown').should('not.be.visible');
@@ -173,19 +198,10 @@ entities.forEach(entity => {
       cy.get(`[data-cy=${status1}]`).check();
       cy.get(`[data-cy=${status2}]`).check();
 
-      cy.wait(1000);
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('include', `status=${status1}%2C${status2}`);
-
-      cy.get('@dropdown').contains('Reset').click();
-      cy.get('@dropdown').should('be.visible');
-
-      cy.get('@dropdown').contains('Ok').click();
-      cy.get('@dropdown').should('not.be.visible');
-
-      cy.wait(1000);
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('not.include', `status=${status1}%2C${status2}`);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.contain(`status=${status1}%2C${status2}`);
+      });
+      // cy.wait('@request').its('request.url').should('include', `status=${status1}%2C${status2}`);
     });
 
     it(`[${entity.baseName}] - should check statuses when status is provided with url`, () => {
@@ -204,8 +220,33 @@ entities.forEach(entity => {
 
       cy.get(`[data-cy=${status2}]`).check();
 
-      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`).as('request');
-      cy.wait('@request').its('request.url').should('include', `status=${status1}`);
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.contain(`status=${status1}`);
+      });
+      // cy.wait('@request').its('request.url').should('include', `status=${status1}`);
+    });
+
+    it(`[${entity.baseName}] - should remove status`, () => {
+      const status1 = 'passed';
+      const status2 = 'failed';
+
+      cy.visit(`/dashboard/${entity.baseName}?status=${status1}%2C${status2}`).then(() => {
+        window.localStorage.setItem('apiEndpoint', baseEndpointUrl);
+      });
+
+      cy.get('[data-cy=status-filter-button]').click();
+      cy.get('[data-cy=status-filter-dropdown]').as('dropdown').should('be.visible');
+
+      cy.get('@dropdown').contains('Reset').click();
+      cy.get('@dropdown').should('be.visible');
+
+      cy.get('@dropdown').contains('Ok').click();
+      cy.get('@dropdown').should('not.be.visible');
+
+      cy.intercept(`${baseEndpointUrl}/${entity.apiName}-with-executions?*`, req => {
+        expect(req.url).to.not.contain(`status=${status1}%2C${status2}`);
+      });
+      // cy.wait('@request').its('request.url').should('not.include', `status=${status1}%2C${status2}`);
     });
   });
 });
