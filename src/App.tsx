@@ -115,4 +115,28 @@ const App: React.FC = () => {
   );
 };
 
+// const rootRoutes = [
+//   {path: '/', Element: <Login />},
+//   {
+//     path: 'tests/*',
+//     Element: (
+//       <ProtectedRoute>
+//         <Tests />
+//       </ProtectedRoute>
+//     ),
+//   },
+//   {
+//     path: 'test-suites/*',
+//     Element: (
+//       <ProtectedRoute>
+//         <TestSuites />
+//       </ProtectedRoute>
+//     ),
+//   },
+//   {
+//     path: '*',
+//     Element: <NotFound />,
+//   },
+// ];
+
 export default App;
