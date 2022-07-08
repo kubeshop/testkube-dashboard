@@ -52,13 +52,7 @@ export const StyledOther = styled.div`
 `;
 
 export const StyledSider = styled(Layout.Sider)`
-  position: fixed;
-  overflow: hidden;
   z-index: 1;
-
-  height: 100vh;
-
-  background-color: ${Colors.blackPure};
 `;
 
 export const StyledSiderChildContainer = styled.div`
@@ -112,30 +106,24 @@ export const StyledNavigationMenu = styled.div`
   flex-direction: column;
 `;
 
-export const StyledNavLink = styled(NavLink)<{gradient: string}>`
+export const StyledNavLink = styled(NavLink)`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 
-  height: 55px;
-  padding: 0 15px;
+  height: 50px;
 
-  color: ${Colors.whitePure};
-
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-
-  transition: all 0.3s;
-
-  &.active {
-    background: ${props => props.gradient};
+  svg {
+    fill: #64748b;
   }
 
+  &.active,
   &:hover {
-    color: ${Colors.whitePure};
+    svg {
+      fill: ${Colors.whitePure};
 
-    background: ${props => props.gradient};
+      transition: 0.3s all;
+    }
   }
 `;
 
@@ -144,21 +132,26 @@ export const StyledOtherItem = styled.div`
   justify-content: center;
   align-items: center;
 
-  height: 80px;
-  width: 100%;
-
-  border-top: 1px solid ${Colors.grey3};
-  border-right: 1px solid ${Colors.grey3};
-  border-left: 1px solid ${Colors.grey3};
-
   cursor: pointer;
   transition: 0.3s;
 
-  &:last-child {
-    border-bottom: 1px solid ${Colors.grey3};
+  &:not(:last-child) {
+    margin-bottom: 20px;
   }
 
+  svg {
+    width: 20px;
+    height: 20px;
+
+    fill: #64748b;
+  }
+
+  &.active,
   &:hover {
-    background-color: ${Colors.grey1000};
+    svg {
+      fill: ${Colors.whitePure};
+
+      transition: 0.3s all;
+    }
   }
 `;

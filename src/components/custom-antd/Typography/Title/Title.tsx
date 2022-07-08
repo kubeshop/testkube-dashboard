@@ -3,11 +3,11 @@ import {TypographyProps as AntTypographyProps} from 'antd/lib/typography/Typogra
 
 import {StyledTitle} from './Title.styled';
 
-const Title: React.FC<AntTypographyProps & AntdTitleProps> = props => {
-  const {children, ...rest} = props;
+const Title: React.FC<AntTypographyProps & AntdTitleProps & {color?: any}> = props => {
+  const {children, color, ...rest} = props;
 
   return (
-    <StyledTitle className="default-title" {...rest}>
+    <StyledTitle className="dashboard-title" $color={color} {...rest}>
       {children}
     </StyledTitle>
   );

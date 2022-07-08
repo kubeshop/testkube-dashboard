@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
-import {CSSTransition} from 'react-transition-group';
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -11,7 +10,9 @@ import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setLabels} from '@redux/reducers/labelsSlice';
 
-import {SideBar} from '@organisms';
+import {Sider} from '@organisms';
+
+import {NotFound, Tests} from '@pages';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -20,10 +21,11 @@ import {useGetLabelsQuery} from '@services/labels';
 import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
-import {CookiesBanner} from './components/molecules';
-import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
+import ProtectedRoute from './components/atoms/PrivateRoute/PrivateRoute';
+// import {CookiesBanner} from './components/molecules';
+// import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
+import TestSuites from './components/pages/TestSuites';
 import env from './env';
-import Routes from './routes';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -95,22 +97,62 @@ const App: React.FC = () => {
 
   return (
     <MainContext.Provider value={mainContextValue}>
-      <Layout>
-        <SideBar />
+      <Layout style={{overflow: 'hidden'}}>
+        <Sider />
         <StyledLayoutContentWrapper>
           <Content>
-            <Routes />
+            <Routes>
+              {/* <Route path="/" element={<Login />} /> */}
+              <Route
+                path="tests/*"
+                element={
+                  <ProtectedRoute>
+                    <Tests />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="test-suites/*"
+                element={
+                  <ProtectedRoute>
+                    <TestSuites />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </Content>
-          <CSSTransition in={isFullScreenLogOutput} timeout={350} classNames="full-screen-log-output" unmountOnExit>
-            <FullScreenLogOutput logOutput={logOutput} />
-          </CSSTransition>
         </StyledLayoutContentWrapper>
-        {isCookiesVisible ? (
+        {/* {isCookiesVisible ? (
           <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
-        ) : null}
+        ) : null} */}
       </Layout>
     </MainContext.Provider>
   );
 };
+
+// const rootRoutes = [
+//   {path: '/', Element: <Login />},
+//   {
+//     path: 'tests/*',
+//     Element: (
+//       <ProtectedRoute>
+//         <Tests />
+//       </ProtectedRoute>
+//     ),
+//   },
+//   {
+//     path: 'test-suites/*',
+//     Element: (
+//       <ProtectedRoute>
+//         <TestSuites />
+//       </ProtectedRoute>
+//     ),
+//   },
+//   {
+//     path: '*',
+//     Element: <NotFound />,
+//   },
+// ];
 
 export default App;
