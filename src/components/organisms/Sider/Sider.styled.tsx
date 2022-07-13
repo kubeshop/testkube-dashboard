@@ -1,6 +1,6 @@
 import {NavLink} from 'react-router-dom';
 
-import {Col, Layout, Menu} from 'antd';
+import {Col, Layout, Menu, Space} from 'antd';
 
 import styled from 'styled-components';
 
@@ -22,7 +22,7 @@ export const StyledLogo = styled.div`
   justify-content: center;
   align-items: center;
 
-  height: 120px;
+  padding-top: 40px;
 
   a {
     display: flex;
@@ -30,6 +30,12 @@ export const StyledLogo = styled.div`
     align-items: center;
 
     width: 80px;
+  }
+
+  svg {
+    width: 100%;
+
+    overflow: visible;
   }
 `;
 
@@ -47,7 +53,7 @@ export const StyledNavigation = styled.div`
   }
 `;
 
-export const StyledOther = styled.div`
+export const StyledOther = styled(Space)`
   padding-bottom: 40px;
 `;
 
@@ -132,22 +138,24 @@ export const StyledOtherItem = styled.div`
   justify-content: center;
   align-items: center;
 
-  cursor: pointer;
   transition: 0.3s;
-
-  &:not(:last-child) {
-    margin-bottom: 20px;
-  }
 
   svg {
     width: 20px;
     height: 20px;
 
     fill: #64748b;
+
+    cursor: pointer;
+
+    &:hover {
+      fill: ${Colors.whitePure};
+
+      transition: 0.3s all;
+    }
   }
 
-  &.active,
-  &:hover {
+  &.active {
     svg {
       fill: ${Colors.whitePure};
 

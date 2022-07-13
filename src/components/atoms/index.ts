@@ -18,3 +18,4 @@ export {default as TableActionsDropdownContainer} from './TableActionsDropdownCo
 export {default as LabelListItem} from './LabelListItem';
 export {default as Loader} from './Loader';
 export {default as UploadWithInput} from './UploadWithInput';
+export {default as StatusIcon} from './StatusIcon';

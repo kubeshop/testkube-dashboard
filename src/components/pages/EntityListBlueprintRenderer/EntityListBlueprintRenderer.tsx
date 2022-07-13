@@ -3,7 +3,7 @@ import TestsEntity from '@constants/entitiesConfig/TestsConfig';
 
 import {Entity, EntityListBlueprint, EntityListBlueprintProps} from '@models/entity';
 
-import EntityListContainer from '../EntityListContainer';
+import {EntityListContainer} from '@organisms';
 
 const entities: {[key in Entity]: EntityListBlueprint} = {
   'test-suites': TestSuitesEntity,

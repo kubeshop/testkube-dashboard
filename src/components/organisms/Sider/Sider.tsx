@@ -1,6 +1,8 @@
 import {useEffect, useMemo, useState} from 'react';
 import {NavLink} from 'react-router-dom';
 
+import {Space} from 'antd';
+
 import {Icon, Modal} from '@atoms';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
@@ -90,9 +92,9 @@ const Sider: React.FC = () => {
       const {icon, onClick} = otherMenuItem;
 
       return (
-        <StyledOtherItem onClick={onClick}>
+        <StyledOtherItem key={icon}>
           {/* @ts-ignore */}
-          <Icon name={icon} />
+          <Icon name={icon} onClick={onClick} />
         </StyledOtherItem>
       );
     });
@@ -103,14 +105,18 @@ const Sider: React.FC = () => {
       <Modal visible={isModalVisible} isModalVisible={onToggleModal} />
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
-          <StyledLogo>
-            <NavLink to="/tests">
-              <Logo />
-            </NavLink>
-          </StyledLogo>
-          {renderedMenuItems}
+          <Space size={30} direction="vertical">
+            <StyledLogo>
+              <NavLink to="/tests">
+                <Logo />
+              </NavLink>
+            </StyledLogo>
+            {renderedMenuItems}
+          </Space>
         </StyledNavigationMenu>
-        <StyledOther>{renderedOtherMenuItems}</StyledOther>
+        <StyledOther size={20} direction="vertical">
+          {renderedOtherMenuItems}
+        </StyledOther>
       </StyledSiderChildContainer>
     </StyledSider>
   );

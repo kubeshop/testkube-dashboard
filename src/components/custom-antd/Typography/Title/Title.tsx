@@ -3,7 +3,11 @@ import {TypographyProps as AntTypographyProps} from 'antd/lib/typography/Typogra
 
 import {StyledTitle} from './Title.styled';
 
-const Title: React.FC<AntTypographyProps & AntdTitleProps & {color?: any}> = props => {
+type TitleProps = {
+  color?: string;
+};
+
+const Title: React.FC<AntTypographyProps & AntdTitleProps & TitleProps> = props => {
   const {children, color, ...rest} = props;
 
   return (

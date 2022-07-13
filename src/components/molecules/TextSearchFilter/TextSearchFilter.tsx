@@ -1,30 +1,29 @@
 import {useContext, useEffect, useState} from 'react';
 
-import {DashboardBlueprintType} from '@models/dashboard';
 import {FilterProps} from '@models/filters';
 
 import useDebounce from '@hooks/useDebounce';
 
 import {MainContext} from '@contexts';
 
+import {Entity} from '@src/models/entity';
+
 import {StyledSearchInput, StyledSearchInputContainer} from './TextSearchFilter.styled';
 
-const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
+const inputValueQueryParams: {[key in Entity]: string} = {
   'test-suites': 'textSearch',
   tests: 'textSearch',
 };
 const TextSearchFilter: React.FC<FilterProps> = props => {
-  const {filters, setSelectedRecord, setFilters, entityType, queryParam, isFiltersDisabled} = props;
+  const {filters, setFilters, entity, queryParam, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
 
-  const queryParamField = queryParam || inputValueQueryParams[entityType];
+  const queryParamField = queryParam || inputValueQueryParams[entity];
 
   const [inputValue, setInputValue] = useState(filters[queryParam || queryParamField]);
 
   const onChange = (e: any) => {
-    dispatch(setSelectedRecord({selectedRecord: null}));
-
     setInputValue(e.target.value);
   };
 

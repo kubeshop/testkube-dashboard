@@ -1,13 +1,22 @@
-import {Typography} from 'antd';
 import {TextProps as AntdTextProps} from 'antd/lib/typography/Text';
 import {TypographyProps as AntTypographyProps} from 'antd/lib/typography/Typography';
 
-const {Text: AntdText} = Typography;
+import {StyledText} from './Text.styled';
 
-const Text: React.FC<AntTypographyProps & AntdTextProps> = props => {
-  const {children, ...rest} = props;
+type TextProps = {
+  color?: string;
+};
 
-  return <AntdText {...rest}>{children}</AntdText>;
+const Text: React.FC<AntTypographyProps & AntdTextProps & TextProps> = props => {
+  const {children, color, className, ...rest} = props;
+
+  const classNames = `testkube-text ${className}`;
+
+  return (
+    <StyledText $color={color} className={classNames} {...rest}>
+      {children}
+    </StyledText>
+  );
 };
 
 export default Text;

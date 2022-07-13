@@ -7,6 +7,8 @@ import {
 } from '@redux/reducers/testSuitesSlice';
 import {selectTests, setTests} from '@redux/reducers/testsSlice';
 
+import {EmptyTestsListContent} from '@molecules';
+
 import {useGetTestsQuery} from '@services/tests';
 
 export const TestsEntity: EntityListBlueprint = {
@@ -14,7 +16,8 @@ export const TestsEntity: EntityListBlueprint = {
   route: '/dashboard/tests',
   reduxSliceName: 'tests',
   pageTitle: 'Tests',
-  pageDescription: 'seasdasd',
+  pageDescription: 'das',
+  emptyDataComponent: EmptyTestsListContent,
 
   useGetData: useGetTestsQuery,
   setData: setTests,

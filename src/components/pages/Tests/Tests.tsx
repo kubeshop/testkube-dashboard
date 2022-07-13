@@ -1,8 +1,6 @@
 import {Outlet, Route, Routes} from 'react-router-dom';
 
-import EntityListBlueprintRenderer from '@organisms/EntityListBlueprintRenderer';
-
-import NotFound from '../NotFound';
+import {EntityListBlueprintRenderer, NotFound} from '@pages';
 
 const Tests: React.FC = props => {
   return (

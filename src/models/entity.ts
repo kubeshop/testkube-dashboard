@@ -11,28 +11,12 @@ export type EntityListBlueprintProps = {
   entity: Entity;
 };
 
-/**
- * Generic type of dashboard pages
- */
-
 export type EntityListBlueprint = {
-  /**
-   * Route to the dashboard entity
-   */
-
   route?: string;
-
-  /**
-   * Page title e.g. 'Test Suites'
-   */
 
   pageTitle: string;
 
-  /**
-   * Page description e.g. 'Test Suites'
-   */
-
-  pageDescription?: string;
+  pageDescription?: any;
 
   /**
    * Redux entity which reflects the provided dashboard entity
@@ -41,6 +25,8 @@ export type EntityListBlueprint = {
   reduxSliceName?: ReduxSlices;
 
   entity: Entity;
+
+  emptyDataComponent: any;
 
   filtersComponentsIds?: FilterType[];
 

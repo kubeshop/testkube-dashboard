@@ -23,8 +23,8 @@ import {MainContext} from '@contexts';
 
 import {StyledDashboardBottomGradient, StyledDashboardContent, StyledDashboardGradient} from '../Dashboard.styled';
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
+// import DashboardFilters from './Dashboar/dFilters';
 import {AddTestButton, StyledContentTable, StyledDashboardContentContainer} from './DashboardContent.styled';
-import DashboardFilters from './DashboardFilters';
 import DashboardTableRow from './DashboardTableRow';
 import DashboardTitle from './DashboardTitle';
 import EmptyTestsDataContent from './EmptyTestsDataContent';
@@ -248,7 +248,7 @@ const DashboardContent: React.FC<DashboardContentProps> = props => {
             </AddTestButton>
           ) : null}
         </DashboardTitle>
-        {filtersComponentsIds && filtersComponentsIds.length ? (
+        {/* {filtersComponentsIds && filtersComponentsIds.length ? (
           <DashboardFilters
             setSelectedRecord={setSelectedRecord}
             selectedRecord={selectedRecord}
@@ -258,7 +258,7 @@ const DashboardContent: React.FC<DashboardContentProps> = props => {
             entityType={entityType}
             isFiltersDisabled={isEmptyTestsData}
           />
-        ) : null}
+        ) : null} */}
         {isEmptyTestsData ? (
           <EmptyTestsDataContent />
         ) : (

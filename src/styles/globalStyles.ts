@@ -39,6 +39,31 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 500;
     line-height: 30px;
   }
+
+  .regular {
+    font-weight: 400;
+  }
+
+  .normal {
+    font-weight: 500;
+  }
+
+  .bold {
+    font-weight: 700;
+  }
+
+  .uppercase {
+    text-transform: uppercase;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .ant-layout-content {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 /* Media Sizes */

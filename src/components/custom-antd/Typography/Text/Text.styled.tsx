@@ -1,0 +1,24 @@
+import {Typography} from 'antd';
+
+import styled from 'styled-components';
+
+export const StyledText = styled(Typography.Text)<{$color?: string}>`
+  &.testkube-text {
+    color: ${({$color}) => $color};
+
+    &.big {
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    &.middle {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    &.small {
+      font-size: 12px;
+      line-height: 16px;
+    }
+  }
+`;

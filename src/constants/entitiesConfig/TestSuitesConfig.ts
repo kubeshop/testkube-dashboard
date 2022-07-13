@@ -8,6 +8,8 @@ import {
   setTestSuitesFilters,
 } from '@redux/reducers/testSuitesSlice';
 
+import {EmptyTestsListContent} from '@molecules';
+
 import {useGetTestSuitesQuery} from '@services/testSuites';
 
 export const TestSuitesEntity: EntityListBlueprint = {
@@ -16,6 +18,7 @@ export const TestSuitesEntity: EntityListBlueprint = {
   reduxSliceName: 'testSuites',
   pageTitle: 'Test Suites',
   pageDescription: 'Some Desc TEst',
+  emptyDataComponent: EmptyTestsListContent,
 
   useGetData: useGetTestSuitesQuery,
   setData: setTestSuites,

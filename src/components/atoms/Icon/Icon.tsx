@@ -4,26 +4,30 @@ import AntdIcon from '@ant-design/icons';
 
 import Icons from './icons';
 
-const {CogIcon, DocumentationIcon, DiscordIcon, GitHubIcon} = Icons;
+const {CogIcon, DocumentationIcon, DiscordIcon, GitHubIcon, PassedStatusIcon, FailedStatusIcon, RunningStatusIcon} =
+  Icons;
 
 const iconsMap: any = {
   cog: CogIcon,
   documentation: DocumentationIcon,
   discord: DiscordIcon,
   github: GitHubIcon,
+  passed: PassedStatusIcon,
+  failed: FailedStatusIcon,
+  running: RunningStatusIcon,
 };
 
 type IconProps = {
-  name: 'cog' | 'documentation' | 'discord' | 'github';
-  component: any;
+  name: 'cog' | 'documentation' | 'discord' | 'github' | 'passed' | 'failed' | 'running';
+  component?: any;
 };
 
 const Icon: React.FC<IconProps> = props => {
-  const {component, name} = props;
+  const {component, name, ...rest} = props;
 
   const iconComponent = name ? iconsMap[name] : component;
 
-  return <AntdIcon component={iconComponent} />;
+  return <AntdIcon component={iconComponent} {...rest} />;
 };
 
 export default Icon;
