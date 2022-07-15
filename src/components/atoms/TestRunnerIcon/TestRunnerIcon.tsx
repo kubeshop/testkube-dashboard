@@ -5,7 +5,9 @@ import {TestExecutor} from '@models/testExecutors';
 import {ReactComponent as ArtilleryIcon} from '@assets/artilleryIcon.svg';
 import {ReactComponent as CurlIcon} from '@assets/curlIcon.svg';
 import {ReactComponent as CypressIcon} from '@assets/cypressIcon.svg';
+import {ReactComponent as GradleIcon} from '@assets/gradleIcon.svg';
 import {ReactComponent as K6Icon} from '@assets/k6Icon.svg';
+import {ReactComponent as MavenIcon} from '@assets/mavenIcon.svg';
 import {ReactComponent as PostmanIcon} from '@assets/postmanIcon.svg';
 import {ReactComponent as SoapUIIcon} from '@assets/soapIcon.svg';
 import {ReactComponent as UnknownIcon} from '@assets/unknownIcon.svg';
@@ -25,6 +27,9 @@ export const testRunnerIcons: {[key in TestExecutor]: any} = {
   'k6/script': <K6Icon />,
   'soapui/xml': <SoapUIIcon />,
   'artillery/test': <ArtilleryIcon />,
+  'gradle/test': <GradleIcon />,
+  'gradle:jdk18/test': <GradleIcon />,
+  'maven/test': <MavenIcon />,
   unknown: <UnknownIcon />,
 };
 

@@ -28,5 +28,8 @@ export const testExecutorsNames: {[key in TestExecutor]: TestExecutorName} = {
   'k6/script': 'K6',
   'soapui/xml': 'SoapUI',
   'artillery/test': 'Artillery',
+  'gradle/test': 'Gradle',
+  'gradle:jdk18/test': 'Gradle 18',
+  'maven/test': 'Maven',
   unknown: 'Unknown test type',
 };
