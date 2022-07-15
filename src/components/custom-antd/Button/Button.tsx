@@ -1,7 +1,7 @@
-import {Button as AntdButton, ButtonProps as AntdButtonProps} from 'antd';
+import {AntdCustomStyledButton, ICustomButtonProps} from './Button.styled';
 
-const Button: React.FC<AntdButtonProps> = props => {
-  return <AntdButton {...props} />;
+const Button: React.FC<ICustomButtonProps> = props => {
+  return <AntdCustomStyledButton {...props} />;
 };
 
 export default Button;

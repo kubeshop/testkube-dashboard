@@ -21,10 +21,13 @@ const EmptyTestsListContent: React.FC = () => {
         Simply define your test, add any variables, execute it and view the results!
       </Text>
       <StyledButtonContainer>
-        <Button onClick={() => window.open('https://kubeshop.github.io/testkube/tests-creating/', '_blank')}>
+        <Button
+          customType="secondary"
+          onClick={() => window.open('https://kubeshop.github.io/testkube/tests-creating/', '_blank')}
+        >
           Learn more
         </Button>
-        <Button type="primary" onClick={() => navigate('/dashboard/tests/add-test')}>
+        <Button customType="primary" onClick={() => navigate('/dashboard/tests/add-test')}>
           Add a new test
         </Button>
       </StyledButtonContainer>
