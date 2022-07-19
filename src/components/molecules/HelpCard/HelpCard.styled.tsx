@@ -21,7 +21,7 @@ export const StyledHelpCardContainer = styled.div<{isLink?: boolean}>`
   color: ${Colors.slate200};
 
   &:hover {
-    background-color: ${Colors.da};
+    background-color: ${Colors.slate900};
   }
 `;
 
