@@ -12,6 +12,14 @@ const iconStyles: any = {
     borderColor: Colors.lime600,
     background: Colors.lime900,
   },
+  running: {
+    borderColor: Colors.sky600,
+    background: Colors.sky900,
+  },
+  pending: {
+    borderColor: Colors.slate600,
+    background: Colors.slate900,
+  },
 };
 
 const StatusIcon: React.FC<any> = props => {
@@ -19,7 +27,7 @@ const StatusIcon: React.FC<any> = props => {
 
   return (
     <StyledStatusIcon style={iconStyles[status]}>
-      <Icon name="failed" />
+      <Icon name={status} />
     </StyledStatusIcon>
   );
 };

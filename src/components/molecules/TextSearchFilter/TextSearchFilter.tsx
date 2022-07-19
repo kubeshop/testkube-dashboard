@@ -37,7 +37,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
 
   useEffect(() => {
     setInputValue(filters[queryParamField]);
-  }, [filters]);
+  }, [filters, entity]);
 
   return (
     <StyledSearchInputContainer>

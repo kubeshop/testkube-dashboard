@@ -6,21 +6,23 @@ import {Entity, EntityListBlueprint} from '@models/entity';
 import {TestWithExecution} from '@models/test';
 import {TestSuiteWithExecution} from '@models/testSuite';
 
-import {Skeleton, Text, Title} from '@custom-antd';
+import {Skeleton, Title} from '@custom-antd';
 
 import {EntityGrid} from '@molecules';
 
 import {PollingIntervals} from '@utils/numbers';
+import {compareFiltersObject} from '@utils/objects';
 
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@src/contexts';
+import {MainContext} from '@contexts';
 
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
-import {EntityListHeader} from './EntityListContent.styled';
+import EmptyDataWithFilters from './EmptyDataWithFilters';
+import {EmptyListWrapper, EntityListHeader, StyledEntityListSkeletonWrapper} from './EntityListContent.styled';
 import Filters from './Filters';
 
 type OnDataChangeInterface = {
@@ -79,30 +81,35 @@ const EntityListSkeleton: React.FC = () => {
     },
     additionalStyles: {
       lineHeight: 120,
+      container: {
+        paddingTop: 20,
+      },
     },
   };
 
   return (
-    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px 32px'}}>
+    <StyledEntityListSkeletonWrapper>
       {new Array(6).fill(0).map(() => {
         return <Skeleton loading title={false} {...skeletonConfig} />;
       })}
-    </div>
+    </StyledEntityListSkeletonWrapper>
   );
 };
 
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {
     pageTitle,
-    pageDescription,
+    pageDescription: PageDescription,
     emptyDataComponent: EmptyData,
     entity,
     filtersComponentsIds,
     setQueryFilters,
     setData,
+    initialFiltersState,
+    setSelectedRecord,
   } = props;
 
-  const {dispatch} = useContext(MainContext);
+  const {dispatch, navigate} = useContext(MainContext);
   const {queryFilters, dataSource} = useContext(EntityListContext);
 
   const [contentProps, setContentProps] = useState<OnDataChangeInterface>({
@@ -121,7 +128,14 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     'test-suites': <TestSuitesDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
   };
 
-  const isEmptyTestsData = false;
+  const resetFilters = () => {
+    dispatch(setQueryFilters(initialFiltersState));
+  };
+
+  const onNavigateToDetails = (item: any) => {
+    dispatch(setSelectedRecord(item));
+    navigate(`${entity}/details`);
+  };
 
   useEffect(() => {
     if (!setData || contentProps.isLoading || contentProps.isFetching) {
@@ -140,45 +154,38 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     }
   }, [contentProps.data, contentProps.isLoading, contentProps.isFetching]);
 
+  const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
+  const isEmptyData = (dataSource.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
+
   return (
     <>
       <EntityListHeader>
         {dataLayers[entity]}
         <Space size={15} direction="vertical">
           <Title color={Colors.slate50}>{pageTitle}</Title>
-          <Text className="regular small" color={Colors.slate400}>
-            {pageDescription}
-          </Text>
+          <PageDescription />
         </Space>
       </EntityListHeader>
-      <div style={{marginTop: 60, height: '100%', display: 'flex', flexDirection: 'column'}}>
-        <div>
-          {filtersComponentsIds && filtersComponentsIds.length ? (
-            <div>
-              <Filters
-                setFilters={setQueryFilters}
-                filters={queryFilters}
-                filtersComponentsIds={filtersComponentsIds}
-                entity={entity}
-                isFiltersDisabled={isEmptyTestsData}
-              />
-            </div>
-          ) : null}
-        </div>
-        <div style={{height: '100%', overflow: 'auto'}}>
-          {contentProps.isLoading ? (
-            <EntityListSkeleton />
-          ) : !contentProps.data || !contentProps.data.length ? (
-            <div style={{display: 'flex', height: '100%', alignItems: 'center'}}>
-              <EmptyData />
-            </div>
-          ) : (
-            <div style={{marginTop: 25}}>
-              <EntityGrid data={dataSource} />
-            </div>
-          )}
-        </div>
-      </div>
+      {filtersComponentsIds && filtersComponentsIds.length ? (
+        <>
+          <Filters
+            setFilters={setQueryFilters}
+            filters={queryFilters}
+            filtersComponentsIds={filtersComponentsIds}
+            entity={entity}
+            isFiltersDisabled={isEmptyData}
+          />
+        </>
+      ) : null}
+      {contentProps.isLoading ? (
+        <EntityListSkeleton />
+      ) : !dataSource || !dataSource.length ? (
+        <EmptyListWrapper>
+          {isFiltersEmpty ? <EmptyData /> : <EmptyDataWithFilters resetFilters={resetFilters} />}
+        </EmptyListWrapper>
+      ) : (
+        <EntityGrid data={dataSource} onNavigateToDetails={onNavigateToDetails} />
+      )}
     </>
   );
 };

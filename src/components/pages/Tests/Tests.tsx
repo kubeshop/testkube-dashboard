@@ -2,12 +2,14 @@ import {Outlet, Route, Routes} from 'react-router-dom';
 
 import {EntityListBlueprintRenderer, NotFound} from '@pages';
 
-const Tests: React.FC = props => {
+import {Title} from '@src/components/custom-antd';
+
+const Tests: React.FC = () => {
   return (
     <>
       <Routes>
         <Route index element={<EntityListBlueprintRenderer entity="tests" />} />
-        {/* <Route path="details" element={<TestSuiteDetails />} /> */}
+        <Route path="details" element={<Title>adsasdas</Title>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

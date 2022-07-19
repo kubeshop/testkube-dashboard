@@ -1,14 +1,13 @@
 import {useContext, useEffect, useState} from 'react';
 
+import {Entity} from '@models/entity';
 import {FilterProps} from '@models/filters';
 
-import {LabelInput} from '@atoms';
+import {Input} from '@custom-antd';
 
 import useDebounce from '@hooks/useDebounce';
 
 import {MainContext} from '@contexts';
-
-import {Entity} from '@src/models/entity';
 
 const inputValueQueryParams: {[key in Entity]: string} = {
   'test-suites': 'textSearch',
@@ -47,7 +46,7 @@ const TextFilter: React.FC<FilterProps> = props => {
 
   const placeholder = placeholderText || `${placeholders[entity]} name`;
 
-  return <LabelInput placeholder={placeholder} value={inputValue} onChange={onChange} />;
+  return <Input placeholder={placeholder} value={inputValue} onChange={onChange} />;
 };
 
 export default TextFilter;

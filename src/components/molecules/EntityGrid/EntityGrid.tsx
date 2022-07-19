@@ -1,25 +1,21 @@
 import {useMemo} from 'react';
 
-import {StatusIcon} from '@src/components/atoms';
-
-import {StyledEntityGrid, StyledEntityGridItem} from './EntityGrid.styled';
-
-const EntityGridItem: React.FC<any> = props => {
-  const {item} = props;
-
-  return (
-    <StyledEntityGridItem>
-      <StatusIcon status="failed" />
-    </StyledEntityGridItem>
-  );
-};
+import {StyledEntityGrid} from './EntityGrid.styled';
+import EntityGridItem from './EntityGridItem';
 
 const EntityGrid: React.FC<any> = props => {
-  const {data} = props;
+  const {data, onNavigateToDetails} = props;
 
   const renderedGrid = useMemo(() => {
     return data.map((item: any) => {
-      return <EntityGridItem item={item} />;
+      return (
+        <EntityGridItem
+          item={item}
+          onClick={() => {
+            onNavigateToDetails(item);
+          }}
+        />
+      );
     });
   }, [data]);
 

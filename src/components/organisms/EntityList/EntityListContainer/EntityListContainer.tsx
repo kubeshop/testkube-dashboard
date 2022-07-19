@@ -7,7 +7,7 @@ import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/conf
 
 import EntityListContent from '../EntityListContent';
 
-export const EntityListContext = createContext({
+export const EntityListContext = createContext<{dataSource: any; queryFilters: any; allFilters: any}>({
   dataSource: [],
   queryFilters: {},
   allFilters: {},

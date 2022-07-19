@@ -10,6 +10,8 @@ import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setLabels} from '@redux/reducers/labelsSlice';
 
+import {ProtectedRoute} from '@atoms';
+
 import {Sider} from '@organisms';
 
 import {NotFound, Tests} from '@pages';
@@ -21,7 +23,6 @@ import {useGetLabelsQuery} from '@services/labels';
 import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
-import ProtectedRoute from './components/atoms/PrivateRoute/PrivateRoute';
 // import {CookiesBanner} from './components/molecules';
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
 import TestSuites from './components/pages/TestSuites';
@@ -130,29 +131,5 @@ const App: React.FC = () => {
     </MainContext.Provider>
   );
 };
-
-// const rootRoutes = [
-//   {path: '/', Element: <Login />},
-//   {
-//     path: 'tests/*',
-//     Element: (
-//       <ProtectedRoute>
-//         <Tests />
-//       </ProtectedRoute>
-//     ),
-//   },
-//   {
-//     path: 'test-suites/*',
-//     Element: (
-//       <ProtectedRoute>
-//         <TestSuites />
-//       </ProtectedRoute>
-//     ),
-//   },
-//   {
-//     path: '*',
-//     Element: <NotFound />,
-//   },
-// ];
 
 export default App;

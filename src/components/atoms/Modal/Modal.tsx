@@ -9,7 +9,9 @@ import {config} from '@constants/config';
 
 import {setApiEndpoint} from '@redux/reducers/configSlice';
 
-import {Button, LabelInput, Typography} from '@atoms';
+import {Button} from '@atoms';
+
+import {Input, Text} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
@@ -86,7 +88,7 @@ const CustomModal: React.FC<ModalProps> = props => {
         bodyStyle={modalBodyStyles}
       >
         <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
-          <Typography variant="secondary" leftAlign>
+          <Text>
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
             TestKube installer -{' '}
             <a
@@ -96,12 +98,12 @@ const CustomModal: React.FC<ModalProps> = props => {
             >
               Read More...
             </a>
-          </Typography>
-          <Typography variant="secondary" leftAlign>
+          </Text>
+          <Text>
             The endpoint needs to be accessible from your browser and will be used to retrieve test results only.
-          </Typography>
+          </Text>
           <StyledFormContainer>
-            <LabelInput
+            <Input
               id="url"
               name="url"
               onChange={event => {

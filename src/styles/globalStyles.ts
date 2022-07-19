@@ -64,6 +64,22 @@ export const GlobalStyle = createGlobalStyle`
     display: flex;
     flex-direction: column;
   }
+
+  .running-icon {
+    animation-name: spin;
+    animation-duration: 500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 /* Media Sizes */

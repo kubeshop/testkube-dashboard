@@ -6,9 +6,15 @@ export const StyledEntityGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
+
+  margin-top: 20px;
+
+  overflow: auto;
 `;
 
-export const StyledEntityGridItem = styled.div`
+export const ItemWrapper = styled.div`
+  display: flex;
+
   height: 120px;
   padding: 20px;
   border: 1px solid transparent;
@@ -22,6 +28,26 @@ export const StyledEntityGridItem = styled.div`
   &:hover {
     border: 1px solid ${Colors.indigo400};
 
-    background: ${Colors.da};
+    background: ${Colors.slate850};
   }
+`;
+
+export const DetailsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  margin-left: 15px;
+`;
+
+export const ItemRow = styled.div<{$flex: number}>`
+  display: flex;
+  align-items: center;
+  flex: ${({$flex}) => $flex};
+  justify-content: space-between;
+`;
+
+export const ItemColumn = styled.div`
+  display: flex;
+  gap: 10px;
 `;

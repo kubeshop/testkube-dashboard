@@ -29,6 +29,7 @@ export type EntityListBlueprint = {
   emptyDataComponent: any;
 
   filtersComponentsIds?: FilterType[];
+  initialFiltersState: any;
 
   /**
    * Hook to get data using RTK approach.
@@ -39,6 +40,8 @@ export type EntityListBlueprint = {
   /**
    * RTK action to set data fetched from Backend to the Redux store
    */
+
+  setSelectedRecord: any;
 
   setData?: any;
 

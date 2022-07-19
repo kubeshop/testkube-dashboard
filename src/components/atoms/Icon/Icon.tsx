@@ -4,8 +4,16 @@ import AntdIcon from '@ant-design/icons';
 
 import Icons from './icons';
 
-const {CogIcon, DocumentationIcon, DiscordIcon, GitHubIcon, PassedStatusIcon, FailedStatusIcon, RunningStatusIcon} =
-  Icons;
+const {
+  CogIcon,
+  DocumentationIcon,
+  DiscordIcon,
+  GitHubIcon,
+  PassedStatusIcon,
+  FailedStatusIcon,
+  RunningStatusIcon,
+  PendingStatusIcon,
+} = Icons;
 
 const iconsMap: any = {
   cog: CogIcon,
@@ -15,10 +23,11 @@ const iconsMap: any = {
   passed: PassedStatusIcon,
   failed: FailedStatusIcon,
   running: RunningStatusIcon,
+  pending: PendingStatusIcon,
 };
 
 type IconProps = {
-  name: 'cog' | 'documentation' | 'discord' | 'github' | 'passed' | 'failed' | 'running';
+  name: 'cog' | 'documentation' | 'discord' | 'github' | 'passed' | 'failed' | 'running' | 'pending';
   component?: any;
 };
 

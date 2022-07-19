@@ -30,6 +30,8 @@ export const testExecutorsNames: {[key in TestExecutor]: TestExecutorName} = {
   'artillery/test': 'Artillery',
   'gradle/test': 'Gradle',
   'gradle:jdk18/test': 'Gradle 18',
+  'maven:jdk18/test': 'Gradle 18',
   'maven/test': 'Maven',
+  'kubepug/yaml': 'Kubepug',
   unknown: 'Unknown test type',
 };
