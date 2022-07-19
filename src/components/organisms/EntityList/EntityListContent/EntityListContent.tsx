@@ -84,6 +84,9 @@ const EntityListSkeleton: React.FC = () => {
     },
     additionalStyles: {
       lineHeight: 120,
+      container: {
+        paddingTop: 20,
+      },
     },
   };
 

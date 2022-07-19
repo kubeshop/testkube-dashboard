@@ -11,6 +11,8 @@ import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/conf
 
 import {ProtectedRoute} from '@atoms';
 
+import {ProtectedRoute} from '@atoms';
+
 import {Sider} from '@organisms';
 
 import {NotFound, Tests} from '@pages';
@@ -114,29 +116,5 @@ const App: React.FC = () => {
     </MainContext.Provider>
   );
 };
-
-// const rootRoutes = [
-//   {path: '/', Element: <Login />},
-//   {
-//     path: 'tests/*',
-//     Element: (
-//       <ProtectedRoute>
-//         <Tests />
-//       </ProtectedRoute>
-//     ),
-//   },
-//   {
-//     path: 'test-suites/*',
-//     Element: (
-//       <ProtectedRoute>
-//         <TestSuites />
-//       </ProtectedRoute>
-//     ),
-//   },
-//   {
-//     path: '*',
-//     Element: <NotFound />,
-//   },
-// ];
 
 export default App;
