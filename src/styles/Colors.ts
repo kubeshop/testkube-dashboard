@@ -928,6 +928,7 @@ const colors = {
 enum Colors {
   mainBackground = '#111827',
   slate50 = '#F8FAFC',
+  slate100 = '#F1F5F9',
   slate200 = '#CBD5E1',
   slate300 = '#CBD5E1',
   slate400 = '#94A3B8',
@@ -947,6 +948,8 @@ enum Colors {
   lime900 = '#365314',
   lime600 = '#65A30D',
 
+  indigo50 = '#EEF2FF',
+  indigo300 = '#A5B4FC',
   indigo400 = '#818CF8',
   // Greys
   grey1000 = '#141414',
