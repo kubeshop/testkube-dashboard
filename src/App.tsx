@@ -11,8 +11,6 @@ import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/conf
 
 import {ProtectedRoute} from '@atoms';
 
-import {ProtectedRoute} from '@atoms';
-
 import {Sider} from '@organisms';
 
 import {NotFound, Tests} from '@pages';
