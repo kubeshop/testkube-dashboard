@@ -4,18 +4,16 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
 type ModalConfig = (onConfirm?: () => void) => ModalConfigProps;
 
-export const TestSuiteModalConfig: ModalConfig = () => {
-  return {
-    title: 'Create a test suite',
-    footer: null,
-    content: <TestSuiteCreationModalContent />,
-  };
+export const TestSuiteModalConfig: ModalConfigProps = {
+  title: 'Create a test suite',
+  footer: null,
+  width: 528,
+  content: <TestSuiteCreationModalContent />,
 };
 
-export const TestModalConfig: ModalConfig = () => {
-  return {
-    title: 'Create a test',
-    footer: null,
-    content: <div>ASasdasdasd</div>,
-  };
+export const TestModalConfig: ModalConfigProps = {
+  title: 'Create a test',
+  footer: null,
+  width: 887,
+  content: <div>ASasdasdasd</div>,
 };

@@ -165,7 +165,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     }
   };
 
-  const creationModalConfig: ModalConfigProps = entity === 'tests' ? TestModalConfig() : TestSuiteModalConfig();
+  const creationModalConfig: ModalConfigProps = entity === 'tests' ? TestModalConfig : TestSuiteModalConfig;
 
   return (
     <>
@@ -200,7 +200,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       ) : (
         <EntityGrid data={dataSource} onNavigateToDetails={onNavigateToDetails} />
       )}
-      <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
+      {isModalVisible ? (
+        <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
+      ) : null}
     </>
   );
 };
