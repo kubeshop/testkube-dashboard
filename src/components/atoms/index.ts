@@ -1,4 +1,4 @@
-export {default as Modal} from './Modal/Modal';
+export {default as OldModal} from './OldModal/Modal';
 export {default as Spinner} from './Spinner/Spinner';
 export {default as Icon} from './Icon/Icon';
 export {default as MenuItem} from './MenuItem/MenuItem';

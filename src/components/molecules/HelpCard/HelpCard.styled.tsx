@@ -10,8 +10,6 @@ export const StyledHelpCardContainer = styled.div<{isLink?: boolean}>`
   transition: background-color 0.5s ease;
 
   border-radius: 4px;
-  height: 44px;
-  width: 100%;
   padding: 14px 15px;
 
   background-color: ${Colors.slate800};
@@ -21,10 +19,24 @@ export const StyledHelpCardContainer = styled.div<{isLink?: boolean}>`
   color: ${Colors.slate200};
 
   &:hover {
-    background-color: ${Colors.slate900};
+    background-color: ${Colors.slate801};
   }
 `;
 
 export const StyledChildrenContainer = styled.div`
-  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 460px;
+`;
+
+export const StyledHelpCardsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  max-width: 514px;
+`;
+
+export const StyledLastHelpCardContainer = styled.div`
+  margin-top: 32px;
 `;
