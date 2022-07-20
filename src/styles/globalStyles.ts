@@ -13,8 +13,6 @@ scrollbar-width: none; /* Firefox */
 export const GlobalStyle = createGlobalStyle`
   body {
     background: ${BackgroundColors.mainBackground};
-
-    overflow: hidden;
   }
 
   h1,
@@ -70,6 +68,14 @@ export const GlobalStyle = createGlobalStyle`
     animation-duration: 500ms;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
+  }
+
+  .ant-tabs-content-holder {
+    overflow: auto;
+
+    .ant-tabs-content {
+      height: 100%;
+    }
   }
 
   @keyframes spin {

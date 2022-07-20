@@ -7,3 +7,4 @@ export {default as AddEntityBlueprintRenderer} from './AddEntity/AddEntityBluepr
 export {default as EntityBluePrintRenderer} from '../pages/EntityListBlueprintRenderer';
 export {default as EntityListContainer} from './EntityList/EntityListContainer';
 export {default as EntityListContent} from './EntityList/EntityListContent';
+export {default as EntityExecutionsContainer} from './EntityExecutions/EntityExecutionsContainer';

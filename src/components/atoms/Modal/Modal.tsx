@@ -9,9 +9,7 @@ import {config} from '@constants/config';
 
 import {setApiEndpoint} from '@redux/reducers/configSlice';
 
-import {Button} from '@atoms';
-
-import {Input, Text} from '@custom-antd';
+import {Button, Input, Text} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
@@ -111,7 +109,7 @@ const CustomModal: React.FC<ModalProps> = props => {
               }}
               defaultValue={apiEndpoint}
             />
-            <Button type="submit" disableFilter variant="secondary">
+            <Button type="primary" htmlType="submit">
               Get results
             </Button>
           </StyledFormContainer>

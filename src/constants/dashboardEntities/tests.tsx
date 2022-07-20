@@ -12,12 +12,9 @@ import {
 
 import {useGetTestsQuery} from '@services/tests';
 
-import {testsDashboardGradient} from '@styles/gradients';
-
 export const TestsEntity: DashboardBlueprint = {
   entityType: 'tests',
   route: '/dashboard/tests',
-  dashboardGradient: testsDashboardGradient,
   reduxEntity: 'tests',
   pageTitle: 'Tests',
   hasInfoPanel: true,
