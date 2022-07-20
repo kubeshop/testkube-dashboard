@@ -8,11 +8,17 @@ type HeypCardTypes = {
   isLink?: boolean;
   isHelp?: boolean;
   children: React.ReactNode;
+  link?: string;
 };
 const HelpCard: React.FC<HeypCardTypes> = props => {
-  const {isLink, isHelp, children} = props;
+  const {isLink, isHelp, children, link} = props;
+
+  const redirectToLink = () => {
+    window.open(link, '_blank');
+  };
+
   return (
-    <StyledHelpCardContainer isLink={isLink}>
+    <StyledHelpCardContainer isLink={isLink} onClick={redirectToLink}>
       {isLink ? <HelpLinkIcon /> : null}
       {isHelp ? <QuestionCircleIcon /> : null}
       <StyledChildrenContainer>{children}</StyledChildrenContainer>

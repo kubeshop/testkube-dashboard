@@ -3,10 +3,12 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Space} from 'antd';
 
 import {Entity, EntityListBlueprint} from '@models/entity';
+import {ModalConfigProps} from '@models/modal';
 import {TestWithExecution} from '@models/test';
 import {TestSuiteWithExecution} from '@models/testSuite';
 
 import {Skeleton, Title} from '@custom-antd';
+import Modal from '@custom-antd/Modal';
 
 import {EntityGrid} from '@molecules';
 
@@ -20,6 +22,7 @@ import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
+import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {EmptyListWrapper, EntityListHeader, StyledEntityListSkeletonWrapper} from './EntityListContent.styled';
@@ -106,6 +109,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     setSelectedRecord,
   } = props;
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const {dispatch, navigate} = useContext(MainContext);
   const {queryFilters, dataSource} = useContext(EntityListContext);
 
@@ -153,6 +157,16 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
   const isEmptyData = (dataSource.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
 
+  const emptyDataAction = () => {
+    if (entity === 'tests') {
+      navigate('/dashboard/tests/add-test');
+    } else {
+      setIsModalVisible(true);
+    }
+  };
+
+  const creationModalConfig: ModalConfigProps = entity === 'tests' ? TestModalConfig() : TestSuiteModalConfig();
+
   return (
     <>
       <EntityListHeader>
@@ -177,11 +191,16 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         <EntityListSkeleton />
       ) : !dataSource || !dataSource.length ? (
         <EmptyListWrapper>
-          {isFiltersEmpty ? <EmptyData /> : <EmptyDataWithFilters resetFilters={resetFilters} />}
+          {isFiltersEmpty ? (
+            <EmptyData action={emptyDataAction} />
+          ) : (
+            <EmptyDataWithFilters resetFilters={resetFilters} />
+          )}
         </EmptyListWrapper>
       ) : (
         <EntityGrid data={dataSource} onNavigateToDetails={onNavigateToDetails} />
       )}
+      <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
     </>
   );
 };
