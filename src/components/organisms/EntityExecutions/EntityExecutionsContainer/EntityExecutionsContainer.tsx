@@ -46,7 +46,6 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
   return (
     <EntityExecutionsContext.Provider value={entityExecutionsContextValues}>
       <EntityExecutionsContent />
-      {isRowSelected ? <div>pidar</div> : null}
     </EntityExecutionsContext.Provider>
   );
 };

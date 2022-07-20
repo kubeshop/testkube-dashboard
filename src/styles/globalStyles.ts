@@ -78,6 +78,12 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .ant-avatar {
+    display: flex;
+    
+    overflow: unset;
+  }
+
   @keyframes spin {
     from {
       transform: rotate(0deg);
