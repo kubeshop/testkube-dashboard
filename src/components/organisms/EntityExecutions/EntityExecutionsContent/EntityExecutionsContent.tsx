@@ -10,6 +10,8 @@ import {LabelsList} from '@molecules';
 
 import Colors from '@styles/Colors';
 
+import {TestRunnerIcon} from '@src/components/atoms';
+
 import {EntityExecutionsContext} from '../EntityExecutionsContainer/EntityExecutionsContainer';
 import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper} from './EntityExecutionsContent.styled';
 import TableRow from './TableRow';
@@ -20,6 +22,7 @@ const EntityExecutionsContent: React.FC = () => {
   const name = entityDetails?.name;
   const description = entityDetails?.description;
   const labels = entityDetails?.labels;
+  const type = entityDetails?.type;
 
   const failedExecutionsListNumber = useMemo(() => {
     let number = 0;
@@ -50,7 +53,15 @@ const EntityExecutionsContent: React.FC = () => {
   };
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column', gap: '40px', overflow: 'hidden', height: '100%'}}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '40px',
+        overflow: 'hidden',
+        height: '100%',
+      }}
+    >
       <StyledPageHeader
         onBack={() => window.history.back()}
         title={name}
@@ -61,10 +72,15 @@ const EntityExecutionsContent: React.FC = () => {
           </Button>,
         ]}
         className="testkube-pageheader"
+        avatar={{
+          icon: <TestRunnerIcon icon={type} noWidth />,
+        }}
       >
-        <Text color={Colors.slate400} className="middle">
-          {description}
-        </Text>
+        {description ? (
+          <Text color={Colors.slate400} className="middle">
+            {description}
+          </Text>
+        ) : null}
       </StyledPageHeader>
       <SummaryGridWrapper>
         <SummaryGridItem>

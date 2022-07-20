@@ -17,6 +17,7 @@ import {StyledTestRunnerIcon} from './TestRunnerIcon.styled';
 
 type TestRunnerIconProps = {
   icon: TestExecutor;
+  noWidth?: boolean;
 };
 
 export const testRunnerIcons: {[key in TestExecutor]: any} = {
@@ -37,9 +38,9 @@ export const testRunnerIcons: {[key in TestExecutor]: any} = {
 };
 
 const TestRunnerIcon: React.FC<TestRunnerIconProps> = props => {
-  const {icon} = props;
+  const {icon, noWidth = false} = props;
 
-  return <StyledTestRunnerIcon>{testRunnerIcons[icon]}</StyledTestRunnerIcon>;
+  return <StyledTestRunnerIcon $noWidth={noWidth}>{testRunnerIcons[icon]}</StyledTestRunnerIcon>;
 };
 
 export default TestRunnerIcon;
