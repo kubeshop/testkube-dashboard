@@ -8,17 +8,12 @@ import {useGA4React} from 'ga-4-react';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
-import {setLabels} from '@redux/reducers/labelsSlice';
 
 import {ProtectedRoute} from '@atoms';
 
 import {Sider} from '@organisms';
 
 import {NotFound, Tests} from '@pages';
-
-import {PollingIntervals} from '@utils/numbers';
-
-import {useGetLabelsQuery} from '@services/labels';
 
 import {MainContext} from '@contexts';
 
@@ -38,18 +33,6 @@ const App: React.FC = () => {
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
-
-  const {data: labelsMap, refetch} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.long});
-
-  useEffect(() => {
-    refetch();
-  }, [apiEndpoint]);
-
-  useEffect(() => {
-    if (labelsMap) {
-      dispatch(setLabels(labelsMap));
-    }
-  }, [labelsMap]);
 
   useEffect(() => {
     if (ga4React) {

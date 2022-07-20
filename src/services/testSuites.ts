@@ -28,6 +28,13 @@ export const testSuitesApi = createApi({
     getTestSuiteDetails: builder.query<any, string>({
       query: id => `/test-suites/${id}`,
     }),
+    addTestSuite: builder.mutation<void, any>({
+      query: body => ({
+        url: `/test-suites`,
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -37,4 +44,5 @@ export const {
   useUpdateTestSuiteMutation,
   useGetTestSuiteExecutionQuery,
   useGetTestSuiteDetailsQuery,
+  useAddTestSuiteMutation,
 } = testSuitesApi;
