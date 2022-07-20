@@ -81,9 +81,6 @@ const EntityListSkeleton: React.FC = () => {
     },
     additionalStyles: {
       lineHeight: 120,
-      container: {
-        paddingTop: 20,
-      },
     },
   };
 
@@ -133,8 +130,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   };
 
   const onNavigateToDetails = (item: any) => {
-    dispatch(setSelectedRecord(item));
-    navigate(`${entity}/details`);
+    navigate(`${entity}/executions/${item.dataItem.name}`);
   };
 
   useEffect(() => {

@@ -10,7 +10,8 @@ export type EntityExecutionsBlueprintProps = {
 export type EntityExecutionsBlueprint = {
   entity?: Entity;
   emptyDetailsComponent?: any;
-  useGetExecutions?: UseQuery<QueryDefinition<any, any, any, any, any>>;
+  useGetExecutions: UseQuery<QueryDefinition<any, any, any, any, any>>;
+  useGetEntityDetails: UseQuery<QueryDefinition<any, any, any, any, any>>;
   setExecutions?: any;
   selectExecutions?: any;
 };

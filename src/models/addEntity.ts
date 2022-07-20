@@ -4,7 +4,7 @@ export type AddEntityWizardTypes = 'addTest';
 
 export type AddEntityBlueprint = {
   pageTitle: string;
-  gradient: string;
+  gradient?: string;
   route: string;
   wizardTitle: string;
   wizardType: AddEntityWizardTypes;

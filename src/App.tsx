@@ -98,7 +98,7 @@ const App: React.FC = () => {
 
   return (
     <MainContext.Provider value={mainContextValue}>
-      <Layout style={{overflow: 'hidden'}}>
+      <Layout>
         <Sider />
         <StyledLayoutContentWrapper>
           <Content>

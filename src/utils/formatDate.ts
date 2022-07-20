@@ -1,3 +1,4 @@
+import {Duration} from 'date-fns';
 import moment from 'moment';
 
 import {executionDateFormat} from './strings';
@@ -31,4 +32,16 @@ export const getTodayTests = (timeStamp: any) => {
 
 export const formatExecutionDate = (date: moment.MomentInput, format = executionDateFormat) => {
   return moment(date).format(format);
+};
+
+export const constructExecutedString = (duration: Duration) => {
+  let finishString = '';
+
+  Object.entries(duration).forEach(([key, value]) => {
+    if (value && !finishString) {
+      finishString = `${value}${key[0]}`;
+    }
+  });
+
+  return finishString;
 };
