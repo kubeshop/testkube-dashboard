@@ -24,12 +24,8 @@ const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {
         <HelpCard isLink link="https://kubeshop.github.io/testkube/testsuites-creating/">
           Learn how to add test suites
         </HelpCard>
-        <HelpCard isLink link="https://kubeshop.github.io/testkube/testsuites-creating/">
-          {/* Need to update link here, did't managed to find correct one */}
-          How to build an optimal test pipeline
-        </HelpCard>
         <StyledLastHelpCardContainer>
-          <HelpCard isHelp>
+          <HelpCard isHelp link="https://discord.com/invite/hfq44wtR6Q">
             Need help getting started? Want to talk to Testkube engineers?{' '}
             <a href="https://discord.com/invite/hfq44wtR6Q" target="_blank">
               Find us on Discord

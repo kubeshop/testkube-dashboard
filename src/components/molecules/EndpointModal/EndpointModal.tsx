@@ -1,50 +1,26 @@
 import React, {useContext, useEffect, useState} from 'react';
 
-import {Modal} from 'antd';
-
 import axios from 'axios';
-import styled from 'styled-components';
 
 import {config} from '@constants/config';
 
 import {setApiEndpoint} from '@redux/reducers/configSlice';
 
-import {Button, Input, Text} from '@custom-antd';
+import {Button, Input, Modal, Text} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
 import env from '../../../env';
+import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
 
-const StyledSearchUrlForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const modalBodyStyles = {
-  backgroundColor: 'var(--color-dark-primary)',
-  overflow: 'hidden',
-};
-
-const StyledFormContainer = styled.div`
-  display: flex;
-  align-items: center;
-
-  margin-top: 10px;
-
-  input {
-    margin-right: 15px;
-  }
-`;
-
-type ModalProps = {
+type EndpointModalProps = {
   isModalVisible: (isVisible: boolean) => void;
-  visible?: boolean;
+  visible: boolean;
 };
 
 axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl || `${window.location.origin}/results/v1`;
 
-const CustomModal: React.FC<ModalProps> = props => {
+const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {isModalVisible, visible} = props;
 
   const defaultApiEndpoint =
@@ -66,10 +42,6 @@ const CustomModal: React.FC<ModalProps> = props => {
     dispatch(setApiEndpoint(apiEndpoint));
   };
 
-  const handleCancel = () => {
-    isModalVisible(false);
-  };
-
   useEffect(() => {
     dispatch(setApiEndpoint(defaultApiEndpoint));
 
@@ -77,14 +49,12 @@ const CustomModal: React.FC<ModalProps> = props => {
   }, []);
 
   return (
-    <>
-      <Modal
-        title="TestKube API endpoint"
-        visible={visible}
-        footer={null}
-        onCancel={handleCancel}
-        bodyStyle={modalBodyStyles}
-      >
+    <Modal
+      title="TestKube API endpoint"
+      isModalVisible={visible}
+      footer={null}
+      setIsModalVisible={isModalVisible}
+      content={
         <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
           <Text>
             Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
@@ -108,15 +78,16 @@ const CustomModal: React.FC<ModalProps> = props => {
                 setApiEndpointHook(event.target.value);
               }}
               defaultValue={apiEndpoint}
+              width="300px"
             />
             <Button type="primary" htmlType="submit">
               Get results
             </Button>
           </StyledFormContainer>
         </StyledSearchUrlForm>
-      </Modal>
-    </>
+      }
+    />
   );
 };
 
-export default CustomModal;
+export default EndpointModal;

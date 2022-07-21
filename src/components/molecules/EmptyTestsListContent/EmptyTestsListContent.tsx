@@ -24,19 +24,11 @@ const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
         <HelpCard isLink link="https://kubeshop.github.io/testkube/tests-creating/">
           Learn how to add tests
         </HelpCard>
-        <HelpCard isLink link="https://kubeshop.github.io/testkube/tests-creating/">
-          {/* Need to update link here, did't managed to find correct one */}
-          What types of test does testkube support?
-        </HelpCard>
-        <HelpCard isLink link="https://kubeshop.github.io/testkube/tests-creating/">
-          {/* Need to update link here, did't managed to find correct one */}
-          How to build an optimal test pipeline?
-        </HelpCard>
         <HelpCard isLink link="https://kubeshop.github.io/testkube/executor-custom/">
           How to add your very own test types and executors?
         </HelpCard>
         <StyledLastHelpCardContainer>
-          <HelpCard isHelp>
+          <HelpCard isHelp link="https://discord.com/invite/hfq44wtR6Q">
             Need help getting started? Want to talk to Testkube engineers?{' '}
             <a href="https://discord.com/invite/hfq44wtR6Q" target="_blank">
               Find us on Discord

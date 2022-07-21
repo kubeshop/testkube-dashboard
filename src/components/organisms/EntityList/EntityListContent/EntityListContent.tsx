@@ -166,7 +166,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
   const isEmptyData = (dataSource.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
 
-  const addEntityButtonText = entity === 'tests' ? 'Add a new test' : 'Add a new Test Suite';
+  const addEntityButtonText = entity === 'tests' ? 'Add a new test' : 'Add a new test suite';
   const addEntityAction = () => {
     if (entity === 'tests') {
       navigate('/dashboard/tests/add-test');

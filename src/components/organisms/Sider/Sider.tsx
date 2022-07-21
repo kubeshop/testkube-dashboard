@@ -3,7 +3,9 @@ import {NavLink} from 'react-router-dom';
 
 import {Space} from 'antd';
 
-import {Icon, OldModal} from '@atoms';
+import {Icon} from '@atoms';
+
+import {EndpointModal} from '@molecules';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
@@ -102,7 +104,7 @@ const Sider: React.FC = () => {
 
   return (
     <StyledSider width={100} data-cy="navigation-sider">
-      <OldModal visible={isModalVisible} isModalVisible={onToggleModal} />
+      <EndpointModal visible={isModalVisible} isModalVisible={onToggleModal} />
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <Space size={30} direction="vertical">

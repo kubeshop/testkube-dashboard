@@ -937,6 +937,7 @@ enum Colors {
   slate700 = '#334155',
   slate800 = '#1E293B',
   slate801 = 'rgba(30, 41, 59, 0.5)',
+  slate800disabled = 'rgba(30, 41, 59, 0.5)',
   slate850 = '#0f172a',
   slate900 = '#0F172A',
 

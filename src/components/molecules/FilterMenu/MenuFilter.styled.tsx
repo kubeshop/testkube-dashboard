@@ -66,12 +66,15 @@ export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean}>`
   border-radius: 4px;
   padding: 11px;
 
-  background-color: ${props => (props.isFiltersDisabled ? Colors.slate600 : Colors.slate800)};
+  background-color: ${props => (props.isFiltersDisabled ? Colors.slate800disabled : Colors.slate800)};
 
   color: ${Colors.slate500};
-  cursor: ${props => (props.isFiltersDisabled ? 'default' : 'pointer')};
-
-  &:hover {
-    border-color: ${Colors.slate600};
-  }
+  cursor: ${props => (props.isFiltersDisabled ? 'not-allowed' : 'pointer')};
+  ${props =>
+    props.isFiltersDisabled
+      ? ''
+      : `
+      &:hover {
+        border-color: ${Colors.slate600};
+      }`}
 `;

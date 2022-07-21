@@ -18,7 +18,7 @@ const HelpCard: React.FC<HeypCardTypes> = props => {
   };
 
   return (
-    <StyledHelpCardContainer isLink={isLink} onClick={redirectToLink}>
+    <StyledHelpCardContainer isLink={Boolean(link)} onClick={redirectToLink}>
       {isLink ? <HelpLinkIcon /> : null}
       {isHelp ? <QuestionCircleIcon /> : null}
       <StyledChildrenContainer>{children}</StyledChildrenContainer>

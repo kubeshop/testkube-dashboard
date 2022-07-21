@@ -19,3 +19,4 @@ export {default as EmptyTestsListContent} from './EmptyTestsListContent';
 export {default as EmptyTestSuitesListContent} from './EmptyTestSuitesListContent';
 export {default as EntityGrid} from './EntityGrid';
 export {default as notificationCall} from './Notification';
+export {default as EndpointModal} from './EndpointModal';
