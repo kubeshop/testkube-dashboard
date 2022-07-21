@@ -17,6 +17,9 @@ export type TestExecutor =
   | 'gradle:jdk18/test'
   //
   | 'maven/test'
+  | 'maven:jdk18/test'
+  //
+  | 'kubepug/yaml'
   //
   | 'unknown';
 
@@ -32,6 +35,7 @@ export type TestExecutorName =
   | 'Gradle'
   | 'Gradle 18'
   | 'Maven'
+  | 'Kubepug'
   | UnknownTestExecutor;
 
 export type TestExecutorConfig = {
