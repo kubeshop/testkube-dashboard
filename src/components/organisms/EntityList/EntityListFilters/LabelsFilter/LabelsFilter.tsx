@@ -7,27 +7,15 @@ import {FilterFilled} from '@ant-design/icons';
 import {Entity, EntityArray} from '@models/entityMap';
 import {FilterProps} from '@models/filters';
 
-import {Input} from '@custom-antd';
+import {Button, Input, Title} from '@custom-antd';
 
-import {
-  AppliedFiltersNotification,
-  FilterMenuFooter,
-  StyledFilterDropdown,
-  StyledFilterLabel,
-  StyledFilterMenu,
-} from '@molecules/FilterMenu';
+import {FilterMenuFooter, StyledFilterDropdown, StyledFilterLabel, StyledFilterMenu} from '@molecules/FilterMenu';
+
+import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-import {
-  EmptyButton,
-  StyledAddRowButton,
-  StyledDeleteRowButton,
-  StyledKeyValueLabel,
-  StyledKeyValueRow,
-  StyledLabelsMenuContainer,
-  StyledTitle,
-} from './LabelsFilter.styled';
+import {EmptyButton, StyledKeyValueRow, StyledLabelsMenuContainer} from './LabelsFilter.styled';
 
 const defaultKeyValuePair: Entity = {
   key: '',
@@ -95,15 +83,19 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         onChange={event => onKeyChange(event.target.value, index)}
         value={item.key}
         data-cy={`key-input-${index}`}
+        placeholder="Key"
       />
       <Input
         width="220px"
         onChange={event => onValueChange(event.target.value, index)}
         value={item.value}
         data-cy={`value-input-${index}`}
+        placeholder="Value"
       />
       {index > 0 ? (
-        <StyledDeleteRowButton onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`} />
+        <Button customType="tertiary" onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`}>
+          &#10005;
+        </Button>
       ) : (
         <EmptyButton />
       )}
@@ -134,13 +126,11 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const menu = (
     <StyledFilterMenu onClick={onMenuClick} data-cy="labels-filter-dropdown">
       <StyledLabelsMenuContainer>
-        <StyledTitle>Filter tests by Key Value pairs.</StyledTitle>
-        <StyledKeyValueRow>
-          <StyledKeyValueLabel>Key</StyledKeyValueLabel>
-          <StyledKeyValueLabel>Value</StyledKeyValueLabel>
-        </StyledKeyValueRow>
+        <Title level={5}>Filter tests by Key Value pairs.</Title>
         {renderKeyValueInputs}
-        <StyledAddRowButton onClick={() => onAddRow()}>&#xFF0B; Add row</StyledAddRowButton>
+        <Button customType="transparent" onClick={() => onAddRow()}>
+          &#xFF0B; Add row
+        </Button>
       </StyledLabelsMenuContainer>
       <FilterMenuFooter onOk={applyFilters} onReset={resetFilters} onCancel={() => onVisibleChange(false)} />
     </StyledFilterMenu>
@@ -163,8 +153,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
           data-cy="labels-filter-button"
           isFiltersDisabled={isFiltersDisabled}
         >
-          {isFilterApplied ? <AppliedFiltersNotification /> : null}
-          Labels <FilterFilled />
+          Labels <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
         </StyledFilterLabel>
       </StyledFilterDropdown>
     </Space>

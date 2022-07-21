@@ -1,14 +1,11 @@
 export {default as ResultDatePicker} from './ResultsDatePicker/ResultDatePicker';
 export {default as InfoPanelHeader} from './InfoPanelHeader';
 export {default as TestRunner} from './TestRunner';
-export {default as LabelsFilter} from './LabelsFilter';
-export {default as StatusFilter} from './StatusFilter';
 export {default as DateRangeFilter} from './DateRangeFilter';
 export {default as TextFilter} from './TextFilter';
 export {default as DateFilter} from './DateFilter';
 export {default as CLICommands} from './CLICommands';
 export {default as CopyCommand} from './CLICommands/CopyCommand';
-export {default as TextSearchFilter} from './TextSearchFilter';
 export {default as LabelsList} from './LabelsList';
 export {default as ExecutionTableRow} from './ExecutionTableRow';
 export {default as ExecutionDefinition} from './ExecutionDefinition';

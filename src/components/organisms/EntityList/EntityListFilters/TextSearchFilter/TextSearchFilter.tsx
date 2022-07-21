@@ -1,25 +1,23 @@
 import {useContext, useEffect, useState} from 'react';
 
+import {Input} from 'antd';
+
+import {SearchOutlined} from '@ant-design/icons';
+
 import {FilterProps} from '@models/filters';
 
 import useDebounce from '@hooks/useDebounce';
 
+import Colors from '@styles/Colors';
+
 import {MainContext} from '@contexts';
 
-import {Entity} from '@src/models/entity';
-
-import {StyledSearchInput, StyledSearchInputContainer} from './TextSearchFilter.styled';
-
-const inputValueQueryParams: {[key in Entity]: string} = {
-  'test-suites': 'textSearch',
-  tests: 'textSearch',
-};
 const TextSearchFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, entity, queryParam, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
 
-  const queryParamField = queryParam || inputValueQueryParams[entity];
+  const queryParamField = queryParam || 'textSearch';
 
   const [inputValue, setInputValue] = useState(filters[queryParam || queryParamField]);
 
@@ -40,15 +38,15 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
   }, [filters, entity]);
 
   return (
-    <StyledSearchInputContainer>
-      <StyledSearchInput
-        placeholder="Search"
-        onChange={onChange}
-        value={inputValue}
-        data-cy="search-filter"
-        disabled={isFiltersDisabled}
-      />
-    </StyledSearchInputContainer>
+    <Input
+      prefix={<SearchOutlined style={{color: Colors.slate500}} />}
+      placeholder="Search"
+      onChange={onChange}
+      value={inputValue}
+      data-cy="search-filter"
+      disabled={isFiltersDisabled}
+      style={{width: '296px'}}
+    />
   );
 };
 

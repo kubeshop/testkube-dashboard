@@ -1,6 +1,6 @@
 import {Entity} from './entity';
 
-export type FilterType = 'status' | 'dateRange' | 'date' | 'textSearch' | 'selector' | 'testType' | 'search';
+export type FilterType = 'textSearch' | 'selector' | 'status';
 
 export type FilterProps = {
   setFilters: any;

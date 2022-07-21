@@ -7,8 +7,7 @@ import {ModalConfigProps} from '@models/modal';
 import {TestWithExecution} from '@models/test';
 import {TestSuiteWithExecution} from '@models/testSuite';
 
-import {Skeleton, Title} from '@custom-antd';
-import Modal from '@custom-antd/Modal';
+import {Button, Modal, Skeleton, Title} from '@custom-antd';
 
 import {EntityGrid} from '@molecules';
 
@@ -24,9 +23,14 @@ import {MainContext} from '@contexts';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
+import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
-import {EmptyListWrapper, EntityListHeader, StyledEntityListSkeletonWrapper} from './EntityListContent.styled';
-import Filters from './Filters';
+import {
+  EmptyListWrapper,
+  EntityListHeader,
+  StyledEntityListSkeletonWrapper,
+  StyledFiltersSection,
+} from './EntityListContent.styled';
 
 type OnDataChangeInterface = {
   data: TestSuiteWithExecution[] | TestWithExecution[];
@@ -157,7 +161,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
   const isEmptyData = (dataSource.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
 
-  const emptyDataAction = () => {
+  const addEntityButtonText = entity === 'tests' ? 'Add a new test' : 'Add a new Test Suite';
+  const addEntityAction = () => {
     if (entity === 'tests') {
       navigate('/dashboard/tests/add-test');
     } else {
@@ -177,7 +182,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         </Space>
       </EntityListHeader>
       {filtersComponentsIds && filtersComponentsIds.length ? (
-        <>
+        <StyledFiltersSection>
           <Filters
             setFilters={setQueryFilters}
             filters={queryFilters}
@@ -185,14 +190,17 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             entity={entity}
             isFiltersDisabled={isEmptyData}
           />
-        </>
+          <Button customType="primary" onClick={addEntityAction}>
+            {addEntityButtonText}
+          </Button>
+        </StyledFiltersSection>
       ) : null}
       {contentProps.isLoading ? (
         <EntityListSkeleton />
       ) : !dataSource || !dataSource.length ? (
         <EmptyListWrapper>
           {isFiltersEmpty ? (
-            <EmptyData action={emptyDataAction} />
+            <EmptyData action={addEntityAction} />
           ) : (
             <EmptyDataWithFilters resetFilters={resetFilters} />
           )}

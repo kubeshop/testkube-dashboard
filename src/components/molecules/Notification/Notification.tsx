@@ -6,7 +6,7 @@ import {Text} from '@custom-antd';
 
 import {StyledNotificationContainer, StyledNotificationHeader, StyledNotificationMessage} from './Notification.styled';
 
-function notificationCall(title: string, message: string, status: any) {
+function notificationCall(status: any, title: string, message: string = '') {
   notification.open({
     message: null,
     description: (
@@ -15,9 +15,11 @@ function notificationCall(title: string, message: string, status: any) {
           <StatusIcon status={status} />
           <Text className="bold middle">{title}</Text>
         </StyledNotificationHeader>
-        <StyledNotificationMessage>
-          <Text className="regular middle">{message}</Text>
-        </StyledNotificationMessage>
+        {message ? (
+          <StyledNotificationMessage>
+            <Text className="regular middle">{message}</Text>
+          </StyledNotificationMessage>
+        ) : null}
       </StyledNotificationContainer>
     ),
     closeIcon: <svg />,

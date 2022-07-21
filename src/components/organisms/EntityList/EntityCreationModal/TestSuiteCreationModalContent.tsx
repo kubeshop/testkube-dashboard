@@ -38,10 +38,13 @@ const TestSuiteCreationModalContent: React.FC = () => {
     })
       .then((res: any) => {
         if (res.error) {
-          const errorTitle = res.error?.data.title || 'Unknown error';
-          const errorDetails = res.error?.data.detail || 'Something went wrong';
-
-          notificationCall(errorTitle, errorDetails, 'failed');
+          if (res.error.data) {
+            const errorTitle = res.error?.data?.title || 'Unknown error';
+            const errorDetails = res.error?.data.detail || 'Something went wrong';
+            notificationCall('failed', errorTitle, errorDetails);
+          } else {
+            notificationCall('failed', res.error.error);
+          }
         } else {
           const testSuiteName = res?.data?.metadata?.name;
           navigate(`test-suites/executions/${testSuiteName}`);
@@ -49,7 +52,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
       })
       .catch(err => {
         if (err instanceof Error) {
-          notificationCall('Unknown error', String(err) || 'Something went wrong', 'failed');
+          notificationCall('failed', 'Unknown error', String(err) || 'Something went wrong');
         }
       });
   };

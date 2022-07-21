@@ -6,32 +6,25 @@ import {EntityListBlueprint} from '@models/entity';
 import {FilterProps, FilterType} from '@models/filters';
 import {SearchParams} from '@models/searchParams';
 
-import {DateFilter, DateRangeFilter, LabelsFilter, StatusFilter, TextFilter, TextSearchFilter} from '@molecules';
-
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {validateSearchParams} from '@utils/fetchUtils';
 
 import {MainContext} from '@contexts';
 
+import LabelsFilter from './LabelsFilter';
+import StatusFilter from './StatusFilter';
+import TextSearchFilter from './TextSearchFilter';
+
 const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
-  status: StatusFilter,
-  dateRange: DateRangeFilter,
-  date: DateFilter,
   textSearch: TextSearchFilter,
   selector: LabelsFilter,
-  testType: TextFilter,
-  search: TextSearchFilter,
+  status: StatusFilter,
 };
 
-const filterSpecificProps: Partial<Record<FilterType, any>> = {
-  testType: {
-    queryParam: 'type',
-    placeholderText: 'Test type',
-  },
-};
-
-const Filters: React.FC<Pick<EntityListBlueprint, 'filtersComponentsIds' | 'entity'> & FilterProps> = props => {
+const EntityListFilters: React.FC<
+  Pick<EntityListBlueprint, 'filtersComponentsIds' | 'entity'> & FilterProps
+> = props => {
   const {filtersComponentsIds, ...rest} = props;
   const {setFilters, filters, entity} = rest;
 
@@ -42,12 +35,7 @@ const Filters: React.FC<Pick<EntityListBlueprint, 'filtersComponentsIds' | 'enti
   const renderedFilters = filtersComponentsIds?.map((filterComponentId: FilterType) => {
     const Component = filtersComponents[filterComponentId];
 
-    const componentProps = {
-      ...filterSpecificProps[filterComponentId],
-      ...rest,
-    };
-
-    return <Component {...componentProps} key={filterComponentId} />;
+    return <Component {...rest} key={filterComponentId} />;
   });
 
   useEffect(() => {
@@ -56,11 +44,7 @@ const Filters: React.FC<Pick<EntityListBlueprint, 'filtersComponentsIds' | 'enti
     }
   }, [entity]);
 
-  return (
-    <div>
-      <Space data-cy="filters-container">{renderedFilters}</Space>
-    </div>
-  );
+  return <Space data-cy="filters-container">{renderedFilters}</Space>;
 };
 
-export default Filters;
+export default EntityListFilters;

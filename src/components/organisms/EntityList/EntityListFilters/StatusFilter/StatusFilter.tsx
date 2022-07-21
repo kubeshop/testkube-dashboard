@@ -1,13 +1,10 @@
 import {useCallback, useContext, useMemo, useState} from 'react';
 
-import {Space} from 'antd';
-
 import {FilterFilled} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
 
 import {
-  AppliedFiltersNotification,
   FilterMenuFooter,
   StyledFilterCheckbox,
   StyledFilterDropdown,
@@ -17,6 +14,8 @@ import {
 } from '@molecules/FilterMenu';
 
 import {uppercaseFirstSymbol} from '@utils/strings';
+
+import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
@@ -80,26 +79,25 @@ const StatusFilter: React.FC<FilterProps> = props => {
     </StyledFilterMenu>
   );
 
+  const isFilterApplied = filters.status.length > 0;
+
   return (
-    <Space>
-      <StyledFilterDropdown
-        overlay={menu}
-        trigger={['click']}
-        placement="bottom"
-        onVisibleChange={onVisibleChange}
-        visible={isVisible}
-        disabled={isFiltersDisabled}
+    <StyledFilterDropdown
+      overlay={menu}
+      trigger={['click']}
+      placement="bottom"
+      onVisibleChange={onVisibleChange}
+      visible={isVisible}
+      disabled={isFiltersDisabled}
+    >
+      <StyledFilterLabel
+        onClick={e => e.preventDefault()}
+        data-cy="status-filter-button"
+        isFiltersDisabled={isFiltersDisabled}
       >
-        <StyledFilterLabel
-          onClick={e => e.preventDefault()}
-          data-cy="status-filter-button"
-          isFiltersDisabled={isFiltersDisabled}
-        >
-          {filters.status.length > 0 ? <AppliedFiltersNotification /> : null}
-          Status <FilterFilled />
-        </StyledFilterLabel>
-      </StyledFilterDropdown>
-    </Space>
+        Status <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
+      </StyledFilterLabel>
+    </StyledFilterDropdown>
   );
 };
 
