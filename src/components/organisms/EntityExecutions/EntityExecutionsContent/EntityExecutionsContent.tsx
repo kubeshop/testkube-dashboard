@@ -52,6 +52,14 @@ const EntityExecutionsContent: React.FC = () => {
     }
   };
 
+  const isEmptyExecutions = !executionsList?.results || !executionsList?.results.length;
+
+  const avatar = type
+    ? {
+        avatar: {icon: <TestRunnerIcon icon={type} noWidth />},
+      }
+    : {};
+
   return (
     <div
       style={{
@@ -72,9 +80,7 @@ const EntityExecutionsContent: React.FC = () => {
           </Button>,
         ]}
         className="testkube-pageheader"
-        avatar={{
-          icon: <TestRunnerIcon icon={type} noWidth />,
-        }}
+        {...avatar}
       >
         {description ? (
           <Text color={Colors.slate400} className="middle">
@@ -115,23 +121,25 @@ const EntityExecutionsContent: React.FC = () => {
         </SummaryGridItem>
       </SummaryGridWrapper>
       <Tabs defaultActiveKey="1" style={{overflow: 'hidden', height: '100%'}}>
-        <Tabs.TabPane tab="Tab 1" key="1">
-          <Table
-            showHeader={false}
-            dataSource={executionsList?.results}
-            columns={[
-              {
-                render: data => {
-                  return <TableRow data={data} />;
+        <Tabs.TabPane tab="Recent executions" key="1">
+          {isEmptyExecutions ? null : (
+            <Table
+              showHeader={false}
+              dataSource={executionsList?.results}
+              columns={[
+                {
+                  render: data => {
+                    return <TableRow data={data} />;
+                  },
                 },
-              },
-            ]}
-            onRow={(record: any) => ({
-              onClick: () => {
-                onRowSelect(record);
-              },
-            })}
-          />
+              ]}
+              onRow={(record: any) => ({
+                onClick: () => {
+                  onRowSelect(record);
+                },
+              })}
+            />
+          )}
         </Tabs.TabPane>
         <Tabs.TabPane tab="Tab 2" key="2">
           dasdsada
