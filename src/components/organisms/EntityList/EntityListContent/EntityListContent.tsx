@@ -44,6 +44,11 @@ type DataLayerProps = {
   queryFilters?: any;
 };
 
+const modalTypes: {[key in Entity]: ModalConfigProps} = {
+  'test-suites': TestSuiteModalConfig,
+  tests: TestModalConfig,
+};
+
 const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
   const {onDataChange, queryFilters} = props;
 
@@ -170,7 +175,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     }
   };
 
-  const creationModalConfig: ModalConfigProps = entity === 'tests' ? TestModalConfig : TestSuiteModalConfig;
+  const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
   return (
     <>
