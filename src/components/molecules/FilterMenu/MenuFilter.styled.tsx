@@ -70,6 +70,8 @@ export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean}>`
 
   color: ${Colors.slate500};
   cursor: ${props => (props.isFiltersDisabled ? 'not-allowed' : 'pointer')};
+  transition: 0.3s ease;
+
   ${props =>
     props.isFiltersDisabled
       ? ''
