@@ -16,9 +16,9 @@ export const EntityListContext = createContext<{dataSource: any; queryFilters: a
 const EntityListContainer: React.FC<EntityListBlueprint> = props => {
   const {selectData, selectQueryFilters, selectAllFilters, ...rest} = props;
 
-  const dataSource: any = useAppSelector(selectData);
-  const queryFilters: any = useAppSelector(selectQueryFilters);
-  const allFilters: any = useAppSelector(selectAllFilters);
+  const dataSource = useAppSelector(selectData);
+  const queryFilters = useAppSelector(selectQueryFilters);
+  const allFilters = useAppSelector(selectAllFilters);
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 

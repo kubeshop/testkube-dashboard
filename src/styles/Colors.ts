@@ -936,6 +936,7 @@ enum Colors {
   slate600 = '#475569',
   slate700 = '#334155',
   slate800 = '#1E293B',
+  slate800halfalpha = '#1E293B32',
   slate801 = 'rgba(30, 41, 59, 0.5)',
   slate800disabled = 'rgba(30, 41, 59, 0.5)',
   slate850 = '#0f172a',
@@ -1043,6 +1044,7 @@ export enum StatusColors {
   pending = Colors.lightGrey,
   queued = Colors.lightGrey,
   neverRun = Colors.whitePure,
+  cancelled = Colors.errorRed,
 }
 
 export enum BorderColors {

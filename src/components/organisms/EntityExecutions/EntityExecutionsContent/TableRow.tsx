@@ -39,9 +39,6 @@ const TableRow: React.FC<{data: any}> = props => {
               #{index}
             </Text>
             <Text className="regular small" color={Colors.slate400}>
-              manual
-            </Text>
-            <Text className="regular small" color={Colors.slate400}>
               Executed: {executedTime} ago
             </Text>
           </ItemColumn>

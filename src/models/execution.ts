@@ -6,7 +6,7 @@ import {EntityMap} from '@models/entityMap';
 import {TestContent} from '@models/test';
 import {TestExecutor} from '@models/testExecutors';
 
-export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued';
+export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued' | 'cancelled';
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
 export type ExecutionStepResultStatusEnum = 'success' | 'error';
 
@@ -23,6 +23,7 @@ export type ExecutionResult = {
   outputType?: ExecutionResultOutputTypeEnum;
   errorMessage?: string;
   steps?: ExecutionStepResult[];
+  reports: any;
 };
 
 export type Execution = {

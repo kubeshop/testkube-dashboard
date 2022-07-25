@@ -8,6 +8,7 @@ const Tests: React.FC = () => {
       <Routes>
         <Route index element={<EntityListBlueprintRenderer entity="tests" />} />
         <Route path="executions/:id" element={<EntityExecutionsBlueprintRenderer entity="tests" />} />
+        <Route path="executions/:id/execution/:execId" element={<EntityExecutionsBlueprintRenderer entity="tests" />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

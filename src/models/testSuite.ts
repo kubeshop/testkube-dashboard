@@ -2,7 +2,7 @@ import {EntityMap} from '@models/entityMap';
 import {ObjectRef} from '@models/objectRef';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
-import {Variable} from './variable';
+import {Variables} from './variable';
 
 export type TestSuiteStepTypeEnum = 'executeTest' | 'delay';
 
@@ -38,6 +38,8 @@ export type TestSuite = {
   schedule?: string;
   repeats?: number;
   params?: EntityMap;
+  created: string;
+  variables: Variables;
 };
 
 export type TestSuiteWithExecution = {

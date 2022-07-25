@@ -31,6 +31,7 @@ export const TestSuitesEntity: EntityListBlueprint = {
   route: '/dashboard/test-suites',
   reduxSliceName: 'testSuites',
   pageTitle: 'Test Suites',
+  addEntityButtonText: 'Add a new test suite',
   pageDescription: TestSuitesPageDescription,
   emptyDataComponent: EmptyTestSuitesListContent,
 

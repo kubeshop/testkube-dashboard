@@ -115,7 +115,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     setQueryFilters,
     setData,
     initialFiltersState,
-    setSelectedRecord,
+    addEntityButtonText,
   } = props;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -164,21 +164,16 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   }, [contentProps.data, contentProps.isLoading, contentProps.isFetching]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
-  const isEmptyData = (dataSource.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
+  const isEmptyData = (dataSource?.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
 
-  const addEntityButtonText = entity === 'tests' ? 'Add a new test' : 'Add a new test suite';
   const addEntityAction = () => {
-    if (entity === 'tests') {
-      navigate('/dashboard/tests/add-test');
-    } else {
-      setIsModalVisible(true);
-    }
+    setIsModalVisible(true);
   };
 
   const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
   return (
-    <>
+    <div style={{padding: 40}}>
       <EntityListHeader>
         {dataLayers[entity]}
         <Space size={15} direction="vertical">
@@ -216,7 +211,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
       ) : null}
-    </>
+    </div>
   );
 };
 

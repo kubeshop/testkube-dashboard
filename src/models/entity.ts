@@ -64,4 +64,6 @@ export type EntityListBlueprint = {
   selectQueryFilters?: any;
 
   selectAllFilters?: any;
+
+  addEntityButtonText?: string;
 };

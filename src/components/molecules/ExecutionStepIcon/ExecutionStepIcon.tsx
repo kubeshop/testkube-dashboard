@@ -20,6 +20,7 @@ const icons: {[key in ExecutionStepIconType | any]: any} = {
   code: <CodeIcon />,
   queued: <PendingStatusIcon />,
   neverRun: <PersonIcon />,
+  cancelled: <ErrorStatusIcon />,
 };
 
 type ExecutionStepIconProps = {

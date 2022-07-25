@@ -17,9 +17,9 @@ export const StyledPageHeader = styled(PageHeader)`
   }
 `;
 
-export const SummaryGridWrapper = styled.div`
+export const SummaryGridWrapper = styled.div<{$gridCols: number}>`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(${({$gridCols}) => $gridCols}, 1fr);
   gap: 12px;
 `;
 
@@ -33,6 +33,12 @@ export const SummaryGridItem = styled.div`
   border-radius: 4px;
 
   background: ${Colors.slate800};
+
+  transition: 0.3s;
+
+  &:hover {
+    background: ${Colors.slate800halfalpha};
+  }
 `;
 
 export const ItemWrapper = styled.div`

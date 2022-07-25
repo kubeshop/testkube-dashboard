@@ -17,7 +17,7 @@ import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper} from './EntityExe
 import TableRow from './TableRow';
 
 const EntityExecutionsContent: React.FC = () => {
-  const {entity, entityDetails, executionsList, onRowSelect} = useContext(EntityExecutionsContext);
+  const {entity, entityDetails, executionsList, onRowSelect, isRowSelected} = useContext(EntityExecutionsContext);
 
   const name = entityDetails?.name;
   const description = entityDetails?.description;
@@ -68,6 +68,8 @@ const EntityExecutionsContent: React.FC = () => {
         gap: '40px',
         overflow: 'hidden',
         height: '100%',
+        flex: 1,
+        padding: 40,
       }}
     >
       <StyledPageHeader
@@ -88,7 +90,7 @@ const EntityExecutionsContent: React.FC = () => {
           </Text>
         ) : null}
       </StyledPageHeader>
-      <SummaryGridWrapper>
+      <SummaryGridWrapper $gridCols={isRowSelected ? 2 : 5}>
         <SummaryGridItem>
           <Text className="uppercase middle" color={Colors.slate500}>
             reliability
@@ -135,7 +137,7 @@ const EntityExecutionsContent: React.FC = () => {
               ]}
               onRow={(record: any) => ({
                 onClick: () => {
-                  onRowSelect(record);
+                  onRowSelect(record, true);
                 },
               })}
             />
