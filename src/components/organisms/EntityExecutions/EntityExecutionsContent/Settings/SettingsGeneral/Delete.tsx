@@ -21,7 +21,7 @@ const namingMap: {[key in Entity]: string} = {
 };
 
 const Delete: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityExecutionsContext);
+  const {entity, entityDetails, defaultStackRoute} = useContext(EntityExecutionsContext);
   const {navigate} = useContext(MainContext);
 
   const [deleteTest] = useDeleteTestMutation();
@@ -42,7 +42,7 @@ const Delete: React.FC = () => {
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was succesfully deleted.`);
 
-          navigate(`test-suites`);
+          navigate(defaultStackRoute);
         });
       })
       .catch((err: any) => {
