@@ -49,6 +49,12 @@ export const testsApi = createApi({
         body: body.data,
       }),
     }),
+    deleteTest: builder.mutation<void, any>({
+      query: testId => ({
+        url: `/tests/${testId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -60,4 +66,5 @@ export const {
   useGetTestExecutionArtifactsQuery,
   useAddTestMutation,
   useUpdateTestMutation,
+  useDeleteTestMutation,
 } = testsApi;

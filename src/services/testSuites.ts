@@ -35,6 +35,12 @@ export const testSuitesApi = createApi({
         body,
       }),
     }),
+    deleteTestSuite: builder.mutation<void, any>({
+      query: testSuiteId => ({
+        url: `/test-suites/${testSuiteId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -45,4 +51,5 @@ export const {
   useGetTestSuiteExecutionQuery,
   useGetTestSuiteDetailsQuery,
   useAddTestSuiteMutation,
+  useDeleteTestSuiteMutation,
 } = testSuitesApi;

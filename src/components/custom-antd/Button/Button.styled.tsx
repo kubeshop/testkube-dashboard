@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 
 export interface ICustomButtonProps extends AntdButtonProps {
-  customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent';
+  customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'warning';
 }
 
 const buttomTypesStyles: {[key: string]: string} = {
@@ -55,6 +55,18 @@ const buttomTypesStyles: {[key: string]: string} = {
       color: ${Colors.slate50};
       border-color: transparent;
       background: rgba(255, 255, 255, 0.03);
+    }
+  `,
+  warning: `
+    color: ${Colors.whitePure};
+    border-color: transparent;
+    background: ${Colors.pink600};
+    &:focus,
+    &:hover,
+    &:active {
+      color: ${Colors.whitePure};
+      border-color: ${Colors.pink600};
+      background: transparent;
     }
   `,
 };

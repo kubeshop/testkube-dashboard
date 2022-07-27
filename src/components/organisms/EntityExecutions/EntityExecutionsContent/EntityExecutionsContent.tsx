@@ -14,6 +14,7 @@ import {TestRunnerIcon} from '@src/components/atoms';
 
 import {EntityExecutionsContext} from '../EntityExecutionsContainer/EntityExecutionsContainer';
 import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper} from './EntityExecutionsContent.styled';
+import Settings from './Settings';
 import TableRow from './TableRow';
 
 const EntityExecutionsContent: React.FC = () => {
@@ -147,6 +148,15 @@ const EntityExecutionsContent: React.FC = () => {
               })}
             />
           )}
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 2" key="2">
+          dasdsada
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 3" key="3">
+          Content of Tab Pane 3
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Settings" key="Settings">
+          <Settings />
         </Tabs.TabPane>
       </Tabs>
     </div>

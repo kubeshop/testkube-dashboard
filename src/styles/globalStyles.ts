@@ -83,6 +83,9 @@ export const GlobalStyle = createGlobalStyle`
     
     overflow: unset;
   }
+  .ant-notification-notice {
+    padding-bottom: 24px;
+  }
 
   @keyframes spin {
     from {
