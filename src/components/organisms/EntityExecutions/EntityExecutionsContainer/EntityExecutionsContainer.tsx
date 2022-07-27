@@ -115,6 +115,8 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
       } else {
         onRowSelect(neededExecution, false);
       }
+    } else {
+      selectRow(undefined);
     }
   }, [executions, pathname]);
 
