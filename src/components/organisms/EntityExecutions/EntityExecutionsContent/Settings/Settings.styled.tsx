@@ -8,6 +8,8 @@ export const StyledTabContentContatner = styled.div`
 `;
 
 export const StyledSettingsContainer = styled.div`
+  position: relative;
+
   display: flex;
   flex-direction: row;
   align-items: flex-start;

@@ -77,7 +77,7 @@ const NameNDescription: React.FC = () => {
       <Form form={form} onFinish={onSave} name="general-settings-name-description" initialValues={{name, description}}>
         <Space size={32} direction="vertical" style={{width: '100%'}}>
           <Form.Item name="name" rules={[required]} style={{marginBottom: '0px'}}>
-            <Input placeholder="Name" />
+            <Input placeholder="Name" disabled />
           </Form.Item>
           <Form.Item name="description" style={{marginBottom: '0px'}}>
             <TextArea placeholder="Description" autoSize={{minRows: 2, maxRows: 3}} />

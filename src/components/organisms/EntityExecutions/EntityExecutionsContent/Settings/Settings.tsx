@@ -4,7 +4,7 @@ import {StyledSettingsContainer, StyledTabContentContatner} from './Settings.sty
 import General from './SettingsGeneral';
 import SettingsNavigation from './SettingsNavigation';
 
-const Settings: React.FC = props => {
+const Settings: React.FC = () => {
   const [selectedSettingsTab, setSelectedSettingsTab] = useState(0);
 
   const subTabsMap = [<General />];

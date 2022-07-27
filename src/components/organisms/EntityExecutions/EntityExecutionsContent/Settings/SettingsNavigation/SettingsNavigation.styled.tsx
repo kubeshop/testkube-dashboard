@@ -5,6 +5,9 @@ export const StyledNavigationOptionContainer = styled.div`
 `;
 
 export const StyledNavigationContatner = styled.div`
+  position: sticky;
+  top: 40px;
+
   display: flex;
   flex-direction: column;
   gap: 16px;
