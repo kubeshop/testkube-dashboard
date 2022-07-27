@@ -149,12 +149,6 @@ const EntityExecutionsContent: React.FC = () => {
             />
           )}
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Tab 2" key="2">
-          dasdsada
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Tab 3" key="3">
-          Content of Tab Pane 3
-        </Tabs.TabPane>
         <Tabs.TabPane tab="Settings" key="Settings">
           <Settings />
         </Tabs.TabPane>
