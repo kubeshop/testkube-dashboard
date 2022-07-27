@@ -8,7 +8,7 @@ export const testSuiteExecutionsApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTestSuiteExecutionsByTestId: builder.query({
-      query: id => `/test-suites/${id}/executions`,
+      query: id => `/test-suite-executions?id=${id}`,
       transformResponse: (response: any, meta, arg) => {
         const {results, ...rest} = response;
 
