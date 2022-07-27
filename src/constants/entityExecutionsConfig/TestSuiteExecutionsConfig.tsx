@@ -7,6 +7,7 @@ const TestSuiteExecutionsConfig: EntityExecutionsBlueprint = {
   entity: 'test-suites',
   useGetExecutions: useGetTestSuiteExecutionsByTestIdQuery,
   useGetEntityDetails: useGetTestSuiteDetailsQuery,
+  defaultStackRoute: '/test-suites',
 };
 
 export default TestSuiteExecutionsConfig;

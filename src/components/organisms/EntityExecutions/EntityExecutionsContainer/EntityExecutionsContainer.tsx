@@ -24,6 +24,7 @@ export const EntityExecutionsContext = createContext<{
   unselectRow: () => void;
   id?: string;
   execId?: string;
+  defaultStackRoute: string;
 }>({
   executionsList: {},
   entityDetails: {},
@@ -35,10 +36,11 @@ export const EntityExecutionsContext = createContext<{
   unselectRow: () => {},
   id: undefined,
   execId: undefined,
+  defaultStackRoute: '',
 });
 
 const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => {
-  const {entity, useGetExecutions, useGetEntityDetails} = props;
+  const {entity, useGetExecutions, useGetEntityDetails, defaultStackRoute} = props;
 
   const {navigate, location} = useContext(MainContext);
   const {pathname} = location;
@@ -98,6 +100,7 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
     unselectRow,
     id,
     execId,
+    defaultStackRoute,
   };
 
   useEffect(() => {

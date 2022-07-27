@@ -4,13 +4,15 @@ import {Table, Tabs} from 'antd';
 
 import axios from 'axios';
 
+import {TestRunnerIcon} from '@atoms';
+
 import {Button, Text, Title} from '@custom-antd';
 
 import {LabelsList} from '@molecules';
 
 import Colors from '@styles/Colors';
 
-import {TestRunnerIcon} from '@src/components/atoms';
+import {MainContext} from '@contexts';
 
 import {EntityExecutionsContext} from '../EntityExecutionsContainer/EntityExecutionsContainer';
 import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper} from './EntityExecutionsContent.styled';
@@ -18,8 +20,9 @@ import Settings from './Settings';
 import TableRow from './TableRow';
 
 const EntityExecutionsContent: React.FC = () => {
-  const {entity, entityDetails, executionsList, onRowSelect, isRowSelected} = useContext(EntityExecutionsContext);
-  console.log('executionsList: ', executionsList);
+  const {entity, entityDetails, executionsList, onRowSelect, isRowSelected, defaultStackRoute} =
+    useContext(EntityExecutionsContext);
+  const {navigate} = useContext(MainContext);
 
   const name = entityDetails?.name;
   const description = entityDetails?.description;
@@ -79,7 +82,7 @@ const EntityExecutionsContent: React.FC = () => {
       }}
     >
       <StyledPageHeader
-        onBack={() => window.history.back()}
+        onBack={() => navigate(defaultStackRoute)}
         title={name}
         subTitle={labels ? <LabelsList labels={entityDetails?.labels} /> : ''}
         extra={[

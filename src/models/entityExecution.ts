@@ -14,4 +14,5 @@ export type EntityExecutionsBlueprint = {
   useGetEntityDetails: UseQuery<QueryDefinition<any, any, any, any, any>>;
   setExecutions?: any;
   selectExecutions?: any;
+  defaultStackRoute: string;
 };
