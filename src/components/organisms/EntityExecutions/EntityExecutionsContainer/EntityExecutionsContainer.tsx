@@ -16,21 +16,25 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 export const EntityExecutionsContext = createContext<{
   executionsList: any;
   entityDetails: any;
-  entity?: Entity;
+  entity: Entity;
   onRowSelect: (dataItem: any, isManual?: boolean) => void;
   selectRow: React.Dispatch<React.SetStateAction<undefined>>;
   isRowSelected: boolean;
   selectedRow?: any;
   unselectRow: () => void;
+  id?: string;
+  execId?: string;
 }>({
   executionsList: {},
   entityDetails: {},
-  entity: undefined,
+  entity: 'tests',
   onRowSelect: () => {},
   isRowSelected: false,
   selectedRow: undefined,
   selectRow: () => {},
   unselectRow: () => {},
+  id: undefined,
+  execId: undefined,
 });
 
 const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => {
@@ -92,6 +96,8 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
     selectedRow,
     selectRow,
     unselectRow,
+    id,
+    execId,
   };
 
   useEffect(() => {

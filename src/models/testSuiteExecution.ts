@@ -5,12 +5,12 @@ import {ObjectRef} from '@models/objectRef';
 export type TestSuiteExecution = {
   id: string;
   name: string;
-  testSuite?: ObjectRef;
+  testSuite: ObjectRef;
   status?: ExecutionStatusEnum;
   envs?: EntityMap;
   params?: EntityMap;
-  startTime?: string;
-  endTime?: string;
+  startTime: Date;
+  endTime: Date;
   duration?: string;
   labels?: EntityMap;
 };

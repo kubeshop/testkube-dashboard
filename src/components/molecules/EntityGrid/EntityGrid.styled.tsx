@@ -45,6 +45,10 @@ export const ItemRow = styled.div<{$flex: number}>`
   align-items: center;
   flex: ${({$flex}) => $flex};
   justify-content: space-between;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
 `;
 
 export const ItemColumn = styled.div`

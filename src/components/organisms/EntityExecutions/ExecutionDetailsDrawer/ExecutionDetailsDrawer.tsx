@@ -1,10 +1,15 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useContext} from 'react';
+
+import {motion} from 'framer-motion';
 
 import {StatusIcon} from '@atoms';
 
 import {Text, Title} from '@custom-antd';
 
 import Colors from '@styles/Colors';
+
+import ExecutionDetails from '@src/components/molecules/ExecutionDetails';
 
 import {EntityExecutionsContext} from '../EntityExecutionsContainer/EntityExecutionsContainer';
 import {DetailsWrapper, ItemColumn} from '../EntityExecutionsContent/EntityExecutionsContent.styled';
@@ -19,33 +24,10 @@ const ExecutionDetailsDrawer: React.FC = () => {
       onClick={() => {
         unselectRow();
       }}
+      animate={{width: isRowSelected ? '40%' : '0px'}}
+      transition={{type: 'just'}}
     >
-      {selectedRow ? (
-        <>
-          <DrawerHeader>
-            <StatusIcon status={selectedRow?.status} />
-            <DetailsWrapper>
-              <ItemRow $flex={1}>
-                <ItemColumn>
-                  <Title ellipsis>{selectedRow?.name}</Title>
-                </ItemColumn>
-                <ItemColumn />
-              </ItemRow>
-              <ItemRow $flex={1}>
-                <ItemColumn>
-                  <Text className="regular small" color={Colors.slate400}>
-                    dsadsa
-                  </Text>
-                  <Text className="regular small" color={Colors.slate400}>
-                    manual
-                  </Text>
-                </ItemColumn>
-              </ItemRow>
-            </DetailsWrapper>
-          </DrawerHeader>
-          <DrawerContent>width</DrawerContent>
-        </>
-      ) : null}
+      {selectedRow ? <ExecutionDetails /> : null}
     </ExecutionDetailsDrawerWrapper>
   );
 };

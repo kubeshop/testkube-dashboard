@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 import {Args} from '@models/args';
 import {AssertionResult} from '@models/assertionResult';
 import {EntityMap} from '@models/entityMap';
@@ -37,9 +35,10 @@ export type Execution = {
   params: EntityMap;
   paramsFile: string;
   content: TestContent;
-  startTime: moment.MomentInput;
-  endTime: moment.MomentInput;
+  startTime: Date;
+  endTime: Date;
   duration: string;
   executionResult: ExecutionResult;
   labels: EntityMap;
+  number: number;
 };

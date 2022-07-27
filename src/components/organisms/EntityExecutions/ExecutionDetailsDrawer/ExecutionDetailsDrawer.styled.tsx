@@ -1,3 +1,4 @@
+import {motion} from 'framer-motion';
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
@@ -6,22 +7,21 @@ export const getInfoPanelFlexProperty = (conditions: any) => {
   const {$isRowSelected} = conditions;
 
   if ($isRowSelected) {
-    return '0 0 400px';
+    return '0 0 40%';
   }
 
   return '0 0 0';
 };
 
-export const ExecutionDetailsDrawerWrapper = styled.div<{$isRowSelected: boolean}>`
+export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected: boolean}>`
   position: relative;
   overflow: hidden;
 
   display: flex;
   flex-direction: column;
-  flex: ${props => getInfoPanelFlexProperty(props)};
+  // flex: ${props => getInfoPanelFlexProperty(props)};
 
-  max-width: 35%;
-
+  // min-width: ${props => (props.$isRowSelected ? '400px' : '0px')};
   height: 100%;
   padding: ${({$isRowSelected}) => ($isRowSelected ? '45px 30px' : '0')};
 

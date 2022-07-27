@@ -1,6 +1,6 @@
 import {FilterType} from '@models/filters';
 
-export const executionDateFormat = 'DD MMM, YYYY hh:mm:ss';
+export const executionDateFormat = 'MMM d, p';
 
 export const githubUriRegex = /.+\.git$/;
 

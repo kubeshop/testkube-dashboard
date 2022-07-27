@@ -12,9 +12,12 @@ import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './EntityExecutio
 
 const TableRow: React.FC<{data: any}> = props => {
   const {data} = props;
-  const {status, index, duration, startTime, name} = data;
+  const {status, index, duration, startTime, endTime, name} = data;
 
-  const executionDuration = status === 'running' ? 'running' : duration;
+  const executionDuration =
+    status === 'running'
+      ? 'running'
+      : constructExecutedString(intervalToDuration({start: new Date(startTime), end: new Date(endTime)}));
   const executedTime = constructExecutedString(intervalToDuration({start: new Date(startTime || ''), end: new Date()}));
 
   return (

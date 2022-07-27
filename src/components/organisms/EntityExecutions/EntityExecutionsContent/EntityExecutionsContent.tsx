@@ -18,6 +18,7 @@ import TableRow from './TableRow';
 
 const EntityExecutionsContent: React.FC = () => {
   const {entity, entityDetails, executionsList, onRowSelect, isRowSelected} = useContext(EntityExecutionsContext);
+  console.log('executionsList: ', executionsList);
 
   const name = entityDetails?.name;
   const description = entityDetails?.description;
@@ -25,6 +26,10 @@ const EntityExecutionsContent: React.FC = () => {
   const type = entityDetails?.type;
 
   const failedExecutionsListNumber = useMemo(() => {
+    if (!executionsList?.results.length) {
+      return '-';
+    }
+
     let number = 0;
 
     executionsList?.results.forEach((item: any) => {
@@ -91,7 +96,7 @@ const EntityExecutionsContent: React.FC = () => {
         ) : null}
       </StyledPageHeader>
       <SummaryGridWrapper $gridCols={isRowSelected ? 2 : 5}>
-        <SummaryGridItem>
+        {/* <SummaryGridItem>
           <Text className="uppercase middle" color={Colors.slate500}>
             reliability
           </Text>
@@ -108,7 +113,7 @@ const EntityExecutionsContent: React.FC = () => {
             execution duration (p95)
           </Text>
           <Title level={3}>TBD</Title>
-        </SummaryGridItem>
+        </SummaryGridItem> */}
         <SummaryGridItem>
           <Text className="uppercase middle" color={Colors.slate500}>
             failed executions
@@ -142,12 +147,6 @@ const EntityExecutionsContent: React.FC = () => {
               })}
             />
           )}
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Tab 2" key="2">
-          dasdsada
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Tab 3" key="3">
-          Content of Tab Pane 3
         </Tabs.TabPane>
       </Tabs>
     </div>
