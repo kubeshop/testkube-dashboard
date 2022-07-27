@@ -1,17 +1,21 @@
+import {Text, Title} from '@custom-antd';
+
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 
 import {ReactComponent as WizardHintImage} from '@assets/wizardHint.svg';
 
-import {StyledWizardButton, StyledWizardHintContainer, WizardHintText} from '../../Wizard.styled';
+import Colors from '@styles/Colors';
+
+import {StyledWizardButton, StyledWizardHintContainer} from '../../Wizard.styled';
 
 const FirstStepHint = (
   <StyledWizardHintContainer>
     <WizardHintImage />
-    <WizardHintText>Don’t see your test type listed?</WizardHintText>
-    <WizardHintText fontWeight={300} fontSize={14}>
-      Add an executor using our Testkube template.
-    </WizardHintText>
-    <StyledWizardButton onClick={openCustomExecutorDocumentation}>Here is how!</StyledWizardButton>
+    <Title level={3}>Missing a test type?</Title>
+    <Text className="regular middle" color={Colors.slate200}>
+      Add test types through testkube executors.
+    </Text>
+    <StyledWizardButton onClick={openCustomExecutorDocumentation}>Learn how</StyledWizardButton>
   </StyledWizardHintContainer>
 );
 

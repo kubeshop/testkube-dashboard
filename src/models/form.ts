@@ -6,7 +6,7 @@ export type Option = {
 };
 
 export type FormItem = {
-  itemLabel: string;
+  itemLabel?: string;
   tooltip?: string;
   fieldName: string;
   inputType: 'select' | 'radio' | 'default' | 'uploadWithInput' | 'textarea' | 'variables';
@@ -14,4 +14,5 @@ export type FormItem = {
   options?: Option[];
   modificator?: 'password';
   help?: string;
+  placeholder?: string;
 };

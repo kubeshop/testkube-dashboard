@@ -1,6 +1,6 @@
 import {createGlobalStyle} from 'styled-components';
 
-import {BackgroundColors} from '@styles/Colors';
+import Colors, {BackgroundColors} from '@styles/Colors';
 
 export const invisibleScroll = `
 &::-webkit-scrollbar {
@@ -93,6 +93,36 @@ export const GlobalStyle = createGlobalStyle`
     }
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  // Tabs 
+
+  .ant-tabs {
+    color: ${Colors.slate400};
+    
+    // font-size: 14px;
+    font-weight: 500;
+
+    .ant-tabs-nav {
+      &::before {
+        border-bottom: unset !important;
+      }
+    }
+  }
+
+  // Select
+
+  .ant-select-arrow {
+    color: ${Colors.slate500};
+  }
+
+  // Input
+  .ant-input-password-icon.anticon {
+    color: ${Colors.slate500};
+
+    &:hover {
+      color: ${Colors.slate500};
     }
   }
 `;

@@ -1,5 +1,6 @@
 import {ModalConfigProps} from '@models/modal';
 
+import TestCreationModalContent from './TestCreationModalContent';
 import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
 export const TestSuiteModalConfig: ModalConfigProps = {
@@ -12,6 +13,6 @@ export const TestSuiteModalConfig: ModalConfigProps = {
 export const TestModalConfig: ModalConfigProps = {
   title: 'Create a test',
   footer: null,
-  width: 887,
-  content: <div>ASasdasdasd</div>,
+  width: 880,
+  content: <TestCreationModalContent />,
 };

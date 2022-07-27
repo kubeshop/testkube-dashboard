@@ -1,5 +1,7 @@
 import {FormItem} from '@custom-antd';
 
+import {StyledFormSpace} from '@organisms/EntityList/EntityCreationModal/CreationModal.styled';
+
 import {renderFormItems} from '@utils/form';
 
 import {
@@ -21,7 +23,7 @@ const FirstStep: React.FC<any> = props => {
   const {onFileChange} = props;
 
   return (
-    <>
+    <StyledFormSpace size={24} direction="vertical">
       {renderFormItems(addTestFormStructure)}
       <FormItem
         noStyle
@@ -31,11 +33,15 @@ const FirstStep: React.FC<any> = props => {
           const testSourceValue = getFieldValue('testSource');
 
           if (testSourceValue) {
-            return renderFormItems(additionalFields[testSourceValue], {onFileChange});
+            return (
+              <StyledFormSpace size={24} direction="vertical">
+                {renderFormItems(additionalFields[testSourceValue], {onFileChange})}
+              </StyledFormSpace>
+            );
           }
         }}
       </FormItem>
-    </>
+    </StyledFormSpace>
   );
 };
 

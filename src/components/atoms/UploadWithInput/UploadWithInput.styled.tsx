@@ -5,6 +5,8 @@ import Colors from '@styles/Colors';
 export const StyledUploadWithInputContainer = styled.div`
   display: flex;
 
+  width: 100%;
+
   span {
     .ant-upload {
       button {

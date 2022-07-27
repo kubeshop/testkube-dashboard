@@ -17,15 +17,13 @@ export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 
 export const addTestFormStructure: FormItem[] = [
   {
-    itemLabel: 'Name',
     tooltip: 'Enter the name of the test you wish to add.',
     rules: [required],
     fieldName: 'name',
     inputType: 'default',
-    help: 'Example: test-script-git',
+    placeholder: 'Name',
   },
   {
-    itemLabel: 'Type',
     tooltip:
       'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
     fieldName: 'testType',
@@ -57,102 +55,98 @@ export const addTestFormStructure: FormItem[] = [
         label: 'Artillery',
       },
     ],
+    placeholder: 'Type',
   },
   {
-    itemLabel: 'Source',
     tooltip:
       'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
     rules: [required],
     fieldName: 'testSource',
-    inputType: 'radio',
+    inputType: 'select',
     options: [
       {value: 'git-dir', label: 'Git directory'},
       {value: 'git-file', label: 'Git file'},
       {value: 'file-uri', label: 'File'},
       {value: 'string', label: 'String'},
     ],
+    placeholder: 'Source',
   },
 ];
 
 export const gitDirFormFields: FormItem[] = [
   {
-    itemLabel: 'Personal Access Token',
     tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
+    placeholder: 'Token',
   },
   {
-    itemLabel: 'Git URI',
     rules: [required, url],
     fieldName: 'uri',
     inputType: 'default',
-    help: 'Example: https://github.com/kubeshop/testkube-example.git',
+    placeholder: 'URI',
   },
   {
-    itemLabel: 'Branch Specifier',
     tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
     inputType: 'default',
+    placeholder: 'Branch',
   },
   {
-    itemLabel: 'Repository Path',
     fieldName: 'path',
     inputType: 'default',
-    help: 'Example: test-directory',
+    placeholder: 'Path',
   },
 ];
 
 export const gitFileFormFields: FormItem[] = [
   {
-    itemLabel: 'Personal Access Token',
     tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
+    placeholder: 'Token',
   },
   {
-    itemLabel: 'Git URI',
     rules: [required, url],
     fieldName: 'uri',
     inputType: 'default',
-    help: 'Example: https://github.com/kubeshop/testkube-example.git',
+    placeholder: 'URI',
   },
   {
-    itemLabel: 'Branch Specifier',
     tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
     inputType: 'default',
+    placeholder: 'Branch',
   },
   {
-    itemLabel: 'Repository Path',
     fieldName: 'path',
     inputType: 'default',
-    help: 'Example: test-directory',
+    placeholder: 'Path',
   },
 ];
 
 export const fileContentFormFields: FormItem[] = [
   {
-    itemLabel: 'Select file',
     rules: [required],
     fieldName: 'file',
     inputType: 'uploadWithInput',
+    placeholder: 'File',
   },
 ];
 
 export const stringContentFormFields: FormItem[] = [
   {
-    itemLabel: 'Enter string',
     rules: [required],
     fieldName: 'string',
     inputType: 'textarea',
+    placeholder: 'String',
   },
 ];
 
 export const secondStepFormFields: FormItem[] = [
   {
-    itemLabel: 'Variables',
     rules: [required],
     fieldName: 'variables',
     inputType: 'variables',
