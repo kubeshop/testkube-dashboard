@@ -12,6 +12,7 @@ export const StyledCopyCommandContainer = styled.div<{isHovered: boolean}>`
   padding: 10px 15px;
 
   background-color: ${Colors.slate900};
+  border-radius: 4px;
 
   cursor: pointer;
 

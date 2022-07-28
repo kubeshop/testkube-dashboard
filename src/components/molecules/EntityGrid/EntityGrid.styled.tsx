@@ -8,8 +8,6 @@ export const StyledEntityGrid = styled.div`
   gap: 32px;
 
   margin-top: 20px;
-
-  overflow: auto;
 `;
 
 export const ItemWrapper = styled.div`
