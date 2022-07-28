@@ -13,10 +13,10 @@ import {Button, Modal, Text, Title} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
-// import {ReactComponent as K6Icon} from '@assets/k6Icon.svg';
 import {useGetAllTestsQuery} from '@services/tests';
 
-import {EntityExecutionsContext} from '../../../EntityExecutionsContainer/EntityExecutionsContainer';
+import {EntityExecutionsContext} from '@contexts';
+
 import {EmptyTestsContainer, StyledDelayModalContent, StyledOptionWrapper} from './SettingsTests.styled';
 
 const {Option} = Select;

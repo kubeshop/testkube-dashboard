@@ -2,7 +2,8 @@ import React, {useContext, useMemo, useState} from 'react';
 
 import {Entity} from '@models/entity';
 
-import {EntityExecutionsContext} from '../../EntityExecutionsContainer/EntityExecutionsContainer';
+import {EntityExecutionsContext} from '@contexts';
+
 import {StyledSettingsContainer, StyledTabContentContatner} from './Settings.styled';
 import General from './SettingsGeneral';
 import SettingsNavigation from './SettingsNavigation';
