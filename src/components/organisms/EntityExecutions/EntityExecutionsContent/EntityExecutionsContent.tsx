@@ -74,7 +74,7 @@ const EntityExecutionsContent: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: '40px',
-        overflow: 'hidden',
+        // overflow: 'hidden',
         height: '100%',
         flex: 1,
         padding: 40,

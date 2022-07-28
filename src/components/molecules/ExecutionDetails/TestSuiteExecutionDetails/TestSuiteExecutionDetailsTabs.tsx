@@ -5,7 +5,7 @@ import {
 } from '../ExecutionDetails.styled';
 import TestSuiteExecutionDetailsAllSteps from './TestSuiteExecutionDetailsAllSteps';
 
-const TestSuiteExecutionDetailsTabs = () => {
+const TestSuiteExecutionDetailsTabs: React.FC = () => {
   return (
     <StyledTestSuiteExecutionDetailsTabsContainer>
       <StyledAntTabs>

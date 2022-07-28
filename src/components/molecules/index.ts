@@ -23,3 +23,4 @@ export {default as EndpointModal} from './EndpointModal';
 export {default as ConfigurationCard} from './ConfigurationCard';
 export {default as ExecutionDetails} from './ExecutionDetails';
 export {default as DragNDropList} from './DragNDropList';
+export {default as ArtifactsList} from './ArtifactsList';

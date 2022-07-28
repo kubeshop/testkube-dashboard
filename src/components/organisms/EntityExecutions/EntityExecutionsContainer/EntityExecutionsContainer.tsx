@@ -95,7 +95,7 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
 
   return (
     <EntityExecutionsContext.Provider value={entityExecutionsContextValues}>
-      <div style={{display: 'flex', height: '100%'}}>
+      <div style={{display: 'flex', height: '100%', overflow: 'hidden'}}>
         <EntityExecutionsContent />
         <ExecutionDetailsDrawer />
       </div>

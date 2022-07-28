@@ -79,9 +79,13 @@ export const StyledLogOutputActionsContainer = styled.ul`
   display: flex;
   justify-content: flex-end;
   flex: 1;
+
+  margin: 0;
+
+  list-style-type: none;
 `;
 
-export const StyledLogOutputHeaderContainer = styled.ul`
+export const StyledLogOutputHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
 

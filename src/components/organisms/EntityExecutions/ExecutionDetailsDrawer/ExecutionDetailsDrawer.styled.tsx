@@ -15,7 +15,7 @@ export const getInfoPanelFlexProperty = (conditions: any) => {
 
 export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected: boolean}>`
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
 
   display: flex;
   flex-direction: column;

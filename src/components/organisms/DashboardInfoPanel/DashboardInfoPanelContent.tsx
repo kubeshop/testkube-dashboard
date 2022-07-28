@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useContext, useEffect, useState} from 'react';
 
 import {Tabs} from 'antd';
@@ -232,9 +233,9 @@ const DashboardInfoPanelContent = () => {
               </Skeleton>
             </StyledInfoPanelSection>
           </TabPane>
-          <TabPane tab="CLI Commands" key="CLICommandsPane">
+          {/* <TabPane tab="CLI Commands" key="CLICommandsPane">
             <CLICommands />
-          </TabPane>
+          </TabPane> */}
           <TabPane tab="Definition" key="ExecutionDefinitionPane">
             <ExecutionDefinition />
           </TabPane>

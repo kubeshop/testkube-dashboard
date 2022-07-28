@@ -82,7 +82,7 @@ const Variables: React.FC<VariablesProps> = props => {
   return (
     <StyledInfoPanelSection>
       {isExecutions ? (
-        <ExecutionsVariablesList data={executionVariables} />
+        <ExecutionsVariablesList variables={executionVariables} />
       ) : (
         <>
           {descriptionTextComponents[entityType]}

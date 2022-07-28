@@ -83,9 +83,8 @@ export const GlobalStyle = createGlobalStyle`
     
     overflow: unset;
   }
-  .ant-notification-notice {
-    padding-bottom: 24px;
-  }
+
+  
 
   @keyframes spin {
     from {
@@ -118,10 +117,21 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   // Input
+
   .ant-input-password-icon.anticon {
     color: ${Colors.slate500};
 
     &:hover {
+      color: ${Colors.slate500};
+    }
+  }
+
+  // Notification 
+  
+  .ant-notification-notice {
+    padding-bottom: 24px;
+
+    .ant-notification-notice-close-x {
       color: ${Colors.slate500};
     }
   }

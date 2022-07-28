@@ -6,87 +6,85 @@ import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 
 import {Variable} from '@models/variable';
 
-import {
-  ReadOnlyVariableRow,
-  StyledReadOnlyLabel,
-  StyledReadOnlyVariableLabel,
-  StyledText,
-  VariablesListContainer,
-} from './ExecutionsVariablesList.styled';
+import {Text} from '@custom-antd';
+
+import Colors from '@styles/Colors';
+
+import {VariablesListContainer} from './ExecutionsVariablesList.styled';
 
 type ExecutionsVariablesListProps = {
-  data: Variable[];
+  variables: Variable[];
 };
 
 const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props => {
-  const {data} = props;
+  const {variables} = props;
 
-  const [secretValuesVisibility, setSecretValuesVisibility] = useState(Array(data.length).fill(false));
+  const [secretValuesVisibility, setSecretValuesVisibility] = useState(Array(variables.length).fill(false));
+
+  const textColor = Colors.slate400;
 
   useEffect(() => {
-    setSecretValuesVisibility(Array(data.length).fill(false));
-  }, [data]);
+    setSecretValuesVisibility(Array(variables.length).fill(false));
+  }, [variables]);
 
   return (
     <VariablesListContainer>
-      <ReadOnlyVariableRow>
-        <StyledReadOnlyLabel>Key:</StyledReadOnlyLabel>
-        <StyledReadOnlyLabel>Value:</StyledReadOnlyLabel>
-      </ReadOnlyVariableRow>
-      {data.map((item, index) => (
-        <ReadOnlyVariableRow>
-          <StyledReadOnlyVariableLabel>
-            <Popover content={item.key} placement="top" arrowPointAtCenter>
-              <StyledText>{item.key}</StyledText>
+      <Text>Key</Text>
+      <Text>Value</Text>
+      {variables.map((item, index) => {
+        return (
+          <>
+            <Popover content={item.key} placement="topLeft">
+              <Text ellipsis color={textColor}>
+                {item.key}
+              </Text>
             </Popover>
-          </StyledReadOnlyVariableLabel>
-          {item.type === 0 ? (
-            <StyledReadOnlyVariableLabel>
-              <Popover content={item.value} placement="topLeft" arrowPointAtCenter>
-                <StyledText>{item.value}</StyledText>
+            {item.type === 0 ? (
+              <Popover content={item.value} placement="topLeft">
+                <Text ellipsis color={textColor}>
+                  {item.value}
+                </Text>
               </Popover>
-            </StyledReadOnlyVariableLabel>
-          ) : (
-            <StyledReadOnlyVariableLabel>
-              {secretValuesVisibility[index] ? (
-                <>
-                  <Popover content={item.value} placement="topLeft" arrowPointAtCenter>
-                    <StyledText>{item.value}</StyledText>
-                  </Popover>
-                  <EyeInvisibleOutlined
-                    onClick={() =>
-                      setSecretValuesVisibility([
-                        ...secretValuesVisibility.slice(0, index),
-                        false,
-                        ...secretValuesVisibility.slice(index + 1),
-                      ])
-                    }
-                  />
-                </>
-              ) : (
-                <>
-                  &bull;&bull;&bull;&bull;&bull;
-                  <EyeOutlined
-                    onClick={() =>
-                      setSecretValuesVisibility([
-                        ...secretValuesVisibility.slice(0, index),
-                        true,
-                        ...secretValuesVisibility.slice(index + 1),
-                      ])
-                    }
-                  />
-                </>
-              )}
-            </StyledReadOnlyVariableLabel>
-          )}
-        </ReadOnlyVariableRow>
-      ))}
+            ) : secretValuesVisibility[index] ? (
+              <div>
+                <Popover content={item.value} placement="topLeft" popupVisible={secretValuesVisibility[index]}>
+                  <Text ellipsis color={textColor}>
+                    {item.value}
+                  </Text>
+                </Popover>
+                <EyeInvisibleOutlined
+                  onClick={() =>
+                    setSecretValuesVisibility([
+                      ...secretValuesVisibility.slice(0, index),
+                      false,
+                      ...secretValuesVisibility.slice(index + 1),
+                    ])
+                  }
+                />
+              </div>
+            ) : (
+              <div>
+                <Text color={textColor}>&bull;&bull;&bull;&bull;&bull;</Text>
+                <EyeOutlined
+                  onClick={() =>
+                    setSecretValuesVisibility([
+                      ...secretValuesVisibility.slice(0, index),
+                      true,
+                      ...secretValuesVisibility.slice(index + 1),
+                    ])
+                  }
+                />
+              </div>
+            )}
+          </>
+        );
+      })}
     </VariablesListContainer>
   );
 };
 
 const arePropsEqual = (prevProps: ExecutionsVariablesListProps, nextProps: ExecutionsVariablesListProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return JSON.stringify(prevProps.variables) === JSON.stringify(nextProps.variables);
 };
 
 export default memo(ExecutionsVariablesList, arePropsEqual);

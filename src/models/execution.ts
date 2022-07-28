@@ -3,6 +3,7 @@ import {AssertionResult} from '@models/assertionResult';
 import {EntityMap} from '@models/entityMap';
 import {TestContent} from '@models/test';
 import {TestExecutor} from '@models/testExecutors';
+import {Variables} from '@models/variable';
 
 export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued' | 'cancelled';
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
@@ -41,4 +42,5 @@ export type Execution = {
   executionResult: ExecutionResult;
   labels: EntityMap;
   number: number;
+  variables?: Variables;
 };

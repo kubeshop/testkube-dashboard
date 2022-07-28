@@ -8,9 +8,10 @@ export const StyledCopyCommandContainer = styled.div<{isHovered: boolean}>`
   display: flex;
   justify-content: space-between;
 
+  margin-top: 5px;
   padding: 10px 15px;
 
-  background-color: ${Colors.grey1000};
+  background-color: ${Colors.slate900};
 
   cursor: pointer;
 
@@ -57,7 +58,15 @@ export const StyledCopyCommandPre = styled.pre`
 `;
 
 export const StyledCopyCommandCode = styled.code`
+  display: flex;
+  align-items: center;
+
   color: ${Colors.greyCode};
+
+  span {
+    margin-right: 5px;
+    color: ${Colors.slate500};
+  }
 `;
 
 export const StyledCopyCommandIcon = styled(CopyOutlined)``;

@@ -56,7 +56,10 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
         onClick={onCopy}
       >
         <StyledCopyCommandPre>
-          <StyledCopyCommandCode>{command}</StyledCopyCommandCode>
+          <StyledCopyCommandCode>
+            <span>$</span>
+            {command}
+          </StyledCopyCommandCode>
         </StyledCopyCommandPre>
         <Tooltip title={tooltipTitle}>
           <StyledCopyCommandIcon onClick={onCopy} />

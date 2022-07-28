@@ -1,23 +1,17 @@
-import {useContext} from 'react';
-
-import {StyledInfoPanelSection} from '@organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
+import {ArtifactsList} from '@molecules';
 
 import {useGetTestExecutionArtifactsQuery} from '@services/tests';
 
-import {DashboardInfoPanelSecondLevelContext} from '@contexts';
+type TestExecutionDetailsArtifactsProps = {
+  id: string;
+};
 
-import ArtifactsList from '../../ArtifactsList/ArtifactsList';
+const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps> = props => {
+  const {id} = props;
 
-const TestExecutionDetailsArtifacts = () => {
-  const {data} = useContext(DashboardInfoPanelSecondLevelContext);
+  const {data: artifactsData} = useGetTestExecutionArtifactsQuery(id);
 
-  const {data: artifactsData} = useGetTestExecutionArtifactsQuery(data.id);
-
-  return (
-    <StyledInfoPanelSection>
-      {artifactsData ? <ArtifactsList artifacts={artifactsData} testExecutionId={data.id} /> : null}
-    </StyledInfoPanelSection>
-  );
+  return artifactsData ? <ArtifactsList artifacts={artifactsData} testExecutionId={id} /> : null;
 };
 
 export default TestExecutionDetailsArtifacts;

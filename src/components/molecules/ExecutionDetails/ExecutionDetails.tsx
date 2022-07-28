@@ -1,6 +1,8 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
 import React, {useContext, useEffect, useState} from 'react';
 
+import {CloseOutlined} from '@ant-design/icons';
+
 import {intervalToDuration} from 'date-fns';
 
 import {Entity} from '@models/entity';
@@ -74,7 +76,7 @@ const components: {[key in Entity]: any} = {
 };
 
 const ExecutionDetails: React.FC = () => {
-  const {entity, execId} = useContext(EntityExecutionsContext);
+  const {entity, execId, unselectRow} = useContext(EntityExecutionsContext);
 
   const [infoPanelProps, setInfoPanelProps] = useState<ExecutionDetailsOnDataChangeInterface>({
     data: null,
@@ -113,6 +115,9 @@ const ExecutionDetails: React.FC = () => {
               <ItemRow $flex={1}>
                 <ItemColumn>
                   <Title ellipsis>{name}</Title>
+                </ItemColumn>
+                <ItemColumn>
+                  <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400}} />
                 </ItemColumn>
               </ItemRow>
               <ItemRow $flex={1}>
