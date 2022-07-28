@@ -6,15 +6,14 @@ import {Entity} from '@models/entity';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {useGetLabelsQuery} from '@services/labels';
 import {useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useUpdateTestMutation} from '@services/tests';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
-
-import {EntityExecutionsContext} from '../../../EntityExecutionsContainer/EntityExecutionsContainer';
+import {EntityExecutionsContext} from '@contexts';
 
 const {Option} = Select;
 

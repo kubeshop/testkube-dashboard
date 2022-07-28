@@ -1,5 +1,5 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {intervalToDuration} from 'date-fns';
 
@@ -19,16 +19,12 @@ import {useGetTestExecutionByIdQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {ExecutionDetailsContext} from '@contexts';
+import {EntityExecutionsContext, ExecutionDetailsContext} from '@contexts';
 
-import {EntityExecutionsContext} from '@src/components/organisms/EntityExecutions/EntityExecutionsContainer/EntityExecutionsContainer';
 import {DrawerHeader} from '@src/components/organisms/EntityExecutions/ExecutionDetailsDrawer/ExecutionDetailsDrawer.styled';
 import {ExecutionDetailsOnDataChangeInterface} from '@src/contexts/ExecutionDetailsContext';
 
 import {DetailsWrapper, ItemColumn, ItemRow} from '../EntityGrid/EntityGrid.styled';
-import {StyledExecutionDetailsHeader} from './ExecutionDetails.styled';
-import ExecutionDetailsGeneralInfo from './ExecutionDetailsGeneralInfo';
-import ExecutionDetailsStatus from './ExecutionDetailsStatus';
 import TestExecutionDetailsTabs from './TestExecutionDetails/TestExecutionDetailsTabs';
 import TestSuiteExecutionDetailsTabs from './TestSuiteExecutionDetails/TestSuiteExecutionDetailsTabs';
 import {getHeaderValues} from './utils';
@@ -38,7 +34,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {execId} = useContext(EntityExecutionsContext);
 
   // @ts-ignore
-  // we have checked if id exists on <ExecutionDetails /> below
+  // we have checked if execId exists on <ExecutionDetails /> below
   const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionByIdQuery(execId, {
     pollingInterval: PollingIntervals.everySecond,
   });
@@ -55,7 +51,7 @@ const TestExecutionDetailsDataLayer: React.FC = () => {
   const {execId} = useContext(EntityExecutionsContext);
 
   // @ts-ignore
-  // we have checked if id exists on <ExecutionDetails /> below
+  // we have checked if execId exists on <ExecutionDetails /> below
   const {data, isLoading, isFetching, refetch} = useGetTestExecutionByIdQuery(execId, {
     pollingInterval: PollingIntervals.everySecond,
   });
@@ -73,7 +69,7 @@ const dataLayers: {[key in Entity]: any} = {
 };
 
 const components: {[key in Entity]: any} = {
-  'test-suites': <TestSuiteExecutionDetailsTabs />,
+  'test-suites': null, // <TestSuiteExecutionDetailsTabs />,
   tests: <TestExecutionDetailsTabs />,
 };
 
@@ -107,7 +103,7 @@ const ExecutionDetails: React.FC = () => {
   const {name, number, startedTime, finishedTime} = headerValues;
 
   return (
-    <ExecutionDetailsContext.Provider value={{onDataChange}}>
+    <ExecutionDetailsContext.Provider value={{onDataChange, data}}>
       {dataLayers[entity]}
       {data ? (
         <>
@@ -145,6 +141,7 @@ const ExecutionDetails: React.FC = () => {
               </ItemRow>
             </DetailsWrapper>
           </DrawerHeader>
+          {components[entity]}
         </>
       ) : null}
     </ExecutionDetailsContext.Provider>
@@ -152,15 +149,3 @@ const ExecutionDetails: React.FC = () => {
 };
 
 export default ExecutionDetails;
-
-// {data ? (
-//   <>
-//     <StyledInfoPanelSection isBorder={false}>
-//       <StyledExecutionDetailsHeader>
-//         <ExecutionDetailsStatus />
-//         <ExecutionDetailsGeneralInfo />
-//       </StyledExecutionDetailsHeader>
-//     </StyledInfoPanelSection>
-//     {components[entityType]}
-//   </>)}
-// : null}

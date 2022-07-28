@@ -87,7 +87,6 @@ export const StyledAntTabs = styled(Tabs)`
 
   .ant-tabs-nav-wrap {
     padding: 0 40px;
-    border-bottom: 1px solid #393939;
 
     .ant-tabs-tab {
       padding: 15px 0;

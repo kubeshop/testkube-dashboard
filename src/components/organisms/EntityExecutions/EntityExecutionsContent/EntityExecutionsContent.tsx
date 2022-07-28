@@ -12,9 +12,8 @@ import {LabelsList} from '@molecules';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {EntityExecutionsContext, MainContext} from '@contexts';
 
-import {EntityExecutionsContext} from '../EntityExecutionsContainer/EntityExecutionsContainer';
 import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper} from './EntityExecutionsContent.styled';
 import Settings from './Settings';
 import TableRow from './TableRow';

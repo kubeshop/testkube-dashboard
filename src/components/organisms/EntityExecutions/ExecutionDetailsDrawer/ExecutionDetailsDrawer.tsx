@@ -1,19 +1,10 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useContext} from 'react';
 
-import {motion} from 'framer-motion';
+import {ExecutionDetails} from '@molecules';
 
-import {StatusIcon} from '@atoms';
+import {EntityExecutionsContext} from '@contexts';
 
-import {Text, Title} from '@custom-antd';
-
-import Colors from '@styles/Colors';
-
-import ExecutionDetails from '@src/components/molecules/ExecutionDetails';
-
-import {EntityExecutionsContext} from '../EntityExecutionsContainer/EntityExecutionsContainer';
-import {DetailsWrapper, ItemColumn} from '../EntityExecutionsContent/EntityExecutionsContent.styled';
-import {DrawerContent, DrawerHeader, ExecutionDetailsDrawerWrapper, ItemRow} from './ExecutionDetailsDrawer.styled';
+import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
 
 const ExecutionDetailsDrawer: React.FC = () => {
   const {isRowSelected, selectedRow, unselectRow} = useContext(EntityExecutionsContext);

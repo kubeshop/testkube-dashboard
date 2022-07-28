@@ -1,43 +1,16 @@
-import {createContext, useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {notification} from 'antd';
 
-import {Entity} from '@models/entity';
 import {EntityExecutionsBlueprint} from '@models/entityExecution';
 
 import {PollingIntervals} from '@utils/numbers';
 
-import {MainContext} from '@src/contexts';
+import {EntityExecutionsContext, MainContext} from '@contexts';
 
 import EntityExecutionsContent from '../EntityExecutionsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
-
-export const EntityExecutionsContext = createContext<{
-  executionsList: any;
-  entityDetails: any;
-  entity: Entity;
-  onRowSelect: (dataItem: any, isManual?: boolean) => void;
-  selectRow: React.Dispatch<React.SetStateAction<undefined>>;
-  isRowSelected: boolean;
-  selectedRow?: any;
-  unselectRow: () => void;
-  id?: string;
-  execId?: string;
-  defaultStackRoute: string;
-}>({
-  executionsList: {},
-  entityDetails: {},
-  entity: 'tests',
-  onRowSelect: () => {},
-  isRowSelected: false,
-  selectedRow: undefined,
-  selectRow: () => {},
-  unselectRow: () => {},
-  id: undefined,
-  execId: undefined,
-  defaultStackRoute: '',
-});
 
 const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => {
   const {entity, useGetExecutions, useGetEntityDetails, defaultStackRoute} = props;

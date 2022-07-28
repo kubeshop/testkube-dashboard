@@ -56,5 +56,9 @@ export const constructExecutedString = (duration: Duration, countToDisplay: numb
     }
   });
 
+  if (!finishString.length) {
+    return '0s';
+  }
+
   return finishString.trim();
 };

@@ -10,12 +10,14 @@ export interface ExecutionDetailsOnDataChangeInterface {
   refetch: Function;
 }
 
-type ExecutionDetailsContextProps = {
+export type ExecutionDetailsContextProps = {
   onDataChange: (args: ExecutionDetailsOnDataChangeInterface) => void;
+  data: Nullable<Execution | TestSuiteExecution>;
 };
 
 const ExecutionDetailsContext = createContext<ExecutionDetailsContextProps>({
   onDataChange: (args: ExecutionDetailsOnDataChangeInterface) => {},
+  data: null,
 });
 
 export default ExecutionDetailsContext;

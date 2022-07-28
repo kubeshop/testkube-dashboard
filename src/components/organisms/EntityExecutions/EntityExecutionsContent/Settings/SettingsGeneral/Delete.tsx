@@ -4,16 +4,13 @@ import {Entity} from '@models/entity';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {useDeleteTestSuiteMutation} from '@services/testSuites';
 import {useDeleteTestMutation} from '@services/tests';
 
-import {MainContext} from '@contexts';
-
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
-
-import {EntityExecutionsContext} from '../../../EntityExecutionsContainer/EntityExecutionsContainer';
+import {EntityExecutionsContext, MainContext} from '@contexts';
 
 const namingMap: {[key in Entity]: string} = {
   'test-suites': 'test suite',

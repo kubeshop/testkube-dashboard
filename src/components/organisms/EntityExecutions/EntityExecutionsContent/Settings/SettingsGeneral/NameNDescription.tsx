@@ -7,14 +7,13 @@ import {Entity} from '@models/entity';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useUpdateTestMutation} from '@services/tests';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
-
-import {EntityExecutionsContext} from '../../../EntityExecutionsContainer/EntityExecutionsContainer';
+import {EntityExecutionsContext} from '@contexts';
 
 const {TextArea} = Input;
 

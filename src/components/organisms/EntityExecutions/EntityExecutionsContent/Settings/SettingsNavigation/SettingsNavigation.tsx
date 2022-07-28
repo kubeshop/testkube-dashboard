@@ -6,7 +6,8 @@ import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
-import {EntityExecutionsContext} from '../../../EntityExecutionsContainer/EntityExecutionsContainer';
+import {EntityExecutionsContext} from '@contexts';
+
 import {StyledNavigationContatner, StyledNavigationOptionContainer} from './SettingsNavigation.styled';
 
 type SettingsNavigationProps = {
@@ -22,6 +23,7 @@ const navigationOptionsConfig: {[key in Entity]: string[]} = {
 const SettingsNavigation: React.FC<SettingsNavigationProps> = props => {
   const {selectedSettingsTab, setSelectedSettingsTab} = props;
   const {entity} = useContext(EntityExecutionsContext);
+
   return (
     <StyledNavigationContatner>
       {entity
