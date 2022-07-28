@@ -27,6 +27,6 @@ export type Test = {
 };
 
 export type TestWithExecution = {
-  dataList: Test;
+  test: Test;
   latestExecution?: Execution;
 };

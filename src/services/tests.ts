@@ -13,6 +13,9 @@ export const testsApi = createApi({
     getTests: builder.query<TestWithExecution[], TestFilters>({
       query: filters => `/test-with-executions?${paramsSerializer(filters)}`,
     }),
+    getAllTests: builder.query<TestWithExecution[], void | null>({
+      query: () => `/test-with-executions`,
+    }),
     getTest: builder.query<TestWithExecution, string>({
       query: testId => `/tests/${testId}`,
     }),
@@ -61,6 +64,7 @@ export const testsApi = createApi({
 export const {
   useGetTestQuery,
   useGetTestsQuery,
+  useGetAllTestsQuery,
   useGetTestExecutionsByIdQuery,
   useGetTestExecutionByIdQuery,
   useGetTestExecutionArtifactsQuery,

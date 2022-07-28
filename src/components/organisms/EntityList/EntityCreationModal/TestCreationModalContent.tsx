@@ -1,20 +1,21 @@
 import {useContext} from 'react';
 
-import {Button, Form, notification} from 'antd';
+import {Button, Form} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 
 import {Text} from '@custom-antd';
 
+import FirstStepHint from '@wizards/AddTestWizard/hints/FirstStepHint';
+import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
 import {getTestSourceSpecificFields} from '@wizards/AddTestWizard/utils';
+
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useAddTestMutation} from '@services/tests';
 
 import {MainContext} from '@contexts';
-
-import FirstStepHint from '@src/components/wizards/AddTestWizard/hints/FirstStepHint';
-import FirstStep from '@src/components/wizards/AddTestWizard/steps/FirstStep';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
@@ -41,23 +42,7 @@ const TestCreationModalContent: React.FC = () => {
 
     return addTest(requestBody)
       .then((res: any) => {
-        if (res.error) {
-          const errorTitle = res.error?.data.title || 'Unknown error';
-          const errorDetails = res.error?.data.detail || 'Something went wrong';
-          const errorStatus = res.error?.status;
-
-          notification.error({
-            message: errorTitle,
-            description: (
-              <span>
-                Status: {errorStatus}
-                <br />
-                Details: {errorDetails}
-              </span>
-            ),
-            duration: 0,
-          });
-        } else {
+        displayDefaultNotificationFlow(res, () => {
           const targetTestName = res?.data?.metadata?.name;
 
           if (!toRun) {
@@ -65,18 +50,10 @@ const TestCreationModalContent: React.FC = () => {
 
             return navigate(`/tests/executions/${values.name}`);
           }
-
-          return targetTestName;
-        }
+        });
       })
       .catch(err => {
-        if (err instanceof Error) {
-          notification.error({
-            message: 'Unknown error',
-            description: String(err) || 'Something went wrong',
-            duration: 0,
-          });
-        }
+        displayDefaultErrorNotification(err);
       });
   };
 
