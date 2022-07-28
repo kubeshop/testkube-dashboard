@@ -24,3 +24,4 @@ export {default as ConfigurationCard} from './ConfigurationCard';
 export {default as ExecutionDetails} from './ExecutionDetails';
 export {default as DragNDropList} from './DragNDropList';
 export {default as ArtifactsList} from './ArtifactsList';
+export {default as TestSuiteStepCard} from './TestSuiteStepCard';

@@ -30,3 +30,13 @@ export const StyledDelayModalContent = styled.div`
     border-color: transparent;
   }
 `;
+
+export const StyledStepsList = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  max-height: 350px;
+  padding-right: 15px;
+
+  overflow-y: auto;
+`;

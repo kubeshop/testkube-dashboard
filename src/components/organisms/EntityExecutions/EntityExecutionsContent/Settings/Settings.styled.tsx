@@ -4,6 +4,8 @@ export const StyledTabContentContainer = styled.div`
   display: flex;
   flex-direction: column;
 
+  padding-right: 15px;
+
   flex: 5;
 `;
 

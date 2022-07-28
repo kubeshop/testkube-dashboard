@@ -1,23 +1,29 @@
-import {memo, useContext, useEffect, useState} from 'react';
+import {memo, useContext, useEffect, useMemo, useRef, useState} from 'react';
 
-import {InputNumber, Select} from 'antd';
+import {Select} from 'antd';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
+
+import {nanoid} from 'nanoid';
 
 import {TestWithExecution} from '@models/test';
 import {TestExecutor} from '@models/testExecutors';
 
 import {TestRunnerIcon} from '@atoms';
 
-import {Button, Modal, Text, Title} from '@custom-antd';
+import {Text, Title} from '@custom-antd';
 
-import {ConfigurationCard} from '@molecules';
+import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
 
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+
+import {useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 
 import {EntityExecutionsContext} from '@contexts';
 
-import {EmptyTestsContainer, StyledDelayModalContent, StyledOptionWrapper} from './SettingsTests.styled';
+import DelayModal from './DelayModal';
+import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './SettingsTests.styled';
 
 const {Option} = Select;
 
@@ -27,37 +33,112 @@ const SettingsTests = () => {
 
   const [currentSteps, setCurrentSteps] = useState(steps);
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
-  const [delayValue, setDelayValue] = useState<string | undefined>(undefined);
+
+  const scrollRef = useRef(null);
 
   const {data: testsList = []} = useGetAllTestsQuery();
+  const [updateTextSuite] = useUpdateTestSuiteMutation();
 
-  const testsData = testsList.map((item: TestWithExecution) => ({
-    name: item.test.name,
-    namespace: item.test.namespace,
-    type: item.test.type,
-  }));
-
-  useEffect(() => {
-    if (!steps) {
-      setCurrentSteps([]);
-    } else {
-      setCurrentSteps(steps);
-    }
-  }, [steps]);
+  const testsData = useMemo(() => {
+    return testsList.map((item: TestWithExecution) => ({
+      name: item.test.name,
+      namespace: item.test.namespace,
+      type: item.test.type,
+    }));
+  }, [testsList]);
 
   const saveSteps = () => {
-    console.log(currentSteps);
+    updateTextSuite({
+      id: entityDetails.name,
+      data: {
+        ...entityDetails,
+        steps: currentSteps,
+      },
+    })
+      .then((res: any) => {
+        displayDefaultNotificationFlow(res, () => {
+          notificationCall('passed', `Steps were succesfully updated.`);
+        });
+      })
+      .catch((err: any) => displayDefaultErrorNotification(err));
   };
 
   const onSelectStep = (value: string) => {
     if (value === 'delay') {
       setIsDelayModalVisible(true);
     } else {
-      setCurrentSteps([...currentSteps, JSON.parse(value)]);
+      const {name, namespace, type} = JSON.parse(value);
+      setCurrentSteps([
+        ...currentSteps,
+        {
+          execute: {
+            name,
+            type,
+            namespace,
+          },
+          id: nanoid(),
+          stopTestOnFailure: false,
+        },
+      ]);
+      scrollToBottom();
     }
   };
 
-  console.log(currentSteps);
+  const addDelay = (value?: number) => {
+    setCurrentSteps([
+      ...currentSteps,
+      {
+        delay: {
+          duration: value,
+        },
+        id: nanoid(),
+        stopTestOnFailure: false,
+      },
+    ]);
+    setIsDelayModalVisible(false);
+    scrollToBottom();
+  };
+
+  const deleteStep = (index: number) => {
+    setCurrentSteps([...currentSteps.slice(0, index), ...currentSteps.slice(index + 1)]);
+  };
+
+  const scrollToBottom = () => {
+    if (!scrollRef.current) {
+      return;
+    }
+    // @ts-ignore
+    scrollRef.current.scrollIntoView({behavior: 'smooth'});
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [currentSteps?.length]);
+
+  useEffect(() => {
+    if (!steps) {
+      setCurrentSteps([]);
+      return;
+    }
+    setCurrentSteps(
+      steps.map((step: any) => {
+        if (step.delay) {
+          return {
+            ...step,
+            id: nanoid(),
+          };
+        }
+        return {
+          ...step,
+          id: nanoid(),
+          execute: {
+            ...step.execute,
+            type: testsData.find(item => item.name === step.execute.name)?.type,
+          },
+        };
+      })
+    );
+  }, [steps, testsData]);
 
   return (
     <ConfigurationCard
@@ -74,21 +155,11 @@ const SettingsTests = () => {
       onConfirm={saveSteps}
     >
       <>
-        {currentSteps?.length === 0 ? (
-          <EmptyTestsContainer>
-            <Title level={2} className="text-center">
-              Add your tests to this test suite
-            </Title>
-            <Text className="regular middle text-center">
-              Select tests from the dropdown below to add them to this suite
-            </Text>
-          </EmptyTestsContainer>
-        ) : null}
         <Select
           placeholder="Add a test or delay"
           showArrow
           onChange={onSelectStep}
-          style={{width: '100%'}}
+          style={{width: '100%', marginBottom: '30px'}}
           value={null}
           size="large"
         >
@@ -107,39 +178,28 @@ const SettingsTests = () => {
             </Option>
           ))}
         </Select>
-        <Modal
-          setIsModalVisible={setIsDelayModalVisible}
-          isModalVisible={isDelayModalVisible}
-          width={528}
-          title="Add a delay"
-          footer={
-            <>
-              <Button customType="secondary" onClick={() => setIsDelayModalVisible(false)}>
-                Cancel
-              </Button>
-              <Button
-                customType="primary"
-                onClick={() => {
-                  setCurrentSteps([...currentSteps, {type: 'delay', name: `${delayValue}ms`}]);
-                  setIsDelayModalVisible(false);
-                  setDelayValue(undefined);
-                }}
-              >
-                Add delay
-              </Button>
-            </>
-          }
-          content={
-            <StyledDelayModalContent>
-              <Text className="regular middle">Delay in ms</Text>
-              <InputNumber
-                placeholder="Delay"
-                controls={false}
-                value={delayValue}
-                onChange={value => setDelayValue(value)}
-              />
-            </StyledDelayModalContent>
-          }
+        {currentSteps?.length === 0 ? (
+          <EmptyTestsContainer>
+            <Title level={2} className="text-center">
+              Add your tests to this test suite
+            </Title>
+            <Text className="regular middle text-center">
+              Select tests from the dropdown below to add them to this suite
+            </Text>
+          </EmptyTestsContainer>
+        ) : null}
+        <DragNDropList
+          items={currentSteps}
+          setItems={setCurrentSteps}
+          onDelete={deleteStep}
+          scrollRef={scrollRef}
+          ContainerComponent={StyledStepsList}
+          ItemComponent={TestSuiteStepCard}
+        />
+        <DelayModal
+          isDelayModalVisible={isDelayModalVisible}
+          setIsDelayModalVisible={setIsDelayModalVisible}
+          addDelay={addDelay}
         />
       </>
     </ConfigurationCard>
