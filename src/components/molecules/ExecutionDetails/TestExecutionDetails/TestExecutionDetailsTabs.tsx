@@ -35,7 +35,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     <StyledTestExecutionDetailsTabsContainer>
       <StyledAntTabs>
         <StyledAntTabPane tab="Log Output" key="LogOutputPane">
-          <LogOutput logOutput={output} executionId={name} isRunning={isRunning} />;
+          <LogOutput logOutput={output} executionId={name} isRunning={isRunning} />
         </StyledAntTabPane>
         <StyledAntTabPane tab="Artifacts" key="ArtifactsPane">
           <TestExecutionDetailsArtifacts id={id} />

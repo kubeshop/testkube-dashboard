@@ -3,13 +3,16 @@ import {useContext, useMemo} from 'react';
 import classNames from 'classnames';
 import {v4} from 'uuid';
 
+import {TestSuiteStepExecutionResult} from '@models/testSuite';
+
 import {setRedirectTarget} from '@redux/reducers/configSlice';
+
+import {StatusIcon, TestRunnerIcon} from '@atoms';
 
 import {ExecutionName} from '@molecules';
 
 import {MainContext} from '@contexts';
 
-import ExecutionStepIcon from '../ExecutionStepIcon';
 import {
   StyledExecutionStepsList,
   StyledExecutionStepsListItem,
@@ -20,7 +23,7 @@ import {
 type IconSet = 'default' | 'definition';
 
 type ExecutionStepsListProps = {
-  executionSteps: Array<any>;
+  executionSteps: TestSuiteStepExecutionResult[];
   iconSet?: IconSet;
 };
 
@@ -51,14 +54,14 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     }
   };
 
-  const onShowClick = (step: any) => {
-    const {executionName} = step;
+  const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
+    const {
+      executionName,
+      step: {execute},
+      execution: {id},
+    } = step;
 
     if (iconSet === 'default') {
-      const {
-        execution: {id},
-      } = step;
-
       dispatch(
         setRedirectTarget({
           targetTestId: executionName,
@@ -74,20 +77,24 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       );
     }
 
-    return navigate('/dashboard/tests');
+    return navigate(`/tests/executions/${execute?.name}/execution/${id}`);
   };
 
   const renderedDefinitionsList = useMemo(() => {
-    return executionSteps?.map((step: any) => {
+    return executionSteps?.map(step => {
       const icon = getExecutionStepIcon(step);
       const executionName = getExecutionStepName(step);
 
-      const {execute, delay, step: stepResult, execution: executionResult} = step;
+      const {step: stepResult, execution} = step;
+      const {execute, delay} = stepResult;
+      const {
+        executionResult: {status},
+      } = execution;
 
-      const listItemKey = executionResult?.id || v4();
+      const listItemKey = execution?.id || v4();
 
       const isClickable =
-        (executionResult?.id && iconSet === 'default') || (iconSet === 'definition' && (!delay || stepResult?.delay));
+        (execution?.id && iconSet === 'default') || (iconSet === 'definition' && (!delay || stepResult?.delay));
 
       const listItemClassNames = classNames({
         clickable: isClickable,
@@ -105,9 +112,10 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
           }}
         >
           <StyledSpace size={15}>
-            {icon ? <ExecutionStepIcon icon={icon} /> : null}
+            {icon ? <StatusIcon status={status} /> : null}
             {execute || stepResult?.execute ? (
               <>
+                <TestRunnerIcon icon="curl/test" />
                 <ExecutionName name={executionName} />
                 <StyledExternalLinkIcon />
               </>

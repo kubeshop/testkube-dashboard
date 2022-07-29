@@ -71,7 +71,7 @@ const dataLayers: {[key in Entity]: any} = {
 };
 
 const components: {[key in Entity]: any} = {
-  'test-suites': null, // <TestSuiteExecutionDetailsTabs />,
+  'test-suites': <TestSuiteExecutionDetailsTabs />,
   tests: <TestExecutionDetailsTabs />,
 };
 

@@ -9,13 +9,10 @@ import Colors from '@styles/Colors';
 export const StyledExecutionStepsList = styled.ul`
   display: flex;
   flex-direction: column;
-
-  background: #151515;
 `;
 
 export const StyledExecutionStepsListItem = styled.li`
-  padding: 7px 15px;
-  border: 1px solid #393939;
+  padding: 8px 0;
 
   color: ${Colors.whitePure};
 

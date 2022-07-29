@@ -88,7 +88,7 @@ const EntityExecutionsContent: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: '40px',
-        overflowY: 'scroll',
+        overflowY: 'auto',
         height: '100%',
         flex: 1,
         padding: 40,
