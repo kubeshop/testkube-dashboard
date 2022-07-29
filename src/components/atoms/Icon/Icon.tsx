@@ -24,6 +24,7 @@ const iconsMap: any = {
   failed: FailedStatusIcon,
   running: RunningStatusIcon,
   pending: PendingStatusIcon,
+  queued: PendingStatusIcon,
 };
 
 type IconProps = {

@@ -54,6 +54,8 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     }
   };
 
+  console.log('executionSteps: ', executionSteps);
+
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
     const {
       executionName,

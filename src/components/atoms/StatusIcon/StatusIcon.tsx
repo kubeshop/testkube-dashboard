@@ -20,6 +20,10 @@ const iconStyles: any = {
     borderColor: Colors.slate600,
     background: Colors.slate900,
   },
+  queued: {
+    borderColor: Colors.slate600,
+    background: Colors.slate900,
+  },
 };
 
 const StatusIcon: React.FC<any> = props => {
