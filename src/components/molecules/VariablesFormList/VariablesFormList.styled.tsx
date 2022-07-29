@@ -94,13 +94,10 @@ export const StyledSaveButton = styled(Button)`
 
 export const StyledButtonsContainer = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+
+  width: 100%;
 
   margin-top: 17px;
-
-  .ant-form-item {
-    margin-bottom: 0;
-  }
 `;

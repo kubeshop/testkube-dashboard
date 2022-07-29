@@ -1,8 +1,10 @@
 import {Form, FormInstance, Input, Popover, Select} from 'antd';
 
-import {CloseCircleOutlined, EyeInvisibleOutlined, EyeOutlined, QuestionCircleOutlined} from '@ant-design/icons';
+import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, QuestionCircleOutlined} from '@ant-design/icons';
 
 import {Variable} from '@models/variable';
+
+import {Button} from '@custom-antd';
 
 import {validateDuplicateValueByKey} from '@utils';
 import {required} from '@utils/form';
@@ -10,12 +12,10 @@ import {required} from '@utils/form';
 import {duplicateKeyMessage, emptyVariableObject, popoverHelpContent, typeOptions} from './VariablesFormList.constants';
 import {
   Asterisk,
-  StyledAddButton,
   StyledButtonsContainer,
   StyledKeyFormItem,
   StyledLabel,
   StyledLablesSpace,
-  StyledSaveButton,
   VariablesListContainer,
 } from './VariablesFormList.styled';
 
@@ -26,7 +26,7 @@ type VariablesFormListProps = {
 };
 
 const VariablesFormList: React.FC<VariablesFormListProps> = props => {
-  const {data, form, isSaveable = true} = props;
+  const {data, form} = props;
 
   return (
     <Form.List name="variables-list" initialValue={data}>
@@ -96,25 +96,13 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                   );
                 }}
               </Form.Item>
-              <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: 32}}>
-                <CloseCircleOutlined onClick={() => remove(name)} size={21} style={{fontSize: '21px'}} />
-              </div>
+              <DeleteOutlined onClick={() => remove(name)} style={{fontSize: '21px', marginTop: '7px'}} />
             </StyledLablesSpace>
           ))}
           <StyledButtonsContainer>
-            <StyledAddButton onClick={() => add(emptyVariableObject)}>Add Variable</StyledAddButton>
-            {data.length > 0 || (fields.length > 0 && isSaveable) ? (
-              <Form.Item>
-                <StyledSaveButton
-                  type="primary"
-                  onClick={() => {
-                    form.submit();
-                  }}
-                >
-                  Save
-                </StyledSaveButton>
-              </Form.Item>
-            ) : null}
+            <Button customType="secondary" onClick={() => add(emptyVariableObject)}>
+              Add a new variable
+            </Button>
           </StyledButtonsContainer>
         </VariablesListContainer>
       )}
