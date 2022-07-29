@@ -38,8 +38,10 @@ const Labels: React.FC = () => {
   if (!entity || !entityDetails) {
     return null;
   }
+  const entityLabels = entityDetails?.labels || {};
 
-  const labels = entityDetails?.labels;
+  const labels = Object.entries(entityLabels).map(([key, value]) => `${key}:${value}`);
+  // const labels = entityLabels.map((value: any) => (typeof value === 'string' ? value : JSON.stringify(value)));
 
   const onSave = (values: any) => {
     updateRequestsMap[entity]({
@@ -78,7 +80,7 @@ const Labels: React.FC = () => {
     >
       <Form form={form} onFinish={onSave} name="general-settings-name-description" initialValues={{labels}}>
         <Form.Item name="labels">
-          <Select placeholder="Labels" mode="multiple" allowClear showArrow showSearch={false}>
+          <Select placeholder="Labels" mode="multiple" allowClear showArrow>
             {data?.map((value: string, index: number) => (
               // eslint-disable-next-line react/no-array-index-key
               <Option key={index} value={`${index}_${value}`}>

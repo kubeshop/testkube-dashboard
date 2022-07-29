@@ -161,6 +161,7 @@ const SettingsTests = () => {
           onChange={onSelectStep}
           style={{width: '100%', marginBottom: '30px'}}
           value={null}
+          showSearch
           size="large"
         >
           <Option value="delay">

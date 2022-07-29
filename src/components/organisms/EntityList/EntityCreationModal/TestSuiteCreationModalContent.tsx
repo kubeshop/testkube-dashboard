@@ -80,7 +80,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
         </StyledFormItem>
         <StyledFormItem name="labels">
-          <Select placeholder="Labels" mode="multiple" allowClear showArrow showSearch={false}>
+          <Select placeholder="Labels" mode="multiple" allowClear showArrow>
             {data?.map((value: string, index: number) => (
               // eslint-disable-next-line react/no-array-index-key
               <Option key={index} value={`${index}_${value}`}>

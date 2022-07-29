@@ -84,6 +84,9 @@ export const GlobalStyle = createGlobalStyle`
     overflow: unset;
   }
 
+  .ant-empty-description {
+    color: ${Colors.slate200};
+  }
   
 
   @keyframes spin {
@@ -115,6 +118,17 @@ export const GlobalStyle = createGlobalStyle`
   .ant-select-arrow {
     color: ${Colors.slate500};
   }
+
+  .ant-select-clear {
+    color: ${Colors.slate500};
+  }
+  
+  .ant-select-multiple .ant-select-selection-item-remove {
+    color: ${Colors.slate200};
+    margin-top: 1px;
+    margin-left: 2px;
+  }
+
 
   // Input
 
