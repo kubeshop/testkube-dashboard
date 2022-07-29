@@ -12,10 +12,11 @@ import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
 import General from './SettingsGeneral';
 import SettingsNavigation from './SettingsNavigation';
 import SettingsTests from './SettingsTests';
+import SettingsVariables from './SettingsVariables';
 
 const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
-  'test-suites': [<General />, <SettingsTests />, null, null],
-  tests: [<General />, null, null, <SettingsDefinition />],
+  'test-suites': [<General />, <SettingsTests />, <SettingsVariables />, null],
+  tests: [<General />, null, <SettingsVariables />, <SettingsDefinition />],
 };
 
 const Settings: React.FC = () => {

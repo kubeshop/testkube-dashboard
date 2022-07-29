@@ -1,24 +1,19 @@
 import {memo, useEffect} from 'react';
 
-import {Form} from 'antd';
+import {Form, FormInstance} from 'antd';
 
 import {Variable} from '@models/variable';
 
-import VariablesFormList from '../../../VariablesFormList';
+import VariablesFormList from '../../VariablesFormList';
 
 type VariablesListProps = {
   data: Variable[];
-  onClickSave: (value: any) => void;
+  form: FormInstance;
+  onFinish: (values: any) => void;
 };
 
 const VariablesList: React.FC<VariablesListProps> = props => {
-  const {data, onClickSave} = props;
-
-  const [form] = Form.useForm();
-
-  const onFinish = (value: any) => {
-    onClickSave(value);
-  };
+  const {data, form, onFinish} = props;
 
   useEffect(() => {
     form.setFieldsValue({

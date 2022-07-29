@@ -2,8 +2,7 @@ import {useContext} from 'react';
 
 import {Execution} from '@models/execution';
 
-import {CLICommands, LogOutput} from '@molecules';
-import {ExecutionsVariablesList} from '@molecules/Variables/VariablesLists';
+import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
 
 import useIsRunning from '@hooks/useIsRunning';
 
