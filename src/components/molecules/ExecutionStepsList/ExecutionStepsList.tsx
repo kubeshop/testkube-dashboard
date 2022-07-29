@@ -91,6 +91,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       const {execute, delay} = stepResult;
       const {
         executionResult: {status},
+        testType,
       } = execution;
 
       const listItemKey = execution?.id || v4();
@@ -117,7 +118,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             {icon ? <StatusIcon status={status} /> : null}
             {execute || stepResult?.execute ? (
               <>
-                <TestRunnerIcon icon="curl/test" />
+                <TestRunnerIcon icon={testType} />
                 <ExecutionName name={executionName} />
                 <StyledExternalLinkIcon />
               </>
