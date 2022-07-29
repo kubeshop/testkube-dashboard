@@ -1,8 +1,11 @@
-import React, {useContext, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 
 import {Entity} from '@models/entity';
 
-import {EntityExecutionsContext} from '@contexts';
+import {EntityExecutionsContext, MainContext} from '@contexts';
+
+import {useAppSelector} from '@src/redux/hooks';
+import {closeSettingsTabConfig, selectRedirectTarget} from '@src/redux/reducers/configSlice';
 
 import {StyledSettingsContainer, StyledTabContentContainer} from './Settings.styled';
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
@@ -10,31 +13,26 @@ import General from './SettingsGeneral';
 import SettingsNavigation from './SettingsNavigation';
 import SettingsTests from './SettingsTests';
 
-// const secondTabConfig: {[key in Entity]: any} = {
-//   'test-suites': <SettingsTests />,
-//   tests: <SettingsTestConfig />,
-// };
-
-// const thirdTabConfig: {[key in Entity]: any} = {
-//   'test-suites': null,
-//   tests: null,
-// };
-
-// const fourthTabConfig: {[key in Entity]: any} = {
-//   'test-suites': null,
-//   tests: <SettingsDefinition />,
-// };
-
 const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
-  'test-suites': [<SettingsTests />, null, null],
-  tests: [null, null, <SettingsDefinition />],
+  'test-suites': [<General />, <SettingsTests />, null, null],
+  tests: [<General />, null, null, <SettingsDefinition />],
 };
 
 const Settings: React.FC = () => {
+  const {dispatch} = useContext(MainContext);
   const {entity} = useContext(EntityExecutionsContext);
   const [selectedSettingsTab, setSelectedSettingsTab] = useState(0);
 
-  const subTabsMap = useMemo(() => [<General />, ...tabConfig[entity]], [entity]);
+  const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
+
+  useEffect(() => {
+    if (isSettingsTabConfig) {
+      setSelectedSettingsTab(1);
+      dispatch(closeSettingsTabConfig());
+    }
+  }, [isSettingsTabConfig, dispatch]);
+
+  const subTabsMap = useMemo(() => tabConfig[entity], [entity]);
 
   return (
     <StyledSettingsContainer>

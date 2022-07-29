@@ -29,7 +29,7 @@ const {Option} = Select;
 
 const SettingsTests = () => {
   const {entityDetails} = useContext(EntityExecutionsContext);
-  const {steps = []} = entityDetails;
+  const steps = entityDetails?.steps;
 
   const [currentSteps, setCurrentSteps] = useState(steps);
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);

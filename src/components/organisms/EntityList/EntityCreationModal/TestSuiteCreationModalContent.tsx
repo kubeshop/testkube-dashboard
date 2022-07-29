@@ -4,14 +4,15 @@ import {Form, Input, Select} from 'antd';
 
 import {Button, Text} from '@custom-antd';
 
-import {notificationCall} from '@molecules';
-
 import {required} from '@utils/form';
 
 import {useGetLabelsQuery} from '@services/labels';
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
 import {MainContext} from '@contexts';
+
+import {openSettingsTabConfig} from '@src/redux/reducers/configSlice';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
@@ -20,7 +21,7 @@ const {Option} = Select;
 
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
-  const {navigate} = useContext(MainContext);
+  const {navigate, dispatch} = useContext(MainContext);
 
   const {data} = useGetLabelsQuery(null);
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
@@ -37,24 +38,14 @@ const TestSuiteCreationModalContent: React.FC = () => {
       }, {}),
     })
       .then((res: any) => {
-        if (res.error) {
-          if (res.error.data) {
-            const errorTitle = res.error?.data?.title || 'Unknown error';
-            const errorDetails = res.error?.data.detail || 'Something went wrong';
-            notificationCall('failed', errorTitle, errorDetails);
-          } else {
-            notificationCall('failed', res.error.error);
-          }
-        } else {
+        displayDefaultNotificationFlow(res, () => {
           const testSuiteName = res?.data?.metadata?.name;
+
+          dispatch(openSettingsTabConfig());
           navigate(`test-suites/executions/${testSuiteName}`);
-        }
+        });
       })
-      .catch(err => {
-        if (err instanceof Error) {
-          notificationCall('failed', 'Unknown error', String(err) || 'Something went wrong');
-        }
-      });
+      .catch(err => displayDefaultErrorNotification(err));
   };
 
   useEffect(() => {

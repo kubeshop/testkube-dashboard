@@ -22,7 +22,7 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
   const {id, execId} = params;
 
   const {data: executions} = useGetExecutions(id, {pollingInterval: PollingIntervals.everySecond});
-  const {data: entityDetails} = useGetEntityDetails(id as string);
+  const {data: entityDetails} = useGetEntityDetails(id, {pollingInterval: PollingIntervals.everySecond});
 
   const [selectedRow, selectRow] = useState();
 

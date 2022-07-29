@@ -1,8 +1,10 @@
-import {useContext, useMemo} from 'react';
+import {useContext, useEffect, useMemo, useState} from 'react';
 
 import {Table, Tabs} from 'antd';
 
 import axios from 'axios';
+
+import {useAppSelector} from '@redux/hooks';
 
 import {TestRunnerIcon} from '@atoms';
 
@@ -14,6 +16,8 @@ import Colors from '@styles/Colors';
 
 import {EntityExecutionsContext, MainContext} from '@contexts';
 
+import {selectRedirectTarget} from '@src/redux/reducers/configSlice';
+
 import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper} from './EntityExecutionsContent.styled';
 import Settings from './Settings';
 import TableRow from './TableRow';
@@ -22,6 +26,16 @@ const EntityExecutionsContent: React.FC = () => {
   const {entity, entityDetails, executionsList, onRowSelect, isRowSelected, defaultStackRoute} =
     useContext(EntityExecutionsContext);
   const {navigate} = useContext(MainContext);
+
+  const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
+
+  const [activeTabKey, setActiveTabKey] = useState('1');
+
+  useEffect(() => {
+    if (isSettingsTabConfig) {
+      setActiveTabKey('Settings');
+    }
+  }, [isSettingsTabConfig]);
 
   const name = entityDetails?.name;
   const description = entityDetails?.description;
@@ -130,7 +144,7 @@ const EntityExecutionsContent: React.FC = () => {
           <Title level={3}>{executionsList?.results.length || '-'}</Title>
         </SummaryGridItem>
       </SummaryGridWrapper>
-      <Tabs defaultActiveKey="1">
+      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey}>
         <Tabs.TabPane tab="Recent executions" key="1">
           {isEmptyExecutions ? null : (
             <Table
