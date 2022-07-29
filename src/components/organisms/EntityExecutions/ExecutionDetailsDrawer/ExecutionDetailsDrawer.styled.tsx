@@ -15,14 +15,14 @@ export const getInfoPanelFlexProperty = (conditions: any) => {
 
 export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected: boolean}>`
   position: relative;
-  // overflow: hidden;
+  overflow-y: auto;
 
   display: flex;
   flex-direction: column;
   // flex: ${props => getInfoPanelFlexProperty(props)};
 
   // min-width: ${props => (props.$isRowSelected ? '400px' : '0px')};
-  height: 100%;
+
   padding: ${({$isRowSelected}) => ($isRowSelected ? '45px 30px' : '0')};
 
   background: ${Colors.slate800};

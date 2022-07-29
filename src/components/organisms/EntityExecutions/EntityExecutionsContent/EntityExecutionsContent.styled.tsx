@@ -43,8 +43,7 @@ export const SummaryGridItem = styled.div`
 
 export const ItemWrapper = styled.div`
   display: flex;
-
-  height: 60px;
+  cursor: pointer;
 `;
 
 export const DetailsWrapper = styled.div`

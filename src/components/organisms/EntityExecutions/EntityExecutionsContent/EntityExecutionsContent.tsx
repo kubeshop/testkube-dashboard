@@ -74,7 +74,7 @@ const EntityExecutionsContent: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: '40px',
-        // overflow: 'hidden',
+        overflowY: 'scroll',
         height: '100%',
         flex: 1,
         padding: 40,
@@ -130,7 +130,7 @@ const EntityExecutionsContent: React.FC = () => {
           <Title level={3}>{executionsList?.results.length || '-'}</Title>
         </SummaryGridItem>
       </SummaryGridWrapper>
-      <Tabs defaultActiveKey="1" style={{overflow: 'hidden', height: '100%'}}>
+      <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="Recent executions" key="1">
           {isEmptyExecutions ? null : (
             <Table
