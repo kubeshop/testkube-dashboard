@@ -3,18 +3,19 @@ import {Checkbox, Dropdown, Menu} from 'antd';
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
+import Shadows from '@styles/Shadows';
 
 export const StyledFilterMenu = styled(Menu)`
-  border: 1px solid ${Colors.greyBorder};
-
-  background-color: ${Colors.mainBackground};
+  border: 1px solid ${Colors.slate800};
+  box-shadow: ${Shadows.soft};
+  background-color: ${Colors.slate900};
 `;
 
 export const StyledFilterCheckbox = styled(Checkbox)`
   width: 100%;
   .ant-checkbox-inner {
     background-color: ${Colors.grey1000};
-    border-color: ${Colors.greyBorder};
+    border-color: ${Colors.slate800};
   }
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: ${Colors.purple};
