@@ -1,11 +1,11 @@
 import {useContext} from 'react';
 
-import {Button, Form} from 'antd';
+import {Form} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 
-import {Text} from '@custom-antd';
+import {Button, Text} from '@custom-antd';
 
 import FirstStepHint from '@wizards/AddTestWizard/hints/FirstStepHint';
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
