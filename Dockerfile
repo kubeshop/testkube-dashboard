@@ -6,7 +6,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY ./package.json /app/
 RUN apt update && apt install -y chromium
 # install  dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 # copy everything to /app directory
 COPY . /app
 RUN npm run build
