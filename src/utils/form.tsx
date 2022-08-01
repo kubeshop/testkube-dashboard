@@ -40,7 +40,7 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
 
     if (inputType === 'select') {
       children = (
-        <Select placeholder={placeholder}>
+        <Select placeholder={placeholder} showSearch>
           {options.map((option: any) => {
             return (
               <Option value={option.value} key={option.value}>

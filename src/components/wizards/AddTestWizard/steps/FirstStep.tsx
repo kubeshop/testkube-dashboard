@@ -1,3 +1,6 @@
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
+
 import {FormItem} from '@custom-antd';
 
 import {StyledFormSpace} from '@organisms/EntityList/EntityCreationModal/CreationModal.styled';
@@ -9,6 +12,7 @@ import {
   fileContentFormFields,
   gitDirFormFields,
   gitFileFormFields,
+  remapExecutors,
   stringContentFormFields,
 } from '../utils';
 
@@ -22,9 +26,13 @@ const additionalFields: any = {
 const FirstStep: React.FC<any> = props => {
   const {onFileChange} = props;
 
+  const executors = useAppSelector(selectExecutors);
+
+  const remmappedExecutors = remapExecutors(executors);
+
   return (
     <StyledFormSpace size={24} direction="vertical">
-      {renderFormItems(addTestFormStructure)}
+      {renderFormItems(addTestFormStructure(remmappedExecutors))}
       <FormItem
         noStyle
         shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}

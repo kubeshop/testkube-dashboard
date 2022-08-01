@@ -8,12 +8,17 @@ import {useGA4React} from 'ga-4-react';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {setExecutors} from '@redux/reducers/executorsSlice';
 
 import {ProtectedRoute} from '@atoms';
 
 import {Sider} from '@organisms';
 
 import {Tests} from '@pages';
+
+import {PollingIntervals} from '@utils/numbers';
+
+import {useGetExecutorsQuery} from '@services/executors';
 
 import {MainContext} from '@contexts';
 
@@ -33,6 +38,12 @@ const App: React.FC = () => {
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
+
+  const {data} = useGetExecutorsQuery(null, {pollingInterval: PollingIntervals.long});
+
+  useEffect(() => {
+    dispatch(setExecutors(data));
+  }, [data]);
 
   useEffect(() => {
     if (ga4React) {

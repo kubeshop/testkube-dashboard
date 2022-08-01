@@ -5,6 +5,8 @@ import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
 import {TestSuiteFilters, TestSuitesState} from '@models/testSuites';
 import {TestFilters, TestsState} from '@models/tests';
 
+import {ExecutorsState} from '@src/models/executors';
+
 const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
   dataList: [],
@@ -123,6 +125,10 @@ const initialLabelsState: LabelsState = {
   labelsObject: {},
 };
 
+const initialExecutorsState: ExecutorsState = {
+  executorsList: [],
+};
+
 const initialConfigState: ConfigState = {
   apiEndpoint: null,
   redirectTarget: {
@@ -144,6 +150,7 @@ const initialReduxState = {
   executions: initialExecutionsState,
   labels: initialLabelsState,
   config: initialConfigState,
+  executors: initialExecutorsState,
 };
 
 export default initialReduxState;

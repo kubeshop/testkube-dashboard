@@ -17,7 +17,7 @@ const EntityGridItem: React.FC<any> = props => {
   const {dataItem, latestExecution} = item;
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
-  const startDate = format(new Date(latestExecution?.startTime), executionDateFormat);
+  const startDate = latestExecution?.startTime ? format(new Date(latestExecution?.startTime), executionDateFormat) : '';
 
   return (
     <ItemWrapper onClick={onClick}>

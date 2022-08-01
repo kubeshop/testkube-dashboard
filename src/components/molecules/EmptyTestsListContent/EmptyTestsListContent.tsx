@@ -10,6 +10,7 @@ import {StyledEmptyTestsDataContainer} from './EmptyTestsListContent.styled';
 
 const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
   const {action} = props;
+
   return (
     <StyledEmptyTestsDataContainer size={24} direction="vertical">
       <CreateTestIcon />

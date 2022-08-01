@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import {FormItem} from '@models/form';
 import {Step} from '@models/wizard';
 
@@ -15,7 +16,7 @@ export const addTestSteps: Step[] = [
 
 export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 
-export const addTestFormStructure: FormItem[] = [
+export const addTestFormStructure = (options: any) => [
   {
     tooltip: 'Enter the name of the test you wish to add.',
     rules: [required],
@@ -29,32 +30,7 @@ export const addTestFormStructure: FormItem[] = [
     fieldName: 'testType',
     inputType: 'select',
     rules: [required],
-    options: [
-      {
-        value: 'curl/test',
-        label: 'Curl',
-      },
-      {
-        value: 'cypress/project',
-        label: 'Cypress',
-      },
-      {
-        value: 'k6/script',
-        label: 'K6',
-      },
-      {
-        value: 'postman/collection',
-        label: 'Postman',
-      },
-      {
-        value: 'soapui/xml',
-        label: 'SoapUI',
-      },
-      {
-        value: 'artillery/test',
-        label: 'Artillery',
-      },
-    ],
+    options,
     placeholder: 'Type',
   },
   {
@@ -182,4 +158,20 @@ export const getTestSourceSpecificFields = (values: any) => {
       ...(values.token ? {token: values.token} : {}),
     },
   };
+};
+
+export const remapExecutors = (executors: any) => {
+  const array: any = [];
+
+  executors.map((executorItem: any) => {
+    const {
+      executor: {types},
+    } = executorItem;
+
+    types.map((type: any) => {
+      array.push({label: type, value: type});
+    });
+  });
+
+  return array;
 };
