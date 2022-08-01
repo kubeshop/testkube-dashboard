@@ -155,6 +155,29 @@ const SettingsTests = () => {
       onConfirm={saveSteps}
     >
       <>
+        {currentSteps?.length === 0 ? (
+          <EmptyTestsContainer>
+            <Title level={2} className="text-center">
+              Add your tests to this test suite
+            </Title>
+            <Text className="regular middle text-center">
+              Select tests from the dropdown below to add them to this suite
+            </Text>
+          </EmptyTestsContainer>
+        ) : null}
+        <DragNDropList
+          items={currentSteps}
+          setItems={setCurrentSteps}
+          onDelete={deleteStep}
+          scrollRef={scrollRef}
+          ContainerComponent={StyledStepsList}
+          ItemComponent={TestSuiteStepCard}
+        />
+        <DelayModal
+          isDelayModalVisible={isDelayModalVisible}
+          setIsDelayModalVisible={setIsDelayModalVisible}
+          addDelay={addDelay}
+        />
         <Select
           placeholder="Add a test or delay"
           showArrow
@@ -179,29 +202,6 @@ const SettingsTests = () => {
             </Option>
           ))}
         </Select>
-        {currentSteps?.length === 0 ? (
-          <EmptyTestsContainer>
-            <Title level={2} className="text-center">
-              Add your tests to this test suite
-            </Title>
-            <Text className="regular middle text-center">
-              Select tests from the dropdown below to add them to this suite
-            </Text>
-          </EmptyTestsContainer>
-        ) : null}
-        <DragNDropList
-          items={currentSteps}
-          setItems={setCurrentSteps}
-          onDelete={deleteStep}
-          scrollRef={scrollRef}
-          ContainerComponent={StyledStepsList}
-          ItemComponent={TestSuiteStepCard}
-        />
-        <DelayModal
-          isDelayModalVisible={isDelayModalVisible}
-          setIsDelayModalVisible={setIsDelayModalVisible}
-          addDelay={addDelay}
-        />
       </>
     </ConfigurationCard>
   );

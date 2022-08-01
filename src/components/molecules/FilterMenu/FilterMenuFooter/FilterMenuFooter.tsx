@@ -11,9 +11,9 @@ type FilterMenuFooterProps = {
 const FilterMenuFooter: React.FC<FilterMenuFooterProps> = props => {
   const {onReset, onOk, onCancel} = props;
   return (
-    <StyledSpace align="center">
+    <StyledSpace>
       {onCancel ? (
-        <Button customType="secondary" onClick={onCancel}>
+        <Button customType="transparent" onClick={onCancel}>
           Cancel
         </Button>
       ) : null}

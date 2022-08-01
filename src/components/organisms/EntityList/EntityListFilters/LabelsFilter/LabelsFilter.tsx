@@ -128,11 +128,11 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       <StyledLabelsMenuContainer>
         <Title level={5}>Filter tests by Key Value pairs.</Title>
         {renderKeyValueInputs}
-        <Button customType="transparent" onClick={() => onAddRow()}>
-          &#xFF0B; Add row
+        <Button customType="secondary" onClick={() => onAddRow()}>
+          Add another row
         </Button>
       </StyledLabelsMenuContainer>
-      <FilterMenuFooter onOk={applyFilters} onReset={resetFilters} onCancel={() => onVisibleChange(false)} />
+      <FilterMenuFooter onOk={applyFilters} onReset={resetFilters} />
     </StyledFilterMenu>
   );
 
