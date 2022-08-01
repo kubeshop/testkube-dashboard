@@ -15,7 +15,7 @@ import SettingsTests from './SettingsTests';
 import SettingsVariables from './SettingsVariables';
 
 const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
-  'test-suites': [<General />, <SettingsTests />, <SettingsVariables />, null],
+  'test-suites': [<General />, <SettingsTests />, <SettingsVariables />, <SettingsDefinition />],
   tests: [<General />, null, <SettingsVariables />, <SettingsDefinition />],
 };
 

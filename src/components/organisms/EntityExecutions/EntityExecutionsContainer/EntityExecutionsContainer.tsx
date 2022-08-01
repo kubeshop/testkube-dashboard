@@ -25,6 +25,7 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
   const {data: entityDetails} = useGetEntityDetails(id, {pollingInterval: PollingIntervals.everySecond});
 
   const [selectedRow, selectRow] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const getDefaultUrl = () => {
     const clarifyTargetUrl = pathname.split('/').slice(0, 4);
@@ -74,6 +75,8 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
     id,
     execId,
     defaultStackRoute,
+    setCurrentPage,
+    currentPage,
   };
 
   useEffect(() => {
@@ -86,7 +89,14 @@ const EntityExecutionsContainer: React.FC<EntityExecutionsBlueprint> = props => 
         notification.error({message: 'Provided execution does not exist'});
         navigate(getDefaultUrl());
       } else {
+        const targetEntity = executions.results?.filter((result: any) => {
+          return result?.id === execId;
+        });
+
+        const targetEntityArrayIndex = executions.results?.indexOf(targetEntity[0]) + 1;
+
         onRowSelect(neededExecution, false);
+        setCurrentPage(Math.ceil(targetEntityArrayIndex / 10));
       }
     } else {
       selectRow(undefined);

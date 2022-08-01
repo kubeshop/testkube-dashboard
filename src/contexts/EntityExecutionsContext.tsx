@@ -14,6 +14,8 @@ const EntityExecutionsContext = createContext<{
   id?: string;
   execId?: string;
   defaultStackRoute: string;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  currentPage: number;
 }>({
   executionsList: {},
   entityDetails: {},
@@ -26,6 +28,8 @@ const EntityExecutionsContext = createContext<{
   id: undefined,
   execId: undefined,
   defaultStackRoute: '',
+  setCurrentPage: () => {},
+  currentPage: 1,
 });
 
 export default EntityExecutionsContext;

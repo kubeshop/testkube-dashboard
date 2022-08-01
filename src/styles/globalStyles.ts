@@ -149,6 +149,143 @@ export const GlobalStyle = createGlobalStyle`
       color: ${Colors.slate500};
     }
   }
+
+  // Table 
+
+  .ant-table-tbody > tr > td {
+    border-radius: 4px;
+
+    border: 1px solid ${Colors.slate800};
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+
+    transition: 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      border: 1px solid ${Colors.purple};
+    }
+  }
+
+  .ant-table-tbody > tr.ant-table-row-selected > td {
+    border: 1px solid ${Colors.purple};
+
+    transition: 0.3s;
+  }
+
+  table tr td.ant-table-selection-column {
+    display: none;
+  }
+
+
+  // Pagination
+
+      .ant-table-pagination.ant-pagination {
+        margin: 0 !important;
+        padding: 32px 0 !important;
+
+    }
+
+
+    .ant-pagination-item {
+      border: 1px solid ${Colors.greyBorder};
+
+      background: ${Colors.slate900};
+
+      a {
+        color: #DBDBDB;
+      }
+
+      &-active {
+        border-color: ${Colors.purple};
+
+        a {
+          color: ${Colors.purple};
+        }
+      }
+
+      &:hover {
+        border-color: ${Colors.purple};
+
+        a {
+          color: ${Colors.purple};
+        }
+      }
+    }
+
+    .ant-pagination-prev,
+    .ant-pagination-next  {
+      .ant-pagination-item-link {
+        border: 1px solid ${Colors.greyBorder};
+
+        color: #DBDBDB;
+        background: transparent;
+
+        span {
+          path {
+            fill: #DBDBDB;
+          }
+        }
+      }
+      
+      &:hover {
+        .ant-pagination-item-link {
+          border-color: ${Colors.purple};
+
+          color: ${Colors.purple};
+          background: transparent;
+        }
+
+        span {
+          path {
+            fill: ${Colors.purple};
+          }
+        }
+      }
+    }
+
+    .ant-pagination-disabled {
+      .ant-pagination-item-link {
+        border: 1px solid ${Colors.greyBorder} !important;
+
+        background: #262626 !important; 
+
+        span {
+          path {
+            fill: ${Colors.greyBorder};
+          }
+        }
+      }
+    }
+
+    // .ant-pagination-item .ant-pagination-item-active, {
+    // border-color: ${Colors.purple} !important;
+    // }
+
+    // .ant-collapse-header {
+    //   display: flex;
+    //   align-items: center;
+    // }
+
+    .ant-table {
+      background: transparent;
+    }
+
+    // .ant-table,
+    // .ant-table-thead > tr,
+    // .ant-table-row {
+    //   border: 1px solid var(--color-gray-nonary) !important;
+    // }
+
+
+    .ant-pagination-item-container {
+      .ant-pagination-item-link-icon,
+      .ant-pagination-item-ellipsis {
+        color: ${Colors.purple} !important;
+      }
+    }
+
 `;
 
 /* Media Sizes */

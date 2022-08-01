@@ -1,32 +1,32 @@
-import {useContext, useState} from 'react';
+import {useContext} from 'react';
 
-import {Tooltip} from '@custom-antd';
+import {CopyOutlined} from '@ant-design/icons';
+
+import {Pre} from '@atoms';
+
+import {Text} from '@custom-antd';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
+import Colors from '@styles/Colors';
+
 import {MainContext} from '@contexts';
 
-import {
-  StyledCopyCommandCode,
-  StyledCopyCommandContainer,
-  StyledCopyCommandIcon,
-  StyledCopyCommandLabel,
-  StyledCopyCommandPre,
-} from './CopyCommand.styled';
+import {LabelWrapper, StyledCopyCommandCode, StyledCopyCommandContainer} from './CopyCommand.styled';
 
 type CopyCommandProps = {
   command: string;
   label?: string;
+  showDollar?: boolean;
+  bg?: string;
 };
 
 const CopyCommand: React.FC<CopyCommandProps> = props => {
-  const {command, label} = props;
+  const {command, label, showDollar = true, bg = Colors.slate900} = props;
 
   const {ga4React} = useContext(MainContext);
 
-  const [isHovered, setHoverState] = useState(false);
-
-  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(command);
+  const {setCopyToClipboardState} = useCopyToClipboard(command);
 
   const onCopy = () => {
     if (ga4React) {
@@ -36,34 +36,23 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
     setCopyToClipboardState(true);
   };
 
-  const onMouseOver = () => {
-    setHoverState(true);
-  };
-
-  const onMouseOut = () => {
-    setHoverState(true);
-  };
-
-  const tooltipTitle = isCopied ? 'Copied' : 'Copy';
-
   return (
     <>
-      {label ? <StyledCopyCommandLabel>{label}</StyledCopyCommandLabel> : null}
-      <StyledCopyCommandContainer
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
-        isHovered={isHovered}
-        onClick={onCopy}
-      >
-        <StyledCopyCommandPre>
+      {label ? (
+        <LabelWrapper>
+          <Text className="normal middle" color={Colors.slate50}>
+            {label}
+          </Text>
+        </LabelWrapper>
+      ) : null}
+      <StyledCopyCommandContainer onClick={onCopy} $bg={bg}>
+        <Pre>
           <StyledCopyCommandCode>
-            <span>$</span>
+            {showDollar ? <span>$</span> : null}
             {command}
           </StyledCopyCommandCode>
-        </StyledCopyCommandPre>
-        <Tooltip title={tooltipTitle}>
-          <StyledCopyCommandIcon onClick={onCopy} />
-        </Tooltip>
+        </Pre>
+        <CopyOutlined onClick={onCopy} style={{color: Colors.slate200halfalpha}} />
       </StyledCopyCommandContainer>
     </>
   );

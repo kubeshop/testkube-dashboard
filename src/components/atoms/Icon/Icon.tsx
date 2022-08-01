@@ -1,7 +1,6 @@
 import React from 'react';
 
-import AntdIcon from '@ant-design/icons';
-
+import {StyledAntdIcon} from './Icon.styled';
 import Icons from './icons';
 
 const {
@@ -13,6 +12,7 @@ const {
   FailedStatusIcon,
   RunningStatusIcon,
   PendingStatusIcon,
+  DelayIcon,
 } = Icons;
 
 const iconsMap: any = {
@@ -25,11 +25,13 @@ const iconsMap: any = {
   running: RunningStatusIcon,
   pending: PendingStatusIcon,
   queued: PendingStatusIcon,
+  delay: DelayIcon,
 };
 
 type IconProps = {
-  name: 'cog' | 'documentation' | 'discord' | 'github' | 'passed' | 'failed' | 'running' | 'pending';
+  name: 'cog' | 'documentation' | 'discord' | 'github' | 'passed' | 'failed' | 'running' | 'pending' | 'delay';
   component?: any;
+  style?: any;
 };
 
 const Icon: React.FC<IconProps> = props => {
@@ -37,7 +39,7 @@ const Icon: React.FC<IconProps> = props => {
 
   const iconComponent = name ? iconsMap[name] : component;
 
-  return <AntdIcon component={iconComponent} {...rest} />;
+  return <StyledAntdIcon component={iconComponent} {...rest} />;
 };
 
 export default Icon;

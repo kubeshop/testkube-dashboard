@@ -1,6 +1,7 @@
 import {useContext, useEffect, useMemo, useState} from 'react';
 
 import {Table, Tabs} from 'antd';
+import {TableRowSelection} from 'antd/lib/table/interface';
 
 import axios from 'axios';
 
@@ -23,8 +24,17 @@ import Settings from './Settings';
 import TableRow from './TableRow';
 
 const EntityExecutionsContent: React.FC = () => {
-  const {entity, entityDetails, executionsList, onRowSelect, isRowSelected, defaultStackRoute} =
-    useContext(EntityExecutionsContext);
+  const {
+    entity,
+    entityDetails,
+    executionsList,
+    onRowSelect,
+    isRowSelected,
+    defaultStackRoute,
+    selectedRow,
+    currentPage,
+    setCurrentPage,
+  } = useContext(EntityExecutionsContext);
   const {navigate} = useContext(MainContext);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -69,6 +79,10 @@ const EntityExecutionsContent: React.FC = () => {
           namespace: 'testkube',
         }),
       });
+
+      setTimeout(() => {
+        onRowSelect(result?.data, true);
+      }, 1500);
     } catch (err) {
       console.log(err);
     }
@@ -81,6 +95,12 @@ const EntityExecutionsContent: React.FC = () => {
         avatar: {icon: <TestRunnerIcon icon={type} noWidth />},
       }
     : {};
+
+  const rowSelection: TableRowSelection<any> = {
+    selectedRowKeys: selectedRow ? [selectedRow.id] : [],
+    columnWidth: 0,
+    renderCell: () => null,
+  };
 
   return (
     <div
@@ -162,6 +182,18 @@ const EntityExecutionsContent: React.FC = () => {
                   onRowSelect(record, true);
                 },
               })}
+              rowSelection={{...rowSelection}}
+              rowKey={record => {
+                return record.id;
+              }}
+              pagination={{
+                pageSize: 10,
+                current: currentPage,
+                onChange: current => {
+                  setCurrentPage(current);
+                },
+                showSizeChanger: false,
+              }}
             />
           )}
         </Tabs.TabPane>

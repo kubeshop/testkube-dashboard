@@ -13,7 +13,7 @@ import {clearRunTarget, clearTargetTestExecutionId, selectRedirectTarget} from '
 
 import {Skeleton} from '@custom-antd';
 
-import {CLICommands, ExecutionDefinition, ExecutionTableRow, InfoPanelHeader} from '@molecules';
+import {CLICommands, ExecutionTableRow, InfoPanelHeader} from '@molecules';
 
 import useElementSize from '@hooks/useElementSize';
 
@@ -236,9 +236,6 @@ const DashboardInfoPanelContent = () => {
           {/* <TabPane tab="CLI Commands" key="CLICommandsPane">
             <CLICommands />
           </TabPane> */}
-          <TabPane tab="Definition" key="ExecutionDefinitionPane">
-            <ExecutionDefinition />
-          </TabPane>
         </StyledAntTabs>
       </DashboardInfoPanelContext.Provider>
     </StyledDashboardInfoPanelContent>

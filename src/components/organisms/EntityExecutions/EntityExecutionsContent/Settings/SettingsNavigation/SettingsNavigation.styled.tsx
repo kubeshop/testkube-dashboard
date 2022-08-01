@@ -12,5 +12,6 @@ export const StyledNavigationContatner = styled.div`
   flex-direction: column;
   gap: 16px;
 
-  flex: 1;
+  padding-right: 20px;
+  min-width: 200px;
 `;

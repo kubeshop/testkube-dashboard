@@ -7,7 +7,7 @@ import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 
-import {StatusIcon, TestRunnerIcon} from '@atoms';
+import {Icon, StatusIcon, TestRunnerIcon} from '@atoms';
 
 import {ExecutionName} from '@molecules';
 
@@ -32,7 +32,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
 
   const {dispatch, navigate} = useContext(MainContext);
 
-  const getExecutionStepIcon = (step: any) => {
+  const getExecutionStepIcon = (step: TestSuiteStepExecutionResult) => {
     if (iconSet === 'definition') {
       return 'code';
     }
@@ -53,8 +53,6 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       return step.step.execute.name;
     }
   };
-
-  console.log('executionSteps: ', executionSteps);
 
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
     const {
@@ -125,7 +123,8 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             ) : null}
             {delay || stepResult?.delay ? (
               <>
-                <ExecutionName name={`Wait for ${delay?.duration || stepResult?.delay?.duration} ms`} />
+                <Icon name="delay" style={{width: 22, height: 20}} />
+                <ExecutionName name="Delay" />
                 <div />
               </>
             ) : null}
