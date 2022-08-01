@@ -12,7 +12,7 @@ import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './EntityExecutio
 
 const TableRow: React.FC<{data: any}> = props => {
   const {data} = props;
-  const {status, index, duration, startTime, endTime, name, id} = data;
+  const {status, number, duration, startTime, endTime, name, id} = data;
 
   const executionDuration =
     status === 'running'
@@ -47,7 +47,7 @@ const TableRow: React.FC<{data: any}> = props => {
         <ItemRow $flex={1}>
           <ItemColumn>
             <Text className="regular small" color={Colors.slate400}>
-              #{index}
+              #{number}
             </Text>
             <Text className="regular small" color={Colors.slate400}>
               Executed: {executedTime} ago
