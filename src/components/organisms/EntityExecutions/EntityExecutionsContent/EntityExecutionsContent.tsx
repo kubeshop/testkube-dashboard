@@ -116,7 +116,7 @@ const EntityExecutionsContent: React.FC = () => {
     >
       <StyledPageHeader
         onBack={() => navigate(defaultStackRoute)}
-        title={name}
+        title={name || 'Loading...'}
         subTitle={labels ? <LabelsList labels={entityDetails?.labels} /> : ''}
         extra={[
           <Button key="1" type="primary" onClick={onRunButtonClick}>
