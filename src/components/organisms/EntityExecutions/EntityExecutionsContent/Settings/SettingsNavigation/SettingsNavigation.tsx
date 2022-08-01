@@ -17,7 +17,7 @@ type SettingsNavigationProps = {
 
 const navigationOptionsConfig: {[key in Entity]: string[]} = {
   'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Definition'],
-  tests: ['General', 'Test', 'Variables & Secrets', 'Definition'],
+  tests: ['General', 'Variables & Secrets', 'Definition'],
 };
 
 const SettingsNavigation: React.FC<SettingsNavigationProps> = props => {

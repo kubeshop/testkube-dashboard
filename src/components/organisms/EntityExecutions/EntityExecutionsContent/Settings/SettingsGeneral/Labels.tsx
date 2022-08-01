@@ -71,9 +71,6 @@ const Labels: React.FC = () => {
     <ConfigurationCard
       title="Labels"
       description={`Define the labels you want to add for this ${namingMap[entity]}`}
-      onConfirm={() => {
-        form.submit();
-      }}
       isButtonsDisabled={
         !form.isFieldsTouched() || form.getFieldsError().filter(({errors}) => errors.length).length > 0
       }

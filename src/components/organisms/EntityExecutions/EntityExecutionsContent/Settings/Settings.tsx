@@ -16,7 +16,7 @@ import SettingsVariables from './SettingsVariables';
 
 const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
   'test-suites': [<General />, <SettingsTests />, <SettingsVariables />, <SettingsDefinition />],
-  tests: [<General />, null, <SettingsVariables />, <SettingsDefinition />],
+  tests: [<General />, <SettingsVariables />, <SettingsDefinition />],
 };
 
 const Settings: React.FC = () => {
