@@ -1,36 +1,34 @@
 import {useContext, useEffect, useState} from 'react';
 
-import {DashboardBlueprintType} from '@models/dashboard';
+import {Entity} from '@models/entity';
 import {FilterProps} from '@models/filters';
 
-import {LabelInput} from '@atoms';
+import {Input} from '@custom-antd';
 
 import useDebounce from '@hooks/useDebounce';
 
 import {MainContext} from '@contexts';
 
-const inputValueQueryParams: {[key in DashboardBlueprintType]: string} = {
+const inputValueQueryParams: {[key in Entity]: string} = {
   'test-suites': 'textSearch',
   tests: 'textSearch',
 };
 
-const placeholders: {[key in DashboardBlueprintType]: string} = {
+const placeholders: {[key in Entity]: string} = {
   'test-suites': 'Test suite',
   tests: 'Test',
 };
 
 const TextFilter: React.FC<FilterProps> = props => {
-  const {filters, setSelectedRecord, setFilters, entityType, queryParam, placeholderText} = props;
+  const {filters, setFilters, entity, queryParam, placeholderText} = props;
 
-  const queryParamField = queryParam || inputValueQueryParams[entityType];
+  const queryParamField = queryParam || inputValueQueryParams[entity];
 
   const {dispatch} = useContext(MainContext);
 
   const [inputValue, setInputValue] = useState(filters[queryParam || queryParamField]);
 
   const onChange = (e: any) => {
-    dispatch(setSelectedRecord({selectedRecord: null}));
-
     setInputValue(e.target.value);
   };
 
@@ -46,9 +44,9 @@ const TextFilter: React.FC<FilterProps> = props => {
     setInputValue(filters[queryParamField]);
   }, [filters]);
 
-  const placeholder = placeholderText || `${placeholders[entityType]} name`;
+  const placeholder = placeholderText || `${placeholders[entity]} name`;
 
-  return <LabelInput placeholder={placeholder} value={inputValue} onChange={onChange} />;
+  return <Input placeholder={placeholder} value={inputValue} onChange={onChange} />;
 };
 
 export default TextFilter;

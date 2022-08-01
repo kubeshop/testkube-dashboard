@@ -9,13 +9,18 @@ import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
 export const testsApi = createApi({
   reducerPath: 'testsApi',
   baseQuery: dynamicBaseQuery,
-
   endpoints: builder => ({
     getTests: builder.query<TestWithExecution[], TestFilters>({
       query: filters => `/test-with-executions?${paramsSerializer(filters)}`,
     }),
+    getAllTests: builder.query<TestWithExecution[], void | null>({
+      query: () => `/test-with-executions`,
+    }),
+    getTest: builder.query<TestWithExecution, string>({
+      query: testId => `/tests/${testId}`,
+    }),
     getTestExecutionsById: builder.query({
-      query: ({name}) => `/tests/${name}/executions`,
+      query: id => `/tests/${id}/executions`,
       transformResponse: (response: any, meta, arg) => {
         const {results, ...rest} = response;
 
@@ -47,14 +52,23 @@ export const testsApi = createApi({
         body: body.data,
       }),
     }),
+    deleteTest: builder.mutation<void, any>({
+      query: testId => ({
+        url: `/tests/${testId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
 export const {
+  useGetTestQuery,
   useGetTestsQuery,
+  useGetAllTestsQuery,
   useGetTestExecutionsByIdQuery,
   useGetTestExecutionByIdQuery,
   useGetTestExecutionArtifactsQuery,
   useAddTestMutation,
   useUpdateTestMutation,
+  useDeleteTestMutation,
 } = testsApi;

@@ -2,8 +2,10 @@ import {ConfigState} from '@models/config';
 import {ExecutionsState} from '@models/executions';
 import {LabelsState} from '@models/labels';
 import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
-import {TestSuitesState} from '@models/testSuites';
+import {TestSuiteFilters, TestSuitesState} from '@models/testSuites';
 import {TestFilters, TestsState} from '@models/tests';
+
+import {ExecutorsState} from '@src/models/executors';
 
 const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
@@ -24,7 +26,7 @@ const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   selectedTestSuiteExecution: null,
 };
 
-const initialTestSuitesState: TestSuitesState = {
+export const initialTestSuitesState: TestSuitesState = {
   isLoading: false,
   dataList: [],
   latestExecution: null,
@@ -42,6 +44,16 @@ const initialTestSuitesState: TestSuitesState = {
     pending: 0,
   },
   selectedTestSuite: undefined,
+};
+
+export const initialTestSuitesFiltersState: TestSuiteFilters = {
+  textSearch: '',
+  pageSize: 10,
+  page: 0,
+  selector: [],
+  startDate: null,
+  endDate: null,
+  status: [],
 };
 
 export const initialTestsFiltersState: TestFilters = {
@@ -113,12 +125,17 @@ const initialLabelsState: LabelsState = {
   labelsObject: {},
 };
 
+const initialExecutorsState: ExecutorsState = {
+  executorsList: [],
+};
+
 const initialConfigState: ConfigState = {
   apiEndpoint: null,
   redirectTarget: {
     runTarget: false,
     targetTestExecutionId: null,
     targetTestId: null,
+    isSettingsTabConfig: false,
   },
   fullScreenLogOutput: {
     isFullScreenLogOutput: false,
@@ -133,6 +150,7 @@ const initialReduxState = {
   executions: initialExecutionsState,
   labels: initialLabelsState,
   config: initialConfigState,
+  executors: initialExecutorsState,
 };
 
 export default initialReduxState;

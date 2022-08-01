@@ -14,14 +14,12 @@ export const StyledLogOutputContainer = styled.div<{$isFullScreen?: boolean}>`
     `
       : ''};
 
-  overflow: auto;
+  overflow-x: auto;
 
   display: flex;
   flex-direction: column;
-
-  height: 100%;
-  border: 1px solid #434343;
-  border-radius: ${({$isFullScreen}) => ($isFullScreen ? '0' : '16px 16px 0px 0px')};
+  
+  border-radius: ${({$isFullScreen}) => ($isFullScreen ? '0' : '4px')};
 
   &.full-screen-log-output-enter {
     width: 0;
@@ -59,7 +57,7 @@ export const StyledLogTextContainer = styled.div`
 
   flex: 1;
 
-  background-color: #151515;
+  background-color: ${Colors.slate900};
 
   ${invisibleScroll};
 `;
@@ -79,16 +77,20 @@ export const StyledLogOutputActionsContainer = styled.ul`
   display: flex;
   justify-content: flex-end;
   flex: 1;
+
+  margin: 0;
+
+  list-style-type: none;
 `;
 
-export const StyledLogOutputHeaderContainer = styled.ul`
+export const StyledLogOutputHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
 
-  padding: 8px 25px;
+  padding: 8px;
   border-radius: inherit;
 
-  background: #303030;
+  background: ${Colors.slate900};
 `;
 
 export const StyledActionIconContainer = styled.li`

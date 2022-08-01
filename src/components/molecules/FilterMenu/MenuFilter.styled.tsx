@@ -3,18 +3,19 @@ import {Checkbox, Dropdown, Menu} from 'antd';
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
-import Fonts from '@styles/Fonts';
+import Shadows from '@styles/Shadows';
 
 export const StyledFilterMenu = styled(Menu)`
-  border: 1px solid ${Colors.greyBorder};
-
-  background-color: ${Colors.grey1000};
+  border: 1px solid ${Colors.slate800};
+  box-shadow: ${Shadows.soft};
+  background-color: ${Colors.slate900};
 `;
 
 export const StyledFilterCheckbox = styled(Checkbox)`
+  width: 100%;
   .ant-checkbox-inner {
     background-color: ${Colors.grey1000};
-    border-color: ${Colors.greyBorder};
+    border-color: ${Colors.slate800};
   }
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: ${Colors.purple};
@@ -29,7 +30,7 @@ export const StyledFilterCheckbox = styled(Checkbox)`
 export const StyledFilterMenuItem = styled(Menu.Item)`
   &:hover,
   &:focus {
-    background-color: ${Colors.dashboardTableBackground};
+    background-color: ${Colors.slate801};
     .ant-checkbox-inner {
       border-color: ${Colors.purple};
     }
@@ -39,19 +40,13 @@ export const StyledFilterMenuItem = styled(Menu.Item)`
 export const StyledFilterDropdown = styled(Dropdown)`
   padding: 0 4px;
 
-  ${props => (props.visible ? `background-color: ${Colors.greyHover};` : '')}
-
-  ${props =>
-    props.disabled === false
-      ? `&:hover {
-    background-color: ${Colors.greyHover};
-  }`
-      : ''}
+  ${props => (props.visible ? `background-color: ${Colors.slate800};` : '')}
 `;
 
 export const AppliedFiltersNotification = styled.div`
   position: absolute;
-  left: -1px;
+  left: 4px;
+  top: 10px;
 
   width: 4px;
   height: 4px;
@@ -63,11 +58,26 @@ export const AppliedFiltersNotification = styled.div`
 
 export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean}>`
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  cursor: ${props => (props.isFiltersDisabled ? 'default' : 'pointer')};
-  color: ${props => (props.isFiltersDisabled ? Colors.greyDisabled : Colors.grey450)};
+  width: 296px;
+  border: 1px solid ${Colors.slate800};
+  border-radius: 4px;
+  padding: 11px;
 
-  font-size: 14px;
-  font-weight: 400;
-  font-family: ${Fonts.nunito};
+  background-color: ${props => (props.isFiltersDisabled ? Colors.slate800disabled : Colors.slate800)};
+
+  color: ${Colors.slate500};
+  cursor: ${props => (props.isFiltersDisabled ? 'not-allowed' : 'pointer')};
+  transition: 0.3s ease;
+
+  ${props =>
+    props.isFiltersDisabled
+      ? ''
+      : `
+      &:hover {
+        border-color: ${Colors.slate600};
+      }`}
 `;

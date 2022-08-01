@@ -6,20 +6,24 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const StyledArtifactsListContainer = styled.ul`
+export const ArtifactsListContainer = styled.ul`
   display: flex;
   flex-direction: column;
-
-  background: #151515;
+  gap: 10px;
 `;
 
-export const StyledArtifactsListItem = styled.li`
-  padding: 7px 15px;
-  border: 1px solid #393939;
+export const ArtifactsListItem = styled.li`
+  padding: 10px 15px;
 
-  color: ${Colors.whitePure};
+  color: ${Colors.slate300};
+  background: ${Colors.slate900};
 
   cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    background: ${Colors.slate700};
+  }
 `;
 
 export const StyledSpace = styled(Space)`
@@ -46,5 +50,3 @@ export const StyledDownloadIcon = styled(DownloadOutlined)`
     }
   }
 `;
-
-export const StyledArtifactsFileName = styled.span``;

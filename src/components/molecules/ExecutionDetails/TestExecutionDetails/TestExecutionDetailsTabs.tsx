@@ -1,38 +1,52 @@
 import {useContext} from 'react';
 
-import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
+import {Execution} from '@models/execution';
 
-import {DashboardInfoPanelSecondLevelContext} from '@contexts';
+import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
 
-import {CLICommands} from '../..';
-import Variables from '../../Variables';
+import useIsRunning from '@hooks/useIsRunning';
+
+import {decomposeVariables} from '@utils/variables';
+
+import {ExecutionDetailsContext} from '@contexts';
+
 import {StyledAntTabPane, StyledAntTabs, StyledTestExecutionDetailsTabsContainer} from '../ExecutionDetails.styled';
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
-import TestExecutionDetailsLogOutput from './TestExecutionDetailsLogOutput';
 
-const TestExecutionDetailsTabs = () => {
-  const {data} = useContext(DashboardInfoPanelSecondLevelContext);
-  const {entityType} = useContext(DashboardContext);
+const TestExecutionDetailsTabs: React.FC = () => {
+  const {data} = useContext(ExecutionDetailsContext);
+
+  const testData = data as Execution;
+
+  const {
+    testType,
+    executionResult: {status, output, errorMessage},
+    name,
+    variables,
+    id,
+  } = testData;
+
+  const isRunning = useIsRunning(status);
+
+  const decomposedVars = decomposeVariables(variables);
 
   return (
     <StyledTestExecutionDetailsTabsContainer>
       <StyledAntTabs>
-        {entityType !== 'test-suites' ? (
-          <StyledAntTabPane tab="Log Output" key="LogOutputPane">
-            <TestExecutionDetailsLogOutput />
-          </StyledAntTabPane>
-        ) : null}
-        {data.testType === 'cypress/project' || data.testType === 'soapui/xml' ? (
-          <StyledAntTabPane tab="Artifacts" key="ArtifactsPane">
-            <TestExecutionDetailsArtifacts />
-          </StyledAntTabPane>
-        ) : null}
+        <StyledAntTabPane tab="Log Output" key="LogOutputPane">
+          <LogOutput logOutput={output} executionId={name} isRunning={isRunning} />
+        </StyledAntTabPane>
+        <StyledAntTabPane tab="Artifacts" key="ArtifactsPane">
+          <TestExecutionDetailsArtifacts id={id} />
+        </StyledAntTabPane>
         <StyledAntTabPane tab="CLI Commands" key="CLICommands">
-          <CLICommands isExecutions />
+          <CLICommands isExecutions type={testType} name={name} modifyMap={{status}} />
         </StyledAntTabPane>
-        <StyledAntTabPane tab="Variables" key="Variables">
-          <Variables isExecutions />
-        </StyledAntTabPane>
+        {decomposedVars ? (
+          <StyledAntTabPane tab="Variables" key="Variables">
+            <ExecutionsVariablesList variables={decomposedVars} />
+          </StyledAntTabPane>
+        ) : null}
       </StyledAntTabs>
     </StyledTestExecutionDetailsTabsContainer>
   );

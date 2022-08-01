@@ -1,13 +1,17 @@
 import {Action, Middleware, ThunkAction, configureStore} from '@reduxjs/toolkit';
 
+import {createLogger} from 'redux-logger';
+
 import configSlice from '@redux/reducers/configSlice';
 import executionsSlice from '@redux/reducers/executionsSlice';
+import executorsSlice from '@redux/reducers/executorsSlice';
 import labelsSlice from '@redux/reducers/labelsSlice';
 import testSuiteExecutionsSlice from '@redux/reducers/testSuiteExecutionsSlice';
 import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
 
 import {executionsApi} from '@services/executions';
+import {executorsApi} from '@services/executors';
 import {labelsApi} from '@services/labels';
 import {testSuiteExecutionsApi} from '@services/testSuiteExecutions';
 import {testSuitesApi} from '@services/testSuites';
@@ -19,7 +23,14 @@ const middlewares: Middleware[] = [
   testSuitesApi.middleware,
   labelsApi.middleware,
   testSuiteExecutionsApi.middleware,
+  executorsApi.middleware,
 ];
+
+if (process.env.NODE_ENV === `development`) {
+  const reduxLoggerMiddleware = createLogger();
+
+  middlewares.push(reduxLoggerMiddleware);
+}
 
 export const store = configureStore({
   reducer: {
@@ -29,12 +40,14 @@ export const store = configureStore({
     labels: labelsSlice,
     config: configSlice,
     testSuiteExecutions: testSuiteExecutionsSlice,
+    executors: executorsSlice,
 
     [testSuitesApi.reducerPath]: testSuitesApi.reducer,
     [testsApi.reducerPath]: testsApi.reducer,
     [executionsApi.reducerPath]: executionsApi.reducer,
     [labelsApi.reducerPath]: labelsApi.reducer,
     [testSuiteExecutionsApi.reducerPath]: testSuiteExecutionsApi.reducer,
+    [executorsApi.reducerPath]: executorsApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 });

@@ -1,29 +1,33 @@
-import {useContext} from 'react';
+import {useContext, useMemo} from 'react';
 
 import {testExecutorsConfigs} from '@constants/testExecutors';
 
-import {DashboardBlueprintType} from '@models/dashboard';
+import {Entity} from '@models/entity';
+import {ExecutionStatusEnum} from '@models/execution';
 import {TestExecutor} from '@models/testExecutors';
 
-import {DashboardContext} from '@organisms/DashboardContainer/DashboardContainer';
+import {EntityExecutionsContext} from '@contexts';
 
-import {DashboardInfoPanelSecondLevelContext} from '@contexts';
-
-import {StyledInfoPanelSection} from '../../organisms/DashboardInfoPanel/DashboardInfoPanel.styled';
 import CopyCommand from './CopyCommand';
 
-type CLIScriptModificator = 'isFinished' | 'canHaveArtifacts';
+type CLIScriptModifier = 'isFinished' | 'canHaveArtifacts';
 
 type CLIScript = {
   label: string;
   command: (name: string) => string;
-  modificator?: CLIScriptModificator;
+  modify?: CLIScriptModifier;
 };
 
-type CLIScriptKey = DashboardBlueprintType | 'executions';
+type CLIScriptKey = Entity | 'executions';
 
 type CLICommandsProps = {
   isExecutions?: boolean;
+  type: TestExecutor;
+  name?: string;
+  id?: string;
+  modifyMap?: {
+    status?: ExecutionStatusEnum;
+  };
 };
 
 const testSuiteScripts: CLIScript[] = [
@@ -64,12 +68,12 @@ const executionsScripts: CLIScript[] = [
   {
     label: 'Watch execution',
     command: (name: string) => `kubectl testkube watch execution ${name}`,
-    modificator: 'isFinished',
+    modify: 'isFinished',
   },
   {
     label: 'Download artifacts',
     command: (name: string) => `kubectl testkube download artifacts ${name}`,
-    modificator: 'canHaveArtifacts',
+    modify: 'canHaveArtifacts',
   },
 ];
 
@@ -79,8 +83,8 @@ const scriptsByEntityType: {[key in CLIScriptKey]: CLIScript[]} = {
   executions: executionsScripts,
 };
 
-const modificatorActions: {
-  [key in CLIScriptModificator]: (args: any) => boolean;
+const modifyActions: {
+  [key in CLIScriptModifier]: (args: any) => boolean;
 } = {
   canHaveArtifacts: canHaveArtifacts => {
     return !canHaveArtifacts;
@@ -91,38 +95,44 @@ const modificatorActions: {
 };
 
 const CLICommands: React.FC<CLICommandsProps> = props => {
-  const {isExecutions} = props;
+  const {isExecutions, type, name, id, modifyMap} = props;
 
-  const {data} = useContext(DashboardInfoPanelSecondLevelContext);
-  const {selectedRecord, entityType} = useContext(DashboardContext);
-  const {name, type} = selectedRecord;
+  const {entity} = useContext(EntityExecutionsContext);
 
-  const CLIEntityType = isExecutions ? 'executions' : entityType;
+  const CLIEntityType = isExecutions ? 'executions' : entity;
 
   const testExecutorConfig = testExecutorsConfigs[type as TestExecutor] || testExecutorsConfigs.unknown;
 
-  const modificatorArgsMap: {[key in CLIScriptModificator]: any} = {
+  const modifyArgsMap: {[key in CLIScriptModifier]: any} = {
     canHaveArtifacts: testExecutorConfig.canHaveArtifacts,
-    isFinished: data?.executionResult?.status,
+    isFinished: modifyMap?.status,
   };
 
-  const renderedCLICommands = scriptsByEntityType[CLIEntityType].map(cliCommand => {
-    const {command, label, modificator} = cliCommand;
+  const renderedCLICommands = useMemo(() => {
+    const testTarget = id || name;
 
-    if (modificator) {
-      const modificatorArg = modificatorArgsMap[modificator];
-
-      if (modificatorActions[modificator](modificatorArg)) {
-        return null;
-      }
+    if (!testTarget) {
+      return null;
     }
 
-    const commandString = isExecutions ? command(data?.id) : command(name);
+    return scriptsByEntityType[CLIEntityType].map(cliCommand => {
+      const {command, label, modify} = cliCommand;
 
-    return <CopyCommand key={label} command={commandString} label={label} />;
-  }).filter(cliCommand => cliCommand);
+      if (modify) {
+        const modifyArg = modifyArgsMap[modify];
 
-  return <StyledInfoPanelSection>{renderedCLICommands}</StyledInfoPanelSection>;
+        if (modifyActions[modify](modifyArg)) {
+          return null;
+        }
+      }
+
+      const commandString = isExecutions ? command(testTarget) : command(testTarget);
+
+      return <CopyCommand key={label} command={commandString} label={label} />;
+    }).filter(cliCommand => cliCommand);
+  }, [id, name, type, modifyMap]);
+
+  return <div>{renderedCLICommands}</div>;
 };
 
 export default CLICommands;

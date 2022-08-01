@@ -12,11 +12,8 @@ import {
 
 import {useGetTestSuitesQuery} from '@services/testSuites';
 
-import {testSuitesDashboardGradient} from '@styles/gradients';
-
 export const TestSuitesEntity: DashboardBlueprint = {
   entityType: 'test-suites',
-  dashboardGradient: testSuitesDashboardGradient,
   route: '/dashboard/test-suites',
   reduxEntity: 'testSuites',
   pageTitle: 'Test Suites',

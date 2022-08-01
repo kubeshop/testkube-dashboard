@@ -39,6 +39,12 @@ export const configSlice = createSlice({
       state.fullScreenLogOutput.isFullScreenLogOutput = false;
       state.fullScreenLogOutput.logOutput = '';
     },
+    openSettingsTabConfig: (state: Draft<ConfigState>) => {
+      state.redirectTarget.isSettingsTabConfig = true;
+    },
+    closeSettingsTabConfig: (state: Draft<ConfigState>) => {
+      state.redirectTarget.isSettingsTabConfig = false;
+    },
   },
 });
 
@@ -56,6 +62,8 @@ export const {
   clearTargetTestExecutionId,
   clearRunTarget,
   setLogOutput,
+  openSettingsTabConfig,
+  closeSettingsTabConfig,
 } = configSlice.actions;
 
 export default configSlice.reducer;

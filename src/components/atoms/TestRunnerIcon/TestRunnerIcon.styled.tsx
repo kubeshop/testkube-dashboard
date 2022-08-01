@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export const StyledTestRunnerIcon = styled.div`
-  width: 24px;
-  height: 24px;
+export const StyledTestRunnerIcon = styled.div<{$noWidth: boolean}>`
+  width: ${({$noWidth}) => ($noWidth ? 'unset' : '24px')};
+  height: ${({$noWidth}) => ($noWidth ? 'unset' : '24px')};
 
   svg {
     width: 100%;

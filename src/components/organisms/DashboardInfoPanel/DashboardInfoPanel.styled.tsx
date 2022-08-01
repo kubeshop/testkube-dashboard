@@ -13,7 +13,7 @@ export const StyledDashboardInfoPanelContainer = styled.div<{
   isRecordSelected?: boolean;
 }>`
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
 
   display: flex;
   flex-direction: column;

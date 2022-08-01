@@ -1,14 +1,14 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {addIndexes} from '@utils/array';
-import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
+import {dynamicBaseQuery} from '@utils/fetchUtils';
 
 export const testSuiteExecutionsApi = createApi({
   reducerPath: 'testSuiteExecutionsApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTestSuiteExecutionsByTestId: builder.query({
-      query: (filters: any) => `/test-suite-executions?${paramsSerializer(filters)}`,
+      query: id => `/test-suite-executions?id=${id}`,
       transformResponse: (response: any, meta, arg) => {
         const {results, ...rest} = response;
 

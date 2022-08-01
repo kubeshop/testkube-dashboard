@@ -6,7 +6,6 @@ export const StyledLabelsList = styled.ul`
   gap: 10px;
 
   margin: 0;
-  padding-top: 7px;
 
   list-style-type: none;
 `;

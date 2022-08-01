@@ -80,33 +80,7 @@ export const StyledStatusContainer = styled.div`
   }
 `;
 
-export const StyledAntTabs = styled(Tabs)`
-  .ant-tabs-content-holder {
-    overflow: auto;
-  }
-
-  .ant-tabs-nav-wrap {
-    padding: 0 40px;
-    border-bottom: 1px solid #393939;
-
-    .ant-tabs-tab {
-      padding: 15px 0;
-
-      .ant-tabs-tab-btn {
-        color: ${Colors.grey450};
-
-        font-size: 16px;
-        font-weight: 400;
-      }
-
-      &-active {
-        .ant-tabs-tab-btn {
-          color: ${Colors.purple};
-        }
-      }
-    }
-  }
-`;
+export const StyledAntTabs = styled(Tabs)``;
 
 export const StyledAntTabPane = styled(Tabs.TabPane)``;
 

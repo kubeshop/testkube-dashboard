@@ -1,20 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 23.0.5, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="TESTKUBE_logos" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-	 y="0px" viewBox="0 0 139.3 139.3" style="enable-background:new 0 0 139.3 139.3;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:url(#SVGID_1_);}
-</style>
-<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="49.5705" y1="89.7496" x2="89.7495" y2="49.5706">
-	<stop  offset="0" style="stop-color:#AEB5D9"/>
-	<stop  offset="0.1421" style="stop-color:#9B9AD5"/>
-	<stop  offset="0.4167" style="stop-color:#7B6DCE"/>
-	<stop  offset="0.6612" style="stop-color:#644CC8"/>
-	<stop  offset="0.8639" style="stop-color:#5637C5"/>
-	<stop  offset="1" style="stop-color:#5130C4"/>
-</linearGradient>
-<path class="st0" d="M100,59.8L72.3,32.1c-1.4-1.4-3.8-1.4-5.2,0L39.3,59.8c-0.7,0.7-1.1,1.6-1.1,2.6v14.4c0,1,0.4,1.9,1.1,2.6
-	l27.7,27.7c1.4,1.4,3.8,1.4,5.2,0L100,79.5c0.7-0.7,1.1-1.6,1.1-2.6V62.4C101.1,61.5,100.7,60.5,100,59.8z M97.7,75l-5.4-5.4
-	l5.4-5.4V75z M90,67.3L71.3,48.6V35.7l25.2,25.2L90,67.3z M51.6,69.7l18.1-18.1l18.1,18.1L69.7,87.7L51.6,69.7z M68,35.7v12.9
-	L49.3,67.3l-6.4-6.4L68,35.7z M69.7,105.2V92.3L90,72l6.4,6.4L69.7,105.2z"/>
+<svg width="35" height="43" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M33.484 15.67 18.45.588a2.005 2.005 0 0 0-2.827 0L.586 15.669c-.373.374-.584.88-.586 1.41v7.852c.002.53.213 1.036.586 1.41l15.036 15.08a2.004 2.004 0 0 0 2.827 0l15.035-15.08c.374-.374.585-.88.587-1.41V17.08a2.004 2.004 0 0 0-.587-1.41Zm-1.25 8.255L29.33 21.01l2.903-2.911v5.825Zm-4.158-4.172L17.923 9.567V2.576l13.638 13.68-3.485 3.497ZM7.25 21.009l9.786-9.816 9.787 9.816-9.787 9.818-9.786-9.818Zm8.899-18.433v6.99L5.994 19.754 2.51 16.255l13.639-13.68Zm.887 37.758v-6.992l11.041-11.074 3.485 3.505-14.526 14.561Z" fill="url(#a)"/>
+    <defs>
+        <linearGradient id="a" x1="6.147" y1="31.93" x2="27.989" y2="10.155" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#B0B5D8"/>
+        <stop offset=".13" stop-color="#9E9DD4"/>
+        <stop offset=".41" stop-color="#7A70CB"/>
+        <stop offset=".66" stop-color="#604FC5"/>
+        <stop offset=".86" stop-color="#513AC1"/>
+        <stop offset="1" stop-color="#4B33C0"/>
+    </linearGradient>
+    </defs>
 </svg>

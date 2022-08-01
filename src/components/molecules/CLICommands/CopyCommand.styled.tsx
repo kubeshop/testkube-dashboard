@@ -1,63 +1,53 @@
-import {CopyOutlined} from '@ant-design/icons';
-
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const StyledCopyCommandContainer = styled.div<{isHovered: boolean}>`
+export const LabelWrapper = styled.div`
+  margin-bottom: 12px;
+`;
+
+export const StyledCopyCommandContainer = styled.div<{$bg: string}>`
   display: flex;
   justify-content: space-between;
 
-  padding: 10px 15px;
+  border-radius: 4px;
 
-  background-color: ${Colors.grey1000};
+  background-color: ${({$bg}) => $bg};
 
   cursor: pointer;
 
   span {
+    position: relative;
+
     svg {
-      color: ${Colors.whitePure};
+      position: absolute;
+      right: 10px;
+      top: 12px;
 
       font-size: 22px;
-
-      transition: 0.15s ease;
-      opacity: 0;
     }
   }
 
   &:not(:last-child) {
     margin-bottom: 15px;
   }
-
-  &:hover {
-    span {
-      svg {
-        transition: 0.15s ease;
-        opacity: 1;
-      }
-    }
-  }
 `;
 
-export const StyledCopyCommandLabel = styled.span`
-  margin-bottom: 5px;
+export const StyledCopyCommandCode = styled.code`
+  display: flex;
+  align-items: center;
 
-  color: ${Colors.grey450};
+  color: ${Colors.greyCode};
 
-  font-size: 16px;
-`;
-
-export const StyledCopyCommandPre = styled.pre`
-  margin-bottom: 0;
+  overflow: auto;
   &::-webkit-scrollbar {
     display: none;
   } /* Chrome, Safari and Opera */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-`;
 
-export const StyledCopyCommandCode = styled.code`
-  color: ${Colors.greyCode};
+  span {
+    margin-right: 5px;
+    color: ${Colors.slate500};
+  }
 `;
-
-export const StyledCopyCommandIcon = styled(CopyOutlined)``;

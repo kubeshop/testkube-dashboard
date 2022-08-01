@@ -24,7 +24,7 @@ export type LogOutputProps = {
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = '', executionId, actions = ['copy', 'fullscreen'], isRunning, title} = props;
+  const {logOutput = 'No logs', executionId, actions = ['copy'], isRunning, title} = props;
 
   const {dispatch} = useContext(MainContext);
 

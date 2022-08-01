@@ -15,6 +15,7 @@ import {clearTargetTestId, selectApiEndpoint, selectRedirectTarget} from '@redux
 import {Skeleton} from '@custom-antd';
 
 import {PollingIntervals} from '@utils/numbers';
+import {compareFiltersObject} from '@utils/objects';
 
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
@@ -23,32 +24,11 @@ import {MainContext} from '@contexts';
 
 import {StyledDashboardBottomGradient, StyledDashboardContent, StyledDashboardGradient} from '../Dashboard.styled';
 import {DashboardContext} from '../DashboardContainer/DashboardContainer';
+// import DashboardFilters from './Dashboar/dFilters';
 import {AddTestButton, StyledContentTable, StyledDashboardContentContainer} from './DashboardContent.styled';
-import DashboardFilters from './DashboardFilters';
 import DashboardTableRow from './DashboardTableRow';
 import DashboardTitle from './DashboardTitle';
 import EmptyTestsDataContent from './EmptyTestsDataContent';
-
-function compareFiltersObject(initialFilters: any, currentFilters: any) {
-  const keys1 = Object.keys(initialFilters);
-  // eslint-disable-next-line no-restricted-syntax
-  for (const key of keys1) {
-    const val1 = initialFilters[key];
-    const val2 = currentFilters[key];
-    const isArrays = Array.isArray(val1) && Array.isArray(val2);
-    if (isArrays) {
-      if (val1.length !== val2.length) {
-        return false;
-      }
-      // eslint-disable-next-line no-continue
-      continue;
-    }
-    if (val1 !== val2) {
-      return false;
-    }
-  }
-  return true;
-}
 
 interface OnDataChangeInterface {
   data: TestSuiteWithExecution[] | TestWithExecution[];
@@ -248,7 +228,7 @@ const DashboardContent: React.FC<DashboardContentProps> = props => {
             </AddTestButton>
           ) : null}
         </DashboardTitle>
-        {filtersComponentsIds && filtersComponentsIds.length ? (
+        {/* {filtersComponentsIds && filtersComponentsIds.length ? (
           <DashboardFilters
             setSelectedRecord={setSelectedRecord}
             selectedRecord={selectedRecord}
@@ -258,7 +238,7 @@ const DashboardContent: React.FC<DashboardContentProps> = props => {
             entityType={entityType}
             isFiltersDisabled={isEmptyTestsData}
           />
-        ) : null}
+        ) : null} */}
         {isEmptyTestsData ? (
           <EmptyTestsDataContent />
         ) : (

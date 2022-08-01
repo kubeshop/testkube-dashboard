@@ -33,13 +33,14 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
       modificator = null,
       rules = [],
       help = null,
+      placeholder = null,
     } = formItem;
 
     let children: Nullable<ReactElement<any, any>> = null;
 
     if (inputType === 'select') {
       children = (
-        <Select>
+        <Select placeholder={placeholder} showSearch>
           {options.map((option: any) => {
             return (
               <Option value={option.value} key={option.value}>
@@ -68,10 +69,10 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     if (inputType === 'default') {
       if (modificator) {
         if (modificator === 'password') {
-          children = <Input.Password />;
+          children = <Input.Password placeholder={placeholder} />;
         }
       } else {
-        children = <Input />;
+        children = <Input placeholder={placeholder} />;
       }
     }
 
@@ -80,7 +81,7 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     }
 
     if (inputType === 'textarea') {
-      children = <TextArea rows={10} />;
+      children = <TextArea rows={10} placeholder={placeholder} />;
     }
 
     if (inputType === 'variables' && form) {

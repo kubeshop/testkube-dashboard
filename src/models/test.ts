@@ -2,7 +2,7 @@ import {EntityMap} from '@models/entityMap';
 import {Execution} from '@models/execution';
 import {Repository} from '@models/repository';
 
-import {Variable} from './variable';
+import {Variables} from './variable';
 
 export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | 'string';
 
@@ -22,9 +22,11 @@ export type Test = {
   labels: EntityMap;
   schedule: string;
   params: EntityMap;
+  variables?: Variables;
+  executorArgs?: string[];
 };
 
 export type TestWithExecution = {
-  dataList: Test;
+  test: Test;
   latestExecution?: Execution;
 };

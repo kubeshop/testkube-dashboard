@@ -12,7 +12,11 @@ const FormItem: React.FC<FormItemProps> = props => {
     ...rest,
   };
 
-  return <AntdFormItem {...formItemsProps}>{children}</AntdFormItem>;
+  return (
+    <AntdFormItem {...formItemsProps} style={{marginBottom: 0}}>
+      {children}
+    </AntdFormItem>
+  );
 };
 
 export default FormItem;

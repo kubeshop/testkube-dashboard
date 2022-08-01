@@ -4,15 +4,13 @@ import {FileOutlined} from '@ant-design/icons';
 
 import {Artifact} from '@models/artifact';
 
+import {Text} from '@custom-antd';
+
 import {downloadFileName} from '@services/artifacts';
 
-import {
-  StyledArtifactsFileName,
-  StyledArtifactsListContainer,
-  StyledArtifactsListItem,
-  StyledDownloadIcon,
-  StyledSpace,
-} from './ArtifactsList.styled';
+import Colors from '@styles/Colors';
+
+import {ArtifactsListContainer, ArtifactsListItem, StyledDownloadIcon, StyledSpace} from './ArtifactsList.styled';
 
 type ArtifactsListProps = {
   artifacts: Artifact[];
@@ -29,18 +27,18 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
       const listItemKey = `${name} - ${index}`;
 
       return (
-        <StyledArtifactsListItem key={listItemKey} onClick={() => downloadFileName(name, testExecutionId)}>
+        <ArtifactsListItem key={listItemKey} onClick={() => downloadFileName(name, testExecutionId)}>
           <StyledSpace size={15}>
             <FileOutlined />
-            <StyledArtifactsFileName>{name}</StyledArtifactsFileName>
+            <Text color={Colors.slate300}>{name}</Text>
             <StyledDownloadIcon />
           </StyledSpace>
-        </StyledArtifactsListItem>
+        </ArtifactsListItem>
       );
     });
   }, [artifacts, testExecutionId]);
 
-  return <StyledArtifactsListContainer>{renderedArtifactsList}</StyledArtifactsListContainer>;
+  return <ArtifactsListContainer>{renderedArtifactsList}</ArtifactsListContainer>;
 };
 
 export default ArtifactsList;

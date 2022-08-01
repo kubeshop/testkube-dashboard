@@ -38,7 +38,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies packages
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Testing dashboard
         if: always()

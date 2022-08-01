@@ -1,8 +1,11 @@
+import {CopyOutlined} from '@ant-design/icons';
+
 import {Tooltip} from '@custom-antd';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
-import {StyledCopyCommandIcon} from '../../CLICommands/CopyCommand.styled';
+import Colors from '@styles/Colors';
+
 import {LogActionProps} from '../LogOutput';
 import {StyledActionIconContainer} from '../LogOutput.styled';
 
@@ -20,7 +23,7 @@ const CopyAction: React.FC<LogActionProps> = props => {
   return (
     <StyledActionIconContainer onClick={onCopy}>
       <Tooltip title={tooltipTitle}>
-        <StyledCopyCommandIcon />
+        <CopyOutlined onClick={onCopy} style={{color: Colors.slate200}} />
       </Tooltip>
     </StyledActionIconContainer>
   );

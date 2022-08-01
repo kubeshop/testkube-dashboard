@@ -34,5 +34,6 @@ export const StyledTestSummary = styled.div`
 
 export const StyledLayoutContentWrapper = styled(Layout)`
   height: 100vh;
-  padding-left: 80px;
+
+  overflow-y: auto;
 `;
