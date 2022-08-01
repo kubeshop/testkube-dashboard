@@ -33,8 +33,6 @@ export const StyledLogo = styled.div`
   }
 
   svg {
-    width: 100%;
-
     overflow: visible;
   }
 `;
