@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -13,7 +13,7 @@ import {ProtectedRoute} from '@atoms';
 
 import {Sider} from '@organisms';
 
-import {NotFound, Tests} from '@pages';
+import {Tests} from '@pages';
 
 import {MainContext} from '@contexts';
 
@@ -103,7 +103,7 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/tests" />} />
             </Routes>
           </Content>
         </StyledLayoutContentWrapper>
