@@ -10,13 +10,15 @@ type Executor = {
     uri: string;
     jobTemplate: string;
     labels: EntityMap;
-    features: 'artifacts' | 'junit-report';
+    features: ExecutorFeature[];
   };
 };
 
+type ExecutorFeature = 'artifacts' | 'junit-report';
+
 interface ExecutorsState {
   executorsList: Executor[];
-  executorsFeaturesMap: EntityMap;
+  executorsFeaturesMap: EntityMap<ExecutorFeature[]>;
 }
 
-export type {ExecutorsState, Executor};
+export type {ExecutorsState, Executor, ExecutorFeature};
