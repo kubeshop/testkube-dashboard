@@ -18,7 +18,7 @@ export const StyledLogOutputContainer = styled.div<{$isFullScreen?: boolean}>`
 
   display: flex;
   flex-direction: column;
-  
+
   border-radius: ${({$isFullScreen}) => ($isFullScreen ? '0' : '4px')};
 
   &.full-screen-log-output-enter {
@@ -78,6 +78,7 @@ export const StyledLogOutputActionsContainer = styled.ul`
   justify-content: flex-end;
   flex: 1;
 
+  padding: 0;
   margin: 0;
 
   list-style-type: none;

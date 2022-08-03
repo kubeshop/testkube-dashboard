@@ -24,7 +24,11 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
 
   const renderedArtifactsList = useMemo(() => {
     if (!artifacts || !artifacts.length) {
-      return <span>No artifacts</span>;
+      return (
+        <Text className="semibold middle" color={Colors.whitePure}>
+          No artifacts
+        </Text>
+      );
     }
 
     return artifacts.map((artifact, index) => {
