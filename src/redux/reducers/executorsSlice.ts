@@ -1,6 +1,7 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {ExecutorsState} from '@models/executors';
+import {EntityMap} from '@models/entityMap';
+import {Executor, ExecutorsState} from '@models/executors';
 
 import initialState from '@redux/initialState';
 
@@ -10,13 +11,27 @@ export const executorsSlice = createSlice({
   name: 'executorsSlice',
   initialState: initialState.executors,
   reducers: {
-    setExecutors: (state: Draft<ExecutorsState>, action: PayloadAction<any>) => {
+    setExecutors: (state: Draft<ExecutorsState>, action: PayloadAction<Executor[]>) => {
+      const executorsFeaturesMap: EntityMap = {};
+
+      action.payload.forEach(executorItem => {
+        const {
+          executor: {features, types},
+        } = executorItem;
+
+        types.forEach(type => {
+          executorsFeaturesMap[type] = features || [];
+        });
+      });
+
+      state.executorsFeaturesMap = executorsFeaturesMap;
       state.executorsList = action.payload || {};
     },
   },
 });
 
 export const selectExecutors = (state: RootState) => state.executors.executorsList;
+export const selectExecutorsFeaturesMap = (state: RootState) => state.executors.executorsFeaturesMap;
 
 export const {setExecutors} = executorsSlice.actions;
 

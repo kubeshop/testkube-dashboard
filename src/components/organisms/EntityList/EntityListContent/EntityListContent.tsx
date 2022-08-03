@@ -177,7 +177,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       <EntityListHeader>
         {dataLayers[entity]}
         <Space size={15} direction="vertical">
-          <Title color={Colors.slate50}>{pageTitle}</Title>
+          <Title color={Colors.slate50} ellipsis>
+            {pageTitle}
+          </Title>
           <PageDescription />
         </Space>
       </EntityListHeader>

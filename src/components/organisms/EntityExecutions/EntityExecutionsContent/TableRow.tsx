@@ -12,7 +12,7 @@ import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './EntityExecutio
 
 const TableRow: React.FC<{data: any}> = props => {
   const {data} = props;
-  const {status, number, duration, startTime, endTime, name, id} = data;
+  const {status, number, startTime, endTime, name, id} = data;
 
   const executionDuration =
     status === 'running'
@@ -24,9 +24,15 @@ const TableRow: React.FC<{data: any}> = props => {
           })
         );
 
-  const executedTime = startTime
-    ? constructExecutedString(intervalToDuration({start: new Date(startTime || ''), end: new Date()}))
-    : '';
+  const getIntervalExecTime = () => {
+    try {
+      return constructExecutedString(intervalToDuration({start: new Date(startTime || {}), end: new Date()}));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const executedTime = getIntervalExecTime();
 
   return (
     <ItemWrapper key={id}>
@@ -46,9 +52,11 @@ const TableRow: React.FC<{data: any}> = props => {
         </ItemRow>
         <ItemRow $flex={1}>
           <ItemColumn>
-            <Text className="regular small" color={Colors.slate400}>
-              #{number}
-            </Text>
+            {number ? (
+              <Text className="regular small" color={Colors.slate400}>
+                #{number}
+              </Text>
+            ) : null}
             <Text className="regular small" color={Colors.slate400}>
               Executed: {executedTime} ago
             </Text>

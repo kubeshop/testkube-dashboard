@@ -1,5 +1,5 @@
-/* eslint-disable array-callback-return */
-import {FormItem} from '@models/form';
+import {Executor} from '@models/executors';
+import {FormItem, Option} from '@models/form';
 import {Step} from '@models/wizard';
 
 import {required, url} from '@utils/form';
@@ -160,15 +160,19 @@ export const getTestSourceSpecificFields = (values: any) => {
   };
 };
 
-export const remapExecutors = (executors: any) => {
-  const array: any = [];
+export const remapExecutors = (executors: Executor[]) => {
+  if (!executors || !executors.length) {
+    return [];
+  }
 
-  executors.map((executorItem: any) => {
+  const array: Option[] = [];
+
+  executors.forEach(executorItem => {
     const {
       executor: {types},
     } = executorItem;
 
-    types.map((type: any) => {
+    types.forEach(type => {
       array.push({label: type, value: type});
     });
   });

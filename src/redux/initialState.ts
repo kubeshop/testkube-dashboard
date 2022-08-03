@@ -1,11 +1,10 @@
 import {ConfigState} from '@models/config';
 import {ExecutionsState} from '@models/executions';
+import {ExecutorsState} from '@models/executors';
 import {LabelsState} from '@models/labels';
 import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
 import {TestSuiteFilters, TestSuitesState} from '@models/testSuites';
 import {TestFilters, TestsState} from '@models/tests';
-
-import {ExecutorsState} from '@src/models/executors';
 
 const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
@@ -29,7 +28,7 @@ const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
 export const initialTestSuitesState: TestSuitesState = {
   isLoading: false,
   dataList: [],
-  latestExecution: null,
+  latestExecution: undefined,
   filters: {textSearch: '', pageSize: 10, page: 0, selector: [], startDate: null, endDate: null, status: []},
   totals: {
     results: 0,
@@ -127,6 +126,7 @@ const initialLabelsState: LabelsState = {
 
 const initialExecutorsState: ExecutorsState = {
   executorsList: [],
+  executorsFeaturesMap: {},
 };
 
 const initialConfigState: ConfigState = {

@@ -97,8 +97,6 @@ After this, you should get an open navigator with the link: `http://localhost:30
 | `npm run lintfix`        |     fix lint of the project      |
 | `npm run stylelint`      |    fix styles of the project     |
 | `npm run start`          |          start the app           |
-| `npm run start:mock-app` |    Start app with mocked data    |
-| `npm run mock-api`       |     Run mock data separately     |
 | `npm run test`           |       run test of the app        |
 | `npm run test:watch`     |         watch jest test          |
 | `npm run test:coverage`  |        run test coverage         |

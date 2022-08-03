@@ -1,7 +1,14 @@
-import {Variable} from '@models/variable';
+import {Variable, Variables} from '@models/variable';
 
 export const formatVariables = (list: Variable[]) => {
-  const variables: {[key in string]: any} = {};
+  const variables: {
+    [key in string]: {
+      name: string;
+      value: string;
+      type: string;
+    };
+  } = {};
+
   list.forEach(item => {
     variables[item.key] = {
       name: item.key,
@@ -9,16 +16,18 @@ export const formatVariables = (list: Variable[]) => {
       type: item.type === 0 ? 'basic' : 'secret',
     };
   });
+
   return variables;
 };
 
-export const decomposeVariables = (variables: any) => {
+export const decomposeVariables = (variables: Variables) => {
   if (!variables) {
     return [];
   }
-  return Object.entries(variables).map(([key, value]: any[]) => ({
+
+  return Object.entries(variables).map(([key, value]: any) => ({
     ...value,
-    key: value.name,
+    key: value?.name,
     type: value.type === 'basic' ? 0 : 1,
   }));
 };

@@ -2,17 +2,17 @@ import React, {useContext, useEffect} from 'react';
 
 import {Form, Input, Select} from 'antd';
 
+import {openSettingsTabConfig} from '@redux/reducers/configSlice';
+
 import {Button, Text} from '@custom-antd';
 
 import {required} from '@utils/form';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useGetLabelsQuery} from '@services/labels';
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
 import {MainContext} from '@contexts';
-
-import {openSettingsTabConfig} from '@src/redux/reducers/configSlice';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
@@ -52,7 +52,6 @@ const TestSuiteCreationModalContent: React.FC = () => {
     return () => {
       form.resetFields();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

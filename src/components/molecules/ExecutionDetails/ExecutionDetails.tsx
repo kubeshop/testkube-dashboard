@@ -22,9 +22,9 @@ import {useGetTestExecutionByIdQuery} from '@services/tests';
 import Colors from '@styles/Colors';
 
 import {EntityExecutionsContext, ExecutionDetailsContext} from '@contexts';
+import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
 
 import {DrawerHeader} from '@src/components/organisms/EntityExecutions/ExecutionDetailsDrawer/ExecutionDetailsDrawer.styled';
-import {ExecutionDetailsOnDataChangeInterface} from '@src/contexts/ExecutionDetailsContext';
 
 import {DetailsWrapper, ItemColumn, ItemRow} from '../EntityGrid/EntityGrid.styled';
 import TestExecutionDetailsTabs from './TestExecutionDetails/TestExecutionDetailsTabs';
@@ -114,7 +114,9 @@ const ExecutionDetails: React.FC = () => {
             <DetailsWrapper>
               <ItemRow $flex={1}>
                 <ItemColumn>
-                  <Title ellipsis>{name}</Title>
+                  <Text className="biggest bold" ellipsis>
+                    {name}
+                  </Text>
                 </ItemColumn>
                 <ItemColumn>
                   <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400}} />

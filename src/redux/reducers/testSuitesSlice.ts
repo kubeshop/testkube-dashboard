@@ -10,8 +10,8 @@ export const testSuitesSlice = createSlice({
   name: 'testSuitesSlice',
   initialState: initialState.testSuites,
   reducers: {
-    setTestSuites: (state: Draft<TestSuitesState>, action: PayloadAction<any>) => {
-      const adjustedPayload = action.payload.map((testItem: any) => {
+    setTestSuites: (state: Draft<TestSuitesState>, action: PayloadAction<any[]>) => {
+      const adjustedPayload = action.payload.map(testItem => {
         return {dataItem: testItem.testSuite, latestExecution: testItem.latestExecution};
       });
 

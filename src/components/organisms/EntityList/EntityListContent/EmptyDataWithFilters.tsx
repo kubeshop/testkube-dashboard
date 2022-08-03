@@ -8,7 +8,7 @@ import {ReactComponent as EmptySearch} from '@assets/empty-search.svg';
 
 import Colors from '@styles/Colors';
 
-import {StyledButtonContainer} from '../../DashboardContent/EmptyTestsDataContent/EmptyTestsDataContent.styled';
+import {StyledButtonContainer} from './EntityListContent.styled';
 
 export const StyledEmptyTestsDataContainer = styled(Space)`
   display: flex;
