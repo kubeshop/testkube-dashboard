@@ -10,7 +10,6 @@ import {store} from '@redux/store';
 import {detectAdBlock} from '@utils/fetchUtils';
 
 import {GlobalStyle} from '@styles/globalStyles';
-import '@styles/variables.css';
 
 import App from './App';
 import './antd-theme/antd-customized.css';

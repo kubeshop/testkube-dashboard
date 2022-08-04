@@ -22,6 +22,7 @@ const iconsMap: any = {
   github: GitHubIcon,
   passed: PassedStatusIcon,
   failed: FailedStatusIcon,
+  error: FailedStatusIcon,
   running: RunningStatusIcon,
   pending: PendingStatusIcon,
   queued: PendingStatusIcon,

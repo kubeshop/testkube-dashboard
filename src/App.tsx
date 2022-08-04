@@ -42,7 +42,7 @@ const App: React.FC = () => {
   const {data} = useGetExecutorsQuery(null, {pollingInterval: PollingIntervals.long});
 
   useEffect(() => {
-    dispatch(setExecutors(data));
+    dispatch(setExecutors(data || []));
   }, [data]);
 
   useEffect(() => {

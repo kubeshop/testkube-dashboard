@@ -23,3 +23,10 @@ export const StyledFiltersSection = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
+export const StyledButtonContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+`;

@@ -73,7 +73,6 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         setLabelsMapping(currentLabels => [...currentLabels, {key: item, value: ''}]);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters.selector]);
 
   const renderKeyValueInputs = labelsMapping.map((item, index) => (

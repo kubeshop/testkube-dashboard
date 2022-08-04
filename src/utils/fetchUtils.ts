@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery} from '@reduxjs/toolkit/dist/query';
 
 import {ParsedQuery} from 'query-string';
@@ -50,7 +49,7 @@ export const validateSearchParams = (params: ParsedQuery, paramsType: SearchPara
 
 export const paramsSerializer = (params: object) => {
   return Object.entries(params)
-    .map(([key, value]: any) => {
+    .map(([key, value]: [string, any]) => {
       if (Array.isArray(value)) {
         if (value.length > 0) {
           return `${encodeURIComponent(key)}=${encodeURIComponent(value.join(','))}`;
@@ -92,19 +91,6 @@ export const dynamicBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBas
   }
 
   return rawBaseQuery(baseUrl)(args, api, extraOptions);
-};
-
-// TODO: finish queryparams purifying
-const purifyQueryParams = (paramsToRemove: string[]) => {
-  let url = new URL(window.location.href);
-  let params = new URLSearchParams(url.search);
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (let i of params.keys()) {
-    if (paramsToRemove.includes(i)) {
-      params.delete(i);
-    }
-  }
 };
 
 export const detectAdBlock = async () => {

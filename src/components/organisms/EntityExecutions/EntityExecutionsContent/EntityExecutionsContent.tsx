@@ -6,6 +6,7 @@ import {TableRowSelection} from 'antd/lib/table/interface';
 import axios from 'axios';
 
 import {useAppSelector} from '@redux/hooks';
+import {selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import {TestRunnerIcon} from '@atoms';
 
@@ -16,8 +17,6 @@ import {LabelsList} from '@molecules';
 import Colors from '@styles/Colors';
 
 import {EntityExecutionsContext, MainContext} from '@contexts';
-
-import {selectRedirectTarget} from '@src/redux/reducers/configSlice';
 
 import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper} from './EntityExecutionsContent.styled';
 import Settings from './Settings';

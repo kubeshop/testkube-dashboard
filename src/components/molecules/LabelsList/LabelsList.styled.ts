@@ -5,6 +5,7 @@ export const StyledLabelsList = styled.ul`
   flex-wrap: wrap;
   gap: 10px;
 
+  padding: 0;
   margin: 0;
 
   list-style-type: none;

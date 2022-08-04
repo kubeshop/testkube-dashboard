@@ -1,3 +1,5 @@
+import {Execution} from '@models/execution';
+
 export type TestSuite = {};
 
 export type TestSuiteFilters = {
@@ -12,7 +14,7 @@ export type TestSuiteFilters = {
 interface TestSuitesState {
   isLoading?: boolean;
   dataList: TestSuite[];
-  latestExecution: any;
+  latestExecution?: Execution;
   filters: TestSuiteFilters;
   totals: {};
   filtered: {};

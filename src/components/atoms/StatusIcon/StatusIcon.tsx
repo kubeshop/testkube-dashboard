@@ -1,10 +1,15 @@
+import {Icon} from '@atoms';
+
 import Colors from '@styles/Colors';
 
-import Icon from '../Icon/Icon';
 import {StyledStatusIcon} from './StatusIcon.styled';
 
 const iconStyles: any = {
   failed: {
+    borderColor: Colors.pink600,
+    background: Colors.pink900,
+  },
+  error: {
     borderColor: Colors.pink600,
     background: Colors.pink900,
   },

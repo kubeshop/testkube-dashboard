@@ -6,7 +6,7 @@ import {Artifact} from '@models/artifact';
 
 import {Text} from '@custom-antd';
 
-import {downloadFileName} from '@services/artifacts';
+import {downloadFile} from '@services/artifacts';
 
 import Colors from '@styles/Colors';
 
@@ -20,14 +20,24 @@ type ArtifactsListProps = {
 const ArtifactsList: React.FC<ArtifactsListProps> = props => {
   const {artifacts, testExecutionId} = props;
 
+  const downloadArtifact = downloadFile(testExecutionId);
+
   const renderedArtifactsList = useMemo(() => {
+    if (!artifacts || !artifacts.length) {
+      return (
+        <Text className="semibold middle" color={Colors.whitePure}>
+          No artifacts
+        </Text>
+      );
+    }
+
     return artifacts.map((artifact, index) => {
       const {name} = artifact;
 
       const listItemKey = `${name} - ${index}`;
 
       return (
-        <ArtifactsListItem key={listItemKey} onClick={() => downloadFileName(name, testExecutionId)}>
+        <ArtifactsListItem key={listItemKey} onClick={() => downloadArtifact(name)}>
           <StyledSpace size={15}>
             <FileOutlined />
             <Text color={Colors.slate300}>{name}</Text>

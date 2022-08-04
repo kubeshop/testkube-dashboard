@@ -9,12 +9,19 @@ import Colors from '@styles/Colors';
 export const StyledExecutionStepsList = styled.ul`
   display: flex;
   flex-direction: column;
+
+  padding: 0;
+  margin: 0;
+
+  list-style-type: none;
 `;
 
 export const StyledExecutionStepsListItem = styled.li`
-  padding: 8px 0;
-
   color: ${Colors.whitePure};
+
+  &:not(:last-child) {
+    padding-bottom: 16px;
+  }
 
   &.clickable {
     cursor: pointer;

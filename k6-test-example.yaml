@@ -1,0 +1,15 @@
+apiVersion: tests.testkube.io/v2
+kind: Test
+metadata:
+  name: new-k6-test
+  namespace: testkube
+  labels:
+spec:
+  type: k6/script
+  content:
+    type: string
+    data: "import http from 'k6/http';\nimport { sleep } from 'k6';\n\nexport default function () {\n  http.get('https://test.k6.io');\n  sleep(1);\n}"
+    uri: 
+  schedule: 
+  variables:
+  executorArgs:

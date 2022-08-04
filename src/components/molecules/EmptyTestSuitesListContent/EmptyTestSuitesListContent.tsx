@@ -1,11 +1,12 @@
 import {Button, Text, Title} from '@custom-antd';
 
+import {HelpCard} from '@molecules';
+import {StyledHelpCardsContainer, StyledLastHelpCardContainer} from '@molecules/HelpCard/HelpCard.styled';
+
 import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
 
 import Colors from '@styles/Colors';
 
-import HelpCard from '../HelpCard';
-import {StyledHelpCardsContainer, StyledLastHelpCardContainer} from '../HelpCard/HelpCard.styled';
 import {StyledEmptyTestSuitesDataContainer} from './EmptyTestSuitesListContent.styled';
 
 const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {

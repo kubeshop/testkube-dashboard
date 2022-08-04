@@ -3,9 +3,8 @@ import {TestExecutor} from '@models/testExecutors';
 
 import {Title} from '@custom-antd';
 
-import {LabelsList} from '@molecules';
+import {LabelsList, TestRunner} from '@molecules';
 
-import TestRunner from '../TestRunner';
 import {
   StyledInfoPanelHeaderContainer,
   StyledInfoPanelHeaderDescription,

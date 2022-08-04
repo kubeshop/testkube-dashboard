@@ -36,7 +36,7 @@ export const StyledLablesSpace = styled.div<{noGap?: boolean}>`
   gap: ${props => (props.noGap ? '0' : '16px')};
 
   min-width: 200px;
-  margin-bottom: 8px;
+  margin-bottom: 25px;
 
   &:first-child {
     margin-top: 24px;
@@ -99,5 +99,5 @@ export const StyledButtonsContainer = styled.div`
 
   width: 100%;
 
-  margin-top: 17px;
+  // margin-top: 17px;
 `;
