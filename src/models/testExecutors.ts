@@ -21,6 +21,8 @@ export type TestExecutor =
   //
   | 'kubepug/yaml'
   //
+  | 'ginkgo/test'
+  //
   | 'unknown';
 
 export type UnknownTestExecutor = 'Unknown test type';
@@ -36,6 +38,7 @@ export type TestExecutorName =
   | 'Gradle 18'
   | 'Maven'
   | 'Kubepug'
+  | 'Ginkgo'
   | UnknownTestExecutor;
 
 export type TestExecutorConfig = {

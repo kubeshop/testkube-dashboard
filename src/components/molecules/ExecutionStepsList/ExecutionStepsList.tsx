@@ -100,7 +100,6 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       const listItemClassNames = classNames({
         clickable: isClickable,
       });
-
       // TODO: improve this
       return (
         <StyledExecutionStepsListItem

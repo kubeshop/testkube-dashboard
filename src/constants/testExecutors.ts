@@ -33,5 +33,6 @@ export const testExecutorsNames: {[key in TestExecutor]: TestExecutorName} = {
   'maven:jdk18/test': 'Gradle 18',
   'maven/test': 'Maven',
   'kubepug/yaml': 'Kubepug',
+  'ginkgo/test': 'Ginkgo',
   unknown: 'Unknown test type',
 };
