@@ -12,13 +12,13 @@ import {TestRunnerIcon} from '@atoms';
 
 import {Button, Text, Title} from '@custom-antd';
 
-import {LabelsList} from '@molecules';
+import {CLICommands, LabelsList} from '@molecules';
 
 import Colors from '@styles/Colors';
 
 import {EntityExecutionsContext, MainContext} from '@contexts';
 
-import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper} from './EntityExecutionsContent.styled';
+import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper, TabsWrapper} from './EntityExecutionsContent.styled';
 import Settings from './Settings';
 import TableRow from './TableRow';
 
@@ -163,7 +163,7 @@ const EntityExecutionsContent: React.FC = () => {
           <Title level={3}>{executionsList?.results.length || '-'}</Title>
         </SummaryGridItem>
       </SummaryGridWrapper>
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey}>
+      <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
         <Tabs.TabPane tab="Recent executions" key="1">
           {isEmptyExecutions ? null : (
             <Table
@@ -196,10 +196,13 @@ const EntityExecutionsContent: React.FC = () => {
             />
           )}
         </Tabs.TabPane>
+        <Tabs.TabPane tab="CLI Commands" key="CLICommands">
+          <CLICommands name={name} bg={Colors.slate800} />
+        </Tabs.TabPane>
         <Tabs.TabPane tab="Settings" key="Settings">
           <Settings />
         </Tabs.TabPane>
-      </Tabs>
+      </TabsWrapper>
     </div>
   );
 };

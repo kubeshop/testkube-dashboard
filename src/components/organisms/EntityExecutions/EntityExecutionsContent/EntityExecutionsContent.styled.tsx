@@ -1,4 +1,4 @@
-import {PageHeader} from 'antd';
+import {PageHeader, Tabs} from 'antd';
 
 import styled from 'styled-components';
 
@@ -51,6 +51,12 @@ export const DetailsWrapper = styled.div`
   flex: 1;
 
   margin-left: 15px;
+`;
+
+export const TabsWrapper = styled(Tabs)`
+  .ant-tabs-nav {
+    margin-bottom: 40px;
+  }
 `;
 
 export const ItemRow = styled.div<{$flex: number}>`
