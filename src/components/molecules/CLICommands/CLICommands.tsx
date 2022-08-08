@@ -1,10 +1,11 @@
 import {useContext, useMemo} from 'react';
 
-import {testExecutorsConfigs} from '@constants/testExecutors';
-
 import {Entity} from '@models/entity';
 import {ExecutionStatusEnum} from '@models/execution';
 import {TestExecutor} from '@models/testExecutors';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
 import {EntityExecutionsContext} from '@contexts';
 
@@ -100,12 +101,12 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
 
   const {entity} = useContext(EntityExecutionsContext);
 
+  const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
+
   const CLIEntityType = isExecutions ? 'executions' : entity;
 
-  const testExecutorConfig = testExecutorsConfigs[type as TestExecutor] || testExecutorsConfigs.unknown;
-
-  const modifyArgsMap: {[key in CLIScriptModifier]: any} = {
-    canHaveArtifacts: testExecutorConfig.canHaveArtifacts,
+  const modifyArgsMap: Partial<{[key in CLIScriptModifier]: any}> = {
+    ...(type ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
     isFinished: modifyMap?.status,
   };
 
@@ -127,7 +128,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
         }
       }
 
-      const commandString = isExecutions ? command(testTarget) : command(testTarget);
+      const commandString = command(testTarget);
 
       return <CopyCommand key={label} command={commandString} label={label} bg={bg} />;
     }).filter(cliCommand => cliCommand);
