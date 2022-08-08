@@ -12,11 +12,11 @@ import {
 
 import {Text} from '@custom-antd';
 
-import {EmptyTestSuitesListContent} from '@molecules';
-
 import {useGetTestSuitesQuery} from '@services/testSuites';
 
 import Colors from '@styles/Colors';
+
+import {EmptyTestSuitesListContent} from './EmptyEntitiesListContent';
 
 const TestSuitesPageDescription: React.FC = () => {
   return (

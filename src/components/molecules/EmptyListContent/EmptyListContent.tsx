@@ -7,24 +7,30 @@ import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
 
 import Colors from '@styles/Colors';
 
-import {StyledEmptyTestSuitesDataContainer} from './EmptyTestSuitesListContent.styled';
+import {StyledEmptyListContainer} from './EmptyListContent.styled';
 
-const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {
-  const {action} = props;
+type EmptyListContentProps = {
+  title: string;
+  description: string;
+  buttonText: string;
+  onButtonClick: () => void;
+  children?: React.ReactNode;
+};
+
+const EmptyListContent: React.FC<EmptyListContentProps> = props => {
+  const {title, description, onButtonClick, children, buttonText} = props;
   return (
-    <StyledEmptyTestSuitesDataContainer size={24} direction="vertical">
+    <StyledEmptyListContainer size={24} direction="vertical">
       <CreateTestIcon />
-      <Title className="text-center">Create your first test suite in a few easy steps.</Title>
+      <Title className="text-center">{title}</Title>
       <Text className="regular middle text-center" color={Colors.slate400}>
-        Simply define your test suites, add any tests, execute it and view the results!
+        {description}
       </Text>
-      <Button customType="primary" onClick={action}>
-        Add a new test suite
+      <Button customType="primary" onClick={onButtonClick}>
+        {buttonText}
       </Button>
       <StyledHelpCardsContainer>
-        <HelpCard isLink link="https://kubeshop.github.io/testkube/testsuites-creating/">
-          Learn how to add test suites
-        </HelpCard>
+        {children}
         <StyledLastHelpCardContainer>
           <HelpCard isHelp link="https://discord.com/invite/hfq44wtR6Q">
             Need help getting started? Want to talk to Testkube engineers?{' '}
@@ -34,8 +40,8 @@ const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {
           </HelpCard>
         </StyledLastHelpCardContainer>
       </StyledHelpCardsContainer>
-    </StyledEmptyTestSuitesDataContainer>
+    </StyledEmptyListContainer>
   );
 };
 
-export default EmptyTestSuitesListContent;
+export default EmptyListContent;

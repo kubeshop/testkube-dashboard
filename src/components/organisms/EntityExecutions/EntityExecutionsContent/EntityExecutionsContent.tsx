@@ -1,4 +1,4 @@
-import {useContext, useEffect, useMemo, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {Table, Tabs} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
@@ -10,7 +10,7 @@ import {selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import {TestRunnerIcon} from '@atoms';
 
-import {Button, Text, Title} from '@custom-antd';
+import {Button, Text} from '@custom-antd';
 
 import {CLICommands, LabelsList} from '@molecules';
 
@@ -18,8 +18,10 @@ import Colors from '@styles/Colors';
 
 import {EntityExecutionsContext, MainContext} from '@contexts';
 
-import {StyledPageHeader, SummaryGridItem, SummaryGridWrapper, TabsWrapper} from './EntityExecutionsContent.styled';
+import EmptyExecutionsListContent from './EmptyExecutionsListContent';
+import {StyledContainer, StyledPageHeader, TabsWrapper} from './EntityExecutionsContent.styled';
 import Settings from './Settings';
+import SummaryGrid from './SummaryGrid';
 import TableRow from './TableRow';
 
 const EntityExecutionsContent: React.FC = () => {
@@ -28,7 +30,6 @@ const EntityExecutionsContent: React.FC = () => {
     entityDetails,
     executionsList,
     onRowSelect,
-    isRowSelected,
     defaultStackRoute,
     selectedRow,
     currentPage,
@@ -50,22 +51,6 @@ const EntityExecutionsContent: React.FC = () => {
   const description = entityDetails?.description;
   const labels = entityDetails?.labels;
   const type = entityDetails?.type;
-
-  const failedExecutionsListNumber = useMemo(() => {
-    if (!executionsList?.results.length) {
-      return '-';
-    }
-
-    let number = 0;
-
-    executionsList?.results.forEach((item: any) => {
-      if (item.status === 'failed') {
-        number += 1;
-      }
-    });
-
-    return number;
-  }, [executionsList?.results]);
 
   const onRunButtonClick = async () => {
     try {
@@ -102,17 +87,7 @@ const EntityExecutionsContent: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '40px',
-        overflowY: 'auto',
-        height: '100%',
-        flex: 1,
-        padding: 40,
-      }}
-    >
+    <StyledContainer>
       <StyledPageHeader
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
@@ -131,41 +106,12 @@ const EntityExecutionsContent: React.FC = () => {
           </Text>
         ) : null}
       </StyledPageHeader>
-      <SummaryGridWrapper $gridCols={isRowSelected ? 2 : 5}>
-        {/* <SummaryGridItem>
-          <Text className="uppercase middle" color={Colors.slate500}>
-            reliability
-          </Text>
-          <Title level={3}>TBD</Title>
-        </SummaryGridItem>
-        <SummaryGridItem>
-          <Text className="uppercase middle" color={Colors.slate500}>
-            execution duration (p50)
-          </Text>
-          <Title level={3}>TBD</Title>
-        </SummaryGridItem>
-        <SummaryGridItem>
-          <Text className="uppercase middle" color={Colors.slate500}>
-            execution duration (p95)
-          </Text>
-          <Title level={3}>TBD</Title>
-        </SummaryGridItem> */}
-        <SummaryGridItem>
-          <Text className="uppercase middle" color={Colors.slate500}>
-            failed executions
-          </Text>
-          <Title level={3}>{failedExecutionsListNumber}</Title>
-        </SummaryGridItem>
-        <SummaryGridItem>
-          <Text className="uppercase middle" color={Colors.slate500}>
-            total executions
-          </Text>
-          <Title level={3}>{executionsList?.results.length || '-'}</Title>
-        </SummaryGridItem>
-      </SummaryGridWrapper>
+      <SummaryGrid />
       <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
         <Tabs.TabPane tab="Recent executions" key="1">
-          {isEmptyExecutions ? null : (
+          {isEmptyExecutions ? (
+            <EmptyExecutionsListContent triggerRun={onRunButtonClick} />
+          ) : (
             <Table
               showHeader={false}
               dataSource={executionsList?.results}
@@ -203,7 +149,7 @@ const EntityExecutionsContent: React.FC = () => {
           <Settings />
         </Tabs.TabPane>
       </TabsWrapper>
-    </div>
+    </StyledContainer>
   );
 };
 

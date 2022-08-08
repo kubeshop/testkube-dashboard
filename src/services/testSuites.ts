@@ -1,7 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {TestSuiteWithExecution} from '@models/testSuite';
-import {TestSuiteFilters} from '@models/testSuites';
+import {TestSuiteFilters, TestSuiteWithExecution} from '@models/testSuite';
 
 import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
 

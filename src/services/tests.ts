@@ -1,8 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Artifact} from '@models/artifact';
-import {TestWithExecution} from '@models/test';
-import {TestFilters} from '@models/tests';
+import {TestFilters, TestWithExecution} from '@models/test';
 
 import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
 
