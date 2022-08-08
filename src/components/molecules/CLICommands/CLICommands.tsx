@@ -22,9 +22,10 @@ type CLIScriptKey = Entity | 'executions';
 
 type CLICommandsProps = {
   isExecutions?: boolean;
-  type: TestExecutor;
+  type?: TestExecutor;
   name?: string;
   id?: string;
+  bg?: string;
   modifyMap?: {
     status?: ExecutionStatusEnum;
   };
@@ -95,7 +96,7 @@ const modifyActions: {
 };
 
 const CLICommands: React.FC<CLICommandsProps> = props => {
-  const {isExecutions, type, name, id, modifyMap} = props;
+  const {isExecutions, type, name, id, modifyMap, bg} = props;
 
   const {entity} = useContext(EntityExecutionsContext);
 
@@ -128,7 +129,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
 
       const commandString = isExecutions ? command(testTarget) : command(testTarget);
 
-      return <CopyCommand key={label} command={commandString} label={label} />;
+      return <CopyCommand key={label} command={commandString} label={label} bg={bg} />;
     }).filter(cliCommand => cliCommand);
   }, [id, name, type, modifyMap]);
 
