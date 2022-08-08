@@ -34,7 +34,7 @@ type CLICommandsProps = {
 
 const testSuiteScripts: CLIScript[] = [
   {
-    label: 'Start test suite',
+    label: 'Run test suite',
     command: (name: string) => `kubectl testkube run testsuite ${name}`,
   },
   {
@@ -45,20 +45,20 @@ const testSuiteScripts: CLIScript[] = [
 
 const testScripts: CLIScript[] = [
   {
-    label: 'Start test',
+    label: 'Run test',
     command: (name: string) => `kubectl testkube run test ${name}`,
-  },
-  {
-    label: 'Delete test',
-    command: (name: string) => `kubectl testkube delete test ${name}`,
   },
   {
     label: 'Get test',
     command: (name: string) => `kubectl testkube get test ${name}`,
   },
   {
-    label: 'Get test executions',
+    label: 'List executions',
     command: (name: string) => `kubectl testkube get executions --test ${name}`,
+  },
+  {
+    label: 'Delete test',
+    command: (name: string) => `kubectl testkube delete test ${name}`,
   },
 ];
 
