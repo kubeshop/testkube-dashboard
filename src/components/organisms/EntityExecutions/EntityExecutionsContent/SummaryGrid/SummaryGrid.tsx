@@ -10,6 +10,7 @@ import {SummaryGridItem, SummaryGridWrapper} from './SummaryGrid.styled';
 
 const SummaryGrid = () => {
   const {executionsList, isRowSelected} = useContext(EntityExecutionsContext);
+
   const failedExecutionsListNumber = useMemo(() => {
     if (!executionsList?.results.length) {
       return '-';

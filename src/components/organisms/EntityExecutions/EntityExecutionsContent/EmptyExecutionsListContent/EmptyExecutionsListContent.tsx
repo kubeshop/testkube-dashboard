@@ -18,6 +18,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
   if (!entityDetails) {
     return null;
   }
+
   if (entity === 'tests') {
     return (
       <EmptyListContent
