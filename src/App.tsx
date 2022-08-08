@@ -14,7 +14,7 @@ import {ProtectedRoute} from '@atoms';
 
 import {Sider} from '@organisms';
 
-import {Tests} from '@pages';
+import {Executors, TestSuites, Tests} from '@pages';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -25,7 +25,6 @@ import {MainContext} from '@contexts';
 import {StyledLayoutContentWrapper} from './App.styled';
 // import {CookiesBanner} from './components/molecules';
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
-import TestSuites from './components/pages/TestSuites';
 import env from './env';
 
 const App: React.FC = () => {
@@ -111,6 +110,14 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <TestSuites />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="executors"
+                element={
+                  <ProtectedRoute>
+                    <Executors />
                   </ProtectedRoute>
                 }
               />

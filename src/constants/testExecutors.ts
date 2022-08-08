@@ -19,7 +19,7 @@ export const testExecutorsConfigs: {[key in TestExecutor]: TestExecutorConfig} =
   unknown: defaultTestExecutorConfig,
 };
 
-export const testExecutorsNames: {[key in TestExecutor]: TestExecutorName} = {
+export const testExecutorsNames: {[key in TestExecutor | string]: TestExecutorName} = {
   'postman/collection': 'Postman',
   'postman/custom': 'Postman',
   'cypress/project': 'Cypress',

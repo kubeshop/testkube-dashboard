@@ -11,6 +11,7 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {openDiscord, openDocumentation, openGithub} from '@utils/externalLinks';
 
+import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
@@ -40,6 +41,13 @@ const routes = [
   {
     path: 'test-suites',
     icon: TestSuitesIcon,
+    transition: {
+      classNames: 'item',
+    },
+  },
+  {
+    path: 'executors',
+    icon: ExecutorsIcon,
     transition: {
       classNames: 'item',
     },
