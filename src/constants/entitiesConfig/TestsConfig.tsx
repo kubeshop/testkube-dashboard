@@ -21,7 +21,7 @@ import Colors from '@styles/Colors';
 const TestsPageDescription: React.FC = () => {
   return (
     <Text className="regular middle" color={Colors.slate400}>
-      Explore your test suites at a glance... Learn more about{' '}
+      Explore your tests at a glance... Learn more about{' '}
       <a href="https://kubeshop.github.io/testkube/" target="_blank">
         testing with Testkube
       </a>
