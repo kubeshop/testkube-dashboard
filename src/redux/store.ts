@@ -3,9 +3,7 @@ import {Action, Middleware, ThunkAction, configureStore} from '@reduxjs/toolkit'
 import {createLogger} from 'redux-logger';
 
 import configSlice from '@redux/reducers/configSlice';
-import executionsSlice from '@redux/reducers/executionsSlice';
 import executorsSlice from '@redux/reducers/executorsSlice';
-import labelsSlice from '@redux/reducers/labelsSlice';
 import testSuiteExecutionsSlice from '@redux/reducers/testSuiteExecutionsSlice';
 import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
@@ -36,8 +34,6 @@ export const store = configureStore({
   reducer: {
     testSuites: testSuitesSlice,
     tests: testsSlice,
-    executions: executionsSlice,
-    labels: labelsSlice,
     config: configSlice,
     testSuiteExecutions: testSuiteExecutionsSlice,
     executors: executorsSlice,

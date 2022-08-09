@@ -21,10 +21,10 @@ import {useGetTestExecutionByIdQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {EntityExecutionsContext, ExecutionDetailsContext} from '@contexts';
+import {EntityDetailsContext, ExecutionDetailsContext} from '@contexts';
 import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
 
-import {DrawerHeader} from '@src/components/organisms/EntityExecutions/ExecutionDetailsDrawer/ExecutionDetailsDrawer.styled';
+import {DrawerHeader} from '@src/components/organisms/EntityDetails/ExecutionDetailsDrawer/ExecutionDetailsDrawer.styled';
 
 import {DetailsWrapper, ItemColumn, ItemRow} from '../EntityGrid/EntityGrid.styled';
 import TestExecutionDetailsTabs from './TestExecutionDetails/TestExecutionDetailsTabs';
@@ -33,7 +33,7 @@ import {getHeaderValues} from './utils';
 
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityExecutionsContext);
+  const {execId} = useContext(EntityDetailsContext);
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
@@ -50,7 +50,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
 const TestExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityExecutionsContext);
+  const {execId} = useContext(EntityDetailsContext);
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
@@ -76,7 +76,7 @@ const components: {[key in Entity]: any} = {
 };
 
 const ExecutionDetails: React.FC = () => {
-  const {entity, execId, unselectRow} = useContext(EntityExecutionsContext);
+  const {entity, execId, unselectRow} = useContext(EntityDetailsContext);
 
   const [infoPanelProps, setInfoPanelProps] = useState<ExecutionDetailsOnDataChangeInterface>({
     data: null,

@@ -1,8 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Artifact} from '@models/artifact';
-import {TestWithExecution} from '@models/test';
-import {TestFilters} from '@models/tests';
+import {TestFilters, TestWithExecution} from '@models/test';
 
 import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
 
@@ -51,6 +50,13 @@ export const testsApi = createApi({
         method: 'DELETE',
       }),
     }),
+    runTest: builder.mutation<void, any>({
+      query: body => ({
+        url: `/tests/${body.id}/executions`,
+        method: 'POST',
+        body: body.data,
+      }),
+    }),
   }),
 });
 
@@ -64,4 +70,5 @@ export const {
   useAddTestMutation,
   useUpdateTestMutation,
   useDeleteTestMutation,
+  useRunTestMutation,
 } = testsApi;

@@ -1,10 +1,8 @@
 import {ConfigState} from '@models/config';
-import {ExecutionsState} from '@models/executions';
 import {ExecutorsState} from '@models/executors';
-import {LabelsState} from '@models/labels';
-import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
-import {TestSuiteFilters, TestSuitesState} from '@models/testSuites';
-import {TestFilters, TestsState} from '@models/tests';
+import {TestFilters, TestsState} from '@models/test';
+import {TestSuiteFilters, TestSuitesState} from '@models/testSuite';
+import {TestSuiteExecutionsState} from '@models/testSuiteExecution';
 
 const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
@@ -85,45 +83,6 @@ const initialTestsState: TestsState = {
   selectedTest: null,
 };
 
-const initialExecutionsState: ExecutionsState = {
-  isLoading: false,
-  executionsList: [],
-  filters: {
-    pageSize: 10,
-    page: 0,
-    status: undefined,
-    startDate: null,
-    endDate: null,
-    testName: '',
-    type: '',
-    labels: [],
-  },
-  error: null,
-  totals: {
-    results: 0,
-    passed: 0,
-    failed: 0,
-    pending: 0,
-  },
-  filtered: {
-    results: 0,
-    passed: 0,
-    failed: 0,
-    pending: 0,
-  },
-  selectedTestId: undefined,
-  status: undefined,
-
-  hasNext: true,
-
-  selectedExecution: null,
-  selectedExecutionInfo: null,
-};
-
-const initialLabelsState: LabelsState = {
-  labelsObject: {},
-};
-
 const initialExecutorsState: ExecutorsState = {
   executorsList: [],
   executorsFeaturesMap: {},
@@ -147,8 +106,6 @@ const initialReduxState = {
   testSuiteExecutions: initialTestSuiteExecutionsState,
   testSuites: initialTestSuitesState,
   tests: initialTestsState,
-  executions: initialExecutionsState,
-  labels: initialLabelsState,
   config: initialConfigState,
   executors: initialExecutorsState,
 };

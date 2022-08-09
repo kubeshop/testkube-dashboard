@@ -1,7 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {TestSuiteWithExecution} from '@models/testSuite';
-import {TestSuiteFilters} from '@models/testSuites';
+import {TestSuiteFilters, TestSuiteWithExecution} from '@models/testSuite';
 
 import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
 
@@ -11,9 +10,6 @@ export const testSuitesApi = createApi({
   endpoints: builder => ({
     getTestSuites: builder.query<TestSuiteWithExecution[], TestSuiteFilters>({
       query: filters => `/test-suite-with-executions?${paramsSerializer(filters)}`,
-    }),
-    runTestSuite: builder.query<any, string>({
-      query: testSuiteName => `/test-suites/${testSuiteName}/run`,
     }),
     updateTestSuite: builder.mutation<void, any>({
       query: body => ({
@@ -41,15 +37,22 @@ export const testSuitesApi = createApi({
         method: 'DELETE',
       }),
     }),
+    runTestSuite: builder.mutation<void, any>({
+      query: body => ({
+        url: `/test-suites/${body.id}/executions`,
+        method: 'POST',
+        body: body.data,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetTestSuitesQuery,
-  useRunTestSuiteQuery,
   useUpdateTestSuiteMutation,
   useGetTestSuiteExecutionQuery,
   useGetTestSuiteDetailsQuery,
   useAddTestSuiteMutation,
   useDeleteTestSuiteMutation,
+  useRunTestSuiteMutation,
 } = testSuitesApi;

@@ -1,6 +1,6 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {TestSuiteExecutionsState} from '@models/testSuiteExecutions';
+import {TestSuiteExecutionsState} from '@models/testSuiteExecution';
 
 import initialState from '@redux/initialState';
 
