@@ -20,4 +20,7 @@ WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
 COPY .env .
 RUN chmod +x env.sh
+
+USER 1001
+
 CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
