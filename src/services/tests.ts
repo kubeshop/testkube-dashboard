@@ -50,6 +50,13 @@ export const testsApi = createApi({
         method: 'DELETE',
       }),
     }),
+    runTest: builder.mutation<void, any>({
+      query: body => ({
+        url: `/tests/${body.id}/executions`,
+        method: 'POST',
+        body: body.data,
+      }),
+    }),
   }),
 });
 
@@ -63,4 +70,5 @@ export const {
   useAddTestMutation,
   useUpdateTestMutation,
   useDeleteTestMutation,
+  useRunTestMutation,
 } = testsApi;

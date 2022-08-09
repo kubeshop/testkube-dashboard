@@ -7,7 +7,7 @@ import {TestExecutor} from '@models/testExecutors';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
-import {EntityExecutionsContext} from '@contexts';
+import {EntityDetailsContext} from '@contexts';
 
 import CopyCommand from './CopyCommand';
 
@@ -99,7 +99,7 @@ const modifyActions: {
 const CLICommands: React.FC<CLICommandsProps> = props => {
   const {isExecutions, type, name, id, modifyMap, bg} = props;
 
-  const {entity} = useContext(EntityExecutionsContext);
+  const {entity} = useContext(EntityDetailsContext);
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
