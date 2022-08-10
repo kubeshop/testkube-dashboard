@@ -1,11 +1,12 @@
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 
-import {useGetTestExecutionsByIdQuery, useGetTestQuery} from '@services/tests';
+import {useGetTestExecutionMetricsQuery, useGetTestExecutionsByIdQuery, useGetTestQuery} from '@services/tests';
 
 const TestExecutionsConfig: EntityDetailsBlueprint = {
   entity: 'tests',
   useGetExecutions: useGetTestExecutionsByIdQuery,
   useGetEntityDetails: useGetTestQuery,
+  useGetMetrics: useGetTestExecutionMetricsQuery,
   defaultStackRoute: '/tests',
 };
 

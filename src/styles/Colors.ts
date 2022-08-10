@@ -951,6 +951,7 @@ enum Colors {
 
   lime900 = '#365314',
   lime600 = '#65A30D',
+  lime300 = '#BEF264',
 
   indigo50 = '#EEF2FF',
   indigo300 = '#A5B4FC',

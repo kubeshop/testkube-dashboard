@@ -13,6 +13,8 @@ import {Button, Text} from '@custom-antd';
 
 import {CLICommands, LabelsList} from '@molecules';
 
+import {displayDefaultErrorNotification} from '@utils/notification';
+
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
 
@@ -20,15 +22,13 @@ import Colors from '@styles/Colors';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
 
-import {displayDefaultErrorNotification} from '@src/utils/notification';
-
 import {StyledContainer, StyledPageHeader, TabsWrapper} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
 
 const EntityDetailsContent: React.FC = () => {
-  const {entity, entityDetails, onRowSelect, defaultStackRoute} = useContext(EntityDetailsContext);
+  const {entity, entityDetails, onRowSelect, defaultStackRoute, metrics} = useContext(EntityDetailsContext);
   const {navigate} = useContext(MainContext);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -97,7 +97,7 @@ const EntityDetailsContent: React.FC = () => {
           </Text>
         ) : null}
       </StyledPageHeader>
-      <SummaryGrid />
+      {metrics ? <SummaryGrid metrics={metrics} /> : null}
       <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
         <Tabs.TabPane tab="Recent executions" key="Executions">
           <ExecutionsTable triggerRun={onRunButtonClick} />

@@ -44,16 +44,6 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     return status;
   };
 
-  const getExecutionStepName = (step: any) => {
-    if (iconSet === 'definition') {
-      return step.execute?.name;
-    }
-
-    if (step.step?.execute) {
-      return step.step.execute.name;
-    }
-  };
-
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
     const {
       executionName,
@@ -83,7 +73,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const renderedDefinitionsList = useMemo(() => {
     return executionSteps?.map(step => {
       const icon = getExecutionStepIcon(step);
-      const executionName = getExecutionStepName(step);
+      const executionName = step.execution.name;
 
       const {step: stepResult, execution} = step;
       const {execute, delay} = stepResult;
@@ -120,10 +110,10 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
                 <StyledExternalLinkIcon />
               </>
             ) : null}
-            {delay || stepResult?.delay ? (
+            {stepResult.delay ? (
               <>
                 <Icon name="delay" style={{width: 22, height: 20}} />
-                <ExecutionName name="Delay" />
+                <ExecutionName name={`Delay ${stepResult.delay.duration}`} />
                 <div />
               </>
             ) : null}

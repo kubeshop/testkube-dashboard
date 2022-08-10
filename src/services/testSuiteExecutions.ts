@@ -12,7 +12,14 @@ export const testSuiteExecutionsApi = createApi({
     getTestSuiteExecutionById: builder.query({
       query: (testSuiteExecutionId: string) => `/test-suite-executions/${testSuiteExecutionId}`,
     }),
+    getTestSuiteExecutionMetrics: builder.query({
+      query: (testSuiteId: string) => `/test-suites/${testSuiteId}/metrics`,
+    }),
   }),
 });
 
-export const {useGetTestSuiteExecutionsByTestIdQuery, useGetTestSuiteExecutionByIdQuery} = testSuiteExecutionsApi;
+export const {
+  useGetTestSuiteExecutionsByTestIdQuery,
+  useGetTestSuiteExecutionByIdQuery,
+  useGetTestSuiteExecutionMetricsQuery,
+} = testSuiteExecutionsApi;
