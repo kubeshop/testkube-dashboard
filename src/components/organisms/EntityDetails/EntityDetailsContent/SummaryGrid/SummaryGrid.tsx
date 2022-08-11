@@ -23,6 +23,8 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
     execution_duration_p50,
     execution_duration_p90,
     execution_duration_p99,
+    execution_duration_p50_ms,
+    execution_duration_p99_ms,
     executions,
     total_executions,
     failed_executions,
@@ -30,6 +32,13 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
   } = metrics;
 
   const {isRowSelected} = useContext(EntityDetailsContext);
+
+  // calculate medianDurationProportion for columns height
+  // better to do it inside metricksbar
+  const medianDurationProportion =
+    execution_duration_p99_ms / execution_duration_p50_ms > 2
+      ? 2
+      : execution_duration_p99_ms / execution_duration_p50_ms;
 
   return (
     <>
@@ -65,7 +74,7 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
           <Title level={3}>{total_executions}</Title>
         </SummaryGridItem>
       </SummaryGridWrapper>
-      <MetricsBarChart data={executions} />
+      <MetricsBarChart data={executions} medianDurationProportion={medianDurationProportion} />
     </>
   );
 };

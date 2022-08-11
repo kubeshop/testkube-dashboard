@@ -3,12 +3,7 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
-export const MetricsBarChartWrapper = styled.div<{$svgWrapperWidth: number; $midVal: number}>`
-  position: relative;
-
-  display: flex;
-  align-items: center;
-
+export const MetricsBarChartWrapper = styled.div<{$svgWrapperWidth: number}>`
   min-height: 200px;
   height: 200px;
 
@@ -16,33 +11,14 @@ export const MetricsBarChartWrapper = styled.div<{$svgWrapperWidth: number; $mid
     position: absolute;
     top: 10px;
     left: 0%;
-
-    content: 'Middle duration: ${({$midVal}) => $midVal}s';
   }
 `;
 
-export const ChartWrapper = styled.div<{$svgWrapperWidth: number; $isHover: boolean}>`
-  position: relative;
-  overflow-x: ${({$isHover}) => ($isHover ? 'visible' : 'auto')};
-
+export const ChartWrapper = styled.div<{$svgWrapperWidth: number}>`
   ${invisibleScroll}
-
-  height: 80%;
 
   width: ${({$svgWrapperWidth}) => $svgWrapperWidth}px;
   min-width: 100%;
-
-  &:before {
-    position: absolute;
-    bottom: 80%;
-
-    content: '';
-    width: ${({$svgWrapperWidth}) => $svgWrapperWidth}px;
-    min-width: 100%;
-    height: 1px;
-
-    border-top: 1px dashed ${Colors.indigo300};
-  }
 `;
 
 export const SvgWithTooltipWrapper = styled.div<{$left: number}>`

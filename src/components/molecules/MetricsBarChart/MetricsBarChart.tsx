@@ -1,24 +1,17 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
 
 /* eslint-disable camelcase */
-import {useMemo, useRef, useState} from 'react';
-
-import {Tooltip} from 'antd';
+import {useMemo} from 'react';
 
 import {ExecutionMetrics} from '@models/metrics';
 
 import Colors from '@styles/Colors';
 
-import {
-  ChartWrapper,
-  MetricsBarChartWrapper,
-  MiddleValueLine,
-  SvgWithTooltipWrapper,
-  SvgWrapper,
-} from './MetricsBarChart.styled';
+import {ChartWrapper, MetricsBarChartWrapper, SvgWrapper} from './MetricsBarChart.styled';
 
 type MetricsBarChartProps = {
   data: ExecutionMetrics[];
+  medianDurationProportion: number;
 };
 
 const Bar: React.FC<any> = props => {
@@ -28,57 +21,45 @@ const Bar: React.FC<any> = props => {
 };
 
 type ChartProps = {
-  chartConfig: {
-    barWidth: number;
-    barMargin: number;
-    middleValue: number;
-    chartData: ExecutionMetrics[];
-  };
-  isHover: any;
-  setHover: any;
+  chartConfig: any;
+  medianDurationProportion: number;
 };
 
+// @ts-ignore
+const greatestValue = values =>
+  // @ts-ignore
+  values.map(value => Math.log(value.duration_ms)).reduce((acc, cur) => (cur > acc ? cur : acc), -Infinity);
+
 const Chart: React.FC<ChartProps> = props => {
-  const {chartConfig, isHover, setHover} = props;
+  const {chartConfig, medianDurationProportion} = props;
 
-  const {chartData, barWidth, barMargin, middleValue} = chartConfig;
+  const {chartData, barWidth, barMargin} = chartConfig;
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  const [leftVal, setLeft] = useState(0);
-
-  const getExceededCoef = (middle: number, actualVal: number) => {
-    return 20 - (middle / actualVal) * 20;
-  };
-
-  const onHover = (left: number) => {
-    setLeft(left - 35);
-    setHover(true);
-  };
+  const max = greatestValue(chartData);
 
   const renderedBarChart = useMemo(() => {
-    return chartData.map((barItem, index) => {
+    return chartData.map((barItem: any, index: number) => {
       const {duration_ms, status} = barItem;
 
       const barColor = status === 'failed' ? Colors.pink600 : Colors.lime300;
-      const exceededColor = status === 'failed' ? Colors.errorRed : Colors.lime600;
 
-      const neededDuration = duration_ms;
-
-      const isExceeded = middleValue < neededDuration;
-
-      const heightCoef = !isExceeded
-        ? (neededDuration / middleValue) * 0.8
-        : (80 + getExceededCoef(middleValue, neededDuration)) / 100;
+      // by default I multiply log value to 200 so value will fit to container
+      // its constant value is 200px
+      // medianDurationProportion is a value between 1 and 2
+      // so multiplyer is between 100 and 200 px
+      // it handles situation when all values are close to equal to each other
+      // and we don't have to display max height for them, only a half
+      // multiplying by 100 gives this
+      const height = (Math.log(duration_ms) * 100 * medianDurationProportion) / max;
 
       return (
         <Bar
           width={barWidth}
           x={index * (barWidth + barMargin)}
-          y={`${100 - heightCoef * 100}%`}
-          height={`${heightCoef * 100}%`}
-          color={isExceeded ? barColor : exceededColor}
-          onHover={() => onHover(index * (barWidth + barMargin))}
+          y={`${200 - height}`}
+          // floor height
+          height={Math.floor(height)}
+          color={barColor}
         />
       );
     });
@@ -87,84 +68,40 @@ const Chart: React.FC<ChartProps> = props => {
   const svgWrapperWidth = renderedBarChart.length * (barMargin + barWidth) - barMargin;
 
   return (
-    <SvgWithTooltipWrapper className="tooltip-wrapper" ref={ref} $left={leftVal}>
-      <Tooltip
-        title={<div>dsadsadsa</div>}
-        style={{top: 100, left: leftVal}}
-        visible={isHover}
-        getPopupContainer={container => {
-          return ref.current || container;
-        }}
-        zIndex={1}
-      />
-      <SvgWrapper
-        viewBox={`0 0 100% ${svgWrapperWidth}px`}
-        height="100%"
-        width={svgWrapperWidth}
-        style={{overflow: 'visible'}}
-        onMouseLeave={() =>
-          setTimeout(() => {
-            setHover(false);
-          }, 200)
-        }
-      >
-        {renderedBarChart}
-      </SvgWrapper>
-    </SvgWithTooltipWrapper>
+    <SvgWrapper
+      viewBox={`0 0 100% ${svgWrapperWidth}px`}
+      height="100%"
+      width={svgWrapperWidth}
+      style={{overflow: 'visible'}}
+    >
+      {renderedBarChart}
+    </SvgWrapper>
   );
 };
 
 const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
-  const {data} = props;
+  const {data, medianDurationProportion} = props;
 
-  const [isHover, setHover] = useState(false);
-
-  const filteredData = data.filter(item => {
-    return item.duration_ms;
-  });
-
-  const filterBigValue = () => {
-    const val = Number(
-      (
-        filteredData.reduce((acc, cur) => {
-          return acc + cur.duration_ms;
-        }, 0) / filteredData.length
-      ).toFixed(0)
-    );
-
-    return val;
-
-    // const val2 = filteredData.filter(item => {
-    //   return item.duration_ms < val;
-    // });
-
-    // return Number(
-    //   (
-    //     val2.reduce((acc, cur) => {
-    //       return acc + cur.duration_ms;
-    //     }, 0) / val2.length
-    //   ).toFixed(0)
-    // );
-  };
+  const filteredData = data
+    .filter(item => item.duration_ms)
+    // division each value by some number makes chart look more propotional
+    // division by 1000 converts values to seconds
+    // better would be to divide it by minValue - 1
+    .map(item => ({...item, duration_ms: item.duration_ms / 1000}))
+    .reverse();
 
   const barChartConfig = {
     barWidth: 12,
     barMargin: 6,
-    middleValue: filterBigValue(),
     chartData: filteredData,
   };
 
-  const svgWrapperWidth =
-    filteredData.length * (barChartConfig.barMargin + barChartConfig.barWidth) - barChartConfig.barMargin;
+  const svgWrapperWidth = data.length * (barChartConfig.barMargin + barChartConfig.barWidth) - barChartConfig.barMargin;
 
   return (
-    <MetricsBarChartWrapper
-      $svgWrapperWidth={svgWrapperWidth}
-      $midVal={Number((barChartConfig.middleValue / 1000).toFixed(0))}
-    >
-      <ChartWrapper $svgWrapperWidth={svgWrapperWidth} $isHover={isHover}>
-        <MiddleValueLine className="middle-val-line" />
-        <Chart chartConfig={barChartConfig} setHover={setHover} isHover={isHover} />
+    <MetricsBarChartWrapper $svgWrapperWidth={svgWrapperWidth}>
+      <ChartWrapper $svgWrapperWidth={svgWrapperWidth}>
+        <Chart chartConfig={barChartConfig} medianDurationProportion={medianDurationProportion} />
       </ChartWrapper>
     </MetricsBarChartWrapper>
   );

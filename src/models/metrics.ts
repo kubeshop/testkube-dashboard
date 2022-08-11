@@ -9,8 +9,11 @@ export type ExecutionMetrics = {
 
 export type Metrics = {
   execution_duration_p50: string;
+  execution_duration_p50_ms: number;
   execution_duration_p90: string;
+  execution_duration_p90_ms: number;
   execution_duration_p99: string;
+  execution_duration_p99_ms: number;
   failed_executions: number;
   pass_fail_ratio: number;
   total_executions: number;
