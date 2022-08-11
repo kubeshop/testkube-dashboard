@@ -945,6 +945,7 @@ enum Colors {
 
   sky900 = '#0C4A6E',
   sky600 = '#0284C7',
+  sky400 = '#38BDF8',
 
   pink900 = '#831843',
   pink600 = '#DB2777',
@@ -1038,11 +1039,11 @@ export enum FontColors {
 }
 
 export enum StatusColors {
-  passed = Colors.successGreen,
-  success = Colors.successGreen,
-  failed = Colors.errorRed,
-  error = Colors.errorRed,
-  running = Colors.lightGrey,
+  passed = Colors.lime300,
+  success = Colors.lime300,
+  failed = Colors.pink600,
+  error = Colors.pink600,
+  running = Colors.sky400,
   pending = Colors.lightGrey,
   queued = Colors.lightGrey,
   neverRun = Colors.whitePure,

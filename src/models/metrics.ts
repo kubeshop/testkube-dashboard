@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
+import {ExecutionStatusEnum} from './execution';
 
 export type ExecutionMetrics = {
   executionId?: string;
   duration: string;
   duration_ms: number;
-  status: string;
+  status: ExecutionStatusEnum;
 };
 
 export type Metrics = {

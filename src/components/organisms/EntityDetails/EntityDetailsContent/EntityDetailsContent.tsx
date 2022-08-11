@@ -97,7 +97,7 @@ const EntityDetailsContent: React.FC = () => {
           </Text>
         ) : null}
       </StyledPageHeader>
-      {metrics ? <SummaryGrid metrics={metrics} /> : null}
+      <SummaryGrid metrics={metrics} />
       <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
         <Tabs.TabPane tab="Recent executions" key="Executions">
           <ExecutionsTable triggerRun={onRunButtonClick} />

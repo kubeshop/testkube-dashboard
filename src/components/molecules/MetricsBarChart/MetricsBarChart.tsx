@@ -1,40 +1,54 @@
 /* eslint-disable camelcase */
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
 import {ExecutionMetrics} from '@models/metrics';
 
-import Colors from '@styles/Colors';
+import {Text} from '@custom-antd';
 
-import {BarWrapper, ChartWrapper, MetricsBarChartWrapper, SvgWrapper} from './MetricsBarChart.styled';
+import Colors, {StatusColors} from '@styles/Colors';
+
+import {BarWrapper, ChartWrapper, MetricsBarChartWrapper, NoData, SvgWrapper} from './MetricsBarChart.styled';
+
+type BarConfig = {
+  width: BarChartConfig['barWidth'];
+  height: number;
+  color: StatusColors;
+  tooltipData: any;
+};
+
+type BarChartConfig = {
+  barWidth: number;
+  barMargin: number;
+  chartData: ExecutionMetrics[];
+};
 
 type MetricsBarChartProps = {
-  data: ExecutionMetrics[];
+  data?: ExecutionMetrics[];
   medianDurationProportion: number;
 };
 
-const Bar: React.FC<any> = props => {
+const Bar: React.FC<BarConfig> = props => {
   const {width, height, color, tooltipData} = props;
 
-  const value = `Duration: ${tooltipData.duration_ms.toFixed()}s`;
+  const value = `${tooltipData.duration.toFixed(1)}s`;
 
   return (
     <Tooltip title={value} placement="top">
-      <BarWrapper style={{height}} $width={width} bg={color} />
+      <BarWrapper style={{height, background: color}} $width={width} />
     </Tooltip>
   );
 };
 
 type ChartProps = {
-  chartConfig: any;
+  chartConfig: BarChartConfig;
   medianDurationProportion: number;
 };
 
-// @ts-ignore
-const greatestValue = values =>
-  // @ts-ignore
-  values.map(value => Math.log(value.duration_ms)).reduce((acc, cur) => (cur > acc ? cur : acc), -Infinity);
+const greatestValue = (values: ExecutionMetrics[]) => {
+  return values.map(value => Math.log(value.duration_ms)).reduce((acc, cur) => (cur > acc ? cur : acc), -Infinity);
+};
 
 const Chart: React.FC<ChartProps> = props => {
   const {chartConfig, medianDurationProportion} = props;
@@ -44,51 +58,58 @@ const Chart: React.FC<ChartProps> = props => {
   const max = greatestValue(chartData);
 
   const renderedBarChart = useMemo(() => {
-    return chartData.map((barItem: any, index: number) => {
+    return chartData.map((barItem, index: number) => {
       const {duration_ms, status} = barItem;
 
-      const barColor = status === 'failed' ? Colors.pink600 : Colors.lime300;
+      const barColor = StatusColors[status];
 
-      // by default I multiply log value to 150 so value will fit to container
-      // its constant value is 100px
-      // medianDurationProportion is a value between 1 and 2
-      // so multiplier is between 75 and 150 px
-      // it handles situation when all values are close to equal to each other
-      // and we don't have to display max height for them, only a half
-      // multiplying by 75 gives this
-      const height = (Math.log(duration_ms) * 75 * medianDurationProportion) / max;
+      /* 
+        By default we multiply log value to 150 so value will fit to container
+        its constant value is 100px
+        medianDurationProportion is a value between 1 and 2
+        so multiplier is between 75 and 150 px
+        it handles situation when all values are to each other
+        and we don't have to display max height for them, only a half
+        multiplying by 75 gives this
+      */
+      const height = status === 'running' ? 75 : (Math.log(duration_ms) * 75 * medianDurationProportion) / max;
 
       return (
         <Bar
           width={barWidth}
-          x={index * (barWidth + barMargin)}
-          y={`${150 - height}`}
-          // floor height
           height={Math.floor(height)}
           color={barColor}
-          tooltipData={barItem}
+          tooltipData={{
+            duration: status === 'running' ? 'running' : barItem.duration_ms,
+          }}
         />
       );
     });
   }, [chartData]);
 
-  const svgWrapperWidth = renderedBarChart.length * (barMargin + barWidth) - barMargin;
-
-  return <SvgWrapper style={{overflow: 'visible'}}>{renderedBarChart}</SvgWrapper>;
+  return <SvgWrapper>{renderedBarChart}</SvgWrapper>;
 };
 
 const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
-  const {data, medianDurationProportion} = props;
+  const {data = [], medianDurationProportion} = props;
 
   const filteredData = data
-    .filter(item => item.duration_ms)
-    // division each value by some number makes chart look more proportional
-    // division by 1000 converts values to seconds
-    // better would be to divide it by minValue - 1
+    /* Some old, legacy tests does not have duration_ms field. We get rid of those here */
+    // .filter(item => item.duration_ms)
+    /*
+      Division each value by some number makes chart look more proportional
+      division by 1000 converts values to seconds
+      better would be to divide it by minValue - 1 to make sure that each record is displayed well
+    */
     .map(item => ({...item, duration_ms: item.duration_ms / 1000}))
+    /*
+      The executions list is sorted in that way that the most
+      recent execution is in the end of the array. We reverse this array
+      to have the most recent execution in the very beginning
+    */
     .reverse();
 
-  const barChartConfig = {
+  const barChartConfig: BarChartConfig = {
     barWidth: 12,
     barMargin: 6,
     chartData: filteredData,
@@ -97,12 +118,20 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   const svgWrapperWidth = data.length * (barChartConfig.barMargin + barChartConfig.barWidth) - barChartConfig.barMargin;
 
   return (
-    <MetricsBarChartWrapper $svgWrapperWidth={svgWrapperWidth}>
-      <ChartWrapper $svgWrapperWidth={svgWrapperWidth}>
-        <Chart chartConfig={barChartConfig} medianDurationProportion={medianDurationProportion} />
-      </ChartWrapper>
+    <MetricsBarChartWrapper>
+      {!filteredData || !filteredData.length ? (
+        <NoData>
+          <Text className="regular big" color={Colors.slate500}>
+            No information about metrics
+          </Text>
+        </NoData>
+      ) : (
+        <ChartWrapper $svgWrapperWidth={svgWrapperWidth}>
+          <Chart chartConfig={barChartConfig} medianDurationProportion={medianDurationProportion} />
+        </ChartWrapper>
+      )}
     </MetricsBarChartWrapper>
   );
 };
 
-export default MetricsBarChart;
+export default memo(MetricsBarChart);
