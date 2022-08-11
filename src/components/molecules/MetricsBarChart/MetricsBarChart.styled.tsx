@@ -4,37 +4,48 @@ import Colors from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
 export const MetricsBarChartWrapper = styled.div<{$svgWrapperWidth: number}>`
-  min-height: 200px;
-  height: 200px;
+  overflow: auto;
+  ${invisibleScroll}
 
-  &:after {
-    position: absolute;
-    top: 10px;
-    left: 0%;
-  }
+  min-height: 150px;
+  height: 150px;
 `;
 
 export const ChartWrapper = styled.div<{$svgWrapperWidth: number}>`
+  position: relative;
+
   ${invisibleScroll}
 
+  height: inherit;
   width: ${({$svgWrapperWidth}) => $svgWrapperWidth}px;
   min-width: 100%;
-`;
-
-export const SvgWithTooltipWrapper = styled.div<{$left: number}>`
-  .ant-tooltip {
-    top: 0% !important;
-    left: ${({$left}) => $left}px !important;
-  }
 `;
 
 export const MiddleValueLine = styled.div`
   position: absolute;
   top: 20%;
 
+  width: 100%;
   height: 1px;
 
   border-top: 1px dashed ${Colors.indigo300};
 `;
 
-export const SvgWrapper = styled.svg``;
+export const SvgWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+`;
+
+export const BarWrapper = styled.div<{$width?: any; bg?: any}>`
+  width: ${({$width}) => $width}px;
+  margin-right: 6px;
+
+  background-color: ${({bg}) => bg};
+
+  transition: 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${Colors.slate600};
+  }
+`;
