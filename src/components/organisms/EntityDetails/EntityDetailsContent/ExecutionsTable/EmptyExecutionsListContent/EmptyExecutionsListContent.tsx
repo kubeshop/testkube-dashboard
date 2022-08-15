@@ -24,7 +24,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
     return (
       <EmptyListContent
         title="Trigger your first run"
-        description="Your test has no past exections. Trigger the first run!"
+        description="Your test has no past executions. Trigger the first run!"
         buttonText="Run this test now"
         onButtonClick={triggerRun}
       />
@@ -49,7 +49,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
   return (
     <EmptyListContent
       title="Trigger your first run"
-      description="Your test suite has no past exections. Trigger the first run!"
+      description="Your test suite has no past executions. Trigger the first run!"
       buttonText="Run this test suite"
       onButtonClick={triggerRun}
     />

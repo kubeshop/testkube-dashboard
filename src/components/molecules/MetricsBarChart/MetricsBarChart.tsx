@@ -32,8 +32,7 @@ type MetricsBarChartProps = {
 const Bar: React.FC<BarConfig> = props => {
   const {width, height, color, tooltipData} = props;
 
-  const value = `${tooltipData.duration.toFixed(1)}s`;
-
+  const value = `Duration: ${tooltipData}`;
   return (
     <Tooltip title={value} placement="top">
       <BarWrapper style={{height, background: color}} $width={width} />
@@ -53,7 +52,7 @@ const greatestValue = (values: ExecutionMetrics[]) => {
 const Chart: React.FC<ChartProps> = props => {
   const {chartConfig, medianDurationProportion} = props;
 
-  const {chartData, barWidth, barMargin} = chartConfig;
+  const {chartData, barWidth} = chartConfig;
 
   const max = greatestValue(chartData);
 
@@ -73,15 +72,16 @@ const Chart: React.FC<ChartProps> = props => {
         multiplying by 75 gives this
       */
       const height = status === 'running' ? 75 : (Math.log(duration_ms) * 75 * medianDurationProportion) / max;
-
+      const barValue =
+        barItem?.duration_ms > 60
+          ? `${(barItem?.duration_ms / 60).toFixed()}m`
+          : `${(barItem?.duration_ms).toFixed()}s`;
       return (
         <Bar
           width={barWidth}
           height={Math.floor(height)}
           color={barColor}
-          tooltipData={{
-            duration: status === 'running' ? 'running' : barItem.duration_ms,
-          }}
+          tooltipData={status === 'running' ? 'running' : barValue}
         />
       );
     });

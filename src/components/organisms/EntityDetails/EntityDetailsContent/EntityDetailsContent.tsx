@@ -64,6 +64,10 @@ const EntityDetailsContent: React.FC = () => {
       },
     })
       .then((result: any) => {
+        if (result.error) {
+          return displayDefaultErrorNotification(result.error.error);
+        }
+
         setTimeout(() => {
           onRowSelect(result?.data, true);
         }, 1500);

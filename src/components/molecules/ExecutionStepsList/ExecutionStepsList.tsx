@@ -73,7 +73,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const renderedDefinitionsList = useMemo(() => {
     return executionSteps?.map(step => {
       const icon = getExecutionStepIcon(step);
-      const executionName = step.execution.name;
+      const executionName = step.execution.name || step.step.execute?.name || '';
 
       const {step: stepResult, execution} = step;
       const {execute, delay} = stepResult;
