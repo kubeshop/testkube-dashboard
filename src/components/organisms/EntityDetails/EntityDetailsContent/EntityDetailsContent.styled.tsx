@@ -13,6 +13,7 @@ export const StyledContainer = styled.div`
 
   height: 100%;
   padding: 40px;
+  padding-left: 1vw;
 `;
 
 export const StyledPageHeader = styled(PageHeader)`

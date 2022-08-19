@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useCallback, useContext} from 'react';
 
 import {Popover} from 'antd';
 
@@ -27,14 +27,14 @@ const Bar: React.FC<BarConfig> = props => {
   const {executionsList, onRowSelect} = useContext(EntityDetailsContext);
   const {status, duration, name, startTime} = tooltipData;
 
-  const onBarClicked = () => {
+  const onBarClicked = useCallback(() => {
     if (executionsList.results) {
       onRowSelect(
         executionsList.results.find((item: any) => item.name === name),
         true
       );
     }
-  };
+  }, [executionsList.results, onRowSelect, name]);
 
   const popoverContent = (
     <StyledPopoverContainer>

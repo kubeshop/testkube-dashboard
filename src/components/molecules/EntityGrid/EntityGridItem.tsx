@@ -50,9 +50,7 @@ const EntityGridItem: React.FC<any> = props => {
         </ItemRow>
         <ItemRow $flex={1}>
           <MetricsBarChart
-            data={metrics?.executions
-              .filter((execItem: any) => execItem.duration_ms || execItem.status === 'running')
-              .slice(-13)}
+            data={metrics?.executions.filter((execItem: any) => execItem.duration_ms || execItem.status === 'running')}
             chartHeight={38}
             barWidth={6}
           />

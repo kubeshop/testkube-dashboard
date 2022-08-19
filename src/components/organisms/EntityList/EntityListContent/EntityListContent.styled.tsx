@@ -37,4 +37,5 @@ export const StyledContainer = styled.div`
   overflow: auto;
 
   padding: 40px;
+  padding-left: 1vw;
 `;
