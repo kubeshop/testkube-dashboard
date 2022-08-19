@@ -47,7 +47,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const getExecutionStepName = (step: TestSuiteStepExecutionResult) => {
     return step.execution.name;
   };
-
+  
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
     const {
       executionName,
@@ -114,7 +114,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
                 <StyledExternalLinkIcon />
               </>
             ) : null}
-            {delay || stepResult?.delay ? (
+            {stepResult.delay ? (
               <>
                 <Icon name="delay" style={{width: 22, height: 20}} />
                 <ExecutionName name={`Delay - ${stepResult.delay?.duration}ms`} />

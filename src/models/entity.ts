@@ -36,6 +36,7 @@ export type EntityListBlueprint = {
    */
 
   useGetData?: UseQuery<QueryDefinition<any, any, any, any, any>>;
+  useGetMetrics?: UseQuery<QueryDefinition<any, any, any, any, any>>;
 
   /**
    * RTK action to set data fetched from Backend to the Redux store

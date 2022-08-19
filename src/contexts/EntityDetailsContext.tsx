@@ -1,6 +1,7 @@
 import {createContext} from 'react';
 
 import {Entity} from '@models/entity';
+import {Metrics} from '@models/metrics';
 
 const EntityDetailsContext = createContext<{
   executionsList: any;
@@ -16,6 +17,7 @@ const EntityDetailsContext = createContext<{
   defaultStackRoute: string;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   currentPage: number;
+  metrics?: Metrics;
 }>({
   executionsList: {},
   entityDetails: {},
@@ -30,6 +32,7 @@ const EntityDetailsContext = createContext<{
   defaultStackRoute: '',
   setCurrentPage: () => {},
   currentPage: 1,
+  metrics: undefined,
 });
 
 export default EntityDetailsContext;

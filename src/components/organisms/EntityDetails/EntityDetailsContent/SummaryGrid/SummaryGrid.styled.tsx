@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const SummaryGridWrapper = styled.div<{$gridCols: number}>`
+export const SummaryGridWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(${({$gridCols}) => $gridCols}, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 12px;
 `;
 

@@ -32,3 +32,8 @@ export const StyledButtonContainer = styled.div`
   justify-content: center;
   gap: 8px;
 `;
+
+export const StyledContainer = styled.div`
+  padding: 40px;
+  padding-left: 1vw;
+`;

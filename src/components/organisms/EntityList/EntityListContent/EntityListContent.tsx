@@ -21,7 +21,7 @@ import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
-import {EmptyListWrapper, EntityListHeader, StyledFiltersSection} from './EntityListContent.styled';
+import {EmptyListWrapper, EntityListHeader, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
 import EntityListSkeleton from './EntityListSkeleton';
 
 const modalTypes: {[key in Entity]: ModalConfigProps} = {

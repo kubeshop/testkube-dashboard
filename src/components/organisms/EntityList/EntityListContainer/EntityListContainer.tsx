@@ -7,14 +7,20 @@ import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/conf
 
 import EntityListContent from '../EntityListContent';
 
-export const EntityListContext = createContext<{dataSource: any; queryFilters: any; allFilters: any}>({
+export const EntityListContext = createContext<{
+  dataSource: any;
+  queryFilters: any;
+  allFilters: any;
+  useGetMetrics: any;
+}>({
   dataSource: [],
   queryFilters: {},
   allFilters: {},
+  useGetMetrics: () => {},
 });
 
 const EntityListContainer: React.FC<EntityListBlueprint> = props => {
-  const {selectData, selectQueryFilters, selectAllFilters, ...rest} = props;
+  const {selectData, selectQueryFilters, selectAllFilters, useGetMetrics, ...rest} = props;
 
   const dataSource = useAppSelector(selectData);
   const queryFilters = useAppSelector(selectQueryFilters);
@@ -26,6 +32,7 @@ const EntityListContainer: React.FC<EntityListBlueprint> = props => {
     dataSource,
     queryFilters,
     allFilters,
+    useGetMetrics,
   };
 
   return (
