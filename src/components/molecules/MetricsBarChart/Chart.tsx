@@ -20,24 +20,24 @@ const Chart: React.FC<ChartProps> = props => {
   const {chartData, barWidth, chartHeight, barMargin} = chartConfig;
 
   const renderedBarChart = useMemo(() => {
-    return chartData.map(barItem => {
+    return chartData.map((barItem, index) => {
       const {duration_s, logDuration, status, name, startTime} = barItem;
 
-      const barColor = StatusColors[status];
+      const barColor = StatusColors[status] as unknown as StatusColors;
 
       const height = status === 'running' ? chartHeight / 2 : (logDuration * chartHeight) / maxValue;
 
-      const formatedDuration = status === 'running' ? 'running' : formatDuration(duration_s);
+      const formattedDuration = status === 'running' ? 'running' : formatDuration(duration_s);
 
-      const key = name;
+      const key = `${name}-bar-${index}`;
 
       return (
         <Bar
           width={barWidth}
           margin={barMargin}
           height={Math.floor(height)}
-          color={barColor as any}
-          tooltipData={{duration: formatedDuration, status, name, startTime}}
+          color={barColor}
+          tooltipData={{duration: formattedDuration, status, name, startTime}}
           key={key}
         />
       );

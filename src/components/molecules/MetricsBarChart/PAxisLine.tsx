@@ -11,7 +11,9 @@ type PAxisLineProps = {
 };
 const PAxisLine: React.FC<PAxisLineProps> = props => {
   const {axisTopPercent, durationMs, label} = props;
+
   const durationSec = Number(durationMs) / 1000;
+
   return (
     <>
       <HorizontalAxis $top={axisTopPercent} />

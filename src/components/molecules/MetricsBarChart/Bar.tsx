@@ -28,13 +28,14 @@ const Bar: React.FC<BarConfig> = props => {
   const {status, duration, name, startTime} = tooltipData;
 
   const onBarClicked = useCallback(() => {
-    if (executionsList.results) {
-      onRowSelect(
-        executionsList.results.find((item: any) => item.name === name),
-        true
-      );
+    if (executionsList?.results) {
+      const targetRecord = executionsList.results.find((item: any) => item.name === name);
+
+      if (targetRecord) {
+        onRowSelect(targetRecord, true);
+      }
     }
-  }, [executionsList.results, onRowSelect, name]);
+  }, [executionsList?.results, onRowSelect, name]);
 
   const popoverContent = (
     <StyledPopoverContainer>

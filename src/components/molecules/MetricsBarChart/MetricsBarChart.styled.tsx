@@ -38,6 +38,8 @@ export const HorizontalAxis = styled.div<{$top: number}>`
   height: 1px;
 
   border-top: 1px dashed ${Colors.indigo300};
+
+  pointer-events: none;
 `;
 
 export const AxisLabel = styled.div<{$top: number; isExtendedPadding: boolean}>`
@@ -56,7 +58,7 @@ export const SvgWrapper = styled.div`
   width: inherit;
 `;
 
-export const BarWrapper = styled.div<{$width?: any; $margin: number}>`
+export const BarWrapper = styled.div<{$width?: number; $margin: number}>`
   width: ${({$width}) => $width}px;
 
   transition: 0.3s;
