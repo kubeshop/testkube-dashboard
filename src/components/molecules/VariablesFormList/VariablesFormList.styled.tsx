@@ -53,10 +53,10 @@ export const StyledPopoverContent = styled.div`
   line-height: 22px;
 `;
 
-export const StyledKeyFormItem = styled(Form.Item)<{showClearIcon?: boolean}>`
+export const StyledKeyFormItem = styled(Form.Item)<{$showClearIcon?: boolean}>`
   .ant-input-suffix {
     ${props =>
-      props.showClearIcon
+      props.$showClearIcon
         ? `svg {
       fill: ${Colors.errorRed};
     }`

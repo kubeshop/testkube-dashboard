@@ -17,9 +17,15 @@ export const StyledExecutionStepsList = styled.ul`
 `;
 
 export const StyledExecutionStepsListItem = styled.li`
+  display: flex;
+  align-items: center;
+
+  height: 30px;
+
   color: ${Colors.whitePure};
 
   &:not(:last-child) {
+    height: 45px;
     padding-bottom: 16px;
   }
 
@@ -38,6 +44,10 @@ export const StyledSpace = styled(Space)`
   .ant-space-item {
     display: flex;
     align-items: center;
+  }
+
+  .ant-space-item:nth-child(3) {
+    overflow: hidden;
   }
 
   .ant-space-item:last-of-type {

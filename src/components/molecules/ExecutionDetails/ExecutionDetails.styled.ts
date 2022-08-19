@@ -112,3 +112,28 @@ export const StyledTestSuiteExecutionResultsListItem = styled.li`
 
   color: ${Colors.whitePure};
 `;
+
+export const ItemRow = styled.div<{$flex: number}>`
+  display: flex;
+  align-items: center;
+  flex: ${({$flex}) => $flex};
+  justify-content: space-between;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+`;
+
+export const ItemColumn = styled.div`
+  overflow: hidden;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  flex: 1;
+
+  &.flex-auto {
+    flex: 0 1 auto;
+  }
+`;

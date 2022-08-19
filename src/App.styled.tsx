@@ -5,5 +5,5 @@ import styled from 'styled-components';
 export const StyledLayoutContentWrapper = styled(Layout)`
   height: 100vh;
 
-  overflow-y: auto;
+  overflow: hidden;
 `;

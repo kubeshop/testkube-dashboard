@@ -29,6 +29,8 @@ const Chart: React.FC<ChartProps> = props => {
 
       const formatedDuration = status === 'running' ? 'running' : formatDuration(duration_s);
 
+      const key = name;
+
       return (
         <Bar
           width={barWidth}
@@ -36,6 +38,7 @@ const Chart: React.FC<ChartProps> = props => {
           height={Math.floor(height)}
           color={barColor as any}
           tooltipData={{duration: formatedDuration, status, name, startTime}}
+          key={key}
         />
       );
     });

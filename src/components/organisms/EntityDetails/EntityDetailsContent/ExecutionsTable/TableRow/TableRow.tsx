@@ -17,9 +17,8 @@ const TableRow: React.FC<{data: any}> = props => {
   const getIntervalExecTime = () => {
     try {
       return constructExecutedString(intervalToDuration({start: new Date(startTime || {}), end: new Date()}));
-    } catch (err) {
-      console.log(err);
-    }
+      // eslint-disable-next-line no-empty
+    } catch (err) {}
   };
 
   const getExecDuration = () => {
@@ -30,9 +29,8 @@ const TableRow: React.FC<{data: any}> = props => {
           end: new Date(endTime === '0001-01-01T00:00:00Z' ? {} : endTime),
         })
       );
-    } catch (err) {
-      console.log('err: ', err);
-    }
+      // eslint-disable-next-line no-empty
+    } catch (err) {}
   };
 
   const executedTime = getIntervalExecTime();

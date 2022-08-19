@@ -3,6 +3,9 @@ import {PageHeader, Tabs} from 'antd';
 import styled from 'styled-components';
 
 export const StyledContainer = styled.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -10,8 +13,6 @@ export const StyledContainer = styled.div`
 
   height: 100%;
   padding: 40px;
-
-  overflow-y: auto;
   padding-left: 1vw;
 `;
 

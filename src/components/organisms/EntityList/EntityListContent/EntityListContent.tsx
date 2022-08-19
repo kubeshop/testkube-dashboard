@@ -115,7 +115,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             entity={entity}
             isFiltersDisabled={isEmptyData}
           />
-          <Button customType="primary" onClick={addEntityAction}>
+          <Button $customType="primary" onClick={addEntityAction}>
             {addEntityButtonText}
           </Button>
         </StyledFiltersSection>

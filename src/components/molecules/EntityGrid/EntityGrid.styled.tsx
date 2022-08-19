@@ -31,11 +31,14 @@ export const ItemWrapper = styled.div`
 `;
 
 export const DetailsWrapper = styled.div`
+  overflow: hidden;
+
   display: flex;
   flex-direction: column;
   flex: 1;
 
   margin-left: 15px;
+  width: 100%;
 `;
 
 export const ItemRow = styled.div<{$flex: number}>`

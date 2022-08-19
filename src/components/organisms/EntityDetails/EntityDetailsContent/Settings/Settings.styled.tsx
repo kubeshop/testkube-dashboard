@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledTabContentContainer = styled.div`
+  overflow-x: hidden;
+
   display: flex;
   flex-direction: column;
 
