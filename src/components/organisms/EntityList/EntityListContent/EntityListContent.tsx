@@ -96,7 +96,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
   return (
-    <div style={{padding: 40, overflow: 'auto'}}>
+    <StyledContainer>
       <EntityListHeader>
         {dataLayers[entity]}
         <Space size={15} direction="vertical">
@@ -136,7 +136,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
       ) : null}
-    </div>
+    </StyledContainer>
   );
 };
 

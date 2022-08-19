@@ -17,7 +17,6 @@ const EntityGrid: React.FC<EntityGridProps> = props => {
 
       return (
         <EntityGridItem
-          key={item.dataItem.name}
           item={item}
           onClick={() => {
             onNavigateToDetails(item);
