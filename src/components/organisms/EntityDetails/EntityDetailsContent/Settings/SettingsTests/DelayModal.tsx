@@ -50,10 +50,10 @@ const DelayModal: React.FC<DelayModalProps> = props => {
       title="Add a delay"
       footer={
         <>
-          <Button customType="secondary" onClick={() => setIsDelayModalVisible(false)}>
+          <Button $customType="secondary" onClick={() => setIsDelayModalVisible(false)}>
             Cancel
           </Button>
-          <Button customType="primary" onClick={onConfirm} disabled={!isDelayInteger}>
+          <Button $customType="primary" onClick={onConfirm} disabled={!isDelayInteger}>
             Add delay
           </Button>
         </>

@@ -46,8 +46,8 @@ const SettingsDefinition: React.FC = () => {
       });
 
       setDefinition(result.data);
+      // eslint-disable-next-line no-empty
     } catch (err) {
-      console.log(err);
     } finally {
       setLoading(false);
     }

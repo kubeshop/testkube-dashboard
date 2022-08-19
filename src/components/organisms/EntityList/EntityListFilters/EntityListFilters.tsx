@@ -45,7 +45,7 @@ const EntityListFilters: React.FC<
   }, [entity]);
 
   return (
-    <Space data-cy="filters-container" size={16}>
+    <Space data-cy="filters-container" size={16} wrap>
       {renderedFilters}
     </Space>
   );

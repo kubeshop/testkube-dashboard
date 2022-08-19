@@ -263,6 +263,10 @@ export const GlobalStyle = createGlobalStyle`
       color: ${Colors.purple} !important;
     }
   }
+
+  .ant-page-header-heading-title {
+    line-height: 38px !important;
+  }
 `;
 
 /* Media Sizes */

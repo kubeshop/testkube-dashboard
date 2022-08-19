@@ -14,7 +14,7 @@ export const StyledLogOutputContainer = styled.div<{$isFullScreen?: boolean}>`
     `
       : ''};
 
-  overflow-x: auto;
+  // overflow-x: auto;
 
   display: flex;
   flex-direction: column;
@@ -53,7 +53,7 @@ export const StyledLogOutputContainer = styled.div<{$isFullScreen?: boolean}>`
 `;
 
 export const StyledLogTextContainer = styled.div`
-  overflow: auto;
+  // overflow: auto;
 
   flex: 1;
 

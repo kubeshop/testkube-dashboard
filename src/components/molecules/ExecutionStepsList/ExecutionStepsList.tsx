@@ -44,14 +44,8 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     return status;
   };
 
-  const getExecutionStepName = (step: any) => {
-    if (iconSet === 'definition') {
-      return step.execute?.name;
-    }
-
-    if (step.step?.execute) {
-      return step.step.execute.name;
-    }
+  const getExecutionStepName = (step: TestSuiteStepExecutionResult) => {
+    return step.execution.name;
   };
 
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
@@ -123,7 +117,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             {delay || stepResult?.delay ? (
               <>
                 <Icon name="delay" style={{width: 22, height: 20}} />
-                <ExecutionName name="Delay" />
+                <ExecutionName name={`Delay - ${stepResult.delay?.duration}ms`} />
                 <div />
               </>
             ) : null}

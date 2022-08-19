@@ -96,7 +96,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
   return (
-    <div style={{padding: 40}}>
+    <div style={{padding: 40, overflow: 'auto'}}>
       <EntityListHeader>
         {dataLayers[entity]}
         <Space size={15} direction="vertical">
@@ -115,7 +115,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             entity={entity}
             isFiltersDisabled={isEmptyData}
           />
-          <Button customType="primary" onClick={addEntityAction}>
+          <Button $customType="primary" onClick={addEntityAction}>
             {addEntityButtonText}
           </Button>
         </StyledFiltersSection>
