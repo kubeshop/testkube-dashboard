@@ -21,7 +21,7 @@ import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
-import {EmptyListWrapper, EntityListHeader, StyledFiltersSection} from './EntityListContent.styled';
+import {EmptyListWrapper, EntityListHeader, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
 import EntityListSkeleton from './EntityListSkeleton';
 
 const modalTypes: {[key in Entity]: ModalConfigProps} = {
@@ -96,7 +96,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
   return (
-    <div style={{padding: 40}}>
+    <StyledContainer>
       <EntityListHeader>
         {dataLayers[entity]}
         <Space size={15} direction="vertical">
@@ -136,7 +136,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
       ) : null}
-    </div>
+    </StyledContainer>
   );
 };
 

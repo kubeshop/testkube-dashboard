@@ -1,125 +1,77 @@
 /* eslint-disable camelcase */
-import {memo, useMemo} from 'react';
-
-import {Tooltip} from 'antd';
+import {memo} from 'react';
 
 import {ExecutionMetrics} from '@models/metrics';
 
 import {Text} from '@custom-antd';
 
-import Colors, {StatusColors} from '@styles/Colors';
+import Colors from '@styles/Colors';
 
-import {BarWrapper, ChartWrapper, MetricsBarChartWrapper, NoData, SvgWrapper} from './MetricsBarChart.styled';
+import Chart from './Chart';
+import {ChartWrapper, MetricsBarChartWrapper, NoData} from './MetricsBarChart.styled';
+import PAxisLine from './PAxisLine';
 
-type BarConfig = {
-  width: BarChartConfig['barWidth'];
-  height: number;
-  color: StatusColors;
-  tooltipData: any;
-};
-
-type BarChartConfig = {
+export type BarChartConfig = {
   barWidth: number;
   barMargin: number;
-  chartData: ExecutionMetrics[];
+  chartHeight: number;
+  chartData: any[];
 };
 
 type MetricsBarChartProps = {
   data?: ExecutionMetrics[];
-  medianDurationProportion: number;
+  execution_duration_p50_ms?: number;
+  execution_duration_p95_ms?: number;
+  chartHeight?: number;
+  barWidth?: number;
 };
 
-const Bar: React.FC<BarConfig> = props => {
-  const {width, height, color, tooltipData} = props;
-
-  const value = `Duration: ${tooltipData}`;
-  return (
-    <Tooltip title={value} placement="top">
-      <BarWrapper style={{height, background: color}} $width={width} />
-    </Tooltip>
-  );
-};
-
-type ChartProps = {
-  chartConfig: BarChartConfig;
-  medianDurationProportion: number;
-};
-
-const greatestValue = (values: ExecutionMetrics[]) => {
-  return values.map(value => Math.log(value.duration_ms)).reduce((acc, cur) => (cur > acc ? cur : acc), -Infinity);
-};
-
-const Chart: React.FC<ChartProps> = props => {
-  const {chartConfig, medianDurationProportion} = props;
-
-  const {chartData, barWidth} = chartConfig;
-
-  const max = greatestValue(chartData);
-
-  const renderedBarChart = useMemo(() => {
-    return chartData.map((barItem, index: number) => {
-      const {duration_ms, status} = barItem;
-
-      const barColor = StatusColors[status];
-
-      /* 
-        By default we multiply log value to 150 so value will fit to container
-        its constant value is 100px
-        medianDurationProportion is a value between 1 and 2
-        so multiplier is between 75 and 150 px
-        it handles situation when all values are to each other
-        and we don't have to display max height for them, only a half
-        multiplying by 75 gives this
-      */
-      const height = status === 'running' ? 75 : (Math.log(duration_ms) * 75 * medianDurationProportion) / max;
-      const barValue =
-        barItem?.duration_ms > 60
-          ? `${(barItem?.duration_ms / 60).toFixed()}m`
-          : `${(barItem?.duration_ms).toFixed()}s`;
-      return (
-        <Bar
-          width={barWidth}
-          height={Math.floor(height)}
-          color={barColor}
-          tooltipData={status === 'running' ? 'running' : barValue}
-        />
-      );
-    });
-  }, [chartData]);
-
-  return <SvgWrapper>{renderedBarChart}</SvgWrapper>;
+const greatestValue = (values: any[], fieldName = 'logDuration') => {
+  return values.map(value => value[fieldName]).reduce((acc, cur) => (cur > acc ? cur : acc), -Infinity);
 };
 
 const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
-  const {data = [], medianDurationProportion} = props;
-
-  const filteredData = data
-    /* Some old, legacy tests does not have duration_ms field. We get rid of those here */
-    // .filter(item => item.duration_ms)
-    /*
-      Division each value by some number makes chart look more proportional
-      division by 1000 converts values to seconds
-      better would be to divide it by minValue - 1 to make sure that each record is displayed well
-    */
-    .map(item => ({...item, duration_ms: item.duration_ms / 1000}))
-    /*
-      The executions list is sorted in that way that the most
-      recent execution is in the end of the array. We reverse this array
-      to have the most recent execution in the very beginning
-    */
+  const {data = [], execution_duration_p50_ms, execution_duration_p95_ms, chartHeight = 100, barWidth = 12} = props;
+  /*
+    Division each value by some number makes chart look more proportional
+    division by 1000 converts values to seconds
+    better would be to divide it by minValue - 1 to make sure that each record is displayed well
+  */
+  const logScaleData = data
+    .filter((execItem: any) => execItem.duration_ms || execItem.status === 'running')
+    .map(item => ({
+      ...item,
+      logDuration: Math.log(item.duration_ms / 1000),
+      duration_s: item.duration_ms / 1000,
+    }))
     .reverse();
 
-  const barChartConfig: BarChartConfig = {
-    barWidth: 12,
-    barMargin: 6,
-    chartData: filteredData,
-  };
+  const maxValue = greatestValue(logScaleData);
 
-  const svgWrapperWidth = data.length * (barChartConfig.barMargin + barChartConfig.barWidth) - barChartConfig.barMargin;
+  const barChartConfig: BarChartConfig = {
+    barWidth,
+    barMargin: barWidth / 2,
+    chartHeight: chartHeight + 5,
+    chartData: logScaleData,
+  };
+  const svgWrapperWidth =
+    logScaleData.length * (barChartConfig.barMargin + barChartConfig.barWidth) - barChartConfig.barMargin;
+
+  const axisValue = (value?: number) => (barChartConfig.chartHeight * Math.log(Number(value) / 1000)) / maxValue;
+  const p50AxisValue = axisValue(execution_duration_p50_ms);
+  const p95AxisValue = axisValue(execution_duration_p95_ms);
+
+  const axisPercent = (value: number) => Math.round(100 - (value * 100) / barChartConfig.chartHeight);
+  const p50AxisPercent = axisPercent(p50AxisValue);
+  const p95AxisPercent = axisPercent(p95AxisValue);
 
   return (
-    <MetricsBarChartWrapper>
-      {!filteredData || !filteredData.length ? (
+    <MetricsBarChartWrapper
+      $height={barChartConfig.chartHeight}
+      isExtendedPadding={Number(execution_duration_p95_ms) / 1000 > 60}
+      isPaddingRemoved={!execution_duration_p95_ms || !execution_duration_p50_ms}
+    >
+      {!data || !data.length ? (
         <NoData>
           <Text className="regular big" color={Colors.slate500}>
             No information about metrics
@@ -127,7 +79,15 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
         </NoData>
       ) : (
         <ChartWrapper $svgWrapperWidth={svgWrapperWidth}>
-          <Chart chartConfig={barChartConfig} medianDurationProportion={medianDurationProportion} />
+          {execution_duration_p50_ms && execution_duration_p95_ms ? (
+            <>
+              <PAxisLine axisTopPercent={p50AxisPercent} label="P50" durationMs={execution_duration_p50_ms} />
+              {p50AxisPercent - p95AxisPercent >= 15 ? (
+                <PAxisLine axisTopPercent={p95AxisPercent} label="P95" durationMs={execution_duration_p95_ms} />
+              ) : null}
+            </>
+          ) : null}
+          <Chart chartConfig={barChartConfig} maxValue={maxValue} />
         </ChartWrapper>
       )}
     </MetricsBarChartWrapper>

@@ -12,6 +12,7 @@ export const StyledContainer = styled.div`
   padding: 40px;
 
   overflow-y: auto;
+  padding-left: 1vw;
 `;
 
 export const StyledPageHeader = styled(PageHeader)`
