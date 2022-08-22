@@ -13,7 +13,6 @@ export const StyledEntityGrid = styled.div`
 export const ItemWrapper = styled.div`
   display: flex;
 
-  height: 120px;
   padding: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
@@ -36,6 +35,7 @@ export const DetailsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 12px;
 
   margin-left: 15px;
   width: 100%;
@@ -46,13 +46,19 @@ export const ItemRow = styled.div<{$flex: number}>`
   align-items: center;
   flex: ${({$flex}) => $flex};
   justify-content: space-between;
-
-  &:not(:last-child) {
-    margin-bottom: 10px;
-  }
+  flex-wrap: wrap;
 `;
 
 export const ItemColumn = styled.div`
   display: flex;
   gap: 10px;
+`;
+
+export const StyledMetricItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-basis: 115px;
+
+  padding-top: 5px;
 `;

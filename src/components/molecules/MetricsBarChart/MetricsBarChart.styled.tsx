@@ -8,7 +8,8 @@ export const MetricsBarChartWrapper = styled.div<{
   isExtendedPadding: boolean;
   isPaddingRemoved: boolean;
 }>`
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   ${invisibleScroll}
 
@@ -22,6 +23,7 @@ export const MetricsBarChartWrapper = styled.div<{
 
 export const ChartWrapper = styled.div<{$svgWrapperWidth: number}>`
   position: relative;
+  overflow-y: hidden;
 
   ${invisibleScroll}
 

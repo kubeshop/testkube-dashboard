@@ -6,16 +6,18 @@ import {formatDuration} from '@utils/formatDate';
 import {StatusColors} from '@styles/Colors';
 
 import Bar from './Bar';
+import BarWithTooltip from './BarWithTooltip';
 import {BarChartConfig} from './MetricsBarChart';
 import {SvgWrapper} from './MetricsBarChart.styled';
 
 type ChartProps = {
   chartConfig: BarChartConfig;
   maxValue: number;
+  withTooltip?: boolean;
 };
 
 const Chart: React.FC<ChartProps> = props => {
-  const {chartConfig, maxValue} = props;
+  const {chartConfig, maxValue, withTooltip = false} = props;
 
   const {chartData, barWidth, chartHeight, barMargin} = chartConfig;
 
@@ -31,16 +33,17 @@ const Chart: React.FC<ChartProps> = props => {
 
       const key = `${name}-bar-${index}`;
 
-      return (
-        <Bar
-          width={barWidth}
-          margin={barMargin}
-          height={Math.floor(height)}
-          color={barColor}
-          tooltipData={{duration: formattedDuration, status, name, startTime}}
-          key={key}
-        />
-      );
+      const barProps = {
+        width: barWidth,
+        margin: barMargin,
+        height: Math.floor(height),
+        color: barColor,
+        key,
+      };
+      if (withTooltip) {
+        return <BarWithTooltip {...barProps} tooltipData={{duration: formattedDuration, status, name, startTime}} />;
+      }
+      return <Bar {...barProps} />;
     });
   }, [chartData]);
 

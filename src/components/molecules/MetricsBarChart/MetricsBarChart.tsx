@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import {memo} from 'react';
+import {memo, useCallback} from 'react';
 
 import {ExecutionMetrics} from '@models/metrics';
 
@@ -24,6 +24,7 @@ type MetricsBarChartProps = {
   execution_duration_p95_ms?: number;
   chartHeight?: number;
   barWidth?: number;
+  withTooltip?: boolean;
 };
 
 const greatestValue = (values: any[], fieldName = 'logDuration') => {
@@ -31,20 +32,35 @@ const greatestValue = (values: any[], fieldName = 'logDuration') => {
 };
 
 const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
-  const {data = [], execution_duration_p50_ms, execution_duration_p95_ms, chartHeight = 100, barWidth = 12} = props;
-  /*
-    Division each value by some number makes chart look more proportional
-    division by 1000 converts values to seconds
-    better would be to divide it by minValue - 1 to make sure that each record is displayed well
-  */
-  const logScaleData = data
-    .filter((execItem: any) => execItem.duration_ms || execItem.status === 'running')
-    .map(item => ({
+  const {
+    data = [],
+    execution_duration_p50_ms,
+    execution_duration_p95_ms,
+    chartHeight = 100,
+    barWidth = 12,
+    withTooltip,
+  } = props;
+  const logScaleData = data.map(item => {
+    // items with no duration set to 1 sec execution
+    if (!item.duration_ms || item.duration_ms <= 1000) {
+      return {
+        ...item,
+        logDuration: 1,
+        duration_s: 1,
+      };
+    }
+    /*
+      Division each value by some number makes chart look more proportional
+      division by 1000 converts values to seconds
+      better would be to divide it by minValue - 1 to make sure that each record is displayed well
+    */
+    const duration_s = item.duration_ms / 1000;
+    return {
       ...item,
-      logDuration: Math.log(item.duration_ms / 1000),
-      duration_s: item.duration_ms / 1000,
-    }))
-    .reverse();
+      logDuration: Math.log(duration_s),
+      duration_s,
+    };
+  });
 
   const maxValue = greatestValue(logScaleData);
 
@@ -57,13 +73,18 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   const svgWrapperWidth =
     logScaleData.length * (barChartConfig.barMargin + barChartConfig.barWidth) - barChartConfig.barMargin;
 
-  const axisValue = (value?: number) => (barChartConfig.chartHeight * Math.log(Number(value) / 1000)) / maxValue;
-  const p50AxisValue = axisValue(execution_duration_p50_ms);
-  const p95AxisValue = axisValue(execution_duration_p95_ms);
+  // @ts-ignore
+  const {p50AxisPercent, p95AxisPercent} = useCallback(() => {
+    if (!execution_duration_p50_ms || !execution_duration_p95_ms) {
+      return;
+    }
+    const axisValue = (value?: number) => (barChartConfig.chartHeight * Math.log(Number(value) / 1000)) / maxValue;
+    const p50AxisValue = axisValue(execution_duration_p50_ms);
+    const p95AxisValue = axisValue(execution_duration_p95_ms);
 
-  const axisPercent = (value: number) => Math.round(100 - (value * 100) / barChartConfig.chartHeight);
-  const p50AxisPercent = axisPercent(p50AxisValue);
-  const p95AxisPercent = axisPercent(p95AxisValue);
+    const axisPercent = (value: number) => Math.round(100 - (value * 100) / barChartConfig.chartHeight);
+    return {p50AxisPercent: axisPercent(p50AxisValue), p95AxisPercent: axisPercent(p95AxisValue)};
+  }, [execution_duration_p50_ms, execution_duration_p95_ms, maxValue, barChartConfig.chartHeight]);
 
   return (
     <MetricsBarChartWrapper
@@ -73,7 +94,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     >
       {!data || !data.length ? (
         <NoData>
-          <Text className="regular big" color={Colors.slate500}>
+          <Text className={`regular ${withTooltip ? 'big' : 'middle'}`} color={Colors.slate500}>
             No information about metrics
           </Text>
         </NoData>
@@ -87,7 +108,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
               ) : null}
             </>
           ) : null}
-          <Chart chartConfig={barChartConfig} maxValue={maxValue} />
+          <Chart chartConfig={barChartConfig} maxValue={maxValue} withTooltip={withTooltip} />
         </ChartWrapper>
       )}
     </MetricsBarChartWrapper>

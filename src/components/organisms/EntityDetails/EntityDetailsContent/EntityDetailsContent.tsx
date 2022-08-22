@@ -1,8 +1,9 @@
 import {useContext, useEffect, useState} from 'react';
 
-import {Tabs} from 'antd';
+import {Select, Tabs} from 'antd';
 
 import {Entity} from '@models/entity';
+import {Option as OptionType} from '@models/form';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectRedirectTarget} from '@redux/reducers/configSlice';
@@ -27,8 +28,16 @@ import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
 
+const filterOptions: OptionType[] = [
+  {value: 7, label: '7 days (default)'},
+  {value: 30, label: '30 days'},
+  {value: 90, label: '90 days'},
+  {value: 0, label: 'All days'},
+];
+
 const EntityDetailsContent: React.FC = () => {
-  const {entity, entityDetails, onRowSelect, defaultStackRoute, metrics} = useContext(EntityDetailsContext);
+  const {entity, entityDetails, onRowSelect, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue} =
+    useContext(EntityDetailsContext);
   const {navigate} = useContext(MainContext);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -88,6 +97,13 @@ const EntityDetailsContent: React.FC = () => {
         title={name || 'Loading...'}
         subTitle={labels ? <LabelsList labels={entityDetails?.labels} /> : ''}
         extra={[
+          <Select
+            placeholder="Last 7/30/90/Year/All days"
+            options={filterOptions}
+            style={{width: 250}}
+            value={daysFilterValue}
+            onChange={setDaysFilterValue}
+          />,
           <Button key="1" type="primary" onClick={onRunButtonClick}>
             Run now
           </Button>,

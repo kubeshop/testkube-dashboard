@@ -56,11 +56,7 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
           <Title level={3}>{metrics?.total_executions || '-'}</Title>
         </SummaryGridItem>
       </SummaryGridWrapper>
-      <MetricsBarChart
-        data={metrics?.executions}
-        execution_duration_p95_ms={metrics?.execution_duration_p95_ms}
-        execution_duration_p50_ms={metrics?.execution_duration_p50_ms}
-      />
+      <MetricsBarChart data={metrics?.executions} withTooltip />
     </>
   );
 };
