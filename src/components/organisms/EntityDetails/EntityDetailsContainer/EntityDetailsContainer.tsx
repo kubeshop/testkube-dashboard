@@ -21,13 +21,13 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const params = useParams();
   const {id, execId} = params;
 
-  const [daysFilterValue, setDaysFilterValue] = useState(null);
+  const [daysFilterValue, setDaysFilterValue] = useState(7);
   const [selectedRow, selectRow] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
   const {data: executions} = useGetExecutions(id, {pollingInterval: PollingIntervals.everySecond});
   const {data: entityDetails} = useGetEntityDetails(id, {pollingInterval: PollingIntervals.everySecond});
-  const {data: metrics} = useGetMetrics({id, last: daysFilterValue || 7}, {pollingInterval: PollingIntervals.long});
+  const {data: metrics} = useGetMetrics({id, last: daysFilterValue}, {pollingInterval: PollingIntervals.long});
 
   const getDefaultUrl = () => {
     const clarifyTargetUrl = pathname.split('/').slice(0, 4);
@@ -80,7 +80,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setCurrentPage,
     currentPage,
     metrics,
-
     daysFilterValue,
     setDaysFilterValue,
   };

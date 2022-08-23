@@ -60,7 +60,7 @@ export const SvgWrapper = styled.div`
   width: inherit;
 `;
 
-export const BarWrapper = styled.div<{$width?: number; $margin: number}>`
+export const BarWrapper = styled.div<{$width?: number; $margin: number; noHover?: boolean}>`
   width: ${({$width}) => $width}px;
 
   transition: 0.3s;
@@ -70,9 +70,12 @@ export const BarWrapper = styled.div<{$width?: number; $margin: number}>`
     margin-right: ${props => props.$margin}px;
   }
 
-  &:hover {
-    background: ${Colors.slate600} !important;
-  }
+  ${props =>
+    props.noHover
+      ? ``
+      : `&:hover {
+          background: ${Colors.slate600} !important;
+        }`}
 `;
 
 export const NoData = styled.div`

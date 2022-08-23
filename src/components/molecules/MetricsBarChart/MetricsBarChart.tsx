@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import {memo, useCallback} from 'react';
+import {memo, useCallback, useRef} from 'react';
 
 import {ExecutionMetrics} from '@models/metrics';
 
@@ -40,6 +40,17 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     barWidth = 12,
     withTooltip,
   } = props;
+
+  const scrollRef = useRef(null);
+
+  const scrollToRight = () => {
+    if (!scrollRef.current) {
+      return;
+    }
+    // @ts-ignore
+    scrollRef.current.scrollIntoView({behavior: 'smooth'});
+  };
+
   const logScaleData = data.map(item => {
     // items with no duration set to 1 sec execution
     if (!item.duration_ms || item.duration_ms <= 1000) {
@@ -109,6 +120,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
             </>
           ) : null}
           <Chart chartConfig={barChartConfig} maxValue={maxValue} withTooltip={withTooltip} />
+          <div ref={scrollRef} />
         </ChartWrapper>
       )}
     </MetricsBarChartWrapper>

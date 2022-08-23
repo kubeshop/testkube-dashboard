@@ -50,15 +50,15 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
   return (
     <Modal
-      title="TestKube API endpoint"
+      title="Testkube API endpoint"
       isModalVisible={visible}
       footer={null}
       setIsModalVisible={isModalVisible}
       content={
         <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
           <Text>
-            Please provide the TestKube API endpoint for your installation, which will have been provided to you by the
-            TestKube installer -{' '}
+            Please provide the Testkube API endpoint for your installation, which will have been provided to you by the
+            Testkube installer -{' '}
             <a
               href="https://kubeshop.github.io/testkube/UI/#ui-results-endpoint"
               target="_blank"

@@ -5,10 +5,9 @@ import {formatDuration} from '@utils/formatDate';
 
 import {StatusColors} from '@styles/Colors';
 
-import Bar from './Bar';
 import BarWithTooltip from './BarWithTooltip';
 import {BarChartConfig} from './MetricsBarChart';
-import {SvgWrapper} from './MetricsBarChart.styled';
+import {BarWrapper as Bar, SvgWrapper} from './MetricsBarChart.styled';
 
 type ChartProps = {
   chartConfig: BarChartConfig;
@@ -40,10 +39,14 @@ const Chart: React.FC<ChartProps> = props => {
         color: barColor,
         key,
       };
+
       if (withTooltip) {
         return <BarWithTooltip {...barProps} tooltipData={{duration: formattedDuration, status, name, startTime}} />;
       }
-      return <Bar {...barProps} />;
+
+      return (
+        <Bar $width={barProps.width} $margin={barProps.margin} style={{height, background: barProps.color}} noHover />
+      );
     });
   }, [chartData]);
 

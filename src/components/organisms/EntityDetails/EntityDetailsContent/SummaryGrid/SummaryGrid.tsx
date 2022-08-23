@@ -3,11 +3,11 @@ import {Metrics} from '@models/metrics';
 
 import {Text, Title} from '@custom-antd';
 
+import {MetricsBarChart} from '@molecules';
+
 import {formatDuration} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
-
-import {MetricsBarChart} from '@src/components/molecules';
 
 import {SummaryGridItem, SummaryGridWrapper} from './SummaryGrid.styled';
 
