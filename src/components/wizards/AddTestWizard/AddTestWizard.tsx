@@ -53,9 +53,8 @@ const AddTestWizard: React.FC<WizardComponentProps> = props => {
 
         navigate('/dashboard/tests');
       }
-    } catch (err) {
-      console.log('err: ', err);
-    }
+      // eslint-disable-next-line no-empty
+    } catch (err) {}
   };
 
   const onSaveClick = async (values: any, toRun: boolean = false) => {

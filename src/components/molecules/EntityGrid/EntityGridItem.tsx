@@ -1,26 +1,40 @@
+import {useContext, useRef} from 'react';
+
 import {format} from 'date-fns';
 
 import {StatusIcon, TestRunnerIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {LabelsList} from '@molecules';
+import {LabelsList, MetricsBarChart} from '@molecules';
 
+import {EntityListContext} from '@organisms/EntityList/EntityListContainer/EntityListContainer';
+
+import useInViewport from '@hooks/useInViewport';
+
+import {formatDuration} from '@utils/formatDate';
 import {executionDateFormat} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
-import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './EntityGrid.styled';
+import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, StyledMetricItem} from './EntityGrid.styled';
 
 const EntityGridItem: React.FC<any> = props => {
   const {item, onClick} = props;
   const {dataItem, latestExecution} = item;
+  const {useGetMetrics} = useContext(EntityListContext);
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
   const startDate = latestExecution?.startTime ? format(new Date(latestExecution?.startTime), executionDateFormat) : '';
 
+  const ref = useRef(null);
+  const isInViewport = useInViewport(ref);
+
+  const {data: metrics} = useGetMetrics({id: dataItem.name, limit: 13, last: 7}, {skip: !isInViewport});
+
+  const executions = metrics?.executions || [];
   return (
-    <ItemWrapper onClick={onClick}>
+    <ItemWrapper onClick={onClick} ref={ref}>
       <StatusIcon status={status} />
       <DetailsWrapper>
         <ItemRow $flex={1}>
@@ -34,9 +48,38 @@ const EntityGridItem: React.FC<any> = props => {
               {startDate}
             </Text>
           </ItemColumn>
-          {/* <ItemColumn /> */}
         </ItemRow>
-        <ItemRow $flex={2} />
+        <ItemRow $flex={1}>
+          <StyledMetricItem>
+            <Text className="small uppercase" color={Colors.slate500}>
+              pass/fail ratio
+            </Text>
+            <Text className="big regular">
+              {metrics?.pass_fail_ratio ? `${metrics?.pass_fail_ratio.toFixed(2)}%` : '-'}
+            </Text>
+          </StyledMetricItem>
+          <StyledMetricItem>
+            <Text className="small uppercase" color={Colors.slate500}>
+              p50
+            </Text>
+            <Text className="big regular">
+              {metrics?.execution_duration_p50_ms ? formatDuration(metrics?.execution_duration_p50_ms / 1000) : '-'}
+            </Text>
+          </StyledMetricItem>
+          <StyledMetricItem>
+            <Text className="small uppercase" color={Colors.slate500}>
+              failed executions
+            </Text>
+            <Text className="big regular">{metrics?.failed_executions || '-'}</Text>
+          </StyledMetricItem>
+          <StyledMetricItem>
+            <MetricsBarChart
+              data={executions.filter((execItem: any) => execItem.duration_ms || execItem.status === 'running')}
+              chartHeight={38}
+              barWidth={6}
+            />
+          </StyledMetricItem>
+        </ItemRow>
       </DetailsWrapper>
     </ItemWrapper>
   );

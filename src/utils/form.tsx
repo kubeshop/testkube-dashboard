@@ -39,17 +39,7 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     let children: Nullable<ReactElement<any, any>> = null;
 
     if (inputType === 'select') {
-      children = (
-        <Select placeholder={placeholder} showSearch>
-          {options.map((option: any) => {
-            return (
-              <Option value={option.value} key={option.value}>
-                {option.label}
-              </Option>
-            );
-          })}
-        </Select>
-      );
+      children = <Select placeholder={placeholder} showSearch options={options} />;
     }
 
     if (inputType === 'radio') {

@@ -9,7 +9,9 @@ import {Entity} from '@models/entity';
 
 import {StatusIcon} from '@atoms';
 
-import {Text, Title} from '@custom-antd';
+import {Text} from '@custom-antd';
+
+import {DrawerHeader} from '@organisms/EntityDetails/ExecutionDetailsDrawer/ExecutionDetailsDrawer.styled';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -21,19 +23,18 @@ import {useGetTestExecutionByIdQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {EntityExecutionsContext, ExecutionDetailsContext} from '@contexts';
+import {EntityDetailsContext, ExecutionDetailsContext} from '@contexts';
 import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
 
-import {DrawerHeader} from '@src/components/organisms/EntityExecutions/ExecutionDetailsDrawer/ExecutionDetailsDrawer.styled';
-
-import {DetailsWrapper, ItemColumn, ItemRow} from '../EntityGrid/EntityGrid.styled';
+import {DetailsWrapper} from '../EntityGrid/EntityGrid.styled';
+import {ItemColumn, ItemRow} from './ExecutionDetails.styled';
 import TestExecutionDetailsTabs from './TestExecutionDetails/TestExecutionDetailsTabs';
 import TestSuiteExecutionDetailsTabs from './TestSuiteExecutionDetails/TestSuiteExecutionDetailsTabs';
 import {getHeaderValues} from './utils';
 
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityExecutionsContext);
+  const {execId} = useContext(EntityDetailsContext);
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
@@ -50,7 +51,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
 const TestExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityExecutionsContext);
+  const {execId} = useContext(EntityDetailsContext);
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
@@ -76,7 +77,7 @@ const components: {[key in Entity]: any} = {
 };
 
 const ExecutionDetails: React.FC = () => {
-  const {entity, execId, unselectRow} = useContext(EntityExecutionsContext);
+  const {entity, execId, unselectRow} = useContext(EntityDetailsContext);
 
   const [infoPanelProps, setInfoPanelProps] = useState<ExecutionDetailsOnDataChangeInterface>({
     data: null,
@@ -104,6 +105,13 @@ const ExecutionDetails: React.FC = () => {
 
   const {name, number, startedTime, finishedTime} = headerValues;
 
+  const getDuration = () => {
+    try {
+      return constructExecutedString(intervalToDuration({start: startedTime, end: finishedTime}));
+      // eslint-disable-next-line no-empty
+    } catch (err) {}
+  };
+
   return (
     <ExecutionDetailsContext.Provider value={{onDataChange, data}}>
       {dataLayers[entity]}
@@ -118,8 +126,8 @@ const ExecutionDetails: React.FC = () => {
                     {name}
                   </Text>
                 </ItemColumn>
-                <ItemColumn>
-                  <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400}} />
+                <ItemColumn className="flex-auto">
+                  <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
                 </ItemColumn>
               </ItemRow>
               <ItemRow $flex={1}>
@@ -140,9 +148,7 @@ const ExecutionDetails: React.FC = () => {
                   </Text>
 
                   <Text className="regular small" color={Colors.slate400}>
-                    {isRunning
-                      ? ''
-                      : constructExecutedString(intervalToDuration({start: startedTime, end: finishedTime}))}
+                    {isRunning ? '' : getDuration()}
                   </Text>
                 </ItemColumn>
               </ItemRow>

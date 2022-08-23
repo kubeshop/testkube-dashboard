@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 
 export interface ICustomButtonProps extends AntdButtonProps {
-  customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'warning';
+  $customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'warning';
 }
 
 const buttomTypesStyles: {[key: string]: string} = {
@@ -72,5 +72,5 @@ const buttomTypesStyles: {[key: string]: string} = {
 };
 
 export const AntdCustomStyledButton = styled(AntdButton)<ICustomButtonProps>`
-  ${props => buttomTypesStyles[props.customType || 'primary']}
+  ${props => buttomTypesStyles[props.$customType || 'primary']}
 `;

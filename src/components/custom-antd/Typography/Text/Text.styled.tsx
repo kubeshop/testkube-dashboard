@@ -8,7 +8,7 @@ export const StyledText = styled(Typography.Text)<{$color?: string}>`
 
     &.biggest {
       font-size: 34px;
-      line-height: 30px;
+      line-height: 38px;
     }
 
     &.big {

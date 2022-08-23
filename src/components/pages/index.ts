@@ -4,4 +4,4 @@ export {default as Tests} from './Tests';
 export {default as TestSuites} from './TestSuites';
 export {default as Executors} from './Executors';
 export {default as EntityListBlueprintRenderer} from './EntityListBlueprintRenderer';
-export {default as EntityExecutionsBlueprintRenderer} from './EntityExecutionsBlueprintRenderer';
+export {default as EntityDetailsBlueprintRenderer} from './EntityDetailsBlueprintRenderer';

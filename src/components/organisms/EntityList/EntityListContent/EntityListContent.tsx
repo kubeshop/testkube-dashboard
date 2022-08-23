@@ -4,18 +4,13 @@ import {Space} from 'antd';
 
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
-import {TestWithExecution} from '@models/test';
-import {TestSuiteWithExecution} from '@models/testSuite';
+import {OnDataChangeInterface} from '@models/onDataChange';
 
-import {Button, Modal, Skeleton, Title} from '@custom-antd';
+import {Button, Modal, Title} from '@custom-antd';
 
 import {EntityGrid} from '@molecules';
 
-import {PollingIntervals} from '@utils/numbers';
 import {compareFiltersObject} from '@utils/objects';
-
-import {useGetTestSuitesQuery} from '@services/testSuites';
-import {useGetTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
@@ -25,86 +20,14 @@ import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
-import {
-  EmptyListWrapper,
-  EntityListHeader,
-  StyledEntityListSkeletonWrapper,
-  StyledFiltersSection,
-} from './EntityListContent.styled';
-
-type OnDataChangeInterface = {
-  data: TestSuiteWithExecution[] | TestWithExecution[];
-  isLoading: boolean;
-  isFetching: boolean;
-  refetch: Function;
-};
-
-type DataLayerProps = {
-  onDataChange: (args: OnDataChangeInterface) => void;
-  queryFilters?: any;
-};
+import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
+import {EmptyListWrapper, EntityListHeader, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
+import EntityListSkeleton from './EntityListSkeleton';
 
 const modalTypes: {[key in Entity]: ModalConfigProps} = {
   'test-suites': TestSuiteModalConfig,
   tests: TestModalConfig,
 };
-
-const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
-  const {onDataChange, queryFilters} = props;
-
-  const {data, isLoading, isFetching, refetch, ...rest} = useGetTestSuitesQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.everySecond,
-  });
-
-  useEffect(() => {
-    if (rest.error) {
-      onDataChange({data: [], isLoading: false, isFetching: false, refetch});
-    } else {
-      onDataChange({data: data || [], isLoading, isFetching, refetch});
-    }
-  }, [data, isLoading, isFetching]);
-
-  return <></>;
-};
-
-const TestsDataLayer: React.FC<DataLayerProps> = props => {
-  const {onDataChange, queryFilters} = props;
-
-  const {data, isLoading, isFetching, refetch, ...rest} = useGetTestsQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.everySecond,
-  });
-
-  useEffect(() => {
-    if (rest.error) {
-      onDataChange({data: [], isLoading: false, isFetching: false, refetch});
-    } else {
-      onDataChange({data: data || [], isLoading, isFetching, refetch});
-    }
-  }, [data, isLoading, isFetching, rest.error]);
-
-  return <></>;
-};
-
-const EntityListSkeleton: React.FC = () => {
-  const skeletonConfig = {
-    paragraph: {
-      rows: 1,
-      width: '100%',
-    },
-    additionalStyles: {
-      lineHeight: 120,
-    },
-  };
-
-  return (
-    <StyledEntityListSkeletonWrapper>
-      {new Array(6).fill(0).map(() => {
-        return <Skeleton loading title={false} {...skeletonConfig} />;
-      })}
-    </StyledEntityListSkeletonWrapper>
-  );
-};
-
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {
     pageTitle,
@@ -173,7 +96,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
   return (
-    <div style={{padding: 40}}>
+    <StyledContainer>
       <EntityListHeader>
         {dataLayers[entity]}
         <Space size={15} direction="vertical">
@@ -192,7 +115,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             entity={entity}
             isFiltersDisabled={isEmptyData}
           />
-          <Button customType="primary" onClick={addEntityAction}>
+          <Button $customType="primary" onClick={addEntityAction}>
             {addEntityButtonText}
           </Button>
         </StyledFiltersSection>
@@ -213,7 +136,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
       ) : null}
-    </div>
+    </StyledContainer>
   );
 };
 

@@ -75,34 +75,39 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     });
   }, [filters.selector]);
 
-  const renderKeyValueInputs = labelsMapping.map((item, index) => (
-    <StyledKeyValueRow>
-      <Input
-        width="220px"
-        onChange={event => onKeyChange(event.target.value, index)}
-        value={item.key}
-        data-cy={`key-input-${index}`}
-        placeholder="Key"
-      />
-      <Input
-        width="220px"
-        onChange={event => onValueChange(event.target.value, index)}
-        value={item.value}
-        data-cy={`value-input-${index}`}
-        placeholder="Value"
-      />
-      {index > 0 ? (
-        <Button customType="tertiary" onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`}>
-          &#10005;
-        </Button>
-      ) : (
-        <EmptyButton />
-      )}
-    </StyledKeyValueRow>
-  ));
+  const renderKeyValueInputs = labelsMapping.map((item, index) => {
+    const key = `key-value-pair${index}`;
+
+    return (
+      <StyledKeyValueRow key={key}>
+        <Input
+          width="220px"
+          onChange={event => onKeyChange(event.target.value, index)}
+          value={item.key}
+          data-cy={`key-input-${index}`}
+          placeholder="Key"
+        />
+        <Input
+          width="220px"
+          onChange={event => onValueChange(event.target.value, index)}
+          value={item.value}
+          data-cy={`value-input-${index}`}
+          placeholder="Value"
+        />
+        {index > 0 ? (
+          <Button $customType="tertiary" onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`}>
+            &#10005;
+          </Button>
+        ) : (
+          <EmptyButton />
+        )}
+      </StyledKeyValueRow>
+    );
+  });
 
   const applyFilters = () => {
     const resultedFilters: string[] = [];
+
     labelsMapping.forEach(item => {
       if (!item.key) {
         return;
@@ -113,6 +118,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         resultedFilters.push(`${item.key}=${item.value}`);
       }
     });
+
     dispatch(setFilters({...filters, page: 0, selector: resultedFilters}));
     onVisibleChange(false);
   };
@@ -127,7 +133,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       <StyledLabelsMenuContainer>
         <Title level={5}>Filter tests by Key Value pairs.</Title>
         {renderKeyValueInputs}
-        <Button customType="secondary" onClick={() => onAddRow()}>
+        <Button $customType="secondary" onClick={() => onAddRow()}>
           Add another row
         </Button>
       </StyledLabelsMenuContainer>
@@ -138,7 +144,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const isFilterApplied = filters.selector.length > 0;
 
   return (
-    <Space size={20}>
+    <Space>
       <StyledFilterDropdown
         overlay={menu}
         trigger={['click']}

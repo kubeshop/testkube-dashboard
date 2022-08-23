@@ -13,14 +13,14 @@ const FilterMenuFooter: React.FC<FilterMenuFooterProps> = props => {
   return (
     <StyledSpace>
       {onCancel ? (
-        <Button customType="transparent" onClick={onCancel}>
+        <Button $customType="transparent" onClick={onCancel}>
           Cancel
         </Button>
       ) : null}
-      <Button customType="secondary" onClick={onReset}>
+      <Button $customType="secondary" onClick={onReset}>
         Reset
       </Button>
-      <Button customType="primary" onClick={onOk}>
+      <Button $customType="primary" onClick={onOk}>
         Ok
       </Button>
     </StyledSpace>

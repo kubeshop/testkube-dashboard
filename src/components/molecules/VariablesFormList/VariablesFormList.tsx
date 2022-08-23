@@ -73,7 +73,7 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                     },
                   },
                 ]}
-                showClearIcon={form.getFieldError(['variables-list', Number(key), 'key'])[0] === duplicateKeyMessage}
+                $showClearIcon={form.getFieldError(['variables-list', Number(key), 'key'])[0] === duplicateKeyMessage}
               >
                 <Input allowClear />
               </StyledKeyFormItem>
@@ -100,7 +100,7 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
             </StyledLablesSpace>
           ))}
           <StyledButtonsContainer>
-            <Button customType="secondary" onClick={() => add(emptyVariableObject)}>
+            <Button $customType="secondary" onClick={() => add(emptyVariableObject)}>
               Add a new variable
             </Button>
           </StyledButtonsContainer>

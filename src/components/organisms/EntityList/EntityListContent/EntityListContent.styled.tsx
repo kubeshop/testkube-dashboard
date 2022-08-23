@@ -22,6 +22,8 @@ export const StyledFiltersSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 `;
 
 export const StyledButtonContainer = styled.div`
@@ -29,4 +31,11 @@ export const StyledButtonContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
+`;
+
+export const StyledContainer = styled.div`
+  overflow: auto;
+
+  padding: 40px;
+  padding-left: 1vw;
 `;

@@ -9,7 +9,7 @@ export const executorsApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getExecutors: builder.query<Executor[], null>({
-      query: () => `/executors`,
+      query: () => '/executors',
     }),
   }),
 });
