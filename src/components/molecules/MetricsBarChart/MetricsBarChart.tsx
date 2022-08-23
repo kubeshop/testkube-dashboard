@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import {memo, useCallback, useRef} from 'react';
+import {memo, useCallback, useEffect, useRef} from 'react';
 
 import {ExecutionMetrics} from '@models/metrics';
 
@@ -25,6 +25,7 @@ type MetricsBarChartProps = {
   chartHeight?: number;
   barWidth?: number;
   withTooltip?: boolean;
+  daysFilterValue?: number;
 };
 
 const greatestValue = (values: any[], fieldName = 'logDuration') => {
@@ -39,17 +40,30 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     chartHeight = 100,
     barWidth = 12,
     withTooltip,
+    daysFilterValue,
   } = props;
 
   const scrollRef = useRef(null);
+  const didMountRef = useRef(false);
 
   const scrollToRight = () => {
     if (!scrollRef.current) {
       return;
     }
     // @ts-ignore
-    scrollRef.current.scrollIntoView({behavior: 'smooth'});
+    scrollRef.current.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
   };
+
+  useEffect(() => {
+    if (didMountRef.current) {
+      if (daysFilterValue) {
+        setTimeout(() => {
+          scrollToRight();
+        }, 500);
+      }
+    }
+    didMountRef.current = true;
+  }, [daysFilterValue]);
 
   const logScaleData = data.map(item => {
     // items with no duration set to 1 sec execution
@@ -119,8 +133,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
               ) : null}
             </>
           ) : null}
-          <Chart chartConfig={barChartConfig} maxValue={maxValue} withTooltip={withTooltip} />
-          <div ref={scrollRef} />
+          <Chart chartConfig={barChartConfig} maxValue={maxValue} withTooltip={withTooltip} scrollRef={scrollRef} />
         </ChartWrapper>
       )}
     </MetricsBarChartWrapper>

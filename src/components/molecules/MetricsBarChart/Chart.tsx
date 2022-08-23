@@ -13,10 +13,11 @@ type ChartProps = {
   chartConfig: BarChartConfig;
   maxValue: number;
   withTooltip?: boolean;
+  scrollRef?: any;
 };
 
 const Chart: React.FC<ChartProps> = props => {
-  const {chartConfig, maxValue, withTooltip = false} = props;
+  const {chartConfig, maxValue, withTooltip = false, scrollRef} = props;
 
   const {chartData, barWidth, chartHeight, barMargin} = chartConfig;
 
@@ -50,7 +51,12 @@ const Chart: React.FC<ChartProps> = props => {
     });
   }, [chartData]);
 
-  return <SvgWrapper>{renderedBarChart}</SvgWrapper>;
+  return (
+    <SvgWrapper>
+      {renderedBarChart}
+      <div ref={scrollRef} />
+    </SvgWrapper>
+  );
 };
 
 export default Chart;

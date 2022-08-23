@@ -18,8 +18,8 @@ const EntityDetailsContext = createContext<{
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   currentPage: number;
   metrics?: Metrics;
-  daysFilterValue: number | null;
-  setDaysFilterValue: any;
+  daysFilterValue: number;
+  setDaysFilterValue: React.Dispatch<React.SetStateAction<number>>;
 }>({
   executionsList: {},
   entityDetails: {},
@@ -35,7 +35,7 @@ const EntityDetailsContext = createContext<{
   setCurrentPage: () => {},
   currentPage: 1,
   metrics: undefined,
-  daysFilterValue: null,
+  daysFilterValue: 7,
   setDaysFilterValue: () => {},
 });
 

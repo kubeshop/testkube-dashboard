@@ -13,10 +13,11 @@ import {SummaryGridItem, SummaryGridWrapper} from './SummaryGrid.styled';
 
 type SummaryGridProps = {
   metrics?: Metrics;
+  daysFilterValue: number;
 };
 
 const SummaryGrid: React.FC<SummaryGridProps> = props => {
-  const {metrics} = props;
+  const {metrics, daysFilterValue} = props;
 
   return (
     <>
@@ -56,7 +57,7 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
           <Title level={3}>{metrics?.total_executions || '-'}</Title>
         </SummaryGridItem>
       </SummaryGridWrapper>
-      <MetricsBarChart data={metrics?.executions} withTooltip />
+      <MetricsBarChart data={metrics?.executions} withTooltip daysFilterValue={daysFilterValue} />
     </>
   );
 };
