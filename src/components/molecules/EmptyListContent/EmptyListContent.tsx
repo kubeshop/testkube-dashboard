@@ -26,7 +26,7 @@ const EmptyListContent: React.FC<EmptyListContentProps> = props => {
       <Text className="regular middle text-center" color={Colors.slate400}>
         {description}
       </Text>
-      <Button customType="primary" onClick={onButtonClick}>
+      <Button $customType="primary" onClick={onButtonClick}>
         {buttonText}
       </Button>
       <StyledHelpCardsContainer>

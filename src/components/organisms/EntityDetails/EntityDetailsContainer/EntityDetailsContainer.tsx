@@ -13,7 +13,7 @@ import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {entity, useGetExecutions, useGetEntityDetails, defaultStackRoute} = props;
+  const {entity, useGetExecutions, useGetEntityDetails, useGetMetrics, defaultStackRoute} = props;
 
   const {navigate, location} = useContext(MainContext);
   const {pathname} = location;
@@ -21,11 +21,13 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const params = useParams();
   const {id, execId} = params;
 
-  const {data: executions} = useGetExecutions(id, {pollingInterval: PollingIntervals.everySecond});
-  const {data: entityDetails} = useGetEntityDetails(id, {pollingInterval: PollingIntervals.everySecond});
-
+  const [daysFilterValue, setDaysFilterValue] = useState(7);
   const [selectedRow, selectRow] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+
+  const {data: executions} = useGetExecutions(id, {pollingInterval: PollingIntervals.everySecond});
+  const {data: entityDetails} = useGetEntityDetails(id, {pollingInterval: PollingIntervals.everySecond});
+  const {data: metrics} = useGetMetrics({id, last: daysFilterValue}, {pollingInterval: PollingIntervals.long});
 
   const getDefaultUrl = () => {
     const clarifyTargetUrl = pathname.split('/').slice(0, 4);
@@ -77,6 +79,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     defaultStackRoute,
     setCurrentPage,
     currentPage,
+    metrics,
+    daysFilterValue,
+    setDaysFilterValue,
   };
 
   useEffect(() => {

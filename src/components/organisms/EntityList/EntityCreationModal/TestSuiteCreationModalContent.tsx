@@ -17,7 +17,6 @@ import {MainContext} from '@contexts';
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
 const {TextArea} = Input;
-const {Option} = Select;
 
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
@@ -70,14 +69,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
         </StyledFormItem>
         <StyledFormItem name="labels">
-          <Select placeholder="Labels" mode="multiple" allowClear showArrow>
-            {data?.map((value: string, index: number) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Option key={index} value={`${index}_${value}`}>
-                {value}
-              </Option>
-            ))}
-          </Select>
+          <Select placeholder="Labels" mode="multiple" allowClear showArrow options={data || []} />
         </StyledFormItem>
         <StyledFormItem>
           <Button htmlType="submit" disabled={isLoading} loading={isLoading} style={{width: '118px'}}>

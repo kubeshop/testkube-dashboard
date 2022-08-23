@@ -43,3 +43,10 @@ export const constructExecutedString = (duration: Duration, countToDisplay: numb
 
   return finishString.trim();
 };
+
+export const formatDuration = (duration: number) =>
+  duration > 3599
+    ? `${(duration / 3600).toFixed()}h ${Math.round(duration % 60)}m ${Math.round(duration % 3600)}s`
+    : duration > 59
+    ? `${(duration / 60).toFixed()}m ${Math.round(duration % 60)}s`
+    : `${duration.toFixed()}s`;

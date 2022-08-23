@@ -52,12 +52,12 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
         {footerText ? <StyledFooterText>{footerText}</StyledFooterText> : null}
         <StyledFooterButtonsContainer>
           {onCancel ? (
-            <Button onClick={onCancel} customType="secondary" disabled={isButtonsDisabled}>
+            <Button onClick={onCancel} $customType="secondary" disabled={isButtonsDisabled}>
               Cancel
             </Button>
           ) : null}
           {onConfirm ? (
-            <Button onClick={onConfirm} customType={isWarning ? 'warning' : 'primary'} disabled={isButtonsDisabled}>
+            <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={isButtonsDisabled}>
               {confirmButtonText}
             </Button>
           ) : null}

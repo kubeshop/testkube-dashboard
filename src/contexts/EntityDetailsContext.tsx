@@ -1,6 +1,7 @@
 import {createContext} from 'react';
 
 import {Entity} from '@models/entity';
+import {Metrics} from '@models/metrics';
 
 const EntityDetailsContext = createContext<{
   executionsList: any;
@@ -16,6 +17,9 @@ const EntityDetailsContext = createContext<{
   defaultStackRoute: string;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   currentPage: number;
+  metrics?: Metrics;
+  daysFilterValue: number;
+  setDaysFilterValue: React.Dispatch<React.SetStateAction<number>>;
 }>({
   executionsList: {},
   entityDetails: {},
@@ -30,6 +34,9 @@ const EntityDetailsContext = createContext<{
   defaultStackRoute: '',
   setCurrentPage: () => {},
   currentPage: 1,
+  metrics: undefined,
+  daysFilterValue: 7,
+  setDaysFilterValue: () => {},
 });
 
 export default EntityDetailsContext;

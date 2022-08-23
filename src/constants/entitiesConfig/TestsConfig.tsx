@@ -12,7 +12,7 @@ import {
 
 import {Text} from '@custom-antd';
 
-import {useGetTestsQuery} from '@services/tests';
+import {useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
@@ -39,6 +39,7 @@ export const TestsEntity: EntityListBlueprint = {
   emptyDataComponent: EmptyTestsListContent,
 
   useGetData: useGetTestsQuery,
+  useGetMetrics: useGetTestExecutionMetricsQuery,
   setData: setTests,
   selectData: selectTests,
 

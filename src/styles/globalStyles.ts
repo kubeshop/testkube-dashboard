@@ -12,6 +12,8 @@ scrollbar-width: none; /* Firefox */
 
 export const GlobalStyle = createGlobalStyle`
   body {
+    overflow: hidden;
+    
     background: ${BackgroundColors.mainBackground};
   }
 
@@ -262,6 +264,10 @@ export const GlobalStyle = createGlobalStyle`
     .ant-pagination-item-ellipsis {
       color: ${Colors.purple} !important;
     }
+  }
+
+  .ant-page-header-heading-title {
+    line-height: 38px !important;
   }
 `;
 

@@ -15,8 +15,10 @@ const EntityListSkeleton: React.FC = () => {
 
   return (
     <StyledEntityListSkeletonWrapper>
-      {new Array(6).fill(0).map(() => {
-        return <Skeleton loading title={false} {...skeletonConfig} />;
+      {new Array(6).fill(0).map((_, index) => {
+        const key = `skeleton-item-${index}`;
+
+        return <Skeleton loading title={false} key={key} {...skeletonConfig} />;
       })}
     </StyledEntityListSkeletonWrapper>
   );
