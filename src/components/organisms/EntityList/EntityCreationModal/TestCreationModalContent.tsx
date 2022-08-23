@@ -99,10 +99,13 @@ const TestCreationModalContent: React.FC = () => {
     <div style={{display: 'flex'}}>
       <Form
         form={form}
+        layout="vertical"
         name="test-suite-creation"
         onFinish={onFinish}
         initialValues={{name: '', description: '', labels: []}}
         style={{flex: 1}}
+        requiredMark="optional"
+        labelAlign="right"
       >
         <StyledFormSpace size={24} direction="vertical">
           <Text className="regular big">Test details</Text>
