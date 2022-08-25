@@ -91,6 +91,8 @@ const EntityDetailsContent: React.FC = () => {
       }
     : {};
 
+  const isMetricsEmpty = !metrics?.executions || !metrics?.executions.length;
+
   return (
     <StyledContainer>
       <StyledPageHeader
@@ -98,13 +100,15 @@ const EntityDetailsContent: React.FC = () => {
         title={name || 'Loading...'}
         subTitle={labels ? <LabelsList labels={entityDetails?.labels} /> : ''}
         extra={[
-          <Select
-            placeholder="Last 7/30/90/Year/All days"
-            options={filterOptions}
-            style={{width: 250}}
-            value={daysFilterValue}
-            onChange={setDaysFilterValue}
-          />,
+          !isMetricsEmpty ? (
+            <Select
+              placeholder="Last 7/30/90/Year/All days"
+              options={filterOptions}
+              style={{width: 250}}
+              value={daysFilterValue}
+              onChange={setDaysFilterValue}
+            />
+          ) : null,
           <Button key="1" type="primary" onClick={onRunButtonClick}>
             Run now
           </Button>,
@@ -118,7 +122,7 @@ const EntityDetailsContent: React.FC = () => {
           </Text>
         ) : null}
       </StyledPageHeader>
-      <SummaryGrid metrics={metrics} daysFilterValue={daysFilterValue} />
+      {!isMetricsEmpty ? <SummaryGrid metrics={metrics} daysFilterValue={daysFilterValue} /> : null}
       <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
         <Tabs.TabPane tab="Recent executions" key="Executions">
           <ExecutionsTable triggerRun={onRunButtonClick} />

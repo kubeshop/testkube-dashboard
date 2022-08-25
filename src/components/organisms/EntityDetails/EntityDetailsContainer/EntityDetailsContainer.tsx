@@ -25,7 +25,10 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [selectedRow, selectRow] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const {data: executions} = useGetExecutions(id, {pollingInterval: PollingIntervals.everySecond});
+  const {data: executions} = useGetExecutions(
+    {id, last: daysFilterValue},
+    {pollingInterval: PollingIntervals.everySecond}
+  );
   const {data: entityDetails} = useGetEntityDetails(id, {pollingInterval: PollingIntervals.everySecond});
   const {data: metrics} = useGetMetrics({id, last: daysFilterValue}, {pollingInterval: PollingIntervals.long});
 
