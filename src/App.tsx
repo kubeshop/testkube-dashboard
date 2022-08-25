@@ -23,7 +23,7 @@ import {useGetExecutorsQuery} from '@services/executors';
 import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
-// import {CookiesBanner} from './components/molecules';
+import {CookiesBanner} from './components/molecules';
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
 import env from './env';
 
@@ -125,10 +125,10 @@ const App: React.FC = () => {
             </Routes>
           </Content>
         </StyledLayoutContentWrapper>
-        {/* {isCookiesVisible ? (
-          <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
-        ) : null} */}
       </Layout>
+      {isCookiesVisible ? (
+        <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
+      ) : null}
     </MainContext.Provider>
   );
 };

@@ -8,16 +8,21 @@ import Fonts from '@styles/Fonts';
 export const StyledCookiesContainer = styled.div`
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 50%;
+  transform: translateX(50%);
   z-index: 3;
 
   display: flex;
   justify-content: center;
 
-  width: calc(100% - 80px);
-  padding: 32px 300px;
+  width: 800px;
+  padding: 35px 32px;
+  border: 1px solid ${Colors.slate700};
+  border-bottom-color: transparent;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 
-  background: ${Colors.purple};
+  background: ${Colors.slate800};
 
   p {
     margin: 0;
@@ -29,8 +34,6 @@ export const StyledCookiesContainer = styled.div`
 `;
 
 export const StyledCookiesDisclaimer = styled.p`
-  width: 500px;
-
   font-family: ${Fonts.ptSans};
   font-size: 14px;
   font-weight: 400;
