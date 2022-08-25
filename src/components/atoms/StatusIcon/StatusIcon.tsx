@@ -23,7 +23,8 @@ const iconStyles: any = {
   },
   pending: {
     borderColor: Colors.slate600,
-    background: Colors.slate900,
+    background: Colors.slate700,
+    color: Colors.slate400,
   },
   queued: {
     borderColor: Colors.slate600,

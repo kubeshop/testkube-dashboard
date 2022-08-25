@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {HourglassOutlined} from '@ant-design/icons';
+
 import {StyledAntdIcon} from './Icon.styled';
 import Icons from './icons';
 
@@ -24,7 +26,7 @@ const iconsMap: any = {
   failed: FailedStatusIcon,
   error: FailedStatusIcon,
   running: RunningStatusIcon,
-  pending: PendingStatusIcon,
+  pending: HourglassOutlined,
   queued: PendingStatusIcon,
   delay: DelayIcon,
 };

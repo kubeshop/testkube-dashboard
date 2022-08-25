@@ -49,4 +49,4 @@ export const formatDuration = (duration: number) =>
     ? `${Math.floor(duration / 3600)}h ${Math.round(duration % 60)}m ${Math.round(duration % 3600)}s`
     : duration > 59
     ? `${Math.floor(duration / 60)}m ${Math.round(duration % 60)}s`
-    : `${duration.toFixed()}s`;
+    : `${duration.toFixed(2)}s`;

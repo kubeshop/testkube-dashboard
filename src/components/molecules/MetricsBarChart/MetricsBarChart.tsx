@@ -3,12 +3,8 @@ import {memo, useCallback, useEffect, useRef} from 'react';
 
 import {ExecutionMetrics} from '@models/metrics';
 
-import {Text} from '@custom-antd';
-
-import Colors from '@styles/Colors';
-
 import Chart from './Chart';
-import {ChartWrapper, MetricsBarChartWrapper, NoData} from './MetricsBarChart.styled';
+import {ChartWrapper, MetricsBarChartWrapper} from './MetricsBarChart.styled';
 import PAxisLine from './PAxisLine';
 
 export type BarChartConfig = {
@@ -46,17 +42,17 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   const scrollRef = useRef(null);
   const didMountRef = useRef(false);
 
-  const scrollToRight = () => {
+  const scrollToRight = (behavior = 'smooth') => {
     if (!scrollRef.current) {
       return;
     }
     // @ts-ignore
-    scrollRef.current.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
+    scrollRef.current.scrollIntoView({behavior, block: 'end', inline: 'nearest'});
   };
 
   useEffect(() => {
     if (didMountRef.current) {
-      if (daysFilterValue) {
+      if (daysFilterValue && withTooltip) {
         setTimeout(() => {
           scrollToRight();
         }, 500);
@@ -65,27 +61,37 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     didMountRef.current = true;
   }, [daysFilterValue]);
 
-  const logScaleData = data.map(item => {
-    // items with no duration set to 1 sec execution
-    if (!item.duration_ms || item.duration_ms <= 1000) {
-      return {
-        ...item,
-        logDuration: 1,
-        duration_s: 1,
-      };
+  useEffect(() => {
+    if (withTooltip) {
+      setTimeout(() => {
+        scrollToRight('auto');
+      }, 500);
     }
-    /*
+  }, []);
+
+  const logScaleData = data
+    .map(item => {
+      // items with no duration set to 1 sec execution
+      if (!item.duration_ms || item.duration_ms <= 1000) {
+        return {
+          ...item,
+          logDuration: 1,
+          duration_s: 1,
+        };
+      }
+      /*
       Division each value by some number makes chart look more proportional
       division by 1000 converts values to seconds
       better would be to divide it by minValue - 1 to make sure that each record is displayed well
     */
-    const duration_s = item.duration_ms / 1000;
-    return {
-      ...item,
-      logDuration: Math.log(duration_s),
-      duration_s,
-    };
-  });
+      const duration_s = item.duration_ms / 1000;
+      return {
+        ...item,
+        logDuration: Math.log(duration_s),
+        duration_s,
+      };
+    })
+    .reverse();
 
   const maxValue = greatestValue(logScaleData);
 
@@ -110,31 +116,26 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     return {p50AxisPercent: axisPercent(p50AxisValue), p95AxisPercent: axisPercent(p95AxisValue)};
   }, [execution_duration_p50_ms, execution_duration_p95_ms, maxValue, barChartConfig.chartHeight]);
 
+  if (!data || !data.length) {
+    return null;
+  }
   return (
     <MetricsBarChartWrapper
       $height={barChartConfig.chartHeight}
       isExtendedPadding={Number(execution_duration_p95_ms) / 1000 > 60}
       isPaddingRemoved={!execution_duration_p95_ms || !execution_duration_p50_ms}
     >
-      {!data || !data.length ? (
-        <NoData>
-          <Text className={`regular ${withTooltip ? 'big' : 'middle'}`} color={Colors.slate500}>
-            No information about metrics
-          </Text>
-        </NoData>
-      ) : (
-        <ChartWrapper $svgWrapperWidth={svgWrapperWidth}>
-          {execution_duration_p50_ms && execution_duration_p95_ms ? (
-            <>
-              <PAxisLine axisTopPercent={p50AxisPercent} label="P50" durationMs={execution_duration_p50_ms} />
-              {p50AxisPercent - p95AxisPercent >= 15 ? (
-                <PAxisLine axisTopPercent={p95AxisPercent} label="P95" durationMs={execution_duration_p95_ms} />
-              ) : null}
-            </>
-          ) : null}
-          <Chart chartConfig={barChartConfig} maxValue={maxValue} withTooltip={withTooltip} scrollRef={scrollRef} />
-        </ChartWrapper>
-      )}
+      <ChartWrapper $svgWrapperWidth={svgWrapperWidth}>
+        {execution_duration_p50_ms && execution_duration_p95_ms ? (
+          <>
+            <PAxisLine axisTopPercent={p50AxisPercent} label="P50" durationMs={execution_duration_p50_ms} />
+            {p50AxisPercent - p95AxisPercent >= 15 ? (
+              <PAxisLine axisTopPercent={p95AxisPercent} label="P95" durationMs={execution_duration_p95_ms} />
+            ) : null}
+          </>
+        ) : null}
+        <Chart chartConfig={barChartConfig} maxValue={maxValue} withTooltip={withTooltip} scrollRef={scrollRef} />
+      </ChartWrapper>
     </MetricsBarChartWrapper>
   );
 };
