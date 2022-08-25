@@ -269,6 +269,10 @@ export const GlobalStyle = createGlobalStyle`
   .ant-page-header-heading-title {
     line-height: 38px !important;
   }
+
+  .ant-form-item-optional {
+    color: ${Colors.whitePure} !important;
+  }
 `;
 
 /* Media Sizes */

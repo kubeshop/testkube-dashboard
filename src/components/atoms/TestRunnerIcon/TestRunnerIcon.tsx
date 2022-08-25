@@ -17,11 +17,11 @@ import {ReactComponent as DefaultIcon} from '@assets/tests-icon.svg';
 import {StyledTestRunnerIcon} from './TestRunnerIcon.styled';
 
 type TestRunnerIconProps = {
-  icon: TestExecutor;
+  icon: TestExecutor | string;
   noWidth?: boolean;
 };
 
-export const testRunnerIcons: {[key in TestExecutor]: any} = {
+export const testRunnerIcons: {[key in TestExecutor | string]: any} = {
   'postman/collection': <PostmanIcon />,
   'postman/custom': <PostmanIcon />,
   'cypress/project': <CypressIcon />,
@@ -42,9 +42,13 @@ export const testRunnerIcons: {[key in TestExecutor]: any} = {
 const TestRunnerIcon: React.FC<TestRunnerIconProps> = props => {
   const {icon, noWidth = false} = props;
 
-  const renderIcon = icon ? testRunnerIcons[icon] : <DefaultIcon />;
+  const renderIcon = icon && testRunnerIcons[icon] ? testRunnerIcons[icon] : <DefaultIcon />;
 
-  return <StyledTestRunnerIcon $noWidth={noWidth}>{renderIcon}</StyledTestRunnerIcon>;
+  return (
+    <StyledTestRunnerIcon $noWidth={noWidth} className="dashboard-test-runner">
+      {renderIcon}
+    </StyledTestRunnerIcon>
+  );
 };
 
 export default TestRunnerIcon;

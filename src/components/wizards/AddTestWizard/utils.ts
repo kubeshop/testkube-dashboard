@@ -51,11 +51,19 @@ export const addTestFormStructure = (options: any) => [
 
 export const gitDirFormFields: FormItem[] = [
   {
-    tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
-    placeholder: 'Token',
+    placeholder: 'Git Token',
+    itemLabel: ' ',
+  },
+  {
+    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    fieldName: 'username',
+    inputType: 'default',
+    placeholder: 'Git Username',
+    itemLabel: ' ',
   },
   {
     rules: [required, url],
@@ -78,11 +86,19 @@ export const gitDirFormFields: FormItem[] = [
 
 export const gitFileFormFields: FormItem[] = [
   {
-    tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
-    placeholder: 'Token',
+    placeholder: 'Git Token',
+    itemLabel: ' ',
+  },
+  {
+    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    fieldName: 'username',
+    inputType: 'default',
+    placeholder: 'Git Username',
+    itemLabel: ' ',
   },
   {
     rules: [required, url],
@@ -145,6 +161,7 @@ export const getTestSourceSpecificFields = (values: any) => {
         uri: values.uri,
         ...(values.token ? {token: values.token} : {}),
         ...(values.branch ? {branch: values.branch} : {}),
+        ...(values.username ? {username: values.username} : {}),
       },
     };
   }
@@ -156,6 +173,7 @@ export const getTestSourceSpecificFields = (values: any) => {
       path: values.path,
       ...(values.branch ? {branch: values.branch} : {}),
       ...(values.token ? {token: values.token} : {}),
+      ...(values.username ? {username: values.username} : {}),
     },
   };
 };
