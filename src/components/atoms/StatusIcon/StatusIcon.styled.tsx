@@ -6,8 +6,13 @@ export const StyledStatusIcon = styled.div`
   align-items: center;
 
   height: 28px;
-  min-width: 28px;
+  width: 28px;
 
   border: 1px solid;
   border-radius: 4px;
+
+  span {
+    width: 20px;
+    height: 20px;
+  }
 `;

@@ -95,8 +95,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     chartHeight: chartHeight + 5,
     chartData: logScaleData,
   };
-  const svgWrapperWidth =
-    logScaleData.length * (barChartConfig.barMargin + barChartConfig.barWidth) - barChartConfig.barMargin;
+  const svgWrapperWidth = logScaleData.length * (barChartConfig.barMargin + barChartConfig.barWidth);
 
   // @ts-ignore
   const {p50AxisPercent, p95AxisPercent} = useCallback(() => {
