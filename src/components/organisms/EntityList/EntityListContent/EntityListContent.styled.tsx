@@ -14,7 +14,7 @@ export const StyledEntityListSkeletonWrapper = styled.div`
 
 export const EmptyListWrapper = styled.div`
   display: flex;
-  height: 100%;
+  flex: auto;
   align-items: center;
 `;
 
@@ -35,6 +35,10 @@ export const StyledButtonContainer = styled.div`
 
 export const StyledContainer = styled.div`
   overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 
   padding: 40px;
   padding-left: 1vw;
