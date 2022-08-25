@@ -56,5 +56,14 @@ export const ExecutorsGridItem = styled(Space)`
 
       color: ${Colors.purple};
     }
+
+    svg {
+      path,
+      rect {
+        transition: all 0.3s;
+
+        fill: ${Colors.purple};
+      }
+    }
   }
 `;

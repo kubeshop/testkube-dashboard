@@ -30,7 +30,7 @@ const Executors: React.FC = () => {
             <Text color={Colors.slate400} className="regular middle">
               {description}
             </Text>
-            <Button $customType="primary">Learn more</Button>
+            <Button $customType="secondary">Learn more</Button>
           </ExecutorsGridItem>
         </a>
       );
