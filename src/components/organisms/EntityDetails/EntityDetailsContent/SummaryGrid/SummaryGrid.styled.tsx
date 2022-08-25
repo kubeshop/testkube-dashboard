@@ -4,7 +4,7 @@ import Colors from '@styles/Colors';
 
 export const SummaryGridWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
   gap: 12px;
 `;
 
@@ -13,6 +13,7 @@ export const SummaryGridItem = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
+  width: 100%;
   height: 100px;
   padding: 20px;
   border-radius: 4px;
