@@ -17,7 +17,7 @@ export const ExecutorsHeader = styled.div`
 export const ExecutorsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-  gap: 40px;
+  gap: 32px;
 `;
 
 export const ExecutorsGridItem = styled(Space)`
@@ -33,8 +33,15 @@ export const ExecutorsGridItem = styled(Space)`
   cursor: pointer;
 
   &.custom-executor {
+    border-color: ${Colors.indigo400};
+
+    span.ant-typography,
+    h3 {
+      color: ${Colors.indigo400};
+    }
     svg {
-      fill: #64748b;
+      fill: ${Colors.indigo400};
+      margin-right: 12px;
     }
   }
 
@@ -43,18 +50,29 @@ export const ExecutorsGridItem = styled(Space)`
     align-items: center;
 
     .dashboard-test-runner {
-      margin-right: 5px;
+      margin-right: 12px;
+
+      path,
+      rect,
+      svg {
+        fill: ${Colors.slate400};
+      }
     }
   }
 
   &:hover {
-    border-color: ${Colors.purple};
+    border-color: ${Colors.slate200};
 
     h3,
+    .dashboard-title .dashboard-test-runner svg,
+    .dashboard-title .dashboard-test-runner path,
+    .dashboard-title .dashboard-test-runner rect,
+    &.custom-executor svg,
     span.testkube-text {
       transition: all 0.3s;
 
-      color: ${Colors.purple};
+      color: ${Colors.slate200};
+      fill: ${Colors.slate200};
     }
 
     svg {
