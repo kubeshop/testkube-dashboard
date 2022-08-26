@@ -28,8 +28,7 @@ export const testsApi = createApi({
       query: testExecutionId => `/executions/${testExecutionId}/artifacts`,
     }),
     getTestExecutionMetrics: builder.query({
-      query: ({id, limit = undefined, last = 7}) =>
-        `/tests/${id}/metrics?last=${last ? `?last=${last}` : ''}${limit ? `&limit=${limit}` : ''}`,
+      query: ({id, last = 7}) => `/tests/${id}/metrics?last=${last ? `?last=${last}` : ''}`,
     }),
     addTest: builder.mutation<void, any>({
       query: ({headers = {}, ...rest}) => {

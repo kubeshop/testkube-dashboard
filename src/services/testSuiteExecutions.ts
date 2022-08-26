@@ -13,8 +13,7 @@ export const testSuiteExecutionsApi = createApi({
       query: (testSuiteExecutionId: string) => `/test-suite-executions/${testSuiteExecutionId}`,
     }),
     getTestSuiteExecutionMetrics: builder.query({
-      query: ({id, limit = undefined, last = 7}) =>
-        `/test-suites/${id}/metrics?last=${last ? `?last=${last}` : ''}${limit ? `&limit=${limit}` : ''}`,
+      query: ({id, last = 7}) => `/test-suites/${id}/metrics?last=${last ? `?last=${last}` : ''}`,
     }),
   }),
 });
