@@ -23,13 +23,13 @@ const Chart: React.FC<ChartProps> = props => {
 
   const renderedBarChart = useMemo(() => {
     return chartData.map((barItem, index) => {
-      const {duration_s, logDuration, status, name, startTime} = barItem;
+      const {durationS, logDuration, status, name, startTime} = barItem;
 
       const barColor = StatusColors[status] as unknown as StatusColors;
 
       const height = status === 'running' ? chartHeight / 2 : (logDuration * chartHeight) / maxValue;
 
-      const formattedDuration = status === 'running' ? 'running' : formatDuration(duration_s);
+      const formattedDuration = status === 'running' ? 'running' : formatDuration(durationS);
 
       const key = `${name}-bar-${index}`;
 

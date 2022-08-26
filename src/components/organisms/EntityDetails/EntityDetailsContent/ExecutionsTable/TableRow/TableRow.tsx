@@ -4,7 +4,7 @@ import {StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {constructExecutedString} from '@utils/formatDate';
+import {constructExecutedString, formatDuration} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
@@ -12,7 +12,7 @@ import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.style
 
 const TableRow: React.FC<{data: any}> = props => {
   const {data} = props;
-  const {status, number, startTime, endTime, name, id} = data;
+  const {status, number, startTime, name, id, durationMs} = data;
 
   const getIntervalExecTime = () => {
     try {
@@ -21,20 +21,7 @@ const TableRow: React.FC<{data: any}> = props => {
     } catch (err) {}
   };
 
-  const getExecDuration = () => {
-    try {
-      return constructExecutedString(
-        intervalToDuration({
-          start: new Date(startTime),
-          end: new Date(endTime === '0001-01-01T00:00:00Z' ? {} : endTime),
-        })
-      );
-      // eslint-disable-next-line no-empty
-    } catch (err) {}
-  };
-
   const executedTime = getIntervalExecTime();
-  const executionDuration = status === 'running' ? 'running' : getExecDuration();
 
   return (
     <ItemWrapper key={id}>
@@ -48,7 +35,7 @@ const TableRow: React.FC<{data: any}> = props => {
           </ItemColumn>
           <ItemColumn>
             <Text className="regular small" color={Colors.slate200}>
-              {executionDuration || 'No data'}
+              {durationMs ? formatDuration(durationMs / 1000) : 'No data'}
             </Text>
           </ItemColumn>
         </ItemRow>
