@@ -30,7 +30,7 @@ const EntityGridItem: React.FC<any> = props => {
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
 
-  const {data: metrics} = useGetMetrics({id: dataItem.name, limit: 13, last: 7}, {skip: !isInViewport});
+  const {data: metrics} = useGetMetrics({id: dataItem.name, last: 7}, {skip: !isInViewport});
 
   const executions = metrics?.executions || [];
   return (
@@ -73,11 +73,7 @@ const EntityGridItem: React.FC<any> = props => {
             <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
           </StyledMetricItem>
           <StyledMetricItem>
-            <MetricsBarChart
-              data={executions.filter((execItem: any) => execItem.durationMs || execItem.status === 'running')}
-              chartHeight={38}
-              barWidth={6}
-            />
+            <MetricsBarChart data={executions.slice(0, 13)} chartHeight={38} barWidth={6} />
           </StyledMetricItem>
         </ItemRow>
       </DetailsWrapper>
