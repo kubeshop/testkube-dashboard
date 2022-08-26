@@ -55,7 +55,7 @@ const EntityGridItem: React.FC<any> = props => {
               pass/fail ratio
             </Text>
             <Text className="big regular">
-              {metrics?.pass_fail_ratio ? `${metrics?.pass_fail_ratio.toFixed(2)}%` : '-'}
+              {metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '-'}
             </Text>
           </StyledMetricItem>
           <StyledMetricItem>
@@ -63,18 +63,18 @@ const EntityGridItem: React.FC<any> = props => {
               p50
             </Text>
             <Text className="big regular">
-              {metrics?.execution_duration_p50_ms ? formatDuration(metrics?.execution_duration_p50_ms / 1000) : '-'}
+              {metrics?.executionDurationP50ms ? formatDuration(metrics?.executionDurationP50ms / 1000) : '-'}
             </Text>
           </StyledMetricItem>
           <StyledMetricItem>
             <Text className="small uppercase" color={Colors.slate500}>
               failed executions
             </Text>
-            <Text className="big regular">{metrics?.failed_executions || '-'}</Text>
+            <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
           </StyledMetricItem>
           <StyledMetricItem>
             <MetricsBarChart
-              data={executions.filter((execItem: any) => execItem.duration_ms || execItem.status === 'running')}
+              data={executions.filter((execItem: any) => execItem.durationMs || execItem.status === 'running')}
               chartHeight={38}
               barWidth={6}
             />

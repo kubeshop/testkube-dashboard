@@ -26,14 +26,14 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
           <Text className="uppercase middle" color={Colors.slate500}>
             pass/fail ratio
           </Text>
-          <Title level={3}>{metrics?.pass_fail_ratio ? `${metrics?.pass_fail_ratio.toFixed(2)}%` : '-'}</Title>
+          <Title level={3}>{metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '-'}</Title>
         </SummaryGridItem>
         <SummaryGridItem>
           <Text className="uppercase middle" color={Colors.slate500}>
             execution duration (p50)
           </Text>
           <Title level={3}>
-            {metrics?.execution_duration_p50_ms ? formatDuration(metrics?.execution_duration_p50_ms / 1000) : '-'}
+            {metrics?.executionDurationP50ms ? formatDuration(metrics?.executionDurationP50ms / 1000) : '-'}
           </Title>
         </SummaryGridItem>
         <SummaryGridItem>
@@ -41,20 +41,20 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
             execution duration (p95)
           </Text>
           <Title level={3}>
-            {metrics?.execution_duration_p95_ms ? formatDuration(metrics?.execution_duration_p95_ms / 1000) : '-'}
+            {metrics?.executionDurationP95ms ? formatDuration(metrics?.executionDurationP95ms / 1000) : '-'}
           </Title>
         </SummaryGridItem>
         <SummaryGridItem>
           <Text className="uppercase middle" color={Colors.slate500}>
             failed executions
           </Text>
-          <Title level={3}>{metrics?.failed_executions || '-'}</Title>
+          <Title level={3}>{metrics?.failedExecutions || '-'}</Title>
         </SummaryGridItem>
         <SummaryGridItem>
           <Text className="uppercase middle" color={Colors.slate500}>
             total executions
           </Text>
-          <Title level={3}>{metrics?.total_executions || '-'}</Title>
+          <Title level={3}>{metrics?.totalExecutions || '-'}</Title>
         </SummaryGridItem>
       </SummaryGridWrapper>
       <MetricsBarChart data={metrics?.executions} withTooltip daysFilterValue={daysFilterValue} />

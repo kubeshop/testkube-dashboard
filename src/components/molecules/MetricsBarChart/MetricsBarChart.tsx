@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import {memo, useCallback, useEffect, useRef} from 'react';
 
 import {ExecutionMetrics} from '@models/metrics';
@@ -16,8 +15,8 @@ export type BarChartConfig = {
 
 type MetricsBarChartProps = {
   data?: ExecutionMetrics[];
-  execution_duration_p50_ms?: number;
-  execution_duration_p95_ms?: number;
+  executionDurationP50ms?: number;
+  executionDurationP95ms?: number;
   chartHeight?: number;
   barWidth?: number;
   withTooltip?: boolean;
@@ -31,8 +30,8 @@ const greatestValue = (values: any[], fieldName = 'logDuration') => {
 const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   const {
     data = [],
-    execution_duration_p50_ms,
-    execution_duration_p95_ms,
+    executionDurationP50ms,
+    executionDurationP95ms,
     chartHeight = 100,
     barWidth = 12,
     withTooltip,
@@ -63,20 +62,18 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
 
   useEffect(() => {
     if (withTooltip) {
-      setTimeout(() => {
-        scrollToRight('auto');
-      }, 500);
+      scrollToRight('auto');
     }
   }, []);
 
   const logScaleData = data
     .map(item => {
       // items with no duration set to 1 sec execution
-      if (!item.duration_ms || item.duration_ms <= 1000) {
+      if (!item.durationMs || item.durationMs <= 1000) {
         return {
           ...item,
           logDuration: 1,
-          duration_s: 1,
+          durationS: 1,
         };
       }
       /*
@@ -84,11 +81,11 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
       division by 1000 converts values to seconds
       better would be to divide it by minValue - 1 to make sure that each record is displayed well
     */
-      const duration_s = item.duration_ms / 1000;
+      const durationS = item.durationMs / 1000;
       return {
         ...item,
-        logDuration: Math.log(duration_s),
-        duration_s,
+        logDuration: Math.log(durationS),
+        durationS,
       };
     })
     .reverse();
@@ -105,16 +102,16 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
 
   // @ts-ignore
   const {p50AxisPercent, p95AxisPercent} = useCallback(() => {
-    if (!execution_duration_p50_ms || !execution_duration_p95_ms) {
+    if (!executionDurationP50ms || !executionDurationP95ms) {
       return;
     }
     const axisValue = (value?: number) => (barChartConfig.chartHeight * Math.log(Number(value) / 1000)) / maxValue;
-    const p50AxisValue = axisValue(execution_duration_p50_ms);
-    const p95AxisValue = axisValue(execution_duration_p95_ms);
+    const p50AxisValue = axisValue(executionDurationP50ms);
+    const p95AxisValue = axisValue(executionDurationP95ms);
 
     const axisPercent = (value: number) => Math.round(100 - (value * 100) / barChartConfig.chartHeight);
     return {p50AxisPercent: axisPercent(p50AxisValue), p95AxisPercent: axisPercent(p95AxisValue)};
-  }, [execution_duration_p50_ms, execution_duration_p95_ms, maxValue, barChartConfig.chartHeight]);
+  }, [executionDurationP50ms, executionDurationP95ms, maxValue, barChartConfig.chartHeight]);
 
   if (!data || !data.length) {
     return null;
@@ -122,15 +119,15 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   return (
     <MetricsBarChartWrapper
       $height={barChartConfig.chartHeight}
-      isExtendedPadding={Number(execution_duration_p95_ms) / 1000 > 60}
-      isPaddingRemoved={!execution_duration_p95_ms || !execution_duration_p50_ms}
+      isExtendedPadding={Number(executionDurationP95ms) / 1000 > 60}
+      isPaddingRemoved={!executionDurationP95ms || !executionDurationP50ms}
     >
       <ChartWrapper $svgWrapperWidth={svgWrapperWidth}>
-        {execution_duration_p50_ms && execution_duration_p95_ms ? (
+        {executionDurationP50ms && executionDurationP95ms ? (
           <>
-            <PAxisLine axisTopPercent={p50AxisPercent} label="P50" durationMs={execution_duration_p50_ms} />
+            <PAxisLine axisTopPercent={p50AxisPercent} label="P50" durationMs={executionDurationP50ms} />
             {p50AxisPercent - p95AxisPercent >= 15 ? (
-              <PAxisLine axisTopPercent={p95AxisPercent} label="P95" durationMs={execution_duration_p95_ms} />
+              <PAxisLine axisTopPercent={p95AxisPercent} label="P95" durationMs={executionDurationP95ms} />
             ) : null}
           </>
         ) : null}
