@@ -78,12 +78,15 @@ const Labels: React.FC = () => {
       <Form form={form} onFinish={onSave} name="general-settings-name-description" initialValues={{labels}}>
         <Form.Item name="labels">
           <Select placeholder="Labels" mode="multiple" allowClear showArrow disabled>
-            {data?.map((value: string, index: number) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Option key={index} value={`${index}_${value}`}>
-                {value}
-              </Option>
-            ))}
+            {data?.map((value: string, index: number) => {
+              const key = `add-test-label_${index}`;
+
+              return (
+                <Option key={key} value={`${index}_${value}`}>
+                  {value}
+                </Option>
+              );
+            })}
           </Select>
         </Form.Item>
       </Form>

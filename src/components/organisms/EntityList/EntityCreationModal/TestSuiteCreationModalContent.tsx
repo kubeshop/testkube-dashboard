@@ -71,12 +71,15 @@ const TestSuiteCreationModalContent: React.FC = () => {
         </StyledFormItem>
         <StyledFormItem name="labels">
           <Select placeholder="Labels" mode="multiple" allowClear showArrow>
-            {data?.map((value: string, index: number) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Option key={index} value={`${index}_${value}`}>
-                {value}
-              </Option>
-            ))}
+            {data?.map((value: string, index: number) => {
+              const key = `add-test-suite-label_${index}`;
+
+              return (
+                <Option key={key} value={`${index}_${value}`}>
+                  {value}
+                </Option>
+              );
+            })}
           </Select>
         </StyledFormItem>
         <StyledFormItem>

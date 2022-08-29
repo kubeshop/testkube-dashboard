@@ -1,5 +1,7 @@
 import {memo, useCallback, useEffect, useRef} from 'react';
 
+import debounce from 'lodash.debounce';
+
 import {ExecutionMetrics} from '@models/metrics';
 
 import Chart from './Chart';
@@ -21,6 +23,7 @@ type MetricsBarChartProps = {
   barWidth?: number;
   withTooltip?: boolean;
   daysFilterValue?: number;
+  isRowSelected: boolean;
 };
 
 const greatestValue = (values: any[], fieldName = 'logDuration') => {
@@ -36,6 +39,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     barWidth = 12,
     withTooltip,
     daysFilterValue,
+    isRowSelected,
   } = props;
 
   const scrollRef = useRef(null);
@@ -65,6 +69,21 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
       scrollToRight('auto');
     }
   }, [data.length]);
+
+  useEffect(() => {
+    window.addEventListener(
+      'resize',
+      debounce(() => {
+        scrollToRight();
+      }, 200)
+    );
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      scrollToRight();
+    }, 500);
+  }, [isRowSelected]);
 
   const logScaleData = data
     .map(item => {
