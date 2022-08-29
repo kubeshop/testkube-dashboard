@@ -64,7 +64,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     if (withTooltip) {
       scrollToRight('auto');
     }
-  }, []);
+  }, [data.length]);
 
   const logScaleData = data
     .map(item => {

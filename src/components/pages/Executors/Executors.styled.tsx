@@ -24,7 +24,7 @@ export const ExecutorsGridItem = styled(Space)`
   justify-content: space-between;
 
   width: 100%;
-  min-height: 215px;
+  min-height: 240px;
   padding: 30px;
   border: 1px solid ${Colors.slate700};
   border-radius: 4px;

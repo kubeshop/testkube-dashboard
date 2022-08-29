@@ -12,7 +12,7 @@ export const executorsList: ExecutorGridItem[] = [
     type: 'cypress/project',
     title: 'Cypress',
     description:
-      'Fast, easy and reliable testing for anything that runs in a browser. The de-facto standard for frontend tests',
+      'Fast, easy and reliable testing for anything that runs in a browser. The de-facto standard for frontend tests.',
     docLink: 'https://kubeshop.github.io/testkube/executor-cypress/',
   },
   {
@@ -32,14 +32,14 @@ export const executorsList: ExecutorGridItem[] = [
     type: 'k6/script',
     title: 'K6',
     description:
-      'k6 is an open-source tool and cloud service that makes load testing easy for developers and QA engineers',
+      'k6 is an open-source tool and cloud service that makes load testing easy for developers and QA engineers.',
     docLink: 'https://kubeshop.github.io/testkube/executor-k6/',
   },
   {
     type: 'curl/test',
     title: 'curl',
     description: 'Test your API by running Curl commands directly from your testkube and evaluate server responses.',
-    docLink: '',
+    docLink: 'https://kubeshop.github.io/testkube/executor-curl/',
   },
   {
     type: 'soapui/xml',
@@ -63,19 +63,22 @@ export const executorsList: ExecutorGridItem[] = [
   {
     type: 'maven/test',
     title: 'Maven',
-    description: '',
+    description:
+      'Maven is a build automation tool used primarily for Java projects. You can run any maven based project and run it as a test. You can use the RestAssured framework with this Maven executor for example.',
     docLink: 'https://kubeshop.github.io/testkube/executor-maven/',
   },
   {
     type: 'gradle/test',
     title: 'Gradle',
-    description: '',
+    description:
+      'Gradle is a build automation tool for multi-language software development. It’s primarily used for Java and a more modern alternative to Maven. You can use the RestAssured framework with this Maven executor for example.',
     docLink: 'https://kubeshop.github.io/testkube/executor-gradle/',
   },
   {
     type: 'ginkgo/test',
     title: 'Ginkgo',
-    description: '',
+    description:
+      'Ginkgo is a mature testing framework for Go designed to help you write expressive specs. Whether you are writing basic unit specs, complex integration specs, or even performance specs.',
     docLink: 'https://kubeshop.github.io/testkube/executor-ginkgo/',
   },
 ];
