@@ -30,7 +30,10 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     {pollingInterval: PollingIntervals.everySecond}
   );
   const {data: entityDetails} = useGetEntityDetails(id, {pollingInterval: PollingIntervals.everySecond});
-  const {data: metrics} = useGetMetrics({id, last: daysFilterValue}, {pollingInterval: PollingIntervals.long});
+  const {data: metrics} = useGetMetrics(
+    {id, last: daysFilterValue},
+    {pollingInterval: PollingIntervals.everyTwoSeconds}
+  );
 
   const getDefaultUrl = () => {
     const clarifyTargetUrl = pathname.split('/').slice(0, 4);
