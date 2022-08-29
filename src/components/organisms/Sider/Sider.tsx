@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react';
 import {NavLink} from 'react-router-dom';
 
-import {Space} from 'antd';
+import {Space, Tooltip} from 'antd';
 
 import {Icon} from '@atoms';
 
@@ -15,6 +15,8 @@ import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
+
+import Colors from '@styles/Colors';
 
 import {
   StyledLogo,
@@ -34,6 +36,7 @@ const routes = [
   {
     path: 'tests',
     icon: TestsIcon,
+    title: 'Tests',
     transition: {
       classNames: 'item2',
     },
@@ -41,6 +44,7 @@ const routes = [
   {
     path: 'test-suites',
     icon: TestSuitesIcon,
+    title: 'Test Suites',
     transition: {
       classNames: 'item',
     },
@@ -48,6 +52,7 @@ const routes = [
   {
     path: 'executors',
     icon: ExecutorsIcon,
+    title: 'Executors',
     transition: {
       classNames: 'item',
     },
@@ -81,7 +86,7 @@ const Sider: React.FC = () => {
 
   const renderedMenuItems = useMemo(() => {
     return routes.map((route: any) => {
-      const {icon: MenuIcon, path} = route;
+      const {icon: MenuIcon, path, title} = route;
 
       return (
         <StyledNavLink
@@ -91,7 +96,9 @@ const Sider: React.FC = () => {
           }}
           data-cy="navigation-tab"
         >
-          <MenuIcon style={DEFAULT_ICON_STYLE} />
+          <Tooltip title={title} placement="right" color={Colors.slate700}>
+            <MenuIcon style={DEFAULT_ICON_STYLE} />
+          </Tooltip>
         </StyledNavLink>
       );
     });
