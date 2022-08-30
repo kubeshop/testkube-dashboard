@@ -13,6 +13,7 @@ import {EntityListContext} from '@organisms/EntityList/EntityListContainer/Entit
 import useInViewport from '@hooks/useInViewport';
 
 import {formatDuration} from '@utils/formatDate';
+import {PollingIntervals} from '@utils/numbers';
 import {executionDateFormat} from '@utils/strings';
 
 import Colors from '@styles/Colors';
@@ -30,7 +31,10 @@ const EntityGridItem: React.FC<any> = props => {
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
 
-  const {data: metrics} = useGetMetrics({id: dataItem.name, last: 7}, {skip: !isInViewport});
+  const {data: metrics} = useGetMetrics(
+    {id: dataItem.name, last: 7},
+    {skip: !isInViewport, pollingInterval: PollingIntervals.default}
+  );
 
   const executions = metrics?.executions || [];
   return (
@@ -55,7 +59,7 @@ const EntityGridItem: React.FC<any> = props => {
               pass/fail ratio
             </Text>
             <Text className="big regular">
-              {metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '-'}
+              {metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '0%'}
             </Text>
           </StyledMetricItem>
           <StyledMetricItem>

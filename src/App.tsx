@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useEffect, useState} from 'react';
 import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 
@@ -14,7 +15,7 @@ import {ProtectedRoute} from '@atoms';
 
 import {Sider} from '@organisms';
 
-import {Executors, TestSuites, Tests} from '@pages';
+import {EndpointProcessing, Executors, TestSuites, Tests} from '@pages';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -121,6 +122,7 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/apiEndpoint" element={<EndpointProcessing />} />
               <Route path="*" element={<Navigate to="/tests" />} />
             </Routes>
           </Content>

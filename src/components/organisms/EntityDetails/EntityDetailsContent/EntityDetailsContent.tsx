@@ -37,8 +37,16 @@ const filterOptions: OptionType[] = [
 ];
 
 const EntityDetailsContent: React.FC = () => {
-  const {entity, entityDetails, onRowSelect, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue} =
-    useContext(EntityDetailsContext);
+  const {
+    entity,
+    entityDetails,
+    onRowSelect,
+    defaultStackRoute,
+    metrics,
+    daysFilterValue,
+    setDaysFilterValue,
+    isRowSelected,
+  } = useContext(EntityDetailsContext);
   const {navigate} = useContext(MainContext);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -122,7 +130,9 @@ const EntityDetailsContent: React.FC = () => {
           </Text>
         ) : null}
       </StyledPageHeader>
-      {!isMetricsEmpty ? <SummaryGrid metrics={metrics} daysFilterValue={daysFilterValue} /> : null}
+      {!isMetricsEmpty ? (
+        <SummaryGrid metrics={metrics} daysFilterValue={daysFilterValue} isRowSelected={isRowSelected} />
+      ) : null}
       <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
         <Tabs.TabPane tab="Recent executions" key="Executions">
           <ExecutionsTable triggerRun={onRunButtonClick} />
