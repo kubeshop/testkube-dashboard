@@ -36,6 +36,7 @@ const EndpointProcessing: React.FC = () => {
       const validatedApiEndpoint = validateApiEndpoint(searchParams.apiEndpoint.toString());
 
       localStorage.setItem(config.apiEndpoint, validatedApiEndpoint);
+
       dispatch(setApiEndpoint(validatedApiEndpoint));
     }
 

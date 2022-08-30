@@ -4,7 +4,8 @@ import axios from 'axios';
 
 import {config} from '@constants/config';
 
-import {setApiEndpoint} from '@redux/reducers/configSlice';
+import {useAppSelector} from '@redux/hooks';
+import {selectApiEndpoint, setApiEndpoint} from '@redux/reducers/configSlice';
 
 import {Button, Input, Modal, Text} from '@custom-antd';
 
@@ -23,8 +24,10 @@ axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl || `
 const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {isModalVisible, visible} = props;
 
+  const apiEndpointRedux = useAppSelector(selectApiEndpoint);
+
   const defaultApiEndpoint =
-    localStorage.getItem('apiEndpoint') || env?.apiUrl || `${window.location.origin}/results/v1`;
+    apiEndpointRedux || localStorage.getItem('apiEndpoint') || env?.apiUrl || `${window.location.origin}/results/v1`;
 
   const {dispatch} = useContext(MainContext);
 
@@ -47,6 +50,12 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
     localStorage.setItem('apiEndpoint', defaultApiEndpoint);
   }, []);
+
+  useEffect(() => {
+    if (apiEndpointRedux) {
+      setApiEndpointHook(apiEndpointRedux);
+    }
+  }, [apiEndpointRedux]);
 
   return (
     <Modal

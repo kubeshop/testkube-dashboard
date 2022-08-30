@@ -23,7 +23,7 @@ type MetricsBarChartProps = {
   barWidth?: number;
   withTooltip?: boolean;
   daysFilterValue?: number;
-  isRowSelected: boolean;
+  isRowSelected?: boolean;
 };
 
 const greatestValue = (values: any[], fieldName = 'logDuration') => {
@@ -71,18 +71,23 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   }, [data.length]);
 
   useEffect(() => {
-    window.addEventListener(
-      'resize',
-      debounce(() => {
-        scrollToRight();
-      }, 200)
-    );
-  });
+    if (withTooltip) {
+      const debouncedScroll = debounce(() => scrollToRight(), 200);
+
+      window.addEventListener('resize', debouncedScroll);
+
+      return () => {
+        window.removeEventListener('resize', debouncedScroll);
+      };
+    }
+  }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      scrollToRight();
-    }, 500);
+    if (withTooltip) {
+      setTimeout(() => {
+        scrollToRight();
+      }, 500);
+    }
   }, [isRowSelected]);
 
   const logScaleData = data
