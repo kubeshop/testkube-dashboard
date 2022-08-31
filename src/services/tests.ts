@@ -19,7 +19,13 @@ export const testsApi = createApi({
       query: testId => `/tests/${testId}`,
     }),
     getTestExecutionsById: builder.query({
-      query: ({id, last = 7}) => `/tests/${id}/executions${last ? `?last=${last}` : ''}`,
+      query: ({id, last = 7, pageSize = Number.MAX_SAFE_INTEGER}) => {
+        const queryParams = new URLSearchParams({
+          last,
+          pageSize,
+        });
+        return `/tests/${id}/executions?${queryParams.toString()}`;
+      },
     }),
     getTestExecutionById: builder.query<any, string>({
       query: testExecutionId => `/executions/${testExecutionId}`,

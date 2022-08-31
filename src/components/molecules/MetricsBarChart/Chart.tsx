@@ -12,12 +12,12 @@ import {BarWrapper as Bar, SvgWrapper} from './MetricsBarChart.styled';
 type ChartProps = {
   chartConfig: BarChartConfig;
   maxValue: number;
-  withTooltip?: boolean;
+  isDetailsView?: boolean;
   scrollRef?: any;
 };
 
 const Chart: React.FC<ChartProps> = props => {
-  const {chartConfig, maxValue, withTooltip = false, scrollRef} = props;
+  const {chartConfig, maxValue, isDetailsView = false, scrollRef} = props;
 
   const {chartData, barWidth, chartHeight, barMargin} = chartConfig;
 
@@ -41,7 +41,7 @@ const Chart: React.FC<ChartProps> = props => {
         key,
       };
 
-      if (withTooltip) {
+      if (isDetailsView) {
         return <BarWithTooltip {...barProps} tooltipData={{duration: formattedDuration, status, name, startTime}} />;
       }
 

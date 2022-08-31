@@ -21,8 +21,7 @@ type MetricsBarChartProps = {
   executionDurationP95ms?: number;
   chartHeight?: number;
   barWidth?: number;
-  withTooltip?: boolean;
-  daysFilterValue?: number;
+  isDetailsView?: boolean;
   isRowSelected?: boolean;
 };
 
@@ -37,13 +36,11 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     executionDurationP95ms,
     chartHeight = 100,
     barWidth = 12,
-    withTooltip,
-    daysFilterValue,
+    isDetailsView,
     isRowSelected,
   } = props;
 
   const scrollRef = useRef(null);
-  const didMountRef = useRef(false);
 
   const scrollToRight = (behavior = 'smooth') => {
     if (!scrollRef.current) {
@@ -54,24 +51,15 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   };
 
   useEffect(() => {
-    if (didMountRef.current) {
-      if (daysFilterValue && withTooltip) {
-        setTimeout(() => {
-          scrollToRight();
-        }, 500);
-      }
+    if (isDetailsView) {
+      setTimeout(() => {
+        scrollToRight();
+      }, 500);
     }
-    didMountRef.current = true;
-  }, [daysFilterValue]);
+  }, [data.length, isRowSelected]);
 
   useEffect(() => {
-    if (withTooltip) {
-      scrollToRight('auto');
-    }
-  }, [data.length]);
-
-  useEffect(() => {
-    if (withTooltip) {
+    if (isDetailsView) {
       const debouncedScroll = debounce(() => scrollToRight(), 200);
 
       window.addEventListener('resize', debouncedScroll);
@@ -81,14 +69,6 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
       };
     }
   }, []);
-
-  useEffect(() => {
-    if (withTooltip) {
-      setTimeout(() => {
-        scrollToRight();
-      }, 500);
-    }
-  }, [isRowSelected]);
 
   const logScaleData = data
     .map(item => {
@@ -155,7 +135,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
             ) : null}
           </>
         ) : null}
-        <Chart chartConfig={barChartConfig} maxValue={maxValue} withTooltip={withTooltip} scrollRef={scrollRef} />
+        <Chart chartConfig={barChartConfig} maxValue={maxValue} isDetailsView={isDetailsView} scrollRef={scrollRef} />
       </ChartWrapper>
     </MetricsBarChartWrapper>
   );
