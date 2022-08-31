@@ -7,7 +7,14 @@ export const testSuiteExecutionsApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTestSuiteExecutionsByTestId: builder.query({
-      query: ({id, last}) => `/test-suite-executions?id=${id}${last ? `&last=${last}` : ''}`,
+      query: ({id, last = 7, pageSize = Number.MAX_SAFE_INTEGER}) => {
+        const queryParams = new URLSearchParams({
+          id,
+          last,
+          pageSize,
+        });
+        return `/test-suite-executions?${queryParams.toString()}`;
+      },
     }),
     getTestSuiteExecutionById: builder.query({
       query: (testSuiteExecutionId: string) => `/test-suite-executions/${testSuiteExecutionId}`,
