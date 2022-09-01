@@ -11,12 +11,15 @@ import {detectAdBlock} from '@utils/fetchUtils';
 
 import {GlobalStyle} from '@styles/globalStyles';
 
+import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import './antd-theme/antd-customized.css';
 import env from './env';
 
 (async () => {
   const isAdBlockEnabled = await detectAdBlock();
+
+  const segmentIOKey = 'iL0p6r5C9i35F7tRxnB0k3gB2nGh7VTK';
 
   if (!isAdBlockEnabled) {
     const ga4react = new GA4React(env.ga || '');
@@ -31,8 +34,10 @@ import env from './env';
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter>
-          <GlobalStyle />
-          <App />
+          <AnalyticsProvider privateKey={segmentIOKey}>
+            <GlobalStyle />
+            <App />
+          </AnalyticsProvider>
         </BrowserRouter>
       </Provider>
     </React.StrictMode>
