@@ -10,9 +10,12 @@ spec:
     data: "import http from \"k6/http\";\nimport { check, sleep } from \"k6\";\n\nexport const options = {\n  stages: [\n    { duration: \"5s\", target: 10 },\n    { duration: \"1s\", target: 10 },\n  ],\n};\n\nexport default function () {\n  const res = http.get(\"https://httpbin.test.k6.io/\");\n  const isFailed = Math.random() > 0.5;\n\n  if (isFailed) {\n    check(res, { \"status was 200\": (r) => r.status === 404 });\n  } else {\n    check(res, { \"status was 200\": (r) => r.status === 200 });\n  }\n\n  sleep(1);\n}"
   executionRequest:
     args: ['args', 'some', 'other']
-    description: "Some desc"
     variables: 
       var1:
         name: "var1"
         type: "basic"
         value: "value1"
+      var2:
+        name: "var2"
+        type: "basic"
+        value: "value2"
