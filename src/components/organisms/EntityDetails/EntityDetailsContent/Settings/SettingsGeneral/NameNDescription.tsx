@@ -46,7 +46,10 @@ const NameNDescription: React.FC = () => {
       id: entityDetails.name,
       data: {
         ...entityDetails,
-        ...values,
+        name: values.name,
+        executionRequest: {
+          description: values.description,
+        },
       },
     })
       .then((res: any) => {
@@ -60,20 +63,17 @@ const NameNDescription: React.FC = () => {
   };
 
   return (
-    <ConfigurationCard
-      title={`${uppercaseFirstSymbol(namingMap[entity])} name & description`}
-      description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
-      onConfirm={() => {
-        form.submit();
-      }}
-      onCancel={() => {
-        form.resetFields();
-      }}
-      isButtonsDisabled={
-        !form.isFieldsTouched() || form.getFieldsError().filter(({errors}) => errors.length).length > 0
-      }
-    >
-      <Form form={form} onFinish={onSave} name="general-settings-name-description" initialValues={{name, description}}>
+    <Form form={form} onFinish={onSave} name="general-settings-name-description" initialValues={{name, description}}>
+      <ConfigurationCard
+        title={`${uppercaseFirstSymbol(namingMap[entity])} name & description`}
+        description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
+        onConfirm={() => {
+          form.submit();
+        }}
+        onCancel={() => {
+          form.resetFields();
+        }}
+      >
         <Space size={32} direction="vertical" style={{width: '100%'}}>
           <Form.Item name="name" rules={[required]} style={{marginBottom: '0px'}}>
             <Input placeholder="Name" disabled />
@@ -82,8 +82,8 @@ const NameNDescription: React.FC = () => {
             <TextArea placeholder="Description" autoSize={{minRows: 2, maxRows: 3}} />
           </Form.Item>
         </Space>
-      </Form>
-    </ConfigurationCard>
+      </ConfigurationCard>
+    </Form>
   );
 };
 
