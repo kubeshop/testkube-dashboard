@@ -24,6 +24,7 @@ export type Test = {
   params: EntityMap;
   variables?: Variables;
   executorArgs?: string[];
+  executionRequest: Execution;
 };
 
 export type TestWithExecution = {

@@ -47,7 +47,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const getExecutionStepName = (step: TestSuiteStepExecutionResult) => {
     return step.execution.name;
   };
-  
+
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
     const {
       executionName,
@@ -94,6 +94,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       const listItemClassNames = classNames({
         clickable: isClickable,
       });
+
       // TODO: improve this
       return (
         <StyledExecutionStepsListItem
@@ -110,7 +111,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             {execute || stepResult?.execute ? (
               <>
                 <TestRunnerIcon icon={testType} />
-                <ExecutionName name={executionName} />
+                <ExecutionName name={executionName || step.step.execute?.name || ''} />
                 <StyledExternalLinkIcon />
               </>
             ) : null}

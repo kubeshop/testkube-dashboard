@@ -44,3 +44,23 @@ export type Execution = {
   number: number;
   variables?: Variables;
 };
+
+export type ExecutionRequest = {
+  description: string;
+  name: string;
+  testSuiteName?: string;
+  number: number;
+  executionLabels: EntityMap;
+  namespace: string;
+  variablesFile: string;
+  variables?: Variables;
+  testSecretUUID: string;
+  testSuiteSecretUUID: string;
+  args: Args;
+  image: string;
+  envs: EntityMap;
+  secretEnvs: EntityMap;
+  sync: boolean;
+  httpProxy: string;
+  httpsProxy: string;
+};
