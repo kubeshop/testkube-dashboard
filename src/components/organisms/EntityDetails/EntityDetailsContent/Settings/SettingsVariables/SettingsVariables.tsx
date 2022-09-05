@@ -4,7 +4,7 @@ import {Space} from 'antd';
 
 import {EntityDetailsContext} from '@contexts';
 
-// import Arguments from './Arguments';
+import Arguments from './Arguments';
 import Variables from './Variables';
 
 const SettingsVariables: React.FC = () => {
@@ -13,7 +13,7 @@ const SettingsVariables: React.FC = () => {
   return (
     <Space size={30} direction="vertical">
       <Variables />
-      {/* {entity === 'tests' ? <Arguments /> : null} */}
+      {entity === 'tests' ? <Arguments /> : null}
     </Space>
   );
 };

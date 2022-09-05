@@ -19,10 +19,11 @@ type CopyCommandProps = {
   label?: string;
   showDollar?: boolean;
   bg?: string;
+  isBordered?: boolean;
 };
 
 const CopyCommand: React.FC<CopyCommandProps> = props => {
-  const {command, label, showDollar = true, bg = Colors.slate900} = props;
+  const {command, label, showDollar = true, bg = Colors.slate900, isBordered = false} = props;
 
   const {ga4React} = useContext(MainContext);
 
@@ -45,7 +46,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
           </Text>
         </LabelWrapper>
       ) : null}
-      <StyledCopyCommandContainer onClick={onCopy} $bg={bg}>
+      <StyledCopyCommandContainer onClick={onCopy} $bg={bg} $isBordered={isBordered}>
         <Pre>
           <StyledCopyCommandCode>
             {showDollar ? <span>$</span> : null}
