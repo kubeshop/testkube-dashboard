@@ -28,6 +28,7 @@ const modalTypes: {[key in Entity]: ModalConfigProps} = {
   'test-suites': TestSuiteModalConfig,
   tests: TestModalConfig,
 };
+
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {
     pageTitle,
