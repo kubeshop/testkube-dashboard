@@ -149,22 +149,29 @@ const Arguments: React.FC = () => {
             <Text className="regular middle" color={Colors.slate400}>
               Arguments passed to the executor (concatted and passed directly to the executor)
             </Text>
-            <div style={{textAlign: 'right'}}>
-              <Button onClick={prettifyArgs} disabled={isPrettified}>
-                Prettify
-              </Button>
-            </div>
+
             <Form.Item name="args" style={{marginBottom: 0, marginTop: 0}}>
-              <Input.TextArea
-                autoSize={{
-                  minRows: 8,
-                }}
-                className="args-textarea"
-                placeholder={`--flag="value value"
+              <div style={{position: 'relative'}}>
+                <Button
+                  onClick={prettifyArgs}
+                  disabled={isPrettified}
+                  style={{position: 'absolute', top: 12, right: 12, zIndex: 10}}
+                  $customType="transparent"
+                >
+                  Prettify
+                </Button>
+
+                <Input.TextArea
+                  autoSize={{
+                    minRows: 8,
+                  }}
+                  className="args-textarea"
+                  placeholder={`--flag="value value"
 --flag-123=value
 value
 `}
-              />
+                />
+              </div>
             </Form.Item>
           </Space>
         </Form>
