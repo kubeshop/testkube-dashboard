@@ -160,8 +160,8 @@ const Arguments: React.FC = () => {
                   minRows: 8,
                 }}
                 className="args-textarea"
-                placeholder={`--flag="va lue"
---flag=value
+                placeholder={`--flag="value value"
+--flag-123=value
 value
 `}
               />
