@@ -21,15 +21,10 @@ import Fonts from '@styles/Fonts';
 
 import {EntityDetailsContext} from '@contexts';
 
-const ArgumentsWrapper = styled.div`
-  .args-textarea {
-    color: ${Colors.slate50};
-
-    font-family: ${Fonts.robotoMono};
-
-    resize: none;
-  }
-`;
+const dash = 'DASH_TBR';
+const doubleDash = 'DOUBLE_DASH_TBR';
+const space = 'SPACE_TBR';
+const stringSpace = 'STRING_SPACE';
 
 const Arguments: React.FC = () => {
   const [form] = Form.useForm();
@@ -39,7 +34,7 @@ const Arguments: React.FC = () => {
 
   const details = entityDetails as Test;
 
-  const [argsValue, setArgsValue] = useState(details.executionRequest.args.join(' ') || '');
+  const [argsValue, setArgsValue] = useState(details?.executionRequest?.args.join(' ') || '');
   const [isPrettified, setPrettifiedState] = useState(true);
 
   const onSaveForm = (values: any) => {
@@ -72,15 +67,9 @@ const Arguments: React.FC = () => {
       setPrettifiedState(false);
     }
 
-    const formArgs = form.getFieldValue('args');
+    const formArgs: string = form.getFieldValue('args');
 
-    setArgsValue(formArgs.replaceAll('\n', ' '));
-  };
-
-  const prettifyArgs = () => {
-    const args: string = form.getFieldValue('args');
-
-    const targetArgs = args
+    const targetArgs = formArgs
       .split(' ')
       .filter(item => {
         return item;
@@ -90,11 +79,44 @@ const Arguments: React.FC = () => {
       .filter(item => {
         return item;
       })
-      .join('\n');
+      .join(' ');
 
+    setArgsValue(targetArgs);
+  };
+
+  const prettifyArgs = () => {
+    const args: string = form.getFieldValue('args');
+
+    const newArgs = args.replaceAll('--', doubleDash).replaceAll('-', dash);
+    let stringArray = [];
+    let isQuoteOpen = false;
+
+    for (let i = 0; i < newArgs.length; i += 1) {
+      if (newArgs[i] === '"') {
+        isQuoteOpen = !isQuoteOpen;
+
+        stringArray.push(newArgs[i]);
+      } else if (newArgs[i] === ' ') {
+        if (!isQuoteOpen) {
+          stringArray.push(space);
+        } else {
+          stringArray.push(stringSpace);
+        }
+      } else {
+        stringArray.push(newArgs[i]);
+      }
+    }
+
+    form.setFieldValue(
+      'args',
+      stringArray
+        .join('')
+        .replaceAll(doubleDash, '--')
+        .replaceAll(dash, '-')
+        .replaceAll(stringSpace, ' ')
+        .replaceAll(space, '\n')
+    );
     setPrettifiedState(true);
-
-    setArgsValue(targetArgs.replaceAll('\n', ' '));
   };
 
   return (
@@ -115,7 +137,7 @@ const Arguments: React.FC = () => {
       onConfirm={onClickSave}
     >
       <ArgumentsWrapper>
-        <CopyCommand command={argsValue} isBordered />
+        <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
         <Form
           form={form}
           name="general-settings-name-description"
@@ -124,19 +146,21 @@ const Arguments: React.FC = () => {
           initialValues={{args: argsValue}}
         >
           <Space size={16} direction="vertical" style={{width: '100%'}}>
-            <Button onClick={prettifyArgs} disabled={isPrettified}>
-              Prettify command
-            </Button>
             <Text className="regular middle" color={Colors.slate400}>
               Arguments passed to the executor (concatted and passed directly to the executor)
             </Text>
-            <Form.Item name="args" style={{marginBottom: '0px'}}>
+            <div style={{textAlign: 'right'}}>
+              <Button onClick={prettifyArgs} disabled={isPrettified}>
+                Prettify
+              </Button>
+            </div>
+            <Form.Item name="args" style={{marginBottom: 0, marginTop: 0}}>
               <Input.TextArea
                 autoSize={{
                   minRows: 8,
                 }}
                 className="args-textarea"
-                placeholder={`--flag=value
+                placeholder={`--flag="va lue"
 --flag=value
 value
 `}
@@ -148,5 +172,15 @@ value
     </ConfigurationCard>
   );
 };
+
+const ArgumentsWrapper = styled.div`
+  .args-textarea {
+    color: ${Colors.slate50};
+
+    font-family: ${Fonts.robotoMono};
+
+    resize: none;
+  }
+`;
 
 export default Arguments;

@@ -20,10 +20,11 @@ type CopyCommandProps = {
   showDollar?: boolean;
   bg?: string;
   isBordered?: boolean;
+  additionalPrefix?: string;
 };
 
 const CopyCommand: React.FC<CopyCommandProps> = props => {
-  const {command, label, showDollar = true, bg = Colors.slate900, isBordered = false} = props;
+  const {command, label, showDollar = true, bg = Colors.slate900, isBordered = false, additionalPrefix} = props;
 
   const {ga4React} = useContext(MainContext);
 
@@ -50,6 +51,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
         <Pre>
           <StyledCopyCommandCode>
             {showDollar ? <span>$</span> : null}
+            {additionalPrefix ? <Text color={Colors.purple}>{additionalPrefix}</Text> : null}
             {command}
           </StyledCopyCommandCode>
         </Pre>
