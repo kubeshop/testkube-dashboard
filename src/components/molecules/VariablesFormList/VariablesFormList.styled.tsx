@@ -98,6 +98,4 @@ export const StyledButtonsContainer = styled.div`
   justify-content: center;
 
   width: 100%;
-
-  // margin-top: 17px;
 `;

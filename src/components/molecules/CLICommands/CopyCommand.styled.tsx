@@ -6,10 +6,11 @@ export const LabelWrapper = styled.div`
   margin-bottom: 12px;
 `;
 
-export const StyledCopyCommandContainer = styled.div<{$bg: string}>`
+export const StyledCopyCommandContainer = styled.div<{$bg: string; $isBordered?: boolean}>`
   display: flex;
   justify-content: space-between;
 
+  ${({$isBordered}) => ($isBordered ? `border: 1px solid ${Colors.slate800};` : '')}
   border-radius: 4px;
 
   background-color: ${({$bg}) => $bg};
