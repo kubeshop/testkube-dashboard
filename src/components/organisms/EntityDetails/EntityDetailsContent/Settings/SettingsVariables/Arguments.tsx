@@ -1,9 +1,6 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {Form, Input, Space} from 'antd';
-
-import styled from 'styled-components';
 
 import {Test} from '@models/test';
 
@@ -11,20 +8,16 @@ import {Button, Text} from '@custom-antd';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
-import {required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
-import Fonts from '@styles/Fonts';
 
 import {EntityDetailsContext} from '@contexts';
 
-const dash = 'DASH_TBR';
-const doubleDash = 'DOUBLE_DASH_TBR';
-const space = 'SPACE_TBR';
-const stringSpace = 'STRING_SPACE';
+import {ArgumentsWrapper, ButtonWrapper} from './Arguments.styled';
+import {dash, doubleDash, space, stringSpace} from './utils';
 
 const Arguments: React.FC = () => {
   const [form] = Form.useForm();
@@ -56,10 +49,6 @@ const Arguments: React.FC = () => {
         });
       })
       .catch((err: any) => displayDefaultErrorNotification(err));
-  };
-
-  const onClickSave = () => {
-    form.submit();
   };
 
   const onChange = () => {
@@ -116,6 +105,7 @@ const Arguments: React.FC = () => {
         .replaceAll(stringSpace, ' ')
         .replaceAll(space, '\n')
     );
+
     setPrettifiedState(true);
   };
 
@@ -134,7 +124,9 @@ const Arguments: React.FC = () => {
           </a>
         </Text>
       }
-      onConfirm={onClickSave}
+      onConfirm={() => {
+        form.submit();
+      }}
     >
       <ArgumentsWrapper>
         <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
@@ -151,43 +143,27 @@ const Arguments: React.FC = () => {
             </Text>
 
             <Form.Item name="args" style={{marginBottom: 0, marginTop: 0}}>
-              <div style={{position: 'relative'}}>
-                <Button
-                  onClick={prettifyArgs}
-                  disabled={isPrettified}
-                  style={{position: 'absolute', top: 12, right: 12, zIndex: 10}}
-                  $customType="transparent"
-                >
-                  Prettify
-                </Button>
-
-                <Input.TextArea
-                  autoSize={{
-                    minRows: 8,
-                  }}
-                  className="args-textarea"
-                  placeholder={`--flag="value value"
+              <Input.TextArea
+                autoSize={{
+                  minRows: 8,
+                }}
+                className="args-textarea"
+                placeholder={`--flag="value value"
 --flag-123=value
 value
 `}
-                />
-              </div>
+              />
             </Form.Item>
+            <ButtonWrapper>
+              <Button onClick={prettifyArgs} disabled={isPrettified}>
+                Prettify
+              </Button>
+            </ButtonWrapper>
           </Space>
         </Form>
       </ArgumentsWrapper>
     </ConfigurationCard>
   );
 };
-
-const ArgumentsWrapper = styled.div`
-  .args-textarea {
-    color: ${Colors.slate50};
-
-    font-family: ${Fonts.robotoMono};
-
-    resize: none;
-  }
-`;
 
 export default Arguments;

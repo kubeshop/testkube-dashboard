@@ -20,4 +20,3 @@ export {default as TestSuiteStepCard} from './TestSuiteStepCard';
 export {default as HelpCard} from './HelpCard';
 export {default as EmptyListContent} from './EmptyListContent';
 export {default as MetricsBarChart} from './MetricsBarChart';
-export {default as ArgumentsList} from './Arguments';
