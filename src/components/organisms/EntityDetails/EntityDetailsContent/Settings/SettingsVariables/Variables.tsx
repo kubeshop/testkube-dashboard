@@ -69,7 +69,7 @@ const Variables: React.FC = () => {
       footerText={
         <Text className="regular middle">
           Learn more about{' '}
-          <a href="https://kubeshop.github.io/testkube/tests-variables/" target="_blank">
+          <a href="https://kubeshop.github.io/testkube/using-testkube/tests/tests-variables/" target="_blank">
             Environment variables
           </a>
         </Text>

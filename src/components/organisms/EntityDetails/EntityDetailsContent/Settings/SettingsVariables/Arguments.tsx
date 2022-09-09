@@ -125,7 +125,7 @@ const Arguments: React.FC = () => {
         <Text className="regular middle">
           Learn more about{' '}
           <a
-            href="https://kubeshop.github.io/testkube/executor-soapui/#using-parameters-and-arguments-in-your-tests"
+            href="https://kubeshop.github.io/testkube/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests"
             target="_blank"
           >
             Arguments
