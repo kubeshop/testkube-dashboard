@@ -19,7 +19,7 @@ import env from './env';
 (async () => {
   const isAdBlockEnabled = await detectAdBlock();
 
-  const segmentIOKey = 'iL0p6r5C9i35F7tRxnB0k3gB2nGh7VTK';
+  const segmentIOKey = 'WLq0PU3KzfH7yBMAFenh6yzq3dHl32IN';
 
   if (!isAdBlockEnabled) {
     const ga4react = new GA4React(env.ga || '');
