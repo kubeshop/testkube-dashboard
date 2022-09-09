@@ -1,6 +1,6 @@
 import {StyledDescriptionText, StyledLink} from './VariablesDescriptions.styled';
 
-const learnMoreLink = 'https://kubeshop.github.io/testkube/tests-running/#passing-parameters';
+const learnMoreLink = 'https://kubeshop.github.io/testkube/using-testkube/tests/tests-running/#passing-parameters';
 
 const TestSuiteDescription = () => {
   return (

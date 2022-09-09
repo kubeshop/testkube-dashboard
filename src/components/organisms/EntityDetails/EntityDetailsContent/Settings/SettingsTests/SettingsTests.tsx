@@ -147,7 +147,7 @@ const SettingsTests = () => {
       footerText={
         <Text className="regular middle">
           Learn more about{' '}
-          <a href="https://kubeshop.github.io/testkube/testsuites-creating/" target="_blank">
+          <a href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/" target="_blank">
             Tests in a test suite
           </a>
         </Text>

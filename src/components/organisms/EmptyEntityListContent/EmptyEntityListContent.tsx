@@ -47,7 +47,7 @@ const EmptyEntityListContent: React.FC<EmptyEntityListContentProps> = props => {
       <StyledButtonContainer>
         <Button
           type="default"
-          onClick={() => window.open('https://kubeshop.github.io/testkube/tests-creating/', '_blank')}
+          onClick={() => window.open('https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/', '_blank')}
         >
           Learn More
         </Button>
