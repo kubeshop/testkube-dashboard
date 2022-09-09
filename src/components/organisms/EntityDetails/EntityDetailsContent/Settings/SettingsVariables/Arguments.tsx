@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {Form, Input, Space} from 'antd';
 
@@ -27,15 +27,19 @@ const Arguments: React.FC = () => {
 
   const details = entityDetails as Test;
 
-  const [argsValue, setArgsValue] = useState(details?.executionRequest?.args.join(' ') || '');
+  const entityArgs = details.executionRequest?.args || [];
+
+  const [argsValue, setArgsValue] = useState(entityArgs.join(' ') || '');
   const [isPrettified, setPrettifiedState] = useState(true);
 
-  const onSaveForm = (values: any) => {
+  const onSaveForm = (values: {args: string}) => {
+    const argVal = !values.args.length ? [] : values.args.trim().split('\n');
+
     const successRecord = {
       ...details,
       executionRequest: {
         ...details.executionRequest,
-        args: values.args.trim().split('\n'),
+        args: argVal,
       },
     };
 
@@ -74,7 +78,7 @@ const Arguments: React.FC = () => {
   };
 
   const prettifyArgs = () => {
-    const args: string = form.getFieldValue('args');
+    const args = form.getFieldValue('args');
 
     const newArgs = args.replaceAll('--', doubleDash).replaceAll('-', dash);
     let stringArray = [];
@@ -108,6 +112,10 @@ const Arguments: React.FC = () => {
 
     setPrettifiedState(true);
   };
+
+  useEffect(() => {
+    prettifyArgs();
+  }, []);
 
   return (
     <ConfigurationCard
