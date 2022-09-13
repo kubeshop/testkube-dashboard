@@ -2,9 +2,9 @@ name: testkube-dashboard-helm-releaser
 
 on:
   push:
-    tags: 
+    tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
-      - "v[0-9]+.[0-9]+.[0-9]+-*"
+#      - "v[0-9]+.[0-9]+.[0-9]+-*"
       # - "vTesting[0-9]+.[0-9]+.[0-9]+"
       # - "vTesting[0-9]+.[0-9]+.[0-9]+-*"
 
@@ -20,16 +20,16 @@ jobs:
         run: |
 
           # Setting up Git:
-            
+
           git clone https://kubeshop-bot:$GH_PUSH_TOKEN@github.com/kubeshop/helm-charts
           cd ./helm-charts
           git config user.name "kubeshop-bot"
           git config user.email "kubeshop-bot@kubeshop.io"
-          
+
           # Calling chart releaser script by passing needed folder name:
-          # E.G. in order to relase api-server": 
+          # E.G. in order to relase api-server":
           # -->> ./chart_releaser.sh --helm-chart-folder api-server
-          
+
           export GH_PUSH_TOKEN
           export RELEASE_VERSION
 
