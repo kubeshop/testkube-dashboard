@@ -3,9 +3,7 @@ name: Publish Docker image
 on:
   push:
     tags:
-      - "v*.*.*-*"
-    branches:
-      - add-vars
+      - "v*.*.*"
 
 jobs:
   build_multi_platform_images:
