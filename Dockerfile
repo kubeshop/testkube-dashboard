@@ -29,4 +29,7 @@ RUN chmod +x env.sh
 
 USER 1001
 
+RUN touch ./env-config.js
+RUN chown 1001:1001 ./env-config.js
+
 CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
