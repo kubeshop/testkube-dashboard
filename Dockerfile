@@ -26,10 +26,12 @@ WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
 COPY .env .
 RUN chmod +x env.sh
-RUN touch ./env-config.js
-RUN chown 1001:1001 ./env-config.js
 
-USER 1001
+# TODO force nginx to be run as non root user
+# RUN touch ./env-config.js
+# RUN chown 1001:1001 ./env-config.js
+
+# USER 1001
 
 
 CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
