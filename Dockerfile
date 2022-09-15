@@ -19,19 +19,17 @@ RUN npm run build
 
 FROM $TARGET
 RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/conf.d
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
+EXPOSE 8080
 WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
 COPY .env .
 RUN chmod +x env.sh
 
-# TODO force nginx to be run as non root user
-# RUN touch ./env-config.js
-# RUN chown 1001:1001 ./env-config.js
+RUN touch ./env-config.js
+RUN chmod a+w ./env-config.js
 
-# USER 1001
 
 
 CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
