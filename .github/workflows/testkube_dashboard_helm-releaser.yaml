@@ -7,8 +7,8 @@ on:
       #- "v[0-9]+.[0-9]+.[0-9]+-*"
       # - "vTesting[0-9]+.[0-9]+.[0-9]+"
       # - "vTesting[0-9]+.[0-9]+.[0-9]+-*"
-  branches:
-    - test
+    branches:
+      - test
 
 jobs:
   releasing_helm_chart_dashboard:
