@@ -20,7 +20,12 @@ export const testSuiteExecutionsApi = createApi({
       query: (testSuiteExecutionId: string) => `/test-suite-executions/${testSuiteExecutionId}`,
     }),
     getTestSuiteExecutionMetrics: builder.query({
-      query: ({id, last = 7}) => `/test-suites/${id}/metrics?last=${last ? `?last=${last}` : ''}`,
+      query: ({id, last = 7}) => {
+        const queryParams = new URLSearchParams({
+          last,
+        });
+        return `/test-suites/${id}/metrics?${queryParams.toString()}`;
+      },
     }),
   }),
 });
