@@ -27,11 +27,9 @@ COPY ./scripts/env.sh .
 COPY .env .
 RUN chmod +x env.sh
 
-# TODO force nginx to be run as non root user
 RUN touch ./env-config.js
 RUN chmod a+w ./env-config.js
 
-# USER 1001
 
 
 CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
