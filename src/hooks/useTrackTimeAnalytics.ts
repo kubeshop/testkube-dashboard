@@ -9,13 +9,9 @@ const useTrackTimeAnalytics = (type: string, condition = true) => {
   const durationRef = useRef(0);
   durationRef.current = duration;
 
-  const trackConditionalDuration = () => {
-    if (document.hidden) {
-      if (condition) {
-        trackDuration(duration);
-      }
-    } else {
-      trackDuration(duration);
+  const conditionalTrack = () => {
+    if (condition) {
+      trackDuration(durationRef.current);
     }
   };
 
@@ -45,19 +41,17 @@ const useTrackTimeAnalytics = (type: string, condition = true) => {
   useEffect(() => {
     setDuration(0);
     return () => {
-      if (condition) {
-        trackDuration(durationRef.current);
-      }
+      conditionalTrack();
     };
   }, [condition]);
 
   useEffect(() => {
     if (document.hidden) {
-      trackConditionalDuration();
+      conditionalTrack();
     } else {
       setDuration(0);
     }
-  }, [document.hidden]);
+  }, [document.hidden, condition]);
 };
 
 export default useTrackTimeAnalytics;
