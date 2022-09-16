@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useMemo} from 'react';
 
 import {Form} from 'antd';
 
@@ -30,7 +30,9 @@ const Variables: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const variables = decomposeVariables(entityDetails?.executionRequest?.variables) || [];
+  const variables = useMemo(() => {
+    return decomposeVariables(entityDetails?.executionRequest?.variables) || [];
+  }, [entityDetails?.executionRequest?.variables]);
 
   const updateRequestsMap: {[key in Entity]: any} = {
     'test-suites': updateTestSuite,

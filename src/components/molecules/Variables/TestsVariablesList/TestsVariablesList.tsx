@@ -1,4 +1,4 @@
-import {memo, useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {Form, FormInstance} from 'antd';
 
@@ -25,8 +25,28 @@ const VariablesList: React.FC<VariablesListProps> = props => {
     <Form
       form={form}
       onFinish={onFinish}
-      onFieldsChange={(_, allFields) => {
-        form.setFieldsValue(allFields);
+      onFieldsChange={(_: any) => {
+        const action = _[0];
+        const actionValue = action.value;
+
+        if (!Array.isArray(actionValue)) {
+          const actionFieldIndex = action.name[1];
+          const isTypeChanged = action.name[2] === 'type';
+          const neededFieldValue = form.getFieldValue('variables-list')[actionFieldIndex];
+
+          if (isTypeChanged) {
+            try {
+              if (actionValue === 'secretRef') {
+                delete neededFieldValue.value;
+              } else {
+                delete neededFieldValue.secretRefName;
+                delete neededFieldValue.secretRefKey;
+              }
+            } catch (err) {
+              console.log('err: ', err);
+            }
+          }
+        }
       }}
     >
       <VariablesFormList data={data} form={form} />
@@ -34,8 +54,4 @@ const VariablesList: React.FC<VariablesListProps> = props => {
   );
 };
 
-const arePropsEqual = (prevProps: VariablesListProps, nextProps: VariablesListProps) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
-};
-
-export default memo(VariablesList, arePropsEqual);
+export default VariablesList;
