@@ -10,6 +10,8 @@ import {Button, Modal, Title} from '@custom-antd';
 
 import {EntityGrid} from '@molecules';
 
+import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
+
 import {compareFiltersObject} from '@utils/objects';
 
 import Colors from '@styles/Colors';
@@ -95,6 +97,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   };
 
   const creationModalConfig: ModalConfigProps = modalTypes[entity];
+
+  useTrackTimeAnalytics(`${entity}-list-page`);
 
   return (
     <StyledContainer>
