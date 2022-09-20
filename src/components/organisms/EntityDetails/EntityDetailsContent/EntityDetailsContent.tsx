@@ -49,7 +49,7 @@ const EntityDetailsContent: React.FC = () => {
     setDaysFilterValue,
     isRowSelected,
   } = useContext(EntityDetailsContext);
-  const analytics = useContext(AnalyticsContext);
+  const {trackEvent} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -92,7 +92,7 @@ const EntityDetailsContent: React.FC = () => {
           return displayDefaultErrorNotification(result.error.error);
         }
 
-        analytics.track(`run-${entity}`, {
+        trackEvent(`run-${entity}`, {
           type,
         });
 
