@@ -4,7 +4,7 @@ import {AnalyticsContext} from '@contexts';
 
 const useTrackTimeAnalytics = (type: string, condition = true) => {
   const analytics = useContext(AnalyticsContext);
-
+  console.log(process.env.NODE_ENV);
   const [duration, setDuration] = useState(0);
   const durationRef = useRef(0);
   durationRef.current = duration;
