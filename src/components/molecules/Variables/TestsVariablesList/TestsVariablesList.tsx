@@ -26,24 +26,28 @@ const VariablesList: React.FC<VariablesListProps> = props => {
       form={form}
       onFinish={onFinish}
       onFieldsChange={(_: any) => {
-        const action = _[0];
-        const actionValue = action.value;
+        if (_[0]) {
+          const action = _[0];
 
-        if (!Array.isArray(actionValue)) {
-          const actionFieldIndex = action.name[1];
-          const isTypeChanged = action.name[2] === 'type';
-          const neededFieldValue = form.getFieldValue('variables-list')[actionFieldIndex];
+          const actionValue = action.value;
 
-          if (isTypeChanged) {
-            try {
-              if (actionValue === 'secretRef') {
-                delete neededFieldValue.value;
-              } else {
-                delete neededFieldValue.secretRefName;
-                delete neededFieldValue.secretRefKey;
+          if (!Array.isArray(actionValue)) {
+            const actionFieldIndex = action.name[1];
+            const isTypeChanged = action.name[2] === 'type';
+            const neededFieldValue = form.getFieldValue('variables-list')[actionFieldIndex];
+
+            if (isTypeChanged) {
+              try {
+                if (actionValue === 'secretRef') {
+                  delete neededFieldValue.value;
+                } else {
+                  delete neededFieldValue.secretRefName;
+                  delete neededFieldValue.secretRefKey;
+                }
+              } catch (err) {
+                // eslint-disable-next-line no-console
+                console.log('err: ', err);
               }
-            } catch (err) {
-              console.log('err: ', err);
             }
           }
         }

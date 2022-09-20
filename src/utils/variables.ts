@@ -14,7 +14,7 @@ export const formatVariables = (list: any[]) => {
   } = {};
 
   list.forEach(item => {
-    if (item.type === 'secretRef') {
+    if (item.secretRef || item.type === 'secretRef') {
       variables[item.key] = {
         name: item.key,
         type: 'secret',
@@ -36,12 +36,20 @@ export const formatVariables = (list: any[]) => {
 };
 
 export const decomposeVariables = (variables: Variables) => {
-  console.log('variables: ', variables);
   if (!variables) {
     return [];
   }
 
   return Object.entries(variables).map(([key, value]: any) => {
+    if (value.secretRef) {
+      return {
+        key: value?.name,
+        type: 'secretRef',
+        secretRefName: value.secretRef.name,
+        secretRefKey: value.secretRef.key,
+      };
+    }
+
     return {
       ...value,
       key: value?.name,
