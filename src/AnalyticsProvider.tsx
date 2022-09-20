@@ -28,5 +28,20 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
       .catch(err => console.error(err));
   }, []);
 
-  return <AnalyticsContext.Provider value={analytics}>{children}</AnalyticsContext.Provider>;
+  const trackEvent = (type: string, data: any) => {
+    if (process.env.NODE_ENV !== 'development') {
+      analytics.track(type, data);
+    }
+  };
+
+  return (
+    <AnalyticsContext.Provider
+      value={{
+        analytics,
+        trackEvent,
+      }}
+    >
+      {children}
+    </AnalyticsContext.Provider>
+  );
 };

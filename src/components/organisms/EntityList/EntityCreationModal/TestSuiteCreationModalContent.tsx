@@ -22,7 +22,7 @@ const {Option} = Select;
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
   const {navigate, dispatch} = useContext(MainContext);
-  const analytics = useContext(AnalyticsContext);
+  const {trackEvent} = useContext(AnalyticsContext);
 
   const {data} = useGetLabelsQuery(null);
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
@@ -42,7 +42,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
         displayDefaultNotificationFlow(res, () => {
           const {name, type} = res?.data?.metadata?.name;
 
-          analytics.track('create-test-suites', {
+          trackEvent('create-test-suites', {
             type,
           });
 

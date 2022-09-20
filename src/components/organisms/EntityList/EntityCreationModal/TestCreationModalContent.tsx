@@ -23,7 +23,7 @@ const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
 
   const {dispatch, navigate} = useContext(MainContext);
-  const analytics = useContext(AnalyticsContext);
+  const {trackEvent} = useContext(AnalyticsContext);
 
   const [addTest, {isLoading}] = useAddTestMutation();
 
@@ -46,7 +46,7 @@ const TestCreationModalContent: React.FC = () => {
         displayDefaultNotificationFlow(res, () => {
           const {name, type} = res?.data?.metadata?.name;
 
-          analytics.track('create-tests', {
+          trackEvent('create-tests', {
             type,
           });
 

@@ -3,7 +3,7 @@ import {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {AnalyticsContext} from '@contexts';
 
 const useTrackTimeAnalytics = (type: string, condition = true) => {
-  const analytics = useContext(AnalyticsContext);
+  const {trackEvent} = useContext(AnalyticsContext);
 
   const [duration, setDuration] = useState(0);
   const durationRef = useRef(0);
@@ -17,8 +17,8 @@ const useTrackTimeAnalytics = (type: string, condition = true) => {
 
   const trackDuration = useCallback(
     (_duration: number) => {
-      if (_duration > 100 && process.env.NODE_ENV !== 'development') {
-        analytics.track(type, {
+      if (_duration > 100) {
+        trackEvent(type, {
           duration: _duration,
         });
       }
@@ -29,9 +29,11 @@ const useTrackTimeAnalytics = (type: string, condition = true) => {
   useEffect(() => {
     let timer: any = null;
 
-    timer = setInterval(() => {
-      setDuration((curTime: number) => curTime + 100);
-    }, 100);
+    if (process.env.NODE_ENV !== 'development') {
+      timer = setInterval(() => {
+        setDuration((curTime: number) => curTime + 100);
+      }, 100);
+    }
 
     return () => {
       clearInterval(timer);
