@@ -15,7 +15,7 @@ type DelayModalProps = {
 const DelayModal: React.FC<DelayModalProps> = props => {
   const {isDelayModalVisible, setIsDelayModalVisible, addDelay} = props;
 
-  const [delayValue, setDelayValue] = useState<number | undefined>(undefined);
+  const [delayValue, setDelayValue] = useState<number>(0);
   const isDelayInteger = useMemo(() => Number.isInteger(delayValue), [delayValue]);
 
   const delayInputRef = useRef(null);
@@ -30,7 +30,8 @@ const DelayModal: React.FC<DelayModalProps> = props => {
     if (isDelayInteger) {
       addDelay(Number(delayValue));
     }
-    setDelayValue(undefined);
+
+    setDelayValue(0);
   };
 
   useEffect(() => {
