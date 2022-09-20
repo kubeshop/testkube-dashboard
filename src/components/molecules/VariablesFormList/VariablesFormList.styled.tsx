@@ -35,12 +35,9 @@ export const StyledLablesSpace = styled.div<{noGap?: boolean}>`
   align-items: flex-start;
   gap: ${props => (props.noGap ? '0' : '16px')};
 
+  height: 44px;
   min-width: 200px;
-  margin-bottom: 25px;
-
-  &:first-child {
-    margin-top: 24px;
-  }
+  margin-bottom: 22px;
 `;
 
 export const StyledPopoverContent = styled.div`
@@ -98,4 +95,11 @@ export const StyledButtonsContainer = styled.div`
   justify-content: center;
 
   width: 100%;
+`;
+
+export const SymbolWrapper = styled.div`
+  display: flex;
+  align-items: center;
+
+  height: 100%;
 `;
