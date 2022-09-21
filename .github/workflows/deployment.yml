@@ -47,7 +47,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          build-args: TARGET=${{ matrix.path }}
+          build-args: |
+            TARGET=${{ matrix.path }}
+            REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
+            REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
 
   create_manifest:
@@ -77,3 +80,35 @@ jobs:
 
           docker manifest create ${{ github.repository }}:latest --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
           docker manifest push -p ${{ github.repository }}:latest
+
+  releasing_helm_chart_dashboard:
+    needs: create_manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: getting Tag name pushed.
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - name: Editing helm-release repo with version based on a Tag pushed.
+        run: |
+
+          # Setting up Git:
+
+          git clone https://kubeshop-bot:$GH_PUSH_TOKEN@github.com/kubeshop/helm-charts
+          cd ./helm-charts
+          git config user.name "kubeshop-bot"
+          git config user.email "kubeshop-bot@kubeshop.io"
+
+          # Calling chart releaser script by passing needed folder name:
+          # E.G. in order to relase api-server":
+          # -->> ./chart_releaser.sh --helm-chart-folder api-server
+
+          export GH_PUSH_TOKEN
+          export RELEASE_VERSION
+
+          cd ./scripts
+          ./chart_releaser.sh --helm-chart-folder testkube-dashboard --main-chart false
+
+        env:
+          GH_PUSH_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}

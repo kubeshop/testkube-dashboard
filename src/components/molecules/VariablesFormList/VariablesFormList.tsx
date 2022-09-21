@@ -1,6 +1,6 @@
-import {Form, FormInstance, Input, Popover, Select} from 'antd';
+import {Form, FormInstance, Input, Select} from 'antd';
 
-import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, QuestionCircleOutlined} from '@ant-design/icons';
+import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, PauseOutlined, RightOutlined} from '@ant-design/icons';
 
 import {Variable} from '@models/variable';
 
@@ -9,13 +9,14 @@ import {Button} from '@custom-antd';
 import {validateDuplicateValueByKey} from '@utils';
 import {required} from '@utils/form';
 
-import {duplicateKeyMessage, emptyVariableObject, popoverHelpContent, typeOptions} from './VariablesFormList.constants';
+import Colors from '@styles/Colors';
+
+import {duplicateKeyMessage, emptyVariableObject, typeOptions} from './VariablesFormList.constants';
 import {
-  Asterisk,
   StyledButtonsContainer,
   StyledKeyFormItem,
-  StyledLabel,
   StyledLablesSpace,
+  SymbolWrapper,
   VariablesListContainer,
 } from './VariablesFormList.styled';
 
@@ -32,73 +33,94 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
     <Form.List name="variables-list" initialValue={data}>
       {(fields, {add, remove}) => (
         <VariablesListContainer>
-          {fields.length !== 0 ? (
-            <StyledLablesSpace noGap>
-              <StyledLabel flex="1">
-                Type
-                <Popover content={popoverHelpContent} placement="topLeft">
-                  <QuestionCircleOutlined style={{marginLeft: '5px', fontSize: '14px'}} />
-                </Popover>
-              </StyledLabel>
-              <StyledLabel flex="2">
-                <Asterisk />
-                Key
-              </StyledLabel>
-              <StyledLabel flex="2">Value</StyledLabel>
-            </StyledLablesSpace>
-          ) : null}
-          {fields.map(({key, name, ...restField}) => (
-            <StyledLablesSpace key={key}>
-              <Form.Item
-                {...restField}
-                name={[name, 'type']}
-                style={{minWidth: '50px', flex: 1, marginBottom: '0'}}
-                rules={[required]}
-              >
-                <Select options={typeOptions} />
-              </Form.Item>
-              <StyledKeyFormItem
-                {...restField}
-                name={[name, 'key']}
-                style={{minWidth: '50px', flex: 2, marginBottom: '0'}}
-                rules={[
-                  required,
-                  {
-                    message: duplicateKeyMessage,
-                    validator: (_, value) => {
-                      const variables = form.getFieldValue('variables-list');
-                      return validateDuplicateValueByKey(value, variables, 'key')
-                        ? Promise.reject()
-                        : Promise.resolve();
+          {fields.map(({key, name, ...restField}) => {
+            return (
+              <StyledLablesSpace key={key}>
+                <Form.Item
+                  {...restField}
+                  name={[name, 'type']}
+                  style={{minWidth: 160, maxWidth: 160, flex: 1, marginBottom: '0'}}
+                  rules={[required]}
+                >
+                  <Select options={typeOptions} />
+                </Form.Item>
+                <StyledKeyFormItem
+                  {...restField}
+                  name={[name, 'key']}
+                  style={{minWidth: '50px', flex: 2, marginBottom: '0'}}
+                  rules={[
+                    required,
+                    {
+                      message: duplicateKeyMessage,
+                      validator: (_, value) => {
+                        const variables = form.getFieldValue('variables-list');
+                        return validateDuplicateValueByKey(value, variables, 'key')
+                          ? Promise.reject()
+                          : Promise.resolve();
+                      },
                     },
-                  },
-                ]}
-                $showClearIcon={form.getFieldError(['variables-list', Number(key), 'key'])[0] === duplicateKeyMessage}
-              >
-                <Input allowClear />
-              </StyledKeyFormItem>
-              <Form.Item noStyle shouldUpdate>
-                {() => {
-                  return (
-                    <Form.Item
-                      {...restField}
-                      name={[name, 'value']}
-                      style={{minWidth: '50px', flex: 2, marginBottom: '0'}}
-                    >
-                      {form.getFieldValue('variables-list')[name]?.type === 1 ? (
-                        <Input.Password
-                          iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-                        />
-                      ) : (
-                        <Input />
-                      )}
-                    </Form.Item>
-                  );
-                }}
-              </Form.Item>
-              <DeleteOutlined onClick={() => remove(name)} style={{fontSize: '21px', marginTop: '7px'}} />
-            </StyledLablesSpace>
-          ))}
+                  ]}
+                  $showClearIcon={form.getFieldError(['variables-list', Number(key), 'key'])[0] === duplicateKeyMessage}
+                >
+                  <Input allowClear placeholder="Your variable name" />
+                </StyledKeyFormItem>
+                <SymbolWrapper>
+                  <PauseOutlined style={{transform: 'rotate(90deg)', color: Colors.slate500}} />
+                </SymbolWrapper>
+                <Form.Item noStyle shouldUpdate>
+                  {() => {
+                    const neededFieldValue = form.getFieldValue('variables-list');
+
+                    const inputType = neededFieldValue[name]?.type;
+
+                    if (inputType === 'secretRef') {
+                      return (
+                        <>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'secretRefName']}
+                            style={{minWidth: '50px', flex: 2, marginBottom: '0'}}
+                          >
+                            <Input placeholder="Referenced secret name" />
+                          </Form.Item>
+                          <SymbolWrapper>
+                            <RightOutlined style={{fontSize: 12}} />
+                          </SymbolWrapper>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'secretRefKey']}
+                            style={{minWidth: '50px', flex: 2, marginBottom: '0'}}
+                          >
+                            <Input placeholder="Referenced secret key" />
+                          </Form.Item>
+                        </>
+                      );
+                    }
+
+                    return (
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'value']}
+                        style={{minWidth: '50px', flex: 2, marginBottom: '0'}}
+                      >
+                        {form.getFieldValue('variables-list')[name]?.type === 1 ? (
+                          <Input.Password
+                            iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+                            placeholder="Your variable value"
+                          />
+                        ) : (
+                          <Input placeholder="Your variable value" />
+                        )}
+                      </Form.Item>
+                    );
+                  }}
+                </Form.Item>
+                <SymbolWrapper>
+                  <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
+                </SymbolWrapper>
+              </StyledLablesSpace>
+            );
+          })}
           <StyledButtonsContainer>
             <Button $customType="secondary" onClick={() => add(emptyVariableObject)}>
               Add a new variable

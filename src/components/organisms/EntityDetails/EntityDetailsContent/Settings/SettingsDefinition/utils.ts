@@ -15,12 +15,12 @@ export const settingsDefinitionData: {
 } = {
   'test-suites': {
     description: 'Validate and export your test suite configuration',
-    helpLinkUrl: 'https://kubeshop.github.io/testkube/testsuites-creating/',
+    helpLinkUrl: 'https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/',
     apiEndpoint: '/test-suite-with-executions/',
   },
   tests: {
     description: 'Validate and export your test configuration',
-    helpLinkUrl: 'https://kubeshop.github.io/testkube/tests-creating/',
+    helpLinkUrl: 'https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/',
     apiEndpoint: '/test-with-executions/',
   },
 };

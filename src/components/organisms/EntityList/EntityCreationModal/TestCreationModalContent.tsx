@@ -15,7 +15,7 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useAddTestMutation} from '@services/tests';
 
-import {MainContext} from '@contexts';
+import {AnalyticsContext, MainContext} from '@contexts';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
@@ -23,6 +23,7 @@ const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
 
   const {dispatch, navigate} = useContext(MainContext);
+  const {trackEvent} = useContext(AnalyticsContext);
 
   const [addTest, {isLoading}] = useAddTestMutation();
 
@@ -43,10 +44,14 @@ const TestCreationModalContent: React.FC = () => {
     return addTest(requestBody)
       .then((res: any) => {
         displayDefaultNotificationFlow(res, () => {
-          const targetTestName = res?.data?.metadata?.name;
+          const {name, type} = res?.data?.metadata?.name;
+
+          trackEvent('create-tests', {
+            type,
+          });
 
           if (!toRun) {
-            dispatch(setRedirectTarget({targetTestId: targetTestName}));
+            dispatch(setRedirectTarget({targetTestId: name}));
 
             return navigate(`/tests/executions/${values.name}`);
           }

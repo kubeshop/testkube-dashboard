@@ -76,7 +76,7 @@ In order to be able to run this application locally without docker, just close t
 
 ```bash
 git clone git@github.com:kubeshop/testkube-dashboard.git && cd kubetest-dashboard
-npm install --legacy-peer-deps
+npm install
 npm run start
 ```
 
@@ -86,8 +86,7 @@ To be able to run the application with mocked data, you just need to switch comm
 npm run start:mock-app
 ```
 
-After this, you should get an open navigator with the link: `http://localhost:3000/` otherwise you can just go to that
-:link:
+After this, you should get an open navigator with the link: `http://localhost:3000/`.
 
 ## Commands:
 

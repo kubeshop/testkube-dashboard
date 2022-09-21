@@ -1,17 +1,22 @@
 import {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
+import useWebSocket from 'react-use-websocket';
 
 import {notification} from 'antd';
 
 import styled from 'styled-components';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
+import {WSData} from '@models/websocket';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
 import {notificationCall} from '@molecules';
 
 import useStateCallback from '@hooks/useStateCallback';
-import useWebSocket from '@hooks/useWebSocket';
 
+// import useWebSocket from '@hooks/useWebSocket';
 import {EntityDetailsContext, MainContext} from '@contexts';
 
 import EntityDetailsContent from '../EntityDetailsContent';
@@ -19,6 +24,8 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const {entity, useGetExecutions, useGetEntityDetails, useGetMetrics, defaultStackRoute} = props;
+
+  const apiEndpoint = useAppSelector(selectApiEndpoint);
 
   const {navigate, location} = useContext(MainContext);
   const {pathname} = location;
@@ -35,25 +42,21 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const {data: entityDetails} = useGetEntityDetails(id);
   const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue});
 
-  const onWebSocketData = (event: any) => {
+  const onWebSocketData = (wsData: WSData) => {
     try {
-      const {execution, type} = JSON.parse(event.data);
-
-      const adjustedExecution = {
-        ...execution,
-        status: execution.executionResult.status,
-      };
-
       if (executionsList) {
-        if (type === 'start-test') {
+        if (wsData.type === 'start-test' && id === wsData.testExecution.testName) {
+          const adjustedExecution = {
+            ...wsData.testExecution,
+            status: wsData.testExecution.executionResult.status,
+          };
+
           setExecutionsList(
             {
               ...executionsList,
               results: [adjustedExecution, ...executionsList.results],
             },
             () => {
-              onRowSelect(adjustedExecution, true);
-
               refetchMetrics();
 
               notificationCall('passed', 'Test started');
@@ -61,9 +64,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
           );
         }
 
-        if (type === 'end-test') {
+        if (wsData.type === 'end-test-success') {
           const targetIndex = executionsList.results.findIndex((item: any) => {
-            return item.id === execution.id;
+            return item.id === wsData.testExecution.id;
           });
 
           if (targetIndex !== -1) {
@@ -72,7 +75,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
                 ...executionsList,
                 results: executionsList.results.map((item: any, index: number) => {
                   if (index === targetIndex) {
-                    return {...item, ...execution, status: execution.executionResult.status};
+                    return {...item, ...wsData.testExecution, status: wsData.testExecution.executionResult.status};
                   }
 
                   return item;
@@ -81,7 +84,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               () => {
                 refetchMetrics();
 
-                notificationCall(execution.executionResult.status, 'Test finished');
+                notificationCall(wsData.testExecution.executionResult.status, 'Test finished');
               }
             );
           }
@@ -91,8 +94,15 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       console.log('err: ', err);
     }
   };
+  const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?/, 'ws') : '';
 
-  useWebSocket({endpoint: '/events/stream', cb: onWebSocketData});
+  useWebSocket(`${wsRoot}/events/stream`, {
+    onMessage: event => {
+      const wsData = JSON.parse(event.data) as WSData;
+
+      onWebSocketData(wsData);
+    },
+  });
 
   const getDefaultUrl = () => {
     const clarifyTargetUrl = pathname.split('/').slice(0, 4);

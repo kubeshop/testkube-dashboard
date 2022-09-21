@@ -14,6 +14,8 @@ import {Button, Text} from '@custom-antd';
 
 import {CLICommands, LabelsList} from '@molecules';
 
+import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
+
 import {displayDefaultErrorNotification} from '@utils/notification';
 
 import {useRunTestSuiteMutation} from '@services/testSuites';
@@ -21,7 +23,7 @@ import {useRunTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {AnalyticsContext, EntityDetailsContext, MainContext} from '@contexts';
 
 import {StyledContainer, StyledPageHeader, TabsWrapper} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
@@ -47,6 +49,7 @@ const EntityDetailsContent: React.FC = () => {
     setDaysFilterValue,
     isRowSelected,
   } = useContext(EntityDetailsContext);
+  const {trackEvent} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -67,6 +70,9 @@ const EntityDetailsContent: React.FC = () => {
     }
   }, [isSettingsTabConfig]);
 
+  useTrackTimeAnalytics(`${entity}-details-page`, activeTabKey !== 'Settings');
+  useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
+
   const name = entityDetails?.name;
   const description = entityDetails?.description;
   const labels = entityDetails?.labels;
@@ -86,9 +92,9 @@ const EntityDetailsContent: React.FC = () => {
           return displayDefaultErrorNotification(result.error.error);
         }
 
-        // setTimeout(() => {
-        //   onRowSelect(result?.data, true);
-        // }, 1500);
+        trackEvent(`run-${entity}`, {
+          type,
+        });
       })
       .catch((err: any) => displayDefaultErrorNotification(err));
   };

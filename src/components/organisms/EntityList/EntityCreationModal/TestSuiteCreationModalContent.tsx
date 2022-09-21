@@ -12,7 +12,7 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 import {useGetLabelsQuery} from '@services/labels';
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
-import {MainContext} from '@contexts';
+import {AnalyticsContext, MainContext} from '@contexts';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
@@ -22,6 +22,7 @@ const {Option} = Select;
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
   const {navigate, dispatch} = useContext(MainContext);
+  const {trackEvent} = useContext(AnalyticsContext);
 
   const {data} = useGetLabelsQuery(null);
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
@@ -39,10 +40,14 @@ const TestSuiteCreationModalContent: React.FC = () => {
     })
       .then((res: any) => {
         displayDefaultNotificationFlow(res, () => {
-          const testSuiteName = res?.data?.metadata?.name;
+          const {name, type} = res?.data?.metadata?.name;
+
+          trackEvent('create-test-suites', {
+            type,
+          });
 
           dispatch(openSettingsTabConfig());
-          navigate(`test-suites/executions/${testSuiteName}`);
+          navigate(`test-suites/executions/${name}`);
         });
       })
       .catch(err => displayDefaultErrorNotification(err));

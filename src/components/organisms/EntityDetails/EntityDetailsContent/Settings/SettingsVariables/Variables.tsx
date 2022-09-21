@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useMemo} from 'react';
 
 import {Form} from 'antd';
 
@@ -30,7 +30,9 @@ const Variables: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const variables = decomposeVariables(entityDetails?.executionRequest?.variables) || [];
+  const variables = useMemo(() => {
+    return decomposeVariables(entityDetails?.executionRequest?.variables) || [];
+  }, [entityDetails?.executionRequest?.variables]);
 
   const updateRequestsMap: {[key in Entity]: any} = {
     'test-suites': updateTestSuite,
@@ -69,7 +71,7 @@ const Variables: React.FC = () => {
       footerText={
         <Text className="regular middle">
           Learn more about{' '}
-          <a href="https://kubeshop.github.io/testkube/tests-variables/" target="_blank">
+          <a href="https://kubeshop.github.io/testkube/using-testkube/tests/tests-variables/" target="_blank">
             Environment variables
           </a>
         </Text>

@@ -15,6 +15,7 @@ export const emptyVariableObject: Variable = {
 export const typeOptions = [
   {label: 'Basic', value: 0},
   {label: 'Secret', value: 1},
+  {label: 'Secret Reference', value: 'secretRef'},
 ];
 
 export const duplicateKeyMessage = 'Duplicate key.';

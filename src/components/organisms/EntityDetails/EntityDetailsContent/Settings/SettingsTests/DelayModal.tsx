@@ -1,4 +1,4 @@
-import React, {KeyboardEventHandler, useEffect, useMemo, useRef, useState} from 'react';
+import React, {KeyboardEventHandler, SetStateAction, useEffect, useMemo, useRef, useState} from 'react';
 
 import {InputNumber} from 'antd';
 
@@ -66,7 +66,7 @@ const DelayModal: React.FC<DelayModalProps> = props => {
             placeholder="Delay"
             controls={false}
             value={delayValue}
-            onChange={value => setDelayValue(value)}
+            onChange={value => setDelayValue(value as SetStateAction<number | undefined>)}
             onKeyPress={handleDelayModalKeyPress}
           />
         </StyledDelayModalContent>

@@ -46,7 +46,7 @@ const Executors: React.FC = () => {
           </Title>
           <Text className="regular middle" color={Colors.slate400}>
             Executors are the type of tests which can be run by testkube. Learn more about{' '}
-            <a href="https://kubeshop.github.io/testkube/executor-custom" target="_blank">
+            <a href="https://kubeshop.github.io/testkube/test-types/executor-custom" target="_blank">
               executors
             </a>
           </Text>
