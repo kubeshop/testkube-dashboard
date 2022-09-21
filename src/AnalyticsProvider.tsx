@@ -17,15 +17,17 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
   const analytics = useMemo(() => AnalyticsBrowser.load({writeKey: privateKey}), [privateKey]);
 
   useEffect(() => {
-    FingerprintJS.load()
-      .then((fp: any) => fp.get())
-      .then((result: any) => {
-        analytics.identify(result.visitorId, {
-          hostname: window.location.hostname,
-        });
-      })
-      // eslint-disable-next-line no-console
-      .catch(err => console.error(err));
+    if (process.env.NODE_ENV !== 'development') {
+      FingerprintJS.load()
+        .then((fp: any) => fp.get())
+        .then((result: any) => {
+          analytics.identify(result.visitorId, {
+            hostname: window.location.hostname,
+          });
+        })
+        // eslint-disable-next-line no-console
+        .catch(err => console.error(err));
+    }
   }, []);
 
   const trackEvent = (type: string, data: any) => {

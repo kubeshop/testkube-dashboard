@@ -93,7 +93,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
         checkURLWorkingState(`${apiEndpoint}/v1/info`);
       }
     } else {
-      const targetProtocol = location.pathname.startsWith('https://') ? 'https://' : 'http://';
+      const targetProtocol = `${window.location.protocol}//`;
 
       if (endsWithV1) {
         checkURLWorkingState(`${targetProtocol}${apiEndpoint}/info`);
