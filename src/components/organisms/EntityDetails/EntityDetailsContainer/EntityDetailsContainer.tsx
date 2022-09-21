@@ -16,7 +16,6 @@ import {notificationCall} from '@molecules';
 
 import useStateCallback from '@hooks/useStateCallback';
 
-// import useWebSocket from '@hooks/useWebSocket';
 import {EntityDetailsContext, MainContext} from '@contexts';
 
 import EntityDetailsContent from '../EntityDetailsContent';
@@ -91,6 +90,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
         }
       }
     } catch (err: any) {
+      // eslint-disable-next-line no-console
       console.log('err: ', err);
     }
   };
