@@ -24,7 +24,6 @@ COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 8080
 WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
-COPY .env .
 RUN chmod +x env.sh
 
 RUN touch ./env-config.js
