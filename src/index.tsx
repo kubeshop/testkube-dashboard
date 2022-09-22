@@ -15,17 +15,13 @@ import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import './antd-theme/antd-customized.css';
 
-// import env from './env';
-
 (async () => {
   const isAdBlockEnabled = await detectAdBlock();
 
-  const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || 'WLq0PU3KzfH7yBMAFenh6yzq3dHl32IN';
-  console.log('process.env.REACT_APP_SEGMENT_WRITE_KEY: ', process.env.REACT_APP_SEGMENT_WRITE_KEY);
+  const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
 
   if (!isAdBlockEnabled) {
-    const ga4react = new GA4React(process.env.REACT_APP_GOOGLE_ANALYTICS_ID || 'G-945BK09GDC');
-    console.log('process.env.REACT_APP_GOOGLE_ANALYTICS_ID: ', process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
+    const ga4react = new GA4React(process.env.REACT_APP_GOOGLE_ANALYTICS_ID || '');
 
     await ga4react.initialize();
   }
