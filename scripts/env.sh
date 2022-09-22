@@ -1,7 +1,5 @@
 #!/bin/sh
 # line endings must be \n, not \r\n !
-echo "window._env_ = {" >./env-config.js
-awk -F '=' '{
-  print $1 ": \"" $2 "\","
-}' ./.env >>./env-config.js
-echo "};" >>./env-config.js
+echo "window._env_ = {" > ./env-config.js
+echo "REACT_APP_API_SERVER_ENDPOINT: '${REACT_APP_API_SERVER_ENDPOINT}'" >> ./env-config.js
+echo "};" >> ./env-config.js
