@@ -107,6 +107,8 @@ const EntityDetailsContent: React.FC = () => {
 
   const isMetricsEmpty = !metrics?.executions || !metrics?.executions.length;
 
+  const isPageDisabled = !name;
+
   return (
     <StyledContainer>
       <StyledPageHeader
@@ -123,7 +125,7 @@ const EntityDetailsContent: React.FC = () => {
               onChange={setDaysFilterValue}
             />
           ) : null,
-          <Button key="1" type="primary" onClick={onRunButtonClick}>
+          <Button key="1" type="primary" onClick={onRunButtonClick} disabled={isPageDisabled}>
             Run now
           </Button>,
         ]}
@@ -138,13 +140,13 @@ const EntityDetailsContent: React.FC = () => {
       </StyledPageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} isRowSelected={isRowSelected} /> : null}
       <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
-        <Tabs.TabPane tab="Recent executions" key="Executions">
+        <Tabs.TabPane tab="Recent executions" key="Executions" disabled={isPageDisabled}>
           <ExecutionsTable triggerRun={onRunButtonClick} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="CLI Commands" key="CLICommands">
+        <Tabs.TabPane tab="CLI Commands" key="CLICommands" disabled={isPageDisabled}>
           <CLICommands name={name} bg={Colors.slate800} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Settings" key="Settings">
+        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
           <Settings />
         </Tabs.TabPane>
       </TabsWrapper>

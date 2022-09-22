@@ -1,5 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 
+import {notification} from 'antd';
+
 import axios from 'axios';
 
 import {config} from '@constants/config';
@@ -11,6 +13,8 @@ import {Button, Input, Modal, Text} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
+import {hasProtocol} from '@src/utils/strings';
+
 import env from '../../../env';
 import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
 
@@ -19,43 +23,105 @@ type EndpointModalProps = {
   visible: boolean;
 };
 
-axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl || `${window.location.origin}/results/v1`;
+axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl;
 
 const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {isModalVisible, visible} = props;
 
   const apiEndpointRedux = useAppSelector(selectApiEndpoint);
 
-  const defaultApiEndpoint =
-    apiEndpointRedux || localStorage.getItem('apiEndpoint') || env?.apiUrl || `${window.location.origin}/results/v1`;
+  const defaultApiEndpoint = apiEndpointRedux || localStorage.getItem('apiEndpoint') || env?.apiUrl;
 
-  const {dispatch} = useContext(MainContext);
+  const {dispatch, location} = useContext(MainContext);
 
   const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
+  const [isLoading, setLoading] = useState(false);
+
+  const checkURLWorkingState = async (url: string): Promise<any> => {
+    try {
+      await fetch(url)
+        .then(res => {
+          return res.json();
+        })
+        .then(res => {
+          if (res.version && res.commit) {
+            const targetUrl = url.replace('/info', '');
+
+            axios.defaults.baseURL = targetUrl;
+
+            localStorage.setItem(config.apiEndpoint, targetUrl);
+
+            dispatch(setApiEndpoint(targetUrl));
+
+            setApiEndpointHook(targetUrl);
+
+            setLoading(false);
+
+            isModalVisible(false);
+          } else {
+            notification.error({
+              message: 'Could not receive data from the specified api endpoint',
+              duration: 0,
+            });
+
+            setLoading(false);
+          }
+        });
+    } catch (err) {
+      if (err) {
+        setLoading(false);
+
+        return notification.error({
+          message: 'Could not receive data from the specified api endpoint',
+          duration: 0,
+        });
+      }
+    }
+  };
 
   const handleOpenUrl = (event: React.FormEvent) => {
     event.preventDefault();
 
-    axios.defaults.baseURL = apiEndpoint;
+    setLoading(true);
 
-    localStorage.setItem(config.apiEndpoint, apiEndpoint);
+    const endsWithV1 = apiEndpoint.endsWith('/v1');
 
-    isModalVisible(false);
+    if (hasProtocol(apiEndpoint)) {
+      if (endsWithV1) {
+        checkURLWorkingState(`${apiEndpoint}/info`);
+      } else {
+        checkURLWorkingState(`${apiEndpoint}/v1/info`);
+      }
+    } else {
+      const targetProtocol = `${window.location.protocol}//`;
 
-    dispatch(setApiEndpoint(apiEndpoint));
+      if (endsWithV1) {
+        checkURLWorkingState(`${targetProtocol}${apiEndpoint}/info`);
+      } else {
+        checkURLWorkingState(`${targetProtocol}${apiEndpoint}/v1/info`);
+      }
+    }
   };
 
   useEffect(() => {
-    dispatch(setApiEndpoint(defaultApiEndpoint));
+    if (defaultApiEndpoint) {
+      dispatch(setApiEndpoint(defaultApiEndpoint));
 
-    localStorage.setItem('apiEndpoint', defaultApiEndpoint);
+      localStorage.setItem('apiEndpoint', defaultApiEndpoint);
+    }
   }, []);
 
   useEffect(() => {
     if (apiEndpointRedux) {
       setApiEndpointHook(apiEndpointRedux);
     }
-  }, [apiEndpointRedux]);
+  }, [apiEndpointRedux, visible]);
+
+  useEffect(() => {
+    if (!apiEndpoint) {
+      isModalVisible(true);
+    }
+  }, []);
 
   return (
     <Modal
@@ -86,10 +152,10 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
               onChange={event => {
                 setApiEndpointHook(event.target.value);
               }}
-              defaultValue={apiEndpoint}
+              value={apiEndpoint}
               width="300px"
             />
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" disabled={isLoading} loading={isLoading}>
               Get results
             </Button>
           </StyledFormContainer>
