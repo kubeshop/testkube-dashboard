@@ -19,14 +19,14 @@ import env from '../../../env';
 import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
 
 type EndpointModalProps = {
-  isModalVisible: (isVisible: boolean) => void;
+  setModalState: (isVisible: boolean) => void;
   visible: boolean;
 };
 
 axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl;
 
 const EndpointModal: React.FC<EndpointModalProps> = props => {
-  const {isModalVisible, visible} = props;
+  const {setModalState, visible} = props;
 
   const apiEndpointRedux = useAppSelector(selectApiEndpoint);
 
@@ -57,7 +57,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
             setLoading(false);
 
-            isModalVisible(false);
+            setModalState(false);
           } else {
             notification.error({
               message: 'Could not receive data from the specified api endpoint',
@@ -69,6 +69,8 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
         });
     } catch (err) {
       if (err) {
+        setModalState(true);
+
         setLoading(false);
 
         return notification.error({
@@ -79,11 +81,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
     }
   };
 
-  const handleOpenUrl = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    setLoading(true);
-
+  const checkAPIEndpoint = () => {
     const endsWithV1 = apiEndpoint.endsWith('/v1');
 
     if (hasProtocol(apiEndpoint)) {
@@ -103,6 +101,14 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
     }
   };
 
+  const handleOpenUrl = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    setLoading(true);
+
+    checkAPIEndpoint();
+  };
+
   useEffect(() => {
     if (defaultApiEndpoint) {
       dispatch(setApiEndpoint(defaultApiEndpoint));
@@ -119,7 +125,9 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
   useEffect(() => {
     if (!apiEndpoint) {
-      isModalVisible(true);
+      setModalState(true);
+    } else {
+      checkAPIEndpoint();
     }
   }, []);
 
@@ -128,7 +136,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
       title="Testkube API endpoint"
       isModalVisible={visible}
       footer={null}
-      setIsModalVisible={isModalVisible}
+      setIsModalVisible={setModalState}
       content={
         <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
           <Text>
