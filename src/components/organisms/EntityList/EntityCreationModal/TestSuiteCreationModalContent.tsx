@@ -19,6 +19,23 @@ import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 const {TextArea} = Input;
 const {Option} = Select;
 
+type AddTestSuitePayload = {
+  data?: {
+    metadata: {
+      name: string;
+    };
+    spec: {
+      content: any;
+      type: any;
+    };
+    status: {
+      // eslint-disable-next-line camelcase
+      last_execution: any;
+    };
+  };
+  error?: any;
+};
+
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
   const {navigate, dispatch} = useContext(MainContext);
@@ -38,16 +55,14 @@ const TestSuiteCreationModalContent: React.FC = () => {
         };
       }, {}),
     })
-      .then((res: any) => {
+      .then((res: AddTestSuitePayload) => {
         displayDefaultNotificationFlow(res, () => {
-          const {name, type} = res?.data?.metadata?.name;
-
           trackEvent('create-test-suites', {
-            type,
+            type: res?.data?.spec?.type,
           });
 
           dispatch(openSettingsTabConfig());
-          navigate(`test-suites/executions/${name}`);
+          navigate(`test-suites/executions/${res?.data?.metadata?.name}`);
         });
       })
       .catch(err => displayDefaultErrorNotification(err));
