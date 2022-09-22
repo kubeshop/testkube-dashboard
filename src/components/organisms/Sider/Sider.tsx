@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {NavLink} from 'react-router-dom';
 
 import {Space, Tooltip} from 'antd';
@@ -6,8 +6,6 @@ import {Space, Tooltip} from 'antd';
 import {Icon} from '@atoms';
 
 import {EndpointModal} from '@molecules';
-
-import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {openDiscord, openDocumentation, openGithub} from '@utils/externalLinks';
 
@@ -60,19 +58,11 @@ const routes = [
 ];
 
 const Sider: React.FC = () => {
-  const [isModalVisible, toggleModal] = useState(false);
-
-  const searchParams = useURLSearchParams();
+  const [isModalVisible, setModalState] = useState(false);
 
   const onToggleModal = () => {
-    toggleModal(prev => !prev);
+    setModalState(prev => !prev);
   };
-
-  useEffect(() => {
-    if (!searchParams.apiEndpoint && !localStorage.getItem('apiEndpoint')) {
-      toggleModal(true);
-    }
-  }, []);
 
   const otherMenuItems = [
     {
@@ -119,7 +109,7 @@ const Sider: React.FC = () => {
 
   return (
     <StyledSider width={100} data-cy="navigation-sider">
-      <EndpointModal visible={isModalVisible} isModalVisible={onToggleModal} />
+      <EndpointModal visible={isModalVisible} setModalState={setModalState} />
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <Space size={30} direction="vertical">
