@@ -19,6 +19,23 @@ import {AnalyticsContext, MainContext} from '@contexts';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
+type AddTestPayload = {
+  data?: {
+    metadata: {
+      name: string;
+    };
+    spec: {
+      content: any;
+      type: any;
+    };
+    status: {
+      // eslint-disable-next-line camelcase
+      last_execution: any;
+    };
+  };
+  error?: any;
+};
+
 const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
 
@@ -42,16 +59,14 @@ const TestCreationModalContent: React.FC = () => {
     };
 
     return addTest(requestBody)
-      .then((res: any) => {
+      .then((res: AddTestPayload) => {
         displayDefaultNotificationFlow(res, () => {
-          const {name, type} = res?.data?.metadata?.name;
-
           trackEvent('create-tests', {
-            type,
+            type: res?.data?.spec?.type,
           });
 
           if (!toRun) {
-            dispatch(setRedirectTarget({targetTestId: name}));
+            dispatch(setRedirectTarget({targetTestId: res?.data?.metadata?.name}));
 
             return navigate(`/tests/executions/${values.name}`);
           }

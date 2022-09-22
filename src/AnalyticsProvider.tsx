@@ -16,13 +16,14 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
 
   const analytics = useMemo(() => AnalyticsBrowser.load({writeKey: privateKey}), [privateKey]);
 
+  const hostname = window.location.hostname;
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') {
       FingerprintJS.load()
         .then((fp: any) => fp.get())
         .then((result: any) => {
           analytics.identify(result.visitorId, {
-            hostname: window.location.hostname,
+            hostname,
           });
         })
         // eslint-disable-next-line no-console
@@ -32,7 +33,7 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
 
   const trackEvent = (type: string, data: any) => {
     if (process.env.NODE_ENV !== 'development') {
-      analytics.track(type, data);
+      analytics.track(type, {...data, hostname});
     }
   };
 
