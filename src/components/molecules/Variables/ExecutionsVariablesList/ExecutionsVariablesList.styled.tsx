@@ -21,8 +21,12 @@ export const VariablesListItem = styled.ul`
 
 export const VariableTypeWrapper = styled.div`
   flex: 1;
+
+  padding-right: 5px;
 `;
 
 export const VariableDetailWrapper = styled.div`
+  overflow: hidden;
+
   flex: 2;
 `;
