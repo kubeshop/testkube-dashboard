@@ -50,7 +50,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
         <StyledAntTabPane tab="CLI Commands" key="CLICommands">
           <CLICommands isExecutions type={testType} name={name} modifyMap={{status}} />
         </StyledAntTabPane>
-        {decomposedVars ? (
+        {decomposedVars.length ? (
           <StyledAntTabPane tab="Variables" key="Variables">
             <ExecutionsVariablesList variables={decomposedVars} />
           </StyledAntTabPane>

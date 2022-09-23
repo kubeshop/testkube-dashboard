@@ -40,6 +40,11 @@ const LogOutput: React.FC<LogOutputProps> = props => {
         setLogs(prev => {
           if (prev) {
             const dataToJSON = JSON.parse(e.data);
+
+            if (dataToJSON?.result?.output) {
+              return dataToJSON.result.output;
+            }
+
             const finalString = `${prev}\n${dataToJSON.content}`;
 
             return finalString;
