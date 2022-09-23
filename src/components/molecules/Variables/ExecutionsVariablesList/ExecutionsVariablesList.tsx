@@ -2,15 +2,18 @@ import {memo, useEffect, useState} from 'react';
 
 import {Popover} from 'antd';
 
-import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
-
 import {Variable} from '@models/variable';
 
 import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
-import {VariablesListContainer} from './ExecutionsVariablesList.styled';
+import {
+  VariableDetailWrapper,
+  VariableTypeWrapper,
+  VariablesList,
+  VariablesListItem,
+} from './ExecutionsVariablesList.styled';
 
 type ExecutionsVariablesListProps = {
   variables: Variable[];
@@ -21,65 +24,54 @@ const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props =>
 
   const [secretValuesVisibility, setSecretValuesVisibility] = useState(Array(variables.length).fill(false));
 
-  const textColor = Colors.slate400;
+  const textColor = Colors.whitePure;
 
   useEffect(() => {
     setSecretValuesVisibility(Array(variables.length).fill(false));
   }, [variables]);
 
   return (
-    <VariablesListContainer>
-      <Text>Key</Text>
-      <Text>Value</Text>
+    <VariablesList>
       {variables.map((item, index) => {
         return (
-          <>
-            <Popover content={item.key} placement="topLeft">
-              <Text ellipsis color={textColor}>
-                {item.key}
+          <VariablesListItem>
+            <VariableTypeWrapper>
+              <Text className="uppercase" color={Colors.slate500}>
+                {!item.type ? 'Basic' : item.type === 'secretRef' ? 'Secret ref' : 'Secret'}
               </Text>
+            </VariableTypeWrapper>
+            <Popover content={item.key} placement="topLeft">
+              <VariableDetailWrapper>
+                <Text ellipsis color={textColor}>
+                  {item.key}
+                </Text>
+              </VariableDetailWrapper>
             </Popover>
             {item.type === 0 ? (
-              <Popover content={item.value} placement="topLeft">
-                <Text ellipsis color={textColor}>
-                  {item.value}
-                </Text>
-              </Popover>
+              <VariableDetailWrapper>
+                <Popover content={item.value} placement="topLeft">
+                  <Text ellipsis color={textColor}>
+                    {item.value}
+                  </Text>
+                </Popover>
+              </VariableDetailWrapper>
             ) : secretValuesVisibility[index] ? (
-              <div>
+              <VariableDetailWrapper>
                 <Popover content={item.value} placement="topLeft" popupVisible={secretValuesVisibility[index]}>
                   <Text ellipsis color={textColor}>
                     {item.value}
                   </Text>
                 </Popover>
-                <EyeInvisibleOutlined
-                  onClick={() =>
-                    setSecretValuesVisibility([
-                      ...secretValuesVisibility.slice(0, index),
-                      false,
-                      ...secretValuesVisibility.slice(index + 1),
-                    ])
-                  }
-                />
-              </div>
+              </VariableDetailWrapper>
             ) : (
-              <div>
-                <Text color={textColor}>&bull;&bull;&bull;&bull;&bull;</Text>
-                <EyeOutlined
-                  onClick={() =>
-                    setSecretValuesVisibility([
-                      ...secretValuesVisibility.slice(0, index),
-                      true,
-                      ...secretValuesVisibility.slice(index + 1),
-                    ])
-                  }
-                />
-              </div>
+              <VariableDetailWrapper>
+                <Text color={textColor}>*********</Text>
+              </VariableDetailWrapper>
             )}
-          </>
+          </VariablesListItem>
         );
       })}
-    </VariablesListContainer>
+    </VariablesList>
   );
 };
 

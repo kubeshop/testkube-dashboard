@@ -84,7 +84,7 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                             <Input placeholder="Referenced secret name" />
                           </Form.Item>
                           <SymbolWrapper>
-                            <RightOutlined style={{fontSize: 12}} />
+                            <RightOutlined style={{fontSize: 12, color: Colors.slate500}} />
                           </SymbolWrapper>
                           <Form.Item
                             {...restField}

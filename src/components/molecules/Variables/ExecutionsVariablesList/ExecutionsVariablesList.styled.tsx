@@ -1,7 +1,28 @@
 import styled from 'styled-components';
 
-export const VariablesListContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 5px;
+import Colors from '@styles/Colors';
+
+export const VariablesList = styled.ul`
+  display: flex;
+  flex-direction: column;
+
+  padding: 0;
+  margin: 0;
+
+  list-style-type: none;
+`;
+
+export const VariablesListItem = styled.ul`
+  display: flex;
+
+  padding: 10px 0;
+  border-bottom: 2px solid ${Colors.slate700};
+`;
+
+export const VariableTypeWrapper = styled.div`
+  flex: 1;
+`;
+
+export const VariableDetailWrapper = styled.div`
+  flex: 2;
 `;
