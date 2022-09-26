@@ -53,7 +53,7 @@ const App: React.FC = () => {
 
   const onAcceptCookies = () => {
     // @ts-ignore
-    window[`ga-disable-${env.ga}`] = false;
+    window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = false;
     localStorage.setItem('isGADisabled', '0');
     setCookiesVisibility(false);
   };
@@ -64,7 +64,7 @@ const App: React.FC = () => {
     }
 
     // @ts-ignore
-    window[`ga-disable-${env.ga}`] = true;
+    window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = true;
     localStorage.setItem('isGADisabled', '1');
     setCookiesVisibility(false);
   };
