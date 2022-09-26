@@ -12,8 +12,6 @@ import {WSData} from '@models/websocket';
 import {useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
-import {notificationCall} from '@molecules';
-
 import useStateCallback from '@hooks/useStateCallback';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
@@ -57,8 +55,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
             },
             () => {
               refetchMetrics();
-
-              notificationCall('passed', 'Test started');
             }
           );
         }
@@ -82,8 +78,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               },
               () => {
                 refetchMetrics();
-
-                notificationCall(wsData.testExecution.executionResult.status, 'Test finished');
               }
             );
           }

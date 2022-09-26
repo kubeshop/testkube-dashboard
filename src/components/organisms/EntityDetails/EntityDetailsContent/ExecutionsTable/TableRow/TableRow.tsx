@@ -4,6 +4,8 @@ import {StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
+import useIsRunning from '@hooks/useIsRunning';
+
 import {constructExecutedString, formatDuration} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
@@ -13,6 +15,8 @@ import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.style
 const TableRow: React.FC<{data: any}> = props => {
   const {data} = props;
   const {status, number, startTime, name, id, durationMs} = data;
+
+  const isRunning = useIsRunning(status);
 
   const getIntervalExecTime = () => {
     try {
@@ -35,7 +39,7 @@ const TableRow: React.FC<{data: any}> = props => {
           </ItemColumn>
           <ItemColumn>
             <Text className="regular small" color={Colors.slate200}>
-              {durationMs ? formatDuration(durationMs / 1000) : 'No data'}
+              {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </Text>
           </ItemColumn>
         </ItemRow>

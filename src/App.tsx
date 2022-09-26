@@ -88,6 +88,7 @@ const App: React.FC = () => {
     dispatch,
     location,
     navigate,
+    apiEndpoint,
   };
 
   return (
