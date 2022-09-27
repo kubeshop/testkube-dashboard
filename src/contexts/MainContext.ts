@@ -10,6 +10,7 @@ type MainContextProps = {
   navigate: ReturnType<typeof useNavigate>;
   ga4React: ReturnType<typeof useGA4React>;
   location: ReturnType<typeof useLocation>;
+  apiEndpoint: string | null;
 };
 
 // @ts-ignore
