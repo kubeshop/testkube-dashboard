@@ -7,7 +7,7 @@ import {notification} from 'antd';
 import styled from 'styled-components';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
-import {WSData} from '@models/websocket';
+import {WSData, WSEventType} from '@models/websocket';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
@@ -42,7 +42,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const onWebSocketData = (wsData: WSData) => {
     try {
       if (executionsList) {
-        if (wsData.type === 'start-test' && id === wsData.testExecution.testName) {
+        if (wsData.type === WSEventType.START_TEST && id === wsData.testExecution.testName) {
           const adjustedExecution = {
             ...wsData.testExecution,
             status: wsData.testExecution.executionResult.status,
@@ -59,7 +59,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
           );
         }
 
-        if (wsData.type === 'end-test-success') {
+        if (wsData.type === WSEventType.END_TEST_SUCCESS) {
           const targetIndex = executionsList.results.findIndex((item: any) => {
             return item.id === wsData.testExecution.id;
           });
