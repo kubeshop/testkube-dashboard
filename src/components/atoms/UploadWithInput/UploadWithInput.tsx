@@ -38,6 +38,7 @@ const UploadWithInput: React.FC<UploadWithInputProps & Pick<UploadProps, 'before
         onChange={() => {
           onFileChange(null);
         }}
+        placeholder="Choose a file"
       />
       <Upload maxCount={1} onChange={onFileChange} showUploadList={false} beforeUpload={beforeUpload} />
     </StyledUploadWithInputContainer>
