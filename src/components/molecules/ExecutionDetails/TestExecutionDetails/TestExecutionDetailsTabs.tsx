@@ -1,4 +1,6 @@
-import {useContext} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
+
+import debounce from 'lodash.debounce';
 
 import {Execution} from '@models/execution';
 
@@ -18,7 +20,13 @@ import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
+
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  const [_, setOldScroll] = useState(0);
+  const [isAutoScrolled, setAutoScrolledState] = useState(true);
 
   const testData = data as Execution;
 
@@ -36,11 +44,36 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   const whetherToShowArtifactsTab = executorsFeaturesMap[testType]?.includes('artifacts');
 
+  useEffect(() => {
+    if (ref && ref.current) {
+      ref.current.onscroll = debounce(() => {
+        setOldScroll(prev => {
+          if (ref && ref.current) {
+            if (prev >= ref.current?.scrollTop) {
+              setAutoScrolledState(false);
+            } else {
+              setAutoScrolledState(true);
+            }
+
+            return ref.current?.scrollTop;
+          }
+
+          return prev;
+        });
+      }, 50);
+    }
+  }, []);
+
+  useEffect(() => {
+    setAutoScrolledState(true);
+    setOldScroll(0);
+  }, [name]);
+
   return (
-    <StyledTestExecutionDetailsTabsContainer>
+    <StyledTestExecutionDetailsTabsContainer ref={ref}>
       <StyledAntTabs>
         <StyledAntTabPane tab="Log Output" key="LogOutputPane">
-          <LogOutput logOutput={output} executionId={id} isRunning={isRunning} />
+          <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />
         </StyledAntTabPane>
         {whetherToShowArtifactsTab ? (
           <StyledAntTabPane tab="Artifacts" key="ArtifactsPane">

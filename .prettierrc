@@ -5,6 +5,7 @@
     "^antd?.+$",
     "^@ant-design?.+$",
     "^@reduxjs?.+$",
+    "^@n8tb1t",
     "^@rjsf?.+$",
     "^(?![@\\.]).+$",
     "^@constants",

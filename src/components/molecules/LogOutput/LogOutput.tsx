@@ -1,4 +1,6 @@
-import {useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useRef, useState} from 'react';
+
+import {Checkbox} from 'antd';
 
 import {LogAction} from '@models/log';
 
@@ -21,25 +23,45 @@ export type LogOutputProps = {
   isFullScreen?: boolean;
   isRunning?: boolean;
   title?: string;
+  isAutoScrolled?: boolean;
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = 'No logs', executionId, actions = ['copy'], isRunning, title} = props;
+  const {logOutput = 'No logs', executionId, actions = ['copy'], isRunning, title, isAutoScrolled} = props;
+
+  const ref = useRef<HTMLDivElement>(null);
 
   const {dispatch} = useContext(MainContext);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [logs, setLogs] = useState('');
+  const [shouldBeScrolled, setScrolledState] = useState(true);
+
+  const scrollToBottom = useCallback(() => {
+    if (!isAutoScrolled) {
+      return;
+    }
+
+    setScrolledState(prev => {
+      if (prev && ref.current) {
+        ref.current.scrollIntoView({behavior: 'smooth', block: 'end'});
+      }
+
+      return prev;
+    });
+  }, [isAutoScrolled]);
 
   useEffect(() => {
     if (isRunning) {
       const eventSource = new EventSource(`${localStorage.getItem('apiEndpoint')}/executions/${executionId}/logs`);
 
       eventSource.addEventListener('message', e => {
+        const logData = e.data;
+
         setLogs(prev => {
           if (prev) {
-            const dataToJSON = JSON.parse(e.data);
+            const dataToJSON = JSON.parse(logData);
 
             if (dataToJSON?.result?.output) {
               return dataToJSON.result.output;
@@ -50,7 +72,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
             return finalString;
           }
 
-          return e.data;
+          return `${logData}\n`;
         });
       });
 
@@ -74,11 +96,27 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     }
   }, [logs, isFullScreenLogOutput]);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [logs]);
+
   return (
-    <StyledLogOutputContainer>
-      <LogOutputHeader logOutput={logs} actions={actions} title={title} />
-      <StyledLogTextContainer>{logs ? <StyledPreLogText>{logs}</StyledPreLogText> : null}</StyledLogTextContainer>
-    </StyledLogOutputContainer>
+    <>
+      <Checkbox
+        onChange={() => {
+          setScrolledState(prev => !prev);
+        }}
+        style={{position: 'absolute'}}
+        checked={isAutoScrolled}
+      >
+        Autoscroll
+      </Checkbox>
+
+      <StyledLogOutputContainer ref={ref}>
+        <LogOutputHeader logOutput={logs} actions={actions} title={title} />
+        <StyledLogTextContainer>{logs ? <StyledPreLogText>{logs}</StyledPreLogText> : null}</StyledLogTextContainer>
+      </StyledLogOutputContainer>
+    </>
   );
 };
 
