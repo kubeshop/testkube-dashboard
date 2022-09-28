@@ -3,10 +3,8 @@ import {useContext, useState} from 'react';
 import {Entity} from '@models/entity';
 import {Option} from '@models/form';
 
-import {CreatableMultiSelect} from '@atoms';
-import {LabelsMultiValueLabel, LabelsOption} from '@atoms/CreatableMultiSelect/CustomComponents';
-
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
+import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
@@ -42,44 +40,13 @@ const Labels: React.FC = () => {
     return null;
   }
   const entityLabels = entityDetails?.labels || {};
-  const defaultLabels = Object.entries(entityLabels).map(([key, value]) => {
-    const labelString = `${key}${value ? `:${value}` : ''}`;
-    return {
-      label: labelString,
-      value: labelString,
-    };
-  });
-  const options = Object.entries(data || {})
-    .map(([key, value]) => {
-      return value.map((item: any) => {
-        const labelString = `${key}${item ? `:${item}` : ''}`;
-        return {
-          label: labelString,
-          value: labelString,
-        };
-      });
-    })
-    .flat();
 
   const onSave = () => {
     updateRequestsMap[entity]({
       id: entityDetails.name,
       data: {
         ...entityDetails,
-        labels: localLabels.reduce((previousValue: any, currentValue: Option) => {
-          const labelString = currentValue.value;
-          if (typeof labelString === 'string' && labelString.includes(':')) {
-            const [key, ...rest] = labelString.split(':');
-            return {
-              ...previousValue,
-              [key.trim()]: rest.join(':').trim(),
-            };
-          }
-          return {
-            ...previousValue,
-            [labelString]: '',
-          };
-        }, {}),
+        labels: decomposeLabels(localLabels),
       },
     })
       .then((res: any) => {
@@ -100,23 +67,13 @@ const Labels: React.FC = () => {
       isButtonsDisabled={!wasTouched}
       onConfirm={onSave}
     >
-      <CreatableMultiSelect
+      <LabelsSelect
         onChange={(values: any) => {
           setLocalLabels(values);
           setWasTouched(true);
         }}
-        placeholder="Add or create new labels"
-        formatCreateLabel={(inputString: string) => {
-          if (inputString.includes(':')) {
-            return `Create ${inputString}`;
-          }
-          return 'Create: You need to add a : separator to create this label';
-        }}
-        defaultValue={defaultLabels}
-        options={options}
-        CustomOptionComponent={LabelsOption}
-        CustomMultiValueLabelComponent={LabelsMultiValueLabel}
-        validateCreation={inputValue => Boolean(inputValue.match(/(.+:.*)/g))}
+        defaultLabels={entityLabels}
+        options={data}
       />
     </ConfigurationCard>
   );

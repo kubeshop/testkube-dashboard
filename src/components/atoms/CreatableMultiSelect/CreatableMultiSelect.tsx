@@ -8,7 +8,7 @@ import {customStyles, customTheme} from './CreatableMultiSelect.styled';
 import {DefaultMultiValueLabel, DefaultMultiValueRemove, DefaultOptionComponent} from './DefaultComponents';
 
 type MultiSelectProps = {
-  options?: any[];
+  options?: Option[];
   placeholder: string;
   formatCreateLabel: (inputString: string) => string;
   defaultValue?: Option[];
@@ -33,13 +33,15 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
   const ref = useRef(null);
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter' && validateCreation) {
-      // @ts-ignore
-      if (!validateCreation(ref.current.props.inputValue)) {
+    if (event.key === 'Enter') {
+      if (validateCreation) {
+        // @ts-ignore
+        if (!validateCreation(ref.current.props.inputValue)) {
+          event.preventDefault();
+        }
+      } else {
         event.preventDefault();
       }
-    } else {
-      event.preventDefault();
     }
   };
 
