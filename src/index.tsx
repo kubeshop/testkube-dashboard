@@ -29,8 +29,15 @@ import './antd-theme/antd-customized.css';
   const container = document.getElementById('root');
   const root = createRoot(container!);
 
-  const rootRoute = (process.env.ROOT_ROUTE as string) || '';
+  const rootRoute = process.env.REACT_APP_ROOT_ROUTE || '';
 
+  // If the user wants to specify a PathPrefix in Ingress controller we should
+  // set a basename to BrowserRouter. But since react-router-dom v6 they stopped
+  // mounting the router if the url does not contain this basename saying
+  // "<Router basename="/basename"> is not able to match the URL e.g. "/" because it does not start with
+  // the basename, so the <Router> won't render anything." So if we want to visit a website without knowing
+  // that we should add some basename we will not be able to see anything.
+  // Big thread here https://github.com/remix-run/react-router/issues/8427
   if (window.location.pathname !== rootRoute && !window.location.pathname.startsWith(rootRoute)) {
     window.history.pushState({}, '', rootRoute);
   }
