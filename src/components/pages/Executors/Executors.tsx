@@ -21,7 +21,7 @@ const Executors: React.FC = () => {
       const isExecutor = type !== 'custom';
 
       return (
-        <a href={docLink} target="_blank">
+        <a href={docLink} target="_blank" key={docLink}>
           <ExecutorsGridItem className={isExecutor ? 'executor' : 'custom-executor'} direction="vertical" size={20}>
             <Title level={3} color={Colors.slate400} className="dashboard-title regular">
               {isExecutor ? <TestRunnerIcon icon={type} /> : <ExecutorsIcon />}

@@ -31,24 +31,16 @@ import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
 
 const filterOptions: OptionType[] = [
-  {value: 7, label: 'Last 7 days'},
-  {value: 30, label: 'Last 30 days'},
-  {value: 90, label: 'Last 90 days'},
-  {value: 365, label: 'This year'},
-  {value: 0, label: 'All days'},
+  {value: 7, label: 'Last 7 days', key: 'last7Days'},
+  {value: 30, label: 'Last 30 days', key: 'last30Days'},
+  {value: 90, label: 'Last 90 days', key: 'last90Days'},
+  {value: 365, label: 'This year', key: 'thisYear'},
+  {value: 0, label: 'All days', key: 'allDays'},
 ];
 
 const EntityDetailsContent: React.FC = () => {
-  const {
-    entity,
-    entityDetails,
-    onRowSelect,
-    defaultStackRoute,
-    metrics,
-    daysFilterValue,
-    setDaysFilterValue,
-    isRowSelected,
-  } = useContext(EntityDetailsContext);
+  const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, isRowSelected} =
+    useContext(EntityDetailsContext);
   const {trackEvent} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
 
@@ -95,10 +87,6 @@ const EntityDetailsContent: React.FC = () => {
         trackEvent(`run-${entity}`, {
           type,
         });
-
-        setTimeout(() => {
-          onRowSelect(result?.data, true);
-        }, 1500);
       })
       .catch((err: any) => displayDefaultErrorNotification(err));
   };
@@ -127,9 +115,10 @@ const EntityDetailsContent: React.FC = () => {
               style={{width: 250}}
               value={daysFilterValue}
               onChange={setDaysFilterValue}
+              key="days-filter-select"
             />
           ) : null,
-          <Button key="1" type="primary" onClick={onRunButtonClick} disabled={isPageDisabled}>
+          <Button key="run-now-button" type="primary" onClick={onRunButtonClick} disabled={isPageDisabled}>
             Run now
           </Button>,
         ]}
