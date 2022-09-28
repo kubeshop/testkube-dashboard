@@ -8,6 +8,9 @@ const TestExecutionsConfig: EntityDetailsBlueprint = {
   useGetEntityDetails: useGetTestQuery,
   useGetMetrics: useGetTestExecutionMetricsQuery,
   defaultStackRoute: '/tests',
+  getExecutionsEndpoint: (id: string) => {
+    return `/tests/${id}/executions`;
+  },
 };
 
 export default TestExecutionsConfig;

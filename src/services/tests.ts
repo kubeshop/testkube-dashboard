@@ -24,6 +24,7 @@ export const testsApi = createApi({
           last,
           pageSize,
         });
+
         return `/tests/${id}/executions?${queryParams.toString()}`;
       },
     }),

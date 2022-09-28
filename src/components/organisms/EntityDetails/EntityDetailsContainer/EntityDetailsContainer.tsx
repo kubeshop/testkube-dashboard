@@ -4,6 +4,7 @@ import useWebSocket from 'react-use-websocket';
 
 import {notification} from 'antd';
 
+import axios from 'axios';
 import styled from 'styled-components';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
@@ -16,15 +17,17 @@ import useStateCallback from '@hooks/useStateCallback';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
 
+// import {testsApi} from '@src/services/tests';
 import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {entity, useGetExecutions, useGetEntityDetails, useGetMetrics, defaultStackRoute} = props;
+  const {entity, useGetExecutions, useGetEntityDetails, useGetMetrics, defaultStackRoute, getExecutionsEndpoint} =
+    props;
 
   const apiEndpoint = useAppSelector(selectApiEndpoint);
 
-  const {navigate, location} = useContext(MainContext);
+  const {navigate, location, dispatch} = useContext(MainContext);
   const {pathname} = location;
 
   const params = useParams();
@@ -35,9 +38,34 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [currentPage, setCurrentPage] = useState(1);
   const [executionsList, setExecutionsList] = useStateCallback<any>(null);
 
-  const {data: executions} = useGetExecutions({id, last: daysFilterValue});
+  // const {data: executions, refetch} = useGetExecutions({id, last: daysFilterValue});
   const {data: entityDetails} = useGetEntityDetails(id);
   const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue});
+
+  // Temporary solution until WS implementation
+  // works stable on both FE and BE
+  const getExecutions = async () => {
+    if (id) {
+      try {
+        const queryParams = new URLSearchParams({
+          id,
+          last: String(daysFilterValue),
+          pageSize: String(Number.MAX_SAFE_INTEGER),
+        });
+
+        const endpoint =
+          typeof getExecutionsEndpoint === 'function' ? getExecutionsEndpoint(id) : getExecutionsEndpoint;
+
+        const {data} = await axios(`${endpoint}?${queryParams.toString()}`, {
+          method: 'GET',
+        });
+
+        setExecutionsList(data);
+      } catch (err) {
+        console.log('err: ', err);
+      }
+    }
+  };
 
   const onWebSocketData = (wsData: WSData) => {
     try {
@@ -88,6 +116,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       console.log('err: ', err);
     }
   };
+
   const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?/, 'ws') : '';
 
   useWebSocket(`${wsRoot}/events/stream`, {
@@ -158,11 +187,25 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     }
   }, [executionsList, pathname]);
 
+  // useEffect(() => {
+  //   if (executions) {
+  //     setExecutionsList(executions);
+  //   }
+  // }, [executions]);
+
   useEffect(() => {
-    if (executions) {
-      setExecutionsList(executions);
+    if (entity === 'test-suites') {
+      const interval = setInterval(() => {
+        getExecutions();
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
     }
-  }, [executions]);
+
+    getExecutions();
+  }, [entity]);
 
   const entityDetailsContextValues = {
     executionsList,
