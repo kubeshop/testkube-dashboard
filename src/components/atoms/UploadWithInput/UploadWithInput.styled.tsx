@@ -17,6 +17,7 @@ export const StyledUploadWithInputContainer = styled.div`
   }
 
   .ant-input-affix-wrapper.disabled-input {
+    height: 40px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 
@@ -28,7 +29,6 @@ export const StyledUploadWithInputContainer = styled.div`
 
     .ant-input {
       color: ${Colors.grey450};
-      background-color: ${Colors.grey1000};
 
       cursor: default;
     }
@@ -41,6 +41,10 @@ export const StyledUploadWithInputContainer = styled.div`
 
     &.not-empty {
       .ant-input-clear-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
         color: ${Colors.grey7};
 
         cursor: pointer;

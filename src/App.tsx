@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useEffect, useState} from 'react';
 import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 
@@ -25,8 +24,8 @@ import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
 import {CookiesBanner} from './components/molecules';
+
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
-import env from './env';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
