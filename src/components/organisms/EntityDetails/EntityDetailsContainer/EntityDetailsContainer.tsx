@@ -17,7 +17,6 @@ import useStateCallback from '@hooks/useStateCallback';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
 
-// import {testsApi} from '@src/services/tests';
 import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
@@ -187,16 +186,11 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     }
   }, [executionsList, pathname]);
 
-  // useEffect(() => {
-  //   if (executions) {
-  //     setExecutionsList(executions);
-  //   }
-  // }, [executions]);
-
   useEffect(() => {
     if (entity === 'test-suites') {
       const interval = setInterval(() => {
         getExecutions();
+        refetchMetrics();
       }, 1000);
 
       return () => {
@@ -205,6 +199,14 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     }
 
     getExecutions();
+
+    const interval = setInterval(() => {
+      refetchMetrics();
+    }, 10000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [entity]);
 
   const entityDetailsContextValues = {
