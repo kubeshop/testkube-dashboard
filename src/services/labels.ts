@@ -8,9 +8,6 @@ export const labelsApi = createApi({
   endpoints: builder => ({
     getLabels: builder.query<any[], null>({
       query: () => `/labels`,
-      transformResponse: (response: any) => {
-        return response.app;
-      },
     }),
   }),
 });

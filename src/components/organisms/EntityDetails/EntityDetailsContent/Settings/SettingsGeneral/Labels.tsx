@@ -1,12 +1,14 @@
-import {useContext} from 'react';
-
-import {Form, Select} from 'antd';
+import {useContext, useState} from 'react';
 
 import {Entity} from '@models/entity';
+import {Option} from '@models/form';
+
+import {CreatableMultiSelect} from '@atoms';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {PollingIntervals} from '@utils/numbers';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {useGetLabelsQuery} from '@services/labels';
@@ -15,8 +17,6 @@ import {useUpdateTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
 
-const {Option} = Select;
-
 const namingMap: {[key in Entity]: string} = {
   'test-suites': 'test suite',
   tests: 'test',
@@ -24,37 +24,55 @@ const namingMap: {[key in Entity]: string} = {
 
 const Labels: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
-  const [form] = Form.useForm();
 
   const [updateTest] = useUpdateTestMutation();
   const [updateTestSuite] = useUpdateTestSuiteMutation();
-
-  const {data} = useGetLabelsQuery(null);
   const updateRequestsMap: {[key in Entity]: any} = {
     'test-suites': updateTestSuite,
     tests: updateTest,
   };
 
+  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
+  const [wasTouched, setWasTouched] = useState(false);
+
+  const {data} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.default});
+
   if (!entity || !entityDetails) {
     return null;
   }
   const entityLabels = entityDetails?.labels || {};
+  const defaultLabels = Object.entries(entityLabels).map(([key, value]) => {
+    const labelString = `${key}:${value}`;
+    return {
+      label: labelString,
+      value: labelString,
+    };
+  });
+  const options = Object.entries(data || {})
+    .map(([key, value]) => {
+      return value.map((item: any) => ({value: `${key}:${item}`, label: `${key}:${item}`}));
+    })
+    .flat();
 
-  const labels = Object.entries(entityLabels).map(([key, value]) => `${key}:${value}`);
-  // const labels = entityLabels.map((value: any) => (typeof value === 'string' ? value : JSON.stringify(value)));
-
-  const onSave = (values: any) => {
+  const onSave = () => {
     updateRequestsMap[entity]({
       id: entityDetails.name,
       data: {
         ...entityDetails,
-        labels: values.labels.reduce((previousValue: any, currentValue: string) => {
-          const keyValuePair = currentValue.split('_');
+        labels: localLabels.reduce((previousValue: any, currentValue: Option) => {
+          const labelString = currentValue.value;
+          if (typeof labelString === 'string' && labelString.includes(':')) {
+            const [key, ...rest] = labelString.split(':');
+            return {
+              ...previousValue,
+              [key]: rest.join(':'),
+            };
+          }
           return {
             ...previousValue,
-            [keyValuePair[0]]: keyValuePair[1],
+            [labelString]: '',
           };
-        }),
+        }, {}),
       },
     })
       .then((res: any) => {
@@ -71,25 +89,27 @@ const Labels: React.FC = () => {
     <ConfigurationCard
       title="Labels"
       description={`Define the labels you want to add for this ${namingMap[entity]}`}
-      isButtonsDisabled={
-        !form.isFieldsTouched() || form.getFieldsError().filter(({errors}) => errors.length).length > 0
-      }
+      isButtonsDisabled={!wasTouched}
+      onConfirm={onSave}
     >
-      <Form form={form} onFinish={onSave} name="general-settings-name-description" initialValues={{labels}}>
-        <Form.Item name="labels">
-          <Select placeholder="Labels" mode="multiple" allowClear showArrow disabled>
-            {data?.map((value: string, index: number) => {
-              const key = `add-test-label_${index}`;
-
-              return (
-                <Option key={key} value={`${index}_${value}`}>
-                  {value}
-                </Option>
-              );
-            })}
-          </Select>
-        </Form.Item>
-      </Form>
+      <CreatableMultiSelect
+        onChange={(values: any) => {
+          setLocalLabels(values);
+          setWasTouched(true);
+        }}
+        placeholder="Add or create new labels"
+        formatCreateLabel={(inputString: string) => {
+          if (inputString.includes(':')) {
+            if (inputString.slice(-1) === ':') {
+              return 'Create: You need to add something after a : separator';
+            }
+            return `Create ${inputString}`;
+          }
+          return 'Create: You need to add a : separator to create this label';
+        }}
+        defaultValue={defaultLabels}
+        options={options}
+      />
     </ConfigurationCard>
   );
 };

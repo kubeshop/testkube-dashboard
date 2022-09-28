@@ -10,3 +10,4 @@ export {default as UploadWithInput} from './UploadWithInput';
 export {default as StatusIcon} from './StatusIcon';
 export {default as ProtectedRoute} from './ProtectedRoute';
 export {default as Pre} from './Pre';
+export {default as CreatableMultiSelect} from './CreatableMultiSelect';
