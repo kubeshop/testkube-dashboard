@@ -9,11 +9,15 @@ import Colors from '@styles/Colors';
 import {StyledOption} from '../CreatableMultiSelect.styled';
 import {SplittedLabel} from '../utils';
 
-const CustomOption = (props: OptionProps<Option>) => {
-  const {children, data, innerRef, innerProps} = props;
+const LabelsOption = (props: OptionProps<Option>) => {
+  // @ts-ignore
+  const {children, innerRef, innerProps, options, value} = props;
 
   const isChildren = typeof children === 'string';
-  const allowClick = isChildren ? (children.includes(' ') ? `Create ${data.value}` === data.label : true) : true;
+  const allowClick =
+    isChildren && options[0].label === children && children !== value
+      ? Boolean(children.match(/(Create (.+:.*))/g))
+      : true;
 
   const modifyChildren = () => {
     if (!isChildren) {
@@ -54,4 +58,4 @@ const CustomOption = (props: OptionProps<Option>) => {
   );
 };
 
-export default CustomOption;
+export default LabelsOption;

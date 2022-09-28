@@ -1,11 +1,11 @@
-import {KeyboardEvent} from 'react';
+import React, {KeyboardEvent, useRef} from 'react';
+import {MultiValueGenericProps, OptionProps} from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
 import {Option} from '@models/form';
 
-import Colors from '@styles/Colors';
-
-import {CustomOption, MultiValueLabel, MultiValueRemove} from './CustomComponents';
+import {customStyles, customTheme} from './CreatableMultiSelect.styled';
+import {DefaultMultiValueLabel, DefaultMultiValueRemove, DefaultOptionComponent} from './DefaultComponents';
 
 type MultiSelectProps = {
   options?: any[];
@@ -13,58 +13,39 @@ type MultiSelectProps = {
   formatCreateLabel: (inputString: string) => string;
   defaultValue?: Option[];
   onChange: (value: readonly Option[]) => void;
+  validateCreation?: (inputValue: string) => boolean;
+  CustomOptionComponent?: (props: OptionProps<Option>) => JSX.Element;
+  CustomMultiValueLabelComponent?: (props: MultiValueGenericProps<Option>) => JSX.Element;
 };
 
 const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
-  const {options, placeholder, formatCreateLabel, defaultValue, onChange} = props;
+  const {
+    options,
+    placeholder,
+    formatCreateLabel,
+    defaultValue,
+    onChange,
+    validateCreation,
+    CustomOptionComponent = DefaultOptionComponent,
+    CustomMultiValueLabelComponent = DefaultMultiValueLabel,
+  } = props;
 
-  const customStyles = {
-    input: (styles: any) => ({...styles, color: Colors.slate200, fontWeight: 400}),
-    valueContainer: (styles: any) => ({...styles, backgroundColor: Colors.slate800}),
-    placeholder: (styles: any) => ({...styles, color: Colors.slate500, fontWeight: 400}),
-    control: (styles: any) => ({
-      ...styles,
-      borderColor: 'transparent',
-      backgroundColor: Colors.slate800,
-      height: '44px',
-    }),
-    indicatorSeparator: (styles: any) => ({...styles, width: 0}),
-    dropdownIndicator: (styles: any) => ({
-      ...styles,
-      color: Colors.slate500,
-      '&:hover': {
-        color: Colors.slate400,
-      },
-    }),
-    menu: (styles: any) => ({...styles, backgroundColor: Colors.slate800}),
-    menuList: (styles: any) => ({...styles, padding: 0}),
-    multiValue: (styles: any) => ({
-      ...styles,
-      background: 'transparent',
-      border: `1px solid ${Colors.slate700}`,
-    }),
-    multiValueRemove: (styles: any) => ({
-      ...styles,
-      '&:hover': {
-        backgroundColor: 'transparent',
-        cursor: 'pointer',
-      },
-    }),
-    noOptionsMessage: (styles: any) => ({
-      ...styles,
-      fontWeight: 400,
-      color: Colors.slate200,
-    }),
-  };
+  const ref = useRef(null);
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && validateCreation) {
+      // @ts-ignore
+      if (!validateCreation(ref.current.props.inputValue)) {
+        event.preventDefault();
+      }
+    } else {
       event.preventDefault();
     }
   };
 
   return (
     <CreatableSelect
+      ref={ref}
       defaultValue={defaultValue}
       isMulti
       isClearable={false}
@@ -74,17 +55,13 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
       createOptionPosition="first"
       onKeyDown={handleKeyDown}
       formatCreateLabel={formatCreateLabel}
-      theme={theme => ({
-        ...theme,
-        borderRadius: 4,
-        colors: {
-          ...theme.colors,
-          primary: Colors.indigo400,
-          neutral30: Colors.slate600,
-        },
-      })}
+      theme={customTheme}
       styles={customStyles}
-      components={{Option: CustomOption, MultiValueLabel, MultiValueRemove}}
+      components={{
+        Option: CustomOptionComponent,
+        MultiValueLabel: CustomMultiValueLabelComponent,
+        MultiValueRemove: DefaultMultiValueRemove,
+      }}
     />
   );
 };

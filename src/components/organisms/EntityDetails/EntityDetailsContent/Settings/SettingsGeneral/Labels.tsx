@@ -4,6 +4,7 @@ import {Entity} from '@models/entity';
 import {Option} from '@models/form';
 
 import {CreatableMultiSelect} from '@atoms';
+import {LabelsMultiValueLabel, LabelsOption} from '@atoms/CreatableMultiSelect/CustomComponents';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -42,7 +43,7 @@ const Labels: React.FC = () => {
   }
   const entityLabels = entityDetails?.labels || {};
   const defaultLabels = Object.entries(entityLabels).map(([key, value]) => {
-    const labelString = `${key}:${value}`;
+    const labelString = `${key}${value ? `:${value}` : ''}`;
     return {
       label: labelString,
       value: labelString,
@@ -50,7 +51,13 @@ const Labels: React.FC = () => {
   });
   const options = Object.entries(data || {})
     .map(([key, value]) => {
-      return value.map((item: any) => ({value: `${key}:${item}`, label: `${key}:${item}`}));
+      return value.map((item: any) => {
+        const labelString = `${key}${item ? `:${item}` : ''}`;
+        return {
+          label: labelString,
+          value: labelString,
+        };
+      });
     })
     .flat();
 
@@ -65,7 +72,7 @@ const Labels: React.FC = () => {
             const [key, ...rest] = labelString.split(':');
             return {
               ...previousValue,
-              [key]: rest.join(':'),
+              [key.trim()]: rest.join(':').trim(),
             };
           }
           return {
@@ -76,6 +83,7 @@ const Labels: React.FC = () => {
       },
     })
       .then((res: any) => {
+        setWasTouched(false);
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was succesfully updated.`);
         });
@@ -100,15 +108,15 @@ const Labels: React.FC = () => {
         placeholder="Add or create new labels"
         formatCreateLabel={(inputString: string) => {
           if (inputString.includes(':')) {
-            if (inputString.slice(-1) === ':') {
-              return 'Create: You need to add something after a : separator';
-            }
             return `Create ${inputString}`;
           }
           return 'Create: You need to add a : separator to create this label';
         }}
         defaultValue={defaultLabels}
         options={options}
+        CustomOptionComponent={LabelsOption}
+        CustomMultiValueLabelComponent={LabelsMultiValueLabel}
+        validateCreation={inputValue => Boolean(inputValue.match(/(.+:.*)/g))}
       />
     </ConfigurationCard>
   );

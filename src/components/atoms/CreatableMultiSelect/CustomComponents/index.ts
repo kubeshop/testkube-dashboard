@@ -1,3 +1,2 @@
-export {default as MultiValueLabel} from './MultiValueLabel';
-export {default as CustomOption} from './Option';
-export {default as MultiValueRemove} from './MultiValueRemove';
+export {default as LabelsMultiValueLabel} from './LabelsMultiValueLabel';
+export {default as LabelsOption} from './LabelsOption';
