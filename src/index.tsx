@@ -29,10 +29,16 @@ import './antd-theme/antd-customized.css';
   const container = document.getElementById('root');
   const root = createRoot(container!);
 
+  const rootRoute = (process.env.ROOT_ROUTE as string) || '';
+
+  if (window.location.pathname !== rootRoute && !window.location.pathname.startsWith(rootRoute)) {
+    window.history.pushState({}, '', rootRoute);
+  }
+
   root.render(
     <React.StrictMode>
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename={rootRoute}>
           <AnalyticsProvider privateKey={segmentIOKey}>
             <GlobalStyle />
             <App />

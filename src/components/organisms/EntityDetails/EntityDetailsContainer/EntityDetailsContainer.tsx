@@ -23,15 +23,15 @@ import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {entity, useGetExecutions, useGetEntityDetails, useGetMetrics, defaultStackRoute, getExecutionsEndpoint} =
-    props;
+  const {entity, useGetEntityDetails, useGetMetrics, defaultStackRoute, getExecutionsEndpoint} = props;
 
   const apiEndpoint = useAppSelector(selectApiEndpoint);
 
-  const {navigate, location, dispatch} = useContext(MainContext);
+  const {navigate, location} = useContext(MainContext);
   const {pathname} = location;
 
   const params = useParams();
+
   const {id, execId} = params;
 
   const [daysFilterValue, setDaysFilterValue] = useState(7);
