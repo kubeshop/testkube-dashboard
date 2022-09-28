@@ -61,7 +61,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
         setExecutionsList(data);
       } catch (err) {
-        console.log('err: ', err);
+        //
       }
     }
   };
