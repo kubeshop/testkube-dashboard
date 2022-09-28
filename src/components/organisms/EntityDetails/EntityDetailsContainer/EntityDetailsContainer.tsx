@@ -15,6 +15,8 @@ import {selectApiEndpoint} from '@redux/reducers/configSlice';
 
 import useStateCallback from '@hooks/useStateCallback';
 
+import {PollingIntervals} from '@utils/numbers';
+
 import {EntityDetailsContext, MainContext} from '@contexts';
 
 import EntityDetailsContent from '../EntityDetailsContent';
@@ -38,7 +40,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [executionsList, setExecutionsList] = useStateCallback<any>(null);
 
   // const {data: executions, refetch} = useGetExecutions({id, last: daysFilterValue});
-  const {data: entityDetails} = useGetEntityDetails(id);
+  const {data: entityDetails} = useGetEntityDetails(id, {
+    pollingInterval: PollingIntervals.everyTwoSeconds,
+  });
   const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue});
 
   // Temporary solution until WS implementation
@@ -86,7 +90,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
           );
         }
 
-        if (wsData.type === WSEventType.END_TEST_SUCCESS) {
+        if (wsData.type === WSEventType.END_TEST_SUCCESS && id === wsData.testExecution.testName) {
           const targetIndex = executionsList.results.findIndex((item: any) => {
             return item.id === wsData.testExecution.id;
           });
