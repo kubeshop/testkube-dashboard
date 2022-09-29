@@ -154,23 +154,11 @@ export const getTestSourceSpecificFields = (values: any) => {
     return {data: values.string || values.file.fileContent};
   }
 
-  if (testSource === 'git-file') {
-    return {
-      repository: {
-        type: testSource,
-        uri: values.uri,
-        ...(values.token ? {token: values.token} : {}),
-        ...(values.branch ? {branch: values.branch} : {}),
-        ...(values.username ? {username: values.username} : {}),
-      },
-    };
-  }
-
   return {
     repository: {
       type: testSource,
       uri: values.uri,
-      path: values.path,
+      ...(values.path ? {path: values.path} : {}),
       ...(values.branch ? {branch: values.branch} : {}),
       ...(values.token ? {token: values.token} : {}),
       ...(values.username ? {username: values.username} : {}),
