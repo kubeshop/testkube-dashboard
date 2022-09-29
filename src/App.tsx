@@ -33,7 +33,13 @@ const App: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const protocol = window.location.protocol;
+  const isProtocolSecure = protocol === 'https:';
+  const wsProtocol = isProtocolSecure ? 'wss://' : 'ws://';
+
   const apiEndpoint = useAppSelector(selectApiEndpoint);
+  const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?:\/\//, wsProtocol) : '';
+
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
@@ -88,6 +94,7 @@ const App: React.FC = () => {
     location,
     navigate,
     apiEndpoint,
+    wsRoot,
   };
 
   return (
