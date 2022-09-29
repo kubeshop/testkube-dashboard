@@ -9,7 +9,8 @@ import {FormItem} from '@custom-antd';
 
 import VariablesFormList from '@molecules/VariablesFormList';
 
-const {Option} = Select;
+import {LabelsSelect} from '@src/components/molecules';
+
 const {TextArea} = Input;
 
 export const required: Rule = {required: true, message: 'Required.'};
@@ -18,11 +19,12 @@ export const duplicateKeyMessage = 'Duplicate key.';
 
 type DefaultConfig = {
   onFileChange?: () => {};
+  onLabelsChange?: (value: any) => void;
   form?: null;
 };
 
 export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
-  const {onFileChange, form} = config;
+  const {onFileChange, onLabelsChange, form} = config;
 
   return array.map((formItem: any) => {
     const {
@@ -54,6 +56,14 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
             );
           })}
         </Radio.Group>
+      );
+    }
+
+    if (inputType === 'labels') {
+      children = (
+        <div style={{width: '100%'}}>
+          <LabelsSelect onChange={onLabelsChange!} />
+        </div>
       );
     }
 

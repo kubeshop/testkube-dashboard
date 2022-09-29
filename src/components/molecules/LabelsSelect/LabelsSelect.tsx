@@ -1,16 +1,24 @@
 import React from 'react';
 
+import {Option} from '@models/form';
+
 import {CreatableMultiSelect} from '@atoms';
 import {LabelsMultiValueLabel, LabelsOption} from '@atoms/CreatableMultiSelect/CustomComponents';
 
+import {PollingIntervals} from '@utils/numbers';
+
+import {useGetLabelsQuery} from '@services/labels';
+
 type LabelsSelectProps = {
-  onChange: (values: any) => void;
+  onChange: (value: readonly Option[]) => void;
   defaultLabels?: {[key: string]: string};
   options?: {[key: string]: string[]};
 };
 
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   const {onChange, defaultLabels, options} = props;
+
+  const {data} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.default, skip: Boolean(options)});
 
   const formattedDefaultLabels = Object.entries(defaultLabels || {}).map(([key, value]) => {
     const labelString = `${key}${value ? `:${value}` : ''}`;
@@ -20,7 +28,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
     };
   });
 
-  const formattedOptions = Object.entries(options || {})
+  const formattedOptions = Object.entries(options || data || {})
     .map(([key, value]) => {
       return value.map((item: any) => {
         const labelString = `${key}${item ? `:${item}` : ''}`;

@@ -13,7 +13,6 @@ import {LabelsSelect} from '@molecules';
 import {required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
-import {useGetLabelsQuery} from '@services/labels';
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
 import {AnalyticsContext, MainContext} from '@contexts';
@@ -46,7 +45,6 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const {navigate, dispatch} = useContext(MainContext);
   const {trackEvent} = useContext(AnalyticsContext);
 
-  const {data} = useGetLabelsQuery(null);
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
@@ -89,7 +87,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
         <StyledFormItem name="description">
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
         </StyledFormItem>
-        <LabelsSelect onChange={setLocalLabels} options={data} />
+        <LabelsSelect onChange={setLocalLabels} />
         <StyledFormItem>
           <Button htmlType="submit" disabled={isLoading} loading={isLoading} style={{width: '118px'}}>
             {isLoading ? 'Creating...' : 'Create'}

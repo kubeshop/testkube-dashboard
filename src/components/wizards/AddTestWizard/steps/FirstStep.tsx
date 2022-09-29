@@ -24,7 +24,7 @@ const additionalFields: any = {
 };
 
 const FirstStep: React.FC<any> = props => {
-  const {onFileChange} = props;
+  const {onFileChange, onLabelsChange} = props;
 
   const executors = useAppSelector(selectExecutors);
 
@@ -32,7 +32,7 @@ const FirstStep: React.FC<any> = props => {
 
   return (
     <StyledFormSpace size={24} direction="vertical">
-      {renderFormItems(addTestFormStructure(remmappedExecutors))}
+      {renderFormItems(addTestFormStructure(remmappedExecutors), {onLabelsChange})}
       <FormItem
         noStyle
         shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}

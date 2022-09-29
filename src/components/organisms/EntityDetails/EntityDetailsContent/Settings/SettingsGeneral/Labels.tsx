@@ -7,10 +7,8 @@ import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
-import {PollingIntervals} from '@utils/numbers';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
-import {useGetLabelsQuery} from '@services/labels';
 import {useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -33,8 +31,6 @@ const Labels: React.FC = () => {
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [wasTouched, setWasTouched] = useState(false);
-
-  const {data} = useGetLabelsQuery(null, {pollingInterval: PollingIntervals.default});
 
   if (!entity || !entityDetails) {
     return null;
@@ -68,12 +64,11 @@ const Labels: React.FC = () => {
       onConfirm={onSave}
     >
       <LabelsSelect
-        onChange={(values: any) => {
+        onChange={values => {
           setLocalLabels(values);
           setWasTouched(true);
         }}
         defaultLabels={entityLabels}
-        options={data}
       />
     </ConfigurationCard>
   );
