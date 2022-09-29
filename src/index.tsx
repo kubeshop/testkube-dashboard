@@ -14,6 +14,7 @@ import {GlobalStyle} from '@styles/globalStyles';
 import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import './antd-theme/antd-customized.css';
+import env from './env';
 
 (async () => {
   const isAdBlockEnabled = await detectAdBlock();
@@ -29,7 +30,7 @@ import './antd-theme/antd-customized.css';
   const container = document.getElementById('root');
   const root = createRoot(container!);
 
-  const rootRoute = process.env.REACT_APP_ROOT_ROUTE || '';
+  const basename = env?.basename || '';
 
   // If the user wants to specify a PathPrefix in Ingress controller we should
   // set a basename to BrowserRouter. But since react-router-dom v6 they stopped
@@ -38,14 +39,14 @@ import './antd-theme/antd-customized.css';
   // the basename, so the <Router> won't render anything." So if we want to visit a website without knowing
   // that we should add some basename we will not be able to see anything.
   // Big thread here https://github.com/remix-run/react-router/issues/8427
-  if (window.location.pathname !== rootRoute && !window.location.pathname.startsWith(rootRoute)) {
-    window.history.pushState({}, '', rootRoute);
+  if (window.location.pathname !== basename && !window.location.pathname.startsWith(basename)) {
+    window.history.pushState({}, '', basename);
   }
 
   root.render(
     <React.StrictMode>
       <Provider store={store}>
-        <BrowserRouter basename={rootRoute}>
+        <BrowserRouter basename={basename}>
           <AnalyticsProvider privateKey={segmentIOKey}>
             <GlobalStyle />
             <App />
