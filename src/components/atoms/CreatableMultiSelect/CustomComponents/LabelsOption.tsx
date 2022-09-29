@@ -14,6 +14,7 @@ const LabelsOption = (props: OptionProps<Option>) => {
   const {children, innerRef, innerProps, options, value} = props;
 
   const isChildren = typeof children === 'string';
+
   const allowClick =
     isChildren && options[0].label === children && children !== value
       ? Boolean(children.match(/(Create (.+:.*))/g))

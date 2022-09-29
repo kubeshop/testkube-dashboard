@@ -8,6 +8,7 @@ type SplittedLabelProps = {
   value: string;
   textClassName?: string;
 };
+
 export const SplittedLabel: React.FC<SplittedLabelProps> = props => {
   const {value, textClassName = 'regular'} = props;
 
@@ -20,6 +21,7 @@ export const SplittedLabel: React.FC<SplittedLabelProps> = props => {
   }
 
   const [key, ...rest] = value.split(':');
+
   return (
     <>
       <Text color={Colors.slate400} className={textClassName}>

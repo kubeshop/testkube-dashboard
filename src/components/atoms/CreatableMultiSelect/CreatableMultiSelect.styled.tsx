@@ -1,4 +1,8 @@
+import {GroupBase, StylesConfig, ThemeConfig} from 'react-select';
+
 import styled from 'styled-components';
+
+import {Option} from '@models/form';
 
 import Colors from '@styles/Colors';
 
@@ -17,50 +21,50 @@ export const StyledMultiLabel = styled.div`
   padding: 3px 5px;
 `;
 
-export const customStyles = {
-  input: (styles: any) => ({...styles, color: Colors.slate200, fontWeight: 400}),
-  valueContainer: (styles: any) => ({...styles, backgroundColor: Colors.slate800}),
-  placeholder: (styles: any) => ({...styles, color: Colors.slate500, fontWeight: 400}),
-  control: (styles: any) => ({
+export const customStyles: StylesConfig<Option, true, GroupBase<Option>> = {
+  input: styles => ({...styles, color: Colors.slate200, fontWeight: 400}),
+  valueContainer: styles => ({...styles, backgroundColor: Colors.slate800}),
+  placeholder: styles => ({...styles, color: Colors.slate500, fontWeight: 400}),
+  control: styles => ({
     ...styles,
     borderColor: 'transparent',
     backgroundColor: Colors.slate800,
     height: '44px',
   }),
-  indicatorSeparator: (styles: any) => ({...styles, width: 0}),
-  dropdownIndicator: (styles: any) => ({
+  indicatorSeparator: styles => ({...styles, width: 0}),
+  dropdownIndicator: styles => ({
     ...styles,
     color: Colors.slate500,
     '&:hover': {
       color: Colors.slate400,
     },
   }),
-  menu: (styles: any) => ({...styles, backgroundColor: Colors.slate800}),
-  menuList: (styles: any) => ({...styles, padding: 0}),
-  multiValue: (styles: any) => ({
+  menu: styles => ({...styles, backgroundColor: Colors.slate800}),
+  menuList: styles => ({...styles, padding: 0}),
+  multiValue: styles => ({
     ...styles,
     background: 'transparent',
     border: `1px solid ${Colors.slate700}`,
   }),
-  multiValueLabel: (styles: any) => ({
+  multiValueLabel: styles => ({
     ...styles,
     color: Colors.slate200,
     fontWeight: 400,
     fontSize: 12,
   }),
-  multiValueRemove: (styles: any) => ({
+  multiValueRemove: styles => ({
     ...styles,
     '&:hover': {
       backgroundColor: 'transparent',
       cursor: 'pointer',
     },
   }),
-  noOptionsMessage: (styles: any) => ({
+  noOptionsMessage: styles => ({
     ...styles,
     fontWeight: 400,
     color: Colors.slate200,
   }),
-  option: (styles: any) => ({
+  option: styles => ({
     ...styles,
     padding: '6px 12px',
     fontWeight: 400,
@@ -74,13 +78,17 @@ export const customStyles = {
   }),
 };
 
-export const customTheme = (theme: any) => ({
-  ...theme,
-  borderRadius: 4,
-  colors: {
-    ...theme.colors,
-    primary: Colors.indigo400,
-    primary25: Colors.slate700,
-    neutral30: Colors.slate600,
-  },
-});
+export const customTheme: ThemeConfig = theme => {
+  const {colors, ...rest} = theme;
+
+  return {
+    ...rest,
+    borderRadius: 4,
+    colors: {
+      ...colors,
+      primary: Colors.indigo400,
+      primary25: Colors.slate700,
+      neutral30: Colors.slate600,
+    },
+  };
+};

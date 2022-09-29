@@ -24,6 +24,7 @@ const Labels: React.FC = () => {
 
   const [updateTest] = useUpdateTestMutation();
   const [updateTestSuite] = useUpdateTestSuiteMutation();
+
   const updateRequestsMap: {[key in Entity]: any} = {
     'test-suites': updateTestSuite,
     tests: updateTest,
@@ -35,6 +36,7 @@ const Labels: React.FC = () => {
   if (!entity || !entityDetails) {
     return null;
   }
+
   const entityLabels = entityDetails?.labels || {};
 
   const onSave = () => {
