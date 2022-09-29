@@ -10,9 +10,6 @@ import styled from 'styled-components';
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {WSData, WSEventType} from '@models/websocket';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint} from '@redux/reducers/configSlice';
-
 import useStateCallback from '@hooks/useStateCallback';
 
 import {PollingIntervals} from '@utils/numbers';
@@ -25,9 +22,7 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const {entity, useGetEntityDetails, useGetMetrics, defaultStackRoute, getExecutionsEndpoint} = props;
 
-  const apiEndpoint = useAppSelector(selectApiEndpoint);
-
-  const {navigate, location} = useContext(MainContext);
+  const {navigate, location, wsRoot} = useContext(MainContext);
   const {pathname} = location;
 
   const params = useParams();
@@ -118,8 +113,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       console.log('err: ', err);
     }
   };
-
-  const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?/, 'ws') : '';
 
   useWebSocket(`${wsRoot}/events/stream`, {
     onMessage: event => {
