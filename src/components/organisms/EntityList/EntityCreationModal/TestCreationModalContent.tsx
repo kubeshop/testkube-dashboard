@@ -1,11 +1,15 @@
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 
 import {Form} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
+import {Option} from '@models/form';
+
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 
 import {Button, Text} from '@custom-antd';
+
+import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import FirstStepHint from '@wizards/AddTestWizard/hints/FirstStepHint';
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
@@ -42,6 +46,7 @@ const TestCreationModalContent: React.FC = () => {
   const {dispatch, navigate} = useContext(MainContext);
   const {trackEvent} = useContext(AnalyticsContext);
 
+  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [addTest, {isLoading}] = useAddTestMutation();
 
   const onSaveClick = async (values: any, toRun: boolean = false) => {
@@ -56,6 +61,7 @@ const TestCreationModalContent: React.FC = () => {
         type: testSource === 'file-uri' ? 'string' : testSource,
         ...testSourceSpecificFields,
       },
+      labels: decomposeLabels(localLabels),
     };
 
     return addTest(requestBody)
@@ -129,7 +135,7 @@ const TestCreationModalContent: React.FC = () => {
       >
         <StyledFormSpace size={24} direction="vertical">
           <Text className="regular big">Test details</Text>
-          <FirstStep onFileChange={onFileChange} />
+          <FirstStep onFileChange={onFileChange} onLabelsChange={setLocalLabels} />
           <StyledFormItem>
             <Button htmlType="submit" loading={isLoading}>
               {isLoading ? 'Creating...' : 'Create'}

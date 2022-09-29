@@ -25,6 +25,9 @@ export const addTestFormStructure = (options: any) => [
     placeholder: 'Name',
   },
   {
+    inputType: 'labels',
+  },
+  {
     tooltip:
       'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
     fieldName: 'testType',

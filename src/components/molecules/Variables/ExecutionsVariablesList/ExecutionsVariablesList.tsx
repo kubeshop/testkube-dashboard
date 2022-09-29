@@ -34,7 +34,7 @@ const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props =>
     <VariablesList>
       {variables.map((item, index) => {
         return (
-          <VariablesListItem>
+          <VariablesListItem key={item.key}>
             <VariableTypeWrapper>
               <Text className="uppercase" color={Colors.slate500}>
                 {!item.type ? 'Basic' : item.type === 'secretRef' ? 'Secret ref' : 'Secret'}
