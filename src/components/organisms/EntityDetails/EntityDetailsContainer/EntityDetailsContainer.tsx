@@ -31,7 +31,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const {pathname} = location;
 
   const params = useParams();
-
   const {id, execId} = params;
 
   const [daysFilterValue, setDaysFilterValue] = useState(7);
