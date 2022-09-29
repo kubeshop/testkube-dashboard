@@ -41,7 +41,7 @@ const filterOptions: OptionType[] = [
 const EntityDetailsContent: React.FC = () => {
   const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, isRowSelected} =
     useContext(EntityDetailsContext);
-  const {trackEvent} = useContext(AnalyticsContext);
+  const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -62,7 +62,7 @@ const EntityDetailsContent: React.FC = () => {
     }
   }, [isSettingsTabConfig]);
 
-  useTrackTimeAnalytics(`${entity}-details-page`, activeTabKey !== 'Settings');
+  useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
   useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
 
   const name = entityDetails?.name;
@@ -84,8 +84,9 @@ const EntityDetailsContent: React.FC = () => {
           return displayDefaultErrorNotification(result.error.error);
         }
 
-        trackEvent(`run-${entity}`, {
+        analyticsTrack('trackEvents', {
           type,
+          event: `run-${entity}`,
         });
       })
       .catch((err: any) => displayDefaultErrorNotification(err));
