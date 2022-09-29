@@ -12,7 +12,7 @@ type LabelListItemProps = {
 const LabelListItem: React.FC<LabelListItemProps> = props => {
   const {labelKey = '', labelValue = '', isSkippedMode = false, skippedLabelsNumber = 0} = props;
 
-  const value = isSkippedMode ? `+${skippedLabelsNumber}` : `${labelKey}: ${labelValue}`;
+  const value = isSkippedMode ? `+${skippedLabelsNumber}` : labelValue ? `${labelKey}: ${labelValue}` : labelKey;
 
   return <StyledLabelListItem isSkippedMode={isSkippedMode}>{value}</StyledLabelListItem>;
 };

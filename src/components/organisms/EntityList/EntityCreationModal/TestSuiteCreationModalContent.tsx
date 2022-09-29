@@ -1,23 +1,27 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
-import {Form, Input, Select} from 'antd';
+import {Form, Input} from 'antd';
+
+import {Option} from '@models/form';
 
 import {openSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {Button, Text} from '@custom-antd';
 
+import {LabelsSelect} from '@molecules';
+
 import {required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
-import {useGetLabelsQuery} from '@services/labels';
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
 import {AnalyticsContext, MainContext} from '@contexts';
 
+import {decomposeLabels} from '@src/components/molecules/LabelsSelect/utils';
+
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
 const {TextArea} = Input;
-const {Option} = Select;
 
 type AddTestSuitePayload = {
   data?: {
@@ -41,19 +45,13 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const {navigate, dispatch} = useContext(MainContext);
   const {trackEvent} = useContext(AnalyticsContext);
 
-  const {data} = useGetLabelsQuery(null);
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
+  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
   const onFinish = (values: any) => {
     addTestSuite({
       ...values,
-      labels: values.labels.reduce((previousValue: any, currentValue: string) => {
-        const keyValuePair = currentValue.split('_');
-        return {
-          ...previousValue,
-          [keyValuePair[0]]: keyValuePair[1],
-        };
-      }, {}),
+      labels: decomposeLabels(localLabels),
     })
       .then((res: AddTestSuitePayload) => {
         displayDefaultNotificationFlow(res, () => {
@@ -89,19 +87,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
         <StyledFormItem name="description">
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
         </StyledFormItem>
-        <StyledFormItem name="labels">
-          <Select placeholder="Labels" mode="multiple" allowClear showArrow>
-            {data?.map((value: string, index: number) => {
-              const key = `add-test-suite-label_${index}`;
-
-              return (
-                <Option key={key} value={`${index}_${value}`}>
-                  {value}
-                </Option>
-              );
-            })}
-          </Select>
-        </StyledFormItem>
+        <LabelsSelect onChange={setLocalLabels} />
         <StyledFormItem>
           <Button htmlType="submit" disabled={isLoading} loading={isLoading} style={{width: '118px'}}>
             {isLoading ? 'Creating...' : 'Create'}

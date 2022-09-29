@@ -132,7 +132,7 @@ const EntityDetailsContent: React.FC = () => {
         ) : null}
       </StyledPageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} isRowSelected={isRowSelected} /> : null}
-      <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
+      <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Recent executions" key="Executions" disabled={isPageDisabled}>
           <ExecutionsTable triggerRun={onRunButtonClick} />
         </Tabs.TabPane>
