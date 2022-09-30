@@ -14,15 +14,22 @@ type AnalyticsProviderProps = {
 export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
   const {privateKey, children} = props;
 
-  const analytics = useMemo(() => AnalyticsBrowser.load({writeKey: privateKey}), [privateKey]);
+  const notDevEnv = process.env.NODE_ENV !== 'development';
+
+  const analytics = useMemo(() => {
+    if (privateKey && notDevEnv) {
+      return AnalyticsBrowser.load({writeKey: privateKey});
+    }
+  }, [privateKey]);
 
   const hostname = window.location.hostname;
+
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') {
+    if (notDevEnv) {
       FingerprintJS.load()
         .then((fp: any) => fp.get())
         .then((result: any) => {
-          analytics.identify(result.visitorId, {
+          analytics?.identify(result.visitorId, {
             hostname,
           });
         })
@@ -31,9 +38,9 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
     }
   }, []);
 
-  const trackEvent = (type: string, data: any) => {
-    if (process.env.NODE_ENV !== 'development') {
-      analytics.track(type, {...data, hostname});
+  const analyticsTrack = (type: string, data: any) => {
+    if (notDevEnv) {
+      analytics?.track(type, {...data, hostname});
     }
   };
 
@@ -41,7 +48,7 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
     <AnalyticsContext.Provider
       value={{
         analytics,
-        trackEvent,
+        analyticsTrack,
       }}
     >
       {children}

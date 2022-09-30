@@ -19,10 +19,11 @@ import env from './env';
 (async () => {
   const isAdBlockEnabled = await detectAdBlock();
 
-  const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
+  let segmentIOKey = '';
 
   if (!isAdBlockEnabled) {
     const ga4react = new GA4React(process.env.REACT_APP_GOOGLE_ANALYTICS_ID || '');
+    segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
 
     await ga4react.initialize();
   }
