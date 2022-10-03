@@ -56,7 +56,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
       .then((res: AddTestSuitePayload) => {
         displayDefaultNotificationFlow(res, () => {
           analyticsTrack('trackEvents', {
-            event: 'create-test-suites',
+            uiEvent: 'create-test-suites',
           });
 
           dispatch(openSettingsTabConfig());

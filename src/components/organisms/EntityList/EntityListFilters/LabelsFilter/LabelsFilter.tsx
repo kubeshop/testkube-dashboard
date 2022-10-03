@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {KeyboardEventHandler, useContext, useEffect, useState} from 'react';
 
 import {Space} from 'antd';
 
@@ -9,6 +9,7 @@ import {FilterProps} from '@models/filters';
 
 import {Button, Input, Title} from '@custom-antd';
 
+import {notificationCall} from '@molecules';
 import {FilterMenuFooter, StyledFilterDropdown, StyledFilterLabel, StyledFilterMenu} from '@molecules/FilterMenu';
 
 import Colors from '@styles/Colors';
@@ -108,6 +109,11 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const applyFilters = () => {
     const resultedFilters: string[] = [];
 
+    if (JSON.stringify(labelsMapping) === JSON.stringify([defaultKeyValuePair])) {
+      onVisibleChange(false);
+      return;
+    }
+
     labelsMapping.forEach(item => {
       if (!item.key) {
         return;
@@ -119,21 +125,33 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       }
     });
 
+    if (resultedFilters.length !== labelsMapping.length) {
+      notificationCall('failed', `Incorrect labels input`);
+      return;
+    }
+
     dispatch(setFilters({...filters, page: 0, selector: resultedFilters}));
     onVisibleChange(false);
   };
 
   const resetFilters = () => {
     setLabelsMapping([defaultKeyValuePair]);
+    onVisibleChange(false);
     dispatch(setFilters({...filters, page: 0, selector: []}));
   };
 
+  const handleKeyDown: KeyboardEventHandler<HTMLUListElement> = event => {
+    if (event.key === 'Enter') {
+      applyFilters();
+    }
+  };
+
   const menu = (
-    <StyledFilterMenu onClick={onMenuClick} data-cy="labels-filter-dropdown">
+    <StyledFilterMenu onClick={onMenuClick} data-cy="labels-filter-dropdown" onKeyDown={handleKeyDown}>
       <StyledLabelsMenuContainer>
         <Title level={5}>Filter tests by Key Value pairs.</Title>
         {renderKeyValueInputs}
-        <Button $customType="secondary" onClick={() => onAddRow()}>
+        <Button $customType="secondary" onClick={onAddRow}>
           Add another row
         </Button>
       </StyledLabelsMenuContainer>
