@@ -197,3 +197,29 @@ export const remapExecutors = (executors: Executor[]) => {
 
   return array;
 };
+
+export const updateTestFormStructure = (options: any) => [
+  {
+    tooltip:
+      'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
+    fieldName: 'testType',
+    inputType: 'select',
+    rules: [required],
+    options,
+    placeholder: 'Type',
+  },
+  {
+    tooltip:
+      'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
+    rules: [required],
+    fieldName: 'testSource',
+    inputType: 'select',
+    options: [
+      {value: 'git-dir', label: 'Git directory'},
+      {value: 'git-file', label: 'Git file'},
+      {value: 'file-uri', label: 'File'},
+      {value: 'string', label: 'String'},
+    ],
+    placeholder: 'Source',
+  },
+];

@@ -9,7 +9,7 @@ import {Entity} from '@models/entity';
 
 import {StatusIcon} from '@atoms';
 
-import {Text} from '@custom-antd';
+import {Button, Modal, Text} from '@custom-antd';
 
 import {DrawerHeader} from '@organisms/EntityDetails/ExecutionDetailsDrawer/ExecutionDetailsDrawer.styled';
 
@@ -31,6 +31,7 @@ import {ItemColumn, ItemRow} from './ExecutionDetails.styled';
 import TestExecutionDetailsTabs from './TestExecutionDetails/TestExecutionDetailsTabs';
 import TestSuiteExecutionDetailsTabs from './TestSuiteExecutionDetails/TestSuiteExecutionDetailsTabs';
 import {getHeaderValues} from './utils';
+import { AbortExecutionModalConfig } from './AbortExecution/utils';
 
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
@@ -86,6 +87,11 @@ const ExecutionDetails: React.FC = () => {
     refetch: () => {},
   });
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const onConfirm = () => {
+    setIsModalVisible(true);
+  };
   const {data, isLoading, isFetching, refetch} = infoPanelProps;
 
   // @ts-ignore
@@ -155,6 +161,13 @@ const ExecutionDetails: React.FC = () => {
             </DetailsWrapper>
           </DrawerHeader>
           {components[entity]}
+          <br />
+          <Button $customType='warning' hidden = {status !== 'running'} onClick={onConfirm}>
+              Abort Execution
+            </Button>
+            {isModalVisible ? (
+        <Modal {...AbortExecutionModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
+      ) : null}
         </>
       ) : null}
     </ExecutionDetailsContext.Provider>
