@@ -43,7 +43,7 @@ type AddTestSuitePayload = {
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
   const {navigate, dispatch} = useContext(MainContext);
-  const {trackEvent} = useContext(AnalyticsContext);
+  const {analyticsTrack} = useContext(AnalyticsContext);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
@@ -55,8 +55,8 @@ const TestSuiteCreationModalContent: React.FC = () => {
     })
       .then((res: AddTestSuitePayload) => {
         displayDefaultNotificationFlow(res, () => {
-          trackEvent('create-test-suites', {
-            type: res?.data?.spec?.type,
+          analyticsTrack('trackEvents', {
+            event: 'create-test-suites',
           });
 
           dispatch(openSettingsTabConfig());

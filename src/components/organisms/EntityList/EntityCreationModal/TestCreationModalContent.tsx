@@ -44,7 +44,7 @@ const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
 
   const {dispatch, navigate} = useContext(MainContext);
-  const {trackEvent} = useContext(AnalyticsContext);
+  const {analyticsTrack} = useContext(AnalyticsContext);
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [addTest, {isLoading}] = useAddTestMutation();
@@ -67,8 +67,9 @@ const TestCreationModalContent: React.FC = () => {
     return addTest(requestBody)
       .then((res: AddTestPayload) => {
         displayDefaultNotificationFlow(res, () => {
-          trackEvent('create-tests', {
+          analyticsTrack('trackEvents', {
             type: res?.data?.spec?.type,
+            event: 'create-tests',
           });
 
           if (!toRun) {
