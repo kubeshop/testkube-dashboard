@@ -51,7 +51,6 @@ const Labels: React.FC = () => {
         if (!res.error) {
           setWasTouched(false);
         }
-
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was succesfully updated.`);
         });

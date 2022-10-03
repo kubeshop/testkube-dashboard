@@ -62,7 +62,6 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
           if (!isValidLabel(inputString)) {
             return 'Incorrect label value';
           }
-
           return `Create ${inputString}`;
         }
         return 'Create: You need to add a : separator to create this label';
