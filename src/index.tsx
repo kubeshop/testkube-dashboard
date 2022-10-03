@@ -39,9 +39,6 @@ import env from './env';
   // the basename, so the <Router> won't render anything." So if we want to visit a website without knowing
   // that we should add some basename we will not be able to see anything.
   // Big thread here https://github.com/remix-run/react-router/issues/8427
-  if (window.location.pathname !== basename && !window.location.pathname.startsWith(basename)) {
-    window.history.pushState({}, '', basename);
-  }
 
   root.render(
     <React.StrictMode>
