@@ -41,4 +41,8 @@ export const StyledFooterText = styled.div`
 
   margin: auto;
   margin-right: 20px;
+
+  span.testkube-text {
+    color: ${Colors.slate400};
+  }
 `;
