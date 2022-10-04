@@ -17,6 +17,7 @@ type LabelsSelectProps = {
 
 const isValidLabel = (value: string) => {
   const match = value?.match(/(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]:(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?)/g);
+
   if (match) {
     return match[0] === value;
   }
@@ -61,6 +62,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
           if (!isValidLabel(inputString)) {
             return 'Incorrect label value';
           }
+
           return `Create ${inputString}`;
         }
         return 'Create: You need to add a : separator to create this label';

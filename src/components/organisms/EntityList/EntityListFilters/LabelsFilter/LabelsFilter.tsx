@@ -118,6 +118,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       if (!item.key) {
         return;
       }
+
       if (!item.value) {
         resultedFilters.push(item.key);
       } else {
