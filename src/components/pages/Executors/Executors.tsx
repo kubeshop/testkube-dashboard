@@ -1,7 +1,5 @@
 import {useMemo} from 'react';
 
-import {Space} from 'antd';
-
 import {TestRunnerIcon} from '@atoms';
 
 import {Button, Text, Title} from '@custom-antd';
@@ -10,7 +8,9 @@ import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
 import Colors from '@styles/Colors';
 
-import {ExecutorsGrid, ExecutorsGridItem, ExecutorsHeader, ExecutorsWrapper} from './Executors.styled';
+import {PageBlueprint} from '@src/components/organisms';
+
+import {ExecutorsGrid, ExecutorsGridItem} from './Executors.styled';
 import {executorsList} from './utils';
 
 const Executors: React.FC = () => {
@@ -38,22 +38,19 @@ const Executors: React.FC = () => {
   }, [executorsList]);
 
   return (
-    <ExecutorsWrapper>
-      <ExecutorsHeader>
-        <Space size={15} direction="vertical">
-          <Title color={Colors.slate50} ellipsis>
-            Executors
-          </Title>
-          <Text className="regular middle" color={Colors.slate400}>
-            Executors are the type of tests which can be run by testkube. Learn more about{' '}
-            <a href="https://kubeshop.github.io/testkube/test-types/executor-custom" target="_blank">
-              executors
-            </a>
-          </Text>
-        </Space>
-      </ExecutorsHeader>
+    <PageBlueprint
+      title="Executors"
+      description={
+        <>
+          Executors are the type of tests which can be run by testkube. Learn more about{' '}
+          <a href="https://kubeshop.github.io/testkube/test-types/executor-custom" target="_blank">
+            executors
+          </a>
+        </>
+      }
+    >
       <ExecutorsGrid>{renderedExecutorsGrid}</ExecutorsGrid>
-    </ExecutorsWrapper>
+    </PageBlueprint>
   );
 };
 
