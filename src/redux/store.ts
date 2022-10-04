@@ -4,6 +4,7 @@ import {createLogger} from 'redux-logger';
 
 import configSlice from '@redux/reducers/configSlice';
 import executorsSlice from '@redux/reducers/executorsSlice';
+import sourcesSlice from '@redux/reducers/sourcesSlice';
 import testSuiteExecutionsSlice from '@redux/reducers/testSuiteExecutionsSlice';
 import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
@@ -11,6 +12,7 @@ import testsSlice from '@redux/reducers/testsSlice';
 import {executionsApi} from '@services/executions';
 import {executorsApi} from '@services/executors';
 import {labelsApi} from '@services/labels';
+import {sourcesApi} from '@services/sources';
 import {testSuiteExecutionsApi} from '@services/testSuiteExecutions';
 import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
@@ -22,12 +24,13 @@ const middlewares: Middleware[] = [
   labelsApi.middleware,
   testSuiteExecutionsApi.middleware,
   executorsApi.middleware,
+  sourcesApi.middleware,
 ];
 
 if (process.env.NODE_ENV === `development`) {
   const reduxLoggerMiddleware = createLogger();
 
-  // middlewares.push(reduxLoggerMiddleware);
+  middlewares.push(reduxLoggerMiddleware);
 }
 
 export const store = configureStore({
@@ -37,6 +40,7 @@ export const store = configureStore({
     config: configSlice,
     testSuiteExecutions: testSuiteExecutionsSlice,
     executors: executorsSlice,
+    sources: sourcesSlice,
 
     [testSuitesApi.reducerPath]: testSuitesApi.reducer,
     [testsApi.reducerPath]: testsApi.reducer,
@@ -44,6 +48,7 @@ export const store = configureStore({
     [labelsApi.reducerPath]: labelsApi.reducer,
     [testSuiteExecutionsApi.reducerPath]: testSuiteExecutionsApi.reducer,
     [executorsApi.reducerPath]: executorsApi.reducer,
+    [sourcesApi.reducerPath]: sourcesApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 });
