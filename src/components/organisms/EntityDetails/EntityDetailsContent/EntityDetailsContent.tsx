@@ -86,7 +86,7 @@ const EntityDetailsContent: React.FC = () => {
 
         analyticsTrack('trackEvents', {
           type,
-          event: `run-${entity}`,
+          uiEvent: `run-${entity}`,
         });
       })
       .catch((err: any) => displayDefaultErrorNotification(err));

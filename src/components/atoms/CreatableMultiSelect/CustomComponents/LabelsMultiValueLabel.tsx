@@ -15,15 +15,17 @@ const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
       return null;
     }
 
-    if (children.match(/(.+:.+)/g)) {
-      return <SplittedLabel value={children} textClassName="regular small" />;
+    const trimmedChildren = children.trim();
+
+    if (trimmedChildren.match(/(.+:.+)/g)) {
+      return <SplittedLabel value={trimmedChildren} textClassName="regular small" />;
     }
 
-    if (children.slice(-1) === ':') {
-      return <Text className="regular small">{children.slice(0, -1)}</Text>;
+    if (trimmedChildren.slice(-1) === ':') {
+      return <Text className="regular small">{trimmedChildren.slice(0, -1)}</Text>;
     }
 
-    return <Text className="regular small">{children}</Text>;
+    return <Text className="regular small">{trimmedChildren}</Text>;
   };
 
   return <StyledMultiLabel>{renderChildren()}</StyledMultiLabel>;

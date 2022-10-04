@@ -69,7 +69,7 @@ const TestCreationModalContent: React.FC = () => {
         displayDefaultNotificationFlow(res, () => {
           analyticsTrack('trackEvents', {
             type: res?.data?.spec?.type,
-            event: 'create-tests',
+            uiEvent: 'create-tests',
           });
 
           if (!toRun) {

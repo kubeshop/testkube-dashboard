@@ -16,6 +16,7 @@ type MultiSelectProps = {
   validateCreation?: (inputValue: string) => boolean;
   CustomOptionComponent?: (props: OptionProps<Option>) => JSX.Element;
   CustomMultiValueLabelComponent?: (props: MultiValueGenericProps<Option>) => JSX.Element;
+  isLoading?: boolean;
 };
 
 const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
@@ -28,6 +29,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     validateCreation,
     CustomOptionComponent = DefaultOptionComponent,
     CustomMultiValueLabelComponent = DefaultMultiValueLabel,
+    isLoading = false,
   } = props;
 
   const ref = useRef(null);
@@ -64,6 +66,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
         MultiValueLabel: CustomMultiValueLabelComponent,
         MultiValueRemove: DefaultMultiValueRemove,
       }}
+      isLoading={isLoading}
     />
   );
 };

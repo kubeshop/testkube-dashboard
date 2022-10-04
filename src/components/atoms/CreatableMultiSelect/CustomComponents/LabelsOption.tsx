@@ -14,10 +14,15 @@ const LabelsOption = (props: OptionProps<Option>) => {
   const {children, innerRef, innerProps, options, value} = props;
 
   const isChildren = typeof children === 'string';
+  const isCreateOption = options[0].label === children && children !== value;
 
   const allowClick =
-    isChildren && options[0].label === children && children !== value
-      ? Boolean(children.match(/(Create (.+:.*))/g))
+    isChildren && isCreateOption
+      ? Boolean(
+          children.match(
+            /(Create (([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]:(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?))/g
+          )
+        )
       : true;
 
   const modifyChildren = () => {
@@ -25,7 +30,7 @@ const LabelsOption = (props: OptionProps<Option>) => {
       return children;
     }
 
-    if (children.includes(' ')) {
+    if (isCreateOption) {
       return (
         <Text color={Colors.slate100} className="regular">
           {children}
