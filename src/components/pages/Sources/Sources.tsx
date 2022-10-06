@@ -2,6 +2,8 @@ import {useEffect, useMemo, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {SourceWithString} from '@models/sources';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
@@ -11,22 +13,23 @@ import {ConfigurationCard, SourcesFormList} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
+import {useAddTestMutation} from '@services/sources';
+
+export type SourcesFormFields = {
+  sourcesFormList: SourceWithString[];
+};
+
 const Sources: React.FC = () => {
   const sourcesList = useAppSelector(selectSources);
 
   const [isInitialState, setIsInitialState] = useState(true);
 
-  const [form] = Form.useForm<{
-    sourcesFormList: {
-      name: string;
-      username: string;
-      repository: string;
-      token: string;
-    }[];
-  }>();
+  const [addSources] = useAddTestMutation();
 
-  const initialValues = useMemo(() => {
-    return sourcesList.map((sourceItem, index) => {
+  const [form] = Form.useForm<SourcesFormFields>();
+
+  const initialValues: SourceWithString[] = useMemo(() => {
+    return sourcesList.map(sourceItem => {
       const {name, repository} = sourceItem;
 
       return {
@@ -38,15 +41,10 @@ const Sources: React.FC = () => {
     });
   }, [sourcesList]);
 
-  const onSaveForm = (value: {
-    sourcesFormList: {
-      name: string;
-      username: string;
-      repository: string;
-      token: string;
-    }[];
-  }) => {
+  const onSaveForm = (value: SourcesFormFields) => {
     const {sourcesFormList} = value;
+
+    addSources(sourcesFormList).then(res => {});
   };
 
   const onChange = () => {

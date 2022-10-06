@@ -4,6 +4,8 @@ import {DeleteOutlined} from '@ant-design/icons';
 
 import {Button, Input} from '@custom-antd';
 
+import {SourcesFormFields} from '@pages/Sources/Sources';
+
 import {required} from '@utils/form';
 
 import {ButtonsContainer, FormSpace, SourcesListContainer, SymbolWrapper} from './SourcesFormList.styled';
@@ -11,7 +13,7 @@ import {emptySourceObject} from './utils';
 
 type VariablesFormListProps = {
   initialValues: any[];
-  form: FormInstance;
+  form: FormInstance<SourcesFormFields>;
   onSaveForm: any;
   onChange: any;
 };
@@ -37,10 +39,10 @@ const SourcesFormList: React.FC<VariablesFormListProps> = props => {
                       style={{flex: 1, marginBottom: '0'}}
                       rules={[required]}
                     >
-                      <Input placeholder="Git Username" />
+                      <Input placeholder="Git username" />
                     </Form.Item>
                     <Form.Item {...rest} name={[name, 'token']} style={{flex: 1, marginBottom: '0'}} rules={[required]}>
-                      <Input placeholder="Git Token value" />
+                      <Input placeholder="Git token reference name" />
                     </Form.Item>
                     <Form.Item {...rest} name={[name, 'uri']} style={{flex: 1, marginBottom: '0'}} rules={[required]}>
                       <Input placeholder="Repository" />
