@@ -38,6 +38,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   // const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [logs, setLogs] = useState('');
+  const [shouldConnect, setShouldConnect] = useState(false);
 
   const scrollToBottom = useCallback(() => {
     if (!isAutoScrolled) {
@@ -49,7 +50,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     }
   }, [isAutoScrolled]);
 
-  const {...rest} = useWebSocket(
+  useWebSocket(
     `${wsRoot}/executions/${executionId}/logs/stream`,
     {
       onMessage: e => {
@@ -71,17 +72,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
           return `${logData}\n`;
         });
       },
-      // onError: e => {
-      //   console.log('error', e);
-      // },
-      // onOpen: e => {
-      //   console.log('open', e);
-      // },
-      // onClose: e => {
-      //   console.log('close', e);
-      // },
     },
-    isRunning
+    shouldConnect
   );
 
   useEffect(() => {
@@ -95,6 +87,10 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       setLogs('');
     };
   }, [isRunning, executionId]);
+
+  useEffect(() => {
+    setShouldConnect(isRunning || false);
+  }, [isRunning]);
 
   // useEffect(() => {
   //   if (isFullScreenLogOutput) {

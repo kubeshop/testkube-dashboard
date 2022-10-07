@@ -26,7 +26,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [oldScroll, setOldScroll] = useState(0);
-  const [isAutoScrolled, setAutoScrolledState] = useState(true);
+  const [isAutoScrolled, setAutoScrolledState] = useState(false);
 
   const testData = data as Execution;
 
@@ -49,7 +49,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
       ref.current.onscroll = debounce(() => {
         setOldScroll(prev => {
           if (ref && ref.current) {
-            if (prev >= ref.current?.scrollTop) {
+            if (prev > ref.current?.scrollTop) {
               setAutoScrolledState(false);
             } else {
               setAutoScrolledState(true);
@@ -69,6 +69,12 @@ const TestExecutionDetailsTabs: React.FC = () => {
       setAutoScrolledState(true);
     }, 500);
   }, [id]);
+
+  useEffect(() => {
+    if (isRunning) {
+      setAutoScrolledState(true);
+    }
+  }, [isRunning, id]);
 
   return (
     <StyledTestExecutionDetailsTabsContainer ref={ref}>
