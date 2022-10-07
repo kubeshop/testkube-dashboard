@@ -6,11 +6,8 @@ export const labelsApi = createApi({
   reducerPath: 'labelsApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
-    getLabels: builder.query<any[], null>({
+    getLabels: builder.query<{[key: string]: string[]}, null>({
       query: () => `/labels`,
-      transformResponse: (response: any) => {
-        return response.app;
-      },
     }),
   }),
 });

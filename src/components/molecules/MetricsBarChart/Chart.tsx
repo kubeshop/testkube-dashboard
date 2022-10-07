@@ -38,15 +38,26 @@ const Chart: React.FC<ChartProps> = props => {
         margin: barMargin,
         height: Math.floor(height),
         color: barColor,
-        key,
       };
 
       if (isDetailsView) {
-        return <BarWithTooltip {...barProps} tooltipData={{duration: formattedDuration, status, name, startTime}} />;
+        return (
+          <BarWithTooltip
+            key={key}
+            tooltipData={{duration: formattedDuration, status, name, startTime}}
+            {...barProps}
+          />
+        );
       }
 
       return (
-        <Bar $width={barProps.width} $margin={barProps.margin} style={{height, background: barProps.color}} noHover />
+        <Bar
+          $width={barProps.width}
+          $margin={barProps.margin}
+          style={{height, background: barProps.color}}
+          key={key}
+          noHover
+        />
       );
     });
   }, [chartData]);

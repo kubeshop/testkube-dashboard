@@ -98,7 +98,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
-  useTrackTimeAnalytics(`${entity}-list-page`);
+  useTrackTimeAnalytics(`${entity}-list`);
 
   return (
     <StyledContainer>

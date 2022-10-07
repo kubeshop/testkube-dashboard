@@ -1,11 +1,13 @@
+/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useCallback, useContext, useEffect, useRef, useState} from 'react';
-
-import {Checkbox} from 'antd';
+import useWebSocket from 'react-use-websocket';
 
 import {LogAction} from '@models/log';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setLogOutput} from '@redux/reducers/configSlice';
+
+import {notificationCall} from '@molecules';
 
 import {MainContext} from '@contexts';
 
@@ -31,32 +33,26 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const {dispatch} = useContext(MainContext);
+  const {dispatch, wsRoot} = useContext(MainContext);
 
-  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
+  // const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [logs, setLogs] = useState('');
-  const [shouldBeScrolled, setScrolledState] = useState(true);
 
   const scrollToBottom = useCallback(() => {
     if (!isAutoScrolled) {
       return;
     }
 
-    setScrolledState(prev => {
-      if (prev && ref.current) {
-        ref.current.scrollIntoView({behavior: 'smooth', block: 'end'});
-      }
-
-      return prev;
-    });
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({behavior: 'smooth', block: 'end'});
+    }
   }, [isAutoScrolled]);
 
-  useEffect(() => {
-    if (isRunning) {
-      const eventSource = new EventSource(`${localStorage.getItem('apiEndpoint')}/executions/${executionId}/logs`);
-
-      eventSource.addEventListener('message', e => {
+  const {...rest} = useWebSocket(
+    `${wsRoot}/executions/${executionId}/logs/stream`,
+    {
+      onMessage: e => {
         const logData = e.data;
 
         setLogs(prev => {
@@ -74,49 +70,49 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
           return `${logData}\n`;
         });
-      });
+      },
+      // onError: e => {
+      //   console.log('error', e);
+      // },
+      // onOpen: e => {
+      //   console.log('open', e);
+      // },
+      // onClose: e => {
+      //   console.log('close', e);
+      // },
+    },
+    isRunning
+  );
 
-      return () => {
-        eventSource.close();
-      };
+  useEffect(() => {
+    if (!isRunning) {
+      setLogs(logOutput);
+    } else {
+      setLogs('');
     }
-
-    setLogs(logOutput);
 
     return () => {
       setLogs('');
     };
-  }, [isRunning, logOutput]);
+  }, [isRunning, executionId]);
 
-  useEffect(() => {
-    if (isFullScreenLogOutput) {
-      dispatch(setLogOutput(logs));
-    } else {
-      dispatch(setLogOutput(''));
-    }
-  }, [logs, isFullScreenLogOutput]);
+  // useEffect(() => {
+  //   if (isFullScreenLogOutput) {
+  //     dispatch(setLogOutput(logs));
+  //   } else {
+  //     dispatch(setLogOutput(''));
+  //   }
+  // }, [logs, isFullScreenLogOutput]);
 
   useEffect(() => {
     scrollToBottom();
   }, [logs]);
 
   return (
-    <>
-      <Checkbox
-        onChange={() => {
-          setScrolledState(prev => !prev);
-        }}
-        style={{position: 'absolute'}}
-        checked={isAutoScrolled}
-      >
-        Autoscroll
-      </Checkbox>
-
-      <StyledLogOutputContainer ref={ref}>
-        <LogOutputHeader logOutput={logs} actions={actions} title={title} />
-        <StyledLogTextContainer>{logs ? <StyledPreLogText>{logs}</StyledPreLogText> : null}</StyledLogTextContainer>
-      </StyledLogOutputContainer>
-    </>
+    <StyledLogOutputContainer ref={ref}>
+      <LogOutputHeader logOutput={logs} actions={actions} title={title} />
+      <StyledLogTextContainer>{logs ? <StyledPreLogText>{logs}</StyledPreLogText> : null}</StyledLogTextContainer>
+    </StyledLogOutputContainer>
   );
 };
 

@@ -25,6 +25,9 @@ export const addTestFormStructure = (options: any) => [
     placeholder: 'Name',
   },
   {
+    inputType: 'labels',
+  },
+  {
     tooltip:
       'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
     fieldName: 'testType',
@@ -154,23 +157,11 @@ export const getTestSourceSpecificFields = (values: any) => {
     return {data: values.string || values.file.fileContent};
   }
 
-  if (testSource === 'git-file') {
-    return {
-      repository: {
-        type: testSource,
-        uri: values.uri,
-        ...(values.token ? {token: values.token} : {}),
-        ...(values.branch ? {branch: values.branch} : {}),
-        ...(values.username ? {username: values.username} : {}),
-      },
-    };
-  }
-
   return {
     repository: {
       type: testSource,
       uri: values.uri,
-      path: values.path,
+      ...(values.path ? {path: values.path} : {}),
       ...(values.branch ? {branch: values.branch} : {}),
       ...(values.token ? {token: values.token} : {}),
       ...(values.username ? {username: values.username} : {}),

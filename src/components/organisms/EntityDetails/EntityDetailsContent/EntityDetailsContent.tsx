@@ -31,25 +31,17 @@ import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
 
 const filterOptions: OptionType[] = [
-  {value: 7, label: 'Last 7 days'},
-  {value: 30, label: 'Last 30 days'},
-  {value: 90, label: 'Last 90 days'},
-  {value: 365, label: 'This year'},
-  {value: 0, label: 'All days'},
+  {value: 7, label: 'Last 7 days', key: 'last7Days'},
+  {value: 30, label: 'Last 30 days', key: 'last30Days'},
+  {value: 90, label: 'Last 90 days', key: 'last90Days'},
+  {value: 365, label: 'This year', key: 'thisYear'},
+  {value: 0, label: 'All days', key: 'allDays'},
 ];
 
 const EntityDetailsContent: React.FC = () => {
-  const {
-    entity,
-    entityDetails,
-    onRowSelect,
-    defaultStackRoute,
-    metrics,
-    daysFilterValue,
-    setDaysFilterValue,
-    isRowSelected,
-  } = useContext(EntityDetailsContext);
-  const {trackEvent} = useContext(AnalyticsContext);
+  const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, isRowSelected} =
+    useContext(EntityDetailsContext);
+  const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -70,7 +62,7 @@ const EntityDetailsContent: React.FC = () => {
     }
   }, [isSettingsTabConfig]);
 
-  useTrackTimeAnalytics(`${entity}-details-page`, activeTabKey !== 'Settings');
+  useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
   useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
 
   const name = entityDetails?.name;
@@ -92,13 +84,10 @@ const EntityDetailsContent: React.FC = () => {
           return displayDefaultErrorNotification(result.error.error);
         }
 
-        trackEvent(`run-${entity}`, {
+        analyticsTrack('trackEvents', {
           type,
+          uiEvent: `run-${entity}`,
         });
-
-        setTimeout(() => {
-          onRowSelect(result?.data, true);
-        }, 1500);
       })
       .catch((err: any) => displayDefaultErrorNotification(err));
   };
@@ -127,9 +116,10 @@ const EntityDetailsContent: React.FC = () => {
               style={{width: 250}}
               value={daysFilterValue}
               onChange={setDaysFilterValue}
+              key="days-filter-select"
             />
           ) : null,
-          <Button key="1" type="primary" onClick={onRunButtonClick} disabled={isPageDisabled}>
+          <Button key="run-now-button" type="primary" onClick={onRunButtonClick} disabled={isPageDisabled}>
             Run now
           </Button>,
         ]}
@@ -143,7 +133,7 @@ const EntityDetailsContent: React.FC = () => {
         ) : null}
       </StyledPageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} isRowSelected={isRowSelected} /> : null}
-      <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey}>
+      <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Recent executions" key="Executions" disabled={isPageDisabled}>
           <ExecutionsTable triggerRun={onRunButtonClick} />
         </Tabs.TabPane>

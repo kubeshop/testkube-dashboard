@@ -1,21 +1,18 @@
-import {useContext} from 'react';
-
-import {Form, Select} from 'antd';
+import {useContext, useState} from 'react';
 
 import {Entity} from '@models/entity';
+import {Option} from '@models/form';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
+import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
-import {useGetLabelsQuery} from '@services/labels';
 import {useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useUpdateTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
-
-const {Option} = Select;
 
 const namingMap: {[key in Entity]: string} = {
   'test-suites': 'test suite',
@@ -24,45 +21,43 @@ const namingMap: {[key in Entity]: string} = {
 
 const Labels: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
-  const [form] = Form.useForm();
 
   const [updateTest] = useUpdateTestMutation();
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
-  const {data} = useGetLabelsQuery(null);
   const updateRequestsMap: {[key in Entity]: any} = {
     'test-suites': updateTestSuite,
     tests: updateTest,
   };
 
+  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
+  const [wasTouched, setWasTouched] = useState(false);
+
   if (!entity || !entityDetails) {
     return null;
   }
+
   const entityLabels = entityDetails?.labels || {};
 
-  const labels = Object.entries(entityLabels).map(([key, value]) => `${key}:${value}`);
-  // const labels = entityLabels.map((value: any) => (typeof value === 'string' ? value : JSON.stringify(value)));
-
-  const onSave = (values: any) => {
+  const onSave = () => {
     updateRequestsMap[entity]({
       id: entityDetails.name,
       data: {
         ...entityDetails,
-        labels: values.labels.reduce((previousValue: any, currentValue: string) => {
-          const keyValuePair = currentValue.split('_');
-          return {
-            ...previousValue,
-            [keyValuePair[0]]: keyValuePair[1],
-          };
-        }),
+        labels: decomposeLabels(localLabels),
       },
     })
       .then((res: any) => {
+        if (!res.error) {
+          setWasTouched(false);
+        }
+
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was succesfully updated.`);
         });
       })
       .catch((err: any) => {
+        setWasTouched(true);
         displayDefaultErrorNotification(err);
       });
   };
@@ -71,25 +66,16 @@ const Labels: React.FC = () => {
     <ConfigurationCard
       title="Labels"
       description={`Define the labels you want to add for this ${namingMap[entity]}`}
-      isButtonsDisabled={
-        !form.isFieldsTouched() || form.getFieldsError().filter(({errors}) => errors.length).length > 0
-      }
+      isButtonsDisabled={!wasTouched}
+      onConfirm={onSave}
     >
-      <Form form={form} onFinish={onSave} name="general-settings-name-description" initialValues={{labels}}>
-        <Form.Item name="labels">
-          <Select placeholder="Labels" mode="multiple" allowClear showArrow disabled>
-            {data?.map((value: string, index: number) => {
-              const key = `add-test-label_${index}`;
-
-              return (
-                <Option key={key} value={`${index}_${value}`}>
-                  {value}
-                </Option>
-              );
-            })}
-          </Select>
-        </Form.Item>
-      </Form>
+      <LabelsSelect
+        onChange={values => {
+          setLocalLabels(values);
+          setWasTouched(true);
+        }}
+        defaultLabels={entityLabels}
+      />
     </ConfigurationCard>
   );
 };

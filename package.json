@@ -1,6 +1,6 @@
 {
   "name": "testkube-dashboard",
-  "version": "1.5.14",
+  "version": "1.6.0",
   "author": "Kubeshop",
   "description": "Simple dashboard for TestKube",
   "contributors": [
@@ -84,7 +84,9 @@
     "react-dom": "18.1.0",
     "react-redux": "8.0.1",
     "react-router-dom": "6.3.0",
+    "react-select": "^5.4.0",
     "react-transition-group": "4.4.2",
+    "react-use-websocket": "^4.2.0",
     "redux-logger": "3.0.6",
     "styled-components": "5.3.5",
     "uuid": "8.3.2",

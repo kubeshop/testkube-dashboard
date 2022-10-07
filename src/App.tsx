@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useEffect, useState} from 'react';
 import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 
@@ -25,8 +24,8 @@ import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
 import {CookiesBanner} from './components/molecules';
+
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
-import env from './env';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,7 +33,13 @@ const App: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const protocol = window.location.protocol;
+  const isProtocolSecure = protocol === 'https:';
+  const wsProtocol = isProtocolSecure ? 'wss://' : 'ws://';
+
   const apiEndpoint = useAppSelector(selectApiEndpoint);
+  const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?:\/\//, wsProtocol) : '';
+
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
@@ -88,6 +93,8 @@ const App: React.FC = () => {
     dispatch,
     location,
     navigate,
+    apiEndpoint,
+    wsRoot,
   };
 
   return (

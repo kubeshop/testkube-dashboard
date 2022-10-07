@@ -7,6 +7,8 @@ export type EntityDetailsBlueprintProps = {
   entity: Entity;
 };
 
+type GetExecutionEndpointFunction = (arg: string) => string;
+
 export type EntityDetailsBlueprint = {
   entity: Entity;
   emptyDetailsComponent?: any;
@@ -16,4 +18,5 @@ export type EntityDetailsBlueprint = {
   setExecutions?: any;
   selectExecutions?: any;
   defaultStackRoute: string;
+  getExecutionsEndpoint: string | GetExecutionEndpointFunction;
 };

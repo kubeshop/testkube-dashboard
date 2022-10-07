@@ -1,12 +1,12 @@
 import React from 'react';
 
+import TestDetailsConfig from '@constants/entityDetailsConfig/TestDetailsConfig';
+import TestSuiteDetailsConfig from '@constants/entityDetailsConfig/TestSuiteDetailsConfig';
+
 import {Entity} from '@models/entity';
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 
 import {EntityDetailsContainer} from '@organisms';
-
-import TestDetailsConfig from '@src/constants/entityDetailsConfig/TestDetailsConfig';
-import TestSuiteDetailsConfig from '@src/constants/entityDetailsConfig/TestSuiteDetailsConfig';
 
 const entities: {[key in Entity]: EntityDetailsBlueprint} = {
   'test-suites': TestSuiteDetailsConfig,
