@@ -75,6 +75,7 @@ const Sources: React.FC = () => {
       } else {
         notificationCall('passed', 'Test Sources were updated successfully');
         refetchSources();
+        setIsInitialState(true);
       }
     });
   };
