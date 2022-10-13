@@ -2,12 +2,13 @@ import {Repository} from '@models/repository';
 
 interface Source {
   name: string;
-  username: string;
-  token: string;
+  type?: 'git-uri';
 }
 
 export interface SourceWithString extends Source {
   uri: string;
+  token?: string;
+  username?: string;
 }
 
 export interface SourceWithRepository extends Source {

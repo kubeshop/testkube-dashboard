@@ -1,8 +1,10 @@
-import React, {KeyboardEventHandler, SetStateAction, useEffect, useMemo, useRef, useState} from 'react';
+import React, {SetStateAction, useEffect, useMemo, useRef, useState} from 'react';
 
 import {InputNumber} from 'antd';
 
 import {Button, Modal, Text} from '@custom-antd';
+
+import usePressEnter from '@hooks/usePressEnter';
 
 import {StyledDelayModalContent} from './SettingsTests.styled';
 
@@ -20,16 +22,13 @@ const DelayModal: React.FC<DelayModalProps> = props => {
 
   const delayInputRef = useRef(null);
 
-  const handleDelayModalKeyPress: KeyboardEventHandler<HTMLInputElement> = e => {
-    if (e.code === 'Enter') {
-      onConfirm();
-    }
-  };
+  const onEvent = usePressEnter();
 
   const onConfirm = () => {
     if (isDelayInteger) {
       addDelay(Number(delayValue));
     }
+
     setDelayValue(undefined);
   };
 
@@ -59,7 +58,11 @@ const DelayModal: React.FC<DelayModalProps> = props => {
         </>
       }
       content={
-        <StyledDelayModalContent>
+        <StyledDelayModalContent
+          onKeyPress={event => {
+            onEvent(event, onConfirm);
+          }}
+        >
           <Text className="regular middle">Delay in ms</Text>
           <InputNumber
             ref={delayInputRef}
@@ -67,7 +70,6 @@ const DelayModal: React.FC<DelayModalProps> = props => {
             controls={false}
             value={delayValue}
             onChange={value => setDelayValue(value as SetStateAction<number | undefined>)}
-            onKeyPress={handleDelayModalKeyPress}
           />
         </StyledDelayModalContent>
       }

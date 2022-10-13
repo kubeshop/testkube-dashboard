@@ -30,7 +30,7 @@ const middlewares: Middleware[] = [
 if (process.env.NODE_ENV === `development`) {
   const reduxLoggerMiddleware = createLogger();
 
-  middlewares.push(reduxLoggerMiddleware);
+  // middlewares.push(reduxLoggerMiddleware);
 }
 
 export const store = configureStore({

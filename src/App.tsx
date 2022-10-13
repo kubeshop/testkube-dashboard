@@ -46,8 +46,10 @@ const App: React.FC = () => {
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
 
-  const {data} = useGetExecutorsQuery(null, {pollingInterval: PollingIntervals.long});
-  const {data: sources} = useGetSourcesQuery(null, {pollingInterval: PollingIntervals.long});
+  const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
+    pollingInterval: PollingIntervals.long,
+  });
+  const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {pollingInterval: PollingIntervals.long});
 
   const onAcceptCookies = () => {
     // @ts-ignore
@@ -74,11 +76,12 @@ const App: React.FC = () => {
     navigate,
     apiEndpoint,
     wsRoot,
+    refetchSources,
   };
 
   useEffect(() => {
-    dispatch(setExecutors(data || []));
-  }, [data]);
+    dispatch(setExecutors(executors || []));
+  }, [executors]);
 
   useEffect(() => {
     if (sources) {
@@ -105,6 +108,11 @@ const App: React.FC = () => {
       ga4React.gtag('event', 'user_info', {api_host: window.location.host, os: window.navigator.userAgent});
     }
   }, [ga4React]);
+
+  useEffect(() => {
+    refetchExecutors();
+    refetchSources();
+  }, [apiEndpoint]);
 
   return (
     <MainContext.Provider value={mainContextValue}>

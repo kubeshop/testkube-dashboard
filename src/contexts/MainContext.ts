@@ -12,6 +12,7 @@ export type MainContextProps = {
   location: ReturnType<typeof useLocation>;
   apiEndpoint: string | null;
   wsRoot: string;
+  refetchSources: () => void;
 };
 
 // @ts-ignore

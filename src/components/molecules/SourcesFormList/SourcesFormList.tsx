@@ -33,15 +33,10 @@ const SourcesFormList: React.FC<VariablesFormListProps> = props => {
                     <Form.Item {...rest} name={[name, 'name']} style={{flex: 1, marginBottom: '0'}} rules={[required]}>
                       <Input placeholder="Name your source" />
                     </Form.Item>
-                    <Form.Item
-                      {...rest}
-                      name={[name, 'username']}
-                      style={{flex: 1, marginBottom: '0'}}
-                      rules={[required]}
-                    >
+                    <Form.Item {...rest} name={[name, 'username']} style={{flex: 1, marginBottom: '0'}}>
                       <Input placeholder="Git username" />
                     </Form.Item>
-                    <Form.Item {...rest} name={[name, 'token']} style={{flex: 1, marginBottom: '0'}} rules={[required]}>
+                    <Form.Item {...rest} name={[name, 'token']} style={{flex: 1, marginBottom: '0'}}>
                       <Input placeholder="Git token reference name" />
                     </Form.Item>
                     <Form.Item {...rest} name={[name, 'uri']} style={{flex: 1, marginBottom: '0'}} rules={[required]}>
