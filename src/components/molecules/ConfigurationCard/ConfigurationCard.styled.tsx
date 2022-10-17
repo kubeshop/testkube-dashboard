@@ -10,6 +10,7 @@ export const StyledContainer = styled.div<{isWarning?: boolean}>`
   border: 1px solid ${props => (props.isWarning ? Colors.pink600 : Colors.slate800)};
   border-radius: 4px;
 `;
+
 export const StyledHeader = styled.div`
   display: flex;
   flex-direction: column;
@@ -18,9 +19,11 @@ export const StyledHeader = styled.div`
   padding: 20px;
   border-bottom: 1px solid ${Colors.slate800};
 `;
+
 export const StyledChildren = styled.div`
   padding: 20px;
 `;
+
 export const StyledFooter = styled.div`
   display: flex;
   flex-direction: row;
@@ -41,8 +44,4 @@ export const StyledFooterText = styled.div`
 
   margin: auto;
   margin-right: 20px;
-
-  span.testkube-text {
-    color: ${Colors.slate400};
-  }
 `;

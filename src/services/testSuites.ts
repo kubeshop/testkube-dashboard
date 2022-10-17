@@ -11,6 +11,9 @@ export const testSuitesApi = createApi({
     getTestSuites: builder.query<TestSuiteWithExecution[], TestSuiteFilters>({
       query: filters => `/test-suite-with-executions?${paramsSerializer(filters)}`,
     }),
+    getAllTestSuites: builder.query<TestSuiteWithExecution[], void | null>({
+      query: () => `/test-suite-with-executions`,
+    }),
     updateTestSuite: builder.mutation<void, any>({
       query: body => ({
         url: `/test-suites/${body.id}`,
@@ -55,4 +58,5 @@ export const {
   useAddTestSuiteMutation,
   useDeleteTestSuiteMutation,
   useRunTestSuiteMutation,
+  useGetAllTestSuitesQuery,
 } = testSuitesApi;

@@ -69,6 +69,9 @@ const routes = [
     path: 'triggers',
     icon: TriggersIcon,
     title: 'Triggers',
+    transition: {
+      classNames: 'item',
+    },
   },
 ];
 

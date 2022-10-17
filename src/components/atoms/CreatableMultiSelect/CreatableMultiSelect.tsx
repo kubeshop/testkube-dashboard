@@ -7,18 +7,24 @@ import {Option} from '@models/form';
 import usePressEnter from '@src/hooks/usePressEnter';
 
 import {customStyles, customTheme} from './CreatableMultiSelect.styled';
-import {DefaultMultiValueLabel, DefaultMultiValueRemove, DefaultOptionComponent} from './DefaultComponents';
+import {
+  DefaultDropdownIndicator,
+  DefaultMultiValueLabel,
+  DefaultMultiValueRemove,
+  DefaultOptionComponent,
+} from './DefaultComponents';
 
 type MultiSelectProps = {
   options?: Option[];
   placeholder: string;
   formatCreateLabel: (inputString: string) => string;
   defaultValue?: Option[];
-  onChange: (value: readonly Option[]) => void;
+  onChange?: (value: readonly Option[]) => void;
   validateCreation?: (inputValue: string) => boolean;
   CustomOptionComponent?: (props: OptionProps<Option>) => JSX.Element;
   CustomMultiValueLabelComponent?: (props: MultiValueGenericProps<Option>) => JSX.Element;
   isLoading?: boolean;
+  validation?: boolean;
 };
 
 const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
@@ -32,6 +38,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     CustomOptionComponent = DefaultOptionComponent,
     CustomMultiValueLabelComponent = DefaultMultiValueLabel,
     isLoading = false,
+    validation,
   } = props;
 
   const ref = useRef(null);
@@ -66,13 +73,13 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
       }}
       formatCreateLabel={formatCreateLabel}
       theme={customTheme}
-      styles={customStyles}
+      styles={customStyles(validation)}
       components={{
         Option: CustomOptionComponent,
         MultiValueLabel: CustomMultiValueLabelComponent,
         MultiValueRemove: DefaultMultiValueRemove,
+        DropdownIndicator: DefaultDropdownIndicator,
       }}
-      isLoading={isLoading}
     />
   );
 };
