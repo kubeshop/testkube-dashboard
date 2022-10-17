@@ -84,7 +84,10 @@ export const StyledAntTabs = styled(Tabs)``;
 
 export const StyledAntTabPane = styled(Tabs.TabPane)``;
 
-export const StyledTestExecutionDetailsTabsContainer = styled.div``;
+export const StyledTestExecutionDetailsTabsContainer = styled.div`
+  height: 100%;
+  overflow: auto;
+`;
 
 export const StyledTestSuiteExecutionDetailsTabsContainer = styled.div``;
 
