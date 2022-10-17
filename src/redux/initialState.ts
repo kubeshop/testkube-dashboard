@@ -1,5 +1,6 @@
 import {ConfigState} from '@models/config';
 import {ExecutorsState} from '@models/executors';
+import {SourcesState} from '@models/sources';
 import {TestFilters, TestsState} from '@models/test';
 import {TestSuiteFilters, TestSuitesState} from '@models/testSuite';
 import {TestSuiteExecutionsState} from '@models/testSuiteExecution';
@@ -102,12 +103,17 @@ const initialConfigState: ConfigState = {
   },
 };
 
+const initialSourcesState: SourcesState = {
+  sourcesList: [],
+};
+
 const initialReduxState = {
   testSuiteExecutions: initialTestSuiteExecutionsState,
   testSuites: initialTestSuitesState,
   tests: initialTestsState,
   config: initialConfigState,
   executors: initialExecutorsState,
+  sources: initialSourcesState,
 };
 
 export default initialReduxState;

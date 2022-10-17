@@ -10,6 +10,7 @@ import {EndpointModal} from '@molecules';
 import {openDiscord, openDocumentation, openGithub} from '@utils/externalLinks';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
+import {ReactComponent as SourcesIcon} from '@assets/sources.svg';
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
@@ -51,6 +52,14 @@ const routes = [
     path: 'executors',
     icon: ExecutorsIcon,
     title: 'Executors',
+    transition: {
+      classNames: 'item',
+    },
+  },
+  {
+    path: 'sources',
+    icon: SourcesIcon,
+    title: 'Sources',
     transition: {
       classNames: 'item',
     },

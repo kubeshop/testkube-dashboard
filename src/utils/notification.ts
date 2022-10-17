@@ -1,6 +1,6 @@
 import {notificationCall} from '@molecules';
 
-export function displayDefaultNotificationFlow(res: any, success: () => void) {
+export function displayDefaultNotificationFlow(res: any, success?: () => void) {
   if (res.error) {
     if (res.error.data) {
       const errorTitle = res.error?.data?.title || 'Unknown error';
@@ -10,7 +10,7 @@ export function displayDefaultNotificationFlow(res: any, success: () => void) {
       notificationCall('failed', res.error.error);
     }
   } else {
-    success();
+    success && success();
   }
 }
 

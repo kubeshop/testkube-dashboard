@@ -14,16 +14,18 @@ import {ProtectedRoute} from '@atoms';
 
 import {Sider} from '@organisms';
 
-import {EndpointProcessing, Executors, TestSuites, Tests} from '@pages';
+import {EndpointProcessing, Executors, Sources, TestSuites, Tests} from '@pages';
 
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetExecutorsQuery} from '@services/executors';
+import {useGetSourcesQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
 import {CookiesBanner} from './components/molecules';
+import {setSources} from './redux/reducers/sourcesSlice';
 
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
 
@@ -44,17 +46,10 @@ const App: React.FC = () => {
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
 
-  const {data} = useGetExecutorsQuery(null, {pollingInterval: PollingIntervals.long});
-
-  useEffect(() => {
-    dispatch(setExecutors(data || []));
-  }, [data]);
-
-  useEffect(() => {
-    if (ga4React) {
-      ga4React.pageview(location.pathname);
-    }
-  }, [location.pathname]);
+  const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
+    pollingInterval: PollingIntervals.long,
+  });
+  const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {pollingInterval: PollingIntervals.long});
 
   const onAcceptCookies = () => {
     // @ts-ignore
@@ -74,6 +69,32 @@ const App: React.FC = () => {
     setCookiesVisibility(false);
   };
 
+  const mainContextValue = {
+    ga4React,
+    dispatch,
+    location,
+    navigate,
+    apiEndpoint,
+    wsRoot,
+    refetchSources,
+  };
+
+  useEffect(() => {
+    dispatch(setExecutors(executors || []));
+  }, [executors]);
+
+  useEffect(() => {
+    if (sources) {
+      dispatch(setSources(sources));
+    }
+  }, [sources]);
+
+  useEffect(() => {
+    if (ga4React) {
+      ga4React.pageview(location.pathname);
+    }
+  }, [location.pathname]);
+
   useEffect(() => {
     const isGADisabled = Boolean(Number(localStorage.getItem('isGADisabled')));
 
@@ -88,14 +109,10 @@ const App: React.FC = () => {
     }
   }, [ga4React]);
 
-  const mainContextValue = {
-    ga4React,
-    dispatch,
-    location,
-    navigate,
-    apiEndpoint,
-    wsRoot,
-  };
+  useEffect(() => {
+    refetchExecutors();
+    refetchSources();
+  }, [apiEndpoint]);
 
   return (
     <MainContext.Provider value={mainContextValue}>
@@ -126,6 +143,14 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <Executors />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="sources"
+                element={
+                  <ProtectedRoute>
+                    <Sources />
                   </ProtectedRoute>
                 }
               />

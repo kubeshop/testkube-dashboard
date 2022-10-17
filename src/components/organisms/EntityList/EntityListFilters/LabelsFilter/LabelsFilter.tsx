@@ -1,4 +1,4 @@
-import {KeyboardEventHandler, useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {Space} from 'antd';
 
@@ -11,6 +11,8 @@ import {Button, Input, Title} from '@custom-antd';
 
 import {notificationCall} from '@molecules';
 import {FilterMenuFooter, StyledFilterDropdown, StyledFilterLabel, StyledFilterMenu} from '@molecules/FilterMenu';
+
+import usePressEnter from '@hooks/usePressEnter';
 
 import Colors from '@styles/Colors';
 
@@ -30,6 +32,8 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const [isVisible, setVisibilityState] = useState(false);
   const [labelsMapping, setLabelsMapping] = useState<EntityArray>([]);
+
+  const onEvent = usePressEnter();
 
   const onVisibleChange = (flag: boolean) => {
     setVisibilityState(flag);
@@ -141,14 +145,14 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     dispatch(setFilters({...filters, page: 0, selector: []}));
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLUListElement> = event => {
-    if (event.key === 'Enter') {
-      applyFilters();
-    }
-  };
-
   const menu = (
-    <StyledFilterMenu onClick={onMenuClick} data-cy="labels-filter-dropdown" onKeyDown={handleKeyDown}>
+    <StyledFilterMenu
+      onClick={onMenuClick}
+      data-cy="labels-filter-dropdown"
+      onKeyPress={event => {
+        onEvent(event, applyFilters);
+      }}
+    >
       <StyledLabelsMenuContainer>
         <Title level={5}>Filter tests by Key Value pairs.</Title>
         {renderKeyValueInputs}

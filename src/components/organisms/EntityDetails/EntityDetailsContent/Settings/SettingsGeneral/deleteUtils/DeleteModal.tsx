@@ -1,4 +1,4 @@
-import {KeyboardEventHandler, useContext, useState} from 'react';
+import {useContext, useState} from 'react';
 
 import {Input, Space} from 'antd';
 
@@ -10,6 +10,8 @@ import {Entity} from '@models/entity';
 import {Button, Text} from '@custom-antd';
 
 import {notificationCall} from '@molecules';
+
+import usePressEnter from '@hooks/usePressEnter';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
@@ -42,6 +44,8 @@ const DeleteModal: React.FC<{
     defaultStackRoute,
   } = useContext(EntityDetailsContext);
 
+  const onEvent = usePressEnter();
+
   const [deleteEntity] = useDeleteMutation();
 
   const [checkName, setName] = useState('');
@@ -60,14 +64,17 @@ const DeleteModal: React.FC<{
       });
   };
 
-  const handleDelayModalKeyPress: KeyboardEventHandler<HTMLInputElement> = e => {
-    if (e.code === 'Enter') {
-      onDelete();
-    }
-  };
-
   return (
-    <Space size={24} direction="vertical">
+    <Space
+      size={24}
+      direction="vertical"
+      style={{width: '100%'}}
+      onKeyPress={event => {
+        if (name === checkName) {
+          onEvent(event, onDelete);
+        }
+      }}
+    >
       <Text className="regular middle" color={Colors.slate400}>
         Do you really want to delete this {namingMap[entity]}?
         <br />
@@ -82,7 +89,6 @@ const DeleteModal: React.FC<{
         onChange={e => {
           setName(e.target.value);
         }}
-        onKeyPress={handleDelayModalKeyPress}
       />
       <FooterSpace size={10}>
         <Button $customType="secondary" onClick={onCancel}>

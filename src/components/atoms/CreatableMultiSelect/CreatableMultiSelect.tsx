@@ -4,6 +4,8 @@ import CreatableSelect from 'react-select/creatable';
 
 import {Option} from '@models/form';
 
+import usePressEnter from '@src/hooks/usePressEnter';
+
 import {customStyles, customTheme} from './CreatableMultiSelect.styled';
 import {DefaultMultiValueLabel, DefaultMultiValueRemove, DefaultOptionComponent} from './DefaultComponents';
 
@@ -34,16 +36,16 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
 
   const ref = useRef(null);
 
+  const onEvent = usePressEnter();
+
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      if (validateCreation) {
-        // @ts-ignore
-        if (!validateCreation(ref.current.props.inputValue)) {
-          event.preventDefault();
-        }
-      } else {
+    if (validateCreation) {
+      // @ts-ignore
+      if (!validateCreation(ref.current.props.inputValue)) {
         event.preventDefault();
       }
+    } else {
+      event.preventDefault();
     }
   };
 
@@ -57,7 +59,11 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
       placeholder={placeholder}
       options={options}
       createOptionPosition="first"
-      onKeyDown={handleKeyDown}
+      onKeyDown={event => {
+        onEvent(event, () => {
+          handleKeyDown(event);
+        });
+      }}
       formatCreateLabel={formatCreateLabel}
       theme={customTheme}
       styles={customStyles}

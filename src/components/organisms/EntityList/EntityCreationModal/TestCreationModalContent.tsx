@@ -5,7 +5,9 @@ import {UploadChangeParam} from 'antd/lib/upload';
 
 import {Option} from '@models/form';
 
+import {useAppSelector} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
+import {selectSources} from '@redux/reducers/sourcesSlice';
 
 import {Button, Text} from '@custom-antd';
 
@@ -46,19 +48,23 @@ const TestCreationModalContent: React.FC = () => {
   const {dispatch, navigate} = useContext(MainContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
 
+  const testSources = useAppSelector(selectSources);
+
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [addTest, {isLoading}] = useAddTestMutation();
 
   const onSaveClick = async (values: any, toRun: boolean = false) => {
     const {testSource, testType} = values;
 
-    const testSourceSpecificFields = getTestSourceSpecificFields(values);
+    const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
+
+    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir, testSources);
 
     const requestBody = {
       name: values.name,
       type: testType,
       content: {
-        type: testSource === 'file-uri' ? 'string' : testSource,
+        type: testSource === 'file-uri' ? 'string' : isTestSourceCustomGitDir ? 'git-dir' : testSource,
         ...testSourceSpecificFields,
       },
       labels: decomposeLabels(localLabels),

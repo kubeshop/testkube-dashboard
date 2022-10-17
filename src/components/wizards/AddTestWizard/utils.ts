@@ -1,5 +1,6 @@
 import {Executor} from '@models/executors';
 import {FormItem, Option} from '@models/form';
+import {SourceWithRepository} from '@models/sources';
 import {Step} from '@models/wizard';
 
 import {required, url} from '@utils/form';
@@ -16,7 +17,7 @@ export const addTestSteps: Step[] = [
 
 export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 
-export const addTestFormStructure = (options: any) => [
+export const addTestFormStructure = (options: Option[], customTestSources: Option[] = []) => [
   {
     tooltip: 'Enter the name of the test you wish to add.',
     rules: [required],
@@ -43,6 +44,7 @@ export const addTestFormStructure = (options: any) => [
     fieldName: 'testSource',
     inputType: 'select',
     options: [
+      ...customTestSources,
       {value: 'git-dir', label: 'Git directory'},
       {value: 'git-file', label: 'Git file'},
       {value: 'file-uri', label: 'File'},
@@ -131,6 +133,20 @@ export const fileContentFormFields: FormItem[] = [
   },
 ];
 
+export const customTypeFormFields: FormItem[] = [
+  {
+    tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    fieldName: 'branch',
+    inputType: 'default',
+    placeholder: 'Branch',
+  },
+  {
+    fieldName: 'path',
+    inputType: 'default',
+    placeholder: 'Path',
+  },
+];
+
 export const stringContentFormFields: FormItem[] = [
   {
     rules: [required],
@@ -150,8 +166,33 @@ export const secondStepFormFields: FormItem[] = [
 
 export const optionalFields = ['token', 'branch', 'path'];
 
-export const getTestSourceSpecificFields = (values: any) => {
+export const getTestSourceSpecificFields = (
+  values: any,
+  isTestSourceCustomGitDir?: boolean,
+  customTestSources?: SourceWithRepository[]
+) => {
   const {testSource} = values;
+
+  if (isTestSourceCustomGitDir && customTestSources && customTestSources.length) {
+    const targetCustomTestSource = customTestSources.filter(source => {
+      return source.name === testSource.replace('custom-git-dir-', '');
+    })[0];
+
+    return {
+      repository: {
+        type: 'git-dir',
+        uri: targetCustomTestSource.repository.uri,
+        ...(values.path ? {path: values.path} : {}),
+        ...(values.branch ? {branch: values.branch} : {}),
+        ...(targetCustomTestSource.repository.tokenSecret?.name
+          ? {token: targetCustomTestSource.repository.tokenSecret?.name}
+          : {}),
+        ...(targetCustomTestSource.repository.usernameSecret?.name
+          ? {username: targetCustomTestSource.repository.usernameSecret?.name}
+          : {}),
+      },
+    };
+  }
 
   if (testSource === 'string' || testSource === 'file-uri') {
     return {data: values.string || values.file.fileContent};
@@ -184,6 +225,25 @@ export const remapExecutors = (executors: Executor[]) => {
     types.forEach(type => {
       array.push({label: type, value: type});
     });
+  });
+
+  return array;
+};
+
+export const remapTestSources = (testSources: SourceWithRepository[]) => {
+  if (!testSources || !testSources.length) {
+    return [];
+  }
+
+  const array: Option[] = [];
+
+  testSources.forEach(source => {
+    const {name} = source;
+
+    const optionValue = `custom-git-dir-${name}`;
+    const optionName = `Git source: ${name}`;
+
+    array.push({value: optionValue, label: optionName});
   });
 
   return array;
