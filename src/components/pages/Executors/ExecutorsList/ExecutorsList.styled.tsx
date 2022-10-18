@@ -1,4 +1,4 @@
-import {Space} from 'antd';
+import {Space, Tabs} from 'antd';
 
 import styled from 'styled-components';
 
