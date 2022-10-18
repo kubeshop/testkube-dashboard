@@ -1,4 +1,4 @@
-import {Space} from 'antd';
+import {Space, Tabs} from 'antd';
 
 import styled from 'styled-components';
 
@@ -83,5 +83,11 @@ export const ExecutorsGridItem = styled(Space)`
         fill: ${Colors.purple};
       }
     }
+  }
+`;
+
+export const TabsWrapper = styled(Tabs)`
+  .ant-tabs-nav {
+    margin-bottom: 40px;
   }
 `;

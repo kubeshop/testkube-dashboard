@@ -31,6 +31,8 @@ export const executorsSlice = createSlice({
 });
 
 export const selectExecutors = (state: RootState) => state.executors.executorsList;
+export const selectCustomExecutors = (state: RootState) =>
+  state.executors.executorsList.filter(executorItem => executorItem.executor.types[0] === 'container');
 export const selectExecutorsFeaturesMap = (state: RootState) => state.executors.executorsFeaturesMap;
 
 export const {setExecutors} = executorsSlice.actions;

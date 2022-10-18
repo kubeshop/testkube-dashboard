@@ -8,4 +8,6 @@ export const PageBlueprintWrapper = styled.div`
 
 export const PageBlueprintHeader = styled.div`
   padding-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
 `;

@@ -1,8 +1,13 @@
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
+
+import {Tabs} from 'antd';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCustomExecutors} from '@redux/reducers/executorsSlice';
 
 import {TestRunnerIcon} from '@atoms';
 
-import {Button, Text, Title} from '@custom-antd';
+import {Button, Modal, Text, Title} from '@custom-antd';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
@@ -10,10 +15,15 @@ import Colors from '@styles/Colors';
 
 import {PageBlueprint} from '@src/components/organisms';
 
-import {ExecutorsGrid, ExecutorsGridItem} from './Executors.styled';
+import {ExecutorsGrid, ExecutorsGridItem, TabsWrapper} from './Executors.styled';
 import {executorsList} from './utils';
 
 const Executors: React.FC = () => {
+  const [activeTabKey, setActiveTabKey] = useState('custom');
+  const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
+
+  const customExecutors = useAppSelector(selectCustomExecutors);
+
   const renderedExecutorsGrid = useMemo(() => {
     return executorsList.map(executorItem => {
       const {type, title, description, docLink} = executorItem;
@@ -37,6 +47,11 @@ const Executors: React.FC = () => {
     });
   }, [executorsList]);
 
+  const renderedCustomExecutorsGrid = useMemo(() => {
+    return [...customExecutors, 'executor'].map(executorItem => {
+      return <Button>execuot</Button>;
+    });
+  }, [executorsList]);
   return (
     <PageBlueprint
       title="Executors"
@@ -48,8 +63,30 @@ const Executors: React.FC = () => {
           </a>
         </>
       }
+      headerButton={
+        <Button $customType="primary" onClick={() => setAddExecutorModalVisibility(true)}>
+          Create a new executor
+        </Button>
+      }
     >
-      <ExecutorsGrid>{renderedExecutorsGrid}</ExecutorsGrid>
+      <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
+        <Tabs.TabPane tab="Custom executors" key="custom">
+          <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
+          {isAddExecutorModalVisible ? (
+            <Modal
+              title="Create an executor"
+              isModalVisible={isAddExecutorModalVisible}
+              setIsModalVisible={setAddExecutorModalVisibility}
+              footer={null}
+              width={880}
+              content={<div />}
+            />
+          ) : null}
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Official executors" key="official">
+          <ExecutorsGrid>{renderedExecutorsGrid}</ExecutorsGrid>
+        </Tabs.TabPane>
+      </TabsWrapper>
     </PageBlueprint>
   );
 };
