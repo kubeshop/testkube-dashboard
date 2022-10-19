@@ -1,6 +1,10 @@
+import {useMemo} from 'react';
+
+import {Dropdown, Menu} from 'antd';
+
 import {intervalToDuration} from 'date-fns';
 
-import {StatusIcon} from '@atoms';
+import {Dots, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
@@ -12,8 +16,8 @@ import Colors from '@styles/Colors';
 
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled';
 
-const TableRow: React.FC<{data: any}> = props => {
-  const {data} = props;
+const TableRow: React.FC<{data: any; onAbortTestExecution: any}> = props => {
+  const {data, onAbortTestExecution} = props;
   const {status, number, startTime, name, id, durationMs} = data;
 
   const isRunning = useIsRunning(status);
@@ -25,7 +29,29 @@ const TableRow: React.FC<{data: any}> = props => {
     } catch (err) {}
   };
 
+  const abortTestExecution = () => {
+    if (onAbortTestExecution) {
+      onAbortTestExecution(id);
+    }
+  };
+
   const executedTime = getIntervalExecTime();
+
+  const renderExecutionActions = () => {
+    let actionsArray = [];
+
+    if (isRunning) {
+      actionsArray.push({key: 1, label: <span onClick={abortTestExecution}>Abort execution</span>});
+    }
+
+    return actionsArray;
+  };
+
+  const renderedExecutionActions = useMemo(() => {
+    return renderExecutionActions();
+  }, [isRunning]);
+
+  const menu = <Menu items={renderedExecutionActions} />;
 
   return (
     <ItemWrapper key={id}>
@@ -41,6 +67,19 @@ const TableRow: React.FC<{data: any}> = props => {
             <Text className="regular small" color={Colors.slate200}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </Text>
+            {renderedExecutionActions && renderedExecutionActions.length ? (
+              <div
+                onClick={e => {
+                  e.stopPropagation();
+                }}
+              >
+                <Dropdown overlay={menu} placement="bottom">
+                  <div style={{width: 20}}>
+                    <Dots color={Colors.grey450} />
+                  </div>
+                </Dropdown>
+              </div>
+            ) : null}
           </ItemColumn>
         </ItemRow>
         <ItemRow $flex={1}>

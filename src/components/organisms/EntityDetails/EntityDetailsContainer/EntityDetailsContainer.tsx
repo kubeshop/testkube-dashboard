@@ -14,6 +14,8 @@ import useStateCallback from '@hooks/useStateCallback';
 
 import {PollingIntervals} from '@utils/numbers';
 
+import {useAbortTestExecutionMutation} from '@services/tests';
+
 import {EntityDetailsContext, MainContext} from '@contexts';
 
 import EntityDetailsContent from '../EntityDetailsContent';
@@ -21,6 +23,8 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const {entity, useGetEntityDetails, useGetMetrics, defaultStackRoute, getExecutionsEndpoint} = props;
+
+  const [abortTestExecution] = useAbortTestExecutionMutation();
 
   const {navigate, location, wsRoot} = useContext(MainContext);
   const {pathname} = location;
@@ -222,6 +226,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     metrics,
     daysFilterValue,
     setDaysFilterValue,
+    abortTestExecution,
   };
 
   return (
