@@ -27,14 +27,18 @@ export const executorsSlice = createSlice({
       state.executorsFeaturesMap = executorsFeaturesMap;
       state.executorsList = action.payload || {};
     },
+    setCurrentExecutor: (state: Draft<ExecutorsState>, action: PayloadAction<Executor>) => {
+      state.currentExecutor = action.payload;
+    },
   },
 });
 
 export const selectExecutors = (state: RootState) => state.executors.executorsList;
 export const selectCustomExecutors = (state: RootState) =>
-  state.executors.executorsList.filter(executorItem => executorItem.executor.types[0] === 'container');
+  state.executors.executorsList.filter(executorItem => executorItem.executor.executorType === 'container');
 export const selectExecutorsFeaturesMap = (state: RootState) => state.executors.executorsFeaturesMap;
+export const selectCurrentExecutor = (state: RootState) => state.executors.currentExecutor;
 
-export const {setExecutors} = executorsSlice.actions;
+export const {setExecutors, setCurrentExecutor} = executorsSlice.actions;
 
 export default executorsSlice.reducer;

@@ -19,6 +19,7 @@ type ExecutorFeature = 'artifacts' | 'junit-report';
 interface ExecutorsState {
   executorsList: Executor[];
   executorsFeaturesMap: EntityMap<ExecutorFeature[]>;
+  currentExecutor?: Executor;
 }
 
 export type {ExecutorsState, Executor, ExecutorFeature};

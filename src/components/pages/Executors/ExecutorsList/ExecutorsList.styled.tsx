@@ -1,4 +1,4 @@
-import {Space, Tabs} from 'antd';
+import {Space} from 'antd';
 
 import styled from 'styled-components';
 
@@ -18,6 +18,10 @@ export const ExecutorsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   gap: 32px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
 `;
 
 export const ExecutorsGridItem = styled(Space)`
@@ -86,8 +90,20 @@ export const ExecutorsGridItem = styled(Space)`
   }
 `;
 
-export const TabsWrapper = styled(Tabs)`
-  .ant-tabs-nav {
-    margin-bottom: 40px;
-  }
+export const AddExecutorsModalContainer = styled.div`
+  display: flex;
+`;
+
+export const CustomExecutorContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+
+  padding: 20px;
+
+  background-color: ${Colors.slate800};
+
+  cursor: pointer;
 `;

@@ -2,10 +2,7 @@ import {useContext, useState} from 'react';
 
 import {Input, Space} from 'antd';
 
-import {BaseQueryFn, FetchArgs, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
-import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
-
-import {Entity} from '@models/entity';
+import {UseMutationType} from '@models/rtk';
 
 import {Button, Text} from '@custom-antd';
 
@@ -18,31 +15,22 @@ import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
-import {FooterSpace} from './Modal.styled';
+import {FooterSpace} from './DeleteEntityModal.styled';
 
-const namingMap: {[key in Entity]: string} = {
-  'test-suites': 'test suite',
-  tests: 'test',
-};
-
-const DeleteModal: React.FC<{
+const DeleteEntityModal: React.FC<{
   // onCancel is passed from parent component <Modal />.
   // Do not pass it directly
   onCancel?: any;
-  useDeleteMutation: UseMutation<
-    MutationDefinition<any, BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, {}, {}>, never, void, any>
-  >;
+  useDeleteMutation: UseMutationType;
+  name: string;
+  entityLabel: string;
+  defaultStackRoute: string;
 }> = props => {
-  const {onCancel, useDeleteMutation} = props;
+  const {onCancel, useDeleteMutation, name, entityLabel, defaultStackRoute} = props;
 
   const {navigate} = useContext(MainContext);
-  const {
-    entityDetails: {name},
-    entity,
-    defaultStackRoute,
-  } = useContext(EntityDetailsContext);
 
   const onEvent = usePressEnter();
 
@@ -54,7 +42,7 @@ const DeleteModal: React.FC<{
     deleteEntity(name)
       .then(res => {
         displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully deleted.`);
+          notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
 
           navigate(defaultStackRoute);
         });
@@ -76,16 +64,16 @@ const DeleteModal: React.FC<{
       }}
     >
       <Text className="regular middle" color={Colors.slate400}>
-        Do you really want to delete this {namingMap[entity]}?
+        Do you really want to delete this {entityLabel}?
         <br />
         All your historical and analytical data will also be removed.
       </Text>
       <Text className="regular middle" color={Colors.slate400}>
-        Please enter the name of this {namingMap[entity]} (<span style={{color: Colors.whitePure}}>{name}</span>) to
-        delete it forever.
+        Please enter the name of this {entityLabel} (<span style={{color: Colors.whitePure}}>{name}</span>) to delete it
+        forever.
       </Text>
       <Input
-        placeholder={`${uppercaseFirstSymbol(namingMap[entity])} name`}
+        placeholder={`${uppercaseFirstSymbol(entityLabel)} name`}
         onChange={e => {
           setName(e.target.value);
         }}
@@ -102,4 +90,4 @@ const DeleteModal: React.FC<{
   );
 };
 
-export default DeleteModal;
+export default DeleteEntityModal;

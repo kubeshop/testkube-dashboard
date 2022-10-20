@@ -5,18 +5,23 @@ import {Entity} from '@models/entity';
 import {useAppSelector} from '@redux/hooks';
 import {closeSettingsTabConfig, selectRedirectTarget} from '@redux/reducers/configSlice';
 
+import {SettingsLeftNavigation, StyledSettingsContainer, StyledTabContentContainer} from '@molecules';
+
 import {EntityDetailsContext, MainContext} from '@contexts';
 
-import {StyledSettingsContainer, StyledTabContentContainer} from './Settings.styled';
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
 import General from './SettingsGeneral';
-import SettingsNavigation from './SettingsNavigation';
 import SettingsTests from './SettingsTests';
 import SettingsVariables from './SettingsVariables';
 
 const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
   'test-suites': [<General />, <SettingsTests />, <SettingsVariables />, <SettingsDefinition />],
   tests: [<General />, <SettingsVariables />, <SettingsDefinition />],
+};
+
+const navigationOptionsConfig: {[key in Entity]: string[]} = {
+  'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Definition'],
+  tests: ['General', 'Variables & Secrets', 'Definition'],
 };
 
 const Settings: React.FC = () => {
@@ -37,7 +42,13 @@ const Settings: React.FC = () => {
 
   return (
     <StyledSettingsContainer>
-      <SettingsNavigation selectedSettingsTab={selectedSettingsTab} setSelectedSettingsTab={setSelectedSettingsTab} />
+      {entity ? (
+        <SettingsLeftNavigation
+          options={navigationOptionsConfig[entity]}
+          selectedOption={selectedSettingsTab}
+          setSelectedOption={setSelectedSettingsTab}
+        />
+      ) : null}
       <StyledTabContentContainer>{subTabsMap[selectedSettingsTab]}</StyledTabContentContainer>
     </StyledSettingsContainer>
   );

@@ -13,15 +13,17 @@ import {Button, Text} from '@custom-antd';
 
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import FirstStepHint from '@wizards/AddTestWizard/hints/FirstStepHint';
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
 import {getTestSourceSpecificFields} from '@wizards/AddTestWizard/utils';
 
+import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
+
+import {Hint} from '@src/components/molecules';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
@@ -150,7 +152,11 @@ const TestCreationModalContent: React.FC = () => {
           </StyledFormItem>
         </StyledFormSpace>
       </Form>
-      {FirstStepHint}
+      <Hint
+        title="Missing a test type?"
+        description="Add test types through testkube executors."
+        openLink={openCustomExecutorDocumentation}
+      />
     </div>
   );
 };

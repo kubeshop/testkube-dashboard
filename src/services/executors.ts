@@ -8,10 +8,27 @@ export const executorsApi = createApi({
   reducerPath: 'executorsApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
-    getExecutors: builder.query<Executor[], null>({
+    getExecutors: builder.query<Executor[], null | void>({
       query: () => '/executors',
+    }),
+    createExecutor: builder.mutation<void, any>({
+      query: body => ({
+        url: `/executors`,
+        method: 'POST',
+        body,
+      }),
+    }),
+    getExecutorDetails: builder.query<any, string>({
+      query: id => `/executors/${id}`,
+    }),
+    deleteExecutor: builder.mutation<void, any>({
+      query: id => ({
+        url: `/executors/${id}`,
+        method: 'DELETE',
+      }),
     }),
   }),
 });
 
-export const {useGetExecutorsQuery} = executorsApi;
+export const {useGetExecutorsQuery, useCreateExecutorMutation, useGetExecutorDetailsQuery, useDeleteExecutorMutation} =
+  executorsApi;

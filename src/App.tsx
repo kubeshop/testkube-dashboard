@@ -139,7 +139,7 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="executors"
+                path="executors/*"
                 element={
                   <ProtectedRoute>
                     <Executors />
