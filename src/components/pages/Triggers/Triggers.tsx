@@ -6,7 +6,7 @@ import {DownOutlined} from '@ant-design/icons';
 
 import {TestWithExecution} from '@models/test';
 
-import {Button} from '@custom-antd';
+import {Button, Skeleton} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
@@ -47,12 +47,14 @@ const addTriggerOptions: {key: TriggerType; label: string; description: string}[
 ];
 
 const Triggers = () => {
-  const {data: triggersKeymap} = useGetTriggersKeymapQuery();
-  const {data: testsList = []} = useGetAllTestsQuery();
-  const {data: testsSuitesList = []} = useGetAllTestSuitesQuery();
-  const {data: triggersList} = useGetTriggersListQuery();
+  const {data: triggersKeymap, isLoading: keymapLoading} = useGetTriggersKeymapQuery();
+  const {data: testsList = [], isLoading: testsLoading} = useGetAllTestsQuery();
+  const {data: testsSuitesList = [], isLoading: testSuitesLoading} = useGetAllTestSuitesQuery();
+  const {data: triggersList, isLoading: triggersLoading} = useGetTriggersListQuery();
 
   const [createTrigger] = useCreateTriggerMutation();
+
+  const [form] = Form.useForm();
 
   useEffect(() => {
     if (triggersList) {
@@ -98,8 +100,6 @@ const Triggers = () => {
   const actionOptions = triggersKeymap?.actions.map((item: string) => ({label: item, value: item}));
   const events = triggersKeymap?.events;
 
-  const [form] = Form.useForm();
-
   const addTriggerMenu = (add: (value: any) => void) => {
     return (
       <Menu
@@ -128,7 +128,6 @@ const Triggers = () => {
 
     const body = {
       ...values.triggers[0],
-      name: 'test-trigger3',
       namespace: 'testkube',
       execution: 'test',
       resourceSelector: getSelector(values.triggers[0].resourceSelector),
@@ -141,6 +140,8 @@ const Triggers = () => {
     //   console.log(res);
     // });
   };
+
+  const isLoading = keymapLoading || testsLoading || testSuitesLoading || triggersLoading;
 
   return (
     <PageBlueprint
@@ -162,36 +163,42 @@ const Triggers = () => {
             form.submit();
           }}
         >
-          <Form.List name="triggers" initialValue={[]}>
-            {(fields, {add, remove}) => (
-              <Wrapper>
-                {fields.map((key, name) => {
-                  const triggerItemData = form.getFieldValue('triggers')[name];
-                  if (!triggerItemData) {
-                    return null;
-                  }
-                  return (
-                    <TriggerItem
-                      type={triggerItemData.type}
-                      resources={resourcesOptions}
-                      actions={actionOptions}
-                      events={events}
-                      name={name}
-                      remove={remove}
-                      form={form}
-                      testsData={testsData}
-                      testSuitesData={testSuitesData}
-                    />
-                  );
-                })}
-                <Dropdown overlay={() => addTriggerMenu(add)} placement="bottomLeft" trigger={['click']}>
-                  <Button $customType="secondary" style={{width: '160px'}}>
-                    Add a new trigger <DownOutlined />
-                  </Button>
-                </Dropdown>
-              </Wrapper>
-            )}
-          </Form.List>
+          {isLoading ? (
+            <>
+              <Skeleton />
+            </>
+          ) : (
+            <Form.List name="triggers" initialValue={[]}>
+              {(fields, {add, remove}) => (
+                <Wrapper>
+                  {fields.map((key, name) => {
+                    const triggerItemData = form.getFieldValue('triggers')[name];
+                    if (!triggerItemData) {
+                      return null;
+                    }
+                    return (
+                      <TriggerItem
+                        type={triggerItemData.type}
+                        resources={resourcesOptions}
+                        actions={actionOptions}
+                        events={events}
+                        name={name}
+                        remove={remove}
+                        form={form}
+                        testsData={testsData}
+                        testSuitesData={testSuitesData}
+                      />
+                    );
+                  })}
+                  <Dropdown overlay={() => addTriggerMenu(add)} placement="bottomLeft" trigger={['click']}>
+                    <Button $customType="secondary" style={{width: '160px'}}>
+                      Add a new trigger <DownOutlined />
+                    </Button>
+                  </Dropdown>
+                </Wrapper>
+              )}
+            </Form.List>
+          )}
         </ConfigurationCard>
       </Form>
     </PageBlueprint>
