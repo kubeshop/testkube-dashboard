@@ -99,11 +99,9 @@ const Executors: React.FC = () => {
       }
     >
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        {customExecutors.length > 0 ? (
-          <Tabs.TabPane tab="Custom executors" key="custom">
-            <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
-          </Tabs.TabPane>
-        ) : null}
+        <Tabs.TabPane tab="Custom executors" key="custom">
+          <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
+        </Tabs.TabPane>
         <Tabs.TabPane tab="Official executors" key="official">
           <ExecutorsGrid>{renderedExecutorsGrid}</ExecutorsGrid>
         </Tabs.TabPane>
