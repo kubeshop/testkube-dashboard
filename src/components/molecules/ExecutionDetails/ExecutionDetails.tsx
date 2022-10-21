@@ -1,8 +1,7 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 
-import {Dropdown} from 'antd';
-import Menu from 'antd/lib/menu';
+import {Dropdown, Menu} from 'antd';
 
 import {CloseOutlined} from '@ant-design/icons';
 

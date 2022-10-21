@@ -29,10 +29,21 @@ const iconsMap: any = {
   pending: HourglassOutlined,
   queued: PendingStatusIcon,
   delay: DelayIcon,
+  cancelled: PendingStatusIcon,
 };
 
 type IconProps = {
-  name: 'cog' | 'documentation' | 'discord' | 'github' | 'passed' | 'failed' | 'running' | 'pending' | 'delay';
+  name:
+    | 'cog'
+    | 'documentation'
+    | 'discord'
+    | 'github'
+    | 'passed'
+    | 'failed'
+    | 'running'
+    | 'pending'
+    | 'delay'
+    | 'cancelled';
   component?: any;
   style?: any;
 };

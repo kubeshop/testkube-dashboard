@@ -177,6 +177,21 @@ export const GlobalStyle = createGlobalStyle`
     display: none;
   }
 
+  // Dropdown 
+  
+  .ant-dropdown-menu {
+    background: ${Colors.slate800};
+
+    .ant-dropdown-menu-item {
+      background: ${Colors.slate700};
+  
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+  
+
   // Pagination
 
   .ant-table-pagination.ant-pagination {

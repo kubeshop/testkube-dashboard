@@ -58,7 +58,6 @@ const Timeout: React.FC = () => {
             </a>
           </Text>
         }
-        isButtonsDisabled
       >
         <Space size={32} direction="vertical" style={{width: '100%'}}>
           <Form.Item name="name" rules={[digits]} style={{marginBottom: '0px'}}>

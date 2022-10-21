@@ -1047,7 +1047,7 @@ export enum StatusColors {
   pending = Colors.lightGrey,
   queued = Colors.lightGrey,
   neverRun = Colors.whitePure,
-  cancelled = Colors.errorRed,
+  cancelled = Colors.slate600,
 }
 
 export enum BorderColors {
