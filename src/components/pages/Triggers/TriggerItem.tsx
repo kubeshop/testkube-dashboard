@@ -93,30 +93,14 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
           );
         }}
       </Form.Item>
-      <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) => {
-          const prevResourceValue = prevValues.triggers[name].resource;
-          const curResourceValue = currentValues.triggers[name].resource;
-
-          if (!prevResourceValue || !curResourceValue) {
-            return false;
-          }
-
-          return prevResourceValue !== curResourceValue;
-        }}
-      >
-        {({getFieldValue, setFieldValue, isFieldTouched}) => {
+      <Form.Item noStyle shouldUpdate>
+        {({getFieldValue}) => {
           let eventsOptions;
 
           const triggerResource = getFieldValue(['triggers', name, 'resource']);
 
           if (events && triggerResource) {
             eventsOptions = events[triggerResource].map((item: string) => ({label: item, value: item}));
-          }
-
-          if (isFieldTouched(['triggers', name, 'resource'])) {
-            setFieldValue(['triggers', name, 'event'], null);
           }
 
           return (
