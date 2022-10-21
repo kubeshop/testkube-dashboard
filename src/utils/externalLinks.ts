@@ -11,7 +11,7 @@ export const openDiscord = () => {
 };
 
 export const openCustomExecutorDocumentation = () => {
-  window.open('https://kubeshop.github.io/testkube/test-types/executor-custom/');
+  window.open('https://kubeshop.github.io/testkube/test-types/container-executor');
 };
 
 export const openTestkubeDashboardDocumentation = () => {

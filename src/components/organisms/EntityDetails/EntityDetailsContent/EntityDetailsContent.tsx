@@ -25,7 +25,7 @@ import Colors from '@styles/Colors';
 
 import {AnalyticsContext, EntityDetailsContext, MainContext} from '@contexts';
 
-import {StyledContainer, StyledPageHeader, TabsWrapper} from './EntityDetailsContent.styled';
+import {StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
@@ -133,7 +133,7 @@ const EntityDetailsContent: React.FC = () => {
         ) : null}
       </StyledPageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} isRowSelected={isRowSelected} /> : null}
-      <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
+      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Recent executions" key="Executions" disabled={isPageDisabled}>
           <ExecutionsTable triggerRun={onRunButtonClick} />
         </Tabs.TabPane>
@@ -143,7 +143,7 @@ const EntityDetailsContent: React.FC = () => {
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
           <Settings />
         </Tabs.TabPane>
-      </TabsWrapper>
+      </Tabs>
     </StyledContainer>
   );
 };

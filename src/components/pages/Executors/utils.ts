@@ -1,7 +1,7 @@
 import {TestExecutor} from '@models/testExecutors';
 
 type ExecutorGridItem = {
-  type: TestExecutor | 'custom';
+  type: TestExecutor | 'custom' | 'container';
   title: string;
   description: string;
   docLink: string;

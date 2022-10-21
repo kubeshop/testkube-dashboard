@@ -132,7 +132,6 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
     <Modal
       title="Testkube API endpoint"
       isModalVisible={visible}
-      footer={null}
       setIsModalVisible={setModalState}
       content={
         <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">

@@ -107,6 +107,7 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 500;
 
     .ant-tabs-nav {
+      margin-bottom: 40px;
       &::before {
         border-bottom: unset !important;
       }

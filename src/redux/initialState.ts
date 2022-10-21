@@ -87,6 +87,7 @@ const initialTestsState: TestsState = {
 const initialExecutorsState: ExecutorsState = {
   executorsList: [],
   executorsFeaturesMap: {},
+  currentExecutor: undefined,
 };
 
 const initialConfigState: ConfigState = {

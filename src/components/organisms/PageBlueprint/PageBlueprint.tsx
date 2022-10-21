@@ -10,10 +10,11 @@ type PageBlueprintProps = {
   children: React.ReactNode;
   title: string;
   description: React.ReactNode;
+  headerButton?: React.ReactNode;
 };
 
 const PageBlueprint: React.FC<PageBlueprintProps> = props => {
-  const {children, title, description} = props;
+  const {children, title, description, headerButton} = props;
 
   return (
     <PageBlueprintWrapper>
@@ -26,6 +27,7 @@ const PageBlueprint: React.FC<PageBlueprintProps> = props => {
             {description}
           </Text>
         </Space>
+        {headerButton}
       </PageBlueprintHeader>
       {children}
     </PageBlueprintWrapper>

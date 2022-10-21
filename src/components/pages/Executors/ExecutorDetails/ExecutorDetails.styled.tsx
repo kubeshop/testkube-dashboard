@@ -2,6 +2,19 @@ import {PageHeader} from 'antd';
 
 import styled from 'styled-components';
 
+export const StyledPageHeader = styled(PageHeader)`
+  &.testkube-pageheader {
+    &.ant-page-header {
+      padding: 0px;
+
+      .ant-page-header-heading-left,
+      .ant-page-header-heading-extra {
+        margin: 0;
+      }
+    }
+  }
+`;
+
 export const StyledContainer = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
@@ -14,17 +27,4 @@ export const StyledContainer = styled.div`
   height: 100%;
   padding: 40px;
   padding-left: 1vw;
-`;
-
-export const StyledPageHeader = styled(PageHeader)`
-  &.testkube-pageheader {
-    &.ant-page-header {
-      padding: 0px;
-
-      .ant-page-header-heading-left,
-      .ant-page-header-heading-extra {
-        margin: 0;
-      }
-    }
-  }
 `;
