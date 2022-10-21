@@ -5,8 +5,6 @@ import {Form, Input} from 'antd';
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, updateExecutorPrivateRegistry} from '@redux/reducers/executorsSlice';
 
-import {Text} from '@custom-antd';
-
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
@@ -74,14 +72,6 @@ const PrivateRegistry: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
-        footerText={
-          <Text className="regular middle">
-            Learn more about{' '}
-            <a href="https://kubeshop.github.io/testkube/test-types/container-executor/" target="_blank">
-              image pull authentication
-            </a>
-          </Text>
-        }
       >
         <Form.Item label="Secret ref name" name="privateRegistry" rules={[required]}>
           <Input placeholder="Secret ref name" />

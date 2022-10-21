@@ -7,8 +7,6 @@ import {Executor} from '@models/executors';
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, updateExecutorContainerImage} from '@redux/reducers/executorsSlice';
 
-import {Text} from '@custom-antd';
-
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
@@ -67,14 +65,6 @@ const ContainerImagePanel: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
-        footerText={
-          <Text className="regular middle">
-            Learn more about{' '}
-            <a href="https://kubeshop.github.io/testkube/test-types/container-executor/" target="_blank">
-              executor images
-            </a>
-          </Text>
-        }
       >
         <Form.Item label="Container image" required name="image" rules={[required]}>
           <Input placeholder="Container image" />

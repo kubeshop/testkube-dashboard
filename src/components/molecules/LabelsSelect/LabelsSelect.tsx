@@ -9,14 +9,20 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {useGetLabelsQuery} from '@services/labels';
 
+import {composeLabels} from './utils';
+
 type LabelsSelectProps = {
-  onChange: (value: readonly Option[]) => void;
+  onChange?: (value: readonly Option[]) => void;
   defaultLabels?: {[key: string]: string};
   options?: {[key: string]: string[]};
+  placeholder?: string;
+  validation?: boolean;
 };
 
 const isValidLabel = (value: string) => {
-  const match = value?.match(/(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]:(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?)/g);
+  const match = value?.match(
+    /(([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]:\s?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?)/g
+  );
 
   if (match) {
     return match[0] === value;
@@ -26,20 +32,14 @@ const isValidLabel = (value: string) => {
 };
 
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
-  const {onChange, defaultLabels, options} = props;
+  const {onChange, defaultLabels, options, placeholder = 'Add or create new labels', validation} = props;
 
   const {data, isFetching} = useGetLabelsQuery(null, {
     pollingInterval: PollingIntervals.default,
     skip: Boolean(options),
   });
 
-  const formattedDefaultLabels = Object.entries(defaultLabels || {}).map(([key, value]) => {
-    const labelString = `${key}${value ? `:${value}` : ''}`;
-    return {
-      label: labelString,
-      value: labelString,
-    };
-  });
+  const formattedDefaultLabels = composeLabels(defaultLabels);
 
   const formattedOptions = Object.entries(options || data || {})
     .map(([key, value]) => {
@@ -56,7 +56,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   return (
     <CreatableMultiSelect
       onChange={onChange}
-      placeholder="Add or create new labels"
+      placeholder={placeholder}
       formatCreateLabel={(inputString: string) => {
         if (typeof inputString === 'string' && inputString.includes(':')) {
           if (!isValidLabel(inputString)) {
@@ -72,6 +72,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
       CustomMultiValueLabelComponent={LabelsMultiValueLabel}
       validateCreation={isValidLabel}
       isLoading={isFetching}
+      validation={validation}
     />
   );
 };

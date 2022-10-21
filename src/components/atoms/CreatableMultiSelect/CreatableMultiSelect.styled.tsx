@@ -21,15 +21,20 @@ export const StyledMultiLabel = styled.div`
   padding: 3px 5px;
 `;
 
-export const customStyles: StylesConfig<Option, true, GroupBase<Option>> = {
+export const customStyles: (validation?: boolean) => StylesConfig<Option, true, GroupBase<Option>> = (
+  validation = true
+) => ({
   input: styles => ({...styles, color: Colors.slate200, fontWeight: 400}),
-  valueContainer: styles => ({...styles, backgroundColor: Colors.slate800}),
+  valueContainer: styles => ({
+    ...styles,
+    backgroundColor: Colors.slate800,
+  }),
   placeholder: styles => ({...styles, color: Colors.slate500, fontWeight: 400}),
   control: styles => ({
     ...styles,
-    borderColor: 'transparent',
+    borderColor: validation ? 'transparent' : Colors.pink500,
     backgroundColor: Colors.slate800,
-    height: '44px',
+    minHeight: '44px',
   }),
   indicatorSeparator: styles => ({...styles, width: 0}),
   dropdownIndicator: styles => ({
@@ -76,7 +81,7 @@ export const customStyles: StylesConfig<Option, true, GroupBase<Option>> = {
       backgroundColor: Colors.slate700,
     },
   }),
-};
+});
 
 export const customTheme: ThemeConfig = theme => {
   const {colors, ...rest} = theme;
@@ -92,3 +97,12 @@ export const customTheme: ThemeConfig = theme => {
     },
   };
 };
+
+export const DropdownWrapper = styled.div`
+  padding-right: 11px;
+  svg {
+    fill: ${Colors.slate500};
+    font-size: 12px;
+    line-height: 1;
+  }
+`;

@@ -79,17 +79,6 @@ const Arguments: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
-        footerText={
-          <Text className="regular middle">
-            Learn more about{' '}
-            <a
-              href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/"
-              target="_blank"
-            >
-              arguments for commands
-            </a>
-          </Text>
-        }
       >
         <Form.List name="arguments">
           {(fields, {add, remove}) => (

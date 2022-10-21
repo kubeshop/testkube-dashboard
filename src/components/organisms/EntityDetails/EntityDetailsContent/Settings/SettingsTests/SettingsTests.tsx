@@ -145,12 +145,12 @@ const SettingsTests = () => {
       title="Tests"
       description="Define the tests and their order of execution for this test suite"
       footerText={
-        <Text className="regular middle">
+        <>
           Learn more about{' '}
           <a href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/" target="_blank">
             Tests in a test suite
           </a>
-        </Text>
+        </>
       }
       onConfirm={saveSteps}
     >

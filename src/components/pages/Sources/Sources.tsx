@@ -7,8 +7,6 @@ import {SourceWithString} from '@models/sources';
 import {useAppSelector} from '@redux/hooks';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
-import {Text} from '@custom-antd';
-
 import {ConfigurationCard, SourcesFormList, notificationCall} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
@@ -129,12 +127,12 @@ const Sources: React.FC = () => {
           title="GitHub"
           description="Testkube can connect to different GitHub projects to help you set up your tests."
           footerText={
-            <Text className="regular middle">
+            <>
               Learn more about{' '}
               <a href="https://kubeshop.github.io/testkube/openapi/#tag/test-sources" target="_blank">
                 GitHub as a source
               </a>
-            </Text>
+            </>
           }
           onConfirm={onSave}
           onCancel={onCancel}

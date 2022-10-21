@@ -122,7 +122,7 @@ const Arguments: React.FC = () => {
       title="Arguments"
       description="Define arguments which will be passed to the test executor."
       footerText={
-        <Text className="regular middle">
+        <>
           Learn more about{' '}
           <a
             href="https://kubeshop.github.io/testkube/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests"
@@ -130,7 +130,7 @@ const Arguments: React.FC = () => {
           >
             Arguments
           </a>
-        </Text>
+        </>
       }
       onConfirm={() => {
         form.submit();
