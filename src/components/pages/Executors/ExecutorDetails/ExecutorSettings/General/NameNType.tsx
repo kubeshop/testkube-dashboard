@@ -12,10 +12,10 @@ import {ConfigurationCard} from '@molecules';
 import {required} from '@utils/form';
 
 const Delete: React.FC = () => {
-  const executor = useAppSelector(selectCurrentExecutor);
+  const {name, executor} = useAppSelector(selectCurrentExecutor);
+  const {types} = executor;
 
-  const name = executor?.name;
-  const type = executor?.executor.types[0];
+  const type = types[0];
 
   const [form] = Form.useForm();
 

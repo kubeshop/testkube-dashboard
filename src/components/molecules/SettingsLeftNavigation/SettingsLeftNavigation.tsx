@@ -12,6 +12,7 @@ type SettingsLeftNavigationProps = {
 
 const SettingsLeftNavigation: React.FC<SettingsLeftNavigationProps> = props => {
   const {options, selectedOption, setSelectedOption} = props;
+
   return (
     <StyledNavigationContatner>
       {options.map((value, index) => (

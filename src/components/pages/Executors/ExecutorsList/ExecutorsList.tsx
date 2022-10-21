@@ -18,14 +18,17 @@ import {PageBlueprint} from '@src/components/organisms';
 
 import {executorsList} from '../utils';
 import AddExecutorsModal from './AddExecutorsModal';
+import EmptyCustomExecutors from './EmptyCustomExecutors';
 import {CustomExecutorContainer, ExecutorsGrid, ExecutorsGridItem} from './ExecutorsList.styled';
 
 const Executors: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate, apiEndpoint} = useContext(MainContext);
+
   const [activeTabKey, setActiveTabKey] = useState('custom');
   const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
 
-  const {data: executors, isLoading, refetch} = useGetExecutorsQuery();
+  const {data: executors, refetch} = useGetExecutorsQuery();
+
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
   const onNavigateToDetails = (name: string) => {
@@ -33,14 +36,8 @@ const Executors: React.FC = () => {
   };
 
   useEffect(() => {
-    if (customExecutors.length <= 0 && !isLoading) {
-      setActiveTabKey('official');
-    }
-  }, [customExecutors, isLoading]);
-
-  useEffect(() => {
     refetch();
-  }, []);
+  }, [apiEndpoint]);
 
   const renderedExecutorsGrid = useMemo(() => {
     return executorsList.map(executorItem => {
@@ -98,9 +95,17 @@ const Executors: React.FC = () => {
         </Button>
       }
     >
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
+      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane defaultActiveKey="custom">
         <Tabs.TabPane tab="Custom executors" key="custom">
-          <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
+          {renderedCustomExecutorsGrid && renderedCustomExecutorsGrid.length ? (
+            <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
+          ) : (
+            <EmptyCustomExecutors
+              onButtonClick={() => {
+                setAddExecutorModalVisibility(true);
+              }}
+            />
+          )}
         </Tabs.TabPane>
         <Tabs.TabPane tab="Official executors" key="official">
           <ExecutorsGrid>{renderedExecutorsGrid}</ExecutorsGrid>

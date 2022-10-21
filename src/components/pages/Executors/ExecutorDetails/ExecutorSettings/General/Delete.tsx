@@ -7,7 +7,7 @@ import {Modal} from '@custom-antd';
 
 import {ConfigurationCard, DeleteEntityModal} from '@molecules';
 
-import {useDeleteExecutorMutation} from '@src/services/executors';
+import {useDeleteExecutorMutation} from '@services/executors';
 
 const Delete: React.FC = () => {
   const executor = useAppSelector(selectCurrentExecutor);

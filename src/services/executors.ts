@@ -4,6 +4,7 @@ import {Executor} from '@models/executors';
 
 import {dynamicBaseQuery} from '@utils/fetchUtils';
 
+// useUpdateCustomExecutor
 export const executorsApi = createApi({
   reducerPath: 'executorsApi',
   baseQuery: dynamicBaseQuery,
@@ -15,6 +16,13 @@ export const executorsApi = createApi({
       query: body => ({
         url: `/executors`,
         method: 'POST',
+        body,
+      }),
+    }),
+    updateCustomExecutor: builder.mutation<void, any>({
+      query: ({body, executorId}) => ({
+        url: `/executors/${executorId}`,
+        method: 'PATCH',
         body,
       }),
     }),
@@ -30,5 +38,10 @@ export const executorsApi = createApi({
   }),
 });
 
-export const {useGetExecutorsQuery, useCreateExecutorMutation, useGetExecutorDetailsQuery, useDeleteExecutorMutation} =
-  executorsApi;
+export const {
+  useGetExecutorsQuery,
+  useCreateExecutorMutation,
+  useGetExecutorDetailsQuery,
+  useDeleteExecutorMutation,
+  useUpdateCustomExecutorMutation,
+} = executorsApi;

@@ -1,3 +1,4 @@
+import {Args} from './args';
 import {EntityMap} from './entityMap';
 
 type Executor = {
@@ -11,8 +12,13 @@ type Executor = {
     jobTemplate: string;
     labels: EntityMap;
     features: ExecutorFeature[];
+    imagePullSecrets?: ImagePullSecret[];
+    command?: string[];
+    args?: Args;
   };
 };
+
+export type ImagePullSecret = {name: string};
 
 type ExecutorFeature = 'artifacts' | 'junit-report';
 

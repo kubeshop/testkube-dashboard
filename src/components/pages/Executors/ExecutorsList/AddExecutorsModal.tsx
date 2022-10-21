@@ -7,12 +7,12 @@ import {Button, Input} from '@custom-antd';
 import {Hint} from '@molecules';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
+import {required} from '@utils/form';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateExecutorMutation} from '@services/executors';
 
 import {MainContext} from '@contexts';
-
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 
@@ -44,13 +44,13 @@ const AddExecutorsModal = () => {
   return (
     <AddExecutorsModalContainer>
       <Form style={{flex: 1}} layout="vertical" onFinish={onFinish}>
-        <Form.Item label="Name" required name="name">
+        <Form.Item label="Name" required name="name" rules={[required]}>
           <Input placeholder="e.g.: my-container-executor" />
         </Form.Item>
-        <Form.Item label="Executor type" required name="type">
+        <Form.Item label="Executor type" required name="type" rules={[required]}>
           <Input placeholder="e.g.: my-executor/type" />
         </Form.Item>
-        <Form.Item label="Container image" required name="image">
+        <Form.Item label="Container image" required name="image" rules={[required]}>
           <Input placeholder="e.g.: curlimages/curl:7.85.0 " />
         </Form.Item>
         <Form.Item
