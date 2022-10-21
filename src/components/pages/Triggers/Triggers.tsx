@@ -52,7 +52,7 @@ const Triggers = () => {
   const {data: triggersKeymap, isLoading: keymapLoading} = useGetTriggersKeymapQuery();
   const {data: testsList = [], isLoading: testsLoading} = useGetAllTestsQuery();
   const {data: testsSuitesList = [], isLoading: testSuitesLoading} = useGetAllTestSuitesQuery();
-  const {data: triggersList, isLoading: triggersLoading} = useGetTriggersListQuery();
+  const {data: triggersList, isLoading: triggersLoading, refetch} = useGetTriggersListQuery();
 
   const [updateTriggers] = useUpdateTriggersMutation();
 
@@ -86,6 +86,10 @@ const Triggers = () => {
   useEffect(() => {
     setDefaultTriggersData(triggersList);
   }, [triggersList]);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   const testsData = useMemo(() => {
     return testsList.map((item: TestWithExecution) => ({
@@ -177,7 +181,7 @@ const Triggers = () => {
       description={
         <>
           Listen for events and run specific testkube actions.{' '}
-          <a href="https://kubeshop.github.io/testkube/test-types/executor-custom" target="_blank">
+          <a href="https://kubeshop.github.io/testkube/using-testkube/triggers" target="_blank">
             Learn more about Triggers
           </a>
         </>
@@ -204,9 +208,11 @@ const Triggers = () => {
                 <Wrapper>
                   {fields.map((key, name) => {
                     const triggerItemData = form.getFieldValue('triggers')[name];
+
                     if (!triggerItemData) {
                       return null;
                     }
+
                     return (
                       <TriggerItem
                         type={triggerItemData.type}
@@ -215,7 +221,6 @@ const Triggers = () => {
                         events={events}
                         name={name}
                         remove={remove}
-                        form={form}
                         testsData={testsData}
                         testSuitesData={testSuitesData}
                       />
