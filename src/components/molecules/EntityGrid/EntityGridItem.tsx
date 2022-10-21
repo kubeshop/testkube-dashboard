@@ -23,7 +23,7 @@ import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, StyledMetricItem} from
 const EntityGridItem: React.FC<any> = props => {
   const {item, onClick} = props;
   const {dataItem, latestExecution} = item;
-  const {useGetMetrics} = useContext(EntityListContext);
+  const {useGetMetrics, entity} = useContext(EntityListContext);
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
   const startDate = latestExecution?.startTime ? format(new Date(latestExecution?.startTime), executionDateFormat) : '';
@@ -37,8 +37,11 @@ const EntityGridItem: React.FC<any> = props => {
   );
 
   const executions = metrics?.executions || [];
+
+  const dataTestValue = `${entity}-list-item`;
+
   return (
-    <ItemWrapper onClick={onClick} ref={ref}>
+    <ItemWrapper onClick={onClick} ref={ref} data-test={dataTestValue}>
       <StatusIcon status={status} />
       <DetailsWrapper>
         <ItemRow $flex={1}>
