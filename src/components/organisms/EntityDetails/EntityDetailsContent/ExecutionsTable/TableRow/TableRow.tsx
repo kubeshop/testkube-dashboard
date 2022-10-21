@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {useContext, useMemo} from 'react';
 
 import {Dropdown, Menu} from 'antd';
 
@@ -14,11 +14,15 @@ import {constructExecutedString, formatDuration} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
+import EntityDetailsContext from '@contexts/EntityDetailsContext';
+
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled';
 
 const TableRow: React.FC<{data: any; onAbortTestExecution: any}> = props => {
   const {data, onAbortTestExecution} = props;
   const {status, number, startTime, name, id, durationMs} = data;
+
+  const {entity} = useContext(EntityDetailsContext);
 
   const isRunning = useIsRunning(status);
 
@@ -67,7 +71,7 @@ const TableRow: React.FC<{data: any; onAbortTestExecution: any}> = props => {
             <Text className="regular small" color={Colors.slate200}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </Text>
-            {renderedExecutionActions && renderedExecutionActions.length ? (
+            {renderedExecutionActions && renderedExecutionActions.length && entity === 'tests' ? (
               <div
                 onClick={e => {
                   e.stopPropagation();

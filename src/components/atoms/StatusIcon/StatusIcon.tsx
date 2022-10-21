@@ -31,8 +31,8 @@ const iconStyles: any = {
     background: Colors.slate900,
   },
   cancelled: {
-    borderColor: Colors.slate600,
-    background: Colors.slate900,
+    borderColor: Colors.pink600,
+    background: Colors.pink900,
   },
 };
 

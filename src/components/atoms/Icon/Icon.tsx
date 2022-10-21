@@ -29,7 +29,7 @@ const iconsMap: any = {
   pending: HourglassOutlined,
   queued: PendingStatusIcon,
   delay: DelayIcon,
-  cancelled: PendingStatusIcon,
+  cancelled: FailedStatusIcon,
 };
 
 type IconProps = {

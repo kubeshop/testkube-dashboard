@@ -36,7 +36,7 @@ import {getHeaderValues} from './utils';
 
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityDetailsContext);
+  const {execId, entity} = useContext(EntityDetailsContext);
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
@@ -151,7 +151,7 @@ const ExecutionDetails: React.FC = () => {
                   </Text>
                 </ItemColumn>
                 <ItemColumn className="flex-auto">
-                  {renderedExecutionActions && renderedExecutionActions.length ? (
+                  {renderedExecutionActions && renderedExecutionActions.length && entity === 'tests' ? (
                     <div
                       onClick={e => {
                         e.stopPropagation();
