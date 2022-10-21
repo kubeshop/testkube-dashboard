@@ -74,9 +74,11 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
       <Form.Item noStyle shouldUpdate>
         {() => {
           let isValid = true;
+
           if (form.getFieldError(['triggers', name, 'resourceSelector']).length > 0) {
             isValid = false;
           }
+
           return (
             <TriggerFormItem flex={3} name={[name, 'resourceSelector']} rules={required}>
               {type[0] === 'name' ? (
@@ -95,10 +97,13 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
       <Form.Item noStyle shouldUpdate>
         {() => {
           let eventsOptions;
+
           const triggerResource = form.getFieldValue('triggers')[name].resource;
+
           if (events && triggerResource) {
             eventsOptions = events[triggerResource].map((item: string) => ({label: item, value: item}));
           }
+
           return (
             <TriggerFormItem flex={1.5} name={[name, 'event']} rules={required}>
               <Select
@@ -120,9 +125,11 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
       <Form.Item noStyle shouldUpdate>
         {() => {
           let isValid = true;
+
           if (form.getFieldError(['triggers', name, 'testSelector']).length > 0) {
             isValid = false;
           }
+
           return (
             <TriggerFormItem flex={3} name={[name, 'testSelector']} rules={required}>
               {type[1] === 'name' ? (

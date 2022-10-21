@@ -11,7 +11,6 @@ export const triggersApi = createApi({
     getTriggersKeymap: builder.query<TriggersKeymap, void>({
       query: () => `/keymap/triggers`,
     }),
-
     getTriggersList: builder.query<any, void>({
       query: () => `/triggers`,
     }),
@@ -22,7 +21,15 @@ export const triggersApi = createApi({
         body,
       }),
     }),
+    updateTriggers: builder.mutation<void, any>({
+      query: body => ({
+        url: `/triggers`,
+        method: 'PATCH',
+        body,
+      }),
+    }),
   }),
 });
 
-export const {useGetTriggersKeymapQuery, useCreateTriggerMutation, useGetTriggersListQuery} = triggersApi;
+export const {useGetTriggersKeymapQuery, useCreateTriggerMutation, useGetTriggersListQuery, useUpdateTriggersMutation} =
+  triggersApi;

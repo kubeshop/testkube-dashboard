@@ -8,14 +8,16 @@ import {TestWithExecution} from '@models/test';
 
 import {Button, Skeleton} from '@custom-antd';
 
-import {ConfigurationCard} from '@molecules';
+import {ConfigurationCard, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {PageBlueprint} from '@organisms';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
-import {useCreateTriggerMutation, useGetTriggersKeymapQuery, useGetTriggersListQuery} from '@services/triggers';
+import {useGetTriggersKeymapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
+
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import AddTriggerOption from './AddTriggerOption';
 import TriggerItem from './TriggerItem';
@@ -52,13 +54,13 @@ const Triggers = () => {
   const {data: testsSuitesList = [], isLoading: testSuitesLoading} = useGetAllTestSuitesQuery();
   const {data: triggersList, isLoading: triggersLoading} = useGetTriggersListQuery();
 
-  const [createTrigger] = useCreateTriggerMutation();
+  const [updateTriggers] = useUpdateTriggersMutation();
 
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    if (triggersList) {
-      const triggersData = triggersList.map((item: any) => {
+  const setDefaultTriggersData = (_triggersList: any) => {
+    if (_triggersList) {
+      const triggersData = _triggersList.map((item: any) => {
         try {
           const isResourceName = item.resourceSelector.name;
           const isTestName = item.testSelector.name;
@@ -67,18 +69,22 @@ const Triggers = () => {
           return {
             ...item,
             type: [resourceType, testType],
-            resourceSelector: isResourceName || item.resourceSelector.labelsSelector.matchLabels,
+            resourceSelector: isResourceName || item.resourceSelector.labelSelector.matchLabels,
             testSelector: isTestName || item.testSelector.labelSelector.matchLabels,
+            action: `${item.action} ${item.execution}`,
           };
         } catch (err) {
           return null;
         }
       });
-      console.log(triggersData);
       form.setFieldsValue({
         triggers: triggersData,
       });
     }
+  };
+
+  useEffect(() => {
+    setDefaultTriggersData(triggersList);
   }, [triggersList]);
 
   const testsData = useMemo(() => {
@@ -97,7 +103,14 @@ const Triggers = () => {
   }, [testsSuitesList]);
 
   const resourcesOptions = triggersKeymap?.resources.map((item: string) => ({label: item, value: item}));
-  const actionOptions = triggersKeymap?.actions.map((item: string) => ({label: item, value: item}));
+  const actionOptions = triggersKeymap?.actions
+    .map((actionItem: string) => {
+      return triggersKeymap.executions.map(executionItem => {
+        const label = `${actionItem} ${executionItem}`;
+        return {label, value: label};
+      });
+    })
+    .flat();
   const events = triggersKeymap?.events;
 
   const addTriggerMenu = (add: (value: any) => void) => {
@@ -114,7 +127,10 @@ const Triggers = () => {
   const onSave = (values: any) => {
     const getSelector = (formValue: any) => {
       if (typeof formValue === 'string') {
-        return JSON.parse(formValue);
+        return {
+          name: formValue,
+          namespace: 'testkube',
+        };
       }
       if (formValue.length) {
         return {
@@ -123,22 +139,34 @@ const Triggers = () => {
           },
         };
       }
-      return null;
+      return {
+        labelSelector: {
+          matchLabels: formValue,
+        },
+      };
     };
 
-    const body = {
-      ...values.triggers[0],
-      namespace: 'testkube',
-      execution: 'test',
-      resourceSelector: getSelector(values.triggers[0].resourceSelector),
-      testSelector: getSelector(values.triggers[0].testSelector),
-    };
-    delete body.type;
+    const body = values.triggers.map((trigger: any) => {
+      const [action, execution] = trigger.action.split(' ');
+      const triggerPayload = {
+        ...trigger,
+        action,
+        execution,
+        namespace: 'testkube',
+        resourceSelector: getSelector(trigger.resourceSelector),
+        testSelector: getSelector(trigger.testSelector),
+      };
+      delete triggerPayload.type;
+      return triggerPayload;
+    });
 
-    console.log(body);
-    // createTrigger(body).then((res: any) => {
-    //   console.log(res);
-    // });
+    updateTriggers(body)
+      .then((res: any) => {
+        displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers succesfully updated'));
+      })
+      .catch(error => {
+        displayDefaultErrorNotification(error);
+      });
   };
 
   const isLoading = keymapLoading || testsLoading || testSuitesLoading || triggersLoading;
@@ -161,6 +189,9 @@ const Triggers = () => {
           description="Testkube can listen to cluster events and trigger specific actions. Events and actions are related to labelled resources."
           onConfirm={() => {
             form.submit();
+          }}
+          onCancel={() => {
+            setDefaultTriggersData(triggersList);
           }}
         >
           {isLoading ? (
