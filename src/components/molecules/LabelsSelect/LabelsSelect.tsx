@@ -73,6 +73,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
       validateCreation={isValidLabel}
       isLoading={isFetching}
       validation={validation}
+      dataTest="labels"
     />
   );
 };

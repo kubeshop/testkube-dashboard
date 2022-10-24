@@ -28,7 +28,7 @@ const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
     return <Text className="regular small">{trimmedChildren}</Text>;
   };
 
-  return <StyledMultiLabel>{renderChildren()}</StyledMultiLabel>;
+  return <StyledMultiLabel data-test={`selected-label-${children}`}>{renderChildren()}</StyledMultiLabel>;
 };
 
 export default LabelsMultiValueLabel;
