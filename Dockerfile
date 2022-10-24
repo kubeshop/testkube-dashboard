@@ -1,6 +1,6 @@
 ARG TARGET=nginx:alpine
 
-FROM node:16 as build
+FROM node:19 as build
 WORKDIR /app
 
 ARG REACT_APP_GOOGLE_ANALYTICS_ID
