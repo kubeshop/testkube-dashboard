@@ -58,17 +58,17 @@ const routes = [
     },
   },
   {
-    path: 'sources',
-    icon: SourcesIcon,
-    title: 'Sources',
+    path: 'triggers',
+    icon: TriggersIcon,
+    title: 'Triggers',
     transition: {
       classNames: 'item',
     },
   },
   {
-    path: 'triggers',
-    icon: TriggersIcon,
-    title: 'Triggers',
+    path: 'sources',
+    icon: SourcesIcon,
+    title: 'Sources',
     transition: {
       classNames: 'item',
     },

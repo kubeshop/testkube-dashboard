@@ -146,7 +146,7 @@ const TestCreationModalContent: React.FC = () => {
           <Text className="regular big">Test details</Text>
           <FirstStep onFileChange={onFileChange} onLabelsChange={setLocalLabels} />
           <StyledFormItem>
-            <Button htmlType="submit" loading={isLoading}>
+            <Button htmlType="submit" loading={isLoading} data-test="add-a-new-test-create-button">
               {isLoading ? 'Creating...' : 'Create'}
             </Button>
           </StyledFormItem>

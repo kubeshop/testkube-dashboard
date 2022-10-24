@@ -89,7 +89,13 @@ const TestSuiteCreationModalContent: React.FC = () => {
         </StyledFormItem>
         <LabelsSelect onChange={setLocalLabels} />
         <StyledFormItem>
-          <Button htmlType="submit" disabled={isLoading} loading={isLoading} style={{width: '118px'}}>
+          <Button
+            htmlType="submit"
+            disabled={isLoading}
+            loading={isLoading}
+            style={{width: '118px'}}
+            data-test="add-a-new-test-suite-create-button"
+          >
             {isLoading ? 'Creating...' : 'Create'}
           </Button>
         </StyledFormItem>
