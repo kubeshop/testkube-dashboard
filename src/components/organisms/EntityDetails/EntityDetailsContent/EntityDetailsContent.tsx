@@ -29,13 +29,13 @@ import {StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
-
+  
 const filterOptions: OptionType[] = [
-  {value: 7, label: 'Last 7 days', key: 'last7Days'},
-  {value: 30, label: 'Last 30 days', key: 'last30Days'},
-  {value: 90, label: 'Last 90 days', key: 'last90Days'},
-  {value: 365, label: 'This year', key: 'thisYear'},
-  {value: 0, label: 'All days', key: 'allDays'},
+  {value: 7, label: 'Timeframe: last 7 days', key: 'last7Days'},
+  {value: 30, label: 'Timeframe: last 30 days', key: 'last30Days'},
+  {value: 90, label: 'Timeframe: last 90 days', key: 'last90Days'},
+  {value: 365, label: 'Timeframe: this year', key: 'thisYear'},
+  {value: 0, label: 'See all executions', key: 'allDays'},
 ];
 
 const EntityDetailsContent: React.FC = () => {
