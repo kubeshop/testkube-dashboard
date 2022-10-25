@@ -7,7 +7,7 @@ import {TestExecutor} from '@models/testExecutors';
 
 import {TestRunnerIcon} from '@atoms';
 
-import {Text} from '@custom-antd';
+import {Input, Text} from '@custom-antd';
 
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 
@@ -81,7 +81,7 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
           return (
             <TriggerFormItem flex={3} name={[name, 'resourceSelector']} rules={required}>
               {type[0] === 'name' ? (
-                renderSelectResource('Select resource', {tests: testsData, testSuites: testSuitesData})
+                <Input placeholder="Enter resource name" />
               ) : (
                 <LabelsSelect
                   placeholder="Resource labels"
