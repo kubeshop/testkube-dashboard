@@ -19,7 +19,7 @@ export const Wrapper = styled.div`
 export const TriggerItemContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: start;
   gap: 10px;
   flex-wrap: wrap;
 
@@ -43,4 +43,12 @@ export const StyledTestOptionWrapper = styled.span`
     width: 24px;
     height: 24px;
   }
+`;
+
+export const TextWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 44px;
 `;
