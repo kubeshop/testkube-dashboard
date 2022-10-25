@@ -25,6 +25,7 @@ type MultiSelectProps = {
   CustomMultiValueLabelComponent?: (props: MultiValueGenericProps<Option>) => JSX.Element;
   isLoading?: boolean;
   validation?: boolean;
+  dataTest?: string;
 };
 
 const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
@@ -39,6 +40,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     CustomMultiValueLabelComponent = DefaultMultiValueLabel,
     isLoading = false,
     validation,
+    dataTest,
   } = props;
 
   const ref = useRef(null);
@@ -80,6 +82,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
         MultiValueRemove: DefaultMultiValueRemove,
         DropdownIndicator: DefaultDropdownIndicator,
       }}
+      data-test={dataTest}
     />
   );
 };

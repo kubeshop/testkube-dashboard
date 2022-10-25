@@ -8,17 +8,17 @@ describe('Navigation Actions', () => {
     cy.get('[data-cy=navigation-sider]').as('navigation').should('be.visible');
   });
 
-  it('redirects to test-suites', () => {
+  it.skip('redirects to test-suites', () => {
     cy.get('@navigation').contains('Test Suites').click();
     cy.url().should('include', 'test-suites');
   });
 
-  it('redirects to tests', () => {
+  it.skip('redirects to tests', () => {
     cy.get('@navigation').contains('Tests').click();
     cy.url().should('include', 'tests');
   });
 
-  it('opens modal', () => {
+  it.skip('opens modal', () => {
     cy.get('@navigation').get('[data-cy=Settings]').click();
     cy.get('[data-cy=modal-api-endpoint]').should('be.visible');
   });

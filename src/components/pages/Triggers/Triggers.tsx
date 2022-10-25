@@ -15,8 +15,9 @@ import {PageBlueprint} from '@organisms';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
-import {useGetTriggersKeymapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
+import {useGetTriggersKeyMapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
 
+import {TestTrigger} from '@src/models/triggers';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import AddTriggerOption from './AddTriggerOption';
@@ -48,8 +49,8 @@ const addTriggerOptions: {key: TriggerType; label: string; description: string}[
   },
 ];
 
-const Triggers = () => {
-  const {data: triggersKeymap, isLoading: keymapLoading} = useGetTriggersKeymapQuery();
+const Triggers: React.FC = () => {
+  const {data: triggersKeyMap, isLoading: keyMapLoading} = useGetTriggersKeyMapQuery();
   const {data: testsList = [], isLoading: testsLoading} = useGetAllTestsQuery();
   const {data: testsSuitesList = [], isLoading: testSuitesLoading} = useGetAllTestSuitesQuery();
   const {data: triggersList, isLoading: triggersLoading, refetch} = useGetTriggersListQuery();
@@ -58,20 +59,23 @@ const Triggers = () => {
 
   const [form] = Form.useForm();
 
-  const setDefaultTriggersData = (_triggersList: any) => {
+  const setDefaultTriggersData = (_triggersList?: TestTrigger[]) => {
     if (_triggersList) {
-      const triggersData = _triggersList.map((item: any) => {
+      const triggersData = _triggersList.map(trigger => {
+        const {resourceSelector, testSelector, action, execution} = trigger;
+
         try {
-          const isResourceName = item.resourceSelector.name;
-          const isTestName = item.testSelector.name;
+          const isResourceName = resourceSelector.name;
+          const isTestName = testSelector.name;
           const resourceType = isResourceName ? 'name' : 'labels';
           const testType = isTestName ? 'name' : 'labels';
+
           return {
-            ...item,
+            ...trigger,
             type: [resourceType, testType],
-            resourceSelector: isResourceName || item.resourceSelector.labelSelector.matchLabels,
-            testSelector: isTestName || item.testSelector.labelSelector.matchLabels,
-            action: `${item.action} ${item.execution}`,
+            resourceSelector: isResourceName || resourceSelector.labelSelector.matchLabels,
+            testSelector: isTestName || testSelector.labelSelector.matchLabels,
+            action: `${action} ${execution}`,
           };
         } catch (err) {
           return null;
@@ -106,16 +110,16 @@ const Triggers = () => {
     }));
   }, [testsSuitesList]);
 
-  const resourcesOptions = triggersKeymap?.resources.map((item: string) => ({label: item, value: item}));
-  const actionOptions = triggersKeymap?.actions
+  const resourcesOptions = triggersKeyMap?.resources.map((item: string) => ({label: item, value: item}));
+  const actionOptions = triggersKeyMap?.actions
     .map((actionItem: string) => {
-      return triggersKeymap.executions.map(executionItem => {
+      return triggersKeyMap.executions.map(executionItem => {
         const label = `${actionItem} ${executionItem}`;
         return {label, value: label};
       });
     })
     .flat();
-  const events = triggersKeymap?.events;
+  const events = triggersKeyMap?.events;
 
   const addTriggerMenu = (add: (value: any) => void) => {
     return (
@@ -166,14 +170,14 @@ const Triggers = () => {
 
     updateTriggers(body)
       .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers succesfully updated'));
+        displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
       })
       .catch(error => {
         displayDefaultErrorNotification(error);
       });
   };
 
-  const isLoading = keymapLoading || testsLoading || testSuitesLoading || triggersLoading;
+  const isLoading = keyMapLoading || testsLoading || testSuitesLoading || triggersLoading;
 
   return (
     <PageBlueprint

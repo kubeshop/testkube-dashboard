@@ -3,4 +3,6 @@ export type ModalConfigProps = {
   width?: number;
   footer?: React.ReactNode;
   content: React.ReactNode;
+  dataTestModalRoot?: string;
+  dataTestCloseBtn?: string;
 };

@@ -26,6 +26,7 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
     placeholder: 'Name',
   },
   {
+    dataTest: 'test-creation_label_option',
     inputType: 'labels',
   },
   {
@@ -51,6 +52,7 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
       {value: 'string', label: 'String'},
     ],
     placeholder: 'Source',
+    dataTest: 'test-creation_type_source_option',
   },
 ];
 

@@ -11,17 +11,17 @@ describe('Navigation Layout', () => {
     cy.get('[data-cy=navigation-sider]').as('navigation').should('be.visible');
   });
 
-  it('displays routes', () => {
+  it.skip('displays routes', () => {
     expect(cy.get('@navigation').contains('Test Suites'));
     expect(cy.get('@navigation').contains('Tests'));
   });
 
-  it('displays sider when screen is small', () => {
+  it.skip('displays sider when screen is small', () => {
     cy.viewport('macbook-13');
     cy.get('@navigation').should('have.css', 'width', '80px').and('have.css', 'height', '800px');
   });
 
-  it('displays sider when screen is big', () => {
+  it.skip('displays sider when screen is big', () => {
     cy.viewport(2560, 1650);
     cy.get('@navigation').should('have.css', 'width', '80px').and('have.css', 'height', '1650px');
   });

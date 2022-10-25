@@ -52,7 +52,7 @@ const LabelsOption = (props: OptionProps<Option>) => {
   if (allowClick) {
     return (
       // @ts-ignore
-      <StyledOption ref={innerRef} {...innerProps}>
+      <StyledOption ref={innerRef} {...innerProps} data-test={`label-option-${children}`}>
         {modifyChildren()}
       </StyledOption>
     );

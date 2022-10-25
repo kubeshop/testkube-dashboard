@@ -1,6 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {TriggersKeymap} from '@models/triggers';
+import {TestTrigger, TriggersKeyMap} from '@models/triggers';
 
 import {dynamicBaseQuery} from '@utils/fetchUtils';
 
@@ -8,10 +8,10 @@ export const triggersApi = createApi({
   reducerPath: 'triggersApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
-    getTriggersKeymap: builder.query<TriggersKeymap, void>({
+    getTriggersKeyMap: builder.query<TriggersKeyMap, void>({
       query: () => `/keymap/triggers`,
     }),
-    getTriggersList: builder.query<any, void>({
+    getTriggersList: builder.query<TestTrigger[], void>({
       query: () => `/triggers`,
     }),
     createTrigger: builder.mutation<any, any>({
@@ -31,5 +31,5 @@ export const triggersApi = createApi({
   }),
 });
 
-export const {useGetTriggersKeymapQuery, useCreateTriggerMutation, useGetTriggersListQuery, useUpdateTriggersMutation} =
+export const {useGetTriggersKeyMapQuery, useCreateTriggerMutation, useGetTriggersListQuery, useUpdateTriggersMutation} =
   triggersApi;

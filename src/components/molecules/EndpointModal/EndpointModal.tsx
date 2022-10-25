@@ -133,6 +133,8 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
       title="Testkube API endpoint"
       isModalVisible={visible}
       setIsModalVisible={setModalState}
+      dataTestModalRoot="endpoint-modal"
+      dataTestCloseBtn="endpoint-modal-close-button"
       content={
         <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
           <Text>
@@ -158,13 +160,21 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
               }}
               value={apiEndpoint}
               width="300px"
+              data-test="endpoint-modal-input"
             />
-            <Button type="primary" htmlType="submit" disabled={isLoading} loading={isLoading}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              disabled={isLoading}
+              loading={isLoading}
+              data-test="endpoint-modal-get-button"
+            >
               Get results
             </Button>
           </StyledFormContainer>
         </StyledSearchUrlForm>
       }
+      data-test="endpoint-modal"
     />
   );
 };
