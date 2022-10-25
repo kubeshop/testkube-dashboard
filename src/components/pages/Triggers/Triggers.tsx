@@ -40,7 +40,7 @@ const addTriggerOptions: {key: TriggerType; label: string; description: string}[
   {
     key: 'name-name',
     label: 'Name to Name',
-    description: 'Identify your cluster and testkube resource by na,e',
+    description: 'Identify your cluster and testkube resource by name',
   },
   {
     key: 'label-name',

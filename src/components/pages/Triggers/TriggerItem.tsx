@@ -7,15 +7,17 @@ import {TestExecutor} from '@models/testExecutors';
 
 import {TestRunnerIcon} from '@atoms';
 
-import {Text} from '@custom-antd';
+import {Input, Text} from '@custom-antd';
+
+import {LabelsSelect} from '@molecules';
+
+import {requiredNoText} from '@utils/form';
 
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 
 import Colors from '@styles/Colors';
 
-import {LabelsSelect} from '@src/components/molecules';
-
-import {StyledTestOptionWrapper, TriggerFormItem, TriggerItemContainer} from './Triggers.styled';
+import {StyledTestOptionWrapper, TextWrapper, TriggerFormItem, TriggerItemContainer} from './Triggers.styled';
 
 const {Option, OptGroup} = Select;
 
@@ -29,8 +31,6 @@ type TriggerItemProps = {
   testsData: any[];
   testSuitesData: any[];
 };
-
-const required = [{required: true, message: ''}];
 
 const TriggerItem: React.FC<TriggerItemProps> = props => {
   const {type, resources, actions, name, events, remove, testsData, testSuitesData} = props;
@@ -68,10 +68,12 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
 
   return (
     <TriggerItemContainer>
-      <Text className="small uppercase" color={Colors.slate500}>
-        When
-      </Text>
-      <TriggerFormItem flex={1} name={[name, 'resource']} rules={required}>
+      <TextWrapper>
+        <Text className="small uppercase" color={Colors.slate500}>
+          When
+        </Text>
+      </TextWrapper>
+      <TriggerFormItem flex={1} name={[name, 'resource']} rules={[requiredNoText]}>
         <Select placeholder="K8s resource" options={resources} allowClear />
       </TriggerFormItem>
       <Form.Item noStyle shouldUpdate>
@@ -79,9 +81,19 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
           const isValid = !(getFieldError(['triggers', name, 'testSelector']).length > 0);
 
           return (
-            <TriggerFormItem flex={3} name={[name, 'resourceSelector']} rules={required}>
+            <TriggerFormItem
+              flex={3}
+              name={[name, 'resourceSelector']}
+              rules={[
+                requiredNoText,
+                {
+                  pattern: /^[a-z0-9][a-z0-9-]+\/[a-z0-9-]+[a-z0-9]$/,
+                  message: 'Please specify a valid resource name: e.g. default/my-resource',
+                },
+              ]}
+            >
               {type[0] === 'name' ? (
-                renderSelectResource('Select resource', {tests: testsData, testSuites: testSuitesData})
+                <Input placeholder="namespace/resource-name" />
               ) : (
                 <LabelsSelect
                   placeholder="Resource labels"
@@ -104,7 +116,7 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
           }
 
           return (
-            <TriggerFormItem flex={1.5} name={[name, 'event']} rules={required}>
+            <TriggerFormItem flex={1.5} name={[name, 'event']} rules={[requiredNoText]}>
               <Select
                 placeholder="Trigger a cluster event"
                 options={eventsOptions}
@@ -115,10 +127,12 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
           );
         }}
       </Form.Item>
-      <Text className="small uppercase" color={Colors.slate500}>
-        Do
-      </Text>
-      <TriggerFormItem flex={1.5} name={[name, 'action']} rules={required}>
+      <TextWrapper>
+        <Text className="small uppercase" color={Colors.slate500}>
+          Do
+        </Text>
+      </TextWrapper>
+      <TriggerFormItem flex={1.5} name={[name, 'action']} rules={[requiredNoText]}>
         <Select placeholder="A specific testkube action" options={actions} allowClear />
       </TriggerFormItem>
       <Form.Item noStyle shouldUpdate>
@@ -128,7 +142,7 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
           const actionValue = getFieldValue(['triggers', name, 'action']);
           const isTestSuiteExecution = typeof actionValue === 'string' ? actionValue.includes('suite') : null;
 
-          const resourseData =
+          const resourceData =
             isTestSuiteExecution === null
               ? {tests: testsData, testSuites: testSuitesData}
               : isTestSuiteExecution
@@ -142,9 +156,9 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
                 };
 
           return (
-            <TriggerFormItem flex={3} name={[name, 'testSelector']} rules={required}>
+            <TriggerFormItem flex={3} name={[name, 'testSelector']} rules={[requiredNoText]}>
               {type[1] === 'name' ? (
-                renderSelectResource('On your testkube resource', resourseData)
+                renderSelectResource('On your testkube resource', resourceData)
               ) : (
                 <LabelsSelect
                   placeholder="On your testkube labels"
@@ -156,7 +170,9 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
           );
         }}
       </Form.Item>
-      <DeleteOutlined style={{cursor: 'pointer', fontSize: '18px'}} onClick={() => remove(name)} />
+      <TextWrapper>
+        <DeleteOutlined style={{cursor: 'pointer', fontSize: '18px'}} onClick={() => remove(name)} />{' '}
+      </TextWrapper>
     </TriggerItemContainer>
   );
 };
