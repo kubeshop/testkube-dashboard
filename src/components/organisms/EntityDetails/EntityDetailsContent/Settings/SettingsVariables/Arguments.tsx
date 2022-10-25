@@ -16,7 +16,7 @@ import Colors from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {ArgumentsWrapper, ButtonWrapper} from './Arguments.styled';
+import {ArgumentsWrapper} from './Arguments.styled';
 import {dash, doubleDash, space, stringSpace} from './utils';
 
 const Arguments: React.FC = () => {
@@ -162,11 +162,9 @@ value
 `}
               />
             </Form.Item>
-            <ButtonWrapper>
-              <Button onClick={prettifyArgs} disabled={isPrettified}>
-                Prettify
-              </Button>
-            </ButtonWrapper>
+            <Button onClick={prettifyArgs} $customType="secondary" disabled={isPrettified}>
+              Prettify
+            </Button>
           </Space>
         </Form>
       </ArgumentsWrapper>
