@@ -204,7 +204,8 @@ const Triggers: React.FC = () => {
         >
           {isLoading ? (
             <>
-              <Skeleton />
+              <Skeleton title={false} paragraph={{rows: 1, width: '100%'}} additionalStyles={{lineHeight: 40}} />
+              <Skeleton title={false} paragraph={{rows: 1, width: '100%'}} additionalStyles={{lineHeight: 40}} />
             </>
           ) : (
             <Form.List name="triggers" initialValue={[]}>

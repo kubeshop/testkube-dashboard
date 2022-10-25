@@ -5,7 +5,9 @@ import {Form} from 'antd';
 import {SourceWithString} from '@models/sources';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectSources} from '@redux/reducers/sourcesSlice';
+import {selectSources, setSources} from '@redux/reducers/sourcesSlice';
+
+import {Skeleton} from '@custom-antd';
 
 import {ConfigurationCard, SourcesFormList, notificationCall} from '@molecules';
 
@@ -14,8 +16,9 @@ import {PageBlueprint} from '@organisms';
 import usePressEnter from '@hooks/usePressEnter';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
+import {PollingIntervals} from '@utils/numbers';
 
-import {SourceFormField, useAddSourcesMutation} from '@services/sources';
+import {SourceFormField, useAddSourcesMutation, useGetSourcesQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
 
@@ -26,11 +29,13 @@ export type SourcesFormFields = {
 const Sources: React.FC = () => {
   const sourcesList = useAppSelector(selectSources);
 
+  const {data: sources, refetch, isLoading} = useGetSourcesQuery(null, {pollingInterval: PollingIntervals.long});
+
   const [isInitialState, setIsInitialState] = useState(true);
 
-  const {refetchSources} = useContext(MainContext);
-
   const [addSources] = useAddSourcesMutation();
+
+  const {dispatch, apiEndpoint} = useContext(MainContext);
 
   const onEvent = usePressEnter();
 
@@ -72,7 +77,7 @@ const Sources: React.FC = () => {
         displayDefaultNotificationFlow(res);
       } else {
         notificationCall('passed', 'Test Sources were updated successfully');
-        refetchSources();
+        refetch();
         setIsInitialState(true);
       }
     });
@@ -101,6 +106,16 @@ const Sources: React.FC = () => {
       sourcesFormList: initialValues,
     });
   }, [initialValues]);
+
+  useEffect(() => {
+    if (sources) {
+      dispatch(setSources(sources));
+    }
+  }, [sources]);
+
+  useEffect(() => {
+    refetch();
+  }, [apiEndpoint]);
 
   return (
     <div
@@ -139,7 +154,14 @@ const Sources: React.FC = () => {
           confirmButtonText="Save"
           isButtonsDisabled={isInitialState}
         >
-          <SourcesFormList form={form} initialValues={initialValues} onSaveForm={onSaveForm} onChange={onChange} />
+          {isLoading ? (
+            <>
+              <Skeleton title={false} paragraph={{rows: 1, width: '100%'}} additionalStyles={{lineHeight: 40}} />
+              <Skeleton title={false} paragraph={{rows: 1, width: '100%'}} additionalStyles={{lineHeight: 40}} />
+            </>
+          ) : (
+            <SourcesFormList form={form} initialValues={initialValues} onSaveForm={onSaveForm} onChange={onChange} />
+          )}
         </ConfigurationCard>
       </PageBlueprint>
     </div>
