@@ -1,10 +1,11 @@
 import React, {useContext} from 'react';
 
-import {Table} from 'antd';
+import {Skeleton, Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
 import {EntityDetailsContext} from '@contexts';
 
+// import EntityDetailsSkeleton from '../EntityDetailsSkeleton';
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
 
@@ -14,7 +15,9 @@ type ExecutionsTableProps = {
 
 const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   const {triggerRun} = props;
-  const {executionsList, selectedRow, currentPage, setCurrentPage, onRowSelect} = useContext(EntityDetailsContext);
+
+  const {executionsList, selectedRow, currentPage, setCurrentPage, onRowSelect, isFirstTimeLoading} =
+    useContext(EntityDetailsContext);
 
   const rowSelection: TableRowSelection<any> = {
     selectedRowKeys: selectedRow ? [selectedRow.id] : [],
@@ -23,6 +26,10 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   };
 
   const isEmptyExecutions = !executionsList?.results || !executionsList?.results.length;
+
+  if (isFirstTimeLoading) {
+    return <Skeleton title={false} loading />;
+  }
 
   if (isEmptyExecutions) {
     return <EmptyExecutionsListContent triggerRun={triggerRun} />;
