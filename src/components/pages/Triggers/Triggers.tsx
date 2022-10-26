@@ -74,7 +74,7 @@ const Triggers: React.FC = () => {
             ...trigger,
             type: [resourceType, testType],
             resourceSelector: isResourceName
-              ? `${resourceSelector.name}/${resourceSelector.namespace}`
+              ? `${resourceSelector.namespace}/${resourceSelector.name}`
               : resourceSelector.labelSelector.matchLabels,
             testSelector: isTestName || testSelector.labelSelector.matchLabels,
             action: `${action} ${execution}`,
@@ -137,10 +137,16 @@ const Triggers: React.FC = () => {
   const onSave = (values: any) => {
     const getSelector = (formValue: any) => {
       if (typeof formValue === 'string') {
-        const [name, namespace] = formValue.split('/');
+        if (formValue.includes('/')) {
+          const [namespace, name] = formValue.split('/');
+          return {
+            name,
+            namespace,
+          };
+        }
         return {
-          name,
-          namespace,
+          name: formValue,
+          namespace: 'testkube',
         };
       }
       if (formValue.length) {
