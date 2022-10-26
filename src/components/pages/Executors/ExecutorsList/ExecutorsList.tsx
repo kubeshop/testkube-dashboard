@@ -107,14 +107,7 @@ const Executors: React.FC = () => {
               {new Array(6).fill(0).map((_, index) => {
                 const key = `skeleton-item-${index}`;
 
-                return (
-                  <Skeleton
-                    title={false}
-                    paragraph={{rows: 1, width: '100%'}}
-                    additionalStyles={{lineHeight: 80}}
-                    key={key}
-                  />
-                );
+                return <Skeleton additionalStyles={{lineHeight: 80}} key={key} />;
               })}
             </ExecutorsListSkeletonWrapper>
           ) : renderedCustomExecutorsGrid && renderedCustomExecutorsGrid.length ? (

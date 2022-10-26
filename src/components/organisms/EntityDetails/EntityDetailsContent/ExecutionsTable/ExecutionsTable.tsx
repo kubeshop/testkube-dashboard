@@ -1,7 +1,9 @@
 import React, {useContext} from 'react';
 
-import {Skeleton, Table} from 'antd';
+import {Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
+
+import {Skeleton} from '@custom-antd';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -28,7 +30,13 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   const isEmptyExecutions = !executionsList?.results || !executionsList?.results.length;
 
   if (isFirstTimeLoading) {
-    return <Skeleton title={false} loading />;
+    return (
+      <>
+        <Skeleton additionalStyles={{lineHeight: 40}} />
+        <Skeleton additionalStyles={{lineHeight: 40}} />
+        <Skeleton additionalStyles={{lineHeight: 40}} />
+      </>
+    );
   }
 
   if (isEmptyExecutions) {

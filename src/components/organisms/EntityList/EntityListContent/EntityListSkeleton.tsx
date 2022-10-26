@@ -4,10 +4,6 @@ import {StyledEntityListSkeletonWrapper} from './EntityListContent.styled';
 
 const EntityListSkeleton: React.FC = () => {
   const skeletonConfig = {
-    paragraph: {
-      rows: 1,
-      width: '100%',
-    },
     additionalStyles: {
       lineHeight: 120,
     },
@@ -18,7 +14,7 @@ const EntityListSkeleton: React.FC = () => {
       {new Array(6).fill(0).map((_, index) => {
         const key = `skeleton-item-${index}`;
 
-        return <Skeleton title={false} key={key} {...skeletonConfig} />;
+        return <Skeleton key={key} {...skeletonConfig} />;
       })}
     </StyledEntityListSkeletonWrapper>
   );

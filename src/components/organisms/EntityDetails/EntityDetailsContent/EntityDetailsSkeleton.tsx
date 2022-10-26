@@ -4,10 +4,6 @@ import {EntityDetailsSkeletonWrapper} from './EntityDetailsContent.styled';
 
 const EntityDetailsSkeleton: React.FC = () => {
   const skeletonConfig = {
-    paragraph: {
-      rows: 1,
-      width: '100%',
-    },
     additionalStyles: {
       lineHeight: 50,
     },
@@ -18,7 +14,7 @@ const EntityDetailsSkeleton: React.FC = () => {
       {new Array(3).fill(0).map((_, index) => {
         const key = `skeleton-item-${index}`;
 
-        return <Skeleton loading title={false} key={key} {...skeletonConfig} />;
+        return <Skeleton key={key} {...skeletonConfig} />;
       })}
     </EntityDetailsSkeletonWrapper>
   );
