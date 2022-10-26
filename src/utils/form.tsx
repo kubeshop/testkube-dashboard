@@ -7,15 +7,18 @@ import {UploadWithInput} from '@atoms';
 
 import {FormItem} from '@custom-antd';
 
+import {LabelsSelect} from '@molecules';
 import VariablesFormList from '@molecules/VariablesFormList';
 
-import {LabelsSelect} from '@src/components/molecules';
+import {k8sResourceNameRegex} from '@utils/strings';
 
 const {TextArea} = Input;
 
 export const required: Rule = {required: true, message: 'Required.'};
 export const digits: Rule = {pattern: /\d/, message: 'Only digits.'};
 export const requiredNoText: Rule = {required: true, message: ''};
+export const k8sResourceNamePattern: Rule = {pattern: k8sResourceNameRegex, message: 'Wrong k8s name pattern'};
+export const k8sResourceNameMaxLength: Rule = {max: 63, message: 'Max length 63 symbols'};
 export const url: Rule = {type: 'url'};
 export const duplicateKeyMessage = 'Duplicate key.';
 

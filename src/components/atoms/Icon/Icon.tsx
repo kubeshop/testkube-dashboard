@@ -30,6 +30,8 @@ const iconsMap: any = {
   queued: PendingStatusIcon,
   delay: DelayIcon,
   cancelled: FailedStatusIcon,
+  timeout: FailedStatusIcon,
+  aborted: FailedStatusIcon,
 };
 
 type IconProps = {
@@ -43,7 +45,9 @@ type IconProps = {
     | 'running'
     | 'pending'
     | 'delay'
-    | 'cancelled';
+    | 'cancelled'
+    | 'timeout'
+    | 'aborted';
   component?: any;
   style?: any;
 };

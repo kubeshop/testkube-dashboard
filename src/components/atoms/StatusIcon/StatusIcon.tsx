@@ -34,6 +34,14 @@ const iconStyles: any = {
     borderColor: Colors.pink600,
     background: Colors.pink900,
   },
+  timeout: {
+    borderColor: Colors.pink600,
+    background: Colors.pink900,
+  },
+  aborted: {
+    borderColor: Colors.pink600,
+    background: Colors.pink900,
+  },
 };
 
 const StatusIcon: React.FC<any> = props => {
