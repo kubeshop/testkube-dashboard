@@ -91,14 +91,14 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       // if no results - set result as an empty array because not all the time we get an empty array from backend
       dispatch(setData([]));
     }
-
-    return () => {
-      setFirstTimeLoading(true);
-    };
   }, [contentProps.data, contentProps.isLoading, contentProps.isFetching]);
 
   useEffect(() => {
     setFirstTimeLoading(true);
+
+    return () => {
+      setFirstTimeLoading(true);
+    };
   }, [entity, apiEndpoint]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
