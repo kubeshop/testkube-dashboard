@@ -108,8 +108,16 @@ export const CustomExecutorContainer = styled.div`
   flex-wrap: wrap;
 
   padding: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
 
   background-color: ${Colors.slate800};
 
   cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    border: 1px solid #818cf8;
+    background: #0f172a;
+  }
 `;

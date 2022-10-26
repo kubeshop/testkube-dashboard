@@ -7,7 +7,7 @@ import {Button, Input} from '@custom-antd';
 import {Hint} from '@molecules';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
-import {required} from '@utils/form';
+import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateExecutorMutation} from '@services/executors';
@@ -44,7 +44,12 @@ const AddExecutorsModal = () => {
   return (
     <AddExecutorsModalContainer>
       <Form style={{flex: 1}} layout="vertical" onFinish={onFinish}>
-        <Form.Item label="Name" required name="name" rules={[required]}>
+        <Form.Item
+          label="Name"
+          required
+          name="name"
+          rules={[required, k8sResourceNameMaxLength, k8sResourceNamePattern]}
+        >
           <Input placeholder="e.g.: my-container-executor" />
         </Form.Item>
         <Form.Item label="Executor type" required name="type" rules={[required]}>
