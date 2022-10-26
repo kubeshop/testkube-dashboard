@@ -73,7 +73,9 @@ const Triggers: React.FC = () => {
           return {
             ...trigger,
             type: [resourceType, testType],
-            resourceSelector: isResourceName || resourceSelector.labelSelector.matchLabels,
+            resourceSelector: isResourceName
+              ? `${resourceSelector.name}/${resourceSelector.namespace}`
+              : resourceSelector.labelSelector.matchLabels,
             testSelector: isTestName || testSelector.labelSelector.matchLabels,
             action: `${action} ${execution}`,
           };
@@ -135,9 +137,10 @@ const Triggers: React.FC = () => {
   const onSave = (values: any) => {
     const getSelector = (formValue: any) => {
       if (typeof formValue === 'string') {
+        const [name, namespace] = formValue.split('/');
         return {
-          name: formValue,
-          namespace: 'testkube',
+          name,
+          namespace,
         };
       }
       if (formValue.length) {
@@ -196,11 +199,15 @@ const Triggers: React.FC = () => {
           title="Cluster events"
           description="Testkube can listen to cluster events and trigger specific actions. Events and actions are related to labelled resources."
           onConfirm={() => {
-            form.submit();
+            form
+              .validateFields()
+              .then(() => form.submit())
+              .catch(() => notificationCall('failed', 'Validate you triggers data, please'));
           }}
           onCancel={() => {
             setDefaultTriggersData(triggersList);
           }}
+          isButtonsDisabled={isLoading}
         >
           {isLoading ? (
             <>
