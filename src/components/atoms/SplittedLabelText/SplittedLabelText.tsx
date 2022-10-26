@@ -9,7 +9,7 @@ type SplittedLabelProps = {
   textClassName?: string;
 };
 
-export const SplittedLabel: React.FC<SplittedLabelProps> = props => {
+const SplittedLabelText: React.FC<SplittedLabelProps> = props => {
   const {value, textClassName = 'regular'} = props;
 
   if (!value.includes(':')) {
@@ -33,3 +33,5 @@ export const SplittedLabel: React.FC<SplittedLabelProps> = props => {
     </>
   );
 };
+
+export default SplittedLabelText;

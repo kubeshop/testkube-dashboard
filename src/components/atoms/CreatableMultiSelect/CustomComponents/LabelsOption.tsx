@@ -2,12 +2,13 @@ import {OptionProps} from 'react-select';
 
 import {Option} from '@models/form';
 
+import {SplittedLabelText} from '@atoms';
+
 import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
 import {StyledOption} from '../CreatableMultiSelect.styled';
-import {SplittedLabel} from '../utils';
 
 const LabelsOption = (props: OptionProps<Option>) => {
   // @ts-ignore
@@ -39,7 +40,7 @@ const LabelsOption = (props: OptionProps<Option>) => {
     }
 
     if (children.includes(':')) {
-      return <SplittedLabel value={children} />;
+      return <SplittedLabelText value={children} />;
     }
 
     return (
