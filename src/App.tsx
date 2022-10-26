@@ -19,13 +19,11 @@ import {EndpointProcessing, Executors, Sources, TestSuites, Tests, Triggers} fro
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetExecutorsQuery} from '@services/executors';
-import {useGetSourcesQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
 
 import {StyledLayoutContentWrapper} from './App.styled';
 import {CookiesBanner} from './components/molecules';
-import {setSources} from './redux/reducers/sourcesSlice';
 
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
 
@@ -49,7 +47,6 @@ const App: React.FC = () => {
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
     pollingInterval: PollingIntervals.long,
   });
-  const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {pollingInterval: PollingIntervals.long});
 
   const onAcceptCookies = () => {
     // @ts-ignore
@@ -76,18 +73,11 @@ const App: React.FC = () => {
     navigate,
     apiEndpoint,
     wsRoot,
-    refetchSources,
   };
 
   useEffect(() => {
     dispatch(setExecutors(executors || []));
   }, [executors]);
-
-  useEffect(() => {
-    if (sources) {
-      dispatch(setSources(sources));
-    }
-  }, [sources]);
 
   useEffect(() => {
     if (ga4React) {
@@ -111,7 +101,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     refetchExecutors();
-    refetchSources();
   }, [apiEndpoint]);
 
   return (

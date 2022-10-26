@@ -4,7 +4,7 @@ import {Tabs} from 'antd';
 
 import {TestRunnerIcon} from '@atoms';
 
-import {Button, Modal, Text, Title} from '@custom-antd';
+import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
@@ -19,7 +19,12 @@ import {PageBlueprint} from '@src/components/organisms';
 import {executorsList} from '../utils';
 import AddExecutorsModal from './AddExecutorsModal';
 import EmptyCustomExecutors from './EmptyCustomExecutors';
-import {CustomExecutorContainer, ExecutorsGrid, ExecutorsGridItem} from './ExecutorsList.styled';
+import {
+  CustomExecutorContainer,
+  ExecutorsGrid,
+  ExecutorsGridItem,
+  ExecutorsListSkeletonWrapper,
+} from './ExecutorsList.styled';
 
 const Executors: React.FC = () => {
   const {navigate, apiEndpoint} = useContext(MainContext);
@@ -27,7 +32,7 @@ const Executors: React.FC = () => {
   const [activeTabKey, setActiveTabKey] = useState('custom');
   const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
 
-  const {data: executors, refetch} = useGetExecutorsQuery();
+  const {data: executors, refetch, isLoading} = useGetExecutorsQuery();
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
@@ -97,7 +102,15 @@ const Executors: React.FC = () => {
     >
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane defaultActiveKey="custom">
         <Tabs.TabPane tab="Custom executors" key="custom">
-          {renderedCustomExecutorsGrid && renderedCustomExecutorsGrid.length ? (
+          {isLoading ? (
+            <ExecutorsListSkeletonWrapper>
+              {new Array(6).fill(0).map((_, index) => {
+                const key = `skeleton-item-${index}`;
+
+                return <Skeleton additionalStyles={{lineHeight: 80}} key={key} />;
+              })}
+            </ExecutorsListSkeletonWrapper>
+          ) : renderedCustomExecutorsGrid && renderedCustomExecutorsGrid.length ? (
             <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
           ) : (
             <EmptyCustomExecutors
