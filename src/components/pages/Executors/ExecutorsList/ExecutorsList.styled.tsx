@@ -24,6 +24,12 @@ export const ExecutorsGrid = styled.div`
   }
 `;
 
+export const ExecutorsListSkeletonWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 32px;
+`;
+
 export const ExecutorsGridItem = styled(Space)`
   justify-content: space-between;
 

@@ -80,19 +80,20 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
         {({getFieldError, getFieldValue}) => {
           const isValid = !(getFieldError(['triggers', name, 'testSelector']).length > 0);
 
-          return (
-            <TriggerFormItem
-              flex={3}
-              name={[name, 'resourceSelector']}
-              rules={[
+          const isName = type[0] === 'name';
+          const rules = isName
+            ? [
                 requiredNoText,
                 {
                   pattern: /^[a-z0-9][a-z0-9-]+\/[a-z0-9-]+[a-z0-9]$/,
                   message: 'Please specify a valid resource name: e.g. default/my-resource',
                 },
-              ]}
-            >
-              {type[0] === 'name' ? (
+              ]
+            : [requiredNoText];
+
+          return (
+            <TriggerFormItem flex={3} name={[name, 'resourceSelector']} rules={rules}>
+              {isName ? (
                 <Input placeholder="namespace/resource-name" />
               ) : (
                 <LabelsSelect

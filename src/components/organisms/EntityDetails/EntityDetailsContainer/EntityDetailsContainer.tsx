@@ -4,7 +4,7 @@ import useWebSocket from 'react-use-websocket';
 
 import {notification} from 'antd';
 
-import axios from 'axios';
+// import axios from 'axios';
 import styled from 'styled-components';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
@@ -20,7 +20,8 @@ import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {entity, useGetEntityDetails, useGetMetrics, defaultStackRoute, getExecutionsEndpoint} = props;
+  const {entity, useGetEntityDetails, useGetMetrics, defaultStackRoute, getExecutionsEndpoint, useGetExecutions} =
+    props;
 
   const {navigate, location, wsRoot} = useContext(MainContext);
   const {pathname} = location;
@@ -32,8 +33,12 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [selectedRow, selectRow] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [executionsList, setExecutionsList] = useStateCallback<any>(null);
+  const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
 
-  // const {data: executions, refetch} = useGetExecutions({id, last: daysFilterValue});
+  const {data: executions, refetch} = useGetExecutions(
+    {id, last: daysFilterValue},
+    {pollingInterval: PollingIntervals.long}
+  );
   const {data: entityDetails} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.everyTwoSeconds,
   });
@@ -41,28 +46,28 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   // Temporary solution until WS implementation
   // works stable on both FE and BE
-  const getExecutions = async () => {
-    if (id) {
-      try {
-        const queryParams = new URLSearchParams({
-          id,
-          last: String(daysFilterValue),
-          pageSize: String(Number.MAX_SAFE_INTEGER),
-        });
+  // const getExecutions = async () => {
+  //   if (id) {
+  //     try {
+  //       const queryParams = new URLSearchParams({
+  //         id,
+  //         last: String(daysFilterValue),
+  //         pageSize: String(Number.MAX_SAFE_INTEGER),
+  //       });
 
-        const endpoint =
-          typeof getExecutionsEndpoint === 'function' ? getExecutionsEndpoint(id) : getExecutionsEndpoint;
+  //       const endpoint =
+  //         typeof getExecutionsEndpoint === 'function' ? getExecutionsEndpoint(id) : getExecutionsEndpoint;
 
-        const {data} = await axios(`${endpoint}?${queryParams.toString()}`, {
-          method: 'GET',
-        });
+  //       const {data} = await axios(`${endpoint}?${queryParams.toString()}`, {
+  //         method: 'GET',
+  //       });
 
-        setExecutionsList(data);
-      } catch (err) {
-        //
-      }
-    }
-  };
+  //       setExecutionsList(data);
+  //     } catch (err) {
+  //       //
+  //     }
+  //   }
+  // };
 
   const onWebSocketData = (wsData: WSData) => {
     try {
@@ -183,9 +188,11 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   }, [executionsList, pathname]);
 
   useEffect(() => {
+    refetch();
+
     if (entity === 'test-suites') {
       const interval = setInterval(() => {
-        getExecutions();
+        // getExecutions();
         refetchMetrics();
       }, 1000);
 
@@ -194,7 +201,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       };
     }
 
-    getExecutions();
+    // getExecutions();
 
     const interval = setInterval(() => {
       refetchMetrics();
@@ -204,6 +211,14 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       clearInterval(interval);
     };
   }, [entity]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFirstTimeLoading(false);
+    }, 2000);
+
+    setExecutionsList(executions);
+  }, [executions]);
 
   const entityDetailsContextValues = {
     executionsList,
@@ -222,6 +237,8 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     metrics,
     daysFilterValue,
     setDaysFilterValue,
+    isFirstTimeLoading,
+    setFirstTimeLoading,
   };
 
   return (

@@ -45,8 +45,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     dataTestID,
   } = props;
 
+  const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const {dispatch, navigate} = useContext(MainContext);
+  const {dispatch, navigate, apiEndpoint} = useContext(MainContext);
   const {queryFilters, dataSource} = useContext(EntityListContext);
 
   const [contentProps, setContentProps] = useState<OnDataChangeInterface>({
@@ -79,16 +80,26 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     }
 
     if (contentProps.data && contentProps.data.length) {
+      setFirstTimeLoading(false);
       dispatch(setData(contentProps.data));
 
       return;
     }
 
     if (!contentProps.data || !contentProps.data.length) {
+      setFirstTimeLoading(false);
       // if no results - set result as an empty array because not all the time we get an empty array from backend
       dispatch(setData([]));
     }
   }, [contentProps.data, contentProps.isLoading, contentProps.isFetching]);
+
+  useEffect(() => {
+    setFirstTimeLoading(true);
+
+    return () => {
+      setFirstTimeLoading(true);
+    };
+  }, [entity, apiEndpoint]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
   const isEmptyData = (dataSource?.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
@@ -126,7 +137,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
           </Button>
         </StyledFiltersSection>
       ) : null}
-      {contentProps.isLoading ? (
+      {isFirstTimeLoading ? (
         <EntityListSkeleton />
       ) : !dataSource || !dataSource.length ? (
         <EmptyListWrapper>
