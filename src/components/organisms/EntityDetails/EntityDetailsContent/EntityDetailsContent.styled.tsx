@@ -1,4 +1,4 @@
-import {PageHeader, Tabs} from 'antd';
+import {PageHeader} from 'antd';
 
 import styled from 'styled-components';
 
@@ -26,11 +26,5 @@ export const StyledPageHeader = styled(PageHeader)`
         margin: 0;
       }
     }
-  }
-`;
-
-export const TabsWrapper = styled(Tabs)`
-  .ant-tabs-nav {
-    margin-bottom: 40px;
   }
 `;

@@ -49,7 +49,13 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
       </StyledHeader>
       {children ? <StyledChildren>{children}</StyledChildren> : null}
       <StyledFooter>
-        {footerText ? <StyledFooterText>{footerText}</StyledFooterText> : null}
+        {footerText ? (
+          <StyledFooterText>
+            <Text className="regular middle" color={Colors.slate400}>
+              {footerText}
+            </Text>
+          </StyledFooterText>
+        ) : null}
         <StyledFooterButtonsContainer>
           {onCancel ? (
             <Button onClick={onCancel} $customType="secondary" disabled={isButtonsDisabled}>

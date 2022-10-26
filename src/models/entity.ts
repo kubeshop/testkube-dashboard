@@ -67,4 +67,6 @@ export type EntityListBlueprint = {
   selectAllFilters?: any;
 
   addEntityButtonText?: string;
+
+  dataTestID?: string;
 };

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const StyledEntityGrid = styled.div`
   display: grid;
@@ -8,6 +9,10 @@ export const StyledEntityGrid = styled.div`
   gap: 32px;
 
   margin-top: 20px;
+
+  @media ${maxDevice.tablet} {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const ItemWrapper = styled.div`

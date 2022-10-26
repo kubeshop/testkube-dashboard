@@ -5,14 +5,16 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
 export const TestSuiteModalConfig: ModalConfigProps = {
   title: 'Create a test suite',
-  footer: null,
   width: 528,
   content: <TestSuiteCreationModalContent />,
+  dataTestCloseBtn: 'add-a-new-test-suite-modal-close-button',
+  dataTestModalRoot: 'add-a-new-test-suite-modal',
 };
 
 export const TestModalConfig: ModalConfigProps = {
   title: 'Create a test',
-  footer: null,
   width: 880,
   content: <TestCreationModalContent />,
+  dataTestCloseBtn: 'add-a-new-test-modal-close-button',
+  dataTestModalRoot: 'add-a-new-test-modal',
 };

@@ -48,6 +48,7 @@ export const TestSuitesEntity: EntityListBlueprint = {
   setSelectedRecord: setSelectedTestSuite,
 
   filtersComponentsIds: ['textSearch', 'selector', 'status'],
+  dataTestID: 'add-a-new-test-suite-btn',
 };
 
 export default TestSuitesEntity;

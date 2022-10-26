@@ -15,6 +15,7 @@ const {TextArea} = Input;
 
 export const required: Rule = {required: true, message: 'Required.'};
 export const digits: Rule = {pattern: /\d/, message: 'Only digits.'};
+export const requiredNoText: Rule = {required: true, message: ''};
 export const url: Rule = {type: 'url'};
 export const duplicateKeyMessage = 'Duplicate key.';
 

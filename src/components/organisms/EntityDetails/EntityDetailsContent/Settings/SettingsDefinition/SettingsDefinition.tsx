@@ -4,8 +4,6 @@ import axios from 'axios';
 
 import {Pre} from '@atoms';
 
-import {Text} from '@custom-antd';
-
 import {ConfigurationCard, CopyCommand} from '@molecules';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
@@ -64,12 +62,12 @@ const SettingsDefinition: React.FC = () => {
       onConfirm={onCopyClick}
       confirmButtonText="Copy"
       footerText={
-        <Text className="regular middle">
+        <>
           Learn more about{' '}
           <a href={sectionData.helpLinkUrl} target="_blank">
             Definitions
           </a>
-        </Text>
+        </>
       }
     >
       {definition ? (

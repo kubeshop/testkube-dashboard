@@ -8,16 +8,16 @@ describe('Tests Dashboard Layout', () => {
       window.localStorage.setItem('apiEndpoint', baseEndpointUrl);
     });
   });
-  it('location and title should be tests', () => {
+  it.skip('location and title should be tests', () => {
     cy.url().should('include', 'tests');
     cy.get('[data-cy=dashboard-title]').should('include.text', 'Tests');
   });
 
-  it('should not be selected tests navigation tab', () => {
+  it.skip('should not be selected tests navigation tab', () => {
     cy.get('[data-cy=navigation-tab]').contains('Tests').should('have.class', 'active');
   });
 
-  it('should contain test-suites in empty info panel', () => {
+  it.skip('should contain test-suites in empty info panel', () => {
     expect(cy.get('[data-cy=empty-info-panel-text]').contains('test'));
   });
 });

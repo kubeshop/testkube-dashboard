@@ -107,6 +107,7 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 500;
 
     .ant-tabs-nav {
+      margin-bottom: 40px;
       &::before {
         border-bottom: unset !important;
       }
@@ -287,6 +288,14 @@ export const GlobalStyle = createGlobalStyle`
 
   .ant-form-item-optional {
     color: ${Colors.whitePure} !important;
+  }
+
+  .ant-dropdown-menu-item.ant-dropdown-menu-item-active {
+    background-color: ${Colors.slate700};
+  }
+  .ant-select-item-group {
+    color: ${Colors.slate400};
+    text-transform: uppercase;
   }
 `;
 

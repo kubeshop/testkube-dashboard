@@ -16,6 +16,7 @@ import {sourcesApi} from '@services/sources';
 import {testSuiteExecutionsApi} from '@services/testSuiteExecutions';
 import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
+import {triggersApi} from '@services/triggers';
 
 const middlewares: Middleware[] = [
   executionsApi.middleware,
@@ -25,6 +26,7 @@ const middlewares: Middleware[] = [
   testSuiteExecutionsApi.middleware,
   executorsApi.middleware,
   sourcesApi.middleware,
+  triggersApi.middleware,
 ];
 
 if (process.env.NODE_ENV === `development`) {
@@ -49,6 +51,7 @@ export const store = configureStore({
     [testSuiteExecutionsApi.reducerPath]: testSuiteExecutionsApi.reducer,
     [executorsApi.reducerPath]: executorsApi.reducer,
     [sourcesApi.reducerPath]: sourcesApi.reducer,
+    [triggersApi.reducerPath]: triggersApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 });

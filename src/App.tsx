@@ -14,7 +14,7 @@ import {ProtectedRoute} from '@atoms';
 
 import {Sider} from '@organisms';
 
-import {EndpointProcessing, Executors, Sources, TestSuites, Tests} from '@pages';
+import {EndpointProcessing, Executors, Sources, TestSuites, Tests, Triggers} from '@pages';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -139,7 +139,7 @@ const App: React.FC = () => {
                 }
               />
               <Route
-                path="executors"
+                path="executors/*"
                 element={
                   <ProtectedRoute>
                     <Executors />
@@ -151,6 +151,14 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <Sources />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="triggers"
+                element={
+                  <ProtectedRoute>
+                    <Triggers />
                   </ProtectedRoute>
                 }
               />

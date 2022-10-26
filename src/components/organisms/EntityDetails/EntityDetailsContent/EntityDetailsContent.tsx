@@ -25,17 +25,17 @@ import Colors from '@styles/Colors';
 
 import {AnalyticsContext, EntityDetailsContext, MainContext} from '@contexts';
 
-import {StyledContainer, StyledPageHeader, TabsWrapper} from './EntityDetailsContent.styled';
+import {StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
-
+  
 const filterOptions: OptionType[] = [
-  {value: 7, label: 'Last 7 days', key: 'last7Days'},
-  {value: 30, label: 'Last 30 days', key: 'last30Days'},
-  {value: 90, label: 'Last 90 days', key: 'last90Days'},
-  {value: 365, label: 'This year', key: 'thisYear'},
-  {value: 0, label: 'All days', key: 'allDays'},
+  {value: 7, label: 'Timeframe: last 7 days', key: 'last7Days'},
+  {value: 30, label: 'Timeframe: last 30 days', key: 'last30Days'},
+  {value: 90, label: 'Timeframe: last 90 days', key: 'last90Days'},
+  {value: 365, label: 'Timeframe: this year', key: 'thisYear'},
+  {value: 0, label: 'See all executions', key: 'allDays'},
 ];
 
 const EntityDetailsContent: React.FC = () => {
@@ -133,7 +133,7 @@ const EntityDetailsContent: React.FC = () => {
         ) : null}
       </StyledPageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} isRowSelected={isRowSelected} /> : null}
-      <TabsWrapper activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
+      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Recent executions" key="Executions" disabled={isPageDisabled}>
           <ExecutionsTable triggerRun={onRunButtonClick} />
         </Tabs.TabPane>
@@ -143,7 +143,7 @@ const EntityDetailsContent: React.FC = () => {
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
           <Settings />
         </Tabs.TabPane>
-      </TabsWrapper>
+      </Tabs>
     </StyledContainer>
   );
 };

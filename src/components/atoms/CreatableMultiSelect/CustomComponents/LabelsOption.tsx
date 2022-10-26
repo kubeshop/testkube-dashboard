@@ -20,7 +20,7 @@ const LabelsOption = (props: OptionProps<Option>) => {
     isChildren && isCreateOption
       ? Boolean(
           children.match(
-            /(Create (([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]:(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?))/g
+            /(Create (([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]:\s?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?))/g
           )
         )
       : true;
@@ -52,7 +52,7 @@ const LabelsOption = (props: OptionProps<Option>) => {
   if (allowClick) {
     return (
       // @ts-ignore
-      <StyledOption ref={innerRef} {...innerProps}>
+      <StyledOption ref={innerRef} {...innerProps} data-test={`label-option-${children}`}>
         {modifyChildren()}
       </StyledOption>
     );

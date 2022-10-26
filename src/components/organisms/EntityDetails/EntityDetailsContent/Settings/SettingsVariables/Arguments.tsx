@@ -16,7 +16,7 @@ import Colors from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {ArgumentsWrapper, ButtonWrapper} from './Arguments.styled';
+import {ArgumentsWrapper} from './Arguments.styled';
 import {dash, doubleDash, space, stringSpace} from './utils';
 
 const Arguments: React.FC = () => {
@@ -122,7 +122,7 @@ const Arguments: React.FC = () => {
       title="Arguments"
       description="Define arguments which will be passed to the test executor."
       footerText={
-        <Text className="regular middle">
+        <>
           Learn more about{' '}
           <a
             href="https://kubeshop.github.io/testkube/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests"
@@ -130,7 +130,7 @@ const Arguments: React.FC = () => {
           >
             Arguments
           </a>
-        </Text>
+        </>
       }
       onConfirm={() => {
         form.submit();
@@ -162,11 +162,9 @@ value
 `}
               />
             </Form.Item>
-            <ButtonWrapper>
-              <Button onClick={prettifyArgs} disabled={isPrettified}>
-                Prettify
-              </Button>
-            </ButtonWrapper>
+            <Button onClick={prettifyArgs} $customType="secondary" disabled={isPrettified}>
+              Prettify
+            </Button>
           </Space>
         </Form>
       </ArgumentsWrapper>

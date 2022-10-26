@@ -1,28 +1,30 @@
 import {useContext, useState} from 'react';
 
 import {Entity} from '@models/entity';
-import {ModalConfigProps} from '@models/modal';
+import {UseMutationType} from '@models/rtk';
 
 import {Modal} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
+import DeleteEntityModal from '@molecules/DeleteEntityModal';
+
+import {useDeleteTestSuiteMutation} from '@services/testSuites';
+import {useDeleteTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
-
-import {TestDeleteModalConfig, TestSuiteDeleteModalConfig} from './deleteUtils/utils';
 
 const namingMap: {[key in Entity]: string} = {
   'test-suites': 'test suite',
   tests: 'test',
 };
 
-const modalTypes: {[key in Entity]: ModalConfigProps} = {
-  'test-suites': TestSuiteDeleteModalConfig,
-  tests: TestDeleteModalConfig,
+const useDeleteMutations: {[key in Entity]: UseMutationType} = {
+  'test-suites': useDeleteTestSuiteMutation,
+  tests: useDeleteTestMutation,
 };
 
 const Delete: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, entityDetails, defaultStackRoute} = useContext(EntityDetailsContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -33,9 +35,6 @@ const Delete: React.FC = () => {
   const onConfirm = () => {
     setIsModalVisible(true);
   };
-
-  const creationModalConfig: ModalConfigProps = modalTypes[entity];
-
   return (
     <>
       <ConfigurationCard
@@ -46,7 +45,19 @@ const Delete: React.FC = () => {
         confirmButtonText="Delete"
       />
       {isModalVisible ? (
-        <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
+        <Modal
+          title={`Delete this ${namingMap[entity]}`}
+          setIsModalVisible={setIsModalVisible}
+          isModalVisible={isModalVisible}
+          content={
+            <DeleteEntityModal
+              defaultStackRoute={defaultStackRoute}
+              useDeleteMutation={useDeleteMutations[entity]}
+              name={entityDetails.name}
+              entityLabel={namingMap[entity]}
+            />
+          }
+        />
       ) : null}
     </>
   );
