@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 
 import GA4React from 'ga-4-react';
+import posthog from 'posthog-js';
 
 import {store} from '@redux/store';
 
@@ -26,6 +27,10 @@ import env from './env';
     segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
 
     await ga4react.initialize();
+  }
+
+  if (process.env.NODE_ENV !== 'development' && !window.location.href.includes('testkube.io')) {
+    posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo');
   }
 
   const container = document.getElementById('root');

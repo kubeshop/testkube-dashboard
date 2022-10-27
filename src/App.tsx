@@ -5,6 +5,7 @@ import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
 import {useGA4React} from 'ga-4-react';
+import posthog from 'posthog-js';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
@@ -53,6 +54,9 @@ const App: React.FC = () => {
     window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = false;
     localStorage.setItem('isGADisabled', '0');
     setCookiesVisibility(false);
+    if (process.env.NODE_ENV !== 'development' && !window.location.href.includes('testkube.io')) {
+      posthog.opt_in_capturing();
+    }
   };
 
   const onDeclineCookies = (args?: {skipGAEvent?: boolean}) => {
@@ -64,6 +68,14 @@ const App: React.FC = () => {
     window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = true;
     localStorage.setItem('isGADisabled', '1');
     setCookiesVisibility(false);
+
+    if (
+      process.env.NODE_ENV !== 'development' &&
+      !window.location.href.includes('testkube.io') &&
+      !posthog.has_opted_out_capturing()
+    ) {
+      posthog.opt_out_capturing();
+    }
   };
 
   const mainContextValue = {
@@ -80,6 +92,8 @@ const App: React.FC = () => {
   }, [executors]);
 
   useEffect(() => {
+    posthog.capture('$pageview');
+
     if (ga4React) {
       ga4React.pageview(location.pathname);
     }

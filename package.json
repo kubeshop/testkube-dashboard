@@ -78,6 +78,7 @@
     "loglevel": "1.8.0",
     "moment": "2.29.3",
     "nanoid": "^4.0.0",
+    "posthog-js": "^1.34.0",
     "query-string": "7.1.1",
     "react": "18.1.0",
     "react-beautiful-dnd": "^13.1.0",
