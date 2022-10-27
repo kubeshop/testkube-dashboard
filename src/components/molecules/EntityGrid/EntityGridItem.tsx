@@ -1,4 +1,4 @@
-import {useContext, useMemo, useRef} from 'react';
+import {useContext, useRef} from 'react';
 
 import {format} from 'date-fns';
 
@@ -36,9 +36,7 @@ const EntityGridItem: React.FC<any> = props => {
     {skip: !isInViewport, pollingInterval: PollingIntervals.halfMin}
   );
 
-  const executions = useMemo(() => {
-    return metrics?.executions || [];
-  }, [metrics]);
+  const executions = metrics?.executions || [];
 
   const dataTestValue = `${entity}-list-item`;
 
