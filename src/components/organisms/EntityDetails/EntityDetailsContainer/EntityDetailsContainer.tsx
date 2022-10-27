@@ -116,6 +116,11 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
             );
           }
         }
+
+        if (wsData.type === WSEventType.END_TEST_ABORT || wsData.type === WSEventType.END_TEST_TIMEOUT) {
+          refetch();
+          refetchMetrics();
+        }
       }
     } catch (err: any) {
       // eslint-disable-next-line no-console
