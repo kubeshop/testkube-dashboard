@@ -2,10 +2,11 @@ import {MultiValueGenericProps} from 'react-select';
 
 import {Option} from '@models/form';
 
+import {SplittedLabelText} from '@atoms';
+
 import {Text} from '@custom-antd';
 
 import {StyledMultiLabel} from '../CreatableMultiSelect.styled';
-import {SplittedLabel} from '../utils';
 
 const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
   const {children} = props;
@@ -18,7 +19,7 @@ const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
     const trimmedChildren = children.trim();
 
     if (trimmedChildren.match(/(.+:.+)/g)) {
-      return <SplittedLabel value={trimmedChildren} textClassName="regular small" />;
+      return <SplittedLabelText value={trimmedChildren} textClassName="regular small" />;
     }
 
     if (trimmedChildren.slice(-1) === ':') {

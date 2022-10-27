@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 
 export const StyledLabelListItem = styled.li<{isSkippedMode: boolean}>`
+  margin: auto;
   padding: 0px ${props => (props.isSkippedMode ? '0px' : '10px')};
-  ${props => (props.isSkippedMode ? '' : `border: 1px solid transparent;`)}
+  ${props => (props.isSkippedMode ? '' : `border: 1px solid ${Colors.slate700};`)}
   border-radius: 4px;
 
-  background: rgba(0, 0, 0, 0.3);
-  color: ${Colors.slate500};
+  background: transparent;
 
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
 `;
