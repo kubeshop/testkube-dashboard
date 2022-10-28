@@ -1,6 +1,8 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
-import {useCallback, useContext, useEffect, useRef, useState} from 'react';
+import {memo, useCallback, useContext, useEffect, useRef, useState} from 'react';
 import useWebSocket from 'react-use-websocket';
+
+import Ansi from 'ansi-to-react';
 
 import {LogAction} from '@models/log';
 
@@ -107,9 +109,15 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   return (
     <StyledLogOutputContainer ref={ref}>
       <LogOutputHeader logOutput={logs} actions={actions} title={title} />
-      <StyledLogTextContainer>{logs ? <StyledPreLogText>{logs}</StyledPreLogText> : null}</StyledLogTextContainer>
+      <StyledLogTextContainer>
+        {logs ? (
+          <StyledPreLogText>
+            <Ansi useClasses>{logs}</Ansi>
+          </StyledPreLogText>
+        ) : null}
+      </StyledLogTextContainer>
     </StyledLogOutputContainer>
   );
 };
 
-export default LogOutput;
+export default memo(LogOutput);
