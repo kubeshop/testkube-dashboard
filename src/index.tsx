@@ -29,9 +29,10 @@ import env from './env';
     await ga4react.initialize();
   }
 
-  if (process.env.NODE_ENV !== 'development' && !window.location.href.includes('testkube.io')) {
-    posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo');
-  }
+  posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
+    opt_out_capturing_by_default: true,
+    disable_cookie: true,
+  });
 
   const container = document.getElementById('root');
   const root = createRoot(container!);

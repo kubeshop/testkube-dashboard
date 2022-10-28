@@ -9,6 +9,7 @@ import testSuiteExecutionsSlice from '@redux/reducers/testSuiteExecutionsSlice';
 import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
 
+import {configApi} from '@services/config';
 import {executionsApi} from '@services/executions';
 import {executorsApi} from '@services/executors';
 import {labelsApi} from '@services/labels';
@@ -27,6 +28,7 @@ const middlewares: Middleware[] = [
   executorsApi.middleware,
   sourcesApi.middleware,
   triggersApi.middleware,
+  configApi.middleware,
 ];
 
 if (process.env.NODE_ENV === `development`) {
@@ -52,6 +54,7 @@ export const store = configureStore({
     [executorsApi.reducerPath]: executorsApi.reducer,
     [sourcesApi.reducerPath]: sourcesApi.reducer,
     [triggersApi.reducerPath]: triggersApi.reducer,
+    [configApi.reducerPath]: configApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 });

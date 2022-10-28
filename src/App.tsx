@@ -19,6 +19,7 @@ import {EndpointProcessing, Executors, Sources, TestSuites, Tests, Triggers} fro
 
 import {PollingIntervals} from '@utils/numbers';
 
+import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
 
 import {MainContext} from '@contexts';
@@ -45,6 +46,8 @@ const App: React.FC = () => {
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
 
+  const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
+
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
     pollingInterval: PollingIntervals.long,
   });
@@ -54,7 +57,12 @@ const App: React.FC = () => {
     window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = false;
     localStorage.setItem('isGADisabled', '0');
     setCookiesVisibility(false);
-    if (process.env.NODE_ENV !== 'development' && !window.location.href.includes('testkube.io')) {
+
+    if (
+      process.env.NODE_ENV !== 'development' &&
+      !window.location.href.includes('testkube.io') &&
+      clusterConfig?.enableTelemetry
+    ) {
       posthog.opt_in_capturing();
     }
   };
@@ -68,14 +76,6 @@ const App: React.FC = () => {
     window[`ga-disable-${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`] = true;
     localStorage.setItem('isGADisabled', '1');
     setCookiesVisibility(false);
-
-    if (
-      process.env.NODE_ENV !== 'development' &&
-      !window.location.href.includes('testkube.io') &&
-      !posthog.has_opted_out_capturing()
-    ) {
-      posthog.opt_out_capturing();
-    }
   };
 
   const mainContextValue = {
@@ -85,6 +85,7 @@ const App: React.FC = () => {
     navigate,
     apiEndpoint,
     wsRoot,
+    clusterConfig,
   };
 
   useEffect(() => {
@@ -115,6 +116,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     refetchExecutors();
+    refetchClusterConfig();
   }, [apiEndpoint]);
 
   return (
@@ -171,7 +173,7 @@ const App: React.FC = () => {
           </Content>
         </StyledLayoutContentWrapper>
       </Layout>
-      {isCookiesVisible ? (
+      {isCookiesVisible && !clusterConfig?.enableTelemetry ? (
         <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
       ) : null}
     </MainContext.Provider>

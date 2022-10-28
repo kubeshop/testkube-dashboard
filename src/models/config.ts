@@ -12,4 +12,10 @@ interface ConfigState {
   };
 }
 
+export type ClusterConfig = {
+  id: string;
+  clusterId: string;
+  enableTelemetry: boolean;
+};
+
 export type {ConfigState};
