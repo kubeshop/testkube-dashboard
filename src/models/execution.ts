@@ -63,4 +63,5 @@ export type ExecutionRequest = {
   sync: boolean;
   httpProxy: string;
   httpsProxy: string;
+  activeDeadlineSeconds?: number;
 };

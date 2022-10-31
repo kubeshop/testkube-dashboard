@@ -18,8 +18,16 @@ type ExecutionsTableProps = {
 const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   const {triggerRun} = props;
 
-  const {executionsList, selectedRow, currentPage, setCurrentPage, onRowSelect, isFirstTimeLoading} =
-    useContext(EntityDetailsContext);
+  const {
+    executionsList,
+    selectedRow,
+    currentPage,
+    setCurrentPage,
+    onRowSelect,
+    id,
+    abortTestExecution,
+    isFirstTimeLoading,
+  } = useContext(EntityDetailsContext);
 
   const rowSelection: TableRowSelection<any> = {
     selectedRowKeys: selectedRow ? [selectedRow.id] : [],
@@ -29,6 +37,11 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
 
   const isEmptyExecutions = !executionsList?.results || !executionsList?.results.length;
 
+  const onAbortTestExecution = (executionId: string) => {
+    if (id) {
+      abortTestExecution({executionId, testId: id});
+    }
+  };
   if (isFirstTimeLoading) {
     return (
       <>
@@ -50,7 +63,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
       columns={[
         {
           render: data => {
-            return <TableRow data={data} />;
+            return <TableRow data={data} onAbortTestExecution={onAbortTestExecution} />;
           },
         },
       ]}

@@ -20,6 +20,7 @@ const EntityDetailsContext = createContext<{
   metrics?: Metrics;
   daysFilterValue: number;
   setDaysFilterValue: React.Dispatch<React.SetStateAction<number>>;
+  abortTestExecution: (args: {executionId: string; testId: string}) => void;
   isFirstTimeLoading: boolean;
   setFirstTimeLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
@@ -39,6 +40,7 @@ const EntityDetailsContext = createContext<{
   metrics: undefined,
   daysFilterValue: 7,
   setDaysFilterValue: () => {},
+  abortTestExecution: () => {},
   isFirstTimeLoading: true,
   setFirstTimeLoading: () => {},
 });

@@ -1,8 +1,7 @@
 import {EntityMap} from '@models/entityMap';
-import {Execution} from '@models/execution';
+import {Execution, ExecutionRequest} from '@models/execution';
 import {Repository} from '@models/repository';
-
-import {Variables} from './variable';
+import {Variables} from '@models/variable';
 
 export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | 'string';
 
@@ -24,7 +23,7 @@ export type Test = {
   params: EntityMap;
   variables?: Variables;
   executorArgs?: string[];
-  executionRequest: Execution;
+  executionRequest: ExecutionRequest;
 };
 
 export type TestWithExecution = {

@@ -6,7 +6,7 @@ import {Button, Input} from '@custom-antd';
 
 import {SourcesFormFields} from '@pages/Sources/Sources';
 
-import {required} from '@utils/form';
+import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 
 import {ButtonsContainer, FormSpace, SourcesListContainer, SymbolWrapper} from './SourcesFormList.styled';
 import {emptySourceObject} from './utils';
@@ -30,7 +30,12 @@ const SourcesFormList: React.FC<VariablesFormListProps> = props => {
               {fields.map(({key, name, ...rest}) => {
                 return (
                   <FormSpace key={key}>
-                    <Form.Item {...rest} name={[name, 'name']} style={{flex: 1, marginBottom: '0'}} rules={[required]}>
+                    <Form.Item
+                      {...rest}
+                      name={[name, 'name']}
+                      style={{flex: 1, marginBottom: '0'}}
+                      rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}
+                    >
                       <Input placeholder="Name your source" />
                     </Form.Item>
                     <Form.Item {...rest} name={[name, 'username']} style={{flex: 1, marginBottom: '0'}}>

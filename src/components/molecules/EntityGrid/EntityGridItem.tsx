@@ -33,7 +33,7 @@ const EntityGridItem: React.FC<any> = props => {
 
   const {data: metrics} = useGetMetrics(
     {id: dataItem.name, last: 7},
-    {skip: !isInViewport, pollingInterval: PollingIntervals.long}
+    {skip: !isInViewport, pollingInterval: PollingIntervals.halfMin}
   );
 
   const executions = metrics?.executions || [];

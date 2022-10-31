@@ -1,5 +1,7 @@
 /* eslint-disable unused-imports/no-unused-imports-ts */
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
+
+import {Dropdown, Menu} from 'antd';
 
 import {CloseOutlined} from '@ant-design/icons';
 
@@ -7,7 +9,7 @@ import {intervalToDuration} from 'date-fns';
 
 import {Entity} from '@models/entity';
 
-import {StatusIcon} from '@atoms';
+import {Dots, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
@@ -34,7 +36,7 @@ import {getHeaderValues} from './utils';
 
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityDetailsContext);
+  const {execId, entity} = useContext(EntityDetailsContext);
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
@@ -77,7 +79,7 @@ const components: {[key in Entity]: any} = {
 };
 
 const ExecutionDetails: React.FC = () => {
-  const {entity, execId, unselectRow} = useContext(EntityDetailsContext);
+  const {entity, execId, unselectRow, abortTestExecution} = useContext(EntityDetailsContext);
 
   const [infoPanelProps, setInfoPanelProps] = useState<ExecutionDetailsOnDataChangeInterface>({
     data: null,
@@ -86,24 +88,46 @@ const ExecutionDetails: React.FC = () => {
     refetch: () => {},
   });
 
-  const {data, isLoading, isFetching, refetch} = infoPanelProps;
+  const {data} = infoPanelProps;
 
   // @ts-ignore
   const status = data?.executionResult?.status || data?.status;
 
   const isRunning = useIsRunning(status);
 
-  const onDataChange = (args: ExecutionDetailsOnDataChangeInterface) => {
-    setInfoPanelProps(args);
+  const headerValues = getHeaderValues(entity, data);
+
+  const {name, number, startedTime, finishedTime, id} = headerValues;
+
+  const onAbortTestExecution = () => {
+    if (id && execId) {
+      abortTestExecution({executionId: execId, testId: id});
+    }
   };
+
+  const renderExecutionActions = () => {
+    let actionsArray = [];
+
+    if (isRunning) {
+      actionsArray.push({key: 1, label: <span onClick={onAbortTestExecution}>Abort execution</span>});
+    }
+
+    return actionsArray;
+  };
+
+  const renderedExecutionActions = useMemo(() => {
+    return renderExecutionActions();
+  }, [isRunning]);
+
+  const menu = <Menu items={renderedExecutionActions} />;
 
   if (!execId) {
     return <></>;
   }
 
-  const headerValues = getHeaderValues(entity, data);
-
-  const {name, number, startedTime, finishedTime} = headerValues;
+  const onDataChange = (args: ExecutionDetailsOnDataChangeInterface) => {
+    setInfoPanelProps(args);
+  };
 
   const getDuration = () => {
     try {
@@ -127,6 +151,19 @@ const ExecutionDetails: React.FC = () => {
                   </Text>
                 </ItemColumn>
                 <ItemColumn className="flex-auto">
+                  {renderedExecutionActions && renderedExecutionActions.length && entity === 'tests' ? (
+                    <div
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Dropdown overlay={menu} placement="bottom">
+                        <div style={{width: 20}}>
+                          <Dots color={Colors.grey450} />
+                        </div>
+                      </Dropdown>
+                    </div>
+                  ) : null}
                   <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
                 </ItemColumn>
               </ItemRow>
