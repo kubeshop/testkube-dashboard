@@ -2,8 +2,8 @@ import Colors from '@styles/Colors';
 
 export default {
   'code[class*="language-"]': {
-    color: '#a9b7c6',
-    fontFamily: 'Consolas, Monaco, monospace',
+    color: Colors.slate200,
+    fontFamily: 'Roboto Mono, Monaco, monospace',
     wordSpacing: 'normal',
     lineHeight: '1.5',
     MozTabSize: '4',
@@ -11,8 +11,8 @@ export default {
     tabSize: '4',
   },
   'pre[class*="language-"]': {
-    color: '#a9b7c6',
-    fontFamily: 'Consolas, Monaco, monospace',
+    color: Colors.slate200,
+    fontFamily: 'Roboto Mono, Monaco, monospace',
     wordSpacing: 'normal',
     lineHeight: '1.5',
     MozTabSize: '4',
@@ -56,100 +56,100 @@ export default {
     background: 'rgba(33, 66, 131, .85)',
   },
   ':not(pre) > code[class*="language-"]': {
-    background: '#2b2b2b',
+    background: Colors.slate700,
     padding: '.1em',
     borderRadius: '.3em',
   },
   comment: {
-    color: '#808080',
+    color: Colors.slate500,
   },
   prolog: {
-    color: '#808080',
+    color: Colors.slate300,
   },
   cdata: {
-    color: '#808080',
+    color: Colors.slate300,
   },
   delimiter: {
-    color: Colors.amber600,
+    color: Colors.amber400,
   },
   boolean: {
-    color: Colors.sky500,
+    color: Colors.sky300,
   },
   keyword: {
-    color: Colors.amber600,
+    color: Colors.rose400,
   },
   selector: {
-    color: Colors.amber600,
+    color: Colors.lime300,
   },
   important: {
-    color: Colors.amber600,
+    color: Colors.amber400,
   },
   atrule: {
-    color: Colors.amber600,
+    color: Colors.amber400,
   },
   operator: {
-    color: '#a9b7c6',
+    color: Colors.yellow300,
   },
   punctuation: {
-    color: '#a9b7c6',
+    color: Colors.slate400,
   },
   'attr-name': {
-    color: '#a9b7c6',
+    color: Colors.slate100,
   },
   tag: {
-    color: '#e8bf6a',
+    color: Colors.amber300,
   },
   'tag.punctuation': {
-    color: '#e8bf6a',
+    color: Colors.slate400,
   },
   doctype: {
-    color: '#e8bf6a',
+    color: Colors.amber300,
   },
   builtin: {
-    color: '#e8bf6a',
+    color: Colors.amber300,
   },
   entity: {
-    color: Colors.sky500,
+    color: Colors.sky300,
   },
   number: {
-    color: Colors.sky500,
+    color: Colors.sky300,
   },
   symbol: {
-    color: Colors.sky500,
+    color: Colors.sky300,
   },
   property: {
-    color: '#9876aa',
+    color: Colors.violet400,
   },
   constant: {
-    color: '#9876aa',
+    color: Colors.violet400,
   },
   variable: {
-    color: '#9876aa',
+    color: Colors.violet400,
   },
   string: {
-    color: Colors.lime500,
+    color: Colors.lime400,
   },
   char: {
-    color: Colors.lime500,
+    color: Colors.lime400,
   },
   'attr-value': {
-    color: '#a5c261',
+    color: Colors.lime500,
   },
   'attr-value.punctuation': {
-    color: '#a5c261',
+    color: Colors.lime500,
   },
   'attr-value.punctuation:first-child': {
-    color: '#a9b7c6',
+    color: Colors.slate100,
   },
   url: {
-    color: '#287bde',
+    color: Colors.indigo400,
     textDecoration: 'underline',
   },
   function: {
-    color: '#ffc66d',
+    color: Colors.lime400,
   },
   regex: {
-    background: '#364135',
+    background: Colors.slate700,
   },
   bold: {
     fontWeight: 'bold',
@@ -158,30 +158,30 @@ export default {
     fontStyle: 'italic',
   },
   inserted: {
-    background: '#294436',
+    background: Colors.lime900,
   },
   deleted: {
-    background: '#484a4a',
+    background: Colors.rose900,
   },
   'code.language-css .token.property': {
-    color: '#a9b7c6',
+    color: Colors.slate100,
   },
   'code.language-css .token.property + .token.punctuation': {
-    color: '#a9b7c6',
+    color: Colors.slate100,
   },
   'code.language-css .token.id': {
-    color: '#ffc66d',
+    color: Colors.amber300,
   },
   'code.language-css .token.selector > .token.class': {
-    color: '#ffc66d',
+    color: Colors.amber300,
   },
   'code.language-css .token.selector > .token.attribute': {
-    color: '#ffc66d',
+    color: Colors.amber300,
   },
   'code.language-css .token.selector > .token.pseudo-class': {
-    color: '#ffc66d',
+    color: Colors.amber300,
   },
   'code.language-css .token.selector > .token.pseudo-element': {
-    color: '#ffc66d',
+    color: Colors.amber300,
   },
 };
