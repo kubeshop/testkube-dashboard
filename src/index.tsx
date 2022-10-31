@@ -3,37 +3,15 @@ import {createRoot} from 'react-dom/client';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 
-import GA4React from 'ga-4-react';
-import posthog from 'posthog-js';
-
 import {store} from '@redux/store';
-
-import {detectAdBlock} from '@utils/fetchUtils';
 
 import {GlobalStyle} from '@styles/globalStyles';
 
-import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import './antd-theme/antd-customized.css';
 import env from './env';
 
 (async () => {
-  const isAdBlockEnabled = await detectAdBlock();
-
-  let segmentIOKey = '';
-
-  if (!isAdBlockEnabled) {
-    const ga4react = new GA4React(process.env.REACT_APP_GOOGLE_ANALYTICS_ID || '');
-    segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
-
-    await ga4react.initialize();
-  }
-
-  posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
-    opt_out_capturing_by_default: true,
-    disable_cookie: true,
-  });
-
   const container = document.getElementById('root');
   const root = createRoot(container!);
 
@@ -51,10 +29,8 @@ import env from './env';
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter basename={basename}>
-          <AnalyticsProvider privateKey={segmentIOKey}>
-            <GlobalStyle />
-            <App />
-          </AnalyticsProvider>
+          <GlobalStyle />
+          <App />
         </BrowserRouter>
       </Provider>
     </React.StrictMode>
