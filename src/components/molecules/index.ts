@@ -27,3 +27,4 @@ export {default as SettingsLeftNavigation} from './SettingsLeftNavigation';
 export {StyledTabContentContainer} from './SettingsLayout';
 export {StyledSettingsContainer} from './SettingsLayout';
 export {default as DeleteEntityModal} from './DeleteEntityModal';
+export {default as Definition} from './Definition';

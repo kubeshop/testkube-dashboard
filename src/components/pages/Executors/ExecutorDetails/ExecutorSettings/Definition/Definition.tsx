@@ -7,11 +7,9 @@ import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
 import {Pre} from '@atoms';
 
-import {ConfigurationCard, CopyCommand} from '@molecules';
+import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
-
-import Colors from '@styles/Colors';
 
 const Definition = () => {
   const executor = useAppSelector(selectCurrentExecutor);
@@ -59,7 +57,7 @@ const Definition = () => {
       confirmButtonText="Copy"
     >
       {definition ? (
-        <CopyCommand command={definition} showDollar={false} bg={Colors.slate800} />
+        <DefinitionContent content={definition} />
       ) : (
         <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
       )}

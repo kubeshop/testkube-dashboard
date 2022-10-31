@@ -957,6 +957,7 @@ enum Colors {
   lime900 = '#365314',
   lime600 = '#65A30D',
   lime500 = '#84CC16',
+  lime400 = '#A3E635',
   lime300 = '#BEF264',
 
   yellow900 = '#713F12',
@@ -970,6 +971,9 @@ enum Colors {
   indigo50 = '#EEF2FF',
   indigo300 = '#A5B4FC',
   indigo400 = '#818CF8',
+
+  amber500 = '#F59E0B',
+  amber600 = '#D97706',
   // Greys
   grey1000 = '#141414',
   grey900 = '#3A4344',
