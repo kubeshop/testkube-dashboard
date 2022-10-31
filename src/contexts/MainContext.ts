@@ -3,6 +3,8 @@ import {useLocation, useNavigate} from 'react-router-dom';
 
 import {useGA4React} from 'ga-4-react';
 
+import {ClusterConfig} from '@models/config';
+
 import {useAppDispatch} from '@redux/hooks';
 
 export type MainContextProps = {
@@ -12,6 +14,7 @@ export type MainContextProps = {
   location: ReturnType<typeof useLocation>;
   apiEndpoint: string | null;
   wsRoot: string;
+  clusterConfig?: ClusterConfig;
 };
 
 // @ts-ignore
