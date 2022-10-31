@@ -945,15 +945,27 @@ enum Colors {
 
   sky900 = '#0C4A6E',
   sky600 = '#0284C7',
+  sky500 = '#0EA5E9',
   sky400 = '#38BDF8',
+  sky300 = '#7DD3FC',
 
   pink900 = '#831843',
   pink600 = '#DB2777',
   pink500 = '#EC4899',
+  pink300 = '#F9A8D4',
 
   lime900 = '#365314',
   lime600 = '#65A30D',
+  lime500 = '#84CC16',
   lime300 = '#BEF264',
+
+  yellow900 = '#713F12',
+  yellow500 = '#EAB308',
+  yellow300 = '#FDE047',
+
+  cyan900 = '#164E63',
+  cyan500 = '#06B6D4',
+  cyan300 = '#67E8F9',
 
   indigo50 = '#EEF2FF',
   indigo300 = '#A5B4FC',
@@ -979,11 +991,6 @@ enum Colors {
   greenOkay = '#09B89D',
   greenOkayCompliment = '#B2DFD3',
 
-  yellowWarning = '#FFE17F',
-  yellowWarningCompliment = '#FFF3CA',
-  yellow7 = '#E8D639',
-  yellow10 = '#FAFAB5',
-
   successGreen = '#94D89C',
   errorRed = '#DB539C',
   lightGrey = '#DEDEDE',
@@ -995,10 +1002,6 @@ enum Colors {
   whitePure = '#FFFFFF',
   blackPure = '#000000',
   blackPearl = '#111D2C',
-
-  cyan = '#58D1C9',
-  cyan7 = '#33BCB7',
-  volcano = '#F3956A',
 
   blue6 = '#1890FC', // Daybreak Blue
   blue10 = '#B7E3FA',
@@ -1019,13 +1022,15 @@ enum Colors {
   greyBorder = '#434343',
   greyHover = '#303030',
   greyDisabled = '#5A5A5A',
+
+  rose300 = '#FDA4AF',
+  rose500 = '#F43F5E',
+  rose900 = '#881337',
 }
 
 export enum BackgroundColors {
   mainBackground = Colors.mainBackground,
   darkThemeBackground = Colors.blackPure,
-  previewModeBackground = Colors.cyan,
-  clusterModeBackground = Colors.volcano,
 }
 
 export enum FontColors {
@@ -1036,7 +1041,6 @@ export enum FontColors {
   grey = Colors.grey700,
   error = Colors.redError,
   afford = Colors.greenOkay,
-  warning = Colors.yellowWarning,
 }
 
 export enum StatusColors {
