@@ -76,7 +76,7 @@ export default {
     color: Colors.sky300,
   },
   keyword: {
-    color: Colors.rose400,
+    color: Colors.amber400,
   },
   selector: {
     color: Colors.lime300,
@@ -97,7 +97,7 @@ export default {
     color: Colors.slate100,
   },
   tag: {
-    color: Colors.amber300,
+    color: Colors.amber400,
   },
   'tag.punctuation': {
     color: Colors.slate400,
@@ -118,10 +118,10 @@ export default {
     color: Colors.sky300,
   },
   property: {
-    color: Colors.violet400,
+    color: Colors.amber400,
   },
   constant: {
-    color: Colors.violet400,
+    color: Colors.indigo400,
   },
   variable: {
     color: Colors.violet400,
@@ -146,7 +146,7 @@ export default {
     textDecoration: 'underline',
   },
   function: {
-    color: Colors.lime400,
+    color: Colors.rose400,
   },
   regex: {
     background: Colors.slate700,
