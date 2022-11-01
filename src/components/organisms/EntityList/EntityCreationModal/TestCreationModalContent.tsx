@@ -139,7 +139,6 @@ const TestCreationModalContent: React.FC = () => {
         onFinish={onFinish}
         initialValues={{name: '', description: '', labels: []}}
         style={{flex: 1}}
-        requiredMark="optional"
         labelAlign="right"
       >
         <StyledFormSpace size={24} direction="vertical">

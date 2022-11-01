@@ -19,28 +19,31 @@ export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 
 export const addTestFormStructure = (options: Option[], customTestSources: Option[] = []) => [
   {
-    tooltip: 'Enter the name of the test you wish to add.',
+    // tooltip: 'Enter the name of the test you wish to add.',
     rules: [required],
     fieldName: 'name',
     inputType: 'default',
     placeholder: 'Name',
+    itemLabel: 'Name',
+    required: true,
   },
   {
     dataTest: 'test-creation_label_option',
     inputType: 'labels',
+    itemLabel: 'Labels',
   },
   {
-    tooltip:
-      'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
+    // tooltip: 'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
     fieldName: 'testType',
     inputType: 'select',
     rules: [required],
     options,
     placeholder: 'Type',
+    itemLabel: 'Type',
+    required: true,
   },
   {
-    tooltip:
-      'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
+    // tooltip: 'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
     rules: [required],
     fieldName: 'testSource',
     inputType: 'select',
@@ -53,6 +56,8 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
     ],
     placeholder: 'Source',
     dataTest: 'test-creation_type_source_option',
+    itemLabel: 'Test Source',
+    required: true,
   },
 ];
 
@@ -79,7 +84,7 @@ export const gitDirFormFields: FormItem[] = [
     placeholder: 'URI',
   },
   {
-    tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
     inputType: 'default',
     placeholder: 'Branch',
@@ -114,7 +119,7 @@ export const gitFileFormFields: FormItem[] = [
     placeholder: 'URI',
   },
   {
-    tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
     inputType: 'default',
     placeholder: 'Branch',
@@ -137,7 +142,7 @@ export const fileContentFormFields: FormItem[] = [
 
 export const customTypeFormFields: FormItem[] = [
   {
-    tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
     inputType: 'default',
     placeholder: 'Branch',

@@ -16,7 +16,7 @@ import {MainContext} from '@contexts';
 
 import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 
-const AddExecutorsModal = () => {
+const AddExecutorsModal: React.FC = () => {
   const {navigate} = useContext(MainContext);
   const [createExecutor, {isLoading}] = useCreateExecutorMutation();
 
