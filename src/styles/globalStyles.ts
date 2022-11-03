@@ -297,6 +297,18 @@ export const GlobalStyle = createGlobalStyle`
     color: ${Colors.slate400};
     text-transform: uppercase;
   }
+
+  // Form
+
+  .ant-form-vertical {
+    .ant-form-item-required { 
+      flex-direction: row-reverse;
+
+      &:before {
+        margin-left: 2px;
+        margin-right: unset !important;
+      }
+  } 
 `;
 
 /* Media Sizes */

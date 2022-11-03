@@ -42,6 +42,7 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
       rules = [],
       help = null,
       placeholder = null,
+      required: isItemRequired,
     } = formItem;
 
     let children: Nullable<ReactElement<any, any>> = null;
@@ -99,7 +100,16 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     }
 
     return (
-      <FormItem rules={rules} label={itemLabel} name={fieldName} tooltip={tooltip} key={fieldName} help={help}>
+      <FormItem
+        rules={rules}
+        label={itemLabel}
+        name={fieldName}
+        tooltip={tooltip}
+        key={fieldName}
+        help={help}
+        required={isItemRequired}
+        requiredMark={isItemRequired ? undefined : 'optional'}
+      >
         {children}
       </FormItem>
     );
