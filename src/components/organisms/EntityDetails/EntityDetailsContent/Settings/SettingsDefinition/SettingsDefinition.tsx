@@ -22,7 +22,7 @@ const SettingsDefinition: React.FC = () => {
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const {setCopyToClipboardState} = useCopyToClipboard(definition);
+  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
 
   const onCopyClick = () => {
     setCopyToClipboardState(true);
@@ -58,7 +58,7 @@ const SettingsDefinition: React.FC = () => {
       title="Definition"
       description={sectionData.description}
       onConfirm={onCopyClick}
-      confirmButtonText="Copy"
+      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
       footerText={
         <>
           Learn more about{' '}

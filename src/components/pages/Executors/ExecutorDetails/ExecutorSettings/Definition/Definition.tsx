@@ -16,7 +16,7 @@ const Definition = () => {
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const {setCopyToClipboardState} = useCopyToClipboard(definition);
+  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
 
   const onCopyClick = () => {
     setCopyToClipboardState(true);
@@ -54,7 +54,7 @@ const Definition = () => {
       title="Definition"
       description="Validate and export your container executor configuration"
       onConfirm={onCopyClick}
-      confirmButtonText="Copy"
+      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
     >
       {definition ? (
         <DefinitionContent content={definition} />

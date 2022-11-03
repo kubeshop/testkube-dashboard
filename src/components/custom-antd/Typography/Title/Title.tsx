@@ -7,7 +7,7 @@ type TitleProps = {
   color?: string;
 };
 
-const Title: React.FC<AntTypographyProps & AntdTitleProps & TitleProps> = props => {
+const Title: React.FC<AntTypographyProps<any> & AntdTitleProps & TitleProps> = props => {
   const {children, color, ...rest} = props;
 
   return (

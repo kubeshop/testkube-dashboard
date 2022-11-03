@@ -1,9 +1,8 @@
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 
-import {Popover} from 'antd';
+import {CopyButton, TestkubeCodeTheme} from '@atoms';
 
-import {DefinitionContainer, StyledCopyOutlined} from './Definition.styled';
-import testkubeTheme from './TestkubeTheme';
+import {DefinitionContainer} from './Definition.styled';
 
 type DefinitionProps = {
   content: string;
@@ -11,12 +10,11 @@ type DefinitionProps = {
 
 const Definition: React.FC<DefinitionProps> = props => {
   const {content} = props;
+
   return (
     <DefinitionContainer>
-      <Popover content="copy" trigger="click">
-        <StyledCopyOutlined />
-      </Popover>
-      <SyntaxHighlighter language="yaml" style={testkubeTheme}>
+      <CopyButton content={content} />
+      <SyntaxHighlighter language="yaml" style={TestkubeCodeTheme}>
         {content}
       </SyntaxHighlighter>
     </DefinitionContainer>

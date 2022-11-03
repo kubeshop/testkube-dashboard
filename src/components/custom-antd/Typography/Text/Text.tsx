@@ -7,7 +7,7 @@ type TextProps = {
   color?: string;
 };
 
-const Text: React.FC<AntTypographyProps & AntdTextProps & TextProps> = props => {
+const Text: React.FC<AntTypographyProps<any> & AntdTextProps & TextProps> = props => {
   const {children, color, className, ...rest} = props;
 
   const classNames = `testkube-text ${className}`;

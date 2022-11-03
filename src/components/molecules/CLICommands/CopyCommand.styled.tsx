@@ -19,14 +19,6 @@ export const StyledCopyCommandContainer = styled.div<{$bg: string; $isBordered?:
 
   span {
     position: relative;
-
-    svg {
-      position: absolute;
-      right: 10px;
-      top: 12px;
-
-      font-size: 22px;
-    }
   }
 
   &:not(:last-child) {
