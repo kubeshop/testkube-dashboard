@@ -13,6 +13,8 @@ import {notificationCall} from '@molecules';
 
 import {MainContext} from '@contexts';
 
+import {Button} from '@src/components/custom-antd';
+
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
 
@@ -42,14 +44,18 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const [logs, setLogs] = useState('');
   const [shouldConnect, setShouldConnect] = useState(false);
 
-  const scrollToBottom = useCallback(() => {
+  const scrollToBottom: (behavior?: ScrollBehavior) => void = (behavior = 'smooth') => {
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({behavior, block: 'end'});
+    }
+  };
+
+  const smoothScrollIfAutoscroll = useCallback(() => {
     if (!isAutoScrolled) {
       return;
     }
 
-    if (ref && ref.current) {
-      ref.current.scrollIntoView({behavior: 'smooth', block: 'end'});
-    }
+    scrollToBottom();
   }, [isAutoScrolled]);
 
   useWebSocket(
@@ -103,11 +109,17 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   // }, [logs, isFullScreenLogOutput]);
 
   useEffect(() => {
-    scrollToBottom();
+    smoothScrollIfAutoscroll();
   }, [logs]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      scrollToBottom('auto');
+    }, 100);
+  }, [executionId]);
+
   return (
-    <StyledLogOutputContainer ref={ref}>
+    <StyledLogOutputContainer>
       <LogOutputHeader logOutput={logs} actions={actions} title={title} />
       <StyledLogTextContainer>
         {logs ? (
@@ -115,6 +127,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
             <Ansi useClasses>{logs}</Ansi>
           </StyledPreLogText>
         ) : null}
+        <div ref={ref} />
       </StyledLogTextContainer>
     </StyledLogOutputContainer>
   );
