@@ -23,6 +23,8 @@ export type TestExecutor =
   //
   | 'ginkgo/test'
   //
+  | 'jmeter/test'
+  //
   | 'unknown';
 
 export type UnknownTestExecutor = 'Unknown test type';
@@ -39,6 +41,7 @@ export type TestExecutorName =
   | 'Maven'
   | 'Kubepug'
   | 'Ginkgo'
+  | 'JMeter'
   | UnknownTestExecutor;
 
 export type TestExecutorConfig = {

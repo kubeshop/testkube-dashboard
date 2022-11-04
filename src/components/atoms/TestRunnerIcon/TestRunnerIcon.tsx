@@ -7,6 +7,7 @@ import {ReactComponent as CurlIcon} from '@assets/curlIcon.svg';
 import {ReactComponent as CypressIcon} from '@assets/cypressIcon.svg';
 import {ReactComponent as GinkgoIcon} from '@assets/ginkgoIcon.svg';
 import {ReactComponent as GradleIcon} from '@assets/gradleIcon.svg';
+import {ReactComponent as JMeterIcon} from '@assets/jmeterIcon.svg';
 import {ReactComponent as K6Icon} from '@assets/k6Icon.svg';
 import {ReactComponent as KubepugIcon} from '@assets/kubepug.svg';
 import {ReactComponent as MavenIcon} from '@assets/mavenIcon.svg';
@@ -36,6 +37,7 @@ export const testRunnerIcons: {[key in TestExecutor | string]: any} = {
   'maven/test': <MavenIcon />,
   'kubepug/yaml': <KubepugIcon />,
   'ginkgo/test': <GinkgoIcon />,
+  'jmeter/test': <JMeterIcon />,
   unknown: <DefaultIcon />,
 };
 

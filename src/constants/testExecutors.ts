@@ -34,5 +34,6 @@ export const testExecutorsNames: {[key in TestExecutor | string]: TestExecutorNa
   'maven/test': 'Maven',
   'kubepug/yaml': 'Kubepug',
   'ginkgo/test': 'Ginkgo',
+  'jmeter/test': 'JMeter',
   unknown: 'Unknown test type',
 };
