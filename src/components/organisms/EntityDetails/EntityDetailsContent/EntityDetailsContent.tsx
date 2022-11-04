@@ -106,7 +106,7 @@ const EntityDetailsContent: React.FC = () => {
   return (
     <StyledContainer>
       <Helmet>
-        <title>{`${name} | Testkube`}</title>
+        <title>{name ? `${name} | Testkube` : 'Testkube'}</title>
         <meta name="description" content={`${description}`} />
       </Helmet>
       <StyledPageHeader
