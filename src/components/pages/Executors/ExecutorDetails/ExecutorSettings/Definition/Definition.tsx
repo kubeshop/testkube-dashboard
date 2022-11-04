@@ -7,18 +7,16 @@ import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
 import {Pre} from '@atoms';
 
-import {ConfigurationCard, CopyCommand} from '@molecules';
+import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
-
-import Colors from '@styles/Colors';
 
 const Definition = () => {
   const executor = useAppSelector(selectCurrentExecutor);
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const {setCopyToClipboardState} = useCopyToClipboard(definition);
+  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
 
   const onCopyClick = () => {
     setCopyToClipboardState(true);
@@ -56,10 +54,10 @@ const Definition = () => {
       title="Definition"
       description="Validate and export your container executor configuration"
       onConfirm={onCopyClick}
-      confirmButtonText="Copy"
+      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
     >
       {definition ? (
-        <CopyCommand command={definition} showDollar={false} bg={Colors.slate800} />
+        <DefinitionContent content={definition} />
       ) : (
         <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
       )}

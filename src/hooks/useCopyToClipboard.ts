@@ -1,17 +1,12 @@
 import {useEffect, useState} from 'react';
 
-import {notification} from 'antd';
-
 type CopyToClipboardOptions = {
   timeoutInMs?: number;
   notificationDuration?: number;
 };
 
-export const useCopyToClipboard = (
-  textToCopy: string,
-  options: CopyToClipboardOptions = {timeoutInMs: 1500, notificationDuration: 1.5}
-) => {
-  const {timeoutInMs, notificationDuration} = options;
+export const useCopyToClipboard = (textToCopy: string, options: CopyToClipboardOptions = {timeoutInMs: 2000}) => {
+  const {timeoutInMs} = options;
 
   const [isCopied, setCopyToClipboardState] = useState(false);
 
@@ -20,7 +15,6 @@ export const useCopyToClipboard = (
 
     if (isCopied) {
       navigator.clipboard.writeText(textToCopy);
-      notification.info({message: null, description: 'Copied', duration: notificationDuration});
       timeout = setTimeout(() => {
         setCopyToClipboardState(false);
       }, timeoutInMs);

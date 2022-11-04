@@ -4,11 +4,9 @@ import axios from 'axios';
 
 import {Pre} from '@atoms';
 
-import {ConfigurationCard, CopyCommand} from '@molecules';
+import {ConfigurationCard, Definition} from '@molecules';
 
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
-
-import Colors from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -24,7 +22,7 @@ const SettingsDefinition: React.FC = () => {
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const {setCopyToClipboardState} = useCopyToClipboard(definition);
+  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
 
   const onCopyClick = () => {
     setCopyToClipboardState(true);
@@ -60,7 +58,7 @@ const SettingsDefinition: React.FC = () => {
       title="Definition"
       description={sectionData.description}
       onConfirm={onCopyClick}
-      confirmButtonText="Copy"
+      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
       footerText={
         <>
           Learn more about{' '}
@@ -70,11 +68,7 @@ const SettingsDefinition: React.FC = () => {
         </>
       }
     >
-      {definition ? (
-        <CopyCommand command={definition} showDollar={false} bg={Colors.slate800} />
-      ) : (
-        <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
-      )}
+      {definition ? <Definition content={definition} /> : <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>}
     </ConfigurationCard>
   );
 };

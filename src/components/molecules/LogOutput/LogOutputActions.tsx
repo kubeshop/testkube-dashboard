@@ -1,9 +1,12 @@
 import {useMemo} from 'react';
 
+import stripAnsi from 'strip-ansi';
+
 import {LogAction} from '@models/log';
 
+import {CopyButton} from '@atoms';
+
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
-import CopyAction from './logActions/CopyAction';
 import FullScreenAction from './logActions/FullScreenAction';
 
 type LogOutputActionsProps = {
@@ -15,7 +18,7 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
   const {logOutput, actions} = props;
 
   const logOutputActionsMap: {[key in LogAction]: any} = {
-    copy: <CopyAction logOutput={logOutput} key="copy-log-action" />,
+    copy: <CopyButton content={stripAnsi(logOutput)} key="copy-action" />,
     fullscreen: <FullScreenAction logOutput={logOutput} key="fullscreen-log-action" />,
   };
 

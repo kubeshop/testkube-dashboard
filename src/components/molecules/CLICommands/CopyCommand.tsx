@@ -1,12 +1,8 @@
 import {useContext} from 'react';
 
-import {CopyOutlined} from '@ant-design/icons';
-
-import {Pre} from '@atoms';
+import {CopyButton, Pre} from '@atoms';
 
 import {Text} from '@custom-antd';
-
-import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
 import Colors from '@styles/Colors';
 
@@ -28,14 +24,10 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
 
   const {ga4React} = useContext(MainContext);
 
-  const {setCopyToClipboardState} = useCopyToClipboard(command);
-
   const onCopy = () => {
     if (ga4React) {
       ga4React.gtag('event', 'copy_command', {command: label});
     }
-
-    setCopyToClipboardState(true);
   };
 
   return (
@@ -55,7 +47,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
             {command}
           </StyledCopyCommandCode>
         </Pre>
-        <CopyOutlined onClick={onCopy} style={{color: Colors.slate200halfalpha}} />
+        <CopyButton content={command} onCopy={onCopy} />
       </StyledCopyCommandContainer>
     </>
   );
