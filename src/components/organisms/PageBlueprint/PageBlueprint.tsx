@@ -1,3 +1,5 @@
+import {Helmet} from 'react-helmet';
+
 import {Space} from 'antd';
 
 import {Text, Title} from '@custom-antd';
@@ -18,6 +20,10 @@ const PageBlueprint: React.FC<PageBlueprintProps> = props => {
 
   return (
     <PageBlueprintWrapper>
+      <Helmet>
+        <title>{`${title} | Testkube`}</title>
+        <meta name="description" content={`${description}`} />
+      </Helmet>
       <PageBlueprintHeader>
         <Space direction="vertical" size={15}>
           <Title color={Colors.slate50} ellipsis>

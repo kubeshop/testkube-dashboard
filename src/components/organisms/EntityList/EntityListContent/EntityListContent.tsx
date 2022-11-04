@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {Helmet} from 'react-helmet';
 
 import {Space} from 'antd';
 
@@ -114,6 +115,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   return (
     <StyledContainer>
+      <Helmet>
+        <title>{`${pageTitle} | Testkube`}</title>
+        <meta name="description" content={`${PageDescription}`} />
+      </Helmet>
       <EntityListHeader>
         {dataLayers[entity]}
         <Space size={15} direction="vertical">

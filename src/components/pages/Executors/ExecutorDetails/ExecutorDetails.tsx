@@ -1,4 +1,5 @@
 import {useContext, useEffect, useState} from 'react';
+import {Helmet} from 'react-helmet';
 
 import {Tabs} from 'antd';
 
@@ -38,6 +39,9 @@ const ExecutorDetails = () => {
 
   return (
     <StyledContainer>
+      <Helmet>
+        <title>{`${name} | Executors | Testkube`}</title>
+      </Helmet>
       <StyledPageHeader
         onBack={() => navigate('/executors')}
         title={name}

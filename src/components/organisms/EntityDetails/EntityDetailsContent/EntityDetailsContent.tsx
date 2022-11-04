@@ -1,4 +1,5 @@
 import {useContext, useEffect, useState} from 'react';
+import {Helmet} from 'react-helmet';
 
 import {Select, Tabs} from 'antd';
 
@@ -29,7 +30,7 @@ import {StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
-  
+
 const filterOptions: OptionType[] = [
   {value: 7, label: 'Timeframe: last 7 days', key: 'last7Days'},
   {value: 30, label: 'Timeframe: last 30 days', key: 'last30Days'},
@@ -104,6 +105,10 @@ const EntityDetailsContent: React.FC = () => {
 
   return (
     <StyledContainer>
+      <Helmet>
+        <title>{`${name} | Testkube`}</title>
+        <meta name="description" content={`${description}`} />
+      </Helmet>
       <StyledPageHeader
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
