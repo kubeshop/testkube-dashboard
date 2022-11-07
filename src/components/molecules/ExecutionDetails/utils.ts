@@ -7,9 +7,9 @@ export const getHeaderValues = (entity: Entity, data: Nullable<Execution | TestS
   if (data) {
     if (entity === 'test-suites') {
       const targetData = data as TestSuiteExecution;
-      const {startTime, endTime, duration, name} = targetData;
+      const {startTime, endTime, duration, name, id} = targetData;
 
-      return {name, number: 0, startedTime: new Date(startTime), finishedTime: new Date(endTime), duration};
+      return {name, number: 0, startedTime: new Date(startTime), finishedTime: new Date(endTime), duration, id};
     }
 
     if (entity === 'tests') {

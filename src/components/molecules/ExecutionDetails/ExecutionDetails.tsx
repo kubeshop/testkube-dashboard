@@ -79,7 +79,7 @@ const components: {[key in Entity]: any} = {
 };
 
 const ExecutionDetails: React.FC = () => {
-  const {entity, execId, unselectRow, abortTestExecution} = useContext(EntityDetailsContext);
+  const {entity, execId, unselectRow, abortExecution} = useContext(EntityDetailsContext);
 
   const [infoPanelProps, setInfoPanelProps] = useState<ExecutionDetailsOnDataChangeInterface>({
     data: null,
@@ -99,9 +99,9 @@ const ExecutionDetails: React.FC = () => {
 
   const {name, number, startedTime, finishedTime, id} = headerValues;
 
-  const onAbortTestExecution = () => {
+  const onAbortExecution = () => {
     if (id && execId) {
-      abortTestExecution({executionId: execId, testId: id});
+      abortExecution({executionId: execId, id});
     }
   };
 
@@ -109,7 +109,7 @@ const ExecutionDetails: React.FC = () => {
     let actionsArray = [];
 
     if (isRunning) {
-      actionsArray.push({key: 1, label: <span onClick={onAbortTestExecution}>Abort execution</span>});
+      actionsArray.push({key: 1, label: <span onClick={onAbortExecution}>Abort execution</span>});
     }
 
     return actionsArray;
@@ -151,7 +151,7 @@ const ExecutionDetails: React.FC = () => {
                   </Text>
                 </ItemColumn>
                 <ItemColumn className="flex-auto">
-                  {renderedExecutionActions && renderedExecutionActions.length && entity === 'tests' ? (
+                  {renderedExecutionActions && renderedExecutionActions.length ? (
                     <div
                       onClick={e => {
                         e.stopPropagation();

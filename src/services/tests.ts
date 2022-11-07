@@ -68,8 +68,8 @@ export const testsApi = createApi({
       }),
     }),
     abortTestExecution: builder.mutation<void, any>({
-      query: ({testId, executionId}) => ({
-        url: `/tests/${testId}/executions/${executionId}`,
+      query: ({id, executionId}) => ({
+        url: `/tests/${id}/executions/${executionId}`,
         method: 'DELETE',
       }),
     }),

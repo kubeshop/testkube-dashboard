@@ -1,4 +1,4 @@
-import {useContext, useMemo} from 'react';
+import {useMemo} from 'react';
 
 import {Dropdown, Menu} from 'antd';
 
@@ -14,15 +14,11 @@ import {constructExecutedString, formatDuration} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
-import EntityDetailsContext from '@contexts/EntityDetailsContext';
-
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled';
 
-const TableRow: React.FC<{data: any; onAbortTestExecution: any}> = props => {
-  const {data, onAbortTestExecution} = props;
+const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
+  const {data, onAbortExecution} = props;
   const {status, number, startTime, name, id, durationMs} = data;
-
-  const {entity} = useContext(EntityDetailsContext);
 
   const isRunning = useIsRunning(status);
 
@@ -33,9 +29,9 @@ const TableRow: React.FC<{data: any; onAbortTestExecution: any}> = props => {
     } catch (err) {}
   };
 
-  const abortTestExecution = () => {
-    if (onAbortTestExecution) {
-      onAbortTestExecution(id);
+  const abortExecution = () => {
+    if (onAbortExecution) {
+      onAbortExecution(id);
     }
   };
 
@@ -45,7 +41,7 @@ const TableRow: React.FC<{data: any; onAbortTestExecution: any}> = props => {
     let actionsArray = [];
 
     if (isRunning) {
-      actionsArray.push({key: 1, label: <span onClick={abortTestExecution}>Abort execution</span>});
+      actionsArray.push({key: 1, label: <span onClick={abortExecution}>Abort execution</span>});
     }
 
     return actionsArray;
@@ -71,7 +67,7 @@ const TableRow: React.FC<{data: any; onAbortTestExecution: any}> = props => {
             <Text className="regular small" color={Colors.slate200}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </Text>
-            {renderedExecutionActions && renderedExecutionActions.length && entity === 'tests' ? (
+            {renderedExecutionActions && renderedExecutionActions.length ? (
               <div
                 onClick={e => {
                   e.stopPropagation();

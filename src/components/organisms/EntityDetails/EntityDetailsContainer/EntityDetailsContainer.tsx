@@ -4,8 +4,7 @@ import useWebSocket from 'react-use-websocket';
 
 import {notification} from 'antd';
 
-// import axios from 'axios';
-import styled from 'styled-components';
+import axios from 'axios';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {WSData, WSEventType} from '@models/websocket';
@@ -14,18 +13,22 @@ import useStateCallback from '@hooks/useStateCallback';
 
 import {PollingIntervals} from '@utils/numbers';
 
-import {useAbortTestExecutionMutation} from '@services/tests';
-
 import {EntityDetailsContext, MainContext} from '@contexts';
 
 import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
+import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {entity, useGetEntityDetails, useGetMetrics, defaultStackRoute, getExecutionsEndpoint, useGetExecutions} =
-    props;
-
-  const [abortTestExecution] = useAbortTestExecutionMutation();
+  const {
+    entity,
+    useGetEntityDetails,
+    useGetMetrics,
+    defaultStackRoute,
+    getExecutionsEndpoint,
+    useGetExecutions,
+    useAbortExecution,
+  } = props;
 
   const {navigate, location, wsRoot} = useContext(MainContext);
   const {pathname} = location;
@@ -47,31 +50,32 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     pollingInterval: PollingIntervals.everyTwoSeconds,
   });
   const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue});
+  const [abortExecution] = useAbortExecution();
 
   // Temporary solution until WS implementation
   // works stable on both FE and BE
-  // const getExecutions = async () => {
-  //   if (id) {
-  //     try {
-  //       const queryParams = new URLSearchParams({
-  //         id,
-  //         last: String(daysFilterValue),
-  //         pageSize: String(Number.MAX_SAFE_INTEGER),
-  //       });
+  const getExecutions = async () => {
+    if (id) {
+      try {
+        const queryParams = new URLSearchParams({
+          id,
+          last: String(daysFilterValue),
+          pageSize: String(Number.MAX_SAFE_INTEGER),
+        });
 
-  //       const endpoint =
-  //         typeof getExecutionsEndpoint === 'function' ? getExecutionsEndpoint(id) : getExecutionsEndpoint;
+        const endpoint =
+          typeof getExecutionsEndpoint === 'function' ? getExecutionsEndpoint(id) : getExecutionsEndpoint;
 
-  //       const {data} = await axios(`${endpoint}?${queryParams.toString()}`, {
-  //         method: 'GET',
-  //       });
+        const {data} = await axios(`${endpoint}?${queryParams.toString()}`, {
+          method: 'GET',
+        });
 
-  //       setExecutionsList(data);
-  //     } catch (err) {
-  //       //
-  //     }
-  //   }
-  // };
+        setExecutionsList(data);
+      } catch (err) {
+        //
+      }
+    }
+  };
 
   const onWebSocketData = (wsData: WSData) => {
     try {
@@ -201,7 +205,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
     if (entity === 'test-suites') {
       const interval = setInterval(() => {
-        // getExecutions();
+        getExecutions();
         refetchMetrics();
       }, 1000);
 
@@ -246,7 +250,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     metrics,
     daysFilterValue,
     setDaysFilterValue,
-    abortTestExecution,
+    abortExecution,
     isFirstTimeLoading,
     setFirstTimeLoading,
   };
@@ -260,13 +264,5 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     </EntityDetailsContext.Provider>
   );
 };
-
-const EntityDetailsWrapper = styled.div`
-  overflow: hidden;
-
-  display: flex;
-
-  height: 100%;
-`;
 
 export default EntityDetailsContainer;
