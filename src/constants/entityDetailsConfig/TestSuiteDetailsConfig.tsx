@@ -4,7 +4,7 @@ import {
   useGetTestSuiteExecutionMetricsQuery,
   useGetTestSuiteExecutionsByTestIdQuery,
 } from '@services/testSuiteExecutions';
-import {useGetTestSuiteDetailsQuery} from '@services/testSuites';
+import {useAbortTestSuiteExecutionMutation, useGetTestSuiteDetailsQuery} from '@services/testSuites';
 
 const TestSuiteExecutionsConfig: EntityDetailsBlueprint = {
   entity: 'test-suites',
@@ -13,6 +13,7 @@ const TestSuiteExecutionsConfig: EntityDetailsBlueprint = {
   useGetMetrics: useGetTestSuiteExecutionMetricsQuery,
   defaultStackRoute: '/test-suites',
   getExecutionsEndpoint: '/test-suite-executions',
+  useAbortExecution: useAbortTestSuiteExecutionMutation,
 };
 
 export default TestSuiteExecutionsConfig;

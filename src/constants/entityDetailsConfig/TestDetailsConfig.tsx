@@ -1,6 +1,11 @@
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 
-import {useGetTestExecutionMetricsQuery, useGetTestExecutionsByIdQuery, useGetTestQuery} from '@services/tests';
+import {
+  useAbortTestExecutionMutation,
+  useGetTestExecutionMetricsQuery,
+  useGetTestExecutionsByIdQuery,
+  useGetTestQuery,
+} from '@services/tests';
 
 const TestExecutionsConfig: EntityDetailsBlueprint = {
   entity: 'tests',
@@ -11,6 +16,7 @@ const TestExecutionsConfig: EntityDetailsBlueprint = {
   getExecutionsEndpoint: (id: string) => {
     return `/tests/${id}/executions`;
   },
+  useAbortExecution: useAbortTestExecutionMutation,
 };
 
 export default TestExecutionsConfig;
