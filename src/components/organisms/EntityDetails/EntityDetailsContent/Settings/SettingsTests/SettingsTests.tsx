@@ -142,9 +142,9 @@ const SettingsTests = () => {
   useEffect(() => {
     if (!steps) {
       setCurrentSteps([]);
-      return;
+    } else {
+      applyCurrentSteps(steps, testsData);
     }
-    applyCurrentSteps(steps, testsData);
   }, [steps, testsData]);
 
   return (
