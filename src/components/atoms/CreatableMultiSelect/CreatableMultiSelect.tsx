@@ -58,6 +58,11 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     }
   };
 
+  const onClear = () => {
+    // @ts-ignore
+    ref.current.select.clearValue();
+  };
+
   return (
     <CreatableSelect
       ref={ref}

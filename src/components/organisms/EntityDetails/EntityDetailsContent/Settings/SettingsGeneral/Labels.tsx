@@ -1,5 +1,7 @@
 import {useContext, useState} from 'react';
 
+import {nanoid} from 'nanoid';
+
 import {Entity} from '@models/entity';
 import {Option} from '@models/form';
 
@@ -32,6 +34,7 @@ const Labels: React.FC = () => {
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [wasTouched, setWasTouched] = useState(false);
+  const [labelsKey, setLabelsKey] = useState(nanoid());
 
   if (!entity || !entityDetails) {
     return null;
@@ -61,20 +64,26 @@ const Labels: React.FC = () => {
       });
   };
 
+  const onCancel = () => {
+    setLabelsKey(nanoid());
+    setLocalLabels(entityLabels);
+    setWasTouched(false);
+  };
+
+  const onChange = (values: any) => {
+    setLocalLabels(values);
+    setWasTouched(true);
+  };
+
   return (
     <ConfigurationCard
       title="Labels"
       description={`Define the labels you want to add for this ${namingMap[entity]}`}
       isButtonsDisabled={!wasTouched}
       onConfirm={onSave}
+      onCancel={onCancel}
     >
-      <LabelsSelect
-        onChange={values => {
-          setLocalLabels(values);
-          setWasTouched(true);
-        }}
-        defaultLabels={entityLabels}
-      />
+      <LabelsSelect key={`labels_${labelsKey}`} onChange={onChange} defaultLabels={entityLabels} />
     </ConfigurationCard>
   );
 };

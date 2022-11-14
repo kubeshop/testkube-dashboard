@@ -33,6 +33,7 @@ const SettingsTests = () => {
 
   const [currentSteps, setCurrentSteps] = useState(steps);
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
+  const [wasTouched, setWasTouched] = useState(false);
 
   const scrollRef = useRef(null);
 
@@ -80,6 +81,7 @@ const SettingsTests = () => {
           stopTestOnFailure: false,
         },
       ]);
+      setWasTouched(true);
       scrollToBottom();
     }
   };
@@ -96,6 +98,7 @@ const SettingsTests = () => {
       },
     ]);
     setIsDelayModalVisible(false);
+    setWasTouched(true);
     scrollToBottom();
   };
 
@@ -115,13 +118,9 @@ const SettingsTests = () => {
     scrollToBottom();
   }, [currentSteps?.length]);
 
-  useEffect(() => {
-    if (!steps) {
-      setCurrentSteps([]);
-      return;
-    }
+  const applyCurrentSteps = (_steps: any[], _testsData: any[]) => {
     setCurrentSteps(
-      steps.map((step: any) => {
+      _steps.map((step: any) => {
         if (step.delay) {
           return {
             ...step,
@@ -133,11 +132,19 @@ const SettingsTests = () => {
           id: nanoid(),
           execute: {
             ...step.execute,
-            type: testsData.find(item => item.name === step.execute.name)?.type,
+            type: _testsData.find(item => item.name === step.execute.name)?.type,
           },
         };
       })
     );
+  };
+
+  useEffect(() => {
+    if (!steps) {
+      setCurrentSteps([]);
+      return;
+    }
+    applyCurrentSteps(steps, testsData);
   }, [steps, testsData]);
 
   return (
@@ -153,6 +160,11 @@ const SettingsTests = () => {
         </>
       }
       onConfirm={saveSteps}
+      onCancel={() => {
+        applyCurrentSteps(steps, testsData);
+        setWasTouched(false);
+      }}
+      isButtonsDisabled={!wasTouched}
     >
       <>
         {currentSteps?.length === 0 ? (

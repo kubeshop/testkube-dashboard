@@ -1,5 +1,3 @@
-import {useEffect} from 'react';
-
 import {Form, FormInstance} from 'antd';
 
 import {Variable} from '@models/variable';
@@ -14,12 +12,6 @@ type VariablesListProps = {
 
 const VariablesList: React.FC<VariablesListProps> = props => {
   const {data, form, onFinish} = props;
-
-  useEffect(() => {
-    form.setFieldsValue({
-      'variables-list': data,
-    });
-  }, [data]);
 
   return (
     <Form

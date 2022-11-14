@@ -135,6 +135,10 @@ const Arguments: React.FC = () => {
       onConfirm={() => {
         form.submit();
       }}
+      onCancel={() => {
+        setArgsValue(entityArgs.join(' '));
+        form.setFieldValue(['args'], entityArgs.join(' '));
+      }}
     >
       <ArgumentsWrapper>
         <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />

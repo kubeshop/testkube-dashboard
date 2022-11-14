@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Form} from 'antd';
+
 import {Button, Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
@@ -56,18 +58,26 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
             </Text>
           </StyledFooterText>
         ) : null}
-        <StyledFooterButtonsContainer>
-          {onCancel ? (
-            <Button onClick={onCancel} $customType="secondary" disabled={isButtonsDisabled}>
-              Cancel
-            </Button>
-          ) : null}
-          {onConfirm ? (
-            <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={isButtonsDisabled}>
-              {confirmButtonText}
-            </Button>
-          ) : null}
-        </StyledFooterButtonsContainer>
+        <Form.Item noStyle shouldUpdate>
+          {({isFieldsTouched}) => (
+            <StyledFooterButtonsContainer>
+              {onCancel ? (
+                <Button onClick={onCancel} $customType="secondary" disabled={isButtonsDisabled || !isFieldsTouched()}>
+                  Cancel
+                </Button>
+              ) : null}
+              {onConfirm ? (
+                <Button
+                  onClick={onConfirm}
+                  $customType={isWarning ? 'warning' : 'primary'}
+                  disabled={isButtonsDisabled || !isFieldsTouched()}
+                >
+                  {confirmButtonText}
+                </Button>
+              ) : null}
+            </StyledFooterButtonsContainer>
+          )}
+        </Form.Item>
       </StyledFooter>
     </StyledContainer>
   );

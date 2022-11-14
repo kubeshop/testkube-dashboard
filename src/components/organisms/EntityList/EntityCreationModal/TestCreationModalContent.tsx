@@ -144,10 +144,17 @@ const TestCreationModalContent: React.FC = () => {
         <StyledFormSpace size={24} direction="vertical">
           <Text className="regular big">Test details</Text>
           <FirstStep onFileChange={onFileChange} onLabelsChange={setLocalLabels} />
-          <StyledFormItem>
-            <Button htmlType="submit" loading={isLoading} data-test="add-a-new-test-create-button">
-              {isLoading ? 'Creating...' : 'Create'}
-            </Button>
+          <StyledFormItem shouldUpdate>
+            {({isFieldsTouched}) => (
+              <Button
+                htmlType="submit"
+                loading={isLoading}
+                data-test="add-a-new-test-create-button"
+                disabled={isLoading || !isFieldsTouched()}
+              >
+                {isLoading ? 'Creating...' : 'Create'}
+              </Button>
+            )}
           </StyledFormItem>
         </StyledFormSpace>
       </Form>

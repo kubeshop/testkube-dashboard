@@ -15,8 +15,6 @@ export const StyledCopyCommandContainer = styled.div<{$bg: string; $isBordered?:
 
   background-color: ${({$bg}) => $bg};
 
-  cursor: pointer;
-
   span {
     position: relative;
   }
