@@ -63,10 +63,13 @@ const AddExecutorsModal: React.FC = () => {
             textAlign: 'end',
             marginBottom: 0,
           }}
+          shouldUpdate
         >
-          <Button htmlType="submit" $customType="primary" loading={isLoading}>
-            {isLoading ? 'Creating...' : 'Create'}
-          </Button>
+          {({isFieldsTouched}) => (
+            <Button htmlType="submit" $customType="primary" loading={isLoading} disabled={!isFieldsTouched()}>
+              {isLoading ? 'Creating...' : 'Create'}
+            </Button>
+          )}
         </Form.Item>
       </Form>
       <Hint

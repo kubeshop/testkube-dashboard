@@ -75,6 +75,9 @@ const Variables: React.FC = () => {
         </>
       }
       onConfirm={onClickSave}
+      onCancel={() => {
+        form.resetFields();
+      }}
     >
       <TestsVariablesList data={variables} form={form} onFinish={onSaveForm} />
     </ConfigurationCard>

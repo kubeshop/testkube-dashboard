@@ -88,16 +88,18 @@ const TestSuiteCreationModalContent: React.FC = () => {
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
         </StyledFormItem>
         <LabelsSelect onChange={setLocalLabels} />
-        <StyledFormItem>
-          <Button
-            htmlType="submit"
-            disabled={isLoading}
-            loading={isLoading}
-            style={{width: '118px'}}
-            data-test="add-a-new-test-suite-create-button"
-          >
-            {isLoading ? 'Creating...' : 'Create'}
-          </Button>
+        <StyledFormItem shouldUpdate>
+          {({isFieldsTouched}) => (
+            <Button
+              htmlType="submit"
+              disabled={isLoading || !isFieldsTouched()}
+              loading={isLoading}
+              style={{width: '118px'}}
+              data-test="add-a-new-test-suite-create-button"
+            >
+              {isLoading ? 'Creating...' : 'Create'}
+            </Button>
+          )}
         </StyledFormItem>
       </StyledFormSpace>
     </Form>
