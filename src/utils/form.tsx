@@ -88,7 +88,7 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     }
 
     if (inputType === 'textarea') {
-      children = <TextArea rows={10} placeholder={placeholder} />;
+      children = <TextArea rows={10} placeholder={placeholder} style={{fontFamily: 'Roboto Mono'}} />;
     }
 
     if (inputType === 'variables' && form) {

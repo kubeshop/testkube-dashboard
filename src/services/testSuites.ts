@@ -50,7 +50,7 @@ export const testSuitesApi = createApi({
     abortTestSuiteExecution: builder.mutation<void, any>({
       query: ({id, executionId}) => ({
         url: `/test-suites/${id}/executions/${executionId}`,
-        method: 'DELETE',
+        method: 'PATCH',
       }),
     }),
   }),

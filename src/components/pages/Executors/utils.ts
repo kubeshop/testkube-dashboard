@@ -81,4 +81,11 @@ export const executorsList: ExecutorGridItem[] = [
       'Ginkgo is a mature testing framework for Go designed to help you write expressive specs. Whether you are writing basic unit specs, complex integration specs, or even performance specs.',
     docLink: 'https://kubeshop.github.io/testkube/test-types/executor-ginkgo/',
   },
+  {
+    type: 'jmeter/test',
+    title: 'JMeter',
+    description:
+      'The Apache JMeter™ application is open source software, a 100% pure Java application designed to load test functional behavior and measure performance.',
+    docLink: 'https://kubeshop.github.io/testkube/test-types/executor-jmeter',
+  },
 ];
