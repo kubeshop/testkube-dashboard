@@ -12,6 +12,8 @@ import VariablesFormList from '@molecules/VariablesFormList';
 
 import {k8sResourceNameRegex} from '@utils/strings';
 
+import Fonts from '@styles/Fonts';
+
 const {TextArea} = Input;
 
 export const required: Rule = {required: true, message: 'Required.'};
@@ -88,7 +90,7 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     }
 
     if (inputType === 'textarea') {
-      children = <TextArea rows={10} placeholder={placeholder} style={{fontFamily: 'Roboto Mono'}} />;
+      children = <TextArea rows={10} placeholder={placeholder} style={{fontFamily: Fonts.robotoMono}} />;
     }
 
     if (inputType === 'variables' && form) {

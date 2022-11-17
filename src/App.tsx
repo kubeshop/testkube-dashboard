@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {Suspense, lazy, useEffect, useState} from 'react';
 import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
@@ -8,16 +8,16 @@ import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {selectApiEndpoint} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
-
-import {ProtectedRoute} from '@atoms';
 
 import {Sider} from '@organisms';
 
-import {EndpointProcessing, Executors, Sources, TestSuites, Tests, Triggers} from '@pages';
+import {EndpointProcessing} from '@pages';
 
 import {PollingIntervals} from '@utils/numbers';
+
+import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 
 import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
@@ -29,6 +29,12 @@ import {StyledLayoutContentWrapper} from './App.styled';
 import {CookiesBanner} from './components/molecules';
 
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
+
+const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
+const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
+const Executors = lazy(() => import('@pages').then(module => ({default: module.Executors})));
+const Sources = lazy(() => import('@pages').then(module => ({default: module.Sources})));
+const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
 
 const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
 
@@ -45,7 +51,7 @@ const App: React.FC = () => {
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?:\/\//, wsProtocol) : '';
 
-  const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
+  // const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
 
@@ -131,51 +137,17 @@ const App: React.FC = () => {
           <Sider />
           <StyledLayoutContentWrapper>
             <Content>
-              <Routes>
-                {/* <Route path="/" element={<Login />} /> */}
-                <Route
-                  path="tests/*"
-                  element={
-                    <ProtectedRoute>
-                      <Tests />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="test-suites/*"
-                  element={
-                    <ProtectedRoute>
-                      <TestSuites />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="executors/*"
-                  element={
-                    <ProtectedRoute>
-                      <Executors />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="sources"
-                  element={
-                    <ProtectedRoute>
-                      <Sources />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="triggers"
-                  element={
-                    <ProtectedRoute>
-                      <Triggers />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/apiEndpoint" element={<EndpointProcessing />} />
-                <Route path="*" element={<Navigate to="/tests" />} />
-              </Routes>
+              <Suspense fallback={<LoadingIcon />}>
+                <Routes>
+                  <Route path="tests/*" element={<Tests />} />
+                  <Route path="test-suites/*" element={<TestSuites />} />
+                  <Route path="executors/*" element={<Executors />} />
+                  <Route path="sources" element={<Sources />} />
+                  <Route path="triggers" element={<Triggers />} />
+                  <Route path="/apiEndpoint" element={<EndpointProcessing />} />
+                  <Route path="*" element={<Navigate to="/tests" />} />
+                </Routes>
+              </Suspense>
             </Content>
           </StyledLayoutContentWrapper>
         </Layout>

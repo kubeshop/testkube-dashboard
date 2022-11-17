@@ -1,7 +1,8 @@
 import {useContext, useMemo} from 'react';
 
+import {nanoid} from '@reduxjs/toolkit';
+
 import classNames from 'classnames';
-import {v4} from 'uuid';
 
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
@@ -86,7 +87,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
         testType,
       } = execution;
 
-      const listItemKey = execution?.id || v4();
+      const listItemKey = execution?.id || nanoid();
 
       const isClickable =
         (execution?.id && iconSet === 'default') || (iconSet === 'definition' && (!delay || stepResult?.delay));
