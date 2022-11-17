@@ -61,7 +61,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
         <Form.Item noStyle shouldUpdate>
           {({isFieldsTouched}) => (
             <StyledFooterButtonsContainer>
-              {onCancel ? (
+              {onCancel && isFieldsTouched() ? (
                 <Button onClick={onCancel} $customType="secondary" disabled={isButtonsDisabled || !isFieldsTouched()}>
                   Cancel
                 </Button>
