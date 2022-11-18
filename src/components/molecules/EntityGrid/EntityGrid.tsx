@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 
 import {StyledEntityGrid} from './EntityGrid.styled';
 import EntityGridItem from './EntityGridItem';
@@ -30,4 +30,4 @@ const EntityGrid: React.FC<EntityGridProps> = props => {
   return <StyledEntityGrid>{renderedGrid}</StyledEntityGrid>;
 };
 
-export default EntityGrid;
+export default memo(EntityGrid);

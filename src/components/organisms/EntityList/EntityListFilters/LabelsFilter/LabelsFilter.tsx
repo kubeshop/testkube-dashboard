@@ -135,14 +135,14 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       return;
     }
 
-    dispatch(setFilters({...filters, page: 0, selector: resultedFilters}));
+    dispatch(setFilters({...filters, selector: resultedFilters}));
     onVisibleChange(false);
   };
 
   const resetFilters = () => {
     setLabelsMapping([defaultKeyValuePair]);
     onVisibleChange(false);
-    dispatch(setFilters({...filters, page: 0, selector: []}));
+    dispatch(setFilters({...filters, selector: []}));
   };
 
   const menu = (

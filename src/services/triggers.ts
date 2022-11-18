@@ -11,7 +11,7 @@ export const triggersApi = createApi({
     getTriggersKeyMap: builder.query<TriggersKeyMap, void>({
       query: () => `/keymap/triggers`,
     }),
-    getTriggersList: builder.query<TestTrigger[], void>({
+    getTriggersList: builder.query<TestTrigger[], void | null>({
       query: () => `/triggers`,
     }),
     createTrigger: builder.mutation<any, any>({
