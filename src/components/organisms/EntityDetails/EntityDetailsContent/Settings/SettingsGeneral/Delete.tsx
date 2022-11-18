@@ -43,6 +43,7 @@ const Delete: React.FC = () => {
         onConfirm={onConfirm}
         isWarning
         confirmButtonText="Delete"
+        isButtonsDisabled={false}
       />
       {isModalVisible ? (
         <Modal

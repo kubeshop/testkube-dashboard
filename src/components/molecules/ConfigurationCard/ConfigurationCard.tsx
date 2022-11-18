@@ -70,7 +70,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                 <Button
                   onClick={onConfirm}
                   $customType={isWarning ? 'warning' : 'primary'}
-                  disabled={isButtonsDisabled || !isFieldsTouched()}
+                  disabled={isWarning ? false : isButtonsDisabled || !isFieldsTouched()}
                 >
                   {confirmButtonText}
                 </Button>
