@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {memo, useContext, useEffect, useMemo} from 'react';
 
 import {Space} from 'antd';
 
@@ -32,11 +32,13 @@ const EntityListFilters: React.FC<
 
   const searchParams = useURLSearchParams();
 
-  const renderedFilters = filtersComponentsIds?.map((filterComponentId: FilterType) => {
-    const Component = filtersComponents[filterComponentId];
+  const renderedFilters = useMemo(() => {
+    return filtersComponentsIds?.map((filterComponentId: FilterType) => {
+      const Component = filtersComponents[filterComponentId];
 
-    return <Component {...rest} key={filterComponentId} />;
-  });
+      return <Component {...rest} key={filterComponentId} />;
+    });
+  }, [filtersComponentsIds]);
 
   useEffect(() => {
     if (Object.entries(searchParams).length) {
@@ -51,4 +53,4 @@ const EntityListFilters: React.FC<
   );
 };
 
-export default EntityListFilters;
+export default memo(EntityListFilters);

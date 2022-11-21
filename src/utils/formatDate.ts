@@ -1,15 +1,6 @@
 import {Duration, format} from 'date-fns';
-import moment from 'moment';
 
 import {executionDateFormat} from './strings';
-
-export const timeStampToDate = (timeStamp: string) => {
-  if (!timeStamp) {
-    return '';
-  }
-
-  return moment(timeStamp).format('MM-DD-YYYY hh:mm:ss').toString();
-};
 
 export const formatExecutionDate = (date: Date, formatString = executionDateFormat) => {
   return format(date, formatString);

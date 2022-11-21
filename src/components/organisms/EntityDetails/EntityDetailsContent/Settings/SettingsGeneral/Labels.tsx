@@ -1,6 +1,6 @@
 import {useContext, useState} from 'react';
 
-import {nanoid} from 'nanoid';
+import {nanoid} from '@reduxjs/toolkit';
 
 import {Entity} from '@models/entity';
 import {Option} from '@models/form';

@@ -4,7 +4,7 @@ import {Select} from 'antd';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
 
-import {nanoid} from 'nanoid';
+import {nanoid} from '@reduxjs/toolkit';
 
 import {TestWithExecution} from '@models/test';
 import {TestExecutor} from '@models/testExecutors';

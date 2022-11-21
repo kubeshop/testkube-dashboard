@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {memo, useEffect} from 'react';
 
 import {OnDataChangeInterface} from '@models/onDataChange';
 
@@ -12,7 +12,7 @@ type DataLayerProps = {
   queryFilters?: any;
 };
 
-export const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
+export const TestSuitesDataLayer: React.FC<DataLayerProps> = memo(props => {
   const {onDataChange, queryFilters} = props;
 
   const {data, isLoading, isFetching, refetch, ...rest} = useGetTestSuitesQuery(queryFilters || null, {
@@ -28,9 +28,9 @@ export const TestSuitesDataLayer: React.FC<DataLayerProps> = props => {
   }, [data, isLoading, isFetching]);
 
   return <></>;
-};
+});
 
-export const TestsDataLayer: React.FC<DataLayerProps> = props => {
+export const TestsDataLayer: React.FC<DataLayerProps> = memo(props => {
   const {onDataChange, queryFilters} = props;
 
   const {data, isLoading, isFetching, refetch, ...rest} = useGetTestsQuery(queryFilters || null, {
@@ -46,4 +46,4 @@ export const TestsDataLayer: React.FC<DataLayerProps> = props => {
   }, [data, isLoading, isFetching, rest.error]);
 
   return <></>;
-};
+});

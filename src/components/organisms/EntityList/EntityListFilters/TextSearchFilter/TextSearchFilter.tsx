@@ -27,7 +27,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
 
   useDebounce(
     () => {
-      dispatch(setFilters({...filters, page: 0, [queryParam || queryParamField]: inputValue}));
+      dispatch(setFilters({...filters, [queryParam || queryParamField]: inputValue}));
     },
     300,
     [inputValue]

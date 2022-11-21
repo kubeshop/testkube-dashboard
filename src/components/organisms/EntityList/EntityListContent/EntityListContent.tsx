@@ -1,21 +1,17 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
-
-import {Space} from 'antd';
 
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
 import {OnDataChangeInterface} from '@models/onDataChange';
 
-import {Button, Modal, Title} from '@custom-antd';
+import {Button, Modal} from '@custom-antd';
 
 import {EntityGrid} from '@molecules';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {compareFiltersObject} from '@utils/objects';
-
-import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
@@ -24,7 +20,8 @@ import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
-import {EmptyListWrapper, EntityListHeader, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
+import {EmptyListWrapper, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
+import EntityListHeader from './EntityListHeader';
 import EntityListSkeleton from './EntityListSkeleton';
 
 const modalTypes: {[key in Entity]: ModalConfigProps} = {
@@ -119,14 +116,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         <title>{`${pageTitle} | Testkube`}</title>
         <meta name="description" content={`${PageDescription}`} />
       </Helmet>
-      <EntityListHeader>
-        {dataLayers[entity]}
-        <Space size={15} direction="vertical">
-          <Title color={Colors.slate50} ellipsis>
-            {pageTitle}
-          </Title>
-          <PageDescription />
-        </Space>
+      {dataLayers[entity]}
+      <EntityListHeader pageTitle={pageTitle}>
+        <PageDescription />
       </EntityListHeader>
       {filtersComponentsIds && filtersComponentsIds.length ? (
         <StyledFiltersSection>
@@ -162,4 +154,4 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   );
 };
 
-export default EntityListContent;
+export default memo(EntityListContent);

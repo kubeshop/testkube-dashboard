@@ -1,12 +1,10 @@
-import {createContext, useContext} from 'react';
+import {createContext} from 'react';
 
 import {Entity, EntityListBlueprint} from '@models/entity';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 
-import {MainContext} from '@contexts';
-
+// import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 import EntityListContent from '../EntityListContent';
 
 export const EntityListContext = createContext<{
@@ -25,12 +23,10 @@ export const EntityListContext = createContext<{
 const EntityListContainer: React.FC<EntityListBlueprint> = props => {
   const {selectData, selectQueryFilters, selectAllFilters, useGetMetrics, ...rest} = props;
 
-  const {apiEndpoint} = useContext(MainContext);
-
   const dataSource = useAppSelector(selectData);
   const queryFilters = useAppSelector(selectQueryFilters);
   const allFilters = useAppSelector(selectAllFilters);
-  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
+  // const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const entityListContextValues = {
     dataSource,

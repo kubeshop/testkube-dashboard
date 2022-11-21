@@ -24,11 +24,21 @@ const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   selectedTestSuiteExecution: null,
 };
 
+export const initialTestSuitesFiltersState: TestSuiteFilters = {
+  textSearch: '',
+  pageSize: 10,
+  page: 0,
+  selector: [],
+  startDate: null,
+  endDate: null,
+  status: [],
+};
+
 export const initialTestSuitesState: TestSuitesState = {
   isLoading: false,
   dataList: [],
   latestExecution: undefined,
-  filters: {textSearch: '', pageSize: 10, page: 0, selector: [], startDate: null, endDate: null, status: []},
+  filters: initialTestSuitesFiltersState,
   totals: {
     results: 0,
     passed: 0,
@@ -42,16 +52,6 @@ export const initialTestSuitesState: TestSuitesState = {
     pending: 0,
   },
   selectedTestSuite: undefined,
-};
-
-export const initialTestSuitesFiltersState: TestSuiteFilters = {
-  textSearch: '',
-  pageSize: 10,
-  page: 0,
-  selector: [],
-  startDate: null,
-  endDate: null,
-  status: [],
 };
 
 export const initialTestsFiltersState: TestFilters = {

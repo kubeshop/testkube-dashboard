@@ -13,6 +13,8 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {PageBlueprint} from '@organisms';
 
+import {PollingIntervals} from '@utils/numbers';
+
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
@@ -53,7 +55,13 @@ const Triggers: React.FC = () => {
   const {data: triggersKeyMap, isLoading: keyMapLoading} = useGetTriggersKeyMapQuery();
   const {data: testsList = [], isLoading: testsLoading} = useGetAllTestsQuery();
   const {data: testsSuitesList = [], isLoading: testSuitesLoading} = useGetAllTestSuitesQuery();
-  const {data: triggersList, isLoading: triggersLoading, refetch} = useGetTriggersListQuery();
+  const {
+    data: triggersList,
+    isLoading: triggersLoading,
+    refetch,
+  } = useGetTriggersListQuery(null, {
+    pollingInterval: PollingIntervals.long,
+  });
 
   const [updateTriggers] = useUpdateTriggersMutation();
 

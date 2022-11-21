@@ -8,7 +8,6 @@ export {default as LabelListItem} from './LabelListItem';
 export {default as Loader} from './Loader';
 export {default as UploadWithInput} from './UploadWithInput';
 export {default as StatusIcon} from './StatusIcon';
-export {default as ProtectedRoute} from './ProtectedRoute';
 export {default as Pre} from './Pre';
 export {default as CreatableMultiSelect} from './CreatableMultiSelect';
 export {default as SplittedLabelText} from './SplittedLabelText';
