@@ -67,7 +67,7 @@
     "@ant-design/icons": "4.7.0",
     "@fingerprintjs/fingerprintjs": "^3.3.5",
     "@n8tb1t/use-scroll-position": "^2.0.3",
-    "@reduxjs/toolkit": "1.8.1",
+    "@reduxjs/toolkit": "1.9.0",
     "@segment/analytics-next": "^1.43.0",
     "ansi-to-react": "^6.1.6",
     "antd": "^4.23.6",
