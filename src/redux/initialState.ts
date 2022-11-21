@@ -57,8 +57,8 @@ export const initialTestSuitesState: TestSuitesState = {
 export const initialTestsFiltersState: TestFilters = {
   textSearch: '',
   type: '',
-  pageSize: 5,
-  page: 3,
+  pageSize: 10,
+  page: 0,
   selector: [],
   createdAt: null,
   status: [],
