@@ -25,7 +25,7 @@ const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
 const EntityListFilters: React.FC<
   Pick<EntityListBlueprint, 'filtersComponentsIds' | 'entity'> & FilterProps
 > = props => {
-  const {filtersComponentsIds, ...rest} = props;
+  const {filtersComponentsIds, isFiltersDisabled, ...rest} = props;
   const {setFilters, filters, entity} = rest;
 
   const {dispatch} = useContext(MainContext);
@@ -36,9 +36,9 @@ const EntityListFilters: React.FC<
     return filtersComponentsIds?.map((filterComponentId: FilterType) => {
       const Component = filtersComponents[filterComponentId];
 
-      return <Component {...rest} key={filterComponentId} />;
+      return <Component {...rest} isFiltersDisabled={isFiltersDisabled} key={filterComponentId} />;
     });
-  }, [filtersComponentsIds]);
+  }, [filtersComponentsIds, isFiltersDisabled]);
 
   useEffect(() => {
     if (Object.entries(searchParams).length) {

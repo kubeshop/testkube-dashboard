@@ -11,8 +11,11 @@ export const ArtifactsListContainer = styled.ul`
   flex-direction: column;
   gap: 10px;
 
+  max-height: 70vh;
   padding: 0;
   margin: 0;
+
+  overflow-y: auto;
 
   list-style-type: none;
 `;

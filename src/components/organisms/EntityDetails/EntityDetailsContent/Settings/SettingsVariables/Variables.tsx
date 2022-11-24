@@ -63,24 +63,56 @@ const Variables: React.FC = () => {
   };
 
   return (
-    <ConfigurationCard
-      title="Variables & Secrets"
-      description={descriptionMap[entity]}
-      footerText={
-        <>
-          Learn more about{' '}
-          <a href="https://kubeshop.github.io/testkube/using-testkube/tests/tests-variables/" target="_blank">
-            Environment variables
-          </a>
-        </>
-      }
-      onConfirm={onClickSave}
-      onCancel={() => {
-        form.resetFields();
+    <Form
+      form={form}
+      onFinish={onSaveForm}
+      onFieldsChange={(_: any) => {
+        if (_[0]) {
+          const action = _[0];
+
+          const actionValue = action.value;
+
+          if (!Array.isArray(actionValue)) {
+            const actionFieldIndex = action.name[1];
+            const isTypeChanged = action.name[2] === 'type';
+            const neededFieldValue = form.getFieldValue('variables-list')[actionFieldIndex];
+
+            if (isTypeChanged) {
+              try {
+                if (actionValue === 'secretRef') {
+                  delete neededFieldValue.value;
+                } else {
+                  delete neededFieldValue.secretRefName;
+                  delete neededFieldValue.secretRefKey;
+                }
+              } catch (err) {
+                // eslint-disable-next-line no-console
+                console.log('err: ', err);
+              }
+            }
+          }
+        }
       }}
     >
-      <TestsVariablesList data={variables} form={form} onFinish={onSaveForm} />
-    </ConfigurationCard>
+      <ConfigurationCard
+        title="Variables & Secrets"
+        description={descriptionMap[entity]}
+        footerText={
+          <>
+            Learn more about{' '}
+            <a href="https://kubeshop.github.io/testkube/using-testkube/tests/tests-variables/" target="_blank">
+              Environment variables
+            </a>
+          </>
+        }
+        onConfirm={onClickSave}
+        onCancel={() => {
+          form.resetFields();
+        }}
+      >
+        <TestsVariablesList data={variables} form={form} />
+      </ConfigurationCard>
+    </Form>
   );
 };
 
