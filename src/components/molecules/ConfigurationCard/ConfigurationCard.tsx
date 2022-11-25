@@ -59,24 +59,24 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
           </StyledFooterText>
         ) : null}
         <Form.Item noStyle shouldUpdate>
-          {({isFieldsTouched}) => (
-            <StyledFooterButtonsContainer>
-              {onCancel && isFieldsTouched() ? (
-                <Button onClick={onCancel} $customType="secondary" disabled={isButtonsDisabled || !isFieldsTouched()}>
-                  Cancel
-                </Button>
-              ) : null}
-              {onConfirm ? (
-                <Button
-                  onClick={onConfirm}
-                  $customType={isWarning ? 'warning' : 'primary'}
-                  disabled={isWarning ? false : isButtonsDisabled || !isFieldsTouched()}
-                >
-                  {confirmButtonText}
-                </Button>
-              ) : null}
-            </StyledFooterButtonsContainer>
-          )}
+          {({isFieldsTouched, getFieldsValue}) => {
+            const isDisabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
+
+            return (
+              <StyledFooterButtonsContainer>
+                {onCancel && !isDisabled ? (
+                  <Button onClick={onCancel} $customType="secondary">
+                    Cancel
+                  </Button>
+                ) : null}
+                {onConfirm ? (
+                  <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={isDisabled}>
+                    {confirmButtonText}
+                  </Button>
+                ) : null}
+              </StyledFooterButtonsContainer>
+            );
+          }}
         </Form.Item>
       </StyledFooter>
     </StyledContainer>

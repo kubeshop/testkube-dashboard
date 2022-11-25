@@ -1,4 +1,4 @@
-import {memo, useEffect, useMemo} from 'react';
+import {memo, useEffect, useMemo, useState} from 'react';
 
 import {Dropdown, Form, Menu} from 'antd';
 
@@ -67,6 +67,8 @@ const Triggers: React.FC = () => {
 
   const [form] = Form.useForm();
 
+  const [defaultFormattedTriggers, setDefaultFormattedTriggers] = useState<any>([]);
+
   const setDefaultTriggersData = (_triggersList?: TestTrigger[]) => {
     if (_triggersList) {
       const triggersData = _triggersList.map(trigger => {
@@ -94,6 +96,7 @@ const Triggers: React.FC = () => {
       form.setFieldsValue({
         triggers: triggersData,
       });
+      setDefaultFormattedTriggers(triggersData);
     }
   };
 
@@ -220,6 +223,7 @@ const Triggers: React.FC = () => {
           }}
           onCancel={() => {
             setDefaultTriggersData(triggersList);
+            form.resetFields();
           }}
           isButtonsDisabled={isLoading}
         >
@@ -229,7 +233,7 @@ const Triggers: React.FC = () => {
               <Skeleton additionalStyles={{lineHeight: 40}} />
             </>
           ) : (
-            <Form.List name="triggers" initialValue={[]}>
+            <Form.List name="triggers" initialValue={defaultFormattedTriggers}>
               {(fields, {add, remove}) => (
                 <Wrapper>
                   {fields.map((key, name) => {

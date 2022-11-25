@@ -31,6 +31,7 @@ const Arguments: React.FC = () => {
 
   const [argsValue, setArgsValue] = useState(entityArgs.join(' ') || '');
   const [isPrettified, setPrettifiedState] = useState(true);
+  const [isButtonsDisabled, setIsButtonsDisabled] = useState(true);
 
   const onSaveForm = (values: {args: string}) => {
     const argVal = !values.args.length ? [] : values.args.trim().split('\n');
@@ -75,6 +76,7 @@ const Arguments: React.FC = () => {
       .join(' ');
 
     setArgsValue(targetArgs);
+    setIsButtonsDisabled(false);
   };
 
   const prettifyArgs = () => {
@@ -118,37 +120,39 @@ const Arguments: React.FC = () => {
   }, []);
 
   return (
-    <ConfigurationCard
-      title="Arguments"
-      description="Define arguments which will be passed to the test executor."
-      footerText={
-        <>
-          Learn more about{' '}
-          <a
-            href="https://kubeshop.github.io/testkube/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests"
-            target="_blank"
-          >
-            Arguments
-          </a>
-        </>
-      }
-      onConfirm={() => {
-        form.submit();
-      }}
-      onCancel={() => {
-        setArgsValue(entityArgs.join(' '));
-        form.setFieldValue(['args'], entityArgs.join(' '));
-      }}
+    <Form
+      form={form}
+      name="general-settings-name-description"
+      onChange={onChange}
+      onFinish={onSaveForm}
+      initialValues={{args: argsValue}}
     >
-      <ArgumentsWrapper>
-        <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
-        <Form
-          form={form}
-          name="general-settings-name-description"
-          onChange={onChange}
-          onFinish={onSaveForm}
-          initialValues={{args: argsValue}}
-        >
+      <ConfigurationCard
+        title="Arguments"
+        description="Define arguments which will be passed to the test executor."
+        footerText={
+          <>
+            Learn more about{' '}
+            <a
+              href="https://kubeshop.github.io/testkube/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests"
+              target="_blank"
+            >
+              Arguments
+            </a>
+          </>
+        }
+        isButtonsDisabled={isButtonsDisabled}
+        onConfirm={() => {
+          form.submit();
+        }}
+        onCancel={() => {
+          setArgsValue(entityArgs.join(' '));
+          form.setFieldValue(['args'], entityArgs.join(' '));
+          setIsButtonsDisabled(true);
+        }}
+      >
+        <ArgumentsWrapper>
+          <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
           <Space size={16} direction="vertical" style={{width: '100%'}}>
             <Text className="regular middle" color={Colors.slate400}>
               Arguments passed to the executor (concatted and passed directly to the executor)
@@ -170,9 +174,9 @@ value
               Prettify
             </Button>
           </Space>
-        </Form>
-      </ArgumentsWrapper>
-    </ConfigurationCard>
+        </ArgumentsWrapper>
+      </ConfigurationCard>
+    </Form>
   );
 };
 
