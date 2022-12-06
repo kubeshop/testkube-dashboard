@@ -7,3 +7,4 @@ export {default as EntityListBlueprintRenderer} from './EntityListBlueprintRende
 export {default as EntityDetailsBlueprintRenderer} from './EntityDetailsBlueprintRenderer';
 export {default as Sources} from './Sources';
 export {default as Triggers} from './Triggers';
+export {default as ErrorBoundary} from './ErrorBoundary';

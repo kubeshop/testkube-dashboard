@@ -226,12 +226,16 @@ export const remapExecutors = (executors: Executor[]) => {
 
   executors.forEach(executorItem => {
     const {
-      executor: {types},
+      executor: {types, executorType},
     } = executorItem;
 
-    types.forEach(type => {
-      array.push({label: type, value: type});
-    });
+    if (types) {
+      types.forEach(type => {
+        array.push({label: type, value: type});
+      });
+    } else if (executorType) {
+      array.push({label: executorType, value: executorType});
+    }
   });
 
   return array;

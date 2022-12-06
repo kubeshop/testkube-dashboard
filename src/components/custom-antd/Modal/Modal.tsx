@@ -35,6 +35,7 @@ const CustomModal: React.FC<ModalProps> = props => {
     <StyledModal
       title={title}
       centered
+      maskClosable={false}
       visible={isModalVisible}
       onCancel={onCancel}
       width={width}
