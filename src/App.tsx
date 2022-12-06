@@ -11,9 +11,11 @@ import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 
+import {CookiesBanner} from '@molecules';
+
 import {Sider} from '@organisms';
 
-import {EndpointProcessing} from '@pages';
+import {EndpointProcessing, ErrorBoundary} from '@pages';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -26,7 +28,6 @@ import {MainContext} from '@contexts';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
 import {StyledLayoutContentWrapper} from './App.styled';
-import {CookiesBanner} from './components/molecules';
 
 // import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
 
@@ -137,17 +138,19 @@ const App: React.FC = () => {
           <Sider />
           <StyledLayoutContentWrapper>
             <Content>
-              <Suspense fallback={<LoadingIcon />}>
-                <Routes>
-                  <Route path="tests/*" element={<Tests />} />
-                  <Route path="test-suites/*" element={<TestSuites />} />
-                  <Route path="executors/*" element={<Executors />} />
-                  <Route path="sources" element={<Sources />} />
-                  <Route path="triggers" element={<Triggers />} />
-                  <Route path="/apiEndpoint" element={<EndpointProcessing />} />
-                  <Route path="*" element={<Navigate to="/tests" />} />
-                </Routes>
-              </Suspense>
+              <ErrorBoundary>
+                <Suspense fallback={<LoadingIcon />}>
+                  <Routes>
+                    <Route path="tests/*" element={<Tests />} />
+                    <Route path="test-suites/*" element={<TestSuites />} />
+                    <Route path="executors/*" element={<Executors />} />
+                    <Route path="sources" element={<Sources />} />
+                    <Route path="triggers" element={<Triggers />} />
+                    <Route path="/apiEndpoint" element={<EndpointProcessing />} />
+                    <Route path="*" element={<Navigate to="/tests" />} />
+                  </Routes>
+                </Suspense>
+              </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>
         </Layout>
