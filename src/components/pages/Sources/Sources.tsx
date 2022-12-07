@@ -16,7 +16,6 @@ import {PageBlueprint} from '@organisms';
 import usePressEnter from '@hooks/usePressEnter';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {PollingIntervals} from '@utils/numbers';
 
 import {SourceFormField, useAddSourcesMutation, useGetSourcesQuery} from '@services/sources';
 
@@ -29,13 +28,13 @@ export type SourcesFormFields = {
 const Sources: React.FC = () => {
   const sourcesList = useAppSelector(selectSources);
 
-  const {data: sources, refetch, isLoading} = useGetSourcesQuery(null, {pollingInterval: PollingIntervals.long});
+  const {data: sources, refetch, isLoading} = useGetSourcesQuery(null);
 
   const [isInitialState, setIsInitialState] = useState(true);
 
   const [addSources] = useAddSourcesMutation();
 
-  const {dispatch, apiEndpoint} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
 
   const onEvent = usePressEnter();
 
@@ -112,10 +111,6 @@ const Sources: React.FC = () => {
       dispatch(setSources(sources));
     }
   }, [sources]);
-
-  useEffect(() => {
-    refetch();
-  }, [apiEndpoint]);
 
   return (
     <div
