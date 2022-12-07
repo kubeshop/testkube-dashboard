@@ -10,6 +10,7 @@ import posthog from 'posthog-js';
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectApiEndpoint} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
+import {setSources} from '@redux/reducers/sourcesSlice';
 
 import {CookiesBanner} from '@molecules';
 
@@ -23,6 +24,7 @@ import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 
 import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
+import {useGetSourcesQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
 
@@ -59,6 +61,10 @@ const App: React.FC = () => {
   const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
+    pollingInterval: PollingIntervals.long,
+  });
+
+  const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
     pollingInterval: PollingIntervals.long,
   });
 
@@ -105,6 +111,10 @@ const App: React.FC = () => {
   }, [executors]);
 
   useEffect(() => {
+    dispatch(setSources(sources || []));
+  }, [sources]);
+
+  useEffect(() => {
     posthog.capture('$pageview');
 
     if (ga4React) {
@@ -128,6 +138,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     refetchExecutors();
+    refetchSources();
     refetchClusterConfig();
   }, [apiEndpoint]);
 

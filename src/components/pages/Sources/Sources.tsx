@@ -35,7 +35,7 @@ const Sources: React.FC = () => {
 
   const [addSources] = useAddSourcesMutation();
 
-  const {dispatch, apiEndpoint} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
 
   const onEvent = usePressEnter();
 
@@ -112,10 +112,6 @@ const Sources: React.FC = () => {
       dispatch(setSources(sources));
     }
   }, [sources]);
-
-  useEffect(() => {
-    refetch();
-  }, [apiEndpoint]);
 
   return (
     <div
