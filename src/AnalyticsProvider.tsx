@@ -9,10 +9,11 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 type AnalyticsProviderProps = {
   privateKey: string;
   children: React.ReactNode;
+  appVersion: string;
 };
 
 export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
-  const {privateKey, children} = props;
+  const {privateKey, children, appVersion} = props;
 
   const notDevEnv = process.env.NODE_ENV !== 'development';
 
@@ -31,6 +32,7 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
         .then((result: any) => {
           analytics?.identify(result.visitorId, {
             hostname,
+            appVersion,
           });
         })
         // eslint-disable-next-line no-console
@@ -40,7 +42,7 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
 
   const analyticsTrack = (type: string, data: any) => {
     if (notDevEnv) {
-      analytics?.track(type, {...data, hostname});
+      analytics?.track(type, {...data, hostname, appVersion});
     }
   };
 

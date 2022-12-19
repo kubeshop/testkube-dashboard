@@ -2,9 +2,9 @@ import {Form, FormInstance} from 'antd';
 
 import {DeleteOutlined} from '@ant-design/icons';
 
-import {Button, Input} from '@custom-antd';
+import {SourcesFormFields} from '@models/sources';
 
-import {SourcesFormFields} from '@pages/Sources/Sources';
+import {Button, Input} from '@custom-antd';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 

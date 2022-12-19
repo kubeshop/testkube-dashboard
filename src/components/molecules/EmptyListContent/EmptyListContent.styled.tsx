@@ -10,4 +10,6 @@ export const StyledEmptyListContainer = styled(Space)`
   justify-content: center;
 
   height: 100%;
+
+  margin-bottom: 30px;
 `;

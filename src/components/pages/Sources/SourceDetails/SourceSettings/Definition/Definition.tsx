@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
+import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
 
 import {Pre} from '@atoms';
 
@@ -12,7 +12,7 @@ import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
 const Definition = () => {
-  const executor = useAppSelector(selectCurrentExecutor);
+  const source = useAppSelector(selectCurrentSource);
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
 
@@ -22,15 +22,15 @@ const Definition = () => {
     setCopyToClipboardState(true);
   };
 
-  const name = executor?.name;
+  const name = source?.name;
 
-  const onGetExecutorCRD = async () => {
+  const onGetSourceCRD = async () => {
     setLoading(true);
 
     try {
       setDefinition('');
 
-      const result = await axios(`/executors/${name}`, {
+      const result = await axios(`/test-sources/${name}`, {
         method: 'GET',
         headers: {
           Accept: 'text/yaml',
@@ -46,13 +46,13 @@ const Definition = () => {
   };
 
   useEffect(() => {
-    onGetExecutorCRD();
+    onGetSourceCRD();
   }, [name]);
 
   return (
     <ConfigurationCard
       title="Definition"
-      description="Validate and export your container executor configuration"
+      description="Validate and export your source configuration"
       onConfirm={onCopyClick}
       confirmButtonText={isCopied ? 'Copied' : 'Copy'}
     >

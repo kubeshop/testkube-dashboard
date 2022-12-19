@@ -13,11 +13,15 @@ export const sourcesSlice = createSlice({
     setSources: (state: Draft<SourcesState>, action: PayloadAction<SourceWithRepository[]>) => {
       state.sourcesList = action.payload;
     },
+    setCurrentSource: (state: Draft<SourcesState>, action: PayloadAction<SourceWithRepository>) => {
+      state.currentSource = action.payload;
+    },
   },
 });
 
 export const selectSources = (state: RootState) => state.sources.sourcesList;
+export const selectCurrentSource = (state: RootState) => state.sources.currentSource;
 
-export const {setSources} = sourcesSlice.actions;
+export const {setSources, setCurrentSource} = sourcesSlice.actions;
 
 export default sourcesSlice.reducer;

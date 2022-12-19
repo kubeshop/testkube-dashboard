@@ -11,7 +11,7 @@ import {ConfigurationCard} from '@molecules';
 
 import {required} from '@utils/form';
 
-const Delete: React.FC = () => {
+const NameNType: React.FC = () => {
   const {name, executor} = useAppSelector(selectCurrentExecutor);
 
   const {types} = executor;
@@ -50,4 +50,4 @@ const Delete: React.FC = () => {
   );
 };
 
-export default Delete;
+export default NameNType;
