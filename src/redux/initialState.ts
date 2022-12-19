@@ -106,6 +106,7 @@ const initialConfigState: ConfigState = {
 
 const initialSourcesState: SourcesState = {
   sourcesList: [],
+  currentSource: undefined,
 };
 
 const initialReduxState = {

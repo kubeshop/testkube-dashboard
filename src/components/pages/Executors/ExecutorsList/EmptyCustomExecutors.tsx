@@ -12,7 +12,7 @@ const EmptyCustomExecutors: React.FC<EmptyCustomExecutorsProps> = props => {
   return (
     <EmptyListContent
       title="Create your first custom executor"
-      description="Define  your container image, customize your commands and arguments and start testing."
+      description="Define your container image, customize your commands and arguments and start testing."
       buttonText="Create a new executor"
       onButtonClick={onButtonClick}
     >

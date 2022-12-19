@@ -1,5 +1,5 @@
 import {Suspense, lazy, useEffect, useState} from 'react';
-import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -16,7 +16,7 @@ import {CookiesBanner} from '@molecules';
 
 import {Sider} from '@organisms';
 
-import {EndpointProcessing, ErrorBoundary} from '@pages';
+import {EndpointProcessing, ErrorBoundary, NotFound} from '@pages';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -38,6 +38,8 @@ const TestSuites = lazy(() => import('@pages').then(module => ({default: module.
 const Executors = lazy(() => import('@pages').then(module => ({default: module.Executors})));
 const Sources = lazy(() => import('@pages').then(module => ({default: module.Sources})));
 const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
+
+const pjson = require('../package.json');
 
 const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
 
@@ -143,7 +145,7 @@ const App: React.FC = () => {
   }, [apiEndpoint]);
 
   return (
-    <AnalyticsProvider privateKey={segmentIOKey}>
+    <AnalyticsProvider privateKey={segmentIOKey} appVersion={pjson.version}>
       <MainContext.Provider value={mainContextValue}>
         <Layout>
           <Sider />
@@ -155,10 +157,10 @@ const App: React.FC = () => {
                     <Route path="tests/*" element={<Tests />} />
                     <Route path="test-suites/*" element={<TestSuites />} />
                     <Route path="executors/*" element={<Executors />} />
-                    <Route path="sources" element={<Sources />} />
+                    <Route path="sources/*" element={<Sources />} />
                     <Route path="triggers" element={<Triggers />} />
                     <Route path="/apiEndpoint" element={<EndpointProcessing />} />
-                    <Route path="*" element={<Navigate to="/tests" />} />
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </Suspense>
               </ErrorBoundary>
