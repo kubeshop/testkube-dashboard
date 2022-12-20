@@ -181,13 +181,13 @@ export const GlobalStyle = createGlobalStyle`
   // Dropdown 
   
   .ant-dropdown-menu {
-    background: ${Colors.slate800};
+    background: ${Colors.slate900};
 
     .ant-dropdown-menu-item {
-      background: ${Colors.slate700};
+      background: ${Colors.slate900};
   
       &:hover {
-        background: transparent;
+      background: ${Colors.slate800};
       }
     }
   }

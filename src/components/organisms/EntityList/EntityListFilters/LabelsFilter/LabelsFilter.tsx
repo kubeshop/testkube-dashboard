@@ -1,4 +1,5 @@
 import {useContext, useEffect, useState} from 'react';
+import {useSearchParams} from 'react-router-dom';
 
 import {Space} from 'antd';
 
@@ -29,6 +30,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [isVisible, setVisibilityState] = useState(false);
   const [labelsMapping, setLabelsMapping] = useState<EntityArray>([]);
@@ -136,6 +138,15 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     }
 
     dispatch(setFilters({...filters, selector: resultedFilters}));
+
+    searchParams.delete('selector');
+    setSearchParams(searchParams);
+
+    resultedFilters.forEach(filter => {
+      searchParams.append('selector', filter);
+    });
+    setSearchParams(searchParams);
+
     onVisibleChange(false);
   };
 
@@ -143,6 +154,9 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     setLabelsMapping([defaultKeyValuePair]);
     onVisibleChange(false);
     dispatch(setFilters({...filters, selector: []}));
+
+    searchParams.delete('selector');
+    setSearchParams(searchParams);
   };
 
   const menu = (

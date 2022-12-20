@@ -1,4 +1,5 @@
 import {useContext, useEffect, useState} from 'react';
+import {useSearchParams} from 'react-router-dom';
 
 import {Input} from 'antd';
 
@@ -16,10 +17,11 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, entity, queryParam, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const queryParamField = queryParam || 'textSearch';
 
-  const [inputValue, setInputValue] = useState(filters[queryParam || queryParamField]);
+  const [inputValue, setInputValue] = useState(filters[queryParamField]);
 
   const onChange = (e: any) => {
     setInputValue(e.target.value);
@@ -27,7 +29,15 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
 
   useDebounce(
     () => {
-      dispatch(setFilters({...filters, [queryParam || queryParamField]: inputValue}));
+      const paramValue = {[queryParamField]: inputValue};
+      dispatch(setFilters({...filters, ...paramValue}));
+      if (inputValue) {
+        searchParams.set(queryParamField, inputValue);
+        setSearchParams(searchParams);
+      } else {
+        searchParams.delete(queryParamField);
+        setSearchParams(searchParams);
+      }
     },
     300,
     [inputValue]

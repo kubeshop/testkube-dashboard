@@ -35,10 +35,9 @@ const EntityListFilters: React.FC<
   const renderedFilters = useMemo(() => {
     return filtersComponentsIds?.map((filterComponentId: FilterType) => {
       const Component = filtersComponents[filterComponentId];
-
       return <Component {...rest} isFiltersDisabled={isFiltersDisabled} key={filterComponentId} />;
     });
-  }, [filtersComponentsIds, isFiltersDisabled]);
+  }, [filtersComponentsIds, isFiltersDisabled, rest]);
 
   useEffect(() => {
     if (Object.entries(searchParams).length) {
