@@ -1,4 +1,5 @@
 import {useCallback, useContext, useMemo, useState} from 'react';
+import {useSearchParams} from 'react-router-dom';
 
 import {FilterFilled} from '@ant-design/icons';
 
@@ -13,18 +14,21 @@ import {
   StyledFilterMenuItem,
 } from '@molecules/FilterMenu';
 
+import useDebounce from '@hooks/useDebounce';
+
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-const statusList = ['queued', 'running', 'passed', 'failed'];
+const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [isVisible, setVisibilityState] = useState(false);
 
@@ -38,7 +42,6 @@ const StatusFilter: React.FC<FilterProps> = props => {
         dispatch(
           setFilters({
             ...filters,
-            page: 0,
             status: filters.status.filter((currentStatus: string) => {
               return status !== currentStatus;
             }),
@@ -49,6 +52,20 @@ const StatusFilter: React.FC<FilterProps> = props => {
       }
     },
     [dispatch, setFilters, filters]
+  );
+
+  useDebounce(
+    () => {
+      if (filters.status.length > 0) {
+        searchParams.set('status', filters.status);
+        setSearchParams(searchParams);
+      } else {
+        searchParams.delete('status');
+        setSearchParams(searchParams);
+      }
+    },
+    300,
+    [filters.status]
   );
 
   const onMenuClick = () => {};
@@ -69,13 +86,18 @@ const StatusFilter: React.FC<FilterProps> = props => {
     });
   }, [filters.status, handleClick]);
 
+  const resetFilter = () => {
+    dispatch(setFilters({...filters, status: []}));
+    onVisibleChange(false);
+
+    searchParams.delete('status');
+    setSearchParams(searchParams);
+  };
+
   const menu = (
     <StyledFilterMenu onClick={onMenuClick} data-cy="status-filter-dropdown">
       {renderedStatuses}
-      <FilterMenuFooter
-        onReset={() => dispatch(setFilters({...filters, status: []}))}
-        onOk={() => onVisibleChange(false)}
-      />
+      <FilterMenuFooter onReset={resetFilter} onOk={() => onVisibleChange(false)} />
     </StyledFilterMenu>
   );
 

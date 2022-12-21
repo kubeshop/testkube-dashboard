@@ -160,6 +160,7 @@ const App: React.FC = () => {
                     <Route path="sources/*" element={<Sources />} />
                     <Route path="triggers" element={<Triggers />} />
                     <Route path="/apiEndpoint" element={<EndpointProcessing />} />
+                    <Route path="/" element={<Tests />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </Suspense>
