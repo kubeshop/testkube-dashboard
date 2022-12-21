@@ -30,7 +30,9 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
   useDebounce(
     () => {
       const paramValue = {[queryParamField]: inputValue};
+
       dispatch(setFilters({...filters, ...paramValue}));
+
       if (inputValue) {
         searchParams.set(queryParamField, inputValue);
         setSearchParams(searchParams);
