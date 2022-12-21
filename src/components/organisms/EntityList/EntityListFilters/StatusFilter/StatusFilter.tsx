@@ -22,7 +22,7 @@ import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-const statusList = ['queued', 'running', 'passed', 'failed'];
+const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, isFiltersDisabled} = props;
