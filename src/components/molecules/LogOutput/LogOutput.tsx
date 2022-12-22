@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {memo, useCallback, useContext, useEffect, useRef, useState} from 'react';
 import useWebSocket from 'react-use-websocket';
 
@@ -6,14 +5,7 @@ import Ansi from 'ansi-to-react';
 
 import {LogAction} from '@models/log';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput, setLogOutput} from '@redux/reducers/configSlice';
-
-import {notificationCall} from '@molecules';
-
 import {MainContext} from '@contexts';
-
-import {Button} from '@src/components/custom-antd';
 
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
@@ -37,7 +29,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const {dispatch, wsRoot} = useContext(MainContext);
+  const {wsRoot} = useContext(MainContext);
 
   // const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 

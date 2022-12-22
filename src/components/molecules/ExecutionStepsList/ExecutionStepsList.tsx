@@ -2,8 +2,6 @@ import {useContext, useMemo} from 'react';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import classNames from 'classnames';
-
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
 import {setRedirectTarget} from '@redux/reducers/configSlice';
@@ -56,6 +54,16 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       execution: {id},
     } = step;
 
+    if (!id) {
+      dispatch(
+        setRedirectTarget({
+          targetTestId: executionName,
+          targetTestExecutionId: null,
+        })
+      );
+      return navigate(`/tests/executions/${execute?.name}`);
+    }
+
     if (iconSet === 'default') {
       dispatch(
         setRedirectTarget({
@@ -81,7 +89,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       const executionName = getExecutionStepName(step);
 
       const {step: stepResult, execution} = step;
-      const {execute, delay} = stepResult;
+      const {execute} = stepResult;
       const {
         executionResult: {status},
         testType,
@@ -89,22 +97,13 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
 
       const listItemKey = execution?.id || nanoid();
 
-      const isClickable =
-        (execution?.id && iconSet === 'default') || (iconSet === 'definition' && (!delay || stepResult?.delay));
-
-      const listItemClassNames = classNames({
-        clickable: isClickable,
-      });
-
       // TODO: improve this
       return (
         <StyledExecutionStepsListItem
           key={listItemKey}
-          className={listItemClassNames}
+          className="clickable"
           onClick={() => {
-            if (isClickable) {
-              onShowClick({...step, executionName});
-            }
+            onShowClick({...step, executionName});
           }}
         >
           <StyledSpace size={15}>

@@ -1,6 +1,8 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
 
+import {LoadingOutlined} from '@ant-design/icons';
+
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
 import {OnDataChangeInterface} from '@models/onDataChange';
@@ -20,8 +22,8 @@ import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
-import {EmptyListWrapper, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
-import EntityListHeader from './EntityListHeader';
+import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
+import EntityListTitle from './EntityListHeader';
 import EntityListSkeleton from './EntityListSkeleton';
 
 const modalTypes: {[key in Entity]: ModalConfigProps} = {
@@ -36,7 +38,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     emptyDataComponent: EmptyData,
     entity,
     filtersComponentsIds,
-    setQueryFilters,
     setData,
     initialFiltersState,
     addEntityButtonText,
@@ -45,8 +46,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isApplyingFilters, setIsApplyingFilters] = useState(false);
+
   const {dispatch, navigate, apiEndpoint} = useContext(MainContext);
-  const {queryFilters, dataSource} = useContext(EntityListContext);
+  const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
 
   const [contentProps, setContentProps] = useState<OnDataChangeInterface>({
     data: [],
@@ -99,6 +102,15 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     };
   }, [entity, apiEndpoint]);
 
+  useEffect(() => {
+    setIsApplyingFilters(true);
+    try {
+      contentProps.refetch().then(() => setIsApplyingFilters(false));
+    } catch (err) {
+      //
+    }
+  }, [queryFilters, contentProps.refetch]);
+
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
   const isEmptyData = (dataSource?.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
 
@@ -117,23 +129,31 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         <meta name="description" content={`${PageDescription}`} />
       </Helmet>
       {dataLayers[entity]}
-      <EntityListHeader pageTitle={pageTitle}>
-        <PageDescription />
-      </EntityListHeader>
-      {filtersComponentsIds && filtersComponentsIds.length ? (
-        <StyledFiltersSection>
-          <Filters
-            setFilters={setQueryFilters}
-            filters={queryFilters}
-            filtersComponentsIds={filtersComponentsIds}
-            entity={entity}
-            isFiltersDisabled={isEmptyData}
-          />
-          <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID}>
-            {addEntityButtonText}
-          </Button>
-        </StyledFiltersSection>
-      ) : null}
+      <Header>
+        <EntityListTitle
+          pageTitle={
+            <>
+              {pageTitle} {isApplyingFilters ? <LoadingOutlined /> : null}
+            </>
+          }
+        >
+          <PageDescription />
+        </EntityListTitle>
+        {filtersComponentsIds && filtersComponentsIds.length ? (
+          <StyledFiltersSection>
+            <Filters
+              setFilters={setQueryFilters}
+              filters={queryFilters}
+              filtersComponentsIds={filtersComponentsIds}
+              entity={entity}
+              isFiltersDisabled={isEmptyData}
+            />
+            <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID}>
+              {addEntityButtonText}
+            </Button>
+          </StyledFiltersSection>
+        ) : null}
+      </Header>
       {isFirstTimeLoading ? (
         <EntityListSkeleton />
       ) : !dataSource || !dataSource.length ? (

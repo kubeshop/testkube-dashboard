@@ -10,18 +10,20 @@ import EntityListContent from '../EntityListContent';
 export const EntityListContext = createContext<{
   dataSource: any;
   queryFilters: any;
+  setQueryFilters: any;
   allFilters: any;
   useGetMetrics: any;
   entity?: Entity;
 }>({
   dataSource: [],
   queryFilters: {},
+  setQueryFilters: () => {},
   allFilters: {},
   useGetMetrics: () => {},
 });
 
 const EntityListContainer: React.FC<EntityListBlueprint> = props => {
-  const {selectData, selectQueryFilters, selectAllFilters, useGetMetrics, ...rest} = props;
+  const {selectData, selectQueryFilters, selectAllFilters, useGetMetrics, setQueryFilters, ...rest} = props;
 
   const dataSource = useAppSelector(selectData);
   const queryFilters = useAppSelector(selectQueryFilters);
@@ -31,6 +33,7 @@ const EntityListContainer: React.FC<EntityListBlueprint> = props => {
   const entityListContextValues = {
     dataSource,
     queryFilters,
+    setQueryFilters,
     allFilters,
     useGetMetrics,
     entity: rest.entity,

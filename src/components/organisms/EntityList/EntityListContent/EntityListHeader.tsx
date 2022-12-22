@@ -8,7 +8,7 @@ import Colors from '@styles/Colors';
 
 import {HeaderContainer} from './EntityListContent.styled';
 
-const EntityListHeader: React.FC<{pageTitle: string; children: React.ReactNode}> = props => {
+const EntityListHeader: React.FC<{pageTitle: React.ReactNode | string; children: React.ReactNode}> = props => {
   const {pageTitle, children} = props;
   return (
     <HeaderContainer>

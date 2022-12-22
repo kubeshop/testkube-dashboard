@@ -13,6 +13,8 @@ import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
+import {initialPageSize} from '@src/redux/initialState';
+
 const TextSearchFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, entity, queryParam, isFiltersDisabled} = props;
 
@@ -31,7 +33,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
     () => {
       const paramValue = {[queryParamField]: inputValue};
 
-      dispatch(setFilters({...filters, ...paramValue}));
+      dispatch(setFilters({...filters, ...paramValue, pageSize: initialPageSize}));
 
       if (inputValue) {
         searchParams.set(queryParamField, inputValue);

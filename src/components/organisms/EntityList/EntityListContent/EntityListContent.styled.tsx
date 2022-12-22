@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import Colors from '@styles/Colors';
+
 export const HeaderContainer = styled.div`
   padding-bottom: 30px;
 `;
@@ -40,6 +42,19 @@ export const StyledContainer = styled.div`
   flex-direction: column;
   flex: 1;
 
-  padding: 40px;
-  padding-left: 1vw;
+  padding: 0px 40px 60px 1vw;
+`;
+
+export const Header = styled.div`
+  position: sticky;
+  top: 0px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 40px 0px 30px 0px;
+
+  background-color: ${Colors.slate900};
+
+  z-index: 1000;
 `;

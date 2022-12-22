@@ -22,6 +22,8 @@ import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
+import {initialPageSize} from '@src/redux/initialState';
+
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
@@ -48,7 +50,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
           })
         );
       } else {
-        dispatch(setFilters({...filters, status: [...filters.status, status]}));
+        dispatch(setFilters({...filters, status: [...filters.status, status], pageSize: initialPageSize}));
       }
     },
     [dispatch, setFilters, filters]
@@ -87,7 +89,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
   }, [filters.status, handleClick]);
 
   const resetFilter = () => {
-    dispatch(setFilters({...filters, status: []}));
+    dispatch(setFilters({...filters, status: [], pageSize: initialPageSize}));
     onVisibleChange(false);
 
     searchParams.delete('status');
