@@ -2,6 +2,9 @@ import {useContext} from 'react';
 
 import {Form} from 'antd';
 
+import {useAppSelector} from '@redux/hooks';
+import {selectNamespace} from '@redux/reducers/configSlice';
+
 import {Button, Input} from '@custom-antd';
 
 import {Hint} from '@molecules';
@@ -18,12 +21,15 @@ import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 
 const AddExecutorsModal: React.FC = () => {
   const {navigate} = useContext(MainContext);
+
   const [createExecutor, {isLoading}] = useCreateExecutorMutation();
+
+  const namespace = useAppSelector(selectNamespace);
 
   const onFinish = (values: any) => {
     const body = {
       ...values,
-      namespace: 'testkube',
+      namespace,
       types: [values.type],
       executorType: 'container',
     };

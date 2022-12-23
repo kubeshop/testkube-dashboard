@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import {config} from '@constants/config';
 
-import {setApiEndpoint} from '@redux/reducers/configSlice';
+import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input, Modal, Text} from '@custom-antd';
 
@@ -43,12 +43,15 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
         .then(res => {
           if (res.version && res.commit) {
             const targetUrl = url.replace('/info', '');
-
             axios.defaults.baseURL = targetUrl;
 
             localStorage.setItem(config.apiEndpoint, targetUrl);
 
             dispatch(setApiEndpoint(targetUrl));
+
+            if (res.namespace) {
+              dispatch(setNamespace(res.namespace));
+            }
 
             setApiEndpointHook(targetUrl);
 

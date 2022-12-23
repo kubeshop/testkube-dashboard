@@ -20,6 +20,8 @@ import {useGetAllTestsQuery} from '@services/tests';
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
 
 import {TestTrigger} from '@src/models/triggers';
+import {useAppSelector} from '@src/redux/hooks';
+import {selectNamespace} from '@src/redux/reducers/configSlice';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import AddTriggerOption from './AddTriggerOption';
@@ -68,6 +70,8 @@ const Triggers: React.FC = () => {
   const [form] = Form.useForm();
 
   const [defaultFormattedTriggers, setDefaultFormattedTriggers] = useState<any>([]);
+
+  const appNamespace = useAppSelector(selectNamespace);
 
   const setDefaultTriggersData = (_triggersList?: TestTrigger[]) => {
     if (_triggersList) {
@@ -157,7 +161,7 @@ const Triggers: React.FC = () => {
         }
         return {
           name: formValue,
-          namespace: 'testkube',
+          namespace: appNamespace,
         };
       }
       if (formValue.length) {
@@ -180,7 +184,7 @@ const Triggers: React.FC = () => {
         ...trigger,
         action,
         execution,
-        namespace: 'testkube',
+        namespace: appNamespace,
         resourceSelector: getSelector(trigger.resourceSelector),
         testSelector: getSelector(trigger.testSelector),
       };

@@ -61,6 +61,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
           targetTestExecutionId: null,
         })
       );
+
       return navigate(`/tests/executions/${execute?.name}`);
     }
 
