@@ -6,6 +6,9 @@ import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 
 import {RepositoryTypeEnum} from '@models/repository';
 
+import {useAppSelector} from '@redux/hooks';
+import {selectNamespace} from '@redux/reducers/configSlice';
+
 import {Button, Input} from '@custom-antd';
 
 import {Hint} from '@molecules';
@@ -23,7 +26,10 @@ import {AddSourceModalContainer} from './SourcesList.styled';
 
 const AddSourceModal = () => {
   const {navigate} = useContext(MainContext);
+
   const [createSource, {isLoading}] = useCreateSourceMutation();
+
+  const namespace = useAppSelector(selectNamespace);
 
   const onFinish = (values: any) => {
     const {name, uri, token, username} = values;
@@ -36,7 +42,7 @@ const AddSourceModal = () => {
         ...(username ? {usernameSecret: {name: username}} : {}),
         ...(token ? {tokenSecret: {name: token}} : {}),
       },
-      namespace: 'testkube',
+      namespace,
     };
 
     createSource(body)

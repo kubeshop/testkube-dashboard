@@ -13,6 +13,9 @@ export const configSlice = createSlice({
     setApiEndpoint: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.apiEndpoint = action.payload;
     },
+    setNamespace: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
+      state.namespace = action.payload;
+    },
     setRedirectTarget: (state: Draft<ConfigState>, action: PayloadAction<any>) => {
       state.redirectTarget = action.payload;
     },
@@ -49,6 +52,7 @@ export const configSlice = createSlice({
 });
 
 export const selectApiEndpoint = (state: RootState) => state.config.apiEndpoint;
+export const selectNamespace = (state: RootState) => state.config.namespace;
 export const selectRedirectTarget = (state: RootState) => state.config.redirectTarget;
 export const selectFullScreenLogOutput = (state: RootState) => state.config.fullScreenLogOutput;
 
@@ -64,6 +68,7 @@ export const {
   setLogOutput,
   openSettingsTabConfig,
   closeSettingsTabConfig,
+  setNamespace,
 } = configSlice.actions;
 
 export default configSlice.reducer;

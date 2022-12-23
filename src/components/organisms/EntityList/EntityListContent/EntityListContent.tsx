@@ -104,6 +104,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   useEffect(() => {
     setIsApplyingFilters(true);
+
     try {
       contentProps.refetch().then(() => setIsApplyingFilters(false));
     } catch (err) {

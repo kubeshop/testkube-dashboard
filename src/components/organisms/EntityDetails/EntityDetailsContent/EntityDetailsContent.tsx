@@ -67,6 +67,7 @@ const EntityDetailsContent: React.FC = () => {
   useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
 
   const name = entityDetails?.name;
+  const namespace = entityDetails?.namespace;
   const description = entityDetails?.description;
   const labels = entityDetails?.labels;
   const type = entityDetails?.type;
@@ -77,7 +78,7 @@ const EntityDetailsContent: React.FC = () => {
     runEntity({
       id: name,
       data: {
-        namespace: 'testkube',
+        namespace,
       },
     })
       .then((result: any) => {
