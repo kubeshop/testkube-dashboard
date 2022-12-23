@@ -1,3 +1,5 @@
+import {memo} from 'react';
+
 import {Button, Text, Title} from '@custom-antd';
 
 import {ReactComponent as WizardHintImage} from '@assets/wizardHint.svg';
@@ -29,4 +31,4 @@ const Hint: React.FC<HintProps> = props => {
   );
 };
 
-export default Hint;
+export default memo(Hint);

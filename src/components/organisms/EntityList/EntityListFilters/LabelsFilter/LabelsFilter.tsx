@@ -8,6 +8,8 @@ import {FilterFilled} from '@ant-design/icons';
 import {Entity, EntityArray} from '@models/entityMap';
 import {FilterProps} from '@models/filters';
 
+import {initialPageSize} from '@redux/initialState';
+
 import {Button, Input, Title} from '@custom-antd';
 
 import {notificationCall} from '@molecules';
@@ -137,7 +139,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       return;
     }
 
-    dispatch(setFilters({...filters, selector: resultedFilters}));
+    dispatch(setFilters({...filters, selector: resultedFilters, pageSize: initialPageSize}));
 
     searchParams.delete('selector');
     setSearchParams(searchParams);
@@ -153,7 +155,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const resetFilters = () => {
     setLabelsMapping([defaultKeyValuePair]);
     onVisibleChange(false);
-    dispatch(setFilters({...filters, selector: []}));
+    dispatch(setFilters({...filters, selector: [], pageSize: initialPageSize}));
 
     searchParams.delete('selector');
     setSearchParams(searchParams);

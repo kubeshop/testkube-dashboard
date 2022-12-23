@@ -1,4 +1,4 @@
-import {useContext, useEffect, useRef, useState} from 'react';
+import {lazy, useContext, useEffect, useRef, useState} from 'react';
 
 import debounce from 'lodash.debounce';
 
@@ -7,7 +7,7 @@ import {Execution} from '@models/execution';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
-import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
+import {CLICommands, ExecutionsVariablesList} from '@molecules';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -17,6 +17,8 @@ import {ExecutionDetailsContext} from '@contexts';
 
 import {StyledAntTabPane, StyledAntTabs, StyledTestExecutionDetailsTabsContainer} from '../ExecutionDetails.styled';
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
+
+const LogOutput = lazy(() => import('@molecules').then(module => ({default: module.LogOutput})));
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);

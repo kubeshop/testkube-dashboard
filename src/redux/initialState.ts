@@ -5,10 +5,12 @@ import {TestFilters, TestsState} from '@models/test';
 import {TestSuiteFilters, TestSuitesState} from '@models/testSuite';
 import {TestSuiteExecutionsState} from '@models/testSuiteExecution';
 
+export const initialPageSize = 20;
+
 const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
   isLoading: false,
   dataList: [],
-  filters: {pageSize: 1000, page: 0, selector: '', textSearch: ''},
+  filters: {pageSize: initialPageSize, page: 0, selector: '', textSearch: ''},
   totals: {
     results: 0,
     passed: 0,
@@ -26,7 +28,7 @@ const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
 
 export const initialTestSuitesFiltersState: TestSuiteFilters = {
   textSearch: '',
-  pageSize: 1000,
+  pageSize: initialPageSize,
   page: 0,
   selector: [],
   startDate: null,
@@ -57,7 +59,7 @@ export const initialTestSuitesState: TestSuitesState = {
 export const initialTestsFiltersState: TestFilters = {
   textSearch: '',
   type: '',
-  pageSize: 1000,
+  pageSize: initialPageSize,
   page: 0,
   selector: [],
   createdAt: null,

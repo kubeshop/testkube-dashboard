@@ -1,4 +1,4 @@
-import {useContext, useRef} from 'react';
+import {useContext, useEffect, useRef} from 'react';
 
 import {format} from 'date-fns';
 
@@ -18,27 +18,40 @@ import {executionDateFormat} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
+import {MainContext} from '@contexts';
+
+import {initialPageSize} from '@src/redux/initialState';
+
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, StyledMetricItem} from './EntityGrid.styled';
 
 const EntityGridItem: React.FC<any> = props => {
-  const {item, onClick} = props;
+  const {item, onClick, isLastItemIndex} = props;
   const {dataItem, latestExecution} = item;
-  const {useGetMetrics, entity} = useContext(EntityListContext);
+
+  const {dispatch} = useContext(MainContext);
+  const {useGetMetrics, entity, queryFilters, setQueryFilters} = useContext(EntityListContext);
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
   const startDate = latestExecution?.startTime ? format(new Date(latestExecution?.startTime), executionDateFormat) : '';
 
   const ref = useRef(null);
+
   const isInViewport = useInViewport(ref);
 
   const {data: metrics} = useGetMetrics(
-    {id: dataItem.name, last: 7},
+    {id: dataItem.name, last: 7, limit: 13},
     {skip: !isInViewport, pollingInterval: PollingIntervals.halfMin}
   );
 
   const executions = metrics?.executions || [];
 
   const dataTestValue = `${entity}-list-item`;
+
+  useEffect(() => {
+    if (isLastItemIndex && isInViewport && queryFilters.pageSize <= isLastItemIndex + initialPageSize) {
+      dispatch(setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize}));
+    }
+  }, [isInViewport, isLastItemIndex]);
 
   return (
     <ItemWrapper onClick={onClick} ref={ref} data-test={dataTestValue}>
@@ -80,7 +93,7 @@ const EntityGridItem: React.FC<any> = props => {
             <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
           </StyledMetricItem>
           <StyledMetricItem>
-            <MetricsBarChart data={executions.slice(0, 13)} chartHeight={38} barWidth={6} />
+            <MetricsBarChart data={executions} chartHeight={38} barWidth={6} />
           </StyledMetricItem>
         </ItemRow>
       </DetailsWrapper>

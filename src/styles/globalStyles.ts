@@ -12,8 +12,6 @@ scrollbar-width: none; /* Firefox */
 
 export const GlobalStyle = createGlobalStyle`
   body {
-    overflow: hidden;
-    
     background: ${BackgroundColors.mainBackground};
   }
 

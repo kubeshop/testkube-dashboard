@@ -20,9 +20,10 @@ export const testSuiteExecutionsApi = createApi({
       query: (testSuiteExecutionId: string) => `/test-suite-executions/${testSuiteExecutionId}`,
     }),
     getTestSuiteExecutionMetrics: builder.query({
-      query: ({id, last = 7}) => {
+      query: ({id, last = 7, limit = Number.MAX_SAFE_INTEGER}) => {
         const queryParams = new URLSearchParams({
           last,
+          limit,
         });
         return `/test-suites/${id}/metrics?${queryParams.toString()}`;
       },
