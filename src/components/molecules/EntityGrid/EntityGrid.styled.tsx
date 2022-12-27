@@ -8,8 +8,6 @@ export const StyledEntityGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 32px;
 
-  margin-top: 20px;
-
   @media ${maxDevice.tablet} {
     grid-template-columns: 1fr;
   }

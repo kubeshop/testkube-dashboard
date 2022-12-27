@@ -170,22 +170,39 @@ const ExecutionDetails: React.FC = () => {
               <ItemRow $flex={1}>
                 <ItemColumn>
                   {number ? (
-                    <Text className="regular small" color={Colors.slate400}>
+                    <Text className="regular small" color={Colors.slate50}>
                       #{number}
                     </Text>
                   ) : null}
-                  <Text className="regular small" color={Colors.slate400}>
+                  <Text className="regular small" color={Colors.slate50}>
+                    <Text className="regular small" color={Colors.slate400}>
+                      Trigger:
+                    </Text>{' '}
                     manual
                   </Text>
-                  <Text className="regular small" color={Colors.slate400}>
-                    Started: {formatExecutionDate(startedTime)}
+                  <Text className="regular small" color={Colors.slate50}>
+                    <Text className="regular small" color={Colors.slate400}>
+                      Started:
+                    </Text>{' '}
+                    {formatExecutionDate(startedTime)}
                   </Text>
-                  <Text className="regular small" color={Colors.slate400}>
-                    Finished: {isRunning ? 'running' : formatExecutionDate(finishedTime)}
+                  <Text className="regular small" color={Colors.slate50}>
+                    <Text className="regular small" color={Colors.slate400}>
+                      Finished:
+                    </Text>{' '}
+                    {isRunning ? 'running' : formatExecutionDate(finishedTime)}
                   </Text>
-
-                  <Text className="regular small" color={Colors.slate400}>
-                    {isRunning ? '' : getDuration()}
+                  <Text className="regular small" color={Colors.slate50}>
+                    {isRunning ? (
+                      'Running...'
+                    ) : (
+                      <>
+                        <Text className="regular small" color={Colors.slate400}>
+                          Execution time:
+                        </Text>{' '}
+                        {getDuration()}
+                      </>
+                    )}
                   </Text>
                 </ItemColumn>
               </ItemRow>
