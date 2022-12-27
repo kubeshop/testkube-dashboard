@@ -1,5 +1,5 @@
 import {Suspense, lazy, useEffect, useState} from 'react';
-import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -160,7 +160,7 @@ const App: React.FC = () => {
                     <Route path="sources/*" element={<Sources />} />
                     <Route path="triggers" element={<Triggers />} />
                     <Route path="/apiEndpoint" element={<EndpointProcessing />} />
-                    <Route path="/" element={<Tests />} />
+                    <Route path="/" element={<Navigate to="/tests" replace />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </Suspense>
