@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import Colors from '@styles/Colors';
+import Colors, {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
 export const MetricsBarChartWrapper = styled.div<{
@@ -21,14 +21,14 @@ export const MetricsBarChartWrapper = styled.div<{
   ${props => (props.isPaddingRemoved ? 'padding: 0;' : '')}
 `;
 
-export const ChartWrapper = styled.div<{$svgWrapperWidth: number}>`
+export const ChartWrapper = styled.div<{$wrapperWidth: number}>`
   position: relative;
   overflow-y: hidden;
 
   ${invisibleScroll}
 
   height: inherit;
-  width: ${({$svgWrapperWidth}) => $svgWrapperWidth}px;
+  width: ${({$wrapperWidth}) => $wrapperWidth}px;
   min-width: 100%;
 `;
 
@@ -60,22 +60,30 @@ export const SvgWrapper = styled.div`
   width: inherit;
 `;
 
-export const BarWrapper = styled.div<{$width?: number; $margin: number; noHover?: boolean}>`
-  width: ${({$width}) => $width}px;
+export const BarWrapper = styled.div<{$margin: number}>`
+  &:not(:last-child) {
+    margin-right: ${props => props.$margin}px;
+  }
+`;
 
+export const ClickableBarWrapper = styled.div<{
+  $margin: number;
+  $color: StatusColors;
+  inactiveColor: SecondaryStatusColors;
+}>`
   transition: 0.3s;
   cursor: pointer;
+
+  background-color: ${props => props.inactiveColor};
+  border-bottom: 3px solid ${props => props.$color};
 
   &:not(:last-child) {
     margin-right: ${props => props.$margin}px;
   }
 
-  ${props =>
-    props.noHover
-      ? ``
-      : `&:hover {
-          background: ${Colors.slate600} !important;
-        }`}
+  &:hover {
+    background-color: ${props => props.$color} !important;
+  }
 `;
 
 export const NoData = styled.div`

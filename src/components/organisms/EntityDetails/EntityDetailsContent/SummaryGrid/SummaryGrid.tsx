@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import {Metrics} from '@models/metrics';
 
 import {Text, Title} from '@custom-antd';
@@ -12,7 +11,7 @@ import Colors from '@styles/Colors';
 import {SummaryGridItem, SummaryGridWrapper} from './SummaryGrid.styled';
 
 type SummaryGridProps = {
-  metrics?: Metrics;
+  metrics: Metrics;
   isRowSelected: boolean;
 };
 
@@ -57,7 +56,13 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
           <Title level={3}>{metrics?.totalExecutions || '-'}</Title>
         </SummaryGridItem>
       </SummaryGridWrapper>
-      <MetricsBarChart data={metrics?.executions} isDetailsView isRowSelected={isRowSelected} />
+      <MetricsBarChart
+        data={metrics?.executions}
+        isDetailsView
+        isRowSelected={isRowSelected}
+        executionDurationP50ms={metrics?.executionDurationP50ms}
+        executionDurationP95ms={metrics?.executionDurationP95ms}
+      />
     </>
   );
 };

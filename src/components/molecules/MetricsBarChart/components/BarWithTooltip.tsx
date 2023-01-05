@@ -8,22 +8,28 @@ import {Text} from '@custom-antd';
 
 import {formatExecutionDate} from '@utils/formatDate';
 
-import Colors, {StatusColors} from '@styles/Colors';
+import Colors, {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {BarWrapper, StyledPopoverContainer, StyledPopoverContent, StyledPopoverHeader} from './MetricsBarChart.styled';
+import {
+  ClickableBarWrapper,
+  StyledPopoverContainer,
+  StyledPopoverContent,
+  StyledPopoverHeader,
+} from '../MetricsBarChart.styled';
 
 type BarConfig = {
   width: number;
   height: number;
   color: StatusColors;
+  inactiveColor: SecondaryStatusColors;
   tooltipData: any;
   margin: number;
 };
 
 const BarWithTooltip: React.FC<BarConfig> = props => {
-  const {width, height, color, tooltipData, margin} = props;
+  const {width, height, color, tooltipData, margin, inactiveColor} = props;
   const {executionsList, onRowSelect} = useContext(EntityDetailsContext);
   const {status, duration, name, startTime} = tooltipData;
 
@@ -65,7 +71,13 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
 
   return (
     <Popover content={popoverContent} color={Colors.slate700}>
-      <BarWrapper $margin={margin} style={{height, background: color}} $width={width} onClick={onBarClicked} />
+      <ClickableBarWrapper
+        $margin={margin}
+        style={{height, width}}
+        $color={color}
+        inactiveColor={inactiveColor}
+        onClick={onBarClicked}
+      />
     </Popover>
   );
 };

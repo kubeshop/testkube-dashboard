@@ -1,8 +1,7 @@
 import React from 'react';
 
-import {formatDuration} from '@utils/formatDate';
-
-import {AxisLabel, HorizontalAxis} from './MetricsBarChart.styled';
+import {HorizontalAxis} from '../MetricsBarChart.styled';
+import {secondInMs} from '../utils';
 
 type PAxisLineProps = {
   axisTopPercent: number;
@@ -12,14 +11,14 @@ type PAxisLineProps = {
 const PAxisLine: React.FC<PAxisLineProps> = props => {
   const {axisTopPercent, durationMs, label} = props;
 
-  const durationSec = Number(durationMs) / 1000;
+  const durationSec = Number(durationMs) / secondInMs;
 
   return (
     <>
       <HorizontalAxis $top={axisTopPercent} />
-      <AxisLabel $top={axisTopPercent - 11} isExtendedPadding={durationSec > 60}>
+      {/* <AxisLabel $top={axisTopPercent - 11} isExtendedPadding={durationSec > 60}>
         {label} ({formatDuration(durationSec)})
-      </AxisLabel>
+      </AxisLabel> */}
     </>
   );
 };
