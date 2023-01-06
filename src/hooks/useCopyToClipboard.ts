@@ -14,7 +14,9 @@ export const useCopyToClipboard = (textToCopy: string, options: CopyToClipboardO
     let timeout: NodeJS.Timeout;
 
     if (isCopied) {
-      navigator.clipboard.writeText(textToCopy);
+      if (window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy);
+      }
       timeout = setTimeout(() => {
         setCopyToClipboardState(false);
       }, timeoutInMs);
