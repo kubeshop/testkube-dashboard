@@ -7,7 +7,7 @@ import {ExecutionMetrics} from '@models/metrics';
 import {ChartWrapper, MetricsBarChartWrapper} from './MetricsBarChart.styled';
 import Chart from './components/Chart';
 import PAxisLine from './components/PAxisLine';
-import {getAxisPercents, getMaximumValue, getMinimumValue, metricsLogarithmization, secondInMs} from './utils';
+import {getAxisPositions, getMaximumValue, getMinimumValue, metricsLogarithmization, secondInMs} from './utils';
 
 export type BarChartConfig = {
   barWidth: number;
@@ -95,11 +95,11 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   const wrapperWidth = logScaleData.length * (barChartConfig.barMargin + barChartConfig.barWidth);
 
   // calculate Y-Axis position on chart
-  const calculateAxisPercents = useCallback(() => {
+  const calculateAxisTop = useCallback(() => {
     if (!executionDurationP50ms || !executionDurationP95ms) {
-      return {p50AxisPercent: 0, p95AxisPercent: 0};
+      return [0, 0];
     }
-    return getAxisPercents(
+    return getAxisPositions(
       executionDurationP50ms,
       executionDurationP95ms,
       barChartConfig.chartHeight,
@@ -108,7 +108,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     );
   }, [executionDurationP50ms, executionDurationP95ms, maxLogValue, barChartConfig.chartHeight, minValueDivider]);
 
-  const {p50AxisPercent, p95AxisPercent} = calculateAxisPercents();
+  const [p50Axis, p95Axis] = calculateAxisTop();
 
   if (!data || !data.length) {
     return null;
@@ -119,9 +119,9 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
       <ChartWrapper $wrapperWidth={wrapperWidth}>
         {executionDurationP50ms && executionDurationP95ms ? (
           <>
-            <PAxisLine axisTopPercent={p50AxisPercent} label="P50" durationMs={executionDurationP50ms} />
-            {p50AxisPercent - p95AxisPercent >= visibleDifferenctBetweenAxes ? (
-              <PAxisLine axisTopPercent={p95AxisPercent} label="P95" durationMs={executionDurationP95ms} />
+            <PAxisLine axisTop={p50Axis} label="P50" durationMs={executionDurationP50ms} />
+            {p50Axis - p95Axis >= visibleDifferenctBetweenAxes ? (
+              <PAxisLine axisTop={p95Axis} label="P95" durationMs={executionDurationP95ms} />
             ) : null}
           </>
         ) : null}

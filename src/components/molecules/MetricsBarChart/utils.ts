@@ -11,7 +11,7 @@ export const getMinimumValue = (values: any[], fieldName = 'durationMs') => {
   return values.map(value => value[fieldName]).reduce((acc, cur) => (cur < acc ? cur : acc), Infinity);
 };
 
-export const getAxisPercents = (
+export const getAxisPositions = (
   executionDurationP50ms: number,
   executionDurationP95ms: number,
   chartHeight: number,
@@ -25,7 +25,7 @@ export const getAxisPercents = (
 
   const axisPercent = (value: number) => Math.round(hundredPercent - (value * hundredPercent) / chartHeight);
 
-  return {p50AxisPercent: axisPercent(p50AxisValue), p95AxisPercent: axisPercent(p95AxisValue)};
+  return [axisPercent(p50AxisValue), axisPercent(p95AxisValue)];
 };
 
 export const metricsLogarithmization = (data: ExecutionMetrics[], minValueDivider: number) => {

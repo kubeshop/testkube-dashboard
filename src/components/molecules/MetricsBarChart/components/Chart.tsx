@@ -1,5 +1,7 @@
 import {useMemo} from 'react';
 
+import {format, getDayOfYear} from 'date-fns';
+
 import {formatDuration} from '@utils/formatDate';
 
 import {SecondaryStatusColors, StatusColors} from '@styles/Colors';
@@ -21,6 +23,8 @@ const Chart: React.FC<ChartProps> = props => {
   const {chartData, barWidth, chartHeight, barMargin} = chartConfig;
 
   const renderedBarChart = useMemo(() => {
+    let prevDay = getDayOfYear(new Date(chartData[0].startTime));
+
     return chartData.map((barItem, index) => {
       const {durationS, logDuration, status, name, startTime} = barItem;
 
@@ -49,10 +53,17 @@ const Chart: React.FC<ChartProps> = props => {
       };
 
       if (isDetailsView) {
+        let showDate = false;
+        const startTimeDate = new Date(startTime);
+        if (prevDay !== getDayOfYear(startTimeDate)) {
+          prevDay = getDayOfYear(startTimeDate);
+          showDate = true;
+        }
         return (
           <BarWithTooltip
             key={key}
             tooltipData={{duration: formattedDuration, status, name, startTime}}
+            date={showDate ? format(startTimeDate, 'd.M.yy') : undefined}
             {...barProps}
           />
         );

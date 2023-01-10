@@ -13,8 +13,7 @@ export const MetricsBarChartWrapper = styled.div<{
 
   ${invisibleScroll}
 
-  min-height: ${({$height}) => $height}px;
-  height: ${({$height}) => $height}px;
+  min-height: 160px;
 
   padding-left: ${props => (props.isExtendedPadding ? '95px' : '65px')};
   padding-top: 5px;
@@ -34,7 +33,7 @@ export const ChartWrapper = styled.div<{$wrapperWidth: number}>`
 
 export const HorizontalAxis = styled.div<{$top: number}>`
   position: absolute;
-  top: ${({$top}) => $top}%;
+  top: ${({$top}) => $top}px;
 
   width: 100%;
   height: 1px;
@@ -56,8 +55,10 @@ export const SvgWrapper = styled.div`
   align-items: flex-end;
   justify-content: space-between;
 
-  height: inherit;
+  height: 100%;
   width: inherit;
+
+  padding-bottom: 50px;
 `;
 
 export const BarWrapper = styled.div<{$margin: number}>`
@@ -76,10 +77,6 @@ export const ClickableBarWrapper = styled.div<{
 
   background-color: ${props => props.inactiveColor};
   border-bottom: 3px solid ${props => props.$color};
-
-  &:not(:last-child) {
-    margin-right: ${props => props.$margin}px;
-  }
 
   &:hover {
     background-color: ${props => props.$color} !important;
@@ -114,4 +111,14 @@ export const StyledPopoverContainer = styled.div`
   flex-direction: column;
 
   background: ${Colors.slate700};
+`;
+
+export const BarDate = styled.div<{
+  $height: number;
+}>`
+  position: absolute;
+  color: ${Colors.slate500};
+  rotate: 45deg;
+  top: ${({$height}) => $height + 15}px;
+  left: -5px;
 `;

@@ -13,6 +13,7 @@ import Colors, {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 import {EntityDetailsContext} from '@contexts';
 
 import {
+  BarDate,
   ClickableBarWrapper,
   StyledPopoverContainer,
   StyledPopoverContent,
@@ -26,10 +27,11 @@ type BarConfig = {
   inactiveColor: SecondaryStatusColors;
   tooltipData: any;
   margin: number;
+  date?: string;
 };
 
 const BarWithTooltip: React.FC<BarConfig> = props => {
-  const {width, height, color, tooltipData, margin, inactiveColor} = props;
+  const {width, height, color, tooltipData, margin, inactiveColor, date} = props;
   const {executionsList, onRowSelect} = useContext(EntityDetailsContext);
   const {status, duration, name, startTime} = tooltipData;
 
@@ -71,13 +73,16 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
 
   return (
     <Popover content={popoverContent} color={Colors.slate700}>
-      <ClickableBarWrapper
-        $margin={margin}
-        style={{height, width}}
-        $color={color}
-        inactiveColor={inactiveColor}
-        onClick={onBarClicked}
-      />
+      <span style={{position: 'relative'}}>
+        <ClickableBarWrapper
+          $margin={margin}
+          style={{height, width}}
+          $color={color}
+          inactiveColor={inactiveColor}
+          onClick={onBarClicked}
+        />
+        {date ? <BarDate $height={height}>{date}</BarDate> : null}
+      </span>
     </Popover>
   );
 };
