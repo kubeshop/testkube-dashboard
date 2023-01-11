@@ -4,7 +4,7 @@ import Colors, {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
 export const MetricsBarChartWrapper = styled.div<{
-  $height: number;
+  isDetailsView?: boolean;
   isExtendedPadding: boolean;
   isPaddingRemoved: boolean;
 }>`
@@ -13,7 +13,7 @@ export const MetricsBarChartWrapper = styled.div<{
 
   ${invisibleScroll}
 
-  min-height: 160px;
+  ${props => (props.isDetailsView ? 'min-height: 160px;' : '')}
 
   padding-left: ${props => (props.isExtendedPadding ? '95px' : '65px')};
   padding-top: 5px;
@@ -50,7 +50,7 @@ export const AxisLabel = styled.div<{$top: number; isExtendedPadding: boolean}>`
   left: ${props => (props.isExtendedPadding ? '-95px' : '-65px')};
 `;
 
-export const SvgWrapper = styled.div`
+export const SvgWrapper = styled.div<{isDetailsView?: boolean}>`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -58,7 +58,7 @@ export const SvgWrapper = styled.div`
   height: 100%;
   width: inherit;
 
-  padding-bottom: 50px;
+  ${props => (props.isDetailsView ? 'padding-bottom: 50px;' : '')}
 `;
 
 export const BarWrapper = styled.div<{$margin: number}>`

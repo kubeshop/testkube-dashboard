@@ -115,7 +115,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   }
 
   return (
-    <MetricsBarChartWrapper $height={barChartConfig.chartHeight} isExtendedPadding={false} isPaddingRemoved>
+    <MetricsBarChartWrapper isDetailsView={isDetailsView} isExtendedPadding={false} isPaddingRemoved>
       <ChartWrapper $wrapperWidth={wrapperWidth}>
         {executionDurationP50ms && executionDurationP95ms ? (
           <>
