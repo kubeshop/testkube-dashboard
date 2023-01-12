@@ -4,7 +4,7 @@ import {Drawer} from 'antd';
 
 import {Entity} from '@models/entity';
 
-import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs} from '@molecules';
+import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCall} from '@molecules';
 
 import useIsMobile from '@hooks/useIsMobile';
 
@@ -27,13 +27,13 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
-  const {data, isLoading, isFetching, refetch} = useGetTestSuiteExecutionByIdQuery(execId, {
+  const {data, isLoading, isFetching, refetch, error} = useGetTestSuiteExecutionByIdQuery(execId, {
     pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch});
-  }, [data, isLoading, isFetching]);
+    onDataChange({data, isLoading, isFetching, refetch, error});
+  }, [data, isLoading, isFetching, error]);
 
   return <></>;
 };
@@ -44,13 +44,13 @@ const TestExecutionDetailsDataLayer: React.FC = () => {
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
-  const {data, isLoading, isFetching, refetch} = useGetTestExecutionByIdQuery(execId, {
+  const {data, isLoading, isFetching, refetch, error} = useGetTestExecutionByIdQuery(execId, {
     pollingInterval: PollingIntervals.everySecond,
   });
 
   useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch});
-  }, [data, isLoading, isFetching]);
+    onDataChange({data, isLoading, isFetching, refetch, error});
+  }, [data, isLoading, isFetching, error]);
 
   return <></>;
 };
@@ -77,13 +77,32 @@ const ExecutionDetailsDrawer: React.FC = () => {
     isLoading: false,
     isFetching: false,
     refetch: () => {},
+    error: null,
   });
+
+  const [error, setError] = useState<any>(null);
 
   const {data} = infoPanelProps;
 
   const onDataChange = (args: ExecutionDetailsOnDataChangeInterface) => {
+    if (JSON.stringify(error) !== JSON.stringify(args.error)) {
+      setError(args.error);
+    }
     setInfoPanelProps(args);
   };
+
+  useEffect(() => {
+    if (error) {
+      const title = error?.data?.title;
+      const detail = error?.data?.detail;
+
+      if (title && detail) {
+        notificationCall('failed', title, detail, 0);
+      } else {
+        notificationCall('failed', 'Unknown error', 'Something went wrong', 0);
+      }
+    }
+  }, [error]);
 
   if (!execId) {
     return <></>;

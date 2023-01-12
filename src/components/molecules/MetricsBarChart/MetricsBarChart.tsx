@@ -36,7 +36,6 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     chartHeight = 105,
     barWidth = 12,
     isDetailsView,
-    isRowSelected,
   } = props;
 
   // autoscroll to right if chart in details view
@@ -56,7 +55,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
         scrollToRight();
       }, 500);
     }
-  }, [data.length, isRowSelected]);
+  }, [data.length]);
 
   useEffect(() => {
     if (isDetailsView) {

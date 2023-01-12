@@ -6,7 +6,7 @@ import {Text} from '@custom-antd';
 
 import {StyledNotificationContainer, StyledNotificationHeader, StyledNotificationMessage} from './Notification.styled';
 
-function notificationCall(status: any, title: string, message: string = '') {
+function notificationCall(status: any, title: string, message: string = '', duration: number = 4.5) {
   notification.open({
     message: null,
     description: (
@@ -23,6 +23,7 @@ function notificationCall(status: any, title: string, message: string = '') {
       </StyledNotificationContainer>
     ),
     closeIcon: <svg />,
+    duration,
   });
 }
 

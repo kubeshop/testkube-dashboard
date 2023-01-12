@@ -59,7 +59,6 @@ const SummaryGrid: React.FC<SummaryGridProps> = props => {
       <MetricsBarChart
         data={metrics?.executions}
         isDetailsView
-        isRowSelected={isRowSelected}
         executionDurationP50ms={metrics?.executionDurationP50ms}
         executionDurationP95ms={metrics?.executionDurationP95ms}
       />
