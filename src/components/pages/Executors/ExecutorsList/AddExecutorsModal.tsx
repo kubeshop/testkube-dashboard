@@ -5,7 +5,7 @@ import {Form} from 'antd';
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
-import {Button, Input} from '@custom-antd';
+import {Button, Input, RadioGroup, Radio} from '@custom-antd';
 
 import {Hint} from '@molecules';
 
@@ -31,10 +31,12 @@ const AddExecutorsModal: React.FC = () => {
       ...values,
       namespace,
       types: [values.type],
-      executorType: 'container',
     };
 
     delete body.type;
+    if (body.executorType === 'job') {
+      delete body.executorType;
+    }
 
     createExecutor(body)
       .then((res: any) => {
@@ -51,6 +53,17 @@ const AddExecutorsModal: React.FC = () => {
     <AddExecutorsModalContainer>
       <Form style={{flex: 1}} layout="vertical" onFinish={onFinish}>
         <Form.Item
+          label="Executor type"
+          required
+          name="executorType"
+          rules={[required]}
+          initialValue="job">
+          <RadioGroup>
+            <Radio value="job">job</Radio>
+            <Radio value="container">container</Radio>
+          </RadioGroup>
+        </Form.Item>
+        <Form.Item
           label="Name"
           required
           name="name"
@@ -58,7 +71,7 @@ const AddExecutorsModal: React.FC = () => {
         >
           <Input placeholder="e.g.: my-container-executor" />
         </Form.Item>
-        <Form.Item label="Executor type" required name="type" rules={[required]}>
+        <Form.Item label="Type" required name="type" rules={[required]}>
           <Input placeholder="e.g.: my-executor/type" />
         </Form.Item>
         <Form.Item label="Container image" required name="image" rules={[required]}>
