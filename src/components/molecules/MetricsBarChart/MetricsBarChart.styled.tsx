@@ -5,8 +5,6 @@ import {invisibleScroll} from '@styles/globalStyles';
 
 export const MetricsBarChartWrapper = styled.div<{
   isDetailsView?: boolean;
-  isExtendedPadding: boolean;
-  isPaddingRemoved: boolean;
 }>`
   overflow-x: auto;
   overflow-y: hidden;
@@ -15,9 +13,8 @@ export const MetricsBarChartWrapper = styled.div<{
 
   ${props => (props.isDetailsView ? 'min-height: 160px;' : '')}
 
-  padding-left: ${props => (props.isExtendedPadding ? '95px' : '65px')};
   padding-top: 5px;
-  ${props => (props.isPaddingRemoved ? 'padding: 0;' : '')}
+  ${props => (props.isDetailsView ? '' : 'padding: 0;')}
 `;
 
 export const ChartWrapper = styled.div<{$wrapperWidth: number}>`
@@ -31,23 +28,22 @@ export const ChartWrapper = styled.div<{$wrapperWidth: number}>`
   min-width: 100%;
 `;
 
-export const HorizontalAxis = styled.div<{$top: number}>`
+export const HorizontalAxis = styled.div<{$top: number; label?: string}>`
   position: absolute;
   top: ${({$top}) => $top}px;
 
   width: 100%;
   height: 1px;
 
-  border-top: 1px dashed ${Colors.indigo300};
+  border-top: 1px ${props => (props.label ? 'dashed' : 'solid')} ${Colors.indigo300};
 
   pointer-events: none;
 `;
 
-export const AxisLabel = styled.div<{$top: number; isExtendedPadding: boolean}>`
+export const AxisLabel = styled.div<{$top: number}>`
   position: absolute;
 
-  top: ${({$top}) => $top}%;
-  left: ${props => (props.isExtendedPadding ? '-95px' : '-65px')};
+  top: ${({$top}) => $top}px;
 `;
 
 export const SvgWrapper = styled.div<{isDetailsView?: boolean}>`
@@ -59,6 +55,7 @@ export const SvgWrapper = styled.div<{isDetailsView?: boolean}>`
   width: inherit;
 
   ${props => (props.isDetailsView ? 'padding-bottom: 50px;' : '')}
+  ${props => (props.isDetailsView ? 'padding-left: 75px;' : '')}
 `;
 
 export const BarWrapper = styled.div<{$margin: number}>`

@@ -7,7 +7,7 @@ import {ExecutionMetrics} from '@models/metrics';
 import {ChartWrapper, MetricsBarChartWrapper} from './MetricsBarChart.styled';
 import Chart from './components/Chart';
 import PAxisLine from './components/PAxisLine';
-import {getAxisPositions, getMaximumValue, getMinimumValue, metricsLogarithmization, secondInMs} from './utils';
+import {getAxisPosition, getMaximumValue, getMinimumValue, metricsLogarithmization, secondInMs} from './utils';
 
 export type BarChartConfig = {
   barWidth: number;
@@ -26,7 +26,7 @@ type MetricsBarChartProps = {
   isRowSelected?: boolean;
 };
 
-const visibleDifferenctBetweenAxes = 5;
+const visibleDifferenctBetweenAxes = 17;
 
 const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   const {
@@ -70,6 +70,9 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     }
   }, []);
 
+  const minValueMs = getMinimumValue(data, 'durationMs');
+  const maxValueMs = getMaximumValue(data, 'durationMs');
+
   /*
     Chart data calculations
     Bar height is calculated from 60% of the minimum value
@@ -82,7 +85,8 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   // Logarithmization of metrics data
   const logScaleData = metricsLogarithmization(data, minValueDivider);
 
-  const maxLogValue = getMaximumValue(logScaleData);
+  const maxLogValue = getMaximumValue(logScaleData, 'logDuration');
+  const minLogValue = getMinimumValue(logScaleData, 'logDuration');
 
   // chart config
   const barChartConfig: BarChartConfig = {
@@ -94,43 +98,61 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   };
   const wrapperWidth = logScaleData.length * (barChartConfig.barMargin + barChartConfig.barWidth);
 
-  // calculate Y-Axis position on chart
-  const calculateAxisTop = useCallback(() => {
-    if (!executionDurationP50ms || !executionDurationP95ms) {
-      return [0, 0];
+  const getAxisLines = useCallback(() => {
+    if (!isDetailsView) {
+      return [0, 0, 0];
     }
-    return getAxisPositions(
-      executionDurationP50ms,
-      executionDurationP95ms,
-      barChartConfig.chartHeight,
-      maxLogValue,
-      minValueDivider
-    );
-  }, [executionDurationP50ms, executionDurationP95ms, maxLogValue, barChartConfig.chartHeight, minValueDivider]);
 
-  const [p50Axis, p95Axis] = calculateAxisTop();
+    return [
+      getAxisPosition(chartHeight, maxLogValue, minValueDivider, executionDurationP50ms),
+      getAxisPosition(chartHeight, maxLogValue, minValueDivider, executionDurationP95ms),
+      getAxisPosition(chartHeight, maxLogValue, minValueDivider, minValueMs),
+    ];
+  }, [
+    chartHeight,
+    maxLogValue,
+    minValueDivider,
+    executionDurationP50ms,
+    executionDurationP95ms,
+    minValueMs,
+    isDetailsView,
+  ]);
+
+  const [p50Axis, p95Axis, minAxis] = getAxisLines();
 
   if (!data || !data.length) {
     return null;
   }
 
   return (
-    <MetricsBarChartWrapper isDetailsView={isDetailsView} isExtendedPadding={false} isPaddingRemoved>
+    <MetricsBarChartWrapper isDetailsView={isDetailsView}>
       <ChartWrapper $wrapperWidth={wrapperWidth}>
-        {executionDurationP50ms && executionDurationP95ms ? (
-          <>
-            <PAxisLine axisTop={p50Axis} label="P50" durationMs={executionDurationP50ms} />
-            {p50Axis - p95Axis >= visibleDifferenctBetweenAxes ? (
-              <PAxisLine axisTop={p95Axis} label="P95" durationMs={executionDurationP95ms} />
-            ) : null}
-          </>
-        ) : null}
         <Chart
           chartConfig={barChartConfig}
           maxValue={maxLogValue}
           isDetailsView={isDetailsView}
           scrollRef={scrollRef}
         />
+        {isDetailsView ? (
+          <>
+            {executionDurationP50ms && executionDurationP95ms ? (
+              <>
+                <PAxisLine axisTop={p50Axis} label="P50" durationMs={executionDurationP50ms} />
+                {p50Axis - p95Axis >= visibleDifferenctBetweenAxes ? (
+                  <PAxisLine axisTop={p95Axis} label="P95" durationMs={executionDurationP95ms} />
+                ) : null}
+              </>
+            ) : null}
+
+            {Math.abs(p50Axis - minAxis) >= visibleDifferenctBetweenAxes &&
+            Math.abs(p95Axis - minAxis) >= visibleDifferenctBetweenAxes ? (
+              <PAxisLine axisTop={minAxis} durationMs={minValueMs} />
+            ) : null}
+            {p95Axis >= visibleDifferenctBetweenAxes || !(p50Axis - p95Axis >= visibleDifferenctBetweenAxes) ? (
+              <PAxisLine axisTop={0} durationMs={maxValueMs} dontApplyMargin />
+            ) : null}
+          </>
+        ) : null}
       </ChartWrapper>
     </MetricsBarChartWrapper>
   );

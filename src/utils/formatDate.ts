@@ -37,7 +37,7 @@ export const constructExecutedString = (duration: Duration, countToDisplay: numb
 
 export const formatDuration = (duration: number) =>
   duration > 3599
-    ? `${Math.floor(duration / 3600)}h ${Math.round(duration % 60)}m ${Math.round(duration % 3600)}s`
+    ? `${Math.floor(duration / 3600)}h ${Math.round((duration / 3600) % 60)}m ${Math.round((duration % 60) % 60)}s`
     : duration > 59
     ? `${Math.floor(duration / 60)}m ${Math.round(duration % 60)}s`
     : `${duration.toFixed(2)}s`;
