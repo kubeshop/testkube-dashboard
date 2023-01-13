@@ -84,10 +84,6 @@ const App: React.FC = () => {
       const ga4react = new GA4React('G-945BK09GDC');
 
       ga4react.initialize();
-
-      posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
-        opt_out_capturing_by_default: false,
-      });
     }
   };
 
@@ -129,6 +125,10 @@ const App: React.FC = () => {
 
     if (isGADisabled) {
       onDeclineCookies({skipGAEvent: true});
+    } else if (process.env.NODE_ENV !== 'development') {
+      posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
+        opt_out_capturing_by_default: false,
+      });
     }
   }, []);
 
