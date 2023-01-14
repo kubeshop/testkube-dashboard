@@ -16,7 +16,7 @@ type SummaryGridProps = {
 };
 
 const SummaryGrid: React.FC<SummaryGridProps> = props => {
-  const {metrics, isRowSelected} = props;
+  const {metrics} = props;
 
   return (
     <>

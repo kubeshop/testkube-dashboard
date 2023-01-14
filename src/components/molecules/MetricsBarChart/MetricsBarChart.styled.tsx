@@ -12,9 +12,6 @@ export const MetricsBarChartWrapper = styled.div<{
   ${invisibleScroll}
 
   ${props => (props.isDetailsView ? 'min-height: 160px;' : '')}
-
-  padding-top: 5px;
-  ${props => (props.isDetailsView ? '' : 'padding: 0;')}
 `;
 
 export const ChartWrapper = styled.div<{$wrapperWidth: number}>`
@@ -23,7 +20,6 @@ export const ChartWrapper = styled.div<{$wrapperWidth: number}>`
 
   ${invisibleScroll}
 
-  height: inherit;
   width: ${({$wrapperWidth}) => $wrapperWidth}px;
   min-width: 100%;
 `;
@@ -49,10 +45,6 @@ export const AxisLabel = styled.div<{$top: number}>`
 export const SvgWrapper = styled.div<{isDetailsView?: boolean}>`
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
-
-  height: 100%;
-  width: inherit;
 
   ${props => (props.isDetailsView ? 'padding-bottom: 50px;' : '')}
   ${props => (props.isDetailsView ? 'padding-left: 75px;' : '')}
@@ -64,28 +56,37 @@ export const BarWrapper = styled.div<{$margin: number}>`
   }
 `;
 
-export const ClickableBarWrapper = styled.div<{
-  $margin: number;
+export const ClickableBar = styled.div<{
   $color: StatusColors;
-  inactiveColor: SecondaryStatusColors;
+  hoverColor: SecondaryStatusColors;
+  isHovered: boolean;
 }>`
   transition: 0.3s;
   cursor: pointer;
 
-  background-color: ${props => props.inactiveColor};
+  background-color: ${props => props.$color};
   border-bottom: 3px solid ${props => props.$color};
 
+  ${props => (props.isHovered ? `background-color: ${props.hoverColor} !important;` : '')}
+
   &:hover {
-    background-color: ${props => props.$color} !important;
+    background-color: ${props => props.hoverColor} !important;
   }
 `;
 
-export const NoData = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const ClickableBarWrapper = styled.span<{borderTop: number}>`
+  position: relative;
 
-  height: 100%;
+  border-top: ${props => (props.borderTop ? `${props.borderTop}px` : '1px')} solid transparent;
+
+  padding-right: 3px;
+`;
+
+export const StyledPopoverContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  background: ${Colors.slate700};
 `;
 
 export const StyledPopoverHeader = styled.div`
@@ -101,13 +102,6 @@ export const StyledPopoverContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px;
-`;
-
-export const StyledPopoverContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  background: ${Colors.slate700};
 `;
 
 export const BarDate = styled.div<{

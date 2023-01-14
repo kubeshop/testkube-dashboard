@@ -85,7 +85,6 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   const logScaleData = metricsLogarithmization(data, minValueDivider);
 
   const maxLogValue = getMaximumValue(logScaleData, 'logDuration');
-  const minLogValue = getMinimumValue(logScaleData, 'logDuration');
 
   // chart config
   const barChartConfig: BarChartConfig = {
@@ -126,32 +125,44 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   return (
     <MetricsBarChartWrapper isDetailsView={isDetailsView}>
       <ChartWrapper $wrapperWidth={wrapperWidth}>
+        {isDetailsView ? (
+          <>
+            <PAxisLine
+              axisTop={0}
+              durationMs={maxValueMs}
+              dontApplyMargin
+              isLabelVisible={
+                p95Axis >= visibleDifferenctBetweenAxes || !(p50Axis - p95Axis >= visibleDifferenctBetweenAxes)
+              }
+            />
+            {executionDurationP50ms && executionDurationP95ms ? (
+              <>
+                <PAxisLine
+                  axisTop={p95Axis}
+                  label="P95"
+                  durationMs={executionDurationP95ms}
+                  isLabelVisible={
+                    Math.abs(p50Axis - p95Axis) >= visibleDifferenctBetweenAxes &&
+                    Math.abs(p95Axis - minAxis) >= visibleDifferenctBetweenAxes
+                  }
+                />
+                <PAxisLine
+                  axisTop={p50Axis}
+                  label="P50"
+                  durationMs={executionDurationP50ms}
+                  isLabelVisible={Math.abs(p50Axis - minAxis) >= visibleDifferenctBetweenAxes}
+                />
+              </>
+            ) : null}
+            <PAxisLine axisTop={minAxis} durationMs={minValueMs} isLabelVisible />
+          </>
+        ) : null}
         <Chart
           chartConfig={barChartConfig}
           maxValue={maxLogValue}
           isDetailsView={isDetailsView}
           scrollRef={scrollRef}
         />
-        {isDetailsView ? (
-          <>
-            {executionDurationP50ms && executionDurationP95ms ? (
-              <>
-                <PAxisLine axisTop={p50Axis} label="P50" durationMs={executionDurationP50ms} />
-                {p50Axis - p95Axis >= visibleDifferenctBetweenAxes ? (
-                  <PAxisLine axisTop={p95Axis} label="P95" durationMs={executionDurationP95ms} />
-                ) : null}
-              </>
-            ) : null}
-
-            {Math.abs(p50Axis - minAxis) >= visibleDifferenctBetweenAxes &&
-            Math.abs(p95Axis - minAxis) >= visibleDifferenctBetweenAxes ? (
-              <PAxisLine axisTop={minAxis} durationMs={minValueMs} />
-            ) : null}
-            {p95Axis >= visibleDifferenctBetweenAxes || !(p50Axis - p95Axis >= visibleDifferenctBetweenAxes) ? (
-              <PAxisLine axisTop={0} durationMs={maxValueMs} dontApplyMargin />
-            ) : null}
-          </>
-        ) : null}
       </ChartWrapper>
     </MetricsBarChartWrapper>
   );

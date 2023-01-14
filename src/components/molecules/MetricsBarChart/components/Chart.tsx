@@ -29,7 +29,7 @@ const Chart: React.FC<ChartProps> = props => {
       const {durationS, logDuration, status, name, startTime} = barItem;
 
       const barColor = StatusColors[status] as unknown as StatusColors;
-      const barInactiveColor = SecondaryStatusColors[status] as unknown as SecondaryStatusColors;
+      const barHoverColor = SecondaryStatusColors[status] as unknown as SecondaryStatusColors;
 
       /*
         if execution is running, bar height is 50% of chartHeight
@@ -49,7 +49,7 @@ const Chart: React.FC<ChartProps> = props => {
         width: barWidth,
         margin: barMargin,
         color: barColor,
-        inactiveColor: barInactiveColor,
+        hoverColor: barHoverColor,
       };
 
       if (isDetailsView) {
@@ -62,6 +62,7 @@ const Chart: React.FC<ChartProps> = props => {
         return (
           <BarWithTooltip
             key={key}
+            chartHeight={chartHeight}
             tooltipData={{duration: formattedDuration, status, name, startTime}}
             date={showDate ? format(startTimeDate, 'd.M.yy') : undefined}
             {...barProps}

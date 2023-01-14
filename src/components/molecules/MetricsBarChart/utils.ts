@@ -12,7 +12,7 @@ export const getMinimumValue = (values: any[], fieldName = 'durationMs') => {
 };
 
 export const axisTopPosition: (value: number, height: number) => number = (value, height) =>
-  Math.round(hundredPercent - (value * hundredPercent) / height);
+  hundredPercent - (value * hundredPercent) / height;
 
 export const getAxisPosition = (
   chartHeight: number,

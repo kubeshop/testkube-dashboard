@@ -1,4 +1,4 @@
-import {useCallback, useContext, useMemo} from 'react';
+import {useCallback, useContext, useMemo, useState} from 'react';
 
 import {Popover} from 'antd';
 
@@ -14,6 +14,7 @@ import {EntityDetailsContext} from '@contexts';
 
 import {
   BarDate,
+  ClickableBar,
   ClickableBarWrapper,
   StyledPopoverContainer,
   StyledPopoverContent,
@@ -24,16 +25,21 @@ type BarConfig = {
   width: number;
   height: number;
   color: StatusColors;
-  inactiveColor: SecondaryStatusColors;
+  hoverColor: SecondaryStatusColors;
   tooltipData: any;
-  margin: number;
   date?: string;
+  chartHeight: number;
 };
 
+const tooltipYOffsetMargin = 5;
+
 const BarWithTooltip: React.FC<BarConfig> = props => {
-  const {width, height, color, tooltipData, margin, inactiveColor, date} = props;
-  const {executionsList, onRowSelect} = useContext(EntityDetailsContext);
+  const {width, height, color, tooltipData, hoverColor, date, chartHeight} = props;
   const {status, duration, name, startTime} = tooltipData;
+
+  const {executionsList, onRowSelect} = useContext(EntityDetailsContext);
+
+  const [isHovered, setIsHovered] = useState(false);
 
   const onBarClicked = useCallback(() => {
     if (executionsList?.results) {
@@ -50,7 +56,9 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
       <StyledPopoverContainer>
         <StyledPopoverHeader>
           <StatusIcon status={status} />
-          <Text className="regular middle">{name}</Text>
+          <Text className="regular middle">
+            {name.length > 50 ? `${name.slice(0, 30)}...${name.slice(-10)}` : name}
+          </Text>
         </StyledPopoverHeader>
         <StyledPopoverContent>
           <Text className="regular small" color={Colors.slate400}>
@@ -72,17 +80,22 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
   );
 
   return (
-    <Popover content={popoverContent} color={Colors.slate700}>
-      <span style={{position: 'relative'}}>
-        <ClickableBarWrapper
-          $margin={margin}
+    <Popover
+      content={popoverContent}
+      color={Colors.slate700}
+      align={{offset: [0, chartHeight - height - tooltipYOffsetMargin]}}
+      onOpenChange={visible => setIsHovered(visible)}
+    >
+      <ClickableBarWrapper borderTop={chartHeight - height}>
+        <ClickableBar
           style={{height, width}}
           $color={color}
-          inactiveColor={inactiveColor}
+          hoverColor={hoverColor}
           onClick={onBarClicked}
+          isHovered={isHovered}
         />
         {date ? <BarDate $height={height}>{date}</BarDate> : null}
-      </span>
+      </ClickableBarWrapper>
     </Popover>
   );
 };
