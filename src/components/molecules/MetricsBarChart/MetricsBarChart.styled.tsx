@@ -125,5 +125,7 @@ export const BarDate = styled.div<{
   top: ${({$height}) => $height + 15}px;
   left: -5px;
 
+  white-space: nowrap;
+
   rotate: 45deg;
 `;
