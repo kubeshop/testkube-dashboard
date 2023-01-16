@@ -74,19 +74,33 @@ export const ClickableBar = styled.div<{
   }
 `;
 
-export const ClickableBarWrapper = styled.span<{borderTop: number}>`
+export const ClickableBarWrapper = styled.span<{borderTop: number; hoverColor: SecondaryStatusColors}>`
   position: relative;
 
   border-top: ${props => (props.borderTop ? `${props.borderTop}px` : '1px')} solid transparent;
 
   padding-right: 3px;
+
+  cursor: pointer;
+
+  &:hover {
+    & > ${ClickableBar} {
+      background-color: ${props => props.hoverColor} !important;
+    }
+  }
 `;
 
 export const StyledPopoverContainer = styled.div`
   display: flex;
   flex-direction: column;
 
+  padding: 12px 16px;
+  
+  border-radius: 4px
+
   background: ${Colors.slate700};
+
+  cursor: pointer;
 `;
 
 export const StyledPopoverHeader = styled.div`
@@ -108,8 +122,8 @@ export const BarDate = styled.div<{
   $height: number;
 }>`
   position: absolute;
-  color: ${Colors.slate500};
-  rotate: 45deg;
   top: ${({$height}) => $height + 15}px;
   left: -5px;
+
+  rotate: 45deg;
 `;

@@ -185,7 +185,7 @@ export const GlobalStyle = createGlobalStyle`
       background: ${Colors.slate900};
   
       &:hover {
-      background: ${Colors.slate800};
+        background: ${Colors.slate800};
       }
     }
   }
@@ -306,7 +306,14 @@ export const GlobalStyle = createGlobalStyle`
         margin-left: 2px;
         margin-right: unset !important;
       }
-  } 
+    }
+  }
+
+  // Popover
+  
+  .ant-popover-inner-content {
+    padding: 0;
+  }
 `;
 
 /* Media Sizes */

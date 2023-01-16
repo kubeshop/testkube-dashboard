@@ -53,7 +53,7 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
 
   const popoverContent = useMemo(
     () => (
-      <StyledPopoverContainer>
+      <StyledPopoverContainer onClick={onBarClicked}>
         <StyledPopoverHeader>
           <StatusIcon status={status} />
           <Text className="regular middle">
@@ -86,7 +86,7 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
       align={{offset: [0, chartHeight - height - tooltipYOffsetMargin]}}
       onOpenChange={visible => setIsHovered(visible)}
     >
-      <ClickableBarWrapper borderTop={chartHeight - height}>
+      <ClickableBarWrapper borderTop={chartHeight - height} hoverColor={hoverColor}>
         <ClickableBar
           style={{height, width}}
           $color={color}
@@ -94,7 +94,13 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
           onClick={onBarClicked}
           isHovered={isHovered}
         />
-        {date ? <BarDate $height={height}>{date}</BarDate> : null}
+        {date ? (
+          <BarDate $height={height}>
+            <Text className="regular small" color={Colors.slate400}>
+              {date}
+            </Text>
+          </BarDate>
+        ) : null}
       </ClickableBarWrapper>
     </Popover>
   );
