@@ -26,7 +26,7 @@ export const formatVariables = (list: any[]) => {
     } else {
       variables[item.key] = {
         name: item.key,
-        value: item.value,
+        value: `"${item.value}"`,
         type: item.type === 0 ? 'basic' : 'secret',
       };
     }
@@ -50,8 +50,21 @@ export const decomposeVariables = (variables: Variables) => {
       };
     }
 
+    let formattedValue = null;
+
+    if (typeof value.value !== 'string') {
+      formattedValue = '';
+    }
+
+    if (value.value.startsWith('"') && value.value.endsWith('"')) {
+      formattedValue = value.value.substring(1, value.value.length - 1);
+    } else {
+      formattedValue = value.value;
+    }
+
     return {
       ...value,
+      value: formattedValue,
       key: value?.name,
       type: value.type === 'basic' ? 0 : 1,
     };

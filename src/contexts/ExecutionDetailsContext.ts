@@ -8,6 +8,7 @@ export interface ExecutionDetailsOnDataChangeInterface {
   isLoading: boolean;
   isFetching: boolean;
   refetch: Function;
+  error: any;
 }
 
 export type ExecutionDetailsContextProps = {

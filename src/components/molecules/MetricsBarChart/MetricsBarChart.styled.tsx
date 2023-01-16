@@ -1,89 +1,106 @@
 import styled from 'styled-components';
 
-import Colors from '@styles/Colors';
+import Colors, {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
 export const MetricsBarChartWrapper = styled.div<{
-  $height: number;
-  isExtendedPadding: boolean;
-  isPaddingRemoved: boolean;
+  isDetailsView?: boolean;
 }>`
   overflow-x: auto;
   overflow-y: hidden;
 
   ${invisibleScroll}
 
-  min-height: ${({$height}) => $height}px;
-  height: ${({$height}) => $height}px;
-
-  padding-left: ${props => (props.isExtendedPadding ? '95px' : '65px')};
-  padding-top: 5px;
-  ${props => (props.isPaddingRemoved ? 'padding: 0;' : '')}
+  ${props => (props.isDetailsView ? 'min-height: 160px;' : '')}
 `;
 
-export const ChartWrapper = styled.div<{$svgWrapperWidth: number}>`
+export const ChartWrapper = styled.div<{$wrapperWidth: number}>`
   position: relative;
   overflow-y: hidden;
 
   ${invisibleScroll}
 
-  height: inherit;
-  width: ${({$svgWrapperWidth}) => $svgWrapperWidth}px;
+  width: ${({$wrapperWidth}) => $wrapperWidth}px;
   min-width: 100%;
 `;
 
-export const HorizontalAxis = styled.div<{$top: number}>`
+export const HorizontalAxis = styled.div<{$top: number; label?: string}>`
   position: absolute;
-  top: ${({$top}) => $top}%;
+  top: ${({$top}) => $top}px;
 
   width: 100%;
   height: 1px;
 
-  border-top: 1px dashed ${Colors.indigo300};
+  border-top: 1px ${props => (props.label ? 'dashed' : 'solid')} ${Colors.indigo300};
 
   pointer-events: none;
 `;
 
-export const AxisLabel = styled.div<{$top: number; isExtendedPadding: boolean}>`
+export const AxisLabel = styled.div<{$top: number}>`
   position: absolute;
 
-  top: ${({$top}) => $top}%;
-  left: ${props => (props.isExtendedPadding ? '-95px' : '-65px')};
+  top: ${({$top}) => $top}px;
 `;
 
-export const SvgWrapper = styled.div`
+export const SvgWrapper = styled.div<{isDetailsView?: boolean}>`
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
 
-  height: inherit;
-  width: inherit;
+  ${props => (props.isDetailsView ? 'padding-bottom: 50px;' : '')}
+  ${props => (props.isDetailsView ? 'padding-left: 75px;' : '')}
 `;
 
-export const BarWrapper = styled.div<{$width?: number; $margin: number; noHover?: boolean}>`
-  width: ${({$width}) => $width}px;
-
-  transition: 0.3s;
-  cursor: pointer;
-
+export const BarWrapper = styled.div<{$margin: number}>`
   &:not(:last-child) {
     margin-right: ${props => props.$margin}px;
   }
-
-  ${props =>
-    props.noHover
-      ? ``
-      : `&:hover {
-          background: ${Colors.slate600} !important;
-        }`}
 `;
 
-export const NoData = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const ClickableBar = styled.div<{
+  $color: StatusColors;
+  hoverColor: SecondaryStatusColors;
+  isHovered: boolean;
+}>`
+  transition: 0.3s;
+  cursor: pointer;
 
-  height: 100%;
+  background-color: ${props => props.$color};
+  border-bottom: 3px solid ${props => props.$color};
+
+  ${props => (props.isHovered ? `background-color: ${props.hoverColor} !important;` : '')}
+
+  &:hover {
+    background-color: ${props => props.hoverColor} !important;
+  }
+`;
+
+export const ClickableBarWrapper = styled.span<{borderTop: number; hoverColor: SecondaryStatusColors}>`
+  position: relative;
+
+  border-top: ${props => (props.borderTop ? `${props.borderTop}px` : '1px')} solid transparent;
+
+  padding-right: 3px;
+
+  cursor: pointer;
+
+  &:hover {
+    & > ${ClickableBar} {
+      background-color: ${props => props.hoverColor} !important;
+    }
+  }
+`;
+
+export const StyledPopoverContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  padding: 12px 16px;
+  
+  border-radius: 4px
+
+  background: ${Colors.slate700};
+
+  cursor: pointer;
 `;
 
 export const StyledPopoverHeader = styled.div`
@@ -101,9 +118,12 @@ export const StyledPopoverContent = styled.div`
   gap: 4px;
 `;
 
-export const StyledPopoverContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+export const BarDate = styled.div<{
+  $height: number;
+}>`
+  position: absolute;
+  top: ${({$height}) => $height + 15}px;
+  left: -5px;
 
-  background: ${Colors.slate700};
+  rotate: 45deg;
 `;
