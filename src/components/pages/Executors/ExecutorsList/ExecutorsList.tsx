@@ -34,7 +34,7 @@ const Executors: React.FC = () => {
 
   const {data: executors, refetch, isLoading} = useGetExecutorsQuery();
 
-  const customExecutors = executors?.filter(executorItem => !executorItem.executor.image.startsWith("kubeshop/")) || [];
+  const customExecutors = executors?.filter(executorItem => !executorItem.executor.image || !executorItem.executor.image.startsWith("kubeshop/")) || [];
 
   const onNavigateToDetails = (name: string) => {
     navigate(`executors/${name}`);
