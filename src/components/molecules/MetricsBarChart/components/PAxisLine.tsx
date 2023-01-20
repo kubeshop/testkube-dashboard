@@ -23,6 +23,10 @@ const PAxisLine: React.FC<PAxisLineProps> = props => {
 
   const finalTopValue = dontApplyMargin ? axisTop : axisTop + margin;
 
+  if (!Number.isSafeInteger(durationMs)) {
+    return null;
+  }
+
   const duration = intervalToDuration({start: 0, end: durationMs});
   const formattedDuration =
     (duration.years ? `${duration.years}y ` : '') +
