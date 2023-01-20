@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Test Docker image
 
 on:
   push:
@@ -11,13 +11,13 @@ jobs:
   build_multi_platform_images:
     name: Build and push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - name: "arm64"
-            path: arm64v8/nginx:alpine
-          - name: "amd64"
-            path: nginx:alpine
+#    strategy:
+#      matrix:
+#        include:
+#          - name: "arm64"
+#            path: arm64v8/nginx:alpine
+#          - name: "amd64"
+#            path: nginx:alpine
 
     steps:
       - name: Get tag
