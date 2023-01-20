@@ -50,7 +50,6 @@ jobs:
         with:
           push: true
           build-args: |
-#            TARGET=${{ matrix.path }}
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}
