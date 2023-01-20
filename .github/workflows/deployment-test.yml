@@ -18,6 +18,13 @@ jobs:
 #            path: arm64v8/nginx:alpine
 #          - name: "amd64"
 #            path: nginx:alpine
+    strategy:
+      matrix:
+        include:
+          - name: "arm64"
+            path: arm64
+          - name: "amd64"
+            path: amd64
 
     steps:
       - name: Get tag
@@ -52,8 +59,8 @@ jobs:
           build-args: |
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
-          tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}
-          platforms: linux/arm64, linux/amd64
+          tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
+          platforms: ${{ matrix.name }}
 
 #  create_manifest:
 #    needs: build_multi_platform_images
