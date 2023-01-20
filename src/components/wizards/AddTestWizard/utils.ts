@@ -68,31 +68,37 @@ export const gitDirFormFields: FormItem[] = [
     inputType: 'default',
     modificator: 'password',
     placeholder: 'Git Token',
-    itemLabel: ' ',
+    itemLabel: 'Git Token',
   },
   {
     // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'username',
     inputType: 'default',
-    placeholder: 'Git Username',
-    itemLabel: ' ',
+    placeholder: 'Your username',
+    itemLabel: 'Git username',
   },
   {
     rules: [required, url],
+    required: true,
     fieldName: 'uri',
     inputType: 'default',
-    placeholder: 'URI',
+    placeholder: 'e.g.: https://github.com/myCompany/myRepo.git',
+    itemLabel: 'Git repository URI',
   },
   {
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
+    required: true,
     inputType: 'default',
-    placeholder: 'Branch',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
   },
   {
     fieldName: 'path',
+    required: true,
     inputType: 'default',
-    placeholder: 'Path',
+    placeholder: 'e.g.: /tests/cypress',
+    itemLabel: 'Path',
   },
 ];
 
@@ -103,40 +109,48 @@ export const gitFileFormFields: FormItem[] = [
     inputType: 'default',
     modificator: 'password',
     placeholder: 'Git Token',
-    itemLabel: ' ',
+    itemLabel: 'Git Token',
   },
   {
     // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'username',
     inputType: 'default',
-    placeholder: 'Git Username',
-    itemLabel: ' ',
+    placeholder: 'Your username',
+    itemLabel: 'Git username',
   },
   {
     rules: [required, url],
+    required: true,
     fieldName: 'uri',
     inputType: 'default',
-    placeholder: 'URI',
+    placeholder: 'e.g.: https://github.com/myCompany/myRepo.git',
+    itemLabel: 'Git repository URI',
   },
   {
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
+    required: true,
     inputType: 'default',
-    placeholder: 'Branch',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
   },
   {
     fieldName: 'path',
+    required: true,
     inputType: 'default',
-    placeholder: 'Path',
+    placeholder: 'e.g.: /tests/cypress',
+    itemLabel: 'Path',
   },
 ];
 
 export const fileContentFormFields: FormItem[] = [
   {
     rules: [required],
+    required: true,
     fieldName: 'file',
     inputType: 'uploadWithInput',
     placeholder: 'File',
+    itemLabel: 'File',
   },
 ];
 
@@ -145,12 +159,14 @@ export const customTypeFormFields: FormItem[] = [
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
     inputType: 'default',
-    placeholder: 'Branch',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
   },
   {
     fieldName: 'path',
     inputType: 'default',
-    placeholder: 'Path',
+    placeholder: 'e.g.: /tests/cypress',
+    itemLabel: 'Path',
   },
 ];
 
@@ -158,8 +174,10 @@ export const stringContentFormFields: FormItem[] = [
   {
     rules: [required],
     fieldName: 'string',
+    required: true,
     inputType: 'textarea',
     placeholder: 'String',
+    itemLabel: 'String',
   },
 ];
 
