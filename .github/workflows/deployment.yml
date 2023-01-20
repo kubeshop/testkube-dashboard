@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - "v*.*.*"
-      - "v*.*.*-*"
 
 jobs:
   build_multi_platform_images:
