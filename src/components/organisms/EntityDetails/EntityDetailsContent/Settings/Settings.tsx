@@ -22,7 +22,7 @@ const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
 
 const navigationOptionsConfig: {[key in Entity]: string[]} = {
   'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Definition'],
-  tests: ['General', 'Variables & Secrets', 'Definition'],
+  tests: ['General', 'Test', 'Variables & Secrets', 'Definition'],
 };
 
 const Settings: React.FC = () => {

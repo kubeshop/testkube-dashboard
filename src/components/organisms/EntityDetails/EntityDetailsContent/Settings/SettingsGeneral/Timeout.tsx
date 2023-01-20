@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 
-import {Form, Input, Space} from 'antd';
+import {Form, Input} from 'antd';
 
 import {Text} from '@custom-antd';
 
@@ -12,6 +12,8 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 import {useUpdateTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
+
+import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 type TimeoutForm = {
   activeDeadlineSeconds?: number;
@@ -76,11 +78,11 @@ const Timeout: React.FC = () => {
           </Text>
         }
       >
-        <Space size={32} direction="vertical" style={{width: '100%'}}>
-          <Form.Item name="activeDeadlineSeconds" rules={[digits]} style={{marginBottom: '0px'}}>
+        <StyledSpace size={32} direction="vertical" style={{width: '100%'}}>
+          <StyledFormItem name="activeDeadlineSeconds" rules={[digits]} style={{marginBottom: '0px'}}>
             <Input placeholder="Timeout in seconds" />
-          </Form.Item>
-        </Space>
+          </StyledFormItem>
+        </StyledSpace>
       </ConfigurationCard>
     </Form>
   );

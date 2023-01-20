@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 
-import {Form, Input, Space} from 'antd';
+import {Form, Input} from 'antd';
 
 import {Entity} from '@models/entity';
 
@@ -14,6 +14,8 @@ import {useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useUpdateTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
+
+import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 const {TextArea} = Input;
 
@@ -74,14 +76,14 @@ const NameNDescription: React.FC = () => {
           form.resetFields();
         }}
       >
-        <Space size={32} direction="vertical" style={{width: '100%'}}>
-          <Form.Item name="name" rules={[required]} style={{marginBottom: '0px'}}>
+        <StyledSpace size={32} direction="vertical">
+          <StyledFormItem name="name" rules={[required]}>
             <Input placeholder="Name" disabled />
-          </Form.Item>
-          <Form.Item name="description" style={{marginBottom: '0px'}}>
+          </StyledFormItem>
+          <StyledFormItem name="description">
             <TextArea placeholder="Description" autoSize={{minRows: 2, maxRows: 3}} />
-          </Form.Item>
-        </Space>
+          </StyledFormItem>
+        </StyledSpace>
       </ConfigurationCard>
     </Form>
   );

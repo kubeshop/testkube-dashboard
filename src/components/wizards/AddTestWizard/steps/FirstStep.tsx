@@ -19,7 +19,7 @@ import {
   stringContentFormFields,
 } from '../utils';
 
-const additionalFields: any = {
+export const additionalFields: any = {
   'git-dir': gitDirFormFields,
   'git-file': gitFileFormFields,
   'file-uri': fileContentFormFields,

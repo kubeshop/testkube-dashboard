@@ -2,6 +2,7 @@ import {ReactElement} from 'react';
 
 import {Input, Radio, Select} from 'antd';
 import {Rule} from 'antd/lib/form';
+import {UploadChangeParam} from 'antd/lib/upload';
 
 import {UploadWithInput} from '@atoms';
 
@@ -29,7 +30,7 @@ export const url: Rule = {type: 'url'};
 export const duplicateKeyMessage = 'Duplicate key.';
 
 type DefaultConfig = {
-  onFileChange?: () => {};
+  onFileChange?: (file: Nullable<UploadChangeParam>) => void;
   onLabelsChange?: (value: any) => void;
   form?: null;
 };

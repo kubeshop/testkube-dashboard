@@ -95,8 +95,8 @@ export const StyledPopoverContainer = styled.div`
   flex-direction: column;
 
   padding: 12px 16px;
-  
-  border-radius: 4px
+
+  border-radius: 4px;
 
   background: ${Colors.slate700};
 

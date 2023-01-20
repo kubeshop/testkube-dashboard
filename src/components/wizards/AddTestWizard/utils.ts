@@ -207,7 +207,7 @@ export const getTestSourceSpecificFields = (
 
   return {
     repository: {
-      type: testSource,
+      type: testSource === 'git-file' ? 'git' : testSource,
       uri: values.uri,
       ...(values.path ? {path: values.path} : {}),
       ...(values.branch ? {branch: values.branch} : {}),
