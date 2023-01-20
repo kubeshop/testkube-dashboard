@@ -10,12 +10,12 @@ on:
 jobs:
   build_multi_platform_images:
     name: Build and push Docker image to Docker Hub
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         include:
           - name: "arm64"
-            path: arm64v8/nginx:1.22-alpine
+            path: arm64v8/nginx:alpine
           - name: "amd64"
             path: nginx:alpine
 #    strategy:
@@ -65,7 +65,7 @@ jobs:
 
   create_manifest:
     needs: build_multi_platform_images
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Get tag
         id: tag
