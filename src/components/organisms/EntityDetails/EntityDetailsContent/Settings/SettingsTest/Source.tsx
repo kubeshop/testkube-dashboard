@@ -20,7 +20,9 @@ import {StyledFormItem, StyledSpace} from '../Settings.styled';
 const Source = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
 
-  const {source} = entityDetails;
+  const {
+    content: {type: source},
+  } = entityDetails;
 
   const [form] = Form.useForm();
   const testSources = useAppSelector(selectSources);
@@ -94,7 +96,17 @@ const Source = () => {
           <StyledFormItem name="source" rules={[required]} style={{marginBottom: '0px'}}>
             <Select showSearch options={sourcesOptions} />
           </StyledFormItem>
-          {source ? renderFormItems(additionalFields[source], {onFileChange}) : null}
+          <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.source !== currentValues.source}>
+            {({getFieldValue}) => {
+              let testSourceValue: string = getFieldValue('source');
+
+              if (testSourceValue) {
+                testSourceValue = testSourceValue.includes('custom-git-dir') ? 'custom' : testSourceValue;
+
+                return renderFormItems(additionalFields[testSourceValue], {onFileChange});
+              }
+            }}
+          </Form.Item>
         </StyledSpace>
       </ConfigurationCard>
     </Form>
