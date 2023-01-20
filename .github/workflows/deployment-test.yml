@@ -53,6 +53,9 @@ jobs:
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}
+          platforms:
+            - linux/arm64
+            - linux/amd64
 
 #  create_manifest:
 #    needs: build_multi_platform_images
