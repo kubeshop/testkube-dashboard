@@ -132,7 +132,8 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
               durationMs={maxValueMs}
               dontApplyMargin
               isLabelVisible={
-                p95Axis >= visibleDifferenctBetweenAxes || !(p50Axis - p95Axis >= visibleDifferenctBetweenAxes)
+                (p95Axis >= visibleDifferenctBetweenAxes || !(p50Axis - p95Axis >= visibleDifferenctBetweenAxes)) &&
+                minAxis >= visibleDifferenctBetweenAxes
               }
             />
             {executionDurationP50ms && executionDurationP95ms ? (
