@@ -11,20 +11,20 @@ jobs:
   build_multi_platform_images:
     name: Build and push Docker image to Docker Hub
     runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        include:
-#          - name: "arm64"
-#            path: arm64v8/nginx:alpine
-#          - name: "amd64"
-#            path: nginx:alpine
     strategy:
       matrix:
         include:
           - name: "arm64"
-            path: arm64
+            path: arm64v8/nginx:1.22-alpine
           - name: "amd64"
-            path: amd64
+            path: nginx:alpine
+#    strategy:
+#      matrix:
+#        include:
+#          - name: "arm64"
+#            path: arm64
+#          - name: "amd64"
+#            path: amd64
 
     steps:
       - name: Get tag
@@ -57,36 +57,37 @@ jobs:
         with:
           push: true
           build-args: |
+            TARGET=${{ matrix.path }}
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
-          platforms: ${{ matrix.name }}
 
-#  create_manifest:
-#    needs: build_multi_platform_images
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Get tag
-#        id: tag
-#        uses: dawidd6/action-get-tag@v1
-#        with:
-#          # Optionally strip `v` prefix
-#          strip_v: true
-#
-#      - name: Use tag
-#        run: echo ${{steps.tag.outputs.tag}}
-#
-#      - name: Log in to Docker Hub
-#        uses: docker/login-action@v2
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Create Docker manifest and push multi-arch image to Registry
-#        run: |
-#          docker manifest create ${{ github.repository }}:${{steps.tag.outputs.tag}} --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
-#          docker manifest push -p ${{ github.repository }}:${{steps.tag.outputs.tag}}
-#
-#          docker manifest create ${{ github.repository }}:latest --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
-#          docker manifest push -p ${{ github.repository }}:latest
-#
+
+  create_manifest:
+    needs: build_multi_platform_images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          # Optionally strip `v` prefix
+          strip_v: true
+
+      - name: Use tag
+        run: echo ${{steps.tag.outputs.tag}}
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create Docker manifest and push multi-arch image to Registry
+        run: |
+          docker manifest create ${{ github.repository }}:${{steps.tag.outputs.tag}} --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
+          docker manifest push -p ${{ github.repository }}:${{steps.tag.outputs.tag}}
+
+          docker manifest create ${{ github.repository }}:latest --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
+          docker manifest push -p ${{ github.repository }}:latest
+
