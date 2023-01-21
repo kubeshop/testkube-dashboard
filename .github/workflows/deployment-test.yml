@@ -55,7 +55,6 @@ jobs:
       - name: Build image and push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          push: true
           build-args: |
             TARGET=${{ matrix.path }}
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
