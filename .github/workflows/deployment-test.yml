@@ -85,6 +85,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Create and push manifest images
+        uses: Noelware/docker-manifest-action@master # or use whatever version.
+        with:
+          base-image: ${{ github.repository }}:${{steps.tag.outputs.tag}}
+          extra-images: ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64,${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
+          push: true
+
       - name: Create Docker manifest and push multi-arch image to Registry
         run: |
           docker manifest create ${{ github.repository }}:${{steps.tag.outputs.tag}} --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
