@@ -60,13 +60,15 @@ const TestCreationModalContent: React.FC = () => {
 
     const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
 
-    const isTestSourceExists = testSources.some(source => {
-      return source.name === testSource.replace('$custom-git-dir-', '');
-    });
+    if (isTestSourceCustomGitDir) {
+      const isTestSourceExists = testSources.some(source => {
+        return source.name === testSource.replace('$custom-git-dir-', '');
+      });
 
-    if (!isTestSourceExists) {
-      notificationCall('failed', 'Provided test source does not exist');
-      return;
+      if (!isTestSourceExists) {
+        notificationCall('failed', 'Provided test source does not exist');
+        return;
+      }
     }
 
     const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
