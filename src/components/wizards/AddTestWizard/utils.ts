@@ -18,6 +18,13 @@ export const addTestSteps: Step[] = [
   {title: 'Done', description: 'Save or run your test.'},
 ];
 
+export const testSourceBaseOptions: Option[] = [
+  {value: 'git-dir', label: 'Git directory'},
+  {value: 'git-file', label: 'Git file'},
+  {value: 'file-uri', label: 'File'},
+  {value: 'string', label: 'String'},
+];
+
 export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 
 export const addTestFormStructure = (options: Option[], customTestSources: Option[] = []) => [
@@ -50,13 +57,7 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
     rules: [required],
     fieldName: 'testSource',
     inputType: 'select',
-    options: [
-      ...customTestSources,
-      {value: 'git-dir', label: 'Git directory'},
-      {value: 'git-file', label: 'Git file'},
-      {value: 'file-uri', label: 'File'},
-      {value: 'string', label: 'String'},
-    ],
+    options: [...customTestSources, ...testSourceBaseOptions],
     placeholder: 'Source',
     dataTest: 'test-creation_type_source_option',
     itemLabel: 'Test Source',
@@ -66,21 +67,6 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
 
 export const gitDirFormFields: FormItem[] = [
   {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
-    fieldName: 'token',
-    inputType: 'default',
-    modificator: 'password',
-    placeholder: 'Git Token',
-    itemLabel: 'Git Token',
-  },
-  {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
-    fieldName: 'username',
-    inputType: 'default',
-    placeholder: 'Your username',
-    itemLabel: 'Git username',
-  },
-  {
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -102,26 +88,26 @@ export const gitDirFormFields: FormItem[] = [
     inputType: 'default',
     placeholder: 'e.g.: /tests/cypress',
     itemLabel: 'Path',
+  },
+  {
+    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    fieldName: 'token',
+    inputType: 'default',
+    modificator: 'password',
+    placeholder: 'Git Token',
+    itemLabel: 'Git Token',
+  },
+  {
+    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    fieldName: 'username',
+    inputType: 'default',
+    placeholder: 'Your username',
+    itemLabel: 'Git username',
   },
 ];
 
 export const gitFileFormFields: FormItem[] = [
   {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
-    fieldName: 'token',
-    inputType: 'default',
-    modificator: 'password',
-    placeholder: 'Git Token',
-    itemLabel: 'Git Token',
-  },
-  {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
-    fieldName: 'username',
-    inputType: 'default',
-    placeholder: 'Your username',
-    itemLabel: 'Git username',
-  },
-  {
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -143,6 +129,21 @@ export const gitFileFormFields: FormItem[] = [
     inputType: 'default',
     placeholder: 'e.g.: /tests/cypress',
     itemLabel: 'Path',
+  },
+  {
+    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    fieldName: 'token',
+    inputType: 'default',
+    modificator: 'password',
+    placeholder: 'Git Token',
+    itemLabel: 'Git Token',
+  },
+  {
+    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    fieldName: 'username',
+    inputType: 'default',
+    placeholder: 'Your username',
+    itemLabel: 'Git username',
   },
 ];
 
@@ -194,30 +195,14 @@ export const secondStepFormFields: FormItem[] = [
 
 export const optionalFields = ['token', 'branch', 'path'];
 
-export const getTestSourceSpecificFields = (
-  values: any,
-  isTestSourceCustomGitDir?: boolean,
-  customTestSources?: SourceWithRepository[]
-) => {
+export const getTestSourceSpecificFields = (values: any, isTestSourceCustomGitDir?: boolean) => {
   const {testSource} = values;
 
-  if (isTestSourceCustomGitDir && customTestSources && customTestSources.length) {
-    const targetCustomTestSource = customTestSources.filter(source => {
-      return source.name === testSource.replace('custom-git-dir-', '');
-    })[0];
-
+  if (isTestSourceCustomGitDir) {
     return {
       repository: {
-        type: 'git-dir',
-        uri: targetCustomTestSource.repository.uri,
         ...(values.path ? {path: values.path} : {}),
         ...(values.branch ? {branch: values.branch} : {}),
-        ...(targetCustomTestSource.repository.tokenSecret?.name
-          ? {token: targetCustomTestSource.repository.tokenSecret?.name}
-          : {}),
-        ...(targetCustomTestSource.repository.usernameSecret?.name
-          ? {username: targetCustomTestSource.repository.usernameSecret?.name}
-          : {}),
       },
     };
   }
@@ -228,7 +213,7 @@ export const getTestSourceSpecificFields = (
 
   return {
     repository: {
-      type: testSource === 'git-file' ? 'git' : testSource,
+      type: 'git',
       uri: values.uri,
       ...(values.path ? {path: values.path} : {}),
       ...(values.branch ? {branch: values.branch} : {}),
@@ -272,7 +257,7 @@ export const remapTestSources = (testSources: SourceWithRepository[]) => {
   testSources.forEach(source => {
     const {name} = source;
 
-    const optionValue = `custom-git-dir-${name}`;
+    const optionValue = `$custom-git-dir-${name}`;
     const optionName = `Git source: ${name}`;
 
     array.push({value: optionValue, label: optionName});

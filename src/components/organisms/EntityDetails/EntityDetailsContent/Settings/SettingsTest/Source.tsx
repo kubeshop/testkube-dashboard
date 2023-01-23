@@ -5,14 +5,22 @@ import {Form, Select} from 'antd';
 import {useAppSelector} from '@redux/hooks';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
-import {ConfigurationCard} from '@molecules';
+import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {additionalFields} from '@wizards/AddTestWizard/steps/FirstStep';
-import {onFileChange, remapTestSources} from '@wizards/AddTestWizard/utils';
+import {
+  getTestSourceSpecificFields,
+  onFileChange,
+  remapTestSources,
+  testSourceBaseOptions,
+} from '@wizards/AddTestWizard/utils';
 
 import {renderFormItems, required} from '@utils/form';
 
 import {EntityDetailsContext} from '@contexts';
+
+import {useUpdateTestMutation} from '@src/services/tests';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
@@ -26,7 +34,7 @@ const Source = () => {
   const getFormValues = () => {
     const {content} = entityDetails;
 
-    if (!content.type) {
+    if (entityDetails.source) {
       const sourceDetails = testSources.find(source => source.name === entityDetails.source);
 
       return {
@@ -53,21 +61,63 @@ const Source = () => {
 
   const [form] = Form.useForm();
 
-  const sourcesOptions = [
-    ...remappedCustomTestSources,
-    {value: 'git-dir', label: 'Git directory'},
-    {value: 'git-file', label: 'Git file'},
-    {value: 'file-uri', label: 'File'},
-    {value: 'string', label: 'String'},
-  ];
+  const sourcesOptions = [...remappedCustomTestSources, ...testSourceBaseOptions];
+
+  const [updateTest] = useUpdateTestMutation();
+
+  const onSave = (values: any) => {
+    const {testSource} = values;
+
+    const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
+
+    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
+
+    if (isTestSourceCustomGitDir) {
+      const isTestSourceExists = testSources.some(sourceItem => {
+        return sourceItem.name === testSource.replace('$custom-git-dir-', '');
+      });
+
+      if (!isTestSourceExists) {
+        notificationCall('failed', 'Provided test source does not exist');
+        return;
+      }
+    }
+
+    const requestDataContent = {
+      ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {} : {type: testSource}),
+      ...testSourceSpecificFields,
+    };
+
+    updateTest({
+      id: entityDetails.name,
+      data: {
+        ...entityDetails,
+        content: requestDataContent,
+        ...(isTestSourceCustomGitDir
+          ? {source: testSource.replace('$custom-git-dir-', '')}
+          : entityDetails.source
+          ? {source: null}
+          : {}),
+      },
+    })
+      .then((res: any) => {
+        displayDefaultNotificationFlow(res, () => {
+          notificationCall('passed', `Test source was succesfully updated.`);
+        });
+      })
+      .catch((err: any) => {
+        displayDefaultErrorNotification(err);
+      });
+  };
 
   return (
     <Form
       form={form}
       name="test-settings-source"
-      initialValues={{source, ...additionalFormValues}}
+      initialValues={{testSource: source, ...additionalFormValues}}
       layout="vertical"
       labelAlign="right"
+      onFinish={onSave}
     >
       <ConfigurationCard
         title="Source"
@@ -91,22 +141,15 @@ const Source = () => {
         }
       >
         <StyledSpace size={24} direction="vertical">
-          <StyledFormItem name="source" rules={[required]}>
+          <StyledFormItem name="testSource" rules={[required]}>
             <Select showSearch options={sourcesOptions} />
           </StyledFormItem>
-          <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.source !== currentValues.source}>
-            {({getFieldValue, setFieldsValue}) => {
-              let testSourceValue: string = getFieldValue('source');
-
-              if (!testSourceValue === source) {
-                setFieldsValue({
-                  branch: '',
-                  path: '',
-                  username: '',
-                  token: '',
-                  uri: '',
-                });
-              }
+          <Form.Item
+            noStyle
+            shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
+          >
+            {({getFieldValue}) => {
+              let testSourceValue: string = getFieldValue('testSource');
 
               if (testSourceValue) {
                 testSourceValue = !additionalFields[testSourceValue] ? 'custom' : testSourceValue;

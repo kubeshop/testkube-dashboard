@@ -23,7 +23,7 @@ import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
 
-import {Hint} from '@src/components/molecules';
+import {Hint, notificationCall} from '@src/components/molecules';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
@@ -60,16 +60,26 @@ const TestCreationModalContent: React.FC = () => {
 
     const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
 
-    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir, testSources);
+    const isTestSourceExists = testSources.some(source => {
+      return source.name === testSource.replace('$custom-git-dir-', '');
+    });
+
+    if (!isTestSourceExists) {
+      notificationCall('failed', 'Provided test source does not exist');
+      return;
+    }
+
+    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
 
     const requestBody = {
       name: values.name,
       type: testType,
       content: {
-        type: testSource === 'file-uri' ? 'string' : isTestSourceCustomGitDir ? 'git-dir' : testSource,
+        ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {} : {type: testSource}),
         ...testSourceSpecificFields,
       },
       labels: decomposeLabels(localLabels),
+      ...(isTestSourceCustomGitDir ? {source: testSource.replace('$custom-git-dir-', '')} : {}),
     };
 
     return addTest(requestBody)
