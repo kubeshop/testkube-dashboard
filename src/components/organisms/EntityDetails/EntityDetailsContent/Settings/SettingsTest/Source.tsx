@@ -1,7 +1,6 @@
 import {useContext} from 'react';
 
 import {Form, Select} from 'antd';
-import {UploadChangeParam} from 'antd/lib/upload';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectSources} from '@redux/reducers/sourcesSlice';
@@ -9,7 +8,7 @@ import {selectSources} from '@redux/reducers/sourcesSlice';
 import {ConfigurationCard} from '@molecules';
 
 import {additionalFields} from '@wizards/AddTestWizard/steps/FirstStep';
-import {remapTestSources} from '@wizards/AddTestWizard/utils';
+import {onFileChange, remapTestSources} from '@wizards/AddTestWizard/utils';
 
 import {renderFormItems, required} from '@utils/form';
 
@@ -17,38 +16,42 @@ import {EntityDetailsContext} from '@contexts';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
-const getFormValues = (entityDetails: any) => {
-  const {content} = entityDetails;
-
-  if (!content.type) {
-    return {
-      source: entityDetails.source,
-      branch: 'main',
-      path: 'test',
-    };
-  }
-
-  if (content.type === 'string') {
-    return {
-      source: content.type,
-      string: content.data,
-    };
-  }
-  return {
-    source: content.type,
-    ...content.repository,
-  };
-};
-
 const Source = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
 
-  const {source, ...additionalFormValues} = getFormValues(entityDetails);
-
-  const [form] = Form.useForm();
   const testSources = useAppSelector(selectSources);
 
   const remappedCustomTestSources = remapTestSources(testSources);
+
+  const getFormValues = () => {
+    const {content} = entityDetails;
+
+    if (!content.type) {
+      const sourceDetails = testSources.find(source => source.name === entityDetails.source);
+
+      return {
+        source: entityDetails.source,
+        branch: sourceDetails?.repository.branch,
+        path: sourceDetails?.repository.path,
+      };
+    }
+
+    if (content.type === 'string') {
+      return {
+        source: content.type,
+        string: content.data,
+      };
+    }
+
+    return {
+      source: content.type,
+      ...content.repository,
+    };
+  };
+
+  const {source, ...additionalFormValues} = getFormValues();
+
+  const [form] = Form.useForm();
 
   const sourcesOptions = [
     ...remappedCustomTestSources,
@@ -57,38 +60,6 @@ const Source = () => {
     {value: 'file-uri', label: 'File'},
     {value: 'string', label: 'String'},
   ];
-
-  const onFileChange = (file: Nullable<UploadChangeParam>) => {
-    if (!file) {
-      form.setFieldsValue({
-        file: null,
-      });
-
-      form.validateFields(['file']);
-    } else {
-      const readFile = new FileReader();
-
-      readFile.onload = e => {
-        if (e && e.target) {
-          const fileContent = e.target.result;
-
-          if (fileContent) {
-            form.setFieldsValue({
-              file: {
-                fileContent: fileContent as string,
-                fileName: file.file.name,
-              },
-            });
-
-            form.validateFields(['file']);
-          }
-        }
-      };
-
-      // @ts-ignore
-      readFile.readAsText(file.file);
-    }
-  };
 
   return (
     <Form
@@ -124,15 +95,27 @@ const Source = () => {
             <Select showSearch options={sourcesOptions} />
           </StyledFormItem>
           <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.source !== currentValues.source}>
-            {({getFieldValue}) => {
+            {({getFieldValue, setFieldsValue}) => {
               let testSourceValue: string = getFieldValue('source');
 
+              if (!testSourceValue === source) {
+                setFieldsValue({
+                  branch: '',
+                  path: '',
+                  username: '',
+                  token: '',
+                  uri: '',
+                });
+              }
+
               if (testSourceValue) {
-                testSourceValue = testSourceValue.includes('custom-git-dir') ? 'custom' : testSourceValue;
-                console.log(testSourceValue);
+                testSourceValue = !additionalFields[testSourceValue] ? 'custom' : testSourceValue;
+
                 return (
                   <StyledSpace size={24} direction="vertical">
-                    {renderFormItems(additionalFields[testSourceValue], {onFileChange})}
+                    {renderFormItems(additionalFields[testSourceValue], {
+                      onFileChange: file => onFileChange(file, form),
+                    })}
                   </StyledSpace>
                 );
               }

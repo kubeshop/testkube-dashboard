@@ -14,7 +14,7 @@ import {Button, Text} from '@custom-antd';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
-import {getTestSourceSpecificFields} from '@wizards/AddTestWizard/utils';
+import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
@@ -98,38 +98,6 @@ const TestCreationModalContent: React.FC = () => {
     return onSaveClick(values);
   };
 
-  const onFileChange = (file: Nullable<UploadChangeParam>) => {
-    if (!file) {
-      form.setFieldsValue({
-        file: null,
-      });
-
-      form.validateFields(['file']);
-    } else {
-      const readFile = new FileReader();
-
-      readFile.onload = e => {
-        if (e && e.target) {
-          const fileContent = e.target.result;
-
-          if (fileContent) {
-            form.setFieldsValue({
-              file: {
-                fileContent: fileContent as string,
-                fileName: file.file.name,
-              },
-            });
-
-            form.validateFields(['file']);
-          }
-        }
-      };
-
-      // @ts-ignore
-      readFile.readAsText(file.file);
-    }
-  };
-
   return (
     <div style={{display: 'flex'}}>
       <Form
@@ -143,7 +111,10 @@ const TestCreationModalContent: React.FC = () => {
       >
         <StyledFormSpace size={24} direction="vertical">
           <Text className="regular big">Test details</Text>
-          <FirstStep onFileChange={onFileChange} onLabelsChange={setLocalLabels} />
+          <FirstStep
+            onFileChange={(file: Nullable<UploadChangeParam>) => onFileChange(file, form)}
+            onLabelsChange={setLocalLabels}
+          />
           <StyledFormItem shouldUpdate>
             {({isFieldsTouched}) => (
               <Button
