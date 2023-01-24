@@ -203,15 +203,18 @@ export const getTestSourceSpecificFields = (values: any, isTestSourceCustomGitDi
       repository: {
         ...(values.path ? {path: values.path} : {}),
         ...(values.branch ? {branch: values.branch} : {}),
+        uri: '',
+        type: '',
       },
     };
   }
 
   if (testSource === 'string' || testSource === 'file-uri') {
-    return {data: values.string || values.file.fileContent};
+    return {data: values.string || values.file.fileContent, repository: {}};
   }
 
   return {
+    data: '',
     repository: {
       type: 'git',
       uri: values.uri,

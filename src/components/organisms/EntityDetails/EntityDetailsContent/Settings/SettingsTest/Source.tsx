@@ -84,7 +84,7 @@ const Source = () => {
     }
 
     const requestDataContent = {
-      ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {} : {type: testSource}),
+      ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {type: ''} : {type: testSource}),
       ...testSourceSpecificFields,
     };
 
@@ -96,7 +96,7 @@ const Source = () => {
         ...(isTestSourceCustomGitDir
           ? {source: testSource.replace('$custom-git-dir-', '')}
           : entityDetails.source
-          ? {source: null}
+          ? {source: ''}
           : {}),
       },
     })
