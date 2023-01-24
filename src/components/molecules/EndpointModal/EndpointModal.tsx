@@ -41,7 +41,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
           return res.json();
         })
         .then(res => {
-          if (res.version && res.commit) {
+          if (res.namespace) {
             const targetUrl = url.replace('/info', '');
             axios.defaults.baseURL = targetUrl;
 
