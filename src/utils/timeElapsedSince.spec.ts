@@ -1,4 +1,4 @@
-import {timeElapsedSince} from './formatDateRefactored'
+import {timeElapsedSince} from './timeElapsedSince'
 
 describe('If the duration of the time is', () => {
 
@@ -64,7 +64,7 @@ describe('If the duration of the time is', () => {
     expect(timeElapsed(currentDate - 60 * 60 * 24 * 29.5).short).toEqual('29 d')
   })
 
-  it.only('more than a month', () => {
+  it('more than a month', () => {
     expect(timeElapsed(currentDate - 3600*24*365).long).toEqual('January 24, 2022')
     expect(timeElapsed(currentDate - 3600*24*365).short).toEqual('Jan 24')
   })
