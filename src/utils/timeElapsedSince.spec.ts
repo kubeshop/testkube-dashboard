@@ -1,3 +1,4 @@
+
 import {timeElapsedSince} from './timeElapsedSince'
 
 describe('If the duration of the time is', () => {
