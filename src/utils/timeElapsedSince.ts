@@ -16,6 +16,13 @@ export const timeElapsedSince = (now: number) => (past: number): TimeFormat => {
   const MONTH = 30*24*60*60 // 2592000;
   const durationInSeconds = now - past
 
+
+  // future
+  if (durationInSeconds < 0 && Math.abs(durationInSeconds) < FEW_SECONDS) return {
+    long: 'shortly',
+    short: 'now'
+  }
+
   // within the last few seconds
   if (durationInSeconds >= 0 && durationInSeconds < FEW_SECONDS) return {
     long: 'just now',

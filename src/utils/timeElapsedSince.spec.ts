@@ -5,6 +5,13 @@ describe('If the duration of the time is', () => {
   const currentDate = Date.parse('January 24, 2023') / 1000;
   const timeElapsed = timeElapsedSince(currentDate)
 
+  it('within the next few seconds', () => {
+    expect(timeElapsed(currentDate + 1).long).toEqual('shortly')
+    expect(timeElapsed(currentDate + 1).short).toEqual('now')
+    expect(timeElapsed(currentDate + 9).long).toEqual('shortly')
+    expect(timeElapsed(currentDate + 9).short).toEqual('now')
+  })
+
   it('less than few seconds', () => {
     expect(timeElapsed(currentDate - 1).long).toEqual('just now')
     expect(timeElapsed(currentDate - 1).short).toEqual('now')
