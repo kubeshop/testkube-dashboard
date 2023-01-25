@@ -1,85 +1,71 @@
-import {useMemo} from 'react'
+import {useMemo} from 'react';
 
-import {Dropdown, Menu} from 'antd'
+import {Dropdown, Menu} from 'antd';
 
-import {intervalToDuration} from 'date-fns'
+import {Dots, StatusIcon} from '@atoms';
 
-import {Dots, StatusIcon} from '@atoms'
+import {Text} from '@custom-antd';
 
-import {Text} from '@custom-antd'
+import useIsRunning from '@hooks/useIsRunning';
 
-import useIsRunning from '@hooks/useIsRunning'
+import {formatDuration} from '@utils/formatDate';
+import {timeElapsedSince} from '@utils/timeElapsedSince';
 
-import {formatDuration} from '@utils/formatDate'
-import {timeElapsedSince} from '@utils/timeElapsedSince'
+import Colors from '@styles/Colors';
 
-import Colors from '@styles/Colors'
+import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled';
 
-import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled'
+const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
+  const {data, onAbortExecution} = props;
+  const {status, number, startTime, name, id, durationMs} = data;
 
-const TableRow: React.FC<{ data: any; onAbortExecution: any }> = props => {
-  const {data, onAbortExecution} = props
-  const {status, number, startTime, name, id, durationMs} = data
-
-  const isRunning = useIsRunning(status)
-
-  /*
-    const getIntervalExecTime = () => {
-      try {
-        return constructExecutedString(intervalToDuration({start: new Date(startTime || {}), end: new Date()}));
-        // eslint-disable-next-line no-empty
-      } catch (err) {}
-    };
-
-  */
+  const isRunning = useIsRunning(status);
 
   const abortExecution = () => {
     if (onAbortExecution) {
-      onAbortExecution(id)
+      onAbortExecution(id);
     }
-  }
-
-  const executedTime = timeElapsedSince(Date.now())(startTime)
+  };
 
   const renderExecutionActions = () => {
-    let actionsArray = []
+    let actionsArray = [];
 
     if (isRunning) {
-      actionsArray.push({key: 1, label: <span onClick={abortExecution}>Abort execution</span>})
+      actionsArray.push({key: 1, label: <span onClick={abortExecution}>Abort execution</span>});
     }
 
-    return actionsArray
-  }
+    return actionsArray;
+  };
 
   const renderedExecutionActions = useMemo(() => {
-    return renderExecutionActions()
-  }, [isRunning])
+    return renderExecutionActions();
+  }, [isRunning]);
 
-  const menu = <Menu items={renderedExecutionActions}/>
+  const menu = <Menu items={renderedExecutionActions} />;
 
   return (
     <ItemWrapper key={id}>
-      <StatusIcon status={status}/>
+      <StatusIcon status={status} />
       <DetailsWrapper>
         <ItemRow $flex={1}>
           <ItemColumn>
-            <Text className='regular big' color={Colors.slate300}>
+            <Text className="regular big" color={Colors.slate300}>
               {name}
             </Text>
           </ItemColumn>
           <ItemColumn>
-            <Text className='regular small' color={Colors.slate200}>
+            <Text className="regular small" color={Colors.slate200}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </Text>
             {renderedExecutionActions && renderedExecutionActions.length ? (
               <div
                 onClick={e => {
-                  e.stopPropagation()
+                  e.stopPropagation();
                 }}
               >
-                <Dropdown overlay={menu} placement='bottom'>
+                <Dropdown overlay={menu} placement="bottom">
                   <div style={{width: 20}}>
-                    <Dots color={Colors.grey450}/>
+                    <Dots color={Colors.grey450} />
                   </div>
                 </Dropdown>
               </div>
@@ -89,18 +75,18 @@ const TableRow: React.FC<{ data: any; onAbortExecution: any }> = props => {
         <ItemRow $flex={1}>
           <ItemColumn>
             {number ? (
-              <Text className='regular small' color={Colors.slate400}>
+              <Text className="regular small" color={Colors.slate400}>
                 #{number}
               </Text>
             ) : null}
-            <Text className='regular small' color={Colors.slate400}>
-              Hello World
+            <Text className="regular small" color={Colors.slate400}>
+              {timeElapsedSince(new Date())(new Date(startTime)).long}
             </Text>
           </ItemColumn>
         </ItemRow>
       </DetailsWrapper>
     </ItemWrapper>
-  )
-}
+  );
+};
 
-export default TableRow
+export default TableRow;
