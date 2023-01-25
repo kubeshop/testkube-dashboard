@@ -72,8 +72,8 @@ export const timeElapsedSince = (currentTime: number) => (timeOfTheEvent: number
   }
 
   return {
-    long: `${format(timeOfTheEvent*1000, 'MMMM d, yyyy')}`,
-    short: `${format(timeOfTheEvent*1000, 'MMM d')}`,
+    long: `${format(timeOfTheEvent * 1000, 'MMMM d, yyyy')}`,
+    short: `${format(timeOfTheEvent * 1000, 'MMM d')}`,
     fullTime: durationInSeconds
   }
 }
