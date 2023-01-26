@@ -12,8 +12,7 @@ import {Text} from '@custom-antd';
 
 import useIsRunning from '@hooks/useIsRunning';
 
-import {constructExecutedString} from '@utils/formatDate';
-import {timeElapsedSince} from '@utils/timeElapsedSince';
+import {constructExecutedString, formatExecutionDate} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
@@ -114,13 +113,13 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
               <Text className="regular small" color={Colors.slate400}>
                 Started:
               </Text>{' '}
-              {timeElapsedSince(new Date())(new Date(startedTime)).long}
+              {formatExecutionDate(startedTime)}
             </Text>
             <Text className="regular small" color={Colors.slate50}>
               <Text className="regular small" color={Colors.slate400}>
                 Finished:
               </Text>{' '}
-              {isRunning ? 'running' : timeElapsedSince(new Date())(new Date(finishedTime)).long}
+              {isRunning ? 'running' : formatExecutionDate(finishedTime)}
             </Text>
             <Text className="regular small" color={Colors.slate50}>
               {isRunning ? (
