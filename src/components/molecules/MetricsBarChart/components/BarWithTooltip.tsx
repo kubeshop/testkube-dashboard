@@ -1,4 +1,4 @@
-import {useCallback, useContext, useMemo} from 'react';
+import {useCallback, useContext, useMemo, useState} from 'react';
 
 import {Popover} from 'antd';
 
@@ -8,24 +8,38 @@ import {Text} from '@custom-antd';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 
-import Colors, {StatusColors} from '@styles/Colors';
+import Colors, {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {BarWrapper, StyledPopoverContainer, StyledPopoverContent, StyledPopoverHeader} from './MetricsBarChart.styled';
+import {
+  BarDate,
+  ClickableBar,
+  ClickableBarWrapper,
+  StyledPopoverContainer,
+  StyledPopoverContent,
+  StyledPopoverHeader,
+} from '../MetricsBarChart.styled';
 
 type BarConfig = {
   width: number;
   height: number;
   color: StatusColors;
+  hoverColor: SecondaryStatusColors;
   tooltipData: any;
-  margin: number;
+  date?: string;
+  chartHeight: number;
 };
 
+const tooltipYOffsetMargin = 5;
+
 const BarWithTooltip: React.FC<BarConfig> = props => {
-  const {width, height, color, tooltipData, margin} = props;
-  const {executionsList, onRowSelect} = useContext(EntityDetailsContext);
+  const {width, height, color, tooltipData, hoverColor, date, chartHeight} = props;
   const {status, duration, name, startTime} = tooltipData;
+
+  const {executionsList, onRowSelect} = useContext(EntityDetailsContext);
+
+  const [isHovered, setIsHovered] = useState(false);
 
   const onBarClicked = useCallback(() => {
     if (executionsList?.results) {
@@ -39,10 +53,12 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
 
   const popoverContent = useMemo(
     () => (
-      <StyledPopoverContainer>
+      <StyledPopoverContainer onClick={onBarClicked}>
         <StyledPopoverHeader>
           <StatusIcon status={status} />
-          <Text className="regular middle">{name}</Text>
+          <Text className="regular middle">
+            {name.length > 50 ? `${name.slice(0, 30)}...${name.slice(-10)}` : name}
+          </Text>
         </StyledPopoverHeader>
         <StyledPopoverContent>
           <Text className="regular small" color={Colors.slate400}>
@@ -64,8 +80,28 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
   );
 
   return (
-    <Popover content={popoverContent} color={Colors.slate700}>
-      <BarWrapper $margin={margin} style={{height, background: color}} $width={width} onClick={onBarClicked} />
+    <Popover
+      content={popoverContent}
+      color={Colors.slate700}
+      align={{offset: [0, chartHeight - height - tooltipYOffsetMargin]}}
+      onOpenChange={visible => setIsHovered(visible)}
+    >
+      <ClickableBarWrapper borderTop={chartHeight - height} hoverColor={hoverColor}>
+        <ClickableBar
+          style={{height, width}}
+          $color={color}
+          hoverColor={hoverColor}
+          onClick={onBarClicked}
+          isHovered={isHovered}
+        />
+        {date ? (
+          <BarDate $height={height}>
+            <Text className="regular small" color={Colors.slate400}>
+              {date}
+            </Text>
+          </BarDate>
+        ) : null}
+      </ClickableBarWrapper>
     </Popover>
   );
 };

@@ -4,9 +4,10 @@ import debounce from 'lodash.debounce';
 
 import {ExecutionMetrics} from '@models/metrics';
 
-import Chart from './Chart';
 import {ChartWrapper, MetricsBarChartWrapper} from './MetricsBarChart.styled';
-import PAxisLine from './PAxisLine';
+import Chart from './components/Chart';
+import PAxisLine from './components/PAxisLine';
+import {getAxisPosition, getMaximumValue, getMinimumValue, metricsLogarithmization, secondInMs} from './utils';
 
 export type BarChartConfig = {
   barWidth: number;
@@ -25,21 +26,19 @@ type MetricsBarChartProps = {
   isRowSelected?: boolean;
 };
 
-const greatestValue = (values: any[], fieldName = 'logDuration') => {
-  return values.map(value => value[fieldName]).reduce((acc, cur) => (cur > acc ? cur : acc), -Infinity);
-};
+const visibleDifferenctBetweenAxes = 17;
 
 const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   const {
     data = [],
     executionDurationP50ms,
     executionDurationP95ms,
-    chartHeight = 100,
+    chartHeight = 105,
     barWidth = 12,
     isDetailsView,
-    isRowSelected,
   } = props;
 
+  // autoscroll to right if chart in details view
   const scrollRef = useRef(null);
 
   const scrollToRight = (behavior = 'smooth') => {
@@ -56,7 +55,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
         scrollToRight();
       }, 500);
     }
-  }, [data.length, isRowSelected]);
+  }, [data.length]);
 
   useEffect(() => {
     if (isDetailsView) {
@@ -70,72 +69,101 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
     }
   }, []);
 
-  const logScaleData = data
-    .map(item => {
-      // items with no duration set to 1 sec execution
-      if (!item.durationMs || item.durationMs <= 1000) {
-        return {
-          ...item,
-          logDuration: 1,
-          durationS: 1,
-        };
-      }
-      /*
-      Division each value by some number makes chart look more proportional
-      division by 1000 converts values to seconds
-      better would be to divide it by minValue - 1 to make sure that each record is displayed well
-    */
-      const durationS = item.durationMs / 1000;
-      return {
-        ...item,
-        logDuration: Math.log(durationS),
-        durationS,
-      };
-    })
-    .reverse();
+  const minValueMs = getMinimumValue(data, 'durationMs');
+  const maxValueMs = getMaximumValue(data, 'durationMs');
 
-  const maxValue = greatestValue(logScaleData);
+  /*
+    Chart data calculations
+    Bar height is calculated from 60% of the minimum value
+    this parameter is discussable and probably can be defined by user
+    the higher the percentage, the bigger is the difference between executions on chart
+  */
+  const minValue60P = getMinimumValue(data) * 0.6;
+  const minValueDivider = minValue60P > secondInMs ? minValue60P : secondInMs;
 
+  // Logarithmization of metrics data
+  const logScaleData = metricsLogarithmization(data, minValueDivider);
+
+  const maxLogValue = getMaximumValue(logScaleData, 'logDuration');
+
+  // chart config
   const barChartConfig: BarChartConfig = {
     barWidth,
+    // margin equal to half of bar width
     barMargin: barWidth / 2,
-    chartHeight: chartHeight + 5,
+    chartHeight,
     chartData: logScaleData,
   };
-  const svgWrapperWidth = logScaleData.length * (barChartConfig.barMargin + barChartConfig.barWidth);
+  const wrapperWidth = logScaleData.length * (barChartConfig.barMargin + barChartConfig.barWidth);
 
-  // @ts-ignore
-  const {p50AxisPercent, p95AxisPercent} = useCallback(() => {
-    if (!executionDurationP50ms || !executionDurationP95ms) {
-      return;
+  const getAxisLines = useCallback(() => {
+    if (!isDetailsView) {
+      return [0, 0, 0];
     }
-    const axisValue = (value?: number) => (barChartConfig.chartHeight * Math.log(Number(value) / 1000)) / maxValue;
-    const p50AxisValue = axisValue(executionDurationP50ms);
-    const p95AxisValue = axisValue(executionDurationP95ms);
 
-    const axisPercent = (value: number) => Math.round(100 - (value * 100) / barChartConfig.chartHeight);
-    return {p50AxisPercent: axisPercent(p50AxisValue), p95AxisPercent: axisPercent(p95AxisValue)};
-  }, [executionDurationP50ms, executionDurationP95ms, maxValue, barChartConfig.chartHeight]);
+    return [
+      getAxisPosition(chartHeight, maxLogValue, minValueDivider, executionDurationP50ms),
+      getAxisPosition(chartHeight, maxLogValue, minValueDivider, executionDurationP95ms),
+      getAxisPosition(chartHeight, maxLogValue, minValueDivider, minValueMs),
+    ];
+  }, [
+    chartHeight,
+    maxLogValue,
+    minValueDivider,
+    executionDurationP50ms,
+    executionDurationP95ms,
+    minValueMs,
+    isDetailsView,
+  ]);
+
+  const [p50Axis, p95Axis, minAxis] = getAxisLines();
 
   if (!data || !data.length) {
     return null;
   }
+
   return (
-    <MetricsBarChartWrapper
-      $height={barChartConfig.chartHeight}
-      isExtendedPadding={Number(executionDurationP95ms) / 1000 > 60}
-      isPaddingRemoved={!executionDurationP95ms || !executionDurationP50ms}
-    >
-      <ChartWrapper $svgWrapperWidth={svgWrapperWidth}>
-        {executionDurationP50ms && executionDurationP95ms ? (
+    <MetricsBarChartWrapper isDetailsView={isDetailsView}>
+      <ChartWrapper $wrapperWidth={wrapperWidth}>
+        {isDetailsView ? (
           <>
-            <PAxisLine axisTopPercent={p50AxisPercent} label="P50" durationMs={executionDurationP50ms} />
-            {p50AxisPercent - p95AxisPercent >= 15 ? (
-              <PAxisLine axisTopPercent={p95AxisPercent} label="P95" durationMs={executionDurationP95ms} />
+            <PAxisLine
+              axisTop={0}
+              durationMs={maxValueMs}
+              dontApplyMargin
+              isLabelVisible={
+                (p95Axis >= visibleDifferenctBetweenAxes || !(p50Axis - p95Axis >= visibleDifferenctBetweenAxes)) &&
+                minAxis >= visibleDifferenctBetweenAxes
+              }
+            />
+            {executionDurationP50ms && executionDurationP95ms ? (
+              <>
+                <PAxisLine
+                  axisTop={p95Axis}
+                  label="P95"
+                  durationMs={executionDurationP95ms}
+                  isLabelVisible={
+                    Math.abs(p50Axis - p95Axis) >= visibleDifferenctBetweenAxes &&
+                    Math.abs(p95Axis - minAxis) >= visibleDifferenctBetweenAxes
+                  }
+                />
+                <PAxisLine
+                  axisTop={p50Axis}
+                  label="P50"
+                  durationMs={executionDurationP50ms}
+                  isLabelVisible={Math.abs(p50Axis - minAxis) >= visibleDifferenctBetweenAxes}
+                />
+              </>
             ) : null}
+            <PAxisLine axisTop={minAxis} durationMs={minValueMs} isLabelVisible />
           </>
         ) : null}
-        <Chart chartConfig={barChartConfig} maxValue={maxValue} isDetailsView={isDetailsView} scrollRef={scrollRef} />
+        <Chart
+          chartConfig={barChartConfig}
+          maxValue={maxLogValue}
+          isDetailsView={isDetailsView}
+          scrollRef={scrollRef}
+        />
       </ChartWrapper>
     </MetricsBarChartWrapper>
   );

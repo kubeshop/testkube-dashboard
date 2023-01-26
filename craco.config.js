@@ -1,6 +1,16 @@
 const CracoAlias = require('craco-alias');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 module.exports = {
+  webpack: {
+    configure: webpackConfig => {
+      if (process.env.NODE_ENV !== 'development') {
+        webpackConfig.optimization.minimizer = [new TerserWebpackPlugin({sourceMap: false, parallel: true})];
+        webpackConfig.optimization.minimize = true;
+      }
+      return webpackConfig;
+    },
+  },
   plugins: [
     {
       plugin: CracoAlias,

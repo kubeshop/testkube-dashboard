@@ -2,6 +2,8 @@ import {useContext, useEffect, useRef} from 'react';
 
 import {format} from 'date-fns';
 
+import {initialPageSize} from '@redux/initialState';
+
 import {StatusIcon, TestRunnerIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
@@ -19,8 +21,6 @@ import {executionDateFormat} from '@utils/strings';
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
-
-import {initialPageSize} from '@src/redux/initialState';
 
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, StyledMetricItem} from './EntityGrid.styled';
 
