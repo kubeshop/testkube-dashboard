@@ -80,7 +80,7 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
               </Text>
             ) : null}
             <Text className="regular small" color={Colors.slate400}>
-              {timeElapsedSince(new Date())(new Date(startTime)).long}
+              Executed: {timeElapsedSince(new Date())(new Date(startTime)).long}
             </Text>
           </ItemColumn>
         </ItemRow>
