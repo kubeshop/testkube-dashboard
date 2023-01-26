@@ -8,8 +8,8 @@ import {Text} from '@custom-antd';
 
 import useIsRunning from '@hooks/useIsRunning';
 
+import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration} from '@utils/formatDate';
-import {timeElapsedSince} from '@utils/timeElapsedSince';
 
 import Colors from '@styles/Colors';
 
@@ -80,7 +80,7 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
               </Text>
             ) : null}
             <Text className="regular small" color={Colors.slate400}>
-              Executed: {timeElapsedSince(new Date())(new Date(startTime)).long}
+              Executed: {displayTimeBetweenDates(new Date(), new Date(startTime)).long}
             </Text>
           </ItemColumn>
         </ItemRow>

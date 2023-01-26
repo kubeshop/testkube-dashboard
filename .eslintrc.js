@@ -29,7 +29,7 @@ module.exports = {
     'no-useless-escape': 'off',
     'object-curly-newline': 'off',
     'lines-between-class-members': 'off',
-    'unused-imports/no-unused-imports-ts': 'error',
+    'unused-imports/no-unused-imports-ts': 'warn', // should be warned and allowed for compilation
     'react/jsx-props-no-spreading': 0,
     'react/jsx-max-props-per-line': [1, {maximum: 1, when: 'multiline'}],
     // Disabled old no-shadow rule as seems to be communicated by ESLint while working with TS.
