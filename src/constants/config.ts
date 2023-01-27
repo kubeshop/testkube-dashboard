@@ -1,4 +1,4 @@
 export const config = {
   apiEndpoint: 'apiEndpoint',
-  apiVersion: '/v1/executions'
+  apiVersion: '/v1/executions',
 };
