@@ -1,7 +1,5 @@
 import {useContext, useEffect, useRef} from 'react';
 
-import {format} from 'date-fns';
-
 import {initialPageSize} from '@redux/initialState';
 
 import {StatusIcon, TestRunnerIcon} from '@atoms';
@@ -14,9 +12,9 @@ import {EntityListContext} from '@organisms/EntityList/EntityListContainer/Entit
 
 import useInViewport from '@hooks/useInViewport';
 
+import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration} from '@utils/formatDate';
 import {PollingIntervals} from '@utils/numbers';
-import {executionDateFormat} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
@@ -32,7 +30,6 @@ const EntityGridItem: React.FC<any> = props => {
   const {useGetMetrics, entity, queryFilters, setQueryFilters} = useContext(EntityListContext);
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
-  const startDate = latestExecution?.startTime ? format(new Date(latestExecution?.startTime), executionDateFormat) : '';
 
   const ref = useRef(null);
 
@@ -65,7 +62,9 @@ const EntityGridItem: React.FC<any> = props => {
           </ItemColumn>
           <ItemColumn>
             <Text className="regular small" color={Colors.slate200}>
-              {startDate}
+              {latestExecution?.startTime
+                ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
+                : null}
             </Text>
           </ItemColumn>
         </ItemRow>
