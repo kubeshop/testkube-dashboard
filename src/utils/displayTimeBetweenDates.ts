@@ -6,13 +6,14 @@ interface TimeFormat {
 }
 
 export const displayTimeBetweenDates = (left: Date, right: Date): TimeFormat => {
-  const FEW_SECONDS = 10;
+  const FEW_SECONDS = 30;
   const MINUTE = 60;
-  const HOUR = 60 * 60; // 3600;
-  const TWO_HOURS = 2 * 60 * 60; // 7200;
-  const DAY = 24 * 60 * 60; // 86400;
-  const TWO_DAYS = 2 * 24 * 60 * 60; // 172800;
-  const MONTH = 30 * 24 * 60 * 60; // 2592000;
+  const MINUTE_AND_HALF = 90;
+  const HOUR = 60 * MINUTE; // 3600s;
+  const TWO_HOURS = 2 * HOUR; // 7200s;
+  const DAY = 24 * HOUR; // 86400s;
+  const TWO_DAYS = 2 * DAY; // 172800s;
+  const MONTH = 30 * DAY; // 2592000s;
   const durationInSeconds = differenceInSeconds(left, right);
 
   // future
@@ -37,18 +38,20 @@ export const displayTimeBetweenDates = (left: Date, right: Date): TimeFormat => 
     };
 
   // within the last minute
-  if (durationInSeconds >= FEW_SECONDS && durationInSeconds < MINUTE)
+  if (durationInSeconds >= FEW_SECONDS && durationInSeconds < MINUTE_AND_HALF)
     return {
       long: 'a minute ago',
       short: '1 m',
     };
 
   // within 59 minutes
-  if (MINUTE >= 60 && durationInSeconds < HOUR)
+  if (durationInSeconds >= MINUTE_AND_HALF && durationInSeconds < HOUR) {
+    const value = Math.round(durationInSeconds / MINUTE);
     return {
-      long: `${Math.floor(durationInSeconds / MINUTE)} minutes ago`,
-      short: `${Math.floor(durationInSeconds / MINUTE)} m`,
+      long: value > 1 ? `${value} minutes ago` : '1 minute ago',
+      short: `${value} m`,
     };
+  }
 
   // 1 hour
   if (durationInSeconds >= HOUR && durationInSeconds < TWO_HOURS)
@@ -60,8 +63,8 @@ export const displayTimeBetweenDates = (left: Date, right: Date): TimeFormat => 
   // hours
   if (durationInSeconds >= TWO_HOURS && durationInSeconds < DAY)
     return {
-      long: `${Math.floor(durationInSeconds / HOUR)} hours ago`,
-      short: `${Math.floor(durationInSeconds / HOUR)} h`,
+      long: `${Math.round(durationInSeconds / HOUR)} hours ago`,
+      short: `${Math.round(durationInSeconds / HOUR)} h`,
     };
 
   // day
@@ -74,8 +77,8 @@ export const displayTimeBetweenDates = (left: Date, right: Date): TimeFormat => 
   // days
   if (durationInSeconds >= TWO_DAYS && durationInSeconds < MONTH)
     return {
-      long: `${Math.floor(durationInSeconds / DAY)} days ago`,
-      short: `${Math.floor(durationInSeconds / DAY)} d`,
+      long: `${Math.round(durationInSeconds / DAY)} days ago`,
+      short: `${Math.round(durationInSeconds / DAY)} d`,
     };
 
   return {
