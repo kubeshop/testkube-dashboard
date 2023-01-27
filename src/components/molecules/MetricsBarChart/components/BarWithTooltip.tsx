@@ -6,7 +6,7 @@ import {StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
+import {formatExecutionDate} from '@utils/formatDate';
 
 import Colors, {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 
@@ -65,7 +65,7 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
             Executed
           </Text>
           <Text className="regular small" color={Colors.slate200}>
-            {displayTimeBetweenDates(new Date(), new Date(startTime)).long}
+            {formatExecutionDate(new Date(startTime))}
           </Text>
           <Text className="regular small" color={Colors.slate400}>
             Duration
