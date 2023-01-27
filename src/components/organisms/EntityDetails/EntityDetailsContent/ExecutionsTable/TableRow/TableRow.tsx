@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 
-import {Dropdown, Menu} from 'antd';
+import {Dropdown, Menu, Tooltip} from 'antd';
 
 import {Dots, StatusIcon} from '@atoms';
 
@@ -9,7 +9,7 @@ import {Text} from '@custom-antd';
 import useIsRunning from '@hooks/useIsRunning';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
-import {formatDuration} from '@utils/formatDate';
+import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
@@ -80,8 +80,17 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
               </Text>
             ) : null}
             <Text className="regular small" color={Colors.slate400}>
-              Executed: {displayTimeBetweenDates(new Date(), new Date(startTime)).long}
+              Executed:
             </Text>
+            <Tooltip
+              overlay={<>{formatExecutionDate(new Date(startTime))}</>}
+              placement="bottomRight"
+              color={Colors.slate700}
+            >
+              <Text className="regular small" color={Colors.slate400}>
+                {displayTimeBetweenDates(new Date(), new Date(startTime)).long}
+              </Text>
+            </Tooltip>
           </ItemColumn>
         </ItemRow>
       </DetailsWrapper>
