@@ -11,7 +11,7 @@ type TooltipProps = {
 const Tooltip: React.FC<AntdTooltipProps & TooltipProps> = props => {
   const {customColor, ...rest} = props;
 
-  return <AntdTooltip color={customColor || Colors.greyBG} {...rest} />;
+  return <AntdTooltip color={customColor || Colors.greyBG} mouseEnterDelay={0.39} mouseLeaveDelay={0.1} {...rest} />;
 };
 
 export default Tooltip;

@@ -1,10 +1,11 @@
-import {useContext, useEffect, useRef} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 
 import {initialPageSize} from '@redux/initialState';
 
 import {StatusIcon, TestRunnerIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
+import Tooltip from '@custom-antd/Tooltip';
 
 import {LabelsList, MetricsBarChart} from '@molecules';
 
@@ -13,7 +14,7 @@ import {EntityListContext} from '@organisms/EntityList/EntityListContainer/Entit
 import useInViewport from '@hooks/useInViewport';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
-import {formatDuration} from '@utils/formatDate';
+import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 import {PollingIntervals} from '@utils/numbers';
 
 import Colors from '@styles/Colors';
@@ -61,11 +62,17 @@ const EntityGridItem: React.FC<any> = props => {
             {dataItem?.labels ? <LabelsList labels={dataItem?.labels} /> : null}
           </ItemColumn>
           <ItemColumn>
-            <Text className="regular small" color={Colors.slate200}>
-              {latestExecution?.startTime
-                ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
-                : null}
-            </Text>
+            <Tooltip
+              title={latestExecution?.startTime ? formatExecutionDate(new Date(latestExecution?.startTime)) : null}
+              placement="bottomRight"
+              color={Colors.slate700}
+            >
+              <Text className="regular small" color={Colors.slate200}>
+                {latestExecution?.startTime
+                  ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
+                  : null}
+              </Text>
+            </Tooltip>
           </ItemColumn>
         </ItemRow>
         <ItemRow $flex={1}>
