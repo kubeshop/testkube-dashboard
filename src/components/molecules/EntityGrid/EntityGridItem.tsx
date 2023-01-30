@@ -66,6 +66,8 @@ const EntityGridItem: React.FC<any> = props => {
               title={latestExecution?.startTime ? formatExecutionDate(new Date(latestExecution?.startTime)) : null}
               placement="bottomRight"
               color={Colors.slate700}
+              mouseEnterDelay={0.39}
+              mouseLeaveDelay={0.1}
             >
               <Text className="regular small" color={Colors.slate200}>
                 {latestExecution?.startTime
