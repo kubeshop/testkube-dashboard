@@ -24,6 +24,8 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
+const dummySecret = '******';
+
 const Source = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
 
@@ -51,9 +53,20 @@ const Source = () => {
       };
     }
 
+    const secrets: {token?: string; username?: string} = {};
+
+    if (content?.repository?.tokenSecret) {
+      secrets.token = dummySecret;
+    }
+
+    if (content?.repository?.usernameSecret) {
+      secrets.username = dummySecret;
+    }
+
     return {
       source: content.type,
       ...content.repository,
+      ...secrets,
     };
   };
 

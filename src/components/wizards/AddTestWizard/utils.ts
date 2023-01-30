@@ -117,6 +117,7 @@ export const gitFileFormFields: FormItem[] = [
   },
   {
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    rules: [required],
     fieldName: 'branch',
     required: true,
     inputType: 'default',
@@ -124,6 +125,7 @@ export const gitFileFormFields: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    rules: [required],
     fieldName: 'path',
     required: true,
     inputType: 'default',
@@ -220,8 +222,8 @@ export const getTestSourceSpecificFields = (values: any, isTestSourceCustomGitDi
       uri: values.uri,
       ...(values.path ? {path: values.path} : {}),
       ...(values.branch ? {branch: values.branch} : {}),
-      ...(values.token ? {token: values.token} : {}),
-      ...(values.username ? {username: values.username} : {}),
+      ...(values.token ? (values.token.includes('*') ? {} : {token: values.token}) : {}),
+      ...(values.username ? (values.username.includes('*') ? {} : {username: values.username}) : {}),
     },
   };
 };
