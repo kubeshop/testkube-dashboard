@@ -2,9 +2,9 @@ import React from 'react';
 
 import {Tooltip} from '@custom-antd';
 
-import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
+import {useDownloadFile} from '@hooks/useDownloadFile';
 
-import {StyledCheckOutlined, StyledCopyOutlined} from './CopyButton.styled';
+import {StyledCopyOutlined} from './CopyButton.styled';
 
 type SaveOptions = {
   content: string;
@@ -14,18 +14,18 @@ type SaveOptions = {
 
 const DownloadButton: React.FC<SaveOptions> = props => {
   const {content, onCopy, filename} = props;
-  const {setCopyToClipboardState} = useCopyToClipboard(content, {
+  const {setProcessed} = useDownloadFile(content, {
     filename,
   });
 
-  const handleIconClick = () => {
-    setCopyToClipboardState(true);
+  const onClick = () => {
+    setProcessed(true);
     onCopy?.();
   };
 
   return (
     <Tooltip title="Download">
-      <StyledCopyOutlined onClick={handleIconClick} />
+      <StyledCopyOutlined onClick={onClick} />
     </Tooltip>
   );
 };

@@ -1,6 +1,5 @@
 const useSecureContext = () => {
-  // @ts-ignore
-  return false;
+  return true;
 };
 
 export default useSecureContext;

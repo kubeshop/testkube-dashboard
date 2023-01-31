@@ -1,7 +1,5 @@
 import {useEffect, useState} from 'react';
 
-import {saveAs} from 'file-saver';
-
 import useSecureContext from '@hooks/useSecureContext';
 
 type CopyToClipboardOptions = {
@@ -23,23 +21,11 @@ export const useCopyToClipboard = (textToCopy: string, options: CopyToClipboardO
     }, timeoutInMs);
   };
 
-  const downloadFile = (content: string, filename: string = 'output.sh') => {
-    const blob = URL.createObjectURL(new Blob([content], {type: 'text/plain;charset=utf-8'}));
-    saveAs(blob, filename);
-    return setTimeout(() => {
-      setProcessed(false);
-    }, timeoutInMs);
-  };
-
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
-    if (isProcessed) {
-      if (isSecureContext) {
-        timeout = copyToClipBoard();
-      } else {
-        timeout = downloadFile(textToCopy, options.filename);
-      }
+    if (isProcessed && isSecureContext) {
+      timeout = copyToClipBoard();
     }
 
     return () => {
