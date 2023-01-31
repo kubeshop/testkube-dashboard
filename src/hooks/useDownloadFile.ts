@@ -12,12 +12,21 @@ export const useDownloadFile = (textToCopy: string, options: DownloadOptions) =>
   const downloadFile = (content: string, filename: string = 'output.sh') => {
     const blob = URL.createObjectURL(new Blob([content], {type: 'text/plain;charset=utf-8'}));
     saveAs(blob, filename);
+    return setTimeout(() => {
+      setProcessed(false);
+    }, 3000);
   };
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
     if (isProcessed) {
-      downloadFile(textToCopy, options.filename);
+      timeout = downloadFile(textToCopy, options.filename);
     }
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [isProcessed, window]);
 
   return {isProcessed, setProcessed};
