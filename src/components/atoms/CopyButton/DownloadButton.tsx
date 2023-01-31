@@ -8,24 +8,24 @@ import {StyledCopyOutlined} from './CopyButton.styled';
 
 type SaveOptions = {
   content: string;
-  onCopy?: () => void;
+  onClick?: () => void;
   filename: string;
 };
 
 const DownloadButton: React.FC<SaveOptions> = props => {
-  const {content, onCopy, filename} = props;
+  const {content, onClick, filename} = props;
   const {setProcessed} = useDownloadFile(content, {
     filename,
   });
 
-  const onClick = () => {
+  const onDownloadClick = () => {
     setProcessed(true);
-    onCopy?.();
+    onClick?.();
   };
 
   return (
     <Tooltip title="Download">
-      <StyledCopyOutlined onClick={onClick} />
+      <StyledCopyOutlined onClick={onDownloadClick} />
     </Tooltip>
   );
 };

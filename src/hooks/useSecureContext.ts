@@ -1,5 +1,5 @@
 const useSecureContext = () => {
-  return true;
+  return false;
 };
 
 export default useSecureContext;

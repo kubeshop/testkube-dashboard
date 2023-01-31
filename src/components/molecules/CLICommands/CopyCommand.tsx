@@ -38,7 +38,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
   const {ga4React} = useContext(MainContext);
   const isSecureContext = useSecureContext();
 
-  const onCopy = () => {
+  const onClick = () => {
     if (ga4React) {
       ga4React.gtag('event', 'copy_command', {command: label});
     }
@@ -53,7 +53,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
           </Text>
         </LabelWrapper>
       ) : null}
-      <StyledCopyCommandContainer onClick={onCopy} $bg={bg} $isBordered={isBordered}>
+      <StyledCopyCommandContainer onClick={onClick} $bg={bg} $isBordered={isBordered}>
         <Pre>
           <StyledCopyCommandCode>
             {showDollar ? <span>$</span> : null}
@@ -62,9 +62,9 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
           </StyledCopyCommandCode>
         </Pre>
         {isSecureContext ? (
-          <CopyButton content={command} onCopy={onCopy} />
+          <CopyButton content={command} onClick={onClick} />
         ) : (
-          <DownloadButton filename={filename} content={command} onCopy={onCopy} />
+          <DownloadButton filename={filename} content={command} onClick={onClick} />
         )}
       </StyledCopyCommandContainer>
     </>
