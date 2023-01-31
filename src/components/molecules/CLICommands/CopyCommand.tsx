@@ -4,9 +4,13 @@ import {CopyButton, Pre} from '@atoms';
 
 import {Text} from '@custom-antd';
 
+import useSecureContext from '@hooks/useSecureContext';
+
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
+
+import DownloadButton from '@src/components/atoms/CopyButton/DownloadButton';
 
 import {LabelWrapper, StyledCopyCommandCode, StyledCopyCommandContainer} from './CopyCommand.styled';
 
@@ -23,6 +27,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
   const {command, label, showDollar = true, bg = Colors.slate900, isBordered = false, additionalPrefix} = props;
 
   const {ga4React} = useContext(MainContext);
+  const isSecureContext = useSecureContext();
 
   const onCopy = () => {
     if (ga4React) {
@@ -47,7 +52,11 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
             {command}
           </StyledCopyCommandCode>
         </Pre>
-        <CopyButton content={command} onCopy={onCopy} />
+        {isSecureContext ? (
+          <CopyButton content={command} onCopy={onCopy} />
+        ) : (
+          <DownloadButton content={command} onCopy={onCopy} />
+        )}
       </StyledCopyCommandContainer>
     </>
   );
