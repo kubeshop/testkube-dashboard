@@ -11,17 +11,6 @@ export const constructExecutedString = (duration: Duration, countToDisplay: numb
   let counter = 0;
 
   Object.entries(duration).forEach(([key, value]) => {
-    /* Here we assume that Duration entity has a stable order of fields as said in their docs
-      type Duration = {
-        years?: number
-        months?: number
-        weeks?: number
-        days?: number
-        hours?: number
-        minutes?: number
-        seconds?: number
-      }
-    */
     if (value && counter < countToDisplay) {
       finishString += `${value}${key[0]} `;
       counter += 1;

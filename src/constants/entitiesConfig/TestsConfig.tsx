@@ -50,7 +50,7 @@ export const TestsEntity: EntityListBlueprint = {
   setSelectedRecord: setSelectedTest,
 
   filtersComponentsIds: ['textSearch', 'selector', 'status'],
-  dataTestID: 'add-a-new-test-btn'
+  dataTestID: 'add-a-new-test-btn',
 };
 
 export default TestsEntity;

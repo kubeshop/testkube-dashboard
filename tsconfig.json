@@ -24,5 +24,8 @@
     "src",
     "cypress"
   ],
-  "extends": "./paths.json"
+  "extends": "./paths.json",
+  "exclude": [
+    "**/*.spec.ts"
+  ]
 }

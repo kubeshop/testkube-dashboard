@@ -1,16 +1,15 @@
-import {useMemo} from 'react';
+import React, {useMemo} from 'react';
 
 import {Dropdown, Menu} from 'antd';
 
-import {intervalToDuration} from 'date-fns';
-
 import {Dots, StatusIcon} from '@atoms';
 
-import {Text} from '@custom-antd';
+import {Text, Tooltip} from '@custom-antd';
 
 import useIsRunning from '@hooks/useIsRunning';
 
-import {constructExecutedString, formatDuration} from '@utils/formatDate';
+import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
+import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
@@ -22,20 +21,11 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
 
   const isRunning = useIsRunning(status);
 
-  const getIntervalExecTime = () => {
-    try {
-      return constructExecutedString(intervalToDuration({start: new Date(startTime || {}), end: new Date()}));
-      // eslint-disable-next-line no-empty
-    } catch (err) {}
-  };
-
   const abortExecution = () => {
     if (onAbortExecution) {
       onAbortExecution(id);
     }
   };
-
-  const executedTime = getIntervalExecTime();
 
   const renderExecutionActions = () => {
     let actionsArray = [];
@@ -90,8 +80,19 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
               </Text>
             ) : null}
             <Text className="regular small" color={Colors.slate400}>
-              Executed: {executedTime} ago
+              Executed:
             </Text>
+            <Tooltip
+              overlay={<>{formatExecutionDate(new Date(startTime))}</>}
+              placement="bottomRight"
+              color={Colors.slate700}
+              mouseEnterDelay={0.39}
+              mouseLeaveDelay={0.1}
+            >
+              <Text className="regular small" color={Colors.slate400}>
+                {displayTimeBetweenDates(new Date(), new Date(startTime)).long}
+              </Text>
+            </Tooltip>
           </ItemColumn>
         </ItemRow>
       </DetailsWrapper>

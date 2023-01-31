@@ -1,5 +1,7 @@
-import {Space, Spin, SpinProps} from 'antd';
 import React from 'react';
+
+import {Space, Spin, SpinProps} from 'antd';
+
 import styled from 'styled-components';
 
 interface IStyledSpinnerWrapper extends SpinProps {

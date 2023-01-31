@@ -1,12 +1,11 @@
-import {useContext, useEffect, useRef} from 'react';
-
-import {format} from 'date-fns';
+import React, {useContext, useEffect, useRef} from 'react';
 
 import {initialPageSize} from '@redux/initialState';
 
 import {StatusIcon, TestRunnerIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
+import Tooltip from '@custom-antd/Tooltip';
 
 import {LabelsList, MetricsBarChart} from '@molecules';
 
@@ -14,9 +13,9 @@ import {EntityListContext} from '@organisms/EntityList/EntityListContainer/Entit
 
 import useInViewport from '@hooks/useInViewport';
 
-import {formatDuration} from '@utils/formatDate';
+import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
+import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 import {PollingIntervals} from '@utils/numbers';
-import {executionDateFormat} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
@@ -32,7 +31,6 @@ const EntityGridItem: React.FC<any> = props => {
   const {useGetMetrics, entity, queryFilters, setQueryFilters} = useContext(EntityListContext);
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
-  const startDate = latestExecution?.startTime ? format(new Date(latestExecution?.startTime), executionDateFormat) : '';
 
   const ref = useRef(null);
 
@@ -64,9 +62,19 @@ const EntityGridItem: React.FC<any> = props => {
             {dataItem?.labels ? <LabelsList labels={dataItem?.labels} /> : null}
           </ItemColumn>
           <ItemColumn>
-            <Text className="regular small" color={Colors.slate200}>
-              {startDate}
-            </Text>
+            <Tooltip
+              title={latestExecution?.startTime ? formatExecutionDate(new Date(latestExecution?.startTime)) : null}
+              placement="bottomRight"
+              color={Colors.slate700}
+              mouseEnterDelay={0.39}
+              mouseLeaveDelay={0.1}
+            >
+              <Text className="regular small" color={Colors.slate200}>
+                {latestExecution?.startTime
+                  ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
+                  : null}
+              </Text>
+            </Tooltip>
           </ItemColumn>
         </ItemRow>
         <ItemRow $flex={1}>
