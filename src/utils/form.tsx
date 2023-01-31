@@ -9,7 +9,6 @@ import {UploadWithInput} from '@atoms';
 import {FormItem} from '@custom-antd';
 
 import {LabelsSelect} from '@molecules';
-import VariablesFormList from '@molecules/VariablesFormList';
 
 import {k8sResourceNameRegex} from '@utils/strings';
 
@@ -96,10 +95,6 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
 
     if (inputType === 'textarea') {
       children = <TextArea rows={10} placeholder={placeholder} style={{fontFamily: Fonts.robotoMono}} />;
-    }
-
-    if (inputType === 'variables' && form) {
-      return <VariablesFormList form={form} data={[]} isSaveable={false} />;
     }
 
     if (!children) {

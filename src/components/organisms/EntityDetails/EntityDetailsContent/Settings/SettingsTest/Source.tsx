@@ -1,21 +1,28 @@
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 
-import {Form, Select} from 'antd';
+import {Form, Input, Select} from 'antd';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
+import {FormItem, Text} from '@custom-antd';
+
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {additionalFields} from '@wizards/AddTestWizard/steps/FirstStep';
 import {
+  customTypeFormFields,
+  fileContentFormFields,
   getTestSourceSpecificFields,
+  gitFormFieldsEdit,
   onFileChange,
   remapTestSources,
+  stringContentFormFields,
   testSourceBaseOptions,
 } from '@wizards/AddTestWizard/utils';
 
 import {renderFormItems, required} from '@utils/form';
+
+import Colors from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -25,6 +32,14 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 const dummySecret = '******';
+
+const additionalFields: any = {
+  'git-dir': gitFormFieldsEdit,
+  'git-file': gitFormFieldsEdit,
+  'file-uri': fileContentFormFields,
+  custom: customTypeFormFields,
+  string: stringContentFormFields,
+};
 
 const Source = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
@@ -55,11 +70,11 @@ const Source = () => {
 
     const secrets: {token?: string; username?: string} = {};
 
-    if (content?.repository?.tokenSecret) {
+    if (content?.repository?.tokenSecret?.name) {
       secrets.token = dummySecret;
     }
 
-    if (content?.repository?.usernameSecret) {
+    if (content?.repository?.usernameSecret?.name) {
       secrets.username = dummySecret;
     }
 
@@ -77,6 +92,9 @@ const Source = () => {
   const sourcesOptions = [...remappedCustomTestSources, ...testSourceBaseOptions];
 
   const [updateTest] = useUpdateTestMutation();
+
+  const [clearedToken, setClearedToken] = useState(!additionalFormValues.token);
+  const [clearedUsername, setClearedUsername] = useState(!additionalFormValues.username);
 
   const onSave = (values: any) => {
     const {testSource} = values;
@@ -140,6 +158,8 @@ const Source = () => {
         }}
         onCancel={() => {
           form.resetFields();
+          setClearedUsername(!additionalFormValues.username);
+          setClearedToken(!additionalFormValues.token);
         }}
         footerText={
           <>
@@ -151,6 +171,9 @@ const Source = () => {
               test sources
             </a>
           </>
+        }
+        forceEnableButtons={
+          (clearedToken && additionalFormValues.token) || (clearedUsername && additionalFormValues.token)
         }
       >
         <StyledSpace size={24} direction="vertical">
@@ -173,6 +196,62 @@ const Source = () => {
                       onFileChange: file => onFileChange(file, form),
                     })}
                   </StyledSpace>
+                );
+              }
+            }}
+          </Form.Item>
+          <Form.Item noStyle shouldUpdate>
+            {({setFieldValue, getFieldValue}) => {
+              const testSourceValue: string = getFieldValue('testSource');
+
+              if (testSourceValue === 'git-dir' || testSourceValue === 'git-file') {
+                return (
+                  <>
+                    <FormItem name="token" label="Git Token">
+                      <Input.Password placeholder="Git Token" disabled={!clearedToken} />
+                    </FormItem>
+                    {!clearedToken ? (
+                      <Text
+                        style={{cursor: 'pointer', marginTop: '5px'}}
+                        className="middle regular"
+                        color={Colors.indigo400}
+                        onClick={() => {
+                          setFieldValue('token', '');
+                          setClearedToken(true);
+                        }}
+                      >
+                        Remove this token
+                      </Text>
+                    ) : null}
+                  </>
+                );
+              }
+            }}
+          </Form.Item>
+          <Form.Item noStyle shouldUpdate>
+            {({setFieldValue, getFieldValue}) => {
+              const testSourceValue: string = getFieldValue('testSource');
+
+              if (testSourceValue === 'git-dir' || testSourceValue === 'git-file') {
+                return (
+                  <>
+                    <FormItem name="username" label="Git Username">
+                      <Input.Password placeholder="Git Username" disabled={!clearedUsername} />
+                    </FormItem>
+                    {!clearedUsername ? (
+                      <Text
+                        style={{cursor: 'pointer', marginTop: '5px'}}
+                        className="middle regular"
+                        color={Colors.indigo400}
+                        onClick={() => {
+                          setFieldValue('username', '');
+                          setClearedUsername(true);
+                        }}
+                      >
+                        Remove username
+                      </Text>
+                    ) : null}
+                  </>
                 );
               }
             }}

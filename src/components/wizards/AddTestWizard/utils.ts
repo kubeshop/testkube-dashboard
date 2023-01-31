@@ -149,6 +149,34 @@ export const gitFileFormFields: FormItem[] = [
   },
 ];
 
+export const gitFormFieldsEdit: FormItem[] = [
+  {
+    rules: [required, url],
+    required: true,
+    fieldName: 'uri',
+    inputType: 'default',
+    placeholder: 'e.g.: https://github.com/myCompany/myRepo.git',
+    itemLabel: 'Git repository URI',
+  },
+  {
+    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    rules: [required],
+    fieldName: 'branch',
+    required: true,
+    inputType: 'default',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
+  },
+  {
+    rules: [required],
+    fieldName: 'path',
+    required: true,
+    inputType: 'default',
+    placeholder: 'e.g.: /tests/cypress',
+    itemLabel: 'Path',
+  },
+];
+
 export const fileContentFormFields: FormItem[] = [
   {
     rules: [required],
@@ -215,6 +243,28 @@ export const getTestSourceSpecificFields = (values: any, isTestSourceCustomGitDi
     return {data: values.string || values.file.fileContent, repository: {}};
   }
 
+  const secrets = (() => {
+    const result: any = {};
+
+    if (values.token !== undefined && values.token !== null) {
+      if (values.token === '') {
+        result.tokenSecret = {};
+      } else if (!values.token.includes('*')) {
+        result.token = values.token;
+      }
+    }
+
+    if (values.username !== undefined) {
+      if (values.username === '') {
+        result.usernameSecret = {};
+      } else if (!values.username.includes('*')) {
+        result.username = values.username;
+      }
+    }
+
+    return result;
+  })();
+
   return {
     data: '',
     repository: {
@@ -222,8 +272,7 @@ export const getTestSourceSpecificFields = (values: any, isTestSourceCustomGitDi
       uri: values.uri,
       ...(values.path ? {path: values.path} : {}),
       ...(values.branch ? {branch: values.branch} : {}),
-      ...(values.token ? (values.token.includes('*') ? {} : {token: values.token}) : {}),
-      ...(values.username ? (values.username.includes('*') ? {} : {username: values.username}) : {}),
+      ...secrets,
     },
   };
 };
