@@ -2,8 +2,6 @@ import {useEffect, useState} from 'react';
 
 import {saveAs} from 'file-saver';
 
-import Timeout from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral/Timeout';
-
 import useSecureContext from '@hooks/useSecureContext';
 
 type CopyToClipboardOptions = {
@@ -15,36 +13,39 @@ type CopyToClipboardOptions = {
 export const useCopyToClipboard = (textToCopy: string, options: CopyToClipboardOptions = {timeoutInMs: 2000}) => {
   const {timeoutInMs} = options;
 
-  const [isCopied, setCopyToClipboardState] = useState(false);
+  const [isProcessed, setProcessed] = useState(false);
   const isSecureContext = useSecureContext();
 
   const copyToClipBoard = () => {
     navigator.clipboard.writeText(textToCopy);
     return setTimeout(() => {
-      setCopyToClipboardState(false);
+      setProcessed(false);
     }, timeoutInMs);
   };
 
-  const downloadFile = (content: string) => {
+  const downloadFile = (content: string, filename: string = 'output.sh') => {
     const blob = URL.createObjectURL(new Blob([content], {type: 'text/plain;charset=utf-8'}));
-    saveAs(blob, 'output.log');
+    saveAs(blob, filename);
+    return setTimeout(() => {
+      setProcessed(false);
+    }, timeoutInMs);
   };
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
-    if (isCopied) {
+    if (isProcessed) {
       if (isSecureContext) {
         timeout = copyToClipBoard();
       } else {
-        downloadFile(textToCopy);
+        timeout = downloadFile(textToCopy, options.filename);
       }
     }
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [isCopied]);
+  }, [isProcessed, window]);
 
-  return {isCopied, setCopyToClipboardState};
+  return {isCopied: isProcessed, setCopyToClipboardState: setProcessed};
 };

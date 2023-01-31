@@ -6,9 +6,17 @@ import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
 import {StyledCheckOutlined, StyledCopyOutlined} from './CopyButton.styled';
 
-const DownloadButton: React.FC<{content: string; onCopy?: () => void}> = props => {
-  const {content, onCopy} = props;
-  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(content);
+type SaveOptions = {
+  content: string;
+  onCopy?: () => void;
+  filename: string;
+};
+
+const DownloadButton: React.FC<SaveOptions> = props => {
+  const {content, onCopy, filename} = props;
+  const {setCopyToClipboardState} = useCopyToClipboard(content, {
+    filename,
+  });
 
   const handleIconClick = () => {
     setCopyToClipboardState(true);
@@ -17,7 +25,7 @@ const DownloadButton: React.FC<{content: string; onCopy?: () => void}> = props =
 
   return (
     <Tooltip title="Download">
-      {isCopied ? <StyledCheckOutlined onClick={handleIconClick} /> : <StyledCopyOutlined onClick={handleIconClick} />}
+      <StyledCopyOutlined onClick={handleIconClick} />
     </Tooltip>
   );
 };

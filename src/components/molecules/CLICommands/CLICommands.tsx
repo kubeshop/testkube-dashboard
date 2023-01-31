@@ -1,4 +1,4 @@
-import {useContext, useMemo} from 'react';
+import React, {useContext, useMemo} from 'react';
 
 import {Entity} from '@models/entity';
 import {ExecutionStatusEnum} from '@models/execution';
@@ -16,6 +16,7 @@ type CLIScriptModifier = 'isFinished' | 'canHaveArtifacts';
 type CLIScript = {
   label: string;
   command: (name: string) => string;
+  filename?: string;
   modify?: CLIScriptModifier;
 };
 
@@ -36,10 +37,12 @@ const testSuiteScripts: CLIScript[] = [
   {
     label: 'Run test suite',
     command: (name: string) => `kubectl testkube run testsuite ${name}`,
+    filename: 'run-test-suite.sh',
   },
   {
     label: 'Delete test suite',
     command: (name: string) => `kubectl testkube delete testsuite ${name}`,
+    filename: 'delete-test-suite.sh',
   },
 ];
 
@@ -47,18 +50,22 @@ const testScripts: CLIScript[] = [
   {
     label: 'Run test',
     command: (name: string) => `kubectl testkube run test ${name}`,
+    filename: 'run-test.sh',
   },
   {
     label: 'Get test',
     command: (name: string) => `kubectl testkube get test ${name}`,
+    filename: 'get-test.sh',
   },
   {
     label: 'List executions',
     command: (name: string) => `kubectl testkube get executions --test ${name}`,
+    filename: 'list-executions.sh',
   },
   {
     label: 'Delete test',
     command: (name: string) => `kubectl testkube delete test ${name}`,
+    filename: 'delete-executions.sh',
   },
 ];
 
@@ -66,16 +73,17 @@ const executionsScripts: CLIScript[] = [
   {
     label: 'Get execution',
     command: (name: string) => `kubectl testkube get execution ${name}`,
+    filename: 'get-executions.sh',
   },
   {
     label: 'Watch execution',
     command: (name: string) => `kubectl testkube watch execution ${name}`,
-    modify: 'isFinished',
+    filename: 'watch-executions.sh',
   },
   {
     label: 'Download artifacts',
     command: (name: string) => `kubectl testkube download artifacts ${name}`,
-    modify: 'canHaveArtifacts',
+    filename: 'download-artifacts.sh',
   },
 ];
 
@@ -130,7 +138,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
 
       const commandString = command(testTarget);
 
-      return <CopyCommand key={label} command={commandString} label={label} bg={bg} />;
+      return <CopyCommand key={label} filename={cliCommand.filename} command={commandString} label={label} bg={bg} />;
     }).filter(cliCommand => cliCommand);
   }, [id, name, type, modifyMap]);
 

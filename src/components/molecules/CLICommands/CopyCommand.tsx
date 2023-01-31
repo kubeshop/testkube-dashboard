@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import React, {useContext} from 'react';
 
 import {CopyButton, Pre} from '@atoms';
 
@@ -15,16 +15,25 @@ import DownloadButton from '@src/components/atoms/CopyButton/DownloadButton';
 import {LabelWrapper, StyledCopyCommandCode, StyledCopyCommandContainer} from './CopyCommand.styled';
 
 type CopyCommandProps = {
+  additionalPrefix?: string;
+  bg?: string;
   command: string;
+  filename?: string;
+  isBordered?: boolean;
   label?: string;
   showDollar?: boolean;
-  bg?: string;
-  isBordered?: boolean;
-  additionalPrefix?: string;
 };
 
 const CopyCommand: React.FC<CopyCommandProps> = props => {
-  const {command, label, showDollar = true, bg = Colors.slate900, isBordered = false, additionalPrefix} = props;
+  const {
+    command,
+    filename = 'command.sh',
+    label,
+    showDollar = true,
+    bg = Colors.slate900,
+    isBordered = false,
+    additionalPrefix,
+  } = props;
 
   const {ga4React} = useContext(MainContext);
   const isSecureContext = useSecureContext();
@@ -55,7 +64,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
         {isSecureContext ? (
           <CopyButton content={command} onCopy={onCopy} />
         ) : (
-          <DownloadButton content={command} onCopy={onCopy} />
+          <DownloadButton filename={filename} content={command} onCopy={onCopy} />
         )}
       </StyledCopyCommandContainer>
     </>
