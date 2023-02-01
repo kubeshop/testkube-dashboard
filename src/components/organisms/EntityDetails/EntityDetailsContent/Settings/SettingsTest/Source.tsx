@@ -20,14 +20,15 @@ import {
   testSourceBaseOptions,
 } from '@wizards/AddTestWizard/utils';
 
+import {openTestSource} from '@utils/externalLinks';
 import {renderFormItems, required} from '@utils/form';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+
+import {useUpdateTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
-
-import {useUpdateTestMutation} from '@src/services/tests';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
@@ -164,10 +165,7 @@ const Source = () => {
         footerText={
           <>
             Learn more about{' '}
-            <a
-              href="https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/#test-source"
-              target="_blank"
-            >
+            <a href={openTestSource} target="_blank">
               test sources
             </a>
           </>
