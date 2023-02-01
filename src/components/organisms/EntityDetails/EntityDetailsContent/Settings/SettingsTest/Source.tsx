@@ -20,7 +20,7 @@ import {
   testSourceBaseOptions,
 } from '@wizards/AddTestWizard/utils';
 
-import {openTestSource} from '@utils/externalLinks';
+import {testSourceLink} from '@utils/externalLinks';
 import {renderFormItems, required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -165,7 +165,7 @@ const Source = () => {
         footerText={
           <>
             Learn more about{' '}
-            <a href={openTestSource} target="_blank">
+            <a href={testSourceLink} target="_blank">
               test sources
             </a>
           </>
