@@ -10,7 +10,7 @@ import {Button, Text} from '@custom-antd';
 
 import {LabelsSelect} from '@molecules';
 
-import {required} from '@utils/form';
+import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
@@ -81,7 +81,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
     >
       <StyledFormSpace size={24} direction="vertical">
         <Text className="regular big">Test suite details</Text>
-        <StyledFormItem name="name" rules={[required]}>
+        <StyledFormItem name="name" rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}>
           <Input placeholder="Name" />
         </StyledFormItem>
         <StyledFormItem name="description">
