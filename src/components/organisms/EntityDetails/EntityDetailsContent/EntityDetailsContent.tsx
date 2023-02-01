@@ -13,7 +13,7 @@ import {TestRunnerIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
-import {CLICommands, LabelsList} from '@molecules';
+import {CLICommands, LabelsList, MetricsBarChart} from '@molecules';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
@@ -141,6 +141,12 @@ const EntityDetailsContent: React.FC = () => {
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} isRowSelected={isRowSelected} /> : null}
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Recent executions" key="Executions" disabled={isPageDisabled}>
+          <MetricsBarChart
+            data={metrics?.executions}
+            isDetailsView
+            executionDurationP50ms={metrics?.executionDurationP50ms}
+            executionDurationP95ms={metrics?.executionDurationP95ms}
+          />
           <ExecutionsTable triggerRun={onRunButtonClick} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="CLI Commands" key="CLICommands" disabled={isPageDisabled}>
