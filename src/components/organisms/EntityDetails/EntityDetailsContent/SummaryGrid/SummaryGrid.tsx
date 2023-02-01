@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Metrics} from '@models/metrics';
 
-import {Title, Tooltip} from '@custom-antd';
+import {Title} from '@custom-antd';
 
 import {formatDuration} from '@utils/formatDate';
 
@@ -16,7 +16,7 @@ type SummaryGridProps = {
 };
 
 const SummaryGrid: React.FC<SummaryGridProps> = props => {
-  const {metrics} = props;
+  const {metrics, isRowSelected} = props;
 
   return (
     <>
