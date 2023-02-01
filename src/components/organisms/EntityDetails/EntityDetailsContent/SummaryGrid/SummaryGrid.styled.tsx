@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {StyledText} from '@custom-antd/Typography/Text/Text.styled';
+
 import Colors from '@styles/Colors';
 
 export const SummaryGridWrapper = styled.div`
@@ -20,8 +22,16 @@ export const SummaryGridWrapper = styled.div`
   }
 `;
 
+export const CustomText = styled(StyledText)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: ${({$color}) => $color};
+`;
+
 export const SummaryGridItem = styled.div`
-  display: flex;
+  display: inline-flex;
+  overflow: hidden;
   flex-direction: column;
   justify-content: space-between;
   white-space: nowrap;
