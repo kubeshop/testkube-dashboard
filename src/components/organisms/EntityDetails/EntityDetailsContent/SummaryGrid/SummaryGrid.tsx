@@ -1,8 +1,8 @@
+import React from 'react';
+
 import {Metrics} from '@models/metrics';
 
 import {Text, Title} from '@custom-antd';
-
-import {MetricsBarChart} from '@molecules';
 
 import {formatDuration} from '@utils/formatDate';
 
