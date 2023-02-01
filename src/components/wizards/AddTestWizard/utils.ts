@@ -1,3 +1,6 @@
+import {FormInstance} from 'antd';
+import {UploadChangeParam} from 'antd/lib/upload';
+
 import {Executor} from '@models/executors';
 import {FormItem, Option} from '@models/form';
 import {SourceWithRepository} from '@models/sources';
@@ -13,6 +16,13 @@ export const addTestSteps: Step[] = [
   {title: 'Test Details', description: 'Enter test information.'},
   {title: 'Add Variables', description: 'Reuse values.'},
   {title: 'Done', description: 'Save or run your test.'},
+];
+
+export const testSourceBaseOptions: Option[] = [
+  {value: 'git-dir', label: 'Git directory'},
+  {value: 'git-file', label: 'Git file'},
+  {value: 'file-uri', label: 'File'},
+  {value: 'string', label: 'String'},
 ];
 
 export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
@@ -47,13 +57,7 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
     rules: [required],
     fieldName: 'testSource',
     inputType: 'select',
-    options: [
-      ...customTestSources,
-      {value: 'git-dir', label: 'Git directory'},
-      {value: 'git-file', label: 'Git file'},
-      {value: 'file-uri', label: 'File'},
-      {value: 'string', label: 'String'},
-    ],
+    options: [...customTestSources, ...testSourceBaseOptions],
     placeholder: 'Source',
     dataTest: 'test-creation_type_source_option',
     itemLabel: 'Test Source',
@@ -63,80 +67,124 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
 
 export const gitDirFormFields: FormItem[] = [
   {
+    rules: [required, url],
+    required: true,
+    fieldName: 'uri',
+    inputType: 'default',
+    placeholder: 'e.g.: https://github.com/myCompany/myRepo.git',
+    itemLabel: 'Git repository URI',
+  },
+  {
+    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    fieldName: 'branch',
+    required: true,
+    inputType: 'default',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
+  },
+  {
+    fieldName: 'path',
+    required: true,
+    inputType: 'default',
+    placeholder: 'e.g.: /tests/cypress',
+    itemLabel: 'Path',
+  },
+  {
     // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
     placeholder: 'Git Token',
-    itemLabel: ' ',
+    itemLabel: 'Git Token',
   },
   {
     // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'username',
     inputType: 'default',
-    placeholder: 'Git Username',
-    itemLabel: ' ',
-  },
-  {
-    rules: [required, url],
-    fieldName: 'uri',
-    inputType: 'default',
-    placeholder: 'URI',
-  },
-  {
-    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
-    fieldName: 'branch',
-    inputType: 'default',
-    placeholder: 'Branch',
-  },
-  {
-    fieldName: 'path',
-    inputType: 'default',
-    placeholder: 'Path',
+    placeholder: 'Your username',
+    itemLabel: 'Git username',
   },
 ];
 
 export const gitFileFormFields: FormItem[] = [
   {
+    rules: [required, url],
+    required: true,
+    fieldName: 'uri',
+    inputType: 'default',
+    placeholder: 'e.g.: https://github.com/myCompany/myRepo.git',
+    itemLabel: 'Git repository URI',
+  },
+  {
+    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    rules: [required],
+    fieldName: 'branch',
+    required: true,
+    inputType: 'default',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
+  },
+  {
+    rules: [required],
+    fieldName: 'path',
+    required: true,
+    inputType: 'default',
+    placeholder: 'e.g.: /tests/cypress',
+    itemLabel: 'Path',
+  },
+  {
     // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
     placeholder: 'Git Token',
-    itemLabel: ' ',
+    itemLabel: 'Git Token',
   },
   {
     // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'username',
     inputType: 'default',
-    placeholder: 'Git Username',
-    itemLabel: ' ',
+    placeholder: 'Your username',
+    itemLabel: 'Git username',
   },
+];
+
+export const gitFormFieldsEdit: FormItem[] = [
   {
     rules: [required, url],
+    required: true,
     fieldName: 'uri',
     inputType: 'default',
-    placeholder: 'URI',
+    placeholder: 'e.g.: https://github.com/myCompany/myRepo.git',
+    itemLabel: 'Git repository URI',
   },
   {
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    rules: [required],
     fieldName: 'branch',
+    required: true,
     inputType: 'default',
-    placeholder: 'Branch',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
   },
   {
+    rules: [required],
     fieldName: 'path',
+    required: true,
     inputType: 'default',
-    placeholder: 'Path',
+    placeholder: 'e.g.: /tests/cypress',
+    itemLabel: 'Path',
   },
 ];
 
 export const fileContentFormFields: FormItem[] = [
   {
     rules: [required],
+    required: true,
     fieldName: 'file',
     inputType: 'uploadWithInput',
     placeholder: 'File',
+    itemLabel: 'File',
   },
 ];
 
@@ -145,12 +193,14 @@ export const customTypeFormFields: FormItem[] = [
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
     inputType: 'default',
-    placeholder: 'Branch',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
   },
   {
     fieldName: 'path',
     inputType: 'default',
-    placeholder: 'Path',
+    placeholder: 'e.g.: /tests/cypress',
+    itemLabel: 'Path',
   },
 ];
 
@@ -158,8 +208,10 @@ export const stringContentFormFields: FormItem[] = [
   {
     rules: [required],
     fieldName: 'string',
+    required: true,
     inputType: 'textarea',
     placeholder: 'String',
+    itemLabel: 'String',
   },
 ];
 
@@ -173,46 +225,54 @@ export const secondStepFormFields: FormItem[] = [
 
 export const optionalFields = ['token', 'branch', 'path'];
 
-export const getTestSourceSpecificFields = (
-  values: any,
-  isTestSourceCustomGitDir?: boolean,
-  customTestSources?: SourceWithRepository[]
-) => {
+export const getTestSourceSpecificFields = (values: any, isTestSourceCustomGitDir?: boolean) => {
   const {testSource} = values;
 
-  if (isTestSourceCustomGitDir && customTestSources && customTestSources.length) {
-    const targetCustomTestSource = customTestSources.filter(source => {
-      return source.name === testSource.replace('custom-git-dir-', '');
-    })[0];
-
+  if (isTestSourceCustomGitDir) {
     return {
       repository: {
-        type: 'git-dir',
-        uri: targetCustomTestSource.repository.uri,
         ...(values.path ? {path: values.path} : {}),
         ...(values.branch ? {branch: values.branch} : {}),
-        ...(targetCustomTestSource.repository.tokenSecret?.name
-          ? {token: targetCustomTestSource.repository.tokenSecret?.name}
-          : {}),
-        ...(targetCustomTestSource.repository.usernameSecret?.name
-          ? {username: targetCustomTestSource.repository.usernameSecret?.name}
-          : {}),
+        uri: '',
+        type: '',
       },
     };
   }
 
   if (testSource === 'string' || testSource === 'file-uri') {
-    return {data: values.string || values.file.fileContent};
+    return {data: values.string || values.file.fileContent, repository: {}};
   }
 
+  const secrets = (() => {
+    const result: any = {};
+
+    if (values.token !== undefined && values.token !== null) {
+      if (values.token === '') {
+        result.tokenSecret = {};
+      } else if (!values.token.includes('*')) {
+        result.token = values.token;
+      }
+    }
+
+    if (values.username !== undefined) {
+      if (values.username === '') {
+        result.usernameSecret = {};
+      } else if (!values.username.includes('*')) {
+        result.username = values.username;
+      }
+    }
+
+    return result;
+  })();
+
   return {
+    data: '',
     repository: {
-      type: testSource,
+      type: 'git',
       uri: values.uri,
       ...(values.path ? {path: values.path} : {}),
       ...(values.branch ? {branch: values.branch} : {}),
-      ...(values.token ? {token: values.token} : {}),
-      ...(values.username ? {username: values.username} : {}),
+      ...secrets,
     },
   };
 };
@@ -251,11 +311,43 @@ export const remapTestSources = (testSources: SourceWithRepository[]) => {
   testSources.forEach(source => {
     const {name} = source;
 
-    const optionValue = `custom-git-dir-${name}`;
+    const optionValue = `$custom-git-dir-${name}`;
     const optionName = `Git source: ${name}`;
 
     array.push({value: optionValue, label: optionName});
   });
 
   return array;
+};
+
+export const onFileChange = (file: Nullable<UploadChangeParam>, form: FormInstance) => {
+  if (!file) {
+    form.setFieldsValue({
+      file: null,
+    });
+
+    form.validateFields(['file']);
+  } else {
+    const readFile = new FileReader();
+
+    readFile.onload = e => {
+      if (e && e.target) {
+        const fileContent = e.target.result;
+
+        if (fileContent) {
+          form.setFieldsValue({
+            file: {
+              fileContent: fileContent as string,
+              fileName: file.file.name,
+            },
+          });
+
+          form.validateFields(['file']);
+        }
+      }
+    };
+
+    // @ts-ignore
+    readFile.readAsText(file.file);
+  }
 };

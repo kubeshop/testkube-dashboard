@@ -11,17 +11,18 @@ import {EntityDetailsContext, MainContext} from '@contexts';
 
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
 import General from './SettingsGeneral';
+import SettingsTest from './SettingsTest';
 import SettingsTests from './SettingsTests';
 import SettingsVariables from './SettingsVariables';
 
 const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
   'test-suites': [<General />, <SettingsTests />, <SettingsVariables />, <SettingsDefinition />],
-  tests: [<General />, <SettingsVariables />, <SettingsDefinition />],
+  tests: [<General />, <SettingsTest />, <SettingsVariables />, <SettingsDefinition />],
 };
 
 const navigationOptionsConfig: {[key in Entity]: string[]} = {
   'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Definition'],
-  tests: ['General', 'Variables & Secrets', 'Definition'],
+  tests: ['General', 'Test', 'Variables & Secrets', 'Definition'],
 };
 
 const Settings: React.FC = () => {

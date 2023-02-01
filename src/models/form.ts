@@ -16,4 +16,5 @@ export type FormItem = {
   modificator?: 'password';
   help?: string;
   placeholder?: string;
+  required?: boolean;
 };
