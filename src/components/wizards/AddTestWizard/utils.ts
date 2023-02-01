@@ -3,7 +3,7 @@ import {FormItem, Option} from '@models/form';
 import {SourceWithRepository} from '@models/sources';
 import {Step} from '@models/wizard';
 
-import {required, url} from '@utils/form';
+import {k8sResourceNameMaxLength, k8sResourceNamePattern, required, url} from '@utils/form';
 
 import FirstStepHint from './hints/FirstStepHint';
 import SecondStepHint from './hints/SecondStepHint';
@@ -20,7 +20,7 @@ export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 export const addTestFormStructure = (options: Option[], customTestSources: Option[] = []) => [
   {
     // tooltip: 'Enter the name of the test you wish to add.',
-    rules: [required],
+    rules: [required, k8sResourceNamePattern, k8sResourceNameMaxLength],
     fieldName: 'name',
     inputType: 'default',
     placeholder: 'Name',
