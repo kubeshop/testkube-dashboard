@@ -12,11 +12,10 @@ import {CustomText, SummaryGridItem, SummaryGridWrapper} from './SummaryGrid.sty
 
 type SummaryGridProps = {
   metrics: Metrics;
-  isRowSelected: boolean;
 };
 
 const SummaryGrid: React.FC<SummaryGridProps> = props => {
-  const {metrics, isRowSelected} = props;
+  const {metrics} = props;
 
   return (
     <>
