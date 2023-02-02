@@ -6,6 +6,8 @@ import {Tabs} from 'antd';
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
+import useLocation from '@hooks/useLocation';
+
 import {useGetSourceDetailsQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
@@ -18,7 +20,7 @@ const SourceDetails = () => {
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);
 
-  const name = location.pathname.split('/')[2];
+  const name = useLocation().lastPathSegment;
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 

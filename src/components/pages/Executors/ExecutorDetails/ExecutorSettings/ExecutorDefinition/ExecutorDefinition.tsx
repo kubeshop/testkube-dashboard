@@ -10,7 +10,7 @@ import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
-import useQueryParams from '@hooks/useQueryParams';
+import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
 const ExecutorDefinition = () => {
@@ -18,7 +18,7 @@ const ExecutorDefinition = () => {
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
   const isSecureContext = useSecureContext();
-  const filename = useQueryParams().lastPathSegment;
+  const filename = useLocation().lastPathSegment;
 
   const name = executor?.name;
 

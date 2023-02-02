@@ -6,7 +6,8 @@ import {Tabs} from 'antd';
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executorsSlice';
 
-// import {Button} from '@custom-antd';
+import useLocation from '@hooks/useLocation';
+
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
 import {MainContext} from '@contexts';
@@ -19,7 +20,7 @@ const ExecutorDetails = () => {
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
 
-  const name = location.pathname.split('/')[2];
+  const name = useLocation().lastPathSegment;
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
@@ -42,16 +43,7 @@ const ExecutorDetails = () => {
       <Helmet>
         <title>{`${name} | Executors | Testkube`}</title>
       </Helmet>
-      <StyledPageHeader
-        onBack={() => navigate('/executors')}
-        title={name}
-        // extra={[
-        //   <Button key="create-test-button" type="primary">
-        //     Create a new test
-        //   </Button>,
-        // ]}
-        className="testkube-pageheader"
-      />
+      <StyledPageHeader onBack={() => navigate('/executors')} title={name} className="testkube-pageheader" />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
           {currentExecutorDetails ? <ExecutorSettings /> : null}

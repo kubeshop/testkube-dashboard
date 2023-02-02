@@ -7,7 +7,7 @@ import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition} from '@molecules';
 
-import useQueryParams from '@hooks/useQueryParams';
+import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
 import {EntityDetailsContext} from '@contexts';
@@ -22,7 +22,7 @@ const SettingsDefinition: React.FC = () => {
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
   const isSecureContext = useSecureContext();
-  const filename = useQueryParams().lastPathSegment;
+  const filename = useLocation().lastPathSegment;
 
   const onGetTestCRD = async () => {
     setLoading(true);

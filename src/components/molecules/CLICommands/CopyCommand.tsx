@@ -4,7 +4,7 @@ import {CopyButton, Pre} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import useQueryParams from '@hooks/useQueryParams';
+import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
 import Colors from '@styles/Colors';
@@ -29,7 +29,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
 
   const {ga4React} = useContext(MainContext);
   const isSecureContext = useSecureContext();
-  const filename = useQueryParams().lastPathSegment;
+  const filename = useLocation().lastPathSegment;
 
   const onClick = () => {
     if (ga4React) {

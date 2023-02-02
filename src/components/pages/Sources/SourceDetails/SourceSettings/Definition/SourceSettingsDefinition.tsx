@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {useParams} from 'react-router';
 
 import axios from 'axios';
 
@@ -10,7 +11,7 @@ import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
-import useQueryParams from '@hooks/useQueryParams';
+import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
 const SourceSettingsDefinition = () => {
@@ -18,7 +19,8 @@ const SourceSettingsDefinition = () => {
   const isSecureContext = useSecureContext();
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const filename = useQueryParams().lastPathSegment;
+  const filename = useLocation().lastPathSegment;
+  const params = useParams();
   const name = source?.name;
 
   const onGetSourceCRD = async () => {

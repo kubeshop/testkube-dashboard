@@ -7,7 +7,7 @@ import {LogAction} from '@models/log';
 import {CopyButton} from '@atoms';
 import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
-import useQueryParams from '@hooks/useQueryParams';
+import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
@@ -21,7 +21,7 @@ type LogOutputActionsProps = {
 const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
   const {logOutput, actions} = props;
   const isSecureContext = useSecureContext();
-  const filename = useQueryParams().lastPathSegment;
+  const filename = useLocation().lastPathSegment;
 
   const logOutputActionsMap: {[key in LogAction]: any} = {
     copy: isSecureContext ? (
