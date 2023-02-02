@@ -4,7 +4,7 @@ import {Tooltip} from '@custom-antd';
 
 import {useDownloadFile} from '@hooks/useDownloadFile';
 
-import {StyledCopyOutlined} from './DownloadButton.styled';
+import {StyledCopyOutlined, StyledDownloadOutlined} from './DownloadButton.styled';
 
 type SaveOptions = {
   content: string;
@@ -25,7 +25,7 @@ const DownloadButton: React.FC<SaveOptions> = props => {
 
   return (
     <Tooltip title="Download">
-      <StyledCopyOutlined onClick={onDownloadClick} />
+      <StyledDownloadOutlined onClick={onDownloadClick} />
     </Tooltip>
   );
 };
