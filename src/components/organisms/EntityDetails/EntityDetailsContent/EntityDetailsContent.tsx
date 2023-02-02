@@ -138,7 +138,7 @@ const EntityDetailsContent: React.FC = () => {
           </Text>
         ) : null}
       </StyledPageHeader>
-      {!isMetricsEmpty ? <SummaryGrid metrics={metrics} isRowSelected={isRowSelected} /> : null}
+      {!isMetricsEmpty ? <SummaryGrid metrics={metrics} /> : null}
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Recent executions" key="Executions" disabled={isPageDisabled}>
           <MetricsBarChart
