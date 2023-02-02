@@ -19,12 +19,6 @@ const SourceSettingsDefinition = () => {
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
-
-  const onCopyClick = () => {
-    setCopyToClipboardState(true);
-  };
-
   const name = source?.name;
 
   const onGetSourceCRD = async () => {
@@ -53,12 +47,7 @@ const SourceSettingsDefinition = () => {
   }, [name]);
 
   return (
-    <ConfigurationCard
-      title="Definition"
-      description="Validate and export your source configuration"
-      onConfirm={onCopyClick}
-      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
-    >
+    <ConfigurationCard title="Definition" description="Validate and export your source configuration">
       {definition ? (
         <DefinitionContent content={definition}>
           {isSecureContext ? (

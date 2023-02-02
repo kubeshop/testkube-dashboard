@@ -24,6 +24,7 @@ type ConfigurationCardProps = {
   confirmButtonText?: string;
   onCancel?: () => void;
   isButtonsDisabled?: boolean;
+  forceEnableButtons?: boolean;
   children?: React.ReactNode;
 };
 
@@ -38,6 +39,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     children,
     confirmButtonText,
     isButtonsDisabled,
+    forceEnableButtons,
   } = props;
   return (
     <StyledContainer isWarning={isWarning}>
@@ -52,16 +54,20 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
       {children ? <StyledChildren>{children}</StyledChildren> : null}
       {(onConfirm || footerText) && (
         <StyledFooter>
-          {footerText ? (
+          {footerText && (
             <StyledFooterText>
               <Text className="regular middle" color={Colors.slate400}>
                 {footerText}
               </Text>
             </StyledFooterText>
-          ) : null}
+          )}
           <Form.Item noStyle shouldUpdate>
             {({isFieldsTouched, getFieldsValue}) => {
-              const isDisabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
+              let isDisabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
+
+              if (forceEnableButtons) {
+                isDisabled = false;
+              }
 
               return (
                 <StyledFooterButtonsContainer>

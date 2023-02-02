@@ -21,3 +21,5 @@ export const openTestkubeDashboardDocumentation = () => {
 export const openSourcesDocumentation = () => {
   window.open('https://kubeshop.github.io/testkube/openapi/#tag/test-sources');
 };
+
+export const testSourceLink = 'https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/#test-source';

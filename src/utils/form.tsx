@@ -2,13 +2,13 @@ import {ReactElement} from 'react';
 
 import {Input, Radio, Select} from 'antd';
 import {Rule} from 'antd/lib/form';
+import {UploadChangeParam} from 'antd/lib/upload';
 
 import {UploadWithInput} from '@atoms';
 
 import {FormItem} from '@custom-antd';
 
 import {LabelsSelect} from '@molecules';
-import VariablesFormList from '@molecules/VariablesFormList';
 
 import {k8sResourceNameRegex} from '@utils/strings';
 
@@ -29,7 +29,7 @@ export const url: Rule = {type: 'url'};
 export const duplicateKeyMessage = 'Duplicate key.';
 
 type DefaultConfig = {
-  onFileChange?: () => {};
+  onFileChange?: (file: Nullable<UploadChangeParam>) => void;
   onLabelsChange?: (value: any) => void;
   form?: null;
 };
@@ -95,10 +95,6 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
 
     if (inputType === 'textarea') {
       children = <TextArea rows={10} placeholder={placeholder} style={{fontFamily: Fonts.robotoMono}} />;
-    }
-
-    if (inputType === 'variables' && form) {
-      return <VariablesFormList form={form} data={[]} isSaveable={false} />;
     }
 
     if (!children) {

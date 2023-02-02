@@ -14,7 +14,7 @@ import {Button, Text} from '@custom-antd';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
-import {getTestSourceSpecificFields} from '@wizards/AddTestWizard/utils';
+import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
@@ -23,7 +23,7 @@ import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
 
-import {Hint} from '@src/components/molecules';
+import {Hint, notificationCall} from '@src/components/molecules';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
@@ -60,16 +60,28 @@ const TestCreationModalContent: React.FC = () => {
 
     const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
 
-    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir, testSources);
+    if (isTestSourceCustomGitDir) {
+      const isTestSourceExists = testSources.some(source => {
+        return source.name === testSource.replace('$custom-git-dir-', '');
+      });
+
+      if (!isTestSourceExists) {
+        notificationCall('failed', 'Provided test source does not exist');
+        return;
+      }
+    }
+
+    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
 
     const requestBody = {
       name: values.name,
       type: testType,
       content: {
-        type: testSource === 'file-uri' ? 'string' : isTestSourceCustomGitDir ? 'git-dir' : testSource,
+        ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {} : {type: testSource}),
         ...testSourceSpecificFields,
       },
       labels: decomposeLabels(localLabels),
+      ...(isTestSourceCustomGitDir ? {source: testSource.replace('$custom-git-dir-', '')} : {}),
     };
 
     return addTest(requestBody)
@@ -98,38 +110,6 @@ const TestCreationModalContent: React.FC = () => {
     return onSaveClick(values);
   };
 
-  const onFileChange = (file: Nullable<UploadChangeParam>) => {
-    if (!file) {
-      form.setFieldsValue({
-        file: null,
-      });
-
-      form.validateFields(['file']);
-    } else {
-      const readFile = new FileReader();
-
-      readFile.onload = e => {
-        if (e && e.target) {
-          const fileContent = e.target.result;
-
-          if (fileContent) {
-            form.setFieldsValue({
-              file: {
-                fileContent: fileContent as string,
-                fileName: file.file.name,
-              },
-            });
-
-            form.validateFields(['file']);
-          }
-        }
-      };
-
-      // @ts-ignore
-      readFile.readAsText(file.file);
-    }
-  };
-
   return (
     <div style={{display: 'flex'}}>
       <Form
@@ -143,7 +123,10 @@ const TestCreationModalContent: React.FC = () => {
       >
         <StyledFormSpace size={24} direction="vertical">
           <Text className="regular big">Test details</Text>
-          <FirstStep onFileChange={onFileChange} onLabelsChange={setLocalLabels} />
+          <FirstStep
+            onFileChange={(file: Nullable<UploadChangeParam>) => onFileChange(file, form)}
+            onLabelsChange={setLocalLabels}
+          />
           <StyledFormItem shouldUpdate>
             {({isFieldsTouched}) => (
               <Button

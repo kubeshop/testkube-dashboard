@@ -13,7 +13,6 @@ export interface SourceWithString extends Source {
 
 export interface SourceWithRepository extends Source {
   repository: Repository;
-  repositoryy?: any;
 }
 
 type SourcesState = {
