@@ -67,7 +67,6 @@ const SettingsDefinition: React.FC = () => {
           {isSecureContext ? (
             <CopyButton content={definition} />
           ) : (
-            /* TODO: Punksage: Add the way to customise name of the default filename to download */
             <DownloadButton filename={filename} extension="yaml" content={definition} />
           )}
         </Definition>
