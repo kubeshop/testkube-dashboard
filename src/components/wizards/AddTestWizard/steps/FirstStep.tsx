@@ -1,3 +1,5 @@
+import {Select} from 'antd';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
@@ -17,6 +19,8 @@ import {
   remapExecutors,
   remapTestSources,
   stringContentFormFields,
+  testSourceBaseOptions,
+  testSourceFieldConfig,
 } from '../utils';
 
 export const additionalFields: any = {
@@ -33,12 +37,37 @@ const FirstStep: React.FC<any> = props => {
   const executors = useAppSelector(selectExecutors);
   const testSources = useAppSelector(selectSources);
 
-  const remmappedExecutors = remapExecutors(executors);
+  const remappedExecutors = remapExecutors(executors);
   const remappedCustomTestSources = remapTestSources(testSources);
 
   return (
     <StyledFormSpace size={24} direction="vertical">
-      {renderFormItems(addTestFormStructure(remmappedExecutors, remappedCustomTestSources), {onLabelsChange})}
+      {renderFormItems(addTestFormStructure(remappedExecutors), {onLabelsChange})}
+      <FormItem
+        noStyle
+        shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
+      >
+        {() => {
+          return (
+            <StyledFormSpace size={24} direction="vertical">
+              <FormItem
+                rules={testSourceFieldConfig.rules}
+                label={testSourceFieldConfig.itemLabel}
+                name={testSourceFieldConfig.fieldName}
+                key={testSourceFieldConfig.fieldName}
+                required={testSourceFieldConfig.required}
+                requiredMark={testSourceFieldConfig.required ? undefined : 'optional'}
+              >
+                <Select
+                  placeholder={testSourceFieldConfig.placeholder}
+                  showSearch
+                  options={[...remappedCustomTestSources, ...testSourceBaseOptions]}
+                />
+              </FormItem>
+            </StyledFormSpace>
+          );
+        }}
+      </FormItem>
       <FormItem
         noStyle
         shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}

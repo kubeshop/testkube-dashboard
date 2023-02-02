@@ -27,7 +27,7 @@ export const testSourceBaseOptions: Option[] = [
 
 export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 
-export const addTestFormStructure = (options: Option[], customTestSources: Option[] = []) => [
+export const addTestFormStructure = (options: Option[]) => [
   {
     // tooltip: 'Enter the name of the test you wish to add.',
     rules: [required, k8sResourceNamePattern, k8sResourceNameMaxLength],
@@ -52,18 +52,18 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
     itemLabel: 'Type',
     required: true,
   },
-  {
-    // tooltip: 'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
-    rules: [required],
-    fieldName: 'testSource',
-    inputType: 'select',
-    options: [...customTestSources, ...testSourceBaseOptions],
-    placeholder: 'Source',
-    dataTest: 'test-creation_type_source_option',
-    itemLabel: 'Test Source',
-    required: true,
-  },
 ];
+
+export const testSourceFieldConfig = {
+  // tooltip: 'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
+  rules: [required],
+  fieldName: 'testSource',
+  inputType: 'select',
+  placeholder: 'Source',
+  dataTest: 'test-creation_type_source_option',
+  itemLabel: 'Test Source',
+  required: true,
+};
 
 export const gitDirFormFields: FormItem[] = [
   {
