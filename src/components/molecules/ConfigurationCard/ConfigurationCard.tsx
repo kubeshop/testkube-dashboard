@@ -50,35 +50,35 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
         </Text>
       </StyledHeader>
       {children ? <StyledChildren>{children}</StyledChildren> : null}
-      <StyledFooter>
-        {footerText ? (
-          <StyledFooterText>
-            <Text className="regular middle" color={Colors.slate400}>
-              {footerText}
-            </Text>
-          </StyledFooterText>
-        ) : null}
-        <Form.Item noStyle shouldUpdate>
-          {({isFieldsTouched, getFieldsValue}) => {
-            const isDisabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
+      {onConfirm && (
+        <StyledFooter>
+          {footerText ? (
+            <StyledFooterText>
+              <Text className="regular middle" color={Colors.slate400}>
+                {footerText}
+              </Text>
+            </StyledFooterText>
+          ) : null}
+          <Form.Item noStyle shouldUpdate>
+            {({isFieldsTouched, getFieldsValue}) => {
+              const isDisabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
 
-            return (
-              <StyledFooterButtonsContainer>
-                {onCancel && !isDisabled ? (
-                  <Button onClick={onCancel} $customType="secondary">
-                    Cancel
-                  </Button>
-                ) : null}
-                {onConfirm ? (
+              return (
+                <StyledFooterButtonsContainer>
+                  {onCancel && !isDisabled && (
+                    <Button onClick={onCancel} $customType="secondary">
+                      Cancel
+                    </Button>
+                  )}
                   <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={isDisabled}>
                     {confirmButtonText}
                   </Button>
-                ) : null}
-              </StyledFooterButtonsContainer>
-            );
-          }}
-        </Form.Item>
-      </StyledFooter>
+                </StyledFooterButtonsContainer>
+              );
+            }}
+          </Form.Item>
+        </StyledFooter>
+      )}
     </StyledContainer>
   );
 };

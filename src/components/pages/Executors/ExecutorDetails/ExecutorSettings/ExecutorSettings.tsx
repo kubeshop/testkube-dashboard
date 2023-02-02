@@ -7,7 +7,7 @@ import ContainerImage from './ContainerImage';
 import Definition from './Definition';
 import General from './General';
 
-const tabsConfig: Array<JSX.Element> = [<General />, <ContainerImage />, <CommandAndArguments />, <Definition />];
+const tabsConfig = [<General />, <ContainerImage />, <CommandAndArguments />, <Definition />];
 
 const navigationOptionsConfig: string[] = ['General', 'Container image', 'Command & Arguments', 'Definition'];
 

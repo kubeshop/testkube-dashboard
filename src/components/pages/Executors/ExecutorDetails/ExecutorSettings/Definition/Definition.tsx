@@ -5,22 +5,18 @@ import axios from 'axios';
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
-import {Pre} from '@atoms';
+import {CopyButton, Pre} from '@atoms';
+import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
-import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
+import useSecureContext from '@hooks/useSecureContext';
 
 const Definition = () => {
   const executor = useAppSelector(selectCurrentExecutor);
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
-
-  const onCopyClick = () => {
-    setCopyToClipboardState(true);
-  };
+  const isSecureContext = useSecureContext();
 
   const name = executor?.name;
 
@@ -50,16 +46,18 @@ const Definition = () => {
   }, [name]);
 
   return (
-    <ConfigurationCard
-      title="Definition"
-      description="Validate and export your container executor configuration"
-      onConfirm={onCopyClick}
-      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
-    >
+    <ConfigurationCard title="Definition" description="Validate and export your container executor configuration">
       {definition ? (
-        <DefinitionContent content={definition} />
+        <DefinitionContent content={definition}>
+          {isSecureContext ? (
+            <CopyButton content={definition} />
+          ) : (
+            /* TODO: Punksage: Add the way to customise name of the default filename to download */
+            <DownloadButton filename="definition.sh" content={definition} />
+          )}
+        </DefinitionContent>
       ) : (
-        <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
+        <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
       )}
     </ConfigurationCard>
   );

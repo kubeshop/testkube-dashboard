@@ -4,7 +4,7 @@ import {Tooltip} from '@custom-antd';
 
 import {useDownloadFile} from '@hooks/useDownloadFile';
 
-import {StyledCopyOutlined} from './CopyButton.styled';
+import {StyledCopyOutlined} from './DownloadButton.styled';
 
 type SaveOptions = {
   content: string;

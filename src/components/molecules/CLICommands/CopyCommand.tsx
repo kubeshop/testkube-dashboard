@@ -10,7 +10,7 @@ import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-import DownloadButton from '@src/components/atoms/CopyButton/DownloadButton';
+import DownloadButton from '@src/components/atoms/DownloadButton/DownloadButton';
 
 import {LabelWrapper, StyledCopyCommandCode, StyledCopyCommandContainer} from './CopyCommand.styled';
 
