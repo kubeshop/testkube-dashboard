@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
 
 import {Form} from 'antd';
 
@@ -13,10 +13,7 @@ import {required} from '@utils/form';
 
 const NameNType: React.FC = () => {
   const {name, executor} = useAppSelector(selectCurrentExecutor);
-
-  const {types} = executor;
-  const type = types[0];
-
+  const type = executor?.types?.[0] ?? '';
   const [form] = Form.useForm();
 
   useEffect(() => {
