@@ -4,6 +4,7 @@ import {CopyButton, Pre} from '@atoms';
 
 import {Text} from '@custom-antd';
 
+import useQueryParams from '@hooks/useQueryParams';
 import useSecureContext from '@hooks/useSecureContext';
 
 import Colors from '@styles/Colors';
@@ -18,25 +19,17 @@ type CopyCommandProps = {
   additionalPrefix?: string;
   bg?: string;
   command: string;
-  filename?: string;
   isBordered?: boolean;
   label?: string;
   showDollar?: boolean;
 };
 
 const CopyCommand: React.FC<CopyCommandProps> = props => {
-  const {
-    command,
-    filename = 'command.sh',
-    label,
-    showDollar = true,
-    bg = Colors.slate900,
-    isBordered = false,
-    additionalPrefix,
-  } = props;
+  const {command, label, showDollar = true, bg = Colors.slate900, isBordered = false, additionalPrefix} = props;
 
   const {ga4React} = useContext(MainContext);
   const isSecureContext = useSecureContext();
+  const filename = useQueryParams().lastPathSegment;
 
   const onClick = () => {
     if (ga4React) {
@@ -64,7 +57,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
         {isSecureContext ? (
           <CopyButton content={command} onClick={onClick} />
         ) : (
-          <DownloadButton filename={filename} content={command} onClick={onClick} />
+          <DownloadButton filename={filename} extension="sh" content={command} onClick={onClick} />
         )}
       </StyledCopyCommandContainer>
     </>

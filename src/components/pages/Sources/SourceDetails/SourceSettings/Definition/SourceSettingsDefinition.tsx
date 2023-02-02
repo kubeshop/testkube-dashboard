@@ -10,6 +10,7 @@ import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
+import useQueryParams from '@hooks/useQueryParams';
 import useSecureContext from '@hooks/useSecureContext';
 
 const SourceSettingsDefinition = () => {
@@ -17,7 +18,7 @@ const SourceSettingsDefinition = () => {
   const isSecureContext = useSecureContext();
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
-
+  const filename = useQueryParams().lastPathSegment;
   const name = source?.name;
 
   const onGetSourceCRD = async () => {
@@ -46,14 +47,13 @@ const SourceSettingsDefinition = () => {
   }, [name]);
 
   return (
-    <ConfigurationCard title="Definition" description="Validate and export your source configuration">
+    <ConfigurationCard title={`Definition`} description="Validate and export your source configuration">
       {definition ? (
         <DefinitionContent content={definition}>
           {isSecureContext ? (
             <CopyButton content={definition} />
           ) : (
-            /* TODO: Punksage: Add the way to customise name of the default filename to download */
-            <DownloadButton filename="definition.sh" content={definition} />
+            <DownloadButton filename={filename} extension="yaml" content={definition} />
           )}
         </DefinitionContent>
       ) : (

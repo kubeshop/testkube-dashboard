@@ -7,6 +7,7 @@ import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition} from '@molecules';
 
+import useQueryParams from '@hooks/useQueryParams';
 import useSecureContext from '@hooks/useSecureContext';
 
 import {EntityDetailsContext} from '@contexts';
@@ -17,12 +18,11 @@ const SettingsDefinition: React.FC = () => {
   const {entityDetails, entity} = useContext(EntityDetailsContext);
 
   const {name} = entityDetails;
-
   const sectionData = settingsDefinitionData[entity];
-
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
   const isSecureContext = useSecureContext();
+  const filename = useQueryParams().lastPathSegment;
 
   const onGetTestCRD = async () => {
     setLoading(true);
@@ -68,7 +68,7 @@ const SettingsDefinition: React.FC = () => {
             <CopyButton content={definition} />
           ) : (
             /* TODO: Punksage: Add the way to customise name of the default filename to download */
-            <DownloadButton filename="definition.sh" content={definition} />
+            <DownloadButton filename={filename} extension="yaml" content={definition} />
           )}
         </Definition>
       ) : (

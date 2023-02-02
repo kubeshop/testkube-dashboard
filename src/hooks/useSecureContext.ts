@@ -1,6 +1,6 @@
 const useSecureContext = () => {
   // TODO: (Punksage): After testing return it to window.isSecureContext
-  return true;
+  return false;
 };
 
 export default useSecureContext;

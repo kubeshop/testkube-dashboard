@@ -7,6 +7,7 @@ import {LogAction} from '@models/log';
 import {CopyButton} from '@atoms';
 import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
+import useQueryParams from '@hooks/useQueryParams';
 import useSecureContext from '@hooks/useSecureContext';
 
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
@@ -20,13 +21,13 @@ type LogOutputActionsProps = {
 const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
   const {logOutput, actions} = props;
   const isSecureContext = useSecureContext();
+  const filename = useQueryParams().lastPathSegment;
 
   const logOutputActionsMap: {[key in LogAction]: any} = {
     copy: isSecureContext ? (
       <CopyButton content={stripAnsi(logOutput)} key="copy-action" />
     ) : (
-      // TODO: (Punksage): Find out the name to save the file
-      <DownloadButton filename="output.log" content={stripAnsi(logOutput)} />
+      <DownloadButton filename={filename} extension="log" content={stripAnsi(logOutput)} />
     ),
     fullscreen: <FullScreenAction logOutput={logOutput} key="fullscreen-log-action" />,
   };

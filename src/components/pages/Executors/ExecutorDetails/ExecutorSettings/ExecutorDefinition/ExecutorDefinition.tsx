@@ -10,6 +10,7 @@ import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
+import useQueryParams from '@hooks/useQueryParams';
 import useSecureContext from '@hooks/useSecureContext';
 
 const ExecutorDefinition = () => {
@@ -17,6 +18,7 @@ const ExecutorDefinition = () => {
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
   const isSecureContext = useSecureContext();
+  const filename = useQueryParams().lastPathSegment;
 
   const name = executor?.name;
 
@@ -53,7 +55,7 @@ const ExecutorDefinition = () => {
             <CopyButton content={definition} />
           ) : (
             /* TODO: Punksage: Add the way to customise name of the default filename to download */
-            <DownloadButton filename="definition.sh" content={definition} />
+            <DownloadButton filename={filename} extension="yaml" content={definition} />
           )}
         </DefinitionContent>
       ) : (

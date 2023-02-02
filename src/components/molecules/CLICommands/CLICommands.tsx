@@ -138,7 +138,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
 
       const commandString = command(testTarget);
 
-      return <CopyCommand key={label} filename={cliCommand.filename} command={commandString} label={label} bg={bg} />;
+      return <CopyCommand key={label} command={commandString} label={label} bg={bg} />;
     }).filter(cliCommand => cliCommand);
   }, [id, name, type, modifyMap]);
 
