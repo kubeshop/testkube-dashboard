@@ -2,10 +2,10 @@ import {useState} from 'react';
 
 import {SettingsLeftNavigation, StyledSettingsContainer, StyledTabContentContainer} from '@molecules';
 
-import Definition from './Definition';
+import SourceSettingsDefinition from './Definition';
 import General from './General';
 
-const tabsConfig: Array<JSX.Element> = [<General />, <Definition />];
+const tabsConfig: Array<JSX.Element> = [<General />, <SourceSettingsDefinition />];
 
 const navigationOptionsConfig: string[] = ['General', 'Definition'];
 

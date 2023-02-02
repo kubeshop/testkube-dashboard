@@ -4,10 +4,10 @@ import {SettingsLeftNavigation, StyledSettingsContainer, StyledTabContentContain
 
 import CommandAndArguments from './CommandAndArguments';
 import ContainerImage from './ContainerImage';
-import Definition from './Definition';
+import ExecutorDefinition from './ExecutorDefinition';
 import General from './General';
 
-const tabsConfig = [<General />, <ContainerImage />, <CommandAndArguments />, <Definition />];
+const tabsConfig = [<General />, <ContainerImage />, <CommandAndArguments />, <ExecutorDefinition />];
 
 const navigationOptionsConfig: string[] = ['General', 'Container image', 'Command & Arguments', 'Definition'];
 

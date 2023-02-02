@@ -1,1 +1,1 @@
-export {default} from './Definition';
+export {default} from './SourceSettingsDefinition';

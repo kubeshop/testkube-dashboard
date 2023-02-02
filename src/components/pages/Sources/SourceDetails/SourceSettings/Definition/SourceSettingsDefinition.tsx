@@ -3,30 +3,37 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
+import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
 
 import {CopyButton, Pre} from '@atoms';
 import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
+import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 import useSecureContext from '@hooks/useSecureContext';
 
-const Definition = () => {
-  const executor = useAppSelector(selectCurrentExecutor);
+const SourceSettingsDefinition = () => {
+  const source = useAppSelector(selectCurrentSource);
+  const isSecureContext = useSecureContext();
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const isSecureContext = useSecureContext();
 
-  const name = executor?.name;
+  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
 
-  const onGetExecutorCRD = async () => {
+  const onCopyClick = () => {
+    setCopyToClipboardState(true);
+  };
+
+  const name = source?.name;
+
+  const onGetSourceCRD = async () => {
     setLoading(true);
 
     try {
       setDefinition('');
 
-      const result = await axios(`/executors/${name}`, {
+      const result = await axios(`/test-sources/${name}`, {
         method: 'GET',
         headers: {
           Accept: 'text/yaml',
@@ -42,11 +49,16 @@ const Definition = () => {
   };
 
   useEffect(() => {
-    onGetExecutorCRD();
+    onGetSourceCRD();
   }, [name]);
 
   return (
-    <ConfigurationCard title="Definition" description="Validate and export your container executor configuration">
+    <ConfigurationCard
+      title="Definition"
+      description="Validate and export your source configuration"
+      onConfirm={onCopyClick}
+      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
+    >
       {definition ? (
         <DefinitionContent content={definition}>
           {isSecureContext ? (
@@ -63,4 +75,4 @@ const Definition = () => {
   );
 };
 
-export default Definition;
+export default SourceSettingsDefinition;

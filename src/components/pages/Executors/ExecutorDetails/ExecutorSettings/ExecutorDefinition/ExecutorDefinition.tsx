@@ -1,36 +1,32 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import axios from 'axios';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
 import {CopyButton, Pre} from '@atoms';
 import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
-import {ConfigurationCard, Definition} from '@molecules';
+import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
 import useSecureContext from '@hooks/useSecureContext';
 
-import {EntityDetailsContext} from '@contexts';
-
-import {settingsDefinitionData} from './utils';
-
-const SettingsDefinition: React.FC = () => {
-  const {entityDetails, entity} = useContext(EntityDetailsContext);
-
-  const {name} = entityDetails;
-
-  const sectionData = settingsDefinitionData[entity];
-
+const ExecutorDefinition = () => {
+  const executor = useAppSelector(selectCurrentExecutor);
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
   const isSecureContext = useSecureContext();
 
-  const onGetTestCRD = async () => {
+  const name = executor?.name;
+
+  const onGetExecutorCRD = async () => {
     setLoading(true);
 
     try {
       setDefinition('');
 
-      const result = await axios(`${sectionData.apiEndpoint}${name}`, {
+      const result = await axios(`/executors/${name}`, {
         method: 'GET',
         headers: {
           Accept: 'text/yaml',
@@ -46,36 +42,25 @@ const SettingsDefinition: React.FC = () => {
   };
 
   useEffect(() => {
-    onGetTestCRD();
+    onGetExecutorCRD();
   }, [name]);
 
   return (
-    <ConfigurationCard
-      title="Definition"
-      description={sectionData.description}
-      footerText={
-        <>
-          Learn more about{' '}
-          <a href={sectionData.helpLinkUrl} target="_blank">
-            Definitions
-          </a>
-        </>
-      }
-    >
+    <ConfigurationCard title="Definition" description="Validate and export your container executor configuration">
       {definition ? (
-        <Definition content={definition}>
+        <DefinitionContent content={definition}>
           {isSecureContext ? (
             <CopyButton content={definition} />
           ) : (
             /* TODO: Punksage: Add the way to customise name of the default filename to download */
             <DownloadButton filename="definition.sh" content={definition} />
           )}
-        </Definition>
+        </DefinitionContent>
       ) : (
-        <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
+        <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
       )}
     </ConfigurationCard>
   );
 };
 
-export default SettingsDefinition;
+export default ExecutorDefinition;
