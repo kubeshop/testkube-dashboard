@@ -36,7 +36,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     onCancel,
     footerText,
     children,
-    confirmButtonText = 'Save',
+    confirmButtonText,
     isButtonsDisabled,
   } = props;
   return (
@@ -50,7 +50,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
         </Text>
       </StyledHeader>
       {children ? <StyledChildren>{children}</StyledChildren> : null}
-      {onConfirm && (
+      {(onConfirm || footerText) && (
         <StyledFooter>
           {footerText ? (
             <StyledFooterText>

@@ -57,8 +57,6 @@ const SettingsDefinition: React.FC = () => {
     <ConfigurationCard
       title="Definition"
       description={sectionData.description}
-      onConfirm={onCopyClick}
-      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
       footerText={
         <>
           Learn more about{' '}
