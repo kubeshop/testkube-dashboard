@@ -10,7 +10,6 @@ import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
-import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 import useSecureContext from '@hooks/useSecureContext';
 
 const SourceSettingsDefinition = () => {
