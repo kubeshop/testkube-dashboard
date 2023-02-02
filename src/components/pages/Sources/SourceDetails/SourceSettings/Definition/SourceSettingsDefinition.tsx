@@ -49,7 +49,7 @@ const SourceSettingsDefinition = () => {
   }, [name]);
 
   return (
-    <ConfigurationCard title={`Definition`} description="Validate and export your source configuration">
+    <ConfigurationCard title="Definition" description="Validate and export your source configuration">
       {definition ? (
         <DefinitionContent content={definition}>
           {isSecureContext ? (
