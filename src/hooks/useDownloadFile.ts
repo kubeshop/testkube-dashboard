@@ -27,7 +27,7 @@ export const useDownloadFile = (textToCopy: string, options: DownloadOptions) =>
     return () => {
       clearTimeout(timeout);
     };
-  }, [isProcessed, window]);
+  }, [isProcessed]);
 
   return {isProcessed, setProcessed};
 };

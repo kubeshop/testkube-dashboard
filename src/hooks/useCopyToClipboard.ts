@@ -31,7 +31,7 @@ export const useCopyToClipboard = (textToCopy: string, options: CopyToClipboardO
     return () => {
       clearTimeout(timeout);
     };
-  }, [isProcessed, window]);
+  }, [isProcessed]);
 
   return {isCopied: isProcessed, setCopyToClipboardState: setProcessed};
 };
