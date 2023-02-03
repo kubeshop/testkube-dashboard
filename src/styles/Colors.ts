@@ -130,8 +130,8 @@ export enum FontColors {
 }
 
 export enum StatusColors {
-  passed = Colors.lime300,
-  success = Colors.lime300,
+  passed = Colors.lime400,
+  success = Colors.lime400,
   failed = Colors.pink600,
   error = Colors.pink600,
   running = Colors.sky400,
