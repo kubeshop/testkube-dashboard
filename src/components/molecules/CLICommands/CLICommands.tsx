@@ -16,7 +16,6 @@ type CLIScriptModifier = 'isFinished' | 'canHaveArtifacts';
 type CLIScript = {
   label: string;
   command: (name: string) => string;
-  filename?: string;
   modify?: CLIScriptModifier;
 };
 
@@ -37,12 +36,10 @@ const testSuiteScripts: CLIScript[] = [
   {
     label: 'Run test suite',
     command: (name: string) => `kubectl testkube run testsuite ${name}`,
-    filename: 'run-test-suite.sh',
   },
   {
     label: 'Delete test suite',
     command: (name: string) => `kubectl testkube delete testsuite ${name}`,
-    filename: 'delete-test-suite.sh',
   },
 ];
 
@@ -50,22 +47,18 @@ const testScripts: CLIScript[] = [
   {
     label: 'Run test',
     command: (name: string) => `kubectl testkube run test ${name}`,
-    filename: 'run-test.sh',
   },
   {
     label: 'Get test',
     command: (name: string) => `kubectl testkube get test ${name}`,
-    filename: 'get-test.sh',
   },
   {
     label: 'List executions',
     command: (name: string) => `kubectl testkube get executions --test ${name}`,
-    filename: 'list-executions.sh',
   },
   {
     label: 'Delete test',
     command: (name: string) => `kubectl testkube delete test ${name}`,
-    filename: 'delete-executions.sh',
   },
 ];
 
@@ -73,17 +66,16 @@ const executionsScripts: CLIScript[] = [
   {
     label: 'Get execution',
     command: (name: string) => `kubectl testkube get execution ${name}`,
-    filename: 'get-executions.sh',
   },
   {
     label: 'Watch execution',
     command: (name: string) => `kubectl testkube watch execution ${name}`,
-    filename: 'watch-executions.sh',
+    modify: 'isFinished',
   },
   {
     label: 'Download artifacts',
     command: (name: string) => `kubectl testkube download artifacts ${name}`,
-    filename: 'download-artifacts.sh',
+    modify: 'canHaveArtifacts',
   },
 ];
 
