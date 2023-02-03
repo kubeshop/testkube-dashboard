@@ -29,12 +29,12 @@ enum Colors {
   pink500 = '#EC4899',
   pink300 = '#F9A8D4',
 
-  lime900 = '#365314',
-  lime700 = '#4D7C0F',
-  lime600 = '#65A30D',
-  lime500 = '#84CC16',
-  lime400 = '#A3E635',
-  lime300 = '#BEF264',
+  lime900 = '#14532D',
+  lime700 = '#15803D',
+  lime600 = '#16A34A',
+  lime500 = '#22C55E',
+  lime400 = '#4ADE80',
+  lime300 = '#86EFAC',
 
   yellow900 = '#713F12',
   yellow500 = '#EAB308',
