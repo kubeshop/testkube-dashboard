@@ -4,7 +4,7 @@ import {Tooltip} from '@custom-antd';
 
 import {useDownloadFile} from '@hooks/useDownloadFile';
 
-import {StyledDownloadOutlined} from './DownloadButton.styled';
+import {StyledCheckOutlined, StyledDownloadOutlined} from './DownloadButton.styled';
 
 type SaveOptions = {
   content: string;
@@ -15,7 +15,7 @@ type SaveOptions = {
 
 const DownloadButton: React.FC<SaveOptions> = props => {
   const {content, onClick, filename = 'download', extension} = props;
-  const {setProcessed} = useDownloadFile(content, {
+  const {isProcessed, setProcessed} = useDownloadFile(content, {
     filename: `${filename}.${extension}`,
   });
 
@@ -26,7 +26,11 @@ const DownloadButton: React.FC<SaveOptions> = props => {
 
   return (
     <Tooltip title="Download">
-      <StyledDownloadOutlined onClick={onDownloadClick} />
+      {isProcessed ? (
+        <StyledCheckOutlined onClick={onDownloadClick} />
+      ) : (
+        <StyledDownloadOutlined onClick={onDownloadClick} />
+      )}
     </Tooltip>
   );
 };
