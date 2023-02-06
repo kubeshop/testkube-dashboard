@@ -35,7 +35,6 @@ const FailureHandling: React.FC = () => {
   const negativeTest = entityDetails?.executionRequest?.negativeTest;
 
   const onSave = (values: any) => {
-    console.log(values);
     updateTest({
       id: entityDetails.name,
       data: {
