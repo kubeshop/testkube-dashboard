@@ -52,7 +52,7 @@ const Variables: React.FC = () => {
     })
       .then((res: any) => {
         displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Variables were succesfully updated.`);
+          notificationCall('passed', `Variables were successfully updated.`);
         });
       })
       .catch((err: any) => displayDefaultErrorNotification(err));

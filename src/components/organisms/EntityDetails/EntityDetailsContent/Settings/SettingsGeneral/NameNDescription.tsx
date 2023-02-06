@@ -56,7 +56,7 @@ const NameNDescription: React.FC = () => {
     })
       .then((res: any) => {
         displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was succesfully updated.`);
+          notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
         });
       })
       .catch((err: any) => {
