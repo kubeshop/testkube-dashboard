@@ -2,8 +2,6 @@ import {useContext} from 'react';
 
 import {Form, Popover} from 'antd';
 
-import {QuestionCircleOutlined} from '@ant-design/icons';
-
 import {Checkbox, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
@@ -14,7 +12,7 @@ import {useUpdateTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {StyledFormItem, StyledPopoverContainer} from '../Settings.styled';
+import {StyledFormItem, StyledPopoverContainer, StyledQuestionCircleOutlined} from '../Settings.styled';
 
 const popoverContent = (
   <StyledPopoverContainer>
@@ -72,12 +70,10 @@ const FailureHandling: React.FC = () => {
       >
         <StyledFormItem name="negativeTest" valuePropName="checked">
           <Checkbox>
-            <>
-              Invert test result
-              <Popover content={popoverContent}>
-                <QuestionCircleOutlined style={{marginLeft: '10px'}} />
-              </Popover>
-            </>
+            Invert test result
+            <Popover content={popoverContent}>
+              <StyledQuestionCircleOutlined />
+            </Popover>
           </Checkbox>
         </StyledFormItem>
       </ConfigurationCard>
