@@ -1,6 +1,9 @@
 import {useEffect, useState} from 'react';
 
+import useSecureContext from '@hooks/useSecureContext';
+
 type CopyToClipboardOptions = {
+  filename?: string;
   timeoutInMs?: number;
   notificationDuration?: number;
 };
@@ -8,22 +11,27 @@ type CopyToClipboardOptions = {
 export const useCopyToClipboard = (textToCopy: string, options: CopyToClipboardOptions = {timeoutInMs: 2000}) => {
   const {timeoutInMs} = options;
 
-  const [isCopied, setCopyToClipboardState] = useState(false);
+  const [isProcessed, setProcessed] = useState(false);
+  const isSecureContext = useSecureContext();
+
+  const copyToClipBoard = () => {
+    navigator.clipboard.writeText(textToCopy);
+    return setTimeout(() => {
+      setProcessed(false);
+    }, timeoutInMs);
+  };
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
-    if (isCopied) {
-      navigator.clipboard.writeText(textToCopy);
-      timeout = setTimeout(() => {
-        setCopyToClipboardState(false);
-      }, timeoutInMs);
+    if (isProcessed && isSecureContext) {
+      timeout = copyToClipBoard();
     }
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [isCopied]);
+  }, [isProcessed]);
 
-  return {isCopied, setCopyToClipboardState};
+  return {isCopied: isProcessed, setCopyToClipboardState: setProcessed};
 };

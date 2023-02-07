@@ -5,6 +5,10 @@ import stripAnsi from 'strip-ansi';
 import {LogAction} from '@models/log';
 
 import {CopyButton} from '@atoms';
+import DownloadButton from '@atoms/DownloadButton/DownloadButton';
+
+import useLocation from '@hooks/useLocation';
+import useSecureContext from '@hooks/useSecureContext';
 
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
 import FullScreenAction from './logActions/FullScreenAction';
@@ -16,9 +20,15 @@ type LogOutputActionsProps = {
 
 const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
   const {logOutput, actions} = props;
+  const isSecureContext = useSecureContext();
+  const filename = useLocation().lastPathSegment;
 
   const logOutputActionsMap: {[key in LogAction]: any} = {
-    copy: <CopyButton content={stripAnsi(logOutput)} key="copy-action" />,
+    copy: isSecureContext ? (
+      <CopyButton content={stripAnsi(logOutput)} key="copy-action" />
+    ) : (
+      <DownloadButton filename={filename} extension="log" content={stripAnsi(logOutput)} />
+    ),
     fullscreen: <FullScreenAction logOutput={logOutput} key="fullscreen-log-action" />,
   };
 
@@ -30,5 +40,4 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
 
   return <StyledLogOutputActionsContainer>{renderedLogOutputActions}</StyledLogOutputActionsContainer>;
 };
-
 export default LogOutputActions;

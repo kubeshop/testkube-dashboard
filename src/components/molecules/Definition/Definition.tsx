@@ -1,19 +1,21 @@
+import React, {ReactNode} from 'react';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 
-import {CopyButton, TestkubeCodeTheme} from '@atoms';
+import { TestkubeCodeTheme} from '@atoms';
 
 import {DefinitionContainer} from './Definition.styled';
 
 type DefinitionProps = {
   content: string;
+  children?: ReactNode;
 };
 
 const Definition: React.FC<DefinitionProps> = props => {
-  const {content} = props;
+  const {content, children} = props;
 
   return (
     <DefinitionContainer>
-      <CopyButton content={content} />
+      {children}
       <SyntaxHighlighter language="yaml" style={TestkubeCodeTheme}>
         {content}
       </SyntaxHighlighter>

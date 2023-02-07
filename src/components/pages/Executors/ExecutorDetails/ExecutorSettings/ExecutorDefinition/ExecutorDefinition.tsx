@@ -5,22 +5,20 @@ import axios from 'axios';
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
-import {Pre} from '@atoms';
+import {CopyButton, Pre} from '@atoms';
+import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
-import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
+import useLocation from '@hooks/useLocation';
+import useSecureContext from '@hooks/useSecureContext';
 
-const Definition = () => {
+const ExecutorDefinition = () => {
   const executor = useAppSelector(selectCurrentExecutor);
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
-
-  const onCopyClick = () => {
-    setCopyToClipboardState(true);
-  };
+  const isSecureContext = useSecureContext();
+  const filename = useLocation().lastPathSegment;
 
   const name = executor?.name;
 
@@ -50,19 +48,20 @@ const Definition = () => {
   }, [name]);
 
   return (
-    <ConfigurationCard
-      title="Definition"
-      description="Validate and export your container executor configuration"
-      onConfirm={onCopyClick}
-      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
-    >
+    <ConfigurationCard title="Definition" description="Validate and export your container executor configuration">
       {definition ? (
-        <DefinitionContent content={definition} />
+        <DefinitionContent content={definition}>
+          {isSecureContext ? (
+            <CopyButton content={definition} />
+          ) : (
+            <DownloadButton filename={filename} extension="yaml" content={definition} />
+          )}
+        </DefinitionContent>
       ) : (
-        <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
+        <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
       )}
     </ConfigurationCard>
   );
 };
 
-export default Definition;
+export default ExecutorDefinition;

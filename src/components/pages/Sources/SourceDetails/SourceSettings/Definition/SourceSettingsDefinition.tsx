@@ -1,27 +1,26 @@
 import {useEffect, useState} from 'react';
+import {useParams} from 'react-router';
 
 import axios from 'axios';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
 
-import {Pre} from '@atoms';
+import {CopyButton, Pre} from '@atoms';
+import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
-import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
+import useLocation from '@hooks/useLocation';
+import useSecureContext from '@hooks/useSecureContext';
 
-const Definition = () => {
+const SourceSettingsDefinition = () => {
   const source = useAppSelector(selectCurrentSource);
+  const isSecureContext = useSecureContext();
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
-
-  const onCopyClick = () => {
-    setCopyToClipboardState(true);
-  };
-
+  const filename = useLocation().lastPathSegment;
+  const params = useParams();
   const name = source?.name;
 
   const onGetSourceCRD = async () => {
@@ -50,19 +49,20 @@ const Definition = () => {
   }, [name]);
 
   return (
-    <ConfigurationCard
-      title="Definition"
-      description="Validate and export your source configuration"
-      onConfirm={onCopyClick}
-      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
-    >
+    <ConfigurationCard title="Definition" description="Validate and export your source configuration">
       {definition ? (
-        <DefinitionContent content={definition} />
+        <DefinitionContent content={definition}>
+          {isSecureContext ? (
+            <CopyButton content={definition} />
+          ) : (
+            <DownloadButton filename={filename} extension="yaml" content={definition} />
+          )}
+        </DefinitionContent>
       ) : (
-        <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
+        <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
       )}
     </ConfigurationCard>
   );
 };
 
-export default Definition;
+export default SourceSettingsDefinition;

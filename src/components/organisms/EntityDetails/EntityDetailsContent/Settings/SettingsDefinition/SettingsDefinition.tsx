@@ -2,11 +2,13 @@ import {useContext, useEffect, useState} from 'react';
 
 import axios from 'axios';
 
-import {Pre} from '@atoms';
+import {CopyButton, Pre} from '@atoms';
+import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition} from '@molecules';
 
-import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
+import useLocation from '@hooks/useLocation';
+import useSecureContext from '@hooks/useSecureContext';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -16,17 +18,11 @@ const SettingsDefinition: React.FC = () => {
   const {entityDetails, entity} = useContext(EntityDetailsContext);
 
   const {name} = entityDetails;
-
   const sectionData = settingsDefinitionData[entity];
-
   const [definition, setDefinition] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  const {isCopied, setCopyToClipboardState} = useCopyToClipboard(definition);
-
-  const onCopyClick = () => {
-    setCopyToClipboardState(true);
-  };
+  const isSecureContext = useSecureContext();
+  const filename = useLocation().lastPathSegment;
 
   const onGetTestCRD = async () => {
     setLoading(true);
@@ -57,8 +53,6 @@ const SettingsDefinition: React.FC = () => {
     <ConfigurationCard
       title="Definition"
       description={sectionData.description}
-      onConfirm={onCopyClick}
-      confirmButtonText={isCopied ? 'Copied' : 'Copy'}
       footerText={
         <>
           Learn more about{' '}
@@ -68,7 +62,17 @@ const SettingsDefinition: React.FC = () => {
         </>
       }
     >
-      {definition ? <Definition content={definition} /> : <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>}
+      {definition ? (
+        <Definition content={definition}>
+          {isSecureContext ? (
+            <CopyButton content={definition} />
+          ) : (
+            <DownloadButton filename={filename} extension="yaml" content={definition} />
+          )}
+        </Definition>
+      ) : (
+        <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
+      )}
     </ConfigurationCard>
   );
 };

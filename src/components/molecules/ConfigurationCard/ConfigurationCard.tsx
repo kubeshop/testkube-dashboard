@@ -37,7 +37,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     onCancel,
     footerText,
     children,
-    confirmButtonText = 'Save',
+    confirmButtonText,
     isButtonsDisabled,
     forceEnableButtons,
   } = props;
@@ -52,38 +52,39 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
         </Text>
       </StyledHeader>
       {children ? <StyledChildren>{children}</StyledChildren> : null}
-      <StyledFooter>
-        {footerText ? (
-          <StyledFooterText>
-            <Text className="regular middle" color={Colors.slate400}>
-              {footerText}
-            </Text>
-          </StyledFooterText>
-        ) : null}
-        <Form.Item noStyle shouldUpdate>
-          {({isFieldsTouched, getFieldsValue}) => {
-            let isDisabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
+      {(onConfirm || footerText) && (
+        <StyledFooter>
+          {footerText && (
+            <StyledFooterText>
+              <Text className="regular middle" color={Colors.slate400}>
+                {footerText}
+              </Text>
+            </StyledFooterText>
+          )}
+          <Form.Item noStyle shouldUpdate>
+            {({isFieldsTouched, getFieldsValue}) => {
+              let isDisabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
 
-            if (forceEnableButtons) {
-              isDisabled = false;
-            }
-            return (
-              <StyledFooterButtonsContainer>
-                {onCancel && !isDisabled ? (
-                  <Button onClick={onCancel} $customType="secondary">
-                    Cancel
-                  </Button>
-                ) : null}
-                {onConfirm ? (
+              if (forceEnableButtons) {
+                isDisabled = false;
+              }
+
+              return (
+                <StyledFooterButtonsContainer>
+                  {onCancel && !isDisabled && (
+                    <Button onClick={onCancel} $customType="secondary">
+                      Cancel
+                    </Button>
+                  )}
                   <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={isDisabled}>
                     {confirmButtonText}
                   </Button>
-                ) : null}
-              </StyledFooterButtonsContainer>
-            );
-          }}
-        </Form.Item>
-      </StyledFooter>
+                </StyledFooterButtonsContainer>
+              );
+            }}
+          </Form.Item>
+        </StyledFooter>
+      )}
     </StyledContainer>
   );
 };
