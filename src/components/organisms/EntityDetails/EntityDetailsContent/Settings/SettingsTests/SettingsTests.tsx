@@ -58,7 +58,7 @@ const SettingsTests = () => {
     })
       .then((res: any) => {
         displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Steps were succesfully updated.`);
+          notificationCall('passed', `Steps were successfully updated.`);
         });
       })
       .catch((err: any) => displayDefaultErrorNotification(err));

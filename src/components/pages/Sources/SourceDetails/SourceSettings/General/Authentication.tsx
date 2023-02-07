@@ -50,7 +50,7 @@ const Authentication: React.FC = () => {
     updateSource(body)
       .then(res => {
         displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', 'Source was succesfully updated.');
+          notificationCall('passed', 'Source was successfully updated.');
           dispatch(setCurrentSource(body));
         });
       })

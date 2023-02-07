@@ -134,7 +134,7 @@ const Source = () => {
     })
       .then((res: any) => {
         displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Test source was succesfully updated.`);
+          notificationCall('passed', `Test source was successfully updated.`);
         });
       })
       .catch((err: any) => {

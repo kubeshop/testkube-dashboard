@@ -40,7 +40,7 @@ const TestType = () => {
     })
       .then((res: any) => {
         displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Test type was succesfully updated.`);
+          notificationCall('passed', `Test type was successfully updated.`);
         });
       })
       .catch((err: any) => {
