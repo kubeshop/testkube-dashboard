@@ -37,10 +37,11 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     onCancel,
     footerText,
     children,
-    confirmButtonText,
+    confirmButtonText = 'Save',
     isButtonsDisabled,
     forceEnableButtons,
   } = props;
+
   return (
     <StyledContainer isWarning={isWarning}>
       <StyledHeader>
