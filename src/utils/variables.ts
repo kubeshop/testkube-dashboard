@@ -26,7 +26,7 @@ export const formatVariables = (list: any[]) => {
     } else {
       variables[item.key] = {
         name: item.key,
-        value: `"${item.value}"`,
+        value: item.value,
         type: item.type === 0 ? 'basic' : 'secret',
       };
     }
