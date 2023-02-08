@@ -6,6 +6,8 @@ import {TestRunnerIcon} from '@atoms';
 
 import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
 
+import {PageBlueprint} from '@organisms';
+
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
 import {useGetExecutorsQuery} from '@services/executors';
@@ -13,8 +15,6 @@ import {useGetExecutorsQuery} from '@services/executors';
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
-
-import {PageBlueprint} from '@src/components/organisms';
 
 import {executorsList} from '../utils';
 import AddExecutorsModal from './AddExecutorsModal';

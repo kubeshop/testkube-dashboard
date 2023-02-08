@@ -13,14 +13,13 @@ import {Button, Input} from '@custom-antd';
 
 import {Hint} from '@molecules';
 
+import {openSourcesDocumentation} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateSourceMutation} from '@services/sources';
 
 import {MainContext} from '@contexts';
-
-import {openSourcesDocumentation} from '@src/utils/externalLinks';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import {AddSourceModalContainer} from './SourcesList.styled';
 

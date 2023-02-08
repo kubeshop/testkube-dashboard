@@ -2,7 +2,7 @@ import {useContext} from 'react';
 
 import {Space} from 'antd';
 
-import {EntityDetailsContext} from '@src/contexts';
+import {EntityDetailsContext} from '@contexts';
 
 import Delete from './Delete';
 import FailureHandling from './FailureHandling';

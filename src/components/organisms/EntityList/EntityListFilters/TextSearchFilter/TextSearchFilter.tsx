@@ -7,13 +7,13 @@ import {SearchOutlined} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
 
+import {initialPageSize} from '@redux/initialState';
+
 import useDebounce from '@hooks/useDebounce';
 
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
-
-import {initialPageSize} from '@src/redux/initialState';
 
 const TextSearchFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, entity, queryParam, isFiltersDisabled} = props;

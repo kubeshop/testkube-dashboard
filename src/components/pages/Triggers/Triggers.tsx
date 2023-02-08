@@ -5,6 +5,10 @@ import {Dropdown, Form, Menu} from 'antd';
 import {DownOutlined} from '@ant-design/icons';
 
 import {TestWithExecution} from '@models/test';
+import {TestTrigger} from '@models/triggers';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Skeleton} from '@custom-antd';
 
@@ -13,16 +17,12 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {PageBlueprint} from '@organisms';
 
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
-
-import {TestTrigger} from '@src/models/triggers';
-import {useAppSelector} from '@src/redux/hooks';
-import {selectNamespace} from '@src/redux/reducers/configSlice';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import AddTriggerOption from './AddTriggerOption';
 import TriggerItem from './TriggerItem';

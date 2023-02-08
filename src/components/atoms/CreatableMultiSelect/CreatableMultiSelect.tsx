@@ -4,7 +4,7 @@ import CreatableSelect from 'react-select/creatable';
 
 import {Option} from '@models/form';
 
-import usePressEnter from '@src/hooks/usePressEnter';
+import usePressEnter from '@hooks/usePressEnter';
 
 import {customStyles, customTheme} from './CreatableMultiSelect.styled';
 import {

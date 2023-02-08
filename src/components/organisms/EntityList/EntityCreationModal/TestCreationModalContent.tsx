@@ -11,6 +11,7 @@ import {selectSources} from '@redux/reducers/sourcesSlice';
 
 import {Button, Text} from '@custom-antd';
 
+import {Hint, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
@@ -22,8 +23,6 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
-
-import {Hint, notificationCall} from '@src/components/molecules';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 

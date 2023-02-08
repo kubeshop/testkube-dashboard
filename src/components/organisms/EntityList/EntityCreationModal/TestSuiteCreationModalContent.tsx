@@ -9,6 +9,7 @@ import {openSettingsTabConfig} from '@redux/reducers/configSlice';
 import {Button, Text} from '@custom-antd';
 
 import {LabelsSelect} from '@molecules';
+import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
@@ -16,8 +17,6 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
 import {AnalyticsContext, MainContext} from '@contexts';
-
-import {decomposeLabels} from '@src/components/molecules/LabelsSelect/utils';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 
