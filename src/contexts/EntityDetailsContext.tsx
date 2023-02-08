@@ -38,7 +38,7 @@ const EntityDetailsContext = createContext<{
   setCurrentPage: () => {},
   currentPage: 1,
   metrics: undefined,
-  daysFilterValue: 7,
+  daysFilterValue: 0, // 0 means to see all executions
   setDaysFilterValue: () => {},
   abortExecution: () => {},
   isFirstTimeLoading: true,

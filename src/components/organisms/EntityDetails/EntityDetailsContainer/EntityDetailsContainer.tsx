@@ -31,14 +31,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   } = props;
 
   const {navigate, location, wsRoot} = useContext(MainContext);
+  const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
+
   const {pathname} = location;
 
   const params = useParams();
   const {id, execId} = params;
 
-  const [daysFilterValue, setDaysFilterValue] = useState(7);
+  const [daysFilterValue, setDaysFilterValue] = useState(defaultDaysFilterValue);
+  const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
   const [selectedRow, selectRow] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
   const [executionsList, setExecutionsList] = useStateCallback<any>(null);
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
 
