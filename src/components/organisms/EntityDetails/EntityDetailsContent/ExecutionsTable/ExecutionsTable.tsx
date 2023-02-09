@@ -7,7 +7,6 @@ import {Skeleton} from '@custom-antd';
 
 import {EntityDetailsContext} from '@contexts';
 
-// import EntityDetailsSkeleton from '../EntityDetailsSkeleton';
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
 

@@ -211,7 +211,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     return () => {
       clearInterval(interval);
     };
-  }, [entity]);
+  }, [entity, daysFilterValue]);
 
   useEffect(() => {
     setTimeout(() => {

@@ -40,7 +40,7 @@ const filterOptions: OptionType[] = [
 ];
 
 const EntityDetailsContent: React.FC = () => {
-  const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, isRowSelected} =
+  const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue} =
     useContext(EntityDetailsContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
