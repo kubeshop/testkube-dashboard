@@ -180,16 +180,8 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     if (params.execId && executionsList?.results.length > 0) {
       const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
       const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
-      if (!indexOfDisplayedExecution) {
-          setDaysFilterValue(0);
-      }
+      indexOfDisplayedExecution ? setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10)) : setDaysFilterValue(0);
     }
-  }, [params, executionsList]);
-
-  useEffect(() => {
-    const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
-    const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
-    if (indexOfDisplayedExecution) setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10));
   }, [params, executionsList]);
 
   useEffect(() => {
