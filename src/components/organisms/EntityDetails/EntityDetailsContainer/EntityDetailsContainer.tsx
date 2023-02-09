@@ -180,7 +180,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     if (params.execId && executionsList?.results.length > 0) {
       const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
       const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
-      if (!indexOfDisplayedExecution) setDaysFilterValue(0);
+      if (!indexOfDisplayedExecution) {
+          setDaysFilterValue(0);
+      }
     }
   }, [params, executionsList]);
 
