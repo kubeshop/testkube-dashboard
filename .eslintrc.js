@@ -18,7 +18,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
     'no-console': 'warn',
     'no-undef': 'off',
-    semi: 'error',
+
     'no-unused-vars': 'off',
     'import/no-extraneous-dependencies': 'off',
     'prefer-destructuring': 'off',
@@ -29,6 +29,7 @@ module.exports = {
     'no-useless-escape': 'off',
     'object-curly-newline': 'off',
     'lines-between-class-members': 'off',
+    semi: 'warn', // should be warned and allowed for compilation
     'no-restricted-globals': 'warn', // should be warned and allowed for compilation
     'unused-imports/no-unused-imports-ts': 'warn', // should be warned and allowed for compilation
     'react/jsx-curly-brace-presence': 'warn', // should be warned and allowed for compilation

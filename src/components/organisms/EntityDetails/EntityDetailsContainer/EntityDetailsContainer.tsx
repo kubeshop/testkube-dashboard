@@ -1,8 +1,6 @@
-import {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import useWebSocket from 'react-use-websocket';
-
-import {notification} from 'antd';
 
 import axios from 'axios';
 
@@ -31,14 +29,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   } = props;
 
   const {navigate, location, wsRoot} = useContext(MainContext);
+  const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
+
   const {pathname} = location;
 
   const params = useParams();
-  const {id, execId} = params;
+  const {id, execId = ''} = params;
 
-  const [daysFilterValue, setDaysFilterValue] = useState(7);
+  const [daysFilterValue, setDaysFilterValue] = useState(defaultDaysFilterValue);
+  const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
   const [selectedRow, selectRow] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
   const [executionsList, setExecutionsList] = useStateCallback<any>(null);
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
 
@@ -153,16 +153,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       if (execId) {
         const defaultUrl = getDefaultUrl();
 
-        const targetUrl = `${defaultUrl}/execution/${dataItem.id}`;
+        const targetUrl = `${defaultUrl}/execution/${dataItem?.id}`;
 
         navigate(targetUrl);
       } else {
-        const targetUrl = `${pathname}/execution/${dataItem.id}`;
+        const targetUrl = `${pathname}/execution/${dataItem?.id}`;
 
         navigate(targetUrl);
       }
     } else if (!execId) {
-      const targetUrl = `${pathname}/execution/${dataItem.id}`;
+      const targetUrl = `${pathname}/execution/${dataItem?.id}`;
 
       navigate(targetUrl);
     }
@@ -177,28 +177,18 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   };
 
   useEffect(() => {
-    if (execId && executionsList && executionsList?.results) {
-      const neededExecution = executionsList?.results.filter((item: any) => {
-        return item.id === execId;
-      })[0];
-
-      if (!neededExecution) {
-        notification.error({message: 'Provided execution does not exist'});
-        navigate(getDefaultUrl());
-      } else {
-        const targetEntity = executionsList.results?.filter((result: any) => {
-          return result?.id === execId;
-        });
-
-        const targetEntityArrayIndex = executionsList.results?.indexOf(targetEntity[0]) + 1;
-
-        onRowSelect(neededExecution, false);
-        setCurrentPage(Math.ceil(targetEntityArrayIndex / 10));
-      }
-    } else {
-      selectRow(undefined);
+    if (params.execId && executionsList?.results.length > 0) {
+      const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
+      const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
+      indexOfDisplayedExecution ? setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10)) : setDaysFilterValue(0);
     }
-  }, [executionsList, pathname]);
+  }, [params, executionsList]);
+
+  useEffect(() => {
+    if (params.execId) {
+      onRowSelect({id: execId}, false);
+    }
+  }, [params]);
 
   useEffect(() => {
     refetch();
@@ -213,8 +203,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
         clearInterval(interval);
       };
     }
-
-    // getExecutions();
 
     const interval = setInterval(() => {
       refetchMetrics();
