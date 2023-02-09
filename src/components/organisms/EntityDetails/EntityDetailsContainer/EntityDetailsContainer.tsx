@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import useWebSocket from 'react-use-websocket';
 
@@ -34,7 +34,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const {pathname} = location;
 
   const params = useParams();
-  const {id, execId} = params;
+  const {id, execId = ''} = params;
 
   const [daysFilterValue, setDaysFilterValue] = useState(defaultDaysFilterValue);
   const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
@@ -153,16 +153,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       if (execId) {
         const defaultUrl = getDefaultUrl();
 
-        const targetUrl = `${defaultUrl}/execution/${dataItem.id}`;
+        const targetUrl = `${defaultUrl}/execution/${dataItem?.id}`;
 
         navigate(targetUrl);
       } else {
-        const targetUrl = `${pathname}/execution/${dataItem.id}`;
+        const targetUrl = `${pathname}/execution/${dataItem?.id}`;
 
         navigate(targetUrl);
       }
     } else if (!execId) {
-      const targetUrl = `${pathname}/execution/${dataItem.id}`;
+      const targetUrl = `${pathname}/execution/${dataItem?.id}`;
 
       navigate(targetUrl);
     }
@@ -177,8 +177,22 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   };
 
   useEffect(() => {
+    if (params.execId && executionsList?.results.length > 0) {
+      const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
+      const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
+      if (!indexOfDisplayedExecution) setDaysFilterValue(0);
+    }
+  }, [params, executionsList]);
+
+  useEffect(() => {
+    const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
+    const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
+    if (indexOfDisplayedExecution) setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10));
+  }, [params, executionsList]);
+
+  useEffect(() => {
     if (params.execId) {
-      onRowSelect(execId, false);
+      onRowSelect({id: execId}, false);
     }
   }, [params]);
 
@@ -195,8 +209,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
         clearInterval(interval);
       };
     }
-
-    // getExecutions();
 
     const interval = setInterval(() => {
       refetchMetrics();
