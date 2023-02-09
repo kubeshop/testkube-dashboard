@@ -2,8 +2,6 @@ import {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import useWebSocket from 'react-use-websocket';
 
-import {notification} from 'antd';
-
 import axios from 'axios';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
@@ -179,28 +177,15 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   };
 
   useEffect(() => {
-    if (execId && executionsList && executionsList?.results) {
-      const neededExecution = executionsList?.results.filter((item: any) => {
-        return item.id === execId;
-      })[0];
-
-      if (!neededExecution) {
-        notification.error({message: 'Provided execution does not exist'});
-        navigate(getDefaultUrl());
-      } else {
-        const targetEntity = executionsList.results?.filter((result: any) => {
-          return result?.id === execId;
-        });
-
-        const targetEntityArrayIndex = executionsList.results?.indexOf(targetEntity[0]) + 1;
-
-        onRowSelect(neededExecution, false);
-        setCurrentPage(Math.ceil(targetEntityArrayIndex / 10));
-      }
-    } else {
-      selectRow(undefined);
+    if (!params.execId) {
+      console.log("We don't have a parameter execId", execId);
+      return () => {};
     }
-  }, [executionsList, pathname]);
+    if (params.execId) {
+      console.log("We have a parameter execId", execId);
+      onRowSelect(execId, false);
+    }
+  }, [params]);
 
   useEffect(() => {
     refetch();
