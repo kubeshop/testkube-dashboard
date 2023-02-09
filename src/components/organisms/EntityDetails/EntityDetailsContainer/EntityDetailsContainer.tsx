@@ -177,12 +177,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   };
 
   useEffect(() => {
-    if (!params.execId) {
-      console.log("We don't have a parameter execId", execId);
-      return () => {};
-    }
     if (params.execId) {
-      console.log("We have a parameter execId", execId);
       onRowSelect(execId, false);
     }
   }, [params]);
