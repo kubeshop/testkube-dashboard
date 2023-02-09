@@ -1,9 +1,5 @@
 import {Select} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-import {selectSources} from '@redux/reducers/sourcesSlice';
-
 import {FormItem} from '@custom-antd';
 
 import {StyledFormSpace} from '@organisms/EntityList/EntityCreationModal/CreationModal.styled';
@@ -32,10 +28,7 @@ export const additionalFields: any = {
 };
 
 const FirstStep: React.FC<any> = props => {
-  const {onFileChange, onLabelsChange} = props;
-
-  const executors = useAppSelector(selectExecutors);
-  const testSources = useAppSelector(selectSources);
+  const {onFileChange, onLabelsChange, executors, testSources} = props;
 
   const remappedExecutors = remapExecutors(executors);
   const remappedCustomTestSources = remapTestSources(testSources);

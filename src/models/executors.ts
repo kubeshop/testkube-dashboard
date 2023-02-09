@@ -3,6 +3,7 @@ import {EntityMap} from './entityMap';
 
 type Executor = {
   name: string;
+  displayName?: string;
   executor: {
     description: string;
     executorType: string;
@@ -15,12 +16,18 @@ type Executor = {
     imagePullSecrets?: ImagePullSecret[];
     command?: string[];
     args?: Args;
+    meta: ExecutorMeta;
   };
 };
 
 export type ImagePullSecret = {name: string};
 
 type ExecutorFeature = 'artifacts' | 'junit-report';
+
+export type ExecutorMeta = {
+  docsURI: string;
+  iconURI: string;
+};
 
 interface ExecutorsState {
   executorsList: Executor[];
