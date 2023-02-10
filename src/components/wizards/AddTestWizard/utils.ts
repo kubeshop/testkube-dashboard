@@ -113,6 +113,7 @@ export const gitDirFormFields: FormItem[] = [
 
 export const gitFileFormFields: FormItem[] = [
   {
+    tooltip: 'We do currently only support checking out repositories via https',
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -130,6 +131,7 @@ export const gitFileFormFields: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    tooltip: 'The path is relative to the root of your repository',
     rules: [required],
     fieldName: 'path',
     required: true,
@@ -138,7 +140,7 @@ export const gitFileFormFields: FormItem[] = [
     itemLabel: 'Path',
   },
   {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
@@ -156,6 +158,7 @@ export const gitFileFormFields: FormItem[] = [
 
 export const gitFormFieldsEdit: FormItem[] = [
   {
+    tooltip: 'We do currently only support checking out repositories via https',
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -173,6 +176,7 @@ export const gitFormFieldsEdit: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    tooltip: 'The path is relative to the root of your repository',
     rules: [required],
     fieldName: 'path',
     required: true,
@@ -202,6 +206,7 @@ export const customTypeFormFields: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    tooltip: 'The path is relative to the root of your repository',
     fieldName: 'path',
     inputType: 'default',
     placeholder: 'e.g.: /tests/cypress',

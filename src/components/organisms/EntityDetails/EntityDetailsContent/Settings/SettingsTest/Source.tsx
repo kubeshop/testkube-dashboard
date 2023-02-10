@@ -3,6 +3,7 @@ import {useContext, useState} from 'react';
 import {Form, Input, Select} from 'antd';
 
 import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
 import {FormItem, Text} from '@custom-antd';
@@ -45,9 +46,14 @@ const additionalFields: any = {
 const Source = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
 
+  const {type} = entityDetails;
+
+  const executors = useAppSelector(selectExecutors);
   const testSources = useAppSelector(selectSources);
 
   const remappedCustomTestSources = remapTestSources(testSources);
+
+  const selectedExecutor = executors.find(executor => executor.executor.types.includes(type));
 
   const getFormValues = () => {
     const {content} = entityDetails;
@@ -90,7 +96,10 @@ const Source = () => {
 
   const [form] = Form.useForm();
 
-  const sourcesOptions = [...remappedCustomTestSources, ...testSourceBaseOptions];
+  const sourcesOptions = [
+    ...remappedCustomTestSources,
+    ...testSourceBaseOptions.filter(option => selectedExecutor?.executor.contentTypes.includes(String(option.value))),
+  ];
 
   const [updateTest] = useUpdateTestMutation();
 
