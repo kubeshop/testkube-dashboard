@@ -17,6 +17,7 @@ type Executor = {
     command?: string[];
     args?: Args;
     meta: ExecutorMeta;
+    contentTypes: string[];
   };
 };
 

@@ -6,6 +6,7 @@ import {FormItem, Option} from '@models/form';
 import {SourceWithRepository} from '@models/sources';
 import {Step} from '@models/wizard';
 
+import {testSourceLink} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required, url} from '@utils/form';
 
 import FirstStepHint from './hints/FirstStepHint';
@@ -18,11 +19,13 @@ export const addTestSteps: Step[] = [
   {title: 'Done', description: 'Save or run your test.'},
 ];
 
-export const testSourceBaseOptions: Option[] = [
-  {value: 'git-dir', label: 'Git directory'},
-  {value: 'git-file', label: 'Git file'},
-  {value: 'file-uri', label: 'File'},
-  {value: 'string', label: 'String'},
+type testSourceBaseOptionsType = (Option & {docsURI: string})[];
+
+export const testSourceBaseOptions: testSourceBaseOptionsType = [
+  {value: 'git-dir', label: 'Git directory', docsURI: testSourceLink},
+  {value: 'git-file', label: 'Git file', docsURI: testSourceLink},
+  {value: 'file-uri', label: 'File', docsURI: testSourceLink},
+  {value: 'string', label: 'String', docsURI: testSourceLink},
 ];
 
 export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
@@ -67,6 +70,7 @@ export const testSourceFieldConfig = {
 
 export const gitDirFormFields: FormItem[] = [
   {
+    tooltip: 'We do currently only support checking out repositories via https',
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -83,6 +87,7 @@ export const gitDirFormFields: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    tooltip: 'The path is relative to the root of your repository',
     fieldName: 'path',
     required: true,
     inputType: 'default',
@@ -90,7 +95,7 @@ export const gitDirFormFields: FormItem[] = [
     itemLabel: 'Path',
   },
   {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',

@@ -17,7 +17,7 @@ import {HintProps} from '@molecules/Hint/Hint';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
-import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
+import {getTestSourceSpecificFields, onFileChange, testSourceBaseOptions} from '@wizards/AddTestWizard/utils';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
@@ -85,7 +85,21 @@ const TestCreationModalContent: React.FC = () => {
         openLink: () => window.open(selectedExecutor.executor.meta.docsURI, '_blank'),
       });
     }
+
+    form.setFieldValue('testSource', null);
   }, [form.getFieldValue('testType')]);
+
+  useEffect(() => {
+    const selectedSource = testSourceBaseOptions.find(source => source.value === form.getFieldValue('testSource'));
+
+    if (selectedSource) {
+      setHintConfig({
+        title: `${selectedSource.label} as source`,
+        description: `Discover all the features and tricks around using ${selectedSource.label} as your source on Testkube`,
+        openLink: () => window.open(selectedSource.docsURI, '_blank'),
+      });
+    }
+  }, [form.getFieldValue('testSource')]);
 
   const onSaveClick = async (values: any) => {
     const {testSource, testType} = values;

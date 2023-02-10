@@ -1,5 +1,7 @@
 import {Select} from 'antd';
 
+import {Executor} from '@models/executors';
+
 import {FormItem} from '@custom-antd';
 
 import {StyledFormSpace} from '@organisms/EntityList/EntityCreationModal/CreationModal.styled';
@@ -40,25 +42,32 @@ const FirstStep: React.FC<any> = props => {
         noStyle
         shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
       >
-        {() => {
-          return (
-            <StyledFormSpace size={24} direction="vertical">
-              <FormItem
-                rules={testSourceFieldConfig.rules}
-                label={testSourceFieldConfig.itemLabel}
-                name={testSourceFieldConfig.fieldName}
-                key={testSourceFieldConfig.fieldName}
-                required={testSourceFieldConfig.required}
-                requiredMark={testSourceFieldConfig.required ? undefined : 'optional'}
-              >
-                <Select
-                  placeholder={testSourceFieldConfig.placeholder}
-                  showSearch
-                  options={[...remappedCustomTestSources, ...testSourceBaseOptions]}
-                />
-              </FormItem>
-            </StyledFormSpace>
+        {({getFieldValue}) => {
+          const selectedExecutor = executors.find((executor: Executor) =>
+            executor.executor.types.includes(getFieldValue('testType'))
           );
+
+          if (selectedExecutor) {
+            const options = [
+              ...remappedCustomTestSources,
+              ...testSourceBaseOptions.filter(option => selectedExecutor.executor.contentTypes.includes(option.value)),
+            ];
+
+            return (
+              <StyledFormSpace size={24} direction="vertical">
+                <FormItem
+                  rules={testSourceFieldConfig.rules}
+                  label={testSourceFieldConfig.itemLabel}
+                  name={testSourceFieldConfig.fieldName}
+                  key={testSourceFieldConfig.fieldName}
+                  required={testSourceFieldConfig.required}
+                  requiredMark={testSourceFieldConfig.required ? undefined : 'optional'}
+                >
+                  <Select placeholder={testSourceFieldConfig.placeholder} showSearch options={options} />
+                </FormItem>
+              </StyledFormSpace>
+            );
+          }
         }}
       </FormItem>
       <FormItem
