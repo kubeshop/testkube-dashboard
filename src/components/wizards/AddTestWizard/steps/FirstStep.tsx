@@ -44,13 +44,15 @@ const FirstStep: React.FC<any> = props => {
       >
         {({getFieldValue}) => {
           const selectedExecutor = executors.find((executor: Executor) =>
-            executor.executor.types.includes(getFieldValue('testType'))
+            executor.executor?.types?.includes(getFieldValue('testType'))
           );
 
           if (selectedExecutor) {
             const options = [
               ...remappedCustomTestSources,
-              ...testSourceBaseOptions.filter(option => selectedExecutor.executor.contentTypes.includes(option.value)),
+              ...testSourceBaseOptions.filter(option =>
+                selectedExecutor.executor?.contentTypes?.includes(option.value)
+              ),
             ];
 
             return (

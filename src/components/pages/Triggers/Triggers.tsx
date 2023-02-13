@@ -9,6 +9,7 @@ import {TestTrigger} from '@models/triggers';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
 
 import {Button, Skeleton} from '@custom-antd';
 
@@ -72,6 +73,7 @@ const Triggers: React.FC = () => {
   const [defaultFormattedTriggers, setDefaultFormattedTriggers] = useState<any>([]);
 
   const appNamespace = useAppSelector(selectNamespace);
+  const executors = useAppSelector(selectExecutors);
 
   const setDefaultTriggersData = (_triggersList?: TestTrigger[]) => {
     if (_triggersList) {
@@ -257,6 +259,7 @@ const Triggers: React.FC = () => {
                         remove={remove}
                         testsData={testsData}
                         testSuitesData={testSuitesData}
+                        executors={executors}
                       />
                     );
                   })}

@@ -53,7 +53,7 @@ const Source = () => {
 
   const remappedCustomTestSources = remapTestSources(testSources);
 
-  const selectedExecutor = executors.find(executor => executor.executor.types.includes(type));
+  const selectedExecutor = executors.find(executor => executor.executor.types?.includes(type));
 
   const getFormValues = () => {
     const {content} = entityDetails;
@@ -98,7 +98,7 @@ const Source = () => {
 
   const sourcesOptions = [
     ...remappedCustomTestSources,
-    ...testSourceBaseOptions.filter(option => selectedExecutor?.executor.contentTypes.includes(String(option.value))),
+    ...testSourceBaseOptions.filter(option => selectedExecutor?.executor?.contentTypes?.includes(String(option.value))),
   ];
 
   const [updateTest] = useUpdateTestMutation();

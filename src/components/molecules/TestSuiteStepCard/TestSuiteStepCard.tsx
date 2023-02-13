@@ -2,9 +2,7 @@ import React from 'react';
 
 import {ClockCircleOutlined, DeleteOutlined} from '@ant-design/icons';
 
-import {TestExecutor} from '@models/testExecutors';
-
-import {TestRunnerIcon} from '@atoms';
+import {ExecutorIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
@@ -38,7 +36,7 @@ const TestSuiteStepCard: React.FC<TestSuiteStepCardProps> = props => {
 
   return (
     <StyledContainer isDragging={isDragging}>
-      {type === 'delay' ? <ClockCircleOutlined /> : <TestRunnerIcon icon={type as TestExecutor} />}
+      {type === 'delay' ? <ClockCircleOutlined /> : <ExecutorIcon type={type} />}
       <StyledNameContainer>
         <Text color={Colors.slate200}>{name}</Text>
       </StyledNameContainer>

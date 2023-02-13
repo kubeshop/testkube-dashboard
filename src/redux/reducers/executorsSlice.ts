@@ -31,8 +31,9 @@ export const executorsSlice = createSlice({
       state.executorsFeaturesMap = executorsFeaturesMap;
       state.executorsList =
         action.payload.map(executor => {
-          const iconURI = executor.executor.meta.iconURI;
-          if (isURL(iconURI)) {
+          const iconURI = executor.executor?.meta?.iconURI;
+
+          if (isURL(iconURI) || !iconURI) {
             return {
               ...executor,
               displayName: executor.name,

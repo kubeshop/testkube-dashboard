@@ -1,16 +1,20 @@
-import {useContext, useMemo} from 'react';
+import {memo, useContext, useMemo} from 'react';
 
 import {nanoid} from '@reduxjs/toolkit';
 
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
 import {setRedirectTarget} from '@redux/reducers/configSlice';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
 
-import {Icon, StatusIcon, TestRunnerIcon} from '@atoms';
+import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {ExecutionName} from '@molecules';
 
 import {MainContext} from '@contexts';
+
+import {useAppSelector} from '@src/redux/hooks';
+import {getTestExecutorIcon} from '@src/redux/utils/executorIcon';
 
 import {
   StyledExecutionStepsList,
@@ -30,6 +34,8 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const {executionSteps, iconSet = 'default'} = props;
 
   const {dispatch, navigate} = useContext(MainContext);
+
+  const executors = useAppSelector(selectExecutors);
 
   const getExecutionStepIcon = (step: TestSuiteStepExecutionResult) => {
     if (iconSet === 'definition') {
@@ -96,6 +102,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
         testType,
       } = execution;
 
+      const stepIcon = getTestExecutorIcon(executors, testType);
       const listItemKey = execution?.id || nanoid();
 
       // TODO: improve this
@@ -111,14 +118,14 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             {icon ? <StatusIcon status={status} /> : null}
             {execute || stepResult?.execute ? (
               <>
-                <TestRunnerIcon icon={testType} />
+                <ExecutorIcon type={stepIcon} />
                 <ExecutionName name={executionName || step.step.execute?.name || ''} />
                 <StyledExternalLinkIcon />
               </>
             ) : null}
             {stepResult.delay ? (
               <>
-                <Icon name="delay" style={{width: 22, height: 20}} />
+                <ExecutorIcon />
                 <ExecutionName name={`Delay - ${stepResult.delay?.duration}ms`} />
                 <div />
               </>
@@ -132,4 +139,4 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   return <StyledExecutionStepsList>{renderedDefinitionsList}</StyledExecutionStepsList>;
 };
 
-export default ExecutionStepsList;
+export default memo(ExecutionStepsList);

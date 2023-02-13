@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledTestRunnerIcon = styled.div<{$noWidth: boolean}>`
+export const StyledExecutorIcon = styled.div<{$noWidth: boolean}>`
   width: ${({$noWidth}) => ($noWidth ? 'unset' : '24px')};
   height: ${({$noWidth}) => ($noWidth ? 'unset' : '24px')};
 

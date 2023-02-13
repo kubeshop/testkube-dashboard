@@ -62,7 +62,7 @@ const TestCreationModalContent: React.FC = () => {
 
   useEffect(() => {
     const selectedExecutor = executors.find(executor =>
-      executor.executor.types.includes(form.getFieldValue('testType'))
+      executor.executor?.types?.includes(form.getFieldValue('testType'))
     );
 
     if (!selectedExecutor) {

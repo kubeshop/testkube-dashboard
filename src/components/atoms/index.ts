@@ -1,7 +1,7 @@
 export {default as Spinner} from './Spinner/Spinner';
 export {default as Icon} from './Icon/Icon';
 export {default as MenuItem} from './MenuItem/MenuItem';
-export {default as TestRunnerIcon} from './TestRunnerIcon';
+export {default as ExecutorIcon} from './ExecutorIcon';
 export {default as Dots} from './Dots';
 export {default as TableActionsDropdownContainer} from './TableActionsDropdownContainer';
 export {default as LabelListItem} from './LabelListItem';

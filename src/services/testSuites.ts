@@ -27,6 +27,9 @@ export const testSuitesApi = createApi({
     getTestSuiteDetails: builder.query<any, string>({
       query: id => `/test-suites/${id}`,
     }),
+    getTestsListForTestSuite: builder.query<any, string>({
+      query: id => `/test-suites/${id}/tests`,
+    }),
     addTestSuite: builder.mutation<any, any>({
       query: body => ({
         url: `/test-suites`,
@@ -66,4 +69,5 @@ export const {
   useRunTestSuiteMutation,
   useGetAllTestSuitesQuery,
   useAbortTestSuiteExecutionMutation,
+  useGetTestsListForTestSuiteQuery,
 } = testSuitesApi;

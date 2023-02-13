@@ -1,5 +1,3 @@
-export {default as InfoPanelHeader} from './InfoPanelHeader';
-export {default as TestRunner} from './TestRunner';
 export {default as TextFilter} from './TextFilter';
 export {default as CLICommands} from './CLICommands';
 export {default as CopyCommand} from './CLICommands/CopyCommand';

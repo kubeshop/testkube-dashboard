@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef} from 'react';
 
 import {initialPageSize} from '@redux/initialState';
 
-import {StatusIcon, TestRunnerIcon} from '@atoms';
+import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 import Tooltip from '@custom-antd/Tooltip';
@@ -57,7 +57,7 @@ const EntityGridItem: React.FC<any> = props => {
       <DetailsWrapper>
         <ItemRow $flex={1}>
           <ItemColumn>
-            {dataItem?.type ? <TestRunnerIcon icon={dataItem?.type} /> : null}
+            {dataItem?.type ? <ExecutorIcon type={dataItem?.testIcon} /> : null}
             <Text className="regular big">{dataItem?.name}</Text>
             {dataItem?.labels ? <LabelsList labels={dataItem?.labels} /> : null}
           </ItemColumn>
