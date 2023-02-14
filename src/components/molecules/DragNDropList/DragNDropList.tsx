@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {DragDropContext, Draggable} from 'react-beautiful-dnd';
 
 import {reorder} from '@utils/array';
@@ -69,4 +69,4 @@ const DragNDropList: React.FC<DragNDropListProps> = props => {
   );
 };
 
-export default DragNDropList;
+export default memo(DragNDropList);

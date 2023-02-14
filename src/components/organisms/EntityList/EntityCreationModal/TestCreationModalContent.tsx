@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
@@ -7,14 +7,17 @@ import {Option} from '@models/form';
 
 import {useAppSelector} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
 import {Button, Text} from '@custom-antd';
 
+import {Hint, notificationCall} from '@molecules';
+import {HintProps} from '@molecules/Hint/Hint';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
-import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
+import {getTestSourceSpecificFields, onFileChange, testSourceBaseOptions} from '@wizards/AddTestWizard/utils';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
@@ -23,9 +26,8 @@ import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
 
-import {Hint, notificationCall} from '@src/components/molecules';
-
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
+import {defaultHintConfig} from './ModalConfig';
 
 type AddTestPayload = {
   data?: {
@@ -50,12 +52,56 @@ const TestCreationModalContent: React.FC = () => {
   const {dispatch, navigate} = useContext(MainContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
 
+  const executors = useAppSelector(selectExecutors);
   const testSources = useAppSelector(selectSources);
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
+  const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);
+
   const [addTest, {isLoading}] = useAddTestMutation();
 
-  const onSaveClick = async (values: any, toRun: boolean = false) => {
+  useEffect(() => {
+    const selectedExecutor = executors.find(executor =>
+      executor.executor?.types?.includes(form.getFieldValue('testType'))
+    );
+
+    if (!selectedExecutor) {
+      setHintConfig(defaultHintConfig);
+      return;
+    }
+
+    if (selectedExecutor.executor?.executorType === 'container') {
+      setHintConfig({
+        title: 'Testing with custom executor',
+        description: 'Discover all the features and tricks around custom executors',
+        openLink: openCustomExecutorDocumentation,
+      });
+    }
+
+    if (selectedExecutor.executor?.executorType === 'job') {
+      setHintConfig({
+        title: `Testing with ${selectedExecutor.displayName}`,
+        description: `Discover all the features and tricks around testing with ${selectedExecutor.displayName} on Testkube`,
+        openLink: () => window.open(selectedExecutor.executor.meta.docsURI, '_blank'),
+      });
+    }
+
+    form.setFieldValue('testSource', null);
+  }, [form.getFieldValue('testType')]);
+
+  useEffect(() => {
+    const selectedSource = testSourceBaseOptions.find(source => source.value === form.getFieldValue('testSource'));
+
+    if (selectedSource) {
+      setHintConfig({
+        title: `${selectedSource.label} as source`,
+        description: `Discover all the features and tricks around using ${selectedSource.label} as your source on Testkube`,
+        openLink: () => window.open(selectedSource.docsURI, '_blank'),
+      });
+    }
+  }, [form.getFieldValue('testSource')]);
+
+  const onSaveClick = async (values: any) => {
     const {testSource, testType} = values;
 
     const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
@@ -92,11 +138,9 @@ const TestCreationModalContent: React.FC = () => {
             uiEvent: 'create-tests',
           });
 
-          if (!toRun) {
-            dispatch(setRedirectTarget({targetTestId: res?.data?.metadata?.name}));
+          dispatch(setRedirectTarget({targetTestId: res?.data?.metadata?.name}));
 
-            return navigate(`/tests/executions/${values.name}`);
-          }
+          return navigate(`/tests/executions/${values.name}`);
         });
       })
       .catch(err => {
@@ -126,6 +170,8 @@ const TestCreationModalContent: React.FC = () => {
           <FirstStep
             onFileChange={(file: Nullable<UploadChangeParam>) => onFileChange(file, form)}
             onLabelsChange={setLocalLabels}
+            executors={executors}
+            testSources={testSources}
           />
           <StyledFormItem shouldUpdate>
             {({isFieldsTouched}) => (
@@ -141,11 +187,7 @@ const TestCreationModalContent: React.FC = () => {
           </StyledFormItem>
         </StyledFormSpace>
       </Form>
-      <Hint
-        title="Missing a test type?"
-        description="Add test types through testkube executors."
-        openLink={openCustomExecutorDocumentation}
-      />
+      <Hint {...hintConfig} />
     </div>
   );
 };

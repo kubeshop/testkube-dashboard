@@ -7,11 +7,16 @@ import axios from 'axios';
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {WSData, WSEventType} from '@models/websocket';
 
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
+
 import useStateCallback from '@hooks/useStateCallback';
 
 import {PollingIntervals} from '@utils/numbers';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
+
+import {getTestExecutorIcon} from '@src/redux/utils/executorIcon';
 
 import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
@@ -41,6 +46,8 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [selectedRow, selectRow] = useState();
   const [executionsList, setExecutionsList] = useStateCallback<any>(null);
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
+
+  const executors = useAppSelector(selectExecutors);
 
   const {data: executions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
@@ -221,9 +228,14 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setExecutionsList(executions);
   }, [executions]);
 
+  const testIcon = entity === 'tests' ? getTestExecutorIcon(executors, entityDetails?.type) : undefined;
+
   const entityDetailsContextValues = {
     executionsList,
-    entityDetails,
+    entityDetails: {
+      ...entityDetails,
+      ...(testIcon ? {testIcon} : {}),
+    },
     entity,
     onRowSelect,
     isRowSelected: Boolean(selectedRow),

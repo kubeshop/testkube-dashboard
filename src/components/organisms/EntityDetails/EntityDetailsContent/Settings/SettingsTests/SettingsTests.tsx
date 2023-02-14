@@ -6,10 +6,13 @@ import {ClockCircleOutlined} from '@ant-design/icons';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {TestWithExecution} from '@models/test';
-import {TestExecutor} from '@models/testExecutors';
+import {Test, TestWithExecution} from '@models/test';
 
-import {TestRunnerIcon} from '@atoms';
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
+import {getTestExecutorIcon} from '@redux/utils/executorIcon';
+
+import {ExecutorIcon} from '@atoms';
 
 import {Text, Title} from '@custom-antd';
 
@@ -17,7 +20,7 @@ import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} f
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
-import {useUpdateTestSuiteMutation} from '@services/testSuites';
+import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
@@ -37,16 +40,27 @@ const SettingsTests = () => {
 
   const scrollRef = useRef(null);
 
-  const {data: testsList = []} = useGetAllTestsQuery();
+  const executors = useAppSelector(selectExecutors);
+
+  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name);
+  const {data: allTestsList = []} = useGetAllTestsQuery();
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
   const testsData = useMemo(() => {
-    return testsList.map((item: TestWithExecution) => ({
-      name: item.test.name,
-      namespace: item.test.namespace,
-      type: item.test.type,
+    return testsList.map((item: Test) => ({
+      name: item.name,
+      namespace: item.namespace,
+      type: getTestExecutorIcon(executors, item.type),
     }));
   }, [testsList]);
+
+  const allTestsData = useMemo(() => {
+    return allTestsList.map((item: TestWithExecution) => ({
+      name: item.test.name,
+      namespace: item.test.namespace,
+      type: getTestExecutorIcon(executors, item.test.type),
+    }));
+  }, [allTestsList]);
 
   const saveSteps = () => {
     updateTestSuite({
@@ -69,6 +83,7 @@ const SettingsTests = () => {
       setIsDelayModalVisible(true);
     } else {
       const {name, namespace, type} = JSON.parse(value);
+
       setCurrentSteps([
         ...currentSteps,
         {
@@ -205,10 +220,10 @@ const SettingsTests = () => {
               <Text className="regular middle">Delay</Text>
             </StyledOptionWrapper>
           </Option>
-          {testsData.map((item: any) => (
+          {allTestsData.map((item: any) => (
             <Option value={JSON.stringify(item)} key={item.name}>
               <StyledOptionWrapper>
-                <TestRunnerIcon icon={item.type as TestExecutor} />
+                <ExecutorIcon type={item.type} />
                 <Text className="regular middle">{item.name}</Text>
               </StyledOptionWrapper>
             </Option>

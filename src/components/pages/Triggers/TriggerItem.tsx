@@ -2,10 +2,10 @@ import {Form, Select} from 'antd';
 
 import {DeleteOutlined} from '@ant-design/icons';
 
+import {Executor} from '@models/executors';
 import {Option as OptionType} from '@models/form';
-import {TestExecutor} from '@models/testExecutors';
 
-import {TestRunnerIcon} from '@atoms';
+import {ExecutorIcon} from '@atoms';
 
 import {Input, Text} from '@custom-antd';
 
@@ -16,6 +16,8 @@ import {requiredNoText} from '@utils/form';
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 
 import Colors from '@styles/Colors';
+
+import {getTestExecutorIcon} from '@src/redux/utils/executorIcon';
 
 import {StyledTestOptionWrapper, TextWrapper, TriggerFormItem, TriggerItemContainer} from './Triggers.styled';
 
@@ -30,10 +32,11 @@ type TriggerItemProps = {
   events?: {[key: string]: string[]};
   testsData: any[];
   testSuitesData: any[];
+  executors: Executor[];
 };
 
 const TriggerItem: React.FC<TriggerItemProps> = props => {
-  const {type, resources, actions, name, events, remove, testsData, testSuitesData} = props;
+  const {type, resources, actions, name, events, remove, testsData, testSuitesData, executors} = props;
 
   const renderSelectResource = (placeholder: string, {tests, testSuites}: {tests: any[]; testSuites: any[]}) => {
     return (
@@ -43,7 +46,7 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
             {tests.map((item: any) => (
               <Option key={item.name}>
                 <StyledTestOptionWrapper>
-                  <TestRunnerIcon icon={item.type as TestExecutor} />
+                  <ExecutorIcon type={getTestExecutorIcon(executors, item.type)} />
                   <Text className="regular middle">{item.name}</Text>
                 </StyledTestOptionWrapper>
               </Option>

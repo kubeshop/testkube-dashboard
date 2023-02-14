@@ -8,7 +8,7 @@ import Colors from '@styles/Colors';
 
 import {StyledWizardHintContainer} from './Hint.styled';
 
-type HintProps = {
+export type HintProps = {
   title: string;
   description: string;
   openLink: () => void;

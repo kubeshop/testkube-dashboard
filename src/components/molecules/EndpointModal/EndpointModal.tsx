@@ -10,9 +10,9 @@ import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input, Modal, Text} from '@custom-antd';
 
-import {MainContext} from '@contexts';
+import {hasProtocol} from '@utils/strings';
 
-import {hasProtocol} from '@src/utils/strings';
+import {MainContext} from '@contexts';
 
 import env from '../../../env';
 import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
