@@ -1,12 +1,10 @@
 import {useContext, useState} from 'react';
 
-import {Form, Input, Select} from 'antd';
+import {Form, Select} from 'antd';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
-
-import {FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -27,11 +25,10 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import Colors from '@styles/Colors';
-
 import {EntityDetailsContext} from '@contexts';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
+import SecretFormItem from './SecretFormItem';
 
 const dummySecret = '******';
 
@@ -207,62 +204,18 @@ const Source = () => {
               }
             }}
           </Form.Item>
-          <Form.Item noStyle shouldUpdate>
-            {({setFieldValue, getFieldValue}) => {
-              const testSourceValue: string = getFieldValue('testSource');
-
-              if (testSourceValue === 'git-dir' || testSourceValue === 'git-file') {
-                return (
-                  <>
-                    <FormItem name="token" label="Git Token">
-                      <Input.Password placeholder="Git Token" disabled={!clearedToken} />
-                    </FormItem>
-                    {!clearedToken ? (
-                      <Text
-                        style={{cursor: 'pointer', marginTop: '5px'}}
-                        className="middle regular"
-                        color={Colors.indigo400}
-                        onClick={() => {
-                          setFieldValue('token', '');
-                          setClearedToken(true);
-                        }}
-                      >
-                        Remove this token
-                      </Text>
-                    ) : null}
-                  </>
-                );
-              }
-            }}
-          </Form.Item>
-          <Form.Item noStyle shouldUpdate>
-            {({setFieldValue, getFieldValue}) => {
-              const testSourceValue: string = getFieldValue('testSource');
-
-              if (testSourceValue === 'git-dir' || testSourceValue === 'git-file') {
-                return (
-                  <>
-                    <FormItem name="username" label="Git Username">
-                      <Input.Password placeholder="Git Username" disabled={!clearedUsername} />
-                    </FormItem>
-                    {!clearedUsername ? (
-                      <Text
-                        style={{cursor: 'pointer', marginTop: '5px'}}
-                        className="middle regular"
-                        color={Colors.indigo400}
-                        onClick={() => {
-                          setFieldValue('username', '');
-                          setClearedUsername(true);
-                        }}
-                      >
-                        Remove username
-                      </Text>
-                    ) : null}
-                  </>
-                );
-              }
-            }}
-          </Form.Item>
+          <SecretFormItem
+            name="token"
+            label="Git Token"
+            isClearedValue={clearedToken}
+            setIsClearedValue={setClearedToken}
+          />
+          <SecretFormItem
+            name="username"
+            label="Git Username"
+            isClearedValue={clearedUsername}
+            setIsClearedValue={setClearedUsername}
+          />
         </StyledSpace>
       </ConfigurationCard>
     </Form>

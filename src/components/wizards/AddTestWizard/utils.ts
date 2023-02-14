@@ -80,6 +80,7 @@ export const gitDirFormFields: FormItem[] = [
   },
   {
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    rules: [required],
     fieldName: 'branch',
     required: true,
     inputType: 'default',
@@ -88,6 +89,7 @@ export const gitDirFormFields: FormItem[] = [
   },
   {
     tooltip: 'The path is relative to the root of your repository',
+    rules: [required],
     fieldName: 'path',
     required: true,
     inputType: 'default',
