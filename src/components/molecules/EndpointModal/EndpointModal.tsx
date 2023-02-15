@@ -87,7 +87,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   };
 
   useEffect(() => {
-    if (getAPI() === '') setModalState(true)
+    if (getAPI() === '') setModalState(true);
   }, [getAPI()]);
 
   const onConfirm = () => {
