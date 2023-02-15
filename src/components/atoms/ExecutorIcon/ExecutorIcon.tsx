@@ -9,6 +9,7 @@ import {ReactComponent as JMeterIcon} from '@assets/jmeterIcon.svg';
 import {ReactComponent as K6Icon} from '@assets/k6Icon.svg';
 import {ReactComponent as KubepugIcon} from '@assets/kubepug.svg';
 import {ReactComponent as MavenIcon} from '@assets/mavenIcon.svg';
+import {ReactComponent as PlaywrightIcon} from '@assets/playwrightIcon.svg';
 import {ReactComponent as PostmanIcon} from '@assets/postmanIcon.svg';
 import {ReactComponent as SoapUIIcon} from '@assets/soapIcon.svg';
 import {ReactComponent as DefaultIcon} from '@assets/tests-icon.svg';
@@ -32,6 +33,7 @@ export const executorIcons: {[key in string]: any} = {
   kubepug: <KubepugIcon />,
   ginkgo: <GinkgoIcon />,
   jmeter: <JMeterIcon />,
+  playwright: <PlaywrightIcon />,
 };
 
 const ExecutorIcon: React.FC<ExecutorIconProps> = props => {
