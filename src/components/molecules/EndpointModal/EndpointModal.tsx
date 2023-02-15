@@ -4,17 +4,15 @@ import {notification} from 'antd';
 
 import axios from 'axios';
 
-import {config} from '@constants/config';
-
 import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input, Modal, Text} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
+import env from '@src/env';
 import {hasProtocol} from '@src/utils/strings';
 
-import env from '../../../env';
 import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
 
 type EndpointModalProps = {
@@ -22,17 +20,15 @@ type EndpointModalProps = {
   visible: boolean;
 };
 
-axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl;
-
 const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {setModalState, visible} = props;
-
-  const {dispatch, apiEndpoint: apiEndpointRedux} = useContext(MainContext);
-
-  const defaultApiEndpoint = apiEndpointRedux || localStorage.getItem('apiEndpoint') || env?.apiUrl;
-
-  const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
+  const context = useContext(MainContext);
   const [isLoading, setLoading] = useState(false);
+
+  const [candidate, setCandidate] = useState<string>('');
+
+  const getAPI: () => any = () =>
+    candidate || context.apiEndpoint || localStorage.getItem('apiEndpoint') || env?.apiUrl || '';
 
   const checkURLWorkingState = async (url: string): Promise<any> => {
     try {
@@ -44,35 +40,18 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
           if (res.version && res.commit) {
             const targetUrl = url.replace('/info', '');
             axios.defaults.baseURL = targetUrl;
-
-            localStorage.setItem(config.apiEndpoint, targetUrl);
-
-            dispatch(setApiEndpoint(targetUrl));
-
+            context.dispatch(setApiEndpoint(targetUrl));
             if (res.namespace) {
-              dispatch(setNamespace(res.namespace));
+              context.dispatch(setNamespace(res.namespace));
             }
-
-            setApiEndpointHook(targetUrl);
-
             setLoading(false);
-
             setModalState(false);
-          } else {
-            notification.error({
-              message: 'Could not receive data from the specified api endpoint',
-              duration: 0,
-            });
-
-            setLoading(false);
+            localStorage.setItem('apiEndpoint', candidate);
           }
         });
     } catch (err) {
       if (err) {
-        setModalState(true);
-
         setLoading(false);
-
         return notification.error({
           message: 'Could not receive data from the specified api endpoint',
           duration: 0,
@@ -82,54 +61,38 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   };
 
   const checkAPIEndpoint = () => {
-    const endsWithV1 = apiEndpoint.endsWith('/v1');
+    const api = getAPI();
+    const endsWithV1 = api?.endsWith('/v1');
 
-    if (hasProtocol(apiEndpoint)) {
+    if (hasProtocol(api ?? '')) {
       if (endsWithV1) {
-        checkURLWorkingState(`${apiEndpoint}/info`);
+        checkURLWorkingState(`${api}/info`);
       } else {
-        checkURLWorkingState(`${apiEndpoint}/v1/info`);
+        checkURLWorkingState(`${api}/v1/info`);
       }
     } else {
       const targetProtocol = `${window.location.protocol}//`;
 
       if (endsWithV1) {
-        checkURLWorkingState(`${targetProtocol}${apiEndpoint}/info`);
+        checkURLWorkingState(`${targetProtocol}${api}/info`);
       } else {
-        checkURLWorkingState(`${targetProtocol}${apiEndpoint}/v1/info`);
+        checkURLWorkingState(`${targetProtocol}${api}/v1/info`);
       }
     }
   };
 
   const handleOpenUrl = (event: React.FormEvent) => {
     event.preventDefault();
-
     setLoading(true);
-
-    checkAPIEndpoint();
   };
 
   useEffect(() => {
-    if (defaultApiEndpoint) {
-      dispatch(setApiEndpoint(defaultApiEndpoint));
+    if (getAPI() === '') setModalState(true)
+  }, [getAPI()]);
 
-      localStorage.setItem('apiEndpoint', defaultApiEndpoint);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (apiEndpointRedux) {
-      setApiEndpointHook(apiEndpointRedux);
-    }
-  }, [apiEndpointRedux, visible]);
-
-  useEffect(() => {
-    if (!apiEndpoint) {
-      setModalState(true);
-    } else {
-      checkAPIEndpoint();
-    }
-  }, []);
+  const onConfirm = () => {
+    checkAPIEndpoint();
+  };
 
   return (
     <Modal
@@ -158,16 +121,15 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
             <Input
               id="url"
               name="url"
-              onChange={event => {
-                setApiEndpointHook(event.target.value);
-              }}
-              value={apiEndpoint}
+              onChange={event => setCandidate(event.target.value)}
+              defaultValue={getAPI()}
               width="300px"
               data-test="endpoint-modal-input"
             />
             <Button
               type="primary"
               htmlType="submit"
+              onClick={onConfirm}
               disabled={isLoading}
               loading={isLoading}
               data-test="endpoint-modal-get-button"

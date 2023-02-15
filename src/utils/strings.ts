@@ -4,7 +4,8 @@ export const executionDateFormat = 'MMM d, p';
 
 export const k8sResourceNameRegex = /^[a-z0-9]{0,1}[a-z0-9-]+[a-z0-9]{1}$/;
 
-export const hasProtocol = (url: string) => {
+export const hasProtocol = (url: string | null | undefined) => {
+  if (!url) return false;
   return /^http(s)?:\/\/.*/.test(url);
 };
 
