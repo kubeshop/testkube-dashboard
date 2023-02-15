@@ -6,6 +6,7 @@ import {FormItem, Option} from '@models/form';
 import {SourceWithRepository} from '@models/sources';
 import {Step} from '@models/wizard';
 
+import {testSourceLink} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required, url} from '@utils/form';
 
 import FirstStepHint from './hints/FirstStepHint';
@@ -18,16 +19,18 @@ export const addTestSteps: Step[] = [
   {title: 'Done', description: 'Save or run your test.'},
 ];
 
-export const testSourceBaseOptions: Option[] = [
-  {value: 'git-dir', label: 'Git directory'},
-  {value: 'git-file', label: 'Git file'},
-  {value: 'file-uri', label: 'File'},
-  {value: 'string', label: 'String'},
+type testSourceBaseOptionsType = (Option & {docsURI: string})[];
+
+export const testSourceBaseOptions: testSourceBaseOptionsType = [
+  {value: 'git-dir', label: 'Git directory', docsURI: testSourceLink},
+  {value: 'git-file', label: 'Git file', docsURI: testSourceLink},
+  {value: 'file-uri', label: 'File', docsURI: testSourceLink},
+  {value: 'string', label: 'String', docsURI: testSourceLink},
 ];
 
 export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
 
-export const addTestFormStructure = (options: Option[], customTestSources: Option[] = []) => [
+export const addTestFormStructure = (options: Option[]) => [
   {
     // tooltip: 'Enter the name of the test you wish to add.',
     rules: [required, k8sResourceNamePattern, k8sResourceNameMaxLength],
@@ -52,21 +55,22 @@ export const addTestFormStructure = (options: Option[], customTestSources: Optio
     itemLabel: 'Type',
     required: true,
   },
-  {
-    // tooltip: 'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
-    rules: [required],
-    fieldName: 'testSource',
-    inputType: 'select',
-    options: [...customTestSources, ...testSourceBaseOptions],
-    placeholder: 'Source',
-    dataTest: 'test-creation_type_source_option',
-    itemLabel: 'Test Source',
-    required: true,
-  },
 ];
+
+export const testSourceFieldConfig = {
+  // tooltip: 'Tests can be added from two sources: A simple file with the test content e.g. Postman collection JSON file Git - the repository, path and branch of where tests are stored.',
+  rules: [required],
+  fieldName: 'testSource',
+  inputType: 'select',
+  placeholder: 'Source',
+  dataTest: 'test-creation_type_source_option',
+  itemLabel: 'Test Source',
+  required: true,
+};
 
 export const gitDirFormFields: FormItem[] = [
   {
+    tooltip: 'We do currently only support checking out repositories via https',
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -76,6 +80,7 @@ export const gitDirFormFields: FormItem[] = [
   },
   {
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    rules: [required],
     fieldName: 'branch',
     required: true,
     inputType: 'default',
@@ -83,6 +88,8 @@ export const gitDirFormFields: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    tooltip: 'The path is relative to the root of your repository',
+    rules: [required],
     fieldName: 'path',
     required: true,
     inputType: 'default',
@@ -90,7 +97,7 @@ export const gitDirFormFields: FormItem[] = [
     itemLabel: 'Path',
   },
   {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
@@ -108,6 +115,7 @@ export const gitDirFormFields: FormItem[] = [
 
 export const gitFileFormFields: FormItem[] = [
   {
+    tooltip: 'We do currently only support checking out repositories via https',
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -125,6 +133,7 @@ export const gitFileFormFields: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    tooltip: 'The path is relative to the root of your repository',
     rules: [required],
     fieldName: 'path',
     required: true,
@@ -133,7 +142,7 @@ export const gitFileFormFields: FormItem[] = [
     itemLabel: 'Path',
   },
   {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
+    tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
     inputType: 'default',
     modificator: 'password',
@@ -151,6 +160,7 @@ export const gitFileFormFields: FormItem[] = [
 
 export const gitFormFieldsEdit: FormItem[] = [
   {
+    tooltip: 'We do currently only support checking out repositories via https',
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -168,6 +178,7 @@ export const gitFormFieldsEdit: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    tooltip: 'The path is relative to the root of your repository',
     rules: [required],
     fieldName: 'path',
     required: true,
@@ -197,6 +208,7 @@ export const customTypeFormFields: FormItem[] = [
     itemLabel: 'Branch',
   },
   {
+    tooltip: 'The path is relative to the root of your repository',
     fieldName: 'path',
     inputType: 'default',
     placeholder: 'e.g.: /tests/cypress',

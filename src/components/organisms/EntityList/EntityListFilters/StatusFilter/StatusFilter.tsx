@@ -5,6 +5,8 @@ import {FilterFilled} from '@ant-design/icons';
 
 import {FilterProps} from '@models/filters';
 
+import {initialPageSize} from '@redux/initialState';
+
 import {
   FilterMenuFooter,
   StyledFilterCheckbox,
@@ -21,8 +23,6 @@ import {uppercaseFirstSymbol} from '@utils/strings';
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
-
-import {initialPageSize} from '@src/redux/initialState';
 
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 

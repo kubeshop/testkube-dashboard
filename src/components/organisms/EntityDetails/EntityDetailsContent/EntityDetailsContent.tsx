@@ -9,7 +9,7 @@ import {Option as OptionType} from '@models/form';
 import {useAppSelector} from '@redux/hooks';
 import {selectRedirectTarget} from '@redux/reducers/configSlice';
 
-import {TestRunnerIcon} from '@atoms';
+import {ExecutorIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
@@ -71,6 +71,7 @@ const EntityDetailsContent: React.FC = () => {
   const description = entityDetails?.description;
   const labels = entityDetails?.labels;
   const type = entityDetails?.type;
+  const testIcon = entityDetails?.testIcon;
 
   const onRunButtonClick = async () => {
     const runEntity = runRequestsMap[entity];
@@ -96,7 +97,7 @@ const EntityDetailsContent: React.FC = () => {
 
   const avatar = type
     ? {
-        avatar: {icon: <TestRunnerIcon icon={type} noWidth />},
+        avatar: {icon: <ExecutorIcon type={testIcon} noWidth />},
       }
     : {};
 

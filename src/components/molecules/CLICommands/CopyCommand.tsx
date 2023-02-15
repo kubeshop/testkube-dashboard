@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 
 import {CopyButton, Pre} from '@atoms';
+import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {Text} from '@custom-antd';
 
@@ -10,8 +11,6 @@ import useSecureContext from '@hooks/useSecureContext';
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
-
-import DownloadButton from '@src/components/atoms/DownloadButton/DownloadButton';
 
 import {LabelWrapper, StyledCopyCommandCode, StyledCopyCommandContainer} from './CopyCommand.styled';
 

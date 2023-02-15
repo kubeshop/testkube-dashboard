@@ -5,6 +5,8 @@ import {Executor, ExecutorFeature, ExecutorsState, ImagePullSecret} from '@model
 
 import initialState from '@redux/initialState';
 
+import {isURL, uppercaseFirstSymbol} from '@utils/strings';
+
 import {RootState} from '../store';
 
 export const executorsSlice = createSlice({
@@ -27,7 +29,22 @@ export const executorsSlice = createSlice({
       });
 
       state.executorsFeaturesMap = executorsFeaturesMap;
-      state.executorsList = action.payload || {};
+      state.executorsList =
+        action.payload.map(executor => {
+          const iconURI = executor.executor?.meta?.iconURI;
+
+          if (isURL(iconURI) || !iconURI) {
+            return {
+              ...executor,
+              displayName: executor.name,
+            };
+          }
+
+          return {
+            ...executor,
+            displayName: uppercaseFirstSymbol(iconURI),
+          };
+        }) || {};
     },
     setCurrentExecutor: (state: Draft<ExecutorsState>, action: PayloadAction<Executor>) => {
       state.currentExecutor = action.payload;

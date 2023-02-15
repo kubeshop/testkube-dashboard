@@ -1,5 +1,7 @@
 import {ModalConfigProps} from '@models/modal';
 
+import {openCustomExecutorDocumentation} from '@utils/externalLinks';
+
 import TestCreationModalContent from './TestCreationModalContent';
 import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
@@ -17,4 +19,10 @@ export const TestModalConfig: ModalConfigProps = {
   content: <TestCreationModalContent />,
   dataTestCloseBtn: 'add-a-new-test-modal-close-button',
   dataTestModalRoot: 'add-a-new-test-modal',
+};
+
+export const defaultHintConfig = {
+  title: 'Missing a test type?',
+  description: 'Add test types through testkube executors.',
+  openLink: openCustomExecutorDocumentation,
 };

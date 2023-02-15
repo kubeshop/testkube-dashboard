@@ -1,6 +1,6 @@
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-import {selectSources} from '@redux/reducers/sourcesSlice';
+import {Select} from 'antd';
+
+import {Executor} from '@models/executors';
 
 import {FormItem} from '@custom-antd';
 
@@ -17,6 +17,8 @@ import {
   remapExecutors,
   remapTestSources,
   stringContentFormFields,
+  testSourceBaseOptions,
+  testSourceFieldConfig,
 } from '../utils';
 
 export const additionalFields: any = {
@@ -28,17 +30,48 @@ export const additionalFields: any = {
 };
 
 const FirstStep: React.FC<any> = props => {
-  const {onFileChange, onLabelsChange} = props;
+  const {onFileChange, onLabelsChange, executors, testSources} = props;
 
-  const executors = useAppSelector(selectExecutors);
-  const testSources = useAppSelector(selectSources);
-
-  const remmappedExecutors = remapExecutors(executors);
+  const remappedExecutors = remapExecutors(executors);
   const remappedCustomTestSources = remapTestSources(testSources);
 
   return (
     <StyledFormSpace size={24} direction="vertical">
-      {renderFormItems(addTestFormStructure(remmappedExecutors, remappedCustomTestSources), {onLabelsChange})}
+      {renderFormItems(addTestFormStructure(remappedExecutors), {onLabelsChange})}
+      <FormItem
+        noStyle
+        shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
+      >
+        {({getFieldValue}) => {
+          const selectedExecutor = executors.find((executor: Executor) =>
+            executor.executor?.types?.includes(getFieldValue('testType'))
+          );
+
+          if (selectedExecutor) {
+            const options = [
+              ...remappedCustomTestSources,
+              ...testSourceBaseOptions.filter(option =>
+                selectedExecutor.executor?.contentTypes?.includes(option.value)
+              ),
+            ];
+
+            return (
+              <StyledFormSpace size={24} direction="vertical">
+                <FormItem
+                  rules={testSourceFieldConfig.rules}
+                  label={testSourceFieldConfig.itemLabel}
+                  name={testSourceFieldConfig.fieldName}
+                  key={testSourceFieldConfig.fieldName}
+                  required={testSourceFieldConfig.required}
+                  requiredMark={testSourceFieldConfig.required ? undefined : 'optional'}
+                >
+                  <Select placeholder={testSourceFieldConfig.placeholder} showSearch options={options} />
+                </FormItem>
+              </StyledFormSpace>
+            );
+          }
+        }}
+      </FormItem>
       <FormItem
         noStyle
         shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}

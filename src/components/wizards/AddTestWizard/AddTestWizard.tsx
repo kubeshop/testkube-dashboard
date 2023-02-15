@@ -12,11 +12,11 @@ import {setRedirectTarget} from '@redux/reducers/configSlice';
 
 import {Button, Step, Steps} from '@custom-antd';
 
+import {formatVariables} from '@utils/variables';
+
 import {useAddTestMutation} from '@services/tests';
 
 import {MainContext} from '@contexts';
-
-import {formatVariables} from '@src/utils/variables';
 
 import {
   StyledWizardBody,

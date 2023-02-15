@@ -1,4 +1,4 @@
-import {ExecutionMetrics} from '@src/models/metrics';
+import {ExecutionMetrics} from '@models/metrics';
 
 const hundredPercent = 100;
 export const secondInMs = 1000;

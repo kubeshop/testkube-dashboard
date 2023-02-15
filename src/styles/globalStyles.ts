@@ -299,14 +299,17 @@ export const GlobalStyle = createGlobalStyle`
   // Form
 
   .ant-form-vertical {
-    .ant-form-item-required { 
-      flex-direction: row-reverse;
-
+    .ant-form-item-required {
       &:before {
         margin-left: 2px;
         margin-right: unset !important;
+        order: 1;
       }
     }
+  }
+  
+  .ant-form-item-label > label .ant-form-item-tooltip {
+    color: inherit;
   }
 
   // Popover

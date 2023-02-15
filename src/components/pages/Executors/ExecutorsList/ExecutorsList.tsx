@@ -2,9 +2,13 @@ import {useContext, useEffect, useMemo, useState} from 'react';
 
 import {Tabs} from 'antd';
 
-import {TestRunnerIcon} from '@atoms';
+import {getTestExecutorIcon} from '@redux/utils/executorIcon';
+
+import {ExecutorIcon} from '@atoms';
 
 import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
+
+import {PageBlueprint} from '@organisms';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
@@ -13,8 +17,6 @@ import {useGetExecutorsQuery} from '@services/executors';
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
-
-import {PageBlueprint} from '@src/components/organisms';
 
 import {executorsList} from '../utils';
 import AddExecutorsModal from './AddExecutorsModal';
@@ -49,12 +51,13 @@ const Executors: React.FC = () => {
       const {type, title, description, docLink} = executorItem;
 
       const isExecutor = type !== 'custom';
+      const executorIcon = getTestExecutorIcon(executors || [], type);
 
       return (
         <a href={docLink} target="_blank" key={docLink}>
           <ExecutorsGridItem className={isExecutor ? 'executor' : 'custom-executor'} direction="vertical" size={20}>
             <Title level={3} color={Colors.slate400} className="dashboard-title regular">
-              {isExecutor ? <TestRunnerIcon icon={type} /> : <ExecutorsIcon />}
+              {isExecutor ? <ExecutorIcon type={executorIcon} /> : <ExecutorsIcon />}
               {title}
             </Title>
             <Text color={Colors.slate400} className="regular middle">
@@ -65,7 +68,7 @@ const Executors: React.FC = () => {
         </a>
       );
     });
-  }, [executorsList]);
+  }, [executorsList, executors]);
 
   const renderedCustomExecutorsGrid = useMemo(() => {
     return customExecutors.map(executorItem => {

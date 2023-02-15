@@ -10,9 +10,9 @@ import {Button, Input, Modal, Text} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
-import env from '@src/env';
 import {hasProtocol} from '@src/utils/strings';
 
+import env from '../../../env';
 import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
 
 type EndpointModalProps = {
