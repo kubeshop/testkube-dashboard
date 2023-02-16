@@ -6,7 +6,6 @@ export const StyledLabelListItem = styled.li<{isSkippedMode: boolean}>`
   display: flex;
   align-items: center;
 
-  // margin: auto;
   padding: 0px 5px;
   border: 1px solid ${Colors.slate700};
   border-radius: 4px;
