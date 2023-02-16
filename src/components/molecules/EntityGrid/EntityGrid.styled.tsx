@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
-import {maxDevice} from '@styles/MediaQueries';
 
 export const StyledEntityGrid = styled.div`
   display: grid;
