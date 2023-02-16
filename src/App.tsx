@@ -1,5 +1,6 @@
 import {Suspense, lazy, useEffect, useState} from 'react';
 import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import {CSSTransition} from 'react-transition-group';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -8,7 +9,7 @@ import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint} from '@redux/reducers/configSlice';
+import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 import {setSources} from '@redux/reducers/sourcesSlice';
 
@@ -30,8 +31,7 @@ import {MainContext} from '@contexts';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
 import {StyledLayoutContentWrapper} from './App.styled';
-
-// import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
+import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -56,7 +56,7 @@ const App: React.FC = () => {
   const apiEndpoint = useAppSelector(selectApiEndpoint);
   const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?:\/\//, wsProtocol) : '';
 
-  // const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
+  const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
 
@@ -166,6 +166,9 @@ const App: React.FC = () => {
                 </Suspense>
               </ErrorBoundary>
             </Content>
+            <CSSTransition in={isFullScreenLogOutput} timeout={350} classNames="full-screen-log-output" unmountOnExit>
+              <FullScreenLogOutput logOutput={logOutput} />
+            </CSSTransition>
           </StyledLayoutContentWrapper>
         </Layout>
         {isCookiesVisible && !clusterConfig?.enableTelemetry ? (

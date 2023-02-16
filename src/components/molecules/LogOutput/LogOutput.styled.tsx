@@ -1,3 +1,5 @@
+import {ExpandAltOutlined, FullscreenExitOutlined} from '@ant-design/icons';
+
 import styled from 'styled-components';
 
 import {AnsiClassesMapping} from '@atoms';
@@ -98,12 +100,14 @@ export const StyledLogOutputHeaderContainer = styled.div`
   background: ${Colors.slate900};
 `;
 
-export const StyledActionIconContainer = styled.li`
+export const StyledActionIconContainer = styled.span`
   padding: 0 4px;
   border: 1px solid #434343;
   border-radius: 2px;
 
   background: #141414;
+
+  width: 500px;
 
   cursor: pointer;
 
@@ -134,4 +138,39 @@ export const StyledLogOutputHeaderTitle = styled.span`
   font-size: 14px;
   font-style: italic;
   font-weight: 600;
+`;
+
+const CopyIconBaseStyles = `
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+  padding: 4px;
+  margin: 6px;
+  
+  font-size: 22px;
+
+  border-radius: 2px;
+`;
+
+export const StyledFullscreenExitOutlined = styled(FullscreenExitOutlined)`
+  ${CopyIconBaseStyles}
+
+  border: 1px solid transparent;
+  transition: 0.3s;
+
+  &:hover {
+    border-color: ${Colors.indigo400};
+  }
+`;
+
+export const StyledExpandAltOutlined = styled(ExpandAltOutlined)`
+  ${CopyIconBaseStyles}
+
+  border: 1px solid transparent;
+  transition: 0.3s;
+
+  &:hover {
+    border-color: ${Colors.indigo400};
+  }
 `;

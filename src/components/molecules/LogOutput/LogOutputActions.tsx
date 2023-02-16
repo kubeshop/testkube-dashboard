@@ -32,6 +32,7 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
     fullscreen: <FullScreenAction logOutput={logOutput} key="fullscreen-log-action" />,
   };
 
+  console.log(actions);
   const renderedLogOutputActions = useMemo(() => {
     return actions.map(actionType => {
       return logOutputActionsMap[actionType];
