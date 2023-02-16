@@ -1,20 +1,16 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
-import {maxDevice} from '@styles/MediaQueries';
 
 export const StyledEntityGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
   gap: 32px;
-
-  @media ${maxDevice.tablet} {
-    grid-template-columns: 1fr;
-  }
 `;
 
 export const ItemWrapper = styled.div`
   display: flex;
+  align-items: space-between;
   gap: 15px;
 
   padding: 20px;
@@ -45,6 +41,14 @@ export const DetailsWrapper = styled.div`
   width: 100%;
 `;
 
+export const RowsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  padding-left: 40px;
+`;
+
 export const ItemRow = styled.div<{$flex: number}>`
   display: flex;
   align-items: center;
@@ -59,7 +63,6 @@ export const ItemColumn = styled.div<{$isStretch?: boolean}>`
 
   display: flex;
   ${({$isStretch}) => ($isStretch ? 'flex: 1;' : '')};
-
   gap: 10px;
 `;
 

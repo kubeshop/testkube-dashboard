@@ -75,7 +75,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
       <HeaderContent>
         <ItemRow $flex={1}>
           <ItemColumn>
-            <Text className="biggest bold" ellipsis>
+            <Text className="biggest bold" ellipsis title={name}>
               {name}
             </Text>
           </ItemColumn>
