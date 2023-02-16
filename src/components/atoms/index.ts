@@ -10,7 +10,7 @@ export {default as UploadWithInput} from './UploadWithInput';
 export {default as StatusIcon} from './StatusIcon';
 export {default as Pre} from './Pre';
 export {default as CreatableMultiSelect} from './CreatableMultiSelect';
-export {default as SplittedLabelText} from './SplittedLabelText';
+export {default as SplitLabelText} from './SplitLabelText';
 export {default as CopyButton} from './CopyButton';
 export {default as AnsiClassesMapping} from './TestkubeTheme/AnsiClassesMapping';
 export {default as TestkubeCodeTheme} from './TestkubeTheme/CodeTheme';

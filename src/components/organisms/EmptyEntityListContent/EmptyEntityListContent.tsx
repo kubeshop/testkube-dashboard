@@ -33,9 +33,9 @@ const constantTextsMap = {
 };
 
 const EmptyEntityListContent: React.FC<EmptyEntityListContentProps> = props => {
-  const {navigate} = useContext(MainContext);
-
   const {entityType} = props;
+
+  const {navigate} = useContext(MainContext);
 
   return (
     <StyledContainer size={32} data-cy="empty-tests-data">

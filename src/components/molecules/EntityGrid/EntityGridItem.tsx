@@ -56,10 +56,13 @@ const EntityGridItem: React.FC<any> = props => {
       <StatusIcon status={status} />
       <DetailsWrapper>
         <ItemRow $flex={1}>
-          <ItemColumn>
+          <ItemColumn $isStretch>
             {dataItem?.type ? <ExecutorIcon type={dataItem?.testIcon} /> : null}
-            <Text className="regular big">{dataItem?.name}</Text>
-            {dataItem?.labels ? <LabelsList labels={dataItem?.labels} /> : null}
+            <div style={{overflow: 'hidden', flex: 1, display: 'flex'}}>
+              <Text className="regular big" ellipsis title={dataItem?.name} style={{width: '100%'}}>
+                {dataItem?.name}
+              </Text>
+            </div>
           </ItemColumn>
           <ItemColumn>
             <Tooltip
@@ -77,6 +80,11 @@ const EntityGridItem: React.FC<any> = props => {
             </Tooltip>
           </ItemColumn>
         </ItemRow>
+        {dataItem?.labels ? (
+          <ItemRow $flex={1}>
+            <LabelsList labels={dataItem?.labels} shouldSkipLabels howManyLabelsToShow={2} />
+          </ItemRow>
+        ) : null}
         <ItemRow $flex={1}>
           <StyledMetricItem>
             <Text className="small uppercase" color={Colors.slate500}>

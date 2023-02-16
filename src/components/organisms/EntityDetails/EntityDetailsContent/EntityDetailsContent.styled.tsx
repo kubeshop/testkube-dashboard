@@ -24,6 +24,12 @@ export const StyledContainer = styled.div`
   padding-left: 1vw;
 `;
 
+export const EntityDetailsHeaderIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const StyledPageHeader = styled(PageHeader)`
   &.testkube-pageheader {
     &.ant-page-header {

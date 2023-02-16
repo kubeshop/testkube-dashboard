@@ -4,17 +4,17 @@ import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
-type SplittedLabelProps = {
+type SplitLabelProps = {
   value: string;
   textClassName?: string;
 };
 
-const SplittedLabelText: React.FC<SplittedLabelProps> = props => {
+const SplitLabelText: React.FC<SplitLabelProps> = props => {
   const {value, textClassName = 'regular'} = props;
 
   if (!value.includes(':')) {
     return (
-      <Text color={Colors.slate200} className={textClassName}>
+      <Text color={Colors.slate400} className={textClassName}>
         {value}
       </Text>
     );
@@ -34,4 +34,4 @@ const SplittedLabelText: React.FC<SplittedLabelProps> = props => {
   );
 };
 
-export default SplittedLabelText;
+export default SplitLabelText;

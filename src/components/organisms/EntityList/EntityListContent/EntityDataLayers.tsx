@@ -4,13 +4,12 @@ import {OnDataChangeInterface} from '@models/onDataChange';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
+import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
-
-import {getTestExecutorIcon} from '@src/redux/utils/executorIcon';
 
 type DataLayerProps = {
   onDataChange: (args: OnDataChangeInterface) => void;

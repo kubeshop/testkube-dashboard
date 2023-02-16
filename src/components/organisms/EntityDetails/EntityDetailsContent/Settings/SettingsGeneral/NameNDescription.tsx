@@ -49,6 +49,7 @@ const NameNDescription: React.FC = () => {
       data: {
         ...entityDetails,
         name: values.name,
+        description: values.description,
         executionRequest: {
           description: values.description,
         },

@@ -5,6 +5,8 @@ import {DeleteOutlined} from '@ant-design/icons';
 import {Executor} from '@models/executors';
 import {Option as OptionType} from '@models/form';
 
+import {getTestExecutorIcon} from '@redux/utils/executorIcon';
+
 import {ExecutorIcon} from '@atoms';
 
 import {Input, Text} from '@custom-antd';
@@ -16,8 +18,6 @@ import {requiredNoText} from '@utils/form';
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 
 import Colors from '@styles/Colors';
-
-import {getTestExecutorIcon} from '@src/redux/utils/executorIcon';
 
 import {StyledTestOptionWrapper, TextWrapper, TriggerFormItem, TriggerItemContainer} from './Triggers.styled';
 

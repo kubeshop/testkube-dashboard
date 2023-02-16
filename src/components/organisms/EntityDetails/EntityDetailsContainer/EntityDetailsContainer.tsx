@@ -9,14 +9,13 @@ import {WSData, WSEventType} from '@models/websocket';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
+import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import useStateCallback from '@hooks/useStateCallback';
 
 import {PollingIntervals} from '@utils/numbers';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
-
-import {getTestExecutorIcon} from '@src/redux/utils/executorIcon';
 
 import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';

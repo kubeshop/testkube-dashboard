@@ -1,8 +1,10 @@
+import {Popover} from 'antd';
+
 import {EntityKey, EntityMap} from '@models/entityMap';
 
 import {LabelListItem} from '@atoms';
 
-import {StyledLabelsList} from './LabelsList.styled';
+import {LabelsPopover, StyledLabelsList} from './LabelsList.styled';
 
 type LabelsListProps = {
   labels: EntityMap;
@@ -29,12 +31,33 @@ const LabelsList: React.FC<LabelsListProps> = props => {
     .filter(labelComponent => labelComponent);
 
   const skippedLabelsNumber = labelKeys.length - renderedLabels.length;
+  const skippedLabelsArray = Object.entries(labels).splice(0, skippedLabelsNumber);
+
+  const renderedSkippedLabels = skippedLabelsArray
+    ? skippedLabelsArray.map(([labelKey]) => {
+        return <LabelListItem key={labelKey} labelKey={labelKey} labelValue={labels[labelKey]} />;
+      })
+    : null;
 
   return (
     <StyledLabelsList className={className}>
       {renderedLabels}
       {skippedLabelsNumber ? (
-        <LabelListItem key="skipped-labels-number" isSkippedMode skippedLabelsNumber={skippedLabelsNumber} />
+        <div
+          onClick={e => {
+            e.stopPropagation();
+          }}
+        >
+          <Popover content={<LabelsPopover>{renderedSkippedLabels}</LabelsPopover>} placement="top">
+            <div>
+              <LabelListItem
+                key="skipped-labels-number"
+                isSkippedMode={shouldSkipLabels}
+                skippedLabelsNumber={skippedLabelsNumber}
+              />
+            </div>
+          </Popover>
+        </div>
       ) : null}
     </StyledLabelsList>
   );

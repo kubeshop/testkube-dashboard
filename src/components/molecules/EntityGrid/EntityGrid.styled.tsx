@@ -15,10 +15,12 @@ export const StyledEntityGrid = styled.div`
 
 export const ItemWrapper = styled.div`
   display: flex;
+  gap: 15px;
 
   padding: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
+  width: 100%;
 
   background: ${Colors.slate800};
 
@@ -40,7 +42,6 @@ export const DetailsWrapper = styled.div`
   flex: 1;
   gap: 12px;
 
-  margin-left: 15px;
   width: 100%;
 `;
 
@@ -50,10 +51,15 @@ export const ItemRow = styled.div<{$flex: number}>`
   flex: ${({$flex}) => $flex};
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 5px;
 `;
 
-export const ItemColumn = styled.div`
+export const ItemColumn = styled.div<{$isStretch?: boolean}>`
+  overflow: hidden;
+
   display: flex;
+  ${({$isStretch}) => ($isStretch ? 'flex: 1;' : '')};
+
   gap: 10px;
 `;
 
