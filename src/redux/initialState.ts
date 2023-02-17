@@ -104,6 +104,7 @@ const initialConfigState: ConfigState = {
   fullScreenLogOutput: {
     isFullScreenLogOutput: false,
     logOutput: '',
+    logOutputDOMRect: undefined,
   },
 };
 

@@ -5,6 +5,9 @@ import Ansi from 'ansi-to-react';
 
 import {LogAction} from '@models/log';
 
+import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {selectFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} from '@redux/reducers/configSlice';
+
 import {MainContext} from '@contexts';
 
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
@@ -25,20 +28,30 @@ export type LogOutputProps = {
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = 'No logs', executionId, actions = ['copy'], isRunning, title, isAutoScrolled} = props;
+  const dispatch = useAppDispatch();
 
-  const ref = useRef<HTMLDivElement>(null);
+  const {
+    logOutput = 'No logs',
+    executionId,
+    actions = ['copy', 'fullscreen'],
+    isRunning,
+    title,
+    isAutoScrolled,
+  } = props;
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const {wsRoot} = useContext(MainContext);
 
-  // const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
+  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [logs, setLogs] = useState('');
   const [shouldConnect, setShouldConnect] = useState(false);
 
   const scrollToBottom: (behavior?: ScrollBehavior) => void = (behavior = 'smooth') => {
-    if (ref && ref.current) {
-      ref.current.scrollIntoView({behavior, block: 'end'});
+    if (bottomRef && bottomRef.current) {
+      bottomRef.current.scrollIntoView({behavior, block: 'end'});
     }
   };
 
@@ -92,13 +105,13 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     setShouldConnect(isRunning || false);
   }, [isRunning]);
 
-  // useEffect(() => {
-  //   if (isFullScreenLogOutput) {
-  //     dispatch(setLogOutput(logs));
-  //   } else {
-  //     dispatch(setLogOutput(''));
-  //   }
-  // }, [logs, isFullScreenLogOutput]);
+  useEffect(() => {
+    if (isFullScreenLogOutput) {
+      dispatch(setLogOutput(logs));
+    } else {
+      dispatch(setLogOutput(''));
+    }
+  }, [logs, isFullScreenLogOutput]);
 
   useEffect(() => {
     smoothScrollIfAutoscroll();
@@ -110,8 +123,22 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     }, 100);
   }, [executionId]);
 
+  useEffect(() => {
+    const rect = containerRef?.current?.getBoundingClientRect();
+    if (rect) {
+      dispatch(
+        setLogOutputDOMRect({
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        })
+      );
+    }
+  }, [isFullScreenLogOutput]);
+
   return (
-    <StyledLogOutputContainer>
+    <StyledLogOutputContainer ref={containerRef}>
       <LogOutputHeader logOutput={logs} actions={actions} title={title} />
       <StyledLogTextContainer>
         {logs ? (
@@ -119,7 +146,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
             <Ansi useClasses>{logs}</Ansi>
           </StyledPreLogText>
         ) : null}
-        <div ref={ref} />
+        <div ref={bottomRef} />
       </StyledLogTextContainer>
     </StyledLogOutputContainer>
   );

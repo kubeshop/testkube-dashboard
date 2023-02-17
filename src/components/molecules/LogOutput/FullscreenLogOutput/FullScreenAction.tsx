@@ -1,6 +1,4 @@
-import {useContext} from 'react';
-
-import {ExpandAltOutlined, FullscreenExitOutlined} from '@ant-design/icons';
+import {useContext, useState} from 'react';
 
 import {useAppSelector} from '@redux/hooks';
 import {
@@ -13,17 +11,17 @@ import {Tooltip} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
-import {LogActionProps} from '../LogOutput';
-import {StyledActionIconContainer} from '../LogOutput.styled';
+import {StyledExpandAltOutlined, StyledFullscreenExitOutlined} from '../LogOutput.styled';
 
-const FullScreenAction: React.FC<LogActionProps> = props => {
-  const {logOutput} = props;
-
+const FullScreenAction: React.FC = () => {
   const {dispatch} = useContext(MainContext);
+
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const onIconClick = () => {
+    setIsTooltipOpen(false);
     if (isFullScreenLogOutput) {
       dispatch(closeFullScreenLogOutput());
     } else {
@@ -34,11 +32,13 @@ const FullScreenAction: React.FC<LogActionProps> = props => {
   const tooltipTitle = isFullScreenLogOutput ? 'Close full screen' : 'Enter full screen';
 
   return (
-    <StyledActionIconContainer onClick={onIconClick}>
-      <Tooltip title={tooltipTitle}>
-        {isFullScreenLogOutput ? <FullscreenExitOutlined /> : <ExpandAltOutlined />}
-      </Tooltip>
-    </StyledActionIconContainer>
+    <Tooltip title={tooltipTitle} open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
+      {isFullScreenLogOutput ? (
+        <StyledFullscreenExitOutlined onClick={onIconClick} />
+      ) : (
+        <StyledExpandAltOutlined onClick={onIconClick} />
+      )}
+    </Tooltip>
   );
 };
 
