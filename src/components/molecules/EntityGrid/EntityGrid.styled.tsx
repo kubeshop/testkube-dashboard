@@ -1,11 +1,16 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const StyledEntityGrid = styled.div`
   display: grid;
   grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
   gap: 32px;
+
+  @media ${maxDevice.laptop} {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const ItemWrapper = styled.div`
