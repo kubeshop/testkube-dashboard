@@ -4,17 +4,16 @@ import {nanoid} from '@reduxjs/toolkit';
 
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
+import {useAppSelector} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
+import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {ExecutionName} from '@molecules';
 
 import {MainContext} from '@contexts';
-
-import {useAppSelector} from '@src/redux/hooks';
-import {getTestExecutorIcon} from '@src/redux/utils/executorIcon';
 
 import {
   StyledExecutionStepsList,

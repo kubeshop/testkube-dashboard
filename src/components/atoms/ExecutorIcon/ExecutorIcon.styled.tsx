@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledExecutorIcon = styled.div<{$noWidth: boolean}>`
-  width: ${({$noWidth}) => ($noWidth ? 'unset' : '24px')};
-  height: ${({$noWidth}) => ($noWidth ? 'unset' : '24px')};
+  width: ${({$noWidth}) => ($noWidth ? 'unset' : '28px')};
+  height: ${({$noWidth}) => ($noWidth ? 'unset' : '28px')};
 
   svg {
     width: 100%;

@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
 
-import {Select, Tabs} from 'antd';
+import {Select, Space, Tabs} from 'antd';
 
 import {Entity} from '@models/entity';
 import {Option as OptionType} from '@models/form';
@@ -26,7 +26,7 @@ import Colors from '@styles/Colors';
 
 import {AnalyticsContext, EntityDetailsContext, MainContext} from '@contexts';
 
-import {StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
+import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
@@ -97,7 +97,13 @@ const EntityDetailsContent: React.FC = () => {
 
   const avatar = type
     ? {
-        avatar: {icon: <ExecutorIcon type={testIcon} noWidth />},
+        avatar: {
+          icon: (
+            <EntityDetailsHeaderIcon>
+              <ExecutorIcon type={testIcon} />
+            </EntityDetailsHeaderIcon>
+          ),
+        },
       }
     : {};
 
@@ -114,7 +120,6 @@ const EntityDetailsContent: React.FC = () => {
       <StyledPageHeader
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
-        subTitle={labels ? <LabelsList labels={entityDetails?.labels} /> : ''}
         extra={[
           !isMetricsEmpty ? (
             <Select
@@ -133,11 +138,14 @@ const EntityDetailsContent: React.FC = () => {
         className="testkube-pageheader"
         {...avatar}
       >
-        {description ? (
-          <Text color={Colors.slate400} className="middle">
-            {description}
-          </Text>
-        ) : null}
+        <Space size={10} direction="vertical">
+          {labels ? <LabelsList labels={labels} /> : null}
+          {description ? (
+            <Text color={Colors.slate400} className="middle">
+              {description}
+            </Text>
+          ) : null}
+        </Space>
       </StyledPageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} /> : null}
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>

@@ -1,24 +1,22 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
-import {maxDevice} from '@styles/MediaQueries';
 
 export const StyledEntityGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
   gap: 32px;
-
-  @media ${maxDevice.tablet} {
-    grid-template-columns: 1fr;
-  }
 `;
 
 export const ItemWrapper = styled.div`
   display: flex;
+  align-items: space-between;
+  gap: 15px;
 
   padding: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
+  width: 100%;
 
   background: ${Colors.slate800};
 
@@ -40,8 +38,15 @@ export const DetailsWrapper = styled.div`
   flex: 1;
   gap: 12px;
 
-  margin-left: 15px;
   width: 100%;
+`;
+
+export const RowsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  padding-left: 40px;
 `;
 
 export const ItemRow = styled.div<{$flex: number}>`
@@ -50,10 +55,14 @@ export const ItemRow = styled.div<{$flex: number}>`
   flex: ${({$flex}) => $flex};
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 5px;
 `;
 
-export const ItemColumn = styled.div`
+export const ItemColumn = styled.div<{$isStretch?: boolean}>`
+  overflow: hidden;
+
   display: flex;
+  ${({$isStretch}) => ($isStretch ? 'flex: 1;' : '')};
   gap: 10px;
 `;
 

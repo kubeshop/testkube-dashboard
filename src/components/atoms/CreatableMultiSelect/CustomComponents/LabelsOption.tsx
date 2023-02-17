@@ -2,7 +2,7 @@ import {OptionProps} from 'react-select';
 
 import {Option} from '@models/form';
 
-import {SplittedLabelText} from '@atoms';
+import {SplitLabelText} from '@atoms';
 
 import {Text} from '@custom-antd';
 
@@ -40,7 +40,7 @@ const LabelsOption = (props: OptionProps<Option>) => {
     }
 
     if (children.includes(':')) {
-      return <SplittedLabelText value={children} />;
+      return <SplitLabelText value={children} />;
     }
 
     return (
