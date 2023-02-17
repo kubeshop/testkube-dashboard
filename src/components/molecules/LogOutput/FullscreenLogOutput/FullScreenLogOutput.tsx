@@ -12,7 +12,7 @@ import {StyledLogTextContainer, StyledPreLogText} from '../LogOutput.styled';
 import {StyledFullscreenLogOutputContainer} from './FullscreenLogOutput.styled';
 
 const FullScreenLogOutput: React.FC<Pick<LogOutputProps, 'actions' | 'logOutput'>> = props => {
-  const {actions = ['copy', 'fullscreen'], logOutput} = props;
+  const {logOutput} = props;
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
