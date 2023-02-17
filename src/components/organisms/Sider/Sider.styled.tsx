@@ -30,8 +30,8 @@ export const StyledOther = styled(Space)`
   padding-bottom: 40px;
 `;
 
-export const StyledSider = styled(Layout.Sider)`
-  z-index: 1;
+export const StyledSider = styled(Layout.Sider)<{isFullScreenLogOutput?: boolean}>`
+  z-index: ${({isFullScreenLogOutput}) => (isFullScreenLogOutput ? '1002' : '1')};
 `;
 
 export const StyledSiderChildContainer = styled.div`

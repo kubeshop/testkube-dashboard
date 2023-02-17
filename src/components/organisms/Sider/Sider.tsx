@@ -3,6 +3,9 @@ import {NavLink} from 'react-router-dom';
 
 import {Space, Tooltip} from 'antd';
 
+import {useAppSelector} from '@redux/hooks';
+import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
+
 import {Icon} from '@atoms';
 
 import {EndpointModal} from '@molecules';
@@ -78,6 +81,8 @@ const routes = [
 const Sider: React.FC = () => {
   const [isModalVisible, setModalState] = useState(false);
 
+  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
+
   const onToggleModal = () => {
     setModalState(prev => !prev);
   };
@@ -126,7 +131,7 @@ const Sider: React.FC = () => {
   }, []);
 
   return (
-    <StyledSider width={100} data-cy="navigation-sider">
+    <StyledSider width={100} data-cy="navigation-sider" isFullScreenLogOutput={isFullScreenLogOutput}>
       <EndpointModal visible={isModalVisible} setModalState={setModalState} />
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
