@@ -6,7 +6,7 @@ import Ansi from 'ansi-to-react';
 import {LogAction} from '@models/log';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput, setLogOutput} from '@redux/reducers/configSlice';
+import {selectFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} from '@redux/reducers/configSlice';
 
 import {MainContext} from '@contexts';
 
@@ -39,7 +39,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     isAutoScrolled,
   } = props;
 
-  const ref = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const {wsRoot} = useContext(MainContext);
 
@@ -49,8 +50,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const [shouldConnect, setShouldConnect] = useState(false);
 
   const scrollToBottom: (behavior?: ScrollBehavior) => void = (behavior = 'smooth') => {
-    if (ref && ref.current) {
-      ref.current.scrollIntoView({behavior, block: 'end'});
+    if (bottomRef && bottomRef.current) {
+      bottomRef.current.scrollIntoView({behavior, block: 'end'});
     }
   };
 
@@ -122,8 +123,22 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     }, 100);
   }, [executionId]);
 
+  useEffect(() => {
+    const rect = containerRef?.current?.getBoundingClientRect();
+    if (rect) {
+      dispatch(
+        setLogOutputDOMRect({
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        })
+      );
+    }
+  }, [isFullScreenLogOutput]);
+
   return (
-    <StyledLogOutputContainer>
+    <StyledLogOutputContainer ref={containerRef}>
       <LogOutputHeader logOutput={logs} actions={actions} title={title} />
       <StyledLogTextContainer>
         {logs ? (
@@ -131,7 +146,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
             <Ansi useClasses>{logs}</Ansi>
           </StyledPreLogText>
         ) : null}
-        <div ref={ref} />
+        <div ref={bottomRef} />
       </StyledLogTextContainer>
     </StyledLogOutputContainer>
   );

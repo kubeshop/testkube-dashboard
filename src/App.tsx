@@ -9,11 +9,13 @@ import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint, selectFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {selectApiEndpoint, selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 import {setSources} from '@redux/reducers/sourcesSlice';
 
 import {CookiesBanner} from '@molecules';
+import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
+import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 
 import {Sider} from '@organisms';
 
@@ -31,7 +33,6 @@ import {MainContext} from '@contexts';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
 import {StyledLayoutContentWrapper} from './App.styled';
-import FullScreenLogOutput from './components/molecules/LogOutput/FullScreenLogOutput';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -118,6 +119,8 @@ const App: React.FC = () => {
     if (ga4React) {
       ga4React.pageview(location.pathname);
     }
+
+    dispatch(setIsFullScreenLogOutput(false));
   }, [location.pathname]);
 
   useEffect(() => {
@@ -166,7 +169,8 @@ const App: React.FC = () => {
                 </Suspense>
               </ErrorBoundary>
             </Content>
-            <CSSTransition in={isFullScreenLogOutput} timeout={350} classNames="full-screen-log-output" unmountOnExit>
+            {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
+            <CSSTransition in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
               <FullScreenLogOutput logOutput={logOutput} />
             </CSSTransition>
           </StyledLayoutContentWrapper>

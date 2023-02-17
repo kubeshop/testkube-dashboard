@@ -7,59 +7,23 @@ import {AnsiClassesMapping} from '@atoms';
 import Colors from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
-export const StyledLogOutputContainer = styled.div<{$isFullScreen?: boolean}>`
-  ${({$isFullScreen}) =>
-    $isFullScreen
-      ? `
-      position: absolute;
-      z-index: 999;
-      right: 0;
-      top: 0;
-    `
-      : ''};
-
+export const BaseLogOutputStyles = `
   display: flex;
   flex-direction: column;
 
   overflow: auto;
-  height: 70vh;
-
-  border-radius: ${({$isFullScreen}) => ($isFullScreen ? '0' : '4px')};
-
-  &.full-screen-log-output-enter {
-    width: 0;
-  }
-
-  &.full-screen-log-output-enter-active {
-    width: calc(100% - 80px);
-
-    transition: 0.35s;
-  }
-
-  &.full-screen-log-output-enter-done {
-    width: calc(100% - 80px);
-  }
-
-  &.full-screen-log-output-exit {
-    width: calc(100% - 80px);
-  }
-
-  &.full-screen-log-output-exit-active {
-    width: 0;
-
-    transition: 0.35s;
-  }
-
-  &.full-screen-log-output-exit-done {
-    display: none;
-  }
-
+  
   ${invisibleScroll}
 `;
 
-export const StyledLogTextContainer = styled.div`
-  // overflow: auto;
+export const StyledLogOutputContainer = styled.div`
+  ${BaseLogOutputStyles}
+  height: 70vh;
 
+  border-radius: 4px;
+`;
+
+export const StyledLogTextContainer = styled.div`
   flex: 1;
 
   background-color: ${Colors.slate900};
@@ -90,48 +54,26 @@ export const StyledLogOutputActionsContainer = styled.ul`
   list-style-type: none;
 `;
 
-export const StyledLogOutputHeaderContainer = styled.div`
+export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolean}>`
+  ${({$isFullScreen}) =>
+    $isFullScreen
+      ? `
+  position: absolute; 
+  right: 0;
+
+  z-index: 1002;
+
+  color: ${Colors.slate400};
+  `
+      : ''}
+
   display: flex;
   justify-content: space-between;
 
   padding: 12px;
   border-radius: inherit;
 
-  background: ${Colors.slate900};
-`;
-
-export const StyledActionIconContainer = styled.span`
-  padding: 0 4px;
-  border: 1px solid #434343;
-  border-radius: 2px;
-
-  background: #141414;
-
-  width: 500px;
-
-  cursor: pointer;
-
-  &:not(:last-child) {
-    margin-right: 8px;
-  }
-
-  span {
-    svg {
-      path {
-        transition: 0.3s;
-      }
-    }
-  }
-
-  &:hover {
-    span {
-      svg {
-        path {
-          fill: ${Colors.purple};
-        }
-      }
-    }
-  }
+  background: transparent;
 `;
 
 export const StyledLogOutputHeaderTitle = styled.span`
@@ -140,10 +82,10 @@ export const StyledLogOutputHeaderTitle = styled.span`
   font-weight: 600;
 `;
 
-const CopyIconBaseStyles = `
+const FullscreenIconBaseStyles = `
   position: absolute;
   top: 0px;
-  right: 0px;
+  right: 35px;
 
   padding: 4px;
   margin: 6px;
@@ -154,7 +96,7 @@ const CopyIconBaseStyles = `
 `;
 
 export const StyledFullscreenExitOutlined = styled(FullscreenExitOutlined)`
-  ${CopyIconBaseStyles}
+  ${FullscreenIconBaseStyles}
 
   border: 1px solid transparent;
   transition: 0.3s;
@@ -165,7 +107,7 @@ export const StyledFullscreenExitOutlined = styled(FullscreenExitOutlined)`
 `;
 
 export const StyledExpandAltOutlined = styled(ExpandAltOutlined)`
-  ${CopyIconBaseStyles}
+  ${FullscreenIconBaseStyles}
 
   border: 1px solid transparent;
   transition: 0.3s;

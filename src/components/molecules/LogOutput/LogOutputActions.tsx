@@ -10,8 +10,8 @@ import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
+import FullScreenAction from './FullscreenLogOutput/FullScreenAction';
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
-import FullScreenAction from './logActions/FullScreenAction';
 
 type LogOutputActionsProps = {
   logOutput: string;
@@ -27,12 +27,11 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
     copy: isSecureContext ? (
       <CopyButton content={stripAnsi(logOutput)} key="copy-action" />
     ) : (
-      <DownloadButton filename={filename} extension="log" content={stripAnsi(logOutput)} />
+      <DownloadButton filename={filename} extension="log" content={stripAnsi(logOutput)} key="download-action" />
     ),
-    fullscreen: <FullScreenAction logOutput={logOutput} key="fullscreen-log-action" />,
+    fullscreen: <FullScreenAction key="fullscreen-log-action" />,
   };
 
-  console.log(actions);
   const renderedLogOutputActions = useMemo(() => {
     return actions.map(actionType => {
       return logOutputActionsMap[actionType];
@@ -41,4 +40,5 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
 
   return <StyledLogOutputActionsContainer>{renderedLogOutputActions}</StyledLogOutputActionsContainer>;
 };
+
 export default LogOutputActions;
