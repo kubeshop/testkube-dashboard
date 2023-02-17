@@ -87,12 +87,12 @@ const FullscreenIconBaseStyles = `
   top: 0px;
   right: 35px;
 
+  border-radius: 2px;
+  
   padding: 4px;
   margin: 6px;
   
   font-size: 22px;
-
-  border-radius: 2px;
 `;
 
 export const StyledFullscreenExitOutlined = styled(FullscreenExitOutlined)`
