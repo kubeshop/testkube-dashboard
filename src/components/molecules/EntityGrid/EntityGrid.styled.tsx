@@ -50,6 +50,7 @@ export const RowsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 12px;
 
   padding-left: 40px;
 `;
