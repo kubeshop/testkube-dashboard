@@ -31,7 +31,7 @@ const LabelsList: React.FC<LabelsListProps> = props => {
     .filter(labelComponent => labelComponent);
 
   const skippedLabelsNumber = labelKeys.length - renderedLabels.length;
-  const skippedLabelsArray = Object.entries(labels).splice(2, skippedLabelsNumber);
+  const skippedLabelsArray = Object.entries(labels).splice(howManyLabelsToShow, skippedLabelsNumber);
 
   const renderedSkippedLabels = skippedLabelsArray
     ? skippedLabelsArray.map(([labelKey]) => {
