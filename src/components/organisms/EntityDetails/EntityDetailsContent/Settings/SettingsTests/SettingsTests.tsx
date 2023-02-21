@@ -169,7 +169,7 @@ const SettingsTests = () => {
       footerText={
         <>
           Learn more about{' '}
-          <a href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/" target="_blank">
+          <a href="https://kubeshop.github.io/testkube/concepts/test-suites/testsuites-creating/" target="_blank">
             Tests in a test suite
           </a>
         </>

@@ -144,7 +144,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
             Please provide the Testkube API endpoint for your installation, which will have been provided to you by the
             Testkube installer -{' '}
             <a
-              href="https://kubeshop.github.io/testkube/UI/#ui-results-endpoint"
+              href="https://kubeshop.github.io/testkube/concepts/dashboard/#ui-results-endpoint"
               target="_blank"
               rel="noopener noreferrer"
             >

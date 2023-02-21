@@ -15,11 +15,11 @@ export const openCustomExecutorDocumentation = () => {
 };
 
 export const openTestkubeDashboardDocumentation = () => {
-  window.open('https://kubeshop.github.io/testkube/using-testkube/UI/');
+  window.open('https://kubeshop.github.io/testkube/concepts/dashboard/');
 };
 
 export const openSourcesDocumentation = () => {
-  window.open('https://kubeshop.github.io/testkube/openapi/#tag/test-sources');
+  window.open('https://kubeshop.github.io/testkube/reference/openapi/#tag/test-sources');
 };
 
-export const testSourceLink = 'https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/#test-source';
+export const testSourceLink = 'https://kubeshop.github.io/testkube/concepts/tests/tests-creating/#test-source';

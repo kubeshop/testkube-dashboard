@@ -100,7 +100,7 @@ const Variables: React.FC = () => {
         footerText={
           <>
             Learn more about{' '}
-            <a href="https://kubeshop.github.io/testkube/using-testkube/tests/tests-variables/" target="_blank">
+            <a href="https://kubeshop.github.io/testkube/concepts/tests/tests-variables/" target="_blank">
               Environment variables
             </a>
           </>

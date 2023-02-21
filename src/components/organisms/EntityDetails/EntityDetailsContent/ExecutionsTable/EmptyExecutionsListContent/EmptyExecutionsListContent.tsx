@@ -39,7 +39,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         buttonText="Add your tests to this suite"
         onButtonClick={() => dispatch(openSettingsTabConfig())}
       >
-        <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
+        <HelpCard isLink link="https://kubeshop.github.io/testkube/concepts/test-suites/testsuites-creating/">
           Learn how to add test suites
         </HelpCard>
       </EmptyListContent>

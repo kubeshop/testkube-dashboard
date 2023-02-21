@@ -10,7 +10,7 @@ const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
       buttonText="Add a new test"
       onButtonClick={action}
     >
-      <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/">
+      <HelpCard isLink link="https://kubeshop.github.io/testkube/concepts/tests/tests-creating/">
         Learn how to add tests
       </HelpCard>
       <HelpCard isLink link="https://kubeshop.github.io/testkube/test-types/executor-custom/">

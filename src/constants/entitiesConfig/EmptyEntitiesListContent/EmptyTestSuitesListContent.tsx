@@ -10,7 +10,7 @@ const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {
       buttonText="Add a new test suite"
       onButtonClick={action}
     >
-      <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
+      <HelpCard isLink link="https://kubeshop.github.io/testkube/concepts/test-suites/testsuites-creating/">
         Learn how to add test suites
       </HelpCard>
     </EmptyListContent>

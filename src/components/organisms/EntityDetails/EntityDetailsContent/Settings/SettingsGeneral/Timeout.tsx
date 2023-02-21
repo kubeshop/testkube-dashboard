@@ -70,7 +70,7 @@ const Timeout: React.FC = () => {
           <Text className="regular middle">
             Learn more about{' '}
             <a
-              href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/"
+              href="https://kubeshop.github.io/testkube/concepts/test-suites/testsuites-creating/"
               target="_blank"
             >
               Timeouts
