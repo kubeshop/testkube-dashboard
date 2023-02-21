@@ -40,7 +40,7 @@
     "@types/uuid": "8.3.4",
     "craco-alias": "3.0.1",
     "craco-less": "1.20.0",
-    "cypress": "8.7.0",
+    "cypress": "12.6.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.26",
