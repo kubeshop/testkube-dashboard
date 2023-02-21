@@ -63,7 +63,6 @@ const FirstStep: React.FC<any> = props => {
                   name={testSourceFieldConfig.fieldName}
                   key={testSourceFieldConfig.fieldName}
                   required={testSourceFieldConfig.required}
-                  requiredMark={testSourceFieldConfig.required ? undefined : 'optional'}
                 >
                   <Select placeholder={testSourceFieldConfig.placeholder} showSearch options={options} />
                 </FormItem>

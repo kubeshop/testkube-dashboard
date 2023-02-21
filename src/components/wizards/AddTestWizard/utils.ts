@@ -89,11 +89,9 @@ export const gitDirFormFields: FormItem[] = [
   },
   {
     tooltip: 'The path is relative to the root of your repository',
-    rules: [required],
     fieldName: 'path',
-    required: true,
     inputType: 'default',
-    placeholder: 'e.g.: /tests/cypress',
+    placeholder: 'e.g.: tests/cypress',
     itemLabel: 'Path',
   },
   {
@@ -134,11 +132,9 @@ export const gitFileFormFields: FormItem[] = [
   },
   {
     tooltip: 'The path is relative to the root of your repository',
-    rules: [required],
     fieldName: 'path',
-    required: true,
     inputType: 'default',
-    placeholder: 'e.g.: /tests/cypress',
+    placeholder: 'e.g.: tests/cypress/index.js',
     itemLabel: 'Path',
   },
   {
@@ -179,11 +175,9 @@ export const gitFormFieldsEdit: FormItem[] = [
   },
   {
     tooltip: 'The path is relative to the root of your repository',
-    rules: [required],
     fieldName: 'path',
-    required: true,
     inputType: 'default',
-    placeholder: 'e.g.: /tests/cypress',
+    placeholder: 'e.g.: tests/cypress',
     itemLabel: 'Path',
   },
 ];
@@ -211,7 +205,7 @@ export const customTypeFormFields: FormItem[] = [
     tooltip: 'The path is relative to the root of your repository',
     fieldName: 'path',
     inputType: 'default',
-    placeholder: 'e.g.: /tests/cypress',
+    placeholder: 'e.g.: tests/cypress',
     itemLabel: 'Path',
   },
 ];

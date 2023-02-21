@@ -110,7 +110,6 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
         key={fieldName}
         help={help}
         required={isItemRequired}
-        requiredMark={isItemRequired ? undefined : 'optional'}
       >
         {children}
       </FormItem>
