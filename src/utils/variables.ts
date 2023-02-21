@@ -54,9 +54,7 @@ export const decomposeVariables = (variables: Variables) => {
 
     if (typeof value.value !== 'string') {
       formattedValue = '';
-    }
-
-    if (value.value.startsWith('"') && value.value.endsWith('"')) {
+    } else if (value.value.startsWith('"') && value.value.endsWith('"')) {
       formattedValue = value.value.substring(1, value.value.length - 1);
     } else {
       formattedValue = value.value;
