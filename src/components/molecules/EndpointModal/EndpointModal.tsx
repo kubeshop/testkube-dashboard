@@ -13,10 +13,11 @@ import {Button, Input, Modal, Text} from '@custom-antd';
 import {hasProtocol} from '@utils/strings';
 
 import {MainContext} from '@contexts';
+import Colors from '@styles/Colors';
 
 import env from '../../../env';
 import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
-import Colors from '@styles/Colors';
+
 
 type EndpointModalProps = {
   setModalState: (isVisible: boolean) => void;
