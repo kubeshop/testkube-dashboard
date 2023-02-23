@@ -16,6 +16,7 @@ import {MainContext} from '@contexts';
 
 import env from '../../../env';
 import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
+import Colors from '@styles/Colors';
 
 type EndpointModalProps = {
   setModalState: (isVisible: boolean) => void;
@@ -141,18 +142,20 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
       content={
         <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
           <Text>
-            Please provide the Testkube API endpoint for your installation, which will have been provided to you by the
-            Testkube installer -{' '}
+            We could not detect the right Testkube API endpoint for you. 
+          </Text>
+          <Text>
+            Please enter the API endpoint for your installation (e.g. from the outpur of the Testkube installer)
             <a
               href="https://kubeshop.github.io/testkube/UI/#ui-results-endpoint"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Read More...
+              Learn more...
             </a>
           </Text>
-          <Text>
-            The endpoint needs to be accessible from your browser and will be used to retrieve test results only.
+          <Text color={Colors.slate400} className="regular middle">
+            The endpoint needs to be accessible from your browser.
           </Text>
           <StyledFormContainer>
             <Input
@@ -162,7 +165,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
                 setApiEndpointHook(event.target.value);
               }}
               value={apiEndpoint}
-              width="300px"
+              placeholder="e.g. https://my.domain/results/v1"
               data-test="endpoint-modal-input"
             />
             <Button
