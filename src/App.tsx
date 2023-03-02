@@ -39,6 +39,7 @@ const TestSuites = lazy(() => import('@pages').then(module => ({default: module.
 const Executors = lazy(() => import('@pages').then(module => ({default: module.Executors})));
 const Sources = lazy(() => import('@pages').then(module => ({default: module.Sources})));
 const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
+const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
 const pjson = require('../package.json');
 
@@ -162,6 +163,7 @@ const App: React.FC = () => {
                     <Route path="executors/*" element={<Executors />} />
                     <Route path="sources/*" element={<Sources />} />
                     <Route path="triggers" element={<Triggers />} />
+                    <Route path="settings" element={<GlobalSettings />} />
                     <Route path="/apiEndpoint" element={<EndpointProcessing />} />
                     <Route path="/" element={<Navigate to="/tests" replace />} />
                     <Route path="*" element={<NotFound />} />

@@ -25,6 +25,7 @@ enum Colors {
 
   pink900 = '#831843',
   pink800 = '#9D174D',
+  pink700 = '#BE185D',
   pink600 = '#DB2777',
   pink500 = '#EC4899',
   pink300 = '#F9A8D4',
@@ -38,6 +39,7 @@ enum Colors {
 
   yellow900 = '#713F12',
   yellow500 = '#EAB308',
+  yellow400 = '#FACC15',
   yellow300 = '#FDE047',
 
   cyan900 = '#164E63',
