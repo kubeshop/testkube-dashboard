@@ -141,11 +141,7 @@ export const GlobalStyle = createGlobalStyle`
   // Notification
 
   .ant-notification-notice {
-    padding-bottom: 24px;
-
-    .ant-notification-notice-close-x {
-      color: ${Colors.slate500};
-    }
+    overflow: unset;
   }
 
   // Table

@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 
-import {notification} from 'antd';
+import {Space} from 'antd';
 
 import axios from 'axios';
 
@@ -10,12 +10,15 @@ import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input, Modal, Text} from '@custom-antd';
 
-import {hasProtocol} from '@utils/strings';
+import {checkAPIEndpoint} from '@utils/endpoint';
+
+import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
 import env from '../../../env';
-import {StyledFormContainer, StyledSearchUrlForm} from './EndpointModal.styled';
+import notificationCall from '../Notification/Notification';
+import {StyledSearchUrlForm} from './EndpointModal.styled';
 
 type EndpointModalProps = {
   setModalState: (isVisible: boolean) => void;
@@ -59,10 +62,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
             setModalState(false);
           } else {
-            notification.error({
-              message: 'Could not receive data from the specified api endpoint',
-              duration: 0,
-            });
+            notificationCall('failed', 'Could not receive data from the specified API endpoint');
 
             setLoading(false);
           }
@@ -73,30 +73,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
         setLoading(false);
 
-        return notification.error({
-          message: 'Could not receive data from the specified api endpoint',
-          duration: 0,
-        });
-      }
-    }
-  };
-
-  const checkAPIEndpoint = () => {
-    const endsWithV1 = apiEndpoint.endsWith('/v1');
-
-    if (hasProtocol(apiEndpoint)) {
-      if (endsWithV1) {
-        checkURLWorkingState(`${apiEndpoint}/info`);
-      } else {
-        checkURLWorkingState(`${apiEndpoint}/v1/info`);
-      }
-    } else {
-      const targetProtocol = `${window.location.protocol}//`;
-
-      if (endsWithV1) {
-        checkURLWorkingState(`${targetProtocol}${apiEndpoint}/info`);
-      } else {
-        checkURLWorkingState(`${targetProtocol}${apiEndpoint}/v1/info`);
+        return notificationCall('failed', 'Could not receive data from the specified API endpoint');
       }
     }
   };
@@ -106,7 +83,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
     setLoading(true);
 
-    checkAPIEndpoint();
+    checkAPIEndpoint(apiEndpoint, checkURLWorkingState);
   };
 
   useEffect(() => {
@@ -127,9 +104,15 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
     if (!apiEndpoint) {
       setModalState(true);
     } else {
-      checkAPIEndpoint();
+      checkAPIEndpoint(apiEndpoint, checkURLWorkingState);
     }
   }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem('apiEndpoint')) {
+      setModalState(true);
+    }
+  }, [localStorage.getItem('apiEndpoint')]);
 
   return (
     <Modal
@@ -138,23 +121,21 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
       setIsModalVisible={setModalState}
       dataTestModalRoot="endpoint-modal"
       dataTestCloseBtn="endpoint-modal-close-button"
+      width={693}
       content={
         <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
           <Text>
-            Please provide the Testkube API endpoint for your installation, which will have been provided to you by the
-            Testkube installer -{' '}
+            We could not detect the right Testkube API endpoint for you. Please enter the API endpoint for your
+            installation (e.g. from the output of the Testkube installer)&nbsp;
             <a
               href="https://kubeshop.github.io/testkube/UI/#ui-results-endpoint"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Read More...
+              Learn more...
             </a>
           </Text>
-          <Text>
-            The endpoint needs to be accessible from your browser and will be used to retrieve test results only.
-          </Text>
-          <StyledFormContainer>
+          <Space style={{width: '100%'}} size={12}>
             <Input
               id="url"
               name="url"
@@ -162,8 +143,9 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
                 setApiEndpointHook(event.target.value);
               }}
               value={apiEndpoint}
-              width="300px"
+              width="550px"
               data-test="endpoint-modal-input"
+              placeholder="e.g.: https://my.domain/results/v1"
             />
             <Button
               type="primary"
@@ -172,9 +154,12 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
               loading={isLoading}
               data-test="endpoint-modal-get-button"
             >
-              Get results
+              Save
             </Button>
-          </StyledFormContainer>
+          </Space>
+          <Text color={Colors.slate400} className="regular middle" style={{width: '100%'}}>
+            Please make sure the endpoint is accessible from your browser.
+          </Text>
         </StyledSearchUrlForm>
       }
       data-test="endpoint-modal"

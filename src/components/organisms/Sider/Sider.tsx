@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useContext, useMemo, useState} from 'react';
 import {NavLink} from 'react-router-dom';
 
 import {Space, Tooltip} from 'antd';
@@ -20,6 +20,8 @@ import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
 import {ReactComponent as TriggersIcon} from '@assets/triggers.svg';
 
 import Colors from '@styles/Colors';
+
+import {MainContext} from '@contexts';
 
 import {
   StyledLogo,
@@ -80,17 +82,14 @@ const routes = [
 
 const Sider: React.FC = () => {
   const [isModalVisible, setModalState] = useState(false);
+  const {navigate} = useContext(MainContext);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
-
-  const onToggleModal = () => {
-    setModalState(prev => !prev);
-  };
 
   const otherMenuItems = [
     {
       icon: 'cog',
-      onClick: onToggleModal,
+      onClick: () => navigate('/settings'),
     },
     {icon: 'github', onClick: openGithub},
     {icon: 'documentation', onClick: openDocumentation},
