@@ -13,7 +13,7 @@ import {ExecutorIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
-import {CLICommands, LabelsList, MetricsBarChart} from '@molecules';
+import {CLICommands, LabelsList, MetricsBarChart, notificationCall} from '@molecules';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
@@ -84,7 +84,7 @@ const EntityDetailsContent: React.FC = () => {
     })
       .then((result: any) => {
         if (result.error) {
-          return displayDefaultErrorNotification(result.error.error);
+          notificationCall('failed', result.error.error);
         }
 
         analyticsTrack('trackEvents', {

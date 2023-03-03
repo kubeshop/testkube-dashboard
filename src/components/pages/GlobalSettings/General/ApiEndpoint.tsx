@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 
 import {Form, Input, Space} from 'antd';
 
@@ -18,6 +18,8 @@ import {MainContext} from '@contexts';
 
 const ApiEndpoint = () => {
   const [form] = Form.useForm();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const {dispatch, apiEndpoint} = useContext(MainContext);
 
@@ -47,12 +49,15 @@ const ApiEndpoint = () => {
         });
     } catch (err) {
       if (err) {
-        return notificationCall('failed', 'Could not receive data from the specified API endpoint');
+        notificationCall('failed', 'Could not receive data from the specified API endpoint');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const onSave = (values: any) => {
+    setIsLoading(true);
     checkAPIEndpoint(values.endpoint, checkURLWorkingState);
   };
 
@@ -78,6 +83,7 @@ const ApiEndpoint = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        confirmButtonText={isLoading ? 'Loading...' : 'Save'}
       >
         <Space size={32} direction="vertical" style={{width: '100%'}}>
           <FormItem name="endpoint">
