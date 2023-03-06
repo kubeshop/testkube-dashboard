@@ -34,7 +34,6 @@ const SettingsTests = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
 
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
-  const [wasTouched, setWasTouched] = useState(false);
 
   const scrollRef = useRef(null);
 
@@ -77,19 +76,14 @@ const SettingsTests = () => {
     };
   }), [entityDetails?.steps, testsData]);
 
-  const [currentSteps, setCurrentSteps] = useState(initialSteps);
+  const [currentSteps = initialSteps, setCurrentSteps] = useState<any[] | undefined>();
+  const wasTouched = currentSteps !== initialSteps;
 
   useEffect(() => {
     if (currentSteps !== initialSteps) {
-      setCurrentSteps(initialSteps);
+      setCurrentSteps(undefined);
     }
   }, [initialSteps]);
-
-  useEffect(() => {
-    if (currentSteps !== initialSteps) {
-      setWasTouched(true);
-    }
-  }, [currentSteps]);
 
   const saveSteps = () => {
     updateTestSuite({
@@ -171,10 +165,7 @@ const SettingsTests = () => {
         </>
       }
       onConfirm={saveSteps}
-      onCancel={() => {
-        setCurrentSteps(initialSteps);
-        setWasTouched(false);
-      }}
+      onCancel={() => setCurrentSteps(undefined)}
       isButtonsDisabled={!wasTouched}
     >
       <>
