@@ -18,7 +18,7 @@ const DragNDropList: React.FC<DragNDropListProps> = props => {
   const {items = [], setItems, onDelete, scrollRef, ItemComponent, ContainerComponent} = props;
 
   const onDragEnd = (result: any) => {
-    if (!result.destination) {
+    if (!result.destination || result.source.index === result.destination.index) {
       return;
     }
 
