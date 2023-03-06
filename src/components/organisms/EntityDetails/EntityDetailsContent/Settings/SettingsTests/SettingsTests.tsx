@@ -125,7 +125,6 @@ const SettingsTests = () => {
           stopTestOnFailure: false,
         },
       ]);
-      scrollToBottom();
     }
   };
 
@@ -141,7 +140,6 @@ const SettingsTests = () => {
       },
     ]);
     setIsDelayModalVisible(false);
-    scrollToBottom();
   };
 
   const deleteStep = (index: number) => {
