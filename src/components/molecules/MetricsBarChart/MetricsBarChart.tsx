@@ -118,7 +118,7 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
 
   const [p50Axis, p95Axis, minAxis] = getAxisLines();
 
-  if (!data || !data.length) {
+  if (!data || !data.length || data.length < 2) {
     return null;
   }
 

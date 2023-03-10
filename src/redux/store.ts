@@ -13,6 +13,7 @@ import {configApi} from '@services/config';
 import {executionsApi} from '@services/executions';
 import {executorsApi} from '@services/executors';
 import {labelsApi} from '@services/labels';
+import {repositoryApi} from '@services/repository';
 import {sourcesApi} from '@services/sources';
 import {testSuiteExecutionsApi} from '@services/testSuiteExecutions';
 import {testSuitesApi} from '@services/testSuites';
@@ -29,6 +30,7 @@ const middlewares: Middleware[] = [
   sourcesApi.middleware,
   triggersApi.middleware,
   configApi.middleware,
+  repositoryApi.middleware,
 ];
 
 if (process.env.NODE_ENV === `development`) {
@@ -55,6 +57,7 @@ export const store = configureStore({
     [sourcesApi.reducerPath]: sourcesApi.reducer,
     [triggersApi.reducerPath]: triggersApi.reducer,
     [configApi.reducerPath]: configApi.reducer,
+    [repositoryApi.reducerPath]: repositoryApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 });

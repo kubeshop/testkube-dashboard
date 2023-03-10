@@ -17,6 +17,7 @@ type LabelsSelectProps = {
   options?: {[key: string]: string[]};
   placeholder?: string;
   validation?: boolean;
+  menuPlacement?: 'auto' | 'bottom' | 'top';
 };
 
 const isValidLabel = (value: string) => {
@@ -32,7 +33,7 @@ const isValidLabel = (value: string) => {
 };
 
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
-  const {onChange, defaultLabels, options, placeholder = 'Add or create new labels', validation} = props;
+  const {onChange, defaultLabels, options, placeholder = 'Add or create new labels', validation, menuPlacement} = props;
 
   const {data, isFetching} = useGetLabelsQuery(null, {
     pollingInterval: PollingIntervals.default,
@@ -73,6 +74,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
       validateCreation={isValidLabel}
       isLoading={isFetching}
       validation={validation}
+      menuPlacement={menuPlacement}
       dataTest="labels"
     />
   );

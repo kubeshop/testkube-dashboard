@@ -17,7 +17,9 @@ import {HintProps} from '@molecules/Hint/Hint';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
-import {getTestSourceSpecificFields, onFileChange, testSourceBaseOptions} from '@wizards/AddTestWizard/utils';
+import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
+
+import useDebounce from '@hooks/useDebounce';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
@@ -25,6 +27,8 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
+
+import {useValidateRepositoryMutation} from '@src/services/repository';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 import {defaultHintConfig} from './ModalConfig';
@@ -57,8 +61,13 @@ const TestCreationModalContent: React.FC = () => {
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);
+  const [uriState, setUriState] = useState<{status: string; message: string} | null>({
+    status: 'default',
+    message: 'We do currently only support checking out repositories via https',
+  });
 
   const [addTest, {isLoading}] = useAddTestMutation();
+  const [validateRepository] = useValidateRepositoryMutation();
 
   useEffect(() => {
     const selectedExecutor = executors.find(executor =>
@@ -73,7 +82,7 @@ const TestCreationModalContent: React.FC = () => {
     if (selectedExecutor.executor?.executorType === 'container') {
       setHintConfig({
         title: 'Testing with custom executor',
-        description: 'Discover all the features and tricks around custom executors',
+        description: 'Discover all the features and examples around custom executors',
         openLink: openCustomExecutorDocumentation,
       });
     }
@@ -81,25 +90,53 @@ const TestCreationModalContent: React.FC = () => {
     if (selectedExecutor.executor?.executorType === 'job') {
       setHintConfig({
         title: `Testing with ${selectedExecutor.displayName}`,
-        description: `Discover all the features and tricks around testing with ${selectedExecutor.displayName} on Testkube`,
+        description: `Discover all the features and examples around testing with ${selectedExecutor.displayName} on Testkube`,
         openLink: () => window.open(selectedExecutor.executor.meta.docsURI, '_blank'),
+        selectedExecutor: selectedExecutor.executor.meta.iconURI,
       });
     }
 
     form.setFieldValue('testSource', null);
   }, [form.getFieldValue('testType')]);
 
-  useEffect(() => {
-    const selectedSource = testSourceBaseOptions.find(source => source.value === form.getFieldValue('testSource'));
+  useDebounce(
+    () => {
+      if (form.getFieldValue('uri')) {
+        setUriState({
+          status: 'loading',
+          message: 'Validating repository',
+        });
 
-    if (selectedSource) {
-      setHintConfig({
-        title: `${selectedSource.label} as source`,
-        description: `Discover all the features and tricks around using ${selectedSource.label} as your source on Testkube`,
-        openLink: () => window.open(selectedSource.docsURI, '_blank'),
-      });
-    }
-  }, [form.getFieldValue('testSource')]);
+        validateRepository({
+          type: 'git',
+          uri: form.getFieldValue('uri'),
+          token: form.getFieldValue('token'),
+          username: form.getFieldValue('username'),
+        })
+          .then((res: any) => {
+            if (res?.error) {
+              setUriState({
+                status: 'error',
+                message: res?.error?.data?.detail || 'Invalid repository',
+              });
+            } else {
+              setUriState({
+                status: 'success',
+                message: 'Repository is accessible',
+              });
+            }
+          })
+          .catch(err => {
+            setUriState({
+              status: 'error',
+              message: err?.error?.data?.detail || 'Invalid repository',
+            });
+          });
+      }
+    },
+    300,
+    [form.getFieldValue('uri'), form.getFieldValue('token'), form.getFieldValue('username')]
+  );
 
   const onSaveClick = async (values: any) => {
     const {testSource, testType} = values;
@@ -172,6 +209,7 @@ const TestCreationModalContent: React.FC = () => {
             onLabelsChange={setLocalLabels}
             executors={executors}
             testSources={testSources}
+            // uriState={uriState}
           />
           <StyledFormItem shouldUpdate>
             {({isFieldsTouched}) => (

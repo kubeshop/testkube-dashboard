@@ -19,7 +19,7 @@ const SecretFormItem: React.FC<SecretFormItemProps> = props => {
       {({setFieldValue, getFieldValue}) => {
         const testSourceValue: string = getFieldValue('testSource');
 
-        if (testSourceValue === 'git-dir' || testSourceValue === 'git-file') {
+        if (testSourceValue === 'git-dir' || testSourceValue === 'git-file' || testSourceValue === 'git') {
           return (
             <>
               <FormItem name={name} label={label}>

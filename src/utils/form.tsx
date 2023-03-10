@@ -54,7 +54,7 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     let children: Nullable<ReactElement<any, any>> = null;
 
     if (inputType === 'select') {
-      children = <Select placeholder={placeholder} showSearch options={options} />;
+      children = <Select placeholder={placeholder} showSearch options={options} allowClear />;
     }
 
     if (inputType === 'radio') {
@@ -74,7 +74,7 @@ export const renderFormItems = (array: any, config: DefaultConfig = {}) => {
     if (inputType === 'labels') {
       children = (
         <div style={{width: '100%'}}>
-          <LabelsSelect onChange={onLabelsChange!} />
+          <LabelsSelect onChange={onLabelsChange!} menuPlacement="top" />
         </div>
       );
     }

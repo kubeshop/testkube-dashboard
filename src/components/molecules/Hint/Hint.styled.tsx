@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import Colors from '@styles/Colors';
+
 export const StyledWizardHintContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,4 +16,24 @@ export const StyledWizardHintContainer = styled.div`
   border-bottom-right-radius: 4px;
 
   text-align: center;
+`;
+
+export const StyledImageContainer = styled.div`
+  position: relative;
+
+  height: 154px;
+`;
+
+export const AbsoluteExecutorIconContainer = styled.div`
+  position: absolute;
+  left: 95px;
+  top: 40px;
+
+  svg {
+    path {
+      fill: ${Colors.whitePure};
+    }
+    width: 44px;
+    height: 44px;
+  }
 `;
