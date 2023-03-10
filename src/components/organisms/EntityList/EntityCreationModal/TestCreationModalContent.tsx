@@ -19,16 +19,15 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
 import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
 
-import useDebounce from '@hooks/useDebounce';
+import useValidateRepository from '@hooks/useValidateRepository';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
+import {useValidateRepositoryMutation} from '@services/repository';
 import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
-
-import {useValidateRepositoryMutation} from '@src/services/repository';
 
 import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 import {defaultHintConfig} from './ModalConfig';
@@ -61,10 +60,7 @@ const TestCreationModalContent: React.FC = () => {
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);
-  const [uriState, setUriState] = useState<{status: string; message: string} | null>({
-    status: 'default',
-    message: 'We do currently only support checking out repositories via https',
-  });
+  const [uriState, setUriState] = useState<{status: string; message: string} | undefined>(undefined);
 
   const [addTest, {isLoading}] = useAddTestMutation();
   const [validateRepository] = useValidateRepositoryMutation();
@@ -99,44 +95,7 @@ const TestCreationModalContent: React.FC = () => {
     form.setFieldValue('testSource', null);
   }, [form.getFieldValue('testType')]);
 
-  useDebounce(
-    () => {
-      if (form.getFieldValue('uri')) {
-        setUriState({
-          status: 'loading',
-          message: 'Validating repository',
-        });
-
-        validateRepository({
-          type: 'git',
-          uri: form.getFieldValue('uri'),
-          token: form.getFieldValue('token'),
-          username: form.getFieldValue('username'),
-        })
-          .then((res: any) => {
-            if (res?.error) {
-              setUriState({
-                status: 'error',
-                message: res?.error?.data?.detail || 'Invalid repository',
-              });
-            } else {
-              setUriState({
-                status: 'success',
-                message: 'Repository is accessible',
-              });
-            }
-          })
-          .catch(err => {
-            setUriState({
-              status: 'error',
-              message: err?.error?.data?.detail || 'Invalid repository',
-            });
-          });
-      }
-    },
-    300,
-    [form.getFieldValue('uri'), form.getFieldValue('token'), form.getFieldValue('username')]
-  );
+  useValidateRepository(form, setUriState, validateRepository);
 
   const onSaveClick = async (values: any) => {
     const {testSource, testType} = values;
@@ -209,7 +168,7 @@ const TestCreationModalContent: React.FC = () => {
             onLabelsChange={setLocalLabels}
             executors={executors}
             testSources={testSources}
-            // uriState={uriState}
+            uriState={uriState}
           />
           <StyledFormItem shouldUpdate>
             {({isFieldsTouched}) => (
