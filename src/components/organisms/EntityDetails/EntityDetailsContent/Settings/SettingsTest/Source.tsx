@@ -33,8 +33,7 @@ import SecretFormItem from './SecretFormItem';
 const dummySecret = '******';
 
 const additionalFields: any = {
-  'git-dir': gitFormFieldsEdit,
-  'git-file': gitFormFieldsEdit,
+  git: gitFormFieldsEdit,
   'file-uri': fileContentFormFields,
   custom: customTypeFormFields,
   string: stringContentFormFields,
@@ -95,7 +94,16 @@ const Source = () => {
 
   const sourcesOptions = [
     ...remappedCustomTestSources,
-    ...testSourceBaseOptions.filter(option => selectedExecutor?.executor?.contentTypes?.includes(String(option.value))),
+    ...testSourceBaseOptions.filter(option => {
+      if (option.value === 'git') {
+        return (
+          selectedExecutor?.executor?.contentTypes?.includes('git-dir') ||
+          selectedExecutor?.executor?.contentTypes?.includes('git-file')
+        );
+      }
+
+      return selectedExecutor?.executor?.contentTypes?.includes(String(option.value));
+    }),
   ];
 
   const [updateTest] = useUpdateTestMutation();
@@ -196,7 +204,7 @@ const Source = () => {
 
                 return (
                   <StyledSpace size={24} direction="vertical">
-                    {renderFormItems(additionalFields[testSourceValue], {
+                    {renderFormItems(additionalFields[testSourceValue](selectedExecutor?.executor.meta.iconURI), {
                       onFileChange: file => onFileChange(file, form),
                     })}
                   </StyledSpace>

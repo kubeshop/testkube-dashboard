@@ -26,6 +26,7 @@ type MultiSelectProps = {
   isLoading?: boolean;
   validation?: boolean;
   dataTest?: string;
+  menuPlacement?: 'auto' | 'bottom' | 'top';
 };
 
 const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
@@ -41,6 +42,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     isLoading = false,
     validation,
     dataTest,
+    menuPlacement = 'bottom',
   } = props;
 
   const ref = useRef(null);
@@ -58,16 +60,12 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     }
   };
 
-  const onClear = () => {
-    // @ts-ignore
-    ref.current.select.clearValue();
-  };
-
   return (
     <CreatableSelect
       ref={ref}
       defaultValue={defaultValue}
       isMulti
+      menuPlacement={menuPlacement}
       isClearable={false}
       onChange={onChange}
       placeholder={placeholder}

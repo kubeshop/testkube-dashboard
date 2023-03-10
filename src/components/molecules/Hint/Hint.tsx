@@ -1,31 +1,42 @@
 import {memo} from 'react';
 
+import {ExecutorIcon} from '@atoms';
+
 import {Button, Text, Title} from '@custom-antd';
 
 import {ReactComponent as WizardHintImage} from '@assets/wizardHint.svg';
+import {ReactComponent as WizardHintEmpty} from '@assets/wizardHintEmpty.svg';
 
 import Colors from '@styles/Colors';
 
-import {StyledWizardHintContainer} from './Hint.styled';
+import {AbsoluteExecutorIconContainer, StyledImageContainer, StyledWizardHintContainer} from './Hint.styled';
 
 export type HintProps = {
   title: string;
   description: string;
   openLink: () => void;
+  selectedExecutor?: string;
 };
 
 const Hint: React.FC<HintProps> = props => {
-  const {title, description, openLink} = props;
+  const {title, description, openLink, selectedExecutor} = props;
 
   return (
     <StyledWizardHintContainer>
-      <WizardHintImage />
+      <StyledImageContainer>
+        {selectedExecutor ? <WizardHintEmpty /> : <WizardHintImage />}
+        {selectedExecutor ? (
+          <AbsoluteExecutorIconContainer>
+            <ExecutorIcon type={selectedExecutor} />
+          </AbsoluteExecutorIconContainer>
+        ) : null}
+      </StyledImageContainer>
       <Title level={3}>{title}</Title>
       <Text className="regular middle" color={Colors.slate400}>
         {description}
       </Text>
       <Button $customType="secondary" onClick={openLink}>
-        Learn how
+        Read our documentation
       </Button>
     </StyledWizardHintContainer>
   );

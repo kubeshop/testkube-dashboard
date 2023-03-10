@@ -1,34 +1,39 @@
 import {FormInstance} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
+import {CheckCircleOutlined, LoadingOutlined, QuestionCircleOutlined, WarningOutlined} from '@ant-design/icons';
+
 import {Executor} from '@models/executors';
-import {FormItem, Option} from '@models/form';
+import {Option} from '@models/form';
 import {SourceWithRepository} from '@models/sources';
-import {Step} from '@models/wizard';
 
 import {testSourceLink} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required, url} from '@utils/form';
 
-import FirstStepHint from './hints/FirstStepHint';
-import SecondStepHint from './hints/SecondStepHint';
-import ThirdStepHint from './hints/ThirdStepHint';
-
-export const addTestSteps: Step[] = [
-  {title: 'Test Details', description: 'Enter test information.'},
-  {title: 'Add Variables', description: 'Reuse values.'},
-  {title: 'Done', description: 'Save or run your test.'},
-];
+import Colors from '@styles/Colors';
 
 type testSourceBaseOptionsType = (Option & {docsURI: string})[];
 
 export const testSourceBaseOptions: testSourceBaseOptionsType = [
-  {value: 'git-dir', label: 'Git directory', docsURI: testSourceLink},
-  {value: 'git-file', label: 'Git file', docsURI: testSourceLink},
+  {value: 'git', label: 'Git', docsURI: testSourceLink},
   {value: 'file-uri', label: 'File', docsURI: testSourceLink},
   {value: 'string', label: 'String', docsURI: testSourceLink},
 ];
 
-export const addTestHints = [FirstStepHint, SecondStepHint, ThirdStepHint];
+export const pathPlaceholders: {[key: string]: string} = {
+  postman: 'tests/postman/collection.json',
+  cypress: 'tests/cypress',
+  curl: 'tests/curl/test.json',
+  k6: 'tests/k6/index.js',
+  soapui: 'tests/soapui/test.xml',
+  artillery: 'tests/artillery/test.yaml',
+  gradle: 'tests/gradle/my-test',
+  maven: 'tests/maven/my-test',
+  kubepug: 'tests/kubepug/test.json',
+  ginkgo: 'tests/ginkgo/my-test',
+  jmeter: 'tests/jmeter/test.jmx',
+  playwright: 'tests/playwright/my-test',
+};
 
 export const addTestFormStructure = (options: Option[]) => [
   {
@@ -39,11 +44,6 @@ export const addTestFormStructure = (options: Option[]) => [
     placeholder: 'Name',
     itemLabel: 'Name',
     required: true,
-  },
-  {
-    dataTest: 'test-creation_label_option',
-    inputType: 'labels',
-    itemLabel: 'Labels',
   },
   {
     // tooltip: 'Tests are single executor orientated objects. Tests can have different types, depending on which executors are installed in your cluster. If you don’t see your type listed, you may add your own executor.',
@@ -68,9 +68,22 @@ export const testSourceFieldConfig = {
   required: true,
 };
 
-export const gitDirFormFields: FormItem[] = [
+export const tooltipIcons: {[key: string]: JSX.Element} = {
+  loading: <LoadingOutlined />,
+  success: <CheckCircleOutlined style={{color: Colors.lime400}} />,
+  error: <WarningOutlined style={{color: Colors.amber400}} />,
+  default: <QuestionCircleOutlined />,
+};
+
+export const gitFormFields = (
+  type: string,
+  uriState = {
+    status: 'default',
+    message: 'We do currently only support checking out repositories via https',
+  }
+) => [
   {
-    tooltip: 'We do currently only support checking out repositories via https',
+    tooltip: {title: uriState.message, icon: tooltipIcons[uriState.status]},
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -78,22 +91,7 @@ export const gitDirFormFields: FormItem[] = [
     placeholder: 'e.g.: https://github.com/myCompany/myRepo.git',
     itemLabel: 'Git repository URI',
   },
-  {
-    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
-    rules: [required],
-    fieldName: 'branch',
-    required: true,
-    inputType: 'default',
-    placeholder: 'e.g.: main',
-    itemLabel: 'Branch',
-  },
-  {
-    tooltip: 'The path is relative to the root of your repository',
-    fieldName: 'path',
-    inputType: 'default',
-    placeholder: 'e.g.: tests/cypress',
-    itemLabel: 'Path',
-  },
+
   {
     tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
     fieldName: 'token',
@@ -109,11 +107,33 @@ export const gitDirFormFields: FormItem[] = [
     placeholder: 'Your username',
     itemLabel: 'Git username',
   },
+  {
+    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
+    rules: [required],
+    fieldName: 'branch',
+    required: true,
+    inputType: 'default',
+    placeholder: 'e.g.: main',
+    itemLabel: 'Branch',
+  },
+  {
+    tooltip: 'The path is relative to the root of your repository',
+    fieldName: 'path',
+    inputType: 'default',
+    placeholder: pathPlaceholders[type] || 'tests/path',
+    itemLabel: 'Path',
+  },
 ];
 
-export const gitFileFormFields: FormItem[] = [
+export const gitFormFieldsEdit = (
+  type: string,
+  uriState = {
+    status: 'default',
+    message: 'We do currently only support checking out repositories via https',
+  }
+) => [
   {
-    tooltip: 'We do currently only support checking out repositories via https',
+    tooltip: {title: uriState.message, icon: tooltipIcons[uriState.status]},
     rules: [required, url],
     required: true,
     fieldName: 'uri',
@@ -134,55 +154,12 @@ export const gitFileFormFields: FormItem[] = [
     tooltip: 'The path is relative to the root of your repository',
     fieldName: 'path',
     inputType: 'default',
-    placeholder: 'e.g.: tests/cypress/index.js',
-    itemLabel: 'Path',
-  },
-  {
-    tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
-    fieldName: 'token',
-    inputType: 'default',
-    modificator: 'password',
-    placeholder: 'Git Token',
-    itemLabel: 'Git Token',
-  },
-  {
-    // tooltip: 'If required by your repository enter your Personal Access Token (PAT). ',
-    fieldName: 'username',
-    inputType: 'default',
-    placeholder: 'Your username',
-    itemLabel: 'Git username',
-  },
-];
-
-export const gitFormFieldsEdit: FormItem[] = [
-  {
-    tooltip: 'We do currently only support checking out repositories via https',
-    rules: [required, url],
-    required: true,
-    fieldName: 'uri',
-    inputType: 'default',
-    placeholder: 'e.g.: https://github.com/myCompany/myRepo.git',
-    itemLabel: 'Git repository URI',
-  },
-  {
-    // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
-    rules: [required],
-    fieldName: 'branch',
-    required: true,
-    inputType: 'default',
-    placeholder: 'e.g.: main',
-    itemLabel: 'Branch',
-  },
-  {
-    tooltip: 'The path is relative to the root of your repository',
-    fieldName: 'path',
-    inputType: 'default',
-    placeholder: 'e.g.: tests/cypress',
+    placeholder: pathPlaceholders[type] || 'tests/path',
     itemLabel: 'Path',
   },
 ];
 
-export const fileContentFormFields: FormItem[] = [
+export const fileContentFormFields = () => [
   {
     rules: [required],
     required: true,
@@ -193,7 +170,7 @@ export const fileContentFormFields: FormItem[] = [
   },
 ];
 
-export const customTypeFormFields: FormItem[] = [
+export const customTypeFormFields = () => [
   {
     // tooltip: 'We’ve entered a default of main, however you can specify any branch.',
     fieldName: 'branch',
@@ -210,7 +187,7 @@ export const customTypeFormFields: FormItem[] = [
   },
 ];
 
-export const stringContentFormFields: FormItem[] = [
+export const stringContentFormFields = () => [
   {
     rules: [required],
     fieldName: 'string',
@@ -220,16 +197,6 @@ export const stringContentFormFields: FormItem[] = [
     itemLabel: 'String',
   },
 ];
-
-export const secondStepFormFields: FormItem[] = [
-  {
-    rules: [required],
-    fieldName: 'variables',
-    inputType: 'variables',
-  },
-];
-
-export const optionalFields = ['token', 'branch', 'path'];
 
 export const getTestSourceSpecificFields = (values: any, isTestSourceCustomGitDir?: boolean) => {
   const {testSource} = values;

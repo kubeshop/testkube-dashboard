@@ -17,11 +17,14 @@ import {HintProps} from '@molecules/Hint/Hint';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
-import {getTestSourceSpecificFields, onFileChange, testSourceBaseOptions} from '@wizards/AddTestWizard/utils';
+import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
+
+import useValidateRepository from '@hooks/useValidateRepository';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
+import {useValidateRepositoryMutation} from '@services/repository';
 import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
@@ -57,8 +60,10 @@ const TestCreationModalContent: React.FC = () => {
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);
+  const [uriState, setUriState] = useState<{status: string; message: string} | undefined>(undefined);
 
   const [addTest, {isLoading}] = useAddTestMutation();
+  const [validateRepository] = useValidateRepositoryMutation();
 
   useEffect(() => {
     const selectedExecutor = executors.find(executor =>
@@ -73,7 +78,7 @@ const TestCreationModalContent: React.FC = () => {
     if (selectedExecutor.executor?.executorType === 'container') {
       setHintConfig({
         title: 'Testing with custom executor',
-        description: 'Discover all the features and tricks around custom executors',
+        description: 'Discover all the features and examples around custom executors',
         openLink: openCustomExecutorDocumentation,
       });
     }
@@ -81,25 +86,16 @@ const TestCreationModalContent: React.FC = () => {
     if (selectedExecutor.executor?.executorType === 'job') {
       setHintConfig({
         title: `Testing with ${selectedExecutor.displayName}`,
-        description: `Discover all the features and tricks around testing with ${selectedExecutor.displayName} on Testkube`,
+        description: `Discover all the features and examples around testing with ${selectedExecutor.displayName} on Testkube`,
         openLink: () => window.open(selectedExecutor.executor.meta.docsURI, '_blank'),
+        selectedExecutor: selectedExecutor.executor.meta.iconURI,
       });
     }
 
     form.setFieldValue('testSource', null);
   }, [form.getFieldValue('testType')]);
 
-  useEffect(() => {
-    const selectedSource = testSourceBaseOptions.find(source => source.value === form.getFieldValue('testSource'));
-
-    if (selectedSource) {
-      setHintConfig({
-        title: `${selectedSource.label} as source`,
-        description: `Discover all the features and tricks around using ${selectedSource.label} as your source on Testkube`,
-        openLink: () => window.open(selectedSource.docsURI, '_blank'),
-      });
-    }
-  }, [form.getFieldValue('testSource')]);
+  useValidateRepository(form, setUriState, validateRepository);
 
   const onSaveClick = async (values: any) => {
     const {testSource, testType} = values;
@@ -172,6 +168,7 @@ const TestCreationModalContent: React.FC = () => {
             onLabelsChange={setLocalLabels}
             executors={executors}
             testSources={testSources}
+            uriState={uriState}
           />
           <StyledFormItem shouldUpdate>
             {({isFieldsTouched}) => (
