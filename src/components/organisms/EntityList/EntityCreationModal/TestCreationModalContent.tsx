@@ -19,12 +19,9 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
 import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
 
-import useValidateRepository from '@hooks/useValidateRepository';
-
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
-import {useValidateRepositoryMutation} from '@services/repository';
 import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
@@ -60,10 +57,8 @@ const TestCreationModalContent: React.FC = () => {
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);
-  const [uriState, setUriState] = useState<{status: string; message: string} | undefined>(undefined);
 
   const [addTest, {isLoading}] = useAddTestMutation();
-  const [validateRepository] = useValidateRepositoryMutation();
 
   useEffect(() => {
     const selectedExecutor = executors.find(executor =>
@@ -94,8 +89,6 @@ const TestCreationModalContent: React.FC = () => {
 
     form.setFieldValue('testSource', null);
   }, [form.getFieldValue('testType')]);
-
-  useValidateRepository(form, setUriState, validateRepository);
 
   const onSaveClick = async (values: any) => {
     const {testSource, testType} = values;
@@ -168,7 +161,6 @@ const TestCreationModalContent: React.FC = () => {
             onLabelsChange={setLocalLabels}
             executors={executors}
             testSources={testSources}
-            uriState={uriState}
           />
           <StyledFormItem shouldUpdate>
             {({isFieldsTouched}) => (
