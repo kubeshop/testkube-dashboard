@@ -10,6 +10,7 @@ import {SettingsLeftNavigation, StyledSettingsContainer, StyledTabContentContain
 import {EntityDetailsContext, MainContext} from '@contexts';
 
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
+import SettingsExecution from './SettingsExecution';
 import General from './SettingsGeneral';
 import SettingsTest from './SettingsTest';
 import SettingsTests from './SettingsTests';
@@ -17,12 +18,12 @@ import SettingsVariables from './SettingsVariables';
 
 const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
   'test-suites': [<General />, <SettingsTests />, <SettingsVariables />, <SettingsDefinition />],
-  tests: [<General />, <SettingsTest />, <SettingsVariables />, <SettingsDefinition />],
+  tests: [<General />, <SettingsTest />, <SettingsExecution />, <SettingsVariables />, <SettingsDefinition />],
 };
 
 const navigationOptionsConfig: {[key in Entity]: string[]} = {
   'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Definition'],
-  tests: ['General', 'Test', 'Variables & Secrets', 'Definition'],
+  tests: ['General', 'Test', 'Execution', 'Variables & Secrets', 'Definition'],
 };
 
 const Settings: React.FC = () => {

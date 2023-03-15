@@ -70,7 +70,6 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolea
   display: flex;
   justify-content: space-between;
 
-  padding: 12px;
   border-radius: inherit;
 
   background: transparent;

@@ -99,7 +99,7 @@ const FirstStep: React.FC<any> = props => {
             return (
               <StyledFormSpaceDropdown size={24} direction="vertical">
                 {renderFormItems(
-                  [...additionalFields[testSourceValue](selectedExecutor.executor.meta.iconURI, uriState), labels],
+                  [...additionalFields[testSourceValue](selectedExecutor.executor.meta?.iconURI, uriState), labels],
                   {onFileChange, onLabelsChange}
                 )}
               </StyledFormSpaceDropdown>

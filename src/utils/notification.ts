@@ -15,7 +15,7 @@ export function displayDefaultNotificationFlow(res: any, success?: () => void) {
 }
 
 export function displayDefaultErrorNotification(err: any) {
-  if (err instanceof Error) {
+  if (err) {
     notificationCall('failed', 'Unknown error', String(err) || 'Something went wrong');
   }
 }
