@@ -37,6 +37,8 @@
     "@types/react-transition-group": "4.4.4",
     "@types/redux-logger": "3.0.9",
     "@types/styled-components": "5.1.18",
+    "@typescript-eslint/parser": "5.55.0",
+    "@typescript-eslint/eslint-plugin": "5.55.0",
     "@types/uuid": "8.3.4",
     "craco-alias": "3.0.1",
     "craco-less": "1.20.0",
