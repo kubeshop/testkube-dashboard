@@ -22,7 +22,7 @@ export const StyledLabel = styled.div<{basis?: string; flex?: string}>`
 `;
 
 export const Asterisk = styled.span`
-  &:after {
+  &::after {
     content: '*';
     margin: 0 4px;
   }
