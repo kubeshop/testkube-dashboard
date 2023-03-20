@@ -70,12 +70,8 @@ export const GlobalStyle = createGlobalStyle`
     animation-timing-function: linear;
   }
 
-  .ant-tabs-content-holder {
-    // overflow: auto;
-
-    .ant-tabs-content {
-      height: 100%;
-    }
+  .ant-tabs-content-holder .ant-tabs-content {
+    height: 100%;
   }
 
   .ant-avatar {
@@ -92,27 +88,29 @@ export const GlobalStyle = createGlobalStyle`
     from {
       transform: rotate(0deg);
     }
+
     to {
       transform: rotate(360deg);
     }
   }
 
-  // Tabs
+  /* Tabs */
 
   .ant-tabs {
     color: ${Colors.slate400};
-    
+
     font-weight: 500;
 
     .ant-tabs-nav {
       margin-bottom: 40px;
+
       &::before {
         border-bottom: unset !important;
       }
     }
   }
 
-  // Select
+  /* Select */
 
   .ant-select-arrow {
     color: ${Colors.slate500};
@@ -128,7 +126,7 @@ export const GlobalStyle = createGlobalStyle`
     margin-left: 2px;
   }
 
-  // Input
+  /* Input */
 
   .ant-input-password-icon.anticon {
     color: ${Colors.slate500};
@@ -138,13 +136,13 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  // Notification
+  /* Notification */
 
   .ant-notification-notice {
     overflow: unset;
   }
 
-  // Table
+  /* Table */
 
   .ant-table-tbody > tr > td {
     border-radius: 4px;
@@ -172,22 +170,22 @@ export const GlobalStyle = createGlobalStyle`
     display: none;
   }
 
-  // Dropdown 
-  
+  /* Dropdown */
+
   .ant-dropdown-menu {
     background: ${Colors.slate900};
 
     .ant-dropdown-menu-item {
       background: ${Colors.slate900};
-  
+
       &:hover {
         background: ${Colors.slate800};
       }
     }
   }
-  
 
-  // Pagination
+
+  /* Pagination */
 
   .ant-table-pagination.ant-pagination {
     margin: 0 !important;
@@ -287,35 +285,36 @@ export const GlobalStyle = createGlobalStyle`
   .ant-dropdown-menu-item.ant-dropdown-menu-item-active {
     background-color: ${Colors.slate700};
   }
+
   .ant-select-item-group {
     color: ${Colors.slate400};
     text-transform: uppercase;
   }
 
-  // Form
+  /* Form */
 
   .ant-form-vertical {
     .ant-form-item-required {
-      &:before {
+      &::before {
         margin-left: 2px;
         margin-right: unset !important;
         order: 1;
       }
     }
   }
-  
+
   .ant-form-item-label > label .ant-form-item-tooltip {
     color: inherit;
   }
 
-  // Popover
-  
+  /* Popover */
+
   .ant-popover-inner-content {
     padding: 0;
   }
 
   .ant-popover-arrow {
-    .ant-popover-arrow-content:before {
+    .ant-popover-arrow-content::before {
       background: ${Colors.slate900} !important;
     }
   }
