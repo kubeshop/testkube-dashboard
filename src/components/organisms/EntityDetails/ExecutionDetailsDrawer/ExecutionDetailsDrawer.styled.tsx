@@ -20,7 +20,7 @@ export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected:
 
   display: flex;
   flex-direction: column;
-  // flex: ${props => getInfoPanelFlexProperty(props)};
+  /* flex: ${props => getInfoPanelFlexProperty(props)}; */
 
   height: 100%;
   width: ${props => (props.drawerWidth ? `${props.drawerWidth}` : '85vw')};

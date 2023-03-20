@@ -1,6 +1,6 @@
 {
-  "processors": ["stylelint-processor-styled-components"],
   "extends": ["stylelint-config-standard", "stylelint-config-recommended", "stylelint-config-styled-components"],
+  "customSyntax": "postcss-styled-syntax",
   "rules": {
     "at-rule-no-unknown": [
       true,
@@ -8,7 +8,11 @@
         "ignoreAtRules": ["extends", "ignores"]
       }
     ],
-    "indentation": [2, {"baseIndentLevel": 2}],
+    "indentation": null,
+    "no-empty-first-line": null,
+    "string-quotes": null,
+    "declaration-empty-line-before": null,
+    "comment-empty-line-before": null,
     "number-leading-zero": null,
     "no-descending-specificity": null,
     "no-duplicate-selectors": null,
@@ -26,7 +30,7 @@
     "keyframe-declaration-no-important": true,
     "media-feature-name-no-unknown": true,
     "no-duplicate-at-import-rules": true,
-    "no-extra-semicolons": true,
+    "no-extra-semicolons": null,
     "no-invalid-double-slash-comments": true,
     "property-no-unknown": true,
     "selector-pseudo-class-no-unknown": true,
