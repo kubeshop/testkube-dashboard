@@ -21,11 +21,10 @@ export const SourcesGrid = styled.div`
 
 export const SourceContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   gap: 16px;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
 
   padding: 20px;
   border: 1px solid transparent;

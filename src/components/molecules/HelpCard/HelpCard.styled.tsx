@@ -24,9 +24,7 @@ export const StyledHelpCardContainer = styled.div<{isLink?: boolean}>`
 `;
 
 export const StyledChildrenContainer = styled.div`
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 460px;
+  flex: 1 1 460px;
 `;
 
 export const StyledHelpCardsContainer = styled.div`

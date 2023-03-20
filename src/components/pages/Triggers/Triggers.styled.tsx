@@ -18,10 +18,9 @@ export const Wrapper = styled.div`
 
 export const TriggerItemContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   align-items: start;
   gap: 10px;
-  flex-wrap: wrap;
 
   width: 100%;
   margin-bottom: 16px;
