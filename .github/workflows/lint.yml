@@ -56,4 +56,4 @@ jobs:
 
       - name: StyleLint Checking
         if: always()
-        run: npm run style:lint
+        run: npm run stylelint
