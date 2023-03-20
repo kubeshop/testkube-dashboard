@@ -49,6 +49,7 @@ export const ExecutorsGridItem = styled(Space)`
     h3 {
       color: ${Colors.indigo400};
     }
+
     svg {
       fill: ${Colors.indigo400};
       margin-right: 12px;
