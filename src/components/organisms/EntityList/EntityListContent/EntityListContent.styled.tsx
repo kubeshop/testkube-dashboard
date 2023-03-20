@@ -50,7 +50,7 @@ export const Header = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 40px 0 30px 0;
+  padding: 40px 0 30px;
 
   background-color: ${Colors.slate900};
 

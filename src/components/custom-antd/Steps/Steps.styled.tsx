@@ -6,7 +6,7 @@ import Colors from '@styles/Colors';
 
 export const StyledSteps = styled(Steps)`
   &.testkube-steps {
-    padding: 0 60px 25px 60px;
+    padding: 0 60px 25px;
 
     .ant-steps-item-process,
     .ant-steps-item-finish {
