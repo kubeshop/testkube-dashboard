@@ -64,7 +64,7 @@ const NameNUrl: React.FC = () => {
     >
       <ConfigurationCard
         title="Source name & repository URL"
-        description="Define the name and type of the executor which will be displayed across the Dashboard and CLI"
+        description="Define the name and repository URL of the source which will be later available in your tests."
         onConfirm={() => {
           form.submit();
         }}
