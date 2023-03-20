@@ -8,12 +8,8 @@
         "ignoreAtRules": ["extends", "ignores"]
       }
     ],
-    "indentation": null,
-    "no-empty-first-line": null,
-    "string-quotes": null,
     "declaration-empty-line-before": null,
     "comment-empty-line-before": null,
-    "number-leading-zero": null,
     "no-descending-specificity": null,
     "no-duplicate-selectors": null,
     "no-empty-source": null,
@@ -21,7 +17,6 @@
     "declaration-block-no-duplicate-properties": null,
     "color-no-invalid-hex": true,
     "comment-no-empty": true,
-    "declaration-colon-newline-after": null,
     "declaration-block-no-shorthand-property-overrides": true,
     "font-family-no-duplicate-names": true,
     "font-family-no-missing-generic-family-keyword": true,
@@ -30,7 +25,6 @@
     "keyframe-declaration-no-important": true,
     "media-feature-name-no-unknown": true,
     "no-duplicate-at-import-rules": true,
-    "no-extra-semicolons": null,
     "no-invalid-double-slash-comments": true,
     "property-no-unknown": true,
     "selector-pseudo-class-no-unknown": true,
