@@ -40,17 +40,17 @@ export const StyledContainer = styled.div`
   flex-direction: column;
   flex: 1;
 
-  padding: 0px 40px 60px 1vw;
+  padding: 0 40px 60px 1vw;
 `;
 
 export const Header = styled.div`
   position: sticky;
-  top: 0px;
+  top: 0;
 
   display: flex;
   flex-direction: column;
 
-  padding: 40px 0px 30px 0px;
+  padding: 40px 0 30px 0;
 
   background-color: ${Colors.slate900};
 
