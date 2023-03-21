@@ -1,60 +1,38 @@
-import {useCallback, useContext, useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {useEvent, useInterval, useLatest} from 'react-use';
 
 import {AnalyticsContext} from '@contexts';
 
 const useTrackTimeAnalytics = (type: string, condition = true) => {
   const {analyticsTrack} = useContext(AnalyticsContext);
-
+  const [hidden, setHidden] = useState(document.hidden);
   const [duration, setDuration] = useState(0);
-  const durationRef = useRef(0);
-  durationRef.current = duration;
+  const durationRef = useLatest(duration);
+
+  useEvent('visibilitychange', () => setHidden(document.hidden), document);
 
   const conditionalTrack = () => {
-    if (condition) {
-      trackDuration(durationRef.current);
+    if (condition && durationRef.current > 100) {
+      analyticsTrack('trackTime', {
+        duration: durationRef.current,
+        page: type,
+      });
     }
   };
 
-  const trackDuration = useCallback(
-    (_duration: number) => {
-      if (_duration > 100) {
-        analyticsTrack('trackTime', {
-          duration: _duration,
-          page: type,
-        });
-      }
-    },
-    [type]
-  );
+  useInterval(() => {
+    setDuration((curTime: number) => curTime + 100);
+  }, 100);
+
+  useEffect(() => conditionalTrack, [condition]);
 
   useEffect(() => {
-    let timer: any = null;
-
-    if (process.env.NODE_ENV !== 'development') {
-      timer = setInterval(() => {
-        setDuration((curTime: number) => curTime + 100);
-      }, 100);
-    }
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  useEffect(() => {
-    setDuration(0);
-    return () => {
-      conditionalTrack();
-    };
-  }, [condition]);
-
-  useEffect(() => {
-    if (document.hidden) {
+    if (hidden) {
       conditionalTrack();
     } else {
       setDuration(0);
     }
-  }, [document.hidden, condition]);
+  }, [hidden, condition]);
 };
 
-export default useTrackTimeAnalytics;
+export default process.env.NODE_ENV === 'development' ? () => {} : useTrackTimeAnalytics;
