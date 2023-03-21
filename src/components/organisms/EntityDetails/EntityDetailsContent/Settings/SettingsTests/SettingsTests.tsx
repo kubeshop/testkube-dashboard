@@ -32,11 +32,8 @@ const {Option} = Select;
 
 const SettingsTests = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
-  const steps = entityDetails?.steps;
 
-  const [currentSteps, setCurrentSteps] = useState(steps);
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
-  const [wasTouched, setWasTouched] = useState(false);
 
   const scrollRef = useRef(null);
 
@@ -46,7 +43,7 @@ const SettingsTests = () => {
   const {data: allTestsList = []} = useGetAllTestsQuery();
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
-  const testsData = useMemo(() => {
+  const testsData = useMemo<any[]>(() => {
     return testsList.map((item: Test) => ({
       name: item.name,
       namespace: item.namespace,
@@ -61,6 +58,32 @@ const SettingsTests = () => {
       type: getTestExecutorIcon(executors, item.test.type),
     }));
   }, [allTestsList]);
+
+  const initialSteps = useMemo(() => (entityDetails?.steps || []).map((step: any) => {
+    if (step.delay) {
+      return {
+        ...step,
+        id: nanoid(),
+      };
+    }
+    return {
+      ...step,
+      id: nanoid(),
+      execute: {
+        ...step.execute,
+        type: testsData.find(item => item.name === step.execute.name)?.type,
+      },
+    };
+  }), [entityDetails?.steps, testsData]);
+
+  const [currentSteps = initialSteps, setCurrentSteps] = useState<any[] | undefined>();
+  const wasTouched = currentSteps !== initialSteps;
+
+  useEffect(() => {
+    if (currentSteps !== initialSteps) {
+      setCurrentSteps(undefined);
+    }
+  }, [initialSteps]);
 
   const saveSteps = () => {
     updateTestSuite({
@@ -96,8 +119,6 @@ const SettingsTests = () => {
           stopTestOnFailure: false,
         },
       ]);
-      setWasTouched(true);
-      scrollToBottom();
     }
   };
 
@@ -113,8 +134,6 @@ const SettingsTests = () => {
       },
     ]);
     setIsDelayModalVisible(false);
-    setWasTouched(true);
-    scrollToBottom();
   };
 
   const deleteStep = (index: number) => {
@@ -133,35 +152,6 @@ const SettingsTests = () => {
     scrollToBottom();
   }, [currentSteps?.length]);
 
-  const applyCurrentSteps = (_steps: any[], _testsData: any[]) => {
-    setCurrentSteps(
-      _steps.map((step: any) => {
-        if (step.delay) {
-          return {
-            ...step,
-            id: nanoid(),
-          };
-        }
-        return {
-          ...step,
-          id: nanoid(),
-          execute: {
-            ...step.execute,
-            type: _testsData.find(item => item.name === step.execute.name)?.type,
-          },
-        };
-      })
-    );
-  };
-
-  useEffect(() => {
-    if (!steps) {
-      setCurrentSteps([]);
-    } else {
-      applyCurrentSteps(steps, testsData);
-    }
-  }, [steps, testsData]);
-
   return (
     <ConfigurationCard
       title="Tests"
@@ -175,10 +165,7 @@ const SettingsTests = () => {
         </>
       }
       onConfirm={saveSteps}
-      onCancel={() => {
-        applyCurrentSteps(steps, testsData);
-        setWasTouched(false);
-      }}
+      onCancel={() => setCurrentSteps(undefined)}
       isButtonsDisabled={!wasTouched}
     >
       <>
