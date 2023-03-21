@@ -1,13 +1,12 @@
-import {useContext, useEffect, useState} from 'react';
-import {useEvent, useInterval, useLatest} from 'react-use';
+import {useContext, useEffect, useRef, useState} from 'react';
+import {useEvent, useInterval} from 'react-use';
 
 import {AnalyticsContext} from '@contexts';
 
 const useTrackTimeAnalytics = (type: string, condition = true) => {
   const {analyticsTrack} = useContext(AnalyticsContext);
   const [hidden, setHidden] = useState(document.hidden);
-  const [duration, setDuration] = useState(0);
-  const durationRef = useLatest(duration);
+  const durationRef = useRef(0);
 
   useEvent('visibilitychange', () => setHidden(document.hidden), document);
 
@@ -21,7 +20,7 @@ const useTrackTimeAnalytics = (type: string, condition = true) => {
   };
 
   useInterval(() => {
-    setDuration((curTime: number) => curTime + 100);
+    durationRef.current += 100;
   }, 100);
 
   useEffect(() => conditionalTrack, [condition]);
@@ -30,7 +29,7 @@ const useTrackTimeAnalytics = (type: string, condition = true) => {
     if (hidden) {
       conditionalTrack();
     } else {
-      setDuration(0);
+      durationRef.current = 0;
     }
   }, [hidden, condition]);
 };
