@@ -1,5 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
+import {useDebounce} from 'react-use';
 
 import {Input} from 'antd';
 
@@ -8,8 +9,6 @@ import {SearchOutlined} from '@ant-design/icons';
 import {FilterProps} from '@models/filters';
 
 import {initialPageSize} from '@redux/initialState';
-
-import useDebounce from '@hooks/useDebounce';
 
 import Colors from '@styles/Colors';
 

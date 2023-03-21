@@ -1,5 +1,6 @@
 import {useCallback, useContext, useMemo, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
+import {useDebounce} from 'react-use';
 
 import {FilterFilled} from '@ant-design/icons';
 
@@ -15,8 +16,6 @@ import {
   StyledFilterMenu,
   StyledFilterMenuItem,
 } from '@molecules/FilterMenu';
-
-import useDebounce from '@hooks/useDebounce';
 
 import {uppercaseFirstSymbol} from '@utils/strings';
 
