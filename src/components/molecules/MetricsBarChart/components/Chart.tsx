@@ -28,8 +28,8 @@ const Chart: React.FC<ChartProps> = props => {
     return chartData.map((barItem, index) => {
       const {durationS, logDuration, status, name, startTime} = barItem;
 
-      const barColor = StatusColors[status] as unknown as StatusColors;
-      const barHoverColor = SecondaryStatusColors[status] as unknown as SecondaryStatusColors;
+      const barColor = StatusColors[status as keyof typeof StatusColors];
+      const barHoverColor = SecondaryStatusColors[status as keyof typeof SecondaryStatusColors];
 
       /*
         if execution is running, bar height is 50% of chartHeight

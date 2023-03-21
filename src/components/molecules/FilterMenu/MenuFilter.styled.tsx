@@ -13,17 +13,21 @@ export const StyledFilterMenu = styled(Menu)`
 
 export const StyledFilterCheckbox = styled(Checkbox)`
   width: 100%;
+
   .ant-checkbox-inner {
     background-color: ${Colors.grey1000};
     border-color: ${Colors.slate800};
   }
+
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: ${Colors.purple};
     border: 0;
   }
+
   .ant-checkbox-input:focus + .ant-checkbox-inner {
     border-color: ${Colors.purple};
   }
+
   color: ${Colors.grey450};
 `;
 
@@ -31,6 +35,7 @@ export const StyledFilterMenuItem = styled(Menu.Item)`
   &:hover,
   &:focus {
     background-color: ${Colors.slate801};
+
     .ant-checkbox-inner {
       border-color: ${Colors.purple};
     }

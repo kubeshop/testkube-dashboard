@@ -11,7 +11,7 @@ export const StyledSpace = styled(Space)`
 `;
 
 export const StyledFormItem = styled(Form.Item)`
-  margin-bottom: 0px;
+  margin-bottom: 0;
 `;
 
 export const StyledPopoverContainer = styled.div`

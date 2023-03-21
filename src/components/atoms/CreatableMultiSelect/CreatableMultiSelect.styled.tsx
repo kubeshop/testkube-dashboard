@@ -100,6 +100,7 @@ export const customTheme: ThemeConfig = theme => {
 
 export const DropdownWrapper = styled.div`
   padding-right: 11px;
+
   svg {
     fill: ${Colors.slate500};
     font-size: 12px;

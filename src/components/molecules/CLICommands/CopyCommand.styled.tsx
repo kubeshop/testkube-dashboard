@@ -31,6 +31,7 @@ export const StyledCopyCommandCode = styled.code`
   color: ${Colors.greyCode};
 
   overflow: auto;
+
   &::-webkit-scrollbar {
     display: none;
   } /* Chrome, Safari and Opera */

@@ -10,16 +10,16 @@ export const StyledUploadWithInputContainer = styled.div`
   span {
     .ant-upload {
       button {
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
       }
     }
   }
 
   .ant-input-affix-wrapper.disabled-input {
     height: 40px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 
     cursor: initial;
 

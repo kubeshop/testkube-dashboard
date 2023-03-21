@@ -33,7 +33,7 @@ export const EntityDetailsHeaderIcon = styled.div`
 export const StyledPageHeader = styled(PageHeader)`
   &.testkube-pageheader {
     &.ant-page-header {
-      padding: 0px;
+      padding: 0;
 
       .ant-page-header-heading-left,
       .ant-page-header-heading-extra {

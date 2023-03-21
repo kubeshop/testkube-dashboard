@@ -6,17 +6,17 @@ import Colors from '@styles/Colors';
 
 export const StyledSteps = styled(Steps)`
   &.testkube-steps {
-    padding: 0px 60px 25px 60px;
+    padding: 0 60px 25px;
 
     .ant-steps-item-process,
     .ant-steps-item-finish {
       .ant-steps-item-title {
-        font-family: 'Nunito';
+        font-family: Nunito, sans-serif;
         color: ${Colors.grey450};
       }
 
       .ant-steps-item-description {
-        font-family: 'Nunito';
+        font-family: Nunito, sans-serif;
         color: ${Colors.grey7};
       }
     }
@@ -28,7 +28,7 @@ export const StyledSteps = styled(Steps)`
 
     .ant-steps-item-process {
       .ant-steps-icon {
-        font-family: 'Nunito';
+        font-family: Nunito, sans-serif;
         color: ${Colors.grey1000};
       }
     }
@@ -36,7 +36,7 @@ export const StyledSteps = styled(Steps)`
     .ant-steps-item-wait {
       .ant-steps-item-title,
       .ant-steps-item-description {
-        font-family: 'Nunito';
+        font-family: Nunito, sans-serif;
         color: ${Colors.grey7};
       }
     }

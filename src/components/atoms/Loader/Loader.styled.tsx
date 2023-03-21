@@ -18,6 +18,7 @@ export const StyledLoaderContainer = styled.div<{$isCentered: boolean; $animatio
     from {
       transform: rotate(0deg);
     }
+
     to {
       transform: rotate(360deg);
     }

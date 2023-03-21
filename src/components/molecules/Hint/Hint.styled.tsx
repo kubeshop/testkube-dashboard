@@ -10,7 +10,7 @@ export const StyledWizardHintContainer = styled.div`
   gap: 10px;
 
   width: 400px;
-  padding: 0px 60px;
+  padding: 0 60px;
 
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;

@@ -49,6 +49,7 @@ export const ExecutorsGridItem = styled(Space)`
     h3 {
       color: ${Colors.indigo400};
     }
+
     svg {
       fill: ${Colors.indigo400};
       margin-right: 12px;
@@ -102,10 +103,9 @@ export const AddExecutorsModalContainer = styled.div`
 
 export const CustomExecutorContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   gap: 16px;
   align-items: center;
-  flex-wrap: wrap;
 
   padding: 20px;
   border: 1px solid transparent;
