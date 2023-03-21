@@ -204,7 +204,7 @@ const Source = () => {
 
                 return (
                   <StyledSpace size={24} direction="vertical">
-                    {renderFormItems(additionalFields[testSourceValue](selectedExecutor?.executor.meta.iconURI), {
+                    {renderFormItems(additionalFields[testSourceValue](selectedExecutor?.executor.meta?.iconURI), {
                       onFileChange: file => onFileChange(file, form),
                     })}
                   </StyledSpace>
