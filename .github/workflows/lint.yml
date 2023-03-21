@@ -3,8 +3,18 @@ name: Linting
 on:
   push:
     branches: [main]
+    paths:
+      - '**.js'
+      - '**.jsx'
+      - '**.ts'
+      - '**.tsx'
   pull_request:
     branches: [main]
+    paths:
+      - '**.js'
+      - '**.jsx'
+      - '**.ts'
+      - '**.tsx'
 
 jobs:
   Lint:
@@ -39,9 +49,9 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: ESLint Checking
-        if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
+        if: always()
         run: npm run lint
 
       - name: StyleLint Checking
-        if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
-        run: npm run style:lint
+        if: always()
+        run: npm run stylelint
