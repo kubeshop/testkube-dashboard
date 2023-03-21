@@ -6,12 +6,10 @@ import {MainContext} from '@contexts';
 
 const useURLSearchParams = () => {
   const {location} = useContext(MainContext);
-
   const {search} = location;
 
-  const urlSearchParams = useMemo(() => new URLSearchParams(search), [search]);
-
-  return qs.parse(urlSearchParams.toString());
+  const query = useMemo(() => new URLSearchParams(search).toString(), [search]);
+  return qs.parse(query);
 };
 
 export default useURLSearchParams;
