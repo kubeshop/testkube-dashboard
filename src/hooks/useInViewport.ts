@@ -1,17 +1,7 @@
-import {useEffect, useState} from 'react';
+import {RefObject} from 'react';
+import {useIntersection} from 'react-use';
 
-export default function useInViewport(ref: any) {
-  const [isIntersecting, setIntersecting] = useState(false);
-
-  const observer = new IntersectionObserver(([entry]) => setIntersecting(entry.isIntersecting));
-
-  useEffect(() => {
-    observer.observe(ref.current);
-    // Remove the observer as soon as the component is unmounted
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  return isIntersecting;
+export default function useInViewport(ref: RefObject<any>) {
+  const entry = useIntersection(ref, {});
+  return Boolean(entry?.isIntersecting);
 }
