@@ -15,6 +15,26 @@ const setDocumentVisibility = (value: boolean) => {
   fireEvent(document, new CustomEvent('visibilitychange'));
 };
 
+interface TestInnerComponentProps {
+  name: string;
+  condition?: boolean;
+}
+
+const TestInnerComponent: FC<TestInnerComponentProps> = ({name, condition}) => {
+  useTrackTimeAnalytics(name, condition);
+  return <div />;
+};
+
+interface TestWrapperProps extends TestInnerComponentProps {
+  track: (type: string, data: any) => void;
+}
+
+const TestWrapper: FC<TestWrapperProps> = ({name, condition, track}) => (
+  <AnalyticsContext.Provider value={{analyticsTrack: track}}>
+    <TestInnerComponent name={name} condition={condition} />
+  </AnalyticsContext.Provider>
+);
+
 describe('hooks', () => {
   describe('useTrackTimeAnalytics', () => {
     beforeEach(() => {
@@ -26,18 +46,9 @@ describe('hooks', () => {
       setDocumentVisibility(true);
     });
 
-    const TestComponent: FC<{name: string, condition?: boolean}> = ({name, condition}) => {
-      useTrackTimeAnalytics(name, condition);
-      return <div />;
-    };
-
     it('should track milliseconds with 100ms precision (floor)', () => {
       const track = jest.fn();
-      const result = render(
-        <AnalyticsContext.Provider value={{ analyticsTrack: track }}>
-          <TestComponent name='test-name' />
-        </AnalyticsContext.Provider>
-      );
+      const result = render(<TestWrapper name='test-name' track={track} />);
       act(() => {
         jest.advanceTimersByTime(299);
       });
@@ -52,11 +63,7 @@ describe('hooks', () => {
     describe('Unmounting', () => {
       it('should not track after immediate unmount', async () => {
         const track = jest.fn();
-        const result = render(
-          <AnalyticsContext.Provider value={{ analyticsTrack: track }}>
-            <TestComponent name='test-name' />
-          </AnalyticsContext.Provider>
-        );
+        const result = render(<TestWrapper name='test-name' track={track} />);
         act(() => {
           jest.advanceTimersByTime(199);
         });
@@ -66,11 +73,7 @@ describe('hooks', () => {
 
       it('should track after minimum of 200ms', async () => {
         const track = jest.fn();
-        const result = render(
-          <AnalyticsContext.Provider value={{ analyticsTrack: track }}>
-            <TestComponent name='test-name' />
-          </AnalyticsContext.Provider>
-        );
+        const result = render(<TestWrapper name='test-name' track={track} />);
         act(() => {
           jest.advanceTimersByTime(200);
         });
@@ -86,11 +89,7 @@ describe('hooks', () => {
     describe('Document visibility change', () => {
       it('should not track after immediate document hide', () => {
         const track = jest.fn();
-        const result = render(
-          <AnalyticsContext.Provider value={{ analyticsTrack: track }}>
-            <TestComponent name='test-name' />
-          </AnalyticsContext.Provider>
-        );
+        const result = render(<TestWrapper name='test-name' track={track} />);
         act(() => {
           jest.advanceTimersByTime(199);
           setDocumentVisibility(false);
@@ -100,11 +99,7 @@ describe('hooks', () => {
 
       it('should track after document hide after minimum of 200ms', () => {
         const track = jest.fn();
-        const result = render(
-          <AnalyticsContext.Provider value={{ analyticsTrack: track }}>
-            <TestComponent name='test-name' />
-          </AnalyticsContext.Provider>
-        );
+        const result = render(<TestWrapper name='test-name' track={track} />);
         act(() => {
           jest.advanceTimersByTime(200);
         });
@@ -122,11 +117,7 @@ describe('hooks', () => {
     describe('Falsy condition', () => {
       it('should not track after unmounting when the condition is falsy', () => {
         const track = jest.fn();
-        const result = render(
-          <AnalyticsContext.Provider value={{ analyticsTrack: track }}>
-            <TestComponent name='test-name' condition={false} />
-          </AnalyticsContext.Provider>
-        );
+        const result = render(<TestWrapper name='test-name' condition={false} track={track} />);
         act(() => {
           jest.advanceTimersByTime(200);
         });
@@ -136,11 +127,7 @@ describe('hooks', () => {
 
       it('should not track after hiding the document when the condition is falsy', () => {
         const track = jest.fn();
-        const result = render(
-          <AnalyticsContext.Provider value={{ analyticsTrack: track }}>
-            <TestComponent name='test-name' condition={false} />
-          </AnalyticsContext.Provider>
-        );
+        const result = render(<TestWrapper name='test-name' condition={false} track={track} />);
         act(() => {
           jest.advanceTimersByTime(200);
           setDocumentVisibility(false);
