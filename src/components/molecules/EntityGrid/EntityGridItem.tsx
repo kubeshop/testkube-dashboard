@@ -68,7 +68,6 @@ const EntityGridItem: React.FC<any> = props => {
             <Tooltip
               title={latestExecution?.startTime ? formatExecutionDate(new Date(latestExecution?.startTime)) : null}
               placement="bottomRight"
-              color={Colors.slate700}
               mouseEnterDelay={0.39}
               mouseLeaveDelay={0.1}
             >

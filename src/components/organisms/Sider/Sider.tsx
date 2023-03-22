@@ -108,7 +108,7 @@ const Sider: React.FC = () => {
           }}
           data-cy="navigation-tab"
         >
-          <Tooltip title={title} placement="right" color={Colors.slate700}>
+          <Tooltip title={title} placement="right">
             <MenuIcon style={DEFAULT_ICON_STYLE} />
           </Tooltip>
         </StyledNavLink>

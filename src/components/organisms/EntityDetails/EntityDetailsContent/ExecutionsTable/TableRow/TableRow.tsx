@@ -85,7 +85,6 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
             <Tooltip
               overlay={<>{formatExecutionDate(new Date(startTime))}</>}
               placement="bottomRight"
-              color={Colors.slate700}
               mouseEnterDelay={0.39}
               mouseLeaveDelay={0.1}
             >

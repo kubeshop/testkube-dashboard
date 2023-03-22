@@ -82,7 +82,6 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
   return (
     <Popover
       content={popoverContent}
-      color={Colors.slate700}
       align={{offset: [0, chartHeight - height - tooltipYOffsetMargin]}}
       onOpenChange={visible => setIsHovered(visible)}
     >
