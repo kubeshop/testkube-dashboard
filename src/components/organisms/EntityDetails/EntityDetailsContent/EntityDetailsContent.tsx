@@ -15,6 +15,7 @@ import {Button, Text} from '@custom-antd';
 
 import {CLICommands, LabelsList, MetricsBarChart, notificationCall} from '@molecules';
 
+import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {displayDefaultErrorNotification} from '@utils/notification';
@@ -44,6 +45,7 @@ const EntityDetailsContent: React.FC = () => {
     useContext(EntityDetailsContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
+  const {isLoading, handleLoading} = useLoadingIndicator(2000);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
 
@@ -74,6 +76,7 @@ const EntityDetailsContent: React.FC = () => {
   const testIcon = entityDetails?.testIcon;
 
   const onRunButtonClick = async () => {
+    handleLoading();
     const runEntity = runRequestsMap[entity];
 
     runEntity({
@@ -131,7 +134,13 @@ const EntityDetailsContent: React.FC = () => {
               key="days-filter-select"
             />
           ) : null,
-          <Button key="run-now-button" type="primary" onClick={onRunButtonClick} disabled={isPageDisabled}>
+          <Button
+            key="run-now-button"
+            type="primary"
+            onClick={onRunButtonClick}
+            disabled={isPageDisabled}
+            loading={isLoading}
+          >
             Run now
           </Button>,
         ]}
