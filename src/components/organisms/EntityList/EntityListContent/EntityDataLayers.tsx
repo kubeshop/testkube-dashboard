@@ -1,4 +1,5 @@
 import React, {memo, useEffect} from 'react';
+import {gql, useSubscription} from '@apollo/client';
 
 import {OnDataChangeInterface} from '@models/onDataChange';
 
@@ -6,30 +7,87 @@ import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
-import {PollingIntervals} from '@utils/numbers';
-
-import {useGetTestSuitesQuery} from '@services/testSuites';
-import {useGetTestsQuery} from '@services/tests';
-
 type DataLayerProps = {
   onDataChange: (args: OnDataChangeInterface) => void;
   queryFilters?: any;
 };
 
+// TODO: Offset/Limit
+const TEST_SUITES_SUBSCRIPTION = gql`
+  subscription($statuses: [String!]!, $selectors: [String!]!, $query: String) {
+    testSuitesWithExecutions(statuses: $statuses, selectors: $selectors, query: $query) {
+      latestExecution {
+        id duration durationMs startTime endTime name testSuiteName status
+      }
+      testSuite {
+        created description name namespace labels
+        status {
+          latestExecution {
+            id startTime endTime status
+            executions {
+              id name status testName type
+            }
+          }
+        }
+        steps {
+          stopTestOnFailure
+          execute { name namespace }
+        }
+      }
+      metrics {
+        executionDurationP50ms passFailRatio failedExecutions
+        executions {
+          duration durationMs name startTime status
+        }
+      }
+    }
+  }
+`;
+
+const TEST_SUBSCRIPTION = gql`
+  subscription($statuses: [String!]!, $selectors: [String!]!, $query: String) {
+    testsWithExecutions(statuses: $statuses, selectors: $selectors, query: $query) {
+      latestExecution {
+        id duration durationMs startTime endTime name testName status
+      }
+      test {
+        content created description name namespace labels
+        status {
+          latestExecution {
+            id startTime endTime status
+          }
+        }
+      }
+      metrics {
+        executionDurationP50ms passFailRatio failedExecutions
+        executions {
+          duration durationMs name startTime status
+        }
+      }
+    }
+  }
+`;
+
 export const TestSuitesDataLayer: React.FC<DataLayerProps> = memo(props => {
   const {onDataChange, queryFilters} = props;
 
-  const {data, isLoading, isFetching, refetch, ...rest} = useGetTestSuitesQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.everySecond,
+  // TODO: Apollo's bug atm, that it's not closing initial subscription if immediately variables are changed
+  const { data: { testSuitesWithExecutions } = {}, loading, error } = useSubscription(TEST_SUITES_SUBSCRIPTION, {
+    shouldResubscribe: true,
+    variables: {
+      statuses: queryFilters.status,
+      selectors: queryFilters.selector,
+      query: queryFilters.textSearch,
+    },
   });
 
   useEffect(() => {
-    if (rest.error) {
-      onDataChange({data: [], isLoading: false, isFetching: false, refetch});
+    if (error) {
+      onDataChange({data: [], isLoading: false, isFetching: false, refetch: () => Promise.resolve()});
     } else {
-      onDataChange({data: data || [], isLoading, isFetching, refetch});
+      onDataChange({data: testSuitesWithExecutions || [], isLoading: loading, isFetching: loading, refetch: () => Promise.resolve()});
     }
-  }, [data, isLoading, isFetching]);
+  }, [testSuitesWithExecutions, loading]);
 
   return <></>;
 });
@@ -39,15 +97,21 @@ export const TestsDataLayer: React.FC<DataLayerProps> = memo(props => {
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data, isLoading, isFetching, refetch, ...rest} = useGetTestsQuery(queryFilters || null, {
-    pollingInterval: PollingIntervals.everySecond,
+  // TODO: Apollo's bug atm, that it's not closing initial subscription if immediately variables are changed
+  const { data: { testsWithExecutions } = {}, loading, error } = useSubscription(TEST_SUBSCRIPTION, {
+    shouldResubscribe: true,
+    variables: {
+      statuses: queryFilters.status,
+      selectors: queryFilters.selector,
+      query: queryFilters.textSearch,
+    },
   });
 
   useEffect(() => {
-    if (rest.error) {
-      onDataChange({data: [], isLoading: false, isFetching: false, refetch});
+    if (error) {
+      onDataChange({data: [], isLoading: false, isFetching: false, refetch: () => Promise.resolve()});
     } else {
-      const mappedTests = (data || []).map(test => {
+      const mappedTests = (testsWithExecutions || []).map((test: any) => {
         const testIcon = getTestExecutorIcon(executors, test.test.type);
 
         return {
@@ -58,9 +122,9 @@ export const TestsDataLayer: React.FC<DataLayerProps> = memo(props => {
           },
         };
       });
-      onDataChange({data: mappedTests, isLoading, isFetching, refetch});
+      onDataChange({data: mappedTests, isLoading: loading, isFetching: loading, refetch: () => Promise.resolve()});
     }
-  }, [data, isLoading, isFetching, rest.error]);
+  }, [testsWithExecutions, loading, error]);
 
   return <></>;
 });

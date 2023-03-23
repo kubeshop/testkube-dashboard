@@ -1,8 +1,10 @@
-import {useContext, useEffect, useMemo, useState} from 'react';
+import {useContext, useMemo, useState} from 'react';
 
 import {Tabs} from 'antd';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
 
 import {ExecutorIcon} from '@atoms';
 
@@ -11,8 +13,6 @@ import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
 import {PageBlueprint} from '@organisms';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
-
-import {useGetExecutorsQuery} from '@services/executors';
 
 import Colors from '@styles/Colors';
 
@@ -34,17 +34,14 @@ const Executors: React.FC = () => {
   const [activeTabKey, setActiveTabKey] = useState('custom');
   const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
 
-  const {data: executors, refetch, isLoading} = useGetExecutorsQuery();
+  const executors = useAppSelector(selectExecutors);
+  const isLoading = executors.length === 0;
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
   const onNavigateToDetails = (name: string) => {
     navigate(`executors/${name}`);
   };
-
-  useEffect(() => {
-    refetch();
-  }, [apiEndpoint]);
 
   const renderedExecutorsGrid = useMemo(() => {
     return executorsList.map(executorItem => {

@@ -15,7 +15,6 @@ import useInViewport from '@hooks/useInViewport';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
-import {PollingIntervals} from '@utils/numbers';
 
 import Colors from '@styles/Colors';
 
@@ -25,21 +24,16 @@ import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMet
 
 const EntityGridItem: React.FC<any> = props => {
   const {item, onClick, isLastItemIndex} = props;
-  const {dataItem, latestExecution} = item;
+  const {dataItem, latestExecution, metrics} = item;
 
   const {dispatch} = useContext(MainContext);
-  const {useGetMetrics, entity, queryFilters, setQueryFilters} = useContext(EntityListContext);
+  const {entity, queryFilters, setQueryFilters} = useContext(EntityListContext);
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
 
   const ref = useRef(null);
 
   const isInViewport = useInViewport(ref);
-
-  const {data: metrics} = useGetMetrics(
-    {id: dataItem.name, last: 7, limit: 13},
-    {skip: !isInViewport, pollingInterval: PollingIntervals.halfMin}
-  );
 
   const executions = metrics?.executions || [];
 

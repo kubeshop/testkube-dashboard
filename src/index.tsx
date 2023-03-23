@@ -2,6 +2,10 @@ import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
+import {ApolloProvider, ApolloClient, InMemoryCache, split, HttpLink} from '@apollo/client';
+import {getMainDefinition} from '@apollo/client/utilities';
+import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
+import {createClient} from 'graphql-ws';
 
 import {store} from '@redux/store';
 
@@ -10,6 +14,30 @@ import {GlobalStyle} from '@styles/globalStyles';
 import App from './App';
 import './antd-theme/antd-customized.css';
 import env from './env';
+
+// TODO: Cloud - organizations as arguments?
+
+const httpLink = new HttpLink({
+  uri: 'http://localhost:8000/graphql'
+});
+
+const wsLink = new GraphQLWsLink(createClient({
+  url: 'ws://localhost:8000/graphql',
+}));
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
+  },
+  wsLink,
+  httpLink,
+);
+
+const client = new ApolloClient({
+  link: splitLink,
+  cache: new InMemoryCache(),
+});
 
 (async () => {
   const container = document.getElementById('root');
@@ -27,12 +55,14 @@ import env from './env';
 
   root.render(
     <React.StrictMode>
-      <Provider store={store}>
-        <BrowserRouter basename={basename}>
-          <GlobalStyle />
-          <App />
-        </BrowserRouter>
-      </Provider>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter basename={basename}>
+            <GlobalStyle />
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
     </React.StrictMode>
   );
 })();

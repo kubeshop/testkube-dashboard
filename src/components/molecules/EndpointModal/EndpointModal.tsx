@@ -25,14 +25,14 @@ type EndpointModalProps = {
   visible: boolean;
 };
 
-axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl;
+axios.defaults.baseURL = env!.apiUrl || localStorage.getItem('apiEndpoint')!;
 
 const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {setModalState, visible} = props;
 
   const {dispatch, apiEndpoint: apiEndpointRedux} = useContext(MainContext);
 
-  const defaultApiEndpoint = apiEndpointRedux || localStorage.getItem('apiEndpoint') || env?.apiUrl;
+  const defaultApiEndpoint = env!.apiUrl || apiEndpointRedux || localStorage.getItem('apiEndpoint')!;
 
   const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
   const [isLoading, setLoading] = useState(false);

@@ -5,6 +5,8 @@ import {CSSTransition} from 'react-transition-group';
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
+import {gql, useSubscription} from '@apollo/client';
+
 import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
@@ -21,13 +23,9 @@ import {Sider} from '@organisms';
 
 import {EndpointProcessing, ErrorBoundary, NotFound} from '@pages';
 
-import {PollingIntervals} from '@utils/numbers';
-
 import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 
 import {useGetClusterConfigQuery} from '@services/config';
-import {useGetExecutorsQuery} from '@services/executors';
-import {useGetSourcesQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
 
@@ -44,6 +42,27 @@ const GlobalSettings = lazy(() => import('@pages').then(module => ({default: mod
 const pjson = require('../package.json');
 
 const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
+
+const EXECUTORS_SUBSCRIPTION = gql`
+  subscription {
+    executors {
+      name
+      executor {
+        executorType image types contentTypes features
+        meta { iconURI docsURI }
+      }
+    }
+  }
+`;
+
+const SOURCES_SUBSCRIPTION = gql`
+  subscription {
+    testSources {
+      name namespace
+      repository { type uri }
+    }
+  }
+`;
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -64,13 +83,8 @@ const App: React.FC = () => {
 
   const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
 
-  const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
-    pollingInterval: PollingIntervals.long,
-  });
-
-  const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
-    pollingInterval: PollingIntervals.long,
-  });
+  const {data: { executors } = {}} = useSubscription(EXECUTORS_SUBSCRIPTION);
+  const {data: { testSources: sources } = {}} = useSubscription(SOURCES_SUBSCRIPTION);
 
   const onAcceptCookies = async () => {
     // @ts-ignore
@@ -143,8 +157,6 @@ const App: React.FC = () => {
   }, [ga4React]);
 
   useEffect(() => {
-    refetchExecutors();
-    refetchSources();
     refetchClusterConfig();
   }, [apiEndpoint]);
 
