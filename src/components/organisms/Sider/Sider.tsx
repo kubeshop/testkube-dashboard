@@ -130,7 +130,7 @@ const Sider: React.FC = () => {
   }, []);
 
   return (
-    <StyledSider width={100} data-cy="navigation-sider" isFullScreenLogOutput={isFullScreenLogOutput}>
+    <StyledSider width={100} data-cy="navigation-sider" $isFullScreenLogOutput={isFullScreenLogOutput}>
       <EndpointModal visible={isModalVisible} setModalState={setModalState} />
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
