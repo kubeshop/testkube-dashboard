@@ -2,7 +2,7 @@ import {Space} from 'antd';
 
 import PreRun from './PreRun';
 
-const SettingsGeneral: React.FC = () => {
+const SettingsExecution: React.FC = () => {
   return (
     <Space size={30} direction="vertical">
       <PreRun />
@@ -10,4 +10,4 @@ const SettingsGeneral: React.FC = () => {
   );
 };
 
-export default SettingsGeneral;
+export default SettingsExecution;
