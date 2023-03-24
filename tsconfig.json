@@ -26,6 +26,7 @@
   ],
   "extends": "./paths.json",
   "exclude": [
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
   ]
 }
