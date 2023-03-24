@@ -2,11 +2,15 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
+import {Text} from '@custom-antd';
+
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
+
+import Colors from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -59,7 +63,14 @@ const PreRun: React.FC = () => {
       >
         <StyledSpace size={32} direction="vertical">
           <StyledFormItem name="command">
-            <Input placeholder="e.g.: myscript.sh" />
+            <Input
+              placeholder="e.g.: myscript.sh"
+              prefix={
+                <Text className="big regular" color={Colors.slate500}>
+                  $
+                </Text>
+              }
+            />
           </StyledFormItem>
         </StyledSpace>
       </ConfigurationCard>

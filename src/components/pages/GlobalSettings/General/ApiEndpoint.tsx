@@ -36,13 +36,16 @@ const ApiEndpoint = () => {
 
             localStorage.setItem(config.apiEndpoint, targetUrl);
 
-            dispatch(setApiEndpoint(targetUrl));
-
             if (res.namespace) {
               dispatch(setNamespace(res.namespace));
             }
 
-            notificationCall('passed', 'API endpoint set up  successfully');
+            dispatch(setApiEndpoint(targetUrl));
+
+            setTimeout(() => {
+              notificationCall('passed', 'API endpoint set up  successfully');
+              form.resetFields();
+            });
           } else {
             notificationCall('failed', 'Could not receive data from the specified API endpoint');
           }

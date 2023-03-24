@@ -77,9 +77,11 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                       Cancel
                     </Button>
                   )}
-                  <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={isDisabled}>
-                    {confirmButtonText}
-                  </Button>
+                  {onConfirm ? (
+                    <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={isDisabled}>
+                      {confirmButtonText}
+                    </Button>
+                  ) : null}
                 </StyledFooterButtonsContainer>
               );
             }}
