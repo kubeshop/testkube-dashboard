@@ -18,8 +18,6 @@ export const StyledPopoverContainer = styled.div`
   padding: 12px 16px;
 
   border-radius: 4px;
-
-  background: ${Colors.slate700};
 `;
 
 export const StyledQuestionCircleOutlined = styled(QuestionCircleOutlined)`

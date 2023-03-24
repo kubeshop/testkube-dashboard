@@ -312,12 +312,6 @@ export const GlobalStyle = createGlobalStyle`
   .ant-popover-inner-content {
     padding: 0;
   }
-
-  .ant-popover-arrow {
-    .ant-popover-arrow-content::before {
-      background: ${Colors.slate900} !important;
-    }
-  }
 `;
 
 /* Media Sizes */
