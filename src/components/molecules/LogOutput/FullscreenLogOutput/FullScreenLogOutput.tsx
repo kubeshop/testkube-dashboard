@@ -1,11 +1,10 @@
 import {useEffect, useRef} from 'react';
+import {useDebounce} from 'react-use';
 
 import Ansi from 'ansi-to-react';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
-
-import useDebounce from '@hooks/useDebounce';
 
 import {LogOutputProps} from '../LogOutput';
 import {StyledLogTextContainer, StyledPreLogText} from '../LogOutput.styled';

@@ -1,11 +1,10 @@
 import {useContext, useEffect, useState} from 'react';
+import {useDebounce} from 'react-use';
 
 import {Entity} from '@models/entity';
 import {FilterProps} from '@models/filters';
 
 import {Input} from '@custom-antd';
-
-import useDebounce from '@hooks/useDebounce';
 
 import {MainContext} from '@contexts';
 
