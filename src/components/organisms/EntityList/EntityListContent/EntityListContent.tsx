@@ -140,21 +140,21 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         >
           <PageDescription />
         </EntityListTitle>
-        {filtersComponentsIds && filtersComponentsIds.length ? (
-          <StyledFiltersSection>
-            <Filters
-              setFilters={setQueryFilters}
-              filters={queryFilters}
-              filtersComponentsIds={filtersComponentsIds}
-              entity={entity}
-              isFiltersDisabled={isEmptyData}
-            />
-            <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID}>
-              {addEntityButtonText}
-            </Button>
-          </StyledFiltersSection>
-        ) : null}
       </Header>
+      {filtersComponentsIds && filtersComponentsIds.length ? (
+        <StyledFiltersSection>
+          <Filters
+            setFilters={setQueryFilters}
+            filters={queryFilters}
+            filtersComponentsIds={filtersComponentsIds}
+            entity={entity}
+            isFiltersDisabled={isEmptyData}
+          />
+          <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID}>
+            {addEntityButtonText}
+          </Button>
+        </StyledFiltersSection>
+      ) : null}
       {isFirstTimeLoading ? (
         <EntityListSkeleton />
       ) : !dataSource || !dataSource.length ? (
