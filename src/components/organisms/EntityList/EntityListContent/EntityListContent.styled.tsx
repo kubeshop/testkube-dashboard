@@ -57,3 +57,10 @@ export const Header = styled.div`
 
   z-index: 1000;
 `;
+
+export const StyledEntityListLoaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+`;

@@ -29,6 +29,7 @@ import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
 import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
 import EntityListTitle from './EntityListHeader';
 import EntityListSkeleton from './EntityListSkeleton';
+import EntityListLoader from './EntityListLoader';
 
 const modalTypes: {[key in Entity]: ModalConfigProps} = {
   'test-suites': TestSuiteModalConfig,
@@ -185,6 +186,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
           disabled={queryFilters.pageSize > dataSource.length || isLoadingNext}
           onScroll={onScrollBottom}
         />
+        {isLoadingNext ? <EntityListLoader /> : null}
       </>}
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
