@@ -120,10 +120,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       setIsLoadingNext(true);
     }
 
-    contentProps.refetch()
-      .catch(() => {})
-      .then(() => setIsApplyingFilters(false))
-      .then(() => setIsLoadingNext(false));
+    contentProps.refetch().then(() => {
+      setIsApplyingFilters(false);
+      setIsLoadingNext(false);
+    });
   }, [queryFilters, contentProps.refetch]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
