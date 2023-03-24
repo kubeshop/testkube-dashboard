@@ -1,11 +1,12 @@
 import React, {useContext, useEffect, useRef} from 'react';
 
+import {Tooltip} from 'antd';
+
 import {initialPageSize} from '@redux/initialState';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
-import Tooltip from '@custom-antd/Tooltip';
 
 import {LabelsList, MetricsBarChart} from '@molecules';
 

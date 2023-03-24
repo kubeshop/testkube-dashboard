@@ -19,8 +19,6 @@ import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
 import {ReactComponent as TriggersIcon} from '@assets/triggers.svg';
 
-import Colors from '@styles/Colors';
-
 import {MainContext} from '@contexts';
 
 import {

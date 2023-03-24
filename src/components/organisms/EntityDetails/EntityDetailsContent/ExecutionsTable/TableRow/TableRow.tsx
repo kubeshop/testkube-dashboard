@@ -1,10 +1,10 @@
 import React, {useMemo} from 'react';
 
-import {Dropdown, Menu} from 'antd';
+import {Dropdown, Menu, Tooltip} from 'antd';
 
 import {Dots, StatusIcon} from '@atoms';
 
-import {Text, Tooltip} from '@custom-antd';
+import {Text} from '@custom-antd';
 
 import useIsRunning from '@hooks/useIsRunning';
 

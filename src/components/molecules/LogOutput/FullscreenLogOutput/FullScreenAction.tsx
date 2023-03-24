@@ -1,13 +1,13 @@
 import {useContext, useState} from 'react';
 
+import {Tooltip} from 'antd';
+
 import {useAppSelector} from '@redux/hooks';
 import {
   closeFullScreenLogOutput,
   selectFullScreenLogOutput,
   setIsFullScreenLogOutput,
 } from '@redux/reducers/configSlice';
-
-import {Tooltip} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
