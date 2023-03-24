@@ -5,5 +5,5 @@ export type OnDataChangeInterface = {
   data: TestSuiteWithExecution[] | TestWithExecution[];
   isLoading: boolean;
   isFetching: boolean;
-  refetch: Function;
+  refetch: () => Promise<any>;
 };

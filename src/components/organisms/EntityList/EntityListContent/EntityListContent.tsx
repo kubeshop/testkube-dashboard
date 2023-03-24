@@ -1,5 +1,8 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
+import {usePrevious} from 'react-use';
+
+import {initialPageSize} from '@redux/initialState';
 
 import {LoadingOutlined} from '@ant-design/icons';
 
@@ -9,6 +12,7 @@ import {OnDataChangeInterface} from '@models/onDataChange';
 
 import {Button, Modal} from '@custom-antd';
 
+import {ScrollTrigger} from '@atoms';
 import {EntityGrid} from '@molecules';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
@@ -47,15 +51,17 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
+  const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   const {dispatch, navigate, apiEndpoint} = useContext(MainContext);
   const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
+  const prevQueryFilters = usePrevious(queryFilters) || queryFilters;
 
   const [contentProps, setContentProps] = useState<OnDataChangeInterface>({
     data: [],
     isLoading: false,
     isFetching: false,
-    refetch: () => {},
+    refetch: () => Promise.resolve(),
   });
 
   const onDataChange = (args: OnDataChangeInterface) => {
@@ -73,6 +79,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   const onNavigateToDetails = (item: any) => {
     navigate(`${entity}/executions/${item.dataItem.name}`);
+  };
+
+  const onScrollBottom = () => {
+    dispatch(setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize}));
   };
 
   useEffect(() => {
@@ -105,11 +115,14 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   useEffect(() => {
     setIsApplyingFilters(true);
 
-    try {
-      contentProps.refetch().then(() => setIsApplyingFilters(false));
-    } catch (err) {
-      //
+    if (queryFilters.pageSize > prevQueryFilters.pageSize) {
+      setIsLoadingNext(true);
     }
+
+    contentProps.refetch()
+      .catch(() => {})
+      .then(() => setIsApplyingFilters(false))
+      .then(() => setIsLoadingNext(false));
   }, [queryFilters, contentProps.refetch]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
@@ -165,9 +178,14 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             <EmptyDataWithFilters resetFilters={resetFilters} />
           )}
         </EmptyListWrapper>
-      ) : (
+      ) : <>
         <EntityGrid data={dataSource} onNavigateToDetails={onNavigateToDetails} />
-      )}
+        <ScrollTrigger
+          offset={200}
+          disabled={queryFilters.pageSize > dataSource.length || isLoadingNext}
+          onScroll={onScrollBottom}
+        />
+      </>}
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
       ) : null}
