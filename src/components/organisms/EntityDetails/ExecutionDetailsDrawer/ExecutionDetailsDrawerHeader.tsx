@@ -1,6 +1,7 @@
 import React, {useContext, useMemo} from 'react';
 
-import {Dropdown, Menu} from 'antd';
+import {Dropdown} from 'antd';
+import {ItemType} from 'antd/lib/menu/hooks/useItems';
 
 import {CloseOutlined} from '@ant-design/icons';
 
@@ -55,17 +56,15 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
     let actionsArray = [];
 
     if (isRunning) {
-      actionsArray.push({key: 1, label: <span onClick={onAbortExecution}>Abort execution</span>});
+      actionsArray.push({key: 1, children: <span onClick={onAbortExecution}>Abort execution</span>});
     }
 
     return actionsArray;
   };
 
-  const renderedExecutionActions = useMemo(() => {
+  const renderedExecutionActions: ItemType[] = useMemo(() => {
     return renderExecutionActions();
   }, [isRunning]);
-
-  const menu = <Menu items={renderedExecutionActions} />;
 
   return (
     <DrawerHeader>
@@ -86,7 +85,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
                   e.stopPropagation();
                 }}
               >
-                <Dropdown overlay={menu} placement="bottom">
+                <Dropdown menu={{items: renderedExecutionActions}} placement="bottom">
                   <div style={{width: 20}}>
                     <Dots color={Colors.grey450} />
                   </div>

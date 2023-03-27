@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 
-import {Dropdown, Menu} from 'antd';
+import {Dropdown} from 'antd';
+import {ItemType} from 'antd/lib/menu/hooks/useItems';
 
 import {Dots, StatusIcon} from '@atoms';
 
@@ -13,7 +14,7 @@ import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
-import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled';
+import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, StatusText} from './TableRow.styled';
 
 const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
   const {data, onAbortExecution} = props;
@@ -31,17 +32,15 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
     let actionsArray = [];
 
     if (isRunning) {
-      actionsArray.push({key: 1, label: <span onClick={abortExecution}>Abort execution</span>});
+      actionsArray.push({key: 1, children: <span onClick={abortExecution}>Abort execution</span>});
     }
 
     return actionsArray;
   };
 
-  const renderedExecutionActions = useMemo(() => {
+  const renderedExecutionActions: ItemType[] = useMemo(() => {
     return renderExecutionActions();
   }, [isRunning]);
-
-  const menu = <Menu items={renderedExecutionActions} />;
 
   return (
     <ItemWrapper key={id}>
@@ -54,16 +53,16 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
             </Text>
           </ItemColumn>
           <ItemColumn>
-            <Text className="regular small" color={Colors.slate200}>
+            <StatusText className="regular small" color={Colors.slate200}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
-            </Text>
+            </StatusText>
             {renderedExecutionActions && renderedExecutionActions.length ? (
               <div
                 onClick={e => {
                   e.stopPropagation();
                 }}
               >
-                <Dropdown overlay={menu} placement="bottom">
+                <Dropdown menu={{items: renderedExecutionActions}} placement="bottom">
                   <div style={{width: 20}}>
                     <Dots color={Colors.grey450} />
                   </div>
