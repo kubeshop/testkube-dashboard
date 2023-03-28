@@ -44,9 +44,6 @@ export const StyledContainer = styled.div`
 `;
 
 export const Header = styled.div`
-  position: sticky;
-  top: 0;
-
   display: flex;
   flex-direction: column;
 
@@ -55,4 +52,12 @@ export const Header = styled.div`
   background-color: ${Colors.slate900};
 
   z-index: 1000;
+`;
+
+export const StyledEntityListLoaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  min-height: 80px;
 `;

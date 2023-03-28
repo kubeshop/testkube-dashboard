@@ -1,8 +1,6 @@
-import React, {useContext, useEffect, useRef} from 'react';
+import React, {useContext, useRef} from 'react';
 
 import {Tooltip} from 'antd';
-
-import {initialPageSize} from '@redux/initialState';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
@@ -25,11 +23,11 @@ import {MainContext} from '@contexts';
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
 
 const EntityGridItem: React.FC<any> = props => {
-  const {item, onClick, isLastItemIndex} = props;
+  const {item, onClick} = props;
   const {dataItem, latestExecution} = item;
 
   const {dispatch} = useContext(MainContext);
-  const {useGetMetrics, entity, queryFilters, setQueryFilters} = useContext(EntityListContext);
+  const {useGetMetrics, entity} = useContext(EntityListContext);
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
 
@@ -45,12 +43,6 @@ const EntityGridItem: React.FC<any> = props => {
   const executions = metrics?.executions || [];
 
   const dataTestValue = `${entity}-list-item`;
-
-  useEffect(() => {
-    if (isLastItemIndex && isInViewport && queryFilters.pageSize <= isLastItemIndex + initialPageSize) {
-      dispatch(setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize}));
-    }
-  }, [isInViewport, isLastItemIndex]);
 
   return (
     <ItemWrapper onClick={onClick} ref={ref} data-test={dataTestValue}>

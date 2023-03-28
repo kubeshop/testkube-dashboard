@@ -22,7 +22,6 @@ const EntityGrid: React.FC<EntityGridProps> = props => {
             onNavigateToDetails(item);
           }}
           key={key}
-          isLastItemIndex={index + 1 === data.length ? index : null}
         />
       );
     });
