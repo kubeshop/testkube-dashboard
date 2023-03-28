@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {forwardRef, useEffect, useRef} from 'react';
 import {useDebounce} from 'react-use';
 
 import Ansi from 'ansi-to-react';
@@ -10,7 +10,7 @@ import {LogOutputProps} from '../LogOutput';
 import {StyledLogTextContainer, StyledPreLogText} from '../LogOutput.styled';
 import {StyledFullscreenLogOutputContainer} from './FullscreenLogOutput.styled';
 
-const FullScreenLogOutput: React.FC<Pick<LogOutputProps, 'actions' | 'logOutput'>> = props => {
+const FullScreenLogOutput = forwardRef<HTMLDivElement, Pick<LogOutputProps, 'actions' | 'logOutput'>>((props, ref) => {
   const {logOutput} = props;
 
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -39,19 +39,17 @@ const FullScreenLogOutput: React.FC<Pick<LogOutputProps, 'actions' | 'logOutput'
   );
 
   return (
-    <>
-      <StyledFullscreenLogOutputContainer logOutputDOMRect={logOutputDOMRect}>
-        <StyledLogTextContainer>
-          {logOutput ? (
-            <StyledPreLogText>
-              <Ansi useClasses>{logOutput}</Ansi>
-            </StyledPreLogText>
-          ) : null}
-          <div ref={bottomRef} />
-        </StyledLogTextContainer>
-      </StyledFullscreenLogOutputContainer>
-    </>
+    <StyledFullscreenLogOutputContainer ref={ref} logOutputDOMRect={logOutputDOMRect}>
+      <StyledLogTextContainer>
+        {logOutput ? (
+          <StyledPreLogText>
+            <Ansi useClasses>{logOutput}</Ansi>
+          </StyledPreLogText>
+        ) : null}
+        <div ref={bottomRef} />
+      </StyledLogTextContainer>
+    </StyledFullscreenLogOutputContainer>
   );
-};
+});
 
 export default FullScreenLogOutput;

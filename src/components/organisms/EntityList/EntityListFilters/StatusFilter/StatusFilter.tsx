@@ -109,8 +109,8 @@ const StatusFilter: React.FC<FilterProps> = props => {
       overlay={menu}
       trigger={['click']}
       placement="bottom"
-      onVisibleChange={onVisibleChange}
-      visible={isVisible}
+      onOpenChange={onVisibleChange}
+      open={isVisible}
       disabled={isFiltersDisabled}
     >
       <StyledFilterLabel

@@ -1,4 +1,4 @@
-import {Suspense, lazy, useEffect, useState} from 'react';
+import {Suspense, lazy, useEffect, useState, useRef} from 'react';
 import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 
@@ -71,6 +71,8 @@ const App: React.FC = () => {
   const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
     pollingInterval: PollingIntervals.long,
   });
+
+  const logRef = useRef<HTMLDivElement>(null);
 
   const onAcceptCookies = async () => {
     // @ts-ignore
@@ -172,8 +174,8 @@ const App: React.FC = () => {
               </ErrorBoundary>
             </Content>
             {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
-            <CSSTransition in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
-              <FullScreenLogOutput logOutput={logOutput} />
+            <CSSTransition nodeRef={logRef} in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
+              <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
             </CSSTransition>
           </StyledLayoutContentWrapper>
         </Layout>
