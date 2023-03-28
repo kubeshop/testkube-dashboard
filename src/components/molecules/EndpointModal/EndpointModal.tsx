@@ -2,19 +2,15 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import {Space} from 'antd';
 
-import axios from 'axios';
-
 import {setNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input, Modal, Text} from '@custom-antd';
-
-import {checkAPIEndpoint} from '@utils/endpoint';
 
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-import {getApiEndpoint, saveApiEndpoint} from '@services/apiEndpoint';
+import {getApiDetails, getApiEndpoint, saveApiEndpoint} from '@services/apiEndpoint';
 
 import notificationCall from '../Notification/Notification';
 import {StyledSearchUrlForm} from './EndpointModal.styled';
@@ -23,8 +19,6 @@ type EndpointModalProps = {
   setModalState: (isVisible: boolean) => void;
   visible: boolean;
 };
-
-axios.defaults.baseURL = getApiEndpoint() || undefined;
 
 const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {setModalState, visible} = props;
@@ -36,41 +30,20 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
   const [isLoading, setLoading] = useState(false);
 
-  const checkURLWorkingState = async (url: string): Promise<any> => {
+  const checkApiEndpoint = async () => {
     try {
-      await fetch(url)
-        .then(res => {
-          return res.json();
-        })
-        .then(res => {
-          if (res.version && res.commit) {
-            const targetUrl = url.replace('/info', '');
-            axios.defaults.baseURL = targetUrl;
-            saveApiEndpoint(targetUrl);
+      const {url, namespace} = await getApiDetails(apiEndpoint);
 
-            if (res.namespace) {
-              dispatch(setNamespace(res.namespace));
-            }
+      saveApiEndpoint(url);
+      dispatch(setNamespace(namespace));
 
-            setApiEndpointHook(targetUrl);
-
-            setLoading(false);
-
-            setModalState(false);
-          } else {
-            notificationCall('failed', 'Could not receive data from the specified API endpoint');
-
-            setLoading(false);
-          }
-        });
-    } catch (err) {
-      if (err) {
-        setModalState(true);
-
-        setLoading(false);
-
-        return notificationCall('failed', 'Could not receive data from the specified API endpoint');
-      }
+      setApiEndpointHook(url);
+      setModalState(false);
+    } catch (error) {
+      setModalState(true);
+      notificationCall('failed', 'Could not receive data from the specified API endpoint');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,7 +52,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
     setLoading(true);
 
-    checkAPIEndpoint(apiEndpoint, checkURLWorkingState);
+    checkApiEndpoint();
   };
 
   useEffect(() => {
@@ -98,7 +71,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
     if (!apiEndpoint) {
       setModalState(true);
     } else {
-      checkAPIEndpoint(apiEndpoint, checkURLWorkingState);
+      checkApiEndpoint();
     }
   }, []);
 

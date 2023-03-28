@@ -4,8 +4,6 @@ import {Title} from '@custom-antd';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
-import {hasProtocol} from '@utils/strings';
-
 import {MainContext} from '@contexts';
 
 import {saveApiEndpoint} from '@services/apiEndpoint';
@@ -17,22 +15,9 @@ const EndpointProcessing: React.FC = () => {
 
   const searchParams = useURLSearchParams();
 
-  const validateApiEndpoint = (apiEndpoint: string) => {
-    if (hasProtocol(apiEndpoint)) {
-      return apiEndpoint;
-    }
-
-    if (apiEndpoint.startsWith('localhost')) {
-      return `http://${apiEndpoint}`;
-    }
-
-    return apiEndpoint;
-  };
-
   useEffect(() => {
     if (searchParams.apiEndpoint) {
-      const validatedApiEndpoint = validateApiEndpoint(searchParams.apiEndpoint.toString());
-      saveApiEndpoint(validatedApiEndpoint);
+      saveApiEndpoint(searchParams.apiEndpoint.toString());
     }
 
     navigate('/');

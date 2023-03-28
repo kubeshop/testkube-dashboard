@@ -1,13 +1,20 @@
 import {useMemo} from 'react';
 import {useUnmount, useUpdate} from 'react-use';
 
+import axios from 'axios';
+
 import {config} from '@constants/config';
 
 import {hasProtocol} from '@utils/strings';
 
 import env from '../env';
 
-type ApiEndpointListener = (apiEndpoint: string | null) => void;
+export type ApiEndpointListener = (apiEndpoint: string | null) => void;
+
+export interface ApiDetails {
+  url: string;
+  namespace: string;
+}
 
 // Storage for API endpoint subscriptions
 const listeners = new Set<ApiEndpointListener>();
@@ -16,6 +23,9 @@ const listeners = new Set<ApiEndpointListener>();
 // we'd like to keep it at least for the current session.
 // TODO: Consider storing it in cookie or URL params as a fallback.
 let cachedApiEndpoint: string | null = sanitizeApiEndpoint(localStorage.getItem(config.apiEndpoint));
+
+// Set up Axios
+axios.defaults.baseURL = getApiEndpoint() || undefined;
 
 function notifySubscriptions(): void {
   const endpoint = getApiEndpoint();
@@ -46,6 +56,7 @@ export function getApiEndpoint(): string | null {
 export function saveApiEndpoint(apiEndpoint: string): boolean {
   try {
     cachedApiEndpoint = sanitizeApiEndpoint(apiEndpoint);
+    axios.defaults.baseURL = cachedApiEndpoint;
     localStorage.setItem(config.apiEndpoint, cachedApiEndpoint);
     notifySubscriptions();
     return true;
@@ -67,4 +78,15 @@ export function useApiEndpoint(): string | null {
   const unsubscribe = useMemo(() => subscribeApiEndpoint(update), []);
   useUnmount(unsubscribe);
   return getApiEndpoint();
+}
+
+export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
+  const url = sanitizeApiEndpoint(apiEndpoint);
+
+  const data = await fetch(`${url}/info`).then(res => res.json());
+  if (!data?.version || !data?.commit) {
+    throw new Error('Received invalid data from provided API endpoint');
+  }
+
+  return { url, namespace: data.namespace || 'testkube' };
 }
