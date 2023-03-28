@@ -59,6 +59,8 @@ module.exports = {
     'react/prop-types': 'off', // TODO re-enable
     'react/require-default-props': 'off', // TODO re-enable
     'no-nested-ternary': 'off', // warn
+    'no-redeclare': 'off',
+    '@typescript-eslint/no-redeclare': 'error',
     'consistent-return': 'off', // warn. Look at api calls closely before enabling this. api.ts.
     // Accessibility off for now to make speed a priority and avoid restructuring for now
     'jsx-a11y/click-events-have-key-events': 'off',
