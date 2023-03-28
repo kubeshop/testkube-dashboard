@@ -10,7 +10,7 @@ import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-import {getApiDetails, saveApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
+import {getApiDetails, getApiEndpoint, saveApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
 
 import notificationCall from '../Notification/Notification';
 import {StyledSearchUrlForm} from './EndpointModal.styled';
@@ -30,14 +30,27 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   const [isLoading, setLoading] = useState(false);
 
   const checkApiEndpoint = async (endpoint: string) => {
+    const prevApiEndpoint = currentApiEndpoint;
     try {
       const {url, namespace} = await getApiDetails(endpoint);
+
+      // Handle race condition, when endpoint has been changed externally,
+      // i.e. via EndpointProcessing page.
+      if (getApiEndpoint() !== prevApiEndpoint) {
+        return;
+      }
 
       saveApiEndpoint(url);
       dispatch(setNamespace(namespace));
 
       setModalState(false);
     } catch (error) {
+      // Handle race condition, when endpoint has been changed externally,
+      // i.e. via EndpointProcessing page.
+      if (getApiEndpoint() !== prevApiEndpoint) {
+        return;
+      }
+
       setModalState(true);
       notificationCall('failed', 'Could not receive data from the specified API endpoint');
     } finally {
