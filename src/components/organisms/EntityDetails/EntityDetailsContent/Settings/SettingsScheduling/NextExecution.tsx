@@ -8,7 +8,7 @@ type NextExecutionProps = {
 
 const NextExecution: React.FC<NextExecutionProps> = props => {
   const {value} = props;
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration] = useState('Not scheduled');
 
   useInterval(() => {
     if (typeof value === 'string') {

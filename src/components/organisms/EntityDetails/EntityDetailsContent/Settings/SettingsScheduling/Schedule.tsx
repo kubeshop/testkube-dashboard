@@ -167,7 +167,7 @@ const Schedule: React.FC = () => {
               ) : null}
             </Text>
             <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
-              {cronString}
+              {cronString === defaultCronString ? '' : cronString}
             </Text>
           </StyledColumn>
           <StyledColumn>
