@@ -93,7 +93,6 @@ const initialExecutorsState: ExecutorsState = {
 };
 
 const initialConfigState: ConfigState = {
-  apiEndpoint: null,
   namespace: 'testkube',
   redirectTarget: {
     runTarget: false,

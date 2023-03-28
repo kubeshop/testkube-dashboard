@@ -9,7 +9,7 @@ import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint, selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 import {setSources} from '@redux/reducers/sourcesSlice';
 
@@ -28,6 +28,7 @@ import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
+import {useApiEndpoint} from '@services/apiEndpoint';
 
 import {MainContext} from '@contexts';
 
@@ -55,7 +56,7 @@ const App: React.FC = () => {
   const isProtocolSecure = protocol === 'https:';
   const wsProtocol = isProtocolSecure ? 'wss://' : 'ws://';
 
-  const apiEndpoint = useAppSelector(selectApiEndpoint);
+  const apiEndpoint = useApiEndpoint();
   const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?:\/\//, wsProtocol) : '';
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);

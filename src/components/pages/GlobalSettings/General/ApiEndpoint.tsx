@@ -4,7 +4,7 @@ import {Form, Input, Space} from 'antd';
 
 import axios from 'axios';
 
-import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
+import {setNamespace} from '@redux/reducers/configSlice';
 
 import {FormItem, Text} from '@custom-antd';
 
@@ -33,9 +33,7 @@ const ApiEndpoint = () => {
           if (res.version && res.commit) {
             const targetUrl = url.replace('/info', '');
             axios.defaults.baseURL = targetUrl;
-
             saveApiEndpoint(targetUrl);
-            dispatch(setApiEndpoint(targetUrl));
 
             if (res.namespace) {
               dispatch(setNamespace(res.namespace));

@@ -4,7 +4,7 @@ import {Space} from 'antd';
 
 import axios from 'axios';
 
-import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
+import {setNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input, Modal, Text} from '@custom-antd';
 
@@ -46,9 +46,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
           if (res.version && res.commit) {
             const targetUrl = url.replace('/info', '');
             axios.defaults.baseURL = targetUrl;
-
             saveApiEndpoint(targetUrl);
-            dispatch(setApiEndpoint(targetUrl));
 
             if (res.namespace) {
               dispatch(setNamespace(res.namespace));
@@ -87,7 +85,6 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   useEffect(() => {
     if (defaultApiEndpoint) {
       saveApiEndpoint(defaultApiEndpoint);
-      dispatch(setApiEndpoint(defaultApiEndpoint));
     }
   }, []);
 

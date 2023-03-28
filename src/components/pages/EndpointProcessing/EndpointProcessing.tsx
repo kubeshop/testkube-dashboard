@@ -1,7 +1,5 @@
 import {useContext, useEffect} from 'react';
 
-import {setApiEndpoint} from '@redux/reducers/configSlice';
-
 import {Title} from '@custom-antd';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
@@ -35,7 +33,6 @@ const EndpointProcessing: React.FC = () => {
     if (searchParams.apiEndpoint) {
       const validatedApiEndpoint = validateApiEndpoint(searchParams.apiEndpoint.toString());
       saveApiEndpoint(validatedApiEndpoint);
-      dispatch(setApiEndpoint(validatedApiEndpoint));
     }
 
     navigate('/');
