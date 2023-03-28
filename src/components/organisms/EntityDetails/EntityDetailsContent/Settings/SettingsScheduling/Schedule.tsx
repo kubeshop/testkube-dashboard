@@ -113,22 +113,15 @@ const Schedule: React.FC = () => {
     setWasTouched(true);
   };
 
-  const getNextExecution = () => {
+  const { nextExecution, isValidFormat } = useMemo(() => {
     try {
       const nextExecution = parser.parseExpression(cronString).next().toDate();
       const duration = intervalToDuration({start: new Date(), end: nextExecution});
-
-      if (!isValidFormat) {
-        setIsValidFormat(true);
-      }
-      return `in ${formatDuration(duration)}`;
+      return { nextExecution: `in ${formatDuration(duration)}`, isValidFormat: true };
     } catch (e) {
-      if (isValidFormat) {
-        setIsValidFormat(false);
-      }
-      return 'Invalid cron format';
+      return { nextExecution: 'Invalid cron format', isValidFormat: false };
     }
-  };
+  }, [ cronString ]);
 
   const [minute, hour, day, month, dayOfWeek] = cronString.split(' ');
 
