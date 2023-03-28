@@ -4,8 +4,6 @@ import {Form, Input, Space} from 'antd';
 
 import axios from 'axios';
 
-import {config} from '@constants/config';
-
 import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
 
 import {FormItem, Text} from '@custom-antd';
@@ -15,6 +13,8 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 import {checkAPIEndpoint} from '@utils/endpoint';
 
 import {MainContext} from '@contexts';
+
+import {saveApiEndpoint} from '@services/apiEndpoint';
 
 const ApiEndpoint = () => {
   const [form] = Form.useForm();
@@ -34,13 +34,12 @@ const ApiEndpoint = () => {
             const targetUrl = url.replace('/info', '');
             axios.defaults.baseURL = targetUrl;
 
-            localStorage.setItem(config.apiEndpoint, targetUrl);
+            saveApiEndpoint(targetUrl);
+            dispatch(setApiEndpoint(targetUrl));
 
             if (res.namespace) {
               dispatch(setNamespace(res.namespace));
             }
-
-            dispatch(setApiEndpoint(targetUrl));
 
             setTimeout(() => {
               notificationCall('passed', 'API endpoint set up  successfully');

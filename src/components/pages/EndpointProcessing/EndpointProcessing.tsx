@@ -1,7 +1,5 @@
 import {useContext, useEffect} from 'react';
 
-import {config} from '@constants/config';
-
 import {setApiEndpoint} from '@redux/reducers/configSlice';
 
 import {Title} from '@custom-antd';
@@ -11,6 +9,8 @@ import useURLSearchParams from '@hooks/useURLSearchParams';
 import {hasProtocol} from '@utils/strings';
 
 import {MainContext} from '@contexts';
+
+import {saveApiEndpoint} from '@services/apiEndpoint';
 
 import {EndpointProcessingContainer} from './EndpointProcessing.styled';
 
@@ -34,9 +34,7 @@ const EndpointProcessing: React.FC = () => {
   useEffect(() => {
     if (searchParams.apiEndpoint) {
       const validatedApiEndpoint = validateApiEndpoint(searchParams.apiEndpoint.toString());
-
-      localStorage.setItem(config.apiEndpoint, validatedApiEndpoint);
-
+      saveApiEndpoint(validatedApiEndpoint);
       dispatch(setApiEndpoint(validatedApiEndpoint));
     }
 

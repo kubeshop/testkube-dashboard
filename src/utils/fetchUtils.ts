@@ -2,12 +2,13 @@ import {BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery} from '@redu
 
 import {ParsedQuery} from 'query-string';
 
-import {config} from '@constants/config';
 import {searchParamsLists} from '@constants/searchParams';
 
 import {SearchParamKey, SearchParamsKeys, SearchParamsType, ValidatedSearchParams} from '@models/searchParams';
 
 import {isArraylikeQueryParam} from '@utils/strings';
+
+import {getApiEndpoint} from '@services/apiEndpoint';
 
 const prohibitedValues = ['undefined', 'null'];
 
@@ -78,7 +79,7 @@ export const dynamicBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBas
   api,
   extraOptions
 ) => {
-  const baseUrl = localStorage.getItem(config.apiEndpoint);
+  const baseUrl = getApiEndpoint();
 
   if (!baseUrl) {
     return {

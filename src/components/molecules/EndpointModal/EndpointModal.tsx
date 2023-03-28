@@ -4,8 +4,6 @@ import {Space} from 'antd';
 
 import axios from 'axios';
 
-import {config} from '@constants/config';
-
 import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input, Modal, Text} from '@custom-antd';
@@ -16,7 +14,8 @@ import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-import env from '../../../env';
+import {getApiEndpoint, saveApiEndpoint} from '@services/apiEndpoint';
+
 import notificationCall from '../Notification/Notification';
 import {StyledSearchUrlForm} from './EndpointModal.styled';
 
@@ -25,14 +24,14 @@ type EndpointModalProps = {
   visible: boolean;
 };
 
-axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl;
+axios.defaults.baseURL = getApiEndpoint() || undefined;
 
 const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {setModalState, visible} = props;
 
   const {dispatch, apiEndpoint: apiEndpointRedux} = useContext(MainContext);
 
-  const defaultApiEndpoint = apiEndpointRedux || localStorage.getItem('apiEndpoint') || env?.apiUrl;
+  const defaultApiEndpoint = apiEndpointRedux || getApiEndpoint()!;
 
   const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
   const [isLoading, setLoading] = useState(false);
@@ -48,8 +47,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
             const targetUrl = url.replace('/info', '');
             axios.defaults.baseURL = targetUrl;
 
-            localStorage.setItem(config.apiEndpoint, targetUrl);
-
+            saveApiEndpoint(targetUrl);
             dispatch(setApiEndpoint(targetUrl));
 
             if (res.namespace) {
@@ -88,9 +86,8 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
   useEffect(() => {
     if (defaultApiEndpoint) {
+      saveApiEndpoint(defaultApiEndpoint);
       dispatch(setApiEndpoint(defaultApiEndpoint));
-
-      localStorage.setItem('apiEndpoint', defaultApiEndpoint);
     }
   }, []);
 
@@ -109,10 +106,10 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('apiEndpoint')) {
+    if (!getApiEndpoint()) {
       setModalState(true);
     }
-  }, [localStorage.getItem('apiEndpoint')]);
+  }, [getApiEndpoint()]);
 
   return (
     <Modal
