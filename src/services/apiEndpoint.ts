@@ -7,10 +7,6 @@ import env from '../env';
 // TODO: Consider storing it in cookie or URL params as a fallback.
 let cachedApiEndpoint: string | null = localStorage.getItem(config.apiEndpoint);
 
-export function isApiEndpointSaved(): boolean {
-  return getApiEndpoint() === localStorage.getItem(config.apiEndpoint);
-}
-
 export function getApiEndpoint(): string | null {
   return cachedApiEndpoint || env?.apiUrl || null;
 }
