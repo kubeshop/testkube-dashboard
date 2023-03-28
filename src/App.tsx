@@ -16,6 +16,7 @@ import {setSources} from '@redux/reducers/sourcesSlice';
 import {CookiesBanner, EndpointModal} from '@molecules';
 import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
 import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
+import notificationCall from '@molecules/Notification';
 
 import {Sider} from '@organisms';
 
@@ -28,7 +29,7 @@ import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
-import {useApiEndpoint} from '@services/apiEndpoint';
+import {getApiDetails, getApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
 
 import {MainContext} from '@contexts';
 
@@ -61,7 +62,25 @@ const App: React.FC = () => {
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
+
   const [isEndpointModalVisible, setEndpointModalState] = useState(false);
+  useEffect(() => {
+    if (!apiEndpoint) {
+      setEndpointModalState(true);
+      return;
+    }
+
+    getApiDetails(apiEndpoint).catch((error) => {
+      // Handle race condition
+      if (getApiEndpoint() !== apiEndpoint) {
+        return;
+      }
+
+      // Display popup
+      notificationCall('failed', 'Could not receive data from the specified API endpoint');
+      setEndpointModalState(true);
+    });
+  }, [apiEndpoint]);
 
   const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
 

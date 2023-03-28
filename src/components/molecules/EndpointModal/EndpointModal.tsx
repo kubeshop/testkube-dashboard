@@ -28,9 +28,11 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   const [value, setValue] = useState(currentApiEndpoint || '');
   const [isLoading, setLoading] = useState(false);
 
-  const checkApiEndpoint = async (endpoint: string) => {
+  const updateEndpoint = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
     try {
-      await updateApiEndpoint(endpoint);
+      await updateApiEndpoint(value);
       setModalState(false);
     } catch (error) {
       setModalState(true);
@@ -40,24 +42,9 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
     }
   };
 
-  const handleOpenUrl = (event: React.FormEvent) => {
-    event.preventDefault();
-    setLoading(true);
-    checkApiEndpoint(value);
-  };
-
   useEffect(() => {
     setValue(currentApiEndpoint || '');
   }, [currentApiEndpoint, visible]);
-
-  // FIXME: This component should not control that
-  useEffect(() => {
-    if (!currentApiEndpoint) {
-      setModalState(true);
-    } else {
-      checkApiEndpoint(currentApiEndpoint);
-    }
-  }, [currentApiEndpoint]);
 
   return (
     <Modal
@@ -68,7 +55,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
       dataTestCloseBtn="endpoint-modal-close-button"
       width={693}
       content={
-        <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
+        <StyledSearchUrlForm onSubmit={updateEndpoint} data-cy="modal-api-endpoint">
           <Text>
             We could not detect the right Testkube API endpoint for you. Please enter the API endpoint for your
             installation (e.g. from the output of the Testkube installer)&nbsp;
