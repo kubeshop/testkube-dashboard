@@ -58,5 +58,6 @@ export const StyledEntityListLoaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 60px;
+  font-size: 30px;
+  min-height: 80px;
 `;
