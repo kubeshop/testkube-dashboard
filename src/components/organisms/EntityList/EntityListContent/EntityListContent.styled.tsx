@@ -24,7 +24,6 @@ export const StyledFiltersSection = styled.div`
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  padding-bottom: 30px;
 `;
 
 export const StyledButtonContainer = styled.div`
@@ -45,13 +44,10 @@ export const StyledContainer = styled.div`
 `;
 
 export const Header = styled.div`
-  position: sticky;
-  top: 0;
-
   display: flex;
   flex-direction: column;
 
-  padding: 40px 0 0;
+  padding: 40px 0 30px;
 
   background-color: ${Colors.slate900};
 
