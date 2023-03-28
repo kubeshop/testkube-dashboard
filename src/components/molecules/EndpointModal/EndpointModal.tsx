@@ -10,7 +10,7 @@ import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-import {getApiDetails, getApiEndpoint, saveApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
+import {getApiDetails, saveApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
 
 import notificationCall from '../Notification/Notification';
 import {StyledSearchUrlForm} from './EndpointModal.styled';
@@ -26,9 +26,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {dispatch} = useContext(MainContext);
   const currentApiEndpoint = useApiEndpoint();
 
-  const defaultApiEndpoint = currentApiEndpoint || getApiEndpoint()!;
-
-  const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
+  const [apiEndpoint, setApiEndpointHook] = useState(currentApiEndpoint || '');
   const [isLoading, setLoading] = useState(false);
 
   const checkApiEndpoint = async () => {
@@ -57,8 +55,8 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   };
 
   useEffect(() => {
-    if (defaultApiEndpoint) {
-      saveApiEndpoint(defaultApiEndpoint);
+    if (currentApiEndpoint) {
+      saveApiEndpoint(currentApiEndpoint);
     }
   }, []);
 
@@ -77,10 +75,10 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   }, []);
 
   useEffect(() => {
-    if (!getApiEndpoint()) {
+    if (!currentApiEndpoint) {
       setModalState(true);
     }
-  }, [getApiEndpoint()]);
+  }, [currentApiEndpoint]);
 
   return (
     <Modal
