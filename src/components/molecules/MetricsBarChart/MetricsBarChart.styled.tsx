@@ -98,8 +98,6 @@ export const StyledPopoverContainer = styled.div`
 
   border-radius: 4px;
 
-  background: ${Colors.slate700};
-
   cursor: pointer;
 `;
 

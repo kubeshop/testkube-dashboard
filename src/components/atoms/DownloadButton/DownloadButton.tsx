@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Tooltip} from '@custom-antd';
+import {Tooltip} from 'antd';
 
 import {useDownloadFile} from '@hooks/useDownloadFile';
 

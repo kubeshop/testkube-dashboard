@@ -1,11 +1,12 @@
 import React, {useContext, useEffect, useRef} from 'react';
 
+import {Tooltip} from 'antd';
+
 import {initialPageSize} from '@redux/initialState';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
-import Tooltip from '@custom-antd/Tooltip';
 
 import {LabelsList, MetricsBarChart} from '@molecules';
 
@@ -68,7 +69,6 @@ const EntityGridItem: React.FC<any> = props => {
             <Tooltip
               title={latestExecution?.startTime ? formatExecutionDate(new Date(latestExecution?.startTime)) : null}
               placement="bottomRight"
-              color={Colors.slate700}
               mouseEnterDelay={0.39}
               mouseLeaveDelay={0.1}
             >
