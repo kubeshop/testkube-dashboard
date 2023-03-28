@@ -1,11 +1,10 @@
-import {useContext, useState} from 'react';
+import {useContext, useMemo, useState} from 'react';
 
 import {Select, Tooltip} from 'antd';
 
 import {WarningOutlined} from '@ant-design/icons';
 
 import parser from 'cron-parser';
-import {formatDuration, intervalToDuration} from 'date-fns';
 
 import {Entity} from '@models/entity';
 
@@ -27,11 +26,14 @@ import {EntityDetailsContext} from '@contexts';
 import {StyledSpace} from '../Settings.styled';
 import CronInput from './CronInput';
 import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
+import NextExecution from './NextExecution';
 
 const namingMap: {[key in Entity]: string} = {
   'test-suites': 'test suite',
   tests: 'test',
 };
+
+const defaultCronString = '* * * * *';
 
 const quickOptions = [
   {
@@ -58,9 +60,11 @@ const quickOptions = [
     label: 'Every month',
     value: '0 0 1 * *',
   },
+  {
+    label: 'Not scheduled',
+    value: defaultCronString,
+  },
 ];
-
-const defaultCronString = '* * * * *';
 
 const Schedule: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
@@ -77,11 +81,6 @@ const Schedule: React.FC = () => {
 
   const [cronString, setCronString] = useState(schedule || defaultCronString);
   const [wasTouched, setWasTouched] = useState(false);
-  const [isValidFormat, setIsValidFormat] = useState(true);
-
-  if (!entity || !entityDetails) {
-    return null;
-  }
 
   const onSave = () => {
     updateRequestsMap[entity]({
@@ -113,15 +112,19 @@ const Schedule: React.FC = () => {
     setWasTouched(true);
   };
 
-  const { nextExecution, isValidFormat } = useMemo(() => {
-    try {
-      const nextExecution = parser.parseExpression(cronString).next().toDate();
-      const duration = intervalToDuration({start: new Date(), end: nextExecution});
-      return { nextExecution: `in ${formatDuration(duration)}`, isValidFormat: true };
-    } catch (e) {
-      return { nextExecution: 'Invalid cron format', isValidFormat: false };
+  const [nextExecution, isValidFormat] = useMemo(() => {
+    if (!cronString || cronString === defaultCronString) {
+      return ['Not scheduled', true];
     }
-  }, [ cronString ]);
+
+    try {
+      const nextDate = parser.parseExpression(cronString).next().toDate();
+
+      return [nextDate, true];
+    } catch (e) {
+      return ['Invalid cron format', false];
+    }
+  }, [cronString]);
 
   const [minute, hour, day, month, dayOfWeek] = cronString.split(' ');
 
@@ -170,7 +173,7 @@ const Schedule: React.FC = () => {
           <StyledColumn>
             <Text className="middle regular">Next Execution</Text>
             <Text style={{color: Colors.slate400}} className="middle regular">
-              {getNextExecution()}
+              <NextExecution value={nextExecution} />
             </Text>
           </StyledColumn>
         </StyledRow>
