@@ -26,17 +26,16 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {dispatch} = useContext(MainContext);
   const currentApiEndpoint = useApiEndpoint();
 
-  const [apiEndpoint, setApiEndpointHook] = useState(currentApiEndpoint || '');
+  const [value, setValue] = useState(currentApiEndpoint || '');
   const [isLoading, setLoading] = useState(false);
 
-  const checkApiEndpoint = async () => {
+  const checkApiEndpoint = async (endpoint: string) => {
     try {
-      const {url, namespace} = await getApiDetails(apiEndpoint);
+      const {url, namespace} = await getApiDetails(endpoint);
 
       saveApiEndpoint(url);
       dispatch(setNamespace(namespace));
 
-      setApiEndpointHook(url);
       setModalState(false);
     } catch (error) {
       setModalState(true);
@@ -48,35 +47,20 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
   const handleOpenUrl = (event: React.FormEvent) => {
     event.preventDefault();
-
     setLoading(true);
-
-    checkApiEndpoint();
+    checkApiEndpoint(value);
   };
 
   useEffect(() => {
-    if (currentApiEndpoint) {
-      saveApiEndpoint(currentApiEndpoint);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (currentApiEndpoint) {
-      setApiEndpointHook(currentApiEndpoint);
-    }
+    setValue(currentApiEndpoint || '');
   }, [currentApiEndpoint, visible]);
 
-  useEffect(() => {
-    if (!apiEndpoint) {
-      setModalState(true);
-    } else {
-      checkApiEndpoint();
-    }
-  }, []);
-
+  // FIXME: This component should not control that
   useEffect(() => {
     if (!currentApiEndpoint) {
       setModalState(true);
+    } else {
+      checkApiEndpoint(currentApiEndpoint);
     }
   }, [currentApiEndpoint]);
 
@@ -106,9 +90,9 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
               id="url"
               name="url"
               onChange={event => {
-                setApiEndpointHook(event.target.value);
+                setValue(event.target.value);
               }}
-              value={apiEndpoint}
+              value={value}
               width="550px"
               data-test="endpoint-modal-input"
               placeholder="e.g.: https://my.domain/results/v1"

@@ -20,9 +20,9 @@ const ApiEndpoint = () => {
   const {dispatch} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
 
-  const checkApiEndpoint = async (newApiEndpoint: string) => {
+  const checkApiEndpoint = async (endpoint: string) => {
     try {
-      const {url, namespace} = await getApiDetails(newApiEndpoint);
+      const {url, namespace} = await getApiDetails(endpoint);
 
       saveApiEndpoint(url);
       dispatch(setNamespace(namespace));
