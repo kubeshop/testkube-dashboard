@@ -57,7 +57,6 @@ const App: React.FC = () => {
   const wsProtocol = isProtocolSecure ? 'wss://' : 'ws://';
 
   const apiEndpoint = useApiEndpoint();
-  const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?:\/\//, wsProtocol) : '';
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
@@ -104,8 +103,6 @@ const App: React.FC = () => {
     dispatch,
     location,
     navigate,
-    apiEndpoint,
-    wsRoot,
     clusterConfig,
   };
 

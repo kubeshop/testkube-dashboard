@@ -1,4 +1,4 @@
-import {memo, useCallback, useContext, useEffect, useRef, useState} from 'react';
+import {memo, useCallback, useEffect, useRef, useState} from 'react';
 import useWebSocket from 'react-use-websocket';
 
 import Ansi from 'ansi-to-react';
@@ -8,7 +8,7 @@ import {LogAction} from '@models/log';
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} from '@redux/reducers/configSlice';
 
-import {MainContext} from '@contexts';
+import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
@@ -42,7 +42,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const {wsRoot} = useContext(MainContext);
+  const wsRoot = useWsEndpoint();
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 

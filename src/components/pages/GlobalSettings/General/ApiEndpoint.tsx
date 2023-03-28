@@ -10,14 +10,15 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {MainContext} from '@contexts';
 
-import {getApiDetails, saveApiEndpoint} from '@services/apiEndpoint';
+import {getApiDetails, saveApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
 
 const ApiEndpoint = () => {
   const [form] = Form.useForm();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const {dispatch, apiEndpoint} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
+  const apiEndpoint = useApiEndpoint();
 
   const checkApiEndpoint = async (newApiEndpoint: string) => {
     try {

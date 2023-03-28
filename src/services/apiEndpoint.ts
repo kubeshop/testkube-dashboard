@@ -80,6 +80,16 @@ export function useApiEndpoint(): string | null {
   return getApiEndpoint();
 }
 
+export function useWsEndpoint(): string | null {
+  const apiEndpoint = useApiEndpoint();
+  return useMemo(() => {
+    if (apiEndpoint === null) {
+      return null;
+    }
+    return apiEndpoint.replace(/^http(?=s?:\/\/)/, 'ws');
+  }, [apiEndpoint]);
+}
+
 export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
   const url = sanitizeApiEndpoint(apiEndpoint);
 
