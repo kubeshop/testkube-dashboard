@@ -2,15 +2,13 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import {Space} from 'antd';
 
-import {setNamespace} from '@redux/reducers/configSlice';
-
 import {Button, Input, Modal, Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-import {getApiDetails, getApiEndpoint, saveApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
+import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 import notificationCall from '../Notification/Notification';
 import {StyledSearchUrlForm} from './EndpointModal.styled';
@@ -25,32 +23,16 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
   const {dispatch} = useContext(MainContext);
   const currentApiEndpoint = useApiEndpoint();
+  const updateApiEndpoint = useUpdateApiEndpoint();
 
   const [value, setValue] = useState(currentApiEndpoint || '');
   const [isLoading, setLoading] = useState(false);
 
   const checkApiEndpoint = async (endpoint: string) => {
-    const prevApiEndpoint = currentApiEndpoint;
     try {
-      const {url, namespace} = await getApiDetails(endpoint);
-
-      // Handle race condition, when endpoint has been changed externally,
-      // i.e. via EndpointProcessing page.
-      if (getApiEndpoint() !== prevApiEndpoint) {
-        return;
-      }
-
-      saveApiEndpoint(url);
-      dispatch(setNamespace(namespace));
-
+      await updateApiEndpoint(endpoint);
       setModalState(false);
     } catch (error) {
-      // Handle race condition, when endpoint has been changed externally,
-      // i.e. via EndpointProcessing page.
-      if (getApiEndpoint() !== prevApiEndpoint) {
-        return;
-      }
-
       setModalState(true);
       notificationCall('failed', 'Could not receive data from the specified API endpoint');
     } finally {

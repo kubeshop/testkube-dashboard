@@ -1,11 +1,15 @@
-import {useMemo} from 'react';
+import {useContext, useMemo} from 'react';
 import {useUnmount, useUpdate} from 'react-use';
 
 import axios from 'axios';
 
 import {config} from '@constants/config';
 
+import {setNamespace} from '@redux/reducers/configSlice';
+
 import {hasProtocol} from '@utils/strings';
+
+import {MainContext} from '@contexts';
 
 import env from '../env';
 
@@ -99,4 +103,32 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
   }
 
   return { url, namespace: data.namespace || 'testkube' };
+}
+
+export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean> {
+  const {dispatch} = useContext(MainContext);
+
+  return useMemo(() => async (apiEndpoint: string) => {
+    const prevApiEndpoint = getApiEndpoint();
+    try {
+      const {url, namespace} = await getApiDetails(apiEndpoint);
+
+      // Handle race condition, when endpoint has been changed already.
+      if (getApiEndpoint() !== prevApiEndpoint) {
+        return false;
+      }
+
+      saveApiEndpoint(url);
+      dispatch(setNamespace(namespace));
+
+      return true;
+    } catch (error) {
+      // Handle race condition, when endpoint has been changed already.
+      if (getApiEndpoint() !== prevApiEndpoint) {
+        return false;
+      }
+
+      throw error;
+    }
+  }, [dispatch]);
 }

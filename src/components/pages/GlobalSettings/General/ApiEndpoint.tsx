@@ -2,15 +2,13 @@ import {useContext, useState} from 'react';
 
 import {Form, Input, Space} from 'antd';
 
-import {setNamespace} from '@redux/reducers/configSlice';
-
 import {FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {MainContext} from '@contexts';
 
-import {getApiDetails, saveApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
+import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 const ApiEndpoint = () => {
   const [form] = Form.useForm();
@@ -19,17 +17,16 @@ const ApiEndpoint = () => {
 
   const {dispatch} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
+  const updateApiEndpoint = useUpdateApiEndpoint();
 
   const checkApiEndpoint = async (endpoint: string) => {
     try {
-      const {url, namespace} = await getApiDetails(endpoint);
-
-      saveApiEndpoint(url);
-      dispatch(setNamespace(namespace));
-      setTimeout(() => {
-        notificationCall('passed', 'API endpoint set up  successfully');
-        form.resetFields();
-      });
+      if (await updateApiEndpoint(endpoint)) {
+        setTimeout(() => {
+          notificationCall('passed', 'API endpoint set up successfully');
+          form.resetFields();
+        });
+      }
     } catch (error) {
       notificationCall('failed', 'Could not receive data from the specified API endpoint');
     } finally {
