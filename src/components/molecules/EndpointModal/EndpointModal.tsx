@@ -2,21 +2,14 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import {Space} from 'antd';
 
-import axios from 'axios';
-
-import {config} from '@constants/config';
-
-import {setApiEndpoint, setNamespace} from '@redux/reducers/configSlice';
-
 import {Button, Input, Modal, Text} from '@custom-antd';
-
-import {checkAPIEndpoint} from '@utils/endpoint';
 
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
 
-import env from '../../../env';
+import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
+
 import notificationCall from '../Notification/Notification';
 import {StyledSearchUrlForm} from './EndpointModal.styled';
 
@@ -25,94 +18,33 @@ type EndpointModalProps = {
   visible: boolean;
 };
 
-axios.defaults.baseURL = localStorage.getItem('apiEndpoint') || env?.apiUrl;
-
 const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {setModalState, visible} = props;
 
-  const {dispatch, apiEndpoint: apiEndpointRedux} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
+  const currentApiEndpoint = useApiEndpoint();
+  const updateApiEndpoint = useUpdateApiEndpoint();
 
-  const defaultApiEndpoint = apiEndpointRedux || localStorage.getItem('apiEndpoint') || env?.apiUrl;
-
-  const [apiEndpoint, setApiEndpointHook] = useState(defaultApiEndpoint);
+  const [value, setValue] = useState(currentApiEndpoint || '');
   const [isLoading, setLoading] = useState(false);
 
-  const checkURLWorkingState = async (url: string): Promise<any> => {
-    try {
-      await fetch(url)
-        .then(res => {
-          return res.json();
-        })
-        .then(res => {
-          if (res.version && res.commit) {
-            const targetUrl = url.replace('/info', '');
-            axios.defaults.baseURL = targetUrl;
-
-            localStorage.setItem(config.apiEndpoint, targetUrl);
-
-            dispatch(setApiEndpoint(targetUrl));
-
-            if (res.namespace) {
-              dispatch(setNamespace(res.namespace));
-            }
-
-            setApiEndpointHook(targetUrl);
-
-            setLoading(false);
-
-            setModalState(false);
-          } else {
-            notificationCall('failed', 'Could not receive data from the specified API endpoint');
-
-            setLoading(false);
-          }
-        });
-    } catch (err) {
-      if (err) {
-        setModalState(true);
-
-        setLoading(false);
-
-        return notificationCall('failed', 'Could not receive data from the specified API endpoint');
-      }
-    }
-  };
-
-  const handleOpenUrl = (event: React.FormEvent) => {
+  const updateEndpoint = async (event: React.FormEvent) => {
     event.preventDefault();
-
     setLoading(true);
-
-    checkAPIEndpoint(apiEndpoint, checkURLWorkingState);
+    try {
+      await updateApiEndpoint(value);
+      setModalState(false);
+    } catch (error) {
+      setModalState(true);
+      notificationCall('failed', 'Could not receive data from the specified API endpoint');
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    if (defaultApiEndpoint) {
-      dispatch(setApiEndpoint(defaultApiEndpoint));
-
-      localStorage.setItem('apiEndpoint', defaultApiEndpoint);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (apiEndpointRedux) {
-      setApiEndpointHook(apiEndpointRedux);
-    }
-  }, [apiEndpointRedux, visible]);
-
-  useEffect(() => {
-    if (!apiEndpoint) {
-      setModalState(true);
-    } else {
-      checkAPIEndpoint(apiEndpoint, checkURLWorkingState);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!localStorage.getItem('apiEndpoint')) {
-      setModalState(true);
-    }
-  }, [localStorage.getItem('apiEndpoint')]);
+    setValue(currentApiEndpoint || '');
+  }, [currentApiEndpoint, visible]);
 
   return (
     <Modal
@@ -123,7 +55,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
       dataTestCloseBtn="endpoint-modal-close-button"
       width={693}
       content={
-        <StyledSearchUrlForm onSubmit={handleOpenUrl} data-cy="modal-api-endpoint">
+        <StyledSearchUrlForm onSubmit={updateEndpoint} data-cy="modal-api-endpoint">
           <Text>
             We could not detect the right Testkube API endpoint for you. Please enter the API endpoint for your
             installation (e.g. from the output of the Testkube installer)&nbsp;
@@ -140,9 +72,9 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
               id="url"
               name="url"
               onChange={event => {
-                setApiEndpointHook(event.target.value);
+                setValue(event.target.value);
               }}
-              value={apiEndpoint}
+              value={value}
               width="550px"
               data-test="endpoint-modal-input"
               placeholder="e.g.: https://my.domain/results/v1"

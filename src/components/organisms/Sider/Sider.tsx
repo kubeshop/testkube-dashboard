@@ -1,4 +1,4 @@
-import {useContext, useMemo, useState} from 'react';
+import {useContext, useMemo} from 'react';
 import {NavLink} from 'react-router-dom';
 
 import {Space, Tooltip} from 'antd';
@@ -7,8 +7,6 @@ import {useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 
 import {Icon} from '@atoms';
-
-import {EndpointModal} from '@molecules';
 
 import {openDiscord, openDocumentation, openGithub} from '@utils/externalLinks';
 
@@ -79,7 +77,6 @@ const routes = [
 ];
 
 const Sider: React.FC = () => {
-  const [isModalVisible, setModalState] = useState(false);
   const {navigate} = useContext(MainContext);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
@@ -129,7 +126,6 @@ const Sider: React.FC = () => {
 
   return (
     <StyledSider width={100} data-cy="navigation-sider" $isFullScreenLogOutput={isFullScreenLogOutput}>
-      <EndpointModal visible={isModalVisible} setModalState={setModalState} />
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <Space size={30} direction="vertical">

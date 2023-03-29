@@ -1,11 +1,11 @@
-import {config} from '@constants/config';
+import {getApiEndpoint} from '@services/apiEndpoint';
 
 export const downloadFileName = (filename: string, executionId: string) => {
   const encodedFileName = encodeURIComponent(filename);
   const doubleEncodedFileName = encodeURIComponent(encodedFileName);
 
   return fetch(
-    `${localStorage.getItem(config.apiEndpoint)}/executions/${executionId}/artifacts/${doubleEncodedFileName}`
+    `${getApiEndpoint()}/executions/${executionId}/artifacts/${doubleEncodedFileName}`
   ).then(response => {
     return response.blob().then(blob => {
       const url = window.URL.createObjectURL(blob);
@@ -26,7 +26,7 @@ export const downloadFile = (executionId: string) => {
     const doubleEncodedFileName = encodeURIComponent(encodedFileName);
 
     return fetch(
-      `${localStorage.getItem(config.apiEndpoint)}/executions/${executionId}/artifacts/${doubleEncodedFileName}`
+      `${getApiEndpoint()}/executions/${executionId}/artifacts/${doubleEncodedFileName}`
     ).then(response => {
       return response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);

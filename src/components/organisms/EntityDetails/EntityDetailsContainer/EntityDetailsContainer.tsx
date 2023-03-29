@@ -13,6 +13,8 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import useStateCallback from '@hooks/useStateCallback';
 
+import {useWsEndpoint} from '@services/apiEndpoint';
+
 import {PollingIntervals} from '@utils/numbers';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
@@ -32,8 +34,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     useAbortExecution,
   } = props;
 
-  const {navigate, location, wsRoot} = useContext(MainContext);
+  const {navigate, location} = useContext(MainContext);
   const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
+  const wsRoot = useWsEndpoint();
 
   const {pathname} = location;
 

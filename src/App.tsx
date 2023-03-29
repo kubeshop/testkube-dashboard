@@ -9,13 +9,14 @@ import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectApiEndpoint, selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 import {setSources} from '@redux/reducers/sourcesSlice';
 
-import {CookiesBanner} from '@molecules';
+import {CookiesBanner, EndpointModal} from '@molecules';
 import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
 import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
+import notificationCall from '@molecules/Notification';
 
 import {Sider} from '@organisms';
 
@@ -28,6 +29,7 @@ import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
+import {getApiDetails, getApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
 
 import {MainContext} from '@contexts';
 
@@ -55,12 +57,12 @@ const App: React.FC = () => {
   const isProtocolSecure = protocol === 'https:';
   const wsProtocol = isProtocolSecure ? 'wss://' : 'ws://';
 
-  const apiEndpoint = useAppSelector(selectApiEndpoint);
-  const wsRoot = apiEndpoint ? apiEndpoint.replace(/https?:\/\//, wsProtocol) : '';
+  const apiEndpoint = useApiEndpoint();
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
+  const [isEndpointModalVisible, setEndpointModalState] = useState(false);
 
   const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
 
@@ -103,8 +105,6 @@ const App: React.FC = () => {
     dispatch,
     location,
     navigate,
-    apiEndpoint,
-    wsRoot,
     clusterConfig,
   };
 
@@ -115,6 +115,29 @@ const App: React.FC = () => {
   useEffect(() => {
     dispatch(setSources(sources || []));
   }, [sources]);
+
+  useEffect(() => {
+    // Do not fire the effect if new endpoint is just being set up
+    if (location.pathname === '/apiEndpoint') {
+      return;
+    }
+
+    if (!apiEndpoint) {
+      setEndpointModalState(true);
+      return;
+    }
+
+    getApiDetails(apiEndpoint).catch((error) => {
+      // Handle race condition
+      if (getApiEndpoint() !== apiEndpoint) {
+        return;
+      }
+
+      // Display popup
+      notificationCall('failed', 'Could not receive data from the specified API endpoint');
+      setEndpointModalState(true);
+    });
+  }, [apiEndpoint]);
 
   useEffect(() => {
     posthog.capture('$pageview');
@@ -154,6 +177,7 @@ const App: React.FC = () => {
     <AnalyticsProvider privateKey={segmentIOKey} appVersion={pjson.version}>
       <MainContext.Provider value={mainContextValue}>
         <Layout>
+          <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
           <Sider />
           <StyledLayoutContentWrapper>
             <Content>

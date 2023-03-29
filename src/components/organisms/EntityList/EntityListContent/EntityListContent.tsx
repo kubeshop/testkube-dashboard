@@ -17,6 +17,8 @@ import {EntityGrid} from '@molecules';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
+import {useApiEndpoint} from '@services/apiEndpoint';
+
 import {compareFiltersObject} from '@utils/objects';
 
 import {MainContext} from '@contexts';
@@ -54,7 +56,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const {dispatch, navigate, apiEndpoint} = useContext(MainContext);
+  const {dispatch, navigate} = useContext(MainContext);
+  const apiEndpoint = useApiEndpoint();
   const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
   const prevQueryFilters = usePrevious(queryFilters) || queryFilters;
 

@@ -1,5 +1,4 @@
 interface ConfigState {
-  apiEndpoint: string | null;
   namespace: string;
   redirectTarget: {
     runTarget: boolean;

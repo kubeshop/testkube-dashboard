@@ -12,6 +12,7 @@ import {PageBlueprint} from '@organisms';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
+import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
 
 import Colors from '@styles/Colors';
@@ -29,7 +30,8 @@ import {
 } from './ExecutorsList.styled';
 
 const Executors: React.FC = () => {
-  const {navigate, apiEndpoint} = useContext(MainContext);
+  const {navigate} = useContext(MainContext);
+  const apiEndpoint = useApiEndpoint();
 
   const [activeTabKey, setActiveTabKey] = useState('custom');
   const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
