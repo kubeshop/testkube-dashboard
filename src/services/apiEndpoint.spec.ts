@@ -95,7 +95,7 @@ describe('services', () => {
           saveApiEndpoint('http://abc/v1');
           expect(getApiEndpoint()).toBe('http://abc/v1');
         });
-      })
+      });
 
       describe('Falling back when no environment is set', () => {
         replaceEnvEach('apiUrl', null);
