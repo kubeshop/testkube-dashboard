@@ -4,7 +4,6 @@ import {Entity, EntityListBlueprint} from '@models/entity';
 
 import {useAppSelector} from '@redux/hooks';
 
-// import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 import EntityListContent from '../EntityListContent';
 
 export const EntityListContext = createContext<{
@@ -28,7 +27,6 @@ const EntityListContainer: React.FC<EntityListBlueprint> = props => {
   const dataSource = useAppSelector(selectData);
   const queryFilters = useAppSelector(selectQueryFilters);
   const allFilters = useAppSelector(selectAllFilters);
-  // const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const entityListContextValues = {
     dataSource,

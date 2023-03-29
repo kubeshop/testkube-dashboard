@@ -3,16 +3,6 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const getInfoPanelFlexProperty = (conditions: any) => {
-  const {$isRowSelected} = conditions;
-
-  if ($isRowSelected) {
-    return '0 0 40%';
-  }
-
-  return '0 0 0';
-};
-
 export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected: boolean; drawerWidth: string}>`
   position: relative;
   overflow-y: hidden;
@@ -20,7 +10,6 @@ export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected:
 
   display: flex;
   flex-direction: column;
-  /* flex: ${props => getInfoPanelFlexProperty(props)}; */
 
   height: 100%;
   width: ${props => (props.drawerWidth ? `${props.drawerWidth}` : '85vw')};

@@ -16,7 +16,6 @@ export const executionsApi = createApi({
     }),
     getScriptExecutionArtifacts: builder.query({
       query: testId => `/executions/${testId}/artifacts`,
-      // query: (testId) => `618e5291d88b39735423e0c6/artifacts`
     }),
   }),
 });
