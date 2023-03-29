@@ -40,7 +40,7 @@ export function sanitizeApiEndpoint(apiEndpoint: string): string;
 export function sanitizeApiEndpoint(apiEndpoint: null | undefined): null;
 export function sanitizeApiEndpoint(apiEndpoint: string | null | undefined): string | null;
 export function sanitizeApiEndpoint<T>(apiEndpoint: string | null | undefined): string | null {
-  if (apiEndpoint == null) {
+  if (!apiEndpoint) {
     return null;
   }
 
@@ -54,13 +54,13 @@ export function sanitizeApiEndpoint<T>(apiEndpoint: string | null | undefined): 
 }
 
 export function getApiEndpoint(): string | null {
-  return cachedApiEndpoint || env?.apiUrl || null;
+  return cachedApiEndpoint || sanitizeApiEndpoint(env?.apiUrl) || null;
 }
 
 export function saveApiEndpoint(apiEndpoint: string): boolean {
   try {
     cachedApiEndpoint = sanitizeApiEndpoint(apiEndpoint);
-    axios.defaults.baseURL = cachedApiEndpoint;
+    axios.defaults.baseURL = cachedApiEndpoint || undefined;
     localStorage.setItem(config.apiEndpoint, cachedApiEndpoint);
     notifySubscriptions();
     return true;
@@ -71,7 +71,7 @@ export function saveApiEndpoint(apiEndpoint: string): boolean {
   }
 }
 
-export function subscribeApiEndpoint(listener: ApiEndpointListener): () => void {
+function subscribeApiEndpoint(listener: ApiEndpointListener): () => void {
   const wrappedListener: ApiEndpointListener = (apiEndpoint) => listener(apiEndpoint);
   listeners.add(wrappedListener);
   return () => listeners.delete(wrappedListener);
@@ -99,7 +99,7 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
 
   const data = await fetch(`${url}/info`).then(res => res.json());
   if (!data?.version || !data?.commit) {
-    throw new Error('Received invalid data from provided API endpoint');
+    throw new Error('Received invalid data from the provided API endpoint');
   }
 
   return { url, namespace: data.namespace || 'testkube' };
