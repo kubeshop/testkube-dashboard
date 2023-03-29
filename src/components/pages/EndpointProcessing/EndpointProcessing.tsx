@@ -11,7 +11,7 @@ import {saveApiEndpoint} from '@services/apiEndpoint';
 import {EndpointProcessingContainer} from './EndpointProcessing.styled';
 
 const EndpointProcessing: React.FC = () => {
-  const {dispatch, navigate} = useContext(MainContext);
+  const {navigate} = useContext(MainContext);
 
   const searchParams = useURLSearchParams();
 
