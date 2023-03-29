@@ -12,18 +12,32 @@ import {EntityDetailsContext, MainContext} from '@contexts';
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
 import SettingsExecution from './SettingsExecution';
 import General from './SettingsGeneral';
+import SettingsScheduling from './SettingsScheduling';
 import SettingsTest from './SettingsTest';
 import SettingsTests from './SettingsTests';
 import SettingsVariables from './SettingsVariables';
 
 const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
-  'test-suites': [<General />, <SettingsTests />, <SettingsVariables />, <SettingsDefinition />],
-  tests: [<General />, <SettingsTest />, <SettingsExecution />, <SettingsVariables />, <SettingsDefinition />],
+  'test-suites': [
+    <General />,
+    <SettingsTests />,
+    <SettingsVariables />,
+    <SettingsScheduling />,
+    <SettingsDefinition />,
+  ],
+  tests: [
+    <General />,
+    <SettingsTest />,
+    <SettingsExecution />,
+    <SettingsVariables />,
+    <SettingsScheduling />,
+    <SettingsDefinition />,
+  ],
 };
 
 const navigationOptionsConfig: {[key in Entity]: string[]} = {
-  'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Definition'],
-  tests: ['General', 'Test', 'Execution', 'Variables & Secrets', 'Definition'],
+  'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Scheduling', 'Definition'],
+  tests: ['General', 'Test', 'Execution', 'Variables & Secrets', 'Scheduling', 'Definition'],
 };
 
 const Settings: React.FC = () => {
