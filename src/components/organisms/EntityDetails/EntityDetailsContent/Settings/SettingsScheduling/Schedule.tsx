@@ -25,8 +25,8 @@ import {EntityDetailsContext} from '@contexts';
 
 import {StyledSpace} from '../Settings.styled';
 import CronInput from './CronInput';
-import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
 import NextExecution from './NextExecution';
+import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
 
 const namingMap: {[key in Entity]: string} = {
   'test-suites': 'test suite',
@@ -34,6 +34,16 @@ const namingMap: {[key in Entity]: string} = {
 };
 
 const defaultCronString = '* * * * *';
+
+const notScheduled = {
+  label: 'Not scheduled',
+  value: defaultCronString,
+};
+
+const custom = {
+  label: 'Custom',
+  value: '',
+};
 
 const quickOptions = [
   {
@@ -60,10 +70,8 @@ const quickOptions = [
     label: 'Every month',
     value: '0 0 1 * *',
   },
-  {
-    label: 'Not scheduled',
-    value: defaultCronString,
-  },
+  custom,
+  notScheduled,
 ];
 
 const Schedule: React.FC = () => {
@@ -80,6 +88,7 @@ const Schedule: React.FC = () => {
   const schedule = entityDetails?.schedule;
 
   const [cronString, setCronString] = useState(schedule || defaultCronString);
+  const [templateValue, setTemplateValue] = useState<string | undefined>(cronString);
   const [wasTouched, setWasTouched] = useState(false);
 
   const onSave = () => {
@@ -110,6 +119,7 @@ const Schedule: React.FC = () => {
     const split = cronString.split(' ');
     setCronString([...split.slice(0, position), value, ...split.slice(position + 1)].join(' '));
     setWasTouched(true);
+    setTemplateValue(custom.value);
   };
 
   const [nextExecution, isValidFormat] = useMemo(() => {
@@ -144,39 +154,45 @@ const Schedule: React.FC = () => {
           onSelect={(value: string) => {
             setCronString(value);
             setWasTouched(true);
+            setTemplateValue(value);
           }}
+          value={quickOptions.find(option => option.value === templateValue)?.value || custom.value}
         />
-        <StyledColumn>
-          <Text className="middle regular">Cron Format</Text>
-          <StyledCronFormat>
-            <CronInput title="Minute" value={minute} onChange={value => onCronInput(value, 0)} />
-            <CronInput title="Hour" value={hour} onChange={value => onCronInput(value, 1)} />
-            <CronInput title="Day" value={day} onChange={value => onCronInput(value, 2)} />
-            <CronInput title="Month" value={month} onChange={value => onCronInput(value, 3)} />
-            <CronInput title="Day / Week" value={dayOfWeek} onChange={value => onCronInput(value, 4)} />
-          </StyledCronFormat>
-        </StyledColumn>
-        <StyledRow>
-          <StyledColumn>
-            <Text className="middle regular" style={{color: isValidFormat ? Colors.slate200 : Colors.amber400}}>
-              Cron Preview{' '}
-              {!isValidFormat ? (
-                <Tooltip title="Cron input is invalid">
-                  <WarningOutlined />
-                </Tooltip>
-              ) : null}
-            </Text>
-            <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
-              {cronString === defaultCronString ? '' : cronString}
-            </Text>
-          </StyledColumn>
-          <StyledColumn>
-            <Text className="middle regular">Next Execution</Text>
-            <Text style={{color: Colors.slate400}} className="middle regular">
-              <NextExecution value={nextExecution} />
-            </Text>
-          </StyledColumn>
-        </StyledRow>
+        {templateValue !== notScheduled.value ? (
+          <>
+            <StyledColumn>
+              <Text className="middle regular">Cron Format</Text>
+              <StyledCronFormat>
+                <CronInput title="Minute" value={minute} onChange={value => onCronInput(value, 0)} />
+                <CronInput title="Hour" value={hour} onChange={value => onCronInput(value, 1)} />
+                <CronInput title="Day" value={day} onChange={value => onCronInput(value, 2)} />
+                <CronInput title="Month" value={month} onChange={value => onCronInput(value, 3)} />
+                <CronInput title="Day / Week" value={dayOfWeek} onChange={value => onCronInput(value, 4)} />
+              </StyledCronFormat>
+            </StyledColumn>
+            <StyledRow>
+              <StyledColumn>
+                <Text className="middle regular" style={{color: isValidFormat ? Colors.slate200 : Colors.amber400}}>
+                  Cron Preview{' '}
+                  {!isValidFormat ? (
+                    <Tooltip title="Cron input is invalid">
+                      <WarningOutlined />
+                    </Tooltip>
+                  ) : null}
+                </Text>
+                <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
+                  {cronString === defaultCronString ? '' : cronString}
+                </Text>
+              </StyledColumn>
+              <StyledColumn>
+                <Text className="middle regular">Next Execution</Text>
+                <Text style={{color: Colors.slate400}} className="middle regular">
+                  <NextExecution value={nextExecution} />
+                </Text>
+              </StyledColumn>
+            </StyledRow>
+          </>
+        ) : null}
       </StyledSpace>
     </ConfigurationCard>
   );
