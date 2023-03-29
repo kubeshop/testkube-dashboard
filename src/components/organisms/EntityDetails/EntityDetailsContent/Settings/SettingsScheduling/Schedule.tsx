@@ -147,17 +147,20 @@ const Schedule: React.FC = () => {
       isButtonsDisabled={!wasTouched}
     >
       <StyledSpace direction="vertical" size={32}>
-        <Select
-          placeholder="Quick select a schedule template"
-          style={{width: '100%'}}
-          options={quickOptions}
-          onSelect={(value: string) => {
-            setCronString(value);
-            setWasTouched(true);
-            setTemplateValue(value);
-          }}
-          value={quickOptions.find(option => option.value === templateValue)?.value || custom.value}
-        />
+        <StyledColumn>
+          <Text className="middle regular">Schedule template</Text>
+          <Select
+            placeholder="Quick select a schedule template"
+            style={{width: '100%'}}
+            options={quickOptions}
+            onSelect={(value: string) => {
+              setCronString(value);
+              setWasTouched(true);
+              setTemplateValue(value);
+            }}
+            value={quickOptions.find(option => option.value === templateValue)?.value || custom.value}
+          />
+        </StyledColumn>
         {templateValue !== notScheduled.value ? (
           <>
             <StyledColumn>
