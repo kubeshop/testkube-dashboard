@@ -117,6 +117,11 @@ const App: React.FC = () => {
   }, [sources]);
 
   useEffect(() => {
+    // Do not fire the effect if new endpoint is just being set up
+    if (location.pathname === '/apiEndpoint') {
+      return;
+    }
+
     if (!apiEndpoint) {
       setEndpointModalState(true);
       return;
