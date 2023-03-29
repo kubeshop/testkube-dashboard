@@ -31,15 +31,24 @@ export const StyledOther = styled(Space)`
 `;
 
 export const StyledSider = styled(Layout.Sider)<{$isFullScreenLogOutput?: boolean}>`
+  height: 100vh;
   z-index: ${({$isFullScreenLogOutput}) => ($isFullScreenLogOutput ? '1002' : '1')};
+
+  .ant-layout-sider-children {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 export const StyledSiderChildContainer = styled.div`
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
-  height: inherit;
+  width: 100px;
+  height: 100vh;
+  overflow: auto;
 `;
 
 export const StyledNavigationMenu = styled.div`
