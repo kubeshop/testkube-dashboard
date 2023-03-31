@@ -37,12 +37,12 @@ const defaultCronString = '* * * * *';
 
 const notScheduled = {
   label: 'Not scheduled',
-  value: defaultCronString,
+  value: '',
 };
 
 const custom = {
   label: 'Custom',
-  value: '',
+  value: defaultCronString,
 };
 
 const quickOptions = [
@@ -87,7 +87,7 @@ const Schedule: React.FC = () => {
   const name = entityDetails?.name;
   const schedule = entityDetails?.schedule;
 
-  const [cronString, setCronString] = useState(schedule || defaultCronString);
+  const [cronString, setCronString] = useState(schedule || '');
   const [templateValue, setTemplateValue] = useState<string | undefined>(cronString);
   const [wasTouched, setWasTouched] = useState(false);
 
@@ -112,7 +112,7 @@ const Schedule: React.FC = () => {
 
   const onCancel = () => {
     setWasTouched(false);
-    setCronString(schedule || defaultCronString);
+    setCronString(schedule || '');
   };
 
   const onCronInput = (value: string, position: number) => {
@@ -123,7 +123,7 @@ const Schedule: React.FC = () => {
   };
 
   const [nextExecution, isValidFormat] = useMemo(() => {
-    if (!cronString || cronString === defaultCronString) {
+    if (!cronString) {
       return ['Not scheduled', true];
     }
 
@@ -137,6 +137,11 @@ const Schedule: React.FC = () => {
   }, [cronString]);
 
   const [minute, hour, day, month, dayOfWeek] = cronString.split(' ');
+  const selectTemplateValue = useMemo(() => {
+    const value = quickOptions.find(option => option.value === templateValue)?.value;
+
+    return value === undefined ? custom.value : value;
+  }, [templateValue]);
 
   return (
     <ConfigurationCard
@@ -158,7 +163,7 @@ const Schedule: React.FC = () => {
               setWasTouched(true);
               setTemplateValue(value);
             }}
-            value={quickOptions.find(option => option.value === templateValue)?.value || custom.value}
+            value={selectTemplateValue}
           />
         </StyledColumn>
         {templateValue !== notScheduled.value ? (
@@ -184,7 +189,7 @@ const Schedule: React.FC = () => {
                   ) : null}
                 </Text>
                 <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
-                  {cronString === defaultCronString ? '' : cronString}
+                  {cronString}
                 </Text>
               </StyledColumn>
               <StyledColumn>
