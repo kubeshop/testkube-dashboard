@@ -1,7 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
-import {UploadChangeParam} from 'antd/lib/upload';
 
 import {Option} from '@models/form';
 
@@ -10,14 +9,11 @@ import {setRedirectTarget} from '@redux/reducers/configSlice';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
-import {Button, Text} from '@custom-antd';
-
 import {Hint, notificationCall} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import FirstStep from '@wizards/AddTestWizard/steps/FirstStep';
-import {getTestSourceSpecificFields, onFileChange} from '@wizards/AddTestWizard/utils';
+import {getTestSourceSpecificFields} from '@wizards/AddTestWizard/utils';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
@@ -26,8 +22,8 @@ import {useAddTestMutation} from '@services/tests';
 
 import {AnalyticsContext, MainContext} from '@contexts';
 
-import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
 import {defaultHintConfig} from './ModalConfig';
+import TestCreationForm from './TestCreationForm';
 
 type AddTestPayload = {
   data?: {
@@ -145,37 +141,7 @@ const TestCreationModalContent: React.FC = () => {
 
   return (
     <div style={{display: 'flex'}}>
-      <Form
-        form={form}
-        layout="vertical"
-        name="test-suite-creation"
-        onFinish={onFinish}
-        initialValues={{name: '', description: '', labels: []}}
-        style={{flex: 1}}
-        labelAlign="right"
-      >
-        <StyledFormSpace size={24} direction="vertical">
-          <Text className="regular big">Test details</Text>
-          <FirstStep
-            onFileChange={(file: Nullable<UploadChangeParam>) => onFileChange(file, form)}
-            onLabelsChange={setLocalLabels}
-            executors={executors}
-            testSources={testSources}
-          />
-          <StyledFormItem shouldUpdate>
-            {({isFieldsTouched}) => (
-              <Button
-                htmlType="submit"
-                loading={isLoading}
-                data-test="add-a-new-test-create-button"
-                disabled={isLoading || !isFieldsTouched()}
-              >
-                {isLoading ? 'Creating...' : 'Create'}
-              </Button>
-            )}
-          </StyledFormItem>
-        </StyledFormSpace>
-      </Form>
+      <TestCreationForm form={form} testSources={testSources} executors={executors} />
       <Hint {...hintConfig} />
     </div>
   );

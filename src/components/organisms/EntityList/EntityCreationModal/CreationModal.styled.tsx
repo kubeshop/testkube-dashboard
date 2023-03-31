@@ -14,6 +14,7 @@ export const StyledFormSpace = styled(Space)`
 export const StyledFormItem = styled(Form.Item)`
   margin-bottom: 0;
 `;
+
 const dropdownAnimation = keyframes`
  0% { height: 1px; }
  100% { height: 500px; }
