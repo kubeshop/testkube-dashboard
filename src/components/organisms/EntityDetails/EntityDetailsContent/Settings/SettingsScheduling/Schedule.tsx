@@ -136,12 +136,13 @@ const Schedule: React.FC = () => {
     }
   }, [cronString]);
 
-  const [minute, hour, day, month, dayOfWeek] = cronString.split(' ');
   const selectTemplateValue = useMemo(() => {
     const value = quickOptions.find(option => option.value === templateValue)?.value;
 
     return value === undefined ? custom.value : value;
   }, [templateValue]);
+
+  const [minute, hour, day, month, dayOfWeek] = cronString.split(' ');
 
   return (
     <ConfigurationCard
