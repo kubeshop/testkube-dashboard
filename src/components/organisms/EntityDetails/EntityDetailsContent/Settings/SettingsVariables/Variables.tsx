@@ -9,10 +9,9 @@ import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecule
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
-import {useUpdateTestSuiteMutation} from '@services/testSuites';
-import {useUpdateTestMutation} from '@services/tests';
-
 import {EntityDetailsContext} from '@contexts';
+
+import {updateRequestsMap} from '../utils';
 
 const descriptionMap: {[key in Entity]: string} = {
   'test-suites':
@@ -23,19 +22,12 @@ const descriptionMap: {[key in Entity]: string} = {
 const Variables: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
 
-  const [updateTest] = useUpdateTestMutation();
-  const [updateTestSuite] = useUpdateTestSuiteMutation();
-
+  const [updateEntity] = updateRequestsMap[entity]();
   const [form] = Form.useForm();
 
   const variables = useMemo(() => {
     return decomposeVariables(entityDetails?.executionRequest?.variables) || [];
   }, [entityDetails?.executionRequest?.variables]);
-
-  const updateRequestsMap: {[key in Entity]: any} = {
-    'test-suites': updateTestSuite,
-    tests: updateTest,
-  };
 
   const onSaveForm = (value: any) => {
     const successRecord = {
@@ -46,7 +38,7 @@ const Variables: React.FC = () => {
       },
     };
 
-    updateRequestsMap[entity]({
+    updateEntity({
       id: entityDetails.name,
       data: successRecord,
     })

@@ -6,8 +6,6 @@ import {WarningOutlined} from '@ant-design/icons';
 
 import parser from 'cron-parser';
 
-import {Entity} from '@models/entity';
-
 import {Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
@@ -15,84 +13,31 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
-import {useUpdateTestSuiteMutation} from '@services/testSuites';
-import {useUpdateTestMutation} from '@services/tests';
-
 import Colors from '@styles/Colors';
 import Fonts from '@styles/Fonts';
 
 import {EntityDetailsContext} from '@contexts';
 
 import {StyledSpace} from '../Settings.styled';
+import {namingMap, updateRequestsMap} from '../utils';
 import CronInput from './CronInput';
 import NextExecution from './NextExecution';
 import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
-
-const namingMap: {[key in Entity]: string} = {
-  'test-suites': 'test suite',
-  tests: 'test',
-};
-
-const defaultCronString = '* * * * *';
-
-const notScheduled = {
-  label: 'Not scheduled',
-  value: '',
-};
-
-const custom = {
-  label: 'Custom',
-  value: defaultCronString,
-};
-
-const quickOptions = [
-  {
-    label: 'Every 5 minutes',
-    value: '*/5 * * * *',
-  },
-  {
-    label: 'Every 30 minutes',
-    value: '*/30 * * * *',
-  },
-  {
-    label: 'Every hour',
-    value: '0 * * * *',
-  },
-  {
-    label: 'Every day',
-    value: '0 0 * * *',
-  },
-  {
-    label: 'Every week',
-    value: '0 0 * * 0',
-  },
-  {
-    label: 'Every month',
-    value: '0 0 1 * *',
-  },
-  custom,
-  notScheduled,
-];
+import {custom, quickOptions} from './utils';
 
 const Schedule: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
 
-  const [updateTest] = useUpdateTestMutation();
-  const [updateTestSuite] = useUpdateTestSuiteMutation();
+  const [updateEntity] = updateRequestsMap[entity]();
 
-  const updateRequestsMap: {[key in Entity]: any} = {
-    'test-suites': updateTestSuite,
-    tests: updateTest,
-  };
   const name = entityDetails?.name;
   const schedule = entityDetails?.schedule;
 
   const [cronString, setCronString] = useState(schedule || '');
-  const [templateValue, setTemplateValue] = useState<string | undefined>(cronString);
   const [wasTouched, setWasTouched] = useState(false);
 
   const onSave = () => {
-    updateRequestsMap[entity]({
+    updateEntity({
       id: name,
       data: {
         ...entityDetails,
@@ -117,9 +62,9 @@ const Schedule: React.FC = () => {
 
   const onCronInput = (value: string, position: number) => {
     const split = cronString.split(' ');
+
     setCronString([...split.slice(0, position), value, ...split.slice(position + 1)].join(' '));
     setWasTouched(true);
-    setTemplateValue(custom.value);
   };
 
   const [nextExecution, isValidFormat] = useMemo(() => {
@@ -136,11 +81,12 @@ const Schedule: React.FC = () => {
     }
   }, [cronString]);
 
-  const selectTemplateValue = useMemo(() => {
-    const value = quickOptions.find(option => option.value === templateValue)?.value;
-
-    return value === undefined ? custom.value : value;
-  }, [templateValue]);
+  const templateValue = useMemo(() => {
+    if (quickOptions.some(x => x.value === cronString)) {
+      return cronString;
+    }
+    return custom.value;
+  }, [cronString]);
 
   const [minute, hour, day, month, dayOfWeek] = cronString.split(' ');
 
@@ -162,12 +108,11 @@ const Schedule: React.FC = () => {
             onSelect={(value: string) => {
               setCronString(value);
               setWasTouched(true);
-              setTemplateValue(value);
             }}
-            value={selectTemplateValue}
+            value={templateValue}
           />
         </StyledColumn>
-        {templateValue !== notScheduled.value ? (
+        {templateValue ? (
           <>
             <StyledColumn>
               <Text className="middle regular">Cron Format</Text>
