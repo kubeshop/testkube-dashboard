@@ -126,8 +126,10 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
             const options = [
               ...remappedCustomTestSources,
-              ...testSourceBaseOptions.filter(option =>
-                selectedExecutor.executor?.contentTypes?.includes(String(option.value))
+              ...testSourceBaseOptions.filter(
+                option =>
+                  selectedExecutor.executor?.contentTypes?.includes(String(option.value)) ||
+                  !selectedExecutor.executor?.contentTypes?.length
               ),
             ];
 
