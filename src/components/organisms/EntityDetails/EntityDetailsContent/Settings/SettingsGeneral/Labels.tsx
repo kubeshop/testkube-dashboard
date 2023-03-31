@@ -2,7 +2,6 @@ import {useContext, useState} from 'react';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {Entity} from '@models/entity';
 import {Option} from '@models/form';
 
 import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
@@ -11,26 +10,13 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
-import {useUpdateTestSuiteMutation} from '@services/testSuites';
-import {useUpdateTestMutation} from '@services/tests';
-
 import {EntityDetailsContext} from '@contexts';
 
-const namingMap: {[key in Entity]: string} = {
-  'test-suites': 'test suite',
-  tests: 'test',
-};
+import {namingMap, updateRequestsMap} from '../utils';
 
 const Labels: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
-
-  const [updateTest] = useUpdateTestMutation();
-  const [updateTestSuite] = useUpdateTestSuiteMutation();
-
-  const updateRequestsMap: {[key in Entity]: any} = {
-    'test-suites': updateTestSuite,
-    tests: updateTest,
-  };
+  const [updateEntity] = updateRequestsMap[entity]();
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [wasTouched, setWasTouched] = useState(false);
@@ -43,7 +29,7 @@ const Labels: React.FC = () => {
   const entityLabels = entityDetails?.labels || {};
 
   const onSave = () => {
-    updateRequestsMap[entity]({
+    updateEntity({
       id: entityDetails.name,
       data: {
         ...entityDetails,

@@ -13,10 +13,7 @@ import {useDeleteTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
 
-const namingMap: {[key in Entity]: string} = {
-  'test-suites': 'test suite',
-  tests: 'test',
-};
+import {namingMap} from '../utils';
 
 const useDeleteMutations: {[key in Entity]: UseMutationType} = {
   'test-suites': useDeleteTestSuiteMutation,

@@ -2,39 +2,24 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {Entity} from '@models/entity';
-
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
-import {useUpdateTestSuiteMutation} from '@services/testSuites';
-import {useUpdateTestMutation} from '@services/tests';
-
 import {EntityDetailsContext} from '@contexts';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
+import {namingMap, updateRequestsMap} from '../utils';
 
 const {TextArea} = Input;
-
-const namingMap: {[key in Entity]: string} = {
-  'test-suites': 'test suite',
-  tests: 'test',
-};
 
 const NameNDescription: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
   const [form] = Form.useForm();
 
-  const [updateTest] = useUpdateTestMutation();
-  const [updateTestSuite] = useUpdateTestSuiteMutation();
-
-  const updateRequestsMap: {[key in Entity]: any} = {
-    'test-suites': updateTestSuite,
-    tests: updateTest,
-  };
+  const [updateEntity] = updateRequestsMap[entity]();
 
   if (!entity || !entityDetails) {
     return null;
@@ -44,7 +29,7 @@ const NameNDescription: React.FC = () => {
   const description = entityDetails?.description;
 
   const onSave = (values: any) => {
-    updateRequestsMap[entity]({
+    updateEntity({
       id: entityDetails.name,
       data: {
         ...entityDetails,
