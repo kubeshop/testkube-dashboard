@@ -5,11 +5,11 @@ import Repository from '../molecules/Repository';
 import SecretFormItem from '../molecules/SecretFormItem';
 
 type GitFormFieldsProps = {
-  testType: string;
+  executorType: string;
 };
 
 const GitFormFields: React.FC<GitFormFieldsProps> = props => {
-  const {testType} = props;
+  const {executorType} = props;
 
   return (
     <StyledFormSpace size={24} direction="vertical">
@@ -17,7 +17,7 @@ const GitFormFields: React.FC<GitFormFieldsProps> = props => {
       <SecretFormItem name="token" label="Git Token" />
       <SecretFormItem name="username" label="Git Username" />
       <Branch />
-      <Path testType={testType} />
+      <Path testType={executorType} />
     </StyledFormSpace>
   );
 };

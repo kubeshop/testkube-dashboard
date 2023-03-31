@@ -21,16 +21,16 @@ import {
 
 import {remapExecutors} from '@utils/executors';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {remapTestSources, testSourceBaseOptions} from '@utils/sources';
+import {getTestSourceSpecificFields, remapTestSources, testSourceBaseOptions} from '@utils/sources';
 
 import {useAddTestMutation} from '@services/tests';
 
-import {StyledFormSpace} from '../CreationModal.styled';
+import {LabelsWrapper, StyledFormSpace} from '../CreationModal.styled';
 
 type TestCreationFormProps = {
   form: FormInstance;
-  onSuccess?: (res: AddTestPayload) => void;
-  onFail?: (err: any) => void;
+  onSuccess: (res: AddTestPayload) => void;
+  onFail: (err: any) => void;
   testSources: SourceWithRepository[];
   executors: Executor[];
 };
@@ -49,7 +49,7 @@ const getAdditionalFields: (source: string, props: any) => JSX.Element = (source
 };
 
 const TestCreationForm: React.FC<TestCreationFormProps> = props => {
-  const {form, testSources, executors, onSuccess = () => {}, onFail = () => {}} = props;
+  const {form, testSources, executors, onSuccess, onFail} = props;
 
   const remappedExecutors = remapExecutors(executors);
   const remappedCustomTestSources = remapTestSources(testSources);
@@ -61,30 +61,30 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
   const onSave = (values: any) => {
     const {testSource, testType} = values;
 
-    // const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
+    const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
 
-    // if (isTestSourceCustomGitDir) {
-    //   const isTestSourceExists = testSources.some(source => {
-    //     return source.name === testSource.replace('$custom-git-dir-', '');
-    //   });
+    if (isTestSourceCustomGitDir) {
+      const isTestSourceExists = testSources.some(source => {
+        return source.name === testSource.replace('$custom-git-dir-', '');
+      });
 
-    //   if (!isTestSourceExists) {
-    //     notificationCall('failed', 'Provided test source does not exist');
-    //     return;
-    //   }
-    // }
+      if (!isTestSourceExists) {
+        notificationCall('failed', 'Provided test source does not exist');
+        return;
+      }
+    }
 
-    // const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
+    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
 
     const requestBody = {
       name: values.name,
       type: testType,
-      // content: {
-      //   ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {} : {type: testSource}),
-      //   ...testSourceSpecificFields,
-      // },
-      // labels: decomposeLabels(localLabels),
-      // ...(isTestSourceCustomGitDir ? {source: testSource.replace('$custom-git-dir-', '')} : {}),
+      labels: decomposeLabels(localLabels),
+      content: {
+        ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {} : {type: testSource}),
+        ...testSourceSpecificFields,
+      },
+      ...(isTestSourceCustomGitDir ? {source: testSource.replace('$custom-git-dir-', '')} : {}),
     };
 
     return addTest(requestBody)
@@ -145,19 +145,20 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
           {({getFieldValue}) => {
             let testSourceValue: string = getFieldValue('testSource');
 
-            const selectedExecutor = executors.find((executor: any) =>
-              executor.executor?.types?.includes(getFieldValue('testType'))
-            );
-
             if (!testSourceValue) {
               return null;
             }
 
             testSourceValue = testSourceValue.includes('custom-git-dir') ? 'custom' : testSourceValue;
 
+            const selectedExecutor = executors.find((executor: any) =>
+              executor.executor?.types?.includes(getFieldValue('testType'))
+            );
+            const executorType = selectedExecutor?.executor.meta?.iconURI;
+
             const childrenProps: {[key: string]: Object} = {
-              git: {selectedExecutor},
-              custom: {selectedExecutor},
+              git: {executorType},
+              custom: {executorType},
             };
 
             return getAdditionalFields(testSourceValue, childrenProps[testSourceValue] || {});
@@ -176,9 +177,9 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
             return (
               <FormItem label="Labels" name="labels">
-                <div style={{width: '100%'}}>
+                <LabelsWrapper>
                   <LabelsSelect onChange={setLocalLabels} menuPlacement="top" />
-                </div>
+                </LabelsWrapper>
               </FormItem>
             );
           }}

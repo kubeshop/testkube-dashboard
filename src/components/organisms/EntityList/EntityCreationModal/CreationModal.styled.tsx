@@ -16,3 +16,11 @@ export const StyledFormItem = styled(Form.Item)`
 `;
 
 export const StyledFormSpaceDropdown = styled(StyledFormSpace)``;
+
+export const LabelsWrapper = styled.div`
+  width: 100%;
+`;
+
+export const TestCreationModalWrapper = styled.div`
+  display: flex;
+`;

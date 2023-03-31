@@ -33,6 +33,7 @@ const Repository: React.FC<RepositoryProps> = props => {
   return (
     <FormItem
       name="uri"
+      key="uri"
       label={<Text className="regular middle">Git repository URI</Text>}
       rules={[required, url]}
       tooltip={{title: labelState.message, icon: tooltipIcons[labelState.status]}}

@@ -3,16 +3,16 @@ import Branch from '../molecules/Branch';
 import Path from '../molecules/Path';
 
 type GitFormFieldsProps = {
-  testType: string;
+  executorType: string;
 };
 
 const GitFormFields: React.FC<GitFormFieldsProps> = props => {
-  const {testType} = props;
+  const {executorType} = props;
 
   return (
     <StyledFormSpace size={24} direction="vertical">
       <Branch />
-      <Path testType={testType} />
+      <Path testType={executorType} />
     </StyledFormSpace>
   );
 };

@@ -33,6 +33,7 @@ const Path: React.FC<PathProps> = props => {
       rules={[required]}
       required
       tooltip="The path is relative to the root of your repository"
+      key="path"
     >
       <Input placeholder={pathPlaceholders[testType] || 'tests/path'} />
     </FormItem>

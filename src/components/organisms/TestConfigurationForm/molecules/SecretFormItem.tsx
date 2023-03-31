@@ -19,7 +19,7 @@ const SecretFormItem: React.FC<SecretFormItemProps> = props => {
       {({setFieldValue}) => {
         return (
           <>
-            <FormItem name={name} label={label}>
+            <FormItem name={name} label={label} key={name}>
               <Input.Password placeholder={label} disabled={isClearedValue === false} />
             </FormItem>
             {isClearedValue === false ? (
