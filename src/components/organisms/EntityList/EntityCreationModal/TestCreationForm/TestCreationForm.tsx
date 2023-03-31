@@ -12,9 +12,12 @@ import {Button, FormItem, Text} from '@custom-antd';
 import {LabelsSelect, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import FileContentFields from '@organisms/TestConfigurationForm/FileContentFields';
-import GitFormFields from '@organisms/TestConfigurationForm/GitFormFields';
-import StringContentFields from '@organisms/TestConfigurationForm/StringContentFields';
+import {
+  CustomFormFields,
+  FileContentFields,
+  GitCreationFormFields,
+  StringContentFields,
+} from '@organisms/TestConfigurationForm';
 
 import {remapExecutors} from '@utils/executors';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -33,9 +36,9 @@ type TestCreationFormProps = {
 };
 
 const additionalFields: {[key: string]: React.FC<any>} = {
-  git: GitFormFields,
+  git: GitCreationFormFields,
   'file-uri': FileContentFields,
-  // custom: customTypeFormFields,
+  custom: CustomFormFields,
   string: StringContentFields,
 };
 
@@ -154,6 +157,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
             const childrenProps: {[key: string]: Object} = {
               git: {selectedExecutor},
+              custom: {selectedExecutor},
             };
 
             return getAdditionalFields(testSourceValue, childrenProps[testSourceValue] || {});
@@ -171,7 +175,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
             }
 
             return (
-              <FormItem label="Labels" name="labels" required>
+              <FormItem label="Labels" name="labels">
                 <div style={{width: '100%'}}>
                   <LabelsSelect onChange={setLocalLabels} menuPlacement="top" />
                 </div>

@@ -1,4 +1,4 @@
-import {Form, Space} from 'antd';
+import {Space} from 'antd';
 
 import styled from 'styled-components';
 
@@ -10,9 +10,3 @@ export const StyledFormSpace = styled(Space)`
     justify-content: flex-end;
   }
 `;
-
-export const StyledFormItem = styled(Form.Item)`
-  margin-bottom: 0;
-`;
-
-export const StyledFormSpaceDropdown = styled(StyledFormSpace)``;
