@@ -1,4 +1,4 @@
-import {Suspense, lazy, useEffect, useState, useRef} from 'react';
+import {Suspense, lazy, useEffect, useState, useRef, useMemo} from 'react';
 import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 
@@ -61,7 +61,6 @@ const App: React.FC = () => {
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
 
-  const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
   const [isEndpointModalVisible, setEndpointModalState] = useState(false);
 
   const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
@@ -76,29 +75,47 @@ const App: React.FC = () => {
 
   const logRef = useRef<HTMLDivElement>(null);
 
-  const onAcceptCookies = async () => {
-    // @ts-ignore
-    window[`ga-disable-G-945BK09GDC`] = false;
+  const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
+  const isTelemetryEnabled = useMemo(() => (
+    !isCookiesVisible && clusterConfig?.enableTelemetry && localStorage.getItem('isGADisabled') === '0'
+  ), [isCookiesVisible, clusterConfig]);
+
+  const onAcceptCookies = () => {
     localStorage.setItem('isGADisabled', '0');
     setCookiesVisibility(false);
-
-    if (
-      process.env.NODE_ENV !== 'development' &&
-      !window.location.href.includes('testkube.io') &&
-      clusterConfig?.enableTelemetry
-    ) {
-      const ga4react = new GA4React('G-945BK09GDC');
-
-      ga4react.initialize();
-    }
   };
 
-  const onDeclineCookies = (args?: {skipGAEvent?: boolean}) => {
-    // @ts-ignore
-    window[`ga-disable-G-945BK09GDC`] = true;
+  const onDeclineCookies = () => {
     localStorage.setItem('isGADisabled', '1');
     setCookiesVisibility(false);
   };
+
+  useEffect(() => {
+    if (!isTelemetryEnabled) {
+      // @ts-ignore
+      window[`ga-disable-G-945BK09GDC`] = true;
+      if (posthog.__loaded) {
+        posthog.opt_out_capturing();
+      }
+    } else if (process.env.NODE_ENV !== 'development') {
+      // @ts-ignore:
+      window[`ga-disable-G-945BK09GDC`] = false;
+      if (!posthog.__loaded) {
+        posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
+          opt_out_capturing_by_default: true,
+          mask_all_text: true,
+          persistence: 'localStorage',
+          property_blacklist: ['$current_url', '$host', '$referrer', '$referring_domain'],
+        });
+      }
+      posthog.opt_in_capturing();
+
+      if (!window.location.href.includes('testkube.io')) {
+        const ga4react = new GA4React('G-945BK09GDC');
+        ga4react.initialize().catch(() => {});
+      }
+    }
+  }, [isTelemetryEnabled]);
 
   const mainContextValue = {
     ga4React,
@@ -148,18 +165,6 @@ const App: React.FC = () => {
 
     dispatch(setIsFullScreenLogOutput(false));
   }, [location.pathname]);
-
-  useEffect(() => {
-    const isGADisabled = Boolean(Number(localStorage.getItem('isGADisabled')));
-
-    if (isGADisabled) {
-      onDeclineCookies({skipGAEvent: true});
-    } else if (process.env.NODE_ENV !== 'development') {
-      posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
-        opt_out_capturing_by_default: false,
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (ga4React) {
