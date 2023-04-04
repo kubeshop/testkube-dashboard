@@ -179,7 +179,7 @@ const App: React.FC = () => {
   }, [apiEndpoint]);
 
   return (
-    <AnalyticsProvider privateKey={segmentIOKey} appVersion={pjson.version}>
+    <AnalyticsProvider disabled={!isTelemetryEnabled} privateKey={segmentIOKey} appVersion={pjson.version}>
       <MainContext.Provider value={mainContextValue}>
         <Layout>
           <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />

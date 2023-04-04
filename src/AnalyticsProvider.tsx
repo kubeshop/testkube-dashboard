@@ -7,21 +7,22 @@ import {AnalyticsContext} from '@contexts';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 type AnalyticsProviderProps = {
+  disabled?: boolean;
   privateKey: string;
   children: React.ReactNode;
   appVersion: string;
 };
 
 export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
-  const {privateKey, children, appVersion} = props;
+  const {disabled, privateKey, children, appVersion} = props;
 
   const notDevEnv = process.env.NODE_ENV !== 'development';
 
   const analytics = useMemo(() => {
-    if (privateKey && notDevEnv) {
+    if (!disabled && privateKey && notDevEnv) {
       return AnalyticsBrowser.load({writeKey: privateKey});
     }
-  }, [privateKey]);
+  }, [disabled, privateKey]);
 
   const hostname = window.location.hostname;
 
@@ -41,7 +42,7 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
   }, []);
 
   const analyticsTrack = (type: string, data: any) => {
-    if (notDevEnv) {
+    if (!disabled && notDevEnv) {
       analytics?.track(type, {...data, hostname, appVersion});
     }
   };
