@@ -1,8 +1,5 @@
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import Branch from '../molecules/Branch';
-import Path from '../molecules/Path';
-import Repository from '../molecules/Repository';
-import SecretFormItem from '../molecules/SecretFormItem';
+import {BranchCommit, Path, Repository, SecretFormItem} from '../molecules';
 
 type SourceEditProps = {
   executorType: string;
@@ -30,7 +27,7 @@ const SourceEdit: React.FC<SourceEditProps> = props => {
         isClearedValue={isClearedUsername}
         setIsClearedValue={setIsClearedUsername}
       />
-      <Branch />
+      <BranchCommit />
       <Path testType={executorType} />
     </StyledFormSpace>
   );

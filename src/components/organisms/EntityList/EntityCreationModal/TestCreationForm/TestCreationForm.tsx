@@ -13,7 +13,7 @@ import {LabelsSelect} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {
-  CustomFormFields,
+  CustomCreationFormFields,
   FileContentFields,
   GitCreationFormFields,
   StringContentFields,
@@ -45,7 +45,7 @@ type TestCreationFormProps = {
 const additionalFields: {[key: string]: React.FC<any>} = {
   git: GitCreationFormFields,
   'file-uri': FileContentFields,
-  custom: CustomFormFields,
+  custom: CustomCreationFormFields,
   string: StringContentFields,
 };
 
@@ -89,7 +89,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
           rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}
           required
         >
-          <Input placeholder="e.g. my-test" />
+          <Input placeholder="e.g.: my-test" />
         </FormItem>
         <FormItem name="testType" label="Type" rules={[required]} required>
           <Select placeholder="Select from available executors..." showSearch options={remappedExecutors} allowClear />
@@ -118,7 +118,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
             return (
               <FormItem rules={[required]} label="Source" name="testSource" required>
-                <Select placeholder="Select suitable source..." options={options} showSearch allowClear />
+                <Select placeholder="Select a source..." options={options} showSearch allowClear />
               </FormItem>
             );
           }}

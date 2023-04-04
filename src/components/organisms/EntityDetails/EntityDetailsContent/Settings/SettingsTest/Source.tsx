@@ -1,4 +1,4 @@
-import {useContext, useMemo, useState} from 'react';
+import {memo, useMemo, useState} from 'react';
 
 import {Form, Select} from 'antd';
 
@@ -8,10 +8,10 @@ import {selectSources} from '@redux/reducers/sourcesSlice';
 
 import {ExternalLink} from '@atoms';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {ConfigurationCard} from '@molecules';
 
 import {
-  CustomFormFields,
+  CustomSourceEditFormFields,
   FileContentFields,
   SourceEditFormFields,
   StringContentFields,
@@ -20,7 +20,6 @@ import {getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/uti
 
 import {testSourceLink} from '@utils/externalLinks';
 import {required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {
   getCustomSourceField,
   getSourceFieldValue,
@@ -30,21 +29,22 @@ import {
   testSourceBaseOptions,
 } from '@utils/sources';
 
-import {useUpdateTestMutation} from '@services/tests';
-
-import {EntityDetailsContext} from '@contexts';
-
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 const additionalFields: {[key: string]: React.FC<any>} = {
   git: SourceEditFormFields,
   'file-uri': FileContentFields,
-  custom: CustomFormFields,
+  custom: CustomSourceEditFormFields,
   string: StringContentFields,
 };
 
-const Source = () => {
-  const {entityDetails} = useContext(EntityDetailsContext);
+type SourceProps = {
+  entityDetails: any;
+  updateTest: (data: any) => void;
+};
+
+const Source: React.FC<SourceProps> = props => {
+  const {entityDetails, updateTest} = props;
 
   const {type} = entityDetails;
 
@@ -58,7 +58,7 @@ const Source = () => {
     [executors, type]
   );
 
-  const {source, ...additionalFormValues} = getSourceFormValues(entityDetails, testSources);
+  const {source, ...additionalFormValues} = getSourceFormValues(entityDetails);
 
   const [form] = Form.useForm();
 
@@ -71,30 +71,16 @@ const Source = () => {
     ),
   ];
 
-  const [updateTest] = useUpdateTestMutation();
-
   const [isClearedToken, setIsClearedToken] = useState(!additionalFormValues.token);
   const [isClearedUsername, setIsClearedUsername] = useState(!additionalFormValues.username);
 
   const onSave = (values: any) => {
-    const {testSource} = values;
+    const {testSource: newTestSource} = values;
 
     updateTest({
-      id: entityDetails.name,
-      data: {
-        ...entityDetails,
-        content: getSourcePayload(values, testSources),
-        ...getCustomSourceField(testSource, entityDetails.source),
-      },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Test source was successfully updated.`);
-        });
-      })
-      .catch((err: any) => {
-        displayDefaultErrorNotification(err);
-      });
+      content: getSourcePayload(values, testSources),
+      ...getCustomSourceField(newTestSource, source),
+    });
   };
 
   return (
@@ -153,4 +139,4 @@ const Source = () => {
   );
 };
 
-export default Source;
+export default memo(Source);

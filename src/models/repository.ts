@@ -4,6 +4,7 @@ export type Repository = {
   type: RepositoryTypeEnum;
   uri: string;
   branch?: string;
+  commit?: string;
   path?: string;
   username?: string;
   token?: string;

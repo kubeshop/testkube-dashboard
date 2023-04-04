@@ -1,20 +1,19 @@
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import Branch from '../molecules/Branch';
-import Path from '../molecules/Path';
+import {BranchCommit, Path} from '../molecules';
 
-type GitFormFieldsProps = {
+type CustomFormFieldsProps = {
   executorType: string;
 };
 
-const GitFormFields: React.FC<GitFormFieldsProps> = props => {
+const CustomFormFields: React.FC<CustomFormFieldsProps> = props => {
   const {executorType} = props;
 
   return (
     <StyledFormSpace size={24} direction="vertical">
-      <Branch />
+      <BranchCommit />
       <Path testType={executorType} />
     </StyledFormSpace>
   );
 };
 
-export default GitFormFields;
+export default CustomFormFields;

@@ -5,25 +5,21 @@ import {SourceWithRepository} from '@models/sources';
 
 import {notificationCall} from '@molecules';
 
-const customGitString = '$custom-git-';
+const customGitSourceString = '$custom-git-';
 
 export const remapTestSources = (testSources: SourceWithRepository[]) => {
   if (!testSources || !testSources.length) {
     return [];
   }
 
-  const array: Option[] = [];
-
-  testSources.forEach(source => {
+  return testSources.map(source => {
     const {name} = source;
 
-    const optionValue = `${customGitString}${name}`;
+    const optionValue = `${customGitSourceString}${name}`;
     const optionName = `Git source: ${name}`;
 
-    array.push({value: optionValue, label: optionName});
+    return {...source, value: optionValue, label: optionName};
   });
-
-  return array;
 };
 
 export const testSourceBaseOptions: Option[] = [
@@ -33,52 +29,49 @@ export const testSourceBaseOptions: Option[] = [
 ];
 
 export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) => {
-  const {testSource} = values;
+  const {testSource, username, token, string, file, ...rest} = values;
+
+  if (rest.commit) {
+    rest.branch = '';
+  }
+
+  if (rest.branch) {
+    rest.commit = '';
+  }
 
   if (isCustomGit) {
     return {
-      repository: {
-        ...(values.path ? {path: values.path} : {}),
-        ...(values.branch ? {branch: values.branch} : {}),
-        uri: '',
-        type: '',
-      },
+      repository: {...rest, uri: '', type: ''},
     };
   }
 
   if (testSource === 'string' || testSource === 'file-uri') {
-    return {data: values.string || values.file.fileContent, repository: {}};
+    return {data: string || file.fileContent, repository: {}};
   }
 
-  const secrets = (() => {
-    const result: any = {};
+  const secrets: any = {};
 
-    if (values.token !== undefined && values.token !== null) {
-      if (values.token === '') {
-        result.tokenSecret = {};
-      } else if (!values.token.includes('*')) {
-        result.token = values.token;
-      }
+  if (token !== undefined && token !== null) {
+    if (token === '') {
+      secrets.tokenSecret = {};
+    } else if (!token.includes('*')) {
+      secrets.token = token;
     }
+  }
 
-    if (values.username !== undefined) {
-      if (values.username === '') {
-        result.usernameSecret = {};
-      } else if (!values.username.includes('*')) {
-        result.username = values.username;
-      }
+  if (username !== undefined) {
+    if (username === '') {
+      secrets.usernameSecret = {};
+    } else if (!username.includes('*')) {
+      secrets.username = username;
     }
-
-    return result;
-  })();
+  }
 
   return {
     data: '',
     repository: {
       type: 'git',
-      uri: values.uri,
-      ...(values.path ? {path: values.path} : {}),
-      ...(values.branch ? {branch: values.branch} : {}),
+      ...rest,
       ...secrets,
     },
   };
@@ -86,13 +79,13 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
 
 export const getSourcePayload = (values: any, testSources: SourceWithRepository[]) => {
   const {testSource} = values;
-  const isTestSourceCustomGitDir = testSource.includes(customGitString);
+  const isCustomGit = testSource.includes(customGitSourceString);
 
-  const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
+  const testSourceSpecificFields = getTestSourceSpecificFields(values, isCustomGit);
 
-  if (isTestSourceCustomGitDir) {
+  if (isCustomGit) {
     const isTestSourceExists = testSources.some(sourceItem => {
-      return sourceItem.name === testSource.replace(customGitString, '');
+      return sourceItem.name === testSource.replace(customGitSourceString, '');
     });
 
     if (!isTestSourceExists) {
@@ -102,29 +95,32 @@ export const getSourcePayload = (values: any, testSources: SourceWithRepository[
   }
 
   return {
-    ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {type: ''} : {type: testSource}),
+    ...(testSource === 'file-uri' ? {type: 'string'} : isCustomGit ? {type: ''} : {type: testSource}),
     ...testSourceSpecificFields,
   };
 };
 
 export const getCustomSourceField = (testSource: string, prevTestSource?: string) => {
-  const isCustomTestSource = testSource.includes(customGitString);
+  const isCustomTestSource = testSource.includes(customGitSourceString);
 
-  return isCustomTestSource ? {source: testSource.replace(customGitString, '')} : prevTestSource ? {source: ''} : {};
+  return isCustomTestSource
+    ? {source: testSource.replace(customGitSourceString, '')}
+    : prevTestSource
+    ? {source: ''}
+    : {};
 };
 
 const dummySecret = '******';
 
-export const getSourceFormValues = (entityDetails: any, testSources: SourceWithRepository[]) => {
+export const getSourceFormValues = (entityDetails: any) => {
   const {content} = entityDetails;
 
   if (entityDetails.source) {
-    const sourceDetails = testSources.find(source => source.name === entityDetails.source);
-
     return {
-      source: entityDetails.source,
-      branch: sourceDetails?.repository.branch,
-      path: sourceDetails?.repository.path,
+      source: `${customGitSourceString}${entityDetails.source}`,
+      branch: content?.repository?.branch,
+      commit: content?.repository?.commit,
+      path: content?.repository?.path,
     };
   }
 
@@ -159,5 +155,5 @@ export const getSourceFieldValue = (getFieldValue: (name: NamePath) => any) => {
     return '';
   }
 
-  return testSourceValue.includes(customGitString) ? 'custom' : testSourceValue;
+  return testSourceValue.includes(customGitSourceString) ? 'custom' : testSourceValue;
 };
