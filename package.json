@@ -1,6 +1,6 @@
 {
   "name": "testkube-dashboard",
-  "version": "1.9.0",
+  "version": "1.10.4",
   "author": "Kubeshop",
   "description": "Simple dashboard for TestKube",
   "contributors": [
