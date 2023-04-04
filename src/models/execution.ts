@@ -1,9 +1,9 @@
 import {Args} from '@models/args';
 import {AssertionResult} from '@models/assertionResult';
 import {EntityMap} from '@models/entityMap';
-import {TestContent} from '@models/test';
 import {TestExecutor} from '@models/testExecutors';
 import {Variables} from '@models/variable';
+import {Source} from '@models/Source';
 
 export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued' | 'cancelled';
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
@@ -35,7 +35,7 @@ export type Execution = {
   args: Args;
   params: EntityMap;
   paramsFile: string;
-  content: TestContent;
+  content: Source;
   startTime: Date;
   endTime: Date;
   duration: string;

@@ -1,3 +1,5 @@
+import {SourceType} from '@models';
+
 import {Args} from './args';
 import {EntityMap} from './entityMap';
 
@@ -17,7 +19,7 @@ type Executor = {
     command?: string[];
     args?: Args;
     meta: ExecutorMeta;
-    contentTypes: string[];
+    contentTypes: SourceType[];
   };
 };
 

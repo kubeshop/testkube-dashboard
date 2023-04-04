@@ -1,22 +1,13 @@
 import {EntityMap} from '@models/entityMap';
 import {Execution, ExecutionRequest} from '@models/execution';
-import {Repository} from '@models/repository';
 import {Variables} from '@models/variable';
-
-export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | 'string';
-
-export type TestContent = {
-  type: TestContentTypeEnum;
-  repository: Repository;
-  data: string;
-  uri: string;
-};
+import {Source} from '@models/Source';
 
 export type Test = {
   name: string;
   namespace: string;
   type: string;
-  content: TestContent;
+  content: Source;
   created: string;
   labels: EntityMap;
   schedule: string;

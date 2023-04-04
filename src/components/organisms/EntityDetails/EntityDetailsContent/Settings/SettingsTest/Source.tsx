@@ -27,6 +27,8 @@ import {useUpdateTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
 
+import {isGitSourceType, SourceType} from '@models';
+
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 import SecretFormItem from './SecretFormItem';
 
@@ -59,8 +61,8 @@ const Source = () => {
 
       return {
         source: entityDetails.source,
-        branch: sourceDetails?.repository.branch,
-        path: sourceDetails?.repository.path,
+        branch: sourceDetails?.repository?.branch,
+        path: sourceDetails?.repository?.path,
       };
     }
 
@@ -95,14 +97,11 @@ const Source = () => {
   const sourcesOptions = [
     ...remappedCustomTestSources,
     ...testSourceBaseOptions.filter(option => {
-      if (option.value === 'git') {
-        return (
-          selectedExecutor?.executor?.contentTypes?.includes('git-dir') ||
-          selectedExecutor?.executor?.contentTypes?.includes('git-file')
-        );
+      if (option.value === SourceType.git) {
+        return selectedExecutor?.executor?.contentTypes?.some(isGitSourceType);
       }
 
-      return selectedExecutor?.executor?.contentTypes?.includes(String(option.value));
+      return selectedExecutor?.executor?.contentTypes?.includes(option.value as SourceType);
     }),
   ];
 

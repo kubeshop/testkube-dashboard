@@ -5,7 +5,7 @@ import {CheckCircleOutlined, LoadingOutlined, QuestionCircleOutlined, WarningOut
 
 import {Executor} from '@models/executors';
 import {Option} from '@models/form';
-import {SourceWithRepository} from '@models/sources';
+import {CustomSource, SourceType} from '@models';
 
 import {testSourceLink} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required, url} from '@utils/form';
@@ -15,9 +15,9 @@ import Colors from '@styles/Colors';
 type testSourceBaseOptionsType = (Option & {docsURI: string})[];
 
 export const testSourceBaseOptions: testSourceBaseOptionsType = [
-  {value: 'git', label: 'Git', docsURI: testSourceLink},
-  {value: 'file-uri', label: 'File', docsURI: testSourceLink},
-  {value: 'string', label: 'String', docsURI: testSourceLink},
+  {value: SourceType.git, label: 'Git', docsURI: testSourceLink},
+  {value: SourceType.fileUri, label: 'File', docsURI: testSourceLink},
+  {value: SourceType.string, label: 'String', docsURI: testSourceLink},
 ];
 
 export const pathPlaceholders: {[key: string]: string} = {
@@ -274,7 +274,7 @@ export const remapExecutors = (executors: Executor[]) => {
   return array;
 };
 
-export const remapTestSources = (testSources: SourceWithRepository[]) => {
+export const remapTestSources = (testSources: CustomSource[]) => {
   if (!testSources || !testSources.length) {
     return [];
   }

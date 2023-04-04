@@ -1,6 +1,7 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {SourceWithRepository, SourcesState} from '@models/sources';
+import {SourcesState} from '@models/sources';
+import {CustomSource} from '@models';
 
 import initialState from '@redux/initialState';
 
@@ -10,10 +11,10 @@ export const sourcesSlice = createSlice({
   name: 'sourcesSlice',
   initialState: initialState.sources,
   reducers: {
-    setSources: (state: Draft<SourcesState>, action: PayloadAction<SourceWithRepository[]>) => {
+    setSources: (state: Draft<SourcesState>, action: PayloadAction<CustomSource[]>) => {
       state.sourcesList = action.payload;
     },
-    setCurrentSource: (state: Draft<SourcesState>, action: PayloadAction<SourceWithRepository>) => {
+    setCurrentSource: (state: Draft<SourcesState>, action: PayloadAction<CustomSource>) => {
       state.currentSource = action.payload;
     },
   },

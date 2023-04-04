@@ -2,6 +2,8 @@ import {Form, Input} from 'antd';
 
 import {FormItem, Text} from '@custom-antd';
 
+import {isGitSourceType, SourceType} from '@models';
+
 import Colors from '@styles/Colors';
 
 type SecretFormItemProps = {
@@ -17,9 +19,9 @@ const SecretFormItem: React.FC<SecretFormItemProps> = props => {
   return (
     <Form.Item noStyle shouldUpdate>
       {({setFieldValue, getFieldValue}) => {
-        const testSourceValue: string = getFieldValue('testSource');
+        const testSourceValue: SourceType = getFieldValue('testSource');
 
-        if (testSourceValue === 'git-dir' || testSourceValue === 'git-file' || testSourceValue === 'git') {
+        if (isGitSourceType(testSourceValue)) {
           return (
             <>
               <FormItem name={name} label={label}>

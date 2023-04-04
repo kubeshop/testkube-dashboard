@@ -4,14 +4,14 @@ import {Input as AntdInput, Form} from 'antd';
 
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 
-import {RepositoryTypeEnum} from '@models/repository';
-
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input} from '@custom-antd';
 
 import {Hint} from '@molecules';
+
+import {SourceType} from '@models';
 
 import {openSourcesDocumentation} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -35,9 +35,12 @@ const AddSourceModal = () => {
 
     const body = {
       name,
+      type: SourceType.git,
       repository: {
-        type: 'git' as RepositoryTypeEnum,
+        type: SourceType.git,
         uri,
+        branch: '',
+        path: '',
         ...(username ? {usernameSecret: {name: username}} : {}),
         ...(token ? {tokenSecret: {name: token}} : {}),
       },

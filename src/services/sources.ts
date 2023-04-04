@@ -1,21 +1,18 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {Repository} from '@models/repository';
-import {SourceWithRepository} from '@models/sources';
+import {CustomSource} from '@models';
 
 import {dynamicBaseQuery} from '@utils/fetchUtils';
 
-export type SourceFormField = {name: string; type: 'git-dir'; repository: Repository};
-
 type AddSourcesPayload = {
-  batch: SourceFormField[];
+  batch: CustomSource[];
 };
 
 export const sourcesApi = createApi({
   reducerPath: 'sourcesApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
-    getSources: builder.query<SourceWithRepository[], null>({
+    getSources: builder.query<CustomSource[], null>({
       query: () => '/test-sources',
     }),
     addSources: builder.mutation<any, AddSourcesPayload>({
@@ -27,7 +24,7 @@ export const sourcesApi = createApi({
         };
       },
     }),
-    createSource: builder.mutation<any, SourceWithRepository>({
+    createSource: builder.mutation<any, CustomSource>({
       query: body => {
         return {
           url: '/test-sources',
@@ -36,7 +33,7 @@ export const sourcesApi = createApi({
         };
       },
     }),
-    getSourceDetails: builder.query<SourceWithRepository, string>({
+    getSourceDetails: builder.query<CustomSource, string>({
       query: id => `/test-sources/${id}`,
     }),
     deleteSource: builder.mutation<void, any>({
@@ -45,7 +42,7 @@ export const sourcesApi = createApi({
         method: 'DELETE',
       }),
     }),
-    updateSource: builder.mutation<any, SourceWithRepository>({
+    updateSource: builder.mutation<any, CustomSource>({
       query: body => {
         return {
           url: `/test-sources/${body.name}`,

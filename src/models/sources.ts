@@ -1,27 +1,12 @@
-import {Repository} from '@models/repository';
-
-interface Source {
-  name: string;
-  type?: 'git-uri';
-}
-
-export interface SourceWithString extends Source {
-  uri: string;
-  token?: string;
-  username?: string;
-}
-
-export interface SourceWithRepository extends Source {
-  repository: Repository;
-}
+import {CustomSource} from '@models/Source';
 
 type SourcesState = {
-  sourcesList: SourceWithRepository[];
-  currentSource?: SourceWithRepository;
+  sourcesList: CustomSource[];
+  currentSource?: CustomSource;
 };
 
 export type SourcesFormFields = {
-  sourcesFormList: SourceWithString[];
+  sourcesFormList: CustomSource[];
 };
 
 export type {SourcesState};

@@ -25,6 +25,7 @@
     "^@styles",
     "^@types",
     "^@contexts",
+    "^@validators",
     "^@src",
     "^(?!\\.+\\/styled)^[./]?.+$",
     "^\\.+\\/styled$"

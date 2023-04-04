@@ -41,7 +41,7 @@ const Authentication: React.FC = () => {
     const body = {
       ...source,
       repository: {
-        ...source.repository,
+        ...source.repository!,
         ...(newUsername ? {usernameSecret: {name: newUsername}} : {}),
         ...(newToken ? {tokenSecret: {name: newToken}} : {}),
       },

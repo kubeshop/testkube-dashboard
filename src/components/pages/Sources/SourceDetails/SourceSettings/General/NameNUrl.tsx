@@ -37,7 +37,7 @@ const NameNUrl: React.FC = () => {
       ...source,
       name: values.name,
       repository: {
-        ...source.repository,
+        ...source.repository!,
         uri: values.uri,
       },
     };
