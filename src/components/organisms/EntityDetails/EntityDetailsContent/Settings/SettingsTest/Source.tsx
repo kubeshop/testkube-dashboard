@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useContext, useMemo, useState} from 'react';
 
 import {Form, Select} from 'antd';
 
@@ -11,34 +11,36 @@ import {ExternalLink} from '@atoms';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {
-  customTypeFormFields,
-  fileContentFormFields,
-  getTestSourceSpecificFields,
-  gitFormFieldsEdit,
-  onFileChange,
-  remapTestSources,
-  stringContentFormFields,
-  testSourceBaseOptions,
-} from '@wizards/AddTestWizard/utils';
+  CustomFormFields,
+  FileContentFields,
+  SourceEditFormFields,
+  StringContentFields,
+} from '@organisms/TestConfigurationForm';
+import {getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
 import {testSourceLink} from '@utils/externalLinks';
-import {renderFormItems, required} from '@utils/form';
+import {required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {
+  getCustomSourceField,
+  getSourceFieldValue,
+  getSourceFormValues,
+  getSourcePayload,
+  remapTestSources,
+  testSourceBaseOptions,
+} from '@utils/sources';
 
 import {useUpdateTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
-import SecretFormItem from './SecretFormItem';
 
-const dummySecret = '******';
-
-const additionalFields: any = {
-  git: gitFormFieldsEdit,
-  'file-uri': fileContentFormFields,
-  custom: customTypeFormFields,
-  string: stringContentFormFields,
+const additionalFields: {[key: string]: React.FC<any>} = {
+  git: SourceEditFormFields,
+  'file-uri': FileContentFields,
+  custom: CustomFormFields,
+  string: StringContentFields,
 };
 
 const Source = () => {
@@ -51,101 +53,38 @@ const Source = () => {
 
   const remappedCustomTestSources = remapTestSources(testSources);
 
-  const selectedExecutor = executors.find(executor => executor.executor.types?.includes(type));
+  const selectedExecutor = useMemo(
+    () => executors.find(executor => executor.executor.types?.includes(type)),
+    [executors, type]
+  );
 
-  const getFormValues = () => {
-    const {content} = entityDetails;
-
-    if (entityDetails.source) {
-      const sourceDetails = testSources.find(source => source.name === entityDetails.source);
-
-      return {
-        source: entityDetails.source,
-        branch: sourceDetails?.repository.branch,
-        path: sourceDetails?.repository.path,
-      };
-    }
-
-    if (content.type === 'string') {
-      return {
-        source: content.type,
-        string: content.data,
-      };
-    }
-
-    const secrets: {token?: string; username?: string} = {};
-
-    if (content?.repository?.tokenSecret?.name) {
-      secrets.token = dummySecret;
-    }
-
-    if (content?.repository?.usernameSecret?.name) {
-      secrets.username = dummySecret;
-    }
-
-    return {
-      source: content.type,
-      ...content.repository,
-      ...secrets,
-    };
-  };
-
-  const {source, ...additionalFormValues} = getFormValues();
+  const {source, ...additionalFormValues} = getSourceFormValues(entityDetails, testSources);
 
   const [form] = Form.useForm();
 
   const sourcesOptions = [
     ...remappedCustomTestSources,
-    ...testSourceBaseOptions.filter(option => {
-      if (option.value === 'git') {
-        return (
-          selectedExecutor?.executor?.contentTypes?.includes('git-dir') ||
-          selectedExecutor?.executor?.contentTypes?.includes('git-file')
-        );
-      }
-
-      return selectedExecutor?.executor?.contentTypes?.includes(String(option.value));
-    }),
+    ...testSourceBaseOptions.filter(
+      option =>
+        selectedExecutor?.executor?.contentTypes?.includes(String(option.value)) ||
+        !selectedExecutor?.executor?.contentTypes?.length
+    ),
   ];
 
   const [updateTest] = useUpdateTestMutation();
 
-  const [clearedToken, setClearedToken] = useState(!additionalFormValues.token);
-  const [clearedUsername, setClearedUsername] = useState(!additionalFormValues.username);
+  const [isClearedToken, setIsClearedToken] = useState(!additionalFormValues.token);
+  const [isClearedUsername, setIsClearedUsername] = useState(!additionalFormValues.username);
 
   const onSave = (values: any) => {
     const {testSource} = values;
-
-    const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
-
-    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
-
-    if (isTestSourceCustomGitDir) {
-      const isTestSourceExists = testSources.some(sourceItem => {
-        return sourceItem.name === testSource.replace('$custom-git-dir-', '');
-      });
-
-      if (!isTestSourceExists) {
-        notificationCall('failed', 'Provided test source does not exist');
-        return;
-      }
-    }
-
-    const requestDataContent = {
-      ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {type: ''} : {type: testSource}),
-      ...testSourceSpecificFields,
-    };
 
     updateTest({
       id: entityDetails.name,
       data: {
         ...entityDetails,
-        content: requestDataContent,
-        ...(isTestSourceCustomGitDir
-          ? {source: testSource.replace('$custom-git-dir-', '')}
-          : entityDetails.source
-          ? {source: ''}
-          : {}),
+        content: getSourcePayload(values, testSources),
+        ...getCustomSourceField(testSource, entityDetails.source),
       },
     })
       .then((res: any) => {
@@ -175,8 +114,8 @@ const Source = () => {
         }}
         onCancel={() => {
           form.resetFields();
-          setClearedUsername(!additionalFormValues.username);
-          setClearedToken(!additionalFormValues.token);
+          setIsClearedUsername(!additionalFormValues.username);
+          setIsClearedToken(!additionalFormValues.token);
         }}
         footerText={
           <>
@@ -184,7 +123,7 @@ const Source = () => {
           </>
         }
         forceEnableButtons={
-          (clearedToken && additionalFormValues.token) || (clearedUsername && additionalFormValues.token)
+          (isClearedToken && additionalFormValues.token) || (isClearedUsername && additionalFormValues.username)
         }
       >
         <StyledSpace size={24} direction="vertical">
@@ -196,33 +135,18 @@ const Source = () => {
             shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
           >
             {({getFieldValue}) => {
-              let testSourceValue: string = getFieldValue('testSource');
+              const testSource = getSourceFieldValue(getFieldValue);
 
-              if (testSourceValue) {
-                testSourceValue = !additionalFields[testSourceValue] ? 'custom' : testSourceValue;
+              const executorType = selectedExecutor?.executor.meta?.iconURI;
 
-                return (
-                  <StyledSpace size={24} direction="vertical">
-                    {renderFormItems(additionalFields[testSourceValue](selectedExecutor?.executor.meta?.iconURI), {
-                      onFileChange: file => onFileChange(file, form),
-                    })}
-                  </StyledSpace>
-                );
-              }
+              const childrenProps: {[key: string]: Object} = {
+                git: {executorType, isClearedToken, isClearedUsername, setIsClearedToken, setIsClearedUsername},
+                custom: {executorType},
+              };
+
+              return getAdditionalFieldsComponent(testSource, childrenProps[testSource], additionalFields);
             }}
           </Form.Item>
-          <SecretFormItem
-            name="token"
-            label="Git Token"
-            isClearedValue={clearedToken}
-            setIsClearedValue={setClearedToken}
-          />
-          <SecretFormItem
-            name="username"
-            label="Git Username"
-            isClearedValue={clearedUsername}
-            setIsClearedValue={setClearedUsername}
-          />
         </StyledSpace>
       </ConfigurationCard>
     </Form>

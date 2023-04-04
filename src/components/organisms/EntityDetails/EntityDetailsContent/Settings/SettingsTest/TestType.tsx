@@ -28,7 +28,7 @@ const TestType = () => {
   const [form] = Form.useForm();
 
   const executors = useAppSelector(selectExecutors);
-  const remmappedExecutors = remapExecutors(executors);
+  const remappedExecutors = remapExecutors(executors);
 
   const [updateTest] = useUpdateTestMutation();
 
@@ -72,7 +72,7 @@ const TestType = () => {
       >
         <StyledSpace size={32} direction="vertical">
           <StyledFormItem name="type" rules={[required]}>
-            <Select showSearch options={remmappedExecutors} />
+            <Select showSearch options={remappedExecutors} />
           </StyledFormItem>
         </StyledSpace>
       </ConfigurationCard>

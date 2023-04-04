@@ -1,5 +1,11 @@
+import {NamePath} from 'antd/lib/form/interface';
+
 import {Option} from '@models/form';
 import {SourceWithRepository} from '@models/sources';
+
+import {notificationCall} from '@molecules';
+
+const customGitString = '$custom-git-';
 
 export const remapTestSources = (testSources: SourceWithRepository[]) => {
   if (!testSources || !testSources.length) {
@@ -11,7 +17,7 @@ export const remapTestSources = (testSources: SourceWithRepository[]) => {
   testSources.forEach(source => {
     const {name} = source;
 
-    const optionValue = `$custom-git-dir-${name}`;
+    const optionValue = `${customGitString}${name}`;
     const optionName = `Git source: ${name}`;
 
     array.push({value: optionValue, label: optionName});
@@ -76,4 +82,82 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
       ...secrets,
     },
   };
+};
+
+export const getSourcePayload = (values: any, testSources: SourceWithRepository[]) => {
+  const {testSource} = values;
+  const isTestSourceCustomGitDir = testSource.includes(customGitString);
+
+  const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
+
+  if (isTestSourceCustomGitDir) {
+    const isTestSourceExists = testSources.some(sourceItem => {
+      return sourceItem.name === testSource.replace(customGitString, '');
+    });
+
+    if (!isTestSourceExists) {
+      notificationCall('failed', 'Provided test source does not exist');
+      return;
+    }
+  }
+
+  return {
+    ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {type: ''} : {type: testSource}),
+    ...testSourceSpecificFields,
+  };
+};
+
+export const getCustomSourceField = (testSource: string, prevTestSource?: string) => {
+  const isCustomTestSource = testSource.includes(customGitString);
+
+  return isCustomTestSource ? {source: testSource.replace(customGitString, '')} : prevTestSource ? {source: ''} : {};
+};
+
+const dummySecret = '******';
+
+export const getSourceFormValues = (entityDetails: any, testSources: SourceWithRepository[]) => {
+  const {content} = entityDetails;
+
+  if (entityDetails.source) {
+    const sourceDetails = testSources.find(source => source.name === entityDetails.source);
+
+    return {
+      source: entityDetails.source,
+      branch: sourceDetails?.repository.branch,
+      path: sourceDetails?.repository.path,
+    };
+  }
+
+  if (content.type === 'string') {
+    return {
+      source: content.type,
+      string: content.data,
+    };
+  }
+
+  const secrets: {token?: string; username?: string} = {};
+
+  if (content?.repository?.tokenSecret?.name) {
+    secrets.token = dummySecret;
+  }
+
+  if (content?.repository?.usernameSecret?.name) {
+    secrets.username = dummySecret;
+  }
+
+  return {
+    source: content.type,
+    ...content.repository,
+    ...secrets,
+  };
+};
+
+export const getSourceFieldValue = (getFieldValue: (name: NamePath) => any) => {
+  const testSourceValue: string = getFieldValue('testSource');
+
+  if (!testSourceValue) {
+    return '';
+  }
+
+  return testSourceValue.includes(customGitString) ? 'custom' : testSourceValue;
 };
