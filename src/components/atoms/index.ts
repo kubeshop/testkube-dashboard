@@ -15,3 +15,4 @@ export {default as CopyButton} from './CopyButton';
 export {default as ScrollTrigger} from './ScrollTrigger';
 export {default as AnsiClassesMapping} from './TestkubeTheme/AnsiClassesMapping';
 export {default as TestkubeCodeTheme} from './TestkubeTheme/CodeTheme';
+export * from './ControlledForm';
