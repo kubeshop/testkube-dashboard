@@ -1,36 +1,35 @@
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useMemo, useState} from 'react';
+import {useDeepCompareEffect} from 'react-use';
 
-import {Form, Select} from 'antd';
+import {Form} from 'antd';
+
+import {Type} from 'class-transformer';
+import {ValidateNested} from 'class-validator';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
+import {SourceInput, SourceTypeInput, useControlledForm} from '@atoms';
 
 import {
   customTypeFormFields,
   fileContentFormFields,
-  getTestSourceSpecificFields,
   gitFormFieldsEdit,
-  onFileChange,
-  remapTestSources,
   stringContentFormFields,
-  testSourceBaseOptions,
 } from '@wizards/AddTestWizard/utils';
 
 import {testSourceLink} from '@utils/externalLinks';
-import {renderFormItems, required} from '@utils/form';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {isGitSourceType, SourceType} from '@models';
+import {Source as SourceModel, CustomSource, SourceType} from '@models';
 
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
-import SecretFormItem from './SecretFormItem';
+import {StyledSpace} from '../Settings.styled';
 
 const dummySecret = '******';
 
@@ -41,108 +40,61 @@ const additionalFields: any = {
   string: stringContentFormFields,
 };
 
+class SourceFormDto {
+  source?: CustomSource | SourceType;
+
+  @ValidateNested()
+  @Type(() => SourceModel)
+  content!: SourceModel;
+}
+
 const Source = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
 
   const {type} = entityDetails;
 
   const executors = useAppSelector(selectExecutors);
-  const testSources = useAppSelector(selectSources);
+  const selectedExecutor = useMemo(() => executors.find(x => x.executor.types?.includes(type)), [executors, type]);
 
-  const remappedCustomTestSources = remapTestSources(testSources);
+  const customSources = useAppSelector(selectSources);
+  const initialCustomSource = useMemo(
+    () => customSources.find(source => source.name === entityDetails.source),
+    [customSources, entityDetails],
+  );
 
-  const selectedExecutor = executors.find(executor => executor.executor.types?.includes(type));
+  const [dto, setDto] = useState<SourceFormDto>({
+    source: initialCustomSource || entityDetails.content?.type,
+    content: entityDetails.content,
+  });
+  useDeepCompareEffect(() => setDto({
+    source: initialCustomSource,
+    content: entityDetails.content,
+  }), [initialCustomSource, entityDetails.content]);
 
-  const getFormValues = () => {
-    const {content} = entityDetails;
-
-    if (entityDetails.source) {
-      const sourceDetails = testSources.find(source => source.name === entityDetails.source);
-
-      return {
-        source: entityDetails.source,
-        branch: sourceDetails?.repository?.branch,
-        path: sourceDetails?.repository?.path,
-      };
+  useEffect(() => {
+    form.resetFields();
+    if (typeof dto.source === 'string') {
+      setDto({...dto, content: {...dto.content, type: dto.source}});
+    } else {
+      setDto({...dto, content: dto.source!});
     }
-
-    if (content.type === 'string') {
-      return {
-        source: content.type,
-        string: content.data,
-      };
-    }
-
-    const secrets: {token?: string; username?: string} = {};
-
-    if (content?.repository?.tokenSecret?.name) {
-      secrets.token = dummySecret;
-    }
-
-    if (content?.repository?.usernameSecret?.name) {
-      secrets.username = dummySecret;
-    }
-
-    return {
-      source: content.type,
-      ...content.repository,
-      ...secrets,
-    };
-  };
-
-  const {source, ...additionalFormValues} = getFormValues();
-
-  const [form] = Form.useForm();
-
-  const sourcesOptions = [
-    ...remappedCustomTestSources,
-    ...testSourceBaseOptions.filter(option => {
-      if (option.value === SourceType.git) {
-        return selectedExecutor?.executor?.contentTypes?.some(isGitSourceType);
-      }
-
-      return selectedExecutor?.executor?.contentTypes?.includes(option.value as SourceType);
-    }),
-  ];
+  }, [dto.source]);
 
   const [updateTest] = useUpdateTestMutation();
 
-  const [clearedToken, setClearedToken] = useState(!additionalFormValues.token);
-  const [clearedUsername, setClearedUsername] = useState(!additionalFormValues.username);
-
-  const onSave = (values: any) => {
-    const {testSource} = values;
-
-    const isTestSourceCustomGitDir = testSource.includes('custom-git-dir');
-
-    const testSourceSpecificFields = getTestSourceSpecificFields(values, isTestSourceCustomGitDir);
-
-    if (isTestSourceCustomGitDir) {
-      const isTestSourceExists = testSources.some(sourceItem => {
-        return sourceItem.name === testSource.replace('$custom-git-dir-', '');
-      });
-
-      if (!isTestSourceExists) {
-        notificationCall('failed', 'Provided test source does not exist');
-        return;
-      }
+  const {form, errors, formProps, useChange, useSubmit} = useControlledForm(SourceFormDto, dto);
+  useChange(setDto);
+  useSubmit(() => {
+    if (errors.length > 0) {
+      return;
     }
-
-    const requestDataContent = {
-      ...(testSource === 'file-uri' ? {type: 'string'} : isTestSourceCustomGitDir ? {type: ''} : {type: testSource}),
-      ...testSourceSpecificFields,
-    };
 
     updateTest({
       id: entityDetails.name,
       data: {
         ...entityDetails,
-        content: requestDataContent,
-        ...(isTestSourceCustomGitDir
-          ? {source: testSource.replace('$custom-git-dir-', '')}
-          : entityDetails.source
-          ? {source: ''}
-          : {}),
+        source: (dto.source as CustomSource)?.name || '',
+        content: dto.content,
       },
     })
       .then((res: any) => {
@@ -153,17 +105,10 @@ const Source = () => {
       .catch((err: any) => {
         displayDefaultErrorNotification(err);
       });
-  };
+  });
 
   return (
-    <Form
-      form={form}
-      name="test-settings-source"
-      initialValues={{testSource: source, ...additionalFormValues}}
-      layout="vertical"
-      labelAlign="right"
-      onFinish={onSave}
-    >
+    <Form name="test-settings-source" layout="vertical" labelAlign="right" {...formProps}>
       <ConfigurationCard
         title="Source"
         description="Define the source for your test"
@@ -171,9 +116,12 @@ const Source = () => {
           form.submit();
         }}
         onCancel={() => {
+          setDto({
+            source: initialCustomSource || entityDetails.content?.type,
+            content: entityDetails.content,
+          });
+          // FIXME: It makes the form blinking
           form.resetFields();
-          setClearedUsername(!additionalFormValues.username);
-          setClearedToken(!additionalFormValues.token);
         }}
         footerText={
           <>
@@ -183,46 +131,15 @@ const Source = () => {
             </a>
           </>
         }
-        forceEnableButtons={
-          (clearedToken && additionalFormValues.token) || (clearedUsername && additionalFormValues.token)
-        }
+        disabled={errors.length > 0}
       >
         <StyledSpace size={24} direction="vertical">
-          <StyledFormItem name="testSource" rules={[required]}>
-            <Select showSearch options={sourcesOptions} />
-          </StyledFormItem>
-          <Form.Item
-            noStyle
-            shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
-          >
-            {({getFieldValue}) => {
-              let testSourceValue: string = getFieldValue('testSource');
-
-              if (testSourceValue) {
-                testSourceValue = !additionalFields[testSourceValue] ? 'custom' : testSourceValue;
-
-                return (
-                  <StyledSpace size={24} direction="vertical">
-                    {renderFormItems(additionalFields[testSourceValue](selectedExecutor?.executor.meta?.iconURI), {
-                      onFileChange: file => onFileChange(file, form),
-                    })}
-                  </StyledSpace>
-                );
-              }
-            }}
+          <Form.Item noStyle name='source'>
+            <SourceTypeInput executor={selectedExecutor!} sources={customSources} />
           </Form.Item>
-          <SecretFormItem
-            name="token"
-            label="Git Token"
-            isClearedValue={clearedToken}
-            setIsClearedValue={setClearedToken}
-          />
-          <SecretFormItem
-            name="username"
-            label="Git Username"
-            isClearedValue={clearedUsername}
-            setIsClearedValue={setClearedUsername}
-          />
+          <Form.Item noStyle name='content'>
+            <SourceInput executor={selectedExecutor!} source={typeof dto.source === 'string' ? undefined : dto.source} />
+          </Form.Item>
         </StyledSpace>
       </ConfigurationCard>
     </Form>
