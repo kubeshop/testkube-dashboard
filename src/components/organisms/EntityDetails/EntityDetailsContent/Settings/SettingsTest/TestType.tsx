@@ -9,8 +9,7 @@ import {ExternalLink} from '@atoms';
 
 import {ConfigurationCard} from '@molecules';
 
-import {remapExecutors} from '@wizards/AddTestWizard/utils';
-
+import {remapExecutors} from '@utils/executors';
 import {required} from '@utils/form';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';

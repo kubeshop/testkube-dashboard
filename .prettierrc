@@ -16,7 +16,6 @@
     "^@molecules",
     "^@organisms",
     "^@pages",
-    "^@wizards",
     "^@hooks",
     "^@utils",
     "^@assets",
