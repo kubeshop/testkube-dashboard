@@ -3,6 +3,8 @@ import {useContext, useEffect, useMemo, useState} from 'react';
 import {useAppSelector} from '@redux/hooks';
 import {selectSources, setSources} from '@redux/reducers/sourcesSlice';
 
+import {ExternalLink} from '@atoms';
+
 import {Button, Modal, Skeleton, Text} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
@@ -58,9 +60,7 @@ const Sources: React.FC = () => {
       description={
         <>
           Define global sources you can refer to in your tests. Learn more about{' '}
-          <a href="https://kubeshop.github.io/testkube/openapi/#tag/test-sources" target="_blank">
-            Sources
-          </a>
+          <ExternalLink href="https://kubeshop.github.io/testkube/openapi/#tag/test-sources">Sources</ExternalLink>
         </>
       }
       headerButton={

@@ -11,6 +11,8 @@ import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 
+import {ExternalLink} from '@atoms';
+
 import {Button, Skeleton} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
@@ -211,9 +213,9 @@ const Triggers: React.FC = () => {
       description={
         <>
           Listen for events and run specific testkube actions.{' '}
-          <a href="https://kubeshop.github.io/testkube/using-testkube/triggers" target="_blank">
+          <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/triggers">
             Learn more about Triggers
-          </a>
+          </ExternalLink>
         </>
       }
     >

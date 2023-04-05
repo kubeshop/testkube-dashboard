@@ -4,6 +4,8 @@ import {Form, Input, Space} from 'antd';
 
 import {Test} from '@models/test';
 
+import {ExternalLink} from '@atoms';
+
 import {Button, Text} from '@custom-antd';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
@@ -133,12 +135,9 @@ const Arguments: React.FC = () => {
         footerText={
           <>
             Learn more about{' '}
-            <a
-              href="https://kubeshop.github.io/testkube/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests"
-              target="_blank"
-            >
+            <ExternalLink href="https://kubeshop.github.io/testkube/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests">
               Arguments
-            </a>
+            </ExternalLink>
           </>
         }
         isButtonsDisabled={isButtonsDisabled}

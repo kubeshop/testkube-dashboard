@@ -1,3 +1,5 @@
+import {ExternalLink} from '@atoms';
+
 import {Button, Text, Title} from '@custom-antd';
 
 import {HelpCard} from '@molecules';
@@ -34,9 +36,7 @@ const EmptyListContent: React.FC<EmptyListContentProps> = props => {
         <StyledLastHelpCardContainer>
           <HelpCard isHelp link="https://discord.com/invite/hfq44wtR6Q">
             Need help getting started? Want to talk to Testkube engineers?{' '}
-            <a href="https://discord.com/invite/hfq44wtR6Q" target="_blank">
-              Find us on Discord
-            </a>
+            <ExternalLink href="https://discord.com/invite/hfq44wtR6Q">Find us on Discord</ExternalLink>
           </HelpCard>
         </StyledLastHelpCardContainer>
       </StyledHelpCardsContainer>

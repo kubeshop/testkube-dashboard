@@ -4,6 +4,8 @@ import {Form} from 'antd';
 
 import {Entity} from '@models/entity';
 
+import {ExternalLink} from '@atoms';
+
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
@@ -92,9 +94,9 @@ const Variables: React.FC = () => {
         footerText={
           <>
             Learn more about{' '}
-            <a href="https://kubeshop.github.io/testkube/using-testkube/tests/tests-variables/" target="_blank">
+            <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/tests/tests-variables/">
               Environment variables
-            </a>
+            </ExternalLink>
           </>
         }
         onConfirm={onClickSave}

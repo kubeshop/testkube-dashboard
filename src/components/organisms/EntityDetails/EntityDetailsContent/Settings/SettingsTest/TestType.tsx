@@ -5,6 +5,8 @@ import {Form, Select} from 'antd';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 
+import {ExternalLink} from '@atoms';
+
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {remapExecutors} from '@wizards/AddTestWizard/utils';
@@ -62,9 +64,9 @@ const TestType = () => {
         footerText={
           <>
             Learn more about{' '}
-            <a href="https://kubeshop.github.io/testkube/category/test-types" target="_blank">
+            <ExternalLink href="https://kubeshop.github.io/testkube/category/test-types">
               test types and executors
-            </a>
+            </ExternalLink>
           </>
         }
       >

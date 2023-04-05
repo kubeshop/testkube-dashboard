@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 
 import axios from 'axios';
 
-import {CopyButton, Pre} from '@atoms';
+import {CopyButton, ExternalLink, Pre} from '@atoms';
 import DownloadButton from '@atoms/DownloadButton/DownloadButton';
 
 import {ConfigurationCard, Definition} from '@molecules';
@@ -55,10 +55,7 @@ const SettingsDefinition: React.FC = () => {
       description={sectionData.description}
       footerText={
         <>
-          Learn more about{' '}
-          <a href={sectionData.helpLinkUrl} target="_blank">
-            Definitions
-          </a>
+          Learn more about <ExternalLink href={sectionData.helpLinkUrl}>Definitions</ExternalLink>
         </>
       }
     >

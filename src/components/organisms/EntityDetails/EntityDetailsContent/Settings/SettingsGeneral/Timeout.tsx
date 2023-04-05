@@ -2,6 +2,8 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
+import {ExternalLink} from '@atoms';
+
 import {Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
@@ -69,12 +71,9 @@ const Timeout: React.FC = () => {
         footerText={
           <Text className="regular middle">
             Learn more about{' '}
-            <a
-              href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/"
-              target="_blank"
-            >
+            <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
               Timeouts
-            </a>
+            </ExternalLink>
           </Text>
         }
       >
