@@ -8,6 +8,7 @@ import {StyledFormSpace} from '../TestConfigurationForm.styled';
 
 const BranchCommit = () => {
   const [switcherValue, setSwitcherValue] = useState<string | number>('branch');
+
   const isFirst = useFirstMountState();
 
   return (
