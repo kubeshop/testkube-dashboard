@@ -14,7 +14,14 @@ export interface FileUriSourceInputProps {
 
 export const FileUriSourceInput: FC<FileUriSourceInputProps> = ({value, onChange}) => {
   return (
-    <ControlledForm layout='vertical' Validator={Source} component='div' value={value} onChange={onChange}>
+    <ControlledForm
+      virtual
+      style={{width: '100%'}}
+      layout='vertical'
+      Validator={Source}
+      value={value}
+      onChange={onChange}
+    >
       <FormItem name='uri' label='File URL' required>
         <Input placeholder='e.g.: https://domain.com/template.json' />
       </FormItem>

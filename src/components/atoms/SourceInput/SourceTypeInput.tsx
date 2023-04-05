@@ -17,6 +17,7 @@ import {SourceInputExecutor} from './types';
 const baseSources = testSourceBaseOptions as Option[];
 
 export interface SourceTypeInputProps {
+  placeholder?: string;
   executor: SourceInputExecutor;
   sources?: CustomSource[];
   value?: CustomSource | SourceType;
@@ -24,7 +25,7 @@ export interface SourceTypeInputProps {
 }
 
 export const SourceTypeInput: FC<SourceTypeInputProps> = (
-  {executor, sources, value, onChange},
+  {placeholder, executor, sources, value, onChange},
 ) => {
   // Get list of custom test sources
   const customSources = useMemo(() => (
@@ -52,6 +53,7 @@ export const SourceTypeInput: FC<SourceTypeInputProps> = (
       value={key}
       onChange={change}
       options={allSources}
+      placeholder={placeholder}
       showSearch
     />
   );

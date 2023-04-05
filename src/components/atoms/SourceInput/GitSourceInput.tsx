@@ -38,7 +38,14 @@ export const GitSourceInput: FC<GitSourceInputProps> = ({executor, value, onChan
   }, [onChange]);
 
   return (
-    <ControlledForm virtual layout='vertical' Validator={Source} value={value} onChange={onChange}>
+    <ControlledForm
+      virtual
+      style={{width: '100%'}}
+      layout='vertical'
+      Validator={Source}
+      value={value}
+      onChange={onChange}
+    >
       <StyledSpace size={24} direction='vertical'>
         <FormItem name={['repository', 'uri']} label='Git repository URI' tooltip={repositoryTooltip} required>
           <Input placeholder='e.g.: https://github.com/myCompany/myRepo.git' />

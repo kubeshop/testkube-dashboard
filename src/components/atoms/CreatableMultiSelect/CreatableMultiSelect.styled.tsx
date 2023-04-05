@@ -24,6 +24,7 @@ export const StyledMultiLabel = styled.div`
 export const customStyles: (validation?: boolean) => StylesConfig<Option, true, GroupBase<Option>> = (
   validation = true
 ) => ({
+  container: styles => ({...styles, width: '100%'}),
   input: styles => ({...styles, color: Colors.slate200, fontWeight: 400}),
   valueContainer: styles => ({
     ...styles,

@@ -19,7 +19,14 @@ export interface GitCustomSourceInputProps {
 // TODO: Unify StyledSpace props
 export const GitCustomSourceInput: FC<GitCustomSourceInputProps> = ({executor, value, onChange}) => {
   return (
-    <ControlledForm layout='vertical' component='div' Validator={Source} value={value} onChange={onChange}>
+    <ControlledForm
+      virtual
+      style={{width: '100%'}}
+      layout='vertical'
+      Validator={Source}
+      value={value}
+      onChange={onChange}
+    >
       <StyledSpace size={24} direction='vertical'>
         <FormItem name={['repository', 'branch']} label='Branch'>
           <Input placeholder='e.g.: main' />
