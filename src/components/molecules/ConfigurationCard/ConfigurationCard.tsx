@@ -25,6 +25,7 @@ type ConfigurationCardProps = {
   onCancel?: () => void;
   isButtonsDisabled?: boolean;
   forceEnableButtons?: boolean;
+  disabled?: boolean;
   children?: React.ReactNode;
 };
 
@@ -33,6 +34,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     title,
     description,
     isWarning = false,
+    disabled = false,
     onConfirm,
     onCancel,
     footerText,
@@ -68,6 +70,9 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
 
               if (forceEnableButtons) {
                 isDisabled = false;
+              }
+              if (disabled) {
+                isDisabled = true;
               }
 
               return (
