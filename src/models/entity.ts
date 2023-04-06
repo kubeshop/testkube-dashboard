@@ -5,7 +5,7 @@ import {FilterType} from './filters';
 
 export type Entity = 'test-suites' | 'tests';
 
-export type ReduxSlices = 'testSuites' | 'testSuiteExecutions' | 'tests' | 'executions' | 'labels' | 'config';
+export type ReduxSlices = 'testSuites' | 'tests' | 'executions' | 'labels' | 'config';
 
 export type EntityListBlueprintProps = {
   entity: Entity;

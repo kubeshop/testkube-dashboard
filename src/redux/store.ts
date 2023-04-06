@@ -3,7 +3,6 @@ import {Action, Middleware, ThunkAction, configureStore} from '@reduxjs/toolkit'
 import configSlice from '@redux/reducers/configSlice';
 import executorsSlice from '@redux/reducers/executorsSlice';
 import sourcesSlice from '@redux/reducers/sourcesSlice';
-import testSuiteExecutionsSlice from '@redux/reducers/testSuiteExecutionsSlice';
 import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
 
@@ -36,7 +35,6 @@ export const store = configureStore({
     testSuites: testSuitesSlice,
     tests: testsSlice,
     config: configSlice,
-    testSuiteExecutions: testSuiteExecutionsSlice,
     executors: executorsSlice,
     sources: sourcesSlice,
 
