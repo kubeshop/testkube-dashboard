@@ -1,11 +1,11 @@
 import {Segmented} from 'antd';
 
-type BranchCommitSwitcherProps = {
+type RevisionSwitcherProps = {
   value: string | number;
   onChange: (value: string | number) => void;
 };
 
-const BranchCommitSwitcher: React.FC<BranchCommitSwitcherProps> = props => {
+const RevisionSwitcher: React.FC<RevisionSwitcherProps> = props => {
   const {value, onChange} = props;
 
   return (
@@ -20,4 +20,4 @@ const BranchCommitSwitcher: React.FC<BranchCommitSwitcherProps> = props => {
   );
 };
 
-export default BranchCommitSwitcher;
+export default RevisionSwitcher;

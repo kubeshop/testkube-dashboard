@@ -8,10 +8,6 @@ import {notificationCall} from '@molecules';
 const customGitSourceString = '$custom-git-';
 
 export const remapTestSources = (testSources: SourceWithRepository[]) => {
-  if (!testSources || !testSources.length) {
-    return [];
-  }
-
   return testSources.map(source => {
     const {name} = source;
 
@@ -59,7 +55,7 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
     }
   }
 
-  if (username !== undefined) {
+  if (username !== undefined && username !== null) {
     if (username === '') {
       secrets.usernameSecret = {};
     } else if (!username.includes('*')) {

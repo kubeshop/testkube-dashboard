@@ -1,5 +1,5 @@
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import {BranchCommit, Path} from '../molecules';
+import {Path, Revision} from '../molecules';
 
 type CustomFormFieldsProps = {
   executorType: string;
@@ -10,7 +10,7 @@ const CustomFormFields: React.FC<CustomFormFieldsProps> = props => {
 
   return (
     <StyledFormSpace size={24} direction="vertical">
-      <BranchCommit />
+      <Revision />
       <Path testType={executorType} />
     </StyledFormSpace>
   );

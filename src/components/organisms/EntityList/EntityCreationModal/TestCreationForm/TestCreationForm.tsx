@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 
 import {Form, FormInstance, Input, Select} from 'antd';
 
@@ -79,6 +79,10 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
       });
   };
 
+  const selectedExecutor = useMemo(() => {
+    return executors.find((executor: Executor) => executor.executor?.types?.includes(form.getFieldValue('testType')));
+  }, [form.getFieldValue('testType')]);
+
   return (
     <Form form={form} layout="vertical" name="test-creation" onFinish={onSave} style={{flex: 1}} labelAlign="right">
       <StyledFormSpace size={24} direction="vertical">
@@ -92,17 +96,13 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
           <Input placeholder="e.g.: my-test" />
         </FormItem>
         <FormItem name="testType" label="Type" rules={[required]} required>
-          <Select placeholder="Select from available executors..." showSearch options={remappedExecutors} allowClear />
+          <Select placeholder="Select from available executors..." showSearch options={remappedExecutors} />
         </FormItem>
         <FormItem
           noStyle
           shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
         >
-          {({getFieldValue}) => {
-            const selectedExecutor = executors.find((executor: Executor) =>
-              executor.executor?.types?.includes(getFieldValue('testType'))
-            );
-
+          {() => {
             if (!selectedExecutor) {
               return null;
             }
@@ -118,7 +118,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
             return (
               <FormItem rules={[required]} label="Source" name="testSource" required>
-                <Select placeholder="Select a source..." options={options} showSearch allowClear />
+                <Select placeholder="Select a source..." options={options} showSearch />
               </FormItem>
             );
           }}
@@ -130,9 +130,6 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
           {({getFieldValue}) => {
             const testSourceValue = getSourceFieldValue(getFieldValue);
 
-            const selectedExecutor = executors.find((executor: any) =>
-              executor.executor?.types?.includes(getFieldValue('testType'))
-            );
             const executorType = selectedExecutor?.executor.meta?.iconURI;
 
             const childrenProps: {[key: string]: Object} = {
