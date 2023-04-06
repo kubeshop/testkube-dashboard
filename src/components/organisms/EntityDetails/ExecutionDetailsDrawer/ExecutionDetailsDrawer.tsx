@@ -1,6 +1,7 @@
-import {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {Drawer} from 'antd';
+import {LoadingOutlined} from '@ant-design/icons';
 
 import {Entity} from '@models/entity';
 
@@ -131,7 +132,18 @@ const ExecutionDetailsDrawer: React.FC = () => {
             {selectedRow ? components[entity] : null}
           </ExecutionDetailsDrawerWrapper>
         </Drawer>
-      ) : null}
+      ) : (
+        <Drawer
+          bodyStyle={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: Colors.slate800, fontSize: '48px'}}
+          headerStyle={{borderBottom: 0, padding: '40px 30px 0', backgroundColor: Colors.slate800}}
+          closable={false}
+          open={isRowSelected}
+          width={drawerWidth}
+          onClose={unselectRow}
+        >
+          <LoadingOutlined />
+        </Drawer>
+      )}
     </ExecutionDetailsContext.Provider>
   );
 };
