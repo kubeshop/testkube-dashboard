@@ -18,15 +18,6 @@ export const sourcesApi = createApi({
     getSources: builder.query<SourceWithRepository[], null>({
       query: () => '/test-sources',
     }),
-    addSources: builder.mutation<any, AddSourcesPayload>({
-      query: body => {
-        return {
-          url: '/test-sources',
-          method: 'PATCH',
-          body,
-        };
-      },
-    }),
     createSource: builder.mutation<any, SourceWithRepository>({
       query: body => {
         return {
@@ -59,7 +50,6 @@ export const sourcesApi = createApi({
 
 export const {
   useGetSourcesQuery,
-  useAddSourcesMutation,
   useGetSourceDetailsQuery,
   useCreateSourceMutation,
   useDeleteSourceMutation,
