@@ -43,8 +43,6 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     setVisibilityState(flag);
   };
 
-  const onMenuClick = () => {};
-
   const onKeyChange = (key: string, index: number) => {
     setLabelsMapping([
       ...labelsMapping.slice(0, index),
@@ -163,7 +161,6 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const menu = (
     <StyledFilterMenu
-      onClick={onMenuClick}
       data-cy="labels-filter-dropdown"
       onKeyPress={event => {
         onEvent(event, applyFilters);

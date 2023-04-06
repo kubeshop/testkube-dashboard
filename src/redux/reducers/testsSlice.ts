@@ -34,7 +34,6 @@ export const testsSlice = createSlice({
 
 export const selectTests = (state: RootState) => state.tests.dataList;
 export const selectTestsFilters = (state: RootState) => state.tests.filters;
-export const selectSelectedTest = (state: RootState) => state.tests.selectedTest;
 export const selectAllTestsFilters = (state: RootState) => ({
   filters: state.tests.filters,
   filtered: state.tests.filtered,

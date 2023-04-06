@@ -69,8 +69,6 @@ const StatusFilter: React.FC<FilterProps> = props => {
     [filters.status]
   );
 
-  const onMenuClick = () => {};
-
   const renderedStatuses = useMemo(() => {
     return statusList.map(status => {
       return (
@@ -96,7 +94,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
   };
 
   const menu = (
-    <StyledFilterMenu onClick={onMenuClick} data-cy="status-filter-dropdown">
+    <StyledFilterMenu data-cy="status-filter-dropdown">
       {renderedStatuses}
       <FilterMenuFooter onReset={resetFilter} onOk={() => onVisibleChange(false)} />
     </StyledFilterMenu>

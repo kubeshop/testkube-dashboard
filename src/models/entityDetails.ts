@@ -3,10 +3,6 @@ import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHook
 
 import {Entity} from './entity';
 
-export type EntityDetailsBlueprintProps = {
-  entity: Entity;
-};
-
 type GetExecutionEndpointFunction = (arg: string) => string;
 
 export type EntityDetailsBlueprint = {

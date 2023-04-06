@@ -5,7 +5,5 @@ export {default as Text} from './Typography/Text';
 export {default as Input} from './Input';
 export {default as FormItem} from './Form/FormItem';
 export {default as Upload} from './Upload';
-export {default as Steps} from './Steps';
-export {default as Step} from './Steps/Step';
 export {default as Modal} from './Modal';
 export {default as Checkbox} from './Checkbox';

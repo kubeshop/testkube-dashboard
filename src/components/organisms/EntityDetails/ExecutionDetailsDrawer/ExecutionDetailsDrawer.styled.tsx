@@ -24,8 +24,6 @@ export const DrawerHeader = styled.div`
   display: flex;
 `;
 
-export const DrawerContent = styled.div``;
-
 export const ItemRow = styled.div<{$flex: number}>`
   display: flex;
   align-items: center;

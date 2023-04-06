@@ -16,11 +16,11 @@ type UploadWithInputProps = {
     fileName: string;
   };
   fieldInstance?: boolean;
-};
+} & Pick<UploadProps, 'beforeUpload'>;
 
 const defaultBeforeUpload = () => false;
 
-const UploadWithInput: React.FC<UploadWithInputProps & Pick<UploadProps, 'beforeUpload'>> = props => {
+const UploadWithInput: React.FC<UploadWithInputProps> = props => {
   const {onFileChange, beforeUpload = defaultBeforeUpload, value} = props;
 
   const inputClassNames = classNames({

@@ -16,24 +16,11 @@ export const configSlice = createSlice({
     setRedirectTarget: (state: Draft<ConfigState>, action: PayloadAction<any>) => {
       state.redirectTarget = action.payload;
     },
-    clearRunTarget: (state: Draft<ConfigState>) => {
-      state.redirectTarget.runTarget = false;
-    },
-    clearTargetTestId: (state: Draft<ConfigState>) => {
-      state.redirectTarget.targetTestId = null;
-    },
-    clearTargetTestExecutionId: (state: Draft<ConfigState>) => {
-      state.redirectTarget.targetTestExecutionId = null;
-    },
     setLogOutput: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.fullScreenLogOutput.logOutput += action.payload;
     },
     setIsFullScreenLogOutput: (state: Draft<ConfigState>, action: PayloadAction<boolean>) => {
       state.fullScreenLogOutput.isFullScreenLogOutput = action.payload;
-    },
-    openFullScreenLogOutput: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
-      state.fullScreenLogOutput.isFullScreenLogOutput = true;
-      state.fullScreenLogOutput.logOutput = action.payload;
     },
     closeFullScreenLogOutput: (state: Draft<ConfigState>) => {
       state.fullScreenLogOutput.isFullScreenLogOutput = false;
@@ -56,12 +43,8 @@ export const selectFullScreenLogOutput = (state: RootState) => state.config.full
 
 export const {
   setIsFullScreenLogOutput,
-  openFullScreenLogOutput,
   closeFullScreenLogOutput,
   setRedirectTarget,
-  clearTargetTestId,
-  clearTargetTestExecutionId,
-  clearRunTarget,
   setLogOutput,
   openSettingsTabConfig,
   closeSettingsTabConfig,

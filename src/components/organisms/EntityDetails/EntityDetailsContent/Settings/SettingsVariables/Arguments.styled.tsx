@@ -12,7 +12,3 @@ export const ArgumentsWrapper = styled.div`
     resize: none;
   }
 `;
-
-export const ButtonWrapper = styled.div`
-  text-align: right;
-`;
