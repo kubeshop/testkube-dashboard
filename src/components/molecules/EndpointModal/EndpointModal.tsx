@@ -2,13 +2,15 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import {Space} from 'antd';
 
+import {ExternalLink} from '@atoms';
+
 import {Button, Input, Modal, Text} from '@custom-antd';
+
+import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 import Colors from '@styles/Colors';
 
 import {MainContext} from '@contexts';
-
-import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 import notificationCall from '../Notification/Notification';
 import {StyledSearchUrlForm} from './EndpointModal.styled';
@@ -59,13 +61,9 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
           <Text>
             We could not detect the right Testkube API endpoint for you. Please enter the API endpoint for your
             installation (e.g. from the output of the Testkube installer)&nbsp;
-            <a
-              href="https://kubeshop.github.io/testkube/UI/#ui-results-endpoint"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <ExternalLink href="https://kubeshop.github.io/testkube/UI/#ui-results-endpoint">
               Learn more...
-            </a>
+            </ExternalLink>
           </Text>
           <Space style={{width: '100%'}} size={12}>
             <Input

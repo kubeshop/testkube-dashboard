@@ -10,6 +10,8 @@ import {
   setTestsFilters,
 } from '@redux/reducers/testsSlice';
 
+import {ExternalLink} from '@atoms';
+
 import {Text} from '@custom-antd';
 
 import {useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
@@ -22,9 +24,7 @@ const TestsPageDescription: React.FC = () => {
   return (
     <Text className="regular middle" color={Colors.slate400}>
       Explore your tests at a glance... Learn more about{' '}
-      <a href="https://kubeshop.github.io/testkube/" target="_blank">
-        testing with Testkube
-      </a>
+      <ExternalLink href="https://kubeshop.github.io/testkube/">testing with Testkube</ExternalLink>
     </Text>
   );
 };

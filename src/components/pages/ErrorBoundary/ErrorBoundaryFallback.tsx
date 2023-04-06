@@ -1,5 +1,7 @@
 import {useCallback, useContext} from 'react';
 
+import {ExternalLink} from '@atoms';
+
 import {Button, Title} from '@custom-antd';
 
 import notFoundImage from '@assets/not-found-image.svg';
@@ -21,7 +23,7 @@ const ErrorBoundaryFallback: React.FC = () => {
     <StyledErrorContainer size={32}>
       <StyledErrorImage src={notFoundImage} preview={false} />
       <Title level={2} color={Colors.whitePure}>
-        An unexpected error occured
+        An unexpected error occurred
       </Title>
       <StyledErrorDescription>
         We were notified about your error and will make sure to fix it as soon as possible. In the mean time you can try
@@ -29,10 +31,8 @@ const ErrorBoundaryFallback: React.FC = () => {
       </StyledErrorDescription>
       <StyledErrorDescription>
         Feel free to reach out to us on{' '}
-        <a href="https://discord.com/invite/hfq44wtR6Q" target="_blank">
-          Discord
-        </a>{' '}
-        if the error continuous to exist.
+        <ExternalLink href="https://discord.com/invite/hfq44wtR6Q">Discord</ExternalLink> if the error continuous to
+        exist.
       </StyledErrorDescription>
       <Button type="primary" onClick={onButtonClick}>
         Back to the Dashboard

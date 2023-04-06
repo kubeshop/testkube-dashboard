@@ -6,6 +6,8 @@ import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
+import {ExternalLink} from '@atoms';
+
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {
@@ -178,10 +180,7 @@ const Source = () => {
         }}
         footerText={
           <>
-            Learn more about{' '}
-            <a href={testSourceLink} target="_blank">
-              test sources
-            </a>
+            Learn more about <ExternalLink href={testSourceLink}>test sources</ExternalLink>
           </>
         }
         forceEnableButtons={

@@ -12,7 +12,7 @@ import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
-import {ExecutorIcon} from '@atoms';
+import {ExecutorIcon, ExternalLink} from '@atoms';
 
 import {Text, Title} from '@custom-antd';
 
@@ -59,22 +59,26 @@ const SettingsTests = () => {
     }));
   }, [allTestsList]);
 
-  const initialSteps = useMemo(() => (entityDetails?.steps || []).map((step: any) => {
-    if (step.delay) {
-      return {
-        ...step,
-        id: nanoid(),
-      };
-    }
-    return {
-      ...step,
-      id: nanoid(),
-      execute: {
-        ...step.execute,
-        type: testsData.find(item => item.name === step.execute.name)?.type,
-      },
-    };
-  }), [entityDetails?.steps, testsData]);
+  const initialSteps = useMemo(
+    () =>
+      (entityDetails?.steps || []).map((step: any) => {
+        if (step.delay) {
+          return {
+            ...step,
+            id: nanoid(),
+          };
+        }
+        return {
+          ...step,
+          id: nanoid(),
+          execute: {
+            ...step.execute,
+            type: testsData.find(item => item.name === step.execute.name)?.type,
+          },
+        };
+      }),
+    [entityDetails?.steps, testsData]
+  );
 
   const [currentSteps = initialSteps, setCurrentSteps] = useState<any[] | undefined>();
   const wasTouched = currentSteps !== initialSteps;
@@ -159,9 +163,9 @@ const SettingsTests = () => {
       footerText={
         <>
           Learn more about{' '}
-          <a href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/" target="_blank">
+          <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
             Tests in a test suite
-          </a>
+          </ExternalLink>
         </>
       }
       onConfirm={saveSteps}

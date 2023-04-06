@@ -4,7 +4,7 @@ import {Tabs} from 'antd';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
-import {ExecutorIcon} from '@atoms';
+import {ExecutorIcon, ExternalLink} from '@atoms';
 
 import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
 
@@ -56,7 +56,7 @@ const Executors: React.FC = () => {
       const executorIcon = getTestExecutorIcon(executors || [], type);
 
       return (
-        <a href={docLink} target="_blank" key={docLink}>
+        <ExternalLink href={docLink} key={docLink}>
           <ExecutorsGridItem className={isExecutor ? 'executor' : 'custom-executor'} direction="vertical" size={20}>
             <Title level={3} color={Colors.slate400} className="dashboard-title regular">
               {isExecutor ? <ExecutorIcon type={executorIcon} /> : <ExecutorsIcon />}
@@ -67,7 +67,7 @@ const Executors: React.FC = () => {
             </Text>
             <Button $customType="secondary">Learn more</Button>
           </ExecutorsGridItem>
-        </a>
+        </ExternalLink>
       );
     });
   }, [executorsList, executors]);
@@ -94,9 +94,7 @@ const Executors: React.FC = () => {
       description={
         <>
           Executors are the type of tests which can be run by testkube. Learn more about{' '}
-          <a href="https://kubeshop.github.io/testkube/test-types/executor-custom" target="_blank">
-            executors
-          </a>
+          <ExternalLink href="https://kubeshop.github.io/testkube/test-types/executor-custom">executors</ExternalLink>
         </>
       }
       headerButton={

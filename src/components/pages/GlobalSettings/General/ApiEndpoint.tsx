@@ -2,13 +2,15 @@ import {useContext, useState} from 'react';
 
 import {Form, Input, Space} from 'antd';
 
+import {ExternalLink} from '@atoms';
+
 import {FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {MainContext} from '@contexts';
-
 import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
+
+import {MainContext} from '@contexts';
 
 const ApiEndpoint = () => {
   const [form] = Form.useForm();
@@ -47,12 +49,9 @@ const ApiEndpoint = () => {
         footerText={
           <Text className="regular middle">
             Learn more about{' '}
-            <a
-              href="https://kubeshop.github.io/testkube/concepts/common-issues/#why-is-the-testkube-dashboard-not-working-or-does-not-return-results"
-              target="_blank"
-            >
+            <ExternalLink href="https://kubeshop.github.io/testkube/concepts/common-issues/#why-is-the-testkube-dashboard-not-working-or-does-not-return-results">
               testkube API endpoints
-            </a>
+            </ExternalLink>
           </Text>
         }
         onConfirm={() => {
