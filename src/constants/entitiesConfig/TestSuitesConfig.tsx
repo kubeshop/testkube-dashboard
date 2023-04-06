@@ -5,7 +5,6 @@ import {
   selectAllTestSuitesFilters,
   selectTestSuites,
   selectTestSuitesFilters,
-  setSelectedTestSuite,
   setTestSuites,
   setTestSuitesFilters,
 } from '@redux/reducers/testSuitesSlice';
@@ -45,7 +44,6 @@ export const TestSuitesEntity: EntityListBlueprint = {
   selectQueryFilters: selectTestSuitesFilters,
   selectAllFilters: selectAllTestSuitesFilters,
   initialFiltersState: initialTestSuitesFiltersState,
-  setSelectedRecord: setSelectedTestSuite,
 
   filtersComponentsIds: ['textSearch', 'selector', 'status'],
   dataTestID: 'add-a-new-test-suite-btn',

@@ -8,8 +8,6 @@ import {RootState} from '../store';
 
 type SetTestsPayload = any;
 
-type SetSelectedTestPayload = any;
-
 type SetTestsFiltersPayload = any;
 
 export const testsSlice = createSlice({
@@ -26,9 +24,6 @@ export const testsSlice = createSlice({
     setTestsFilters: (state: Draft<TestsState>, action: PayloadAction<SetTestsFiltersPayload>) => {
       state.filters = action.payload;
     },
-    setSelectedTest: (state: Draft<TestsState>, action: PayloadAction<SetSelectedTestPayload>) => {
-      state.selectedTest = action.payload[0] || action.payload.selectedRecord;
-    },
   },
 });
 
@@ -40,6 +35,6 @@ export const selectAllTestsFilters = (state: RootState) => ({
   totals: state.tests.totals,
 });
 
-export const {setTests, setTestsFilters, setSelectedTest} = testsSlice.actions;
+export const {setTests, setTestsFilters} = testsSlice.actions;
 
 export default testsSlice.reducer;

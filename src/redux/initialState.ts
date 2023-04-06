@@ -53,7 +53,6 @@ export const initialTestSuitesState: TestSuitesState = {
     failed: 0,
     pending: 0,
   },
-  selectedTestSuite: undefined,
 };
 
 export const initialTestsFiltersState: TestFilters = {
@@ -83,7 +82,6 @@ const initialTestsState: TestsState = {
     failed: 0,
     pending: 0,
   },
-  selectedTest: null,
 };
 
 const initialExecutorsState: ExecutorsState = {

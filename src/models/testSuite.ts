@@ -62,7 +62,6 @@ interface TestSuitesState {
   filters: TestSuiteFilters;
   totals: {};
   filtered: {};
-  selectedTestSuite?: TestSuite;
 }
 
 export type {TestSuitesState};

@@ -48,7 +48,6 @@ interface TestsState {
   filters: TestFilters;
   totals: {};
   filtered: {};
-  selectedTest: Test | null;
 }
 
 export type AddTestPayload = {

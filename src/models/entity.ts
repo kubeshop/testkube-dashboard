@@ -42,8 +42,6 @@ export type EntityListBlueprint = {
    * RTK action to set data fetched from Backend to the Redux store
    */
 
-  setSelectedRecord: any;
-
   setData?: any;
 
   /**
