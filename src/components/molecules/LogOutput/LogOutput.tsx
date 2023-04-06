@@ -1,4 +1,4 @@
-import {memo, useCallback, useEffect, useRef, useState} from 'react';
+import {memo, MouseEvent, useCallback, useEffect, useRef, useState} from 'react';
 import useWebSocket from 'react-use-websocket';
 
 import Ansi from 'ansi-to-react';
@@ -10,6 +10,7 @@ import {selectFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} from '@red
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
+import {useCountLines, useLastLines} from './utils';
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
 
@@ -25,6 +26,7 @@ export type LogOutputProps = {
   isRunning?: boolean;
   title?: string;
   isAutoScrolled?: boolean;
+  initialLines?: number;
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
@@ -37,6 +39,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     isRunning,
     title,
     isAutoScrolled,
+    initialLines = 300,
   } = props;
 
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -49,11 +52,20 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const [logs, setLogs] = useState('');
   const [shouldConnect, setShouldConnect] = useState(false);
 
+  const [expanded, setExpanded] = useState(false);
+  const lines = useCountLines(logs);
+  const visibleLogs = useLastLines(logs, expanded ? Infinity : initialLines);
+
   const scrollToBottom: (behavior?: ScrollBehavior) => void = (behavior = 'smooth') => {
     if (bottomRef && bottomRef.current) {
       bottomRef.current.scrollIntoView({behavior, block: 'end'});
     }
   };
+
+  const onExpand = useCallback((event: MouseEvent) => {
+    event.preventDefault();
+    setExpanded(true);
+  }, []);
 
   const smoothScrollIfAutoscroll = useCallback(() => {
     if (!isAutoScrolled) {
@@ -141,9 +153,13 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     <StyledLogOutputContainer ref={containerRef}>
       <LogOutputHeader logOutput={logs} actions={actions} title={title} />
       <StyledLogTextContainer>
-        {logs ? (
+        {visibleLogs ? (
           <StyledPreLogText>
-            <Ansi useClasses>{logs}</Ansi>
+            {!expanded && lines >= initialLines ? <>
+              <a href='#' onClick={onExpand}>Click to show all {lines} lines...</a>
+              <br />
+            </> : null}
+            <Ansi useClasses>{visibleLogs}</Ansi>
           </StyledPreLogText>
         ) : null}
         <div ref={bottomRef} />

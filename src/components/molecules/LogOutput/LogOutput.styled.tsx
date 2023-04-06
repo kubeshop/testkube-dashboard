@@ -12,7 +12,7 @@ export const BaseLogOutputStyles = `
   flex-direction: column;
 
   overflow: auto;
-  
+
   ${invisibleScroll}
 `;
 
@@ -35,6 +35,7 @@ export const StyledLogText = styled.span``;
 
 export const StyledPreLogText = styled.pre`
   display: flex;
+  flex-direction: column;
 
   padding: 10px;
   font-size: 12px;
@@ -58,7 +59,7 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolea
   ${({$isFullScreen}) =>
     $isFullScreen
       ? `
-  position: absolute; 
+  position: absolute;
   right: 0;
 
   z-index: 1002;
@@ -87,10 +88,10 @@ const FullscreenIconBaseStyles = `
   right: 35px;
 
   border-radius: 2px;
-  
+
   padding: 4px;
   margin: 6px;
-  
+
   font-size: 22px;
 `;
 
