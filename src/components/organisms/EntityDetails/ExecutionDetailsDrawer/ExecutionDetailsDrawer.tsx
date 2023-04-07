@@ -1,6 +1,7 @@
-import {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {Drawer} from 'antd';
+import {LoadingOutlined} from '@ant-design/icons';
 
 import {Entity} from '@models/entity';
 
@@ -65,6 +66,9 @@ const components: {[key in Entity]: any} = {
   tests: <TestExecutionDetailsTabs />,
 };
 
+const headerStyle = {borderBottom: 0, padding: '40px 30px 0', backgroundColor: Colors.slate800};
+const loaderBodyStyle = {display: 'flex', alignItems: 'center', justifyContent: 'center', background: Colors.slate800, fontSize: '48px'};
+
 const ExecutionDetailsDrawer: React.FC = () => {
   const {isRowSelected, selectedRow, unselectRow, entity, execId} = useContext(EntityDetailsContext);
 
@@ -114,7 +118,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
       {data ? (
         <Drawer
           title={<ExecutionDetailsDrawerHeader data={data} />}
-          headerStyle={{borderBottom: 0, padding: '40px 30px 0', backgroundColor: Colors.slate800}}
+          headerStyle={headerStyle}
           closable={false}
           mask
           maskClosable
@@ -131,7 +135,18 @@ const ExecutionDetailsDrawer: React.FC = () => {
             {selectedRow ? components[entity] : null}
           </ExecutionDetailsDrawerWrapper>
         </Drawer>
-      ) : null}
+      ) : (
+        <Drawer
+          bodyStyle={loaderBodyStyle}
+          headerStyle={headerStyle}
+          closable={false}
+          open={isRowSelected}
+          width={drawerWidth}
+          onClose={unselectRow}
+        >
+          <LoadingOutlined />
+        </Drawer>
+      )}
     </ExecutionDetailsContext.Provider>
   );
 };
