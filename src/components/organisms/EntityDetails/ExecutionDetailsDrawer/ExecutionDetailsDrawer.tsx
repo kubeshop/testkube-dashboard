@@ -66,6 +66,9 @@ const components: {[key in Entity]: any} = {
   tests: <TestExecutionDetailsTabs />,
 };
 
+const headerStyle = {borderBottom: 0, padding: '40px 30px 0', backgroundColor: Colors.slate800};
+const loaderBodyStyle = {display: 'flex', alignItems: 'center', justifyContent: 'center', background: Colors.slate800, fontSize: '48px'};
+
 const ExecutionDetailsDrawer: React.FC = () => {
   const {isRowSelected, selectedRow, unselectRow, entity, execId} = useContext(EntityDetailsContext);
 
@@ -115,7 +118,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
       {data ? (
         <Drawer
           title={<ExecutionDetailsDrawerHeader data={data} />}
-          headerStyle={{borderBottom: 0, padding: '40px 30px 0', backgroundColor: Colors.slate800}}
+          headerStyle={headerStyle}
           closable={false}
           mask
           maskClosable
@@ -134,8 +137,8 @@ const ExecutionDetailsDrawer: React.FC = () => {
         </Drawer>
       ) : (
         <Drawer
-          bodyStyle={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: Colors.slate800, fontSize: '48px'}}
-          headerStyle={{borderBottom: 0, padding: '40px 30px 0', backgroundColor: Colors.slate800}}
+          bodyStyle={loaderBodyStyle}
+          headerStyle={headerStyle}
           closable={false}
           open={isRowSelected}
           width={drawerWidth}
