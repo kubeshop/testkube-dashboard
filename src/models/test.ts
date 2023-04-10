@@ -51,4 +51,21 @@ interface TestsState {
   selectedTest: Test | null;
 }
 
+export type AddTestPayload = {
+  data?: {
+    metadata: {
+      name: string;
+    };
+    spec: {
+      content: any;
+      type: any;
+    };
+    status: {
+      // eslint-disable-next-line camelcase
+      last_execution: any;
+    };
+  };
+  error?: any;
+};
+
 export type {TestsState};

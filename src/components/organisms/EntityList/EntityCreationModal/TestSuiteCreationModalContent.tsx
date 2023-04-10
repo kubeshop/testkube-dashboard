@@ -6,7 +6,7 @@ import {Option} from '@models/form';
 
 import {openSettingsTabConfig} from '@redux/reducers/configSlice';
 
-import {Button, Text} from '@custom-antd';
+import {Button, FormItem, Text} from '@custom-antd';
 
 import {LabelsSelect} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
@@ -18,7 +18,7 @@ import {useAddTestSuiteMutation} from '@services/testSuites';
 
 import {AnalyticsContext, MainContext} from '@contexts';
 
-import {StyledFormItem, StyledFormSpace} from './CreationModal.styled';
+import {StyledFormSpace} from './CreationModal.styled';
 
 const {TextArea} = Input;
 
@@ -80,14 +80,14 @@ const TestSuiteCreationModalContent: React.FC = () => {
     >
       <StyledFormSpace size={24} direction="vertical">
         <Text className="regular big">Test suite details</Text>
-        <StyledFormItem name="name" rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}>
+        <FormItem name="name" rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}>
           <Input placeholder="Name" />
-        </StyledFormItem>
-        <StyledFormItem name="description">
+        </FormItem>
+        <FormItem name="description">
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
-        </StyledFormItem>
+        </FormItem>
         <LabelsSelect onChange={setLocalLabels} />
-        <StyledFormItem shouldUpdate>
+        <FormItem shouldUpdate>
           {({isFieldsTouched}) => (
             <Button
               htmlType="submit"
@@ -99,7 +99,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
               {isLoading ? 'Creating...' : 'Create'}
             </Button>
           )}
-        </StyledFormItem>
+        </FormItem>
       </StyledFormSpace>
     </Form>
   );

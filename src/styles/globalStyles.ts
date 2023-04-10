@@ -3,11 +3,11 @@ import {createGlobalStyle} from 'styled-components';
 import Colors, {BackgroundColors} from '@styles/Colors';
 
 export const invisibleScroll = `
-&::-webkit-scrollbar {
-  display: none;
-} /* Chrome, Safari and Opera */
--ms-overflow-style: none; /* IE and Edge */
-scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  } /* Chrome, Safari and Opera */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const GlobalStyle = createGlobalStyle`
@@ -312,9 +312,23 @@ export const GlobalStyle = createGlobalStyle`
   .ant-popover-inner-content {
     padding: 0;
   }
+
+  /* Segmented */
+
+  .ant-segmented {
+    padding: 0;
+    border: 1px solid ${Colors.slate600};
+  }
+
+  .ant-segmented-item {
+    font-size: 12px !important;
+    line-height: 16px;
+    letter-spacing: 0.05em;
+  }
 `;
 
 /* Media Sizes */
+
 const size = {
   mobileS: '320px',
   mobileM: '375px',

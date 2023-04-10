@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {memo} from 'react';
 
 import {Form, Select} from 'antd';
 
@@ -7,47 +7,28 @@ import {selectExecutors} from '@redux/reducers/executorsSlice';
 
 import {ExternalLink} from '@atoms';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {ConfigurationCard} from '@molecules';
 
-import {remapExecutors} from '@wizards/AddTestWizard/utils';
-
+import {remapExecutors} from '@utils/executors';
 import {required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
-
-import {useUpdateTestMutation} from '@services/tests';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
-const TestType = () => {
-  const {entityDetails} = useContext(EntityDetailsContext);
+type TestTypeProps = {
+  type: string;
+  updateTest: (data: any) => void;
+};
 
-  const {type} = entityDetails;
+const TestType: React.FC<TestTypeProps> = props => {
+  const {type, updateTest} = props;
 
   const [form] = Form.useForm();
 
   const executors = useAppSelector(selectExecutors);
-  const remmappedExecutors = remapExecutors(executors);
-
-  const [updateTest] = useUpdateTestMutation();
+  const remappedExecutors = remapExecutors(executors);
 
   const onSave = (values: any) => {
-    updateTest({
-      id: entityDetails.name,
-      data: {
-        ...entityDetails,
-        type: values.type,
-      },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Test type was successfully updated.`);
-        });
-      })
-      .catch((err: any) => {
-        displayDefaultErrorNotification(err);
-      });
+    updateTest({type: values.type});
   };
 
   return (
@@ -72,7 +53,7 @@ const TestType = () => {
       >
         <StyledSpace size={32} direction="vertical">
           <StyledFormItem name="type" rules={[required]}>
-            <Select showSearch options={remmappedExecutors} />
+            <Select showSearch options={remappedExecutors} />
           </StyledFormItem>
         </StyledSpace>
       </ConfigurationCard>
@@ -80,4 +61,4 @@ const TestType = () => {
   );
 };
 
-export default TestType;
+export default memo(TestType);
