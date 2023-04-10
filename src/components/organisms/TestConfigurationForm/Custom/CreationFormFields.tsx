@@ -1,5 +1,6 @@
+import {Branch, Path} from '@molecules';
+
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import {Branch, Path} from '../molecules';
 
 type CustomFormFieldsProps = {
   executorType: string;

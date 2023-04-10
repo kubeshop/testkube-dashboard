@@ -1,5 +1,6 @@
+import {Branch, Path, Repository, SecretFormItem} from '@molecules';
+
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import {Branch, Path, Repository, SecretFormItem} from '../molecules';
 
 type GitFormFieldsProps = {
   executorType: string;

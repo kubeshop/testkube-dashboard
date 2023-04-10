@@ -58,7 +58,7 @@ const Source: React.FC<SourceProps> = props => {
     [executors, type]
   );
 
-  const {source, ...additionalFormValues} = getSourceFormValues(entityDetails);
+  const {source, ...additionalFormValues} = getSourceFormValues(entityDetails, testSources);
 
   const [form] = Form.useForm();
 

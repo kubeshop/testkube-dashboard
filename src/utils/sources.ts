@@ -108,15 +108,17 @@ export const getCustomSourceField = (testSource: string, prevTestSource?: string
 
 const dummySecret = '******';
 
-export const getSourceFormValues = (entityDetails: any) => {
+export const getSourceFormValues = (entityDetails: any, testSources: SourceWithRepository[]) => {
   const {content} = entityDetails;
 
   if (entityDetails.source) {
+    const sourceDetails = testSources.find(source => source.name === entityDetails.source);
+
     return {
       source: `${customGitSourceString}${entityDetails.source}`,
-      branch: content?.repository?.branch,
-      commit: content?.repository?.commit,
-      path: content?.repository?.path,
+      branch: content?.repository?.branch || sourceDetails?.repository?.branch,
+      commit: content?.repository?.commit || sourceDetails?.repository?.commit,
+      path: content?.repository?.path || sourceDetails?.repository?.commit,
     };
   }
 

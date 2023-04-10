@@ -4,7 +4,7 @@ import {useFirstMountState} from 'react-use';
 import {FormItem} from '@custom-antd';
 
 import {Branch, Commit, RevisionSwitcher} from '.';
-import {StyledFormSpace} from '../TestConfigurationForm.styled';
+import {StyledFormSpace} from '../../organisms/TestConfigurationForm/TestConfigurationForm.styled';
 
 const Revision = () => {
   const [switcherValue, setSwitcherValue] = useState<string | number>('branch');

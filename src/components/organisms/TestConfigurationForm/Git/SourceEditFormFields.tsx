@@ -1,5 +1,6 @@
+import {Path, Repository, Revision, SecretFormItem} from '@molecules';
+
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import {Path, Repository, Revision, SecretFormItem} from '../molecules';
 
 type SourceEditProps = {
   executorType: string;

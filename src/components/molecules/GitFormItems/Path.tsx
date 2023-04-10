@@ -2,8 +2,6 @@ import {Input} from 'antd';
 
 import {FormItem} from '@custom-antd';
 
-import {required} from '@utils/form';
-
 export const pathPlaceholders: {[key: string]: string} = {
   postman: 'tests/postman/collection.json',
   cypress: 'tests/cypress',
@@ -27,14 +25,7 @@ const Path: React.FC<PathProps> = props => {
   const {testType} = props;
 
   return (
-    <FormItem
-      name="path"
-      label="Path"
-      rules={[required]}
-      required
-      tooltip="The path is relative to the root of your repository"
-      key="path"
-    >
+    <FormItem name="path" label="Path" tooltip="The path is relative to the root of your repository" key="path">
       <Input placeholder={pathPlaceholders[testType] || 'tests/path'} />
     </FormItem>
   );
