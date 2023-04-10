@@ -99,11 +99,7 @@ export const getSourcePayload = (values: any, testSources: SourceWithRepository[
 export const getCustomSourceField = (testSource: string, prevTestSource?: string) => {
   const isCustomTestSource = testSource.includes(customGitSourceString);
 
-  return isCustomTestSource
-    ? {source: testSource.replace(customGitSourceString, '')}
-    : prevTestSource
-    ? {source: ''}
-    : {};
+  return isCustomTestSource ? {source: testSource.replace(customGitSourceString, '')} : {source: ''};
 };
 
 const dummySecret = '******';
