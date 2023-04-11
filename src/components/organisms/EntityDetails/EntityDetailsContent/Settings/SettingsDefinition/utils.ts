@@ -1,15 +1,5 @@
 import {Entity} from '@models/entity';
 
-export const getDefinition = (entity: Entity, entityDetails: any) => {
-  if (entity === 'tests') {
-    return entityDetails?.content.data;
-  }
-
-  if (entity === 'test-suites') {
-    return 'tbd';
-  }
-};
-
 export const settingsDefinitionData: {
   [key in Entity]: {description: string; helpLinkUrl: string; apiEndpoint: string};
 } = {

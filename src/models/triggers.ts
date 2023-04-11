@@ -10,8 +10,6 @@ export enum TriggerResources {
   'event' = 'event',
 }
 
-export type TestTriggersBulkUpdate = TestTriggerSelector[];
-
 export type TriggerEvent = EntityMap<string[]>;
 
 export enum TriggerAction {

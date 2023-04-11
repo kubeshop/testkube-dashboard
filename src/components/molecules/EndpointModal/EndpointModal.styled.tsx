@@ -6,16 +6,3 @@ export const StyledSearchUrlForm = styled.form`
   align-items: center;
   gap: 20px;
 `;
-
-export const StyledFormContainer = styled.div`
-  display: flex;
-  align-items: center;
-
-  width: 100%;
-
-  margin-top: 10px;
-
-  input {
-    margin-right: 15px;
-  }
-`;

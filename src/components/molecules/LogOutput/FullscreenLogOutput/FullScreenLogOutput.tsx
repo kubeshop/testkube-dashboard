@@ -1,5 +1,4 @@
 import {forwardRef, MouseEvent, useCallback, useEffect, useRef, useState} from 'react';
-import {useDebounce} from 'react-use';
 
 import Ansi from 'ansi-to-react';
 
@@ -26,7 +25,6 @@ const FullScreenLogOutput = forwardRef<HTMLDivElement, Pick<LogOutputProps, 'act
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const {logOutputDOMRect} = useAppSelector(selectFullScreenLogOutput);
-  let debouncedLogOutputDOMRect;
 
   const scrollToBottom: (behavior?: ScrollBehavior) => void = () => {
     if (bottomRef && bottomRef.current) {
@@ -39,14 +37,6 @@ const FullScreenLogOutput = forwardRef<HTMLDivElement, Pick<LogOutputProps, 'act
       scrollToBottom();
     }, 100);
   }, []);
-
-  useDebounce(
-    () => {
-      debouncedLogOutputDOMRect = logOutputDOMRect;
-    },
-    10,
-    [logOutputDOMRect]
-  );
 
   return (
     <StyledFullscreenLogOutputContainer ref={ref} logOutputDOMRect={logOutputDOMRect}>

@@ -10,7 +10,7 @@ import Colors from '@styles/Colors';
 
 import {StyledButtonContainer} from './EntityListContent.styled';
 
-export const StyledEmptyTestsDataContainer = styled(Space)`
+const StyledEmptyTestsDataContainer = styled(Space)`
   display: flex;
   flex: 1;
   flex-direction: column;

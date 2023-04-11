@@ -2,14 +2,6 @@ import {PageHeader} from 'antd';
 
 import styled from 'styled-components';
 
-export const EntityDetailsSkeletonWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px 32px;
-
-  padding-top: 20px;
-`;
-
 export const StyledContainer = styled.div`
   overflow-y: auto;
   overflow-x: hidden;

@@ -5,8 +5,6 @@ import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {Execution} from './execution';
 import {Variables} from './variable';
 
-export type TestSuiteStepTypeEnum = 'executeTest' | 'delay';
-
 export type TestSuiteStepDelay = {
   duration: number;
 };
@@ -64,7 +62,6 @@ interface TestSuitesState {
   filters: TestSuiteFilters;
   totals: {};
   filtered: {};
-  selectedTestSuite?: TestSuite;
 }
 
 export type {TestSuitesState};

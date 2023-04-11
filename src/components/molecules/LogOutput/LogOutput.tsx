@@ -14,15 +14,10 @@ import {useCountLines, useLastLines} from './utils';
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
 
-export type LogActionProps = {
-  logOutput: string;
-};
-
 export type LogOutputProps = {
   logOutput?: string;
   executionId?: string;
   actions?: LogAction[];
-  isFullScreen?: boolean;
   isRunning?: boolean;
   title?: string;
   isAutoScrolled?: boolean;

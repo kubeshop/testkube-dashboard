@@ -31,8 +31,6 @@ export const StyledLogTextContainer = styled.div`
   ${invisibleScroll};
 `;
 
-export const StyledLogText = styled.span``;
-
 export const StyledPreLogText = styled.pre`
   display: flex;
   flex-direction: column;

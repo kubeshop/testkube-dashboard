@@ -4,7 +4,6 @@ import {Executor} from '@models/executors';
 
 import {dynamicBaseQuery} from '@utils/fetchUtils';
 
-// useUpdateCustomExecutor
 export const executorsApi = createApi({
   reducerPath: 'executorsApi',
   baseQuery: dynamicBaseQuery,

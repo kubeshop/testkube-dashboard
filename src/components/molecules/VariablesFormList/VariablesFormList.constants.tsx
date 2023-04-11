@@ -1,11 +1,5 @@
 import {Variable} from '@models/variable';
 
-import {StyledPopoverContent} from './VariablesFormList.styled';
-
-export const popoverHelpContent = (
-  <StyledPopoverContent>If you wish to hide or obfuscate variables, select type Secret.</StyledPopoverContent>
-);
-
 export const emptyVariableObject: Variable = {
   type: 0,
   key: '',

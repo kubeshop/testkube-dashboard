@@ -5,12 +5,6 @@ interface Source {
   type?: 'git-uri';
 }
 
-export interface SourceWithString extends Source {
-  uri: string;
-  token?: string;
-  username?: string;
-}
-
 export interface SourceWithRepository extends Source {
   repository: Repository;
 }
@@ -18,10 +12,6 @@ export interface SourceWithRepository extends Source {
 type SourcesState = {
   sourcesList: SourceWithRepository[];
   currentSource?: SourceWithRepository;
-};
-
-export type SourcesFormFields = {
-  sourcesFormList: SourceWithString[];
 };
 
 export type {SourcesState};

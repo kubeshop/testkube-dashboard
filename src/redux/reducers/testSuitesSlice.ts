@@ -20,21 +20,17 @@ export const testSuitesSlice = createSlice({
     setTestSuitesFilters: (state: Draft<TestSuitesState>, action: PayloadAction<any>) => {
       state.filters = action.payload;
     },
-    setSelectedTestSuite: (state: Draft<TestSuitesState>, action: PayloadAction<any>) => {
-      state.selectedTestSuite = action.payload[0] || action.payload.selectedRecord;
-    },
   },
 });
 
 export const selectTestSuites = (state: RootState) => state.testSuites.dataList;
 export const selectTestSuitesFilters = (state: RootState) => state.testSuites.filters;
-export const selectSelectedTestSuite = (state: RootState) => state.testSuites.selectedTestSuite;
 export const selectAllTestSuitesFilters = (state: RootState) => ({
   filters: state.testSuites.filters,
   filtered: state.testSuites.filtered,
   totals: state.testSuites.totals,
 });
 
-export const {setTestSuites, setTestSuitesFilters, setSelectedTestSuite} = testSuitesSlice.actions;
+export const {setTestSuites, setTestSuitesFilters} = testSuitesSlice.actions;
 
 export default testSuitesSlice.reducer;

@@ -1,4 +1,4 @@
-import {CheckOutlined, CopyOutlined, DownloadOutlined} from '@ant-design/icons';
+import {CheckOutlined, DownloadOutlined} from '@ant-design/icons';
 
 import styled from 'styled-components';
 
@@ -15,17 +15,6 @@ const CopyIconBaseStyles = `
   font-size: 22px;
 
   border-radius: 2px;
-`;
-
-export const StyledCopyOutlined = styled(CopyOutlined)`
-  ${CopyIconBaseStyles}
-
-  border: 1px solid transparent;
-  transition: 0.3s;
-
-  &:hover {
-    border-color: ${Colors.indigo400};
-  }
 `;
 
 export const StyledDownloadOutlined = styled(DownloadOutlined)`

@@ -3,28 +3,8 @@ import {ExecutorsState} from '@models/executors';
 import {SourcesState} from '@models/sources';
 import {TestFilters, TestsState} from '@models/test';
 import {TestSuiteFilters, TestSuitesState} from '@models/testSuite';
-import {TestSuiteExecutionsState} from '@models/testSuiteExecution';
 
 export const initialPageSize = 20;
-
-const initialTestSuiteExecutionsState: TestSuiteExecutionsState = {
-  isLoading: false,
-  dataList: [],
-  filters: {pageSize: initialPageSize, page: 0, selector: '', textSearch: ''},
-  totals: {
-    results: 0,
-    passed: 0,
-    failed: 0,
-    pending: 0,
-  },
-  filtered: {
-    results: 0,
-    passed: 0,
-    failed: 0,
-    pending: 0,
-  },
-  selectedTestSuiteExecution: null,
-};
 
 export const initialTestSuitesFiltersState: TestSuiteFilters = {
   textSearch: '',
@@ -53,7 +33,6 @@ export const initialTestSuitesState: TestSuitesState = {
     failed: 0,
     pending: 0,
   },
-  selectedTestSuite: undefined,
 };
 
 export const initialTestsFiltersState: TestFilters = {
@@ -83,7 +62,6 @@ const initialTestsState: TestsState = {
     failed: 0,
     pending: 0,
   },
-  selectedTest: null,
 };
 
 const initialExecutorsState: ExecutorsState = {
@@ -113,7 +91,6 @@ const initialSourcesState: SourcesState = {
 };
 
 const initialReduxState = {
-  testSuiteExecutions: initialTestSuiteExecutionsState,
   testSuites: initialTestSuitesState,
   tests: initialTestsState,
   config: initialConfigState,

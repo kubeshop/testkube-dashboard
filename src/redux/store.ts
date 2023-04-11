@@ -1,11 +1,8 @@
 import {Action, Middleware, ThunkAction, configureStore} from '@reduxjs/toolkit';
 
-import {createLogger} from 'redux-logger';
-
 import configSlice from '@redux/reducers/configSlice';
 import executorsSlice from '@redux/reducers/executorsSlice';
 import sourcesSlice from '@redux/reducers/sourcesSlice';
-import testSuiteExecutionsSlice from '@redux/reducers/testSuiteExecutionsSlice';
 import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
 
@@ -33,18 +30,11 @@ const middlewares: Middleware[] = [
   repositoryApi.middleware,
 ];
 
-if (process.env.NODE_ENV === `development`) {
-  const reduxLoggerMiddleware = createLogger();
-
-  // middlewares.push(reduxLoggerMiddleware);
-}
-
 export const store = configureStore({
   reducer: {
     testSuites: testSuitesSlice,
     tests: testsSlice,
     config: configSlice,
-    testSuiteExecutions: testSuiteExecutionsSlice,
     executors: executorsSlice,
     sources: sourcesSlice,
 
