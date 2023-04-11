@@ -1,4 +1,4 @@
-import {act, fireEvent, render} from '@testing-library/react';
+import {act, render} from '@testing-library/react';
 import {intersectionObserver} from '@shopify/jest-dom-mocks';
 
 import {ScrollTrigger} from '@atoms';
@@ -40,7 +40,7 @@ describe('atoms', () => {
         const result = render(<ScrollTrigger disabled onScroll={onScroll} />);
 
         act(() => {
-          intersectionObserver.simulate({ isIntersecting: true })
+          intersectionObserver.simulate({ isIntersecting: true });
           result.rerender(<ScrollTrigger onScroll={onScroll} />);
         });
 
