@@ -60,7 +60,7 @@
     "postcss-styled-syntax": "0.4.0",
     "prettier": "2.6.2",
     "react-error-overlay": "6.0.9",
-    "react-scripts": "4.0.3",
+    "react-scripts": "5.0.1",
     "stylelint": "15.3.0",
     "stylelint-config-recommended": "11.0.0",
     "stylelint-config-standard": "31.0.0",
