@@ -208,7 +208,7 @@ const App: React.FC = () => {
             </CSSTransition>
           </StyledLayoutContentWrapper>
         </Layout>
-        {isCookiesVisible && !clusterConfig?.enableTelemetry ? (
+        {isCookiesVisible && clusterConfig?.enableTelemetry ? (
           <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
         ) : null}
       </MainContext.Provider>
