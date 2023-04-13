@@ -2,11 +2,11 @@ import {useDebounce} from 'react-use';
 
 import {NamePath} from 'antd/lib/form/interface';
 
-const fieldsNames: string[] = ['uri', 'token', 'username', 'branch', 'commit'];
+const fieldsNames: string[] = ['uri', 'token', 'username', 'branch', 'commit', 'path'];
 
 const useValidateRepository = (
   getFieldValue: (name: NamePath) => string,
-  setValidationState: any,
+  setValidationState: React.Dispatch<any>,
   validateRepository: any
 ) => {
   useDebounce(
@@ -24,10 +24,28 @@ const useValidateRepository = (
       validateRepository({
         type: 'git',
         ...fieldsNames.reduce((acc, curr) => Object.assign(acc, {[curr]: getFieldValue(curr)}), {}),
+        tokenSecret: {
+          key: 'git-token',
+          name: 'k6-demo-test-secrets',
+          namespace: 'testkube',
+        },
+        usernameSecret: {
+          key: 'git-username',
+          name: 'k6-demo-test-secrets',
+          namespace: 'testkube',
+        },
       }).then((res: any) => {
         if (res?.error) {
           const errorDetail = res?.error?.data?.detail;
           const fieldsStatus: any = {};
+
+          if (!errorDetail) {
+            setValidationState({
+              message: 'Network error',
+              uri: 'error',
+            });
+            return;
+          }
 
           if (errorDetail.includes('authentication')) {
             fieldsStatus.uri = 'error';
@@ -37,8 +55,8 @@ const useValidateRepository = (
             fieldsStatus.uri = 'error';
           } else {
             fieldsStatus.uri = 'success';
-            fieldsStatus.token = 'success';
-            fieldsStatus.username = 'success';
+            fieldsStatus.token = getFieldValue('token') ? 'success' : '';
+            fieldsStatus.username = getFieldValue('username') ? 'success' : '';
           }
           if (errorDetail.includes('branch')) {
             fieldsStatus.branch = 'error';
@@ -71,8 +89,8 @@ const useValidateRepository = (
       if (!getFieldValue('uri') || (!getFieldValue('branch') && !getFieldValue('commit'))) {
         setValidationState((validationState: any) => ({
           ...validationState,
-          branch: 'none',
-          commit: 'none',
+          branch: '',
+          commit: '',
         }));
         return;
       }
@@ -92,12 +110,33 @@ const useValidateRepository = (
           const errorDetail = res?.error?.data?.detail;
           const fieldsStatus: any = {};
 
-          if (errorDetail.includes('branch')) {
-            fieldsStatus.branch = 'error';
+          if (errorDetail.includes('authentication') || errorDetail.includes('git')) {
+            setValidationState((validationState: any) => ({
+              ...validationState,
+              message: errorDetail,
+              branch: '',
+              commit: '',
+            }));
+            return;
           }
 
+          if (!errorDetail) {
+            setValidationState({
+              message: 'Network error',
+              uri: 'error',
+            });
+            return;
+          }
           if (errorDetail.includes('commit')) {
             fieldsStatus.commit = 'error';
+          } else {
+            fieldsStatus.commit = 'success';
+          }
+
+          if (errorDetail.includes('branch')) {
+            fieldsStatus.branch = 'error';
+          } else {
+            fieldsStatus.branch = 'success';
           }
 
           setValidationState((validationState: any) => ({
@@ -108,8 +147,8 @@ const useValidateRepository = (
         } else {
           setValidationState((validationState: any) => ({
             ...validationState,
-            branch: 'success',
-            commit: 'success',
+            branch: getFieldValue('branch') ? 'success' : '',
+            commit: getFieldValue('commit') ? 'success' : '',
           }));
         }
       });

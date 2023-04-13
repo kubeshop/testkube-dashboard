@@ -19,9 +19,9 @@ const Branch: React.FC<BranchProps> = props => {
       name="branch"
       label={<FormItemLabel status={status} required text="Branch" />}
       rules={[required]}
+      // required mark is shown in custom label component
       required={false}
       tooltip={getTooltip(status, message)}
-      // required mark is shown in custom label component
       key="branch"
     >
       <Input placeholder="e.g.: main" />

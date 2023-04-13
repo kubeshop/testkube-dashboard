@@ -131,7 +131,14 @@ const Source: React.FC<SourceProps> = props => {
               const executorType = selectedExecutor?.executor.meta?.iconURI;
 
               const childrenProps: {[key: string]: Object} = {
-                git: {executorType, isClearedToken, isClearedUsername, setIsClearedToken, setIsClearedUsername},
+                git: {
+                  executorType,
+                  isClearedToken,
+                  isClearedUsername,
+                  setIsClearedToken,
+                  setIsClearedUsername,
+                  getFieldValue,
+                },
                 custom: {executorType},
               };
 
