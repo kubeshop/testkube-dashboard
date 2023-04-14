@@ -72,7 +72,7 @@ const Command: React.FC = () => {
           form.resetFields();
         }}
       >
-        <Form.Item label="Command" required name="command" >
+        <Form.Item label="Command" name="command">
           <Input placeholder="Command" />
         </Form.Item>
       </ConfigurationCard>
