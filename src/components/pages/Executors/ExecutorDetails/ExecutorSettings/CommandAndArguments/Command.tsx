@@ -9,7 +9,6 @@ import {selectCurrentExecutor, updateExecutorCommand} from '@redux/reducers/exec
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {required} from '@utils/form';
 import {displayDefaultErrorNotification} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
@@ -72,7 +71,7 @@ const Command: React.FC = () => {
           form.resetFields();
         }}
       >
-        <Form.Item label="Command" required name="command" rules={[required]}>
+        <Form.Item label="Command" name="command">
           <Input placeholder="Command" />
         </Form.Item>
       </ConfigurationCard>
