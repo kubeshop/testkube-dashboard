@@ -9,7 +9,6 @@ import {selectCurrentExecutor, updateExecutorCommand} from '@redux/reducers/exec
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {required} from '@utils/form';
 import {displayDefaultErrorNotification} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
