@@ -3,6 +3,8 @@ import {useDebounce} from 'react-use';
 
 import {NamePath} from 'antd/lib/form/interface';
 
+import {dummySecret} from '@utils/sources';
+
 const fieldsNames: string[] = ['uri', 'token', 'username', 'branch', 'path'];
 
 const useValidateRepository = (
@@ -38,8 +40,6 @@ const useValidateRepository = (
 
         if (errorDetail.includes('branch')) {
           fieldsStatus.branch = 'error';
-        } else {
-          fieldsStatus.branch = getFieldValue('branch') ? 'success' : '';
         }
 
         setValidationState({
@@ -52,12 +52,33 @@ const useValidateRepository = (
           token: getFieldValue('token') ? 'success' : '',
           username: getFieldValue('username') ? 'success' : '',
           branch: getFieldValue('branch') ? 'success' : '',
-          commit: getFieldValue('commit') ? 'success' : '',
         });
       }
     },
     [setValidationState, getFieldValue]
   );
+
+  const getValidationPayload = useCallback(() => {
+    return {
+      type: 'git',
+      ...fieldsNames.reduce((acc, curr) => {
+        if (curr === 'token' && getFieldValue(curr) === dummySecret && getFieldValue('tokenSecret')) {
+          return {
+            ...acc,
+            tokenSecret: getFieldValue('tokenSecret'),
+          };
+        }
+
+        if (curr === 'username' && getFieldValue(curr) === dummySecret && getFieldValue('usernameSecret')) {
+          return {
+            ...acc,
+            usernameSecret: getFieldValue('usernameSecret'),
+          };
+        }
+        return {...acc, [curr]: getFieldValue(curr)};
+      }, {}),
+    };
+  }, [getFieldValue]);
 
   useDebounce(
     () => {
@@ -71,10 +92,7 @@ const useValidateRepository = (
         username: getFieldValue('username') ? 'loading' : '',
       });
 
-      validateRepository({
-        type: 'git',
-        ...fieldsNames.reduce((acc, curr) => Object.assign(acc, {[curr]: getFieldValue(curr)}), {}),
-      }).then((res: any) => {
+      validateRepository(getValidationPayload()).then((res: any) => {
         handleResponse(res);
       });
     },
@@ -88,7 +106,6 @@ const useValidateRepository = (
         setValidationState((validationState: any) => ({
           ...validationState,
           branch: '',
-          commit: '',
         }));
         return;
       }
@@ -97,18 +114,14 @@ const useValidateRepository = (
         ...validationState,
         message: '',
         branch: 'loading',
-        commit: 'loading',
       }));
 
-      validateRepository({
-        type: 'git',
-        ...fieldsNames.reduce((acc, curr) => Object.assign(acc, {[curr]: getFieldValue(curr)}), {}),
-      }).then((res: any) => {
+      validateRepository(getValidationPayload()).then((res: any) => {
         handleResponse(res);
       });
     },
     300,
-    [getFieldValue('branch'), getFieldValue('commit')]
+    [getFieldValue('branch')]
   );
 };
 
