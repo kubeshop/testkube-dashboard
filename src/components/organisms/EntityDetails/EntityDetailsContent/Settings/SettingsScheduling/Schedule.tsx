@@ -16,6 +16,8 @@ import {uppercaseFirstSymbol} from '@utils/strings';
 import Colors from '@styles/Colors';
 import Fonts from '@styles/Fonts';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {StyledSpace} from '../Settings.styled';
@@ -27,6 +29,7 @@ import {custom, quickOptions} from './utils';
 
 const Schedule: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const enabled = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();
 
@@ -97,11 +100,13 @@ const Schedule: React.FC = () => {
       onConfirm={onSave}
       onCancel={onCancel}
       isButtonsDisabled={!wasTouched}
+      enabled={enabled}
     >
       <StyledSpace direction="vertical" size={32}>
         <StyledColumn>
           <Text className="middle regular">Schedule template</Text>
           <Select
+            disabled={!enabled}
             placeholder="Quick select a schedule template"
             style={{width: '100%'}}
             options={quickOptions}
@@ -117,11 +122,11 @@ const Schedule: React.FC = () => {
             <StyledColumn>
               <Text className="middle regular">Cron Format</Text>
               <StyledCronFormat>
-                <CronInput title="Minute" value={minute} onChange={value => onCronInput(value, 0)} />
-                <CronInput title="Hour" value={hour} onChange={value => onCronInput(value, 1)} />
-                <CronInput title="Day" value={day} onChange={value => onCronInput(value, 2)} />
-                <CronInput title="Month" value={month} onChange={value => onCronInput(value, 3)} />
-                <CronInput title="Day / Week" value={dayOfWeek} onChange={value => onCronInput(value, 4)} />
+                <CronInput title="Minute" disabled={!enabled} value={minute} onChange={value => onCronInput(value, 0)} />
+                <CronInput title="Hour" disabled={!enabled} value={hour} onChange={value => onCronInput(value, 1)} />
+                <CronInput title="Day" disabled={!enabled} value={day} onChange={value => onCronInput(value, 2)} />
+                <CronInput title="Month" disabled={!enabled} value={month} onChange={value => onCronInput(value, 3)} />
+                <CronInput title="Day / Week" disabled={!enabled} value={dayOfWeek} onChange={value => onCronInput(value, 4)} />
               </StyledCronFormat>
             </StyledColumn>
             <StyledRow>

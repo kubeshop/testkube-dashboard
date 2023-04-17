@@ -9,7 +9,7 @@ export const VariablesListContainer = styled.div`
   flex-direction: column;
 `;
 
-export const StyledLablesSpace = styled.div<{noGap?: boolean}>`
+export const StyledLabelsSpace = styled.div<{noGap?: boolean}>`
   display: flex;
   align-items: flex-start;
   gap: ${props => (props.noGap ? '0' : '16px')};

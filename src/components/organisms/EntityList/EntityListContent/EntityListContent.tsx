@@ -21,13 +21,15 @@ import {useApiEndpoint} from '@services/apiEndpoint';
 
 import {compareFiltersObject} from '@utils/objects';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
-import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
+import {TestsDataLayer, TestSuitesDataLayer} from './EntityDataLayers';
 import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
 import EntityListTitle from './EntityListHeader';
 import EntityListSkeleton from './EntityListSkeleton';
@@ -58,6 +60,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   const {dispatch, navigate} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
+  const mayCreate = usePermission(Permissions.createEntity);
   const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
   const prevQueryFilters = usePrevious(queryFilters) || queryFilters;
 
@@ -166,9 +169,11 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
               entity={entity}
               isFiltersDisabled={isEmptyData}
             />
-            <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID}>
-              {addEntityButtonText}
-            </Button>
+            {mayCreate ? (
+              <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID}>
+                {addEntityButtonText}
+              </Button>
+            ) : null}
           </StyledFiltersSection>
         ) : null}
       </Header>

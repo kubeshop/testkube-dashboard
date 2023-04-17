@@ -13,7 +13,7 @@ import {selectExecutors} from '@redux/reducers/executorsSlice';
 
 import {ExternalLink} from '@atoms';
 
-import {Button, Skeleton} from '@custom-antd';
+import {Button, Skeleton, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
@@ -26,6 +26,8 @@ import {PollingIntervals} from '@utils/numbers';
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import AddTriggerOption from './AddTriggerOption';
 import TriggerItem from './TriggerItem';
@@ -57,6 +59,10 @@ const addTriggerOptions: {key: TriggerType; label: string; description: string}[
 ];
 
 const Triggers: React.FC = () => {
+  // TODO: Check if that was expected permissions setup for triggers?
+  const isTriggersAvailable = usePermission(Permissions.createEntity);
+  const mayEdit = usePermission(Permissions.editEntity);
+
   const {data: triggersKeyMap, isLoading: keyMapLoading} = useGetTriggersKeyMapQuery();
   const {data: testsList = [], isLoading: testsLoading} = useGetAllTestsQuery();
   const {data: testsSuitesList = [], isLoading: testSuitesLoading} = useGetAllTestSuitesQuery();
@@ -219,7 +225,7 @@ const Triggers: React.FC = () => {
         </>
       }
     >
-      <Form name="triggers-form" form={form} onFinish={onSave}>
+      <Form name="triggers-form" form={form} onFinish={onSave} disabled={!isTriggersAvailable}>
         <ConfigurationCard
           title="Cluster events"
           description="Testkube can listen to cluster events and trigger specific actions. Events and actions are related to labelled resources."
@@ -234,6 +240,7 @@ const Triggers: React.FC = () => {
             form.resetFields();
           }}
           isButtonsDisabled={isLoading}
+          enabled={mayEdit}
         >
           {isLoading ? (
             <>
@@ -244,32 +251,39 @@ const Triggers: React.FC = () => {
             <Form.List name="triggers" initialValue={defaultFormattedTriggers}>
               {(fields, {add, remove}) => (
                 <Wrapper>
-                  {fields.map((key, name) => {
-                    const triggerItemData = form.getFieldValue('triggers')[name];
+                  {fields.length ? (
+                    fields.map((key, name) => {
+                      const triggerItemData = form.getFieldValue('triggers')[name];
 
-                    if (!triggerItemData) {
-                      return null;
-                    }
+                      if (!triggerItemData) {
+                        return null;
+                      }
 
-                    return (
-                      <TriggerItem
-                        type={triggerItemData.type}
-                        resources={resourcesOptions}
-                        actions={actionOptions}
-                        events={events}
-                        name={name}
-                        remove={remove}
-                        testsData={testsData}
-                        testSuitesData={testSuitesData}
-                        executors={executors}
-                      />
-                    );
-                  })}
-                  <Dropdown overlay={() => addTriggerMenu(add)} placement="bottomLeft" trigger={['click']}>
-                    <Button $customType="secondary" style={{width: '160px'}}>
-                      Add a new trigger <DownOutlined />
-                    </Button>
-                  </Dropdown>
+                      return (
+                        <TriggerItem
+                          type={triggerItemData.type}
+                          resources={resourcesOptions}
+                          actions={actionOptions}
+                          events={events}
+                          name={name}
+                          remove={remove}
+                          testsData={testsData}
+                          testSuitesData={testSuitesData}
+                          isTriggersAvailable={isTriggersAvailable}
+                          executors={executors}
+                        />
+                      );
+                    })
+                  ) : !isTriggersAvailable ? (
+                    <Text className="regular">We could not find any existing triggers in this environment.</Text>
+                  ) : null}
+                  {isTriggersAvailable ? (
+                    <Dropdown overlay={() => addTriggerMenu(add)} placement="bottomLeft" trigger={['click']}>
+                      <Button $customType="secondary" style={{width: '160px'}}>
+                        Add a new trigger <DownOutlined />
+                      </Button>
+                    </Dropdown>
+                  ) : null}
                 </Wrapper>
               )}
             </Form.List>

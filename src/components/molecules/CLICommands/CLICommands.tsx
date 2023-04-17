@@ -7,11 +7,13 @@ import {TestExecutor} from '@models/testExecutors';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import CopyCommand from './CopyCommand';
 
-type CLIScriptModifier = 'isFinished' | 'canHaveArtifacts';
+type CLIScriptModifier = 'isFinished' | 'canHaveArtifacts' | 'isRunPermission' | 'isDeletePermission';
 
 type CLIScript = {
   label: string;
@@ -35,11 +37,13 @@ type CLICommandsProps = {
 const testSuiteScripts: CLIScript[] = [
   {
     label: 'Run test suite',
+    modify: 'isRunPermission',
     command: (name: string) => `kubectl testkube run testsuite ${name}`,
   },
   {
     label: 'Delete test suite',
     command: (name: string) => `kubectl testkube delete testsuite ${name}`,
+    modify: 'isDeletePermission',
   },
 ];
 
@@ -47,6 +51,7 @@ const testScripts: CLIScript[] = [
   {
     label: 'Run test',
     command: (name: string) => `kubectl testkube run test ${name}`,
+    modify: 'isRunPermission',
   },
   {
     label: 'Get test',
@@ -59,6 +64,7 @@ const testScripts: CLIScript[] = [
   {
     label: 'Delete test',
     command: (name: string) => `kubectl testkube delete test ${name}`,
+    modify: 'isDeletePermission',
   },
 ];
 
@@ -94,10 +100,18 @@ const modifyActions: {
   isFinished: execStatus => {
     return execStatus !== 'running';
   },
+  isRunPermission: hasPermission => {
+    return !hasPermission;
+  },
+  isDeletePermission: hasPermission => {
+    return !hasPermission;
+  },
 };
 
 const CLICommands: React.FC<CLICommandsProps> = props => {
   const {isExecutions, type, name, id, modifyMap, bg} = props;
+  const mayRun = usePermission(Permissions.runEntity);
+  const mayDelete = usePermission(Permissions.deleteEntity);
 
   const {entity} = useContext(EntityDetailsContext);
 
@@ -108,6 +122,8 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const modifyArgsMap: Partial<{[key in CLIScriptModifier]: any}> = {
     ...(type ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
     isFinished: modifyMap?.status,
+    isRunPermission: mayRun,
+    isDeletePermission: mayDelete,
   };
 
   const renderedCLICommands = useMemo(() => {

@@ -10,12 +10,16 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {namingMap, updateRequestsMap} from '../utils';
 
 const Labels: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const mayEdit = usePermission(Permissions.editEntity);
+
   const [updateEntity] = updateRequestsMap[entity]();
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
@@ -68,6 +72,7 @@ const Labels: React.FC = () => {
       isButtonsDisabled={!wasTouched}
       onConfirm={onSave}
       onCancel={onCancel}
+      enabled={mayEdit}
     >
       <LabelsSelect key={`labels_${labelsKey}`} onChange={onChange} defaultLabels={entityLabels} />
     </ConfigurationCard>

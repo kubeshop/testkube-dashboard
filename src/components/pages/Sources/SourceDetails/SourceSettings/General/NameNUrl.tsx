@@ -14,11 +14,14 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useUpdateSourceMutation} from '@services/sources';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 const NameNUrl: React.FC = () => {
   const source = useAppSelector(selectCurrentSource);
   const {dispatch} = useContext(MainContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateSource] = useUpdateSourceMutation();
 
@@ -61,6 +64,7 @@ const NameNUrl: React.FC = () => {
       initialValues={{name, uri}}
       layout="vertical"
       onFinish={onFinish}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Source name & repository URL"
@@ -71,6 +75,7 @@ const NameNUrl: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
       >
         <Form.Item label="Name" required name="name" rules={[required]}>
           <Input placeholder="e.g.: my-git-test-repository" disabled />

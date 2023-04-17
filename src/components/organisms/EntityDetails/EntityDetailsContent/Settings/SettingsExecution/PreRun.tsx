@@ -10,6 +10,8 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useUpdateTestMutation} from '@services/tests';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import Colors from '@styles/Colors';
 
 import {EntityDetailsContext} from '@contexts';
@@ -18,6 +20,8 @@ import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 const PreRun: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const isPreRunAvailable = usePermission(Permissions.editEntity);
+
   const [form] = Form.useForm();
 
   const [updateTest] = useUpdateTestMutation();
@@ -50,10 +54,16 @@ const PreRun: React.FC = () => {
   };
 
   return (
-    <Form form={form} onFinish={onSave} name="execution-settings-pre-run" initialValues={{command}}>
+    <Form
+      form={form}
+      onFinish={onSave}
+      name="execution-settings-pre-run"
+      initialValues={{command}}
+      disabled={!isPreRunAvailable}
+    >
       <ConfigurationCard
         title="Pre-Run phase"
-        description="You can run a command or a script (relative to your source root) which will be executed before the test itself is started. "
+        description="You can run a command or a script (relative to your source root) which will be executed before the test itself is started."
         onConfirm={() => {
           form.submit();
         }}

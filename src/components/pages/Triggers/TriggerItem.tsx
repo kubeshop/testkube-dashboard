@@ -32,11 +32,23 @@ type TriggerItemProps = {
   events?: {[key: string]: string[]};
   testsData: any[];
   testSuitesData: any[];
+  isTriggersAvailable?: boolean;
   executors: Executor[];
 };
 
 const TriggerItem: React.FC<TriggerItemProps> = props => {
-  const {type, resources, actions, name, events, remove, testsData, testSuitesData, executors} = props;
+  const {
+    type,
+    resources,
+    actions,
+    name,
+    events,
+    remove,
+    testsData,
+    testSuitesData,
+    isTriggersAvailable = true,
+    executors,
+  } = props;
 
   const renderSelectResource = (placeholder: string, {tests, testSuites}: {tests: any[]; testSuites: any[]}) => {
     return (
@@ -70,7 +82,7 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
   };
 
   return (
-    <TriggerItemContainer>
+    <TriggerItemContainer $isTriggersAvailable={isTriggersAvailable}>
       <TextWrapper>
         <Text className="small uppercase" color={Colors.slate500}>
           When
@@ -125,7 +137,7 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
                 placeholder="Trigger a cluster event"
                 options={eventsOptions}
                 allowClear
-                disabled={!triggerResource}
+                disabled={!triggerResource || !isTriggersAvailable}
               />
             </TriggerFormItem>
           );
@@ -174,9 +186,11 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
           );
         }}
       </Form.Item>
-      <TextWrapper>
-        <DeleteOutlined style={{cursor: 'pointer', fontSize: '18px'}} onClick={() => remove(name)} />{' '}
-      </TextWrapper>
+      {isTriggersAvailable ? (
+        <TextWrapper>
+          <DeleteOutlined style={{cursor: 'pointer', fontSize: '18px'}} onClick={() => remove(name)} />
+        </TextWrapper>
+      ) : null}
     </TriggerItemContainer>
   );
 };

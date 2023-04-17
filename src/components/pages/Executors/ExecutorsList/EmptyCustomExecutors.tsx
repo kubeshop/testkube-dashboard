@@ -14,6 +14,8 @@ const EmptyCustomExecutors: React.FC<EmptyCustomExecutorsProps> = props => {
       title="Create your first custom executor"
       description="Define your container image, customize your commands and arguments and start testing."
       buttonText="Create a new executor"
+      emptyListReadonlyDescription="We could not find any custom container executors in this environment."
+      emptyListReadonlyTitle="No custom executors found"
       onButtonClick={onButtonClick}
     >
       <HelpCard isLink link="https://kubeshop.github.io/testkube/test-types/executor-custom">

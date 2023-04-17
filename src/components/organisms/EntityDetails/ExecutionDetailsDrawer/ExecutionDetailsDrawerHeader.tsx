@@ -16,6 +16,8 @@ import {constructExecutedString, formatExecutionDate} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from './ExecutionDetailsDrawer.styled';
@@ -27,6 +29,7 @@ type ExecutionDetailsDrawerHeaderProps = {
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
   const {unselectRow, entity, execId, abortExecution} = useContext(EntityDetailsContext);
+  const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
   const {data} = props;
   // @ts-ignore
@@ -79,22 +82,24 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
               {name}
             </Text>
           </ItemColumn>
-          <ItemColumn className="flex-auto">
-            {renderedExecutionActions && renderedExecutionActions.length ? (
-              <div
-                onClick={e => {
-                  e.stopPropagation();
-                }}
-              >
-                <Dropdown overlay={menu} placement="bottom">
-                  <div style={{width: 20}}>
-                    <Dots color={Colors.grey450} />
-                  </div>
-                </Dropdown>
-              </div>
-            ) : null}
-            <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
-          </ItemColumn>
+          {mayManageExecution ? (
+            <ItemColumn className="flex-auto">
+              {renderedExecutionActions && renderedExecutionActions.length ? (
+                <div
+                  onClick={e => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <Dropdown overlay={menu} placement="bottom">
+                    <div style={{width: 20}}>
+                      <Dots color={Colors.grey450} />
+                    </div>
+                  </Dropdown>
+                </div>
+              ) : null}
+              <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
+            </ItemColumn>
+          ) : null}
         </ItemRow>
         <ItemRow $flex={1}>
           <ItemColumn>

@@ -12,6 +12,8 @@ import {ConfigurationCard} from '@molecules';
 import {remapExecutors} from '@utils/executors';
 import {required} from '@utils/form';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 type TestTypeProps = {
@@ -24,6 +26,7 @@ const TestType: React.FC<TestTypeProps> = props => {
 
   const [form] = Form.useForm();
 
+  const mayEdit = usePermission(Permissions.editEntity);
   const executors = useAppSelector(selectExecutors);
   const remappedExecutors = remapExecutors(executors);
 
@@ -32,7 +35,13 @@ const TestType: React.FC<TestTypeProps> = props => {
   };
 
   return (
-    <Form form={form} onFinish={onSave} name="test-settings-test-type" initialValues={{type}}>
+    <Form
+      form={form}
+      onFinish={onSave}
+      name="test-settings-test-type"
+      initialValues={{type}}
+      disabled={!mayEdit}
+    >
       <ConfigurationCard
         title="Test type"
         description="Define the test type for this test."
@@ -50,6 +59,7 @@ const TestType: React.FC<TestTypeProps> = props => {
             </ExternalLink>
           </>
         }
+        enabled={mayEdit}
       >
         <StyledSpace size={32} direction="vertical">
           <StyledFormItem name="type" rules={[required]}>

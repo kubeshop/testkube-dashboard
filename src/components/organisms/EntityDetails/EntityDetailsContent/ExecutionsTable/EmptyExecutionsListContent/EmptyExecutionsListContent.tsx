@@ -4,6 +4,8 @@ import {openSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext, MainContext} from '@contexts';
 
 type EmptyExecutionsListContentProps = {
@@ -15,10 +17,27 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
 
   const {entity, entityDetails} = useContext(EntityDetailsContext);
   const {dispatch} = useContext(MainContext);
+  const mayRun = usePermission(Permissions.runEntity);
 
   if (!entityDetails) {
     return null;
   }
+
+  if (!mayRun) {
+  return (
+    <EmptyListContent
+      title="No executions found"
+      description={
+        <>
+          Your {entity === 'tests' ? 'test' : 'test suite'} has no past executions. We will update this list as soon
+          as the first execution was started. <br />
+          Since you do only have read permissions on this environments you can not trigger a test/test suite run
+        </>
+      }
+      buttonText="Run"
+    />
+  );
+}
 
   if (entity === 'tests') {
     return (

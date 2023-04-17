@@ -8,6 +8,8 @@ const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
       title="Create your first test in a few easy steps."
       description="Simply define your test, add any variables, execute it and view the results!"
       buttonText="Add a new test"
+      emptyListReadonlyTitle="No tests found"
+      emptyListReadonlyDescription="We could not find any tests in this environment."
       onButtonClick={action}
     >
       <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/">

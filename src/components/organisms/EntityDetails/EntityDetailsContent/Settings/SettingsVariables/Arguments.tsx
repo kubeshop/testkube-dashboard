@@ -16,6 +16,8 @@ import {useUpdateTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {ArgumentsWrapper} from './Arguments.styled';
@@ -24,6 +26,7 @@ import {dash, doubleDash, space, stringSpace} from './utils';
 const Arguments: React.FC = () => {
   const [form] = Form.useForm();
   const {entityDetails} = useContext(EntityDetailsContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateTest] = useUpdateTestMutation();
 
@@ -128,6 +131,7 @@ const Arguments: React.FC = () => {
       onChange={onChange}
       onFinish={onSaveForm}
       initialValues={{args: argsValue}}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Arguments"
@@ -149,6 +153,7 @@ const Arguments: React.FC = () => {
           form.setFieldValue(['args'], entityArgs.join(' '));
           setIsButtonsDisabled(true);
         }}
+        enabled={mayEdit}
       >
         <ArgumentsWrapper>
           <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />

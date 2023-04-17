@@ -13,6 +13,8 @@ import {useGetSourcesQuery} from '@services/sources';
 
 import Colors from '@styles/Colors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 import AddSourceModal from './AddSourceModal';
@@ -26,6 +28,7 @@ const Sources: React.FC = () => {
 
   const {dispatch, navigate, location} = useContext(MainContext);
   const [isAddSourceModalVisible, setAddSourceModalVisibility] = useState(false);
+  const mayCreate = usePermission(Permissions.createEntity);
 
   const onNavigateToDetails = (name: string) => {
     navigate(`sources/${name}`);
@@ -63,11 +66,11 @@ const Sources: React.FC = () => {
           <ExternalLink href="https://kubeshop.github.io/testkube/openapi/#tag/test-sources">Sources</ExternalLink>
         </>
       }
-      headerButton={
+      headerButton={mayCreate ? (
         <Button $customType="primary" onClick={() => setAddSourceModalVisibility(true)}>
           Create a new source
         </Button>
-      }
+      ) : null}
     >
       {isLoading ? (
         <SourcesListSkeletonWrapper>

@@ -13,6 +13,8 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useUpdateTestMutation} from '@services/tests';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
@@ -23,6 +25,7 @@ type TimeoutForm = {
 
 const Timeout: React.FC = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
+  const mayEdit = usePermission(Permissions.editEntity);
   const {executionRequest, name} = entityDetails;
 
   const [form] = Form.useForm<TimeoutForm>();
@@ -58,6 +61,7 @@ const Timeout: React.FC = () => {
       onFinish={onSave}
       name="general-settings-name-description"
       initialValues={{activeDeadlineSeconds: executionRequest?.activeDeadlineSeconds}}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Timeout"
@@ -76,6 +80,7 @@ const Timeout: React.FC = () => {
             </ExternalLink>
           </Text>
         }
+        enabled={mayEdit}
       >
         <StyledSpace size={32} direction="vertical" style={{width: '100%'}}>
           <StyledFormItem name="activeDeadlineSeconds" rules={[digits]} style={{marginBottom: '0px'}}>

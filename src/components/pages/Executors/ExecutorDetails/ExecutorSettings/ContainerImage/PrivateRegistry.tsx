@@ -12,6 +12,8 @@ import {displayDefaultErrorNotification} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 export type PrivateRegistryFormFields = {
@@ -23,6 +25,7 @@ const PrivateRegistry: React.FC = () => {
   const {imagePullSecrets} = executor;
 
   const {dispatch} = useContext(MainContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
 
@@ -62,6 +65,7 @@ const PrivateRegistry: React.FC = () => {
       initialValues={{privateRegistry}}
       layout="vertical"
       onFinish={onSubmit}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Private registry"
@@ -72,6 +76,7 @@ const PrivateRegistry: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
       >
         <Form.Item label="Secret ref name" name="privateRegistry" rules={[required]}>
           <Input placeholder="Secret ref name" />

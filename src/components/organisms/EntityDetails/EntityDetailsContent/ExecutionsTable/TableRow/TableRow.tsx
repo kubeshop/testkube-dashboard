@@ -11,6 +11,8 @@ import useIsRunning from '@hooks/useIsRunning';
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import Colors from '@styles/Colors';
 
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled';
@@ -20,6 +22,7 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
   const {status, number, startTime, name, id, durationMs} = data;
 
   const isRunning = useIsRunning(status);
+  const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
   const abortExecution = () => {
     if (onAbortExecution) {
@@ -57,7 +60,9 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
             <Text className="regular small" color={Colors.slate200}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </Text>
-            {renderedExecutionActions && renderedExecutionActions.length ? (
+            {renderedExecutionActions &&
+            renderedExecutionActions.length &&
+            mayManageExecution ? (
               <div
                 onClick={e => {
                   e.stopPropagation();

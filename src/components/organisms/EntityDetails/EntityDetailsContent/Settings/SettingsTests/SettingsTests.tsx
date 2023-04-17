@@ -16,12 +16,14 @@ import {ExecutorIcon, ExternalLink} from '@atoms';
 
 import {Text, Title} from '@custom-antd';
 
-import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
+import {ConfigurationCard, DragNDropList, notificationCall, TestSuiteStepCard} from '@molecules';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -32,6 +34,7 @@ const {Option} = Select;
 
 const SettingsTests = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
 
@@ -171,6 +174,8 @@ const SettingsTests = () => {
       onConfirm={saveSteps}
       onCancel={() => setCurrentSteps(undefined)}
       isButtonsDisabled={!wasTouched}
+      isEditable={mayEdit}
+      enabled={mayEdit}
     >
       <>
         {currentSteps?.length === 0 ? (
@@ -196,30 +201,32 @@ const SettingsTests = () => {
           setIsDelayModalVisible={setIsDelayModalVisible}
           addDelay={addDelay}
         />
-        <Select
-          placeholder="Add a test or delay"
-          showArrow
-          onChange={onSelectStep}
-          style={{width: '100%', marginBottom: '30px'}}
-          value={null}
-          showSearch
-          size="large"
-        >
-          <Option value="delay">
-            <StyledOptionWrapper>
-              <ClockCircleOutlined />
-              <Text className="regular middle">Delay</Text>
-            </StyledOptionWrapper>
-          </Option>
-          {allTestsData.map((item: any) => (
-            <Option value={JSON.stringify(item)} key={item.name}>
+        {mayEdit ? (
+          <Select
+            placeholder="Add a test or delay"
+            showArrow
+            onChange={onSelectStep}
+            style={{width: '100%', marginBottom: '30px'}}
+            value={null}
+            showSearch
+            size="large"
+          >
+            <Option value="delay">
               <StyledOptionWrapper>
-                <ExecutorIcon type={item.type} />
-                <Text className="regular middle">{item.name}</Text>
+                <ClockCircleOutlined />
+                <Text className="regular middle">Delay</Text>
               </StyledOptionWrapper>
             </Option>
-          ))}
-        </Select>
+            {allTestsData.map((item: any) => (
+              <Option value={JSON.stringify(item)} key={item.name}>
+                <StyledOptionWrapper>
+                  <ExecutorIcon type={item.type} />
+                  <Text className="regular middle">{item.name}</Text>
+                </StyledOptionWrapper>
+              </Option>
+            ))}
+          </Select>
+        ) : null}
       </>
     </ConfigurationCard>
   );

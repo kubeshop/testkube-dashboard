@@ -16,14 +16,14 @@ export const Wrapper = styled.div`
   align-items: center;
 `;
 
-export const TriggerItemContainer = styled.div`
+export const TriggerItemContainer = styled.div<{$isTriggersAvailable: boolean}>`
   display: flex;
   flex-flow: row wrap;
   align-items: start;
   gap: 10px;
 
   width: 100%;
-  margin-bottom: 16px;
+  ${({$isTriggersAvailable}) => ($isTriggersAvailable ? 'margin-bottom: 16px;' : null)};
 `;
 
 export const TriggerFormItem = styled(Form.Item)<{flex: number}>`
