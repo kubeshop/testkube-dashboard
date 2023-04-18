@@ -1,6 +1,6 @@
 import {useEffect, useMemo} from 'react';
 
-import {AnalyticsBrowser} from '@segment/analytics-next';
+import {AnalyticsBrowser, Context, Plugin} from '@segment/analytics-next';
 
 import {AnalyticsContext} from '@contexts';
 
@@ -13,6 +13,27 @@ type AnalyticsProviderProps = {
   appVersion: string;
 };
 
+const maskSensitiveData = (ctx: Context): Context => {
+  if (ctx.event.context) {
+    ctx.event.context.page.referrer = '';
+  }
+  return ctx;
+};
+
+const CleanSensitiveDataPlugin: Plugin = {
+  name: 'CleanSensitiveData',
+  version: '0.0.0',
+  type: 'before',
+  isLoaded: () => true,
+  load: () => Promise.resolve(),
+  identify: maskSensitiveData,
+  track: maskSensitiveData,
+  page: maskSensitiveData,
+  alias: maskSensitiveData,
+  group: maskSensitiveData,
+  screen: maskSensitiveData,
+};
+
 export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
   const {disabled, privateKey, children, appVersion} = props;
 
@@ -20,7 +41,7 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
 
   const analytics = useMemo(() => {
     if (!disabled && privateKey && notDevEnv) {
-      return AnalyticsBrowser.load({writeKey: privateKey});
+      return AnalyticsBrowser.load({writeKey: privateKey, plugins: [CleanSensitiveDataPlugin]});
     }
   }, [disabled, privateKey]);
 
