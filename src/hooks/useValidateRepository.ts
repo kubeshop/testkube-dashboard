@@ -7,6 +7,18 @@ import {dummySecret} from '@utils/sources';
 
 const fieldsNames: string[] = ['uri', 'token', 'username', 'branch', 'path'];
 
+const authSearchString = 'username or token:';
+const uriSearchString = 'uri:';
+const branchSearchString = 'branch:';
+const pathSearchString = 'path:';
+const endSearchString = ', context';
+
+const getErrorMessage = (rawErrorString: string, searchString: string) =>
+  rawErrorString.slice(
+    rawErrorString.search(searchString) + searchString.length,
+    rawErrorString.search(endSearchString)
+  );
+
 const useValidateRepository = (
   getFieldValue: (name: NamePath) => string,
   setValidationState: React.Dispatch<any>,
@@ -16,7 +28,6 @@ const useValidateRepository = (
     (res: any) => {
       if (res?.error) {
         const errorDetail = res?.error?.data?.detail;
-        const fieldsStatus: any = {};
 
         if (!errorDetail) {
           setValidationState({
@@ -26,25 +37,49 @@ const useValidateRepository = (
           return;
         }
 
-        if (errorDetail.includes('authentication')) {
-          fieldsStatus.uri = 'error';
-          fieldsStatus.token = 'error';
-          fieldsStatus.username = 'error';
-        } else if (errorDetail.includes('git')) {
-          fieldsStatus.uri = 'error';
-        } else {
-          fieldsStatus.uri = 'success';
-          fieldsStatus.token = getFieldValue('token') ? 'success' : '';
-          fieldsStatus.username = getFieldValue('username') ? 'success' : '';
+        if (errorDetail.includes(authSearchString)) {
+          setValidationState({
+            message: getErrorMessage(errorDetail, authSearchString),
+            uri: 'error',
+            token: 'error',
+            username: 'error',
+          });
+          return;
+        }
+        if (errorDetail.includes(uriSearchString)) {
+          setValidationState({
+            message: getErrorMessage(errorDetail, uriSearchString),
+            uri: 'error',
+          });
+          return;
         }
 
-        if (errorDetail.includes('branch')) {
-          fieldsStatus.branch = 'error';
+        if (errorDetail.includes(branchSearchString)) {
+          setValidationState({
+            message: getErrorMessage(errorDetail, branchSearchString),
+            uri: 'success',
+            token: getFieldValue('token') ? 'success' : '',
+            username: getFieldValue('username') ? 'success' : '',
+            branch: 'error',
+          });
+          return;
+        }
+
+        if (errorDetail.includes(pathSearchString)) {
+          setValidationState({
+            message: getErrorMessage(errorDetail, pathSearchString),
+            uri: 'success',
+            token: getFieldValue('token') ? 'success' : '',
+            username: getFieldValue('username') ? 'success' : '',
+            branch: getFieldValue('branch') ? 'success' : '',
+            path: 'error',
+          });
+          return;
         }
 
         setValidationState({
-          message: errorDetail,
-          ...fieldsStatus,
+          message: 'Unknown error',
+          uri: 'error',
         });
       } else {
         setValidationState({
@@ -52,6 +87,7 @@ const useValidateRepository = (
           token: getFieldValue('token') ? 'success' : '',
           username: getFieldValue('username') ? 'success' : '',
           branch: getFieldValue('branch') ? 'success' : '',
+          path: getFieldValue('path') ? 'success' : '',
         });
       }
     },
@@ -102,7 +138,7 @@ const useValidateRepository = (
 
   useDebounce(
     () => {
-      if (!getFieldValue('uri') || (!getFieldValue('branch') && !getFieldValue('commit'))) {
+      if (!getFieldValue('uri') || !getFieldValue('branch')) {
         setValidationState((validationState: any) => ({
           ...validationState,
           branch: '',
@@ -122,6 +158,30 @@ const useValidateRepository = (
     },
     300,
     [getFieldValue('branch')]
+  );
+
+  useDebounce(
+    () => {
+      if (!getFieldValue('uri') || !getFieldValue('path')) {
+        setValidationState((validationState: any) => ({
+          ...validationState,
+          path: '',
+        }));
+        return;
+      }
+
+      setValidationState((validationState: any) => ({
+        ...validationState,
+        message: '',
+        path: 'loading',
+      }));
+
+      validateRepository(getValidationPayload()).then((res: any) => {
+        handleResponse(res);
+      });
+    },
+    300,
+    [getFieldValue('path')]
   );
 };
 

@@ -5,7 +5,7 @@ import {FormItem} from '@custom-antd';
 import {required, url} from '@utils/form';
 
 import FormItemLabel from './FormItemLabel';
-import {getTooltip, tooltipStatus} from './tooltipUtils';
+import {getValidationTooltip, tooltipStatus} from './tooltipUtils';
 
 type RepositoryProps = {
   status?: tooltipStatus;
@@ -28,7 +28,7 @@ const Repository: React.FC<RepositoryProps> = props => {
         />
       }
       rules={[required, url]}
-      tooltip={getTooltip(status, message)}
+      tooltip={getValidationTooltip(status, message)}
       // required mark is shown in custom label component
       required={false}
     >

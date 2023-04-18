@@ -5,7 +5,7 @@ import {FormItem} from '@custom-antd';
 import {required} from '@utils/form';
 
 import FormItemLabel from './FormItemLabel';
-import {getTooltip, tooltipStatus} from './tooltipUtils';
+import {getValidationTooltip, tooltipStatus} from './tooltipUtils';
 
 type BranchProps = {
   status?: tooltipStatus;
@@ -21,7 +21,7 @@ const Branch: React.FC<BranchProps> = props => {
       rules={[required]}
       // required mark is shown in custom label component
       required={false}
-      tooltip={getTooltip(status, message)}
+      tooltip={getValidationTooltip(status, message)}
       key="branch"
     >
       <Input placeholder="e.g.: main" />

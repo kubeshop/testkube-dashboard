@@ -11,7 +11,7 @@ export const tooltipIcons: {[key in tooltipStatus]: JSX.Element | undefined} = {
   none: undefined,
 };
 
-export const getTooltip = (status: tooltipStatus, message?: string) => {
+export const getValidationTooltip = (status: tooltipStatus, message?: string) => {
   if (!tooltipIcons[status]) {
     return undefined;
   }

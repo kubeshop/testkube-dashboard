@@ -55,7 +55,7 @@ const SourceEdit: React.FC<SourceEditProps> = props => {
         branchStatus={validationState.branch}
         commitStatus={validationState.commit}
       />
-      <Path testType={executorType} />
+      <Path testType={executorType} message={validationState.message} status={validationState.path} />
     </StyledFormSpace>
   );
 };

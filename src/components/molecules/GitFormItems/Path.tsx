@@ -2,6 +2,9 @@ import {Input} from 'antd';
 
 import {FormItem} from '@custom-antd';
 
+import FormItemLabel from './FormItemLabel';
+import {getValidationTooltip, tooltipStatus} from './tooltipUtils';
+
 export const pathPlaceholders: {[key: string]: string} = {
   postman: 'tests/postman/collection.json',
   cypress: 'tests/cypress',
@@ -19,13 +22,26 @@ export const pathPlaceholders: {[key: string]: string} = {
 
 type PathProps = {
   testType: string;
+  status?: tooltipStatus;
+  message?: string;
 };
 
 const Path: React.FC<PathProps> = props => {
-  const {testType} = props;
+  const {testType, status = 'none', message} = props;
 
   return (
-    <FormItem name="path" label="Path" tooltip="The path is relative to the root of your repository" key="path">
+    <FormItem
+      name="path"
+      label={
+        <FormItemLabel
+          text="Path"
+          tooltipMessage="The path is relative to the root of your repository"
+          status={status}
+        />
+      }
+      tooltip={getValidationTooltip(status, message)}
+      key="path"
+    >
       <Input placeholder={pathPlaceholders[testType] || 'tests/path'} />
     </FormItem>
   );

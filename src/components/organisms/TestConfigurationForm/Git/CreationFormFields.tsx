@@ -35,7 +35,7 @@ const GitFormFields: React.FC<GitFormFieldsProps> = props => {
         label="Git Username"
       />
       <Branch message={validationState.message} status={validationState.branch} />
-      <Path testType={executorType} />
+      <Path testType={executorType} message={validationState.message} status={validationState.path} />
     </StyledFormSpace>
   );
 };
