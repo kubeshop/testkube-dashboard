@@ -39,9 +39,11 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const onEvent = usePressEnter();
 
-  const onVisibleChange = (flag: boolean) => {
+  const onOpenChange = (flag: boolean) => {
     setVisibilityState(flag);
   };
+
+  const onMenuClick = () => {};
 
   const onKeyChange = (key: string, index: number) => {
     setLabelsMapping([
@@ -116,7 +118,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     const resultedFilters: string[] = [];
 
     if (JSON.stringify(labelsMapping) === JSON.stringify([defaultKeyValuePair])) {
-      onVisibleChange(false);
+      onOpenChange(false);
       return;
     }
 
@@ -147,12 +149,12 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     });
     setSearchParams(searchParams);
 
-    onVisibleChange(false);
+    onOpenChange(false);
   };
 
   const resetFilters = () => {
     setLabelsMapping([defaultKeyValuePair]);
-    onVisibleChange(false);
+    onOpenChange(false);
     dispatch(setFilters({...filters, selector: [], pageSize: initialPageSize}));
 
     searchParams.delete('selector');
@@ -161,6 +163,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const menu = (
     <StyledFilterMenu
+      onClick={onMenuClick}
       data-cy="labels-filter-dropdown"
       onKeyPress={event => {
         onEvent(event, applyFilters);
@@ -185,7 +188,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         overlay={menu}
         trigger={['click']}
         placement="bottom"
-        onOpenChange={onVisibleChange}
+        onOpenChange={onOpenChange}
         open={isVisible}
         disabled={isFiltersDisabled}
       >
