@@ -1,14 +1,13 @@
-import React from 'react';
+import React, {PropsWithChildren} from 'react';
 
 import ErrorBoundaryFallback from './ErrorBoundaryFallback';
 
 type ErrorBoundaryInnerProps = {
-  children: React.ReactNode;
   hasError: boolean;
   setHasError: (has: boolean) => void;
 };
 
-class ErrorBoundary extends React.Component<ErrorBoundaryInnerProps, {hasError: boolean}> {
+class ErrorBoundary extends React.Component<PropsWithChildren<ErrorBoundaryInnerProps>, {hasError: boolean}> {
   constructor(props: any) {
     super(props);
     this.state = {hasError: false};

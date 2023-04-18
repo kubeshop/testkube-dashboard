@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropsWithChildren} from 'react';
 
 import {Space} from 'antd';
 
@@ -8,7 +8,11 @@ import Colors from '@styles/Colors';
 
 import {HeaderContainer} from './EntityListContent.styled';
 
-const EntityListHeader: React.FC<{pageTitle: React.ReactNode | string; children: React.ReactNode}> = props => {
+type EntityListHeaderProps = {
+  pageTitle: React.ReactNode | string;
+};
+
+const EntityListHeader: React.FC<PropsWithChildren<EntityListHeaderProps>> = props => {
   const {pageTitle, children} = props;
   return (
     <HeaderContainer>
