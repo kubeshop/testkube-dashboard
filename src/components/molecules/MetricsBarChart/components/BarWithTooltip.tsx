@@ -61,18 +61,10 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
           </Text>
         </StyledPopoverHeader>
         <StyledPopoverContent>
-          <Text className="regular small" color={Colors.slate400}>
-            Executed
-          </Text>
-          <Text className="regular small" color={Colors.slate200}>
-            {formatExecutionDate(new Date(startTime))}
-          </Text>
-          <Text className="regular small" color={Colors.slate400}>
-            Duration
-          </Text>
-          <Text className="regular small" color={Colors.slate200}>
-            {duration}
-          </Text>
+          <Text color={Colors.slate400}>Executed</Text>
+          <Text color={Colors.slate200}>{formatExecutionDate(new Date(startTime))}</Text>
+          <Text color={Colors.slate400}>Duration</Text>
+          <Text color={Colors.slate200}>{duration}</Text>
         </StyledPopoverContent>
       </StyledPopoverContainer>
     ),
@@ -95,9 +87,7 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
         />
         {date ? (
           <BarDate $height={height}>
-            <Text className="regular small" color={Colors.slate400}>
-              {date}
-            </Text>
+            <Text color={Colors.slate400}>{date}</Text>
           </BarDate>
         ) : null}
       </ClickableBarWrapper>

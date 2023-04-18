@@ -18,9 +18,7 @@ const AddTriggerOption: React.FC<AddTriggerOptionProps> = props => {
       <Text className="regular middle" color={Colors.slate100}>
         {label}
       </Text>
-      <Text className="regular small" color={Colors.slate400}>
-        {description}
-      </Text>
+      <Text color={Colors.slate400}>{description}</Text>
     </OptionWrapper>
   );
 };

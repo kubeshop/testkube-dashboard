@@ -23,10 +23,10 @@ const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
     }
 
     if (trimmedChildren.slice(-1) === ':') {
-      return <Text className="regular small">{trimmedChildren.slice(0, -1)}</Text>;
+      return <Text>{trimmedChildren.slice(0, -1)}</Text>;
     }
 
-    return <Text className="regular small">{trimmedChildren}</Text>;
+    return <Text>{trimmedChildren}</Text>;
   };
 
   return <StyledMultiLabel data-test={`selected-label-${children}`}>{renderChildren()}</StyledMultiLabel>;

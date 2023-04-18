@@ -41,7 +41,7 @@ const PAxisLine: React.FC<PAxisLineProps> = props => {
       <HorizontalAxis $top={finalTopValue} label={label} />
       {isLabelVisible ? (
         <AxisLabel $top={finalTopValue + 2}>
-          <Text className="regular small" color={Colors.slate400}>
+          <Text color={Colors.slate400}>
             {label} {formattedDuration}
           </Text>
         </AxisLabel>

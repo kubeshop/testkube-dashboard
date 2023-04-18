@@ -98,37 +98,25 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
         </ItemRow>
         <ItemRow $flex={1}>
           <ItemColumn>
-            {number ? (
-              <Text className="regular small" color={Colors.slate50}>
-                #{number}
-              </Text>
-            ) : null}
-            <Text className="regular small" color={Colors.slate50}>
-              <Text className="regular small" color={Colors.slate400}>
-                Trigger:
-              </Text>{' '}
+            {number ? <Text color={Colors.slate50}>#{number}</Text> : null}
+            <Text color={Colors.slate50}>
+              <Text color={Colors.slate400}>Trigger:&nbsp;</Text>
               manual
             </Text>
-            <Text className="regular small" color={Colors.slate50}>
-              <Text className="regular small" color={Colors.slate400}>
-                Started:
-              </Text>{' '}
+            <Text color={Colors.slate50}>
+              <Text color={Colors.slate400}>Started:&nbsp;</Text>
               {formatExecutionDate(startedTime)}
             </Text>
-            <Text className="regular small" color={Colors.slate50}>
-              <Text className="regular small" color={Colors.slate400}>
-                Finished:
-              </Text>{' '}
+            <Text color={Colors.slate50}>
+              <Text color={Colors.slate400}>Finished:&nbsp;</Text>
               {isRunning ? 'running' : formatExecutionDate(finishedTime)}
             </Text>
-            <Text className="regular small" color={Colors.slate50}>
+            <Text color={Colors.slate50}>
               {isRunning ? (
                 'Running...'
               ) : (
                 <>
-                  <Text className="regular small" color={Colors.slate400}>
-                    Execution time:
-                  </Text>{' '}
+                  <Text color={Colors.slate400}>Execution time:&nbsp;</Text>
                   {getDuration()}
                 </>
               )}

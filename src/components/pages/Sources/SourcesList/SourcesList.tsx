@@ -46,9 +46,7 @@ const Sources: React.FC = () => {
       return (
         <SourceContainer onClick={() => onNavigateToDetails(sourceItem.name)} key={sourceItem.name}>
           <Text className="regular big">{sourceItem.name}</Text>
-          <Text className="regular small" color={Colors.slate500}>
-            {sourceItem.repository?.uri}
-          </Text>
+          <Text color={Colors.slate500}>{sourceItem.repository?.uri}</Text>
         </SourceContainer>
       );
     });
