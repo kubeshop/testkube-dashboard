@@ -24,20 +24,20 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
   }
 
   if (!mayRun) {
-  return (
-    <EmptyListContent
-      title="No executions found"
-      description={
-        <>
-          Your {entity === 'tests' ? 'test' : 'test suite'} has no past executions. We will update this list as soon
-          as the first execution was started. <br />
-          Since you do only have read permissions on this environments you can not trigger a test/test suite run
-        </>
-      }
-      buttonText="Run"
-    />
-  );
-}
+    return (
+      <EmptyListContent
+        title="No executions found"
+        description={
+          <>
+            Your {entity === 'tests' ? 'test' : 'test suite'} has no past executions. We will update this list as soon
+            as the first execution was started. <br />
+            Since you do only have read permissions on this environments you can not trigger a test/test suite run
+          </>
+        }
+        buttonText="Run"
+      />
+    );
+  }
 
   if (entity === 'tests') {
     return (
