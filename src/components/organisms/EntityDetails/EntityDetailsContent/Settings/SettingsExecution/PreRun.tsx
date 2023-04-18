@@ -10,9 +10,9 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {Permissions, usePermission} from '@permissions/base';
-
 import Colors from '@styles/Colors';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext} from '@contexts';
 
