@@ -41,8 +41,8 @@ const useValidateRepository = (
           setValidationState({
             message: getErrorMessage(errorDetail, authSearchString),
             uri: 'error',
-            token: 'error',
-            username: 'error',
+            token: getFieldValue('token') ? 'error' : '',
+            username: getFieldValue('username') ? 'error' : '',
           });
           return;
         }
