@@ -1,4 +1,4 @@
-import React, {createContext, PropsWithChildren, ReactElement, useContext, useEffect, useMemo, useRef} from 'react';
+import React, {createContext, PropsWithChildren, ReactElement, useContext, useMemo, useRef} from 'react';
 
 // Interface
 
@@ -60,14 +60,15 @@ export function createUsePermissionHook<T extends PermissionsResolver<any, any>>
 
     // It's much more convenient to avoid caching the scope object in each component for comparison.
     // To simplify that, the scope will be cached based on identity of the properties.
-    const localScope = useRef<typeof scope>(undefined);
-    useEffect(() => {
-      const prevScope = localScope.current;
+    const localScopeRef = useRef<typeof scope>(undefined);
+    // Avoid unnecessary re-render - use useMemo instead of useEffect
+    const localScope = useMemo(() => {
+      const prevScope = localScopeRef.current;
 
       // Speed up in case of empty local scope
       if (scope === undefined || prevScope === undefined) {
-        localScope.current = scope;
-        return;
+        localScopeRef.current = scope;
+        return scope;
       }
 
       // for..in is faster than comparing Object.keys, even cached.
@@ -75,22 +76,24 @@ export function createUsePermissionHook<T extends PermissionsResolver<any, any>>
       // eslint-disable-next-line no-restricted-syntax
       for (let k in prevScope) {
         if (prevScope[k] !== scope[k]) {
-          localScope.current = scope;
-          return;
+          localScopeRef.current = scope;
+          return scope;
         }
       }
       // eslint-disable-next-line no-restricted-syntax
       for (let k in scope) {
         if (prevScope[k] !== scope[k]) {
-          localScope.current = scope;
-          return;
+          localScopeRef.current = scope;
+          return scope;
         }
       }
+
+      return localScopeRef.current;
     }, [scope]);
 
     return useMemo(
-      () => resolver.has(permission, {...baseScope, ...localScope.current}),
-      [permission, localScope.current, baseScope, resolver],
+      () => resolver.has(permission, {...baseScope, ...localScope}),
+      [permission, localScope, baseScope, resolver],
     );
   };
 }
