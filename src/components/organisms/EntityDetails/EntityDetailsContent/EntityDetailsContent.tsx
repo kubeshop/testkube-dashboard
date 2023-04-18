@@ -142,8 +142,8 @@ const EntityDetailsContent: React.FC = () => {
             type="primary"
             onClick={onRunButtonClick}
             disabled={isPageDisabled}
-            loading={isLoading}
             hidden={!mayRun}
+            loading={isLoading}
           >
             Run now
           </Button>,
