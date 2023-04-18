@@ -14,7 +14,7 @@ type AnalyticsProviderProps = {
 };
 
 const maskSensitiveData = (ctx: Context): Context => {
-  if (ctx.event.context) {
+  if (ctx.event.context?.page) {
     ctx.event.context.page.referrer = '';
   }
   return ctx;
