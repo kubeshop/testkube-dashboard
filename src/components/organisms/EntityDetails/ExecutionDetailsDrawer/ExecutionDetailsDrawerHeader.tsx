@@ -82,24 +82,24 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
               {name}
             </Text>
           </ItemColumn>
-          {mayManageExecution ? (
-            <ItemColumn className="flex-auto">
-              {renderedExecutionActions && renderedExecutionActions.length ? (
-                <div
-                  onClick={e => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <Dropdown overlay={menu} placement="bottom">
-                    <div style={{width: 20}}>
-                      <Dots color={Colors.grey450} />
-                    </div>
-                  </Dropdown>
-                </div>
-              ) : null}
-              <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
-            </ItemColumn>
-          ) : null}
+          <ItemColumn className="flex-auto">
+            {renderedExecutionActions &&
+            renderedExecutionActions.length &&
+            mayManageExecution ? (
+              <div
+                onClick={e => {
+                  e.stopPropagation();
+                }}
+              >
+                <Dropdown overlay={menu} placement="bottom">
+                  <div style={{width: 20}}>
+                    <Dots color={Colors.grey450} />
+                  </div>
+                </Dropdown>
+              </div>
+            ) : null}
+            <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
+          </ItemColumn>
         </ItemRow>
         <ItemRow $flex={1}>
           <ItemColumn>
