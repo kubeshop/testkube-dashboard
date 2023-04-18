@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 
 import {Form} from 'antd';
 
@@ -17,7 +17,7 @@ import {
 
 type ConfigurationCardProps = {
   title: string;
-  description: string;
+  description: string | ReactElement;
   isWarning?: boolean;
   footerText?: React.ReactNode;
   onConfirm?: () => void;
