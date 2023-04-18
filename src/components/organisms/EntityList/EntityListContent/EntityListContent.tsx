@@ -123,10 +123,17 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       setIsLoadingNext(true);
     }
 
-    contentProps.refetch().then(() => {
-      setIsApplyingFilters(false);
-      setIsLoadingNext(false);
-    });
+    try {
+      contentProps.refetch().then(() => {
+        setIsApplyingFilters(false);
+        setIsLoadingNext(false);
+      });
+    } catch (err: any) {
+      // RTK is failing synchronously if there was it was skipped
+      if (!err?.message.includes('not been started yet')) {
+        throw err;
+      }
+    }
   }, [queryFilters, contentProps.refetch]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
@@ -151,7 +158,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         <EntityListTitle
           pageTitle={
             <>
-              {pageTitle} {isApplyingFilters ? <LoadingOutlined /> : null}
+              {pageTitle} {isApplyingFilters && !isFirstTimeLoading ? <LoadingOutlined /> : null}
             </>
           }
         >
