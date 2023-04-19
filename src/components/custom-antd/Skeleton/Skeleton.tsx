@@ -2,10 +2,13 @@ import {SkeletonProps as AntdSkeletonProps} from 'antd';
 
 import {StyledSkeleton} from './Skeleton.styled';
 
-type AdditionalSkeletonStyles = {
+export type AdditionalSkeletonStyles = {
   lineHeight?: number;
+  color?: string;
+  contrastColor?: string;
   container?: {
     paddingTop?: number;
+    paddingBottom?: number;
   };
 };
 
@@ -14,7 +17,7 @@ type CustomAntdSkeletonProps = {
 };
 
 const Skeleton: React.FC<AntdSkeletonProps & CustomAntdSkeletonProps> = props => {
-  const {children, active = false, title = false, paragraph = {rows: 1, width: '100%'}} = props;
+  const {children, active = true, title = false, paragraph = {rows: 1, width: '100%'}} = props;
 
   if (children) {
     return (
