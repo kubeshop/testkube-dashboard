@@ -34,7 +34,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     useAbortExecution,
   } = props;
 
-  const {navigate, location} = useContext(MainContext);
+  const {navigate, location, isClusterAvailable} = useContext(MainContext);
   const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
   const wsRoot = useWsEndpoint();
 
@@ -57,6 +57,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   );
   const {data: entityDetails} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.everyTwoSeconds,
+    skip: !isClusterAvailable,
   });
   const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue});
   const [abortExecution] = useAbortExecution();

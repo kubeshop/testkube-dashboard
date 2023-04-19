@@ -1,3 +1,5 @@
+import {useContext} from 'react';
+
 import {Space} from 'antd';
 
 import styled from 'styled-components';
@@ -7,6 +9,8 @@ import {Button, Text, Title} from '@custom-antd';
 import {ReactComponent as EmptySearch} from '@assets/empty-search.svg';
 
 import Colors from '@styles/Colors';
+
+import {MainContext} from '@contexts';
 
 import {StyledButtonContainer} from './EntityListContent.styled';
 
@@ -21,6 +25,8 @@ const StyledEmptyTestsDataContainer = styled(Space)`
 const EmptyDataWithFilters: React.FC<any> = props => {
   const {resetFilters} = props;
 
+  const {isClusterAvailable} = useContext(MainContext);
+
   return (
     <StyledEmptyTestsDataContainer size={30} direction="vertical">
       <EmptySearch />
@@ -29,7 +35,7 @@ const EmptyDataWithFilters: React.FC<any> = props => {
         We couldn’t find any results for your filters.
       </Text>
       <StyledButtonContainer>
-        <Button type="primary" onClick={() => resetFilters()}>
+        <Button type="primary" onClick={() => resetFilters()} disabled={!isClusterAvailable}>
           Reset all filters
         </Button>
       </StyledButtonContainer>

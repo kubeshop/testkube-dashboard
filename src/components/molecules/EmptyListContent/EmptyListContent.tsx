@@ -1,4 +1,4 @@
-import {ReactElement} from 'react';
+import {ReactElement, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
@@ -12,6 +12,8 @@ import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
 import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {MainContext} from '@contexts';
 
 import {StyledEmptyListContainer} from './EmptyListContent.styled';
 
@@ -35,6 +37,8 @@ const EmptyListContent: React.FC<EmptyListContentProps> = props => {
     emptyListReadonlyTitle,
     emptyListReadonlyDescription,
   } = props;
+
+  const {isClusterAvailable} = useContext(MainContext);
   const isActionAvailable = usePermission(Permissions.runEntity);
 
   return (
@@ -46,7 +50,7 @@ const EmptyListContent: React.FC<EmptyListContentProps> = props => {
           <Text className="regular middle text-center" color={Colors.slate400}>
             {description}
           </Text>
-          <Button $customType="primary" onClick={onButtonClick}>
+          <Button $customType="primary" onClick={onButtonClick} disabled={!isClusterAvailable}>
             {buttonText}
           </Button>
           <StyledHelpCardsContainer>

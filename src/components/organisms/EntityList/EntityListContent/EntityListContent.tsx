@@ -58,7 +58,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const {dispatch, navigate} = useContext(MainContext);
+  const {dispatch, navigate, isClusterAvailable} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
   const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
@@ -174,10 +174,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
               filters={queryFilters}
               filtersComponentsIds={filtersComponentsIds}
               entity={entity}
-              isFiltersDisabled={isEmptyData}
+              isFiltersDisabled={isEmptyData || !isClusterAvailable}
             />
             {mayCreate ? (
-              <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID}>
+              <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID} disabled={!isClusterAvailable}>
                 {addEntityButtonText}
               </Button>
             ) : null}

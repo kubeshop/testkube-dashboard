@@ -32,7 +32,7 @@ import {
 } from './ExecutorsList.styled';
 
 const Executors: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate, isClusterAvailable} = useContext(MainContext);
   const mayCreate = usePermission(Permissions.createEntity);
   const apiEndpoint = useApiEndpoint();
 
@@ -97,7 +97,7 @@ const Executors: React.FC = () => {
         </>
       }
       headerButton={mayCreate ? (
-        <Button $customType="primary" onClick={() => setAddExecutorModalVisibility(true)}>
+        <Button $customType="primary" onClick={() => setAddExecutorModalVisibility(true)} disabled={!isClusterAvailable}>
           Create a new executor
         </Button>
       ) : null}

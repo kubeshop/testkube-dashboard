@@ -1,4 +1,4 @@
-import {memo, useEffect, useMemo, useState} from 'react';
+import {memo, useContext, useEffect, useMemo, useState} from 'react';
 
 import {Dropdown, Form, Menu} from 'antd';
 
@@ -28,6 +28,8 @@ import {useGetAllTestsQuery} from '@services/tests';
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {MainContext} from '@contexts';
 
 import AddTriggerOption from './AddTriggerOption';
 import TriggerItem from './TriggerItem';
@@ -59,6 +61,7 @@ const addTriggerOptions: {key: TriggerType; label: string; description: string}[
 ];
 
 const Triggers: React.FC = () => {
+  const {isClusterAvailable} = useContext(MainContext);
   // TODO: Check if that was expected permissions setup for triggers?
   const isTriggersAvailable = usePermission(Permissions.createEntity);
   const mayEdit = usePermission(Permissions.editEntity);
@@ -278,7 +281,12 @@ const Triggers: React.FC = () => {
                     <Text className="regular">We could not find any existing triggers in this environment.</Text>
                   ) : null}
                   {isTriggersAvailable ? (
-                    <Dropdown overlay={() => addTriggerMenu(add)} placement="bottomLeft" trigger={['click']}>
+                    <Dropdown
+                      overlay={() => addTriggerMenu(add)}
+                      placement="bottomLeft"
+                      trigger={['click']}
+                      disabled={!isClusterAvailable}
+                    >
                       <Button $customType="secondary" style={{width: '160px'}}>
                         Add a new trigger <DownOutlined />
                       </Button>

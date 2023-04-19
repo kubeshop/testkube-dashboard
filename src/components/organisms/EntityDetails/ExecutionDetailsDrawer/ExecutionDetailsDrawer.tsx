@@ -16,7 +16,7 @@ import {useGetTestExecutionByIdQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {EntityDetailsContext, ExecutionDetailsContext} from '@contexts';
+import {EntityDetailsContext, ExecutionDetailsContext, MainContext} from '@contexts';
 import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
 
 import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
@@ -25,11 +25,13 @@ import ExecutionDetailsDrawerHeader from './ExecutionDetailsDrawerHeader';
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
   const {execId} = useContext(EntityDetailsContext);
+  const {isClusterAvailable} = useContext(MainContext);
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
   const {data, isLoading, isFetching, refetch, error} = useGetTestSuiteExecutionByIdQuery(execId, {
     pollingInterval: PollingIntervals.everySecond,
+    skip: !isClusterAvailable,
   });
 
   useEffect(() => {
@@ -42,11 +44,13 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 const TestExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
   const {execId} = useContext(EntityDetailsContext);
+  const {isClusterAvailable} = useContext(MainContext);
 
   // @ts-ignore
   // we have checked if execId exists on <ExecutionDetails /> below
   const {data, isLoading, isFetching, refetch, error} = useGetTestExecutionByIdQuery(execId, {
     pollingInterval: PollingIntervals.everySecond,
+    skip: !isClusterAvailable,
   });
 
   useEffect(() => {

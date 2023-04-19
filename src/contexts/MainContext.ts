@@ -13,6 +13,7 @@ export type MainContextProps = {
   ga4React: ReturnType<typeof useGA4React>;
   location: ReturnType<typeof useLocation>;
   clusterConfig?: ClusterConfig;
+  isClusterAvailable: boolean;
 };
 
 // @ts-ignore
