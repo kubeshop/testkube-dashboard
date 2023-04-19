@@ -9,6 +9,8 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {useGetLabelsQuery} from '@services/labels';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {composeLabels} from './utils';
 
 type LabelsSelectProps = {
@@ -34,6 +36,8 @@ const isValidLabel = (value: string) => {
 
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   const {onChange, defaultLabels, options, placeholder = 'Add or create new labels', validation, menuPlacement} = props;
+  // TODO: Check if it's actually expected, as it's used in multiple places
+  const isSelectDisabled = usePermission(Permissions.editEntity);
 
   const {data, isFetching} = useGetLabelsQuery(null, {
     pollingInterval: PollingIntervals.default,
@@ -76,6 +80,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
       validation={validation}
       menuPlacement={menuPlacement}
       dataTest="labels"
+      disabled={isSelectDisabled}
     />
   );
 };

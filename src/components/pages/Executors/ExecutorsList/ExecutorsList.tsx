@@ -17,6 +17,8 @@ import {useGetExecutorsQuery} from '@services/executors';
 
 import Colors from '@styles/Colors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 import {executorsList} from '../utils';
@@ -31,6 +33,7 @@ import {
 
 const Executors: React.FC = () => {
   const {navigate} = useContext(MainContext);
+  const mayCreate = usePermission(Permissions.createEntity);
   const apiEndpoint = useApiEndpoint();
 
   const [activeTabKey, setActiveTabKey] = useState('custom');
@@ -97,11 +100,11 @@ const Executors: React.FC = () => {
           <ExternalLink href="https://kubeshop.github.io/testkube/test-types/executor-custom">executors</ExternalLink>
         </>
       }
-      headerButton={
+      headerButton={mayCreate ? (
         <Button $customType="primary" onClick={() => setAddExecutorModalVisibility(true)}>
           Create a new executor
         </Button>
-      }
+      ) : null}
     >
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane defaultActiveKey="custom">
         <Tabs.TabPane tab="Custom executors" key="custom">

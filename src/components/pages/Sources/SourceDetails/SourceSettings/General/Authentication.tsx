@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 
-import {Input as AntdInput, Form} from 'antd';
+import {Form, Input as AntdInput} from 'antd';
 
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 
@@ -15,10 +15,13 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useUpdateSourceMutation} from '@services/sources';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 const Authentication: React.FC = () => {
   const {dispatch} = useContext(MainContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const source = useAppSelector(selectCurrentSource);
 
@@ -66,6 +69,7 @@ const Authentication: React.FC = () => {
       initialValues={{username, token}}
       layout="vertical"
       onFinish={onFinish}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Authentication"
@@ -76,6 +80,7 @@ const Authentication: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
       >
         <Form.Item label="Git username" name="username">
           <Input placeholder="e.g.: my-username" />

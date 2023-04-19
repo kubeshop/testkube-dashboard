@@ -3,6 +3,8 @@ import {DragDropContext, Draggable} from 'react-beautiful-dnd';
 
 import {reorder} from '@utils/array';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import StrictModeDroppable from './StrictModeDroppable';
 
 type DragNDropListProps = {
@@ -16,6 +18,7 @@ type DragNDropListProps = {
 
 const DragNDropList: React.FC<DragNDropListProps> = props => {
   const {items = [], setItems, onDelete, scrollRef, ItemComponent, ContainerComponent} = props;
+  const isReadonly = !usePermission(Permissions.editEntity);
 
   const onDragEnd = (result: any) => {
     if (!result.destination || result.source.index === result.destination.index) {
@@ -37,11 +40,11 @@ const DragNDropList: React.FC<DragNDropListProps> = props => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <StrictModeDroppable droppableId="droppable">
+      <StrictModeDroppable droppableId="droppable" isDropDisabled={isReadonly}>
         {(provided, snapshot) => (
           <ContainerComponent {...provided.droppableProps} ref={provided.innerRef} isDragging={snapshot.isDraggingOver}>
             {items.map((item: any, index: number) => (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
+              <Draggable key={item.id} draggableId={item.id} index={index} isDragDisabled={isReadonly}>
                 {(providedDraggable, snapshotDraggable) => (
                   <div
                     ref={providedDraggable.innerRef}
@@ -53,6 +56,7 @@ const DragNDropList: React.FC<DragNDropListProps> = props => {
                       index={index}
                       isDragging={snapshotDraggable.isDragging}
                       onDelete={onDelete}
+                      isDragNDropAvailable={!isReadonly}
                     />
                   </div>
                 )}

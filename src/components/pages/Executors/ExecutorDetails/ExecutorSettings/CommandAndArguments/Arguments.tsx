@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-imports-ts */
 import {useContext, useEffect} from 'react';
 
 import {Form, Input} from 'antd';
@@ -10,19 +9,20 @@ import {Executor} from '@models/executors';
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, updateExecutorArguments} from '@redux/reducers/executorsSlice';
 
-import {Button, Text} from '@custom-antd';
+import {Button} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
 import {displayDefaultErrorNotification} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
-import {StyledButtonsContainer, StyledLablesSpace, SymbolWrapper, VariablesListContainer} from './Arguments.styled';
+import {StyledButtonsContainer, StyledLabelsSpace, SymbolWrapper, VariablesListContainer} from './Arguments.styled';
 
 type ArgumentsFormFields = {
   arguments: string[];
@@ -33,6 +33,7 @@ const Arguments: React.FC = () => {
   const {args} = executor;
 
   const {dispatch} = useContext(MainContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
 
@@ -69,6 +70,7 @@ const Arguments: React.FC = () => {
       initialValues={{arguments: args}}
       layout="vertical"
       onFinish={onSubmit}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Arguments for your command"
@@ -79,20 +81,21 @@ const Arguments: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
       >
         <Form.List name="arguments">
           {(fields, {add, remove}) => (
             <VariablesListContainer>
               {fields.map(({key, name, ...restField}) => {
                 return (
-                  <StyledLablesSpace key={key}>
+                  <StyledLabelsSpace key={key}>
                     <Form.Item {...restField} name={[name]} style={{flex: 1, marginBottom: '0'}} rules={[required]}>
                       <Input placeholder="Your argument value" />
                     </Form.Item>
                     <SymbolWrapper>
                       <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
                     </SymbolWrapper>
-                  </StyledLablesSpace>
+                  </StyledLabelsSpace>
                 );
               })}
               <StyledButtonsContainer>

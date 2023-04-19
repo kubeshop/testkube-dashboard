@@ -23,6 +23,7 @@
     "^@services",
     "^@styles",
     "^@types",
+    "^@permissions",
     "^@contexts",
     "^@src",
     "^(?!\\.+\\/styled)^[./]?.+$",

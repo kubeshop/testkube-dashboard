@@ -25,6 +25,8 @@ import {useRunTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {AnalyticsContext, EntityDetailsContext, MainContext} from '@contexts';
 
 import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
@@ -45,6 +47,7 @@ const EntityDetailsContent: React.FC = () => {
     useContext(EntityDetailsContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
+  const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
 
   const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
@@ -139,6 +142,7 @@ const EntityDetailsContent: React.FC = () => {
             type="primary"
             onClick={onRunButtonClick}
             disabled={isPageDisabled}
+            hidden={!mayRun}
             loading={isLoading}
           >
             Run now

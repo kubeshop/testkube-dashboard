@@ -31,6 +31,8 @@ import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 import {getApiDetails, getApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
 
+import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
@@ -178,41 +180,46 @@ const App: React.FC = () => {
     refetchClusterConfig();
   }, [apiEndpoint]);
 
+  const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
+  const permissionsScope = useMemo(() => ({}), []);
+
   return (
-    <AnalyticsProvider disabled={!isTelemetryEnabled} privateKey={segmentIOKey} appVersion={pjson.version}>
-      <MainContext.Provider value={mainContextValue}>
-        <Layout>
-          <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
-          <Sider />
-          <StyledLayoutContentWrapper>
-            <Content>
-              <ErrorBoundary>
-                <Suspense fallback={<LoadingIcon />}>
-                  <Routes>
-                    <Route path="tests/*" element={<Tests />} />
-                    <Route path="test-suites/*" element={<TestSuites />} />
-                    <Route path="executors/*" element={<Executors />} />
-                    <Route path="sources/*" element={<Sources />} />
-                    <Route path="triggers" element={<Triggers />} />
-                    <Route path="settings" element={<GlobalSettings />} />
-                    <Route path="/apiEndpoint" element={<EndpointProcessing />} />
-                    <Route path="/" element={<Navigate to="/tests" replace />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-              </ErrorBoundary>
-            </Content>
-            {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
-            <CSSTransition nodeRef={logRef} in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
-              <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
-            </CSSTransition>
-          </StyledLayoutContentWrapper>
-        </Layout>
-        {isCookiesVisible && clusterConfig?.enableTelemetry ? (
-          <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
-        ) : null}
-      </MainContext.Provider>
-    </AnalyticsProvider>
+    <PermissionsProvider scope={permissionsScope} resolver={permissionsResolver}>
+      <AnalyticsProvider disabled={!isTelemetryEnabled} privateKey={segmentIOKey} appVersion={pjson.version}>
+        <MainContext.Provider value={mainContextValue}>
+          <Layout>
+            <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
+            <Sider />
+            <StyledLayoutContentWrapper>
+              <Content>
+                <ErrorBoundary>
+                  <Suspense fallback={<LoadingIcon />}>
+                    <Routes>
+                      <Route path="tests/*" element={<Tests />} />
+                      <Route path="test-suites/*" element={<TestSuites />} />
+                      <Route path="executors/*" element={<Executors />} />
+                      <Route path="sources/*" element={<Sources />} />
+                      <Route path="triggers" element={<Triggers />} />
+                      <Route path="settings" element={<GlobalSettings />} />
+                      <Route path="/apiEndpoint" element={<EndpointProcessing />} />
+                      <Route path="/" element={<Navigate to="/tests" replace />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </ErrorBoundary>
+              </Content>
+              {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
+              <CSSTransition nodeRef={logRef} in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
+                <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
+              </CSSTransition>
+            </StyledLayoutContentWrapper>
+          </Layout>
+          {isCookiesVisible && clusterConfig?.enableTelemetry ? (
+            <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
+          ) : null}
+        </MainContext.Provider>
+      </AnalyticsProvider>
+    </PermissionsProvider>
   );
 };
 

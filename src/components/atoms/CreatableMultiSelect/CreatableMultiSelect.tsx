@@ -26,6 +26,7 @@ type MultiSelectProps = {
   isLoading?: boolean;
   validation?: boolean;
   dataTest?: string;
+  disabled?: boolean;
   menuPlacement?: 'auto' | 'bottom' | 'top';
 };
 
@@ -42,6 +43,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     isLoading = false,
     validation,
     dataTest,
+    disabled = false,
     menuPlacement = 'bottom',
   } = props;
 
@@ -86,6 +88,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
         DropdownIndicator: DefaultDropdownIndicator,
       }}
       data-test={dataTest}
+      isDisabled={disabled}
     />
   );
 };

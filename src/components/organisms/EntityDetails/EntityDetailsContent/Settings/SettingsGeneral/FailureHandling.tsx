@@ -10,6 +10,8 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useUpdateTestMutation} from '@services/tests';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {StyledFormItem, StyledPopoverContainer, StyledQuestionCircleOutlined} from '../Settings.styled';
@@ -23,6 +25,7 @@ const popoverContent = (
 );
 const FailureHandling: React.FC = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm();
 
@@ -56,7 +59,13 @@ const FailureHandling: React.FC = () => {
   };
 
   return (
-    <Form form={form} onFinish={onSave} initialValues={{negativeTest}} name="general-settings-failure-handling">
+    <Form
+      form={form}
+      onFinish={onSave}
+      initialValues={{negativeTest}}
+      name="general-settings-failure-handling"
+      disabled={!mayEdit}
+    >
       <ConfigurationCard
         title="Failure handling"
         description="Define how Testkube should treat occurring errors."
@@ -66,6 +75,7 @@ const FailureHandling: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
       >
         <StyledFormItem name="negativeTest" valuePropName="checked">
           <Checkbox>

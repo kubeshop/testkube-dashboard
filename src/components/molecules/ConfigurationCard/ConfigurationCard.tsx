@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 
 import {Form} from 'antd';
 
@@ -17,7 +17,7 @@ import {
 
 type ConfigurationCardProps = {
   title: string;
-  description: string;
+  description: string | ReactElement;
   isWarning?: boolean;
   footerText?: React.ReactNode;
   onConfirm?: () => void;
@@ -26,6 +26,8 @@ type ConfigurationCardProps = {
   isButtonsDisabled?: boolean;
   forceEnableButtons?: boolean;
   children?: React.ReactNode;
+  isEditable?: boolean;
+  enabled?: boolean;
 };
 
 const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
@@ -40,6 +42,8 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     confirmButtonText = 'Save',
     isButtonsDisabled,
     forceEnableButtons,
+    isEditable = true,
+    enabled = true,
   } = props;
 
   return (
@@ -52,8 +56,8 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
           {description}
         </Text>
       </StyledHeader>
-      {children ? <StyledChildren>{children}</StyledChildren> : null}
-      {(onConfirm || footerText) && (
+      {children ? <StyledChildren $isActionsVisible={enabled || !isEditable}>{children}</StyledChildren> : null}
+      {(enabled && onConfirm) || footerText ? (
         <StyledFooter>
           {footerText && (
             <StyledFooterText>
@@ -62,32 +66,30 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
               </Text>
             </StyledFooterText>
           )}
-          <Form.Item noStyle shouldUpdate>
-            {({isFieldsTouched, getFieldsValue}) => {
-              let isDisabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
+          {enabled ? (
+            <Form.Item noStyle shouldUpdate>
+              {({isFieldsTouched, getFieldsValue}) => {
+                let disabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
 
-              if (forceEnableButtons) {
-                isDisabled = false;
-              }
+                if (forceEnableButtons) {
+                  disabled = false;
+                }
 
-              return (
-                <StyledFooterButtonsContainer>
-                  {onCancel && !isDisabled && (
-                    <Button onClick={onCancel} $customType="secondary">
+                return (
+                  <StyledFooterButtonsContainer>
+                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || disabled}>
                       Cancel
                     </Button>
-                  )}
-                  {onConfirm ? (
-                    <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={isDisabled}>
+                    <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={disabled} hidden={!onConfirm}>
                       {confirmButtonText}
                     </Button>
-                  ) : null}
-                </StyledFooterButtonsContainer>
-              );
-            }}
-          </Form.Item>
+                  </StyledFooterButtonsContainer>
+                );
+              }}
+            </Form.Item>
+          ) : null}
         </StyledFooter>
-      )}
+      ) : null}
     </StyledContainer>
   );
 };

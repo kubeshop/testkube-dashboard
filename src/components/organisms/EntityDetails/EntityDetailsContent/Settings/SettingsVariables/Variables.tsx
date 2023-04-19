@@ -6,10 +6,12 @@ import {Entity} from '@models/entity';
 
 import {ExternalLink} from '@atoms';
 
-import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
+import {ConfigurationCard, notificationCall, TestsVariablesList} from '@molecules';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -23,6 +25,7 @@ const descriptionMap: {[key in Entity]: string} = {
 
 const Variables: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();
   const [form] = Form.useForm();
@@ -87,6 +90,7 @@ const Variables: React.FC = () => {
           }
         }
       }}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Variables & Secrets"
@@ -103,6 +107,7 @@ const Variables: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
       >
         <TestsVariablesList data={variables} form={form} />
       </ConfigurationCard>

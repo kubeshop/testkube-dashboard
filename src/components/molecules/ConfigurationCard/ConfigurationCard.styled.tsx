@@ -20,8 +20,10 @@ export const StyledHeader = styled.div`
   border-bottom: 1px solid ${Colors.slate800};
 `;
 
-export const StyledChildren = styled.div`
+export const StyledChildren = styled.div<{$isActionsVisible: boolean}>`
   padding: 20px;
+
+  ${({$isActionsVisible}) => (!$isActionsVisible ? 'cursor: not-allowed' : '')}
 `;
 
 export const StyledFooter = styled.div`

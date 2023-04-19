@@ -16,6 +16,8 @@ import {constructExecutedString, formatExecutionDate} from '@utils/formatDate';
 
 import Colors from '@styles/Colors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from './ExecutionDetailsDrawer.styled';
@@ -27,6 +29,7 @@ type ExecutionDetailsDrawerHeaderProps = {
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
   const {unselectRow, entity, execId, abortExecution} = useContext(EntityDetailsContext);
+  const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
   const {data} = props;
   // @ts-ignore
@@ -80,7 +83,9 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
             </Text>
           </ItemColumn>
           <ItemColumn className="flex-auto">
-            {renderedExecutionActions && renderedExecutionActions.length ? (
+            {renderedExecutionActions &&
+            renderedExecutionActions.length &&
+            mayManageExecution ? (
               <div
                 onClick={e => {
                   e.stopPropagation();

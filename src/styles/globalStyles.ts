@@ -291,6 +291,16 @@ export const GlobalStyle = createGlobalStyle`
     text-transform: uppercase;
   }
 
+  .ant-select-disabled {
+    .ant-select-selector {
+      border-color: ${Colors.slate800} !important;
+    }
+
+    .ant-select-selection-item {
+      color: ${Colors.slate500};
+    }
+  }
+
   /* Form */
 
   .ant-form-vertical {

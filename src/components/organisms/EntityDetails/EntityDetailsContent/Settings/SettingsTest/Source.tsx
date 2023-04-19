@@ -29,6 +29,8 @@ import {
   testSourceBaseOptions,
 } from '@utils/sources';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 const additionalFields: {[key: string]: React.FC<any>} = {
@@ -45,6 +47,7 @@ type SourceProps = {
 
 const Source: React.FC<SourceProps> = props => {
   const {entityDetails, updateTest} = props;
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const {type} = entityDetails;
 
@@ -91,6 +94,7 @@ const Source: React.FC<SourceProps> = props => {
       layout="vertical"
       labelAlign="right"
       onFinish={onSave}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Source"
@@ -111,6 +115,7 @@ const Source: React.FC<SourceProps> = props => {
         forceEnableButtons={
           (isClearedToken && additionalFormValues.token) || (isClearedUsername && additionalFormValues.username)
         }
+        enabled={mayEdit}
       >
         <StyledSpace size={24} direction="vertical">
           <StyledFormItem name="testSource" rules={[required]}>

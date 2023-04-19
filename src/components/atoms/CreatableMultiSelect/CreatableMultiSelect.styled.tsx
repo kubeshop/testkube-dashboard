@@ -25,15 +25,15 @@ export const customStyles: (validation?: boolean) => StylesConfig<Option, true, 
   validation = true
 ) => ({
   input: styles => ({...styles, color: Colors.slate200, fontWeight: 400}),
-  valueContainer: styles => ({
+  valueContainer: (styles, props) => ({
     ...styles,
-    backgroundColor: Colors.slate800,
+    backgroundColor: props.isDisabled ? 'transparent' : Colors.slate800,
   }),
   placeholder: styles => ({...styles, color: Colors.slate500, fontWeight: 400}),
-  control: styles => ({
+  control: (styles, props) => ({
     ...styles,
     borderColor: validation ? 'transparent' : Colors.pink500,
-    backgroundColor: Colors.slate800,
+    backgroundColor: props.isDisabled ? '#1e293b80' : Colors.slate800,
     minHeight: '44px',
   }),
   indicatorSeparator: styles => ({...styles, width: 0}),

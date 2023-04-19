@@ -6,6 +6,7 @@ import Colors from '@styles/Colors';
 
 export interface ICustomButtonProps extends AntdButtonProps {
   $customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'warning';
+  hidden?: boolean;
 }
 
 const buttomTypesStyles: {[key: string]: string} = {

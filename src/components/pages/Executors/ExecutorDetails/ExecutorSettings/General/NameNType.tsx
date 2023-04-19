@@ -11,7 +11,10 @@ import {ConfigurationCard} from '@molecules';
 
 import {required} from '@utils/form';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 const NameNType: React.FC = () => {
+  const mayEdit = usePermission(Permissions.editEntity);
   const {name, executor} = useAppSelector(selectCurrentExecutor);
   const type = executor?.types?.[0] ?? '';
   const [form] = Form.useForm();
@@ -24,7 +27,13 @@ const NameNType: React.FC = () => {
   }, [name, type]);
 
   return (
-    <Form form={form} name="general-settings-name-type" initialValues={{name, type}} layout="vertical">
+    <Form
+      form={form}
+      name="general-settings-name-type"
+      initialValues={{name, type}}
+      layout="vertical"
+      disabled={!mayEdit}
+    >
       <ConfigurationCard
         title="Executor name & type"
         description="Define the name and type of the executor which will be displayed across the Dashboard and CLI"
@@ -35,6 +44,7 @@ const NameNType: React.FC = () => {
           form.resetFields();
         }}
         isButtonsDisabled
+        enabled={mayEdit}
       >
         <Form.Item label="Name" required name="name" rules={[required]}>
           <Input placeholder="e.g.: my-container-executor" disabled />

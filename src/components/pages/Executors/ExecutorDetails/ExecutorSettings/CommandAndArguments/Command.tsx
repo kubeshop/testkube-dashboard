@@ -13,6 +13,8 @@ import {displayDefaultErrorNotification} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 type CommandFormFields = {
@@ -20,10 +22,11 @@ type CommandFormFields = {
 };
 
 const Command: React.FC = () => {
+  const {dispatch} = useContext(MainContext);
+  const mayEdit = usePermission(Permissions.editEntity);
+
   const {executor, name} = useAppSelector(selectCurrentExecutor) as Executor;
   const {command} = executor;
-
-  const {dispatch} = useContext(MainContext);
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
 
@@ -60,6 +63,7 @@ const Command: React.FC = () => {
       initialValues={{command: command?.join(' ')}}
       layout="vertical"
       onFinish={onSubmit}
+      disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Command"
@@ -70,6 +74,7 @@ const Command: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
       >
         <Form.Item label="Command" name="command">
           <Input placeholder="Command" />

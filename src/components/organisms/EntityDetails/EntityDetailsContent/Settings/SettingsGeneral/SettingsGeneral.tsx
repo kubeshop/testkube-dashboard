@@ -2,6 +2,8 @@ import {useContext} from 'react';
 
 import {Space} from 'antd';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {EntityDetailsContext} from '@contexts';
 
 import Delete from './Delete';
@@ -12,6 +14,7 @@ import Timeout from './Timeout';
 
 const SettingsGeneral: React.FC = () => {
   const {entity} = useContext(EntityDetailsContext);
+  const mayDelete = usePermission(Permissions.deleteEntity);
 
   return (
     <Space size={30} direction="vertical">
@@ -19,7 +22,7 @@ const SettingsGeneral: React.FC = () => {
       <Labels />
       {entity === 'tests' ? <Timeout /> : null}
       {entity === 'tests' ? <FailureHandling /> : null}
-      <Delete />
+      {mayDelete ? <Delete /> : null}
     </Space>
   );
 };

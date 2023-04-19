@@ -1,3 +1,5 @@
+import {ReactElement} from 'react';
+
 import {ExternalLink} from '@atoms';
 
 import {Button, Text, Title} from '@custom-antd';
@@ -9,37 +11,63 @@ import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
 
 import Colors from '@styles/Colors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {StyledEmptyListContainer} from './EmptyListContent.styled';
 
 type EmptyListContentProps = {
   title: string;
-  description: string;
+  description: string | ReactElement;
   buttonText: string;
-  onButtonClick: () => void;
+  onButtonClick?: () => void;
   children?: React.ReactNode;
+  emptyListReadonlyTitle?: string;
+  emptyListReadonlyDescription?: string;
 };
 
 const EmptyListContent: React.FC<EmptyListContentProps> = props => {
-  const {title, description, onButtonClick, children, buttonText} = props;
+  const {
+    title,
+    description,
+    onButtonClick,
+    children,
+    buttonText,
+    emptyListReadonlyTitle,
+    emptyListReadonlyDescription,
+  } = props;
+  const isActionAvailable = usePermission(Permissions.runEntity);
+
   return (
     <StyledEmptyListContainer size={24} direction="vertical">
-      <CreateTestIcon />
-      <Title className="text-center">{title}</Title>
-      <Text className="regular middle text-center" color={Colors.slate400}>
-        {description}
-      </Text>
-      <Button $customType="primary" onClick={onButtonClick}>
-        {buttonText}
-      </Button>
-      <StyledHelpCardsContainer>
-        {children}
-        <StyledLastHelpCardContainer>
-          <HelpCard isHelp link="https://discord.com/invite/hfq44wtR6Q">
-            Need help getting started? Want to talk to Testkube engineers?{' '}
-            <ExternalLink href="https://discord.com/invite/hfq44wtR6Q">Find us on Discord</ExternalLink>
-          </HelpCard>
-        </StyledLastHelpCardContainer>
-      </StyledHelpCardsContainer>
+      {isActionAvailable ? (
+        <>
+          <CreateTestIcon />
+          <Title className="text-center">{title}</Title>
+          <Text className="regular middle text-center" color={Colors.slate400}>
+            {description}
+          </Text>
+          <Button $customType="primary" onClick={onButtonClick}>
+            {buttonText}
+          </Button>
+          <StyledHelpCardsContainer>
+            {children}
+            <StyledLastHelpCardContainer>
+              <HelpCard isHelp link="https://discord.com/invite/hfq44wtR6Q">
+                Need help getting started? Want to talk to Testkube engineers?{' '}
+                <ExternalLink href="https://discord.com/invite/hfq44wtR6Q">Find us on Discord</ExternalLink>
+              </HelpCard>
+            </StyledLastHelpCardContainer>
+          </StyledHelpCardsContainer>
+        </>
+      ) : (
+        <>
+          <CreateTestIcon />
+          <Title className="text-center">{emptyListReadonlyTitle}</Title>
+          <Text className="regular middle text-center" color={Colors.slate400}>
+            {emptyListReadonlyDescription}
+          </Text>
+        </>
+      )}
     </StyledEmptyListContainer>
   );
 };

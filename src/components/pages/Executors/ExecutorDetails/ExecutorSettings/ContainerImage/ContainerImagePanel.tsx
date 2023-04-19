@@ -14,6 +14,8 @@ import {displayDefaultErrorNotification} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {MainContext} from '@contexts';
 
 export type ContainerImageFormFields = {
@@ -21,10 +23,11 @@ export type ContainerImageFormFields = {
 };
 
 const ContainerImagePanel: React.FC = () => {
-  const {executor, name} = useAppSelector(selectCurrentExecutor) as Executor;
-  const {image} = executor;
+  const {executor, name} = useAppSelector(selectCurrentExecutor);
+  const image = executor?.image;
 
   const {dispatch} = useContext(MainContext);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
 
@@ -55,7 +58,14 @@ const ContainerImagePanel: React.FC = () => {
   }, [image]);
 
   return (
-    <Form form={form} name="general-settings-name-type" initialValues={{image}} layout="vertical" onFinish={onSubmit}>
+    <Form
+      form={form}
+      name="general-settings-name-type"
+      initialValues={{image}}
+      layout="vertical"
+      onFinish={onSubmit}
+      disabled={!mayEdit}
+    >
       <ConfigurationCard
         title="Container image"
         description="Define the image you want to use for this executor. We defer by default to Dockerhub – but you can also insert a URL to your very own image"
@@ -65,6 +75,7 @@ const ContainerImagePanel: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
       >
         <Form.Item label="Container image" required name="image" rules={[required]}>
           <Input placeholder="Container image" />
