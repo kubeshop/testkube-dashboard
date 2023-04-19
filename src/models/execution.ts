@@ -28,6 +28,7 @@ export type ExecutionResult = {
 export type Execution = {
   id: string;
   testName: string;
+  testSuiteName?: string;
   testNamespace: string;
   testType: TestExecutor;
   name: string;

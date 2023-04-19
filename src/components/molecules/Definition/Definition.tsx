@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 
-import { TestkubeCodeTheme} from '@atoms';
+import {TestkubeCodeTheme} from '@atoms';
 
 import {DefinitionContainer} from './Definition.styled';
 

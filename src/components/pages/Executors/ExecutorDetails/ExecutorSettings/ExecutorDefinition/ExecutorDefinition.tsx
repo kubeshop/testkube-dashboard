@@ -5,8 +5,7 @@ import axios from 'axios';
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
-import {CopyButton, Pre} from '@atoms';
-import DownloadButton from '@atoms/DownloadButton/DownloadButton';
+import {CopyButton, DownloadButton, Pre} from '@atoms';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 

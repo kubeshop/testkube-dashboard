@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 
-import {CopyButton, Pre} from '@atoms';
-import DownloadButton from '@atoms/DownloadButton/DownloadButton';
+import {CopyButton, DownloadButton, Pre} from '@atoms';
 
 import {Text} from '@custom-antd';
 
