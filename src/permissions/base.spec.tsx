@@ -4,6 +4,7 @@ import {BasePermissionsResolver, Permissions, PermissionsProvider, PermissionsRe
 
 // The original renderHook method from '@testing-library/react' doesn't allow passing props to wrapper,
 // while it's needed for testing this feature completely.
+// eslint-disable-next-line react/no-unused-prop-types
 type TestProps<T> = {permission: Permissions, scope?: T, local?: T, resolver: PermissionsResolver<any>};
 const renderUsePermissionHook = (props: TestProps<any>) => {
   const result: {current: boolean} = {current: undefined};
