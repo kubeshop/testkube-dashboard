@@ -5,15 +5,15 @@ import {FormItem} from '@custom-antd';
 import {required} from '@utils/form';
 
 import FormItemLabel from './FormItemLabel';
-import {getValidationTooltip, tooltipStatus} from './tooltipUtils';
+import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 
 type CommitProps = {
-  status?: tooltipStatus;
+  status?: TooltipStatus;
   message?: string;
 };
 
 const Commit: React.FC<CommitProps> = props => {
-  const {status = 'none', message} = props;
+  const {status = TooltipStatus.none, message} = props;
   return (
     <FormItem
       name="commit"

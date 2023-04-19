@@ -5,12 +5,12 @@ import {FormItem} from '@custom-antd';
 
 import {Branch, Commit, RevisionSwitcher} from '.';
 import {StyledFormSpace} from '../../organisms/TestConfigurationForm/TestConfigurationForm.styled';
-import {tooltipStatus} from './tooltipUtils';
+import {TooltipStatus} from './tooltipUtils';
 
 type RevisionProps = {
   message?: string;
-  branchStatus?: tooltipStatus;
-  commitStatus?: tooltipStatus;
+  branchStatus?: TooltipStatus;
+  commitStatus?: TooltipStatus;
 };
 
 const Revision: React.FC<RevisionProps> = props => {

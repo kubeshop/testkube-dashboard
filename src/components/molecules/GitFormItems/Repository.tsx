@@ -5,15 +5,15 @@ import {FormItem} from '@custom-antd';
 import {required, url} from '@utils/form';
 
 import FormItemLabel from './FormItemLabel';
-import {getValidationTooltip, tooltipStatus} from './tooltipUtils';
+import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 
 type RepositoryProps = {
-  status?: tooltipStatus;
+  status?: TooltipStatus;
   message?: string;
 };
 
 const Repository: React.FC<RepositoryProps> = props => {
-  const {status = 'none', message} = props;
+  const {status = TooltipStatus.none, message} = props;
 
   return (
     <FormItem

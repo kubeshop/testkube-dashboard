@@ -1,4 +1,3 @@
-import {useCallback} from 'react';
 import {useDebounce} from 'react-use';
 
 import {NamePath} from 'antd/lib/form/interface';
@@ -15,8 +14,8 @@ const endSearchString = ', context';
 
 const getErrorMessage = (rawErrorString: string, searchString: string) =>
   rawErrorString.slice(
-    rawErrorString.search(searchString) + searchString.length,
-    rawErrorString.search(endSearchString)
+    rawErrorString.indexOf(searchString) + searchString.length,
+    rawErrorString.indexOf(endSearchString)
   );
 
 const useValidateRepository = (
@@ -24,77 +23,74 @@ const useValidateRepository = (
   setValidationState: React.Dispatch<any>,
   validateRepository: any
 ) => {
-  const handleResponse = useCallback(
-    (res: any) => {
-      if (res?.error) {
-        const errorDetail = res?.error?.data?.detail;
+  const handleResponse = (res: any) => {
+    if (res?.error) {
+      const errorDetail = res?.error?.data?.detail;
 
-        if (!errorDetail) {
-          setValidationState({
-            message: 'Network error',
-            uri: 'error',
-          });
-          return;
-        }
-
-        if (errorDetail.includes(authSearchString)) {
-          setValidationState({
-            message: getErrorMessage(errorDetail, authSearchString),
-            uri: 'error',
-            token: getFieldValue('token') ? 'error' : '',
-            username: getFieldValue('username') ? 'error' : '',
-          });
-          return;
-        }
-        if (errorDetail.includes(uriSearchString)) {
-          setValidationState({
-            message: getErrorMessage(errorDetail, uriSearchString),
-            uri: 'error',
-          });
-          return;
-        }
-
-        if (errorDetail.includes(branchSearchString)) {
-          setValidationState({
-            message: getErrorMessage(errorDetail, branchSearchString),
-            uri: 'success',
-            token: getFieldValue('token') ? 'success' : '',
-            username: getFieldValue('username') ? 'success' : '',
-            branch: 'error',
-          });
-          return;
-        }
-
-        if (errorDetail.includes(pathSearchString)) {
-          setValidationState({
-            message: getErrorMessage(errorDetail, pathSearchString),
-            uri: 'success',
-            token: getFieldValue('token') ? 'success' : '',
-            username: getFieldValue('username') ? 'success' : '',
-            branch: getFieldValue('branch') ? 'success' : '',
-            path: 'error',
-          });
-          return;
-        }
-
+      if (!errorDetail) {
         setValidationState({
-          message: 'Unknown error',
+          message: 'Network error',
           uri: 'error',
         });
-      } else {
+        return;
+      }
+
+      if (errorDetail.includes(authSearchString)) {
         setValidationState({
+          message: getErrorMessage(errorDetail, authSearchString),
+          uri: 'error',
+          token: getFieldValue('token') ? 'error' : '',
+          username: getFieldValue('username') ? 'error' : '',
+        });
+        return;
+      }
+      if (errorDetail.includes(uriSearchString)) {
+        setValidationState({
+          message: getErrorMessage(errorDetail, uriSearchString),
+          uri: 'error',
+        });
+        return;
+      }
+
+      if (errorDetail.includes(branchSearchString)) {
+        setValidationState({
+          message: getErrorMessage(errorDetail, branchSearchString),
+          uri: 'success',
+          token: getFieldValue('token') ? 'success' : '',
+          username: getFieldValue('username') ? 'success' : '',
+          branch: 'error',
+        });
+        return;
+      }
+
+      if (errorDetail.includes(pathSearchString)) {
+        setValidationState({
+          message: getErrorMessage(errorDetail, pathSearchString),
           uri: 'success',
           token: getFieldValue('token') ? 'success' : '',
           username: getFieldValue('username') ? 'success' : '',
           branch: getFieldValue('branch') ? 'success' : '',
-          path: getFieldValue('path') ? 'success' : '',
+          path: 'error',
         });
+        return;
       }
-    },
-    [setValidationState, getFieldValue]
-  );
 
-  const getValidationPayload = useCallback(() => {
+      setValidationState({
+        message: 'Unknown error',
+        uri: 'error',
+      });
+    } else {
+      setValidationState({
+        uri: 'success',
+        token: getFieldValue('token') ? 'success' : '',
+        username: getFieldValue('username') ? 'success' : '',
+        branch: getFieldValue('branch') ? 'success' : '',
+        path: getFieldValue('path') ? 'success' : '',
+      });
+    }
+  };
+
+  const getValidationPayload = () => {
     return {
       type: 'git',
       ...fieldsNames.reduce((acc, curr) => {
@@ -114,7 +110,7 @@ const useValidateRepository = (
         return {...acc, [curr]: getFieldValue(curr)};
       }, {}),
     };
-  }, [getFieldValue]);
+  };
 
   useDebounce(
     () => {
