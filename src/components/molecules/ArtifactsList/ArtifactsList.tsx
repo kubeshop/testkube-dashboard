@@ -40,7 +40,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
         <ArtifactsListItem key={listItemKey} onClick={() => downloadArtifact(name)}>
           <StyledSpace size={15}>
             <FileOutlined />
-            <Text color={Colors.slate300}>{name}</Text>
+            <Text className="regular" color={Colors.slate300}>{name}</Text>
             <StyledDownloadIcon />
           </StyledSpace>
         </ArtifactsListItem>

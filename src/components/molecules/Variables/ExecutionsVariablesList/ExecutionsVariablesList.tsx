@@ -42,7 +42,7 @@ const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props =>
             </VariableTypeWrapper>
             <Popover content={item.key} placement="topLeft">
               <VariableDetailWrapper>
-                <Text ellipsis color={textColor}>
+                <Text className="regular" ellipsis color={textColor}>
                   {item.key}
                 </Text>
               </VariableDetailWrapper>
@@ -50,7 +50,7 @@ const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props =>
             {item.type === 0 ? (
               <VariableDetailWrapper>
                 <Popover content={item.value} placement="topLeft">
-                  <Text ellipsis color={textColor}>
+                  <Text className="regular" ellipsis color={textColor}>
                     {item.value}
                   </Text>
                 </Popover>
@@ -58,14 +58,14 @@ const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props =>
             ) : secretValuesVisibility[index] ? (
               <VariableDetailWrapper>
                 <Popover content={item.value} placement="topLeft" popupVisible={secretValuesVisibility[index]}>
-                  <Text ellipsis color={textColor}>
+                  <Text className="regular" ellipsis color={textColor}>
                     {item.value}
                   </Text>
                 </Popover>
               </VariableDetailWrapper>
             ) : (
               <VariableDetailWrapper>
-                <Text color={textColor}>*********</Text>
+                <Text className="regular" color={textColor}>*********</Text>
               </VariableDetailWrapper>
             )}
           </VariablesListItem>
