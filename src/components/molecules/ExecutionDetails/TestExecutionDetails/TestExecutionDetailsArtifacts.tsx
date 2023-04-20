@@ -1,10 +1,12 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {Artifact} from '@models/artifact';
 
 import {ArtifactsList} from '@molecules';
 
 import {useGetTestExecutionArtifactsQuery} from '@services/tests';
+
+import {MainContext} from '@contexts';
 
 type TestExecutionDetailsArtifactsProps = {
   id: string;
@@ -13,9 +15,11 @@ type TestExecutionDetailsArtifactsProps = {
 const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps> = props => {
   const {id} = props;
 
+  const {isClusterAvailable} = useContext(MainContext);
+
   const [artifacts, setArtifacts] = useState<Artifact[]>([]);
 
-  const {data, isLoading, error} = useGetTestExecutionArtifactsQuery(id);
+  const {data, isLoading, error} = useGetTestExecutionArtifactsQuery(id, {skip: !isClusterAvailable});
 
   useEffect(() => {
     if (error) {

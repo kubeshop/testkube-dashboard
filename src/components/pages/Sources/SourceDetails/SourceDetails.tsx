@@ -16,7 +16,7 @@ import {StyledContainer, StyledPageHeader} from './SourceDetails.styled';
 import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
-  const {navigate, location, dispatch} = useContext(MainContext);
+  const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);
 
@@ -24,7 +24,7 @@ const SourceDetails = () => {
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name);
+  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: isClusterAvailable});
 
   const isPageDisabled = !name;
 

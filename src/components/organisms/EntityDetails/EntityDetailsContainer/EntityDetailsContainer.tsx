@@ -59,7 +59,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     pollingInterval: PollingIntervals.everyTwoSeconds,
     skip: !isClusterAvailable,
   });
-  const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue});
+  const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue, skip: !isClusterAvailable});
   const [abortExecution] = useAbortExecution();
 
   // Temporary solution until WS implementation

@@ -66,15 +66,18 @@ const Triggers: React.FC = () => {
   const isTriggersAvailable = usePermission(Permissions.createEntity);
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const {data: triggersKeyMap, isLoading: keyMapLoading} = useGetTriggersKeyMapQuery();
-  const {data: testsList = [], isLoading: testsLoading} = useGetAllTestsQuery();
-  const {data: testsSuitesList = [], isLoading: testSuitesLoading} = useGetAllTestSuitesQuery();
+  const {data: triggersKeyMap, isLoading: keyMapLoading} = useGetTriggersKeyMapQuery(null, {skip: !isClusterAvailable});
+  const {data: testsList = [], isLoading: testsLoading} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
+  const {data: testsSuitesList = [], isLoading: testSuitesLoading} = useGetAllTestSuitesQuery(null, {
+    skip: !isClusterAvailable,
+  });
   const {
     data: triggersList,
     isLoading: triggersLoading,
     refetch,
   } = useGetTriggersListQuery(null, {
     pollingInterval: PollingIntervals.long,
+    skip: !isClusterAvailable,
   });
 
   const [updateTriggers] = useUpdateTriggersMutation();

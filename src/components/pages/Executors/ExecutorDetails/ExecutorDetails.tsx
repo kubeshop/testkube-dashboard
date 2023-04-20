@@ -16,7 +16,7 @@ import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails = () => {
-  const {navigate, location, dispatch} = useContext(MainContext);
+  const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
 
@@ -24,7 +24,7 @@ const ExecutorDetails = () => {
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: executorDetails, refetch} = useGetExecutorDetailsQuery(name);
+  const {data: executorDetails, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
 
   const isPageDisabled = !name;
 

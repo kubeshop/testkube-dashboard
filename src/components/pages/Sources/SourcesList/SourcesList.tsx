@@ -24,9 +24,10 @@ import {SourceContainer, SourcesGrid, SourcesListSkeletonWrapper} from './Source
 const Sources: React.FC = () => {
   const sourcesList = useAppSelector(selectSources);
 
-  const {data: sources, refetch, isLoading} = useGetSourcesQuery(null);
+  const {dispatch, navigate, location, isClusterAvailable} = useContext(MainContext);
 
-  const {dispatch, navigate, location} = useContext(MainContext);
+  const {data: sources, refetch, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
+
   const [isAddSourceModalVisible, setAddSourceModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
 

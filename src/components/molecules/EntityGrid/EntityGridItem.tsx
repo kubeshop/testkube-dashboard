@@ -26,7 +26,7 @@ const EntityGridItem: React.FC<any> = props => {
   const {item, onClick} = props;
   const {dataItem, latestExecution} = item;
 
-  const {dispatch} = useContext(MainContext);
+  const {isClusterAvailable} = useContext(MainContext);
   const {useGetMetrics, entity} = useContext(EntityListContext);
 
   const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
@@ -37,7 +37,7 @@ const EntityGridItem: React.FC<any> = props => {
 
   const {data: metrics} = useGetMetrics(
     {id: dataItem.name, last: 7, limit: 13},
-    {skip: !isInViewport, pollingInterval: PollingIntervals.halfMin}
+    {skip: !isInViewport || !isClusterAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
   const executions = metrics?.executions || [];

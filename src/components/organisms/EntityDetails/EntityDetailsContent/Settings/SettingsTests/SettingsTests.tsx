@@ -25,7 +25,7 @@ import {useGetAllTestsQuery} from '@services/tests';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext} from '@contexts';
+import {EntityDetailsContext, MainContext} from '@contexts';
 
 import DelayModal from './DelayModal';
 import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './SettingsTests.styled';
@@ -33,6 +33,7 @@ import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './Setti
 const {Option} = Select;
 
 const SettingsTests = () => {
+  const {isClusterAvailable} = useContext(MainContext);
   const {entityDetails} = useContext(EntityDetailsContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -42,8 +43,8 @@ const SettingsTests = () => {
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name);
-  const {data: allTestsList = []} = useGetAllTestsQuery();
+  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {skip: !isClusterAvailable});
+  const {data: allTestsList = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
   const testsData = useMemo<any[]>(() => {
