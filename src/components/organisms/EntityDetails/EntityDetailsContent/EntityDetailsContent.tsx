@@ -13,7 +13,7 @@ import {ExecutorIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
-import {CLICommands, LabelsList, MetricsBarChart} from '@molecules';
+import {CLICommands, LabelsList, MetricsBarChart, RunningContextType} from '@molecules';
 
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
@@ -87,6 +87,9 @@ const EntityDetailsContent: React.FC = () => {
       id: name,
       data: {
         namespace,
+        runningContext: {
+          type: RunningContextType.userUI,
+        },
       },
     }).then((res: any) => {
       displayDefaultNotificationFlow(res, () => {

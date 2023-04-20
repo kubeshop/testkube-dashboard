@@ -8,7 +8,7 @@ import {StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {DotsDropdown} from '@molecules';
+import {DotsDropdown, RunningContext} from '@molecules';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -34,7 +34,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
   const {data} = props;
   // @ts-ignore
   const status = data?.executionResult?.status || data?.status;
-  const runContext = data?.runContext;
+  const runningContext = data?.runningContext;
 
   const isRunning = useIsRunning(status);
 
@@ -91,9 +91,9 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
         <ItemRow $flex={1}>
           <ItemColumn>
             {number ? <Text color={Colors.slate50}>#{number}</Text> : null}
-            <Text color={Colors.slate50}>
+            <Text>
               <Text color={Colors.slate400}>Trigger:&nbsp;</Text>
-              manual
+              <RunningContext type={runningContext?.type} context={runningContext?.context} />
             </Text>
             <Text color={Colors.slate50}>
               <Text color={Colors.slate400}>Started:&nbsp;</Text>
