@@ -2,8 +2,8 @@ import {ExecutionStatusEnum} from './execution';
 
 export type ExecutionMetrics = {
   executionId?: string;
-  duration: string;
-  durationMs: number;
+  duration?: string;
+  durationMs?: number;
   status: ExecutionStatusEnum;
   name: string;
   startTime: string;

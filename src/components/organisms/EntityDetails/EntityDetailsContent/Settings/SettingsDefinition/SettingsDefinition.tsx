@@ -2,8 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 
 import axios from 'axios';
 
-import {CopyButton, ExternalLink, Pre} from '@atoms';
-import DownloadButton from '@atoms/DownloadButton/DownloadButton';
+import {CopyButton, DownloadButton, ExternalLink, Pre} from '@atoms';
 
 import {ConfigurationCard, Definition} from '@molecules';
 

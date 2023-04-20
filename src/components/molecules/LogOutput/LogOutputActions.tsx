@@ -4,8 +4,7 @@ import stripAnsi from 'strip-ansi';
 
 import {LogAction} from '@models/log';
 
-import {CopyButton} from '@atoms';
-import DownloadButton from '@atoms/DownloadButton/DownloadButton';
+import {CopyButton, DownloadButton} from '@atoms';
 
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';

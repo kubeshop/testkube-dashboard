@@ -24,6 +24,7 @@ export const configSlice = createSlice({
     },
     closeFullScreenLogOutput: (state: Draft<ConfigState>) => {
       state.fullScreenLogOutput.isFullScreenLogOutput = false;
+      state.fullScreenLogOutput.logOutput = '';
     },
     openSettingsTabConfig: (state: Draft<ConfigState>) => {
       state.redirectTarget.isSettingsTabConfig = true;

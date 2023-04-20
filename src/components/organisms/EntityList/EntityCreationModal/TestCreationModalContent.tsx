@@ -54,8 +54,8 @@ const TestCreationModalContent: React.FC = () => {
       setHintConfig({
         title: `Testing with ${selectedExecutor.displayName}`,
         description: `Discover all the features and examples around testing with ${selectedExecutor.displayName} on Testkube`,
-        openLink: () => window.open(selectedExecutor.executor.meta?.docsURI, '_blank'),
-        selectedExecutor: selectedExecutor.executor.meta?.iconURI,
+        openLink: () => window.open(selectedExecutor.executor?.meta?.docsURI, '_blank'),
+        selectedExecutor: selectedExecutor.executor?.meta?.iconURI,
       });
     }
 
