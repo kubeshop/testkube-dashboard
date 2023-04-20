@@ -2,11 +2,11 @@ import React, {useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
+import {Text} from '@custom-antd';
+
 import {StatusIcon} from '@atoms';
 
 import {DotsDropdown} from '@molecules';
-
-import {Text} from '@custom-antd';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -17,7 +17,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import Colors from '@styles/Colors';
 
-import {DetailsWrapper, DotsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled';
+import {DetailsWrapper, DotsWrapper, ItemColumn, ItemRow, ItemWrapper, StatusText} from './TableRow.styled';
 
 const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
   const {data, onAbortExecution} = props;
@@ -57,9 +57,9 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
             </Text>
           </ItemColumn>
           <ItemColumn>
-            <Text color={Colors.slate200}>
+            <StatusText color={Colors.slate200} $isRunning={isRunning}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
-            </Text>
+            </StatusText>
             {renderedExecutionActions &&
             renderedExecutionActions.length &&
             mayManageExecution ? (

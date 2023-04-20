@@ -26,6 +26,13 @@ export const ItemColumn = styled.div`
   gap: 16px;
 `;
 
+export const StatusText = styled(Text)<{$isRunning?: boolean}>`
+  &.testkube-text.small {
+    display: flex;
+    ${({$isRunning}) => ($isRunning ? 'align-items: center;' : 'align-items: flex-start;')}
+  }
+`;
+
 export const DotsWrapper = styled.div`
   display: flex;
   align-items: center;
