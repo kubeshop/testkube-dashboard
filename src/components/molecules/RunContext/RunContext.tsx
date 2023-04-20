@@ -3,45 +3,43 @@ import {Link} from 'react-router-dom';
 
 import {Text} from '@custom-antd';
 
+import Colors from '@styles/Colors';
+
+export enum RunContextType {
+  userUI = 'user-ui',
+  userCLI = 'user-cli',
+  testSuite = 'testsuite',
+  testTrigger = 'testtrigger',
+  scheduler = 'scheduler',
+  default = 'default',
+}
+
 type RunContextProps = {
-  runContext?: {
-    type: 'scheduler' | 'testsuite' | 'cliManual' | 'testtrigger';
+  runContext: {
+    type: RunContextType;
     context: string;
   };
 };
 
-const RunContext: React.FC<RunContextProps> = ({runContext}) => {
+const RunContext: React.FC<RunContextProps> = props => {
+  const {
+    runContext: {type = RunContextType.default, context = ''},
+  } = props;
+
   const runContextMap = {
-    scheduler: {
-      text: `Scheduled to run on a schedule: ${runContext?.context || ''}`,
-      link: null,
-    },
-    testsuite: {
-      text: `Triggered by test suite ${runContext?.context || ''}.`,
-      link: <Link to={`/test-suites/${runContext?.context}`}>Link to test suite</Link>,
-    },
-    cliManual: {
-      text: 'Manually triggered by a command line interface.',
-      link: null,
-    },
-    testtrigger: {
-      text: `Triggered by test ${runContext?.context || ''}.`,
-      link: <Link to={`/tests/${runContext?.context}`}>Link to test</Link>,
-    },
-    default: {
-      text: 'Unknown run context.',
-      link: null,
-    },
+    'user-ui': 'Manual UI',
+    'user-cli': 'Manual CLI',
+    scheduler: 'Scheduler',
+    testsuite: (
+      <>
+        Test Suite - <Link to={`test-suites/executions/test-suite/execution/${context}`}>{context}</Link>
+      </>
+    ),
+    testtrigger: `Test Trigger - ${context}`,
+    default: 'Unknown run context',
   };
 
-  const {type = 'default', context} = runContext || {};
-  const {text, link} = runContextMap[type];
-
-  return (
-    <Text>
-      {text} {link}
-    </Text>
-  );
+  return <Text color={Colors.slate50}>{runContextMap[type]}</Text>;
 };
 
 export default RunContext;
