@@ -149,39 +149,18 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     },
   });
 
-  const getDefaultUrl = () => {
-    const clarifyTargetUrl = pathname.split('/').slice(0, 4);
-
-    return clarifyTargetUrl.join('/');
-  };
+  const defaultUrl = `/${entity}/executions/${entityDetails?.name}`;
 
   const onRowSelect = (dataItem: any, isManual?: boolean) => {
     selectRow(dataItem);
 
     if (isManual) {
-      if (execId) {
-        const defaultUrl = getDefaultUrl();
-
-        const targetUrl = `${defaultUrl}/execution/${dataItem?.id}`;
-
-        navigate(targetUrl);
-      } else {
-        const targetUrl = `${pathname}/execution/${dataItem?.id}`;
-
-        navigate(targetUrl);
-      }
-    } else if (!execId) {
-      const targetUrl = `${pathname}/execution/${dataItem?.id}`;
-
-      navigate(targetUrl);
+      navigate(`${defaultUrl}/execution/${dataItem?.id}`);
     }
   };
 
   const unselectRow = () => {
     selectRow(undefined);
-
-    const defaultUrl = getDefaultUrl();
-
     navigate(defaultUrl);
   };
 

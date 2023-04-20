@@ -44,7 +44,7 @@ const Executors: React.FC = () => {
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
   const onNavigateToDetails = (name: string) => {
-    navigate(`executors/${name}`);
+    navigate(`/executors/${name}`);
   };
 
   useEffect(() => {

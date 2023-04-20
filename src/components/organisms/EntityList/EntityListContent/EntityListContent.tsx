@@ -85,7 +85,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   };
 
   const onNavigateToDetails = (item: any) => {
-    navigate(`${entity}/executions/${item.dataItem.name}`);
+    navigate(`/${entity}/executions/${item.dataItem.name}`);
   };
 
   const onScrollBottom = () => {
