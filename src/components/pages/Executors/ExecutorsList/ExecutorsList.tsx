@@ -10,6 +10,8 @@ import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
 
+import {safeRefetch} from '@utils/fetchUtils';
+
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
@@ -48,7 +50,7 @@ const Executors: React.FC = () => {
   };
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, [apiEndpoint]);
 
   const renderedExecutorsGrid = useMemo(() => {

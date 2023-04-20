@@ -20,6 +20,7 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {PageBlueprint} from '@organisms';
 
+import {safeRefetch} from '@utils/fetchUtils';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
 
@@ -125,7 +126,7 @@ const Triggers: React.FC = () => {
   }, [triggersList]);
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, []);
 
   const testsData = useMemo(() => {

@@ -8,6 +8,8 @@ import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executo
 
 import useLocation from '@hooks/useLocation';
 
+import {safeRefetch} from '@utils/fetchUtils';
+
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
 import {MainContext} from '@contexts';
@@ -35,7 +37,7 @@ const ExecutorDetails = () => {
   }, [executorDetails]);
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, [location]);
 
   return (

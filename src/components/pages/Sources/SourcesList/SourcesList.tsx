@@ -9,6 +9,8 @@ import {Button, Modal, Skeleton, Text} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
 
+import {safeRefetch} from '@utils/fetchUtils';
+
 import {useGetSourcesQuery} from '@services/sources';
 
 import Colors from '@styles/Colors';
@@ -42,7 +44,7 @@ const Sources: React.FC = () => {
   }, [sources]);
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, [location]);
 
   const renderedSourcesGrid = useMemo(() => {

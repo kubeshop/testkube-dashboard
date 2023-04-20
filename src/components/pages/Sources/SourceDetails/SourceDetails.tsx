@@ -8,6 +8,8 @@ import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlic
 
 import useLocation from '@hooks/useLocation';
 
+import {safeRefetch} from '@utils/fetchUtils';
+
 import {useGetSourceDetailsQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
@@ -35,7 +37,7 @@ const SourceDetails = () => {
   }, [sourceDetails]);
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, [location]);
 
   return (

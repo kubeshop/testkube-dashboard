@@ -19,6 +19,7 @@ import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 
+import {safeRefetch} from '@utils/fetchUtils';
 import {compareFiltersObject} from '@utils/objects';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -126,17 +127,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       setIsLoadingNext(true);
     }
 
-    try {
-      contentProps.refetch().then(() => {
-        setIsApplyingFilters(false);
-        setIsLoadingNext(false);
-      });
-    } catch (err: any) {
-      // RTK is failing synchronously if there was it was skipped
-      if (!err?.message.includes('not been started yet')) {
-        throw err;
-      }
-    }
+    safeRefetch(contentProps.refetch).then(() => {
+      setIsApplyingFilters(false);
+      setIsLoadingNext(false);
+    });
   }, [queryFilters, contentProps.refetch]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
