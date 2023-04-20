@@ -17,7 +17,7 @@ import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
 import {ReactComponent as TriggersIcon} from '@assets/triggers.svg';
 
-import {MainContext} from '@contexts';
+import {ConfigContext, MainContext} from '@contexts';
 
 import {
   StyledLogo,
@@ -78,6 +78,7 @@ const routes = [
 
 const Sider: React.FC = () => {
   const {navigate} = useContext(MainContext);
+  const {showLogoInSider, showSocialLinksInSider} = useContext(ConfigContext);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
@@ -129,17 +130,19 @@ const Sider: React.FC = () => {
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <Space size={30} direction="vertical">
-            <StyledLogo>
+            {showLogoInSider ? <StyledLogo>
               <NavLink to="/tests">
                 <Logo />
               </NavLink>
-            </StyledLogo>
+            </StyledLogo> : null}
             {renderedMenuItems}
           </Space>
         </StyledNavigationMenu>
-        <StyledOther size={20} direction="vertical">
-          {renderedOtherMenuItems}
-        </StyledOther>
+        {showSocialLinksInSider ? (
+          <StyledOther size={20} direction="vertical">
+            {renderedOtherMenuItems}
+          </StyledOther>
+        ) : null}
       </StyledSiderChildContainer>
     </StyledSider>
   );
