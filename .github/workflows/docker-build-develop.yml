@@ -3,7 +3,7 @@ name: Publish Docker image with a commit hash tag
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   push_to_registry:
@@ -32,11 +32,11 @@ jobs:
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:sha-${{ steps.github_sha.outputs.sha_short }}
 
-      #Trigger Helm repo workflow to deploy Dashboard to Stage cluster
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.CI_BOT_TOKEN }}
-          repository: kubeshop/helm-charts
-          event-type: trigger-workflow-dashboard
-          client-payload: '{"image_tag_dashboard": "sha-${{ steps.github_sha.outputs.sha_short }}"}'
+#      #Trigger Helm repo workflow to deploy Dashboard to Stage cluster
+#      - name: Repository Dispatch
+#        uses: peter-evans/repository-dispatch@v2
+#        with:
+#          token: ${{ secrets.CI_BOT_TOKEN }}
+#          repository: kubeshop/helm-charts
+#          event-type: trigger-workflow-dashboard-develop
+#          client-payload: '{"image_tag_dashboard": "sha-${{ steps.github_sha.outputs.sha_short }}"}'

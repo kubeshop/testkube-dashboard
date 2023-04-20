@@ -102,6 +102,9 @@ jobs:
           git config user.name "kubeshop-bot"
           git config user.email "kubeshop-bot@kubeshop.io"
 
+          git fetch origin "release-$RELEASE_VERSION"
+          git checkout "release-$RELEASE_VERSION"
+
           # Calling chart releaser script by passing needed folder name:
           # E.G. in order to relase api-server":
           # -->> ./chart_releaser.sh --helm-chart-folder api-server
