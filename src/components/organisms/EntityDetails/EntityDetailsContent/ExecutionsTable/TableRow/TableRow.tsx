@@ -57,7 +57,7 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
             </Text>
           </ItemColumn>
           <ItemColumn>
-            <Text className="regular small" color={Colors.slate200}>
+            <Text color={Colors.slate200}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </Text>
             {renderedExecutionActions &&
@@ -79,21 +79,15 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
         </ItemRow>
         <ItemRow $flex={1}>
           <ItemColumn>
-            {number ? (
-              <Text className="regular small" color={Colors.slate400}>
-                #{number}
-              </Text>
-            ) : null}
-            <Text className="regular small" color={Colors.slate400}>
-              Executed:
-            </Text>
+            {number ? <Text color={Colors.slate400}>#{number}</Text> : null}
+            <Text color={Colors.slate400}>Executed:</Text>
             <Tooltip
               overlay={<>{formatExecutionDate(new Date(startTime))}</>}
               placement="bottomRight"
               mouseEnterDelay={0.39}
               mouseLeaveDelay={0.1}
             >
-              <Text className="regular small" color={Colors.slate400}>
+              <Text color={Colors.slate400}>
                 {displayTimeBetweenDates(new Date(), new Date(startTime)).long}
               </Text>
             </Tooltip>

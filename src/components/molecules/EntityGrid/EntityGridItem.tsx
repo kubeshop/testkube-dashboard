@@ -64,7 +64,7 @@ const EntityGridItem: React.FC<any> = props => {
               mouseEnterDelay={0.39}
               mouseLeaveDelay={0.1}
             >
-              <Text className="regular small" color={Colors.slate200}>
+              <Text color={Colors.slate200}>
                 {latestExecution?.startTime
                   ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
                   : null}

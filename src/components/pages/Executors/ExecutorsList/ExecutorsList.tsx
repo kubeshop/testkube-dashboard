@@ -80,12 +80,8 @@ const Executors: React.FC = () => {
       return (
         <CustomExecutorContainer onClick={() => onNavigateToDetails(executorItem.name)} key={executorItem.name}>
           <Text className="regular big">{executorItem.name}</Text>
-          <Text className="regular small" color={Colors.slate500}>
-            {executorItem.executor.executorType}
-          </Text>
-          <Text className="regular small" color={Colors.slate500}>
-            {executorItem.executor.image}
-          </Text>
+          <Text color={Colors.slate500}>{executorItem.executor.executorType}</Text>
+          <Text color={Colors.slate500}>{executorItem.executor.image}</Text>
         </CustomExecutorContainer>
       );
     });

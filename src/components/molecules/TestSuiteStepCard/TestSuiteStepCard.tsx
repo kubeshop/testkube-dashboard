@@ -38,7 +38,7 @@ const TestSuiteStepCard: React.FC<TestSuiteStepCardProps> = props => {
     <StyledContainer isDragging={isDragging}>
       {type === 'delay' ? <ClockCircleOutlined /> : <ExecutorIcon type={type} />}
       <StyledNameContainer>
-        <Text color={Colors.slate200}>{name}</Text>
+        <Text className="regular" color={Colors.slate200}>{name}</Text>
       </StyledNameContainer>
       <StyledIconsWrapper>
         <DeleteOutlined onClick={() => onDelete(index)} />

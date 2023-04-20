@@ -48,7 +48,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
         <Pre>
           <StyledCopyCommandCode>
             {showDollar ? <span>$</span> : null}
-            {additionalPrefix ? <Text color={Colors.purple}>{additionalPrefix}</Text> : null}
+            {additionalPrefix ? <Text className="regular" color={Colors.purple}>{additionalPrefix}</Text> : null}
             {command}
           </StyledCopyCommandCode>
         </Pre>
