@@ -25,6 +25,13 @@ export const executorsApi = createApi({
         body,
       }),
     }),
+    getExecutorDefinition: builder.query<string, string>({
+      query: id => ({
+        url: `/executors/${id}`,
+        responseHandler: 'text',
+        headers: {accept: 'text/yaml'},
+      }),
+    }),
     getExecutorDetails: builder.query<any, string>({
       query: id => `/executors/${id}`,
     }),
@@ -40,6 +47,7 @@ export const executorsApi = createApi({
 export const {
   useGetExecutorsQuery,
   useCreateExecutorMutation,
+  useGetExecutorDefinitionQuery,
   useGetExecutorDetailsQuery,
   useDeleteExecutorMutation,
   useUpdateCustomExecutorMutation,

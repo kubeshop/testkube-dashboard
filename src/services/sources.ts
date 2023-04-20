@@ -27,6 +27,13 @@ export const sourcesApi = createApi({
         };
       },
     }),
+    getSourceDefinition: builder.query<string, string>({
+      query: id => ({
+        url: `/test-sources/${id}`,
+        responseHandler: 'text',
+        headers: {accept: 'text/yaml'},
+      }),
+    }),
     getSourceDetails: builder.query<SourceWithRepository, string>({
       query: id => `/test-sources/${id}`,
     }),
@@ -50,6 +57,7 @@ export const sourcesApi = createApi({
 
 export const {
   useGetSourcesQuery,
+  useGetSourceDefinitionQuery,
   useGetSourceDetailsQuery,
   useCreateSourceMutation,
   useDeleteSourceMutation,

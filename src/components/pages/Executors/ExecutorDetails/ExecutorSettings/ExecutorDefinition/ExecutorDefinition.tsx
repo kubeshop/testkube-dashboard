@@ -1,6 +1,4 @@
-import {useEffect, useState} from 'react';
-
-import axios from 'axios';
+import {useContext} from 'react';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
@@ -9,42 +7,20 @@ import {CopyButton, DownloadButton, Pre} from '@atoms';
 
 import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
+import {useGetExecutorDefinitionQuery} from '@services/executors';
+
+import {MainContext} from '@contexts';
+
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
 const ExecutorDefinition = () => {
+  const {isClusterAvailable} = useContext(MainContext);
+
   const executor = useAppSelector(selectCurrentExecutor);
-  const [definition, setDefinition] = useState('');
-  const [isLoading, setLoading] = useState(false);
+  const {data: definition = '', isLoading} = useGetExecutorDefinitionQuery(executor?.name, {skip: !isClusterAvailable});
   const isSecureContext = useSecureContext();
   const filename = useLocation().lastPathSegment;
-
-  const name = executor?.name;
-
-  const onGetExecutorCRD = async () => {
-    setLoading(true);
-
-    try {
-      setDefinition('');
-
-      const result = await axios(`/executors/${name}`, {
-        method: 'GET',
-        headers: {
-          Accept: 'text/yaml',
-        },
-      });
-
-      setDefinition(result.data);
-      // eslint-disable-next-line no-empty
-    } catch (err) {
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    onGetExecutorCRD();
-  }, [name]);
 
   return (
     <ConfigurationCard title="Definition" description="Validate and export your container executor configuration">

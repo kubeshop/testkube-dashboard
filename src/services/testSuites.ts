@@ -24,6 +24,13 @@ export const testSuitesApi = createApi({
     getTestSuiteExecution: builder.query<any, string>({
       query: executionId => `/test-suites-executions/${executionId}`,
     }),
+    getTestSuiteDefinition: builder.query<string, string>({
+      query: id => ({
+        url: `/test-suites/${id}`,
+        responseHandler: 'text',
+        headers: {accept: 'text/yaml'},
+      }),
+    }),
     getTestSuiteDetails: builder.query<any, string>({
       query: id => `/test-suites/${id}`,
     }),
@@ -63,6 +70,7 @@ export const {
   useGetTestSuitesQuery,
   useUpdateTestSuiteMutation,
   useGetTestSuiteExecutionQuery,
+  useGetTestSuiteDefinitionQuery,
   useGetTestSuiteDetailsQuery,
   useAddTestSuiteMutation,
   useDeleteTestSuiteMutation,
