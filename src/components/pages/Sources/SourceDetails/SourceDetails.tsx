@@ -8,6 +8,8 @@ import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlic
 
 import useLocation from '@hooks/useLocation';
 
+import {safeRefetch} from '@utils/fetchUtils';
+
 import {useGetSourceDetailsQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
@@ -16,7 +18,7 @@ import {StyledContainer, StyledPageHeader} from './SourceDetails.styled';
 import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
-  const {navigate, location, dispatch} = useContext(MainContext);
+  const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);
 
@@ -24,7 +26,7 @@ const SourceDetails = () => {
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name);
+  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: isClusterAvailable});
 
   const isPageDisabled = !name;
 
@@ -35,7 +37,7 @@ const SourceDetails = () => {
   }, [sourceDetails]);
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, [location]);
 
   return (

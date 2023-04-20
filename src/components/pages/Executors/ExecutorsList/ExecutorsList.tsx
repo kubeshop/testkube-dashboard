@@ -10,6 +10,8 @@ import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
 
+import {safeRefetch} from '@utils/fetchUtils';
+
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
@@ -32,7 +34,7 @@ import {
 } from './ExecutorsList.styled';
 
 const Executors: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate, isClusterAvailable} = useContext(MainContext);
   const mayCreate = usePermission(Permissions.createEntity);
   const apiEndpoint = useApiEndpoint();
 
@@ -48,7 +50,7 @@ const Executors: React.FC = () => {
   };
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, [apiEndpoint]);
 
   const renderedExecutorsGrid = useMemo(() => {
@@ -97,7 +99,7 @@ const Executors: React.FC = () => {
         </>
       }
       headerButton={mayCreate ? (
-        <Button $customType="primary" onClick={() => setAddExecutorModalVisibility(true)}>
+        <Button $customType="primary" onClick={() => setAddExecutorModalVisibility(true)} disabled={!isClusterAvailable}>
           Create a new executor
         </Button>
       ) : null}

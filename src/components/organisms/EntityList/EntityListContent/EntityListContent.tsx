@@ -19,6 +19,7 @@ import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 
+import {safeRefetch} from '@utils/fetchUtils';
 import {compareFiltersObject} from '@utils/objects';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -58,7 +59,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const {dispatch, navigate} = useContext(MainContext);
+  const {dispatch, navigate, isClusterAvailable} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
   const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
@@ -126,17 +127,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       setIsLoadingNext(true);
     }
 
-    try {
-      contentProps.refetch().then(() => {
-        setIsApplyingFilters(false);
-        setIsLoadingNext(false);
-      });
-    } catch (err: any) {
-      // RTK is failing synchronously if there was it was skipped
-      if (!err?.message.includes('not been started yet')) {
-        throw err;
-      }
-    }
+    safeRefetch(contentProps.refetch).then(() => {
+      setIsApplyingFilters(false);
+      setIsLoadingNext(false);
+    });
   }, [queryFilters, contentProps.refetch]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
@@ -174,10 +168,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
               filters={queryFilters}
               filtersComponentsIds={filtersComponentsIds}
               entity={entity}
-              isFiltersDisabled={isEmptyData}
+              isFiltersDisabled={isEmptyData || !isClusterAvailable}
             />
             {mayCreate ? (
-              <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID}>
+              <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID} disabled={!isClusterAvailable}>
                 {addEntityButtonText}
               </Button>
             ) : null}

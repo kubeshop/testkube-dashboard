@@ -15,6 +15,7 @@ import useStateCallback from '@hooks/useStateCallback';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
+import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
@@ -34,7 +35,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     useAbortExecution,
   } = props;
 
-  const {navigate, location} = useContext(MainContext);
+  const {navigate, location, isClusterAvailable} = useContext(MainContext);
   const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
   const wsRoot = useWsEndpoint();
 
@@ -57,8 +58,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   );
   const {data: entityDetails} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.everyTwoSeconds,
+    skip: !isClusterAvailable,
   });
-  const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue});
+  const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue, skip: !isClusterAvailable});
   const [abortExecution] = useAbortExecution();
 
   // Temporary solution until WS implementation
@@ -101,7 +103,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               results: [adjustedExecution, ...executionsList.results],
             },
             () => {
-              refetchMetrics();
+              safeRefetch(refetchMetrics);
             }
           );
         }
@@ -124,15 +126,15 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
                 }),
               },
               () => {
-                refetchMetrics();
+                safeRefetch(refetchMetrics);
               }
             );
           }
         }
 
         if (wsData.type === WSEventType.END_TEST_ABORT || wsData.type === WSEventType.END_TEST_TIMEOUT) {
-          refetch();
-          refetchMetrics();
+          safeRefetch(refetch);
+          safeRefetch(refetchMetrics);
         }
       }
     } catch (err: any) {
@@ -200,12 +202,12 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   }, [params]);
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
 
     if (entity === 'test-suites') {
       const interval = setInterval(() => {
         getExecutions();
-        refetchMetrics();
+        safeRefetch(refetchMetrics);
       }, 1000);
 
       return () => {
@@ -214,7 +216,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     }
 
     const interval = setInterval(() => {
-      refetchMetrics();
+      safeRefetch(refetchMetrics);
     }, 10000);
 
     return () => {

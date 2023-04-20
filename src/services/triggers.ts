@@ -8,7 +8,7 @@ export const triggersApi = createApi({
   reducerPath: 'triggersApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
-    getTriggersKeyMap: builder.query<TriggersKeyMap, void>({
+    getTriggersKeyMap: builder.query<TriggersKeyMap, void | null>({
       query: () => `/keymap/triggers`,
     }),
     getTriggersList: builder.query<TestTrigger[], void | null>({

@@ -1,4 +1,4 @@
-import React, {memo, useEffect} from 'react';
+import React, {memo, useContext, useEffect} from 'react';
 
 import {OnDataChangeInterface} from '@models/onDataChange';
 
@@ -11,6 +11,8 @@ import {PollingIntervals} from '@utils/numbers';
 import {useGetTestSuitesQuery} from '@services/testSuites';
 import {useGetTestsQuery} from '@services/tests';
 
+import {MainContext} from '@contexts';
+
 type DataLayerProps = {
   onDataChange: (args: OnDataChangeInterface) => void;
   queryFilters?: any;
@@ -18,9 +20,11 @@ type DataLayerProps = {
 
 export const TestSuitesDataLayer: React.FC<DataLayerProps> = memo(props => {
   const {onDataChange, queryFilters} = props;
+  const {isClusterAvailable} = useContext(MainContext);
 
   const {data, isLoading, isFetching, refetch, ...rest} = useGetTestSuitesQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
+    skip: !isClusterAvailable,
   });
 
   useEffect(() => {
@@ -36,11 +40,13 @@ export const TestSuitesDataLayer: React.FC<DataLayerProps> = memo(props => {
 
 export const TestsDataLayer: React.FC<DataLayerProps> = memo(props => {
   const {onDataChange, queryFilters} = props;
+  const {isClusterAvailable} = useContext(MainContext);
 
   const executors = useAppSelector(selectExecutors);
 
   const {data, isLoading, isFetching, refetch, ...rest} = useGetTestsQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
+    skip: !isClusterAvailable,
   });
 
   useEffect(() => {

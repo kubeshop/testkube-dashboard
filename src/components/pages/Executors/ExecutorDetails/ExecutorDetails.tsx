@@ -8,6 +8,8 @@ import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executo
 
 import useLocation from '@hooks/useLocation';
 
+import {safeRefetch} from '@utils/fetchUtils';
+
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
 import {MainContext} from '@contexts';
@@ -16,7 +18,7 @@ import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails = () => {
-  const {navigate, location, dispatch} = useContext(MainContext);
+  const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
 
@@ -24,7 +26,7 @@ const ExecutorDetails = () => {
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: executorDetails, refetch} = useGetExecutorDetailsQuery(name);
+  const {data: executorDetails, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
 
   const isPageDisabled = !name;
 
@@ -35,7 +37,7 @@ const ExecutorDetails = () => {
   }, [executorDetails]);
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, [location]);
 
   return (

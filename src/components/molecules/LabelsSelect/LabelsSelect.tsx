@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 import {Option} from '@models/form';
 
@@ -10,6 +10,8 @@ import {PollingIntervals} from '@utils/numbers';
 import {useGetLabelsQuery} from '@services/labels';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {MainContext} from '@contexts';
 
 import {composeLabels} from './utils';
 
@@ -39,9 +41,11 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   // TODO: Check if it's actually expected, as it's used in multiple places
   const isSelectDisabled = usePermission(Permissions.editEntity);
 
+  const {isClusterAvailable} = useContext(MainContext);
+
   const {data, isFetching} = useGetLabelsQuery(null, {
     pollingInterval: PollingIntervals.default,
-    skip: Boolean(options),
+    skip: Boolean(options) || !isClusterAvailable,
   });
 
   const formattedDefaultLabels = composeLabels(defaultLabels);

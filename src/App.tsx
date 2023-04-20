@@ -125,6 +125,7 @@ const App: React.FC = () => {
     location,
     navigate,
     clusterConfig,
+    isClusterAvailable: true,
   };
 
   useEffect(() => {

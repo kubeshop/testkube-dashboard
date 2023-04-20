@@ -93,3 +93,14 @@ export const dynamicBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBas
 
   return rawBaseQuery(baseUrl)(args, api, extraOptions);
 };
+
+export async function safeRefetch<T>(refetchFn: () => Promise<T>): Promise<T | null> {
+  try {
+    return await refetchFn();
+  } catch (err: any) {
+    if (!err?.message.includes('not been started yet')) {
+      throw err;
+    }
+  }
+  return null;
+}
