@@ -1,4 +1,4 @@
-import {ReactElement, useContext} from 'react';
+import {PropsWithChildren, ReactElement, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
@@ -22,12 +22,11 @@ type EmptyListContentProps = {
   description: string | ReactElement;
   buttonText: string;
   onButtonClick?: () => void;
-  children?: React.ReactNode;
   emptyListReadonlyTitle?: string;
   emptyListReadonlyDescription?: string;
 };
 
-const EmptyListContent: React.FC<EmptyListContentProps> = props => {
+const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = props => {
   const {
     title,
     description,
