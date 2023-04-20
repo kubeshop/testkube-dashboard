@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {Text} from '@custom-antd';
+
 import Colors from '@styles/Colors';
 
 export const ItemWrapper = styled.div`
