@@ -15,7 +15,7 @@ const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps
 
   const [artifacts, setArtifacts] = useState<Artifact[]>([]);
 
-  const {data, error} = useGetTestExecutionArtifactsQuery(id);
+  const {data, isLoading, error} = useGetTestExecutionArtifactsQuery(id);
 
   useEffect(() => {
     if (error) {
@@ -25,7 +25,7 @@ const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps
     }
   }, [data, error]);
 
-  return <ArtifactsList artifacts={artifacts} testExecutionId={id} />;
+  return <ArtifactsList artifacts={artifacts} testExecutionId={id} isLoading={isLoading} />;
 };
 
 export default TestExecutionDetailsArtifacts;
