@@ -2,6 +2,8 @@ import {useDebounce} from 'react-use';
 
 import {NamePath} from 'antd/lib/form/interface';
 
+import {isEqual} from 'lodash';
+
 import {dummySecret} from '@utils/sources';
 
 const fieldsNames: string[] = ['uri', 'token', 'username', 'branch', 'path'];
@@ -23,7 +25,10 @@ const useValidateRepository = (
   setValidationState: React.Dispatch<any>,
   validateRepository: any
 ) => {
-  const handleResponse = (res: any) => {
+  const handleResponse = (res: any, validationPayload: any) => {
+    if (!isEqual(validationPayload, getValidationPayload())) {
+      return;
+    }
     if (res?.error) {
       const errorDetail = res?.error?.data?.detail;
 
@@ -112,6 +117,14 @@ const useValidateRepository = (
     };
   };
 
+  const validationRequest = () => {
+    const validationPayload = getValidationPayload();
+
+    validateRepository(validationPayload).then((res: any) => {
+      handleResponse(res, validationPayload);
+    });
+  };
+
   useDebounce(
     () => {
       if (!getFieldValue('uri')) {
@@ -124,9 +137,7 @@ const useValidateRepository = (
         username: getFieldValue('username') ? 'loading' : '',
       });
 
-      validateRepository(getValidationPayload()).then((res: any) => {
-        handleResponse(res);
-      });
+      validationRequest();
     },
     300,
     [getFieldValue('uri'), getFieldValue('token'), getFieldValue('username')]
@@ -148,9 +159,7 @@ const useValidateRepository = (
         branch: 'loading',
       }));
 
-      validateRepository(getValidationPayload()).then((res: any) => {
-        handleResponse(res);
-      });
+      validationRequest();
     },
     300,
     [getFieldValue('branch')]
@@ -172,9 +181,7 @@ const useValidateRepository = (
         path: 'loading',
       }));
 
-      validateRepository(getValidationPayload()).then((res: any) => {
-        handleResponse(res);
-      });
+      validationRequest();
     },
     300,
     [getFieldValue('path')]
