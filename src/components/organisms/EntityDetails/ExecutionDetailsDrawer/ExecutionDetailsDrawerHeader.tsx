@@ -1,14 +1,14 @@
 import React, {useContext, useMemo} from 'react';
 
-import {Dropdown, Menu} from 'antd';
-
 import {CloseOutlined} from '@ant-design/icons';
 
 import {intervalToDuration} from 'date-fns';
 
-import {Dots, StatusIcon} from '@atoms';
+import {StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
+
+import {DotsDropdown} from '@molecules';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -68,8 +68,6 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
     return renderExecutionActions();
   }, [isRunning]);
 
-  const menu = <Menu items={renderedExecutionActions} />;
-
   return (
     <DrawerHeader>
       <div style={{marginTop: '5px'}}>
@@ -86,17 +84,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
             {renderedExecutionActions &&
             renderedExecutionActions.length &&
             mayManageExecution ? (
-              <div
-                onClick={e => {
-                  e.stopPropagation();
-                }}
-              >
-                <Dropdown overlay={menu} placement="bottom">
-                  <div style={{width: 20}}>
-                    <Dots color={Colors.grey450} />
-                  </div>
-                </Dropdown>
-              </div>
+              <DotsDropdown items={renderedExecutionActions} />
             ) : null}
             <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
           </ItemColumn>

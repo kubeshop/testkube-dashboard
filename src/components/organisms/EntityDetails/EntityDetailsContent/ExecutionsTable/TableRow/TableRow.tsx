@@ -1,10 +1,12 @@
 import React, {useMemo} from 'react';
 
-import {Dropdown, Menu, Tooltip} from 'antd';
-
-import {Dots, StatusIcon} from '@atoms';
+import {Tooltip} from 'antd';
 
 import {Text} from '@custom-antd';
+
+import {StatusIcon} from '@atoms';
+
+import {DotsDropdown} from '@molecules';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -15,7 +17,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import Colors from '@styles/Colors';
 
-import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper} from './TableRow.styled';
+import {DetailsWrapper, DotsWrapper, ItemColumn, ItemRow, ItemWrapper, StatusText} from './TableRow.styled';
 
 const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
   const {data, onAbortExecution} = props;
@@ -44,8 +46,6 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
     return renderExecutionActions();
   }, [isRunning]);
 
-  const menu = <Menu items={renderedExecutionActions} />;
-
   return (
     <ItemWrapper key={id}>
       <StatusIcon status={status} />
@@ -57,23 +57,19 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
             </Text>
           </ItemColumn>
           <ItemColumn>
-            <Text color={Colors.slate200}>
+            <StatusText color={Colors.slate200} $isRunning={isRunning}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
-            </Text>
+            </StatusText>
             {renderedExecutionActions &&
             renderedExecutionActions.length &&
             mayManageExecution ? (
-              <div
+              <DotsWrapper
                 onClick={e => {
                   e.stopPropagation();
                 }}
               >
-                <Dropdown overlay={menu} placement="bottom">
-                  <div style={{width: 20}}>
-                    <Dots color={Colors.grey450} />
-                  </div>
-                </Dropdown>
-              </div>
+                <DotsDropdown items={renderedExecutionActions} withPadding={false} />
+              </DotsWrapper>
             ) : null}
           </ItemColumn>
         </ItemRow>
