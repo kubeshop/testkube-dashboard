@@ -34,6 +34,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
   const {data} = props;
   // @ts-ignore
   const status = data?.executionResult?.status || data?.status;
+  const runContext = data?.runContext;
 
   const isRunning = useIsRunning(status);
 
@@ -81,9 +82,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
             </Text>
           </ItemColumn>
           <ItemColumn className="flex-auto">
-            {renderedExecutionActions &&
-            renderedExecutionActions.length &&
-            mayManageExecution ? (
+            {renderedExecutionActions && renderedExecutionActions.length && mayManageExecution ? (
               <DotsDropdown items={renderedExecutionActions} />
             ) : null}
             <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
