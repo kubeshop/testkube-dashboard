@@ -8,7 +8,7 @@ import {selectCurrentExecutor, updateExecutorPrivateRegistry} from '@redux/reduc
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {displayDefaultErrorNotification} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -41,15 +41,12 @@ const PrivateRegistry: React.FC = () => {
         ...executor,
         imagePullSecrets: [{name: values.privateRegistry}],
       },
-    })
-      .then(() => {
-        notificationCall('passed', 'Private registry was successfully updated.');
-
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
         dispatch(updateExecutorPrivateRegistry(values.privateRegistry));
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
+        notificationCall('passed', 'Private registry was successfully updated.');
       });
+    });
   };
 
   useEffect(() => {

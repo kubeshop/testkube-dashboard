@@ -6,7 +6,7 @@ import {Checkbox, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -47,15 +47,11 @@ const FailureHandling: React.FC = () => {
           negativeTest: values.negativeTest,
         },
       },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Test was successfully updated.`);
-        });
-      })
-      .catch((err: any) => {
-        displayDefaultErrorNotification(err);
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Test was successfully updated.`);
       });
+    });
   };
 
   return (

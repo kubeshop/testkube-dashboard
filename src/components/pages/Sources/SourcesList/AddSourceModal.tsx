@@ -15,7 +15,7 @@ import {Hint} from '@molecules';
 
 import {openSourcesDocumentation} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateSourceMutation} from '@services/sources';
 
@@ -44,15 +44,11 @@ const AddSourceModal = () => {
       namespace,
     };
 
-    createSource(body)
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          navigate(`/sources/${res.data.metadata.name}`);
-        });
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
+    createSource(body).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        navigate(`/sources/${res.data.metadata.name}`);
       });
+    });
   };
 
   return (

@@ -12,7 +12,7 @@ import {LabelsSelect} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
@@ -51,18 +51,16 @@ const TestSuiteCreationModalContent: React.FC = () => {
     addTestSuite({
       ...values,
       labels: decomposeLabels(localLabels),
-    })
-      .then((res: AddTestSuitePayload) => {
-        displayDefaultNotificationFlow(res, () => {
-          analyticsTrack('trackEvents', {
-            uiEvent: 'create-test-suites',
-          });
-
-          dispatch(openSettingsTabConfig());
-          navigate(`/test-suites/executions/${res?.data?.metadata?.name}`);
+    }).then((res: AddTestSuitePayload) => {
+      displayDefaultNotificationFlow(res, () => {
+        analyticsTrack('trackEvents', {
+          uiEvent: 'create-test-suites',
         });
-      })
-      .catch(err => displayDefaultErrorNotification(err));
+
+        dispatch(openSettingsTabConfig());
+        navigate(`/test-suites/executions/${res?.data?.metadata?.name}`);
+      });
+    });
   };
 
   useEffect(() => {

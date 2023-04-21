@@ -37,7 +37,6 @@ import {LabelsWrapper, StyledFormSpace} from '../CreationModal.styled';
 type TestCreationFormProps = {
   form: FormInstance;
   onSuccess: (res: AddTestPayload) => void;
-  onFail: (err: any) => void;
   testSources: SourceWithRepository[];
   executors: Executor[];
 };
@@ -50,7 +49,7 @@ const additionalFields: {[key: string]: React.FC<any>} = {
 };
 
 const TestCreationForm: React.FC<TestCreationFormProps> = props => {
-  const {form, testSources, executors, onSuccess, onFail} = props;
+  const {form, testSources, executors, onSuccess} = props;
 
   const remappedExecutors = remapExecutors(executors);
   const remappedCustomTestSources = remapTestSources(testSources);
@@ -70,13 +69,9 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
       ...getCustomSourceField(testSource),
     };
 
-    return addTest(requestBody)
-      .then(res => {
-        onSuccess(res);
-      })
-      .catch(err => {
-        onFail(err);
-      });
+    addTest(requestBody).then(res => {
+      onSuccess(res);
+    });
   };
 
   const selectedExecutor = useMemo(() => {

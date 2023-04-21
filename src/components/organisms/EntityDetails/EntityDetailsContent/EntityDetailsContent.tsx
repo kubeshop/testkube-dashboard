@@ -13,12 +13,12 @@ import {ExecutorIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
-import {CLICommands, LabelsList, MetricsBarChart, notificationCall} from '@molecules';
+import {CLICommands, LabelsList, MetricsBarChart} from '@molecules';
 
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {displayDefaultErrorNotification} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
@@ -88,18 +88,14 @@ const EntityDetailsContent: React.FC = () => {
       data: {
         namespace,
       },
-    })
-      .then((result: any) => {
-        if (result.error) {
-          notificationCall('failed', result.error.error);
-        }
-
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
         analyticsTrack('trackEvents', {
           type,
           uiEvent: `run-${entity}`,
         });
-      })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+      });
+    });
   };
 
   const avatar = type

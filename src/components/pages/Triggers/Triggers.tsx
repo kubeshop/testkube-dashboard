@@ -21,7 +21,7 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import {PageBlueprint} from '@organisms';
 
 import {safeRefetch} from '@utils/fetchUtils';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
@@ -209,13 +209,9 @@ const Triggers: React.FC = () => {
       return triggerPayload;
     });
 
-    updateTriggers(body)
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
-      })
-      .catch(error => {
-        displayDefaultErrorNotification(error);
-      });
+    updateTriggers(body).then(res => {
+      displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
+    });
   };
 
   const isLoading = keyMapLoading || testsLoading || testSuitesLoading || triggersLoading;
