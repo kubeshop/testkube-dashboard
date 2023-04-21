@@ -1,43 +1,36 @@
 import {Input} from 'antd';
 
-import {CheckCircleOutlined, LoadingOutlined, QuestionCircleOutlined, WarningOutlined} from '@ant-design/icons';
-
-import {FormItem, Text} from '@custom-antd';
+import {FormItem} from '@custom-antd';
 
 import {required, url} from '@utils/form';
 
-import Colors from '@styles/Colors';
-
-export const tooltipIcons: {[key: string]: JSX.Element} = {
-  loading: <LoadingOutlined />,
-  success: <CheckCircleOutlined style={{color: Colors.lime400}} />,
-  error: <WarningOutlined style={{color: Colors.amber400}} />,
-  default: <QuestionCircleOutlined />,
-};
+import FormItemLabel from './FormItemLabel';
+import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 
 type RepositoryProps = {
-  labelState?: {
-    status: string;
-    message: string;
-  };
+  status?: TooltipStatus;
+  message?: string;
 };
 
 const Repository: React.FC<RepositoryProps> = props => {
-  const {
-    labelState = {
-      status: 'default',
-      message: 'We do currently only support checking out repositories via https',
-    },
-  } = props;
+  const {status = TooltipStatus.none, message} = props;
 
   return (
     <FormItem
       name="uri"
       key="uri"
-      label={<Text className="regular middle">Git repository URI</Text>}
+      label={
+        <FormItemLabel
+          text="Git repository URI"
+          tooltipMessage="We do currently only support checking out repositories via https"
+          required
+          status={status}
+        />
+      }
       rules={[required, url]}
-      tooltip={{title: labelState.message, icon: tooltipIcons[labelState.status]}}
-      required
+      tooltip={getValidationTooltip(status, message)}
+      // required mark is shown in custom label component
+      required={false}
     >
       <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
     </FormItem>

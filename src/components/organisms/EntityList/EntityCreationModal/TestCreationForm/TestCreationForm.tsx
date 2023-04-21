@@ -133,7 +133,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
             const executorType = selectedExecutor?.executor.meta?.iconURI;
 
             const childrenProps: {[key: string]: Object} = {
-              git: {executorType},
+              git: {executorType, getFieldValue},
               custom: {executorType},
             };
 

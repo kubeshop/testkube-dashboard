@@ -102,7 +102,7 @@ export const getCustomSourceField = (testSource: string, prevTestSource?: string
   return isCustomTestSource ? {source: testSource.replace(customGitSourceString, '')} : {source: ''};
 };
 
-const dummySecret = '******';
+export const dummySecret = '******';
 
 export const getSourceFormValues = (entityDetails: any, testSources: SourceWithRepository[]) => {
   const {content} = entityDetails;
@@ -125,14 +125,16 @@ export const getSourceFormValues = (entityDetails: any, testSources: SourceWithR
     };
   }
 
-  const secrets: {token?: string; username?: string} = {};
+  const secrets: {token?: string; username?: string; tokenSecret?: Object; usernameSecret?: Object} = {};
 
   if (content?.repository?.tokenSecret?.name) {
     secrets.token = dummySecret;
+    secrets.tokenSecret = {...content?.repository?.tokenSecret, namespace: entityDetails?.namespace};
   }
 
   if (content?.repository?.usernameSecret?.name) {
     secrets.username = dummySecret;
+    secrets.usernameSecret = {...content?.repository?.usernameSecret, namespace: entityDetails?.namespace};
   }
 
   return {
