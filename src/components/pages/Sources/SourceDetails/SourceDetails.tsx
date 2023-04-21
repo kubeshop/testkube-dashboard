@@ -26,7 +26,7 @@ const SourceDetails = () => {
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: isClusterAvailable});
+  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
 
   const isPageDisabled = !name;
 
