@@ -34,7 +34,7 @@ const Sources: React.FC = () => {
   const mayCreate = usePermission(Permissions.createEntity);
 
   const onNavigateToDetails = (name: string) => {
-    navigate(`sources/${name}`);
+    navigate(`/sources/${name}`);
   };
 
   useEffect(() => {

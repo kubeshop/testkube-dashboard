@@ -59,7 +59,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
           });
 
           dispatch(openSettingsTabConfig());
-          navigate(`test-suites/executions/${res?.data?.metadata?.name}`);
+          navigate(`/test-suites/executions/${res?.data?.metadata?.name}`);
         });
       })
       .catch(err => displayDefaultErrorNotification(err));
