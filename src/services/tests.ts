@@ -15,6 +15,13 @@ export const testsApi = createApi({
     getAllTests: builder.query<TestWithExecution[], void | null>({
       query: () => `/test-with-executions`,
     }),
+    getTestDefinition: builder.query<string, string>({
+      query: testId => ({
+        url: `/tests/${testId}`,
+        responseHandler: 'text',
+        headers: {accept: 'text/yaml'},
+      }),
+    }),
     getTest: builder.query<TestWithExecution, string>({
       query: testId => `/tests/${testId}`,
     }),
@@ -83,6 +90,7 @@ export const testsApi = createApi({
 });
 
 export const {
+  useGetTestDefinitionQuery,
   useGetTestQuery,
   useGetTestsQuery,
   useGetAllTestsQuery,
