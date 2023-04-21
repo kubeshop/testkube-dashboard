@@ -27,7 +27,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {AnalyticsContext, EntityDetailsContext, MainContext} from '@contexts';
+import {AnalyticsContext, ConfigContext, EntityDetailsContext, MainContext} from '@contexts';
 
 import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
@@ -45,6 +45,7 @@ const filterOptions: OptionType[] = [
 const EntityDetailsContent: React.FC = () => {
   const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue} =
     useContext(EntityDetailsContext);
+  const {pageTitle} = useContext(ConfigContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(MainContext);
   const mayRun = usePermission(Permissions.runEntity);
@@ -120,7 +121,7 @@ const EntityDetailsContent: React.FC = () => {
   return (
     <StyledContainer>
       <Helmet>
-        <title>{name ? `${name} | Testkube` : 'Testkube'}</title>
+        <title>{name ? `${name} | ${pageTitle}` : pageTitle}</title>
         <meta name="description" content={`${description}`} />
       </Helmet>
       <StyledPageHeader

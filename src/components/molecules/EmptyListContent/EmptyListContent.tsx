@@ -13,7 +13,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {MainContext} from '@contexts';
+import {ConfigContext, MainContext} from '@contexts';
 
 import {StyledEmptyListContainer} from './EmptyListContent.styled';
 
@@ -38,6 +38,7 @@ const EmptyListContent: React.FC<EmptyListContentProps> = props => {
     emptyListReadonlyDescription,
   } = props;
 
+  const {discordUrl} = useContext(ConfigContext);
   const {isClusterAvailable} = useContext(MainContext);
   const isActionAvailable = usePermission(Permissions.runEntity);
 
@@ -56,9 +57,9 @@ const EmptyListContent: React.FC<EmptyListContentProps> = props => {
           <StyledHelpCardsContainer>
             {children}
             <StyledLastHelpCardContainer>
-              <HelpCard isHelp link="https://discord.com/invite/hfq44wtR6Q">
+              <HelpCard isHelp link={discordUrl}>
                 Need help getting started? Want to talk to Testkube engineers?{' '}
-                <ExternalLink href="https://discord.com/invite/hfq44wtR6Q">Find us on Discord</ExternalLink>
+                <ExternalLink href={discordUrl}>Find us on Discord</ExternalLink>
               </HelpCard>
             </StyledLastHelpCardContainer>
           </StyledHelpCardsContainer>

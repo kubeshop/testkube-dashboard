@@ -8,12 +8,13 @@ import notFoundImage from '@assets/not-found-image.svg';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {ConfigContext, MainContext} from '@contexts';
 
 import {StyledErrorContainer, StyledErrorDescription, StyledErrorImage} from './ErrorBoundary.styled';
 
 const ErrorBoundaryFallback: React.FC = () => {
   const {navigate} = useContext(MainContext);
+  const {discordUrl} = useContext(ConfigContext);
 
   const onButtonClick = useCallback(() => {
     navigate('/tests');
@@ -31,7 +32,7 @@ const ErrorBoundaryFallback: React.FC = () => {
       </StyledErrorDescription>
       <StyledErrorDescription>
         Feel free to reach out to us on{' '}
-        <ExternalLink href="https://discord.com/invite/hfq44wtR6Q">Discord</ExternalLink> if the error continuous to
+        <ExternalLink href={discordUrl}>Discord</ExternalLink> if the error continuous to
         exist.
       </StyledErrorDescription>
       <Button type="primary" onClick={onButtonClick}>

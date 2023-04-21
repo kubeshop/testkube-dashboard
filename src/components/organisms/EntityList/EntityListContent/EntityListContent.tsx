@@ -24,7 +24,7 @@ import {compareFiltersObject} from '@utils/objects';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {MainContext} from '@contexts';
+import {ConfigContext, MainContext} from '@contexts';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
@@ -59,6 +59,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
+  const {pageTitle: mainPageTitle} = useContext(ConfigContext);
   const {dispatch, navigate, isClusterAvailable} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
@@ -147,7 +148,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   return (
     <StyledContainer>
       <Helmet>
-        <title>{`${pageTitle} | Testkube`}</title>
+        <title>{`${pageTitle} | ${mainPageTitle}`}</title>
         <meta name="description" content={`${PageDescription}`} />
       </Helmet>
       {dataLayers[entity]}

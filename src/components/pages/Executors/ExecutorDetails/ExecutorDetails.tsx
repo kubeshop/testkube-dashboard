@@ -12,13 +12,14 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
-import {MainContext} from '@contexts';
+import {ConfigContext, MainContext} from '@contexts';
 
 import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails = () => {
   const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
+  const {pageTitle} = useContext(ConfigContext);
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
 
@@ -43,7 +44,7 @@ const ExecutorDetails = () => {
   return (
     <StyledContainer>
       <Helmet>
-        <title>{`${name} | Executors | Testkube`}</title>
+        <title>{`${name} | Executors | ${pageTitle}`}</title>
       </Helmet>
       <StyledPageHeader onBack={() => navigate('/executors')} title={name} className="testkube-pageheader" />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>

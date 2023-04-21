@@ -1,3 +1,4 @@
+import {useContext} from 'react';
 import {Helmet} from 'react-helmet';
 
 import {Space} from 'antd';
@@ -5,6 +6,8 @@ import {Space} from 'antd';
 import {Text, Title} from '@custom-antd';
 
 import Colors from '@styles/Colors';
+
+import {ConfigContext} from '@contexts';
 
 import {PageBlueprintHeader, PageBlueprintWrapper} from './PageBlueprint.styled';
 
@@ -17,11 +20,12 @@ type PageBlueprintProps = {
 
 const PageBlueprint: React.FC<PageBlueprintProps> = props => {
   const {children, title, description, headerButton} = props;
+  const {pageTitle} = useContext(ConfigContext);
 
   return (
     <PageBlueprintWrapper>
       <Helmet>
-        <title>{`${title} | Testkube`}</title>
+        <title>{`${title} | ${pageTitle}`}</title>
         <meta name="description" content={`${description}`} />
       </Helmet>
       <PageBlueprintHeader>
