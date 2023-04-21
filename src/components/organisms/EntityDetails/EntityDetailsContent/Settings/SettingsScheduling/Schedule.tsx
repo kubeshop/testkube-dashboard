@@ -10,7 +10,7 @@ import {Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
@@ -46,16 +46,12 @@ const Schedule: React.FC = () => {
         ...entityDetails,
         schedule: cronString,
       },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
-        });
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
         setWasTouched(false);
-      })
-      .catch((err: any) => {
-        displayDefaultErrorNotification(err);
       });
+    });
   };
 
   const onCancel = () => {
