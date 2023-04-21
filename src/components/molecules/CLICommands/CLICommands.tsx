@@ -9,7 +9,7 @@ import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext} from '@contexts';
+import {EntityDetailsContext, MainContext} from '@contexts';
 
 import CopyCommand from './CopyCommand';
 
@@ -114,6 +114,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const mayDelete = usePermission(Permissions.deleteEntity);
 
   const {entity} = useContext(EntityDetailsContext);
+  const {ga4React} = useContext(MainContext);
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -146,7 +147,13 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
 
       const commandString = command(testTarget);
 
-      return <CopyCommand key={label} command={commandString} label={label} bg={bg} />;
+      const onCopy = () => {
+        if (ga4React) {
+          ga4React.gtag('event', 'copy_command', {command: label});
+        }
+      };
+
+      return <CopyCommand key={label} command={commandString} label={label} bg={bg} onCopy={onCopy} highlightSyntax />;
     }).filter(cliCommand => cliCommand);
   }, [id, name, type, modifyMap]);
 

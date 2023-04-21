@@ -38,8 +38,11 @@ export const StyledCopyCommandCode = styled.code`
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 
-  span {
-    margin-right: 5px;
+  > span {
     color: ${Colors.slate500};
+
+    &:not(:last-child)::after {
+      content: ' ';
+    }
   }
 `;

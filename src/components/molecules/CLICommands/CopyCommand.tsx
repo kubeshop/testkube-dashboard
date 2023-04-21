@@ -1,4 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
+
+import {getLiteralColor} from '@models/command';
 
 import {CopyButton, DownloadButton, Pre} from '@atoms';
 
@@ -9,31 +11,69 @@ import useSecureContext from '@hooks/useSecureContext';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
-
 import {LabelWrapper, StyledCopyCommandCode, StyledCopyCommandContainer} from './CopyCommand.styled';
 
 type CopyCommandProps = {
+  command: string;
   additionalPrefix?: string;
   bg?: string;
-  command: string;
   isBordered?: boolean;
   label?: string;
   showDollar?: boolean;
+  highlightSyntax?: boolean;
+  onCopy?: () => void;
 };
 
+// TODO consider refactoring to a more generic component. (i.e. not specific to CLI commands)
 const CopyCommand: React.FC<CopyCommandProps> = props => {
-  const {command, label, showDollar = true, bg = Colors.slate900, isBordered = false, additionalPrefix} = props;
+  const {
+    command,
+    label,
+    showDollar = true,
+    bg = Colors.slate900,
+    isBordered = false,
+    highlightSyntax = false,
+    additionalPrefix,
+    onCopy,
+  } = props;
 
-  const {ga4React} = useContext(MainContext);
+  const contentRef = useRef(null);
+
   const isSecureContext = useSecureContext();
   const filename = useLocation().lastPathSegment;
 
-  const onClick = () => {
-    if (ga4React) {
-      ga4React.gtag('event', 'copy_command', {command: label});
+  const content = useMemo(() => {
+    if (command === '') {
+      return null;
     }
-  };
+    if (!highlightSyntax) {
+      return <span style={{color: Colors.whitePure}}>{command}</span>;
+    }
+
+    return command.split(/\s+/g).map((word, index, words) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <span key={`${word}_${index}`} style={{color: getLiteralColor(word)}}>
+        {word}
+        {words.length === index + 1 ? '' : ' '}
+      </span>
+    ));
+  }, [highlightSyntax, command]);
+
+  const onDoubleClick = useCallback(() => {
+    const target = contentRef?.current;
+    if (!target) {
+      return;
+    }
+
+    const range = document.createRange();
+    range.selectNodeContents(target);
+
+    const sel = window.getSelection();
+    if (sel) {
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  }, [contentRef?.current]);
 
   return (
     <>
@@ -44,18 +84,18 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
           </Text>
         </LabelWrapper>
       ) : null}
-      <StyledCopyCommandContainer onClick={onClick} $bg={bg} $isBordered={isBordered}>
+      <StyledCopyCommandContainer $bg={bg} $isBordered={isBordered}>
         <Pre>
-          <StyledCopyCommandCode>
+          <StyledCopyCommandCode data-test="command-to-copy" onDoubleClick={onDoubleClick}>
             {showDollar ? <span>$</span> : null}
             {additionalPrefix ? <Text className="regular" color={Colors.purple}>{additionalPrefix}</Text> : null}
-            {command}
+            {content ? <span ref={contentRef}>{content}</span> : null}
           </StyledCopyCommandCode>
         </Pre>
         {isSecureContext ? (
-          <CopyButton content={command} onClick={onClick} />
+          <CopyButton content={command} onClick={onCopy} />
         ) : (
-          <DownloadButton filename={filename} extension="sh" content={command} onClick={onClick} />
+          <DownloadButton filename={filename} extension="sh" content={command} onClick={onCopy} />
         )}
       </StyledCopyCommandContainer>
     </>
