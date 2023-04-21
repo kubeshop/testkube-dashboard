@@ -21,6 +21,8 @@
       "@wizards/*": ["src/components/wizards/*"],
       "@services": ["src/services/"],
       "@services/*": ["src/services/*"],
+      "@icons": ["src/assets/icons/"],
+      "@icons/*": ["src/assets/icons/*"],
       "@assets": ["src/assets/images/"],
       "@assets/*": ["src/assets/images/*"],
       "@contexts": ["src/contexts/"],

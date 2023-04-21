@@ -1,10 +1,10 @@
-import {NavLink} from 'react-router-dom';
-
 import {Layout, Space} from 'antd';
 
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
+
+import SiderLink from './SiderLink';
 
 export const StyledLogo = styled.div`
   display: flex;
@@ -31,7 +31,7 @@ export const StyledOther = styled(Space)`
 `;
 
 export const StyledSider = styled(Layout.Sider)<{$isFullScreenLogOutput?: boolean}>`
-  height: 100vh;
+  padding-top: 30px;
   z-index: ${({$isFullScreenLogOutput}) => ($isFullScreenLogOutput ? '1002' : '1')};
 
   .ant-layout-sider-children {
@@ -47,7 +47,7 @@ export const StyledSiderChildContainer = styled.div`
   justify-content: space-between;
 
   width: 100px;
-  height: 100vh;
+  height: calc(100vh - 120px); /* minus StatusBar and margin */
   overflow: auto;
 `;
 
@@ -56,7 +56,7 @@ export const StyledNavigationMenu = styled.div`
   flex-direction: column;
 `;
 
-export const StyledNavLink = styled(NavLink)`
+export const StyledSiderLink = styled(SiderLink)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,6 +65,13 @@ export const StyledNavLink = styled(NavLink)`
 
   svg {
     fill: #64748b;
+  }
+
+  &.settings-icon {
+    svg {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   &.active,
