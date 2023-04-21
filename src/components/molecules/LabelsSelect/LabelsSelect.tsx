@@ -39,7 +39,7 @@ const isValidLabel = (value: string) => {
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   const {onChange, defaultLabels, options, placeholder = 'Add or create new labels', validation, menuPlacement} = props;
   // TODO: Check if it's actually expected, as it's used in multiple places
-  const isSelectDisabled = usePermission(Permissions.editEntity);
+  const isSelectDisabled = !usePermission(Permissions.editEntity);
 
   const {isClusterAvailable} = useContext(MainContext);
 
