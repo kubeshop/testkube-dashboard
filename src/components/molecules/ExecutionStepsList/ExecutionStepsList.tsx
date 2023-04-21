@@ -15,7 +15,7 @@ import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {ExecutionName} from '@molecules';
 
-import {MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import {
   StyledExecutionStepsList,
@@ -34,7 +34,8 @@ type ExecutionStepsListProps = {
 const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const {executionSteps, iconSet = 'default'} = props;
 
-  const {dispatch, navigate} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const executors = useAppSelector(selectExecutors);
 

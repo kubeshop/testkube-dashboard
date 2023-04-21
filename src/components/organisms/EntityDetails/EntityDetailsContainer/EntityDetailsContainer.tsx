@@ -18,7 +18,7 @@ import {useWsEndpoint} from '@services/apiEndpoint';
 import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
 
 import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
@@ -35,7 +35,8 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     useAbortExecution,
   } = props;
 
-  const {navigate, location, isClusterAvailable} = useContext(MainContext);
+  const {isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
   const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
   const wsRoot = useWsEndpoint();
 

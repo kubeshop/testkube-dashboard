@@ -15,7 +15,7 @@ import {HintProps} from '@molecules/Hint/Hint';
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
-import {AnalyticsContext, MainContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
 import {TestCreationModalWrapper} from './CreationModal.styled';
 import {defaultHintConfig} from './ModalConfig';
@@ -24,7 +24,8 @@ import TestCreationForm from './TestCreationForm';
 const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
 
-  const {dispatch, navigate} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
 
   const executors = useAppSelector(selectExecutors);

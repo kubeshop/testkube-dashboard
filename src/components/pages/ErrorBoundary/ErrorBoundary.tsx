@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import ErrorBoundaryInner from './ErrorBoundaryInner';
 
 export default function ErrorBoundary({children}: {children: React.ReactNode}) {
-  const {location} = useContext(MainContext);
+  const {location} = useContext(DashboardContext);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {

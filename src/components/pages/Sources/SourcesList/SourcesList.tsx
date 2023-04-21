@@ -17,7 +17,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import AddSourceModal from './AddSourceModal';
 import EmptySources from './EmptySources';
@@ -26,7 +26,8 @@ import {SourceContainer, SourcesGrid, SourcesListSkeletonWrapper} from './Source
 const Sources: React.FC = () => {
   const sourcesList = useAppSelector(selectSources);
 
-  const {dispatch, navigate, location, isClusterAvailable} = useContext(MainContext);
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
 
   const {data: sources, refetch, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
 

@@ -16,7 +16,7 @@ import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
-import {AnalyticsContext, MainContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
 import {StyledFormSpace} from './CreationModal.styled';
 
@@ -41,7 +41,8 @@ type AddTestSuitePayload = {
 
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
-  const {navigate, dispatch} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();

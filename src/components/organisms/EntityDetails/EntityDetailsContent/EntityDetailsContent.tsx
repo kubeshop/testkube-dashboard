@@ -27,7 +27,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {AnalyticsContext, ConfigContext, EntityDetailsContext, MainContext} from '@contexts';
+import {AnalyticsContext, ConfigContext, DashboardContext, EntityDetailsContext} from '@contexts';
 
 import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
@@ -47,7 +47,7 @@ const EntityDetailsContent: React.FC = () => {
     useContext(EntityDetailsContext);
   const {pageTitle} = useContext(ConfigContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
 

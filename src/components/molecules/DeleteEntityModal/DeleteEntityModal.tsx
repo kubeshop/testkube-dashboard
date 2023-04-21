@@ -15,7 +15,7 @@ import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {FooterSpace} from './DeleteEntityModal.styled';
 
@@ -30,7 +30,7 @@ const DeleteEntityModal: React.FC<{
 }> = props => {
   const {onCancel, useDeleteMutation, name, entityLabel, defaultStackRoute} = props;
 
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const onEvent = usePressEnter();
 
