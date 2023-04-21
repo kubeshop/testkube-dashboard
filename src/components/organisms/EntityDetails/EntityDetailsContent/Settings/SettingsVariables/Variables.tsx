@@ -1,4 +1,4 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useContext, useEffect, useMemo} from 'react';
 
 import {Form} from 'antd';
 
@@ -33,6 +33,13 @@ const Variables: React.FC = () => {
   const variables = useMemo(() => {
     return decomposeVariables(entityDetails?.executionRequest?.variables) || [];
   }, [entityDetails?.executionRequest?.variables]);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      'variables-list': variables,
+    });
+    form.resetFields();
+  }, [variables]);
 
   const onSaveForm = (value: any) => {
     const successRecord = {
