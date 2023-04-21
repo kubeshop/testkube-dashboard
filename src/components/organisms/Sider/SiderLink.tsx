@@ -15,10 +15,10 @@ const SiderLink: React.FC<SiderLinkProps & AnchorHTMLAttributes<HTMLAnchorElemen
   children,
   ...rest
 }) => {
-  const {navigate, location} = useContext(DashboardContext);
+  const {baseUrl, navigate, location} = useContext(DashboardContext);
   const finalClassName = classNames(className, {
     active: (
-      (location.pathname === `${href}` || location.pathname.startsWith(`${href}/`)) ||
+      (location.pathname === href || location.pathname.startsWith(`${href}/`)) ||
       (active && active.test(location.pathname))
     ),
   });
@@ -29,7 +29,7 @@ const SiderLink: React.FC<SiderLinkProps & AnchorHTMLAttributes<HTMLAnchorElemen
   }, [navigate]);
 
   return (
-    <a href={href} className={finalClassName} onClick={onClick} {...rest}>
+    <a href={`${baseUrl}${href}`} className={finalClassName} onClick={onClick} {...rest}>
       {children}
     </a>
   );
