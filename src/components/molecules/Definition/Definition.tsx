@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {PropsWithChildren} from 'react';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 
 import {TestkubeCodeTheme} from '@atoms';
@@ -7,10 +7,9 @@ import {DefinitionContainer} from './Definition.styled';
 
 type DefinitionProps = {
   content: string;
-  children?: ReactNode;
 };
 
-const Definition: React.FC<DefinitionProps> = props => {
+const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
   const {content, children} = props;
 
   return (
