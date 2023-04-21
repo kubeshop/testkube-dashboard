@@ -190,6 +190,7 @@ const App: React.FC = () => {
   const dashboardValue = useMemo(() => ({
     navigate,
     location,
+    baseUrl: '',
     showLogoInSider: true,
     showSocialLinksInSider: true,
   }), [navigate, location]);

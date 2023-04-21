@@ -4,6 +4,7 @@ import {Location, NavigateFunction} from 'react-router';
 interface DashboardContextData {
   navigate: NavigateFunction;
   location: Location;
+  baseUrl: string;
 
   showLogoInSider: boolean;
   showSocialLinksInSider: boolean;
