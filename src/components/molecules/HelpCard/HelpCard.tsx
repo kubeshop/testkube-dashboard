@@ -1,17 +1,19 @@
+import {PropsWithChildren} from 'react';
+
 import {ReactComponent as HelpLinkIcon} from '@assets/helpLinkIcon.svg';
 import {ReactComponent as LinkIcon} from '@assets/linkIcon.svg';
 import {ReactComponent as QuestionCircleIcon} from '@assets/questionCircleIcon.svg';
 
-import {StyledChildrenContainer, StyledHelpCardContainer} from './HelpCard.styled';
+import {IconWrapper, StyledChildrenContainer, StyledHelpCardContainer} from './HelpCard.styled';
 
-type HeypCardTypes = {
+type HelpCardTypes = {
   isLink?: boolean;
   isHelp?: boolean;
-  children: React.ReactNode;
   link?: string;
+  customLinkIcon?: any;
 };
-const HelpCard: React.FC<HeypCardTypes> = props => {
-  const {isLink, isHelp, children, link} = props;
+const HelpCard: React.FC<PropsWithChildren<HelpCardTypes>> = props => {
+  const {isLink, isHelp, children, link, customLinkIcon: CustomLinkIcon} = props;
 
   const redirectToLink = () => {
     window.open(link, '_blank');
@@ -19,10 +21,18 @@ const HelpCard: React.FC<HeypCardTypes> = props => {
 
   return (
     <StyledHelpCardContainer isLink={Boolean(link)} onClick={redirectToLink}>
-      {isLink ? <HelpLinkIcon /> : null}
-      {isHelp ? <QuestionCircleIcon /> : null}
+      {isLink && !CustomLinkIcon ? (
+        <IconWrapper>
+          <HelpLinkIcon />
+        </IconWrapper>
+      ) : null}
+      {isHelp ? (
+        <IconWrapper>
+          <QuestionCircleIcon />
+        </IconWrapper>
+      ) : null}
       <StyledChildrenContainer>{children}</StyledChildrenContainer>
-      {isLink ? <LinkIcon /> : null}
+      {isLink ? <IconWrapper>{CustomLinkIcon || <LinkIcon />}</IconWrapper> : null}
     </StyledHelpCardContainer>
   );
 };
