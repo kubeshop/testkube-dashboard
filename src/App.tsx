@@ -37,6 +37,7 @@ import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {ModalHandler, ModalOutlet} from '@contexts/ModalContext';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
 import {StyledLayoutContentWrapper} from './App.styled';
@@ -210,6 +211,7 @@ const App: React.FC = () => {
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(AnalyticsProvider, {disabled: !isTelemetryEnabled, privateKey: segmentIOKey, appVersion: pjson.version})
     .append(MainContext.Provider, {value: mainContextValue})
+    .append(ModalHandler, {})
     .render(
       <>
         <Layout>
@@ -245,6 +247,7 @@ const App: React.FC = () => {
         {isCookiesVisible && clusterConfig?.enableTelemetry ? (
           <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
         ) : null}
+        <ModalOutlet />
       </>
     );
 };
