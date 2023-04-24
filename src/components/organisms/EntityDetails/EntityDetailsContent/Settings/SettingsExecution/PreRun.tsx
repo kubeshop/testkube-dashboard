@@ -6,7 +6,7 @@ import {Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -46,15 +46,11 @@ const PreRun: React.FC = () => {
           preRunScript: values.command,
         },
       },
-    })
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Pre-Run command was successfully updated.`);
-        });
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Pre-Run command was successfully updated.`);
       });
+    });
   };
 
   return (

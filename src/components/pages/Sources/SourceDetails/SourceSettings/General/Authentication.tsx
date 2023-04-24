@@ -11,7 +11,7 @@ import {Input} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateSourceMutation} from '@services/sources';
 
@@ -53,16 +53,12 @@ const Authentication: React.FC = () => {
         },
       };
 
-      updateSource(body)
-        .then(res => {
-          displayDefaultNotificationFlow(res, () => {
-            notificationCall('passed', 'Source was successfully updated.');
-            dispatch(setCurrentSource(body));
-          });
-        })
-        .catch(err => {
-          displayDefaultErrorNotification(err);
+      updateSource(body).then(res => {
+        displayDefaultNotificationFlow(res, () => {
+          notificationCall('passed', 'Source was successfully updated.');
+          dispatch(setCurrentSource(body));
         });
+      });
     }
   };
 
