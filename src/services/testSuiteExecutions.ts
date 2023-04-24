@@ -13,11 +13,16 @@ export const testSuiteExecutionsApi = createApi({
           last,
           pageSize,
         });
-        return `/test-suite-executions?${queryParams.toString()}`;
+
+        return {
+          url: `/test-suite-executions?${queryParams.toString()}`,
+        };
       },
     }),
     getTestSuiteExecutionById: builder.query({
-      query: (testSuiteExecutionId: string) => `/test-suite-executions/${testSuiteExecutionId}`,
+      query: (testSuiteExecutionId: string) => ({
+        url: `/test-suite-executions/${testSuiteExecutionId}`,
+      }),
     }),
     getTestSuiteExecutionMetrics: builder.query({
       query: ({id, last = 7, limit = Number.MAX_SAFE_INTEGER}) => {
@@ -25,7 +30,10 @@ export const testSuiteExecutionsApi = createApi({
           last,
           limit,
         });
-        return `/test-suites/${id}/metrics?${queryParams.toString()}`;
+
+        return {
+          url: `/test-suites/${id}/metrics?${queryParams.toString()}`,
+        };
       },
     }),
   }),

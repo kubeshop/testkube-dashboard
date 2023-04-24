@@ -9,20 +9,26 @@ export const testSuitesApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTestSuites: builder.query<TestSuiteWithExecution[], TestSuiteFilters>({
-      query: filters => `/test-suite-with-executions?${paramsSerializer(filters)}`,
+      query: filters => ({
+        url: `/test-suite-with-executions?${paramsSerializer(filters)}`,
+      }),
     }),
     getAllTestSuites: builder.query<TestSuiteWithExecution[], void | null>({
-      query: () => `/test-suite-with-executions`,
+      query: () => ({
+        url: `/test-suite-with-executions`,
+      }),
     }),
     updateTestSuite: builder.mutation<void, any>({
       query: body => ({
         url: `/test-suites/${body.id}`,
         method: 'PATCH',
-        body: body.data,
+        data: body.data,
       }),
     }),
     getTestSuiteExecution: builder.query<any, string>({
-      query: executionId => `/test-suites-executions/${executionId}`,
+      query: executionId => ({
+        url: `/test-suites-executions/${executionId}`,
+      }),
     }),
     getTestSuiteDefinition: builder.query<string, string>({
       query: id => ({
@@ -32,16 +38,20 @@ export const testSuitesApi = createApi({
       }),
     }),
     getTestSuiteDetails: builder.query<any, string>({
-      query: id => `/test-suites/${id}`,
+      query: id => ({
+        url: `/test-suites/${id}`,
+      }),
     }),
     getTestsListForTestSuite: builder.query<any, string>({
-      query: id => `/test-suites/${id}/tests`,
+      query: id => ({
+        url: `/test-suites/${id}/tests`,
+      }),
     }),
     addTestSuite: builder.mutation<any, any>({
-      query: body => ({
+      query: data => ({
         url: `/test-suites`,
         method: 'POST',
-        body,
+        data,
       }),
     }),
     deleteTestSuite: builder.mutation<void, any>({
@@ -54,7 +64,7 @@ export const testSuitesApi = createApi({
       query: body => ({
         url: `/test-suites/${body.id}/executions`,
         method: 'POST',
-        body: body.data,
+        data: body.data,
       }),
     }),
     abortTestSuiteExecution: builder.mutation<void, any>({

@@ -69,19 +69,39 @@ export const paramsSerializer = (params: object) => {
     .join('&');
 };
 
-const rawBaseQuery = (baseUrl: string) =>
+type IdTokenResolver = () => Promise<string | null>;
+let resolveIdToken: IdTokenResolver = () => Promise.resolve(null);
+
+type BaseUrlResolver = (routeToRequest: string | null) => string;
+let resolveBaseUrl: BaseUrlResolver = () => '';
+export const setRtkIdTokenResolver = (resolver: IdTokenResolver): void => {
+  resolveIdToken = resolver;
+};
+export const setRtkBaseUrlResolver = (resolver: BaseUrlResolver): void => {
+  resolveBaseUrl = resolver;
+};
+
+const rawBaseQuery = (baseUrl: string, idToken?: string | null) =>
   fetchBaseQuery({
     baseUrl,
+    prepareHeaders: headers => {
+      if (idToken) {
+        const bearer = `Bearer ${idToken}`;
+        headers.append('Authorization', bearer);
+      }
+
+      return headers;
+    },
   });
 
-export const dynamicBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+type DynamicFetchArgs = FetchArgs & {routeToRequest?: string};
+export const dynamicBaseQuery: BaseQueryFn<string | DynamicFetchArgs, unknown, FetchBaseQueryError> = async (
   args,
   api,
   extraOptions
 ) => {
-  const baseUrl = getApiEndpoint();
-
-  if (!baseUrl) {
+  const apiEndpoint = getApiEndpoint();
+  if (!apiEndpoint) {
     return {
       error: {
         status: 400,
@@ -91,7 +111,14 @@ export const dynamicBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBas
     };
   }
 
-  return rawBaseQuery(baseUrl)(args, api, extraOptions);
+  if (typeof args === 'string') {
+    args = {url: args};
+  }
+
+  const idToken = await resolveIdToken();
+  const baseUrl = resolveBaseUrl(args.routeToRequest || null) || '';
+
+  return rawBaseQuery(`${apiEndpoint}${baseUrl}`, idToken)(args, api, extraOptions);
 };
 
 export async function safeRefetch<T>(refetchFn: () => Promise<T>): Promise<T | null> {

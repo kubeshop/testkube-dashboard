@@ -7,7 +7,9 @@ export const labelsApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getLabels: builder.query<{[key: string]: string[]}, null>({
-      query: () => `/labels`,
+      query: () => ({
+        url: `/labels`,
+      }),
     }),
   }),
 });

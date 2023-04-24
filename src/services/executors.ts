@@ -9,7 +9,9 @@ export const executorsApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getExecutors: builder.query<Executor[], null | void>({
-      query: () => '/executors',
+      query: () => ({
+        url: `/executors`,
+      }),
     }),
     createExecutor: builder.mutation<void, any>({
       query: body => ({
@@ -33,7 +35,9 @@ export const executorsApi = createApi({
       }),
     }),
     getExecutorDetails: builder.query<any, string>({
-      query: id => `/executors/${id}`,
+      query: id => ({
+        url: `/executors/${id}`,
+      }),
     }),
     deleteExecutor: builder.mutation<void, any>({
       query: id => ({
