@@ -57,6 +57,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
 
   return (
     <Table
+      className="custom-table"
       showHeader={false}
       dataSource={executionsList?.results}
       columns={[

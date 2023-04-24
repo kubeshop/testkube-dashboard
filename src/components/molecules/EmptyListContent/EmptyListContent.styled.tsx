@@ -8,8 +8,5 @@ export const StyledEmptyListContainer = styled(Space)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  height: 100%;
-
-  margin-bottom: 30px;
+  margin-top: 30px;
 `;

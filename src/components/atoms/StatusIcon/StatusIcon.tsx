@@ -17,6 +17,10 @@ const iconStyles: any = {
     borderColor: Colors.lime600,
     background: Colors.lime900,
   },
+  success: {
+    borderColor: Colors.lime600,
+    background: Colors.lime900,
+  },
   running: {
     borderColor: Colors.sky600,
     background: Colors.sky900,

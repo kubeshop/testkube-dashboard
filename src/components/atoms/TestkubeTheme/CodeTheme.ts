@@ -19,7 +19,7 @@ export default {
     OTabSize: '4',
     tabSize: '4',
     padding: '1em',
-    margin: '.5em 0',
+    margin: '0',
     overflow: 'auto',
     background: Colors.slate800,
   },
