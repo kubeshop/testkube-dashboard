@@ -2,7 +2,7 @@ import {Form, FormInstance, Input, Select} from 'antd';
 
 import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, PauseOutlined, RightOutlined} from '@ant-design/icons';
 
-import {Variable} from '@models/variable';
+import {Variable, VariableInForm} from '@models/variable';
 
 import {Button, Text} from '@custom-antd';
 
@@ -23,7 +23,7 @@ import {
 } from './VariablesFormList.styled';
 
 type VariablesFormListProps = {
-  data: Variable[];
+  data: VariableInForm[];
   form: FormInstance;
   isSaveable?: boolean;
 };
@@ -64,7 +64,9 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                         },
                       },
                     ]}
-                    $showClearIcon={form.getFieldError(['variables-list', Number(key), 'key'])[0] === duplicateKeyMessage}
+                    $showClearIcon={
+                      form.getFieldError(['variables-list', Number(key), 'key'])[0] === duplicateKeyMessage
+                    }
                   >
                     <Input allowClear placeholder="Your variable name" />
                   </StyledKeyFormItem>

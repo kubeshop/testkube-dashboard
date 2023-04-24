@@ -4,8 +4,7 @@ import {Dropdown, Form} from 'antd';
 
 import {DownOutlined} from '@ant-design/icons';
 
-import {TestWithExecution} from '@models/test';
-import {TestTrigger} from '@models/triggers';
+import {TestTrigger, TestTriggerFormEntity} from '@models/triggers';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
@@ -61,6 +60,10 @@ const addTriggerOptions: {key: TriggerType; label: string; description: string}[
   },
 ];
 
+type TriggersFormValues = {
+  triggers: TestTriggerFormEntity[];
+};
+
 const Triggers: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   // TODO: Check if that was expected permissions setup for triggers?
@@ -83,16 +86,17 @@ const Triggers: React.FC = () => {
 
   const [updateTriggers] = useUpdateTriggersMutation();
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<TriggersFormValues>();
 
-  const [defaultFormattedTriggers, setDefaultFormattedTriggers] = useState<any>([]);
+  const [defaultFormattedTriggers, setDefaultFormattedTriggers] = useState<TestTriggerFormEntity[]>([]);
 
   const appNamespace = useAppSelector(selectNamespace);
   const executors = useAppSelector(selectExecutors);
 
-  const setDefaultTriggersData = (_triggersList?: TestTrigger[]) => {
-    if (_triggersList) {
-      const triggersData = _triggersList.map(trigger => {
+  const setDefaultTriggersData = (_triggersList: TestTrigger[]) => {
+    if (_triggersList && _triggersList.length) {
+      // @ts-ignore
+      const triggersData: TestTriggerFormEntity[] = _triggersList.map(trigger => {
         const {resourceSelector, testSelector, action, execution} = trigger;
 
         try {
@@ -114,15 +118,21 @@ const Triggers: React.FC = () => {
           return null;
         }
       });
+
       form.setFieldsValue({
         triggers: triggersData,
       });
+
       setDefaultFormattedTriggers(triggersData);
+    } else {
+      form.setFieldsValue({
+        triggers: [],
+      });
     }
   };
 
   useEffect(() => {
-    setDefaultTriggersData(triggersList);
+    setDefaultTriggersData(triggersList || []);
   }, [triggersList]);
 
   useEffect(() => {
@@ -130,7 +140,7 @@ const Triggers: React.FC = () => {
   }, []);
 
   const testsData = useMemo(() => {
-    return testsList.map((item: TestWithExecution) => ({
+    return testsList.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
       type: item.test.type,
@@ -138,7 +148,7 @@ const Triggers: React.FC = () => {
   }, [testsList]);
 
   const testSuitesData = useMemo(() => {
-    return testsSuitesList.map((item: any) => ({
+    return testsSuitesList.map(item => ({
       name: item.testSuite.name,
       namespace: item.testSuite.namespace,
     }));
@@ -155,37 +165,41 @@ const Triggers: React.FC = () => {
     .flat();
   const events = triggersKeyMap?.events;
 
-  const onSave = (values: any) => {
-    const getSelector = (formValue: any) => {
-      if (typeof formValue === 'string') {
-        if (formValue.includes('/')) {
-          const [namespace, name] = formValue.split('/');
-          return {
-            name,
-            namespace,
-          };
-        }
+  const getSelector = (formValue: any) => {
+    if (typeof formValue === 'string') {
+      if (formValue.includes('/')) {
+        const [namespace, name] = formValue.split('/');
+
         return {
-          name: formValue,
-          namespace: appNamespace,
-        };
-      }
-      if (formValue.length) {
-        return {
-          labelSelector: {
-            matchLabels: decomposeLabels(formValue),
-          },
+          name,
+          namespace,
         };
       }
       return {
+        name: formValue,
+        namespace: appNamespace,
+      };
+    }
+
+    if (formValue.length) {
+      return {
         labelSelector: {
-          matchLabels: formValue,
+          matchLabels: decomposeLabels(formValue),
         },
       };
-    };
+    }
 
-    const body = values.triggers.map((trigger: any) => {
+    return {
+      labelSelector: {
+        matchLabels: formValue,
+      },
+    };
+  };
+
+  const onSave = (values: TriggersFormValues) => {
+    const body = values.triggers.map(trigger => {
       const [action, execution] = trigger.action.split(' ');
+
       const triggerPayload = {
         ...trigger,
         action,
@@ -194,7 +208,9 @@ const Triggers: React.FC = () => {
         resourceSelector: getSelector(trigger.resourceSelector),
         testSelector: getSelector(trigger.testSelector),
       };
+
       delete triggerPayload.type;
+
       return triggerPayload;
     });
 
@@ -228,7 +244,7 @@ const Triggers: React.FC = () => {
               .catch(() => notificationCall('failed', 'Validate you triggers data, please'));
           }}
           onCancel={() => {
-            setDefaultTriggersData(triggersList);
+            setDefaultTriggersData(triggersList || []);
             form.resetFields();
           }}
           isButtonsDisabled={isLoading}

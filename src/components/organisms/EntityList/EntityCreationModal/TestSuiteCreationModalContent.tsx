@@ -39,8 +39,14 @@ type AddTestSuitePayload = {
   error?: any;
 };
 
+type TestSuiteCreationModalFormValues = {
+  name: string;
+  description: string;
+  labels: readonly Option[];
+};
+
 const TestSuiteCreationModalContent: React.FC = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<TestSuiteCreationModalFormValues>();
   const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
@@ -48,7 +54,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: TestSuiteCreationModalFormValues) => {
     addTestSuite({
       ...values,
       labels: decomposeLabels(localLabels),

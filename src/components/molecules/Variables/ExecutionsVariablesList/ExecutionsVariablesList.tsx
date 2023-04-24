@@ -2,7 +2,7 @@ import {memo, useEffect, useState} from 'react';
 
 import {Popover} from 'antd';
 
-import {Variable} from '@models/variable';
+import {VariableInForm} from '@models/variable';
 
 import {Text} from '@custom-antd';
 
@@ -16,7 +16,7 @@ import {
 } from './ExecutionsVariablesList.styled';
 
 type ExecutionsVariablesListProps = {
-  variables: Variable[];
+  variables: VariableInForm[];
 };
 
 const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props => {
@@ -65,7 +65,9 @@ const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props =>
               </VariableDetailWrapper>
             ) : (
               <VariableDetailWrapper>
-                <Text className="regular" color={textColor}>*********</Text>
+                <Text className="regular" color={textColor}>
+                  *********
+                </Text>
               </VariableDetailWrapper>
             )}
           </VariablesListItem>

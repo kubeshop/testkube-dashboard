@@ -54,7 +54,7 @@ export const testSuitesApi = createApi({
         body,
       }),
     }),
-    deleteTestSuite: builder.mutation<void, any>({
+    deleteTestSuite: builder.mutation<void, string>({
       query: testSuiteId => ({
         url: `/test-suites/${testSuiteId}`,
         method: 'DELETE',

@@ -18,6 +18,11 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {MainContext} from '@contexts';
 
+type NameNUrlFormValues = {
+  name: string;
+  uri: string;
+};
+
 const NameNUrl: React.FC = () => {
   const source = useAppSelector(selectCurrentSource);
   const {dispatch} = useContext(MainContext);
@@ -28,9 +33,9 @@ const NameNUrl: React.FC = () => {
   const name = source?.name;
   const uri = source?.repository?.uri;
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<NameNUrlFormValues>();
 
-  const onFinish = (values: {name: string; uri: string}) => {
+  const onFinish = (values: NameNUrlFormValues) => {
     if (!source) {
       notificationCall('failed', 'Something went wrong.');
       return;

@@ -18,30 +18,28 @@ import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 type TestTypeProps = {
   type: string;
-  updateTest: (data: any) => void;
+  updateTest: (data: Object) => void;
+};
+
+type TestTypeFormValues = {
+  type: string;
 };
 
 const TestType: React.FC<TestTypeProps> = props => {
   const {type, updateTest} = props;
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<TestTypeFormValues>();
 
   const mayEdit = usePermission(Permissions.editEntity);
   const executors = useAppSelector(selectExecutors);
   const remappedExecutors = remapExecutors(executors);
 
-  const onSave = (values: any) => {
+  const onSave = (values: TestTypeFormValues) => {
     updateTest({type: values.type});
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onSave}
-      name="test-settings-test-type"
-      initialValues={{type}}
-      disabled={!mayEdit}
-    >
+    <Form form={form} onFinish={onSave} name="test-settings-test-type" initialValues={{type}} disabled={!mayEdit}>
       <ConfigurationCard
         title="Test type"
         description="Define the test type for this test."

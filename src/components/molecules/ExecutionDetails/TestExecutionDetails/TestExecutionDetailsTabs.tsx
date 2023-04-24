@@ -6,6 +6,7 @@ import debounce from 'lodash.debounce';
 import {Tab} from 'rc-tabs/lib/interface';
 
 import {Execution} from '@models/execution';
+import {Variable} from '@models/variable';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';

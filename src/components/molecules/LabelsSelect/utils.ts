@@ -1,7 +1,7 @@
 import {Option} from '@models/form';
 
-export const decomposeLabels = (labels: readonly Option[]) => {
-  return labels.reduce((previousValue: any, currentValue: Option) => {
+export const decomposeLabels = (labels: readonly Option[]): Option[] | {} => {
+  return labels.reduce((previousValue, currentValue: Option) => {
     const labelString = currentValue.value;
 
     if (typeof labelString === 'string' && labelString.includes(':')) {
