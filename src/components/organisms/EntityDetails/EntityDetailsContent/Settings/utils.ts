@@ -1,3 +1,6 @@
+import {BaseQueryFn, FetchArgs, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+
 import {Entity} from '@models/entity';
 
 import {useUpdateTestSuiteMutation} from '@services/testSuites';
@@ -8,7 +11,11 @@ export const namingMap: {[key in Entity]: string} = {
   tests: 'test',
 };
 
-export const updateRequestsMap: {[key in Entity]: any} = {
+export const updateRequestsMap: {
+  [key in Entity]: UseMutation<
+    MutationDefinition<any, BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>, never, void, string>
+  >;
+} = {
   'test-suites': useUpdateTestSuiteMutation,
   tests: useUpdateTestMutation,
 };

@@ -4,8 +4,7 @@ import {Dropdown, Form, Menu} from 'antd';
 
 import {DownOutlined} from '@ant-design/icons';
 
-import {TestWithExecution} from '@models/test';
-import {TestTrigger, TestTriggerFormEntity, TestTriggerSelector} from '@models/triggers';
+import {TestTrigger, TestTriggerFormEntity} from '@models/triggers';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
@@ -35,31 +34,7 @@ import {MainContext} from '@contexts';
 import AddTriggerOption from './AddTriggerOption';
 import TriggerItem from './TriggerItem';
 import {Wrapper} from './Triggers.styled';
-
-export type TriggerType = 'label-label' | 'name-label' | 'name-name' | 'label-name';
-
-const addTriggerOptions: {key: TriggerType; label: string; description: string}[] = [
-  {
-    key: 'label-label',
-    label: 'Labels to Labels',
-    description: 'Identify your cluster and testkube resources by label',
-  },
-  {
-    key: 'name-label',
-    label: 'Name to Labels',
-    description: 'Identify your cluster resource by name, your testkube resources by label',
-  },
-  {
-    key: 'name-name',
-    label: 'Name to Name',
-    description: 'Identify your cluster and testkube resource by name',
-  },
-  {
-    key: 'label-name',
-    label: 'Labels to Name',
-    description: 'Identify your cluster resources by labels, your testkube resource by name',
-  },
-];
+import {addTriggerOptions} from './utils';
 
 type TriggersFormValues = {
   triggers: TestTriggerFormEntity[];
