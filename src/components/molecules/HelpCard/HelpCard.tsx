@@ -10,7 +10,7 @@ type HelpCardTypes = {
   isLink?: boolean;
   isHelp?: boolean;
   link?: string;
-  customLinkIcon?: any;
+  customLinkIcon?: JSX.Element;
 };
 const HelpCard: React.FC<PropsWithChildren<HelpCardTypes>> = props => {
   const {isLink, isHelp, children, link, customLinkIcon: CustomLinkIcon} = props;

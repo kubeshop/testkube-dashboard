@@ -21,7 +21,9 @@ type ExecutorIconProps = {
   noWidth?: boolean;
 };
 
-export const executorIcons: {[key in string]: any} = {
+export const executorIcons: {
+  [key in string]: JSX.Element;
+} = {
   postman: <PostmanIcon />,
   cypress: <CypressIcon />,
   curl: <CurlIcon />,
