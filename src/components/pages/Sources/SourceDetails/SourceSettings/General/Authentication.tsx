@@ -81,7 +81,7 @@ const Authentication: React.FC = () => {
         <Form.Item label="Git username" name="username">
           <Input placeholder="e.g.: my-username" />
         </Form.Item>
-        <Form.Item label="Git token" name="token">
+        <Form.Item label="Git token" name="token" style={{flex: 1, marginBottom: 0}}>
           <AntdInput.Password
             placeholder="e.g.: some-token"
             iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}

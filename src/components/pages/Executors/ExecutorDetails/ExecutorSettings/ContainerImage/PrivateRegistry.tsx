@@ -75,7 +75,12 @@ const PrivateRegistry: React.FC = () => {
         }}
         enabled={mayEdit}
       >
-        <Form.Item label="Secret ref name" name="privateRegistry" rules={[required]}>
+        <Form.Item
+          label="Secret ref name"
+          name="privateRegistry"
+          rules={[required]}
+          style={{flex: 1, marginBottom: '0'}}
+        >
           <Input placeholder="Secret ref name" />
         </Form.Item>
       </ConfigurationCard>
