@@ -6,7 +6,7 @@ import {Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -50,6 +50,7 @@ const PreRun: React.FC = () => {
       displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `Pre-Run command was successfully updated.`);
       });
+    });
   };
 
   return (
