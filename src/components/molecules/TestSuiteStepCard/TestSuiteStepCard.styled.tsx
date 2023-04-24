@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const StyledContainer = styled.div<{isDragging?: boolean}>`
+export const StyledContainer = styled.div<{$isDragging?: boolean, $disabled: boolean}>`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -17,13 +17,17 @@ export const StyledContainer = styled.div<{isDragging?: boolean}>`
 
   transition: 0.3s all;
 
-  &:hover {
-    background: ${Colors.slate900};
-    border: 1px solid ${Colors.indigo400};
-  }
+  ${props =>
+    props.$disabled
+      ? ''
+      : `
+        &:hover {
+          background: ${Colors.slate900};
+          border: 1px solid ${Colors.indigo400};
+        }`}
 
   ${props =>
-    props.isDragging
+    props.$isDragging
       ? `
         background: ${Colors.slate900};
         border: 1px solid ${Colors.indigo400};`

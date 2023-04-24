@@ -35,7 +35,7 @@ const {Option} = Select;
 const SettingsTests = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {entityDetails} = useContext(EntityDetailsContext);
-  const mayEdit = usePermission(Permissions.editEntity);
+  const mayEdit = !usePermission(Permissions.editEntity);
 
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
 
@@ -194,6 +194,7 @@ const SettingsTests = () => {
           scrollRef={scrollRef}
           ContainerComponent={StyledStepsList}
           ItemComponent={TestSuiteStepCard}
+          disabled={!mayEdit}
         />
         <DelayModal
           isDelayModalVisible={isDelayModalVisible}

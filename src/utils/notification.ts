@@ -18,5 +18,8 @@ export function displayDefaultErrorNotification(err: any) {
   const errorTitle = err?.title || 'Unknown error';
   const errorDetails = err?.detail || err || 'Something went wrong';
 
-  notificationCall('failed', errorTitle, String(errorDetails));
+  // TODO: Think how to split the logic between OSS and others
+  if (err?.status !== 429) {
+    notificationCall('failed', errorTitle, String(errorDetails));
+  }
 }

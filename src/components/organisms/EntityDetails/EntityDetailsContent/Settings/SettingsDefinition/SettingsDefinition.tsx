@@ -1,5 +1,7 @@
 import {useContext} from 'react';
 
+import {Form} from 'antd';
+
 import {CopyButton, DownloadButton, ExternalLink, Pre} from '@atoms';
 
 import {ConfigurationCard, Definition} from '@molecules';
@@ -22,27 +24,29 @@ const SettingsDefinition: React.FC = () => {
   const filename = useLocation().lastPathSegment;
 
   return (
-    <ConfigurationCard
-      title="Definition"
-      description={sectionData.description}
-      footerText={
-        <>
-          Learn more about <ExternalLink href={sectionData.helpLinkUrl}>Definitions</ExternalLink>
-        </>
-      }
-    >
-      {definition ? (
-        <Definition content={definition}>
-          {isSecureContext ? (
-            <CopyButton content={definition} />
-          ) : (
-            <DownloadButton filename={filename} extension="yaml" content={definition} />
-          )}
-        </Definition>
-      ) : (
-        <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
-      )}
-    </ConfigurationCard>
+    <Form name="definition-form">
+      <ConfigurationCard
+        title="Definition"
+        description={sectionData.description}
+        footerText={
+          <>
+            Learn more about <ExternalLink href={sectionData.helpLinkUrl}>Definitions</ExternalLink>
+          </>
+        }
+      >
+        {definition ? (
+          <Definition content={definition}>
+            {isSecureContext ? (
+              <CopyButton content={definition} />
+            ) : (
+              <DownloadButton filename={filename} extension="yaml" content={definition} />
+            )}
+          </Definition>
+        ) : (
+          <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
+        )}
+      </ConfigurationCard>
+    </Form>
   );
 };
 

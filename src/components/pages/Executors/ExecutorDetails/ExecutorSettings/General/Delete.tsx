@@ -1,5 +1,7 @@
 import {useState} from 'react';
 
+import {Form} from 'antd';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
@@ -19,7 +21,7 @@ const Delete: React.FC = () => {
   };
 
   return (
-    <>
+    <Form name="delete-executor-form">
       <ConfigurationCard
         title="Delete this executor"
         description="The executor will be permanently deleted. All your tests will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
@@ -42,7 +44,7 @@ const Delete: React.FC = () => {
           }
         />
       ) : null}
-    </>
+    </Form>
   );
 };
 

@@ -1,5 +1,7 @@
 import {useContext} from 'react';
 
+import {Form} from 'antd';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
@@ -23,19 +25,21 @@ const ExecutorDefinition = () => {
   const filename = useLocation().lastPathSegment;
 
   return (
-    <ConfigurationCard title="Definition" description="Validate and export your container executor configuration">
-      {definition ? (
-        <DefinitionContent content={definition}>
-          {isSecureContext ? (
-            <CopyButton content={definition} />
-          ) : (
-            <DownloadButton filename={filename} extension="yaml" content={definition} />
-          )}
-        </DefinitionContent>
-      ) : (
-        <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
-      )}
-    </ConfigurationCard>
+    <Form name="definition-form">
+      <ConfigurationCard title="Definition" description="Validate and export your container executor configuration">
+        {definition ? (
+          <DefinitionContent content={definition}>
+            {isSecureContext ? (
+              <CopyButton content={definition} />
+            ) : (
+              <DownloadButton filename={filename} extension="yaml" content={definition} />
+            )}
+          </DefinitionContent>
+        ) : (
+          <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
+        )}
+      </ConfigurationCard>
+    </Form>
   );
 };
 
