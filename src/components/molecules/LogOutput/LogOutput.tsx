@@ -1,5 +1,6 @@
 import {memo, MouseEvent, useCallback, useEffect, useRef, useState} from 'react';
 import useWebSocket from 'react-use-websocket';
+import {useAsync} from 'react-use';
 
 import Ansi from 'ansi-to-react';
 
@@ -9,6 +10,8 @@ import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} from '@redux/reducers/configSlice';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
+
+import {getRtkIdToken} from '@utils/fetchUtils';
 
 import {useCountLines, useLastLines} from './utils';
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
@@ -70,6 +73,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     scrollToBottom();
   }, [isAutoScrolled]);
 
+  // TODO: Consider getting token different way than using the one from RTK
+  const {value: token, loading: tokenLoading} = useAsync(getRtkIdToken);
   useWebSocket(
     `${wsRoot}/executions/${executionId}/logs/stream`,
     {
@@ -77,23 +82,30 @@ const LogOutput: React.FC<LogOutputProps> = props => {
         const logData = e.data;
 
         setLogs(prev => {
-          if (prev) {
-            const dataToJSON = JSON.parse(logData);
+          try {
+            if (prev) {
+              const dataToJSON = JSON.parse(logData);
 
-            if (dataToJSON?.result?.output) {
-              return dataToJSON.result.output;
+              if (dataToJSON?.result?.output) {
+                return dataToJSON.result.output;
+              }
+
+              const finalString = `${prev}\n${dataToJSON.content}`;
+
+              return finalString;
             }
-
-            const finalString = `${prev}\n${dataToJSON.content}`;
-
-            return finalString;
+          } catch (err) {
+            // It may be just an output directly, so we have to ignore it
           }
 
           return `${logData}\n`;
         });
       },
+      shouldReconnect: () => true,
+      retryOnError: true,
+      queryParams: token ? {token} : {},
     },
-    shouldConnect
+    shouldConnect && !tokenLoading
   );
 
   useEffect(() => {
