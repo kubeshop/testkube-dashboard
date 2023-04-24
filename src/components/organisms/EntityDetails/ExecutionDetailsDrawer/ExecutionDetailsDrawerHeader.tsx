@@ -91,9 +91,14 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
         <ItemRow $flex={1}>
           <ItemColumn>
             {number ? <Text color={Colors.slate50}>#{number}</Text> : null}
-            <Text>
+            <Text ellipsis>
               <Text color={Colors.slate400}>Trigger:&nbsp;</Text>
-              <RunningContext type={runningContext?.type} context={runningContext?.context} />
+              <RunningContext
+                type={runningContext?.type}
+                context={runningContext?.context}
+                unselectRow={unselectRow}
+                entity={entity}
+              />
             </Text>
             <Text color={Colors.slate50}>
               <Text color={Colors.slate400}>Started:&nbsp;</Text>
