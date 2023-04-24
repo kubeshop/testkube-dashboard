@@ -1,25 +1,41 @@
 import {getApiEndpoint} from '@services/apiEndpoint';
 
-export const downloadFileName = (filename: string, executionId: string) => {
-  const encodedFileName = encodeURIComponent(filename);
+import {getRtkBaseUrl, getRtkIdToken} from '@utils/fetchUtils';
+
+export const downloadArtifact = async (
+  fileName: string,
+  executionId: string,
+  testName?: string,
+  testSuiteName?: string,
+) => {
+  // Build URL
+  const encodedFileName = encodeURIComponent(fileName);
   const doubleEncodedFileName = encodeURIComponent(encodedFileName);
+  const queryParams = {
+    ...(testName && {testName}),
+    ...(testSuiteName && {testSuiteName}),
+  };
+  const url = `/executions/${executionId}/artifacts/${doubleEncodedFileName}`;
+  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl(undefined)}${url}`;
+  const idToken = await getRtkIdToken();
 
-  return fetch(
-    `${getApiEndpoint()}/executions/${executionId}/artifacts/${doubleEncodedFileName}`
-  ).then(response => {
-    return response.blob().then(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    });
+  // Call the API to retrieve file or signed URL
+  let response = await fetch(`${finalUrl}?${new URLSearchParams(queryParams)}`, {
+    headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
   });
-};
 
-export const downloadFile = (executionId: string) => {
-  return (fileName: string) => downloadFileName(fileName, executionId);
+  // When the signed URL is returned, follow it
+  if (response.headers.get('content-type') === 'application/json') {
+    response = await fetch((await response.json()).data.url);
+  }
+
+  // Download the file
+  const blobUrl = window.URL.createObjectURL(await response.blob());
+  const a = document.createElement('a');
+  a.href = blobUrl;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(blobUrl);
 };

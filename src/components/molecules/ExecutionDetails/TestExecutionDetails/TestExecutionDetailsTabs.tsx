@@ -38,6 +38,8 @@ const TestExecutionDetailsTabs: React.FC = () => {
     name,
     variables,
     id,
+    testName,
+    testSuiteName,
   } = testData;
 
   const isRunning = useIsRunning(status);
@@ -86,7 +88,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
         </StyledAntTabPane>
         {whetherToShowArtifactsTab ? (
           <StyledAntTabPane tab="Artifacts" key="ArtifactsPane">
-            <TestExecutionDetailsArtifacts id={id} />
+            <TestExecutionDetailsArtifacts id={id} testName={testName} testSuiteName={testSuiteName} />
           </StyledAntTabPane>
         ) : null}
         <StyledAntTabPane tab="CLI Commands" key="CLICommands">

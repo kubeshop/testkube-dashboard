@@ -10,10 +10,12 @@ import {MainContext} from '@contexts';
 
 type TestExecutionDetailsArtifactsProps = {
   id: string;
+  testName?: string;
+  testSuiteName?: string;
 };
 
 const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps> = props => {
-  const {id} = props;
+  const {id, testName, testSuiteName} = props;
 
   const {isClusterAvailable} = useContext(MainContext);
 
@@ -29,7 +31,15 @@ const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps
     }
   }, [data, error]);
 
-  return <ArtifactsList artifacts={artifacts} testExecutionId={id} isLoading={isLoading} />;
+  return (
+    <ArtifactsList
+      artifacts={artifacts}
+      testExecutionId={id}
+      isLoading={isLoading}
+      testName={testName}
+      testSuiteName={testSuiteName}
+    />
+  );
 };
 
 export default TestExecutionDetailsArtifacts;
