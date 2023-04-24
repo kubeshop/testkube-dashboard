@@ -35,7 +35,7 @@ const {Option} = Select;
 const SettingsTests = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {entityDetails} = useContext(EntityDetailsContext);
-  const mayEdit = !usePermission(Permissions.editEntity);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
 

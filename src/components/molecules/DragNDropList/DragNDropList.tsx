@@ -12,7 +12,7 @@ type DragNDropListProps = {
   ItemComponent: any;
   onDelete: (index: number) => void;
   scrollRef: any;
-  disabled?: boolean
+  disabled?: boolean;
 };
 
 const DragNDropList: React.FC<DragNDropListProps> = props => {
