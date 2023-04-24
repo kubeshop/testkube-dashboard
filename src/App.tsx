@@ -1,15 +1,24 @@
-import {lazy, useRef} from 'react';
-import {Navigate, Route, Routes} from 'react-router-dom';
+import {lazy, useEffect, useRef, useState} from 'react';
+import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
+
+import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {setExecutors} from '@redux/reducers/executorsSlice';
+import {setSources} from '@redux/reducers/sourcesSlice';
+
+import {useGetExecutorsQuery} from '@services/executors';
+import {useGetSourcesQuery} from '@services/sources';
+import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
+
+import {PollingIntervals} from '@utils/numbers';
 
 import {EndpointProcessing, NotFound} from '@pages';
 
-import {isApiEndpointLocked} from '@services/apiEndpoint';
+import {EndpointModal} from '@molecules';
 import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
-import {useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
-import {EndpointModal} from '@molecules';
+import notificationCall from '@molecules/Notification';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -18,9 +27,59 @@ const Sources = lazy(() => import('@pages').then(module => ({default: module.Sou
 const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
 const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
-const App: React.FC<any> = ({setEndpointModalState, isEndpointModalVisible = false}) => {
+const App: React.FC<any> = () => {
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const apiEndpoint = useApiEndpoint();
+
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
   const logRef = useRef<HTMLDivElement>(null);
+
+  const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
+    pollingInterval: PollingIntervals.long,
+  });
+  const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
+    pollingInterval: PollingIntervals.long,
+  });
+
+  const [isEndpointModalVisible, setEndpointModalState] = useState(false);
+
+  useEffect(() => {
+    dispatch(setExecutors(executors || []));
+  }, [executors]);
+
+  useEffect(() => {
+    dispatch(setSources(sources || []));
+  }, [sources]);
+
+  useEffect(() => {
+    refetchExecutors();
+    refetchSources();
+  }, [apiEndpoint]);
+
+  useEffect(() => {
+    // Do not fire the effect if new endpoint is just being set up,
+    // or it can't be changed.
+    if (location.pathname === '/apiEndpoint' || isApiEndpointLocked()) {
+      return;
+    }
+
+    if (!apiEndpoint) {
+      setEndpointModalState(true);
+      return;
+    }
+
+    getApiDetails(apiEndpoint).catch((error) => {
+      // Handle race condition
+      if (getApiEndpoint() !== apiEndpoint) {
+        return;
+      }
+
+      // Display popup
+      notificationCall('failed', 'Could not receive data from the specified API endpoint');
+      setEndpointModalState(true);
+    });
+  }, [apiEndpoint]);
 
   return <>
     <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />

@@ -1,4 +1,4 @@
-import {Suspense, useEffect, useState, useRef, useMemo} from 'react';
+import {Suspense, useEffect, useState, useMemo} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
@@ -7,27 +7,21 @@ import {Content} from 'antd/lib/layout/layout';
 import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
-import {setExecutors} from '@redux/reducers/executorsSlice';
-import {setSources} from '@redux/reducers/sourcesSlice';
+import {useAppDispatch} from '@redux/hooks';
+import {setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 
 import {CookiesBanner} from '@molecules';
-import notificationCall from '@molecules/Notification';
 
 import {Sider} from '@organisms';
 
 import {ErrorBoundary} from '@pages';
 
-import {PollingIntervals} from '@utils/numbers';
 import {composeProviders} from '@utils/composeProviders';
 
 import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 
 import {useGetClusterConfigQuery} from '@services/config';
-import {useGetExecutorsQuery} from '@services/executors';
-import {useGetSourcesQuery} from '@services/sources';
-import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
+import {useApiEndpoint} from '@services/apiEndpoint';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 
@@ -52,27 +46,9 @@ const AppRoot: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const protocol = window.location.protocol;
-  const isProtocolSecure = protocol === 'https:';
-  const wsProtocol = isProtocolSecure ? 'wss://' : 'ws://';
-
   const apiEndpoint = useApiEndpoint();
 
-  const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
-
-  const [isEndpointModalVisible, setEndpointModalState] = useState(false);
-
   const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
-
-  const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
-    pollingInterval: PollingIntervals.long,
-  });
-
-  const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
-    pollingInterval: PollingIntervals.long,
-  });
-
-  const logRef = useRef<HTMLDivElement>(null);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
   const isTelemetryEnabled = useMemo(() => (
@@ -124,41 +100,6 @@ const AppRoot: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(setExecutors(executors || []));
-  }, [executors]);
-
-  useEffect(() => {
-    dispatch(setSources(sources || []));
-  }, [sources]);
-
-  useEffect(() => {
-    // Do not fire the effect if new endpoint is just being set up
-    if (location.pathname === '/apiEndpoint') {
-      return;
-    }
-
-    if (!apiEndpoint) {
-      setEndpointModalState(true);
-      return;
-    }
-
-    getApiDetails(apiEndpoint).catch((error) => {
-      // Handle race condition
-      if (getApiEndpoint() !== apiEndpoint) {
-        return;
-      }
-
-      // Display popup
-      notificationCall('failed', 'Could not receive data from the specified API endpoint');
-
-      // Allow changing API endpoint if there is none in environment variables
-      if (!isApiEndpointLocked()) {
-        setEndpointModalState(true);
-      }
-    });
-  }, [apiEndpoint]);
-
-  useEffect(() => {
     posthog.capture('$pageview');
 
     if (ga4React) {
@@ -175,8 +116,6 @@ const AppRoot: React.FC = () => {
   }, [ga4React]);
 
   useEffect(() => {
-    refetchExecutors();
-    refetchSources();
     refetchClusterConfig();
   }, [apiEndpoint]);
 
@@ -211,10 +150,7 @@ const AppRoot: React.FC = () => {
             <Content>
               <ErrorBoundary>
                 <Suspense fallback={<LoadingIcon />}>
-                  <App
-                    isEndpointModalVisible={isEndpointModalVisible}
-                    setEndpointModalState={setEndpointModalState}
-                  />
+                  <App />
                 </Suspense>
               </ErrorBoundary>
             </Content>
