@@ -72,7 +72,7 @@ export const paramsSerializer = (params: object) => {
 type IdTokenResolver = () => Promise<string | null>;
 let resolveIdToken: IdTokenResolver = () => Promise.resolve(null);
 
-type BaseUrlResolver = (routeToRequest: string | null) => string;
+type BaseUrlResolver = (routeToRequest: string | undefined) => string;
 let resolveBaseUrl: BaseUrlResolver = () => '';
 export const setRtkIdTokenResolver = (resolver: IdTokenResolver): void => {
   resolveIdToken = resolver;
@@ -116,7 +116,7 @@ export const dynamicBaseQuery: BaseQueryFn<string | DynamicFetchArgs, unknown, F
   }
 
   const idToken = await resolveIdToken();
-  const baseUrl = resolveBaseUrl(args.routeToRequest || null) || '';
+  const baseUrl = resolveBaseUrl(args.routeToRequest) || '';
 
   return rawBaseQuery(`${apiEndpoint}${baseUrl}`, idToken)(args, api, extraOptions);
 };
