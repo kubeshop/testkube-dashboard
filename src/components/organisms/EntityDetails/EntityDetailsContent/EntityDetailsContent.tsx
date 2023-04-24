@@ -51,7 +51,7 @@ const EntityDetailsContent: React.FC = () => {
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
 
-  const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
+  const {settingsTabConfig} = useAppSelector(selectRedirectTarget);
 
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();
@@ -64,10 +64,10 @@ const EntityDetailsContent: React.FC = () => {
   const [activeTabKey, setActiveTabKey] = useState('Executions');
 
   useEffect(() => {
-    if (isSettingsTabConfig) {
+    if (settingsTabConfig) {
       setActiveTabKey('Settings');
     }
-  }, [isSettingsTabConfig]);
+  }, [settingsTabConfig]);
 
   useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
   useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');

@@ -1,6 +1,6 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {ConfigState, Coordinates} from '@models/config';
+import {ConfigState, Coordinates, SettingsTabConfigType} from '@models/config';
 
 import initialState from '@redux/initialState';
 
@@ -26,11 +26,11 @@ export const configSlice = createSlice({
       state.fullScreenLogOutput.isFullScreenLogOutput = false;
       state.fullScreenLogOutput.logOutput = '';
     },
-    openSettingsTabConfig: (state: Draft<ConfigState>) => {
-      state.redirectTarget.isSettingsTabConfig = true;
+    setSettingsTabConfig: (state: Draft<ConfigState>, action: PayloadAction<SettingsTabConfigType>) => {
+      state.redirectTarget.settingsTabConfig = action.payload;
     },
     closeSettingsTabConfig: (state: Draft<ConfigState>) => {
-      state.redirectTarget.isSettingsTabConfig = false;
+      state.redirectTarget.settingsTabConfig = null;
     },
     setLogOutputDOMRect: (state: Draft<ConfigState>, action: PayloadAction<Coordinates>) => {
       state.fullScreenLogOutput.logOutputDOMRect = action?.payload;
@@ -47,7 +47,7 @@ export const {
   closeFullScreenLogOutput,
   setRedirectTarget,
   setLogOutput,
-  openSettingsTabConfig,
+  setSettingsTabConfig,
   closeSettingsTabConfig,
   setNamespace,
   setLogOutputDOMRect,

@@ -4,7 +4,7 @@ import {Form, Input} from 'antd';
 
 import {Option} from '@models/form';
 
-import {openSettingsTabConfig} from '@redux/reducers/configSlice';
+import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
@@ -58,7 +58,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
           uiEvent: 'create-test-suites',
         });
 
-        dispatch(openSettingsTabConfig());
+        dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
         navigate(`/test-suites/executions/${res?.data?.metadata?.name}`);
       });
     });
