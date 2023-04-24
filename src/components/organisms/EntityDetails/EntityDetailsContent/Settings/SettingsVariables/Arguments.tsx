@@ -23,8 +23,13 @@ import {EntityDetailsContext} from '@contexts';
 import {ArgumentsWrapper} from './Arguments.styled';
 import {dash, doubleDash, space, stringSpace} from './utils';
 
+type ArgumentsFormValues = {
+  args: string;
+};
+
 const Arguments: React.FC = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<ArgumentsFormValues>();
+
   const {entityDetails} = useContext(EntityDetailsContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -38,7 +43,7 @@ const Arguments: React.FC = () => {
   const [isPrettified, setPrettifiedState] = useState(true);
   const [isButtonsDisabled, setIsButtonsDisabled] = useState(true);
 
-  const onSaveForm = (values: {args: string}) => {
+  const onSaveForm = (values: ArgumentsFormValues) => {
     const argVal = !values.args.length ? [] : values.args.trim().split('\n');
 
     const successRecord = {
@@ -53,12 +58,12 @@ const Arguments: React.FC = () => {
       id: entityDetails.name,
       data: successRecord,
     })
-      .then((res: any) => {
+      .then(res => {
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', 'Variables were successfully updated.');
         });
       })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+      .catch(err => displayDefaultErrorNotification(err));
   };
 
   const onChange = () => {

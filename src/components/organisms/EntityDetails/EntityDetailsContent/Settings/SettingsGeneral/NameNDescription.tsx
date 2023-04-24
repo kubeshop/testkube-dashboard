@@ -17,11 +17,16 @@ import {namingMap, updateRequestsMap} from '../utils';
 
 const {TextArea} = Input;
 
+type NameNDescriptionFormValues = {
+  name: string;
+  description: string;
+};
+
 const NameNDescription: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<NameNDescriptionFormValues>();
 
   const [updateEntity] = updateRequestsMap[entity]();
 
@@ -32,7 +37,7 @@ const NameNDescription: React.FC = () => {
   const name = entityDetails?.name;
   const description = entityDetails?.description;
 
-  const onSave = (values: any) => {
+  const onSave = (values: NameNDescriptionFormValues) => {
     updateEntity({
       id: entityDetails.name,
       data: {

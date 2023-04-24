@@ -23,11 +23,16 @@ const popoverContent = (
     </Text>
   </StyledPopoverContainer>
 );
+
+type FailureHandlingFormValues = {
+  negativeTest: boolean;
+};
+
 const FailureHandling: React.FC = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FailureHandlingFormValues>();
 
   const [updateTest] = useUpdateTestMutation();
 
@@ -37,7 +42,7 @@ const FailureHandling: React.FC = () => {
 
   const negativeTest = entityDetails?.executionRequest?.negativeTest;
 
-  const onSave = (values: any) => {
+  const onSave = (values: FailureHandlingFormValues) => {
     updateTest({
       id: entityDetails.name,
       data: {
@@ -48,12 +53,12 @@ const FailureHandling: React.FC = () => {
         },
       },
     })
-      .then((res: any) => {
+      .then(res => {
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `Test was successfully updated.`);
         });
       })
-      .catch((err: any) => {
+      .catch(err => {
         displayDefaultErrorNotification(err);
       });
   };

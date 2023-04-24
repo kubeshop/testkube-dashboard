@@ -37,13 +37,13 @@ export const sourcesApi = createApi({
     getSourceDetails: builder.query<SourceWithRepository, string>({
       query: id => `/test-sources/${id}`,
     }),
-    deleteSource: builder.mutation<void, any>({
+    deleteSource: builder.mutation<void, string>({
       query: id => ({
         url: `/test-sources/${id}`,
         method: 'DELETE',
       }),
     }),
-    updateSource: builder.mutation<any, SourceWithRepository>({
+    updateSource: builder.mutation<void, SourceWithRepository>({
       query: body => {
         return {
           url: `/test-sources/${body.name}`,

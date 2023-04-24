@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 
-import {Form, Input as AntdInput} from 'antd';
+import {Input as AntdInput, Form} from 'antd';
 
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 
@@ -19,6 +19,11 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {MainContext} from '@contexts';
 
+type AuthenticationFormValues = {
+  token: string;
+  username: string;
+};
+
 const Authentication: React.FC = () => {
   const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
@@ -31,35 +36,34 @@ const Authentication: React.FC = () => {
   const token = repository?.tokenSecret?.name || '';
   const username = repository?.usernameSecret?.name || '';
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<AuthenticationFormValues>();
 
-  const onFinish = (values: {token: string; username: string}) => {
+  const onFinish = (values: AuthenticationFormValues) => {
     if (!source) {
       notificationCall('failed', 'Something went wrong.');
-      return;
-    }
+    } else {
+      const {token: newToken, username: newUsername} = values;
 
-    const {token: newToken, username: newUsername} = values;
+      const body = {
+        ...source,
+        repository: {
+          ...source.repository,
+          ...(newUsername ? {usernameSecret: {name: newUsername}} : {}),
+          ...(newToken ? {tokenSecret: {name: newToken}} : {}),
+        },
+      };
 
-    const body = {
-      ...source,
-      repository: {
-        ...source.repository,
-        ...(newUsername ? {usernameSecret: {name: newUsername}} : {}),
-        ...(newToken ? {tokenSecret: {name: newToken}} : {}),
-      },
-    };
-
-    updateSource(body)
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', 'Source was successfully updated.');
-          dispatch(setCurrentSource(body));
+      updateSource(body)
+        .then(res => {
+          displayDefaultNotificationFlow(res, () => {
+            notificationCall('passed', 'Source was successfully updated.');
+            dispatch(setCurrentSource(body));
+          });
+        })
+        .catch(err => {
+          displayDefaultErrorNotification(err);
         });
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
-      });
+    }
   };
 
   return (

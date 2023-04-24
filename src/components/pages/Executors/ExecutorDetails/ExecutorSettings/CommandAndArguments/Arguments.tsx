@@ -4,8 +4,6 @@ import {Form, Input} from 'antd';
 
 import {DeleteOutlined} from '@ant-design/icons';
 
-import {Executor} from '@models/executors';
-
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, updateExecutorArguments} from '@redux/reducers/executorsSlice';
 
@@ -29,7 +27,7 @@ type ArgumentsFormFields = {
 };
 
 const Arguments: React.FC = () => {
-  const {executor, name: executorName} = useAppSelector(selectCurrentExecutor) as Executor;
+  const {executor, name: executorName} = useAppSelector(selectCurrentExecutor);
   const {args} = executor;
 
   const {dispatch} = useContext(MainContext);

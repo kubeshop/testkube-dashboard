@@ -4,6 +4,7 @@ export const emptyVariableObject: Variable = {
   type: 0,
   key: '',
   value: '',
+  name: '',
 };
 
 export const typeOptions = [

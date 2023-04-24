@@ -3,10 +3,11 @@ import React, {useContext, useEffect, useMemo} from 'react';
 import {Form} from 'antd';
 
 import {Entity} from '@models/entity';
+import {Variable, VariableInForm} from '@models/variable';
 
 import {ExternalLink} from '@atoms';
 
-import {ConfigurationCard, notificationCall, TestsVariablesList} from '@molecules';
+import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
 import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
@@ -23,15 +24,19 @@ const descriptionMap: {[key in Entity]: string} = {
   tests: 'Define environment variables which will be shared across your test.',
 };
 
+type VariablesFormValues = {
+  'variables-list': VariableInForm[];
+};
+
 const Variables: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<VariablesFormValues>();
 
   const variables = useMemo(() => {
-    return decomposeVariables(entityDetails?.executionRequest?.variables) || [];
+    return decomposeVariables(entityDetails?.executionRequest?.variables);
   }, [entityDetails?.executionRequest?.variables]);
 
   useEffect(() => {
@@ -41,7 +46,7 @@ const Variables: React.FC = () => {
     form.resetFields();
   }, [variables]);
 
-  const onSaveForm = (value: any) => {
+  const onSaveForm = (value: VariablesFormValues) => {
     const successRecord = {
       ...entityDetails,
       executionRequest: {

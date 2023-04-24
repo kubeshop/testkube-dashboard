@@ -43,7 +43,7 @@ export type TestSuite = {
 };
 
 export type TestSuiteWithExecution = {
-  dataList: TestSuite;
+  testSuite: TestSuite;
   latestExecution?: TestSuiteExecution;
 };
 export type TestSuiteFilters = {

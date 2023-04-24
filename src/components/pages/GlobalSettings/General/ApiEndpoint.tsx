@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 
 import {Form, Input, Space} from 'antd';
 
@@ -10,14 +10,15 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
-import {MainContext} from '@contexts';
+type ApiEndpointFormValues = {
+  endpoint: string;
+};
 
-const ApiEndpoint = () => {
-  const [form] = Form.useForm();
+const ApiEndpoint: React.FC = () => {
+  const [form] = Form.useForm<ApiEndpointFormValues>();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const {dispatch} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
   const updateApiEndpoint = useUpdateApiEndpoint();
 
@@ -36,7 +37,7 @@ const ApiEndpoint = () => {
     }
   };
 
-  const onSave = (values: any) => {
+  const onSave = (values: ApiEndpointFormValues) => {
     setIsLoading(true);
     checkApiEndpoint(values.endpoint);
   };

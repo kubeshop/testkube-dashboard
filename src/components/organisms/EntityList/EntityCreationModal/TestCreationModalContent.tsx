@@ -22,7 +22,7 @@ import {defaultHintConfig} from './ModalConfig';
 import TestCreationForm from './TestCreationForm';
 
 const TestCreationModalContent: React.FC = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<AddTestPayload>();
 
   const {dispatch, navigate} = useContext(MainContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
@@ -39,27 +39,26 @@ const TestCreationModalContent: React.FC = () => {
 
     if (!selectedExecutor) {
       setHintConfig(defaultHintConfig);
-      return;
-    }
+    } else {
+      if (selectedExecutor.executor?.executorType === 'container') {
+        setHintConfig({
+          title: 'Testing with custom executor',
+          description: 'Discover all the features and examples around custom executors',
+          openLink: openCustomExecutorDocumentation,
+        });
+      }
 
-    if (selectedExecutor.executor?.executorType === 'container') {
-      setHintConfig({
-        title: 'Testing with custom executor',
-        description: 'Discover all the features and examples around custom executors',
-        openLink: openCustomExecutorDocumentation,
-      });
-    }
+      if (selectedExecutor.executor?.executorType === 'job') {
+        setHintConfig({
+          title: `Testing with ${selectedExecutor.displayName}`,
+          description: `Discover all the features and examples around testing with ${selectedExecutor.displayName} on Testkube`,
+          openLink: () => window.open(selectedExecutor.executor?.meta?.docsURI, '_blank'),
+          selectedExecutor: selectedExecutor.executor?.meta?.iconURI,
+        });
+      }
 
-    if (selectedExecutor.executor?.executorType === 'job') {
-      setHintConfig({
-        title: `Testing with ${selectedExecutor.displayName}`,
-        description: `Discover all the features and examples around testing with ${selectedExecutor.displayName} on Testkube`,
-        openLink: () => window.open(selectedExecutor.executor?.meta?.docsURI, '_blank'),
-        selectedExecutor: selectedExecutor.executor?.meta?.iconURI,
-      });
+      form.setFieldValue('testSource', null);
     }
-
-    form.setFieldValue('testSource', null);
   }, [form.getFieldValue('testType')]);
 
   const onSuccess = (res: AddTestPayload) => {
@@ -71,7 +70,7 @@ const TestCreationModalContent: React.FC = () => {
 
       dispatch(setRedirectTarget({targetTestId: res?.data?.metadata?.name}));
 
-      return navigate(`/tests/executions/${res?.data?.metadata?.name}`);
+      navigate(`/tests/executions/${res?.data?.metadata?.name}`);
     });
   };
 

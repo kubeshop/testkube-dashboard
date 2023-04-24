@@ -35,6 +35,21 @@ export type TestTrigger = {
   testSelector: TestTriggerSelector;
 };
 
+type TestTriggerTypes = 'name' | 'labels';
+
+export type TestTriggerFormEntity = {
+  type?: [TestTriggerTypes, TestTriggerTypes];
+  resourceSelector: `${string}/${string}` | MatchLabels;
+  testSelector: string | MatchLabels;
+  action: `${TriggerAction} ${TriggerExecution}`;
+  name: string;
+  namespace?: string;
+  labels?: EntityMap;
+  resource: TriggerResources;
+  event: string;
+  execution: TriggerExecution;
+};
+
 export type TestTriggerSelector = {
   name: string;
   namespace?: string;
