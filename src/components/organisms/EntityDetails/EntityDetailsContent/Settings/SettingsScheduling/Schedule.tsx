@@ -47,13 +47,13 @@ const Schedule: React.FC = () => {
         schedule: cronString,
       },
     })
-      .then((res: any) => {
+      .then(res => {
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
         });
         setWasTouched(false);
       })
-      .catch((err: any) => {
+      .catch(err => {
         displayDefaultErrorNotification(err);
       });
   };
@@ -122,11 +122,21 @@ const Schedule: React.FC = () => {
             <StyledColumn>
               <Text className="middle regular">Cron Format</Text>
               <StyledCronFormat>
-                <CronInput title="Minute" disabled={!enabled} value={minute} onChange={value => onCronInput(value, 0)} />
+                <CronInput
+                  title="Minute"
+                  disabled={!enabled}
+                  value={minute}
+                  onChange={value => onCronInput(value, 0)}
+                />
                 <CronInput title="Hour" disabled={!enabled} value={hour} onChange={value => onCronInput(value, 1)} />
                 <CronInput title="Day" disabled={!enabled} value={day} onChange={value => onCronInput(value, 2)} />
                 <CronInput title="Month" disabled={!enabled} value={month} onChange={value => onCronInput(value, 3)} />
-                <CronInput title="Day / Week" disabled={!enabled} value={dayOfWeek} onChange={value => onCronInput(value, 4)} />
+                <CronInput
+                  title="Day / Week"
+                  disabled={!enabled}
+                  value={dayOfWeek}
+                  onChange={value => onCronInput(value, 4)}
+                />
               </StyledCronFormat>
             </StyledColumn>
             <StyledRow>

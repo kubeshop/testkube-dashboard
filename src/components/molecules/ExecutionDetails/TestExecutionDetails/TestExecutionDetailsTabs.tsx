@@ -3,7 +3,6 @@ import {lazy, useContext, useEffect, useRef, useState} from 'react';
 import debounce from 'lodash.debounce';
 
 import {Execution} from '@models/execution';
-import {Variable} from '@models/variable';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
@@ -95,7 +94,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
         </StyledAntTabPane>
         {decomposedVars.length ? (
           <StyledAntTabPane tab="Variables" key="Variables">
-            <ExecutionsVariablesList variables={decomposedVars as Variable[]} />
+            <ExecutionsVariablesList variables={decomposedVars} />
           </StyledAntTabPane>
         ) : null}
       </StyledAntTabs>

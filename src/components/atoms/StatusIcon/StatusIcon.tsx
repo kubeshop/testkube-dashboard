@@ -2,9 +2,16 @@ import {Icon} from '@atoms';
 
 import Colors from '@styles/Colors';
 
+import {IconProps} from '../Icon/types';
 import {StyledStatusIcon} from './StatusIcon.styled';
 
-const iconStyles: any = {
+const iconStyles: {
+  [key in string]: {
+    borderColor: Colors;
+    background: Colors;
+    color?: Colors;
+  };
+} = {
   failed: {
     borderColor: Colors.pink600,
     background: Colors.pink900,
@@ -44,7 +51,11 @@ const iconStyles: any = {
   },
 };
 
-const StatusIcon: React.FC<any> = props => {
+type StatusIconProps = {
+  status: Partial<IconProps['name']>;
+};
+
+const StatusIcon: React.FC<StatusIconProps> = props => {
   const {status} = props;
 
   return (

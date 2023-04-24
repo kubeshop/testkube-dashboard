@@ -17,7 +17,7 @@ import {composeLabels} from './utils';
 
 type LabelsSelectProps = {
   onChange?: (value: readonly Option[]) => void;
-  defaultLabels?: {[key: string]: string};
+  defaultLabels?: readonly Option[];
   options?: {[key: string]: string[]};
   placeholder?: string;
   validation?: boolean;
@@ -52,8 +52,9 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
 
   const formattedOptions = Object.entries(options || data || {})
     .map(([key, value]) => {
-      return value.map((item: any) => {
+      return value.map(item => {
         const labelString = `${key}${item ? `:${item}` : ''}`;
+
         return {
           label: labelString,
           value: labelString,
@@ -71,8 +72,10 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
           if (!isValidLabel(inputString)) {
             return 'Incorrect label value';
           }
+
           return `Create ${inputString}`;
         }
+
         return 'Create: You need to add a : separator to create this label';
       }}
       defaultValue={formattedDefaultLabels}

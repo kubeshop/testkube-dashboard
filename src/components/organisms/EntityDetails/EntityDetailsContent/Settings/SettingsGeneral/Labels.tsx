@@ -40,15 +40,13 @@ const Labels: React.FC = () => {
         labels: decomposeLabels(localLabels),
       },
     })
-      .then((res: any) => {
-        if (!res.error) {
-          setWasTouched(false);
-        }
+      .then(res => {
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
+          setWasTouched(false);
         });
       })
-      .catch((err: any) => {
+      .catch(err => {
         setWasTouched(true);
         displayDefaultErrorNotification(err);
       });

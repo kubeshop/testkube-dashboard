@@ -13,10 +13,10 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import useStateCallback from '@hooks/useStateCallback';
 
-import {useWsEndpoint} from '@services/apiEndpoint';
-
 import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
+
+import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
 
@@ -60,7 +60,11 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     pollingInterval: PollingIntervals.everyTwoSeconds,
     skip: !isClusterAvailable,
   });
-  const {data: metrics, refetch: refetchMetrics} = useGetMetrics({id, last: daysFilterValue, skip: !isClusterAvailable});
+  const {data: metrics, refetch: refetchMetrics} = useGetMetrics({
+    id,
+    last: daysFilterValue,
+    skip: !isClusterAvailable,
+  });
   const [abortExecution] = useAbortExecution();
 
   // Temporary solution until WS implementation
@@ -137,7 +141,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
           safeRefetch(refetchMetrics);
         }
       }
-    } catch (err: any) {
+    } catch (err) {
       // eslint-disable-next-line no-console
       console.log('err: ', err);
     }

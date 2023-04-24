@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useMemo} from 'react';
 import {Form} from 'antd';
 
 import {Entity} from '@models/entity';
-import {Variable, VariableInForm} from '@models/variable';
+import {VariableInForm} from '@models/variable';
 
 import {ExternalLink} from '@atoms';
 
@@ -59,12 +59,12 @@ const Variables: React.FC = () => {
       id: entityDetails.name,
       data: successRecord,
     })
-      .then((res: any) => {
+      .then(res => {
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `Variables were successfully updated.`);
         });
       })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+      .catch(err => displayDefaultErrorNotification(err));
   };
 
   const onClickSave = () => {

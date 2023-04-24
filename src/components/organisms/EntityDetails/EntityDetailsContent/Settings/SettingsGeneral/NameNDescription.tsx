@@ -49,12 +49,12 @@ const NameNDescription: React.FC = () => {
         },
       },
     })
-      .then((res: any) => {
+      .then(res => {
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
         });
       })
-      .catch((err: any) => {
+      .catch(err => {
         displayDefaultErrorNotification(err);
       });
   };
