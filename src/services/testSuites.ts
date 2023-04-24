@@ -22,7 +22,7 @@ export const testSuitesApi = createApi({
       query: body => ({
         url: `/test-suites/${body.id}`,
         method: 'PATCH',
-        data: body.data,
+        body: body.data,
       }),
     }),
     getTestSuiteExecution: builder.query<any, string>({
@@ -48,10 +48,10 @@ export const testSuitesApi = createApi({
       }),
     }),
     addTestSuite: builder.mutation<any, any>({
-      query: data => ({
+      query: body => ({
         url: `/test-suites`,
         method: 'POST',
-        data,
+        body,
       }),
     }),
     deleteTestSuite: builder.mutation<void, any>({
@@ -64,7 +64,7 @@ export const testSuitesApi = createApi({
       query: body => ({
         url: `/test-suites/${body.id}/executions`,
         method: 'POST',
-        data: body.data,
+        body: body.data,
       }),
     }),
     abortTestSuiteExecution: builder.mutation<void, any>({
