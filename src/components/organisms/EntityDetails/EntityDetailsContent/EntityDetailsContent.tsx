@@ -16,7 +16,7 @@ import {ExecutorIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
-import {CLICommands, LabelsList, MetricsBarChart, RunningContextType} from '@molecules';
+import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextType} from '@molecules';
 
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
@@ -143,6 +143,7 @@ const EntityDetailsContent: React.FC = () => {
               key="days-filter-select"
             />
           ) : null,
+          <DotsDropdown items={[{key: 1, label: <span>Abort all executions</span>}]} isTransparent={false} />,
           <Button
             key="run-now-button"
             type="primary"

@@ -20,9 +20,15 @@ interface DotsDropdownProps {
     | 'bottomRight'
     | undefined;
   withPadding?: boolean;
+  isTransparent?: boolean;
 }
 
-const DotsDropdown: React.FC<DotsDropdownProps> = ({items, placement = 'bottom', withPadding = true}) => {
+const DotsDropdown: React.FC<DotsDropdownProps> = ({
+  items,
+  placement = 'bottom',
+  withPadding = true,
+  isTransparent = true,
+}) => {
   return (
     <Dropdown
       trigger={['click']}
@@ -31,7 +37,7 @@ const DotsDropdown: React.FC<DotsDropdownProps> = ({items, placement = 'bottom',
       }}
       placement={placement}
     >
-      <DotsWrapper>
+      <DotsWrapper isTransparent={isTransparent}>
         <Dots color={Colors.grey450} withPadding={withPadding} />
       </DotsWrapper>
     </Dropdown>
