@@ -81,6 +81,15 @@ export const setRtkBaseUrlResolver = (resolver: BaseUrlResolver): void => {
   resolveBaseUrl = resolver;
 };
 
+// TODO: Delete these when not needed.
+//       It's temporarily used to unify ID token and base url strategy.
+export const getRtkBaseUrl = (routeToRequest: string | undefined): string => {
+  return resolveBaseUrl(routeToRequest) || '';
+};
+export const getRtkIdToken = (): Promise<string | null> => {
+  return resolveIdToken();
+};
+
 const rawBaseQuery = (baseUrl: string, idToken?: string | null) =>
   fetchBaseQuery({
     baseUrl,
