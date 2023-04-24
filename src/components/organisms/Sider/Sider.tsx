@@ -17,7 +17,7 @@ import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
 import {ReactComponent as TriggersIcon} from '@assets/triggers.svg';
 
-import {ConfigContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {
   StyledLogo,
@@ -77,8 +77,7 @@ const routes = [
 ];
 
 const Sider: React.FC = () => {
-  const {navigate} = useContext(MainContext);
-  const {showLogoInSider, showSocialLinksInSider} = useContext(ConfigContext);
+  const {navigate, showLogoInSider, showSocialLinksInSider} = useContext(DashboardContext);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 

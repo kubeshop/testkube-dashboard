@@ -12,13 +12,14 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import {useGetSourceDetailsQuery} from '@services/sources';
 
-import {ConfigContext, MainContext} from '@contexts';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
 import {StyledContainer, StyledPageHeader} from './SourceDetails.styled';
 import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
-  const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
   const {pageTitle} = useContext(ConfigContext);
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);

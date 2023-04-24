@@ -8,12 +8,12 @@ import notFoundImage from '@assets/not-found-image.svg';
 
 import Colors from '@styles/Colors';
 
-import {ConfigContext, MainContext} from '@contexts';
+import {ConfigContext, DashboardContext} from '@contexts';
 
 import {StyledErrorContainer, StyledErrorDescription, StyledErrorImage} from './ErrorBoundary.styled';
 
 const ErrorBoundaryFallback: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const {discordUrl} = useContext(ConfigContext);
 
   const onButtonClick = useCallback(() => {

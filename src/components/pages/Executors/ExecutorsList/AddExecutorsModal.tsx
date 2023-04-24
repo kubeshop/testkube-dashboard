@@ -15,12 +15,12 @@ import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateExecutorMutation} from '@services/executors';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 
 const AddExecutorsModal: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const [createExecutor, {isLoading}] = useCreateExecutorMutation();
 

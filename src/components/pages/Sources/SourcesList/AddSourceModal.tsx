@@ -19,12 +19,12 @@ import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateSourceMutation} from '@services/sources';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {AddSourceModalContainer} from './SourcesList.styled';
 
 const AddSourceModal = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const [createSource, {isLoading}] = useCreateSourceMutation();
 

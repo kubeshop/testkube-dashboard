@@ -24,7 +24,7 @@ import {compareFiltersObject} from '@utils/objects';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {ConfigContext, MainContext} from '@contexts';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
@@ -60,7 +60,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   const {pageTitle: mainPageTitle} = useContext(ConfigContext);
-  const {dispatch, navigate, isClusterAvailable} = useContext(MainContext);
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
   const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
