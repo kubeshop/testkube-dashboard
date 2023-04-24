@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import useWebSocket from 'react-use-websocket';
 import {useAsync} from 'react-use';
+import useWebSocket from 'react-use-websocket';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {ExecutionMetrics, Metrics} from '@models/metrics';
@@ -13,10 +13,10 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import useStateCallback from '@hooks/useStateCallback';
 
-import {useWsEndpoint} from '@services/apiEndpoint';
-
 import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
+
+import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
 
@@ -178,16 +178,20 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   // TODO: Consider getting token different way than using the one from RTK
   const {value: token, loading: tokenLoading} = useAsync(getRtkIdToken);
-  useWebSocket(`${wsRoot}/events/stream`, {
-    onMessage: event => {
-      const wsData = JSON.parse(event.data) as WSData;
+  useWebSocket(
+    `${wsRoot}/events/stream`,
+    {
+      onMessage: event => {
+        const wsData = JSON.parse(event.data) as WSData;
 
-      onWebSocketData(wsData);
+        onWebSocketData(wsData);
+      },
+      shouldReconnect: () => true,
+      retryOnError: true,
+      queryParams: token ? {token} : {},
     },
-    shouldReconnect: () => true,
-    retryOnError: true,
-    queryParams: token ? {token} : {},
-  }, !tokenLoading);
+    !tokenLoading
+  );
 
   const defaultUrl = `/${entity}/executions/${entityDetails?.name}`;
 

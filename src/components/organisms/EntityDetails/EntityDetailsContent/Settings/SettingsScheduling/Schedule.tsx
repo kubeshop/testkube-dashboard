@@ -46,16 +46,12 @@ const Schedule: React.FC = () => {
         ...entityDetails,
         schedule: cronString,
       },
-    })
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
-        });
-        setWasTouched(false);
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
       });
+      setWasTouched(false);
+    });
   };
 
   const onCancel = () => {

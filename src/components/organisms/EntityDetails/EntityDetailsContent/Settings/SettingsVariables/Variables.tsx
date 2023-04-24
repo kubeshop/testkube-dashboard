@@ -9,7 +9,7 @@ import {ExternalLink} from '@atoms';
 
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -58,13 +58,11 @@ const Variables: React.FC = () => {
     updateEntity({
       id: entityDetails.name,
       data: successRecord,
-    })
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Variables were successfully updated.`);
-        });
-      })
-      .catch(err => displayDefaultErrorNotification(err));
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Variables were successfully updated.`);
+      });
+    });
   };
 
   const onClickSave = () => {
