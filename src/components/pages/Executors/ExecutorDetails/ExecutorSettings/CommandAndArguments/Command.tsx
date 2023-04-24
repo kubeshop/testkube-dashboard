@@ -9,7 +9,7 @@ import {selectCurrentExecutor, updateExecutorCommand} from '@redux/reducers/exec
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -40,14 +40,12 @@ const Command: React.FC = () => {
         ...executor,
         command: values.command.split(' '),
       },
-    })
-      .then(() => {
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Command was successfully updated.');
         dispatch(updateExecutorCommand(values.command));
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
       });
+    });
   };
 
   useEffect(() => {

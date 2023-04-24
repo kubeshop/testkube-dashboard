@@ -31,6 +31,8 @@ import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 import {getApiDetails, getApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
 
+import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
 import {ConfigContext, MainContext} from '@contexts';
@@ -50,6 +52,8 @@ const pjson = require('../package.json');
 const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
 
 const App: React.FC = () => {
+  useAxiosInterceptors();
+
   const dispatch = useAppDispatch();
   const ga4React = useGA4React();
   const location = useLocation();

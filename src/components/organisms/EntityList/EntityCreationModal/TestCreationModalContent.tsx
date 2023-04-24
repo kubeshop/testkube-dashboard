@@ -13,7 +13,7 @@ import {Hint} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {AnalyticsContext, MainContext} from '@contexts';
 
@@ -75,10 +75,6 @@ const TestCreationModalContent: React.FC = () => {
     });
   };
 
-  const onFail = (err: any) => {
-    displayDefaultErrorNotification(err);
-  };
-
   return (
     <TestCreationModalWrapper>
       <TestCreationForm
@@ -86,7 +82,6 @@ const TestCreationModalContent: React.FC = () => {
         testSources={testSources}
         executors={executors}
         onSuccess={onSuccess}
-        onFail={onFail}
       />
       <Hint {...hintConfig} />
     </TestCreationModalWrapper>

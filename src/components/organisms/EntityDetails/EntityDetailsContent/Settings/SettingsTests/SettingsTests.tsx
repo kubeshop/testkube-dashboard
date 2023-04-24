@@ -18,7 +18,7 @@ import {Text, Title} from '@custom-antd';
 
 import {ConfigurationCard, DragNDropList, notificationCall, TestSuiteStepCard} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
@@ -100,13 +100,11 @@ const SettingsTests = () => {
         ...entityDetails,
         steps: currentSteps,
       },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Steps were successfully updated.`);
-        });
-      })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Steps were successfully updated.`);
+      });
+    });
   };
 
   const onSelectStep = (value: string) => {

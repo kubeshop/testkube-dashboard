@@ -7,7 +7,7 @@ import {Option} from '@models/form';
 import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -41,16 +41,10 @@ const Labels: React.FC = () => {
       },
     })
       .then((res: any) => {
-        if (!res.error) {
-          setWasTouched(false);
-        }
         displayDefaultNotificationFlow(res, () => {
           notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
+          setWasTouched(false);
         });
-      })
-      .catch((err: any) => {
-        setWasTouched(true);
-        displayDefaultErrorNotification(err);
       });
   };
 
