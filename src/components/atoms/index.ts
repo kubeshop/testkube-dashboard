@@ -2,6 +2,7 @@ export {default as Icon} from './Icon/Icon';
 export {default as ExecutorIcon} from './ExecutorIcon';
 export {default as Dots} from './Dots';
 export {default as LabelListItem} from './LabelListItem';
+export {default as Loader} from './Loader';
 export {default as UploadWithInput} from './UploadWithInput';
 export {default as StatusIcon} from './StatusIcon';
 export {default as Pre} from './Pre';
