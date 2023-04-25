@@ -13,7 +13,7 @@ import {ExecutorIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
-import {CLICommands, LabelsList, MetricsBarChart} from '@molecules';
+import {CLICommands, LabelsList, MetricsBarChart, RunningContextType} from '@molecules';
 
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
@@ -51,7 +51,7 @@ const EntityDetailsContent: React.FC = () => {
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
 
-  const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
+  const {settingsTabConfig} = useAppSelector(selectRedirectTarget);
 
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();
@@ -64,10 +64,10 @@ const EntityDetailsContent: React.FC = () => {
   const [activeTabKey, setActiveTabKey] = useState('Executions');
 
   useEffect(() => {
-    if (isSettingsTabConfig) {
+    if (settingsTabConfig) {
       setActiveTabKey('Settings');
     }
-  }, [isSettingsTabConfig]);
+  }, [settingsTabConfig]);
 
   useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
   useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
@@ -87,6 +87,9 @@ const EntityDetailsContent: React.FC = () => {
       id: name,
       data: {
         namespace,
+        runningContext: {
+          type: RunningContextType.userUI,
+        },
       },
     }).then((res: any) => {
       displayDefaultNotificationFlow(res, () => {

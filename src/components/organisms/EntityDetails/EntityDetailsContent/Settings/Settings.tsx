@@ -45,14 +45,18 @@ const Settings: React.FC = () => {
   const {entity} = useContext(EntityDetailsContext);
   const [selectedSettingsTab, setSelectedSettingsTab] = useState(0);
 
-  const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
+  const {settingsTabConfig} = useAppSelector(selectRedirectTarget);
 
   useEffect(() => {
-    if (isSettingsTabConfig) {
-      setSelectedSettingsTab(1);
+    if (settingsTabConfig && entity === settingsTabConfig.entity) {
+      setSelectedSettingsTab(
+        typeof settingsTabConfig.tab === 'string'
+          ? navigationOptionsConfig[entity].findIndex(tab => tab === settingsTabConfig.tab)
+          : settingsTabConfig.tab
+      );
       dispatch(closeSettingsTabConfig());
     }
-  }, [isSettingsTabConfig, dispatch]);
+  }, [settingsTabConfig, dispatch]);
 
   const subTabsMap = useMemo(() => tabConfig[entity], [entity]);
 

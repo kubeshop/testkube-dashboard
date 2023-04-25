@@ -76,7 +76,7 @@ const initialConfigState: ConfigState = {
     runTarget: false,
     targetTestExecutionId: null,
     targetTestId: null,
-    isSettingsTabConfig: false,
+    settingsTabConfig: null,
   },
   fullScreenLogOutput: {
     isFullScreenLogOutput: false,
