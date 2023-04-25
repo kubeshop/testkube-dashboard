@@ -194,6 +194,7 @@ const SettingsTests = () => {
           scrollRef={scrollRef}
           ContainerComponent={StyledStepsList}
           ItemComponent={TestSuiteStepCard}
+          disabled={!mayEdit}
         />
         <DelayModal
           isDelayModalVisible={isDelayModalVisible}

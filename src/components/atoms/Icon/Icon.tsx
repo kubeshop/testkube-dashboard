@@ -32,6 +32,7 @@ const iconsMap: any = {
   cancelled: FailedStatusIcon,
   timeout: FailedStatusIcon,
   aborted: FailedStatusIcon,
+  success: PassedStatusIcon,
 };
 
 type IconProps = {

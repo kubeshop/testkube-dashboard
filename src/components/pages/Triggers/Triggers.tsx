@@ -1,6 +1,6 @@
 import {memo, useContext, useEffect, useMemo, useState} from 'react';
 
-import {Dropdown, Form, Menu} from 'antd';
+import {Dropdown, Form} from 'antd';
 
 import {DownOutlined} from '@ant-design/icons';
 
@@ -155,17 +155,6 @@ const Triggers: React.FC = () => {
     .flat();
   const events = triggersKeyMap?.events;
 
-  const addTriggerMenu = (add: (value: any) => void) => {
-    return (
-      <Menu
-        items={addTriggerOptions.map(({key, ...restProps}) => ({
-          key,
-          label: <AddTriggerOption {...restProps} onSelect={() => add({type: key.split('-')})} />,
-        }))}
-      />
-    );
-  };
-
   const onSave = (values: any) => {
     const getSelector = (formValue: any) => {
       if (typeof formValue === 'string') {
@@ -282,7 +271,12 @@ const Triggers: React.FC = () => {
                   ) : null}
                   {isTriggersAvailable ? (
                     <Dropdown
-                      overlay={() => addTriggerMenu(add)}
+                      menu={{
+                        items: addTriggerOptions.map(({key, ...restProps}) => ({
+                          key,
+                          label: <AddTriggerOption {...restProps} onSelect={() => add({type: key.split('-')})} />,
+                        })),
+                      }}
                       placement="bottomLeft"
                       trigger={['click']}
                       disabled={!isClusterAvailable}

@@ -14,7 +14,7 @@ const NotFound: React.FC = () => {
   const {navigate} = useContext(DashboardContext);
 
   const onButtonClick = useCallback(() => {
-    navigate('/tests');
+    navigate(-1);
   }, []);
 
   return (

@@ -16,10 +16,11 @@ type TestSuiteStepCardProps = {
   onDelete: (index: number) => void;
   index: number;
   isDragging?: boolean;
+  disabled?: boolean;
 };
 
 const TestSuiteStepCard: React.FC<TestSuiteStepCardProps> = props => {
-  const {execute, delay, onDelete, index, isDragging} = props;
+  const {execute, delay, onDelete, index, isDragging, disabled = false} = props;
 
   let name = '';
   let type = '';
@@ -35,14 +36,16 @@ const TestSuiteStepCard: React.FC<TestSuiteStepCardProps> = props => {
   }
 
   return (
-    <StyledContainer isDragging={isDragging}>
+    <StyledContainer $disabled={disabled} $isDragging={isDragging}>
       {type === 'delay' ? <ClockCircleOutlined /> : <ExecutorIcon type={type} />}
       <StyledNameContainer>
         <Text className="regular" color={Colors.slate200}>{name}</Text>
       </StyledNameContainer>
-      <StyledIconsWrapper>
-        <DeleteOutlined onClick={() => onDelete(index)} />
-      </StyledIconsWrapper>
+      {disabled ? null : (
+        <StyledIconsWrapper>
+          <DeleteOutlined onClick={() => onDelete(index)} />
+        </StyledIconsWrapper>
+      )}
     </StyledContainer>
   );
 };
