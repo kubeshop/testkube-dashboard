@@ -82,23 +82,23 @@ const LogOutput: React.FC<LogOutputProps> = props => {
         const logData = e.data;
 
         setLogs(prev => {
-          try {
             if (prev) {
-              const dataToJSON = JSON.parse(logData);
+              try {
+                const dataToJSON = JSON.parse(logData);
+                const potentialOutput = dataToJSON?.result?.output || dataToJSON?.output;
 
-              if (dataToJSON?.result?.output) {
-                return dataToJSON.result.output;
+                if (potentialOutput) {
+                  return potentialOutput;
+                }
+
+                return `${prev}\n${dataToJSON.content}`;
+              } catch (err) {
+                // It may be just an output directly, so we have to ignore it
               }
-
-              const finalString = `${prev}\n${dataToJSON.content}`;
-
-              return finalString;
+              return `${prev}\n${logData}`;
             }
-          } catch (err) {
-            // It may be just an output directly, so we have to ignore it
-          }
 
-          return `${logData}\n`;
+          return `${logData}`;
         });
       },
       shouldReconnect: () => true,
