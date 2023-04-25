@@ -53,7 +53,7 @@ const RunningContext: React.FC<RunningContextProps> = props => {
     ),
     scheduler: context ? (
       <>
-        Scheduler&nbsp;&nbsp;&nbsp;
+        Scheduler{' '}
         <ExternalLink
           onClick={() => {
             unselectRow();
