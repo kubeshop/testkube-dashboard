@@ -24,7 +24,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
 
   const [inputValue, setInputValue] = useState(filters[queryParamField]);
 
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
