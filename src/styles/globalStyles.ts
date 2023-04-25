@@ -11,6 +11,14 @@ export const invisibleScroll = `
 `;
 
 export const GlobalStyle = createGlobalStyle`
+  #root {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 100%;
+  }
+
   body {
     background: ${BackgroundColors.mainBackground};
   }
@@ -56,6 +64,14 @@ export const GlobalStyle = createGlobalStyle`
 
   .text-center {
     text-align: center;
+  }
+
+  .ant-layout {
+    min-height: 100vh;
+
+    .ant-layout {
+      min-height: initial;
+    }
   }
 
   .ant-layout-content {
@@ -144,42 +160,65 @@ export const GlobalStyle = createGlobalStyle`
 
   /* Table */
 
-  .ant-table-tbody > tr > td {
-    border-radius: 4px;
+  .ant-table-thead .ant-table-cell {
+    background-color: ${Colors.slate800};
+    color: ${Colors.slate400};
 
+    font-weight: 400;
+  }
+
+  .ant-table table {
     border: 1px solid ${Colors.slate800};
-    border-top-color: transparent;
-    border-right-color: transparent;
-    border-left-color: transparent;
+  }
 
-    transition: 0.3s;
-    cursor: pointer;
+  .ant-table-tbody > tr.ant-table-row:hover > td, .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+    background-color: ${Colors.slate800halfalpha};
+  }
 
-    &:hover {
-      border: 1px solid ${Colors.purple};
+  .no-row-border {
+    .ant-table-tbody > tr > td {
+      border: 0;
     }
   }
 
-  .ant-table-tbody > tr.ant-table-row-selected > td {
-    border: 1px solid ${Colors.purple};
+  .custom-table {
+    .ant-table-tbody > tr > td {
+      border-radius: 4px;
 
-    transition: 0.3s;
-  }
+      border: 1px solid ${Colors.slate800};
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-left-color: transparent;
 
-  table tr td.ant-table-selection-column {
-    display: none;
+      transition: 0.3s;
+      cursor: pointer;
+
+      &:hover {
+        border: 1px solid ${Colors.purple};
+      }
+    }
+
+    .ant-table-tbody > tr.ant-table-row-selected > td {
+      border: 1px solid ${Colors.purple};
+
+      transition: 0.3s;
+    }
+
+    table tr td.ant-table-selection-column {
+      display: none;
+    }
   }
 
   /* Dropdown */
 
   .ant-dropdown-menu {
-    background: ${Colors.slate900};
+    background: ${Colors.slate800};
 
     .ant-dropdown-menu-item {
-      background: ${Colors.slate900};
+      background: ${Colors.slate700};
 
       &:hover {
-        background: ${Colors.slate800};
+        background: transparent;
       }
     }
   }

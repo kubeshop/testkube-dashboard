@@ -12,8 +12,7 @@ export const StyledContainer = styled.div`
   flex: 1;
 
   height: 100%;
-  padding: 40px;
-  padding-left: 1vw;
+  padding: 30px 30px 75px 0;
 `;
 
 export const EntityDetailsHeaderIcon = styled.div`

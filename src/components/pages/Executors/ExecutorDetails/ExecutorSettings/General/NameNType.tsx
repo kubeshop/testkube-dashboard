@@ -49,7 +49,7 @@ const NameNType: React.FC = () => {
         <Form.Item label="Name" required name="name" rules={[required]}>
           <Input placeholder="e.g.: my-container-executor" disabled />
         </Form.Item>
-        <Form.Item label="Type" required name="type" rules={[required]}>
+        <Form.Item label="Type" required name="type" rules={[required]} style={{flex: 1, marginBottom: '0'}}>
           <Input placeholder="e.g.: my-executor/type" disabled />
         </Form.Item>
       </ConfigurationCard>

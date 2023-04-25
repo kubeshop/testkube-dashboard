@@ -75,7 +75,13 @@ const ContainerImagePanel: React.FC = () => {
         }}
         enabled={mayEdit}
       >
-        <Form.Item label="Container image" required name="image" rules={[required]}>
+        <Form.Item
+          label="Container image"
+          required
+          name="image"
+          rules={[required]}
+          style={{flex: 1, marginBottom: '0'}}
+        >
           <Input placeholder="Container image" />
         </Form.Item>
       </ConfigurationCard>

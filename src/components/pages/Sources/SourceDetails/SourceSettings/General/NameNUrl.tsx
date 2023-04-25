@@ -76,7 +76,7 @@ const NameNUrl: React.FC = () => {
         <Form.Item label="Name" required name="name" rules={[required]}>
           <Input placeholder="e.g.: my-git-test-repository" disabled />
         </Form.Item>
-        <Form.Item label="Git repository URL" required name="uri" rules={[required]}>
+        <Form.Item label="Git repository URL" required name="uri" rules={[required]} style={{flex: 1, marginBottom: 0}}>
           <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
         </Form.Item>
       </ConfigurationCard>

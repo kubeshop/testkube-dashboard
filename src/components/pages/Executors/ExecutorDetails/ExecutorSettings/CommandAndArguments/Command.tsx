@@ -74,7 +74,7 @@ const Command: React.FC = () => {
         }}
         enabled={mayEdit}
       >
-        <Form.Item label="Command" name="command">
+        <Form.Item label="Command" name="command" style={{flex: 1, marginBottom: '0'}}>
           <Input placeholder="Command" />
         </Form.Item>
       </ConfigurationCard>

@@ -11,8 +11,6 @@ export const StyledLogo = styled.div`
   justify-content: center;
   align-items: center;
 
-  padding-top: 40px;
-
   a {
     display: flex;
     justify-content: center;
@@ -31,12 +29,13 @@ export const StyledOther = styled(Space)`
 `;
 
 export const StyledSider = styled(Layout.Sider)<{$isFullScreenLogOutput?: boolean}>`
-  padding-top: 30px;
   z-index: ${({$isFullScreenLogOutput}) => ($isFullScreenLogOutput ? '1002' : '1')};
 
   .ant-layout-sider-children {
     display: flex;
-    justify-content: center;
+    align-items: stretch;
+    flex: 1 auto;
+    flex-direction: column;
   }
 `;
 
@@ -46,8 +45,9 @@ export const StyledSiderChildContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
+  padding-top: 30px;
   width: 100px;
-  height: calc(100vh - 120px); /* minus StatusBar and margin */
+  min-height: 100%;
   overflow: auto;
 `;
 

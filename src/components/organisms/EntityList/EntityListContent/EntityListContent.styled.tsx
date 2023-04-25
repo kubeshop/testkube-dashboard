@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 
 export const HeaderContainer = styled.div`
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 `;
 
 export const StyledEntityListSkeletonWrapper = styled.div`
@@ -39,15 +39,16 @@ export const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 20px;
 
-  padding: 0 40px 60px 1vw;
+  padding: 0 30px 60px 0;
 `;
 
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 40px 0 30px;
+  padding: 30px 0 0;
 
   background-color: ${Colors.slate900};
 

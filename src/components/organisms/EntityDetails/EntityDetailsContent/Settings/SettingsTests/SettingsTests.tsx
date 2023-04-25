@@ -205,7 +205,7 @@ const SettingsTests = () => {
             placeholder="Add a test or delay"
             showArrow
             onChange={onSelectStep}
-            style={{width: '100%', marginBottom: '30px'}}
+            style={{width: '100%', marginTop: 15, marginBottom: 30}}
             value={null}
             showSearch
             size="large"

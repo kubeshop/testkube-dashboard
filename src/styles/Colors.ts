@@ -45,15 +45,27 @@ enum Colors {
   cyan900 = '#164E63',
   cyan500 = '#06B6D4',
   cyan300 = '#67E8F9',
+  cyan50 = '#ECFEFF',
+
+  blue500 = '#3b82f6',
+
+  emerald500 = '#10B981',
+
+  teal300 = '#5eead4',
+  teal900 = '#164e63',
 
   indigo50 = '#EEF2FF',
   indigo300 = '#A5B4FC',
   indigo400 = '#818CF8',
+  indigo900 = '#312e81',
 
+  amber100 = '#FEF3C7',
+  amber200 = '#FDE68A',
   amber300 = '#FCD34D',
   amber400 = '#fbbf24',
   amber500 = '#F59E0B',
   amber600 = '#D97706',
+  amber900 = '#78350F',
 
   violet400 = '#a78bfa',
 
@@ -110,9 +122,14 @@ enum Colors {
   greyHover = '#303030',
   greyDisabled = '#5A5A5A',
 
+  rose100 = '#FFE4E6',
+  rose200 = '#FECDD3',
   rose300 = '#FDA4AF',
   rose400 = '#fb7185',
   rose500 = '#F43F5E',
+  rose600 = '#e11d48',
+  rose700 = '#be123c',
+  rose800 = '#9f1239',
   rose900 = '#881337',
 }
 
