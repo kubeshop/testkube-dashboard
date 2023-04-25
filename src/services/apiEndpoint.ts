@@ -55,6 +55,10 @@ function notifySubscriptions(): void {
   listeners.forEach((listener) => listener(endpoint));
 }
 
+export function isApiEndpointLocked(): boolean {
+  return Boolean(env?.apiUrl);
+}
+
 export function sanitizeApiEndpoint(apiEndpoint: string): string;
 export function sanitizeApiEndpoint(apiEndpoint: null | undefined): null;
 export function sanitizeApiEndpoint(apiEndpoint: string | null | undefined): string | null;
@@ -75,7 +79,7 @@ export function sanitizeApiEndpoint<T>(apiEndpoint: string | null | undefined): 
 }
 
 export function getApiEndpoint(): string | null {
-  return cachedApiEndpoint || sanitizeApiEndpoint(env?.apiUrl) || null;
+  return sanitizeApiEndpoint(env?.apiUrl) || cachedApiEndpoint || null;
 }
 
 export function saveApiEndpoint(apiEndpoint: string): boolean {

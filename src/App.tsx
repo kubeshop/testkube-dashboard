@@ -29,7 +29,7 @@ import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
-import {getApiDetails, getApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
+import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 
@@ -157,7 +157,11 @@ const App: React.FC = () => {
 
       // Display popup
       notificationCall('failed', 'Could not receive data from the specified API endpoint');
-      setEndpointModalState(true);
+
+      // Allow changing API endpoint if there is none in environment variables
+      if (isApiEndpointLocked()) {
+        setEndpointModalState(true);
+      }
     });
   }, [apiEndpoint]);
 
@@ -219,7 +223,10 @@ const App: React.FC = () => {
                           <Route path="sources/*" element={<Sources />} />
                           <Route path="triggers" element={<Triggers />} />
                           <Route path="settings" element={<GlobalSettings />} />
-                          <Route path="/apiEndpoint" element={<EndpointProcessing />} />
+                          <Route
+                            path="/apiEndpoint"
+                            element={isApiEndpointLocked() ? <EndpointProcessing /> : <Navigate to="/" replace />}
+                          />
                           <Route path="/" element={<Navigate to="/tests" replace />} />
                           <Route path="*" element={<NotFound />} />
                         </Routes>
