@@ -10,7 +10,7 @@ import {Input} from '@custom-antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateSourceMutation} from '@services/sources';
 
@@ -50,16 +50,12 @@ const NameNUrl: React.FC = () => {
       },
     };
 
-    updateSource(body)
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', 'Source was successfully updated.');
-          dispatch(setCurrentSource(body));
-        });
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
+    updateSource(body).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', 'Source was successfully updated.');
+        dispatch(setCurrentSource(body));
       });
+    });
   };
 
   return (
@@ -85,7 +81,7 @@ const NameNUrl: React.FC = () => {
         <Form.Item label="Name" required name="name" rules={[required]}>
           <Input placeholder="e.g.: my-git-test-repository" disabled />
         </Form.Item>
-        <Form.Item label="Git repository URL" required name="uri" rules={[required]}>
+        <Form.Item label="Git repository URL" required name="uri" rules={[required]} style={{flex: 1, marginBottom: 0}}>
           <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
         </Form.Item>
       </ConfigurationCard>

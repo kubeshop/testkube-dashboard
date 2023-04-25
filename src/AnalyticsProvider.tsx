@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from 'react';
+import {PropsWithChildren, useEffect, useMemo} from 'react';
 
 import {AnalyticsBrowser, Context, Plugin} from '@segment/analytics-next';
 
@@ -9,7 +9,6 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 type AnalyticsProviderProps = {
   disabled?: boolean;
   privateKey: string;
-  children: React.ReactNode;
   appVersion: string;
 };
 
@@ -34,7 +33,7 @@ const CleanSensitiveDataPlugin: Plugin = {
   screen: maskSensitiveData,
 };
 
-export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
+export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProps>> = props => {
   const {disabled, privateKey, children, appVersion} = props;
 
   const notDevEnv = process.env.NODE_ENV !== 'development';

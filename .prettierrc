@@ -19,6 +19,7 @@
     "^@hooks",
     "^@utils",
     "^@assets",
+    "^@icons",
     "^@segment",
     "^@services",
     "^@styles",

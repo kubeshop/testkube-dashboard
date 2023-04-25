@@ -4,7 +4,7 @@ import {Space} from 'antd';
 
 import {notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -25,15 +25,11 @@ const SettingsTest = () => {
         ...entityDetails,
         ...data,
       },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Test settings was successfully updated.`);
-        });
-      })
-      .catch((err: any) => {
-        displayDefaultErrorNotification(err);
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Test settings was successfully updated.`);
       });
+    });
   };
 
   return (

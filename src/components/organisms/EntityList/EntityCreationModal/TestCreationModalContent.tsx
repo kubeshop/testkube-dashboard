@@ -13,9 +13,9 @@ import {Hint} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {AnalyticsContext, MainContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
 import {TestCreationModalWrapper} from './CreationModal.styled';
 import {defaultHintConfig} from './ModalConfig';
@@ -24,7 +24,8 @@ import TestCreationForm from './TestCreationForm';
 const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm<AddTestPayload>();
 
-  const {dispatch, navigate} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
 
   const executors = useAppSelector(selectExecutors);
@@ -74,10 +75,6 @@ const TestCreationModalContent: React.FC = () => {
     });
   };
 
-  const onFail = (err: any) => {
-    displayDefaultErrorNotification(err);
-  };
-
   return (
     <TestCreationModalWrapper>
       <TestCreationForm
@@ -85,7 +82,6 @@ const TestCreationModalContent: React.FC = () => {
         testSources={testSources}
         executors={executors}
         onSuccess={onSuccess}
-        onFail={onFail}
       />
       <Hint {...hintConfig} />
     </TestCreationModalWrapper>

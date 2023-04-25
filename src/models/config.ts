@@ -1,10 +1,14 @@
+import {Entity} from './entity';
+
+type SettingsTabConfigType = {entity: Entity; tab: number | string};
+
 interface ConfigState {
   namespace: string;
   redirectTarget: {
     runTarget: boolean;
     targetTestId: string | null;
     targetTestExecutionId: string | null;
-    isSettingsTabConfig: boolean;
+    settingsTabConfig: SettingsTabConfigType | null;
   };
   fullScreenLogOutput: {
     isFullScreenLogOutput: boolean;
@@ -26,4 +30,4 @@ type ClusterConfig = {
   enableTelemetry: boolean;
 };
 
-export type {ConfigState, Coordinates, ClusterConfig};
+export type {ConfigState, Coordinates, ClusterConfig, SettingsTabConfigType};

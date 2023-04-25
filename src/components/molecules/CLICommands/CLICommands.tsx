@@ -7,6 +7,8 @@ import {TestExecutor} from '@models/testExecutors';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
+import {Text} from '@custom-antd';
+
 import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
@@ -121,7 +123,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const CLIEntityType = isExecutions ? 'executions' : entity;
 
   const modifyArgsMap: Partial<{[key in CLIScriptModifier]: any}> = {
-    ...(type ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
+    ...(type && executorsFeaturesMap[type] ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
     isFinished: modifyMap?.status,
     isRunPermission: mayRun,
     isDeletePermission: mayDelete,
@@ -157,7 +159,11 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
     }).filter(cliCommand => cliCommand);
   }, [id, name, type, modifyMap]);
 
-  return <div>{renderedCLICommands}</div>;
+  return (
+    <div>
+      {(renderedCLICommands?.length && renderedCLICommands) || <Text className="regular">No CLI commands</Text>}
+    </div>
+  );
 };
 
 export default CLICommands;

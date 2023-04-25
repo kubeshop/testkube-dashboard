@@ -9,7 +9,7 @@ import {Text} from '@custom-antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {digits} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -44,15 +44,11 @@ const Timeout: React.FC = () => {
           activeDeadlineSeconds: activeDeadlineSeconds ? Number(activeDeadlineSeconds) : 0,
         },
       },
-    })
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', 'Test Timeout was successfully updated.');
-        });
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', 'Test Timeout was successfully updated.');
       });
+    });
   };
 
   return (

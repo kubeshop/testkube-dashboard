@@ -8,7 +8,7 @@ import {FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
+import {isApiEndpointLocked, useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 type ApiEndpointFormValues = {
   endpoint: string;
@@ -21,6 +21,7 @@ const ApiEndpoint: React.FC = () => {
 
   const apiEndpoint = useApiEndpoint();
   const updateApiEndpoint = useUpdateApiEndpoint();
+  const disabled = isApiEndpointLocked();
 
   const checkApiEndpoint = async (endpoint: string) => {
     try {
@@ -43,9 +44,15 @@ const ApiEndpoint: React.FC = () => {
   };
 
   return (
-    <Form form={form} onFinish={onSave} name="global-settings-api-endpoint" initialValues={{endpoint: apiEndpoint}}>
+    <Form
+      form={form}
+      onFinish={onSave}
+      name="global-settings-api-endpoint"
+      initialValues={{endpoint: apiEndpoint}}
+      disabled={disabled}
+    >
       <ConfigurationCard
-        title="testkube API endpoint"
+        title="Testkube API endpoint"
         description="Please provide the TestKube API endpoint for your installation. The endpoint needs to be accessible from your browser"
         footerText={
           <Text className="regular middle">
@@ -62,6 +69,7 @@ const ApiEndpoint: React.FC = () => {
           form.resetFields();
         }}
         confirmButtonText={isLoading ? 'Loading...' : 'Save'}
+        enabled={!disabled}
       >
         <Space size={32} direction="vertical" style={{width: '100%'}}>
           <FormItem name="endpoint">

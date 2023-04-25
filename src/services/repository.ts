@@ -7,13 +7,11 @@ export const repositoryApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     validateRepository: builder.mutation<any, any>({
-      query: body => {
-        return {
-          url: '/repositories',
-          method: 'POST',
-          body,
-        };
-      },
+      query: body => ({
+        url: '/repositories',
+        method: 'POST',
+        body,
+      }),
     }),
   }),
 });

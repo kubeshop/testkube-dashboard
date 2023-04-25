@@ -33,6 +33,7 @@ const iconsMap: {[key in string]: React.FC<{}>} = {
   cancelled: FailedStatusIcon,
   timeout: FailedStatusIcon,
   aborted: FailedStatusIcon,
+  success: PassedStatusIcon,
 };
 
 const Icon: React.FC<IconProps> = props => {

@@ -10,12 +10,12 @@ import {notificationCall} from '@molecules';
 
 import usePressEnter from '@hooks/usePressEnter';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {FooterSpace} from './DeleteEntityModal.styled';
 
@@ -30,7 +30,7 @@ const DeleteEntityModal: React.FC<{
 }> = props => {
   const {onCancel, useDeleteMutation, name, entityLabel, defaultStackRoute} = props;
 
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const onEvent = usePressEnter();
 
@@ -39,17 +39,13 @@ const DeleteEntityModal: React.FC<{
   const [checkName, setName] = useState('');
 
   const onDelete = () => {
-    deleteEntity(name)
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
+    deleteEntity(name).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
 
-          navigate(defaultStackRoute);
-        });
-      })
-      .catch((err: any) => {
-        displayDefaultErrorNotification(err);
+        navigate(defaultStackRoute);
       });
+    });
   };
 
   return (

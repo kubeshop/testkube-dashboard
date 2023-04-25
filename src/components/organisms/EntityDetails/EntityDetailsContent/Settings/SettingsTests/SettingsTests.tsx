@@ -18,7 +18,7 @@ import {Text, Title} from '@custom-antd';
 
 import {ConfigurationCard, DragNDropList, notificationCall, TestSuiteStepCard} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
@@ -100,13 +100,11 @@ const SettingsTests = () => {
         ...entityDetails,
         steps: currentSteps,
       },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Steps were successfully updated.`);
-        });
-      })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Steps were successfully updated.`);
+      });
+    });
   };
 
   const onSelectStep = (value: string) => {
@@ -196,6 +194,7 @@ const SettingsTests = () => {
           scrollRef={scrollRef}
           ContainerComponent={StyledStepsList}
           ItemComponent={TestSuiteStepCard}
+          disabled={!mayEdit}
         />
         <DelayModal
           isDelayModalVisible={isDelayModalVisible}
@@ -207,7 +206,7 @@ const SettingsTests = () => {
             placeholder="Add a test or delay"
             showArrow
             onChange={onSelectStep}
-            style={{width: '100%', marginBottom: '30px'}}
+            style={{width: '100%', marginTop: 15, marginBottom: 30}}
             value={null}
             showSearch
             size="large"

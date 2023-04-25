@@ -1,6 +1,6 @@
 import {memo, useContext, useEffect, useMemo, useState} from 'react';
 
-import {Dropdown, Form, Menu} from 'antd';
+import {Dropdown, Form} from 'antd';
 
 import {DownOutlined} from '@ant-design/icons';
 
@@ -20,7 +20,7 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import {PageBlueprint} from '@organisms';
 
 import {safeRefetch} from '@utils/fetchUtils';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
@@ -156,7 +156,7 @@ const Triggers: React.FC = () => {
     if (typeof formValue === 'string') {
       if (formValue.includes('/')) {
         const [namespace, name] = formValue.split('/');
-
+        
         return {
           name,
           namespace,
@@ -201,15 +201,9 @@ const Triggers: React.FC = () => {
       return triggerPayload;
     });
 
-    updateTriggers(body)
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', 'Triggers successfully updated');
-        });
-      })
-      .catch(error => {
-        displayDefaultErrorNotification(error);
-      });
+    updateTriggers(body).then(res => {
+      displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
+    });
   };
 
   const isLoading = keyMapLoading || testsLoading || testSuitesLoading || triggersLoading;
@@ -280,7 +274,12 @@ const Triggers: React.FC = () => {
                   ) : null}
                   {isTriggersAvailable ? (
                     <Dropdown
-                      overlay={() => addTriggerMenu(add)}
+                      menu={{
+                        items: addTriggerOptions.map(({key, ...restProps}) => ({
+                          key,
+                          label: <AddTriggerOption {...restProps} onSelect={() => add({type: key.split('-')})} />,
+                        })),
+                      }}
                       placement="bottomLeft"
                       trigger={['click']}
                       disabled={!isClusterAvailable}

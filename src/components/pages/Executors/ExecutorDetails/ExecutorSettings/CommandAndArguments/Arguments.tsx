@@ -12,7 +12,7 @@ import {Button} from '@custom-antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {displayDefaultErrorNotification} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -45,14 +45,12 @@ const Arguments: React.FC = () => {
         name: executorName,
         args: values.arguments,
       },
-    })
-      .then(() => {
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Arguments were successfully updated.');
         dispatch(updateExecutorArguments(values.arguments));
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
       });
+    });
   };
 
   useEffect(() => {

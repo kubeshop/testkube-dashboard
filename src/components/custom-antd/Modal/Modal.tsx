@@ -4,7 +4,7 @@ import {CloseOutlined} from '@ant-design/icons';
 
 import {StyledModal} from './Modal.styled';
 
-type ModalProps = {
+export type ModalProps = {
   title: string;
   width?: number;
   footer?: React.ReactNode;

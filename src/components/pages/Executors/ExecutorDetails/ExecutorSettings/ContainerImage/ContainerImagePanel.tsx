@@ -10,7 +10,7 @@ import {selectCurrentExecutor, updateExecutorContainerImage} from '@redux/reduce
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {displayDefaultErrorNotification} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -41,14 +41,12 @@ const ContainerImagePanel: React.FC = () => {
         ...executor,
         ...values,
       },
-    })
-      .then(() => {
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Container image was successfully updated.');
         dispatch(updateExecutorContainerImage(values.image));
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
       });
+    });
   };
 
   useEffect(() => {
@@ -77,7 +75,13 @@ const ContainerImagePanel: React.FC = () => {
         }}
         enabled={mayEdit}
       >
-        <Form.Item label="Container image" required name="image" rules={[required]}>
+        <Form.Item
+          label="Container image"
+          required
+          name="image"
+          rules={[required]}
+          style={{flex: 1, marginBottom: '0'}}
+        >
           <Input placeholder="Container image" />
         </Form.Item>
       </ConfigurationCard>

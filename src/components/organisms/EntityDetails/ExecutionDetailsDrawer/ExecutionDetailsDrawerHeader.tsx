@@ -8,7 +8,7 @@ import {StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {DotsDropdown} from '@molecules';
+import {DotsDropdown, RunningContext} from '@molecules';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -34,6 +34,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
   const {data} = props;
   // @ts-ignore
   const status = data?.executionResult?.status || data?.status;
+  const runningContext = data?.runningContext;
 
   const isRunning = useIsRunning(status);
 
@@ -81,9 +82,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
             </Text>
           </ItemColumn>
           <ItemColumn className="flex-auto">
-            {renderedExecutionActions &&
-            renderedExecutionActions.length &&
-            mayManageExecution ? (
+            {renderedExecutionActions && renderedExecutionActions.length && mayManageExecution ? (
               <DotsDropdown items={renderedExecutionActions} />
             ) : null}
             <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
@@ -92,9 +91,14 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
         <ItemRow $flex={1}>
           <ItemColumn>
             {number ? <Text color={Colors.slate50}>#{number}</Text> : null}
-            <Text color={Colors.slate50}>
+            <Text ellipsis>
               <Text color={Colors.slate400}>Trigger:&nbsp;</Text>
-              manual
+              <RunningContext
+                type={runningContext?.type}
+                context={runningContext?.context}
+                unselectRow={unselectRow}
+                entity={entity}
+              />
             </Text>
             <Text color={Colors.slate50}>
               <Text color={Colors.slate400}>Started:&nbsp;</Text>

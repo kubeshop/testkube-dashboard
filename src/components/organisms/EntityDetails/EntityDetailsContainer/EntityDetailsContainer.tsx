@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import useWebSocket from 'react-use-websocket';
-
-import axios from 'axios';
+import {useAsync} from 'react-use';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
+import {ExecutionMetrics, Metrics} from '@models/metrics';
 import {WSData, WSEventType} from '@models/websocket';
 
 import {useAppSelector} from '@redux/hooks';
@@ -13,29 +13,22 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import useStateCallback from '@hooks/useStateCallback';
 
-import {safeRefetch} from '@utils/fetchUtils';
-import {PollingIntervals} from '@utils/numbers';
-
 import {useWsEndpoint} from '@services/apiEndpoint';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
+import {PollingIntervals} from '@utils/numbers';
+
+import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
 
 import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {
-    entity,
-    useGetEntityDetails,
-    useGetMetrics,
-    defaultStackRoute,
-    getExecutionsEndpoint,
-    useGetExecutions,
-    useAbortExecution,
-  } = props;
+  const {entity, useGetEntityDetails, useGetMetrics, defaultStackRoute, useGetExecutions, useAbortExecution} = props;
 
-  const {navigate, location, isClusterAvailable} = useContext(MainContext);
+  const {isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
   const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
   const wsRoot = useWsEndpoint();
 
@@ -48,13 +41,14 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
   const [selectedRow, selectRow] = useState();
   const [executionsList, setExecutionsList] = useStateCallback<any>(null);
+  const [metricsState, setMetricsState] = useState<Metrics | undefined>(undefined);
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
 
   const executors = useAppSelector(selectExecutors);
 
   const {data: executions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
-    {pollingInterval: PollingIntervals.long}
+    {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable}
   );
   const {data: entityDetails} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.everyTwoSeconds,
@@ -67,31 +61,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   });
   const [abortExecution] = useAbortExecution();
 
-  // Temporary solution until WS implementation
-  // works stable on both FE and BE
-  const getExecutions = async () => {
-    if (id) {
-      try {
-        const queryParams = new URLSearchParams({
-          id,
-          last: String(daysFilterValue),
-          pageSize: String(Number.MAX_SAFE_INTEGER),
-        });
-
-        const endpoint =
-          typeof getExecutionsEndpoint === 'function' ? getExecutionsEndpoint(id) : getExecutionsEndpoint;
-
-        const {data} = await axios(`${endpoint}?${queryParams.toString()}`, {
-          method: 'GET',
-        });
-
-        setExecutionsList(data);
-      } catch (err) {
-        //
-      }
-    }
-  };
-
   const onWebSocketData = (wsData: WSData) => {
     try {
       if (executionsList) {
@@ -100,6 +69,18 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
             ...wsData.testExecution,
             status: wsData.testExecution.executionResult.status,
           };
+
+          const metricToPush: ExecutionMetrics = {
+            name: wsData.testExecution.testName,
+            startTime: wsData.testExecution.startTime,
+            status: wsData.testExecution.executionResult.status,
+          };
+
+          setMetricsState(prev => {
+            if (prev) {
+              return {...prev, executions: [metricToPush, ...((prev.executions && prev.executions) || [])]};
+            }
+          });
 
           setExecutionsList(
             {
@@ -136,9 +117,57 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
           }
         }
 
-        if (wsData.type === WSEventType.END_TEST_ABORT || wsData.type === WSEventType.END_TEST_TIMEOUT) {
+        if (
+          wsData.type === WSEventType.END_TEST_ABORT ||
+          wsData.type === WSEventType.END_TEST_TIMEOUT ||
+          wsData.type === WSEventType.END_TEST_FAILED ||
+          wsData.type === WSEventType.END_TEST_SUITE_ABORT ||
+          wsData.type === WSEventType.END_TEST_SUITE_TIMEOUT ||
+          wsData.type === WSEventType.END_TEST_SUITE_FAILED
+        ) {
           safeRefetch(refetch);
           safeRefetch(refetchMetrics);
+        }
+
+        if (wsData.type === WSEventType.START_TEST_SUITE && id === wsData.testSuiteExecution.testSuite.name) {
+          const adjustedExecution = {
+            ...wsData.testSuiteExecution,
+            status: wsData.testSuiteExecution.status,
+          };
+
+          setExecutionsList(
+            {
+              ...executionsList,
+              results: [adjustedExecution, ...executionsList.results],
+            },
+            () => {
+              safeRefetch(refetchMetrics);
+            }
+          );
+        }
+
+        if (wsData.type === WSEventType.END_TEST_SUITE_SUCCESS && id === wsData.testSuiteExecution.testSuite.name) {
+          const targetIndex = executionsList.results.findIndex((item: any) => {
+            return item.id === wsData.testSuiteExecution.id;
+          });
+
+          if (targetIndex !== -1) {
+            setExecutionsList(
+              {
+                ...executionsList,
+                results: executionsList.results.map((item: any, index: number) => {
+                  if (index === targetIndex) {
+                    return {...item, ...wsData.testSuiteExecution, status: wsData.testSuiteExecution.status};
+                  }
+
+                  return item;
+                }),
+              },
+              () => {
+                safeRefetch(refetchMetrics);
+              }
+            );
+          }
         }
       }
     } catch (err) {
@@ -147,13 +176,18 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     }
   };
 
+  // TODO: Consider getting token different way than using the one from RTK
+  const {value: token, loading: tokenLoading} = useAsync(getRtkIdToken);
   useWebSocket(`${wsRoot}/events/stream`, {
     onMessage: event => {
       const wsData = JSON.parse(event.data) as WSData;
 
       onWebSocketData(wsData);
     },
-  });
+    shouldReconnect: () => true,
+    retryOnError: true,
+    queryParams: token ? {token} : {},
+  }, !tokenLoading);
 
   const defaultUrl = `/${entity}/executions/${entityDetails?.name}`;
 
@@ -169,6 +203,10 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     selectRow(undefined);
     navigate(defaultUrl);
   };
+
+  useEffect(() => {
+    setMetricsState(metrics);
+  }, [metrics]);
 
   useEffect(() => {
     if (params.execId && executionsList?.results.length > 0) {
@@ -187,20 +225,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   useEffect(() => {
     safeRefetch(refetch);
 
-    if (entity === 'test-suites') {
-      const interval = setInterval(() => {
-        getExecutions();
-        safeRefetch(refetchMetrics);
-      }, 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
-    }
-
     const interval = setInterval(() => {
       safeRefetch(refetchMetrics);
-    }, 10000);
+    }, 2000);
 
     return () => {
       clearInterval(interval);
@@ -234,7 +261,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     defaultStackRoute,
     setCurrentPage,
     currentPage,
-    metrics,
+    metrics: metricsState,
     daysFilterValue,
     setDaysFilterValue,
     abortExecution,

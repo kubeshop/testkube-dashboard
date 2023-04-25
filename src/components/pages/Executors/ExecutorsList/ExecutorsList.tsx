@@ -21,7 +21,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import {executorsList} from '../utils';
 import AddExecutorsModal from './AddExecutorsModal';
@@ -34,14 +34,15 @@ import {
 } from './ExecutorsList.styled';
 
 const Executors: React.FC = () => {
-  const {navigate, isClusterAvailable} = useContext(MainContext);
+  const {isClusterAvailable} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const mayCreate = usePermission(Permissions.createEntity);
   const apiEndpoint = useApiEndpoint();
 
   const [activeTabKey, setActiveTabKey] = useState('custom');
   const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
 
-  const {data: executors, refetch, isLoading} = useGetExecutorsQuery();
+  const {data: executors, isLoading, refetch} = useGetExecutorsQuery(null, {skip: !isClusterAvailable});
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 

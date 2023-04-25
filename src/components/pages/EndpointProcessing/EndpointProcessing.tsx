@@ -4,14 +4,14 @@ import {Title} from '@custom-antd';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {saveApiEndpoint} from '@services/apiEndpoint';
 
 import {EndpointProcessingContainer} from './EndpointProcessing.styled';
 
 const EndpointProcessing: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const searchParams = useURLSearchParams();
 

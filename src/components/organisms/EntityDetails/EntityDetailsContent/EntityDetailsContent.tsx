@@ -13,12 +13,12 @@ import {ExecutorIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
-import {CLICommands, LabelsList, MetricsBarChart, notificationCall} from '@molecules';
+import {CLICommands, LabelsList, MetricsBarChart, RunningContextType} from '@molecules';
 
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {displayDefaultErrorNotification} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
@@ -27,7 +27,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {AnalyticsContext, ConfigContext, EntityDetailsContext, MainContext} from '@contexts';
+import {AnalyticsContext, ConfigContext, DashboardContext, EntityDetailsContext} from '@contexts';
 
 import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
@@ -47,11 +47,11 @@ const EntityDetailsContent: React.FC = () => {
     useContext(EntityDetailsContext);
   const {pageTitle} = useContext(ConfigContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
 
-  const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
+  const {settingsTabConfig} = useAppSelector(selectRedirectTarget);
 
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();
@@ -64,10 +64,10 @@ const EntityDetailsContent: React.FC = () => {
   const [activeTabKey, setActiveTabKey] = useState('Executions');
 
   useEffect(() => {
-    if (isSettingsTabConfig) {
+    if (settingsTabConfig) {
       setActiveTabKey('Settings');
     }
-  }, [isSettingsTabConfig]);
+  }, [settingsTabConfig]);
 
   useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
   useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
@@ -87,19 +87,18 @@ const EntityDetailsContent: React.FC = () => {
       id: name,
       data: {
         namespace,
+        runningContext: {
+          type: RunningContextType.userUI,
+        },
       },
-    })
-      .then((result: any) => {
-        if (result.error) {
-          notificationCall('failed', result.error.error);
-        }
-
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
         analyticsTrack('trackEvents', {
           type,
           uiEvent: `run-${entity}`,
         });
-      })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+      });
+    });
   };
 
   const avatar = type

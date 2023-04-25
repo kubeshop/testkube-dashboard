@@ -18,6 +18,10 @@ export const openTestkubeDashboardDocumentation = () => {
   window.open('https://kubeshop.github.io/testkube/using-testkube/UI/');
 };
 
+export const openTestkubeIntegrationsDocumentation = () => {
+  window.open('https://testkube.io/integrations');
+};
+
 export const openSourcesDocumentation = () => {
   window.open('https://kubeshop.github.io/testkube/openapi/#tag/test-sources');
 };

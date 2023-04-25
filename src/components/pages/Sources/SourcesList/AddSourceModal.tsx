@@ -15,16 +15,16 @@ import {Hint} from '@molecules';
 
 import {openSourcesDocumentation} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateSourceMutation} from '@services/sources';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {AddSourceModalContainer} from './SourcesList.styled';
 
 const AddSourceModal = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const [createSource, {isLoading}] = useCreateSourceMutation();
 
@@ -44,15 +44,11 @@ const AddSourceModal = () => {
       namespace,
     };
 
-    createSource(body)
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          navigate(`/sources/${res.data.metadata.name}`);
-        });
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
+    createSource(body).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        navigate(`/sources/${res.data.metadata.name}`);
       });
+    });
   };
 
   return (

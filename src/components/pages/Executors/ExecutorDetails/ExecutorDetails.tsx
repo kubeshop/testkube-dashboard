@@ -12,13 +12,14 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
-import {ConfigContext, MainContext} from '@contexts';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
 import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails = () => {
-  const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
   const {pageTitle} = useContext(ConfigContext);
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
