@@ -1,7 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Repository} from '@models/repository';
-import {SourceWithRepository} from '@models/sources';
+import {CreateSourcePayload, SourceWithRepository} from '@models/sources';
 
 import {dynamicBaseQuery} from '@utils/fetchUtils';
 
@@ -27,7 +27,7 @@ export const sourcesApi = createApi({
         body,
       }),
     }),
-    createSource: builder.mutation<any, SourceWithRepository>({
+    createSource: builder.mutation<CreateSourcePayload, SourceWithRepository>({
       query: body => ({
         url: '/test-sources',
         method: 'POST',
