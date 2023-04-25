@@ -82,21 +82,21 @@ const LogOutput: React.FC<LogOutputProps> = props => {
         const logData = e.data;
 
         setLogs(prev => {
-            if (prev) {
-              try {
-                const dataToJSON = JSON.parse(logData);
-                const potentialOutput = dataToJSON?.result?.output || dataToJSON?.output;
+          if (prev) {
+            try {
+              const dataToJSON = JSON.parse(logData);
+              const potentialOutput = dataToJSON?.result?.output || dataToJSON?.output;
 
-                if (potentialOutput) {
-                  return potentialOutput;
-                }
-
-                return `${prev}\n${dataToJSON.content}`;
-              } catch (err) {
-                // It may be just an output directly, so we have to ignore it
+              if (potentialOutput) {
+                return potentialOutput;
               }
-              return `${prev}\n${logData}`;
+
+              return `${prev}\n${dataToJSON.content}`;
+            } catch (err) {
+              // It may be just an output directly, so we have to ignore it
             }
+            return `${prev}\n${logData}`;
+          }
 
           return `${logData}`;
         });
