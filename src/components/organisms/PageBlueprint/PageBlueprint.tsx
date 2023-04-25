@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {PropsWithChildren, useContext} from 'react';
 import {Helmet} from 'react-helmet';
 
 import {Space} from 'antd';
@@ -12,13 +12,12 @@ import {ConfigContext} from '@contexts';
 import {PageBlueprintHeader, PageBlueprintWrapper} from './PageBlueprint.styled';
 
 type PageBlueprintProps = {
-  children: React.ReactNode;
   title: string;
   description: React.ReactNode;
   headerButton?: React.ReactNode;
 };
 
-const PageBlueprint: React.FC<PageBlueprintProps> = props => {
+const PageBlueprint: React.FC<PropsWithChildren<PageBlueprintProps>> = props => {
   const {children, title, description, headerButton} = props;
   const {pageTitle} = useContext(ConfigContext);
 
