@@ -123,7 +123,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const CLIEntityType = isExecutions ? 'executions' : entity;
 
   const modifyArgsMap: Partial<{[key in CLIScriptModifier]: any}> = {
-    ...(type ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
+    ...(type && executorsFeaturesMap[type] ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
     isFinished: modifyMap?.status,
     isRunPermission: mayRun,
     isDeletePermission: mayDelete,
