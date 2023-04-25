@@ -11,7 +11,7 @@ import env from '../env';
 
 import {
   getApiDetails,
-  getApiEndpoint,
+  getApiEndpoint, isApiEndpointLocked,
   sanitizeApiEndpoint,
   saveApiEndpoint,
   useApiEndpoint,
@@ -91,9 +91,9 @@ describe('services', () => {
           expect(getApiEndpoint()).toBe('http://test-api-url/v1');
         });
 
-        it('should prioritize local storage over environment variable', () => {
+        it('should prioritize environment variable over local storage', () => {
           saveApiEndpoint('http://abc/v1');
-          expect(getApiEndpoint()).toBe('http://abc/v1');
+          expect(getApiEndpoint()).toBe('http://test-api-url/v1');
         });
       });
 
@@ -103,6 +103,24 @@ describe('services', () => {
         it('should be null', () => {
           saveApiEndpoint('');
           expect(getApiEndpoint()).toBe(null);
+        });
+      });
+    });
+
+    describe('isApiEndpointLocked', () => {
+      describe('Environment variable available', () => {
+        replaceEnvEach('apiUrl', 'some-url');
+
+        it('should detect API Endpoint as locked', () => {
+          expect(isApiEndpointLocked()).toBe(true);
+        });
+      });
+
+      describe('Environment variable not available', () => {
+        replaceEnvEach('apiUrl', null);
+
+        it('should detect API Endpoint as not locked', () => {
+          expect(isApiEndpointLocked()).toBe(false);
         });
       });
     });
