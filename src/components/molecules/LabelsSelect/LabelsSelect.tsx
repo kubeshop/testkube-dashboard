@@ -50,7 +50,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
 
   const formattedDefaultLabels = composeLabels(defaultLabels);
 
-  const formattedOptions = Object.entries(options || data || {})
+  const formattedOptions: Option[] = Object.entries(options || data || {})
     .map(([key, value]) => {
       return value.map(item => {
         const labelString = `${key}${item ? `:${item}` : ''}`;
