@@ -10,10 +10,14 @@ export const testsApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTests: builder.query<TestWithExecution[], TestFilters>({
-      query: filters => `/test-with-executions?${paramsSerializer(filters)}`,
+      query: filters => ({
+        url: `/test-with-executions?${paramsSerializer(filters)}`,
+      }),
     }),
     getAllTests: builder.query<TestWithExecution[], void | null>({
-      query: () => `/test-with-executions`,
+      query: () => ({
+        url: `/test-with-executions`,
+      }),
     }),
     getTestDefinition: builder.query<string, string>({
       query: testId => ({
@@ -23,7 +27,9 @@ export const testsApi = createApi({
       }),
     }),
     getTest: builder.query<TestWithExecution, string>({
-      query: testId => `/tests/${testId}`,
+      query: testId => ({
+        url: `/tests/${testId}`,
+      }),
     }),
     getTestExecutionsById: builder.query({
       query: ({id, last = 7, pageSize = Number.MAX_SAFE_INTEGER}) => {
@@ -32,14 +38,20 @@ export const testsApi = createApi({
           pageSize,
         });
 
-        return `/tests/${id}/executions?${queryParams.toString()}`;
+        return {
+          url: `/tests/${id}/executions?${queryParams.toString()}`,
+        };
       },
     }),
     getTestExecutionById: builder.query<any, string>({
-      query: testExecutionId => `/executions/${testExecutionId}`,
+      query: testExecutionId => ({
+        url: `/executions/${testExecutionId}`,
+      }),
     }),
     getTestExecutionArtifacts: builder.query<Artifact[], string>({
-      query: testExecutionId => `/executions/${testExecutionId}/artifacts`,
+      query: testExecutionId => ({
+        url: `/executions/${testExecutionId}/artifacts`,
+      }),
     }),
     getTestExecutionMetrics: builder.query({
       query: ({id, last = 7, limit = Number.MAX_SAFE_INTEGER}) => {
@@ -47,7 +59,10 @@ export const testsApi = createApi({
           last,
           limit,
         });
-        return `/tests/${id}/metrics?${queryParams.toString()}`;
+
+        return {
+          url: `/tests/${id}/metrics?${queryParams.toString()}`,
+        };
       },
     }),
     addTest: builder.mutation<any, any>({

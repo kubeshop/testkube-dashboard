@@ -9,10 +9,10 @@ export const triggersApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTriggersKeyMap: builder.query<TriggersKeyMap, void | null>({
-      query: () => `/keymap/triggers`,
+      query: () => ({url: `/keymap/triggers`}),
     }),
     getTriggersList: builder.query<TestTrigger[], void | null>({
-      query: () => `/triggers`,
+      query: () => ({url: `/triggers`}),
     }),
     createTrigger: builder.mutation<any, any>({
       query: body => ({

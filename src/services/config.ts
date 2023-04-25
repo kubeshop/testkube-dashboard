@@ -9,7 +9,9 @@ export const configApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getClusterConfig: builder.query<ClusterConfig, void>({
-      query: () => '/config',
+      query: () => ({
+        url: `/config`,
+      }),
     }),
   }),
 });

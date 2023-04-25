@@ -16,16 +16,23 @@ export const sourcesApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getSources: builder.query<SourceWithRepository[], null>({
-      query: () => '/test-sources',
+      query: () => ({
+        url: '/test-sources',
+      }),
+    }),
+    addSources: builder.mutation<any, AddSourcesPayload>({
+      query: body => ({
+        url: '/test-sources',
+        method: 'PATCH',
+        body,
+      }),
     }),
     createSource: builder.mutation<any, SourceWithRepository>({
-      query: body => {
-        return {
-          url: '/test-sources',
-          method: 'POST',
-          body,
-        };
-      },
+      query: body => ({
+        url: '/test-sources',
+        method: 'POST',
+        body,
+      }),
     }),
     getSourceDefinition: builder.query<string, string>({
       query: id => ({
@@ -35,7 +42,9 @@ export const sourcesApi = createApi({
       }),
     }),
     getSourceDetails: builder.query<SourceWithRepository, string>({
-      query: id => `/test-sources/${id}`,
+      query: id => ({
+        url: `/test-sources/${id}`,
+      }),
     }),
     deleteSource: builder.mutation<void, any>({
       query: id => ({
@@ -44,13 +53,11 @@ export const sourcesApi = createApi({
       }),
     }),
     updateSource: builder.mutation<any, SourceWithRepository>({
-      query: body => {
-        return {
-          url: `/test-sources/${body.name}`,
-          method: 'PATCH',
-          body,
-        };
-      },
+      query: body => ({
+        url: `/test-sources/${body.name}`,
+        method: 'PATCH',
+        body,
+      }),
     }),
   }),
 });

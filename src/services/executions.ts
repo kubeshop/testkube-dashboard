@@ -7,15 +7,17 @@ export const executionsApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getExecutions: builder.query({
-      query: (filters: any) => {
-        return `${filters.testName ? `/tests/${filters.testName}` : ''}/executions?${paramsSerializer(filters)}`;
-      },
+      query: (filters: any) => ({
+        url: `${filters.testName ? `/tests/${filters.testName}` : ''}/executions?${paramsSerializer(filters)}`,
+      }),
     }),
     getScriptExecutionById: builder.query({
-      query: scriptExecutionId => `/executions/${scriptExecutionId}`,
+      query: scriptExecutionId => ({url: `/executions/${scriptExecutionId}`}),
     }),
     getScriptExecutionArtifacts: builder.query({
-      query: testId => `/executions/${testId}/artifacts`,
+      query: testId => ({
+        url: `/executions/${testId}/artifacts`,
+      }),
     }),
   }),
 });
