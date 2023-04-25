@@ -2,7 +2,7 @@ import {Form, FormInstance, Input, Select} from 'antd';
 
 import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, PauseOutlined, RightOutlined} from '@ant-design/icons';
 
-import {Variable, VariableInForm} from '@models/variable';
+import {VariableInForm} from '@models/variable';
 
 import {Button, Text} from '@custom-antd';
 
