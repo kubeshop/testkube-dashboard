@@ -5,7 +5,7 @@ import {Form, Input} from 'antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -57,7 +57,6 @@ const NameNDescription: React.FC = () => {
       .catch(err => {
         displayDefaultErrorNotification(err);
       });
-    });
   };
 
   return (

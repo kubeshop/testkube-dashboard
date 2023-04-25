@@ -6,7 +6,7 @@ import {Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -55,7 +55,6 @@ const PreRun: React.FC = () => {
       .catch(err => {
         displayDefaultErrorNotification(err);
       });
-    });
   };
 
   return (

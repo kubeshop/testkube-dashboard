@@ -9,7 +9,7 @@ import {ExternalLink} from '@atoms';
 
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
 import {Permissions, usePermission} from '@permissions/base';

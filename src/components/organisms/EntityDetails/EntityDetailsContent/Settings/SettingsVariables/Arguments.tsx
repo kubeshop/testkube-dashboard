@@ -10,7 +10,7 @@ import {Button, Text} from '@custom-antd';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 

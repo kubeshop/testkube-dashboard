@@ -141,22 +141,11 @@ const Triggers: React.FC = () => {
     .flat();
   const events = triggersKeyMap?.events;
 
-  const addTriggerMenu = (add: (defaultValue?: unknown, insertIndex?: number | undefined) => void) => {
-    return (
-      <Menu
-        items={addTriggerOptions.map(({key, ...restProps}) => ({
-          key,
-          label: <AddTriggerOption {...restProps} onSelect={() => add({type: key.split('-')})} />,
-        }))}
-      />
-    );
-  };
-
   const getSelector = (formValue: any) => {
     if (typeof formValue === 'string') {
       if (formValue.includes('/')) {
         const [namespace, name] = formValue.split('/');
-        
+
         return {
           name,
           namespace,
