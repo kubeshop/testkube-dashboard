@@ -20,6 +20,25 @@ export interface ApiDetails {
   namespace: string;
 }
 
+interface ApiEndpointConfig {
+  suffix?: string;
+  useWsEndpoint: (apiEndpoint: string | null) => string | null;
+}
+
+let endpointConfig: ApiEndpointConfig = {
+  suffix: '/v1',
+  useWsEndpoint: (apiEndpoint) => useMemo(
+  () => (apiEndpoint ? apiEndpoint.replace(/^http(?=s?:\/\/)/, 'ws') : null),
+  [apiEndpoint, endpointConfig.useWsEndpoint],
+  ),
+};
+
+export const setApiEndpointConfig = (newConfig: ApiEndpointConfig): void => {
+  endpointConfig = newConfig;
+  notifySubscriptions();
+  axios.defaults.baseURL = getApiEndpoint() || undefined;
+};
+
 // Storage for API endpoint subscriptions
 const listeners = new Set<ApiEndpointListener>();
 
@@ -48,9 +67,11 @@ export function sanitizeApiEndpoint<T>(apiEndpoint: string | null | undefined): 
     apiEndpoint = `${window.location.protocol}//${apiEndpoint}`;
   }
 
-  return apiEndpoint
-    .replace(/\/+$/, '')
-    .replace(/(\/v1)?$/, '/v1');
+  apiEndpoint = apiEndpoint.replace(/\/+$/, '');
+  if (endpointConfig.suffix && !apiEndpoint.endsWith(endpointConfig.suffix)) {
+    apiEndpoint += endpointConfig.suffix;
+  }
+  return apiEndpoint;
 }
 
 export function getApiEndpoint(): string | null {
@@ -85,13 +106,7 @@ export function useApiEndpoint(): string | null {
 }
 
 export function useWsEndpoint(): string | null {
-  const apiEndpoint = useApiEndpoint();
-  return useMemo(() => {
-    if (apiEndpoint === null) {
-      return null;
-    }
-    return apiEndpoint.replace(/^http(?=s?:\/\/)/, 'ws');
-  }, [apiEndpoint]);
+  return endpointConfig.useWsEndpoint(useApiEndpoint());
 }
 
 export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
