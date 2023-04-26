@@ -5,13 +5,13 @@ import Colors from '@styles/Colors';
 import {IconProps} from '../Icon/types';
 import {StyledStatusIcon} from './StatusIcon.styled';
 
-const iconStyles: {
-  [key in string]: {
-    borderColor: Colors;
-    background: Colors;
-    color?: Colors;
-  };
-} = {
+interface IconStyle {
+  borderColor: Colors;
+  background: Colors;
+  color?: Colors;
+}
+
+const iconStyles: Record<string, IconStyle> = {
   failed: {
     borderColor: Colors.pink600,
     background: Colors.pink900,
