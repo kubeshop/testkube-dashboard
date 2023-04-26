@@ -68,11 +68,17 @@ const Sources: React.FC = () => {
           <ExternalLink href="https://kubeshop.github.io/testkube/openapi/#tag/test-sources">Sources</ExternalLink>
         </>
       }
-      headerButton={mayCreate ? (
-        <Button $customType="primary" onClick={() => setAddSourceModalVisibility(true)}>
-          Create a new source
-        </Button>
-      ) : null}
+      headerButton={
+        mayCreate ? (
+          <Button
+            $customType="primary"
+            onClick={() => setAddSourceModalVisibility(true)}
+            disabled={!isClusterAvailable}
+          >
+            Create a new source
+          </Button>
+        ) : null
+      }
     >
       {isLoading ? (
         <SourcesListSkeletonWrapper>
