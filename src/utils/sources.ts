@@ -45,10 +45,11 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
     return {data: string || file.fileContent, repository: {}};
   }
 
+  import {SecretRef} from '@models/secretRef';
   const secrets: {
-    tokenSecret?: Object;
+    tokenSecret?: SecretRef;
     token?: string;
-    usernameSecret?: Object;
+    usernameSecret?: SecretRef;
     username?: string;
   } = {};
 
