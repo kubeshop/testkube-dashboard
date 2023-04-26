@@ -65,4 +65,8 @@ export type TriggersKeyMap = {
   executions: TriggerExecution[];
 };
 
-export type AddTriggerOption = {key: TriggerType; label: string; description: string};
+export type AddTriggerOption = {
+  key: TriggerType;
+  label: string;
+  description: string;
+};
