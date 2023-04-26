@@ -4,6 +4,8 @@ import {DeleteOutlined} from '@ant-design/icons';
 
 import {Executor} from '@models/executors';
 import {Option as OptionType} from '@models/form';
+import {TestForTrigger} from '@models/test';
+import {TestSuiteForTrigger} from '@models/testSuite';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
@@ -25,15 +27,16 @@ const {Option, OptGroup} = Select;
 
 type TriggerItemProps = {
   type: string[];
-  name: any;
+  name: number;
   remove: (name: number) => void;
   resources?: OptionType[];
   actions?: OptionType[];
-  events?: {[key: string]: string[]};
-  testsData: any[];
-  testSuitesData: any[];
+  events?: Record<string, string[]>;
+  testsData: TestForTrigger[];
+  testSuitesData: TestSuiteForTrigger[];
   isTriggersAvailable?: boolean;
   executors: Executor[];
+  key: React.Key;
 };
 
 const TriggerItem: React.FC<TriggerItemProps> = props => {
@@ -50,7 +53,10 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
     executors,
   } = props;
 
-  const renderSelectResource = (placeholder: string, {tests, testSuites}: {tests: any[]; testSuites: any[]}) => {
+  const renderSelectResource = (
+    placeholder: string,
+    {tests, testSuites}: {tests: TestForTrigger[]; testSuites: TestSuiteForTrigger[]}
+  ) => {
     return (
       <Select placeholder={placeholder} allowClear optionLabelProp="key">
         {tests.length > 0 ? (
