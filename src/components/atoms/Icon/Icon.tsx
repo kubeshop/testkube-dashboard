@@ -18,7 +18,9 @@ const {
   DelayIcon,
 } = Icons;
 
-const iconsMap: {[key in string]: React.FC<{}>} = {
+import {IconComponentProps} from '@ant-design/icons/lib/components/Icon';
+
+const iconsMap: Record<string, IconComponentProps['component']> = {
   cog: CogIcon,
   documentation: DocumentationIcon,
   discord: DiscordIcon,
