@@ -25,7 +25,7 @@ export const formatVariables = (list: VariableInForm[]) => {
   return variables;
 };
 
-export const decomposeVariables = (variables: Variables): VariableInForm[] | [] => {
+export const decomposeVariables = (variables: Variables): VariableInForm[] => {
   if (!variables) {
     return [];
   }
