@@ -31,7 +31,7 @@ module.exports = {
     'lines-between-class-members': 'off',
     semi: 'warn', // should be warned and allowed for compilation
     'no-restricted-globals': 'warn', // should be warned and allowed for compilation
-    'unused-imports/no-unused-imports-ts': 'error',
+    'unused-imports/no-unused-imports-ts': 'warn',
     'react/jsx-curly-brace-presence': 'warn', // should be warned and allowed for compilation
     'spaced-comment': 'warn', // should be warned and allowed for compilation
     'react/no-unused-prop-types': 'warn', // should be warned and allowed for compilation
