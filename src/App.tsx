@@ -1,4 +1,4 @@
-import {Suspense, lazy, useEffect, useState, useRef, useMemo} from 'react';
+import {Suspense, lazy, useEffect, useMemo, useRef, useState} from 'react';
 import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 
@@ -22,17 +22,17 @@ import {Sider} from '@organisms';
 
 import {EndpointProcessing, ErrorBoundary, NotFound} from '@pages';
 
-import {PollingIntervals} from '@utils/numbers';
+import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+
 import {composeProviders} from '@utils/composeProviders';
+import {PollingIntervals} from '@utils/numbers';
 
 import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 
+import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
-import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
-
-import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
@@ -84,9 +84,10 @@ const App: React.FC = () => {
   const logRef = useRef<HTMLDivElement>(null);
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
-  const isTelemetryEnabled = useMemo(() => (
-    !isCookiesVisible && clusterConfig?.enableTelemetry && localStorage.getItem('isGADisabled') === '0'
-  ), [isCookiesVisible, clusterConfig]);
+  const isTelemetryEnabled = useMemo(
+    () => !isCookiesVisible && clusterConfig?.enableTelemetry && localStorage.getItem('isGADisabled') === '0',
+    [isCookiesVisible, clusterConfig]
+  );
 
   const onAcceptCookies = () => {
     localStorage.setItem('isGADisabled', '0');
@@ -151,7 +152,7 @@ const App: React.FC = () => {
       return;
     }
 
-    getApiDetails(apiEndpoint).catch((error) => {
+    getApiDetails(apiEndpoint).catch(error => {
       // Handle race condition
       if (getApiEndpoint() !== apiEndpoint) {
         return;
@@ -192,18 +193,24 @@ const App: React.FC = () => {
   const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
   const permissionsScope = useMemo(() => ({}), []);
 
-  const config = useMemo(() => ({
-    pageTitle: 'Testkube',
-    discordUrl: 'https://discord.com/invite/hfq44wtR6Q',
-  }), []);
+  const config = useMemo(
+    () => ({
+      pageTitle: 'Testkube',
+      discordUrl: 'https://discord.com/invite/hfq44wtR6Q',
+    }),
+    []
+  );
 
-  const dashboardValue = useMemo(() => ({
-    navigate,
-    location,
-    baseUrl: '',
-    showLogoInSider: true,
-    showSocialLinksInSider: true,
-  }), [navigate, location]);
+  const dashboardValue = useMemo(
+    () => ({
+      navigate,
+      location,
+      baseUrl: '',
+      showLogoInSider: true,
+      showSocialLinksInSider: true,
+    }),
+    [navigate, location]
+  );
 
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})
@@ -239,7 +246,13 @@ const App: React.FC = () => {
               </ErrorBoundary>
             </Content>
             {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
-            <CSSTransition nodeRef={logRef} in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
+            <CSSTransition
+              nodeRef={logRef}
+              in={isFullScreenLogOutput}
+              timeout={1000}
+              classNames="full-screen-log-output"
+              unmountOnExit
+            >
               <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
             </CSSTransition>
           </StyledLayoutContentWrapper>
