@@ -112,7 +112,7 @@
     "test:update": "craco test --updateSnapshot",
     "eject": "react-scripts eject",
     "lint": "npm run lint:config && npm run lint:src",
-    "lint:config": "eslint .",
+    "lint:config": "eslint --max-warnings 0 .",
     "lint:src": "eslint --max-warnings 0 \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
     "lintfix": "eslint --fix \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint  \"./src/**/*.{ts,tsx}\"",
