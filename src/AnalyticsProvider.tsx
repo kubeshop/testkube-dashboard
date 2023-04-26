@@ -61,7 +61,7 @@ export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProp
     }
   }, []);
 
-  const analyticsTrack = (type: string, data: Object) => {
+  const analyticsTrack = (type: string, data: Record<string, any>) => {
     if (!disabled && notDevEnv) {
       analytics?.track(type, {...data, hostname, appVersion});
     }
