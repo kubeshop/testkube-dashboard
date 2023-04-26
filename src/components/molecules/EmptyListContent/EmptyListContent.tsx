@@ -24,6 +24,12 @@ type EmptyListContentProps = {
   onButtonClick?: () => void;
   emptyListReadonlyTitle?: string;
   emptyListReadonlyDescription?: string;
+  actionType: 'create' | 'run';
+};
+
+const actionTypeToPermission: Record<EmptyListContentProps['actionType'], Permissions> = {
+  create: Permissions.createEntity,
+  run: Permissions.runEntity,
 };
 
 const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = props => {
@@ -35,11 +41,12 @@ const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = pro
     buttonText,
     emptyListReadonlyTitle,
     emptyListReadonlyDescription,
+    actionType,
   } = props;
 
   const {discordUrl} = useContext(ConfigContext);
   const {isClusterAvailable} = useContext(MainContext);
-  const isActionAvailable = usePermission(Permissions.runEntity);
+  const isActionAvailable = usePermission(actionTypeToPermission[actionType]);
 
   return (
     <StyledEmptyListContainer size={24} direction="vertical">
