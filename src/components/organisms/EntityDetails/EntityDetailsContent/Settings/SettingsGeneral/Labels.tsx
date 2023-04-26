@@ -1,5 +1,7 @@
 import {useContext, useState} from 'react';
 
+import {Form} from 'antd';
+
 import {nanoid} from '@reduxjs/toolkit';
 
 import {Option} from '@models/form';
@@ -39,13 +41,12 @@ const Labels: React.FC = () => {
         ...entityDetails,
         labels: decomposeLabels(localLabels),
       },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
-          setWasTouched(false);
-        });
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
+        setWasTouched(false);
       });
+    });
   };
 
   const onCancel = () => {
@@ -60,16 +61,18 @@ const Labels: React.FC = () => {
   };
 
   return (
-    <ConfigurationCard
-      title="Labels"
-      description={`Define the labels you want to add for this ${namingMap[entity]}`}
-      isButtonsDisabled={!wasTouched}
-      onConfirm={onSave}
-      onCancel={onCancel}
-      enabled={mayEdit}
-    >
-      <LabelsSelect key={`labels_${labelsKey}`} onChange={onChange} defaultLabels={entityLabels} />
-    </ConfigurationCard>
+    <Form name="labels-form">
+      <ConfigurationCard
+        title="Labels"
+        description={`Define the labels you want to add for this ${namingMap[entity]}`}
+        isButtonsDisabled={!wasTouched}
+        onConfirm={onSave}
+        onCancel={onCancel}
+        enabled={mayEdit}
+      >
+        <LabelsSelect key={`labels_${labelsKey}`} onChange={onChange} defaultLabels={entityLabels} />
+      </ConfigurationCard>
+    </Form>
   );
 };
 
