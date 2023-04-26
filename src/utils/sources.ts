@@ -1,6 +1,7 @@
 import {NamePath} from 'antd/lib/form/interface';
 
 import {Option} from '@models/form';
+import {SecretRef} from '@models/secretRef';
 import {SourceWithRepository} from '@models/sources';
 
 import {notificationCall} from '@molecules';
@@ -45,11 +46,10 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
     return {data: string || file.fileContent, repository: {}};
   }
 
-  import {SecretRef} from '@models/secretRef';
   const secrets: {
-    tokenSecret?: SecretRef;
+    tokenSecret?: Partial<SecretRef>;
     token?: string;
-    usernameSecret?: SecretRef;
+    usernameSecret?: Partial<SecretRef>;
     username?: string;
   } = {};
 

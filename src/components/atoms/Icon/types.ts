@@ -15,7 +15,8 @@ export type IconProps = {
     | 'timeout'
     | 'aborted'
     | 'error'
-    | 'queued';
+    | 'queued'
+    | 'success';
   component?: IconComponentProps['component'];
   style?: React.CSSProperties;
 };
