@@ -41,12 +41,10 @@ const Labels: React.FC = () => {
         ...entityDetails,
         labels: decomposeLabels(localLabels),
       },
-    })
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
-          setWasTouched(false);
-        });
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
+        setWasTouched(false);
       });
     });
   };
