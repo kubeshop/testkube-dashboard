@@ -46,6 +46,12 @@ export type TestSuiteWithExecution = {
   testSuite: TestSuite;
   latestExecution?: TestSuiteExecution;
 };
+
+export type TestSuiteForTrigger = {
+  name: TestSuite['name'];
+  namespace: TestSuite['namespace'];
+};
+
 export type TestSuiteFilters = {
   textSearch: string;
   pageSize: number;
@@ -55,6 +61,7 @@ export type TestSuiteFilters = {
   endDate: null;
   status: Array<string>;
 };
+
 interface TestSuitesState {
   isLoading?: boolean;
   dataList: TestSuite | {}[];

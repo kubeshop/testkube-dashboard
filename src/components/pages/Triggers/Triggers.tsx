@@ -4,6 +4,8 @@ import {Dropdown, Form} from 'antd';
 
 import {DownOutlined} from '@ant-design/icons';
 
+import {TestForTrigger} from '@models/test';
+import {TestSuiteForTrigger} from '@models/testSuite';
 import {TestTrigger, TestTriggerFormEntity} from '@models/triggers';
 
 import {useAppSelector} from '@redux/hooks';
@@ -115,7 +117,7 @@ const Triggers: React.FC = () => {
     safeRefetch(refetch);
   }, []);
 
-  const testsData = useMemo(() => {
+  const testsData: TestForTrigger[] = useMemo(() => {
     return testsList.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
@@ -123,14 +125,14 @@ const Triggers: React.FC = () => {
     }));
   }, [testsList]);
 
-  const testSuitesData = useMemo(() => {
+  const testSuitesData: TestSuiteForTrigger[] = useMemo(() => {
     return testsSuitesList.map(item => ({
       name: item.testSuite.name,
       namespace: item.testSuite.namespace,
     }));
   }, [testsSuitesList]);
 
-  const resourcesOptions = triggersKeyMap?.resources.map((item: string) => ({label: item, value: item}));
+  const resourcesOptions = triggersKeyMap?.resources.map(item => ({label: item, value: item}));
   const actionOptions = triggersKeyMap?.actions
     .map((actionItem: string) => {
       return triggersKeyMap.executions.map(executionItem => {
@@ -239,6 +241,8 @@ const Triggers: React.FC = () => {
                     fields.map((key, name) => {
                       const triggerItemData = form.getFieldValue('triggers')[name];
 
+                      const triggerItemKey = `trigger-${name}`;
+
                       if (!triggerItemData) {
                         return null;
                       }
@@ -255,6 +259,7 @@ const Triggers: React.FC = () => {
                           testSuitesData={testSuitesData}
                           isTriggersAvailable={isTriggersAvailable}
                           executors={executors}
+                          key={triggerItemKey}
                         />
                       );
                     })
