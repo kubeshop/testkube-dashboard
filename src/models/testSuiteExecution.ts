@@ -17,7 +17,7 @@ export type TestSuiteExecution = {
   endTime: Date;
   duration?: string;
   labels?: EntityMap;
-  stepResults?: TestSuiteStepExecutionResult[];
+  stepResults: TestSuiteStepExecutionResult[];
 };
 interface TestSuiteExecutionsState {
   isLoading?: boolean;

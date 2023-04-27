@@ -92,9 +92,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
       ? {
           key: 'ArtifactsPane',
           label: 'Artifacts',
-          children: whetherToShowArtifactsTab ? (
-            <TestExecutionDetailsArtifacts id={id} testName={testName} testSuiteName={testSuiteName} />
-          ) : null,
+          children: <TestExecutionDetailsArtifacts id={id} testName={testName} testSuiteName={testSuiteName} />,
         }
       : null,
     {
