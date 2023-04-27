@@ -11,6 +11,7 @@ const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {
       emptyListReadonlyDescription="We could not find any test suites in this environment."
       emptyListReadonlyTitle="No test suites found"
       onButtonClick={action}
+      actionType="create"
     >
       <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
         Learn how to add test suites
