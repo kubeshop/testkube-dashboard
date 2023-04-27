@@ -11,6 +11,7 @@ const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
       emptyListReadonlyTitle="No tests found"
       emptyListReadonlyDescription="We could not find any tests in this environment."
       onButtonClick={action}
+      actionType="create"
     >
       <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/">
         Learn how to add tests
