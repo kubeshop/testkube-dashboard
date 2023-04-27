@@ -25,8 +25,6 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
 
   if (!mayRun) {
     return (
-      // TODO: rethink empty list usage depending on permissions also
-      // @ts-ignore
       <EmptyListContent
         title="No executions found"
         description={
@@ -37,6 +35,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
           </>
         }
         buttonText="Run"
+        actionType="run"
       />
     );
   }
