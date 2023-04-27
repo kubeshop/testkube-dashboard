@@ -161,23 +161,41 @@ const EntityDetailsContent: React.FC = () => {
         </Space>
       </StyledPageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} /> : null}
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        <Tabs.TabPane tab="Recent executions" key="Executions" disabled={isPageDisabled}>
-          <MetricsBarChart
-            data={metrics?.executions}
-            isDetailsView
-            executionDurationP50ms={metrics?.executionDurationP50ms}
-            executionDurationP95ms={metrics?.executionDurationP95ms}
-          />
-          <ExecutionsTable triggerRun={onRunButtonClick} />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="CLI Commands" key="CLICommands" disabled={isPageDisabled}>
-          <CLICommands name={name} bg={Colors.slate800} />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          <Settings />
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
+        destroyInactiveTabPane
+        items={[
+          {
+            key: 'Executions',
+            label: 'Recent executions',
+            disabled: isPageDisabled,
+            children: (
+              <>
+                <MetricsBarChart
+                  data={metrics?.executions}
+                  isDetailsView
+                  executionDurationP50ms={metrics?.executionDurationP50ms}
+                  executionDurationP95ms={metrics?.executionDurationP95ms}
+                />
+                <ExecutionsTable triggerRun={onRunButtonClick} />
+              </>
+            ),
+          },
+          {
+            key: 'CLICommands',
+            label: 'CLI Commands',
+            disabled: isPageDisabled,
+            children: <CLICommands name={name} bg={Colors.slate800} />,
+          },
+          {
+            key: 'Settings',
+            label: 'Settings',
+            disabled: isPageDisabled,
+            children: <Settings />,
+          },
+        ]}
+      />
     </StyledContainer>
   );
 };
