@@ -35,7 +35,10 @@ export type TestTrigger = {
   testSelector: TestTriggerSelector;
 };
 
-type TestTriggerTypes = 'name' | 'labels';
+enum TestTriggerTypes {
+  'name',
+  'labels',
+}
 
 export type TestTriggerFormEntity = {
   type?: [TestTriggerTypes, TestTriggerTypes];
@@ -50,7 +53,12 @@ export type TestTriggerFormEntity = {
   execution: TriggerExecution;
 };
 
-export type TriggerType = 'label-label' | 'name-label' | 'name-name' | 'label-name';
+export enum TriggerType {
+  'label-label',
+  'name-label',
+  'name-name',
+  'label-name',
+}
 
 export type TestTriggerSelector = {
   name: string;
