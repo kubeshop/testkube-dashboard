@@ -19,7 +19,7 @@ export const decomposeLabels = (labels: readonly Option[]): Record<string, strin
   }, {});
 };
 
-export const composeLabels = (labelsObject?: readonly Option[]) => {
+export const composeLabels = (labelsObject?: readonly Option[]): Option[] => {
   return Object.entries(labelsObject || {}).map(([key, value]) => {
     const labelString = `${key}${value ? `:${value}` : ''}`;
 
