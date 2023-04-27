@@ -1,4 +1,4 @@
-import {BaseQueryFn, FetchArgs, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
+import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {Entity} from '@models/entity';
@@ -11,7 +11,7 @@ export const namingMap: {[key in Entity]: string} = {
   tests: 'test',
 };
 
-export const updateRequestsMap: Record<Entity, UseMutation<MutationDefinition<any, any, never, void>> = {
+export const updateRequestsMap: Record<Entity, UseMutation<MutationDefinition<any, any, never, void>>> = {
   'test-suites': useUpdateTestSuiteMutation,
   tests: useUpdateTestMutation,
 };
