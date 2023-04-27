@@ -1,4 +1,4 @@
-import {lazy, useEffect, useRef, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 
@@ -13,7 +13,7 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 
 import {PollingIntervals} from '@utils/numbers';
 
-import {EndpointProcessing, NotFound} from '@pages';
+import {EndpointProcessing, Loading, NotFound} from '@pages';
 
 import {EndpointModal} from '@molecules';
 import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
@@ -85,7 +85,7 @@ const App: React.FC<any> = () => {
     });
   }, [apiEndpoint]);
 
-  return <>
+  return <Suspense fallback={<Loading />}>
     <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
     <Routes>
       <Route path="tests/*" element={<Tests />} />
@@ -105,7 +105,7 @@ const App: React.FC<any> = () => {
     <CSSTransition nodeRef={logRef} in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
       <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
     </CSSTransition>
-  </>;
+  </Suspense>;
 };
 
 export default App;

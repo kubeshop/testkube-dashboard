@@ -9,3 +9,4 @@ export {default as Sources} from './Sources';
 export {default as Triggers} from './Triggers';
 export {default as ErrorBoundary} from './ErrorBoundary';
 export {default as GlobalSettings} from './GlobalSettings';
+export {default as Loading} from './Loading';

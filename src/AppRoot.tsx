@@ -1,4 +1,4 @@
-import {Suspense, useEffect, useState, useMemo} from 'react';
+import {useEffect, useState, useMemo} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
@@ -16,8 +16,6 @@ import {Sider} from '@organisms';
 import {ErrorBoundary} from '@pages';
 
 import {composeProviders} from '@utils/composeProviders';
-
-import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
 
 import {useGetClusterConfigQuery} from '@services/config';
 import {useApiEndpoint} from '@services/apiEndpoint';
@@ -146,9 +144,7 @@ const AppRoot: React.FC = () => {
           <StyledLayoutContentWrapper>
             <Content>
               <ErrorBoundary>
-                <Suspense fallback={<LoadingIcon />}>
-                  <App />
-                </Suspense>
+                <App />
               </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>
