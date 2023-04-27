@@ -11,11 +11,7 @@ export const namingMap: {[key in Entity]: string} = {
   tests: 'test',
 };
 
-export const updateRequestsMap: {
-  [key in Entity]: UseMutation<
-    MutationDefinition<any, BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>, never, void, string>
-  >;
-} = {
+export const updateRequestsMap: Record<Entity, UseMutation<MutationDefinition<any, any, never, void>> = {
   'test-suites': useUpdateTestSuiteMutation,
   tests: useUpdateTestMutation,
 };
