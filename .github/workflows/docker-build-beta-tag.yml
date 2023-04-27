@@ -40,6 +40,14 @@ jobs:
           driver-opts: |
             image=moby/buildkit:v0.10.6
 
+      - name: Docker Cache
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -55,6 +63,10 @@ jobs:
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
+          cache-from: |
+            type=gha,src=/tmp/.buildx-cache
+          cache-to: |
+            type=gha,src=/tmp/.buildx-cache
 
   create_manifest:
     needs: build_multi_platform_images
