@@ -12,6 +12,7 @@ import {useGetSourcesQuery} from '@services/sources';
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 
 import {PollingIntervals} from '@utils/numbers';
+import {safeRefetch} from '@utils/fetchUtils';
 
 import {MainContext} from '@contexts';
 
@@ -62,8 +63,8 @@ const App: React.FC<any> = () => {
   }, [sources]);
 
   useEffect(() => {
-    refetchExecutors();
-    refetchSources();
+    safeRefetch(refetchExecutors);
+    safeRefetch(refetchSources);
   }, [apiEndpoint]);
 
   useEffect(() => {
