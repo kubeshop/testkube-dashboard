@@ -30,7 +30,7 @@ export type TestTrigger = {
   resource: TriggerResources;
   resourceSelector: TestTriggerSelector;
   event: string;
-  action: TriggerAction[];
+  action: TriggerAction;
   execution: TriggerExecution;
   testSelector: TestTriggerSelector;
 };

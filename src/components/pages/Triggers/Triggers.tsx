@@ -73,11 +73,10 @@ const Triggers: React.FC = () => {
 
   const setDefaultTriggersData = (_triggersList: TestTrigger[]) => {
     if (_triggersList && _triggersList.length) {
-      // @ts-ignore
-      const triggersData: TestTriggerFormEntity[] = _triggersList.map(trigger => {
-        const {resourceSelector, testSelector, action, execution} = trigger;
+      try {
+        const triggersData: TestTriggerFormEntity[] = _triggersList.map(trigger => {
+          const {resourceSelector, testSelector, action, execution} = trigger;
 
-        try {
           const isResourceName = resourceSelector.name;
           const isTestName = testSelector.name;
           const resourceType = isResourceName ? 'name' : 'labels';
@@ -92,16 +91,17 @@ const Triggers: React.FC = () => {
             testSelector: isTestName || testSelector.labelSelector.matchLabels,
             action: `${action} ${execution}`,
           };
-        } catch (err) {
-          return null;
-        }
-      });
+        });
 
-      form.setFieldsValue({
-        triggers: triggersData,
-      });
+        form.setFieldsValue({
+          triggers: triggersData,
+        });
 
-      setDefaultFormattedTriggers(triggersData);
+        setDefaultFormattedTriggers(triggersData);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
     } else {
       form.setFieldsValue({
         triggers: [],
