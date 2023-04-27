@@ -10,7 +10,7 @@ import {Button, Text} from '@custom-antd';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -162,7 +162,7 @@ const Arguments: React.FC = () => {
           <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
           <Space size={16} direction="vertical" style={{width: '100%'}}>
             <Text className="regular middle" color={Colors.slate400}>
-              Arguments passed to the executor (concatted and passed directly to the executor)
+              Arguments passed to the executor (concat and passed directly to the executor)
             </Text>
 
             <Form.Item name="args" style={{marginBottom: 0, marginTop: 0}}>
