@@ -1,6 +1,6 @@
 import {useContext, useMemo, useState} from 'react';
 
-import {Select, Tooltip} from 'antd';
+import {Form, Select, Tooltip} from 'antd';
 
 import {WarningOutlined} from '@ant-design/icons';
 
@@ -90,66 +90,83 @@ const Schedule: React.FC = () => {
   const [minute, hour, day, month, dayOfWeek] = cronString.split(' ');
 
   return (
-    <ConfigurationCard
-      title="Schedule"
-      description={`You can add a cronjob like schedule for your ${namingMap[entity]} which will then be executed automatically.`}
-      onConfirm={onSave}
-      onCancel={onCancel}
-      isButtonsDisabled={!wasTouched}
-      enabled={enabled}
-    >
-      <StyledSpace direction="vertical" size={32}>
-        <StyledColumn>
-          <Text className="middle regular">Schedule template</Text>
-          <Select
-            disabled={!enabled}
-            placeholder="Quick select a schedule template"
-            style={{width: '100%'}}
-            options={quickOptions}
-            onSelect={(value: string) => {
-              setCronString(value);
-              setWasTouched(true);
-            }}
-            value={templateValue}
-          />
-        </StyledColumn>
-        {templateValue ? (
-          <>
-            <StyledColumn>
-              <Text className="middle regular">Cron Format</Text>
-              <StyledCronFormat>
-                <CronInput title="Minute" disabled={!enabled} value={minute} onChange={value => onCronInput(value, 0)} />
-                <CronInput title="Hour" disabled={!enabled} value={hour} onChange={value => onCronInput(value, 1)} />
-                <CronInput title="Day" disabled={!enabled} value={day} onChange={value => onCronInput(value, 2)} />
-                <CronInput title="Month" disabled={!enabled} value={month} onChange={value => onCronInput(value, 3)} />
-                <CronInput title="Day / Week" disabled={!enabled} value={dayOfWeek} onChange={value => onCronInput(value, 4)} />
-              </StyledCronFormat>
-            </StyledColumn>
-            <StyledRow>
+    <Form name="schedule-form">
+      <ConfigurationCard
+        title="Schedule"
+        description={`You can add a cronjob like schedule for your ${namingMap[entity]} which will then be executed automatically.`}
+        onConfirm={onSave}
+        onCancel={onCancel}
+        isButtonsDisabled={!wasTouched}
+        enabled={enabled}
+      >
+        <StyledSpace direction="vertical" size={32}>
+          <StyledColumn>
+            <Text className="middle regular">Schedule template</Text>
+            <Select
+              disabled={!enabled}
+              placeholder="Quick select a schedule template"
+              style={{width: '100%'}}
+              options={quickOptions}
+              onSelect={(value: string) => {
+                setCronString(value);
+                setWasTouched(true);
+              }}
+              value={templateValue}
+            />
+          </StyledColumn>
+          {templateValue ? (
+            <>
               <StyledColumn>
-                <Text className="middle regular" style={{color: isValidFormat ? Colors.slate200 : Colors.amber400}}>
-                  Cron Preview{' '}
-                  {!isValidFormat ? (
-                    <Tooltip title="Cron input is invalid">
-                      <WarningOutlined />
-                    </Tooltip>
-                  ) : null}
-                </Text>
-                <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
-                  {cronString}
-                </Text>
+                <Text className="middle regular">Cron Format</Text>
+                <StyledCronFormat>
+                  <CronInput
+                    title="Minute"
+                    disabled={!enabled}
+                    value={minute}
+                    onChange={value => onCronInput(value, 0)}
+                  />
+                  <CronInput title="Hour" disabled={!enabled} value={hour} onChange={value => onCronInput(value, 1)} />
+                  <CronInput title="Day" disabled={!enabled} value={day} onChange={value => onCronInput(value, 2)} />
+                  <CronInput
+                    title="Month"
+                    disabled={!enabled}
+                    value={month}
+                    onChange={value => onCronInput(value, 3)}
+                  />
+                  <CronInput
+                    title="Day / Week"
+                    disabled={!enabled}
+                    value={dayOfWeek}
+                    onChange={value => onCronInput(value, 4)}
+                  />
+                </StyledCronFormat>
               </StyledColumn>
-              <StyledColumn>
-                <Text className="middle regular">Next Execution</Text>
-                <Text style={{color: Colors.slate400}} className="middle regular">
-                  <NextExecution value={nextExecution} />
-                </Text>
-              </StyledColumn>
-            </StyledRow>
-          </>
-        ) : null}
-      </StyledSpace>
-    </ConfigurationCard>
+              <StyledRow>
+                <StyledColumn>
+                  <Text className="middle regular" style={{color: isValidFormat ? Colors.slate200 : Colors.amber400}}>
+                    Cron Preview{' '}
+                    {!isValidFormat ? (
+                      <Tooltip title="Cron input is invalid">
+                        <WarningOutlined />
+                      </Tooltip>
+                    ) : null}
+                  </Text>
+                  <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
+                    {cronString}
+                  </Text>
+                </StyledColumn>
+                <StyledColumn>
+                  <Text className="middle regular">Next Execution</Text>
+                  <Text style={{color: Colors.slate400}} className="middle regular">
+                    <NextExecution value={nextExecution} />
+                  </Text>
+                </StyledColumn>
+              </StyledRow>
+            </>
+          ) : null}
+        </StyledSpace>
+      </ConfigurationCard>
+    </Form>
   );
 };
 

@@ -17,6 +17,7 @@ const EmptyCustomExecutors: React.FC<EmptyCustomExecutorsProps> = props => {
       emptyListReadonlyDescription="We could not find any custom container executors in this environment."
       emptyListReadonlyTitle="No custom executors found"
       onButtonClick={onButtonClick}
+      actionType="create"
     >
       <HelpCard isLink link="https://kubeshop.github.io/testkube/test-types/executor-custom">
         What is an executor?

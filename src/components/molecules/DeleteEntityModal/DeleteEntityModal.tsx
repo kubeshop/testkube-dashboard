@@ -2,7 +2,7 @@ import {useContext, useState} from 'react';
 
 import {Input, Space} from 'antd';
 
-import {UseMutationType} from '@models/rtk';
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {Button, Text} from '@custom-antd';
 
@@ -15,21 +15,25 @@ import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
-import {DashboardContext} from '@contexts';
+import {DashboardContext, ModalContext} from '@contexts';
 
 import {FooterSpace} from './DeleteEntityModal.styled';
 
+// TODO: refactor using DeleteModal
 const DeleteEntityModal: React.FC<{
   // onCancel is passed from parent component <Modal />.
   // Do not pass it directly
   onCancel?: any;
-  useDeleteMutation: UseMutationType;
+  useDeleteMutation: UseMutation<any>;
   name: string;
   entityLabel: string;
   defaultStackRoute: string;
+  idToDelete?: string;
+  onConfirm?: any;
 }> = props => {
-  const {onCancel, useDeleteMutation, name, entityLabel, defaultStackRoute} = props;
+  const {onCancel, useDeleteMutation, name, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
+  const {setModalOpen} = useContext(ModalContext);
   const {navigate} = useContext(DashboardContext);
 
   const onEvent = usePressEnter();
@@ -39,11 +43,17 @@ const DeleteEntityModal: React.FC<{
   const [checkName, setName] = useState('');
 
   const onDelete = () => {
-    deleteEntity(name).then(res => {
+    deleteEntity(idToDelete || name).then(res => {
       displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
 
-        navigate(defaultStackRoute);
+        setModalOpen(false);
+
+        if (onConfirm) {
+          onConfirm();
+        } else {
+          navigate(defaultStackRoute);
+        }
       });
     });
   };
