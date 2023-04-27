@@ -8,7 +8,6 @@ import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
 import {useAppDispatch} from '@redux/hooks';
-import {setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 
 import {CookiesBanner} from '@molecules';
 
@@ -105,8 +104,6 @@ const AppRoot: React.FC = () => {
     if (ga4React) {
       ga4React.pageview(location.pathname);
     }
-
-    dispatch(setIsFullScreenLogOutput(false));
   }, [location.pathname]);
 
   useEffect(() => {

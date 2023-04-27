@@ -3,7 +3,7 @@ import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 import {setSources} from '@redux/reducers/sourcesSlice';
 
@@ -43,6 +43,10 @@ const App: React.FC<any> = () => {
   });
 
   const [isEndpointModalVisible, setEndpointModalState] = useState(false);
+
+  useEffect(() => {
+    dispatch(setIsFullScreenLogOutput(false));
+  }, [location.pathname]);
 
   useEffect(() => {
     dispatch(setExecutors(executors || []));
