@@ -17,7 +17,7 @@ import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
 
-const ExecutorDetails = () => {
+const ExecutorDetails: React.FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
   const {pageTitle} = useContext(ConfigContext);
@@ -48,11 +48,19 @@ const ExecutorDetails = () => {
         <title>{`${name} | Executors | ${pageTitle}`}</title>
       </Helmet>
       <StyledPageHeader onBack={() => navigate('/executors')} title={name} className="testkube-pageheader" />
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {currentExecutorDetails ? <ExecutorSettings /> : null}
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
+        destroyInactiveTabPane
+        items={[
+          {
+            key: 'Settings',
+            label: 'Settings',
+            disabled: isPageDisabled,
+            children: currentExecutorDetails ? <ExecutorSettings /> : null,
+          },
+        ]}
+      />
     </StyledContainer>
   );
 };
