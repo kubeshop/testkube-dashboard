@@ -18,11 +18,15 @@ import {EntityDetailsContext} from '@contexts';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
+type PreRunFormValues = {
+  command: string;
+};
+
 const PreRun: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
   const isPreRunAvailable = usePermission(Permissions.editEntity);
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<PreRunFormValues>();
 
   const [updateTest] = useUpdateTestMutation();
 
@@ -32,7 +36,7 @@ const PreRun: React.FC = () => {
 
   const command = entityDetails?.executionRequest?.preRunScript;
 
-  const onSave = (values: any) => {
+  const onSave = (values: PreRunFormValues) => {
     updateTest({
       id: entityDetails.name,
       data: {
@@ -42,7 +46,7 @@ const PreRun: React.FC = () => {
           preRunScript: values.command,
         },
       },
-    }).then((res: any) => {
+    }).then(res => {
       displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `Pre-Run command was successfully updated.`);
       });

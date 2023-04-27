@@ -13,11 +13,17 @@ import {required} from '@utils/form';
 
 import {Permissions, usePermission} from '@permissions/base';
 
+type NameNTypeFormValues = {
+  name: string;
+  type: string;
+};
+
 const NameNType: React.FC = () => {
   const mayEdit = usePermission(Permissions.editEntity);
+  const [form] = Form.useForm<NameNTypeFormValues>();
+
   const {name, executor} = useAppSelector(selectCurrentExecutor);
   const type = executor?.types?.[0] ?? '';
-  const [form] = Form.useForm();
 
   useEffect(() => {
     form.setFieldsValue({

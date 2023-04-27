@@ -49,8 +49,8 @@ export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProp
   useEffect(() => {
     if (notDevEnv) {
       FingerprintJS.load()
-        .then((fp: any) => fp.get())
-        .then((result: any) => {
+        .then(fp => fp.get())
+        .then(result => {
           analytics?.identify(result.visitorId, {
             hostname,
             appVersion,
@@ -61,7 +61,7 @@ export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProp
     }
   }, []);
 
-  const analyticsTrack = (type: string, data: any) => {
+  const analyticsTrack = (type: string, data: Record<string, any>) => {
     if (!disabled && notDevEnv) {
       analytics?.track(type, {...data, hostname, appVersion});
     }

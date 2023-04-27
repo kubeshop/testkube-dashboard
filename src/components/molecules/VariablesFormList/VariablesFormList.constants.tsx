@@ -1,6 +1,6 @@
-import {Variable} from '@models/variable';
+import {VariableInForm} from '@models/variable';
 
-export const emptyVariableObject: Variable = {
+export const emptyVariableObject: VariableInForm = {
   type: 0,
   key: '',
   value: '',

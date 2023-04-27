@@ -1,6 +1,7 @@
 import {NamePath} from 'antd/lib/form/interface';
 
 import {Option} from '@models/form';
+import {SecretRef} from '@models/secretRef';
 import {SourceWithRepository} from '@models/sources';
 
 import {notificationCall} from '@molecules';
@@ -45,7 +46,12 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
     return {data: string || file.fileContent, repository: {}};
   }
 
-  const secrets: any = {};
+  const secrets: {
+    tokenSecret?: Partial<SecretRef>;
+    token?: string;
+    usernameSecret?: Partial<SecretRef>;
+    username?: string;
+  } = {};
 
   if (token !== undefined && token !== null) {
     if (token === '') {
@@ -86,14 +92,13 @@ export const getSourcePayload = (values: any, testSources: SourceWithRepository[
 
     if (!isTestSourceExists) {
       notificationCall('failed', 'Provided test source does not exist');
-      return;
     }
+  } else {
+    return {
+      ...(testSource === 'file-uri' ? {type: 'string'} : isCustomGit ? {type: ''} : {type: testSource}),
+      ...testSourceSpecificFields,
+    };
   }
-
-  return {
-    ...(testSource === 'file-uri' ? {type: 'string'} : isCustomGit ? {type: ''} : {type: testSource}),
-    ...testSourceSpecificFields,
-  };
 };
 
 export const getCustomSourceField = (testSource: string, prevTestSource?: string) => {
