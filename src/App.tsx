@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
+import React, {lazy, Suspense, useContext, useEffect, useRef, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 
@@ -12,6 +12,8 @@ import {useGetSourcesQuery} from '@services/sources';
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 
 import {PollingIntervals} from '@utils/numbers';
+
+import {MainContext} from '@contexts';
 
 import {EndpointProcessing, Loading, NotFound} from '@pages';
 
@@ -31,15 +33,18 @@ const App: React.FC<any> = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
+  const {isClusterAvailable} = useContext(MainContext);
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
   const logRef = useRef<HTMLDivElement>(null);
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
     pollingInterval: PollingIntervals.long,
+    skip: !isClusterAvailable,
   });
   const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
     pollingInterval: PollingIntervals.long,
+    skip: !isClusterAvailable,
   });
 
   const [isEndpointModalVisible, setEndpointModalState] = useState(false);
