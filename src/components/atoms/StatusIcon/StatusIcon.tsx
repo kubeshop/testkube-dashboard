@@ -56,7 +56,7 @@ const iconStyles: Record<string, IconStyle> = {
 };
 
 type StatusIconProps = {
-  status: Partial<IconProps['name']>;
+  status: IconProps['name'];
 };
 
 const StatusIcon: React.FC<StatusIconProps> = props => {
