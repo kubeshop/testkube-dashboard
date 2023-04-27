@@ -14,7 +14,7 @@
     "node": ">=20.0.0",
     "npm": ">=9.0.0 <10.0.0"
   },
-  "resolutions": {
+  "overrides": {
     "react-error-overlay": "6.0.9",
     "minimist": "1.2.6",
     "immer": "9.0.12"
