@@ -64,9 +64,9 @@ jobs:
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
           cache-from: |
-            type=gha,src=/tmp/.buildx-cache
+            type=local,src=/tmp/.buildx-cache
           cache-to: |
-            type=gha,src=/tmp/.buildx-cache
+            type=local,dest=/tmp/.buildx-cache-new,mode=max
 
   create_manifest:
     needs: build_multi_platform_images
