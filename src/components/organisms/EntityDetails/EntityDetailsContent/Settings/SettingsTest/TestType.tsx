@@ -18,7 +18,7 @@ import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 type TestTypeProps = {
   type: string;
-  updateTest: (data: Object) => void;
+  updateTest: (data: {type: string}) => void;
 };
 
 type TestTypeFormValues = {
