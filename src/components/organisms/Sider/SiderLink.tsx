@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import {DashboardContext} from '@contexts';
 
-interface SiderLinkProps {
+export interface SiderLinkProps {
   href: string;
   active?: RegExp;
 }
