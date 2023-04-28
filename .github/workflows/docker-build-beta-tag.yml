@@ -42,7 +42,7 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
+          path: /tmp/.buildx-cache-${{ matrix.path }}
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
@@ -62,10 +62,13 @@ jobs:
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
-          cache-from: |
-            type=local,src=/tmp/.buildx-cache
-          cache-to: |
-            type=local,dest=/tmp/.buildx-cache,mode=max
+          cache-from: type=local,src=/tmp/.buildx-cache-${{ matrix.path }}
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache-${{ matrix.path }}
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache-${{ matrix.path }}
 
   create_manifest:
     needs: build_multi_platform_images
