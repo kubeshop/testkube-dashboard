@@ -62,13 +62,13 @@ jobs:
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
-          cache-from: type=local,src=/tmp/.buildx-cache-${{ matrix.path }}
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
 
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache-${{ matrix.path }}
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache-${{ matrix.path }}
+          rm -rf /tmp/.buildx-cache-${{ matrix.name }}
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache-${{ matrix.name }}
 
   create_manifest:
     needs: build_multi_platform_images
