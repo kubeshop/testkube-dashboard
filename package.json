@@ -10,7 +10,11 @@
     "type": "git",
     "url": "git@github.com:kubeshop/testkube-dashboard.git"
   },
-  "resolutions": {
+  "engines": {
+    "node": "^18.13.0 || ^20.0.0",
+    "npm": "^9.0.0"
+  },
+  "overrides": {
     "react-error-overlay": "6.0.9",
     "minimist": "1.2.6",
     "immer": "9.0.12"
@@ -103,9 +107,8 @@
     "web-vitals": "2.1.4"
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
-    "start": "sh scripts/env.sh && cp env-config.js ./public/ && npm run less && craco start",
-    "build": "CI=false && npm run less && craco --max_old_space_size=4096 build",
+    "start": "sh scripts/env.sh && cp env-config.js ./public/ && npm run less && NODE_OPTIONS=--openssl-legacy-provider craco start",
+    "build": "npm run less && NODE_OPTIONS=--openssl-legacy-provider craco --max_old_space_size=4096 build",
     "test": "craco test --watchAll=false",
     "test:watch": "craco test --detectOpenHandles",
     "test:coverage": "craco test --coverage --watchAll=false",
