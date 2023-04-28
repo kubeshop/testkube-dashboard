@@ -11,8 +11,8 @@
     "url": "git@github.com:kubeshop/testkube-dashboard.git"
   },
   "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=9.0.0 <10.0.0"
+    "node": "^18.16.0 || ^20.0.0",
+    "npm": "^9.0.0"
   },
   "overrides": {
     "react-error-overlay": "6.0.9",
