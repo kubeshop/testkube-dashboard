@@ -39,14 +39,6 @@ jobs:
           driver-opts: |
             image=moby/buildkit:v0.11.6
 
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache-${{ matrix.path }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -64,11 +56,6 @@ jobs:
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
           cache-from: type=gha,scope=${{ matrix.name }}
           cache-to: type=gha,mode=max,scope=${{ matrix.name }}
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache-${{ matrix.name }}
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache-${{ matrix.name }}
 
   create_manifest:
     needs: build_multi_platform_images
