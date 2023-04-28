@@ -22,7 +22,6 @@ jobs:
         id: tag
         uses: dawidd6/action-get-tag@v1
         with:
-          # Optionally strip `v` prefix
           strip_v: true
 
       - name: Use tag
@@ -64,17 +63,9 @@ jobs:
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
           cache-from: |
-            type=gha,src=/tmp/.buildx-cache
+            type=local,src=/tmp/.buildx-cache
           cache-to: |
-            type=gha,dest=/tmp/.buildx-cache-new,mode=max
-
-      # Temp fix
-      # https://github.com/docker/build-push-action/issues/252
-      # https://github.com/moby/buildkit/issues/1896
-      - name: Move cache
-        run:
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+            type=local,dest=/tmp/.buildx-cache,mode=max
 
   create_manifest:
     needs: build_multi_platform_images
@@ -84,7 +75,6 @@ jobs:
         id: tag
         uses: dawidd6/action-get-tag@v1
         with:
-          # Optionally strip `v` prefix
           strip_v: true
 
       - name: Use tag
