@@ -40,11 +40,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-#      #Trigger Helm repo workflow to deploy Dashboard to Stage cluster
-#      - name: Repository Dispatch
-#        uses: peter-evans/repository-dispatch@v2
-#        with:
-#          token: ${{ secrets.CI_BOT_TOKEN }}
-#          repository: kubeshop/helm-charts
-#          event-type: trigger-workflow-dashboard-develop
-#          client-payload: '{"image_tag_dashboard": "sha-${{ steps.github_sha.outputs.sha_short }}"}'
+      #Trigger Helm repo workflow to deploy Dashboard to Stage cluster
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.CI_BOT_TOKEN }}
+          repository: kubeshop/helm-charts
+          event-type: trigger-workflow-dashboard-develop
+          client-payload: '{"image_tag_dashboard": "sha-${{ steps.github_sha.outputs.sha_short }}"}'
