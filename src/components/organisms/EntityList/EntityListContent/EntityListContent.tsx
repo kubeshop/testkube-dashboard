@@ -2,25 +2,26 @@ import React, {memo, useContext, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
 import {usePrevious} from 'react-use';
 
-import {initialPageSize} from '@redux/initialState';
-
 import {LoadingOutlined} from '@ant-design/icons';
 
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
 import {OnDataChangeInterface} from '@models/onDataChange';
 
-import {Button, Modal} from '@custom-antd';
+import {initialPageSize} from '@redux/initialState';
 
 import {ScrollTrigger} from '@atoms';
+
+import {Button, Modal} from '@custom-antd';
+
 import {EntityGrid} from '@molecules';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {useApiEndpoint} from '@services/apiEndpoint';
-
 import {safeRefetch} from '@utils/fetchUtils';
 import {compareFiltersObject} from '@utils/objects';
+
+import {useApiEndpoint} from '@services/apiEndpoint';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -30,13 +31,13 @@ import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
-import {TestsDataLayer, TestSuitesDataLayer} from './EntityDataLayers';
+import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
 import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
 import EntityListTitle from './EntityListHeader';
-import EntityListSkeleton from './EntityListSkeleton';
 import EntityListLoader from './EntityListLoader';
+import EntityListSkeleton from './EntityListSkeleton';
 
-const modalTypes: {[key in Entity]: ModalConfigProps} = {
+const modalTypes: Record<Entity, ModalConfigProps> = {
   'test-suites': TestSuiteModalConfig,
   tests: TestModalConfig,
 };
@@ -78,7 +79,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     setContentProps(args);
   };
 
-  const dataLayers: {[key in Entity]: any} = {
+  const dataLayers: Record<Entity, JSX.Element> = {
     tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
     'test-suites': <TestSuitesDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
   };
@@ -173,7 +174,12 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
               isFiltersDisabled={isEmptyData || !isClusterAvailable}
             />
             {mayCreate ? (
-              <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID} disabled={!isClusterAvailable}>
+              <Button
+                $customType="primary"
+                onClick={addEntityAction}
+                data-test={dataTestID}
+                disabled={!isClusterAvailable}
+              >
                 {addEntityButtonText}
               </Button>
             ) : null}
@@ -190,15 +196,17 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             <EmptyDataWithFilters resetFilters={resetFilters} />
           )}
         </EmptyListWrapper>
-      ) : <>
-        <EntityGrid data={dataSource} onNavigateToDetails={onNavigateToDetails} />
-        <ScrollTrigger
-          offset={200}
-          disabled={queryFilters.pageSize > dataSource.length || isLoadingNext}
-          onScroll={onScrollBottom}
-        />
-        {isLoadingNext ? <EntityListLoader /> : null}
-      </>}
+      ) : (
+        <>
+          <EntityGrid data={dataSource} onNavigateToDetails={onNavigateToDetails} />
+          <ScrollTrigger
+            offset={200}
+            disabled={queryFilters.pageSize > dataSource.length || isLoadingNext}
+            onScroll={onScrollBottom}
+          />
+          {isLoadingNext ? <EntityListLoader /> : null}
+        </>
+      )}
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
       ) : null}

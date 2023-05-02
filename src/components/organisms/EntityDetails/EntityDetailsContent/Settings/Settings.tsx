@@ -17,7 +17,7 @@ import SettingsTest from './SettingsTest';
 import SettingsTests from './SettingsTests';
 import SettingsVariables from './SettingsVariables';
 
-const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
+const tabConfig: Record<Entity, JSX.Element[]> = {
   'test-suites': [
     <General />,
     <SettingsTests />,
@@ -35,7 +35,7 @@ const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
   ],
 };
 
-const navigationOptionsConfig: {[key in Entity]: string[]} = {
+const navigationOptionsConfig: Record<Entity, string[]> = {
   'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Scheduling', 'Definition'],
   tests: ['General', 'Test', 'Execution', 'Variables & Secrets', 'Scheduling', 'Definition'],
 };

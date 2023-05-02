@@ -8,12 +8,12 @@ import {Input} from '@custom-antd';
 
 import {MainContext} from '@contexts';
 
-const inputValueQueryParams: {[key in Entity]: string} = {
+const inputValueQueryParams: Record<Entity, string> = {
   'test-suites': 'textSearch',
   tests: 'textSearch',
 };
 
-const placeholders: {[key in Entity]: string} = {
+const placeholders: Record<Entity, string> = {
   'test-suites': 'Test suite',
   tests: 'Test',
 };

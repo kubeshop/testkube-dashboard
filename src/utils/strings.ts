@@ -9,7 +9,7 @@ export const hasProtocol = (url: string) => {
   return /^http(s)?:\/\/.*/.test(url);
 };
 
-const arraylikeQueryParams: {[key in FilterType | string]: boolean} = {
+const arraylikeQueryParams: Record<FilterType | string, boolean> = {
   selector: true,
   status: true,
   textSearch: false,

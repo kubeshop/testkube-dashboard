@@ -87,15 +87,13 @@ const executionsScripts: CLIScript[] = [
   },
 ];
 
-const scriptsByEntityType: {[key in CLIScriptKey]: CLIScript[]} = {
+const scriptsByEntityType: Record<CLIScriptKey, CLIScript[]> = {
   'test-suites': testSuiteScripts,
   tests: testScripts,
   executions: executionsScripts,
 };
 
-const modifyActions: {
-  [key in CLIScriptModifier]: (args: any) => boolean;
-} = {
+const modifyActions: Record<CLIScriptModifier, (arg: boolean | string) => boolean> = {
   canHaveArtifacts: canHaveArtifacts => {
     return !canHaveArtifacts;
   },
@@ -122,7 +120,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
 
   const CLIEntityType = isExecutions ? 'executions' : entity;
 
-  const modifyArgsMap: Partial<{[key in CLIScriptModifier]: any}> = {
+  const modifyArgsMap: Partial<Record<CLIScriptModifier, boolean | ExecutionStatusEnum>> = {
     ...(type && executorsFeaturesMap[type] ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
     isFinished: modifyMap?.status,
     isRunPermission: mayRun,
@@ -142,7 +140,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
       if (modify) {
         const modifyArg = modifyArgsMap[modify];
 
-        if (modifyActions[modify](modifyArg)) {
+        if (modifyArg && modifyActions[modify](modifyArg)) {
           return null;
         }
       }

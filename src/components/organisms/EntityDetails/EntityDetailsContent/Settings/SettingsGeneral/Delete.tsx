@@ -16,7 +16,7 @@ import {EntityDetailsContext, ModalContext} from '@contexts';
 
 import {namingMap} from '../utils';
 
-const useDeleteMutations: {[key in Entity]: UseMutation<any>} = {
+const useDeleteMutations: Record<Entity, UseMutation<any>> = {
   'test-suites': useDeleteTestSuiteMutation,
   tests: useDeleteTestMutation,
 };
