@@ -89,12 +89,12 @@ const AppRoot: React.FC = () => {
     }
   }, [isTelemetryEnabled]);
 
-  const mainContextValue = {
+  const mainContextValue = useMemo(() => ({
     ga4React,
     dispatch,
     clusterConfig,
     isClusterAvailable: true,
-  };
+  }), [ga4React, dispatch, clusterConfig]);
 
   useEffect(() => {
     posthog.capture('$pageview');

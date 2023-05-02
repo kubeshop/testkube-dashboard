@@ -1,4 +1,5 @@
 import {BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery} from '@reduxjs/toolkit/dist/query';
+import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ParsedQuery} from 'query-string';
 
@@ -9,6 +10,8 @@ import {SearchParamKey, SearchParamsKeys, SearchParamsType, ValidatedSearchParam
 import {isArraylikeQueryParam} from '@utils/strings';
 
 import {getApiEndpoint} from '@services/apiEndpoint';
+import {useEffect, useRef} from 'react';
+import {isEqual} from 'lodash';
 
 const prohibitedValues = ['undefined', 'null'];
 
@@ -139,4 +142,29 @@ export async function safeRefetch<T>(refetchFn: () => Promise<T>): Promise<T | n
     }
   }
   return null;
+}
+
+// Keep the same identity for 'data',
+// when the actual data is the same.
+export function memoizeQuery<T extends UseQuery<any>>(
+  hook: T,
+  transformData = (x: ReturnType<T>['data']) => x): ReturnType<T>['data'] {
+  return ((...args: Parameters<T>) => {
+    type U = ReturnType<T>['data'];
+    const result = (hook as any)(...args);
+
+    const dataRef = useRef<U>(result.data);
+    const transformedRef = useRef<U>(result.data);
+
+    useEffect(() => {
+      if (dataRef.current !== result.data) {
+        const next = result.data == null ? result.data : transformData(result.data);
+        if (!isEqual(next, transformedRef.current)) {
+          transformedRef.current = next;
+        }
+      }
+    }, [result.data]);
+
+    return {...result, data: transformedRef.current};
+  }) as any;
 }

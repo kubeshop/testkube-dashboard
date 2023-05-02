@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useCallback, useContext} from 'react';
 
 import {Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
@@ -36,11 +36,11 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
 
   const isEmptyExecutions = !executionsList?.results || !executionsList?.results.length;
 
-  const onAbortExecution = (executionId: string) => {
+  const onAbortExecution = useCallback((executionId: string) => {
     if (id) {
       abortExecution({executionId, id});
     }
-  };
+  }, [id, abortExecution]);
   if (isFirstTimeLoading) {
     return (
       <>

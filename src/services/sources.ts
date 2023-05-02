@@ -3,7 +3,7 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 import {Repository} from '@models/repository';
 import {CreateSourcePayload, SourceWithRepository} from '@models/sources';
 
-import {dynamicBaseQuery} from '@utils/fetchUtils';
+import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
 export type SourceFormField = {name: string; type: 'git-dir'; repository: Repository};
 
@@ -63,6 +63,9 @@ export const sourcesApi = createApi({
     }),
   }),
 });
+
+// Apply optimization
+sourcesApi.useGetSourcesQuery = memoizeQuery(sourcesApi.useGetSourcesQuery);
 
 export const {
   useGetSourcesQuery,

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useAsync} from 'react-use';
 import useWebSocket from 'react-use-websocket';
@@ -195,18 +195,18 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   const defaultUrl = `/${entity}/executions/${entityDetails?.name}`;
 
-  const onRowSelect = (dataItem: any, isManual?: boolean) => {
+  const onRowSelect = useCallback((dataItem: any, isManual?: boolean) => {
     selectRow(dataItem);
 
     if (isManual) {
       navigate(`${defaultUrl}/execution/${dataItem?.id}`);
     }
-  };
+  }, [selectRow, navigate, defaultUrl]);
 
-  const unselectRow = () => {
+  const unselectRow = useCallback(() => {
     selectRow(undefined);
     navigate(defaultUrl);
-  };
+  }, [selectRow, navigate, defaultUrl]);
 
   useEffect(() => {
     setMetricsState(metrics);
@@ -248,12 +248,14 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   const testIcon = entity === 'tests' ? getTestExecutorIcon(executors, entityDetails?.type) : undefined;
 
+  const entityDetailsWithIcon = useMemo(() => ({
+    ...entityDetails,
+    ...(testIcon ? {testIcon} : {}),
+  }), [entityDetails, testIcon]);
+
   const entityDetailsContextValues = {
     executionsList,
-    entityDetails: {
-      ...entityDetails,
-      ...(testIcon ? {testIcon} : {}),
-    },
+    entityDetails: entityDetailsWithIcon,
     entity,
     onRowSelect,
     isRowSelected: Boolean(selectedRow),
