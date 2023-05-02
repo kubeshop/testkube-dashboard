@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
@@ -26,11 +26,11 @@ const TableRow: React.FC<{data: any; onAbortExecution: any}> = props => {
   const isRunning = useIsRunning(status);
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
-  const abortExecution = () => {
+  const abortExecution = useCallback(() => {
     if (onAbortExecution) {
       onAbortExecution(id);
     }
-  };
+  }, [onAbortExecution, id]);
 
   const renderExecutionActions = () => {
     let actionsArray = [];

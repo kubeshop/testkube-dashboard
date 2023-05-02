@@ -1,4 +1,4 @@
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
 import {usePrevious} from 'react-use';
 
@@ -88,9 +88,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     dispatch(setQueryFilters(initialFiltersState));
   };
 
-  const onNavigateToDetails = (item: any) => {
+  const onNavigateToDetails = useCallback((item: any) => {
     navigate(`/${entity}/executions/${item.dataItem.name}`);
-  };
+  }, [navigate, entity]);
 
   const onScrollBottom = () => {
     dispatch(setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize}));

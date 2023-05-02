@@ -1,4 +1,4 @@
-import React, {useContext, useRef} from 'react';
+import React, {useCallback, useContext, useRef} from 'react';
 
 import {Tooltip} from 'antd';
 
@@ -44,8 +44,12 @@ const EntityGridItem: React.FC<any> = props => {
 
   const dataTestValue = `${entity}-list-item`;
 
+  const click = useCallback(() => {
+    onClick(item);
+  }, [onClick, item]);
+
   return (
-    <ItemWrapper onClick={onClick} ref={ref} data-test={dataTestValue}>
+    <ItemWrapper onClick={click} ref={ref} data-test={dataTestValue}>
       <DetailsWrapper>
         <ItemRow $flex={0}>
           <ItemColumn $isStretch>
