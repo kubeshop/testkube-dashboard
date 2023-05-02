@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 import {Drawer} from 'antd';
+
 import {LoadingOutlined} from '@ant-design/icons';
 
 import {Entity} from '@models/entity';
@@ -60,18 +61,24 @@ const TestExecutionDetailsDataLayer: React.FC = () => {
   return <></>;
 };
 
-const dataLayers: {[key in Entity]: any} = {
+const dataLayers: Record<Entity, JSX.Element> = {
   'test-suites': <TestSuiteExecutionDetailsDataLayer />,
   tests: <TestExecutionDetailsDataLayer />,
 };
 
-const components: {[key in Entity]: any} = {
+const components: Record<Entity, JSX.Element> = {
   'test-suites': <TestSuiteExecutionDetailsTabs />,
   tests: <TestExecutionDetailsTabs />,
 };
 
 const headerStyle = {borderBottom: 0, padding: '40px 30px 0', backgroundColor: Colors.slate800};
-const loaderBodyStyle = {display: 'flex', alignItems: 'center', justifyContent: 'center', background: Colors.slate800, fontSize: '48px'};
+const loaderBodyStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: Colors.slate800,
+  fontSize: '48px',
+};
 
 const ExecutionDetailsDrawer: React.FC = () => {
   const {isRowSelected, selectedRow, unselectRow, entity, execId} = useContext(EntityDetailsContext);

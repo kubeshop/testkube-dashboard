@@ -18,7 +18,7 @@ import {EntityDetailsContext} from '@contexts';
 
 import {updateRequestsMap} from '../utils';
 
-const descriptionMap: {[key in Entity]: string} = {
+const descriptionMap: Record<Entity, string> = {
   'test-suites':
     'Define environment variables which will be shared across your tests. Variables defined at a Test Suite level will override those defined at a Test level.',
   tests: 'Define environment variables which will be shared across your test.',

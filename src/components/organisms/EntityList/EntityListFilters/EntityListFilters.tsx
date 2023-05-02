@@ -16,7 +16,7 @@ import LabelsFilter from './LabelsFilter';
 import StatusFilter from './StatusFilter';
 import TextSearchFilter from './TextSearchFilter';
 
-const filtersComponents: {[key in FilterType]: React.FC<FilterProps>} = {
+const filtersComponents: Record<FilterType, React.FC<FilterProps>> = {
   textSearch: TextSearchFilter,
   selector: LabelsFilter,
   status: StatusFilter,

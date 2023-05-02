@@ -22,7 +22,7 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
   const isSecureContext = useSecureContext();
   const filename = useLocation().lastPathSegment;
 
-  const logOutputActionsMap: {[key in LogAction]: any} = {
+  const logOutputActionsMap: Record<LogAction, JSX.Element> = {
     copy: isSecureContext ? (
       <CopyButton content={stripAnsi(logOutput)} key="copy-action" />
     ) : (

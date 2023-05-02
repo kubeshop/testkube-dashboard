@@ -3,6 +3,9 @@ import {Helmet} from 'react-helmet';
 
 import {Select, Space, Tabs} from 'antd';
 
+import {BaseQueryFn, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
+import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+
 import {Entity} from '@models/entity';
 import {Option as OptionType} from '@models/form';
 
@@ -56,7 +59,10 @@ const EntityDetailsContent: React.FC = () => {
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();
 
-  const runRequestsMap: {[key in Entity]: any} = {
+  const runRequestsMap: Record<
+    Entity,
+    MutationTrigger<MutationDefinition<any, BaseQueryFn<any, unknown, FetchBaseQueryError>, never, void, string>>
+  > = {
     'test-suites': runTestSuite,
     tests: runTest,
   };

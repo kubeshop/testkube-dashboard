@@ -11,7 +11,7 @@ type LoaderProps = SpinProps & {
   duration?: DurationType | number;
 };
 
-const durationTime: {[key in DurationType]: number} = {
+const durationTime: Record<DurationType, number> = {
   long: 5000,
   default: 1000,
   short: 500,

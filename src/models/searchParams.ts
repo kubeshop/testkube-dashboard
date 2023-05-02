@@ -16,13 +16,9 @@ export type SearchParamsType = 'test-suites' | 'tests';
 
 export type SearchParamsKeys = SearchParamKey[];
 
-export type SearchParamsTypes = {
-  [key in SearchParamsType]: SearchParamsKeys;
-};
+export type SearchParamsTypes = Record<SearchParamsType, SearchParamsKeys>;
 
-export type ValidatedSearchParams = {
-  [key in SearchParamKey]: SearchParamValue;
-};
+export type ValidatedSearchParams = Record<SearchParamKey, SearchParamValue>;
 
 export enum SearchParams {
   'test-suites' = 'test-suites',
