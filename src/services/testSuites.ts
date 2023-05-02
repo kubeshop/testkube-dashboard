@@ -2,7 +2,7 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {TestSuiteFilters, TestSuiteWithExecution} from '@models/testSuite';
 
-import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
+import {dynamicBaseQuery, memoizeQuery, paramsSerializer} from '@utils/fetchUtils';
 
 export const testSuitesApi = createApi({
   reducerPath: 'testSuitesApi',
@@ -75,6 +75,12 @@ export const testSuitesApi = createApi({
     }),
   }),
 });
+
+// Apply optimization
+testSuitesApi.useGetTestSuitesQuery = memoizeQuery(testSuitesApi.useGetTestSuitesQuery);
+testSuitesApi.useGetTestSuiteDetailsQuery = memoizeQuery(testSuitesApi.useGetTestSuiteDetailsQuery);
+testSuitesApi.useGetAllTestSuitesQuery = memoizeQuery(testSuitesApi.useGetAllTestSuitesQuery);
+testSuitesApi.useGetTestsListForTestSuiteQuery = memoizeQuery(testSuitesApi.useGetTestsListForTestSuiteQuery);
 
 export const {
   useGetTestSuitesQuery,

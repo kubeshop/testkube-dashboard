@@ -2,7 +2,7 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {ClusterConfig} from '@models/config';
 
-import {dynamicBaseQuery} from '@utils/fetchUtils';
+import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
 export const configApi = createApi({
   reducerPath: 'configApi',
@@ -15,5 +15,8 @@ export const configApi = createApi({
     }),
   }),
 });
+
+// Apply optimization
+configApi.useGetClusterConfigQuery = memoizeQuery(configApi.useGetClusterConfigQuery);
 
 export const {useGetClusterConfigQuery} = configApi;

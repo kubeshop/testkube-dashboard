@@ -2,7 +2,7 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Executor} from '@models/executors';
 
-import {dynamicBaseQuery} from '@utils/fetchUtils';
+import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
 export const executorsApi = createApi({
   reducerPath: 'executorsApi',
@@ -47,6 +47,9 @@ export const executorsApi = createApi({
     }),
   }),
 });
+
+// Apply optimization
+executorsApi.useGetExecutorsQuery = memoizeQuery(executorsApi.useGetExecutorsQuery);
 
 export const {
   useGetExecutorsQuery,

@@ -1,6 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {dynamicBaseQuery} from '@utils/fetchUtils';
+import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
 export const labelsApi = createApi({
   reducerPath: 'labelsApi',
@@ -13,5 +13,8 @@ export const labelsApi = createApi({
     }),
   }),
 });
+
+// Apply optimization
+labelsApi.useGetLabelsQuery = memoizeQuery(labelsApi.useGetLabelsQuery);
 
 export const {useGetLabelsQuery} = labelsApi;
