@@ -1,4 +1,4 @@
-import {useCallback, useContext, useMemo, useState} from 'react';
+import {useCallback, useContext, useMemo} from 'react';
 
 import {Popover} from 'antd';
 
@@ -39,8 +39,6 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
 
   const {executionsList, onRowSelect} = useContext(EntityDetailsContext);
 
-  const [isHovered, setIsHovered] = useState(false);
-
   const onBarClicked = useCallback(() => {
     if (executionsList?.results) {
       const targetRecord = executionsList.results.find((item: any) => item.name === name);
@@ -75,7 +73,6 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
     <Popover
       content={popoverContent}
       align={{offset: [0, chartHeight - height - tooltipYOffsetMargin]}}
-      onOpenChange={visible => setIsHovered(visible)}
     >
       <ClickableBarWrapper borderTop={chartHeight - height} hoverColor={hoverColor}>
         <ClickableBar
@@ -83,7 +80,6 @@ const BarWithTooltip: React.FC<BarConfig> = props => {
           $color={color}
           hoverColor={hoverColor}
           onClick={onBarClicked}
-          isHovered={isHovered}
         />
         {date ? (
           <BarDate $height={height}>

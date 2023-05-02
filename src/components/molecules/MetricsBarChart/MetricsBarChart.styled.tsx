@@ -59,15 +59,12 @@ export const BarWrapper = styled.div<{$margin: number}>`
 export const ClickableBar = styled.div<{
   $color: StatusColors;
   hoverColor: SecondaryStatusColors;
-  isHovered: boolean;
 }>`
   transition: 0.3s;
   cursor: pointer;
 
   background-color: ${props => props.$color};
   border-bottom: 3px solid ${props => props.$color};
-
-  ${props => (props.isHovered ? `background-color: ${props.hoverColor} !important;` : '')}
 
   &:hover {
     background-color: ${props => props.hoverColor} !important;
