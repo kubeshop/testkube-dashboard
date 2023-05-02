@@ -67,13 +67,13 @@ export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProp
     }
   };
 
+  const value = useMemo(() => ({
+    analytics,
+    analyticsTrack,
+  }), [disabled, privateKey, hostname, appVersion]);
+
   return (
-    <AnalyticsContext.Provider
-      value={{
-        analytics,
-        analyticsTrack,
-      }}
-    >
+    <AnalyticsContext.Provider value={value}>
       {children}
     </AnalyticsContext.Provider>
   );
