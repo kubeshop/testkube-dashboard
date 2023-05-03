@@ -16,7 +16,6 @@ jobs:
             path: arm64v8/nginx:alpine
           - name: "amd64"
             path: nginx:alpine
-
     steps:
       - name: Get tag
         id: tag
