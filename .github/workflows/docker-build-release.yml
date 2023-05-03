@@ -1,0 +1,65 @@
+name: Publish Docker image with a commit hash tag
+
+on:
+  push:
+    branches:
+      - release_**
+
+jobs:
+  push_to_registry:
+    name: Build and push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out GitHub repo
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Output commit sha
+        id: github_sha
+        run: echo "::set-output name=sha_short::${GITHUB_SHA::7}"
+
+      - name: Build image and push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          build-args: |
+            REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
+            REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
+          tags: ${{ github.repository }}:sha-${{ steps.github_sha.outputs.sha_short }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Create a release branch in helm-chars repo
+        run: |
+
+          # Set up variables for repository and branch name
+          REPO_OWNER=kubeshop
+          REPO_NAME=helm-charts
+          BRANCH_NAME=${GITHUB_REF}
+
+          # Set up authentication using a personal access token
+          AUTH_HEADER="Authorization: Bearer ${{ secrets.CI_BOT_TOKEN }}"
+
+          # Check if branch already exists
+          STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H "${AUTH_HEADER}" "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches/${BRANCH_NAME}")
+
+          # If branch doesn't exist, create it
+          if [ "${STATUS}" -eq 404 ]; then
+            curl -X POST -H "${AUTH_HEADER}" -d '{"ref": "'"${BRANCH_NAME}"'","sha": "'"$(curl -s -H "${AUTH_HEADER}" "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/refs/heads/main" | jq -r '.object.sha')"'"}' "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/refs"
+            echo "Created branch ${BRANCH_NAME} in ${REPO_OWNER}/${REPO_NAME}"
+          else
+            echo "Branch ${BRANCH_NAME} already exists in ${REPO_OWNER}/${REPO_NAME}"
+          fi
+
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.CI_BOT_TOKEN }}
+          repository: kubeshop/helm-charts
+          event-type: trigger-workflow-dashboard-release
+          client-payload: '{"image_tag_dashboard": "sha-${{ steps.github_sha.outputs.sha_short }}"}'

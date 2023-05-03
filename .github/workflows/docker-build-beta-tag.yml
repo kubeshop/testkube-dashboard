@@ -1,9 +1,9 @@
-name: Publish Docker image
+name: Publish Beta Docker image
 
 on:
   push:
     tags:
-      - "v*.*.*"
+      -  "v[0-9]+.[0-9]+.[0-9]+-*"
 
 jobs:
   build_multi_platform_images:
@@ -22,11 +22,7 @@ jobs:
         id: tag
         uses: dawidd6/action-get-tag@v1
         with:
-          # Optionally strip `v` prefix
           strip_v: true
-
-      - name: Use tag
-        run: echo ${{steps.tag.outputs.tag}}
 
       - name: Check out GitHub repo
         uses: actions/checkout@v2
@@ -38,7 +34,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
         with:
           driver-opts: |
-            image=moby/buildkit:v0.10.6
+            image=moby/buildkit:v0.11.6
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -55,6 +51,8 @@ jobs:
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
 
   create_manifest:
     needs: build_multi_platform_images
@@ -64,11 +62,7 @@ jobs:
         id: tag
         uses: dawidd6/action-get-tag@v1
         with:
-          # Optionally strip `v` prefix
           strip_v: true
-
-      - name: Use tag
-        run: echo ${{steps.tag.outputs.tag}}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -84,34 +78,20 @@ jobs:
           docker manifest create ${{ github.repository }}:latest --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
           docker manifest push -p ${{ github.repository }}:latest
 
-  releasing_helm_chart_dashboard:
-    needs: create_manifest
+  trigger_deployment:
+    needs: [build_multi_platform_images, create_manifest ]
     runs-on: ubuntu-latest
     steps:
-      - name: getting Tag name pushed.
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          strip_v: true
 
-      - name: Editing helm-release repo with version based on a Tag pushed.
-        run: |
-
-          # Setting up Git:
-
-          git clone https://kubeshop-bot:$GH_PUSH_TOKEN@github.com/kubeshop/helm-charts
-          cd ./helm-charts
-          git config user.name "kubeshop-bot"
-          git config user.email "kubeshop-bot@kubeshop.io"
-
-          # Calling chart releaser script by passing needed folder name:
-          # E.G. in order to relase api-server":
-          # -->> ./chart_releaser.sh --helm-chart-folder api-server
-
-          export GH_PUSH_TOKEN
-          export RELEASE_VERSION
-
-          cd ./scripts
-          ./chart_releaser.sh --helm-chart-folder testkube-dashboard --main-chart false
-
-        env:
-          GH_PUSH_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.CI_BOT_TOKEN }}
+          repository: kubeshop/helm-charts
+          event-type: trigger-workflow-dashboard-pre-release
+          client-payload: '{"image_tag_dashboard": "${{ steps.tag.outputs.tag }}"}'
