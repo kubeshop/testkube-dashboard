@@ -25,15 +25,7 @@ const EntityGridItem: React.FC<any> = props => {
     {skip: !isInViewport || !isClusterAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
-  return (
-    <EntityGridItemPure
-      ref={ref}
-      item={item}
-      onClick={onClick}
-      entity={entity}
-      metrics={metrics}
-    />
-  );
+  return <EntityGridItemPure ref={ref} item={item} onClick={onClick} entity={entity} metrics={metrics} />;
 };
 
 export default EntityGridItem;
