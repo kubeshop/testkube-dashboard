@@ -10,6 +10,7 @@ type AnalyticsProviderProps = {
   disabled?: boolean;
   privateKey: string;
   appVersion: string;
+  featureFlags: string[];
 };
 
 const maskSensitiveData = (ctx: Context): Context => {
@@ -34,7 +35,7 @@ const CleanSensitiveDataPlugin: Plugin = {
 };
 
 export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProps>> = props => {
-  const {disabled, privateKey, children, appVersion} = props;
+  const {disabled, privateKey, children, appVersion, featureFlags} = props;
 
   const notDevEnv = process.env.NODE_ENV !== 'development';
 
@@ -67,14 +68,14 @@ export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProp
     }
   };
 
-  const value = useMemo(() => ({
-    analytics,
-    analyticsTrack,
-  }), [disabled, privateKey, hostname, appVersion]);
-
-  return (
-    <AnalyticsContext.Provider value={value}>
-      {children}
-    </AnalyticsContext.Provider>
+  const value = useMemo(
+    () => ({
+      analytics,
+      analyticsTrack,
+      featureFlags,
+    }),
+    [disabled, privateKey, hostname, appVersion]
   );
+
+  return <AnalyticsContext.Provider value={value}>{children}</AnalyticsContext.Provider>;
 };

@@ -1,4 +1,4 @@
-import {useEffect, useState, useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
@@ -15,12 +15,12 @@ import {Sider} from '@organisms';
 
 import {ErrorBoundary} from '@pages';
 
+import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+
 import {composeProviders} from '@utils/composeProviders';
 
-import {useGetClusterConfigQuery} from '@services/config';
 import {useApiEndpoint} from '@services/apiEndpoint';
-
-import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+import {useGetClusterConfigQuery} from '@services/config';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
@@ -28,8 +28,8 @@ import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutlet} from '@contexts/ModalContext';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
-import {StyledLayoutContentWrapper} from './App.styled';
 import App from './App';
+import {StyledLayoutContentWrapper} from './App.styled';
 
 const pjson = require('../package.json');
 
@@ -48,9 +48,11 @@ const AppRoot: React.FC = () => {
   const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
-  const isTelemetryEnabled = useMemo(() => (
-    !isCookiesVisible && clusterConfig?.enableTelemetry && localStorage.getItem('isGADisabled') === '0'
-  ), [isCookiesVisible, clusterConfig]);
+  const [featureFlags, setFeatureFlags] = useState<string[]>([]);
+  const isTelemetryEnabled = useMemo(
+    () => !isCookiesVisible && clusterConfig?.enableTelemetry && localStorage.getItem('isGADisabled') === '0',
+    [isCookiesVisible, clusterConfig]
+  );
 
   const onAcceptCookies = () => {
     localStorage.setItem('isGADisabled', '0');
@@ -78,6 +80,11 @@ const AppRoot: React.FC = () => {
           mask_all_text: true,
           persistence: 'localStorage',
           property_blacklist: ['$current_url', '$host', '$referrer', '$referring_domain'],
+          loaded: instance => {
+            instance.onFeatureFlags(flags => {
+              setFeatureFlags(flags);
+            });
+          },
         });
       }
       posthog.opt_in_capturing();
@@ -89,12 +96,15 @@ const AppRoot: React.FC = () => {
     }
   }, [isTelemetryEnabled]);
 
-  const mainContextValue = useMemo(() => ({
-    ga4React,
-    dispatch,
-    clusterConfig,
-    isClusterAvailable: true,
-  }), [ga4React, dispatch, clusterConfig]);
+  const mainContextValue = useMemo(
+    () => ({
+      ga4React,
+      dispatch,
+      clusterConfig,
+      isClusterAvailable: true,
+    }),
+    [ga4React, dispatch, clusterConfig]
+  );
 
   useEffect(() => {
     posthog.capture('$pageview');
@@ -117,24 +127,35 @@ const AppRoot: React.FC = () => {
   const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
   const permissionsScope = useMemo(() => ({}), []);
 
-  const config = useMemo(() => ({
-    pageTitle: 'Testkube',
-    discordUrl: 'https://discord.com/invite/hfq44wtR6Q',
-  }), []);
+  const config = useMemo(
+    () => ({
+      pageTitle: 'Testkube',
+      discordUrl: 'https://discord.com/invite/hfq44wtR6Q',
+    }),
+    []
+  );
 
-  const dashboardValue = useMemo(() => ({
-    navigate,
-    location,
-    baseUrl: '',
-    showLogoInSider: true,
-    showSocialLinksInSider: true,
-  }), [navigate, location]);
+  const dashboardValue = useMemo(
+    () => ({
+      navigate,
+      location,
+      baseUrl: '',
+      showLogoInSider: true,
+      showSocialLinksInSider: true,
+    }),
+    [navigate, location]
+  );
 
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
-    .append(AnalyticsProvider, {disabled: !isTelemetryEnabled, privateKey: segmentIOKey, appVersion: pjson.version})
+    .append(AnalyticsProvider, {
+      disabled: !isTelemetryEnabled,
+      privateKey: segmentIOKey,
+      appVersion: pjson.version,
+      featureFlags,
+    })
     .append(MainContext.Provider, {value: mainContextValue})
     .append(ModalHandler, {})
     .render(
