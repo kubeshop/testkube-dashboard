@@ -6,7 +6,7 @@ import {Checkbox, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -23,11 +23,16 @@ const popoverContent = (
     </Text>
   </StyledPopoverContainer>
 );
+
+type FailureHandlingFormValues = {
+  negativeTest: boolean;
+};
+
 const FailureHandling: React.FC = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FailureHandlingFormValues>();
 
   const [updateTest] = useUpdateTestMutation();
 
@@ -37,7 +42,7 @@ const FailureHandling: React.FC = () => {
 
   const negativeTest = entityDetails?.executionRequest?.negativeTest;
 
-  const onSave = (values: any) => {
+  const onSave = (values: FailureHandlingFormValues) => {
     updateTest({
       id: entityDetails.name,
       data: {
@@ -47,15 +52,11 @@ const FailureHandling: React.FC = () => {
           negativeTest: values.negativeTest,
         },
       },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Test was successfully updated.`);
-        });
-      })
-      .catch((err: any) => {
-        displayDefaultErrorNotification(err);
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Test was successfully updated.`);
       });
+    });
   };
 
   return (

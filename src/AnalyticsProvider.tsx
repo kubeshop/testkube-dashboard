@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from 'react';
+import {PropsWithChildren, useEffect, useMemo} from 'react';
 
 import {AnalyticsBrowser, Context, Plugin} from '@segment/analytics-next';
 
@@ -9,7 +9,6 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 type AnalyticsProviderProps = {
   disabled?: boolean;
   privateKey: string;
-  children: React.ReactNode;
   appVersion: string;
 };
 
@@ -34,7 +33,7 @@ const CleanSensitiveDataPlugin: Plugin = {
   screen: maskSensitiveData,
 };
 
-export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
+export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProps>> = props => {
   const {disabled, privateKey, children, appVersion} = props;
 
   const notDevEnv = process.env.NODE_ENV !== 'development';
@@ -50,8 +49,8 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
   useEffect(() => {
     if (notDevEnv) {
       FingerprintJS.load()
-        .then((fp: any) => fp.get())
-        .then((result: any) => {
+        .then(fp => fp.get())
+        .then(result => {
           analytics?.identify(result.visitorId, {
             hostname,
             appVersion,
@@ -62,19 +61,19 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = props => {
     }
   }, []);
 
-  const analyticsTrack = (type: string, data: any) => {
+  const analyticsTrack = (type: string, data: Record<string, any>) => {
     if (!disabled && notDevEnv) {
       analytics?.track(type, {...data, hostname, appVersion});
     }
   };
 
+  const value = useMemo(() => ({
+    analytics,
+    analyticsTrack,
+  }), [disabled, privateKey, hostname, appVersion]);
+
   return (
-    <AnalyticsContext.Provider
-      value={{
-        analytics,
-        analyticsTrack,
-      }}
-    >
+    <AnalyticsContext.Provider value={value}>
       {children}
     </AnalyticsContext.Provider>
   );

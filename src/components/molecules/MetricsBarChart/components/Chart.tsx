@@ -14,7 +14,7 @@ type ChartProps = {
   chartConfig: BarChartConfig;
   maxValue: number;
   isDetailsView?: boolean;
-  scrollRef?: any;
+  scrollRef?: React.MutableRefObject<null>;
 };
 
 const Chart: React.FC<ChartProps> = props => {

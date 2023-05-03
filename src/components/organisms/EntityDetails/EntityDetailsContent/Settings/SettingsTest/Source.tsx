@@ -45,6 +45,18 @@ type SourceProps = {
   updateTest: (data: any) => void;
 };
 
+type SourceFormValues = {
+  source: string;
+  token?: string;
+  username?: string;
+  password?: string;
+  url?: string;
+  branch?: string;
+  path?: string;
+  content?: string;
+  testSource: string;
+};
+
 const Source: React.FC<SourceProps> = props => {
   const {entityDetails, updateTest} = props;
   const mayEdit = usePermission(Permissions.editEntity);
@@ -63,7 +75,7 @@ const Source: React.FC<SourceProps> = props => {
 
   const {source, ...additionalFormValues} = getSourceFormValues(entityDetails, testSources);
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<SourceFormValues>();
 
   const sourcesOptions = [
     ...remappedCustomTestSources,
@@ -77,7 +89,7 @@ const Source: React.FC<SourceProps> = props => {
   const [isClearedToken, setIsClearedToken] = useState(!additionalFormValues.token);
   const [isClearedUsername, setIsClearedUsername] = useState(!additionalFormValues.username);
 
-  const onSave = (values: any) => {
+  const onSave = (values: SourceFormValues) => {
     const {testSource: newTestSource} = values;
 
     updateTest({
@@ -131,7 +143,14 @@ const Source: React.FC<SourceProps> = props => {
               const executorType = selectedExecutor?.executor.meta?.iconURI;
 
               const childrenProps: {[key: string]: Object} = {
-                git: {executorType, isClearedToken, isClearedUsername, setIsClearedToken, setIsClearedUsername},
+                git: {
+                  executorType,
+                  isClearedToken,
+                  isClearedUsername,
+                  setIsClearedToken,
+                  setIsClearedUsername,
+                  getFieldValue,
+                },
                 custom: {executorType},
               };
 

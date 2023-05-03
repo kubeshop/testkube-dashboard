@@ -6,15 +6,15 @@ import notFoundImage from '@assets/not-found-image.svg';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {StyledNotFoundContainer, StyledNotFoundDescription, StyledNotFoundImage} from './NotFound.styled';
 
 const NotFound: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const onButtonClick = useCallback(() => {
-    navigate('/tests');
+    navigate(-1);
   }, []);
 
   return (

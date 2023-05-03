@@ -2,9 +2,16 @@ import {Icon} from '@atoms';
 
 import Colors from '@styles/Colors';
 
+import {IconProps} from '../Icon/types';
 import {StyledStatusIcon} from './StatusIcon.styled';
 
-const iconStyles: any = {
+interface IconStyle {
+  borderColor: Colors;
+  background: Colors;
+  color?: Colors;
+}
+
+const iconStyles: Record<string, IconStyle> = {
   failed: {
     borderColor: Colors.pink600,
     background: Colors.pink900,
@@ -14,6 +21,10 @@ const iconStyles: any = {
     background: Colors.pink900,
   },
   passed: {
+    borderColor: Colors.lime600,
+    background: Colors.lime900,
+  },
+  success: {
     borderColor: Colors.lime600,
     background: Colors.lime900,
   },
@@ -44,7 +55,11 @@ const iconStyles: any = {
   },
 };
 
-const StatusIcon: React.FC<any> = props => {
+type StatusIconProps = {
+  status: IconProps['name'];
+};
+
+const StatusIcon: React.FC<StatusIconProps> = props => {
   const {status} = props;
 
   return (

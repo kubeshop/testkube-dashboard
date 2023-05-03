@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 
 import {Form, Input, Space} from 'antd';
 
@@ -8,18 +8,20 @@ import {FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
+import {isApiEndpointLocked, useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
-import {MainContext} from '@contexts';
+type ApiEndpointFormValues = {
+  endpoint: string;
+};
 
-const ApiEndpoint = () => {
-  const [form] = Form.useForm();
+const ApiEndpoint: React.FC = () => {
+  const [form] = Form.useForm<ApiEndpointFormValues>();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const {dispatch} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
   const updateApiEndpoint = useUpdateApiEndpoint();
+  const disabled = isApiEndpointLocked();
 
   const checkApiEndpoint = async (endpoint: string) => {
     try {
@@ -36,15 +38,21 @@ const ApiEndpoint = () => {
     }
   };
 
-  const onSave = (values: any) => {
+  const onSave = (values: ApiEndpointFormValues) => {
     setIsLoading(true);
     checkApiEndpoint(values.endpoint);
   };
 
   return (
-    <Form form={form} onFinish={onSave} name="global-settings-api-endpoint" initialValues={{endpoint: apiEndpoint}}>
+    <Form
+      form={form}
+      onFinish={onSave}
+      name="global-settings-api-endpoint"
+      initialValues={{endpoint: apiEndpoint}}
+      disabled={disabled}
+    >
       <ConfigurationCard
-        title="testkube API endpoint"
+        title="Testkube API endpoint"
         description="Please provide the TestKube API endpoint for your installation. The endpoint needs to be accessible from your browser"
         footerText={
           <Text className="regular middle">
@@ -61,6 +69,7 @@ const ApiEndpoint = () => {
           form.resetFields();
         }}
         confirmButtonText={isLoading ? 'Loading...' : 'Save'}
+        enabled={!disabled}
       >
         <Space size={32} direction="vertical" style={{width: '100%'}}>
           <FormItem name="endpoint">

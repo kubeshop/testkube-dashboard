@@ -5,7 +5,7 @@ import {Entity, EntityListBlueprint, EntityListBlueprintProps} from '@models/ent
 
 import {EntityListContainer} from '@organisms';
 
-const entities: {[key in Entity]: EntityListBlueprint} = {
+const entities: Record<Entity, EntityListBlueprint> = {
   'test-suites': TestSuitesEntity,
   tests: TestsEntity,
 };

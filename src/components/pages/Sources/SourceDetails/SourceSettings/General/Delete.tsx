@@ -1,5 +1,7 @@
 import {useState} from 'react';
 
+import {Form} from 'antd';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
 
@@ -19,7 +21,7 @@ const Delete: React.FC = () => {
   };
 
   return (
-    <>
+    <Form name="delete-source-form">
       <ConfigurationCard
         title="Delete this source"
         description="This source will be permanently deleted. All your tests linked to this source will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
@@ -43,7 +45,7 @@ const Delete: React.FC = () => {
           }
         />
       ) : null}
-    </>
+    </Form>
   );
 };
 

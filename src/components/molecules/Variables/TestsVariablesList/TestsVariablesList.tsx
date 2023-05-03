@@ -1,11 +1,11 @@
 import {FormInstance} from 'antd';
 
-import {Variable} from '@models/variable';
+import {VariableInForm} from '@models/variable';
 
 import VariablesFormList from '../../VariablesFormList';
 
 type VariablesListProps = {
-  data: Variable[];
+  data: VariableInForm[];
   form: FormInstance;
 };
 

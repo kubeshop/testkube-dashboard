@@ -7,9 +7,11 @@ import {TestExecutor} from '@models/testExecutors';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
+import {Text} from '@custom-antd';
+
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext} from '@contexts';
+import {EntityDetailsContext, MainContext} from '@contexts';
 
 import CopyCommand from './CopyCommand';
 
@@ -85,15 +87,13 @@ const executionsScripts: CLIScript[] = [
   },
 ];
 
-const scriptsByEntityType: {[key in CLIScriptKey]: CLIScript[]} = {
+const scriptsByEntityType: Record<CLIScriptKey, CLIScript[]> = {
   'test-suites': testSuiteScripts,
   tests: testScripts,
   executions: executionsScripts,
 };
 
-const modifyActions: {
-  [key in CLIScriptModifier]: (args: any) => boolean;
-} = {
+const modifyActions: Record<CLIScriptModifier, (arg: boolean | string) => boolean> = {
   canHaveArtifacts: canHaveArtifacts => {
     return !canHaveArtifacts;
   },
@@ -114,13 +114,14 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const mayDelete = usePermission(Permissions.deleteEntity);
 
   const {entity} = useContext(EntityDetailsContext);
+  const {ga4React} = useContext(MainContext);
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
   const CLIEntityType = isExecutions ? 'executions' : entity;
 
-  const modifyArgsMap: Partial<{[key in CLIScriptModifier]: any}> = {
-    ...(type ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
+  const modifyArgsMap: Partial<Record<CLIScriptModifier, boolean | ExecutionStatusEnum>> = {
+    ...(type && executorsFeaturesMap[type] ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
     isFinished: modifyMap?.status,
     isRunPermission: mayRun,
     isDeletePermission: mayDelete,
@@ -139,18 +140,28 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
       if (modify) {
         const modifyArg = modifyArgsMap[modify];
 
-        if (modifyActions[modify](modifyArg)) {
+        if (modifyArg && modifyActions[modify](modifyArg)) {
           return null;
         }
       }
 
       const commandString = command(testTarget);
 
-      return <CopyCommand key={label} command={commandString} label={label} bg={bg} />;
+      const onCopy = () => {
+        if (ga4React) {
+          ga4React.gtag('event', 'copy_command', {command: label});
+        }
+      };
+
+      return <CopyCommand key={label} command={commandString} label={label} bg={bg} onCopy={onCopy} highlightSyntax />;
     }).filter(cliCommand => cliCommand);
   }, [id, name, type, modifyMap]);
 
-  return <div>{renderedCLICommands}</div>;
+  return (
+    <div>
+      {(renderedCLICommands?.length && renderedCLICommands) || <Text className="regular">No CLI commands</Text>}
+    </div>
+  );
 };
 
 export default CLICommands;

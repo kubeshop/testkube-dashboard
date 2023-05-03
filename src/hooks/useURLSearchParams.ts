@@ -2,10 +2,10 @@ import {useContext, useMemo} from 'react';
 
 import qs from 'query-string';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 const useURLSearchParams = () => {
-  const {location} = useContext(MainContext);
+  const {location} = useContext(DashboardContext);
   const {search} = location;
 
   const query = useMemo(() => new URLSearchParams(search).toString(), [search]);

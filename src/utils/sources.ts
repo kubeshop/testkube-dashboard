@@ -1,6 +1,7 @@
 import {NamePath} from 'antd/lib/form/interface';
 
 import {Option} from '@models/form';
+import {SecretRef} from '@models/secretRef';
 import {SourceWithRepository} from '@models/sources';
 
 import {notificationCall} from '@molecules';
@@ -45,7 +46,12 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
     return {data: string || file.fileContent, repository: {}};
   }
 
-  const secrets: any = {};
+  const secrets: {
+    tokenSecret?: Partial<SecretRef>;
+    token?: string;
+    usernameSecret?: Partial<SecretRef>;
+    username?: string;
+  } = {};
 
   if (token !== undefined && token !== null) {
     if (token === '') {
@@ -86,14 +92,13 @@ export const getSourcePayload = (values: any, testSources: SourceWithRepository[
 
     if (!isTestSourceExists) {
       notificationCall('failed', 'Provided test source does not exist');
-      return;
     }
+  } else {
+    return {
+      ...(testSource === 'file-uri' ? {type: 'string'} : isCustomGit ? {type: ''} : {type: testSource}),
+      ...testSourceSpecificFields,
+    };
   }
-
-  return {
-    ...(testSource === 'file-uri' ? {type: 'string'} : isCustomGit ? {type: ''} : {type: testSource}),
-    ...testSourceSpecificFields,
-  };
 };
 
 export const getCustomSourceField = (testSource: string, prevTestSource?: string) => {
@@ -102,7 +107,7 @@ export const getCustomSourceField = (testSource: string, prevTestSource?: string
   return isCustomTestSource ? {source: testSource.replace(customGitSourceString, '')} : {source: ''};
 };
 
-const dummySecret = '******';
+export const dummySecret = '******';
 
 export const getSourceFormValues = (entityDetails: any, testSources: SourceWithRepository[]) => {
   const {content} = entityDetails;
@@ -125,14 +130,16 @@ export const getSourceFormValues = (entityDetails: any, testSources: SourceWithR
     };
   }
 
-  const secrets: {token?: string; username?: string} = {};
+  const secrets: {token?: string; username?: string; tokenSecret?: Object; usernameSecret?: Object} = {};
 
   if (content?.repository?.tokenSecret?.name) {
     secrets.token = dummySecret;
+    secrets.tokenSecret = {...content?.repository?.tokenSecret, namespace: entityDetails?.namespace};
   }
 
   if (content?.repository?.usernameSecret?.name) {
     secrets.username = dummySecret;
+    secrets.usernameSecret = {...content?.repository?.usernameSecret, namespace: entityDetails?.namespace};
   }
 
   return {

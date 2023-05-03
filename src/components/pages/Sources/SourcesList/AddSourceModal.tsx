@@ -1,10 +1,10 @@
-import {useContext} from 'react';
+import React, {useContext} from 'react';
 
 import {Input as AntdInput, Form} from 'antd';
 
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 
-import {RepositoryTypeEnum} from '@models/repository';
+import {SourceWithRepository} from '@models/sources';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
@@ -15,28 +15,36 @@ import {Hint} from '@molecules';
 
 import {openSourcesDocumentation} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateSourceMutation} from '@services/sources';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {AddSourceModalContainer} from './SourcesList.styled';
 
-const AddSourceModal = () => {
-  const {navigate} = useContext(MainContext);
+type AddSourceFormValues = {
+  name: string;
+  uri: string;
+  token?: string;
+  username?: string;
+};
+
+const AddSourceModal: React.FC = () => {
+  const [form] = Form.useForm<AddSourceFormValues>();
+  const {navigate} = useContext(DashboardContext);
 
   const [createSource, {isLoading}] = useCreateSourceMutation();
 
   const namespace = useAppSelector(selectNamespace);
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: AddSourceFormValues) => {
     const {name, uri, token, username} = values;
 
-    const body = {
+    const body: SourceWithRepository = {
       name,
       repository: {
-        type: 'git' as RepositoryTypeEnum,
+        type: 'git',
         uri,
         ...(username ? {usernameSecret: {name: username}} : {}),
         ...(token ? {tokenSecret: {name: token}} : {}),
@@ -45,19 +53,17 @@ const AddSourceModal = () => {
     };
 
     createSource(body)
-      .then((res: any) => {
+      .unwrap()
+      .then(res => {
         displayDefaultNotificationFlow(res, () => {
           navigate(`/sources/${res.data.metadata.name}`);
         });
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
       });
   };
 
   return (
     <AddSourceModalContainer>
-      <Form style={{flex: 1}} layout="vertical" onFinish={onFinish}>
+      <Form style={{flex: 1}} layout="vertical" onFinish={onFinish} form={form} name="add-source-form">
         <Form.Item
           label="Name"
           required

@@ -1,10 +1,8 @@
+import {PropsWithChildren} from 'react';
+
 import {StyledPre} from './Pre.styled';
 
-type PreProps = {
-  children: any;
-};
-
-const Pre: React.FC<PreProps> = props => {
+const Pre: React.FC<PropsWithChildren<{}>> = props => {
   const {children} = props;
 
   return <StyledPre>{children}</StyledPre>;

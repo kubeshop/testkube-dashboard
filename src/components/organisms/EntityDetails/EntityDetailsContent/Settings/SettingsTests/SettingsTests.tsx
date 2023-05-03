@@ -1,6 +1,6 @@
 import {memo, useContext, useEffect, useMemo, useRef, useState} from 'react';
 
-import {Select} from 'antd';
+import {Form, Select} from 'antd';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
 
@@ -16,9 +16,9 @@ import {ExecutorIcon, ExternalLink} from '@atoms';
 
 import {Text, Title} from '@custom-antd';
 
-import {ConfigurationCard, DragNDropList, notificationCall, TestSuiteStepCard} from '@molecules';
+import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
@@ -100,13 +100,11 @@ const SettingsTests = () => {
         ...entityDetails,
         steps: currentSteps,
       },
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Steps were successfully updated.`);
-        });
-      })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+    }).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Steps were successfully updated.`);
+      });
+    });
   };
 
   const onSelectStep = (value: string) => {
@@ -161,75 +159,78 @@ const SettingsTests = () => {
   }, [currentSteps?.length]);
 
   return (
-    <ConfigurationCard
-      title="Tests"
-      description="Define the tests and their order of execution for this test suite"
-      footerText={
+    <Form name="define-tests-form">
+      <ConfigurationCard
+        title="Tests"
+        description="Define the tests and their order of execution for this test suite"
+        footerText={
+          <>
+            Learn more about{' '}
+            <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
+              Tests in a test suite
+            </ExternalLink>
+          </>
+        }
+        onConfirm={saveSteps}
+        onCancel={() => setCurrentSteps(undefined)}
+        isButtonsDisabled={!wasTouched}
+        isEditable={mayEdit}
+        enabled={mayEdit}
+      >
         <>
-          Learn more about{' '}
-          <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
-            Tests in a test suite
-          </ExternalLink>
-        </>
-      }
-      onConfirm={saveSteps}
-      onCancel={() => setCurrentSteps(undefined)}
-      isButtonsDisabled={!wasTouched}
-      isEditable={mayEdit}
-      enabled={mayEdit}
-    >
-      <>
-        {currentSteps?.length === 0 ? (
-          <EmptyTestsContainer>
-            <Title level={2} className="text-center">
-              Add your tests to this test suite
-            </Title>
-            <Text className="regular middle text-center">
-              Select tests from the dropdown below to add them to this suite
-            </Text>
-          </EmptyTestsContainer>
-        ) : null}
-        <DragNDropList
-          items={currentSteps}
-          setItems={setCurrentSteps}
-          onDelete={deleteStep}
-          scrollRef={scrollRef}
-          ContainerComponent={StyledStepsList}
-          ItemComponent={TestSuiteStepCard}
-        />
-        <DelayModal
-          isDelayModalVisible={isDelayModalVisible}
-          setIsDelayModalVisible={setIsDelayModalVisible}
-          addDelay={addDelay}
-        />
-        {mayEdit ? (
-          <Select
-            placeholder="Add a test or delay"
-            showArrow
-            onChange={onSelectStep}
-            style={{width: '100%', marginBottom: '30px'}}
-            value={null}
-            showSearch
-            size="large"
-          >
-            <Option value="delay">
-              <StyledOptionWrapper>
-                <ClockCircleOutlined />
-                <Text className="regular middle">Delay</Text>
-              </StyledOptionWrapper>
-            </Option>
-            {allTestsData.map((item: any) => (
-              <Option value={JSON.stringify(item)} key={item.name}>
+          {currentSteps?.length === 0 ? (
+            <EmptyTestsContainer>
+              <Title level={2} className="text-center">
+                Add your tests to this test suite
+              </Title>
+              <Text className="regular middle text-center">
+                Select tests from the dropdown below to add them to this suite
+              </Text>
+            </EmptyTestsContainer>
+          ) : null}
+          <DragNDropList
+            items={currentSteps}
+            setItems={setCurrentSteps}
+            onDelete={deleteStep}
+            scrollRef={scrollRef}
+            ContainerComponent={StyledStepsList}
+            ItemComponent={TestSuiteStepCard}
+            disabled={!mayEdit}
+          />
+          <DelayModal
+            isDelayModalVisible={isDelayModalVisible}
+            setIsDelayModalVisible={setIsDelayModalVisible}
+            addDelay={addDelay}
+          />
+          {mayEdit ? (
+            <Select
+              placeholder="Add a test or delay"
+              showArrow
+              onChange={onSelectStep}
+              style={{width: '100%', marginTop: 15, marginBottom: 30}}
+              value={null}
+              showSearch
+              size="large"
+            >
+              <Option value="delay">
                 <StyledOptionWrapper>
-                  <ExecutorIcon type={item.type} />
-                  <Text className="regular middle">{item.name}</Text>
+                  <ClockCircleOutlined />
+                  <Text className="regular middle">Delay</Text>
                 </StyledOptionWrapper>
               </Option>
-            ))}
-          </Select>
-        ) : null}
-      </>
-    </ConfigurationCard>
+              {allTestsData.map((item: any) => (
+                <Option value={JSON.stringify(item)} key={item.name}>
+                  <StyledOptionWrapper>
+                    <ExecutorIcon type={item.type} />
+                    <Text className="regular middle">{item.name}</Text>
+                  </StyledOptionWrapper>
+                </Option>
+              ))}
+            </Select>
+          ) : null}
+        </>
+      </ConfigurationCard>
+    </Form>
   );
 };
 

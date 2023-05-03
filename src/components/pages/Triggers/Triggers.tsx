@@ -1,11 +1,12 @@
 import {memo, useContext, useEffect, useMemo, useState} from 'react';
 
-import {Dropdown, Form, Menu} from 'antd';
+import {Dropdown, Form} from 'antd';
 
 import {DownOutlined} from '@ant-design/icons';
 
-import {TestWithExecution} from '@models/test';
-import {TestTrigger} from '@models/triggers';
+import {TestForTrigger} from '@models/test';
+import {TestSuiteForTrigger} from '@models/testSuite';
+import {TestTrigger, TestTriggerFormEntity} from '@models/triggers';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
@@ -21,7 +22,7 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import {PageBlueprint} from '@organisms';
 
 import {safeRefetch} from '@utils/fetchUtils';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
@@ -35,31 +36,11 @@ import {MainContext} from '@contexts';
 import AddTriggerOption from './AddTriggerOption';
 import TriggerItem from './TriggerItem';
 import {Wrapper} from './Triggers.styled';
+import {addTriggerOptions} from './utils';
 
-export type TriggerType = 'label-label' | 'name-label' | 'name-name' | 'label-name';
-
-const addTriggerOptions: {key: TriggerType; label: string; description: string}[] = [
-  {
-    key: 'label-label',
-    label: 'Labels to Labels',
-    description: 'Identify your cluster and testkube resources by label',
-  },
-  {
-    key: 'name-label',
-    label: 'Name to Labels',
-    description: 'Identify your cluster resource by name, your testkube resources by label',
-  },
-  {
-    key: 'name-name',
-    label: 'Name to Name',
-    description: 'Identify your cluster and testkube resource by name',
-  },
-  {
-    key: 'label-name',
-    label: 'Labels to Name',
-    description: 'Identify your cluster resources by labels, your testkube resource by name',
-  },
-];
+type TriggersFormValues = {
+  triggers: TestTriggerFormEntity[];
+};
 
 const Triggers: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
@@ -83,19 +64,19 @@ const Triggers: React.FC = () => {
 
   const [updateTriggers] = useUpdateTriggersMutation();
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<TriggersFormValues>();
 
-  const [defaultFormattedTriggers, setDefaultFormattedTriggers] = useState<any>([]);
+  const [defaultFormattedTriggers, setDefaultFormattedTriggers] = useState<TestTriggerFormEntity[]>([]);
 
   const appNamespace = useAppSelector(selectNamespace);
   const executors = useAppSelector(selectExecutors);
 
-  const setDefaultTriggersData = (_triggersList?: TestTrigger[]) => {
-    if (_triggersList) {
-      const triggersData = _triggersList.map(trigger => {
-        const {resourceSelector, testSelector, action, execution} = trigger;
+  const setDefaultTriggersData = (_triggersList: TestTrigger[]) => {
+    if (_triggersList && _triggersList.length) {
+      try {
+        const triggersData: TestTriggerFormEntity[] = _triggersList.map(trigger => {
+          const {resourceSelector, testSelector, action, execution} = trigger;
 
-        try {
           const isResourceName = resourceSelector.name;
           const isTestName = testSelector.name;
           const resourceType = isResourceName ? 'name' : 'labels';
@@ -110,41 +91,48 @@ const Triggers: React.FC = () => {
             testSelector: isTestName || testSelector.labelSelector.matchLabels,
             action: `${action} ${execution}`,
           };
-        } catch (err) {
-          return null;
-        }
-      });
+        });
+
+        form.setFieldsValue({
+          triggers: triggersData,
+        });
+
+        setDefaultFormattedTriggers(triggersData);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
+    } else {
       form.setFieldsValue({
-        triggers: triggersData,
+        triggers: [],
       });
-      setDefaultFormattedTriggers(triggersData);
     }
   };
 
   useEffect(() => {
-    setDefaultTriggersData(triggersList);
+    setDefaultTriggersData(triggersList || []);
   }, [triggersList]);
 
   useEffect(() => {
     safeRefetch(refetch);
   }, []);
 
-  const testsData = useMemo(() => {
-    return testsList.map((item: TestWithExecution) => ({
+  const testsData: TestForTrigger[] = useMemo(() => {
+    return testsList.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
       type: item.test.type,
     }));
   }, [testsList]);
 
-  const testSuitesData = useMemo(() => {
-    return testsSuitesList.map((item: any) => ({
+  const testSuitesData: TestSuiteForTrigger[] = useMemo(() => {
+    return testsSuitesList.map(item => ({
       name: item.testSuite.name,
       namespace: item.testSuite.namespace,
     }));
   }, [testsSuitesList]);
 
-  const resourcesOptions = triggersKeyMap?.resources.map((item: string) => ({label: item, value: item}));
+  const resourcesOptions = triggersKeyMap?.resources.map(item => ({label: item, value: item}));
   const actionOptions = triggersKeyMap?.actions
     .map((actionItem: string) => {
       return triggersKeyMap.executions.map(executionItem => {
@@ -155,48 +143,41 @@ const Triggers: React.FC = () => {
     .flat();
   const events = triggersKeyMap?.events;
 
-  const addTriggerMenu = (add: (value: any) => void) => {
-    return (
-      <Menu
-        items={addTriggerOptions.map(({key, ...restProps}) => ({
-          key,
-          label: <AddTriggerOption {...restProps} onSelect={() => add({type: key.split('-')})} />,
-        }))}
-      />
-    );
-  };
+  const getSelector = (formValue: any) => {
+    if (typeof formValue === 'string') {
+      if (formValue.includes('/')) {
+        const [namespace, name] = formValue.split('/');
 
-  const onSave = (values: any) => {
-    const getSelector = (formValue: any) => {
-      if (typeof formValue === 'string') {
-        if (formValue.includes('/')) {
-          const [namespace, name] = formValue.split('/');
-          return {
-            name,
-            namespace,
-          };
-        }
         return {
-          name: formValue,
-          namespace: appNamespace,
-        };
-      }
-      if (formValue.length) {
-        return {
-          labelSelector: {
-            matchLabels: decomposeLabels(formValue),
-          },
+          name,
+          namespace,
         };
       }
       return {
+        name: formValue,
+        namespace: appNamespace,
+      };
+    }
+
+    if (formValue.length) {
+      return {
         labelSelector: {
-          matchLabels: formValue,
+          matchLabels: decomposeLabels(formValue),
         },
       };
-    };
+    }
 
-    const body = values.triggers.map((trigger: any) => {
+    return {
+      labelSelector: {
+        matchLabels: formValue,
+      },
+    };
+  };
+
+  const onSave = (values: TriggersFormValues) => {
+    const body = values.triggers.map(trigger => {
       const [action, execution] = trigger.action.split(' ');
+
       const triggerPayload = {
         ...trigger,
         action,
@@ -205,17 +186,15 @@ const Triggers: React.FC = () => {
         resourceSelector: getSelector(trigger.resourceSelector),
         testSelector: getSelector(trigger.testSelector),
       };
+
       delete triggerPayload.type;
+
       return triggerPayload;
     });
 
-    updateTriggers(body)
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
-      })
-      .catch(error => {
-        displayDefaultErrorNotification(error);
-      });
+    updateTriggers(body).then(res => {
+      displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
+    });
   };
 
   const isLoading = keyMapLoading || testsLoading || testSuitesLoading || triggersLoading;
@@ -243,7 +222,7 @@ const Triggers: React.FC = () => {
               .catch(() => notificationCall('failed', 'Validate you triggers data, please'));
           }}
           onCancel={() => {
-            setDefaultTriggersData(triggersList);
+            setDefaultTriggersData(triggersList || []);
             form.resetFields();
           }}
           isButtonsDisabled={isLoading}
@@ -262,6 +241,8 @@ const Triggers: React.FC = () => {
                     fields.map((key, name) => {
                       const triggerItemData = form.getFieldValue('triggers')[name];
 
+                      const triggerItemKey = `trigger-${name}`;
+
                       if (!triggerItemData) {
                         return null;
                       }
@@ -278,6 +259,7 @@ const Triggers: React.FC = () => {
                           testSuitesData={testSuitesData}
                           isTriggersAvailable={isTriggersAvailable}
                           executors={executors}
+                          key={triggerItemKey}
                         />
                       );
                     })
@@ -286,7 +268,12 @@ const Triggers: React.FC = () => {
                   ) : null}
                   {isTriggersAvailable ? (
                     <Dropdown
-                      overlay={() => addTriggerMenu(add)}
+                      menu={{
+                        items: addTriggerOptions.map(({key, ...restProps}) => ({
+                          key,
+                          label: <AddTriggerOption {...restProps} onSelect={() => add({type: key.split('-')})} />,
+                        })),
+                      }}
                       placement="bottomLeft"
                       trigger={['click']}
                       disabled={!isClusterAvailable}

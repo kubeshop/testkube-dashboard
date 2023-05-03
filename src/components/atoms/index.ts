@@ -2,6 +2,7 @@ export {default as Icon} from './Icon/Icon';
 export {default as ExecutorIcon} from './ExecutorIcon';
 export {default as Dots} from './Dots';
 export {default as LabelListItem} from './LabelListItem';
+export {default as Loader} from './Loader';
 export {default as UploadWithInput} from './UploadWithInput';
 export {default as StatusIcon} from './StatusIcon';
 export {default as Pre} from './Pre';
@@ -13,3 +14,4 @@ export {default as AnsiClassesMapping} from './TestkubeTheme/AnsiClassesMapping'
 export {default as TestkubeCodeTheme} from './TestkubeTheme/CodeTheme';
 export {default as ExternalLink} from './ExternalLink';
 export {default as DownloadButton} from './DownloadButton';
+export {default as Asterisk} from './Asterisk';

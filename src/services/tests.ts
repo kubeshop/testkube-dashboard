@@ -3,44 +3,66 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 import {Artifact} from '@models/artifact';
 import {TestFilters, TestWithExecution} from '@models/test';
 
-import {dynamicBaseQuery, paramsSerializer} from '@utils/fetchUtils';
+import {dynamicBaseQuery, memoizeQuery, paramsSerializer} from '@utils/fetchUtils';
 
 export const testsApi = createApi({
   reducerPath: 'testsApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTests: builder.query<TestWithExecution[], TestFilters>({
-      query: filters => `/test-with-executions?${paramsSerializer(filters)}`,
+      query: filters => ({
+        url: `/test-with-executions?${paramsSerializer(filters)}`,
+      }),
     }),
     getAllTests: builder.query<TestWithExecution[], void | null>({
-      query: () => `/test-with-executions`,
+      query: () => ({
+        url: `/test-with-executions`,
+      }),
+    }),
+    getTestDefinition: builder.query<string, string>({
+      query: testId => ({
+        url: `/tests/${testId}`,
+        responseHandler: 'text',
+        headers: {accept: 'text/yaml'},
+      }),
     }),
     getTest: builder.query<TestWithExecution, string>({
-      query: testId => `/tests/${testId}`,
+      query: testId => ({
+        url: `/tests/${testId}`,
+      }),
     }),
     getTestExecutionsById: builder.query({
-      query: ({id, last = 7, pageSize = Number.MAX_SAFE_INTEGER}) => {
+      query: ({id, last = 7, pageSize = 1000}) => {
         const queryParams = new URLSearchParams({
           last,
           pageSize,
         });
 
-        return `/tests/${id}/executions?${queryParams.toString()}`;
+        return {
+          url: `/tests/${id}/executions?${queryParams.toString()}`,
+        };
       },
     }),
     getTestExecutionById: builder.query<any, string>({
-      query: testExecutionId => `/executions/${testExecutionId}`,
+      query: testExecutionId => ({
+        url: `/executions/${testExecutionId}`,
+      }),
     }),
     getTestExecutionArtifacts: builder.query<Artifact[], string>({
-      query: testExecutionId => `/executions/${testExecutionId}/artifacts`,
+      query: testExecutionId => ({
+        url: `/executions/${testExecutionId}/artifacts`,
+      }),
     }),
     getTestExecutionMetrics: builder.query({
-      query: ({id, last = 7, limit = Number.MAX_SAFE_INTEGER}) => {
+      query: ({id, last = 7, limit = 1000}) => {
         const queryParams = new URLSearchParams({
           last,
           limit,
         });
-        return `/tests/${id}/metrics?${queryParams.toString()}`;
+
+        return {
+          url: `/tests/${id}/metrics?${queryParams.toString()}`,
+        };
       },
     }),
     addTest: builder.mutation<any, any>({
@@ -82,7 +104,27 @@ export const testsApi = createApi({
   }),
 });
 
+// Apply optimization
+testsApi.useGetTestQuery = memoizeQuery(testsApi.useGetTestQuery);
+testsApi.useGetTestsQuery = memoizeQuery(testsApi.useGetTestsQuery);
+testsApi.useGetAllTestsQuery = memoizeQuery(testsApi.useGetAllTestsQuery);
+testsApi.useGetTestExecutionsByIdQuery = memoizeQuery(testsApi.useGetTestExecutionsByIdQuery, (executions) => (
+  // Limit to show maximum of 1000 latest executions
+  executions.results?.length > 1000
+    ? {...executions, results: executions.results.slice(0, 1000)}
+    : executions
+));
+testsApi.useGetTestExecutionByIdQuery = memoizeQuery(testsApi.useGetTestExecutionByIdQuery);
+testsApi.useGetTestExecutionArtifactsQuery = memoizeQuery(testsApi.useGetTestExecutionArtifactsQuery);
+testsApi.useGetTestExecutionMetricsQuery = memoizeQuery(testsApi.useGetTestExecutionMetricsQuery, (metrics) => (
+  // Limit to show maximum of 1000 latest executions
+  metrics.executions?.length > 1000
+    ? {...metrics, executions: metrics.executions.slice(0, 1000)}
+    : metrics
+));
+
 export const {
+  useGetTestDefinitionQuery,
   useGetTestQuery,
   useGetTestsQuery,
   useGetAllTestsQuery,

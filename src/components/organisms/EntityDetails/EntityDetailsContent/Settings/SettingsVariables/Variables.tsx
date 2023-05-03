@@ -1,14 +1,15 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useContext, useEffect, useMemo} from 'react';
 
 import {Form} from 'antd';
 
 import {Entity} from '@models/entity';
+import {VariableInForm} from '@models/variable';
 
 import {ExternalLink} from '@atoms';
 
-import {ConfigurationCard, notificationCall, TestsVariablesList} from '@molecules';
+import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -17,10 +18,14 @@ import {EntityDetailsContext} from '@contexts';
 
 import {updateRequestsMap} from '../utils';
 
-const descriptionMap: {[key in Entity]: string} = {
+const descriptionMap: Record<Entity, string> = {
   'test-suites':
     'Define environment variables which will be shared across your tests. Variables defined at a Test Suite level will override those defined at a Test level.',
   tests: 'Define environment variables which will be shared across your test.',
+};
+
+type VariablesFormValues = {
+  'variables-list': VariableInForm[];
 };
 
 const Variables: React.FC = () => {
@@ -28,13 +33,20 @@ const Variables: React.FC = () => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<VariablesFormValues>();
 
   const variables = useMemo(() => {
-    return decomposeVariables(entityDetails?.executionRequest?.variables) || [];
+    return decomposeVariables(entityDetails?.executionRequest?.variables);
   }, [entityDetails?.executionRequest?.variables]);
 
-  const onSaveForm = (value: any) => {
+  useEffect(() => {
+    form.setFieldsValue({
+      'variables-list': variables,
+    });
+    form.resetFields();
+  }, [variables]);
+
+  const onSaveForm = (value: VariablesFormValues) => {
     const successRecord = {
       ...entityDetails,
       executionRequest: {
@@ -46,13 +58,11 @@ const Variables: React.FC = () => {
     updateEntity({
       id: entityDetails.name,
       data: successRecord,
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `Variables were successfully updated.`);
-        });
-      })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', `Variables were successfully updated.`);
+      });
+    });
   };
 
   const onClickSave = () => {

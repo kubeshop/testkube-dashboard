@@ -7,7 +7,7 @@ import {store} from '@redux/store';
 
 import {GlobalStyle} from '@styles/globalStyles';
 
-import App from './App';
+import AppRoot from './AppRoot';
 import './antd-theme/antd-customized.css';
 import env from './env';
 
@@ -30,7 +30,7 @@ import env from './env';
       <Provider store={store}>
         <BrowserRouter basename={basename}>
           <GlobalStyle />
-          <App />
+          <AppRoot />
         </BrowserRouter>
       </Provider>
     </React.StrictMode>

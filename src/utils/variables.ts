@@ -1,20 +1,10 @@
-import {Variables} from '@models/variable';
+import {VariableInForm, Variables} from '@models/variable';
 
-export const formatVariables = (list: any[]) => {
-  const variables: {
-    [key in string]: {
-      name: string;
-      value?: string;
-      type: string;
-      secretRef?: {
-        name: string;
-        key: string;
-      };
-    };
-  } = {};
+export const formatVariables = (list: VariableInForm[]) => {
+  const variables: Variables = {};
 
   list.forEach(item => {
-    if (item.secretRef || item.type === 'secretRef') {
+    if (item.secretRefName && item.secretRefKey && item.type === 'secretRef') {
       variables[item.key] = {
         name: item.key,
         type: 'secret',
@@ -35,18 +25,19 @@ export const formatVariables = (list: any[]) => {
   return variables;
 };
 
-export const decomposeVariables = (variables: Variables) => {
+export const decomposeVariables = (variables: Variables): VariableInForm[] => {
   if (!variables) {
     return [];
   }
 
-  return Object.entries(variables).map(([key, value]: any) => {
+  return Object.entries(variables).map(([key, value]) => {
     if (value.secretRef) {
       return {
-        key: value?.name,
+        key: value.name,
         type: 'secretRef',
         secretRefName: value.secretRef.name,
         secretRefKey: value.secretRef.key,
+        name: value.name,
       };
     }
 
@@ -63,8 +54,9 @@ export const decomposeVariables = (variables: Variables) => {
     return {
       ...value,
       value: formattedValue,
-      key: value?.name,
+      key: value.name,
       type: value.type === 'basic' ? 0 : 1,
+      name: value.name,
     };
   });
 };

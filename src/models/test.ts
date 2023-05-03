@@ -41,6 +41,13 @@ export type TestFilters = {
   createdAt: null;
   status: Array<string>;
 };
+
+export type TestForTrigger = {
+  name: Test['name'];
+  namespace: Test['namespace'];
+  type: Test['type'];
+};
+
 interface TestsState {
   isLoading?: boolean;
   dataList: Test[];

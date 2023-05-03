@@ -1,9 +1,11 @@
 import React from 'react';
 
 import {HourglassOutlined} from '@ant-design/icons';
+import {IconComponentProps} from '@ant-design/icons/lib/components/Icon';
 
 import {StyledAntdIcon} from './Icon.styled';
 import Icons from './icons';
+import {IconProps} from './types';
 
 const {
   CogIcon,
@@ -17,7 +19,7 @@ const {
   DelayIcon,
 } = Icons;
 
-const iconsMap: any = {
+const iconsMap: Record<IconProps['name'], IconComponentProps['component']> = {
   cog: CogIcon,
   documentation: DocumentationIcon,
   discord: DiscordIcon,
@@ -26,30 +28,14 @@ const iconsMap: any = {
   failed: FailedStatusIcon,
   error: FailedStatusIcon,
   running: RunningStatusIcon,
-  pending: HourglassOutlined,
+  // It's standalone AntD icon that shouldn't be used, but it works
+  pending: HourglassOutlined as React.FC<{}>,
   queued: PendingStatusIcon,
   delay: DelayIcon,
   cancelled: FailedStatusIcon,
   timeout: FailedStatusIcon,
   aborted: FailedStatusIcon,
-};
-
-type IconProps = {
-  name:
-    | 'cog'
-    | 'documentation'
-    | 'discord'
-    | 'github'
-    | 'passed'
-    | 'failed'
-    | 'running'
-    | 'pending'
-    | 'delay'
-    | 'cancelled'
-    | 'timeout'
-    | 'aborted';
-  component?: any;
-  style?: any;
+  success: PassedStatusIcon,
 };
 
 const Icon: React.FC<IconProps> = props => {

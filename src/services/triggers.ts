@@ -2,17 +2,17 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {TestTrigger, TriggersKeyMap} from '@models/triggers';
 
-import {dynamicBaseQuery} from '@utils/fetchUtils';
+import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
 export const triggersApi = createApi({
   reducerPath: 'triggersApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getTriggersKeyMap: builder.query<TriggersKeyMap, void | null>({
-      query: () => `/keymap/triggers`,
+      query: () => ({url: `/keymap/triggers`}),
     }),
     getTriggersList: builder.query<TestTrigger[], void | null>({
-      query: () => `/triggers`,
+      query: () => ({url: `/triggers`}),
     }),
     createTrigger: builder.mutation<any, any>({
       query: body => ({
@@ -30,6 +30,10 @@ export const triggersApi = createApi({
     }),
   }),
 });
+
+// Apply optimization
+triggersApi.useGetTriggersKeyMapQuery = memoizeQuery(triggersApi.useGetTriggersKeyMapQuery);
+triggersApi.useGetTriggersListQuery = memoizeQuery(triggersApi.useGetTriggersListQuery);
 
 export const {useGetTriggersKeyMapQuery, useCreateTriggerMutation, useGetTriggersListQuery, useUpdateTriggersMutation} =
   triggersApi;

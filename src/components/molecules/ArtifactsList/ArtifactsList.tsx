@@ -1,27 +1,24 @@
 import {useMemo} from 'react';
 
-import {FileOutlined} from '@ant-design/icons';
-
 import {Artifact} from '@models/artifact';
 
 import {Skeleton, Text} from '@custom-antd';
 
-import {downloadFile} from '@services/artifacts';
-
 import Colors from '@styles/Colors';
 
-import {ArtifactsListContainer, ArtifactsListItem, StyledDownloadIcon, StyledSpace} from './ArtifactsList.styled';
+import {ArtifactsListContainer} from './ArtifactsList.styled';
+import ArtifactsListItem from './ArtifactsListItem';
 
 type ArtifactsListProps = {
   artifacts: Artifact[];
   testExecutionId: string;
   isLoading?: boolean;
+  testName?: string;
+  testSuiteName?: string;
 };
 
 const ArtifactsList: React.FC<ArtifactsListProps> = props => {
-  const {artifacts, testExecutionId, isLoading} = props;
-
-  const downloadArtifact = downloadFile(testExecutionId);
+  const {artifacts, testExecutionId, testName, testSuiteName, isLoading} = props;
 
   const renderedArtifactsList = useMemo(() => {
     if (isLoading) {
@@ -47,16 +44,16 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
       const listItemKey = `${name} - ${index}`;
 
       return (
-        <ArtifactsListItem key={listItemKey} onClick={() => downloadArtifact(name)}>
-          <StyledSpace size={15}>
-            <FileOutlined />
-            <Text className="regular" color={Colors.slate300}>{name}</Text>
-            <StyledDownloadIcon />
-          </StyledSpace>
-        </ArtifactsListItem>
+        <ArtifactsListItem
+          artifact={artifact}
+          key={listItemKey}
+          executionId={testExecutionId}
+          testName={testName}
+          testSuiteName={testSuiteName}
+        />
       );
     });
-  }, [artifacts, testExecutionId]);
+  }, [artifacts, testExecutionId, isLoading]);
 
   return <ArtifactsListContainer>{renderedArtifactsList}</ArtifactsListContainer>;
 };

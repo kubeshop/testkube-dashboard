@@ -12,13 +12,15 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import {useGetSourceDetailsQuery} from '@services/sources';
 
-import {MainContext} from '@contexts';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
 import {StyledContainer, StyledPageHeader} from './SourceDetails.styled';
 import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
-  const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
+  const {pageTitle} = useContext(ConfigContext);
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);
 
@@ -26,7 +28,7 @@ const SourceDetails = () => {
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: isClusterAvailable});
+  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
 
   const isPageDisabled = !name;
 
@@ -43,7 +45,7 @@ const SourceDetails = () => {
   return (
     <StyledContainer>
       <Helmet>
-        <title>{`${name} | Sources | Testkube`}</title>
+        <title>{`${name} | Sources | ${pageTitle}`}</title>
       </Helmet>
       <StyledPageHeader onBack={() => navigate('/sources')} title={name} className="testkube-pageheader" />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>

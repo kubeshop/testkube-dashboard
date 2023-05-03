@@ -17,7 +17,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import AddSourceModal from './AddSourceModal';
 import EmptySources from './EmptySources';
@@ -26,7 +26,8 @@ import {SourceContainer, SourcesGrid, SourcesListSkeletonWrapper} from './Source
 const Sources: React.FC = () => {
   const sourcesList = useAppSelector(selectSources);
 
-  const {dispatch, navigate, location, isClusterAvailable} = useContext(MainContext);
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
 
   const {data: sources, refetch, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
 
@@ -34,7 +35,7 @@ const Sources: React.FC = () => {
   const mayCreate = usePermission(Permissions.createEntity);
 
   const onNavigateToDetails = (name: string) => {
-    navigate(`sources/${name}`);
+    navigate(`/sources/${name}`);
   };
 
   useEffect(() => {
@@ -67,11 +68,17 @@ const Sources: React.FC = () => {
           <ExternalLink href="https://kubeshop.github.io/testkube/openapi/#tag/test-sources">Sources</ExternalLink>
         </>
       }
-      headerButton={mayCreate ? (
-        <Button $customType="primary" onClick={() => setAddSourceModalVisibility(true)}>
-          Create a new source
-        </Button>
-      ) : null}
+      headerButton={
+        mayCreate ? (
+          <Button
+            $customType="primary"
+            onClick={() => setAddSourceModalVisibility(true)}
+            disabled={!isClusterAvailable}
+          >
+            Create a new source
+          </Button>
+        ) : null
+      }
     >
       {isLoading ? (
         <SourcesListSkeletonWrapper>

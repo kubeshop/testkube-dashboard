@@ -1,16 +1,12 @@
 import {useContext} from 'react';
 
+import {Tabs} from 'antd';
+
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {ExecutionStepsList} from '@molecules';
 
 import {ExecutionDetailsContext} from '@contexts';
-
-import {
-  StyledAntTabPane,
-  StyledAntTabs,
-  StyledTestSuiteExecutionDetailsTabsContainer,
-} from '../ExecutionDetails.styled';
 
 const TestSuiteExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
@@ -19,13 +15,15 @@ const TestSuiteExecutionDetailsTabs: React.FC = () => {
   const {stepResults} = testSuiteData;
 
   return (
-    <StyledTestSuiteExecutionDetailsTabsContainer>
-      <StyledAntTabs>
-        <StyledAntTabPane tab="All Steps" key="AllStepsPane">
-          {stepResults ? <ExecutionStepsList executionSteps={stepResults} /> : null}
-        </StyledAntTabPane>
-      </StyledAntTabs>
-    </StyledTestSuiteExecutionDetailsTabsContainer>
+    <Tabs
+      items={[
+        {
+          key: 'AllStepsPane',
+          label: 'All Steps',
+          children: <ExecutionStepsList executionSteps={stepResults} />,
+        },
+      ]}
+    />
   );
 };
 

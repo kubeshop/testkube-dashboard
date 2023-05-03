@@ -33,7 +33,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
 
   const [isVisible, setVisibilityState] = useState(false);
 
-  const onVisibleChange = (flag: boolean) => {
+  const onOpenChange = (flag: boolean) => {
     setVisibilityState(flag);
   };
 
@@ -87,7 +87,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
 
   const resetFilter = () => {
     dispatch(setFilters({...filters, status: [], pageSize: initialPageSize}));
-    onVisibleChange(false);
+    onOpenChange(false);
 
     searchParams.delete('status');
     setSearchParams(searchParams);
@@ -96,7 +96,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
   const menu = (
     <StyledFilterMenu data-cy="status-filter-dropdown">
       {renderedStatuses}
-      <FilterMenuFooter onReset={resetFilter} onOk={() => onVisibleChange(false)} />
+      <FilterMenuFooter onReset={resetFilter} onOk={() => onOpenChange(false)} />
     </StyledFilterMenu>
   );
 
@@ -107,7 +107,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
       overlay={menu}
       trigger={['click']}
       placement="bottom"
-      onOpenChange={onVisibleChange}
+      onOpenChange={onOpenChange}
       open={isVisible}
       disabled={isFiltersDisabled}
     >

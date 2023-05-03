@@ -17,7 +17,7 @@ import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
 import {triggersApi} from '@services/triggers';
 
-const middlewares: Middleware[] = [
+export const middlewares: Middleware[] = [
   executionsApi.middleware,
   testsApi.middleware,
   testSuitesApi.middleware,
@@ -30,25 +30,27 @@ const middlewares: Middleware[] = [
   repositoryApi.middleware,
 ];
 
-export const store = configureStore({
-  reducer: {
-    testSuites: testSuitesSlice,
-    tests: testsSlice,
-    config: configSlice,
-    executors: executorsSlice,
-    sources: sourcesSlice,
+export const reducers = {
+  testSuites: testSuitesSlice,
+  tests: testsSlice,
+  config: configSlice,
+  executors: executorsSlice,
+  sources: sourcesSlice,
 
-    [testSuitesApi.reducerPath]: testSuitesApi.reducer,
-    [testsApi.reducerPath]: testsApi.reducer,
-    [executionsApi.reducerPath]: executionsApi.reducer,
-    [labelsApi.reducerPath]: labelsApi.reducer,
-    [testSuiteExecutionsApi.reducerPath]: testSuiteExecutionsApi.reducer,
-    [executorsApi.reducerPath]: executorsApi.reducer,
-    [sourcesApi.reducerPath]: sourcesApi.reducer,
-    [triggersApi.reducerPath]: triggersApi.reducer,
-    [configApi.reducerPath]: configApi.reducer,
-    [repositoryApi.reducerPath]: repositoryApi.reducer,
-  },
+  [testSuitesApi.reducerPath]: testSuitesApi.reducer,
+  [testsApi.reducerPath]: testsApi.reducer,
+  [executionsApi.reducerPath]: executionsApi.reducer,
+  [labelsApi.reducerPath]: labelsApi.reducer,
+  [testSuiteExecutionsApi.reducerPath]: testSuiteExecutionsApi.reducer,
+  [executorsApi.reducerPath]: executorsApi.reducer,
+  [sourcesApi.reducerPath]: sourcesApi.reducer,
+  [triggersApi.reducerPath]: triggersApi.reducer,
+  [configApi.reducerPath]: configApi.reducer,
+  [repositoryApi.reducerPath]: repositoryApi.reducer,
+};
+
+export const store = configureStore({
+  reducer: reducers,
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 });
 

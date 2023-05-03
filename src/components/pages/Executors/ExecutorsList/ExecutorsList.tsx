@@ -21,7 +21,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import {executorsList} from '../utils';
 import AddExecutorsModal from './AddExecutorsModal';
@@ -34,19 +34,20 @@ import {
 } from './ExecutorsList.styled';
 
 const Executors: React.FC = () => {
-  const {navigate, isClusterAvailable} = useContext(MainContext);
+  const {isClusterAvailable} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const mayCreate = usePermission(Permissions.createEntity);
   const apiEndpoint = useApiEndpoint();
 
   const [activeTabKey, setActiveTabKey] = useState('custom');
   const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
 
-  const {data: executors, refetch, isLoading} = useGetExecutorsQuery();
+  const {data: executors, isLoading, refetch} = useGetExecutorsQuery(null, {skip: !isClusterAvailable});
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
   const onNavigateToDetails = (name: string) => {
-    navigate(`executors/${name}`);
+    navigate(`/executors/${name}`);
   };
 
   useEffect(() => {
@@ -98,36 +99,52 @@ const Executors: React.FC = () => {
           <ExternalLink href="https://kubeshop.github.io/testkube/test-types/executor-custom">executors</ExternalLink>
         </>
       }
-      headerButton={mayCreate ? (
-        <Button $customType="primary" onClick={() => setAddExecutorModalVisibility(true)} disabled={!isClusterAvailable}>
-          Create a new executor
-        </Button>
-      ) : null}
+      headerButton={
+        mayCreate ? (
+          <Button
+            $customType="primary"
+            onClick={() => setAddExecutorModalVisibility(true)}
+            disabled={!isClusterAvailable}
+          >
+            Create a new executor
+          </Button>
+        ) : null
+      }
     >
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane defaultActiveKey="custom">
-        <Tabs.TabPane tab="Custom executors" key="custom">
-          {isLoading ? (
-            <ExecutorsListSkeletonWrapper>
-              {new Array(6).fill(0).map((_, index) => {
-                const key = `skeleton-item-${index}`;
+      <Tabs
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
+        destroyInactiveTabPane
+        defaultActiveKey="custom"
+        items={[
+          {
+            label: 'Custom executors',
+            key: 'custom',
+            children: isLoading ? (
+              <ExecutorsListSkeletonWrapper>
+                {new Array(6).fill(0).map((_, index) => {
+                  const key = `skeleton-item-${index}`;
 
-                return <Skeleton additionalStyles={{lineHeight: 80}} key={key} />;
-              })}
-            </ExecutorsListSkeletonWrapper>
-          ) : renderedCustomExecutorsGrid && renderedCustomExecutorsGrid.length ? (
-            <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
-          ) : (
-            <EmptyCustomExecutors
-              onButtonClick={() => {
-                setAddExecutorModalVisibility(true);
-              }}
-            />
-          )}
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Official executors" key="official">
-          <ExecutorsGrid>{renderedExecutorsGrid}</ExecutorsGrid>
-        </Tabs.TabPane>
-      </Tabs>
+                  return <Skeleton additionalStyles={{lineHeight: 80}} key={key} />;
+                })}
+              </ExecutorsListSkeletonWrapper>
+            ) : renderedCustomExecutorsGrid && renderedCustomExecutorsGrid.length ? (
+              <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
+            ) : (
+              <EmptyCustomExecutors
+                onButtonClick={() => {
+                  setAddExecutorModalVisibility(true);
+                }}
+              />
+            ),
+          },
+          {
+            label: 'Official executors',
+            key: 'official',
+            children: <ExecutorsGrid>{renderedExecutorsGrid}</ExecutorsGrid>,
+          },
+        ]}
+      />
       {isAddExecutorModalVisible ? (
         <Modal
           title="Create an executor"

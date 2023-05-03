@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 
-import {openSettingsTabConfig} from '@redux/reducers/configSlice';
+import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
@@ -35,6 +35,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
           </>
         }
         buttonText="Run"
+        actionType="run"
       />
     );
   }
@@ -46,6 +47,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         description="Your test has no past executions. Trigger the first run!"
         buttonText="Run this test now"
         onButtonClick={triggerRun}
+        actionType="run"
       />
     );
   }
@@ -56,7 +58,8 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         title="Congrats, now add your tests to this suite"
         description="In order to be able to run your test suite you need to define the tests you want to add."
         buttonText="Add your tests to this suite"
-        onButtonClick={() => dispatch(openSettingsTabConfig())}
+        onButtonClick={() => dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}))}
+        actionType="create"
       >
         <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
           Learn how to add test suites
@@ -71,6 +74,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
       description="Your test suite has no past executions. Trigger the first run!"
       buttonText="Run this test suite"
       onButtonClick={triggerRun}
+      actionType="run"
     />
   );
 };

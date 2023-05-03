@@ -18,9 +18,7 @@ const EntityGrid: React.FC<EntityGridProps> = props => {
       return (
         <EntityGridItem
           item={item}
-          onClick={() => {
-            onNavigateToDetails(item);
-          }}
+          onClick={onNavigateToDetails}
           key={key}
         />
       );

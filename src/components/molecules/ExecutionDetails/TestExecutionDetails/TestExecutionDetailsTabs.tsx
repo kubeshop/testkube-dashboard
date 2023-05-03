@@ -1,6 +1,9 @@
 import {lazy, useContext, useEffect, useRef, useState} from 'react';
 
+import {Tabs} from 'antd';
+
 import debounce from 'lodash.debounce';
+import {Tab} from 'rc-tabs/lib/interface';
 
 import {Execution} from '@models/execution';
 
@@ -15,7 +18,6 @@ import {decomposeVariables} from '@utils/variables';
 
 import {ExecutionDetailsContext} from '@contexts';
 
-import {StyledAntTabPane, StyledAntTabs, StyledTestExecutionDetailsTabsContainer} from '../ExecutionDetails.styled';
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
 
 const LogOutput = lazy(() => import('@molecules').then(module => ({default: module.LogOutput})));
@@ -38,6 +40,8 @@ const TestExecutionDetailsTabs: React.FC = () => {
     name,
     variables,
     id,
+    testName,
+    testSuiteName,
   } = testData;
 
   const isRunning = useIsRunning(status);
@@ -78,27 +82,37 @@ const TestExecutionDetailsTabs: React.FC = () => {
     }
   }, [isRunning, id]);
 
+  const items = [
+    {
+      key: 'LogOutputPane',
+      label: 'Log Output',
+      children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />,
+    },
+    whetherToShowArtifactsTab
+      ? {
+          key: 'ArtifactsPane',
+          label: 'Artifacts',
+          children: <TestExecutionDetailsArtifacts id={id} testName={testName} testSuiteName={testSuiteName} />,
+        }
+      : null,
+    {
+      key: 'CLICommands',
+      label: 'CLI Commands',
+      children: <CLICommands isExecutions type={testType} id={id} modifyMap={{status}} />,
+    },
+    decomposedVars.length
+      ? {
+          key: 'Variables',
+          label: 'Variables',
+          children: <ExecutionsVariablesList variables={decomposedVars} />,
+        }
+      : null,
+  ].filter(Boolean) as Tab[];
+
   return (
-    <StyledTestExecutionDetailsTabsContainer ref={ref}>
-      <StyledAntTabs>
-        <StyledAntTabPane tab="Log Output" key="LogOutputPane">
-          <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />
-        </StyledAntTabPane>
-        {whetherToShowArtifactsTab ? (
-          <StyledAntTabPane tab="Artifacts" key="ArtifactsPane">
-            <TestExecutionDetailsArtifacts id={id} />
-          </StyledAntTabPane>
-        ) : null}
-        <StyledAntTabPane tab="CLI Commands" key="CLICommands">
-          <CLICommands isExecutions type={testType} id={id} modifyMap={{status}} />
-        </StyledAntTabPane>
-        {decomposedVars.length ? (
-          <StyledAntTabPane tab="Variables" key="Variables">
-            <ExecutionsVariablesList variables={decomposedVars} />
-          </StyledAntTabPane>
-        ) : null}
-      </StyledAntTabs>
-    </StyledTestExecutionDetailsTabsContainer>
+    <div ref={ref}>
+      <Tabs items={items} />
+    </div>
   );
 };
 

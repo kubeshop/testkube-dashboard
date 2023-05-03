@@ -2,14 +2,16 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Executor} from '@models/executors';
 
-import {dynamicBaseQuery} from '@utils/fetchUtils';
+import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
 export const executorsApi = createApi({
   reducerPath: 'executorsApi',
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getExecutors: builder.query<Executor[], null | void>({
-      query: () => '/executors',
+      query: () => ({
+        url: `/executors`,
+      }),
     }),
     createExecutor: builder.mutation<void, any>({
       query: body => ({
@@ -25,8 +27,17 @@ export const executorsApi = createApi({
         body,
       }),
     }),
+    getExecutorDefinition: builder.query<string, string>({
+      query: id => ({
+        url: `/executors/${id}`,
+        responseHandler: 'text',
+        headers: {accept: 'text/yaml'},
+      }),
+    }),
     getExecutorDetails: builder.query<any, string>({
-      query: id => `/executors/${id}`,
+      query: id => ({
+        url: `/executors/${id}`,
+      }),
     }),
     deleteExecutor: builder.mutation<void, any>({
       query: id => ({
@@ -37,9 +48,13 @@ export const executorsApi = createApi({
   }),
 });
 
+// Apply optimization
+executorsApi.useGetExecutorsQuery = memoizeQuery(executorsApi.useGetExecutorsQuery);
+
 export const {
   useGetExecutorsQuery,
   useCreateExecutorMutation,
+  useGetExecutorDefinitionQuery,
   useGetExecutorDetailsQuery,
   useDeleteExecutorMutation,
   useUpdateCustomExecutorMutation,

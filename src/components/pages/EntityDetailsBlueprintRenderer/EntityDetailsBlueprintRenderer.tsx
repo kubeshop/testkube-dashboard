@@ -8,7 +8,7 @@ import {EntityDetailsBlueprint} from '@models/entityDetails';
 
 import {EntityDetailsContainer} from '@organisms';
 
-const entities: {[key in Entity]: EntityDetailsBlueprint} = {
+const entities: Record<Entity, EntityDetailsBlueprint> = {
   'test-suites': TestSuiteDetailsConfig,
   tests: TestDetailsConfig,
 };

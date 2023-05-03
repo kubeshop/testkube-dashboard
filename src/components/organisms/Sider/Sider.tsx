@@ -1,5 +1,4 @@
-import {useContext, useMemo} from 'react';
-import {NavLink} from 'react-router-dom';
+import {useMemo, useContext} from 'react';
 
 import {Space, Tooltip} from 'antd';
 
@@ -17,25 +16,28 @@ import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
 import {ReactComponent as TriggersIcon} from '@assets/triggers.svg';
 
-import {MainContext} from '@contexts';
+import {ReactComponent as SettingIcon} from '@icons/setting.svg';
 
+import {DashboardContext} from '@contexts';
+
+import SiderLink from './SiderLink';
 import {
   StyledLogo,
-  StyledNavLink,
   StyledNavigationMenu,
   StyledOther,
   StyledOtherItem,
   StyledSider,
   StyledSiderChildContainer,
+  StyledSiderLink,
 } from './Sider.styled';
 
 const DEFAULT_ICON_STYLE = {
   fontSize: 24,
 };
 
-const routes = [
+const getRoutes = (showSocialLinksInSider: boolean) => [
   {
-    path: 'tests',
+    path: '/tests',
     icon: TestsIcon,
     title: 'Tests',
     transition: {
@@ -43,7 +45,7 @@ const routes = [
     },
   },
   {
-    path: 'test-suites',
+    path: '/test-suites',
     icon: TestSuitesIcon,
     title: 'Test Suites',
     transition: {
@@ -51,7 +53,7 @@ const routes = [
     },
   },
   {
-    path: 'executors',
+    path: '/executors',
     icon: ExecutorsIcon,
     title: 'Executors',
     transition: {
@@ -59,7 +61,7 @@ const routes = [
     },
   },
   {
-    path: 'triggers',
+    path: '/triggers',
     icon: TriggersIcon,
     title: 'Triggers',
     transition: {
@@ -67,17 +69,29 @@ const routes = [
     },
   },
   {
-    path: 'sources',
+    path: '/sources',
     icon: SourcesIcon,
     title: 'Sources',
     transition: {
       classNames: 'item',
     },
   },
+    ...(showSocialLinksInSider ? [] : [
+      {
+        path: '/settings',
+        icon: SettingIcon,
+        title: 'Settings',
+        transition: {
+          classNames: 'item',
+        },
+        additionalClassName: 'settings-icon',
+        active: /environment-management/,
+      }
+    ]),
 ];
 
 const Sider: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate, showLogoInSider, showSocialLinksInSider} = useContext(DashboardContext);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
@@ -92,24 +106,24 @@ const Sider: React.FC = () => {
   ];
 
   const renderedMenuItems = useMemo(() => {
-    return routes.map((route: any) => {
-      const {icon: MenuIcon, path, title} = route;
+    return getRoutes(showSocialLinksInSider).map((route: any) => {
+      const {icon: MenuIcon, path, title, active} = route;
 
       return (
-        <StyledNavLink
+        <StyledSiderLink
           key={path}
-          to={{
-            pathname: path,
-          }}
+          href={path}
           data-cy="navigation-tab"
+          className={route.additionalClassName}
+          active={active}
         >
           <Tooltip title={title} placement="right">
             <MenuIcon style={DEFAULT_ICON_STYLE} />
           </Tooltip>
-        </StyledNavLink>
+        </StyledSiderLink>
       );
     });
-  }, []);
+  }, [showSocialLinksInSider]);
 
   const renderedOtherMenuItems = useMemo(() => {
     return otherMenuItems.map(otherMenuItem => {
@@ -129,17 +143,19 @@ const Sider: React.FC = () => {
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <Space size={30} direction="vertical">
-            <StyledLogo>
-              <NavLink to="/tests">
+            {showLogoInSider ? <StyledLogo>
+              <SiderLink href="/tests">
                 <Logo />
-              </NavLink>
-            </StyledLogo>
+              </SiderLink>
+            </StyledLogo> : null}
             {renderedMenuItems}
           </Space>
         </StyledNavigationMenu>
-        <StyledOther size={20} direction="vertical">
-          {renderedOtherMenuItems}
-        </StyledOther>
+        {showSocialLinksInSider ? (
+          <StyledOther size={20} direction="vertical">
+            {renderedOtherMenuItems}
+          </StyledOther>
+        ) : null}
       </StyledSiderChildContainer>
     </StyledSider>
   );

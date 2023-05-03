@@ -13,18 +13,19 @@ import {Hint} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {AnalyticsContext, MainContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
 import {TestCreationModalWrapper} from './CreationModal.styled';
 import {defaultHintConfig} from './ModalConfig';
 import TestCreationForm from './TestCreationForm';
 
 const TestCreationModalContent: React.FC = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<AddTestPayload>();
 
-  const {dispatch, navigate} = useContext(MainContext);
+  const {dispatch} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
 
   const executors = useAppSelector(selectExecutors);
@@ -39,27 +40,26 @@ const TestCreationModalContent: React.FC = () => {
 
     if (!selectedExecutor) {
       setHintConfig(defaultHintConfig);
-      return;
-    }
+    } else {
+      if (selectedExecutor.executor?.executorType === 'container') {
+        setHintConfig({
+          title: 'Testing with custom executor',
+          description: 'Discover all the features and examples around custom executors',
+          openLink: openCustomExecutorDocumentation,
+        });
+      }
 
-    if (selectedExecutor.executor?.executorType === 'container') {
-      setHintConfig({
-        title: 'Testing with custom executor',
-        description: 'Discover all the features and examples around custom executors',
-        openLink: openCustomExecutorDocumentation,
-      });
-    }
+      if (selectedExecutor.executor?.executorType === 'job') {
+        setHintConfig({
+          title: `Testing with ${selectedExecutor.displayName}`,
+          description: `Discover all the features and examples around testing with ${selectedExecutor.displayName} on Testkube`,
+          openLink: () => window.open(selectedExecutor.executor?.meta?.docsURI, '_blank'),
+          selectedExecutor: selectedExecutor.executor?.meta?.iconURI,
+        });
+      }
 
-    if (selectedExecutor.executor?.executorType === 'job') {
-      setHintConfig({
-        title: `Testing with ${selectedExecutor.displayName}`,
-        description: `Discover all the features and examples around testing with ${selectedExecutor.displayName} on Testkube`,
-        openLink: () => window.open(selectedExecutor.executor?.meta?.docsURI, '_blank'),
-        selectedExecutor: selectedExecutor.executor?.meta?.iconURI,
-      });
+      form.setFieldValue('testSource', null);
     }
-
-    form.setFieldValue('testSource', null);
   }, [form.getFieldValue('testType')]);
 
   const onSuccess = (res: AddTestPayload) => {
@@ -71,12 +71,8 @@ const TestCreationModalContent: React.FC = () => {
 
       dispatch(setRedirectTarget({targetTestId: res?.data?.metadata?.name}));
 
-      return navigate(`/tests/executions/${res?.data?.metadata?.name}`);
+      navigate(`/tests/executions/${res?.data?.metadata?.name}`);
     });
-  };
-
-  const onFail = (err: any) => {
-    displayDefaultErrorNotification(err);
   };
 
   return (
@@ -86,7 +82,6 @@ const TestCreationModalContent: React.FC = () => {
         testSources={testSources}
         executors={executors}
         onSuccess={onSuccess}
-        onFail={onFail}
       />
       <Hint {...hintConfig} />
     </TestCreationModalWrapper>

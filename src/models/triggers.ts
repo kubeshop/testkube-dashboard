@@ -30,10 +30,27 @@ export type TestTrigger = {
   resource: TriggerResources;
   resourceSelector: TestTriggerSelector;
   event: string;
-  action: TriggerAction[];
+  action: TriggerAction;
   execution: TriggerExecution;
   testSelector: TestTriggerSelector;
 };
+
+type TestTriggerTypes = 'name' | 'labels';
+
+export type TestTriggerFormEntity = {
+  type?: [TestTriggerTypes, TestTriggerTypes];
+  resourceSelector: `${string}/${string}` | MatchLabels;
+  testSelector: string | MatchLabels;
+  action: `${TriggerAction} ${TriggerExecution}`;
+  name: string;
+  namespace?: string;
+  labels?: EntityMap;
+  resource: TriggerResources;
+  event: string;
+  execution: TriggerExecution;
+};
+
+export type TriggerType = 'label-label' | 'name-label' | 'name-name' | 'label-name';
 
 export type TestTriggerSelector = {
   name: string;
@@ -46,4 +63,10 @@ export type TriggersKeyMap = {
   events: TriggerEvent;
   actions: TriggerAction[];
   executions: TriggerExecution[];
+};
+
+export type AddTriggerOption = {
+  key: TriggerType;
+  label: string;
+  description: string;
 };

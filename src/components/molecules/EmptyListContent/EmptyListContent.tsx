@@ -1,4 +1,4 @@
-import {ReactElement, useContext} from 'react';
+import {PropsWithChildren, ReactElement, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
@@ -13,7 +13,7 @@ import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {MainContext} from '@contexts';
+import {ConfigContext, MainContext} from '@contexts';
 
 import {StyledEmptyListContainer} from './EmptyListContent.styled';
 
@@ -22,12 +22,17 @@ type EmptyListContentProps = {
   description: string | ReactElement;
   buttonText: string;
   onButtonClick?: () => void;
-  children?: React.ReactNode;
   emptyListReadonlyTitle?: string;
   emptyListReadonlyDescription?: string;
+  actionType: 'create' | 'run';
 };
 
-const EmptyListContent: React.FC<EmptyListContentProps> = props => {
+const actionTypeToPermission: Record<EmptyListContentProps['actionType'], Permissions> = {
+  create: Permissions.createEntity,
+  run: Permissions.runEntity,
+};
+
+const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = props => {
   const {
     title,
     description,
@@ -36,10 +41,12 @@ const EmptyListContent: React.FC<EmptyListContentProps> = props => {
     buttonText,
     emptyListReadonlyTitle,
     emptyListReadonlyDescription,
+    actionType,
   } = props;
 
+  const {discordUrl} = useContext(ConfigContext);
   const {isClusterAvailable} = useContext(MainContext);
-  const isActionAvailable = usePermission(Permissions.runEntity);
+  const isActionAvailable = usePermission(actionTypeToPermission[actionType]);
 
   return (
     <StyledEmptyListContainer size={24} direction="vertical">
@@ -56,9 +63,9 @@ const EmptyListContent: React.FC<EmptyListContentProps> = props => {
           <StyledHelpCardsContainer>
             {children}
             <StyledLastHelpCardContainer>
-              <HelpCard isHelp link="https://discord.com/invite/hfq44wtR6Q">
+              <HelpCard isHelp link={discordUrl}>
                 Need help getting started? Want to talk to Testkube engineers?{' '}
-                <ExternalLink href="https://discord.com/invite/hfq44wtR6Q">Find us on Discord</ExternalLink>
+                <ExternalLink href={discordUrl}>Find us on Discord</ExternalLink>
               </HelpCard>
             </StyledLastHelpCardContainer>
           </StyledHelpCardsContainer>

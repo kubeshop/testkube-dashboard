@@ -12,14 +12,13 @@ const soapuiTestExecutorConfig: TestExecutorConfig = {
   canHaveArtifacts: true,
 };
 
-// @ts-ignore
-export const testExecutorsConfigs: {[key in TestExecutor]: TestExecutorConfig} = {
+export const testExecutorsConfigs: Partial<Record<TestExecutor, TestExecutorConfig>> = {
   'cypress/project': cypressTestExecutorConfig,
   'soapui/xml': soapuiTestExecutorConfig,
   unknown: defaultTestExecutorConfig,
 };
 
-export const testExecutorsNames: {[key in TestExecutor | string]: TestExecutorName} = {
+export const testExecutorsNames: Record<TestExecutor, TestExecutorName> = {
   'postman/collection': 'Postman',
   'postman/custom': 'Postman',
   'cypress/project': 'Cypress',

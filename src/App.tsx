@@ -1,42 +1,27 @@
-import {Suspense, lazy, useEffect, useState, useRef, useMemo} from 'react';
-import {Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import React, {lazy, Suspense, useContext, useEffect, useRef, useState} from 'react';
+import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
-
-import {Layout} from 'antd';
-import {Content} from 'antd/lib/layout/layout';
-
-import GA4React, {useGA4React} from 'ga-4-react';
-import posthog from 'posthog-js';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 import {setSources} from '@redux/reducers/sourcesSlice';
 
-import {CookiesBanner, EndpointModal} from '@molecules';
-import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
-import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
-import notificationCall from '@molecules/Notification';
-
-import {Sider} from '@organisms';
-
-import {EndpointProcessing, ErrorBoundary, NotFound} from '@pages';
-
-import {PollingIntervals} from '@utils/numbers';
-
-import {ReactComponent as LoadingIcon} from '@assets/loading.svg';
-
-import {useGetClusterConfigQuery} from '@services/config';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
-import {getApiDetails, getApiEndpoint, useApiEndpoint} from '@services/apiEndpoint';
+import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 
-import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
+import {PollingIntervals} from '@utils/numbers';
+import {safeRefetch} from '@utils/fetchUtils';
 
 import {MainContext} from '@contexts';
 
-import {AnalyticsProvider} from './AnalyticsProvider';
-import {StyledLayoutContentWrapper} from './App.styled';
+import {EndpointProcessing, Loading, NotFound} from '@pages';
+
+import {EndpointModal} from '@molecules';
+import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
+import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
+import notificationCall from '@molecules/Notification';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -45,88 +30,29 @@ const Sources = lazy(() => import('@pages').then(module => ({default: module.Sou
 const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
 const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
-const pjson = require('../package.json');
-
-const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
-
-const App: React.FC = () => {
+const App: React.FC<any> = () => {
   const dispatch = useAppDispatch();
-  const ga4React = useGA4React();
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const protocol = window.location.protocol;
-  const isProtocolSecure = protocol === 'https:';
-  const wsProtocol = isProtocolSecure ? 'wss://' : 'ws://';
-
   const apiEndpoint = useApiEndpoint();
+  const {isClusterAvailable} = useContext(MainContext);
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
-
-  const [isEndpointModalVisible, setEndpointModalState] = useState(false);
-
-  const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
+  const logRef = useRef<HTMLDivElement>(null);
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
     pollingInterval: PollingIntervals.long,
+    skip: !isClusterAvailable,
   });
-
   const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
     pollingInterval: PollingIntervals.long,
+    skip: !isClusterAvailable,
   });
 
-  const logRef = useRef<HTMLDivElement>(null);
-
-  const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
-  const isTelemetryEnabled = useMemo(() => (
-    !isCookiesVisible && clusterConfig?.enableTelemetry && localStorage.getItem('isGADisabled') === '0'
-  ), [isCookiesVisible, clusterConfig]);
-
-  const onAcceptCookies = () => {
-    localStorage.setItem('isGADisabled', '0');
-    setCookiesVisibility(false);
-  };
-
-  const onDeclineCookies = () => {
-    localStorage.setItem('isGADisabled', '1');
-    setCookiesVisibility(false);
-  };
+  const [isEndpointModalVisible, setEndpointModalState] = useState(false);
 
   useEffect(() => {
-    if (!isTelemetryEnabled) {
-      // @ts-ignore
-      window[`ga-disable-G-945BK09GDC`] = true;
-      if (posthog.__loaded) {
-        posthog.opt_out_capturing();
-      }
-    } else if (process.env.NODE_ENV !== 'development') {
-      // @ts-ignore:
-      window[`ga-disable-G-945BK09GDC`] = false;
-      if (!posthog.__loaded) {
-        posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
-          opt_out_capturing_by_default: true,
-          mask_all_text: true,
-          persistence: 'localStorage',
-          property_blacklist: ['$current_url', '$host', '$referrer', '$referring_domain'],
-        });
-      }
-      posthog.opt_in_capturing();
-
-      if (!window.location.href.includes('testkube.io')) {
-        const ga4react = new GA4React('G-945BK09GDC');
-        ga4react.initialize().catch(() => {});
-      }
-    }
-  }, [isTelemetryEnabled]);
-
-  const mainContextValue = {
-    ga4React,
-    dispatch,
-    location,
-    navigate,
-    clusterConfig,
-    isClusterAvailable: true,
-  };
+    dispatch(setIsFullScreenLogOutput(false));
+  }, [location.pathname]);
 
   useEffect(() => {
     dispatch(setExecutors(executors || []));
@@ -137,8 +63,14 @@ const App: React.FC = () => {
   }, [sources]);
 
   useEffect(() => {
-    // Do not fire the effect if new endpoint is just being set up
-    if (location.pathname === '/apiEndpoint') {
+    safeRefetch(refetchExecutors);
+    safeRefetch(refetchSources);
+  }, [apiEndpoint]);
+
+  useEffect(() => {
+    // Do not fire the effect if new endpoint is just being set up,
+    // or it can't be changed.
+    if (location.pathname === '/apiEndpoint' || isApiEndpointLocked()) {
       return;
     }
 
@@ -159,69 +91,27 @@ const App: React.FC = () => {
     });
   }, [apiEndpoint]);
 
-  useEffect(() => {
-    posthog.capture('$pageview');
-
-    if (ga4React) {
-      ga4React.pageview(location.pathname);
-    }
-
-    dispatch(setIsFullScreenLogOutput(false));
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (ga4React) {
-      ga4React.gtag('event', 'user_info', {api_host: window.location.host, os: window.navigator.userAgent});
-    }
-  }, [ga4React]);
-
-  useEffect(() => {
-    refetchExecutors();
-    refetchSources();
-    refetchClusterConfig();
-  }, [apiEndpoint]);
-
-  const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
-  const permissionsScope = useMemo(() => ({}), []);
-
-  return (
-    <PermissionsProvider scope={permissionsScope} resolver={permissionsResolver}>
-      <AnalyticsProvider disabled={!isTelemetryEnabled} privateKey={segmentIOKey} appVersion={pjson.version}>
-        <MainContext.Provider value={mainContextValue}>
-          <Layout>
-            <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
-            <Sider />
-            <StyledLayoutContentWrapper>
-              <Content>
-                <ErrorBoundary>
-                  <Suspense fallback={<LoadingIcon />}>
-                    <Routes>
-                      <Route path="tests/*" element={<Tests />} />
-                      <Route path="test-suites/*" element={<TestSuites />} />
-                      <Route path="executors/*" element={<Executors />} />
-                      <Route path="sources/*" element={<Sources />} />
-                      <Route path="triggers" element={<Triggers />} />
-                      <Route path="settings" element={<GlobalSettings />} />
-                      <Route path="/apiEndpoint" element={<EndpointProcessing />} />
-                      <Route path="/" element={<Navigate to="/tests" replace />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </Suspense>
-                </ErrorBoundary>
-              </Content>
-              {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
-              <CSSTransition nodeRef={logRef} in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
-                <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
-              </CSSTransition>
-            </StyledLayoutContentWrapper>
-          </Layout>
-          {isCookiesVisible && clusterConfig?.enableTelemetry ? (
-            <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
-          ) : null}
-        </MainContext.Provider>
-      </AnalyticsProvider>
-    </PermissionsProvider>
-  );
+  return <Suspense fallback={<Loading />}>
+    <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
+    <Routes>
+      <Route path="tests/*" element={<Tests />} />
+      <Route path="test-suites/*" element={<TestSuites />} />
+      <Route path="executors/*" element={<Executors />} />
+      <Route path="sources/*" element={<Sources />} />
+      <Route path="triggers" element={<Triggers />} />
+      <Route path="settings" element={<GlobalSettings />} />
+      <Route
+        path="/apiEndpoint"
+        element={isApiEndpointLocked() ? <Navigate to="/" replace /> : <EndpointProcessing />}
+      />
+      <Route path="/" element={<Navigate to="/tests" replace />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+    {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
+    <CSSTransition nodeRef={logRef} in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
+      <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
+    </CSSTransition>
+  </Suspense>;
 };
 
 export default App;

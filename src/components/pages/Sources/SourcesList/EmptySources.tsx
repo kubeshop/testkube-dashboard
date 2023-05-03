@@ -12,11 +12,12 @@ const EmptySources: React.FC<EmptySourcesProps> = props => {
   return (
     <EmptyListContent
       title="Create your first global source"
-      description="Define your git respository to be able to reuse it later on when you create your tests."
+      description="Define your git repository to be able to reuse it later on when you create your tests."
       buttonText="Create a new source"
       emptyListReadonlyTitle="No sources found"
       emptyListReadonlyDescription="We could not find any global sources in this environment."
       onButtonClick={onButtonClick}
+      actionType="create"
     >
       <HelpCard isLink link="https://kubeshop.github.io/testkube/openapi#tag/test-sources">
         What is a test source?

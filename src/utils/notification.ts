@@ -15,7 +15,11 @@ export function displayDefaultNotificationFlow(res: any, success?: () => void) {
 }
 
 export function displayDefaultErrorNotification(err: any) {
-  if (err) {
-    notificationCall('failed', 'Unknown error', String(err) || 'Something went wrong');
+  const errorTitle = err?.title || 'Unknown error';
+  const errorDetails = err?.detail || err || 'Something went wrong';
+
+  // TODO: Think how to split the logic between OSS and others
+  if (err?.status !== 429) {
+    notificationCall('failed', errorTitle, String(errorDetails));
   }
 }

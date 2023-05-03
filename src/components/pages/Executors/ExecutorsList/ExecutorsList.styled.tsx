@@ -19,6 +19,8 @@ export const ExecutorsGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   gap: 32px;
 
+  padding-bottom: 30px;
+
   @media (max-width: 600px) {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }

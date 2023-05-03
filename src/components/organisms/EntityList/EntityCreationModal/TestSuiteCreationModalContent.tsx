@@ -4,7 +4,7 @@ import {Form, Input} from 'antd';
 
 import {Option} from '@models/form';
 
-import {openSettingsTabConfig} from '@redux/reducers/configSlice';
+import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
@@ -12,11 +12,11 @@ import {LabelsSelect} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
-import {AnalyticsContext, MainContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
 import {StyledFormSpace} from './CreationModal.styled';
 
@@ -39,30 +39,35 @@ type AddTestSuitePayload = {
   error?: any;
 };
 
+type TestSuiteCreationModalFormValues = {
+  name: string;
+  description: string;
+  labels: readonly Option[];
+};
+
 const TestSuiteCreationModalContent: React.FC = () => {
-  const [form] = Form.useForm();
-  const {navigate, dispatch} = useContext(MainContext);
+  const [form] = Form.useForm<TestSuiteCreationModalFormValues>();
+  const {dispatch} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: TestSuiteCreationModalFormValues) => {
     addTestSuite({
       ...values,
       labels: decomposeLabels(localLabels),
-    })
-      .then((res: AddTestSuitePayload) => {
-        displayDefaultNotificationFlow(res, () => {
-          analyticsTrack('trackEvents', {
-            uiEvent: 'create-test-suites',
-          });
-
-          dispatch(openSettingsTabConfig());
-          navigate(`test-suites/executions/${res?.data?.metadata?.name}`);
+    }).then((res: AddTestSuitePayload) => {
+      displayDefaultNotificationFlow(res, () => {
+        analyticsTrack('trackEvents', {
+          uiEvent: 'create-test-suites',
         });
-      })
-      .catch(err => displayDefaultErrorNotification(err));
+
+        dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
+        navigate(`/test-suites/executions/${res?.data?.metadata?.name}`);
+      });
+    });
   };
 
   useEffect(() => {

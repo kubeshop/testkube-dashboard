@@ -10,7 +10,7 @@ import {Button, Text} from '@custom-antd';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -23,8 +23,13 @@ import {EntityDetailsContext} from '@contexts';
 import {ArgumentsWrapper} from './Arguments.styled';
 import {dash, doubleDash, space, stringSpace} from './utils';
 
+type ArgumentsFormValues = {
+  args: string;
+};
+
 const Arguments: React.FC = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<ArgumentsFormValues>();
+
   const {entityDetails} = useContext(EntityDetailsContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -38,7 +43,7 @@ const Arguments: React.FC = () => {
   const [isPrettified, setPrettifiedState] = useState(true);
   const [isButtonsDisabled, setIsButtonsDisabled] = useState(true);
 
-  const onSaveForm = (values: {args: string}) => {
+  const onSaveForm = (values: ArgumentsFormValues) => {
     const argVal = !values.args.length ? [] : values.args.trim().split('\n');
 
     const successRecord = {
@@ -52,13 +57,11 @@ const Arguments: React.FC = () => {
     updateTest({
       id: entityDetails.name,
       data: successRecord,
-    })
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', 'Variables were successfully updated.');
-        });
-      })
-      .catch((err: any) => displayDefaultErrorNotification(err));
+    }).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        notificationCall('passed', 'Variables were successfully updated.');
+      });
+    });
   };
 
   const onChange = () => {
@@ -159,7 +162,7 @@ const Arguments: React.FC = () => {
           <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
           <Space size={16} direction="vertical" style={{width: '100%'}}>
             <Text className="regular middle" color={Colors.slate400}>
-              Arguments passed to the executor (concatted and passed directly to the executor)
+              Arguments passed to the executor (concat and passed directly to the executor)
             </Text>
 
             <Form.Item name="args" style={{marginBottom: 0, marginTop: 0}}>

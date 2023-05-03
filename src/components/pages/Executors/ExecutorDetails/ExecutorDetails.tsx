@@ -12,13 +12,15 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
-import {MainContext} from '@contexts';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
 import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
 
-const ExecutorDetails = () => {
-  const {navigate, location, dispatch, isClusterAvailable} = useContext(MainContext);
+const ExecutorDetails: React.FC = () => {
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
+  const {pageTitle} = useContext(ConfigContext);
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
 
@@ -43,14 +45,22 @@ const ExecutorDetails = () => {
   return (
     <StyledContainer>
       <Helmet>
-        <title>{`${name} | Executors | Testkube`}</title>
+        <title>{`${name} | Executors | ${pageTitle}`}</title>
       </Helmet>
       <StyledPageHeader onBack={() => navigate('/executors')} title={name} className="testkube-pageheader" />
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {currentExecutorDetails ? <ExecutorSettings /> : null}
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
+        destroyInactiveTabPane
+        items={[
+          {
+            key: 'Settings',
+            label: 'Settings',
+            disabled: isPageDisabled,
+            children: currentExecutorDetails ? <ExecutorSettings /> : null,
+          },
+        ]}
+      />
     </StyledContainer>
   );
 };

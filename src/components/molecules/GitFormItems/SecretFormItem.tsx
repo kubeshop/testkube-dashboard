@@ -6,15 +6,20 @@ import {secretRegex} from '@utils/strings';
 
 import Colors from '@styles/Colors';
 
+import FormItemLabel from './FormItemLabel';
+import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
+
 type SecretFormItemProps = {
   isClearedValue?: boolean;
   setIsClearedValue?: (value: boolean) => void;
   name: string;
   label: string;
+  status?: TooltipStatus;
+  message?: string;
 };
 
 const SecretFormItem: React.FC<SecretFormItemProps> = props => {
-  const {isClearedValue, setIsClearedValue, name, label} = props;
+  const {isClearedValue, setIsClearedValue, name, label, status = TooltipStatus.none, message} = props;
 
   const rules = isClearedValue ? [{pattern: secretRegex, message: `Invalid ${name} value`}] : [];
 
@@ -23,7 +28,13 @@ const SecretFormItem: React.FC<SecretFormItemProps> = props => {
       {({setFieldValue}) => {
         return (
           <>
-            <FormItem name={name} label={label} key={name} rules={rules}>
+            <FormItem
+              name={name}
+              label={<FormItemLabel text={label} status={status} />}
+              key={name}
+              rules={rules}
+              tooltip={getValidationTooltip(status, message)}
+            >
               <Input.Password placeholder={label} disabled={isClearedValue === false} />
             </FormItem>
             {isClearedValue === false ? (

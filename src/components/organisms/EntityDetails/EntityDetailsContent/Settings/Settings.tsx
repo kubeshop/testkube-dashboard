@@ -17,7 +17,7 @@ import SettingsTest from './SettingsTest';
 import SettingsTests from './SettingsTests';
 import SettingsVariables from './SettingsVariables';
 
-const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
+const tabConfig: Record<Entity, JSX.Element[]> = {
   'test-suites': [
     <General />,
     <SettingsTests />,
@@ -35,7 +35,7 @@ const tabConfig: {[key in Entity]: Array<JSX.Element | null>} = {
   ],
 };
 
-const navigationOptionsConfig: {[key in Entity]: string[]} = {
+const navigationOptionsConfig: Record<Entity, string[]> = {
   'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Scheduling', 'Definition'],
   tests: ['General', 'Test', 'Execution', 'Variables & Secrets', 'Scheduling', 'Definition'],
 };
@@ -45,14 +45,18 @@ const Settings: React.FC = () => {
   const {entity} = useContext(EntityDetailsContext);
   const [selectedSettingsTab, setSelectedSettingsTab] = useState(0);
 
-  const {isSettingsTabConfig} = useAppSelector(selectRedirectTarget);
+  const {settingsTabConfig} = useAppSelector(selectRedirectTarget);
 
   useEffect(() => {
-    if (isSettingsTabConfig) {
-      setSelectedSettingsTab(1);
+    if (settingsTabConfig && entity === settingsTabConfig.entity) {
+      setSelectedSettingsTab(
+        typeof settingsTabConfig.tab === 'string'
+          ? navigationOptionsConfig[entity].findIndex(tab => tab === settingsTabConfig.tab)
+          : settingsTabConfig.tab
+      );
       dispatch(closeSettingsTabConfig());
     }
-  }, [isSettingsTabConfig, dispatch]);
+  }, [settingsTabConfig, dispatch]);
 
   const subTabsMap = useMemo(() => tabConfig[entity], [entity]);
 

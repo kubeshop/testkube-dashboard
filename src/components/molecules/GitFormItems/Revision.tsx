@@ -5,8 +5,16 @@ import {FormItem} from '@custom-antd';
 
 import {Branch, Commit, RevisionSwitcher} from '.';
 import {StyledFormSpace} from '../../organisms/TestConfigurationForm/TestConfigurationForm.styled';
+import {TooltipStatus} from './tooltipUtils';
 
-const Revision = () => {
+type RevisionProps = {
+  message?: string;
+  branchStatus?: TooltipStatus;
+  commitStatus?: TooltipStatus;
+};
+
+const Revision: React.FC<RevisionProps> = props => {
+  const {message, branchStatus, commitStatus} = props;
   const [switcherValue, setSwitcherValue] = useState<string | number>('branch');
 
   const isFirst = useFirstMountState();
@@ -23,7 +31,11 @@ const Revision = () => {
         return (
           <StyledFormSpace size={24} direction="vertical">
             <RevisionSwitcher value={switcherValue} onChange={setSwitcherValue} />
-            {switcherValue === 'branch' ? <Branch /> : <Commit />}
+            {switcherValue === 'branch' ? (
+              <Branch message={message} status={branchStatus} />
+            ) : (
+              <Commit message={message} status={commitStatus} />
+            )}
           </StyledFormSpace>
         );
       }}

@@ -11,16 +11,16 @@ import {Hint} from '@molecules';
 
 import {openCustomExecutorDocumentation} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultErrorNotification, displayDefaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateExecutorMutation} from '@services/executors';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 
 const AddExecutorsModal: React.FC = () => {
-  const {navigate} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const [createExecutor, {isLoading}] = useCreateExecutorMutation();
 
@@ -36,15 +36,11 @@ const AddExecutorsModal: React.FC = () => {
 
     delete body.type;
 
-    createExecutor(body)
-      .then((res: any) => {
-        displayDefaultNotificationFlow(res, () => {
-          navigate(`/executors/${res.data.metadata.name}`);
-        });
-      })
-      .catch(err => {
-        displayDefaultErrorNotification(err);
+    createExecutor(body).then((res: any) => {
+      displayDefaultNotificationFlow(res, () => {
+        navigate(`/executors/${res.data.metadata.name}`);
       });
+    });
   };
 
   return (
