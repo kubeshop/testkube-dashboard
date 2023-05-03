@@ -40,7 +40,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      #Trigger Helm repo workflow to deploy Dashboard to Stage cluster
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v2
         with:
