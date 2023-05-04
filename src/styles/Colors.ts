@@ -160,6 +160,7 @@ export enum StatusColors {
   cancelled = Colors.pink600,
   timeout = Colors.pink600,
   aborted = Colors.pink600,
+  aborting = Colors.pink600,
 }
 
 export enum SecondaryStatusColors {
@@ -171,6 +172,7 @@ export enum SecondaryStatusColors {
   cancelled = Colors.pink800,
   timeout = Colors.pink800,
   aborted = Colors.pink800,
+  aborting = Colors.pink800,
 }
 
 export enum BorderColors {

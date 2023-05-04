@@ -13,7 +13,7 @@ import {ExternalLink} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
+import {useAbortAllTestExecutionsMutation, useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
@@ -39,6 +39,7 @@ export const TestsEntity: EntityListBlueprint = {
 
   useGetData: useGetTestsQuery,
   useGetMetrics: useGetTestExecutionMetricsQuery,
+  useAbortAllExecutions: useAbortAllTestExecutionsMutation,
   setData: setTests,
   selectData: selectTests,
 

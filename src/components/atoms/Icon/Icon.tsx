@@ -17,6 +17,7 @@ const {
   RunningStatusIcon,
   PendingStatusIcon,
   DelayIcon,
+  AbortingStatusIcon,
 } = Icons;
 
 const iconsMap: Record<IconProps['name'], IconComponentProps['component']> = {
@@ -35,6 +36,7 @@ const iconsMap: Record<IconProps['name'], IconComponentProps['component']> = {
   cancelled: FailedStatusIcon,
   timeout: FailedStatusIcon,
   aborted: FailedStatusIcon,
+  aborting: AbortingStatusIcon,
   success: PassedStatusIcon,
 };
 

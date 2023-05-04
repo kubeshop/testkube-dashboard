@@ -70,6 +70,8 @@ export const ItemColumn = styled.div<{$isStretch?: boolean}>`
   display: flex;
   ${({$isStretch}) => ($isStretch ? 'flex: 1;' : '')};
   gap: 10px;
+
+  align-items: center;
 `;
 
 export const StyledMetricItem = styled.div`
