@@ -43,7 +43,9 @@ const SettingsTests = () => {
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {skip: !isClusterAvailable});
+  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
+    skip: !isClusterAvailable || !entityDetails.name,
+  });
   const {data: allTestsList = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
