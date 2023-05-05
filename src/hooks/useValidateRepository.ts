@@ -8,14 +8,13 @@ import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {isEqual} from 'lodash';
 
+import {RTKResponse} from '@models/fetch';
 import {Repository} from '@models/repository';
 
 import {TooltipStatus} from '@molecules/GitFormItems/tooltipUtils';
 
 import {DynamicFetchArgs} from '@utils/fetchUtils';
 import {dummySecret} from '@utils/sources';
-
-import {RTKResponse} from '@src/models/fetch';
 
 export type ValidationState = {
   message: string;

@@ -1,7 +1,6 @@
 import React, {useMemo, useState} from 'react';
 
 import {Form, FormInstance, Input, Select} from 'antd';
-import {NamePath} from 'antd/lib/form/interface';
 
 import {Executor} from '@models/executors';
 import {MetadataResponse, RTKResponse} from '@models/fetch';
