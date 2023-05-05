@@ -1,3 +1,6 @@
+import {Execution} from '@models/execution';
+import {TestSuiteExecution} from '@models/testSuiteExecution';
+
 export enum WSEventType {
   START_TEST = 'start-test',
   START_TEST_SUITE = 'start-testsuite',
@@ -15,8 +18,14 @@ export enum WSEventType {
   END_TEST_SUITE_TIMEOUT = 'end-testsuite-timeout',
 }
 
-export type WSData = {
+export interface WSData {
   type: WSEventType;
-  testExecution?: any;
-  testSuiteExecution?: any;
-};
+}
+
+export interface WSDataWithTestExecution extends WSData {
+  testExecution: Execution;
+}
+
+export interface WSDataWithTestSuiteExecution extends WSData {
+  testSuiteExecution: TestSuiteExecution;
+}

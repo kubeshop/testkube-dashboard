@@ -52,13 +52,13 @@ const AddSourceModal: React.FC = () => {
       namespace,
     };
 
-    createSource(body)
-      .unwrap()
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
+    createSource(body).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        if ('data' in res) {
           navigate(`/sources/${res.data.metadata.name}`);
-        });
+        }
       });
+    });
   };
 
   return (

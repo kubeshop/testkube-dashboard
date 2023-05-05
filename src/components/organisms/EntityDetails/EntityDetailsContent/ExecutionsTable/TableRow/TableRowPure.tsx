@@ -80,7 +80,7 @@ const TableRowPure: React.FC<{data: any; onAbortExecution: any, mayManageExecuti
               mouseEnterDelay={0.39}
               mouseLeaveDelay={0.1}
             >
-              <Text color={Colors.slate400}>
+              <Text color={Colors.slate400} className="regular small">
                 {displayTimeBetweenDates(new Date(), new Date(startTime)).long}
               </Text>
             </Tooltip>

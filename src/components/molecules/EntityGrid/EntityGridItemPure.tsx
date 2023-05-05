@@ -49,7 +49,7 @@ const EntityGridItemPure: React.FC<any> = memo(forwardRef<HTMLDivElement, any>((
               mouseEnterDelay={0.39}
               mouseLeaveDelay={0.1}
             >
-              <Text color={Colors.slate200}>
+              <Text color={Colors.slate200} className="regular small">
                 {latestExecution?.startTime
                   ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
                   : null}

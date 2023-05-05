@@ -12,17 +12,26 @@ export type TestSuiteStepDelay = {
 export type TestSuiteStepExecuteTest = {
   namespace?: string;
   name: string;
+  type: string;
 };
 
-export type TestSuiteStep = {
+export interface TestSuiteStep {
   stopTestOnFailure: boolean;
-  execute?: TestSuiteStepExecuteTest;
-  delay?: TestSuiteStepDelay;
-};
+  // Used for form
+  id?: string | number;
+}
+
+export interface TestSuiteStepWithExecute extends TestSuiteStep {
+  execute: TestSuiteStepExecuteTest;
+}
+
+export interface TestSuiteStepWithDelay extends TestSuiteStep {
+  delay: TestSuiteStepDelay;
+}
 
 export type TestSuiteStepExecutionResult = {
   description?: string;
-  step: TestSuiteStep;
+  step: TestSuiteStepWithExecute | TestSuiteStepWithDelay;
   test: ObjectRef;
   execution: Execution;
 };
@@ -32,7 +41,7 @@ export type TestSuite = {
   namespace?: string;
   description?: string;
   before?: TestSuiteStep[];
-  steps: TestSuiteStep[];
+  steps?: (TestSuiteStepWithExecute | TestSuiteStepWithDelay)[];
   after?: TestSuiteStep[];
   labels?: EntityMap;
   schedule?: string;
@@ -44,6 +53,11 @@ export type TestSuite = {
 
 export type TestSuiteWithExecution = {
   testSuite: TestSuite;
+  latestExecution?: TestSuiteExecution;
+};
+
+export type TestSuiteWithExecutionRedux = {
+  dataItem: TestSuite;
   latestExecution?: TestSuiteExecution;
 };
 
@@ -64,7 +78,7 @@ export type TestSuiteFilters = {
 
 interface TestSuitesState {
   isLoading?: boolean;
-  dataList: TestSuite | {}[];
+  dataList: TestSuiteWithExecutionRedux[];
   latestExecution?: Execution;
   filters: TestSuiteFilters;
   totals: {};

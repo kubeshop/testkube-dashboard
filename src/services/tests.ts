@@ -1,7 +1,8 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Artifact} from '@models/artifact';
-import {TestFilters, TestWithExecution} from '@models/test';
+import {MetadataResponse} from '@models/fetch';
+import {Test, TestFilters, TestWithExecution} from '@models/test';
 
 import {dynamicBaseQuery, memoizeQuery, paramsSerializer} from '@utils/fetchUtils';
 
@@ -65,7 +66,7 @@ export const testsApi = createApi({
         };
       },
     }),
-    addTest: builder.mutation<any, any>({
+    addTest: builder.mutation<MetadataResponse<Test>, any>({
       query: ({headers = {}, ...rest}) => {
         return {
           url: `/tests`,
@@ -82,7 +83,7 @@ export const testsApi = createApi({
         body: body.data,
       }),
     }),
-    deleteTest: builder.mutation<void, any>({
+    deleteTest: builder.mutation<void, string>({
       query: testId => ({
         url: `/tests/${testId}`,
         method: 'DELETE',
@@ -108,20 +109,16 @@ export const testsApi = createApi({
 testsApi.useGetTestQuery = memoizeQuery(testsApi.useGetTestQuery);
 testsApi.useGetTestsQuery = memoizeQuery(testsApi.useGetTestsQuery);
 testsApi.useGetAllTestsQuery = memoizeQuery(testsApi.useGetAllTestsQuery);
-testsApi.useGetTestExecutionsByIdQuery = memoizeQuery(testsApi.useGetTestExecutionsByIdQuery, (executions) => (
+testsApi.useGetTestExecutionsByIdQuery = memoizeQuery(testsApi.useGetTestExecutionsByIdQuery, executions =>
   // Limit to show maximum of 1000 latest executions
-  executions.results?.length > 1000
-    ? {...executions, results: executions.results.slice(0, 1000)}
-    : executions
-));
+  executions.results?.length > 1000 ? {...executions, results: executions.results.slice(0, 1000)} : executions
+);
 testsApi.useGetTestExecutionByIdQuery = memoizeQuery(testsApi.useGetTestExecutionByIdQuery);
 testsApi.useGetTestExecutionArtifactsQuery = memoizeQuery(testsApi.useGetTestExecutionArtifactsQuery);
-testsApi.useGetTestExecutionMetricsQuery = memoizeQuery(testsApi.useGetTestExecutionMetricsQuery, (metrics) => (
+testsApi.useGetTestExecutionMetricsQuery = memoizeQuery(testsApi.useGetTestExecutionMetricsQuery, metrics =>
   // Limit to show maximum of 1000 latest executions
-  metrics.executions?.length > 1000
-    ? {...metrics, executions: metrics.executions.slice(0, 1000)}
-    : metrics
-));
+  metrics.executions?.length > 1000 ? {...metrics, executions: metrics.executions.slice(0, 1000)} : metrics
+);
 
 export const {
   useGetTestDefinitionQuery,

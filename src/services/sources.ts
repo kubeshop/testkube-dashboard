@@ -1,7 +1,8 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {MetadataResponse} from '@models/fetch';
 import {Repository} from '@models/repository';
-import {CreateSourcePayload, SourceWithRepository} from '@models/sources';
+import {SourceWithRepository} from '@models/sources';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
@@ -27,7 +28,7 @@ export const sourcesApi = createApi({
         body,
       }),
     }),
-    createSource: builder.mutation<CreateSourcePayload, SourceWithRepository>({
+    createSource: builder.mutation<MetadataResponse<{name: string; namespace?: string}>, SourceWithRepository>({
       query: body => ({
         url: '/test-sources',
         method: 'POST',

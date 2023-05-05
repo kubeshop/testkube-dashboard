@@ -13,7 +13,7 @@ import {EntityDetailsContext} from '@contexts';
 import Source from './Source';
 import TestType from './TestType';
 
-const SettingsTest = () => {
+const SettingsTest: React.FC = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
 
   const [updateTestMutation] = useUpdateTestMutation();
@@ -25,7 +25,7 @@ const SettingsTest = () => {
         ...entityDetails,
         ...data,
       },
-    }).then((res: any) => {
+    }).then(res => {
       displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `Test settings was successfully updated.`);
       });

@@ -6,7 +6,8 @@ import {ClockCircleOutlined} from '@ant-design/icons';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {Test, TestWithExecution} from '@models/test';
+import {TestForTestSuiteSteps} from '@models/test';
+import {TestSuite, TestSuiteStepWithDelay, TestSuiteStepWithExecute} from '@models/testSuite';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
@@ -32,14 +33,16 @@ import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './Setti
 
 const {Option} = Select;
 
-const SettingsTests = () => {
+const SettingsTests: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {entityDetails} = useContext(EntityDetailsContext);
+  const typedEntityDetails = entityDetails as TestSuite;
+
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
 
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const executors = useAppSelector(selectExecutors);
 
@@ -47,49 +50,57 @@ const SettingsTests = () => {
   const {data: allTestsList = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
-  const testsData = useMemo<any[]>(() => {
-    return testsList.map((item: Test) => ({
+  const testsData: TestForTestSuiteSteps[] = useMemo(() => {
+    return testsList.map(item => ({
       name: item.name,
       namespace: item.namespace,
       type: getTestExecutorIcon(executors, item.type),
     }));
   }, [testsList]);
 
-  const allTestsData = useMemo(() => {
-    return allTestsList.map((item: TestWithExecution) => ({
+  const allTestsData: TestForTestSuiteSteps[] = useMemo(() => {
+    return allTestsList.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
       type: getTestExecutorIcon(executors, item.test.type),
     }));
   }, [allTestsList]);
 
-  const initialSteps = useMemo(
+  const initialSteps: (TestSuiteStepWithDelay | TestSuiteStepWithExecute)[] = useMemo(
     () =>
-      (entityDetails?.steps || []).map((step: any) => {
-        if (step.delay) {
-          return {
-            ...step,
-            id: nanoid(),
-          };
-        }
-        return {
-          ...step,
-          id: nanoid(),
-          execute: {
-            ...step.execute,
-            type: testsData.find(item => item.name === step.execute.name)?.type,
-          },
-        };
-      }),
-    [entityDetails?.steps, testsData]
+      typedEntityDetails.steps
+        ? typedEntityDetails.steps.map(step => {
+            const id = nanoid();
+
+            if ('delay' in step) {
+              return {
+                ...step,
+                id,
+              };
+            }
+
+            return {
+              ...step,
+              id,
+              execute: {
+                ...step.execute,
+                type: testsData.find(item => step.execute && item.name === step.execute.name)?.type || '',
+              },
+            };
+          })
+        : [],
+    [typedEntityDetails?.steps, testsData]
   );
 
-  const [currentSteps = initialSteps, setCurrentSteps] = useState<any[] | undefined>();
+  const [currentSteps = initialSteps, setCurrentSteps] = useState<
+    (TestSuiteStepWithDelay | TestSuiteStepWithExecute)[]
+  >([]);
+
   const wasTouched = currentSteps !== initialSteps;
 
   useEffect(() => {
     if (currentSteps !== initialSteps) {
-      setCurrentSteps(undefined);
+      setCurrentSteps([]);
     }
   }, [initialSteps]);
 
@@ -100,9 +111,9 @@ const SettingsTests = () => {
         ...entityDetails,
         steps: currentSteps,
       },
-    }).then((res: any) => {
+    }).then(res => {
       displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `Steps were successfully updated.`);
+        notificationCall('passed', 'Steps were successfully updated.');
       });
     });
   };
@@ -128,7 +139,7 @@ const SettingsTests = () => {
     }
   };
 
-  const addDelay = (value?: number) => {
+  const addDelay = (value: number) => {
     setCurrentSteps([
       ...currentSteps,
       {
@@ -150,6 +161,7 @@ const SettingsTests = () => {
     if (!scrollRef.current) {
       return;
     }
+
     // @ts-ignore
     scrollRef.current.scrollIntoView({behavior: 'smooth'});
   };
@@ -172,7 +184,7 @@ const SettingsTests = () => {
           </>
         }
         onConfirm={saveSteps}
-        onCancel={() => setCurrentSteps(undefined)}
+        onCancel={() => setCurrentSteps([])}
         isButtonsDisabled={!wasTouched}
         isEditable={mayEdit}
         enabled={mayEdit}
@@ -218,7 +230,7 @@ const SettingsTests = () => {
                   <Text className="regular middle">Delay</Text>
                 </StyledOptionWrapper>
               </Option>
-              {allTestsData.map((item: any) => (
+              {allTestsData.map(item => (
                 <Option value={JSON.stringify(item)} key={item.name}>
                   <StyledOptionWrapper>
                     <ExecutorIcon type={item.type} />

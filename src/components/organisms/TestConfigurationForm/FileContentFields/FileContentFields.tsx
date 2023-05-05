@@ -9,7 +9,7 @@ import {required} from '@utils/form';
 
 import {onFileChange} from './utils';
 
-const FileContentFields = () => {
+const FileContentFields: React.FC = () => {
   return (
     <FormItem noStyle shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}>
       {form => {

@@ -106,7 +106,7 @@ const Sider: React.FC = () => {
   ];
 
   const renderedMenuItems = useMemo(() => {
-    return getRoutes(showSocialLinksInSider).map((route: any) => {
+    return getRoutes(showSocialLinksInSider).map(route => {
       const {icon: MenuIcon, path, title, active} = route;
 
       return (

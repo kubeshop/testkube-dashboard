@@ -1,11 +1,13 @@
 import React, {useMemo, useState} from 'react';
 
 import {Form, FormInstance, Input, Select} from 'antd';
+import {NamePath} from 'antd/lib/form/interface';
 
 import {Executor} from '@models/executors';
+import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Option} from '@models/form';
 import {SourceWithRepository} from '@models/sources';
-import {AddTestPayload} from '@models/test';
+import {Test} from '@models/test';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
@@ -18,7 +20,7 @@ import {
   GitCreationFormFields,
   StringContentFields,
 } from '@organisms/TestConfigurationForm';
-import {getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
+import {Fields, Props, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
 import {remapExecutors} from '@utils/executors';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -34,14 +36,21 @@ import {useAddTestMutation} from '@services/tests';
 
 import {LabelsWrapper, StyledFormSpace} from '../CreationModal.styled';
 
+type TestCreationFormValues = {
+  name: string;
+  testType: string;
+  testSource: string;
+  labels: Option[];
+};
+
 type TestCreationFormProps = {
-  form: FormInstance;
-  onSuccess: (res: AddTestPayload) => void;
+  form: FormInstance<TestCreationFormValues>;
+  onSuccess: (res: RTKResponse<MetadataResponse<Test>>) => void;
   testSources: SourceWithRepository[];
   executors: Executor[];
 };
 
-const additionalFields: {[key: string]: React.FC<any>} = {
+const additionalFields: Fields = {
   git: GitCreationFormFields,
   'file-uri': FileContentFields,
   custom: CustomCreationFormFields,
@@ -58,7 +67,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
   const [addTest, {isLoading}] = useAddTestMutation();
 
-  const onSave = (values: any) => {
+  const onSave = (values: TestCreationFormValues) => {
     const {testSource, testType} = values;
 
     const requestBody = {
@@ -123,16 +132,18 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
           shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
         >
           {({getFieldValue}) => {
-            const testSourceValue = getSourceFieldValue(getFieldValue);
+            const testSourceValue = getSourceFieldValue(getFieldValue) as SourceType;
 
-            const executorType = selectedExecutor?.executor.meta?.iconURI;
+            const executorType = selectedExecutor?.executor.meta?.iconURI || 'unknown';
 
-            const childrenProps: {[key: string]: Object} = {
+            const childrenProps: Record<SourceType, Partial<Props>> = {
               git: {executorType, getFieldValue},
               custom: {executorType},
+              string: {},
+              'file-uri': {},
             };
 
-            return getAdditionalFieldsComponent(testSourceValue, childrenProps[testSourceValue], additionalFields);
+            return getAdditionalFieldsComponent(testSourceValue, additionalFields, childrenProps[testSourceValue]);
           }}
         </FormItem>
         <FormItem

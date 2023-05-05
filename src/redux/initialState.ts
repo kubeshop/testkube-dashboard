@@ -48,7 +48,7 @@ export const initialTestsFiltersState: TestFilters = {
 const initialTestsState: TestsState = {
   isLoading: false,
   dataList: [],
-  latestExecution: null,
+  latestExecution: undefined,
   filters: initialTestsFiltersState,
   totals: {
     results: 0,

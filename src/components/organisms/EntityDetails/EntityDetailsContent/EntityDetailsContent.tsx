@@ -97,7 +97,7 @@ const EntityDetailsContent: React.FC = () => {
           type: RunningContextType.userUI,
         },
       },
-    }).then((res: any) => {
+    }).then(res => {
       displayDefaultNotificationFlow(res, () => {
         analyticsTrack('trackEvents', {
           type,

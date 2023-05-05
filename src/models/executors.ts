@@ -1,5 +1,5 @@
-import {Args} from './args';
-import {EntityMap} from './entityMap';
+import {Args} from '@models/args';
+import {EntityMap} from '@models/entityMap';
 
 type Executor = {
   name: string;

@@ -1,4 +1,4 @@
-import React, {SetStateAction, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
 import {InputNumber} from 'antd';
 
@@ -11,13 +11,14 @@ import {StyledDelayModalContent} from './SettingsTests.styled';
 type DelayModalProps = {
   isDelayModalVisible: boolean;
   setIsDelayModalVisible: (flag: boolean) => void;
-  addDelay: (delay?: number) => void;
+  addDelay: (delay: number) => void;
 };
 
 const DelayModal: React.FC<DelayModalProps> = props => {
   const {isDelayModalVisible, setIsDelayModalVisible, addDelay} = props;
 
-  const [delayValue, setDelayValue] = useState<number | undefined>(undefined);
+  const [delayValue, setDelayValue] = useState<number | string | null>(null);
+
   const isDelayInteger = useMemo(() => Number.isInteger(delayValue), [delayValue]);
 
   const delayInputRef = useRef(null);
@@ -29,7 +30,7 @@ const DelayModal: React.FC<DelayModalProps> = props => {
       addDelay(Number(delayValue));
     }
 
-    setDelayValue(undefined);
+    setDelayValue(null);
   };
 
   useEffect(() => {
@@ -69,7 +70,7 @@ const DelayModal: React.FC<DelayModalProps> = props => {
             placeholder="Delay"
             controls={false}
             value={delayValue}
-            onChange={value => setDelayValue(value as SetStateAction<number | undefined>)}
+            onChange={value => setDelayValue(value)}
           />
         </StyledDelayModalContent>
       }

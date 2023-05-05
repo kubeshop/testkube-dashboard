@@ -1,5 +1,5 @@
 import {EntityMap} from '@models/entityMap';
-import {Execution, ExecutionRequest} from '@models/execution';
+import {Execution, ExecutionRequest, ExecutionStatusEnum} from '@models/execution';
 import {Repository} from '@models/repository';
 import {Variables} from '@models/variable';
 
@@ -10,6 +10,14 @@ export type TestContent = {
   repository: Repository;
   data: string;
   uri: string;
+};
+
+export type LatestExecution = {
+  id: string;
+  number: number;
+  startTime: string;
+  endTime: string;
+  status: ExecutionStatusEnum;
 };
 
 export type Test = {
@@ -25,10 +33,19 @@ export type Test = {
   executorArgs?: string[];
   executionRequest: ExecutionRequest;
   testIcon?: string;
+  status?: {
+    latestExecution?: LatestExecution;
+  };
+  source: string;
 };
 
 export type TestWithExecution = {
   test: Test;
+  latestExecution?: Execution;
+};
+
+export type TestWithExecutionRedux = {
+  dataItem: Test;
   latestExecution?: Execution;
 };
 
@@ -48,30 +65,19 @@ export type TestForTrigger = {
   type: Test['type'];
 };
 
+export type TestForTestSuiteSteps = {
+  name: Test['name'];
+  namespace: Test['namespace'];
+  type?: Test['type'];
+};
+
 interface TestsState {
   isLoading?: boolean;
-  dataList: Test[];
-  latestExecution: any;
+  dataList: TestWithExecutionRedux[];
+  latestExecution?: Execution;
   filters: TestFilters;
   totals: {};
   filtered: {};
 }
-
-export type AddTestPayload = {
-  data?: {
-    metadata: {
-      name: string;
-    };
-    spec: {
-      content: any;
-      type: any;
-    };
-    status: {
-      // eslint-disable-next-line camelcase
-      last_execution: any;
-    };
-  };
-  error?: any;
-};
 
 export type {TestsState};

@@ -2,6 +2,7 @@ import {useContext, useState} from 'react';
 
 import {Input, Space} from 'antd';
 
+import {BaseQueryFn, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {Button, Text} from '@custom-antd';
@@ -10,6 +11,7 @@ import {notificationCall} from '@molecules';
 
 import usePressEnter from '@hooks/usePressEnter';
 
+import {DynamicFetchArgs} from '@utils/fetchUtils';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
@@ -24,7 +26,15 @@ const DeleteEntityModal: React.FC<{
   // onCancel is passed from parent component <Modal />.
   // Do not pass it directly
   onCancel?: any;
-  useDeleteMutation: UseMutation<any>;
+  useDeleteMutation: UseMutation<
+    MutationDefinition<
+      string,
+      BaseQueryFn<string | DynamicFetchArgs, unknown, FetchBaseQueryError>,
+      never,
+      void,
+      string
+    >
+  >;
   name: string;
   entityLabel: string;
   defaultStackRoute: string;

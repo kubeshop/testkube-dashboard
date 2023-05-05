@@ -13,7 +13,7 @@ type RepositoryProps = {
 };
 
 const Repository: React.FC<RepositoryProps> = props => {
-  const {status = TooltipStatus.none, message} = props;
+  const {status = TooltipStatus.None, message} = props;
 
   return (
     <FormItem

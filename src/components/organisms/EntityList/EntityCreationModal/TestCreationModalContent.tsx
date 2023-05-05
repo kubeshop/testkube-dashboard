@@ -2,7 +2,8 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {AddTestPayload} from '@models/test';
+import {MetadataResponse, RTKResponse} from '@models/fetch';
+import {Test} from '@models/test';
 
 import {useAppSelector} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
@@ -22,7 +23,7 @@ import {defaultHintConfig} from './ModalConfig';
 import TestCreationForm from './TestCreationForm';
 
 const TestCreationModalContent: React.FC = () => {
-  const [form] = Form.useForm<AddTestPayload>();
+  const [form] = Form.useForm();
 
   const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
@@ -62,27 +63,24 @@ const TestCreationModalContent: React.FC = () => {
     }
   }, [form.getFieldValue('testType')]);
 
-  const onSuccess = (res: AddTestPayload) => {
+  const onSuccess = (res: RTKResponse<MetadataResponse<Test>>) => {
     displayDefaultNotificationFlow(res, () => {
-      analyticsTrack('trackEvents', {
-        type: res?.data?.spec?.type,
-        uiEvent: 'create-tests',
-      });
+      if ('data' in res) {
+        analyticsTrack('trackEvents', {
+          type: res.data.spec?.type,
+          uiEvent: 'create-tests',
+        });
 
-      dispatch(setRedirectTarget({targetTestId: res?.data?.metadata?.name}));
+        dispatch(setRedirectTarget({targetTestId: res.data.metadata.name}));
 
-      navigate(`/tests/executions/${res?.data?.metadata?.name}`);
+        navigate(`/tests/executions/${res.data.metadata.name}`);
+      }
     });
   };
 
   return (
     <TestCreationModalWrapper>
-      <TestCreationForm
-        form={form}
-        testSources={testSources}
-        executors={executors}
-        onSuccess={onSuccess}
-      />
+      <TestCreationForm form={form} testSources={testSources} executors={executors} onSuccess={onSuccess} />
       <Hint {...hintConfig} />
     </TestCreationModalWrapper>
   );

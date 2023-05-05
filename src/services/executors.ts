@@ -1,6 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Executor} from '@models/executors';
+import {MetadataResponse} from '@models/fetch';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
@@ -13,7 +14,7 @@ export const executorsApi = createApi({
         url: `/executors`,
       }),
     }),
-    createExecutor: builder.mutation<void, any>({
+    createExecutor: builder.mutation<MetadataResponse<{name: string}>, any>({
       query: body => ({
         url: `/executors`,
         method: 'POST',
@@ -39,7 +40,7 @@ export const executorsApi = createApi({
         url: `/executors/${id}`,
       }),
     }),
-    deleteExecutor: builder.mutation<void, any>({
+    deleteExecutor: builder.mutation<void, string>({
       query: id => ({
         url: `/executors/${id}`,
         method: 'DELETE',

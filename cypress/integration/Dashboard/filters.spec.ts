@@ -2,12 +2,12 @@
 
 const baseEndpointUrl = Cypress.env('endpoint');
 
-const entities: any = [
-  // {baseName: 'test-suites', apiName: 'test-suite'},
-  // {baseName: 'tests', apiName: 'test'},
+const entities: {baseName: string; apiName: string}[] = [
+  {baseName: 'test-suites', apiName: 'test-suite'},
+  {baseName: 'tests', apiName: 'test'},
 ];
 
-entities.forEach((entity: any) => {
+entities.forEach(entity => {
   describe(`[${entity.baseName}] Content Filters`, () => {
     beforeEach(() => {
       cy.visit(`/dashboard/${entity.baseName}`).then(() => {

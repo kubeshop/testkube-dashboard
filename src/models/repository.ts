@@ -2,7 +2,7 @@ export type RepositoryTypeEnum = 'git';
 
 export type Repository = {
   type: RepositoryTypeEnum;
-  uri: string;
+  uri?: string;
   branch?: string;
   commit?: string;
   path?: string;
@@ -18,4 +18,7 @@ export type Repository = {
     name: string;
     key?: string;
   };
+  certificateSecret?: string;
+  workingDir?: string;
+  authType?: string;
 };

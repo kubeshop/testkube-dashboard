@@ -19,14 +19,22 @@ import {DashboardContext} from '@contexts';
 
 import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 
+type AddExecutorsFormValues = {
+  name: string;
+  type?: string;
+  image: string;
+};
+
 const AddExecutorsModal: React.FC = () => {
   const {navigate} = useContext(DashboardContext);
+
+  const [form] = Form.useForm<AddExecutorsFormValues>();
 
   const [createExecutor, {isLoading}] = useCreateExecutorMutation();
 
   const namespace = useAppSelector(selectNamespace);
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: AddExecutorsFormValues) => {
     const body = {
       ...values,
       namespace,
@@ -36,16 +44,18 @@ const AddExecutorsModal: React.FC = () => {
 
     delete body.type;
 
-    createExecutor(body).then((res: any) => {
+    createExecutor(body).then(res => {
       displayDefaultNotificationFlow(res, () => {
-        navigate(`/executors/${res.data.metadata.name}`);
+        if ('data' in res) {
+          navigate(`/executors/${res.data.metadata.name}`);
+        }
       });
     });
   };
 
   return (
     <AddExecutorsModalContainer>
-      <Form style={{flex: 1}} layout="vertical" onFinish={onFinish}>
+      <Form style={{flex: 1}} layout="vertical" onFinish={onFinish} form={form}>
         <Form.Item
           label="Name"
           required
