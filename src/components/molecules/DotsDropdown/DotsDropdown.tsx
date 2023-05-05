@@ -20,7 +20,7 @@ interface DotsDropdownProps {
     | 'bottomRight'
     | undefined;
   withPadding?: boolean;
-  isTransparent?: boolean;
+  wrapperStyle?: React.CSSProperties;
   trigger?: ('click' | 'hover' | 'contextMenu')[];
 }
 
@@ -28,7 +28,7 @@ const DotsDropdown: React.FC<DotsDropdownProps> = ({
   items,
   placement = 'bottom',
   withPadding = true,
-  isTransparent = true,
+  wrapperStyle = {},
   trigger = ['click'],
 }) => {
   return (
@@ -39,7 +39,7 @@ const DotsDropdown: React.FC<DotsDropdownProps> = ({
       }}
       placement={placement}
     >
-      <DotsWrapper isTransparent={isTransparent} onClick={event => event.stopPropagation()}>
+      <DotsWrapper style={wrapperStyle} onClick={event => event.stopPropagation()}>
         <Dots color={Colors.grey450} withPadding={withPadding} />
       </DotsWrapper>
     </Dropdown>

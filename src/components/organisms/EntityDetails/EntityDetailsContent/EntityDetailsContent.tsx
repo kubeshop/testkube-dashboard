@@ -151,7 +151,7 @@ const EntityDetailsContent: React.FC = () => {
           ) : null,
           <DotsDropdown
             items={[{key: 1, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>}]}
-            isTransparent={false}
+            wrapperStyle={{backgroundColor: Colors.slate800}}
           />,
           <Button
             key="run-now-button"
