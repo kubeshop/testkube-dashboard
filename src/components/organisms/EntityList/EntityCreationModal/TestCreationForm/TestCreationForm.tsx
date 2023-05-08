@@ -19,7 +19,7 @@ import {
   GitCreationFormFields,
   StringContentFields,
 } from '@organisms/TestConfigurationForm';
-import {Fields, Props, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
+import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
 import {remapExecutors} from '@utils/executors';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -49,7 +49,7 @@ type TestCreationFormProps = {
   executors: Executor[];
 };
 
-const additionalFields: Fields = {
+const additionalFields: SourceFields = {
   git: GitCreationFormFields,
   'file-uri': FileContentFields,
   custom: CustomCreationFormFields,
@@ -131,7 +131,11 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
           shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
         >
           {({getFieldValue}) => {
-            const testSourceValue = getSourceFieldValue(getFieldValue) as SourceType;
+            const testSourceValue = getSourceFieldValue(getFieldValue);
+
+            if (!testSourceValue) {
+              return null;
+            }
 
             const executorType = selectedExecutor?.executor.meta?.iconURI || 'unknown';
 

@@ -2,7 +2,7 @@ import {NamePath} from 'antd/lib/form/interface';
 
 export type SourceType = 'git' | 'custom' | 'file-uri' | 'string';
 
-export type Fields = Record<SourceType, React.FC<Partial<Props>>>;
+export type SourceFields = Record<SourceType, React.FC<Partial<Props>>>;
 
 export type Props = {
   executorType: string;
@@ -15,13 +15,9 @@ export type Props = {
 
 export const getAdditionalFieldsComponent: (
   source: SourceType,
-  additionalFields: Fields,
+  additionalFields: SourceFields,
   props: Partial<Props>
 ) => JSX.Element | null = (source, additionalFields, props = {}) => {
-  if (!source) {
-    return null;
-  }
-
   const AdditionalFieldsComponent = additionalFields[source];
 
   if (!AdditionalFieldsComponent) {

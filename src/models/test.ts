@@ -65,7 +65,7 @@ export type TestForTrigger = {
   type: Test['type'];
 };
 
-export type TestForTestSuiteSteps = {
+export type TestSuiteStepTest = {
   name: Test['name'];
   namespace: Test['namespace'];
   type?: Test['type'];

@@ -18,7 +18,7 @@ import {
   SourceEditFormFields,
   StringContentFields,
 } from '@organisms/TestConfigurationForm';
-import {Fields, Props, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
+import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
 import {testSourceLink} from '@utils/externalLinks';
 import {required} from '@utils/form';
@@ -35,7 +35,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
-const additionalFields: Fields = {
+const additionalFields: SourceFields = {
   git: SourceEditFormFields,
   'file-uri': FileContentFields,
   custom: CustomSourceEditFormFields,
@@ -140,9 +140,13 @@ const Source: React.FC<SourceProps> = props => {
             shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
           >
             {({getFieldValue}) => {
-              const testSource = getSourceFieldValue(getFieldValue) as SourceType;
+              const testSource = getSourceFieldValue(getFieldValue);
 
-              const executorType = selectedExecutor?.executor.meta?.iconURI;
+              if (!testSource) {
+                return null;
+              }
+
+              const executorType = selectedExecutor?.executor.meta?.iconURI || 'unknown';
 
               const childrenProps: Record<SourceType, Partial<Props>> = {
                 git: {

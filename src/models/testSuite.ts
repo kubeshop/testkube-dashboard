@@ -15,23 +15,25 @@ export type TestSuiteStepExecuteTest = {
   type: string;
 };
 
-export interface TestSuiteStep {
+export interface TestSuiteStepAbstract {
   stopTestOnFailure: boolean;
   // Used for form
   id?: string | number;
 }
 
-export interface TestSuiteStepWithExecute extends TestSuiteStep {
+export interface TestSuiteStepWithExecute extends TestSuiteStepAbstract {
   execute: TestSuiteStepExecuteTest;
 }
 
-export interface TestSuiteStepWithDelay extends TestSuiteStep {
+export interface TestSuiteStepWithDelay extends TestSuiteStepAbstract {
   delay: TestSuiteStepDelay;
 }
 
+export type TestSuiteStep = TestSuiteStepWithExecute | TestSuiteStepWithDelay;
+
 export type TestSuiteStepExecutionResult = {
   description?: string;
-  step: TestSuiteStepWithExecute | TestSuiteStepWithDelay;
+  step: TestSuiteStep;
   test: ObjectRef;
   execution: Execution;
 };
@@ -41,7 +43,7 @@ export type TestSuite = {
   namespace?: string;
   description?: string;
   before?: TestSuiteStep[];
-  steps?: (TestSuiteStepWithExecute | TestSuiteStepWithDelay)[];
+  steps?: TestSuiteStep[];
   after?: TestSuiteStep[];
   labels?: EntityMap;
   schedule?: string;

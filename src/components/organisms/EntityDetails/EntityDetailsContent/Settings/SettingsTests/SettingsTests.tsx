@@ -6,8 +6,8 @@ import {ClockCircleOutlined} from '@ant-design/icons';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {TestForTestSuiteSteps} from '@models/test';
-import {TestSuite, TestSuiteStepWithDelay, TestSuiteStepWithExecute} from '@models/testSuite';
+import {TestSuiteStepTest} from '@models/test';
+import {TestSuite, TestSuiteStep} from '@models/testSuite';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
@@ -35,8 +35,7 @@ const {Option} = Select;
 
 const SettingsTests: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {entityDetails} = useContext(EntityDetailsContext);
-  const typedEntityDetails = entityDetails as TestSuite;
+  const {entityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -50,7 +49,7 @@ const SettingsTests: React.FC = () => {
   const {data: allTestsList = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
-  const testsData: TestForTestSuiteSteps[] = useMemo(() => {
+  const testsData: TestSuiteStepTest[] = useMemo(() => {
     return testsList.map(item => ({
       name: item.name,
       namespace: item.namespace,
@@ -58,7 +57,7 @@ const SettingsTests: React.FC = () => {
     }));
   }, [testsList]);
 
-  const allTestsData: TestForTestSuiteSteps[] = useMemo(() => {
+  const allTestsData: TestSuiteStepTest[] = useMemo(() => {
     return allTestsList.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
@@ -66,10 +65,10 @@ const SettingsTests: React.FC = () => {
     }));
   }, [allTestsList]);
 
-  const initialSteps: (TestSuiteStepWithDelay | TestSuiteStepWithExecute)[] = useMemo(
+  const initialSteps: TestSuiteStep[] = useMemo(
     () =>
-      typedEntityDetails.steps
-        ? typedEntityDetails.steps.map(step => {
+      entityDetails.steps
+        ? entityDetails.steps.map(step => {
             const id = nanoid();
 
             if ('delay' in step) {
@@ -84,17 +83,15 @@ const SettingsTests: React.FC = () => {
               id,
               execute: {
                 ...step.execute,
-                type: testsData.find(item => step.execute && item.name === step.execute.name)?.type || '',
+                type: testsData.find(item => item.name === step.execute.name)?.type || '',
               },
             };
           })
         : [],
-    [typedEntityDetails?.steps, testsData]
+    [entityDetails?.steps, testsData]
   );
 
-  const [currentSteps = initialSteps, setCurrentSteps] = useState<
-    (TestSuiteStepWithDelay | TestSuiteStepWithExecute)[]
-  >([]);
+  const [currentSteps = initialSteps, setCurrentSteps] = useState<TestSuiteStep[]>([]);
 
   const wasTouched = currentSteps !== initialSteps;
 

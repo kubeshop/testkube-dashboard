@@ -3,7 +3,7 @@ import {DragDropContext, Draggable, DropResult, DroppableStateSnapshot} from 're
 
 import {StyledComponent} from 'styled-components';
 
-import {TestSuiteStepWithDelay, TestSuiteStepWithExecute} from '@models/testSuite';
+import {TestSuiteStep} from '@models/testSuite';
 
 import {reorder} from '@utils/array';
 
@@ -17,12 +17,12 @@ interface ItemComponentProps {
 }
 
 type DragNDropListProps = {
-  items: (TestSuiteStepWithDelay | TestSuiteStepWithExecute)[];
-  setItems: React.Dispatch<React.SetStateAction<(TestSuiteStepWithDelay | TestSuiteStepWithExecute)[]>>;
+  items: TestSuiteStep[];
+  setItems: (steps: TestSuiteStep[]) => void;
   ContainerComponent: StyledComponent<'div', {}, {isDragging: DroppableStateSnapshot['isDraggingOver']}, never>;
   ItemComponent: React.FC<ItemComponentProps>;
   onDelete: (index: number) => void;
-  scrollRef: React.LegacyRef<HTMLDivElement> | undefined;
+  scrollRef: React.RefObject<HTMLDivElement> | undefined;
   disabled?: boolean;
 };
 
