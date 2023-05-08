@@ -9,11 +9,18 @@ import {reorder} from '@utils/array';
 
 import StrictModeDroppable from './StrictModeDroppable';
 
+interface ItemComponentProps {
+  index: number;
+  isDragging: boolean;
+  onDelete: (index: number) => void;
+  disabled: boolean;
+}
+
 type DragNDropListProps = {
   items: (TestSuiteStepWithDelay | TestSuiteStepWithExecute)[];
   setItems: React.Dispatch<React.SetStateAction<(TestSuiteStepWithDelay | TestSuiteStepWithExecute)[]>>;
   ContainerComponent: StyledComponent<'div', {}, {isDragging: DroppableStateSnapshot['isDraggingOver']}, never>;
-  ItemComponent: React.FC<{index: number; isDragging: boolean; onDelete: (index: number) => void; disabled: boolean}>;
+  ItemComponent: React.FC<ItemComponentProps>;
   onDelete: (index: number) => void;
   scrollRef: React.LegacyRef<HTMLDivElement> | undefined;
   disabled?: boolean;
