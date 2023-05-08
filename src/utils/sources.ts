@@ -113,7 +113,7 @@ export const getCustomSourceField = (testSource: string) => {
 
 export const dummySecret = '******';
 
-type GetSourceFormValues = {
+export type GetSourceFormValues = {
   source: string;
   branch?: string;
   commit?: string;

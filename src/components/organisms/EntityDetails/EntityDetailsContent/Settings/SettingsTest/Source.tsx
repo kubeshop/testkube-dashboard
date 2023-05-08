@@ -23,6 +23,7 @@ import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@or
 import {testSourceLink} from '@utils/externalLinks';
 import {required} from '@utils/form';
 import {
+  GetSourceFormValues,
   getCustomSourceField,
   getSourceFieldValue,
   getSourceFormValues,
@@ -47,17 +48,7 @@ type SourceProps = {
   updateTest: (data: any) => void;
 };
 
-type SourceFormValues = {
-  source: string;
-  token?: string;
-  username?: string;
-  password?: string;
-  url?: string;
-  branch?: string;
-  path?: string;
-  content?: string;
-  testSource: string;
-};
+type SourceFormValues = GetSourceFormValues & {testSource: string};
 
 const Source: React.FC<SourceProps> = props => {
   const {entityDetails, updateTest} = props;
