@@ -98,6 +98,7 @@ const Schedule: React.FC = () => {
         onCancel={onCancel}
         isButtonsDisabled={!wasTouched}
         enabled={enabled}
+        forceEnableButtons={wasTouched}
       >
         <StyledSpace direction="vertical" size={32}>
           <StyledColumn>

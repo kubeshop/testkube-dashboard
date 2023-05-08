@@ -178,6 +178,7 @@ const SettingsTests = () => {
         isButtonsDisabled={!wasTouched}
         isEditable={mayEdit}
         enabled={mayEdit}
+        forceEnableButtons={wasTouched}
       >
         <>
           {currentSteps?.length === 0 ? (
