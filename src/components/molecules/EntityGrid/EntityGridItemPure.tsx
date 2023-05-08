@@ -66,7 +66,6 @@ const EntityGridItemPure: React.FC<any> = memo(
                     label: <span onClick={event => onAbortAllExecutionsClick(event)}>Abort all executions</span>,
                   },
                 ]}
-                trigger={['hover']}
               />
             </ItemColumn>
           </ItemRow>
