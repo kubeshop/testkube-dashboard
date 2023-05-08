@@ -3,7 +3,7 @@ name: Publish Docker image
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   build_multi_platform_images:
@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: "arm64"
+          - name: 'arm64'
             path: arm64v8/nginx:alpine
-          - name: "amd64"
+          - name: 'amd64'
             path: nginx:alpine
     steps:
       - name: Get tag
@@ -99,10 +99,10 @@ jobs:
           export RELEASE_VERSION
           export SERVICE
 
-          # Check if release branch exists in helm-charts repository
+          # Check if release branch exists
           REPO_OWNER=kubeshop
           REPO_NAME=helm-charts
-          RELEASE_BRANCH_NAME=release/$SERVICE/$RELEASE_VERSION
+          RELEASE_BRANCH_NAME=release-$RELEASE_VERSION
           echo $RELEASE_VERSION
           STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H "${AUTH_HEADER}" "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches/${RELEASE_BRANCH_NAME}")
 
@@ -110,13 +110,18 @@ jobs:
             git fetch origin main
             git checkout main
             cd ./scripts
-            ./chart_releaser.sh --helm-chart-folder testkube-$SERVICE
+            ./chart_releaser.sh --helm-chart-folder testkube-dashboard
           else
-            git fetch origin "release/$SERVICE/$RELEASE_VERSION"
-            git checkout "release/$SERVICE/$RELEASE_VERSION"
+            git fetch origin "release-$RELEASE_VERSION"
+            git checkout "release-$RELEASE_VERSION"
             echo "Switched to release branch"
             cd ./scripts
-            ./chart_releaser.sh --helm-chart-folder testkube-$SERVICE --branch true
+            ./chart_releaser.sh --helm-chart-folder testkube-dashboard --branch true
+
+            git checkout main
+            git merge "release-$RELEASE_VERSION"
+            git push --set-upstream https://kubeshop-bot:$GH_PUSH_TOKEN@github.com/kubeshop/helm-charts  main
+            git push origin -d "release-$RELEASE_VERSION"
           fi
 
         env:
