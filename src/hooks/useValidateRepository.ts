@@ -3,9 +3,6 @@ import {useDebounce, useInterval, useLatest, useUpdate} from 'react-use';
 
 import {NamePath} from 'antd/lib/form/interface';
 
-import {BaseQueryFn, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
-import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
-
 import {isEqual} from 'lodash';
 
 import {RTKResponse} from '@models/fetch';
@@ -13,7 +10,6 @@ import {Repository} from '@models/repository';
 
 import {TooltipStatus} from '@molecules/GitFormItems/tooltipUtils';
 
-import {DynamicFetchArgs} from '@utils/fetchUtils';
 import {dummySecret} from '@utils/sources';
 
 export type ValidationState = {
@@ -44,15 +40,7 @@ const getErrorMessage = (rawErrorString: string, searchString: string) => {
 const useValidateRepository = (
   getFieldValue: (name: NamePath) => string,
   setValidationState: React.Dispatch<React.SetStateAction<ValidationState>>,
-  validateRepository: MutationTrigger<
-    MutationDefinition<
-      Repository,
-      BaseQueryFn<string | DynamicFetchArgs, unknown, FetchBaseQueryError>,
-      never,
-      void,
-      'repositoryApi'
-    >
-  >
+  validateRepository: (repository: Repository) => Promise<RTKResponse<void>>
 ) => {
   const getValues = () => ({
     uri: getFieldValue('uri') || '',
