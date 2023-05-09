@@ -21,6 +21,7 @@ const EntityDetailsContext = createContext<{
   daysFilterValue: number;
   setDaysFilterValue: React.Dispatch<React.SetStateAction<number>>;
   abortExecution: any;
+  abortAllExecutions: any;
   isFirstTimeLoading: boolean;
   setFirstTimeLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
@@ -41,6 +42,7 @@ const EntityDetailsContext = createContext<{
   daysFilterValue: 7, // 0 means to see all executions
   setDaysFilterValue: () => {},
   abortExecution: () => {},
+  abortAllExecutions: () => {},
   isFirstTimeLoading: true,
   setFirstTimeLoading: () => {},
 });

@@ -13,16 +13,26 @@ export const EntityListContext = createContext<{
   allFilters: any;
   useGetMetrics: any;
   entity?: Entity;
+  useAbortAllExecutions: any;
 }>({
   dataSource: [],
   queryFilters: {},
   setQueryFilters: () => {},
   allFilters: {},
   useGetMetrics: () => {},
+  useAbortAllExecutions: () => {},
 });
 
 const EntityListContainer: React.FC<EntityListBlueprint> = props => {
-  const {selectData, selectQueryFilters, selectAllFilters, useGetMetrics, setQueryFilters, ...rest} = props;
+  const {
+    selectData,
+    selectQueryFilters,
+    selectAllFilters,
+    useGetMetrics,
+    useAbortAllExecutions,
+    setQueryFilters,
+    ...rest
+  } = props;
 
   const dataSource = useAppSelector(selectData);
   const queryFilters = useAppSelector(selectQueryFilters);
@@ -35,6 +45,7 @@ const EntityListContainer: React.FC<EntityListBlueprint> = props => {
     allFilters,
     useGetMetrics,
     entity: rest.entity,
+    useAbortAllExecutions,
   };
 
   return (

@@ -213,6 +213,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .ant-dropdown-menu {
     background: ${Colors.slate800};
+    padding: 0;
 
     .ant-dropdown-menu-item {
       background: ${Colors.slate700};

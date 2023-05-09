@@ -12,7 +12,7 @@ import {
 import {Text} from '@custom-antd';
 
 import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuiteExecutions';
-import {useGetTestSuitesQuery} from '@services/testSuites';
+import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
 
 import Colors from '@styles/Colors';
 
@@ -37,6 +37,7 @@ export const TestSuitesEntity: EntityListBlueprint = {
 
   useGetData: useGetTestSuitesQuery,
   useGetMetrics: useGetTestSuiteExecutionMetricsQuery,
+  useAbortAllExecutions: useAbortAllTestSuiteExecutionsMutation,
   setData: setTestSuites,
   selectData: selectTestSuites,
 

@@ -16,7 +16,7 @@ import {ExecutorIcon} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
-import {CLICommands, LabelsList, MetricsBarChart, RunningContextType} from '@molecules';
+import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextType, notificationCall} from '@molecules';
 
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
@@ -46,7 +46,7 @@ const filterOptions: OptionType[] = [
 ];
 
 const EntityDetailsContent: React.FC = () => {
-  const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue} =
+  const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
     useContext(EntityDetailsContext);
   const {pageTitle} = useContext(ConfigContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
@@ -107,6 +107,12 @@ const EntityDetailsContent: React.FC = () => {
     });
   };
 
+  const onAbortAllExecutionsClick = () => {
+    abortAllExecutions({id: name}).catch(() => {
+      notificationCall('failed', `Something went wrong during ${entity} execution abortion`);
+    });
+  };
+
   const avatar = type
     ? {
         avatar: {
@@ -143,6 +149,10 @@ const EntityDetailsContent: React.FC = () => {
               key="days-filter-select"
             />
           ) : null,
+          <DotsDropdown
+            items={[{key: 1, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>}]}
+            wrapperStyle={{backgroundColor: Colors.slate800}}
+          />,
           <Button
             key="run-now-button"
             type="primary"
