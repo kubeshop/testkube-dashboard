@@ -6,7 +6,7 @@ import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {LabelsList, MetricsBarChart} from '@molecules';
+import {DotsDropdown, LabelsList, MetricsBarChart, notificationCall} from '@molecules';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
@@ -17,7 +17,7 @@ import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMet
 
 const EntityGridItemPure: React.FC<any> = memo(
   forwardRef<HTMLDivElement, any>((props, ref) => {
-    const {item, onClick, entity, metrics} = props;
+    const {item, onClick, entity, metrics, abortAllExecutions} = props;
     const {dataItem, latestExecution} = item;
 
     const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
@@ -27,6 +27,13 @@ const EntityGridItemPure: React.FC<any> = memo(
     const click = useCallback(() => {
       onClick(item);
     }, [onClick, item]);
+
+    const onAbortAllExecutionsClick = (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.stopPropagation();
+      abortAllExecutions({id: dataItem?.name}).catch(() => {
+        notificationCall('failed', `Something went wrong during ${entity} execution abortion`);
+      });
+    };
 
     return (
       <ItemWrapper onClick={click} ref={ref} data-test={dataTestValue}>
@@ -45,15 +52,21 @@ const EntityGridItemPure: React.FC<any> = memo(
               <Tooltip
                 title={latestExecution?.startTime ? formatExecutionDate(new Date(latestExecution?.startTime)) : null}
                 placement="bottomRight"
-                mouseEnterDelay={0.39}
-                mouseLeaveDelay={0.1}
               >
-                <Text color={Colors.slate200} className="regular small">
+                <Text color={Colors.slate200}>
                   {latestExecution?.startTime
                     ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
                     : null}
                 </Text>
               </Tooltip>
+              <DotsDropdown
+                items={[
+                  {
+                    key: 1,
+                    label: <span onClick={event => onAbortAllExecutionsClick(event)}>Abort all executions</span>,
+                  },
+                ]}
+              />
             </ItemColumn>
           </ItemRow>
           <RowsWrapper>
