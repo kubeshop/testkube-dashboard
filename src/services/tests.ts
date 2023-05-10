@@ -102,6 +102,12 @@ export const testsApi = createApi({
         method: 'PATCH',
       }),
     }),
+    abortAllTestExecutions: builder.mutation<void, any>({
+      query: ({id}) => ({
+        url: `/tests/${id}/abort`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -134,4 +140,5 @@ export const {
   useGetTestExecutionMetricsQuery,
   useRunTestMutation,
   useAbortTestExecutionMutation,
+  useAbortAllTestExecutionsMutation,
 } = testsApi;

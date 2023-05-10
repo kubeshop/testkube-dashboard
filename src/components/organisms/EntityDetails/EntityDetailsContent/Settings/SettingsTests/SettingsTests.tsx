@@ -45,7 +45,9 @@ const SettingsTests: React.FC = () => {
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {skip: !isClusterAvailable});
+  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
+    skip: !isClusterAvailable || !entityDetails.name,
+  });
   const {data: allTestsList = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
@@ -185,6 +187,7 @@ const SettingsTests: React.FC = () => {
         isButtonsDisabled={!wasTouched}
         isEditable={mayEdit}
         enabled={mayEdit}
+        forceEnableButtons={wasTouched}
       >
         <>
           {currentSteps?.length === 0 ? (

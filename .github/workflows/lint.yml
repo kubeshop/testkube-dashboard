@@ -2,14 +2,14 @@ name: Linting
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - '**.js'
       - '**.jsx'
       - '**.ts'
       - '**.tsx'
   pull_request:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - '**.js'
       - '**.jsx'

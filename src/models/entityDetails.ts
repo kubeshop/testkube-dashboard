@@ -12,6 +12,7 @@ export type EntityDetailsBlueprint = {
   useGetEntityDetails: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useGetMetrics: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useAbortExecution: UseMutation<MutationDefinition<any, any, any, any, any>>;
+  useAbortAllExecutions: UseMutation<MutationDefinition<any, any, any, any, any>>;
   setExecutions?: any;
   selectExecutions?: any;
   defaultStackRoute: string;

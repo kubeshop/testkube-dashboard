@@ -6,7 +6,7 @@ import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {LabelsList, MetricsBarChart} from '@molecules';
+import {DotsDropdown, LabelsList, MetricsBarChart, notificationCall} from '@molecules';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
@@ -15,15 +15,25 @@ import Colors from '@styles/Colors';
 
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
 
-const EntityGridItemPure: React.FC<any> = memo(forwardRef<HTMLDivElement, any>((props, ref) => {
-  const {item, onClick, entity, metrics} = props;
-  const {dataItem, latestExecution} = item;
+const EntityGridItemPure: React.FC<any> = memo(
+  forwardRef<HTMLDivElement, any>((props, ref) => {
+    const {item, onClick, entity, metrics, abortAllExecutions} = props;
+    const {dataItem, latestExecution} = item;
 
-  const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
+    const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
+    const executions = metrics?.executions;
+    const dataTestValue = `${entity}-list-item`;
 
-  const executions = metrics?.executions;
+    const click = useCallback(() => {
+      onClick(item);
+    }, [onClick, item]);
 
-  const dataTestValue = `${entity}-list-item`;
+    const onAbortAllExecutionsClick = (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.stopPropagation();
+      abortAllExecutions({id: dataItem?.name}).catch(() => {
+        notificationCall('failed', `Something went wrong during ${entity} execution abortion`);
+      });
+    };
 
   const click = useCallback(() => {
     onClick(item);
@@ -90,10 +100,44 @@ const EntityGridItemPure: React.FC<any> = memo(forwardRef<HTMLDivElement, any>((
               <MetricsBarChart data={executions} chartHeight={38} barWidth={6} />
             </StyledMetricItem>
           </ItemRow>
-        </RowsWrapper>
-      </DetailsWrapper>
-    </ItemWrapper>
-  );
-}));
+          <RowsWrapper>
+            <ItemRow $flex={1}>
+              {dataItem?.labels ? (
+                <LabelsList labels={dataItem?.labels} shouldSkipLabels howManyLabelsToShow={2} />
+              ) : null}
+            </ItemRow>
+            <ItemRow $flex={1}>
+              <StyledMetricItem>
+                <Text className="small uppercase" color={Colors.slate500}>
+                  pass/fail ratio
+                </Text>
+                <Text className="big regular">
+                  {metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '0%'}
+                </Text>
+              </StyledMetricItem>
+              <StyledMetricItem>
+                <Text className="small uppercase" color={Colors.slate500}>
+                  p50
+                </Text>
+                <Text className="big regular">
+                  {metrics?.executionDurationP50ms ? formatDuration(metrics?.executionDurationP50ms / 1000) : '-'}
+                </Text>
+              </StyledMetricItem>
+              <StyledMetricItem>
+                <Text className="small uppercase" color={Colors.slate500}>
+                  failed executions
+                </Text>
+                <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
+              </StyledMetricItem>
+              <StyledMetricItem>
+                <MetricsBarChart data={executions} chartHeight={38} barWidth={6} />
+              </StyledMetricItem>
+            </ItemRow>
+          </RowsWrapper>
+        </DetailsWrapper>
+      </ItemWrapper>
+    );
+  })
+);
 
 export default EntityGridItemPure;

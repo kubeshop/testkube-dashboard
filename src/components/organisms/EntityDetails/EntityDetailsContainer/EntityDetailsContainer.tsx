@@ -27,14 +27,20 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {entity, useGetEntityDetails, useGetMetrics, defaultStackRoute, useGetExecutions, useAbortExecution} = props;
+  const {
+    entity,
+    useGetEntityDetails,
+    useGetMetrics,
+    defaultStackRoute,
+    useGetExecutions,
+    useAbortExecution,
+    useAbortAllExecutions,
+  } = props;
 
   const {isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
   const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
   const wsRoot = useWsEndpoint();
-
-  const {pathname} = location;
 
   const params = useParams();
   const {id, execId = ''} = params;
@@ -62,6 +68,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     skip: !isClusterAvailable,
   });
   const [abortExecution] = useAbortExecution();
+  const [abortAllExecutions] = useAbortAllExecutions();
 
   const onWebSocketData = (wsData: WSDataWithTestExecution | WSDataWithTestSuiteExecution) => {
     try {
@@ -281,6 +288,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     daysFilterValue,
     setDaysFilterValue,
     abortExecution,
+    abortAllExecutions,
     isFirstTimeLoading,
     setFirstTimeLoading,
   };
