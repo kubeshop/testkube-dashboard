@@ -16,6 +16,9 @@ export const literalToColor: Record<string, Colors> = {
   download: Colors.slate400,
   delete: Colors.slate400,
   upgrade: Colors.slate400,
+  connect: Colors.amber400,
+  cloud: Colors.amber400,
+  environment: Colors.amber400,
 };
 
 export const getLiteralColor = (literal: string): Colors => {
