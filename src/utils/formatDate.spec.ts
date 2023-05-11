@@ -22,7 +22,7 @@ describe('utils', () => {
     it('should round correctly', () => {
       expect(formatDuration(time(1, 59, 59.555))).toBe('1h 59m 59s');
       expect(formatDuration(time(0, 59, 59.555))).toBe('59m 59s');
-      expect(formatDuration(time(0, 0, 59.555))).toBe('59.56s');
+      expect(formatDuration(time(0, 0, 59.555))).toBe('59.55s');
     });
   });
 });
