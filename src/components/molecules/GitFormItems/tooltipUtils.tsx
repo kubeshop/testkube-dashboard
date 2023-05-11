@@ -3,10 +3,10 @@ import {CheckCircleFilled, LoadingOutlined, WarningFilled} from '@ant-design/ico
 import Colors from '@styles/Colors';
 
 export enum TooltipStatus {
-  loading = 'loading',
-  error = 'error',
-  success = 'success',
-  none = 'none',
+  Loading = 'loading',
+  Error = 'error',
+  Success = 'success',
+  None = 'none',
 }
 
 export const tooltipIcons: Record<TooltipStatus, JSX.Element | undefined> = {

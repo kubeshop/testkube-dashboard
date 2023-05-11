@@ -2,6 +2,7 @@ import {useContext, useState} from 'react';
 
 import {Input, Space} from 'antd';
 
+import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {Button, Text} from '@custom-antd';
@@ -24,7 +25,7 @@ const DeleteEntityModal: React.FC<{
   // onCancel is passed from parent component <Modal />.
   // Do not pass it directly
   onCancel?: any;
-  useDeleteMutation: UseMutation<any>;
+  useDeleteMutation: UseMutation<MutationDefinition<string, any, never, void, string>>;
   name: string;
   entityLabel: string;
   defaultStackRoute: string;

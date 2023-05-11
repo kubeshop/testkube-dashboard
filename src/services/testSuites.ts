@@ -1,5 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {MetadataResponse} from '@models/fetch';
+import {Test} from '@models/test';
 import {TestSuiteFilters, TestSuiteWithExecution} from '@models/testSuite';
 
 import {dynamicBaseQuery, memoizeQuery, paramsSerializer} from '@utils/fetchUtils';
@@ -42,12 +44,12 @@ export const testSuitesApi = createApi({
         url: `/test-suites/${id}`,
       }),
     }),
-    getTestsListForTestSuite: builder.query<any, string>({
+    getTestsListForTestSuite: builder.query<Test[], string>({
       query: id => ({
         url: `/test-suites/${id}/tests`,
       }),
     }),
-    addTestSuite: builder.mutation<any, any>({
+    addTestSuite: builder.mutation<MetadataResponse<{name: string; namespace: string}>, any>({
       query: body => ({
         url: `/test-suites`,
         method: 'POST',

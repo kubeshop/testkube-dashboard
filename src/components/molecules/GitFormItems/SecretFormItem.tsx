@@ -19,7 +19,7 @@ type SecretFormItemProps = {
 };
 
 const SecretFormItem: React.FC<SecretFormItemProps> = props => {
-  const {isClearedValue, setIsClearedValue, name, label, status = TooltipStatus.none, message} = props;
+  const {isClearedValue, setIsClearedValue, name, label, status = TooltipStatus.None, message} = props;
 
   const rules = isClearedValue ? [{pattern: secretRegex, message: `Invalid ${name} value`}] : [];
 

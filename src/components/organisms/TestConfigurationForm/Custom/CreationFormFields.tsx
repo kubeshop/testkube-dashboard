@@ -1,13 +1,10 @@
 import {Branch, Path} from '@molecules';
 
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
+import {Props} from '../utils';
 
-type CustomFormFieldsProps = {
-  executorType: string;
-};
-
-const CustomFormFields: React.FC<CustomFormFieldsProps> = props => {
-  const {executorType} = props;
+const CustomFormFields: React.FC<Partial<Props>> = props => {
+  const {executorType} = props as Pick<Props, 'executorType'>;
 
   return (
     <StyledFormSpace size={24} direction="vertical">

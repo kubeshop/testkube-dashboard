@@ -7,6 +7,8 @@ import {LoadingOutlined} from '@ant-design/icons';
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
 import {OnDataChangeInterface} from '@models/onDataChange';
+import {TestWithExecutionRedux} from '@models/test';
+import {TestSuiteWithExecutionRedux} from '@models/testSuite';
 
 import {initialPageSize} from '@redux/initialState';
 
@@ -88,9 +90,12 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     dispatch(setQueryFilters(initialFiltersState));
   };
 
-  const onNavigateToDetails = useCallback((item: any) => {
-    navigate(`/${entity}/executions/${item.dataItem.name}`);
-  }, [navigate, entity]);
+  const onNavigateToDetails = useCallback(
+    (item: TestWithExecutionRedux | TestSuiteWithExecutionRedux) => {
+      navigate(`/${entity}/executions/${item.dataItem.name}`);
+    },
+    [navigate, entity]
+  );
 
   const onScrollBottom = () => {
     dispatch(setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize}));

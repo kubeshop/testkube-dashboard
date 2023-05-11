@@ -2,6 +2,8 @@ import {memo, useMemo, useState} from 'react';
 
 import {Form, Select} from 'antd';
 
+import {Test} from '@models/test';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
@@ -16,11 +18,12 @@ import {
   SourceEditFormFields,
   StringContentFields,
 } from '@organisms/TestConfigurationForm';
-import {getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
+import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
 import {testSourceLink} from '@utils/externalLinks';
 import {required} from '@utils/form';
 import {
+  GetSourceFormValues,
   getCustomSourceField,
   getSourceFieldValue,
   getSourceFormValues,
@@ -33,7 +36,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
-const additionalFields: {[key: string]: React.FC<any>} = {
+const additionalFields: SourceFields = {
   git: SourceEditFormFields,
   'file-uri': FileContentFields,
   custom: CustomSourceEditFormFields,
@@ -41,27 +44,17 @@ const additionalFields: {[key: string]: React.FC<any>} = {
 };
 
 type SourceProps = {
-  entityDetails: any;
+  entityDetails: Test;
   updateTest: (data: any) => void;
 };
 
-type SourceFormValues = {
-  source: string;
-  token?: string;
-  username?: string;
-  password?: string;
-  url?: string;
-  branch?: string;
-  path?: string;
-  content?: string;
-  testSource: string;
-};
+type SourceFormValues = GetSourceFormValues & {testSource: string};
 
 const Source: React.FC<SourceProps> = props => {
   const {entityDetails, updateTest} = props;
-  const mayEdit = usePermission(Permissions.editEntity);
-
   const {type} = entityDetails;
+
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const executors = useAppSelector(selectExecutors);
   const testSources = useAppSelector(selectSources);
@@ -94,7 +87,7 @@ const Source: React.FC<SourceProps> = props => {
 
     updateTest({
       content: getSourcePayload(values, testSources),
-      ...getCustomSourceField(newTestSource, source),
+      ...getCustomSourceField(newTestSource),
     });
   };
 
@@ -124,9 +117,9 @@ const Source: React.FC<SourceProps> = props => {
             Learn more about <ExternalLink href={testSourceLink}>test sources</ExternalLink>
           </>
         }
-        forceEnableButtons={
+        forceEnableButtons={Boolean(
           (isClearedToken && additionalFormValues.token) || (isClearedUsername && additionalFormValues.username)
-        }
+        )}
         enabled={mayEdit}
       >
         <StyledSpace size={24} direction="vertical">
@@ -140,9 +133,13 @@ const Source: React.FC<SourceProps> = props => {
             {({getFieldValue}) => {
               const testSource = getSourceFieldValue(getFieldValue);
 
-              const executorType = selectedExecutor?.executor.meta?.iconURI;
+              if (!testSource) {
+                return null;
+              }
 
-              const childrenProps: {[key: string]: Object} = {
+              const executorType = selectedExecutor?.executor.meta?.iconURI || 'unknown';
+
+              const childrenProps: Record<SourceType, Partial<Props>> = {
                 git: {
                   executorType,
                   isClearedToken,
@@ -152,9 +149,11 @@ const Source: React.FC<SourceProps> = props => {
                   getFieldValue,
                 },
                 custom: {executorType},
+                string: {},
+                'file-uri': {},
               };
 
-              return getAdditionalFieldsComponent(testSource, childrenProps[testSource], additionalFields);
+              return getAdditionalFieldsComponent(testSource, additionalFields, childrenProps[testSource]);
             }}
           </Form.Item>
         </StyledSpace>

@@ -5,7 +5,9 @@ import useWebSocket from 'react-use-websocket';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {ExecutionMetrics, Metrics} from '@models/metrics';
-import {WSData, WSEventType} from '@models/websocket';
+import {Test} from '@models/test';
+import {TestSuiteExecution} from '@models/testSuiteExecution';
+import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from '@models/websocket';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
@@ -68,112 +70,114 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [abortExecution] = useAbortExecution();
   const [abortAllExecutions] = useAbortAllExecutions();
 
-  const onWebSocketData = (wsData: WSData) => {
+  const onWebSocketData = (wsData: WSDataWithTestExecution | WSDataWithTestSuiteExecution) => {
     try {
       if (executionsList) {
-        if (wsData.type === WSEventType.START_TEST && id === wsData.testExecution.testName) {
-          const adjustedExecution = {
-            ...wsData.testExecution,
-            status: wsData.testExecution.executionResult.status,
-          };
+        if ('testExecution' in wsData) {
+          if (wsData.type === WSEventType.START_TEST && id === wsData.testExecution.testName) {
+            const adjustedExecution = {
+              ...wsData.testExecution,
+              status: wsData.testExecution.executionResult.status,
+            };
 
-          const metricToPush: ExecutionMetrics = {
-            name: wsData.testExecution.testName,
-            startTime: wsData.testExecution.startTime,
-            status: wsData.testExecution.executionResult.status,
-          };
+            const metricToPush: ExecutionMetrics = {
+              name: wsData.testExecution.testName,
+              startTime: wsData.testExecution.startTime,
+              status: wsData.testExecution.executionResult.status,
+            };
 
-          setMetricsState(prev => {
-            if (prev) {
-              return {...prev, executions: [metricToPush, ...((prev.executions && prev.executions) || [])]};
-            }
-          });
+            setMetricsState(prev => {
+              if (prev) {
+                return {...prev, executions: [metricToPush, ...((prev.executions && prev.executions) || [])]};
+              }
+            });
 
-          setExecutionsList(
-            {
-              ...executionsList,
-              results: [adjustedExecution, ...executionsList.results],
-            },
-            () => {
-              safeRefetch(refetchMetrics);
-            }
-          );
-        }
-
-        if (wsData.type === WSEventType.END_TEST_SUCCESS && id === wsData.testExecution.testName) {
-          const targetIndex = executionsList.results.findIndex((item: any) => {
-            return item.id === wsData.testExecution.id;
-          });
-
-          if (targetIndex !== -1) {
             setExecutionsList(
               {
                 ...executionsList,
-                results: executionsList.results.map((item: any, index: number) => {
-                  if (index === targetIndex) {
-                    return {...item, ...wsData.testExecution, status: wsData.testExecution.executionResult.status};
-                  }
-
-                  return item;
-                }),
+                results: [adjustedExecution, ...executionsList.results],
               },
               () => {
                 safeRefetch(refetchMetrics);
               }
             );
           }
-        }
 
-        if (
-          wsData.type === WSEventType.END_TEST_ABORT ||
-          wsData.type === WSEventType.END_TEST_TIMEOUT ||
-          wsData.type === WSEventType.END_TEST_FAILED ||
-          wsData.type === WSEventType.END_TEST_SUITE_ABORT ||
-          wsData.type === WSEventType.END_TEST_SUITE_TIMEOUT ||
-          wsData.type === WSEventType.END_TEST_SUITE_FAILED
-        ) {
-          safeRefetch(refetch);
-          safeRefetch(refetchMetrics);
-        }
+          if (wsData.type === WSEventType.END_TEST_SUCCESS && id === wsData.testExecution.testName) {
+            const targetIndex = executionsList.results.findIndex((item: any) => {
+              return item.id === wsData.testExecution.id;
+            });
 
-        if (wsData.type === WSEventType.START_TEST_SUITE && id === wsData.testSuiteExecution.testSuite.name) {
-          const adjustedExecution = {
-            ...wsData.testSuiteExecution,
-            status: wsData.testSuiteExecution.status,
-          };
+            if (targetIndex !== -1) {
+              setExecutionsList(
+                {
+                  ...executionsList,
+                  results: executionsList.results.map((item: Test, index: number) => {
+                    if (index === targetIndex) {
+                      return {...item, ...wsData.testExecution, status: wsData.testExecution.executionResult.status};
+                    }
 
-          setExecutionsList(
-            {
-              ...executionsList,
-              results: [adjustedExecution, ...executionsList.results],
-            },
-            () => {
-              safeRefetch(refetchMetrics);
+                    return item;
+                  }),
+                },
+                () => {
+                  safeRefetch(refetchMetrics);
+                }
+              );
             }
-          );
-        }
+          }
+        } else {
+          if (
+            wsData.type === WSEventType.END_TEST_ABORT ||
+            wsData.type === WSEventType.END_TEST_TIMEOUT ||
+            wsData.type === WSEventType.END_TEST_FAILED ||
+            wsData.type === WSEventType.END_TEST_SUITE_ABORT ||
+            wsData.type === WSEventType.END_TEST_SUITE_TIMEOUT ||
+            wsData.type === WSEventType.END_TEST_SUITE_FAILED
+          ) {
+            safeRefetch(refetch);
+            safeRefetch(refetchMetrics);
+          }
 
-        if (wsData.type === WSEventType.END_TEST_SUITE_SUCCESS && id === wsData.testSuiteExecution.testSuite.name) {
-          const targetIndex = executionsList.results.findIndex((item: any) => {
-            return item.id === wsData.testSuiteExecution.id;
-          });
+          if (wsData.type === WSEventType.START_TEST_SUITE && id === wsData.testSuiteExecution.testSuite.name) {
+            const adjustedExecution = {
+              ...wsData.testSuiteExecution,
+              status: wsData.testSuiteExecution.status,
+            };
 
-          if (targetIndex !== -1) {
             setExecutionsList(
               {
                 ...executionsList,
-                results: executionsList.results.map((item: any, index: number) => {
-                  if (index === targetIndex) {
-                    return {...item, ...wsData.testSuiteExecution, status: wsData.testSuiteExecution.status};
-                  }
-
-                  return item;
-                }),
+                results: [adjustedExecution, ...executionsList.results],
               },
               () => {
                 safeRefetch(refetchMetrics);
               }
             );
+          }
+
+          if (wsData.type === WSEventType.END_TEST_SUITE_SUCCESS && id === wsData.testSuiteExecution.testSuite.name) {
+            const targetIndex = executionsList.results.findIndex((item: TestSuiteExecution) => {
+              return item.id === wsData.testSuiteExecution.id;
+            });
+
+            if (targetIndex !== -1) {
+              setExecutionsList(
+                {
+                  ...executionsList,
+                  results: executionsList.results.map((item: TestSuiteExecution, index: number) => {
+                    if (index === targetIndex) {
+                      return {...item, ...wsData.testSuiteExecution, status: wsData.testSuiteExecution.status};
+                    }
+
+                    return item;
+                  }),
+                },
+                () => {
+                  safeRefetch(refetchMetrics);
+                }
+              );
+            }
           }
         }
       }
@@ -189,7 +193,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     `${wsRoot}/events/stream`,
     {
       onMessage: event => {
-        const wsData = JSON.parse(event.data) as WSData;
+        const wsData = JSON.parse(event.data) as WSDataWithTestExecution | WSDataWithTestSuiteExecution;
 
         onWebSocketData(wsData);
       },
@@ -202,13 +206,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   const defaultUrl = `/${entity}/executions/${entityDetails?.name}`;
 
-  const onRowSelect = useCallback((dataItem: any, isManual?: boolean) => {
-    selectRow(dataItem);
+  const onRowSelect = useCallback(
+    (dataItem: any, isManual?: boolean) => {
+      selectRow(dataItem);
 
-    if (isManual) {
-      navigate(`${defaultUrl}/execution/${dataItem?.id}`);
-    }
-  }, [selectRow, navigate, defaultUrl]);
+      if (isManual) {
+        navigate(`${defaultUrl}/execution/${dataItem?.id}`);
+      }
+    },
+    [selectRow, navigate, defaultUrl]
+  );
 
   const unselectRow = useCallback(() => {
     selectRow(undefined);
@@ -255,10 +262,13 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   const testIcon = entity === 'tests' ? getTestExecutorIcon(executors, entityDetails?.type) : undefined;
 
-  const entityDetailsWithIcon = useMemo(() => ({
-    ...entityDetails,
-    ...(testIcon ? {testIcon} : {}),
-  }), [entityDetails, testIcon]);
+  const entityDetailsWithIcon = useMemo(
+    () => ({
+      ...entityDetails,
+      ...(testIcon ? {testIcon} : {}),
+    }),
+    [entityDetails, testIcon]
+  );
 
   const entityDetailsContextValues = {
     executionsList,

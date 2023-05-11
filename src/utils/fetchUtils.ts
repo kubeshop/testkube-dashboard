@@ -106,7 +106,7 @@ const rawBaseQuery = (baseUrl: string, idToken?: string | null) =>
     },
   });
 
-type DynamicFetchArgs = FetchArgs & {routeToRequest?: string};
+export type DynamicFetchArgs = FetchArgs & {routeToRequest?: string};
 export const dynamicBaseQuery: BaseQueryFn<string | DynamicFetchArgs, unknown, FetchBaseQueryError> = async (
   args,
   api,

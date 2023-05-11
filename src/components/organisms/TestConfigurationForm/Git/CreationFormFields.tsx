@@ -1,7 +1,5 @@
 import {useState} from 'react';
 
-import {NamePath} from 'antd/lib/form/interface';
-
 import {Branch, Path, Repository, SecretFormItem} from '@molecules';
 
 import useValidateRepository from '@hooks/useValidateRepository';
@@ -9,14 +7,10 @@ import useValidateRepository from '@hooks/useValidateRepository';
 import {useValidateRepositoryMutation} from '@services/repository';
 
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
+import {Props} from '../utils';
 
-type GitFormFieldsProps = {
-  executorType: string;
-  getFieldValue: (name: NamePath) => string;
-};
-
-const GitFormFields: React.FC<GitFormFieldsProps> = props => {
-  const {executorType, getFieldValue} = props;
+const GitFormFields: React.FC<Partial<Props>> = props => {
+  const {executorType, getFieldValue} = props as Pick<Props, 'executorType' | 'getFieldValue'>;
 
   const [validationState, setValidationState] = useState<any>({message: ''});
 

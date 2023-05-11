@@ -1,7 +1,7 @@
-import {createElement, FC, ReactElement} from 'react';
+import {FC, ReactElement, createElement} from 'react';
 
 class ProviderCompositor {
-  public providers: {provider: FC<any>, props: any}[] = [];
+  public providers: {provider: FC<any>; props: unknown}[] = [];
 
   public append<T>(provider: FC<T>, props: Omit<T, 'children'>): this {
     this.providers.push({provider, props});

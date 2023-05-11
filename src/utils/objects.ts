@@ -1,4 +1,7 @@
-export const compareFiltersObject = (initialFilters: any, currentFilters: any) => {
+export const compareFiltersObject = (
+  initialFilters: Record<string, string>,
+  currentFilters: Record<string, string>
+) => {
   const keys1 = Object.keys(initialFilters);
   // eslint-disable-next-line no-restricted-syntax
   for (const key of keys1) {

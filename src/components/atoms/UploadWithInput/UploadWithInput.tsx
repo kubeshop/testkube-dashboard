@@ -9,8 +9,6 @@ import {StyledUploadWithInputContainer} from './UploadWithInput.styled';
 type UploadWithInputProps = {
   onFileChange: (info: UploadChangeParam | null) => void;
   // received from <Form /> parent. Don't specify directly
-  onChange?: any;
-  // received from <Form /> parent. Don't specify directly
   value?: {
     fileContent: string;
     fileName: string;
