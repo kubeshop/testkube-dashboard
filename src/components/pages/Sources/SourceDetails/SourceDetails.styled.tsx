@@ -1,4 +1,4 @@
-import {PageHeader} from 'antd';
+import {PageHeader, Space} from 'antd';
 
 import styled from 'styled-components';
 
@@ -26,4 +26,8 @@ export const StyledContainer = styled.div`
 
   height: 100%;
   padding: 30px 30px 30px 0;
+`;
+
+export const StyledSpace = styled(Space)`
+  width: 100%;
 `;

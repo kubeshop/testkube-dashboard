@@ -52,7 +52,7 @@ export const sourcesApi = createApi({
         method: 'DELETE',
       }),
     }),
-    updateSource: builder.mutation<void, SourceWithRepository>({
+    updateSource: builder.mutation<any, SourceWithRepository>({
       query: body => {
         return {
           url: `/test-sources/${body.name}`,

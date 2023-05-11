@@ -1,16 +1,13 @@
-import {useContext} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
-import {Input as AntdInput, Form} from 'antd';
-
-import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
+import {Form} from 'antd';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
-import {Input} from '@custom-antd';
+import {ConfigurationCard, notificationCall, SecretFormItem} from '@molecules';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
-
+import {dummySecret} from '@utils/sources';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateSourceMutation} from '@services/sources';
@@ -18,6 +15,8 @@ import {useUpdateSourceMutation} from '@services/sources';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {MainContext} from '@contexts';
+
+import {StyledSpace} from '../../SourceDetails.styled';
 
 type AuthenticationFormValues = {
   token: string;
@@ -28,35 +27,51 @@ const Authentication: React.FC = () => {
   const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
+  const [form] = Form.useForm<AuthenticationFormValues>();
+
   const source = useAppSelector(selectCurrentSource);
 
   const [updateSource] = useUpdateSourceMutation();
 
   const repository = source?.repository;
-  const token = repository?.tokenSecret?.name || '';
-  const username = repository?.usernameSecret?.name || '';
+  const {tokenSecret, usernameSecret} = repository || {};
+  const defaults = {
+    token: tokenSecret ? dummySecret : '',
+    username: usernameSecret ? dummySecret : '',
+  };
 
-  const [form] = Form.useForm<AuthenticationFormValues>();
+  const [isClearedToken, setIsClearedToken] = useState(!tokenSecret);
+  const [isClearedUsername, setIsClearedUsername] = useState(!usernameSecret);
+
+  useEffect(() => {
+    form.setFieldsValue(defaults);
+    form.resetFields();
+    setIsClearedToken(!tokenSecret);
+    setIsClearedUsername(!usernameSecret);
+  }, [repository]);
 
   const onFinish = (values: AuthenticationFormValues) => {
     if (!source) {
       notificationCall('failed', 'Something went wrong.');
     } else {
-      const {token: newToken, username: newUsername} = values;
-
+      const token = values.token || '';
+      const username = values.username || '';
       const body = {
         ...source,
         repository: {
           ...source.repository,
-          ...(newUsername ? {usernameSecret: {name: newUsername}} : {}),
-          ...(newToken ? {tokenSecret: {name: newToken}} : {}),
+          ...(!tokenSecret || isClearedToken ? {token, tokenSecret: undefined} : {}),
+          ...(!usernameSecret || isClearedUsername ? {username, usernameSecret: undefined} : {}),
         },
       };
 
+      // @ts-ignore:
       updateSource(body).then(res => {
         displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', 'Source was successfully updated.');
-          dispatch(setCurrentSource(body));
+          if ('data' in res) {
+            notificationCall('passed', 'Source was successfully updated.');
+            dispatch(setCurrentSource({...body, ...res.data.spec}));
+          }
         });
       });
     }
@@ -65,8 +80,8 @@ const Authentication: React.FC = () => {
   return (
     <Form
       form={form}
+      initialValues={defaults}
       name="general-settings-authentication"
-      initialValues={{username, token}}
       layout="vertical"
       onFinish={onFinish}
       disabled={!mayEdit}
@@ -81,16 +96,22 @@ const Authentication: React.FC = () => {
           form.resetFields();
         }}
         enabled={mayEdit}
+        forceEnableButtons={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
       >
-        <Form.Item label="Git username" name="username">
-          <Input placeholder="e.g.: my-username" />
-        </Form.Item>
-        <Form.Item label="Git token" name="token" style={{flex: 1, marginBottom: 0}}>
-          <AntdInput.Password
-            placeholder="e.g.: some-token"
-            iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+        <StyledSpace size={24} direction="vertical">
+          <SecretFormItem
+            name="username"
+            label="Git username"
+            isClearedValue={isClearedUsername}
+            setIsClearedValue={setIsClearedUsername}
           />
-        </Form.Item>
+          <SecretFormItem
+            name="token"
+            label="Git token"
+            isClearedValue={isClearedToken}
+            setIsClearedValue={setIsClearedToken}
+          />
+        </StyledSpace>
       </ConfigurationCard>
     </Form>
   );
