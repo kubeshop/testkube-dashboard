@@ -126,7 +126,6 @@ testsApi.useGetTestExecutionsByIdQuery = memoizeQuery(testsApi.useGetTestExecuti
 );
 testsApi.useGetTestExecutionByIdQuery = memoizeQuery(testsApi.useGetTestExecutionByIdQuery);
 testsApi.useGetTestExecutionArtifactsQuery = memoizeQuery(testsApi.useGetTestExecutionArtifactsQuery);
-testsApi.useGetTestExecutionAIQuery = memoizeQuery(testsApi.useGetTestExecutionAIQuery);
 testsApi.useGetTestExecutionMetricsQuery = memoizeQuery(testsApi.useGetTestExecutionMetricsQuery, metrics =>
   // Limit to show maximum of 1000 latest executions
   metrics.executions?.length > 1000 ? {...metrics, executions: metrics.executions.slice(0, 1000)} : metrics
