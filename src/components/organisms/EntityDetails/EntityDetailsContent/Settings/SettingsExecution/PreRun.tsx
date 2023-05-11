@@ -1,16 +1,14 @@
 import {useContext} from 'react';
 
-import {Form, Input} from 'antd';
+import {Form} from 'antd';
 
-import {Text} from '@custom-antd';
+import {CommandInput} from '@atoms';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
-
-import Colors from '@styles/Colors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -60,6 +58,7 @@ const PreRun: React.FC = () => {
       name="execution-settings-pre-run"
       initialValues={{command}}
       disabled={!isPreRunAvailable}
+      layout="vertical"
     >
       <ConfigurationCard
         title="Pre-Run phase"
@@ -72,15 +71,8 @@ const PreRun: React.FC = () => {
         }}
       >
         <StyledSpace size={32} direction="vertical">
-          <StyledFormItem name="command">
-            <Input
-              placeholder="e.g.: myscript.sh"
-              prefix={
-                <Text className="big regular" color={Colors.slate500}>
-                  $
-                </Text>
-              }
-            />
+          <StyledFormItem name="command" label="Command">
+            <CommandInput />
           </StyledFormItem>
         </StyledSpace>
       </ConfigurationCard>
