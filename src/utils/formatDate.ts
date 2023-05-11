@@ -24,9 +24,15 @@ export const constructExecutedString = (duration: Duration, countToDisplay: numb
   return finishString.trim();
 };
 
-export const formatDuration = (duration: number) =>
-  duration > 3599
-    ? `${Math.floor(duration / 3600)}h ${Math.round((duration / 3600) % 60)}m ${Math.round((duration % 60) % 60)}s`
-    : duration > 59
-    ? `${Math.floor(duration / 60)}m ${Math.round(duration % 60)}s`
-    : `${duration.toFixed(2)}s`;
+export const formatDuration = (duration: number) => {
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor(duration % 3600 / 60);
+  const seconds = Math.floor(duration % 60);
+  if (hours > 0) {
+    return `${hours}h ${minutes}m ${seconds}s`;
+  }
+  if (minutes > 0) {
+    return `${minutes}m ${seconds}s`;
+  }
+  return `${duration.toFixed(2)}s`;
+};
