@@ -90,40 +90,6 @@ const EntityGridItemPure: React.FC<any> = memo(
               </StyledMetricItem>
             </ItemRow>
           </RowsWrapper>
-          <RowsWrapper>
-            <ItemRow $flex={1}>
-              {dataItem?.labels ? (
-                <LabelsList labels={dataItem?.labels} shouldSkipLabels howManyLabelsToShow={2} />
-              ) : null}
-            </ItemRow>
-            <ItemRow $flex={1}>
-              <StyledMetricItem>
-                <Text className="small uppercase" color={Colors.slate500}>
-                  pass/fail ratio
-                </Text>
-                <Text className="big regular">
-                  {metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '0%'}
-                </Text>
-              </StyledMetricItem>
-              <StyledMetricItem>
-                <Text className="small uppercase" color={Colors.slate500}>
-                  p50
-                </Text>
-                <Text className="big regular">
-                  {metrics?.executionDurationP50ms ? formatDuration(metrics?.executionDurationP50ms / 1000) : '-'}
-                </Text>
-              </StyledMetricItem>
-              <StyledMetricItem>
-                <Text className="small uppercase" color={Colors.slate500}>
-                  failed executions
-                </Text>
-                <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
-              </StyledMetricItem>
-              <StyledMetricItem>
-                <MetricsBarChart data={executions} chartHeight={38} barWidth={6} />
-              </StyledMetricItem>
-            </ItemRow>
-          </RowsWrapper>
         </DetailsWrapper>
       </ItemWrapper>
     );
