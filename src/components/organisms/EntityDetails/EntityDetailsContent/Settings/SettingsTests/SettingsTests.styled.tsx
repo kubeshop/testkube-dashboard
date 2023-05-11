@@ -1,3 +1,5 @@
+import {ReactNode} from 'react';
+
 import styled from 'styled-components';
 
 export const EmptyTestsContainer = styled.div`
@@ -31,7 +33,11 @@ export const StyledDelayModalContent = styled.div`
   }
 `;
 
-export const StyledStepsList = styled.div`
+export const StyledStepsList = styled.div<{
+  isDragging: boolean;
+  ref: (element: HTMLElement | null) => void;
+  children?: ReactNode;
+}>`
   display: flex;
   flex-direction: column;
 `;

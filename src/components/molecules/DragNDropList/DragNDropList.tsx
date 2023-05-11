@@ -1,7 +1,5 @@
-import React, {memo} from 'react';
-import {DragDropContext, Draggable, DropResult, DroppableStateSnapshot} from 'react-beautiful-dnd';
-
-import {StyledComponent} from 'styled-components';
+import React, {PropsWithChildren, memo} from 'react';
+import {DragDropContext, Draggable, DropResult, DroppableProvided, DroppableStateSnapshot} from 'react-beautiful-dnd';
 
 import {TestSuiteStep} from '@models/testSuite';
 
@@ -19,7 +17,12 @@ interface ItemComponentProps {
 type DragNDropListProps = {
   items: TestSuiteStep[];
   setItems: (steps: TestSuiteStep[]) => void;
-  ContainerComponent: StyledComponent<'div', {}, {isDragging: DroppableStateSnapshot['isDraggingOver']}, never>;
+  ContainerComponent: React.FC<
+    PropsWithChildren<{
+      isDragging: DroppableStateSnapshot['isDraggingOver'];
+      ref: DroppableProvided['innerRef'];
+    }>
+  >;
   ItemComponent: React.FC<ItemComponentProps>;
   onDelete: (index: number) => void;
   scrollRef: React.RefObject<HTMLDivElement> | undefined;
