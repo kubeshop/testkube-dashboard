@@ -23,6 +23,7 @@ export const StyledSkeleton = styled(Skeleton)<{additionalStyles?: AdditionalSke
       .ant-skeleton-paragraph {
         & > li {
           background: ${props => props.additionalStyles?.color ? props.additionalStyles?.color : Colors.slate800};
+
           &::after {
             background: linear-gradient(90deg,
             ${props => `${props.additionalStyles?.color ? props.additionalStyles?.color : Colors.slate800}`} 25%,
