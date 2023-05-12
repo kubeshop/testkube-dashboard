@@ -1,8 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {MetadataResponse} from '@models/fetch';
 import {Repository} from '@models/repository';
-import {SourceWithRepository} from '@models/sources';
+import {CreateSourceResult, SourceWithRepository} from '@models/sources';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
@@ -28,7 +27,7 @@ export const sourcesApi = createApi({
         body,
       }),
     }),
-    createSource: builder.mutation<MetadataResponse<{name: string; namespace?: string}>, SourceWithRepository>({
+    createSource: builder.mutation<CreateSourceResult, SourceWithRepository>({
       query: body => ({
         url: '/test-sources',
         method: 'POST',
@@ -53,7 +52,7 @@ export const sourcesApi = createApi({
         method: 'DELETE',
       }),
     }),
-    updateSource: builder.mutation<void, SourceWithRepository>({
+    updateSource: builder.mutation<any, SourceWithRepository>({
       query: body => {
         return {
           url: `/test-sources/${body.name}`,
