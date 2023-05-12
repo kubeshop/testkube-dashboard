@@ -1,6 +1,7 @@
 import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
+import {FullWidthSpace} from '@custom-antd';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
@@ -15,8 +16,6 @@ import {useUpdateSourceMutation} from '@services/sources';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {MainContext} from '@contexts';
-
-import {StyledSpace} from '../../SourceDetails.styled';
 
 type AuthenticationFormValues = {
   token: string;
@@ -98,7 +97,7 @@ const Authentication: React.FC = () => {
         enabled={mayEdit}
         forceEnableButtons={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
       >
-        <StyledSpace size={24} direction="vertical">
+        <FullWidthSpace size={24} direction="vertical">
           <SecretFormItem
             name="username"
             label="Git username"
@@ -111,7 +110,7 @@ const Authentication: React.FC = () => {
             isClearedValue={isClearedToken}
             setIsClearedValue={setIsClearedToken}
           />
-        </StyledSpace>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );
