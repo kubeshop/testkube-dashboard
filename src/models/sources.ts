@@ -15,4 +15,18 @@ type SourcesState = {
   currentSource?: SourceWithRepository;
 };
 
+export type CreateSourceResult = {
+  metadata: {
+    name: string;
+    namespace: string;
+    uid: string;
+    resourceVersion: string;
+    generation: 1;
+    creationTimestamp: string;
+  };
+  spec: {
+    repository: Repository;
+  };
+};
+
 export type {SourcesState};
