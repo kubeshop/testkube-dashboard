@@ -1,7 +1,11 @@
+import {useMemo, useRef} from 'react';
+
 import {BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery} from '@reduxjs/toolkit/dist/query';
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ParsedQuery} from 'query-string';
+
+import {isEqual} from 'lodash';
 
 import {searchParamsLists} from '@constants/searchParams';
 
@@ -10,8 +14,6 @@ import {SearchParamKey, SearchParamsKeys, SearchParamsType, ValidatedSearchParam
 import {isArraylikeQueryParam} from '@utils/strings';
 
 import {getApiEndpoint} from '@services/apiEndpoint';
-import {useEffect, useRef} from 'react';
-import {isEqual} from 'lodash';
 
 const prohibitedValues = ['undefined', 'null'];
 
@@ -156,7 +158,7 @@ export function memoizeQuery<T extends UseQuery<any>>(
     const dataRef = useRef<U>(result.data);
     const transformedRef = useRef<U>(result.data);
 
-    useEffect(() => {
+    useMemo(() => {
       if (dataRef.current !== result.data) {
         const next = result.data == null ? result.data : transformData(result.data);
         if (!isEqual(next, transformedRef.current)) {
