@@ -19,7 +19,7 @@ const SiderLink: React.FC<SiderLinkProps & AnchorHTMLAttributes<HTMLAnchorElemen
   const finalClassName = classNames(className, {
     active: (
       (location.pathname === href || location.pathname.startsWith(`${href}/`)) ||
-      (active && active.test(location.pathname))
+      (active && (active.test(location.pathname) || active.test(window.location.pathname)))
     ),
   });
 

@@ -118,7 +118,7 @@ const Sider: React.FC = () => {
           active={active}
         >
           <Tooltip title={title} placement="right">
-            <MenuIcon style={DEFAULT_ICON_STYLE} />
+            <span><MenuIcon style={DEFAULT_ICON_STYLE} /></span>
           </Tooltip>
         </StyledSiderLink>
       );
