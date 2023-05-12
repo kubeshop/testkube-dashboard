@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext, useEffect} from 'react';
 
 import {Form} from 'antd';
 
@@ -27,13 +27,18 @@ const NameNUrl: React.FC = () => {
   const source = useAppSelector(selectCurrentSource);
   const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
+  const [form] = Form.useForm<NameNUrlFormValues>();
 
   const [updateSource] = useUpdateSourceMutation();
 
   const name = source?.name;
   const uri = source?.repository?.uri;
+  const defaults = {name, uri};
 
-  const [form] = Form.useForm<NameNUrlFormValues>();
+  useEffect(() => {
+    form.setFieldsValue(defaults);
+    form.resetFields();
+  }, [name, uri]);
 
   const onFinish = (values: NameNUrlFormValues) => {
     if (!source) {
@@ -62,7 +67,7 @@ const NameNUrl: React.FC = () => {
     <Form
       form={form}
       name="general-settings-name-url"
-      initialValues={{name, uri}}
+      initialValues={defaults}
       layout="vertical"
       onFinish={onFinish}
       disabled={!mayEdit}
