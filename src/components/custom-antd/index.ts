@@ -7,3 +7,4 @@ export {default as FormItem} from './Form/FormItem';
 export {default as Upload} from './Upload';
 export {default as Modal} from './Modal';
 export {default as Checkbox} from './Checkbox';
+export {default as FullWidthSpace} from './FullWidthSpace';
