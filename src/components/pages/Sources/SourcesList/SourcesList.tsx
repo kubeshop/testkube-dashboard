@@ -65,7 +65,7 @@ const Sources: React.FC = () => {
       description={
         <>
           Define global sources you can refer to in your tests. Learn more about{' '}
-          <ExternalLink href="https://kubeshop.github.io/testkube/openapi/#tag/test-sources">Sources</ExternalLink>
+          <ExternalLink href="https://docs.testkube.io/openapi/#tag/test-sources">Sources</ExternalLink>
         </>
       }
       headerButton={

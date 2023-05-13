@@ -13,7 +13,7 @@ const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {
       onButtonClick={action}
       actionType="create"
     >
-      <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
+      <HelpCard isLink link="https://docs.testkube.io/articles/creating-test-suites">
         Learn how to add test suites
       </HelpCard>
     </EmptyListContent>

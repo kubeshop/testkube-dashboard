@@ -19,13 +19,13 @@ const EmptyCustomExecutors: React.FC<EmptyCustomExecutorsProps> = props => {
       onButtonClick={onButtonClick}
       actionType="create"
     >
-      <HelpCard isLink link="https://kubeshop.github.io/testkube/test-types/executor-custom">
+      <HelpCard isLink link="https://docs.testkube.io/test-types/container-executor">
         What is an executor?
       </HelpCard>
-      <HelpCard isLink link="https://kubeshop.github.io/testkube/test-types/container-executor">
+      <HelpCard isLink link="https://docs.testkube.io/test-types/container-executor">
         Learn how to easily create a container based executor
       </HelpCard>
-      <HelpCard isLink link="https://kubeshop.github.io/testkube/test-types/executor-custom#creating-a-custom-executor">
+      <HelpCard isLink link="https://docs.testkube.io/test-types/container-executor#creating-a-custom-executor">
         Want to add more complex executors?
       </HelpCard>
     </EmptyListContent>
