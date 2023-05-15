@@ -23,7 +23,7 @@ const TestsPageDescription: React.FC = () => {
   return (
     <Text className="regular middle" color={Colors.slate400}>
       Explore your tests at a glance... Learn more about{' '}
-      <ExternalLink href="https://kubeshop.github.io/testkube/">testing with Testkube</ExternalLink>
+      <ExternalLink href="https://docs.testkube.io/">testing with Testkube</ExternalLink>
     </Text>
   );
 };

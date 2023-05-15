@@ -96,7 +96,7 @@ const Executors: React.FC = () => {
       description={
         <>
           Executors are the type of tests which can be run by testkube. Learn more about{' '}
-          <ExternalLink href="https://kubeshop.github.io/testkube/test-types/executor-custom">executors</ExternalLink>
+          <ExternalLink href="https://docs.testkube.io/test-types/container-executor">executors</ExternalLink>
         </>
       }
       headerButton={
