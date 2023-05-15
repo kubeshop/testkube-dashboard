@@ -13,10 +13,10 @@ const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
       onButtonClick={action}
       actionType="create"
     >
-      <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/">
+      <HelpCard isLink link="https://docs.testkube.io/articles/creating-tests">
         Learn how to add tests
       </HelpCard>
-      <HelpCard isLink link="https://kubeshop.github.io/testkube/test-types/executor-custom/">
+      <HelpCard isLink link="https://docs.testkube.io/test-types/container-executor">
         How to add your very own test types and executors?
       </HelpCard>
     </EmptyListContent>

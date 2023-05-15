@@ -71,7 +71,7 @@ const Timeout: React.FC = () => {
         footerText={
           <Text className="regular middle">
             Learn more about{' '}
-            <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
+            <ExternalLink href="https://docs.testkube.io/articles/creating-test-suites">
               Timeouts
             </ExternalLink>
           </Text>

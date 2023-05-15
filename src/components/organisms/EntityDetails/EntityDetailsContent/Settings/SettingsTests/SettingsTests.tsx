@@ -177,7 +177,7 @@ const SettingsTests: React.FC = () => {
         footerText={
           <>
             Learn more about{' '}
-            <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
+            <ExternalLink href="https://docs.testkube.io/using-testkube/test-suites/testsuites-creating/">
               Tests in a test suite
             </ExternalLink>
           </>
