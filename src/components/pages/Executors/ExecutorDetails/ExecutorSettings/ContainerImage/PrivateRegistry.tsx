@@ -3,7 +3,7 @@ import {useContext, useEffect} from 'react';
 import {Form, Input} from 'antd';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateExecutorPrivateRegistry} from '@redux/reducers/executorsSlice';
+import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -43,7 +43,7 @@ const PrivateRegistry: React.FC = () => {
       },
     }).then(res => {
       displayDefaultNotificationFlow(res, () => {
-        dispatch(updateExecutorPrivateRegistry(values.privateRegistry));
+        dispatch(updateCurrentExecutorData({imagePullSecrets: [{name: values.privateRegistry}]}));
         notificationCall('passed', 'Private registry was successfully updated.');
       });
     });
