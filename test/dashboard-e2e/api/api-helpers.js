@@ -21,9 +21,9 @@ export class ApiHelpers {
         const request = `${this.API_URL}/tests`
         
         try {
-            const response = await superagent.post(request);
-            .set('Content-Type', 'application/json')
-            .send(testData)
+            const response = await superagent.post(request)
+                .set('Content-Type', 'application/json')
+                .send(testData)
     
             return response.body;
         } catch (e) {
@@ -57,9 +57,9 @@ export class ApiHelpers {
         const request = `${this.API_URL}/tests/${testData.name}`
         
         try {
-            const response = await superagent.patch(request);
-            .set('Content-Type', 'application/json')
-            .send(testData)
+            const response = await superagent.patch(request)
+                .set('Content-Type', 'application/json')
+                .send(testData)
     
             return response.body;
         } catch (e) {
