@@ -2,12 +2,13 @@ import {Button, Space} from 'antd';
 
 import {CloudUploadOutlined} from '@ant-design/icons';
 
+import {ExternalLink} from '@atoms';
+
+import {Text} from '@custom-antd';
+
 import {ConfigurationCard} from '@molecules';
 
 import Colors from '@styles/Colors';
-
-import {ExternalLink} from '@src/components/atoms';
-import {Text} from '@src/components/custom-antd';
 
 const ConnectCloud = () => {
   return (
