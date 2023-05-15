@@ -131,7 +131,7 @@ export class ApiHelpers {
 
         try {
             const response = await superagent.get(request);
-            const totalsResults = response.body;.totals.results
+            const totalsResults = response.body.totals.results
     
             if(totalsResults == 0) {
                 return totalsResults
