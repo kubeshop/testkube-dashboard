@@ -1,8 +1,6 @@
-import {Form, FormItemProps} from 'antd';
+import {FormItemProps} from 'antd';
 
-import {StyledFormItemLabel} from '../Form.styled';
-
-const {Item: AntdFormItem} = Form;
+import {StyledFormItem, StyledFormItemLabel} from '../Form.styled';
 
 const FormItem: React.FC<FormItemProps> = props => {
   const {children, label, ...rest} = props;
@@ -12,11 +10,7 @@ const FormItem: React.FC<FormItemProps> = props => {
     ...rest,
   };
 
-  return (
-    <AntdFormItem {...formItemsProps} style={{marginBottom: 0}}>
-      {children}
-    </AntdFormItem>
-  );
+  return <StyledFormItem {...formItemsProps}>{children}</StyledFormItem>;
 };
 
 export default FormItem;
