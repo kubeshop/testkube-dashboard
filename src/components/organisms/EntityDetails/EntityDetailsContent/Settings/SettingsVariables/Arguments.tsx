@@ -142,7 +142,7 @@ const Arguments: React.FC = () => {
         footerText={
           <>
             Learn more about{' '}
-            <ExternalLink href="https://kubeshop.github.io/testkube/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests">
+            <ExternalLink href="https://docs.testkube.io/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests">
               Arguments
             </ExternalLink>
           </>

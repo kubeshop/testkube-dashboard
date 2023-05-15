@@ -18,7 +18,7 @@ Available operations for the api-server are in its
 
 During development one can bypass the Ingress and interact with the api-server directly:
 
-- Install TestKube in your cluster - see [TestKube Installation](https://kubeshop.github.io/testkube/installing/)
+- Install TestKube in your cluster - see [TestKube Installation](https://docs.testkube.io/articles/getting-started-overview/)
 - Expose the api-server with
 
 ```shell

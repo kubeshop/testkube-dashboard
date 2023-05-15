@@ -1,5 +1,5 @@
 export const openDocumentation = () => {
-  window.open('https://kubeshop.github.io/testkube/');
+  window.open('https://docs.testkube.io/');
 };
 
 export const openGithub = () => {
@@ -11,11 +11,11 @@ export const openDiscord = () => {
 };
 
 export const openCustomExecutorDocumentation = () => {
-  window.open('https://kubeshop.github.io/testkube/test-types/container-executor');
+  window.open('https://docs.testkube.io/test-types/container-executor');
 };
 
 export const openTestkubeDashboardDocumentation = () => {
-  window.open('https://kubeshop.github.io/testkube/using-testkube/UI/');
+  window.open('https://docs.testkube.io/articles/testkube-dashboard');
 };
 
 export const openTestkubeIntegrationsDocumentation = () => {
@@ -23,7 +23,7 @@ export const openTestkubeIntegrationsDocumentation = () => {
 };
 
 export const openSourcesDocumentation = () => {
-  window.open('https://kubeshop.github.io/testkube/openapi/#tag/test-sources');
+  window.open('https://docs.testkube.io/openapi/#tag/test-sources');
 };
 
-export const testSourceLink = 'https://kubeshop.github.io/testkube/using-testkube/tests/tests-creating/#test-source';
+export const testSourceLink = 'https://docs.testkube.io/articles/creating-tests/#test-source';
