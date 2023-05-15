@@ -19,7 +19,7 @@ const EmptySources: React.FC<EmptySourcesProps> = props => {
       onButtonClick={onButtonClick}
       actionType="create"
     >
-      <HelpCard isLink link="https://docs.testkube.io/openapi#tag/test-sources">
+      <HelpCard isLink link="https://docs.testkube.io/articles/test-sources">
         What is a test source?
       </HelpCard>
       <HelpCard isLink link="https://docs.testkube.io/articles/creating-tests/">

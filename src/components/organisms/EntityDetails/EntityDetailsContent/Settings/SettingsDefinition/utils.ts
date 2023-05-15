@@ -21,7 +21,7 @@ export const settingsDefinitionData: Record<
   },
   tests: {
     description: 'Validate and export your test configuration',
-    helpLinkUrl: 'https://docs.testkube.io/articles/creating-test-suites',
+    helpLinkUrl: 'https://docs.testkube.io/articles/creating-tests',
     query: useGetTestDefinitionQuery,
   },
 };
