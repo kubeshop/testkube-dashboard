@@ -22,6 +22,7 @@ type CopyCommandProps = {
   showDollar?: boolean;
   highlightSyntax?: boolean;
   onCopy?: () => void;
+  enabled?: boolean;
 };
 
 // TODO consider refactoring to a more generic component. (i.e. not specific to CLI commands)
@@ -35,6 +36,7 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
     highlightSyntax = false,
     additionalPrefix,
     onCopy,
+    enabled = true,
   } = props;
 
   const contentRef = useRef(null);
@@ -88,15 +90,23 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
         <Pre>
           <StyledCopyCommandCode data-test="command-to-copy" onDoubleClick={onDoubleClick}>
             {showDollar ? <span>$</span> : null}
-            {additionalPrefix ? <Text className="regular" color={Colors.purple}>{additionalPrefix}</Text> : null}
+            {additionalPrefix ? (
+              <Text className="regular" color={Colors.purple}>
+                {additionalPrefix}
+              </Text>
+            ) : null}
             {content ? <span ref={contentRef}>{content}</span> : null}
           </StyledCopyCommandCode>
         </Pre>
-        {isSecureContext ? (
-          <CopyButton content={command} onClick={onCopy} />
-        ) : (
-          <DownloadButton filename={filename} extension="sh" content={command} onClick={onCopy} />
-        )}
+        {enabled ? (
+          <>
+            {isSecureContext ? (
+              <CopyButton content={command} onClick={onCopy} />
+            ) : (
+              <DownloadButton filename={filename} extension="sh" content={command} onClick={onCopy} />
+            )}
+          </>
+        ) : null}
       </StyledCopyCommandContainer>
     </>
   );

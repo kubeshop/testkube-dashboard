@@ -13,7 +13,8 @@ type BranchProps = {
 };
 
 const Branch: React.FC<BranchProps> = props => {
-  const {status = TooltipStatus.none, message} = props;
+  const {status = TooltipStatus.None, message} = props;
+
   return (
     <FormItem
       name="branch"

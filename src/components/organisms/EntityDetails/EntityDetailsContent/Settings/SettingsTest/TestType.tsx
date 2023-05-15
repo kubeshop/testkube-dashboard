@@ -52,7 +52,7 @@ const TestType: React.FC<TestTypeProps> = props => {
         footerText={
           <>
             Learn more about{' '}
-            <ExternalLink href="https://kubeshop.github.io/testkube/category/test-types">
+            <ExternalLink href="https://docs.testkube.io/category/test-types">
               test types and executors
             </ExternalLink>
           </>

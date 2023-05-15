@@ -3,6 +3,7 @@ import {Form, Input} from 'antd';
 import {FormItem, Text} from '@custom-antd';
 
 import {secretRegex} from '@utils/strings';
+import {dummySecret} from '@utils/sources';
 
 import Colors from '@styles/Colors';
 
@@ -19,7 +20,7 @@ type SecretFormItemProps = {
 };
 
 const SecretFormItem: React.FC<SecretFormItemProps> = props => {
-  const {isClearedValue, setIsClearedValue, name, label, status = TooltipStatus.none, message} = props;
+  const {isClearedValue, setIsClearedValue, name, label, status = TooltipStatus.None, message} = props;
 
   const rules = isClearedValue ? [{pattern: secretRegex, message: `Invalid ${name} value`}] : [];
 
@@ -35,11 +36,11 @@ const SecretFormItem: React.FC<SecretFormItemProps> = props => {
               rules={rules}
               tooltip={getValidationTooltip(status, message)}
             >
-              <Input.Password placeholder={label} disabled={isClearedValue === false} />
+              <Input.Password placeholder={isClearedValue ? label : dummySecret} disabled={!isClearedValue} />
             </FormItem>
             {isClearedValue === false ? (
               <Text
-                style={{cursor: 'pointer', marginTop: '5px'}}
+                style={{display: 'inline-block', cursor: 'pointer', marginTop: '5px'}}
                 className="middle regular"
                 color={Colors.indigo400}
                 onClick={() => {

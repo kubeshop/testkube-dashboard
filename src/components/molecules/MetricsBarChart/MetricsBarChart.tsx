@@ -4,7 +4,7 @@ import debounce from 'lodash.debounce';
 
 import {ExecutionMetrics} from '@models/metrics';
 
-import {ChartWrapper, MetricsBarChartWrapper} from './MetricsBarChart.styled';
+import {BarsWrapper, ChartWrapper, MetricsBarChartWrapper} from './MetricsBarChart.styled';
 import Chart from './components/Chart';
 import PAxisLine from './components/PAxisLine';
 import {getAxisPosition, getMaximumValue, getMinimumValue, metricsLogarithmization, secondInMs} from './utils';
@@ -123,8 +123,8 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
   }
 
   return (
-    <MetricsBarChartWrapper isDetailsView={isDetailsView}>
-      <ChartWrapper $wrapperWidth={wrapperWidth}>
+    <MetricsBarChartWrapper $isDetailsView={isDetailsView}>
+      <ChartWrapper $wrapperWidth={wrapperWidth} $isDetailsView={isDetailsView}>
         {isDetailsView ? (
           <>
             <PAxisLine
@@ -158,12 +158,14 @@ const MetricsBarChart: React.FC<MetricsBarChartProps> = props => {
             <PAxisLine axisTop={minAxis} durationMs={minValueMs} isLabelVisible />
           </>
         ) : null}
-        <Chart
-          chartConfig={barChartConfig}
-          maxValue={maxLogValue}
-          isDetailsView={isDetailsView}
-          scrollRef={scrollRef}
-        />
+        <BarsWrapper $isDetailsView={isDetailsView}>
+          <Chart
+            chartConfig={barChartConfig}
+            maxValue={maxLogValue}
+            isDetailsView={isDetailsView}
+            scrollRef={scrollRef}
+          />
+        </BarsWrapper>
       </ChartWrapper>
     </MetricsBarChartWrapper>
   );

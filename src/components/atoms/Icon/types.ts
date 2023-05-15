@@ -14,6 +14,7 @@ export type IconProps = {
     | 'cancelled'
     | 'timeout'
     | 'aborted'
+    | 'aborting'
     | 'error'
     | 'queued'
     | 'success';

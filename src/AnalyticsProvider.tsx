@@ -16,6 +16,13 @@ type AnalyticsProviderProps = {
 const maskSensitiveData = (ctx: Context): Context => {
   if (ctx.event.context?.page) {
     ctx.event.context.page.referrer = '';
+    ctx.event.context.page.url = `${window.location.protocol}//dummy.testkube${ctx.event.context.page.path}`;
+  }
+  if (ctx.event.traits?.hostname) {
+    ctx.event.traits.hostname = 'dummy.testkube';
+  }
+  if (ctx.event.properties?.hostname) {
+    ctx.event.properties.hostname = 'dummy.testkube';
   }
   return ctx;
 };

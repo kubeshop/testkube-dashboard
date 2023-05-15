@@ -2,6 +2,8 @@ import React from 'react';
 
 import {ClockCircleOutlined, DeleteOutlined} from '@ant-design/icons';
 
+import {TestSuiteStepDelay, TestSuiteStepExecuteTest} from '@models/testSuite';
+
 import {ExecutorIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
@@ -11,8 +13,8 @@ import Colors from '@styles/Colors';
 import {StyledContainer, StyledIconsWrapper, StyledNameContainer} from './TestSuiteStepCard.styled';
 
 type TestSuiteStepCardProps = {
-  execute?: any;
-  delay?: any;
+  execute?: TestSuiteStepExecuteTest;
+  delay?: TestSuiteStepDelay;
   onDelete: (index: number) => void;
   index: number;
   isDragging?: boolean;
@@ -28,9 +30,7 @@ const TestSuiteStepCard: React.FC<TestSuiteStepCardProps> = props => {
   if (delay) {
     name = `${delay.duration}ms`;
     type = 'delay';
-  }
-
-  if (execute) {
+  } else if (execute) {
     name = execute.name;
     type = execute.type;
   }
@@ -39,7 +39,9 @@ const TestSuiteStepCard: React.FC<TestSuiteStepCardProps> = props => {
     <StyledContainer $disabled={disabled} $isDragging={isDragging}>
       {type === 'delay' ? <ClockCircleOutlined /> : <ExecutorIcon type={type} />}
       <StyledNameContainer>
-        <Text className="regular" color={Colors.slate200}>{name}</Text>
+        <Text className="regular" color={Colors.slate200}>
+          {name}
+        </Text>
       </StyledNameContainer>
       {disabled ? null : (
         <StyledIconsWrapper>

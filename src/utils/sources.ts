@@ -1,10 +1,14 @@
 import {NamePath} from 'antd/lib/form/interface';
 
 import {Option} from '@models/form';
+import {Repository} from '@models/repository';
 import {SecretRef} from '@models/secretRef';
 import {SourceWithRepository} from '@models/sources';
+import {Test} from '@models/test';
 
 import {notificationCall} from '@molecules';
+
+import {SourceType} from '@organisms/TestConfigurationForm/utils';
 
 const customGitSourceString = '$custom-git-';
 
@@ -101,7 +105,7 @@ export const getSourcePayload = (values: any, testSources: SourceWithRepository[
   }
 };
 
-export const getCustomSourceField = (testSource: string, prevTestSource?: string) => {
+export const getCustomSourceField = (testSource: string) => {
   const isCustomTestSource = testSource.includes(customGitSourceString);
 
   return isCustomTestSource ? {source: testSource.replace(customGitSourceString, '')} : {source: ''};
@@ -109,7 +113,19 @@ export const getCustomSourceField = (testSource: string, prevTestSource?: string
 
 export const dummySecret = '******';
 
-export const getSourceFormValues = (entityDetails: any, testSources: SourceWithRepository[]) => {
+export type GetSourceFormValues = {
+  source: string;
+  branch?: string;
+  commit?: string;
+  path?: string;
+  string?: string;
+  token?: string;
+  username?: string;
+  tokenSecret?: Repository['tokenSecret'];
+  usernameSecret?: Repository['usernameSecret'];
+};
+
+export const getSourceFormValues = (entityDetails: Test, testSources: SourceWithRepository[]): GetSourceFormValues => {
   const {content} = entityDetails;
 
   if (entityDetails.source) {
@@ -130,7 +146,12 @@ export const getSourceFormValues = (entityDetails: any, testSources: SourceWithR
     };
   }
 
-  const secrets: {token?: string; username?: string; tokenSecret?: Object; usernameSecret?: Object} = {};
+  const secrets: {
+    token?: string;
+    username?: string;
+    tokenSecret?: Repository['tokenSecret'];
+    usernameSecret?: Repository['usernameSecret'];
+  } = {};
 
   if (content?.repository?.tokenSecret?.name) {
     secrets.token = dummySecret;
@@ -149,8 +170,8 @@ export const getSourceFormValues = (entityDetails: any, testSources: SourceWithR
   };
 };
 
-export const getSourceFieldValue = (getFieldValue: (name: NamePath) => any) => {
-  const testSourceValue: string = getFieldValue('testSource');
+export const getSourceFieldValue = (getFieldValue: (name: NamePath) => SourceType) => {
+  const testSourceValue = getFieldValue('testSource');
 
   if (!testSourceValue) {
     return '';

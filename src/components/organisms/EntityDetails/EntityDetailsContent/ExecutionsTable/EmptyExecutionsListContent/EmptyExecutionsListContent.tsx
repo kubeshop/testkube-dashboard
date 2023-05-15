@@ -61,7 +61,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         onButtonClick={() => dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}))}
         actionType="create"
       >
-        <HelpCard isLink link="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
+        <HelpCard isLink link="https://docs.testkube.io/articles/creating-test-suites">
           Learn how to add test suites
         </HelpCard>
       </EmptyListContent>

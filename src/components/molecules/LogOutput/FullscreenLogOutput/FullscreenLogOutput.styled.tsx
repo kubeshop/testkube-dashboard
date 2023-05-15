@@ -1,16 +1,19 @@
 import styled from 'styled-components';
 
+import {Coordinates} from '@models/config';
+
 import Colors from '@styles/Colors';
 
 import {BaseLogOutputStyles} from '../LogOutput.styled';
 
-export const StyledFullscreenLogOutputContainer = styled.div<{logOutputDOMRect: any}>`
+export const StyledFullscreenLogOutputContainer = styled.div<{
+  logOutputDOMRect?: Coordinates;
+}>`
   ${BaseLogOutputStyles}
 
   ${({logOutputDOMRect}) =>
     logOutputDOMRect
       ? `
-
   position: absolute;
   z-index: 1001;
 

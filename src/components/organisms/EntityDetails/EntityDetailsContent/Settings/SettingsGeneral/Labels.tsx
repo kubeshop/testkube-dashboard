@@ -69,6 +69,7 @@ const Labels: React.FC = () => {
         onConfirm={onSave}
         onCancel={onCancel}
         enabled={mayEdit}
+        forceEnableButtons={wasTouched}
       >
         <LabelsSelect key={`labels_${labelsKey}`} onChange={onChange} defaultLabels={entityLabels} />
       </ConfigurationCard>

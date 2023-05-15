@@ -61,7 +61,7 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
       <Select placeholder={placeholder} allowClear optionLabelProp="key">
         {tests.length > 0 ? (
           <OptGroup label="Tests">
-            {tests.map((item: any) => (
+            {tests.map(item => (
               <Option key={item.name}>
                 <StyledTestOptionWrapper>
                   <ExecutorIcon type={getTestExecutorIcon(executors, item.type)} />
@@ -73,7 +73,7 @@ const TriggerItem: React.FC<TriggerItemProps> = props => {
         ) : null}
         {testSuites.length > 0 ? (
           <OptGroup label="Test Suites">
-            {testSuites.map((item: any) => (
+            {testSuites.map(item => (
               <Option key={item.name}>
                 <StyledTestOptionWrapper>
                   <TestSuitesIcon fill={Colors.slate100} />

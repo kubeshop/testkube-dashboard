@@ -57,7 +57,7 @@ const ApiEndpoint: React.FC = () => {
         footerText={
           <Text className="regular middle">
             Learn more about{' '}
-            <ExternalLink href="https://kubeshop.github.io/testkube/concepts/common-issues/#why-is-the-testkube-dashboard-not-working-or-does-not-return-results">
+            <ExternalLink href="https://docs.testkube.io/articles/common-issues/#why-is-the-testkube-dashboard-not-working-or-does-not-return-results">
               testkube API endpoints
             </ExternalLink>
           </Text>

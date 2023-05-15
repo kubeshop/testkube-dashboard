@@ -1,6 +1,6 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {TestSuitesState} from '@models/testSuite';
+import {TestSuiteWithExecution, TestSuitesState} from '@models/testSuite';
 
 import initialState from '@redux/initialState';
 
@@ -10,7 +10,7 @@ export const testSuitesSlice = createSlice({
   name: 'testSuitesSlice',
   initialState: initialState.testSuites,
   reducers: {
-    setTestSuites: (state: Draft<TestSuitesState>, action: PayloadAction<any[]>) => {
+    setTestSuites: (state: Draft<TestSuitesState>, action: PayloadAction<TestSuiteWithExecution[]>) => {
       const adjustedPayload = action.payload.map(testItem => {
         return {dataItem: testItem.testSuite, latestExecution: testItem.latestExecution};
       });

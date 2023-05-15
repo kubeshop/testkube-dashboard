@@ -1,7 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Repository} from '@models/repository';
-import {CreateSourcePayload, SourceWithRepository} from '@models/sources';
+import {CreateSourceResult, SourceWithRepository} from '@models/sources';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
@@ -27,7 +27,7 @@ export const sourcesApi = createApi({
         body,
       }),
     }),
-    createSource: builder.mutation<CreateSourcePayload, SourceWithRepository>({
+    createSource: builder.mutation<CreateSourceResult, SourceWithRepository>({
       query: body => ({
         url: '/test-sources',
         method: 'POST',
@@ -52,7 +52,7 @@ export const sourcesApi = createApi({
         method: 'DELETE',
       }),
     }),
-    updateSource: builder.mutation<void, SourceWithRepository>({
+    updateSource: builder.mutation<any, SourceWithRepository>({
       query: body => {
         return {
           url: `/test-sources/${body.name}`,

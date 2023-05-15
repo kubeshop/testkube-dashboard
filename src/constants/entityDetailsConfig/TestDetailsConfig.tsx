@@ -1,6 +1,7 @@
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 
 import {
+  useAbortAllTestExecutionsMutation,
   useAbortTestExecutionMutation,
   useGetTestExecutionMetricsQuery,
   useGetTestExecutionsByIdQuery,
@@ -17,6 +18,7 @@ const TestExecutionsConfig: EntityDetailsBlueprint = {
     return `/tests/${id}/executions`;
   },
   useAbortExecution: useAbortTestExecutionMutation,
+  useAbortAllExecutions: useAbortAllTestExecutionsMutation,
 };
 
 export default TestExecutionsConfig;

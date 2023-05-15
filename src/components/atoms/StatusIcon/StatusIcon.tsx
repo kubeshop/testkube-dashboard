@@ -53,6 +53,10 @@ const iconStyles: Record<string, IconStyle> = {
     borderColor: Colors.pink600,
     background: Colors.pink900,
   },
+  aborting: {
+    borderColor: Colors.pink600,
+    background: Colors.pink900,
+  },
 };
 
 type StatusIconProps = {

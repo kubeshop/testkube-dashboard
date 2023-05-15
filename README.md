@@ -1,7 +1,8 @@
 # TestKube Dashboard
 
-![Netlify](https://img.shields.io/netlify/8cef7e08-ee34-4dd3-871a-27fb0c63a0c8?color=%231890fc&style=for-the-badge)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kubeshop/testkube-dashboard/Publish%20Docker%20image?style=for-the-badge)
+![Build Status](https://github.com/kubeshop/testkube-dashboard/actions/workflows/build.yml/badge.svg?event=push)
+![Tests Status](https://github.com/kubeshop/testkube-dashboard/actions/workflows/test.yml/badge.svg?event=push)
+![Docker Status](https://github.com/kubeshop/testkube-dashboard/actions/workflows/docker-build-tag.yml/badge.svg?branch=main&event=push)
 
 A simple read-only dashboard for real-time TestKube results.
 
@@ -17,7 +18,7 @@ Available operations for the api-server are in its
 
 During development one can bypass the Ingress and interact with the api-server directly:
 
-- Install TestKube in your cluster - see [TestKube Installation](https://kubeshop.github.io/testkube/installing/)
+- Install TestKube in your cluster - see [TestKube Installation](https://docs.testkube.io/articles/getting-started-overview/)
 - Expose the api-server with
 
 ```shell
@@ -104,5 +105,6 @@ After this, you should get an open navigator with the link: `http://localhost:30
 
 ## Deployment application
 
-This application is deployed with [Netlify](https://app.netlify.com/) where you can see it live using under this :link:
-[TestKube-dashboard](https://cocky-northcutt-d5b913.netlify.app/) .
+If you want to see a live demo,
+the last release is automatically deployed [**:link: demo.testkube.io**](https://demo.testkube.io),
+while the latest changes from the `develop` branch are available on [**:link: dev.testkube.io**](https://dev.testkube.io).

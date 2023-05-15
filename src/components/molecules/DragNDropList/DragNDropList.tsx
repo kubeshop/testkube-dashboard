@@ -1,24 +1,38 @@
-import React, {memo} from 'react';
-import {DragDropContext, Draggable} from 'react-beautiful-dnd';
+import React, {PropsWithChildren, memo} from 'react';
+import {DragDropContext, Draggable, DropResult, DroppableProvided, DroppableStateSnapshot} from 'react-beautiful-dnd';
+
+import {TestSuiteStep} from '@models/testSuite';
 
 import {reorder} from '@utils/array';
 
 import StrictModeDroppable from './StrictModeDroppable';
 
-type DragNDropListProps = {
-  items: any[];
-  setItems: (items: any[]) => void;
-  ContainerComponent: any;
-  ItemComponent: any;
+interface ItemComponentProps {
+  index: number;
+  isDragging: boolean;
   onDelete: (index: number) => void;
-  scrollRef: any;
+  disabled: boolean;
+}
+
+type DragNDropListProps = {
+  items: TestSuiteStep[];
+  setItems: (steps: TestSuiteStep[]) => void;
+  ContainerComponent: React.FC<
+    PropsWithChildren<{
+      isDragging: DroppableStateSnapshot['isDraggingOver'];
+      ref: DroppableProvided['innerRef'];
+    }>
+  >;
+  ItemComponent: React.FC<ItemComponentProps>;
+  onDelete: (index: number) => void;
+  scrollRef: React.RefObject<HTMLDivElement> | undefined;
   disabled?: boolean;
 };
 
 const DragNDropList: React.FC<DragNDropListProps> = props => {
   const {items = [], setItems, onDelete, scrollRef, ItemComponent, ContainerComponent, disabled = false} = props;
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination || result.source.index === result.destination.index) {
       return;
     }
@@ -41,8 +55,8 @@ const DragNDropList: React.FC<DragNDropListProps> = props => {
       <StrictModeDroppable droppableId="droppable" isDropDisabled={disabled}>
         {(provided, snapshot) => (
           <ContainerComponent {...provided.droppableProps} ref={provided.innerRef} isDragging={snapshot.isDraggingOver}>
-            {items.map((item: any, index: number) => (
-              <Draggable key={item.id} draggableId={item.id} index={index} isDragDisabled={disabled}>
+            {items.map((item, index) => (
+              <Draggable key={item.id} draggableId={String(item.id)} index={index} isDragDisabled={disabled}>
                 {(providedDraggable, snapshotDraggable) => (
                   <div
                     ref={providedDraggable.innerRef}
