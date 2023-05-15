@@ -2,7 +2,7 @@ import type { Page } from  '@playwright/test';
 import { TestDataHandler } from '../data-handlers/test-data-handlers';
 
 export class CreateTestPage{
-    readonly page: Page
+    readonly page: Page;
     constructor(page:Page){
         this.page=page;
     }
