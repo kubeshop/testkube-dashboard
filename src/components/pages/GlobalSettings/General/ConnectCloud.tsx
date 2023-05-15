@@ -36,7 +36,12 @@ const ConnectCloud = () => {
             </ExternalLink>
           </Space>
         </Space>
-        <Button type="primary">Connect your Testkube Cloud account</Button>
+        <Button
+          type="primary"
+          onClick={() => window.open('https://cloud.testkube.io/system-init?cloudMigrate=true', '_self')}
+        >
+          Connect your Testkube Cloud account
+        </Button>
       </Space>
     </ConfigurationCard>
   );
