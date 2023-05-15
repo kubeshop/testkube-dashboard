@@ -61,7 +61,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
           <Text>
             We could not detect the right Testkube API endpoint for you. Please enter the API endpoint for your
             installation (e.g. from the output of the Testkube installer)&nbsp;
-            <ExternalLink href="https://docs.testkube.io/articles/testkube-dashboard/#ui-results-endpoint">
+            <ExternalLink href="https://docs.testkube.io/articles/testkube-dashboard-api-endpoint">
               Learn more...
             </ExternalLink>
           </Text>
