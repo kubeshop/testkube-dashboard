@@ -136,7 +136,7 @@ export class ApiHelpers {
             if(totalsResults == 0) {
                 return totalsResults
             } else {
-                const lastExecutionResults = response.body;.results[0]
+                const lastExecutionResults = response.body.results[0]
     
                 return lastExecutionResults.number
             }
