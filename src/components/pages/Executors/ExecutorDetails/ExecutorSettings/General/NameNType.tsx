@@ -9,17 +9,12 @@ import {Input} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
-import {required} from '@utils/form';
-
-import {Permissions, usePermission} from '@permissions/base';
-
 type NameNTypeFormValues = {
   name: string;
   type: string;
 };
 
 const NameNType: React.FC = () => {
-  const mayEdit = usePermission(Permissions.editEntity);
   const [form] = Form.useForm<NameNTypeFormValues>();
 
   const {name, executor} = useAppSelector(selectCurrentExecutor);
@@ -38,7 +33,7 @@ const NameNType: React.FC = () => {
       name="general-settings-name-type"
       initialValues={{name, type}}
       layout="vertical"
-      disabled={!mayEdit}
+      disabled
     >
       <ConfigurationCard
         title="Executor name & type"
@@ -50,12 +45,13 @@ const NameNType: React.FC = () => {
           form.resetFields();
         }}
         isButtonsDisabled
-        enabled={mayEdit}
+        enabled={false}
+        isEditable={false}
       >
-        <Form.Item label="Name" required name="name" rules={[required]}>
+        <Form.Item label="Name" name="name">
           <Input placeholder="e.g.: my-container-executor" disabled />
         </Form.Item>
-        <Form.Item label="Type" required name="type" rules={[required]} style={{flex: 1, marginBottom: '0'}}>
+        <Form.Item label="Type" name="type" style={{flex: 1, marginBottom: '0'}}>
           <Input placeholder="e.g.: my-executor/type" disabled />
         </Form.Item>
       </ConfigurationCard>
