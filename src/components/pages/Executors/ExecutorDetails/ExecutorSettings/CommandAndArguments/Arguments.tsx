@@ -5,7 +5,7 @@ import {Form, Input} from 'antd';
 import {DeleteOutlined} from '@ant-design/icons';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateExecutorArguments} from '@redux/reducers/executorsSlice';
+import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
 import {Button} from '@custom-antd';
 
@@ -48,7 +48,7 @@ const Arguments: React.FC = () => {
     }).then(res => {
       displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Arguments were successfully updated.');
-        dispatch(updateExecutorArguments(values.arguments));
+        dispatch(updateCurrentExecutorData({args: values.arguments}));
       });
     });
   };
