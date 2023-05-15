@@ -9,8 +9,6 @@ import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/
 
 import {CommandInput} from '@atoms';
 
-import {CommandInput} from '@atoms';
-
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
