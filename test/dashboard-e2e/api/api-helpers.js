@@ -18,12 +18,12 @@ export class ApiHelpers {
     }
 
     async createTest(testData) {
-        const request = `${this.API_URL}/tests`
+        const request = `${this.API_URL}/tests`;
         
         try {
             const response = await superagent.post(request)
                 .set('Content-Type', 'application/json')
-                .send(testData)
+                .send(testData);
     
             return response.body;
         } catch (e) {
@@ -32,19 +32,19 @@ export class ApiHelpers {
     }
 
     async abortTest(testName, executionId) {
-        const request = `${this.API_URL}/tests/${testName}/executions/${executionId}`
+        const request = `${this.API_URL}/tests/${testName}/executions/${executionId}`;
 
         try {
             const response = await superagent.patch(request);
 
-            return response
+            return response;
         } catch (e) {
             throw Error(`abortTest failed on "${request}" with: "${e}"`);
         }
     }
     
     async removeTest(testName) {
-        const request = `${this.API_URL}/tests/${testName}`
+        const request = `${this.API_URL}/tests/${testName}`;
 
         try {
             await superagent.delete(request);
@@ -54,12 +54,12 @@ export class ApiHelpers {
     }
 
     async updateTest(testData) {
-        const request = `${this.API_URL}/tests/${testData.name}`
+        const request = `${this.API_URL}/tests/${testData.name}`;
         
         try {
             const response = await superagent.patch(request)
                 .set('Content-Type', 'application/json')
-                .send(testData)
+                .send(testData);
     
             return response.body;
         } catch (e) {
@@ -69,14 +69,14 @@ export class ApiHelpers {
 
     async isTestCreated(testName) {
         try {
-            const currentTests = await this.getTests()
-            const test = currentTests.find(singleTest => singleTest.name == testName)
+            const currentTests = await this.getTests();
+            const test = currentTests.find(singleTest => singleTest.name === testName);
     
-            if(test != undefined) {
-                return true
+            if(test !== undefined) {
+                return true;
             }
     
-            return false
+            return false;
         } catch (e) {
             throw Error(`isTestCreated failed for "${testName}" with: "${e}"`);
         }
@@ -84,12 +84,12 @@ export class ApiHelpers {
 
     async assureTestNotCreated(testName) {
         try {
-            const alreadyCreated = await this.isTestCreated(testName)
+            const alreadyCreated = await this.isTestCreated(testName);
             if(alreadyCreated) {
-                await this.removeTest(testName)
+                await this.removeTest(testName);
             }
     
-            return true
+            return true;
         } catch (e) {
             throw Error(`assureTestNotCreated failed for "${testName}" with: "${e}"`);
         }
@@ -97,17 +97,17 @@ export class ApiHelpers {
 
     async assureTestCreated(testData, fullCleanup=false) {
         try {
-            const alreadyCreated = await this.isTestCreated(testData.name)
+            const alreadyCreated = await this.isTestCreated(testData.name);
 
             if(alreadyCreated) {
                 if(fullCleanup) {
-                    await this.removeTest(testData.name)
-                    await this.createTest(testData)
+                    await this.removeTest(testData.name);
+                    await this.createTest(testData);
                 } else {
-                    await this.updateTest(testData)
+                    await this.updateTest(testData);
                }
             } else {
-                await this.createTest(testData)
+                await this.createTest(testData);
             }
         } catch (e) {
             throw Error(`assureTestCreated failed for "${testData.name}" with: "${e}"`);
@@ -115,7 +115,7 @@ export class ApiHelpers {
     }
 
     async getTestData(testName) {
-        const request = `${this.API_URL}/tests/${testName}`
+        const request = `${this.API_URL}/tests/${testName}`;
 
         try {
             const response = await superagent.get(request);
@@ -127,18 +127,18 @@ export class ApiHelpers {
     }
 
     async getLastExecutionNumber(testName) {
-        const request = `${this.API_URL}/tests/${testName}/executions`
+        const request = `${this.API_URL}/tests/${testName}/executions`;
 
         try {
             const response = await superagent.get(request);
-            const totalsResults = response.body.totals.results
+            const totalsResults = response.body.totals.results;
     
-            if(totalsResults == 0) {
-                return totalsResults
+            if(totalsResults === 0) {
+                return totalsResults;
             } else {
-                const lastExecutionResults = response.body.results[0]
+                const lastExecutionResults = response.body.results[0];
     
-                return lastExecutionResults.number
+                return lastExecutionResults.number;
             }
         } catch (e) {
             throw Error(`getLastExecutionNumber failed on "${request}" with: "${e}"`);
