@@ -3,11 +3,10 @@ import {useContext, useEffect} from 'react';
 import {Form, Input} from 'antd';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateExecutorPrivateRegistry} from '@redux/reducers/executorsSlice';
+import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
@@ -34,16 +33,17 @@ const PrivateRegistry: React.FC = () => {
   const [form] = Form.useForm<PrivateRegistryFormFields>();
 
   const onSubmit = (values: PrivateRegistryFormFields) => {
+    const newImagePullSecrets = values.privateRegistry ? [{name: values.privateRegistry}] : [];
     updateCustomExecutor({
       executorId: name,
       body: {
         name,
         ...executor,
-        imagePullSecrets: [{name: values.privateRegistry}],
+        imagePullSecrets: newImagePullSecrets,
       },
     }).then(res => {
       displayDefaultNotificationFlow(res, () => {
-        dispatch(updateExecutorPrivateRegistry(values.privateRegistry));
+        dispatch(updateCurrentExecutorData({imagePullSecrets: newImagePullSecrets}));
         notificationCall('passed', 'Private registry was successfully updated.');
       });
     });
@@ -78,7 +78,6 @@ const PrivateRegistry: React.FC = () => {
         <Form.Item
           label="Secret ref name"
           name="privateRegistry"
-          rules={[required]}
           style={{flex: 1, marginBottom: '0'}}
         >
           <Input placeholder="Secret ref name" />

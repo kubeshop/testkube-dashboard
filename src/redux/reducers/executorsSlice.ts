@@ -1,7 +1,7 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {EntityMap} from '@models/entityMap';
-import {Executor, ExecutorFeature, ExecutorsState, ImagePullSecret} from '@models/executors';
+import {Executor, ExecutorFeature, ExecutorsState} from '@models/executors';
 
 import initialState from '@redux/initialState';
 
@@ -46,38 +46,16 @@ export const executorsSlice = createSlice({
           };
         }) || {};
     },
-    setCurrentExecutor: (state: Draft<ExecutorsState>, action: PayloadAction<Executor>) => {
+    setCurrentExecutor: (state: Draft<ExecutorsState>, action: PayloadAction<string>) => {
       state.currentExecutor = action.payload;
     },
-    updateExecutorContainerImage: (
-      state: Draft<ExecutorsState>,
-      action: PayloadAction<Executor['executor']['image']>
-    ) => {
+    updateCurrentExecutorData: (state: Draft<ExecutorsState>, action: PayloadAction<Partial<Executor['executor']>>) => {
       if (state.currentExecutor) {
-        if (state.currentExecutor.executor) {
-          state.currentExecutor.executor.image = action.payload;
-        }
-      }
-    },
-    updateExecutorPrivateRegistry: (state: Draft<ExecutorsState>, action: PayloadAction<ImagePullSecret['name']>) => {
-      if (state.currentExecutor) {
-        if (state.currentExecutor.executor) {
-          state.currentExecutor.executor.imagePullSecrets = [{name: action.payload}];
-        }
-      }
-    },
-    updateExecutorCommand: (state: Draft<ExecutorsState>, action: PayloadAction<string>) => {
-      if (state.currentExecutor) {
-        if (state.currentExecutor.executor) {
-          state.currentExecutor.executor.command = action.payload.split(' ');
-        }
-      }
-    },
-    updateExecutorArguments: (state: Draft<ExecutorsState>, action: PayloadAction<Executor['executor']['args']>) => {
-      if (state.currentExecutor) {
-        if (state.currentExecutor.executor) {
-          state.currentExecutor.executor.args = action.payload;
-        }
+        state.executorsList = state.executorsList.map(executor => (
+          executor.name === state.currentExecutor
+            ? {...executor, executor: {...executor.executor, ...action.payload}}
+            : executor
+        ));
       }
     },
   },
@@ -85,15 +63,14 @@ export const executorsSlice = createSlice({
 
 export const selectExecutors = (state: RootState) => state.executors.executorsList;
 export const selectExecutorsFeaturesMap = (state: RootState) => state.executors.executorsFeaturesMap;
-export const selectCurrentExecutor = (state: RootState) => state.executors.currentExecutor as Executor;
+export const selectCurrentExecutor = (state: RootState) => (
+  state.executors.executorsList.find(executor => executor.name === state.executors.currentExecutor) as Executor
+);
 
 export const {
   setExecutors,
   setCurrentExecutor,
-  updateExecutorContainerImage,
-  updateExecutorPrivateRegistry,
-  updateExecutorCommand,
-  updateExecutorArguments,
+  updateCurrentExecutorData,
 } = executorsSlice.actions;
 
 export default executorsSlice.reducer;
