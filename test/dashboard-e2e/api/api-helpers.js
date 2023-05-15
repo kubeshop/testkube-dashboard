@@ -135,11 +135,12 @@ export class ApiHelpers {
     
             if(totalsResults === 0) {
                 return totalsResults;
-            } else {
-                const lastExecutionResults = response.body.results[0];
-    
-                return lastExecutionResults.number;
             }
+            
+            const lastExecutionResults = response.body.results[0];
+
+            return lastExecutionResults.number;
+
         } catch (e) {
             throw Error(`getLastExecutionNumber failed on "${request}" with: "${e}"`);
         }
