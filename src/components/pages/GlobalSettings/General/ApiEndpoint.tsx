@@ -10,6 +10,8 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {isApiEndpointLocked, useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
+import Colors from '@styles/Colors';
+
 type ApiEndpointFormValues = {
   endpoint: string;
 };
@@ -55,7 +57,7 @@ const ApiEndpoint: React.FC = () => {
         title="Testkube API endpoint"
         description="Please provide the TestKube API endpoint for your installation. The endpoint needs to be accessible from your browser"
         footerText={
-          <Text className="regular middle">
+          <Text className="regular middle" color={`${Colors.slate400}`}>
             Learn more about{' '}
             <ExternalLink href="https://docs.testkube.io/articles/common-issues/#why-is-the-testkube-dashboard-not-working-or-does-not-return-results">
               testkube API endpoints
