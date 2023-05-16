@@ -19,6 +19,7 @@ import {decomposeVariables} from '@utils/variables';
 import {ExecutionDetailsContext} from '@contexts';
 
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
+import TestExecutionDetailsAI from './TestExecutionDetailsAI';
 
 const LogOutput = lazy(() => import('@molecules').then(module => ({default: module.LogOutput})));
 
@@ -87,6 +88,11 @@ const TestExecutionDetailsTabs: React.FC = () => {
       key: 'LogOutputPane',
       label: 'Log Output',
       children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />,
+    },
+    {
+      key: 'LogOutputPane',
+      label: 'AI Insights',
+      children: <TestExecutionDetailsAI id={id} testName={testName} testSuiteName={testSuiteName} />,
     },
     whetherToShowArtifactsTab
       ? {

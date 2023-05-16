@@ -54,6 +54,11 @@ export const testsApi = createApi({
         url: `/executions/${testExecutionId}/artifacts`,
       }),
     }),
+    getTestExecutionAI: builder.query({
+      query: testExecutionId => ({
+        url: `/executions/${testExecutionId}/ai`,
+      }),
+    }),
     getTestExecutionMetrics: builder.query({
       query: ({id, last = 7, limit = 1000}) => {
         const queryParams = new URLSearchParams({
@@ -121,6 +126,7 @@ testsApi.useGetTestExecutionsByIdQuery = memoizeQuery(testsApi.useGetTestExecuti
 );
 testsApi.useGetTestExecutionByIdQuery = memoizeQuery(testsApi.useGetTestExecutionByIdQuery);
 testsApi.useGetTestExecutionArtifactsQuery = memoizeQuery(testsApi.useGetTestExecutionArtifactsQuery);
+testsApi.useGetTestExecutionAIQuery = memoizeQuery(testsApi.useGetTestExecutionAIQuery);
 testsApi.useGetTestExecutionMetricsQuery = memoizeQuery(testsApi.useGetTestExecutionMetricsQuery, metrics =>
   // Limit to show maximum of 1000 latest executions
   metrics.executions?.length > 1000 ? {...metrics, executions: metrics.executions.slice(0, 1000)} : metrics
@@ -134,6 +140,7 @@ export const {
   useGetTestExecutionsByIdQuery,
   useGetTestExecutionByIdQuery,
   useGetTestExecutionArtifactsQuery,
+  useGetTestExecutionAIQuery,
   useAddTestMutation,
   useUpdateTestMutation,
   useDeleteTestMutation,
