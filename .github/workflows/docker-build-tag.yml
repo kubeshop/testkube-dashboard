@@ -110,13 +110,13 @@ jobs:
             git fetch origin main
             git checkout main
             cd ./scripts
-            ./chart_releaser.sh --helm-chart-folder testkube-dashboard
+            ./chart_releaser.sh --helm-chart-folder testkube-$SERVICE
           else
-            git fetch origin "release/dashboard/$RELEASE_VERSION"
-            git checkout "release/dashboard/$RELEASE_VERSION"
+            git fetch origin "release/$SERVICE/$RELEASE_VERSION"
+            git checkout "release/$SERVICE/$RELEASE_VERSION"
             echo "Switched to release branch"
             cd ./scripts
-            ./chart_releaser.sh --helm-chart-folder testkube-dashboard --branch true
+            ./chart_releaser.sh --helm-chart-folder testkube-$SERVICE --branch true
           fi
 
         env:
