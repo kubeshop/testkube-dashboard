@@ -1,6 +1,8 @@
 import type { Page } from  '@playwright/test';
 import TestDataHandler from '../data-handlers/test-data-handlers';
 
+const testDataHandler=new TestDataHandler();
+
 export class CreateTestPage{
     readonly page: Page;
     constructor(page:Page){
@@ -50,7 +52,7 @@ export class CreateTestPage{
     }
 
     async _fillInTestDetails(testName) {
-        const testData = TestDataHandler.getTest(testName);
+        const testData = testDataHandler.getTest(testName);
         await this.setBasicInput(testData.name, 'name');
         await this.selectTestType(testData.type);
         await this.selectTestSource(testData.content);
