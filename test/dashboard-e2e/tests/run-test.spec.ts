@@ -14,8 +14,7 @@ test.beforeEach(async ({ page }) => {
 const testNames = ['cypress-git-created', 'k6-git-created', 'postman-git-created'];
 for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
   test(`Run test ${testName}`, async ({ page }) => {
-    const testDataHandler=new TestDataHandler();
-    const testData = testDataHandler.getTest(testName);
+    const testData = TestDataHandler.getTest(testName);
     const realTestName = testData.name;
 
     const apiHelpers=new ApiHelpers(process.env.API_URL);
