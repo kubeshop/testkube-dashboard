@@ -1,6 +1,6 @@
 import testsData from '../fixtures/tests.json';
 
-export class TestDataHandler {
+export default class TestDataHandler {
     getTest = (testName) => {
         return testsData[testName];
     }

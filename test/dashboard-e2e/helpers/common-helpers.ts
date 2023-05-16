@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-export class CommonHelpers {
+export default class CommonHelpers {
     validateTest = (testData, createdTestData) => {
         expect(testData.name).toEqual(createdTestData.name);
         // TODO: label

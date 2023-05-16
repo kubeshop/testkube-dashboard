@@ -1,8 +1,8 @@
 import { test } from '@playwright/test';
 
-import { TestDataHandler } from '../data-handlers/test-data-handlers';
+import TestDataHandler from '../data-handlers/test-data-handlers';
 import { ApiHelpers } from '../api/api-helpers';
-import { CommonHelpers } from '../helpers/common-helpers';
+import CommonHelpers from '../helpers/common-helpers';
 import { MainPage } from '../pages/MainPage';
 import { CreateTestPage } from '../pages/CreateTestPage';
 
