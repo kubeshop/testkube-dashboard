@@ -90,7 +90,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
       children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />,
     },
     {
-      key: 'LogOutputPane',
+      key: 'AiInsightsPane',
       label: 'AI Insights',
       children: <TestExecutionDetailsAI id={id} testName={testName} testSuiteName={testSuiteName} />,
     },
