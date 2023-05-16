@@ -3,7 +3,7 @@ name: Publish Docker image with a commit hash tag
 on:
   push:
     branches:
-      - release-**
+      - release/**
 
 jobs:
   push_to_registry:
