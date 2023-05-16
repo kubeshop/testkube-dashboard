@@ -47,10 +47,10 @@ jobs:
           REPO_OWNER=kubeshop
           REPO_NAME=helm-charts
           OLD_BRANCH_NAME=${GITHUB_REF}
-          RELEASE_TAG=$(echo $OLD_BRANCH_NAME | sed 's/[^/]*\///')
+          RELEASE_TAG=$(basename "${OLD_BRANCH_NAME}")
 
           # Set up the new branch name
-          NEW_BRANCH_NAME="release/dashboard/${RELEASE_TAG}"
+          NEW_BRANCH_NAME="refs/heads/release/dashboard/${RELEASE_TAG}"
 
           # Set up authentication using a personal access token
           AUTH_HEADER="Authorization: Bearer ${{ secrets.CI_BOT_TOKEN }}"
