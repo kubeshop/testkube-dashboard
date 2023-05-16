@@ -15,7 +15,8 @@ test.beforeEach(async ({ page }) => {
 const testNames = ['cypress-git', 'k6-git', 'postman-git'];
 for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
   test(`Creating test for ${testName}`, async ({ page }) => {
-    const testData = TestDataHandler.getTest(testName);
+    const testDataHandler=new TestDataHandler();
+    const testData = testDataHandler.getTest(testName);
   
     const apiHelpers=new ApiHelpers(process.env.API_URL);
     await apiHelpers.assureTestNotCreated(testData.name);
@@ -30,7 +31,8 @@ for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
   
     const createdTestData = await apiHelpers.getTestData(testData.name);
   
-    await CommonHelpers.validateTest(testData, createdTestData);
+    const commonHelpers = new CommonHelpers();
+    await commonHelpers.validateTest(testData, createdTestData);
   });
 }
 
