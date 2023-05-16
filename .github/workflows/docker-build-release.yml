@@ -3,7 +3,7 @@ name: Publish Docker image with a commit hash tag
 on:
   push:
     branches:
-      - release-**
+      - release/**
 
 jobs:
   push_to_registry:
@@ -46,20 +46,24 @@ jobs:
           # Set up variables for repository and branch name
           REPO_OWNER=kubeshop
           REPO_NAME=helm-charts
-          BRANCH_NAME=${GITHUB_REF}
+          OLD_BRANCH_NAME=${GITHUB_REF}
+          RELEASE_TAG=$(echo $OLD_BRANCH_NAME | sed 's/[^/]*\///')
+
+          # Set up the new branch name
+          NEW_BRANCH_NAME="release/dashboard/${RELEASE_TAG}"
 
           # Set up authentication using a personal access token
           AUTH_HEADER="Authorization: Bearer ${{ secrets.CI_BOT_TOKEN }}"
 
           # Check if branch already exists
-          STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H "${AUTH_HEADER}" "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches/${BRANCH_NAME}")
+          STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H "${AUTH_HEADER}" "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches/${NEW_BRANCH_NAME}")
 
           # If branch doesn't exist, create it
           if [ "${STATUS}" -eq 404 ]; then
-            curl -X POST -H "${AUTH_HEADER}" -d '{"ref": "'"${BRANCH_NAME}"'","sha": "'"$(curl -s -H "${AUTH_HEADER}" "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/refs/heads/main" | jq -r '.object.sha')"'"}' "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/refs"
-            echo "Created branch ${BRANCH_NAME} in ${REPO_OWNER}/${REPO_NAME}"
+            curl -X POST -H "${AUTH_HEADER}" -d '{"ref": "'"${NEW_BRANCH_NAME}"'","sha": "'"$(curl -s -H "${AUTH_HEADER}" "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/refs/heads/main" | jq -r '.object.sha')"'"}' "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/refs"
+            echo "Created branch ${NEW_BRANCH_NAME} in ${REPO_OWNER}/${REPO_NAME}"
           else
-            echo "Branch ${BRANCH_NAME} already exists in ${REPO_OWNER}/${REPO_NAME}"
+            echo "Branch ${NEW_BRANCH_NAME} already exists in ${REPO_OWNER}/${REPO_NAME}"
           fi
 
       - name: Repository Dispatch
