@@ -25,7 +25,7 @@ import {useGetClusterConfigQuery} from '@services/config';
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
-import {ModalHandler, ModalOutlet} from '@contexts/ModalContext';
+import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
@@ -158,6 +158,7 @@ const AppRoot: React.FC = () => {
     })
     .append(MainContext.Provider, {value: mainContextValue})
     .append(ModalHandler, {})
+    .append(ModalOutletProvider, {})
     .render(
       <>
         <Layout>
@@ -173,7 +174,6 @@ const AppRoot: React.FC = () => {
         {isCookiesVisible && clusterConfig?.enableTelemetry ? (
           <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
         ) : null}
-        <ModalOutlet />
       </>
     );
 };

@@ -54,4 +54,11 @@ export const ModalOutlet: FC = () => {
   );
 };
 
+export const ModalOutletProvider: FC<PropsWithChildren<{}>> = ({children}) => (
+  <>
+    <ModalOutlet />
+    {children}
+  </>
+);
+
 export default ModalContext;
