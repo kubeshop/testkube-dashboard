@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 
 export class CommonHelpers {
-    validateTest(testData, createdTestData) { // eslint-disable-line class-methods-use-this
+    validateTest = (testData, createdTestData) => {
         expect(testData.name).toEqual(createdTestData.name);
         // TODO: label
         expect(testData.type).toEqual(createdTestData.type);

@@ -1,7 +1,7 @@
 import testsData from '../fixtures/tests.json';
 
 export class TestDataHandler {
-    getTest(testName) {  // eslint-disable-line class-methods-use-this
+    getTest = (testName) => {
         return testsData[testName];
     }
 }
