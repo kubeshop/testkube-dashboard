@@ -13,7 +13,7 @@ import {ExternalLink} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
+import {useAbortAllTestExecutionsMutation, useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
@@ -23,7 +23,7 @@ const TestsPageDescription: React.FC = () => {
   return (
     <Text className="regular middle" color={Colors.slate400}>
       Explore your tests at a glance... Learn more about{' '}
-      <ExternalLink href="https://kubeshop.github.io/testkube/">testing with Testkube</ExternalLink>
+      <ExternalLink href="https://docs.testkube.io/">testing with Testkube</ExternalLink>
     </Text>
   );
 };
@@ -39,6 +39,7 @@ export const TestsEntity: EntityListBlueprint = {
 
   useGetData: useGetTestsQuery,
   useGetMetrics: useGetTestExecutionMetricsQuery,
+  useAbortAllExecutions: useAbortAllTestExecutionsMutation,
   setData: setTests,
   selectData: selectTests,
 

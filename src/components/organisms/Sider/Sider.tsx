@@ -106,7 +106,7 @@ const Sider: React.FC = () => {
   ];
 
   const renderedMenuItems = useMemo(() => {
-    return getRoutes(showSocialLinksInSider).map((route: any) => {
+    return getRoutes(showSocialLinksInSider).map(route => {
       const {icon: MenuIcon, path, title, active} = route;
 
       return (
@@ -118,7 +118,7 @@ const Sider: React.FC = () => {
           active={active}
         >
           <Tooltip title={title} placement="right">
-            <MenuIcon style={DEFAULT_ICON_STYLE} />
+            <span><MenuIcon style={DEFAULT_ICON_STYLE} /></span>
           </Tooltip>
         </StyledSiderLink>
       );

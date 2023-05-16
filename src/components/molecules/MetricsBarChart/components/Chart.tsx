@@ -35,12 +35,14 @@ const Chart: React.FC<ChartProps> = props => {
         if execution is running, bar height is 50% of chartHeight
         PROPORTION ---- heightInPx / chartHeightInPx = logDurationInMs / maxValueInMs
         so we basically say that bar value in px relates to 100% that is chartHeight
-        the same as bar value in miliseconds relates to 100% that is max Value in data set
+        the same as bar value in milliseconds relates to 100% that is max Value in data set
         we take that greatest value is basically set to 100% of chart height
       */
-      const height = status === 'running' ? chartHeight / 2 : (logDuration * chartHeight) / maxValue;
 
-      const formattedDuration = status === 'running' ? 'running' : formatDuration(durationS);
+      const height =
+        status === 'running' || status === 'aborting' ? chartHeight / 2 : (logDuration * chartHeight) / maxValue;
+
+      const formattedDuration = status === 'running' || status === 'aborting' ? 'running' : formatDuration(durationS);
 
       const key = `${name}-bar-${index}`;
 
@@ -75,7 +77,7 @@ const Chart: React.FC<ChartProps> = props => {
   }, [chartData]);
 
   return (
-    <SvgWrapper isDetailsView={isDetailsView}>
+    <SvgWrapper $isDetailsView={isDetailsView}>
       {renderedBarChart}
       <div ref={scrollRef} />
     </SvgWrapper>

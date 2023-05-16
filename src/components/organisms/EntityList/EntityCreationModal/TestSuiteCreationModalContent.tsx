@@ -22,23 +22,6 @@ import {StyledFormSpace} from './CreationModal.styled';
 
 const {TextArea} = Input;
 
-type AddTestSuitePayload = {
-  data?: {
-    metadata: {
-      name: string;
-    };
-    spec: {
-      content: any;
-      type: any;
-    };
-    status: {
-      // eslint-disable-next-line camelcase
-      last_execution: any;
-    };
-  };
-  error?: any;
-};
-
 type TestSuiteCreationModalFormValues = {
   name: string;
   description: string;
@@ -58,14 +41,17 @@ const TestSuiteCreationModalContent: React.FC = () => {
     addTestSuite({
       ...values,
       labels: decomposeLabels(localLabels),
-    }).then((res: AddTestSuitePayload) => {
+    }).then(res => {
       displayDefaultNotificationFlow(res, () => {
-        analyticsTrack('trackEvents', {
-          uiEvent: 'create-test-suites',
-        });
+        if ('data' in res) {
+          analyticsTrack('trackEvents', {
+            uiEvent: 'create-test-suites',
+          });
 
-        dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
-        navigate(`/test-suites/executions/${res?.data?.metadata?.name}`);
+          dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
+
+          navigate(`/test-suites/executions/${res.data.metadata.name}`);
+        }
       });
     });
   };

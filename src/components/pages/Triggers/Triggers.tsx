@@ -205,7 +205,7 @@ const Triggers: React.FC = () => {
       description={
         <>
           Listen for events and run specific testkube actions.{' '}
-          <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/triggers">
+          <ExternalLink href="https://docs.testkube.io/articles/test-triggers">
             Learn more about Triggers
           </ExternalLink>
         </>

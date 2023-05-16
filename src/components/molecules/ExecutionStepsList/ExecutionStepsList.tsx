@@ -58,27 +58,29 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
     const {
       executionName,
-      step: {execute},
+      step: executeStep,
       execution: {id},
     } = step;
 
-    if (iconSet === 'default') {
-      dispatch(
-        setRedirectTarget({
-          targetTestId: executionName,
-          targetTestExecutionId: id,
-        })
-      );
-    } else if (iconSet === 'definition') {
-      dispatch(
-        setRedirectTarget({
-          targetTestId: executionName,
-          targetTestExecutionId: null,
-        })
-      );
-    }
+    if ('execute' in executeStep) {
+      if (iconSet === 'default') {
+        dispatch(
+          setRedirectTarget({
+            targetTestId: executionName,
+            targetTestExecutionId: id,
+          })
+        );
+      } else if (iconSet === 'definition') {
+        dispatch(
+          setRedirectTarget({
+            targetTestId: executionName,
+            targetTestExecutionId: null,
+          })
+        );
+      }
 
-    return navigate(`/tests/executions/${execute?.name}/execution/${id}`);
+      return navigate(`/tests/executions/${executeStep.execute.name}/execution/${id}`);
+    }
   };
 
   const renderedDefinitionsList = useMemo(() => {
@@ -87,7 +89,6 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       const executionName = getExecutionStepName(step);
 
       const {step: stepResult, execution} = step;
-      const {execute, delay} = stepResult;
       const {
         executionResult: {status},
         testType,
@@ -95,9 +96,28 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
 
       const stepIcon = getTestExecutorIcon(executors, testType);
       const listItemKey = execution?.id || nanoid();
+      let isClickable = false;
+      let content;
 
-      const isClickable =
-        (execution?.id && iconSet === 'default') || (iconSet === 'definition' && (!delay || stepResult?.delay));
+      if ('delay' in stepResult) {
+        content = (
+          <>
+            <ExecutorIcon />
+            <ExecutionName name={`Delay - ${stepResult.delay.duration}ms`} />
+            <div />
+          </>
+        );
+      } else if ('execute' in stepResult) {
+        isClickable = (execution?.id && iconSet === 'default') || iconSet === 'definition';
+
+        content = (
+          <>
+            <ExecutorIcon type={stepIcon} />
+            <ExecutionName name={executionName || stepResult.execute.name || ''} />
+            <StyledExternalLinkIcon />
+          </>
+        );
+      }
 
       const listItemClassNames = classNames({
         clickable: isClickable,
@@ -116,20 +136,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
         >
           <StyledSpace size={15}>
             {icon ? <StatusIcon status={status} /> : null}
-            {execute || stepResult?.execute ? (
-              <>
-                <ExecutorIcon type={stepIcon} />
-                <ExecutionName name={executionName || step.step.execute?.name || ''} />
-                <StyledExternalLinkIcon />
-              </>
-            ) : null}
-            {stepResult.delay ? (
-              <>
-                <ExecutorIcon />
-                <ExecutionName name={`Delay - ${stepResult.delay?.duration}ms`} />
-                <div />
-              </>
-            ) : null}
+            {content}
           </StyledSpace>
         </StyledExecutionStepsListItem>
       );

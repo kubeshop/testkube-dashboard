@@ -5,7 +5,22 @@ import {NamePath} from 'antd/lib/form/interface';
 
 import {isEqual} from 'lodash';
 
+import {RTKResponse} from '@models/fetch';
+import {Repository} from '@models/repository';
+
+import {TooltipStatus} from '@molecules/GitFormItems/tooltipUtils';
+
 import {dummySecret} from '@utils/sources';
+
+export type ValidationState = {
+  message: string;
+  uri?: TooltipStatus;
+  token?: TooltipStatus;
+  username?: TooltipStatus;
+  branch?: TooltipStatus;
+  commit?: TooltipStatus;
+  path?: TooltipStatus;
+};
 
 const fieldsNames: string[] = ['uri', 'token', 'username', 'branch', 'path'];
 
@@ -15,16 +30,17 @@ const branchSearchString = 'branch:';
 const pathSearchString = 'path:';
 const endSearchString = ', context';
 
-const getErrorMessage = (rawErrorString: string, searchString: string) =>
-  rawErrorString.slice(
+const getErrorMessage = (rawErrorString: string, searchString: string) => {
+  return rawErrorString.slice(
     rawErrorString.indexOf(searchString) + searchString.length,
     rawErrorString.indexOf(endSearchString)
   );
+};
 
 const useValidateRepository = (
   getFieldValue: (name: NamePath) => string,
-  setValidationState: React.Dispatch<any>,
-  validateRepository: any
+  setValidationState: React.Dispatch<React.SetStateAction<ValidationState>>,
+  validateRepository: (repository: Repository) => Promise<RTKResponse<void>>
 ) => {
   const getValues = () => ({
     uri: getFieldValue('uri') || '',
@@ -37,18 +53,20 @@ const useValidateRepository = (
   });
 
   const latestRef = useLatest(getValues());
+
   const validatedRef = useRef<typeof latestRef.current>(getValues());
   const {current} = latestRef;
 
   // Speed up rendering the change
   const update = useUpdate();
+
   useInterval(() => {
     if (!isEqual(getValues(), latestRef.current)) {
       update();
     }
   }, 100);
 
-  const getValidationPayload = () => {
+  const getValidationPayload = (): Repository => {
     return {
       type: 'git',
       ...fieldsNames.reduce((acc, name) => {
@@ -65,12 +83,13 @@ const useValidateRepository = (
             usernameSecret: current.usernameSecret,
           };
         }
+
         return {...acc, [name]: current[name as keyof typeof current]};
       }, {}),
     };
   };
 
-  const handleResponse = (res: any) => {
+  const handleResponse = (res: RTKResponse<void>) => {
     if (!isEqual(latestRef.current, current)) {
       return;
     }
@@ -78,13 +97,14 @@ const useValidateRepository = (
     // Save information about the last response
     validatedRef.current = current;
 
-    if (res?.error) {
-      const errorDetail = res?.error?.data?.detail;
+    if (res && 'error' in res && 'data' in res.error) {
+      // @ts-ignore
+      const errorDetail = res.error.data?.detail;
 
       if (!errorDetail) {
         setValidationState({
           message: 'Network error',
-          uri: 'error',
+          uri: TooltipStatus.Error,
         });
         return;
       }
@@ -92,16 +112,16 @@ const useValidateRepository = (
       if (errorDetail.includes(authSearchString)) {
         setValidationState({
           message: getErrorMessage(errorDetail, authSearchString),
-          uri: 'error',
-          token: current.token ? 'error' : '',
-          username: current.username ? 'error' : '',
+          uri: TooltipStatus.Error,
+          token: current.token ? TooltipStatus.Error : TooltipStatus.None,
+          username: current.username ? TooltipStatus.Error : TooltipStatus.None,
         });
         return;
       }
       if (errorDetail.includes(uriSearchString)) {
         setValidationState({
           message: getErrorMessage(errorDetail, uriSearchString),
-          uri: 'error',
+          uri: TooltipStatus.Error,
         });
         return;
       }
@@ -109,10 +129,10 @@ const useValidateRepository = (
       if (errorDetail.includes(branchSearchString)) {
         setValidationState({
           message: getErrorMessage(errorDetail, branchSearchString),
-          uri: 'success',
-          token: current.token ? 'success' : '',
-          username: current.username ? 'success' : '',
-          branch: 'error',
+          uri: TooltipStatus.Success,
+          token: current.token ? TooltipStatus.Success : TooltipStatus.None,
+          username: current.username ? TooltipStatus.Success : TooltipStatus.None,
+          branch: TooltipStatus.Error,
         });
         return;
       }
@@ -120,26 +140,27 @@ const useValidateRepository = (
       if (errorDetail.includes(pathSearchString)) {
         setValidationState({
           message: getErrorMessage(errorDetail, pathSearchString),
-          uri: 'success',
-          token: current.token ? 'success' : '',
-          username: current.username ? 'success' : '',
-          branch: current.branch ? 'success' : '',
-          path: 'error',
+          uri: TooltipStatus.Success,
+          token: current.token ? TooltipStatus.Success : TooltipStatus.None,
+          username: current.username ? TooltipStatus.Success : TooltipStatus.None,
+          branch: current.branch ? TooltipStatus.Success : TooltipStatus.None,
+          path: TooltipStatus.Error,
         });
         return;
       }
 
       setValidationState({
         message: 'Unknown error',
-        uri: 'error',
+        uri: TooltipStatus.Error,
       });
     } else {
       setValidationState({
-        uri: 'success',
-        token: current.token ? 'success' : '',
-        username: current.username ? 'success' : '',
-        branch: current.branch ? 'success' : '',
-        path: current.path ? 'success' : '',
+        uri: TooltipStatus.Success,
+        token: current.token ? TooltipStatus.Success : TooltipStatus.None,
+        username: current.username ? TooltipStatus.Success : TooltipStatus.None,
+        branch: current.branch ? TooltipStatus.Success : TooltipStatus.None,
+        path: current.path ? TooltipStatus.Success : TooltipStatus.None,
+        message: TooltipStatus.None,
       });
     }
   };
@@ -148,7 +169,7 @@ const useValidateRepository = (
     () => {
       // Can't validate repository without URI or branch name
       if (!current.uri) {
-        setValidationState({});
+        setValidationState({message: TooltipStatus.None});
         return;
       }
 
@@ -159,16 +180,20 @@ const useValidateRepository = (
       const isUsernameChanged = current.username !== last.username;
       const isBranchChanged = current.branch !== last.branch;
       const isPathChanged = current.path !== last.path;
-      const validationState: any = {
-        uri: isUriChanged ? 'loading' : '',
-        token: (isUriChanged && current.token) || isTokenChanged ? 'loading' : '',
-        username: (isUriChanged && current.username) || isUsernameChanged ? 'loading' : '',
-        branch: (isUriChanged && current.branch) || isBranchChanged ? 'loading' : '',
-        path: ((isUriChanged || isBranchChanged) && current.path) || isPathChanged ? 'loading' : '',
+      const validationState: Record<string, TooltipStatus> = {
+        uri: isUriChanged ? TooltipStatus.Loading : TooltipStatus.None,
+        token: (isUriChanged && current.token) || isTokenChanged ? TooltipStatus.Loading : TooltipStatus.None,
+        username: (isUriChanged && current.username) || isUsernameChanged ? TooltipStatus.Loading : TooltipStatus.None,
+        branch: (isUriChanged && current.branch) || isBranchChanged ? TooltipStatus.Loading : TooltipStatus.None,
+        path:
+          ((isUriChanged || isBranchChanged) && current.path) || isPathChanged
+            ? TooltipStatus.Loading
+            : TooltipStatus.None,
       };
 
       // Update external state
-      setValidationState((prevValidationState: any) => ({
+      setValidationState(prevValidationState => ({
+        ...prevValidationState,
         uri: validationState.uri || prevValidationState.uri,
         token: validationState.token || (current.token === '' ? '' : prevValidationState.token),
         username: validationState.username || (current.username === '' ? '' : prevValidationState.username),
@@ -177,8 +202,10 @@ const useValidateRepository = (
       }));
 
       // Trigger new update
-      if (fieldsNames.some(field => validationState[field] === 'loading')) {
-        validateRepository(getValidationPayload()).then(handleResponse);
+      if (fieldsNames.some(field => validationState[field] === TooltipStatus.Loading)) {
+        validateRepository(getValidationPayload()).then(res => {
+          handleResponse(res);
+        });
       }
     },
     300,

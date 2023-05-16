@@ -1,29 +1,19 @@
 import {useState} from 'react';
 
-import {NamePath} from 'antd/lib/form/interface';
-
 import {Path, Repository, Revision, SecretFormItem} from '@molecules';
 
-import useValidateRepository from '@hooks/useValidateRepository';
+import useValidateRepository, {ValidationState} from '@hooks/useValidateRepository';
 
 import {useValidateRepositoryMutation} from '@services/repository';
 
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
+import {Props} from '../utils';
 
-type SourceEditProps = {
-  executorType: string;
-  isClearedToken?: boolean;
-  setIsClearedToken?: (value: boolean) => void;
-  isClearedUsername?: boolean;
-  setIsClearedUsername?: (value: boolean) => void;
-  getFieldValue: (name: NamePath) => string;
-};
-
-const SourceEdit: React.FC<SourceEditProps> = props => {
+const SourceEdit: React.FC<Partial<Props>> = props => {
   const {executorType, isClearedToken, setIsClearedToken, isClearedUsername, setIsClearedUsername, getFieldValue} =
-    props;
+    props as Props;
 
-  const [validationState, setValidationState] = useState<any>({
+  const [validationState, setValidationState] = useState<ValidationState>({
     message: '',
   });
 

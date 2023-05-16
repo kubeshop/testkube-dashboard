@@ -4,23 +4,37 @@ import Colors, {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
 export const MetricsBarChartWrapper = styled.div<{
-  isDetailsView?: boolean;
+  $isDetailsView?: boolean;
+}>`
+  ${props => (props.$isDetailsView ? 'min-height: 160px;' : '')}
+`;
+
+export const BarsWrapper = styled.div<{
+  $isDetailsView?: boolean;
 }>`
   overflow-x: auto;
   overflow-y: hidden;
 
   ${invisibleScroll}
 
-  ${props => (props.isDetailsView ? 'min-height: 160px;' : '')}
+  ${({$isDetailsView}) => (
+    // Ensure that axis is visible for details
+    $isDetailsView ? 'margin-left: 30px;' : ''
+  )}
 `;
 
-export const ChartWrapper = styled.div<{$wrapperWidth: number}>`
+export const ChartWrapper = styled.div<{
+  $wrapperWidth: number;
+  $isDetailsView?: boolean;
+}>`
   position: relative;
   overflow-y: hidden;
 
   ${invisibleScroll}
 
-  width: ${({$wrapperWidth}) => $wrapperWidth}px;
+  ${({$isDetailsView, $wrapperWidth}) => (
+    $isDetailsView ? '' : `width: ${$wrapperWidth}px;`
+  )}
   min-width: 100%;
 `;
 
@@ -40,14 +54,16 @@ export const AxisLabel = styled.div<{$top: number}>`
   position: absolute;
 
   top: ${({$top}) => $top}px;
+
+  pointer-events: none;
 `;
 
-export const SvgWrapper = styled.div<{isDetailsView?: boolean}>`
+export const SvgWrapper = styled.div<{$isDetailsView?: boolean}>`
   display: flex;
   align-items: flex-end;
 
-  ${props => (props.isDetailsView ? 'padding-bottom: 50px;' : '')}
-  ${props => (props.isDetailsView ? 'padding-left: 75px;' : '')}
+  ${props => (props.$isDetailsView ? 'padding-bottom: 50px;' : '')}
+  ${props => (props.$isDetailsView ? 'padding-left: 75px;' : '')}
 `;
 
 export const BarWrapper = styled.div<{$margin: number}>`

@@ -13,7 +13,8 @@ type CommitProps = {
 };
 
 const Commit: React.FC<CommitProps> = props => {
-  const {status = TooltipStatus.none, message} = props;
+  const {status = TooltipStatus.None, message} = props;
+
   return (
     <FormItem
       name="commit"

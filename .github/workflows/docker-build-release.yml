@@ -36,7 +36,7 @@ jobs:
           build-args: |
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
-          tags: ${{ github.repository }}:sha-${{ steps.github_sha.outputs.sha_short }}
+          tags: ${{ github.repository }}:${{ steps.github_sha.outputs.sha_short }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -68,4 +68,4 @@ jobs:
           token: ${{ secrets.CI_BOT_TOKEN }}
           repository: kubeshop/helm-charts
           event-type: trigger-workflow-dashboard-release
-          client-payload: '{"image_tag_dashboard": "sha-${{ steps.github_sha.outputs.sha_short }}"}'
+          client-payload: '{"image_tag_dashboard": "${{ steps.github_sha.outputs.sha_short }}"}'

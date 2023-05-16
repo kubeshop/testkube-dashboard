@@ -5,7 +5,7 @@ import {Form, Input} from 'antd';
 import {Executor} from '@models/executors';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateExecutorContainerImage} from '@redux/reducers/executorsSlice';
+import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -44,7 +44,7 @@ const ContainerImagePanel: React.FC = () => {
     }).then(res => {
       displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Container image was successfully updated.');
-        dispatch(updateExecutorContainerImage(values.image));
+        dispatch(updateCurrentExecutorData({image: values.image}));
       });
     });
   };

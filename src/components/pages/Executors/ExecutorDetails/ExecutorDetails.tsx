@@ -33,10 +33,8 @@ const ExecutorDetails: React.FC = () => {
   const isPageDisabled = !name;
 
   useEffect(() => {
-    if (executorDetails) {
-      dispatch(setCurrentExecutor(executorDetails));
-    }
-  }, [executorDetails]);
+    dispatch(setCurrentExecutor(name));
+  }, [name]);
 
   useEffect(() => {
     safeRefetch(refetch);

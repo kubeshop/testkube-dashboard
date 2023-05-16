@@ -6,7 +6,8 @@ import {ClockCircleOutlined} from '@ant-design/icons';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {Test, TestWithExecution} from '@models/test';
+import {TestSuiteStepTest} from '@models/test';
+import {TestSuite, TestSuiteStep} from '@models/testSuite';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
@@ -32,64 +33,73 @@ import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './Setti
 
 const {Option} = Select;
 
-const SettingsTests = () => {
+const SettingsTests: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {entityDetails} = useContext(EntityDetailsContext);
+  const {entityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
+
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
 
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {skip: !isClusterAvailable});
+  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
+    skip: !isClusterAvailable || !entityDetails.name,
+  });
   const {data: allTestsList = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
-  const testsData = useMemo<any[]>(() => {
-    return testsList.map((item: Test) => ({
+  const testsData: TestSuiteStepTest[] = useMemo(() => {
+    return testsList.map(item => ({
       name: item.name,
       namespace: item.namespace,
       type: getTestExecutorIcon(executors, item.type),
     }));
   }, [testsList]);
 
-  const allTestsData = useMemo(() => {
-    return allTestsList.map((item: TestWithExecution) => ({
+  const allTestsData: TestSuiteStepTest[] = useMemo(() => {
+    return allTestsList.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
       type: getTestExecutorIcon(executors, item.test.type),
     }));
   }, [allTestsList]);
 
-  const initialSteps = useMemo(
+  const initialSteps: TestSuiteStep[] = useMemo(
     () =>
-      (entityDetails?.steps || []).map((step: any) => {
-        if (step.delay) {
-          return {
-            ...step,
-            id: nanoid(),
-          };
-        }
-        return {
-          ...step,
-          id: nanoid(),
-          execute: {
-            ...step.execute,
-            type: testsData.find(item => item.name === step.execute.name)?.type,
-          },
-        };
-      }),
+      entityDetails.steps
+        ? entityDetails.steps.map(step => {
+            const id = nanoid();
+
+            if ('delay' in step) {
+              return {
+                ...step,
+                id,
+              };
+            }
+
+            return {
+              ...step,
+              id,
+              execute: {
+                ...step.execute,
+                type: testsData.find(item => item.name === step.execute.name)?.type || '',
+              },
+            };
+          })
+        : [],
     [entityDetails?.steps, testsData]
   );
 
-  const [currentSteps = initialSteps, setCurrentSteps] = useState<any[] | undefined>();
+  const [currentSteps = initialSteps, setCurrentSteps] = useState<TestSuiteStep[]>([]);
+
   const wasTouched = currentSteps !== initialSteps;
 
   useEffect(() => {
     if (currentSteps !== initialSteps) {
-      setCurrentSteps(undefined);
+      setCurrentSteps([]);
     }
   }, [initialSteps]);
 
@@ -100,9 +110,9 @@ const SettingsTests = () => {
         ...entityDetails,
         steps: currentSteps,
       },
-    }).then((res: any) => {
+    }).then(res => {
       displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `Steps were successfully updated.`);
+        notificationCall('passed', 'Steps were successfully updated.');
       });
     });
   };
@@ -128,7 +138,7 @@ const SettingsTests = () => {
     }
   };
 
-  const addDelay = (value?: number) => {
+  const addDelay = (value: number) => {
     setCurrentSteps([
       ...currentSteps,
       {
@@ -150,6 +160,7 @@ const SettingsTests = () => {
     if (!scrollRef.current) {
       return;
     }
+
     // @ts-ignore
     scrollRef.current.scrollIntoView({behavior: 'smooth'});
   };
@@ -166,16 +177,17 @@ const SettingsTests = () => {
         footerText={
           <>
             Learn more about{' '}
-            <ExternalLink href="https://kubeshop.github.io/testkube/using-testkube/test-suites/testsuites-creating/">
+            <ExternalLink href="https://docs.testkube.io/using-testkube/test-suites/testsuites-creating/">
               Tests in a test suite
             </ExternalLink>
           </>
         }
         onConfirm={saveSteps}
-        onCancel={() => setCurrentSteps(undefined)}
+        onCancel={() => setCurrentSteps([])}
         isButtonsDisabled={!wasTouched}
         isEditable={mayEdit}
         enabled={mayEdit}
+        forceEnableButtons={wasTouched}
       >
         <>
           {currentSteps?.length === 0 ? (
@@ -218,7 +230,7 @@ const SettingsTests = () => {
                   <Text className="regular middle">Delay</Text>
                 </StyledOptionWrapper>
               </Option>
-              {allTestsData.map((item: any) => (
+              {allTestsData.map(item => (
                 <Option value={JSON.stringify(item)} key={item.name}>
                   <StyledOptionWrapper>
                     <ExecutorIcon type={item.type} />

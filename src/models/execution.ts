@@ -22,7 +22,6 @@ export type ExecutionResult = {
   outputType?: ExecutionResultOutputTypeEnum;
   errorMessage?: string;
   steps?: ExecutionStepResult[];
-  reports: any;
 };
 
 export type Execution = {

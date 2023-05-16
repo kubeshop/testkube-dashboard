@@ -1,11 +1,13 @@
 import {useContext, useEffect} from 'react';
 
-import {Form, Input} from 'antd';
+import {Form} from 'antd';
 
 import {Executor} from '@models/executors';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateExecutorCommand} from '@redux/reducers/executorsSlice';
+import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
+
+import {CommandInput} from '@atoms';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -43,7 +45,7 @@ const Command: React.FC = () => {
     }).then(res => {
       displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Command was successfully updated.');
-        dispatch(updateExecutorCommand(values.command));
+        dispatch(updateCurrentExecutorData({command: values.command!.split(' ')}));
       });
     });
   };
@@ -75,7 +77,7 @@ const Command: React.FC = () => {
         enabled={mayEdit}
       >
         <Form.Item label="Command" name="command" style={{flex: 1, marginBottom: '0'}}>
-          <Input placeholder="Command" />
+          <CommandInput />
         </Form.Item>
       </ConfigurationCard>
     </Form>

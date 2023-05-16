@@ -46,19 +46,19 @@ const AddSourceModal: React.FC = () => {
       repository: {
         type: 'git',
         uri,
-        ...(username ? {usernameSecret: {name: username}} : {}),
-        ...(token ? {tokenSecret: {name: token}} : {}),
+        username: username || undefined,
+        token: token || undefined,
       },
       namespace,
     };
 
-    createSource(body)
-      .unwrap()
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
+    createSource(body).then(res => {
+      displayDefaultNotificationFlow(res, () => {
+        if ('data' in res) {
           navigate(`/sources/${res.data.metadata.name}`);
-        });
+        }
       });
+    });
   };
 
   return (

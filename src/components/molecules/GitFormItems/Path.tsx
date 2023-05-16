@@ -5,7 +5,7 @@ import {FormItem} from '@custom-antd';
 import FormItemLabel from './FormItemLabel';
 import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 
-export const pathPlaceholders: {[key: string]: string} = {
+export const pathPlaceholders: Record<string, string> = {
   postman: 'tests/postman/collection.json',
   cypress: 'tests/cypress',
   curl: 'tests/curl/test.json',
@@ -27,7 +27,7 @@ type PathProps = {
 };
 
 const Path: React.FC<PathProps> = props => {
-  const {testType, status = TooltipStatus.none, message} = props;
+  const {testType, status = TooltipStatus.None, message} = props;
 
   return (
     <FormItem
