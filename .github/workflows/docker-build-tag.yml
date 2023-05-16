@@ -102,7 +102,7 @@ jobs:
           # Check if release branch exists in helm-charts repository
           REPO_OWNER=kubeshop
           REPO_NAME=helm-charts
-          RELEASE_BRANCH_NAME=release/dashboard/$RELEASE_VERSION
+          RELEASE_BRANCH_NAME=release/$SERVICE/$RELEASE_VERSION
           echo $RELEASE_VERSION
           STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H "${AUTH_HEADER}" "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/branches/${RELEASE_BRANCH_NAME}")
 
