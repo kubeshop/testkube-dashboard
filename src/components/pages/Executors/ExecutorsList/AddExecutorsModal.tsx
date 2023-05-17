@@ -1,17 +1,19 @@
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 
 import {Form} from 'antd';
+
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input} from '@custom-antd';
 
-import {Hint} from '@molecules';
+import {Hint, NotificationContent} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useCreateExecutorMutation} from '@services/executors';
 
@@ -34,6 +36,8 @@ const AddExecutorsModal: React.FC = () => {
 
   const namespace = useAppSelector(selectNamespace);
 
+  const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
+
   const onFinish = (values: AddExecutorsFormValues) => {
     const body = {
       ...values,
@@ -45,17 +49,28 @@ const AddExecutorsModal: React.FC = () => {
     delete body.type;
 
     createExecutor(body).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        if ('data' in res) {
-          navigate(`/executors/${res.data.metadata.name}`);
+      defaultNotificationFlow(
+        res,
+        () => {
+          if ('data' in res) {
+            navigate(`/executors/${res.data.metadata.name}`);
+          }
+        },
+        err => {
+          setError(err);
         }
-      });
+      );
     });
   };
 
   return (
     <AddExecutorsModalContainer>
       <Form style={{flex: 1}} layout="vertical" onFinish={onFinish} form={form}>
+        {error ? (
+          <div style={{marginBottom: '20px'}}>
+            <NotificationContent status="failed" message={error.message} title={error.title} />
+          </div>
+        ) : null}
         <Form.Item
           label="Name"
           required

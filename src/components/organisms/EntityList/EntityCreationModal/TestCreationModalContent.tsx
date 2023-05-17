@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from 'react';
 import {Form} from 'antd';
 
 import {MetadataResponse, RTKResponse} from '@models/fetch';
+import {ErrorNotificationConfig} from '@models/notifications';
 import {Test} from '@models/test';
 
 import {useAppSelector} from '@redux/hooks';
@@ -14,7 +15,7 @@ import {Hint} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 
 import {externalLinks} from '@utils/externalLinks';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
@@ -33,6 +34,7 @@ const TestCreationModalContent: React.FC = () => {
   const testSources = useAppSelector(selectSources);
 
   const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);
+  const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
   useEffect(() => {
     const selectedExecutor = executors.find(executor =>
@@ -64,23 +66,35 @@ const TestCreationModalContent: React.FC = () => {
   }, [form.getFieldValue('testType')]);
 
   const onSuccess = (res: RTKResponse<MetadataResponse<Test>>) => {
-    displayDefaultNotificationFlow(res, () => {
-      if ('data' in res) {
-        analyticsTrack('trackEvents', {
-          type: res.data.spec?.type,
-          uiEvent: 'create-tests',
-        });
+    defaultNotificationFlow(
+      res,
+      () => {
+        if ('data' in res) {
+          analyticsTrack('trackEvents', {
+            type: res.data.spec?.type,
+            uiEvent: 'create-tests',
+          });
 
-        dispatch(setRedirectTarget({targetTestId: res.data.metadata.name}));
+          dispatch(setRedirectTarget({targetTestId: res.data.metadata.name}));
 
-        navigate(`/tests/executions/${res.data.metadata.name}`);
+          navigate(`/tests/executions/${res.data.metadata.name}`);
+        }
+      },
+      err => {
+        setError(err);
       }
-    });
+    );
   };
 
   return (
     <TestCreationModalWrapper>
-      <TestCreationForm form={form} testSources={testSources} executors={executors} onSuccess={onSuccess} />
+      <TestCreationForm
+        form={form}
+        testSources={testSources}
+        executors={executors}
+        onSuccess={onSuccess}
+        error={error}
+      />
       <Hint {...hintConfig} />
     </TestCreationModalWrapper>
   );

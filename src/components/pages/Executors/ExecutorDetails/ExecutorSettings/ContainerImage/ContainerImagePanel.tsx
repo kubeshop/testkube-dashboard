@@ -10,7 +10,7 @@ import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -33,8 +33,10 @@ const ContainerImagePanel: React.FC = () => {
 
   const [form] = Form.useForm<ContainerImageFormFields>();
 
-  const onSubmit = (values: ContainerImageFormFields) => {
-    updateCustomExecutor({
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
+
+    return updateCustomExecutor({
       executorId: name,
       body: {
         name,
@@ -42,7 +44,7 @@ const ContainerImagePanel: React.FC = () => {
         ...values,
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', 'Container image was successfully updated.');
         dispatch(updateCurrentExecutorData({image: values.image}));
       });
@@ -56,20 +58,11 @@ const ContainerImagePanel: React.FC = () => {
   }, [image]);
 
   return (
-    <Form
-      form={form}
-      name="general-settings-name-type"
-      initialValues={{image}}
-      layout="vertical"
-      onFinish={onSubmit}
-      disabled={!mayEdit}
-    >
+    <Form form={form} name="general-settings-name-type" initialValues={{image}} layout="vertical" disabled={!mayEdit}>
       <ConfigurationCard
         title="Container image"
-        description="Define the image you want to use for this executor. We defer by default to Dockerhub – but you can also insert a URL to your very own image"
-        onConfirm={() => {
-          form.submit();
-        }}
+        description="Define the image you want to use for this executor. We defer by default to Dockerhub - but you can also insert a URL to your very own image"
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}

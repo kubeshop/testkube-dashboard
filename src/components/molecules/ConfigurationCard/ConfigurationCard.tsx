@@ -1,11 +1,14 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useState} from 'react';
 
 import {Form} from 'antd';
+
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import {Button, Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
+import {NotificationContent} from '../Notification';
 import {
   StyledChildren,
   StyledContainer,
@@ -13,6 +16,7 @@ import {
   StyledFooterButtonsContainer,
   StyledFooterText,
   StyledHeader,
+  StyledNotificationContainer,
 } from './ConfigurationCard.styled';
 
 type ConfigurationCardProps = {
@@ -20,7 +24,7 @@ type ConfigurationCardProps = {
   description: string | ReactElement;
   isWarning?: boolean;
   footerText?: React.ReactNode;
-  onConfirm?: () => void;
+  onConfirm?: () => Promise<ErrorNotificationConfig | null> | void;
   confirmButtonText?: string;
   onCancel?: () => void;
   isButtonsDisabled?: boolean;
@@ -45,6 +49,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     isEditable = true,
     enabled = true,
   } = props;
+  const [error, setError] = useState<ErrorNotificationConfig | null>(null);
 
   return (
     <StyledContainer isWarning={isWarning}>
@@ -56,7 +61,16 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
           {description}
         </Text>
       </StyledHeader>
-      {children ? <StyledChildren $isActionsVisible={enabled || !isEditable}>{children}</StyledChildren> : null}
+      {children ? (
+        <>
+          {error ? (
+            <StyledNotificationContainer>
+              <NotificationContent status="failed" message={error.message} title={error.title} />
+            </StyledNotificationContainer>
+          ) : null}
+          <StyledChildren $isActionsVisible={enabled || !isEditable}>{children}</StyledChildren>
+        </>
+      ) : null}
       {(enabled && onConfirm) || footerText ? (
         <StyledFooter>
           {footerText && (
@@ -77,10 +91,31 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
 
                 return (
                   <StyledFooterButtonsContainer>
-                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || disabled}>
+                    <Button
+                      onClick={() => {
+                        onCancel?.();
+                        setError(null);
+                      }}
+                      $customType="secondary"
+                      hidden={!onCancel || disabled}
+                    >
                       Cancel
                     </Button>
-                    <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={disabled} hidden={!onConfirm}>
+                    <Button
+                      onClick={() => {
+                        const confirmResult = onConfirm?.();
+
+                        if (typeof confirmResult === 'object' && typeof confirmResult.then === 'function') {
+                          confirmResult.then((res: any) => {
+                            setError(res);
+                          });
+                        }
+                      }}
+                      $customType={isWarning ? 'warning' : 'primary'}
+                      disabled={disabled}
+                      hidden={!onConfirm}
+                      htmlType="submit"
+                    >
                       {confirmButtonText}
                     </Button>
                   </StyledFooterButtonsContainer>

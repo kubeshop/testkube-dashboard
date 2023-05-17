@@ -12,7 +12,7 @@ import {Button} from '@custom-antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -37,8 +37,10 @@ const Arguments: React.FC = () => {
 
   const [form] = Form.useForm<ArgumentsFormFields>();
 
-  const onSubmit = (values: ArgumentsFormFields) => {
-    updateCustomExecutor({
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
+
+    return updateCustomExecutor({
       executorId: executorName,
       body: {
         ...executor,
@@ -46,7 +48,7 @@ const Arguments: React.FC = () => {
         args: values.arguments,
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', 'Arguments were successfully updated.');
         dispatch(updateCurrentExecutorData({args: values.arguments}));
       });
@@ -65,15 +67,12 @@ const Arguments: React.FC = () => {
       name="executor-settings-arguments-list"
       initialValues={{arguments: args}}
       layout="vertical"
-      onFinish={onSubmit}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Arguments for your command"
         description="Define the arguments for your command"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}

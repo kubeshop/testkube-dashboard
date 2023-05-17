@@ -10,7 +10,7 @@ import {Test} from '@models/test';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
-import {LabelsSelect} from '@molecules';
+import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {
@@ -33,6 +33,8 @@ import {
 
 import {useAddTestMutation} from '@services/tests';
 
+import {ErrorNotificationConfig} from '@src/models/notifications';
+
 import {LabelsWrapper, StyledFormSpace} from '../CreationModal.styled';
 
 type TestCreationFormValues = {
@@ -47,6 +49,7 @@ type TestCreationFormProps = {
   onSuccess: (res: RTKResponse<MetadataResponse<Test>>) => void;
   testSources: SourceWithRepository[];
   executors: Executor[];
+  error?: ErrorNotificationConfig;
 };
 
 const additionalFields: SourceFields = {
@@ -57,7 +60,7 @@ const additionalFields: SourceFields = {
 };
 
 const TestCreationForm: React.FC<TestCreationFormProps> = props => {
-  const {form, testSources, executors, onSuccess} = props;
+  const {form, testSources, executors, onSuccess, error} = props;
 
   const remappedExecutors = remapExecutors(executors);
   const remappedCustomTestSources = remapTestSources(testSources);
@@ -90,6 +93,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
     <Form form={form} layout="vertical" name="test-creation" onFinish={onSave} style={{flex: 1}} labelAlign="right">
       <StyledFormSpace size={24} direction="vertical">
         <Text className="regular big">Test details</Text>
+        {error ? <NotificationContent status="failed" message={error.message} title={error.title} /> : null}
         <FormItem
           name="name"
           label="Name"

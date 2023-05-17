@@ -14,5 +14,5 @@ export const StyledNotificationHeader = styled.div`
 `;
 
 export const StyledNotificationMessage = styled.div`
-  margin-top: 20px;
+  margin-top: 8px;
 `;

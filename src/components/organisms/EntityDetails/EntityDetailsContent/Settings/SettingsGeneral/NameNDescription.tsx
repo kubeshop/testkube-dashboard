@@ -7,7 +7,7 @@ import {FormItem, FullWidthSpace} from '@custom-antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -38,8 +38,10 @@ const NameNDescription: React.FC = () => {
   const name = entityDetails?.name;
   const description = entityDetails?.description;
 
-  const onSave = (values: NameNDescriptionFormValues) => {
-    updateEntity({
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateEntity({
       id: entityDetails.name,
       data: {
         ...entityDetails,
@@ -50,26 +52,18 @@ const NameNDescription: React.FC = () => {
         },
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
       });
     });
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onSave}
-      name="general-settings-name-description"
-      initialValues={{name, description}}
-      disabled={!mayEdit}
-    >
+    <Form form={form} name="general-settings-name-description" initialValues={{name, description}} disabled={!mayEdit}>
       <ConfigurationCard
         title={`${uppercaseFirstSymbol(namingMap[entity])} name & description`}
         description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}

@@ -4,7 +4,7 @@ import {Space} from 'antd';
 
 import {notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -19,14 +19,14 @@ const SettingsTest: React.FC = () => {
   const [updateTestMutation] = useUpdateTestMutation();
 
   const updateTest = (data: Object) => {
-    updateTestMutation({
+    return updateTestMutation({
       id: entityDetails.name,
       data: {
         ...entityDetails,
         ...data,
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', `Test settings was successfully updated.`);
       });
     });

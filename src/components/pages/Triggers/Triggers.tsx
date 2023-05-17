@@ -23,7 +23,7 @@ import {PageBlueprint} from '@organisms';
 
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
@@ -175,7 +175,9 @@ const Triggers: React.FC = () => {
     };
   };
 
-  const onSave = (values: TriggersFormValues) => {
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
     const body = values.triggers.map(trigger => {
       const [action, execution] = trigger.action.split(' ');
 
@@ -193,8 +195,8 @@ const Triggers: React.FC = () => {
       return triggerPayload;
     });
 
-    updateTriggers(body).then(res => {
-      displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
+    return updateTriggers(body).then(res => {
+      return defaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
     });
   };
 
@@ -215,10 +217,12 @@ const Triggers: React.FC = () => {
           title="Cluster events"
           description="Testkube can listen to cluster events and trigger specific actions. Events and actions are related to labelled resources."
           onConfirm={() => {
-            form
+            return form
               .validateFields()
-              .then(() => form.submit())
-              .catch(() => notificationCall('failed', 'Validate you triggers data, please'));
+              .then(onSave)
+              .catch(() => {
+                return {title: 'Invalid triggers data'};
+              });
           }}
           onCancel={() => {
             setDefaultTriggersData(triggersList || []);

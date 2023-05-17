@@ -10,7 +10,7 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
 import {digits} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -32,10 +32,11 @@ const Timeout: React.FC = () => {
 
   const [updateTest] = useUpdateTestMutation();
 
-  const onSave = (values: TimeoutForm) => {
+  const onSave = () => {
+    const values = form.getFieldsValue();
     const {activeDeadlineSeconds} = values;
 
-    updateTest({
+    return updateTest({
       id: name,
       data: {
         ...entityDetails,
@@ -45,7 +46,7 @@ const Timeout: React.FC = () => {
         },
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', 'Test Timeout was successfully updated.');
       });
     });
@@ -54,7 +55,6 @@ const Timeout: React.FC = () => {
   return (
     <Form
       form={form}
-      onFinish={onSave}
       name="general-settings-name-description"
       initialValues={{activeDeadlineSeconds: executionRequest?.activeDeadlineSeconds}}
       disabled={!mayEdit}
@@ -62,9 +62,7 @@ const Timeout: React.FC = () => {
       <ConfigurationCard
         title="Timeout"
         description="Define the timeout in seconds after which this test will fail."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}

@@ -9,7 +9,7 @@ import {Option} from '@models/form';
 import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -35,14 +35,14 @@ const Labels: React.FC = () => {
   const entityLabels = entityDetails?.labels || {};
 
   const onSave = () => {
-    updateEntity({
+    return updateEntity({
       id: entityDetails.name,
       data: {
         ...entityDetails,
         labels: decomposeLabels(localLabels),
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
         setWasTouched(false);
       });

@@ -11,7 +11,7 @@ import {CommandInput} from '@atoms';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -34,8 +34,10 @@ const Command: React.FC = () => {
 
   const [form] = Form.useForm<CommandFormFields>();
 
-  const onSubmit = (values: CommandFormFields) => {
-    updateCustomExecutor({
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
+
+    return updateCustomExecutor({
       executorId: name,
       body: {
         name,
@@ -43,7 +45,7 @@ const Command: React.FC = () => {
         command: values.command.split(' '),
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', 'Command was successfully updated.');
         dispatch(updateCurrentExecutorData({command: values.command!.split(' ')}));
       });
@@ -62,15 +64,12 @@ const Command: React.FC = () => {
       name="general-settings-name-type"
       initialValues={{command: command?.join(' ')}}
       layout="vertical"
-      onFinish={onSubmit}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Command"
         description="Define the command your image needs to run"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}

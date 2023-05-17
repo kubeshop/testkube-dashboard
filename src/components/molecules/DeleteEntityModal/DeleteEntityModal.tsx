@@ -11,7 +11,7 @@ import {notificationCall} from '@molecules';
 
 import usePressEnter from '@hooks/usePressEnter';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
@@ -45,17 +45,23 @@ const DeleteEntityModal: React.FC<{
 
   const onDelete = () => {
     deleteEntity(idToDelete || name).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
+      defaultNotificationFlow(
+        res,
+        () => {
+          notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
 
-        setModalOpen(false);
+          setModalOpen(false);
 
-        if (onConfirm) {
-          onConfirm();
-        } else {
-          navigate(defaultStackRoute);
+          if (onConfirm) {
+            onConfirm();
+          } else {
+            navigate(defaultStackRoute);
+          }
+        },
+        error => {
+          notificationCall('failed', error.title, error.message);
         }
-      });
+      );
     });
   };
 

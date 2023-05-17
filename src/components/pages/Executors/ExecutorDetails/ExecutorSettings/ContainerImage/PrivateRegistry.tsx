@@ -7,7 +7,7 @@ import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -32,9 +32,11 @@ const PrivateRegistry: React.FC = () => {
 
   const [form] = Form.useForm<PrivateRegistryFormFields>();
 
-  const onSubmit = (values: PrivateRegistryFormFields) => {
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
     const newImagePullSecrets = values.privateRegistry ? [{name: values.privateRegistry}] : [];
-    updateCustomExecutor({
+
+    return updateCustomExecutor({
       executorId: name,
       body: {
         name,
@@ -42,7 +44,7 @@ const PrivateRegistry: React.FC = () => {
         imagePullSecrets: newImagePullSecrets,
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         dispatch(updateCurrentExecutorData({imagePullSecrets: newImagePullSecrets}));
         notificationCall('passed', 'Private registry was successfully updated.');
       });
@@ -61,25 +63,18 @@ const PrivateRegistry: React.FC = () => {
       name="general-settings-name-type"
       initialValues={{privateRegistry}}
       layout="vertical"
-      onFinish={onSubmit}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Private registry"
         description="In case your image is on a private registry please add the name of your credential secret."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}
         enabled={mayEdit}
       >
-        <Form.Item
-          label="Secret ref name"
-          name="privateRegistry"
-          style={{flex: 1, marginBottom: '0'}}
-        >
+        <Form.Item label="Secret ref name" name="privateRegistry" style={{flex: 1, marginBottom: '0'}}>
           <Input placeholder="Secret ref name" />
         </Form.Item>
       </ConfigurationCard>

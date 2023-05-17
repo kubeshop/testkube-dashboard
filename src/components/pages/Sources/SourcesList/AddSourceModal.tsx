@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {Input as AntdInput, Form} from 'antd';
 
@@ -11,15 +11,17 @@ import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {Button, Input} from '@custom-antd';
 
-import {Hint} from '@molecules';
+import {Hint, NotificationContent} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useCreateSourceMutation} from '@services/sources';
 
 import {DashboardContext} from '@contexts';
+
+import {ErrorNotificationConfig} from '@src/models/notifications';
 
 import {AddSourceModalContainer} from './SourcesList.styled';
 
@@ -38,6 +40,8 @@ const AddSourceModal: React.FC = () => {
 
   const namespace = useAppSelector(selectNamespace);
 
+  const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
+
   const onFinish = (values: AddSourceFormValues) => {
     const {name, uri, token, username} = values;
 
@@ -53,17 +57,28 @@ const AddSourceModal: React.FC = () => {
     };
 
     createSource(body).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        if ('data' in res) {
-          navigate(`/sources/${res.data.metadata.name}`);
+      defaultNotificationFlow(
+        res,
+        () => {
+          if ('data' in res) {
+            navigate(`/sources/${res.data.metadata.name}`);
+          }
+        },
+        err => {
+          setError(err);
         }
-      });
+      );
     });
   };
 
   return (
     <AddSourceModalContainer>
       <Form style={{flex: 1}} layout="vertical" onFinish={onFinish} form={form} name="add-source-form">
+        {error ? (
+          <div style={{marginBottom: '20px'}}>
+            <NotificationContent status="failed" message={error.message} title={error.title} />
+          </div>
+        ) : null}
         <Form.Item
           label="Name"
           required

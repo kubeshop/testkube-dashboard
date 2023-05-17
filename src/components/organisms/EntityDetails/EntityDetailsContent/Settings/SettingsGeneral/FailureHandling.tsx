@@ -6,7 +6,7 @@ import {Checkbox, FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -42,8 +42,10 @@ const FailureHandling: React.FC = () => {
 
   const negativeTest = entityDetails?.executionRequest?.negativeTest;
 
-  const onSave = (values: FailureHandlingFormValues) => {
-    updateTest({
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateTest({
       id: entityDetails.name,
       data: {
         ...entityDetails,
@@ -53,26 +55,18 @@ const FailureHandling: React.FC = () => {
         },
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', `Test was successfully updated.`);
       });
     });
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onSave}
-      initialValues={{negativeTest}}
-      name="general-settings-failure-handling"
-      disabled={!mayEdit}
-    >
+    <Form form={form} initialValues={{negativeTest}} name="general-settings-failure-handling" disabled={!mayEdit}>
       <ConfigurationCard
         title="Failure handling"
         description="Define how Testkube should treat occurring errors."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}

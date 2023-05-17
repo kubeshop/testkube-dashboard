@@ -10,7 +10,7 @@ import {FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
@@ -39,17 +39,17 @@ const Schedule: React.FC = () => {
   const [wasTouched, setWasTouched] = useState(false);
 
   const onSave = () => {
-    updateEntity({
+    return updateEntity({
       id: name,
       data: {
         ...entityDetails,
         schedule: cronString,
       },
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      setWasTouched(false);
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
       });
-      setWasTouched(false);
     });
   };
 

@@ -11,7 +11,7 @@ import {Button, FullWidthSpace, Text} from '@custom-antd';
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -44,7 +44,8 @@ const Arguments: React.FC = () => {
   const [isPrettified, setPrettifiedState] = useState(true);
   const [isButtonsDisabled, setIsButtonsDisabled] = useState(true);
 
-  const onSaveForm = (values: ArgumentsFormValues) => {
+  const onSaveForm = () => {
+    const values = form.getFieldsValue();
     const argVal = !values.args.length ? [] : values.args.trim().split('\n');
 
     const successRecord = {
@@ -55,11 +56,11 @@ const Arguments: React.FC = () => {
       },
     };
 
-    updateTest({
+    return updateTest({
       id: entityDetails.name,
       data: successRecord,
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+      return defaultNotificationFlow(res, () => {
         notificationCall('passed', 'Variables were successfully updated.');
       });
     });
@@ -133,7 +134,6 @@ const Arguments: React.FC = () => {
       form={form}
       name="general-settings-name-description"
       onChange={onChange}
-      onFinish={onSaveForm}
       initialValues={{args: argsValue}}
       disabled={!mayEdit}
     >
@@ -146,9 +146,7 @@ const Arguments: React.FC = () => {
           </>
         }
         isButtonsDisabled={isButtonsDisabled}
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSaveForm}
         onCancel={() => {
           setArgsValue(entityArgs.join(' '));
           form.setFieldValue(['args'], entityArgs.join(' '));

@@ -3,16 +3,17 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Form, Input} from 'antd';
 
 import {Option} from '@models/form';
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
-import {LabelsSelect} from '@molecules';
+import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {defaultNotificationFlow} from '@utils/notification';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
@@ -37,22 +38,30 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
+  const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
+
   const onFinish = (values: TestSuiteCreationModalFormValues) => {
     addTestSuite({
       ...values,
       labels: decomposeLabels(localLabels),
     }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        if ('data' in res) {
-          analyticsTrack('trackEvents', {
-            uiEvent: 'create-test-suites',
-          });
+      defaultNotificationFlow(
+        res,
+        () => {
+          if ('data' in res) {
+            analyticsTrack('trackEvents', {
+              uiEvent: 'create-test-suites',
+            });
 
-          dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
+            dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
 
-          navigate(`/test-suites/executions/${res.data.metadata.name}`);
+            navigate(`/test-suites/executions/${res.data.metadata.name}`);
+          }
+        },
+        err => {
+          setError(err);
         }
-      });
+      );
     });
   };
 
@@ -71,6 +80,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
     >
       <StyledFormSpace size={24} direction="vertical">
         <Text className="regular big">Test suite details</Text>
+        {error ? <NotificationContent status="failed" message={error.message} title={error.title} /> : null}
         <FormItem name="name" rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}>
           <Input placeholder="Name" />
         </FormItem>
