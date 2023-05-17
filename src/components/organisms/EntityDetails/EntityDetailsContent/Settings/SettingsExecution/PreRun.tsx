@@ -4,6 +4,8 @@ import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
 
+import {FormItem, FullWidthSpace} from '@custom-antd';
+
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -13,8 +15,6 @@ import {useUpdateTestMutation} from '@services/tests';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext} from '@contexts';
-
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 type PreRunFormValues = {
   command: string;
@@ -70,11 +70,11 @@ const PreRun: React.FC = () => {
           form.resetFields();
         }}
       >
-        <StyledSpace size={32} direction="vertical">
-          <StyledFormItem name="command" label="Command">
+        <FullWidthSpace size={32} direction="vertical">
+          <FormItem name="command" label="Command">
             <CommandInput />
-          </StyledFormItem>
-        </StyledSpace>
+          </FormItem>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );
