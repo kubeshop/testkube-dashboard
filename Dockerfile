@@ -19,7 +19,7 @@ RUN npm run build
 
 FROM $TARGET
 RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/nginx.conf /etc/nginx/nginx.conf.tmpl
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 8080
 WORKDIR /usr/share/nginx/html
@@ -31,4 +31,9 @@ RUN chmod a+w ./env-config.js
 
 
 
-CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
+CMD [ \
+  "/bin/sh", \
+  "-c", \
+  "/usr/share/nginx/html/env.sh && \
+   envsubst '$ENABLE_IPV6' < /etc/nginx/nginx.conf.tmpl | sed -e '1h;2,$H;$!d;g' -e 's/# cut true.*# end//g' > /etc/nginx/nginx.conf && \
+   nginx -g \"daemon off;\"" ]
