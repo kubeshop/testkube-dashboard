@@ -82,7 +82,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
           )}
           {enabled ? (
             <Form.Item noStyle shouldUpdate>
-              {({isFieldsTouched, getFieldsValue}) => {
+              {({isFieldsTouched, getFieldsValue, validateFields}) => {
                 let disabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
 
                 if (forceEnableButtons) {
@@ -103,13 +103,15 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                     </Button>
                     <Button
                       onClick={() => {
-                        const confirmResult = onConfirm?.();
+                        validateFields?.().then(() => {
+                          const confirmResult = onConfirm?.();
 
-                        if (typeof confirmResult === 'object' && typeof confirmResult.then === 'function') {
-                          confirmResult.then((res: any) => {
-                            setError(res);
-                          });
-                        }
+                          if (typeof confirmResult === 'object' && typeof confirmResult.then === 'function') {
+                            confirmResult.then((res: any) => {
+                              setError(res);
+                            });
+                          }
+                        });
                       }}
                       $customType={isWarning ? 'warning' : 'primary'}
                       disabled={disabled}
