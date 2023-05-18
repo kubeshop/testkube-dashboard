@@ -10,7 +10,7 @@ import {FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import Colors from '@styles/Colors';
@@ -47,7 +47,7 @@ const Schedule: React.FC = () => {
       },
     }).then(res => {
       setWasTouched(false);
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
       });
     });

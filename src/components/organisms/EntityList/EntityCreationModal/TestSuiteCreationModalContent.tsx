@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
@@ -12,8 +12,10 @@ import {Button, FormItem, Text} from '@custom-antd';
 import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
+import useInViewport from '@hooks/useInViewport';
+
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
@@ -40,14 +42,16 @@ const TestSuiteCreationModalContent: React.FC = () => {
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
+
   const onFinish = (values: TestSuiteCreationModalFormValues) => {
     addTestSuite({
       ...values,
       labels: decomposeLabels(localLabels),
-    }).then(res => {
-      defaultNotificationFlow(
-        res,
-        () => {
+    })
+      .then(res => {
+        displayDefaultNotificationFlow(res, () => {
           if ('data' in res) {
             analyticsTrack('trackEvents', {
               uiEvent: 'create-test-suites',
@@ -57,12 +61,15 @@ const TestSuiteCreationModalContent: React.FC = () => {
 
             navigate(`/test-suites/executions/${res.data.metadata.name}`);
           }
-        },
-        err => {
-          setError(err);
+        });
+      })
+      .catch(err => {
+        setError(err);
+
+        if (!inTopInViewport && topRef && topRef.current) {
+          topRef.current.scrollIntoView();
         }
-      );
-    });
+      });
   };
 
   useEffect(() => {
@@ -78,6 +85,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
       onFinish={onFinish}
       initialValues={{name: '', description: '', labels: []}}
     >
+      <div ref={topRef} />
       <StyledFormSpace size={24} direction="vertical">
         <Text className="regular big">Test suite details</Text>
         {error ? <NotificationContent status="failed" message={error.message} title={error.title} /> : null}

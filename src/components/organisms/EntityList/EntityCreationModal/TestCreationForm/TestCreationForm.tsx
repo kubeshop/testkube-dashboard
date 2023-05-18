@@ -1,10 +1,11 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 
 import {Form, FormInstance, Input, Select} from 'antd';
 
 import {Executor} from '@models/executors';
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Option} from '@models/form';
+import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 import {Test} from '@models/test';
 
@@ -21,6 +22,8 @@ import {
 } from '@organisms/TestConfigurationForm';
 import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
+import useInViewport from '@hooks/useInViewport';
+
 import {remapExecutors} from '@utils/executors';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {
@@ -32,8 +35,6 @@ import {
 } from '@utils/sources';
 
 import {useAddTestMutation} from '@services/tests';
-
-import {ErrorNotificationConfig} from '@src/models/notifications';
 
 import {LabelsWrapper, StyledFormSpace} from '../CreationModal.styled';
 
@@ -49,7 +50,6 @@ type TestCreationFormProps = {
   onSuccess: (res: RTKResponse<MetadataResponse<Test>>) => void;
   testSources: SourceWithRepository[];
   executors: Executor[];
-  error?: ErrorNotificationConfig;
 };
 
 const additionalFields: SourceFields = {
@@ -60,14 +60,18 @@ const additionalFields: SourceFields = {
 };
 
 const TestCreationForm: React.FC<TestCreationFormProps> = props => {
-  const {form, testSources, executors, onSuccess, error} = props;
+  const {form, testSources, executors, onSuccess} = props;
 
   const remappedExecutors = remapExecutors(executors);
   const remappedCustomTestSources = remapTestSources(testSources);
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
+  const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
   const [addTest, {isLoading}] = useAddTestMutation();
+
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
 
   const onSave = (values: TestCreationFormValues) => {
     const {testSource, testType} = values;
@@ -80,9 +84,17 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
       ...getCustomSourceField(testSource),
     };
 
-    addTest(requestBody).then(res => {
-      onSuccess(res);
-    });
+    addTest(requestBody)
+      .then(res => {
+        onSuccess(res);
+      })
+      .catch(err => {
+        setError(err);
+
+        if (!inTopInViewport && topRef && topRef.current) {
+          topRef.current.scrollIntoView();
+        }
+      });
   };
 
   const selectedExecutor = useMemo(() => {
@@ -91,6 +103,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
   return (
     <Form form={form} layout="vertical" name="test-creation" onFinish={onSave} style={{flex: 1}} labelAlign="right">
+      <div ref={topRef} />
       <StyledFormSpace size={24} direction="vertical">
         <Text className="regular big">Test details</Text>
         {error ? <NotificationContent status="failed" message={error.message} title={error.title} /> : null}

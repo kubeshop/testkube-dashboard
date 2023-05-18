@@ -20,7 +20,7 @@ import {Text, Title} from '@custom-antd';
 import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
@@ -112,7 +112,7 @@ const SettingsTests: React.FC = () => {
         steps: currentSteps,
       },
     }).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Steps were successfully updated.');
       });
     });

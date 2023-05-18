@@ -7,7 +7,7 @@ import {FormItem, FullWidthSpace} from '@custom-antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -52,7 +52,7 @@ const NameNDescription: React.FC = () => {
         },
       },
     }).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
       });
     });

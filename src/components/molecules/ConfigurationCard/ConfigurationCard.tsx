@@ -1,10 +1,12 @@
-import React, {ReactElement, useState} from 'react';
+import React, {ReactElement, useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {Button, Text} from '@custom-antd';
+
+import useInViewport from '@hooks/useInViewport';
 
 import Colors from '@styles/Colors';
 
@@ -24,7 +26,7 @@ type ConfigurationCardProps = {
   description: string | ReactElement;
   isWarning?: boolean;
   footerText?: React.ReactNode;
-  onConfirm?: () => Promise<ErrorNotificationConfig | null> | void;
+  onConfirm?: () => Promise<ErrorNotificationConfig | void> | void;
   confirmButtonText?: string;
   onCancel?: () => void;
   isButtonsDisabled?: boolean;
@@ -51,9 +53,12 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
   } = props;
   const [error, setError] = useState<ErrorNotificationConfig | null>(null);
 
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
+
   return (
     <StyledContainer isWarning={isWarning}>
-      <StyledHeader>
+      <StyledHeader ref={topRef}>
         <Text className="regular big" color={Colors.slate50}>
           {title}
         </Text>
@@ -103,15 +108,17 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                     </Button>
                     <Button
                       onClick={() => {
-                        validateFields?.().then(() => {
-                          const confirmResult = onConfirm?.();
+                        validateFields?.()
+                          .then(() => {
+                            return onConfirm?.();
+                          })
+                          .catch((err: ErrorNotificationConfig) => {
+                            setError(err);
 
-                          if (typeof confirmResult === 'object' && typeof confirmResult.then === 'function') {
-                            confirmResult.then((res: any) => {
-                              setError(res);
-                            });
-                          }
-                        });
+                            if (!inTopInViewport && topRef && topRef.current) {
+                              topRef.current.scrollIntoView();
+                            }
+                          });
                       }}
                       $customType={isWarning ? 'warning' : 'primary'}
                       disabled={disabled}

@@ -7,7 +7,7 @@ import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -44,7 +44,7 @@ const PrivateRegistry: React.FC = () => {
         imagePullSecrets: newImagePullSecrets,
       },
     }).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         dispatch(updateCurrentExecutorData({imagePullSecrets: newImagePullSecrets}));
         notificationCall('passed', 'Private registry was successfully updated.');
       });

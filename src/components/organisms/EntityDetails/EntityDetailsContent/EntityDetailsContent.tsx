@@ -21,7 +21,7 @@ import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextTy
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
@@ -97,18 +97,18 @@ const EntityDetailsContent: React.FC = () => {
           type: RunningContextType.userUI,
         },
       },
-    }).then(res => {
-      defaultNotificationFlow(
-        res,
-        () => {
+    })
+      .then(res => {
+        displayDefaultNotificationFlow(res, () => {
           analyticsTrack('trackEvents', {
             type,
             uiEvent: `run-${entity}`,
           });
-        },
-        error => notificationCall('failed', error.title, error.message)
-      );
-    });
+        });
+      })
+      .catch(error => {
+        notificationCall('failed', error.title, error.message);
+      });
   };
 
   const onAbortAllExecutionsClick = () => {

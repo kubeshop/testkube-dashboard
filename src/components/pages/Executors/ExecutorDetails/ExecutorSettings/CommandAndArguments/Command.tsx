@@ -11,7 +11,7 @@ import {CommandInput} from '@atoms';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -45,7 +45,7 @@ const Command: React.FC = () => {
         command: values.command.split(' '),
       },
     }).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Command was successfully updated.');
         dispatch(updateCurrentExecutorData({command: values.command!.split(' ')}));
       });

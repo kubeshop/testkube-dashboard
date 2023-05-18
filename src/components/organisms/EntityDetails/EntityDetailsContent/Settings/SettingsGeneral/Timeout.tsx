@@ -10,7 +10,7 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
 import {digits} from '@utils/form';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -46,7 +46,7 @@ const Timeout: React.FC = () => {
         },
       },
     }).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Test Timeout was successfully updated.');
       });
     });

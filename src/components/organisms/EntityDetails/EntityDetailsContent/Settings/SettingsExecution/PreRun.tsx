@@ -8,7 +8,7 @@ import {FormItem, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -47,7 +47,7 @@ const PreRun: React.FC = () => {
         },
       },
     }).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `Pre-Run command was successfully updated.`);
       });
     });

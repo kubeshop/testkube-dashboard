@@ -2,6 +2,8 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {ErrorNotificationConfig} from '@models/notifications';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
@@ -9,7 +11,7 @@ import {FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard, SecretFormItem, notificationCall} from '@molecules';
 
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {dummySecret} from '@utils/sources';
 
 import {useUpdateSourceMutation} from '@services/sources';
@@ -17,8 +19,6 @@ import {useUpdateSourceMutation} from '@services/sources';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {MainContext} from '@contexts';
-
-import {ErrorNotificationConfig} from '@src/models/notifications';
 
 type AuthenticationFormValues = {
   token: string;
@@ -70,7 +70,7 @@ const Authentication: React.FC = () => {
     };
 
     return updateSource(body).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         if ('data' in res) {
           notificationCall('passed', 'Source was successfully updated.');
           dispatch(setCurrentSource({...body, ...res.data.spec}));

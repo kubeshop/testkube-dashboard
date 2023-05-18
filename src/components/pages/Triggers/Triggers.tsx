@@ -23,7 +23,7 @@ import {PageBlueprint} from '@organisms';
 
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
@@ -196,7 +196,7 @@ const Triggers: React.FC = () => {
     });
 
     return updateTriggers(body).then(res => {
-      return defaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
+      return displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
     });
   };
 

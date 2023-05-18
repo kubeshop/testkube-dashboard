@@ -4,7 +4,7 @@ import {Space} from 'antd';
 
 import {notificationCall} from '@molecules';
 
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
 
@@ -26,7 +26,7 @@ const SettingsTest: React.FC = () => {
         ...data,
       },
     }).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `Test settings was successfully updated.`);
       });
     });

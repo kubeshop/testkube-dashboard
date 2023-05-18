@@ -10,7 +10,7 @@ import {Input} from '@custom-antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateSourceMutation} from '@services/sources';
 
@@ -61,7 +61,7 @@ const NameNUrl: React.FC = () => {
     };
 
     return updateSource(body).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Source was successfully updated.');
         dispatch(setCurrentSource(body));
       });

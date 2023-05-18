@@ -10,7 +10,7 @@ import {ExternalLink} from '@atoms';
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -61,7 +61,7 @@ const Variables: React.FC = () => {
       id: entityDetails.name,
       data: successRecord,
     }).then(res => {
-      defaultNotificationFlow(res, () => {
+      displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', `Variables were successfully updated.`);
       });
     });

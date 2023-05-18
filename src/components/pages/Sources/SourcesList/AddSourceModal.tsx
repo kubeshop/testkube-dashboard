@@ -1,9 +1,10 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 
 import {Input as AntdInput, Form} from 'antd';
 
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 
+import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 
 import {useAppSelector} from '@redux/hooks';
@@ -13,15 +14,15 @@ import {Button, Input} from '@custom-antd';
 
 import {Hint, NotificationContent} from '@molecules';
 
+import useInViewport from '@hooks/useInViewport';
+
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateSourceMutation} from '@services/sources';
 
 import {DashboardContext} from '@contexts';
-
-import {ErrorNotificationConfig} from '@src/models/notifications';
 
 import {AddSourceModalContainer} from './SourcesList.styled';
 
@@ -42,6 +43,9 @@ const AddSourceModal: React.FC = () => {
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
+
   const onFinish = (values: AddSourceFormValues) => {
     const {name, uri, token, username} = values;
 
@@ -56,23 +60,26 @@ const AddSourceModal: React.FC = () => {
       namespace,
     };
 
-    createSource(body).then(res => {
-      defaultNotificationFlow(
-        res,
-        () => {
+    createSource(body)
+      .then(res => {
+        displayDefaultNotificationFlow(res, () => {
           if ('data' in res) {
             navigate(`/sources/${res.data.metadata.name}`);
           }
-        },
-        err => {
-          setError(err);
+        });
+      })
+      .catch(err => {
+        setError(err);
+
+        if (!inTopInViewport && topRef && topRef.current) {
+          topRef.current.scrollIntoView();
         }
-      );
-    });
+      });
   };
 
   return (
     <AddSourceModalContainer>
+      <div ref={topRef} />
       <Form style={{flex: 1}} layout="vertical" onFinish={onFinish} form={form} name="add-source-form">
         {error ? (
           <div style={{marginBottom: '20px'}}>

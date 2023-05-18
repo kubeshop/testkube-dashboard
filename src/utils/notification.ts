@@ -1,5 +1,4 @@
 import {RTKResponse} from '@models/fetch';
-import {ErrorNotificationConfig} from '@models/notifications';
 
 import {notificationCall} from '@molecules';
 
@@ -9,11 +8,7 @@ export type DefaultRequestError = {
   status?: number;
 };
 
-export function defaultNotificationFlow<T = unknown>(
-  res?: RTKResponse<T>,
-  success?: () => void,
-  fail?: (error: ErrorNotificationConfig) => void
-): {title: string; message?: string} | null {
+const getErrorFromResponse = (res?: RTKResponse<unknown>) => {
   if (res && 'error' in res) {
     let errorObject = null;
 
@@ -34,14 +29,21 @@ export function defaultNotificationFlow<T = unknown>(
       };
     }
 
-    if (errorObject) {
-      fail?.(errorObject);
-    }
     return errorObject;
+  }
+};
+
+export function displayDefaultNotificationFlow<T = unknown>(
+  res?: RTKResponse<T>,
+  success?: () => void
+): {title: string; message?: string} | void {
+  const error = getErrorFromResponse(res);
+
+  if (error) {
+    throw error;
   }
 
   success?.();
-  return null;
 }
 
 export function displayDefaultErrorNotification(err: DefaultRequestError) {

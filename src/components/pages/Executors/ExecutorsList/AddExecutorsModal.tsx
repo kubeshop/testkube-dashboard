@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useContext, useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
@@ -11,9 +11,11 @@ import {Button, Input} from '@custom-antd';
 
 import {Hint, NotificationContent} from '@molecules';
 
+import useInViewport from '@hooks/useInViewport';
+
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useCreateExecutorMutation} from '@services/executors';
 
@@ -38,6 +40,9 @@ const AddExecutorsModal: React.FC = () => {
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
+
   const onFinish = (values: AddExecutorsFormValues) => {
     const body = {
       ...values,
@@ -48,23 +53,26 @@ const AddExecutorsModal: React.FC = () => {
 
     delete body.type;
 
-    createExecutor(body).then(res => {
-      defaultNotificationFlow(
-        res,
-        () => {
+    createExecutor(body)
+      .then(res => {
+        displayDefaultNotificationFlow(res, () => {
           if ('data' in res) {
             navigate(`/executors/${res.data.metadata.name}`);
           }
-        },
-        err => {
-          setError(err);
+        });
+      })
+      .catch(err => {
+        setError(err);
+
+        if (!inTopInViewport && topRef && topRef.current) {
+          topRef.current.scrollIntoView();
         }
-      );
-    });
+      });
   };
 
   return (
     <AddExecutorsModalContainer>
+      <div ref={topRef} />
       <Form style={{flex: 1}} layout="vertical" onFinish={onFinish} form={form}>
         {error ? (
           <div style={{marginBottom: '20px'}}>

@@ -1,4 +1,4 @@
 export type ErrorNotificationConfig = {
   title: string;
-  message?: string;
+  message?: string | undefined;
 };

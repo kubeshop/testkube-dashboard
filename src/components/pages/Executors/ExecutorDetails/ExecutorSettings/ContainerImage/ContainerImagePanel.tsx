@@ -10,7 +10,7 @@ import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
-import {defaultNotificationFlow} from '@utils/notification';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
@@ -44,7 +44,7 @@ const ContainerImagePanel: React.FC = () => {
         ...values,
       },
     }).then(res => {
-      return defaultNotificationFlow(res, () => {
+      return displayDefaultNotificationFlow(res, () => {
         notificationCall('passed', 'Container image was successfully updated.');
         dispatch(updateCurrentExecutorData({image: values.image}));
       });
