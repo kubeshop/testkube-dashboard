@@ -14,4 +14,5 @@ export const StyledSettingsContainer = styled.div`
 
   display: flex;
   flex-direction: row;
+  gap: 20px;
 `;
