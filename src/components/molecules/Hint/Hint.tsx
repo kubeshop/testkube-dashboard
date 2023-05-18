@@ -14,7 +14,7 @@ import {AbsoluteExecutorIconContainer, StyledImageContainer, StyledWizardHintCon
 export type HintProps = {
   title: string;
   description: string;
-  openLink: () => Window | null;
+  openLink: () => void;
   selectedExecutor?: string;
 };
 
