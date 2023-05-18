@@ -2,6 +2,8 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
+import {FormItem, FullWidthSpace} from '@custom-antd';
+
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {required} from '@utils/form';
@@ -12,7 +14,6 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
 import {namingMap, updateRequestsMap} from '../utils';
 
 const {TextArea} = Input;
@@ -74,14 +75,14 @@ const NameNDescription: React.FC = () => {
         }}
         enabled={mayEdit}
       >
-        <StyledSpace size={32} direction="vertical">
-          <StyledFormItem name="name" rules={[required]}>
+        <FullWidthSpace size={32} direction="vertical">
+          <FormItem name="name" rules={[required]}>
             <Input placeholder="Name" disabled />
-          </StyledFormItem>
-          <StyledFormItem name="description">
+          </FormItem>
+          <FormItem name="description">
             <TextArea placeholder="Description" autoSize={{minRows: 2, maxRows: 3}} />
-          </StyledFormItem>
-        </StyledSpace>
+          </FormItem>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

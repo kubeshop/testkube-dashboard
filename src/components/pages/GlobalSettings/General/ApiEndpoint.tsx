@@ -1,10 +1,10 @@
 import {useState} from 'react';
 
-import {Form, Input, Space} from 'antd';
+import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {FormItem, Text} from '@custom-antd';
+import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -73,11 +73,11 @@ const ApiEndpoint: React.FC = () => {
         confirmButtonText={isLoading ? 'Loading...' : 'Save'}
         enabled={!disabled}
       >
-        <Space size={32} direction="vertical" style={{width: '100%'}}>
+        <FullWidthSpace size={32} direction="vertical">
           <FormItem name="endpoint">
             <Input placeholder="Endpoint" />
           </FormItem>
-        </Space>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

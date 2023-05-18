@@ -7,14 +7,14 @@ import {selectExecutors} from '@redux/reducers/executorsSlice';
 
 import {ExternalLink} from '@atoms';
 
+import {FormItem, FullWidthSpace} from '@custom-antd';
+
 import {ConfigurationCard} from '@molecules';
 
 import {remapExecutors} from '@utils/executors';
 import {required} from '@utils/form';
 
 import {Permissions, usePermission} from '@permissions/base';
-
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 type TestTypeProps = {
   type: string;
@@ -52,18 +52,16 @@ const TestType: React.FC<TestTypeProps> = props => {
         footerText={
           <>
             Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/category/test-types">
-              test types and executors
-            </ExternalLink>
+            <ExternalLink href="https://docs.testkube.io/category/test-types">test types and executors</ExternalLink>
           </>
         }
         enabled={mayEdit}
       >
-        <StyledSpace size={32} direction="vertical">
-          <StyledFormItem name="type" rules={[required]}>
+        <FullWidthSpace size={32} direction="vertical">
+          <FormItem name="type" rules={[required]}>
             <Select showSearch options={remappedExecutors} />
-          </StyledFormItem>
-        </StyledSpace>
+          </FormItem>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

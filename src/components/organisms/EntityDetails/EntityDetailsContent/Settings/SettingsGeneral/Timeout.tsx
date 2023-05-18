@@ -4,7 +4,7 @@ import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {Text} from '@custom-antd';
+import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -17,16 +17,15 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
-
 type TimeoutForm = {
   activeDeadlineSeconds?: number;
 };
 
 const Timeout: React.FC = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
-  const mayEdit = usePermission(Permissions.editEntity);
   const {executionRequest, name} = entityDetails;
+
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<TimeoutForm>();
 
@@ -71,18 +70,16 @@ const Timeout: React.FC = () => {
         footerText={
           <Text className="regular middle">
             Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/articles/creating-test-suites">
-              Timeouts
-            </ExternalLink>
+            <ExternalLink href="https://docs.testkube.io/articles/creating-test-suites">Timeouts</ExternalLink>
           </Text>
         }
         enabled={mayEdit}
       >
-        <StyledSpace size={32} direction="vertical" style={{width: '100%'}}>
-          <StyledFormItem name="activeDeadlineSeconds" rules={[digits]} style={{marginBottom: '0px'}}>
+        <FullWidthSpace size={32} direction="vertical">
+          <FormItem name="activeDeadlineSeconds" rules={[digits]}>
             <Input placeholder="Timeout in seconds" />
-          </StyledFormItem>
-        </StyledSpace>
+          </FormItem>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

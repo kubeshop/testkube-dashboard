@@ -27,3 +27,7 @@ export const openSourcesDocumentation = () => {
 };
 
 export const testSourceLink = 'https://docs.testkube.io/articles/creating-tests/#test-source';
+
+export const openOSSToCloudMigrateLink = () => {
+  window.open('https://cloud.testkube.io/system-init?cloudMigrate=true', '_self');
+};

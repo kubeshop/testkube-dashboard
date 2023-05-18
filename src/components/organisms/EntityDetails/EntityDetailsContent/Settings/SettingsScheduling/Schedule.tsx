@@ -6,7 +6,7 @@ import {WarningOutlined} from '@ant-design/icons';
 
 import parser from 'cron-parser';
 
-import {Text} from '@custom-antd';
+import {FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -20,7 +20,6 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {StyledSpace} from '../Settings.styled';
 import {namingMap, updateRequestsMap} from '../utils';
 import CronInput from './CronInput';
 import NextExecution from './NextExecution';
@@ -100,7 +99,7 @@ const Schedule: React.FC = () => {
         enabled={enabled}
         forceEnableButtons={wasTouched}
       >
-        <StyledSpace direction="vertical" size={32}>
+        <FullWidthSpace direction="vertical" size={32}>
           <StyledColumn>
             <Text className="middle regular">Schedule template</Text>
             <Select
@@ -165,7 +164,7 @@ const Schedule: React.FC = () => {
               </StyledRow>
             </>
           ) : null}
-        </StyledSpace>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

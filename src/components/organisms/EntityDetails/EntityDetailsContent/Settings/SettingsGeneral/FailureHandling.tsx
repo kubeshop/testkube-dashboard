@@ -2,7 +2,7 @@ import {useContext} from 'react';
 
 import {Form, Popover} from 'antd';
 
-import {Checkbox, Text} from '@custom-antd';
+import {Checkbox, FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -14,7 +14,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {StyledFormItem, StyledPopoverContainer, StyledQuestionCircleOutlined} from '../Settings.styled';
+import {StyledPopoverContainer, StyledQuestionCircleOutlined} from '../Settings.styled';
 
 const popoverContent = (
   <StyledPopoverContainer>
@@ -78,14 +78,14 @@ const FailureHandling: React.FC = () => {
         }}
         enabled={mayEdit}
       >
-        <StyledFormItem name="negativeTest" valuePropName="checked">
+        <FormItem name="negativeTest" valuePropName="checked">
           <Checkbox>
             Invert test result
             <Popover content={popoverContent}>
               <StyledQuestionCircleOutlined />
             </Popover>
           </Checkbox>
-        </StyledFormItem>
+        </FormItem>
       </ConfigurationCard>
     </Form>
   );

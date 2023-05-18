@@ -10,6 +10,8 @@ import {selectSources} from '@redux/reducers/sourcesSlice';
 
 import {ExternalLink} from '@atoms';
 
+import {FormItem, FullWidthSpace} from '@custom-antd';
+
 import {ConfigurationCard} from '@molecules';
 
 import {
@@ -33,8 +35,6 @@ import {
 } from '@utils/sources';
 
 import {Permissions, usePermission} from '@permissions/base';
-
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 const additionalFields: SourceFields = {
   git: SourceEditFormFields,
@@ -122,10 +122,10 @@ const Source: React.FC<SourceProps> = props => {
         )}
         enabled={mayEdit}
       >
-        <StyledSpace size={24} direction="vertical">
-          <StyledFormItem name="testSource" rules={[required]}>
+        <FullWidthSpace size={24} direction="vertical">
+          <FormItem name="testSource" rules={[required]}>
             <Select showSearch options={sourcesOptions} />
-          </StyledFormItem>
+          </FormItem>
           <Form.Item
             noStyle
             shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
@@ -156,7 +156,7 @@ const Source: React.FC<SourceProps> = props => {
               return getAdditionalFieldsComponent(testSource, additionalFields, childrenProps[testSource]);
             }}
           </Form.Item>
-        </StyledSpace>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

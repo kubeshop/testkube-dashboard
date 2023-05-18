@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 
-import {Form, Input, Space} from 'antd';
+import {Form, Input} from 'antd';
 
 import {Test} from '@models/test';
 
 import {ExternalLink} from '@atoms';
 
-import {Button, Text} from '@custom-antd';
+import {Button, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
@@ -160,7 +160,7 @@ const Arguments: React.FC = () => {
       >
         <ArgumentsWrapper>
           <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
-          <Space size={16} direction="vertical" style={{width: '100%'}}>
+          <FullWidthSpace size={16} direction="vertical">
             <Text className="regular middle" color={Colors.slate400}>
               Arguments passed to the executor (concat and passed directly to the executor)
             </Text>
@@ -180,7 +180,7 @@ value
             <Button onClick={prettifyArgs} $customType="secondary" disabled={isPrettified}>
               Prettify
             </Button>
-          </Space>
+          </FullWidthSpace>
         </ArgumentsWrapper>
       </ConfigurationCard>
     </Form>

@@ -1,11 +1,11 @@
 import {useContext, useState} from 'react';
 
-import {Input, Space} from 'antd';
+import {Input} from 'antd';
 
 import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {Button, Text} from '@custom-antd';
+import {Button, FullWidthSpace, Text} from '@custom-antd';
 
 import {notificationCall} from '@molecules';
 
@@ -60,10 +60,9 @@ const DeleteEntityModal: React.FC<{
   };
 
   return (
-    <Space
+    <FullWidthSpace
       size={24}
       direction="vertical"
-      style={{width: '100%'}}
       onKeyPress={event => {
         if (name === checkName) {
           onEvent(event, onDelete);
@@ -93,7 +92,7 @@ const DeleteEntityModal: React.FC<{
           Delete
         </Button>
       </FooterSpace>
-    </Space>
+    </FullWidthSpace>
   );
 };
 
