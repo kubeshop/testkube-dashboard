@@ -2,9 +2,7 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {ExternalLink} from '@atoms';
-
-import {FormItem, FullWidthSpace, Text} from '@custom-antd';
+import {FormItem, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -67,12 +65,6 @@ const Timeout: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
-        footerText={
-          <Text className="regular middle">
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/articles/creating-test-suites">Timeouts</ExternalLink>
-          </Text>
-        }
         enabled={mayEdit}
       >
         <FullWidthSpace size={32} direction="vertical">

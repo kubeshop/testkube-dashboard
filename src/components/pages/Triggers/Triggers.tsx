@@ -21,6 +21,7 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {PageBlueprint} from '@organisms';
 
+import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {PollingIntervals} from '@utils/numbers';
@@ -205,9 +206,7 @@ const Triggers: React.FC = () => {
       description={
         <>
           Listen for events and run specific testkube actions.{' '}
-          <ExternalLink href="https://docs.testkube.io/articles/test-triggers">
-            Learn more about Triggers
-          </ExternalLink>
+          <ExternalLink href={externalLinks.testTriggers}>Learn more about Triggers</ExternalLink>
         </>
       }
     >

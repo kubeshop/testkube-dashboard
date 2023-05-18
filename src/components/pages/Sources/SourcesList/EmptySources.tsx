@@ -2,6 +2,8 @@ import React from 'react';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
+
 interface EmptySourcesProps {
   onButtonClick: () => void;
 }
@@ -19,10 +21,10 @@ const EmptySources: React.FC<EmptySourcesProps> = props => {
       onButtonClick={onButtonClick}
       actionType="create"
     >
-      <HelpCard isLink link="https://docs.testkube.io/articles/test-sources">
+      <HelpCard isLink link={externalLinks.testSources}>
         What is a test source?
       </HelpCard>
-      <HelpCard isLink link="https://docs.testkube.io/articles/creating-tests/">
+      <HelpCard isLink link={externalLinks.createTest}>
         Learn how tests via Testkube work.
       </HelpCard>
     </EmptyListContent>

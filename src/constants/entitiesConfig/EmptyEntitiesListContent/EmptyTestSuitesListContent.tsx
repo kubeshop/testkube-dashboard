@@ -1,5 +1,7 @@
 import {EmptyListContent, HelpCard} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
+
 const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {
   const {action} = props;
 
@@ -13,7 +15,7 @@ const EmptyTestSuitesListContent: React.FC<{action: () => void}> = props => {
       onButtonClick={action}
       actionType="create"
     >
-      <HelpCard isLink link="https://docs.testkube.io/articles/creating-test-suites">
+      <HelpCard isLink link={externalLinks.createTestSuite}>
         Learn how to add test suites
       </HelpCard>
     </EmptyListContent>

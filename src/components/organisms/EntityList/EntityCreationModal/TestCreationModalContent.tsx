@@ -13,7 +13,7 @@ import {selectSources} from '@redux/reducers/sourcesSlice';
 import {Hint} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 
-import {openCustomExecutorDocumentation} from '@utils/externalLinks';
+import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
@@ -46,7 +46,7 @@ const TestCreationModalContent: React.FC = () => {
         setHintConfig({
           title: 'Testing with custom executor',
           description: 'Discover all the features and examples around custom executors',
-          openLink: openCustomExecutorDocumentation,
+          openLink: () => window.open(externalLinks.containerExecutor),
         });
       }
 

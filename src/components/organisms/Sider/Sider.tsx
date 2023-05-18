@@ -1,4 +1,4 @@
-import {useMemo, useContext} from 'react';
+import {useContext, useMemo} from 'react';
 
 import {Space, Tooltip} from 'antd';
 
@@ -7,7 +7,7 @@ import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 
 import {Icon} from '@atoms';
 
-import {openDiscord, openDocumentation, openGithub} from '@utils/externalLinks';
+import {externalLinks} from '@utils/externalLinks';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 import {ReactComponent as SourcesIcon} from '@assets/sources.svg';
@@ -20,7 +20,6 @@ import {ReactComponent as SettingIcon} from '@icons/setting.svg';
 
 import {DashboardContext} from '@contexts';
 
-import SiderLink from './SiderLink';
 import {
   StyledLogo,
   StyledNavigationMenu,
@@ -30,6 +29,7 @@ import {
   StyledSiderChildContainer,
   StyledSiderLink,
 } from './Sider.styled';
+import SiderLink from './SiderLink';
 
 const DEFAULT_ICON_STYLE = {
   fontSize: 24,
@@ -76,18 +76,20 @@ const getRoutes = (showSocialLinksInSider: boolean) => [
       classNames: 'item',
     },
   },
-    ...(showSocialLinksInSider ? [] : [
-      {
-        path: '/settings',
-        icon: SettingIcon,
-        title: 'Settings',
-        transition: {
-          classNames: 'item',
+  ...(showSocialLinksInSider
+    ? []
+    : [
+        {
+          path: '/settings',
+          icon: SettingIcon,
+          title: 'Settings',
+          transition: {
+            classNames: 'item',
+          },
+          additionalClassName: 'settings-icon',
+          active: /environment-management/,
         },
-        additionalClassName: 'settings-icon',
-        active: /environment-management/,
-      }
-    ]),
+      ]),
 ];
 
 const Sider: React.FC = () => {
@@ -100,9 +102,9 @@ const Sider: React.FC = () => {
       icon: 'cog',
       onClick: () => navigate('/settings'),
     },
-    {icon: 'github', onClick: openGithub},
-    {icon: 'documentation', onClick: openDocumentation},
-    {icon: 'discord', onClick: openDiscord},
+    {icon: 'github', onClick: window.open(externalLinks.github)},
+    {icon: 'documentation', onClick: window.open(externalLinks.documentation)},
+    {icon: 'discord', onClick: window.open(externalLinks.discord)},
   ];
 
   const renderedMenuItems = useMemo(() => {
@@ -118,7 +120,9 @@ const Sider: React.FC = () => {
           active={active}
         >
           <Tooltip title={title} placement="right">
-            <span><MenuIcon style={DEFAULT_ICON_STYLE} /></span>
+            <span>
+              <MenuIcon style={DEFAULT_ICON_STYLE} />
+            </span>
           </Tooltip>
         </StyledSiderLink>
       );
@@ -143,11 +147,13 @@ const Sider: React.FC = () => {
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <Space size={30} direction="vertical">
-            {showLogoInSider ? <StyledLogo>
-              <SiderLink href="/tests">
-                <Logo />
-              </SiderLink>
-            </StyledLogo> : null}
+            {showLogoInSider ? (
+              <StyledLogo>
+                <SiderLink href="/tests">
+                  <Logo />
+                </SiderLink>
+              </StyledLogo>
+            ) : null}
             {renderedMenuItems}
           </Space>
         </StyledNavigationMenu>

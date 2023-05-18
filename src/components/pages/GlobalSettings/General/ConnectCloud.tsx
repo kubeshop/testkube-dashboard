@@ -8,7 +8,7 @@ import {FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
-import {openOSSToCloudMigrateLink} from '@utils/externalLinks';
+import {externalLinks} from '@utils/externalLinks';
 
 import Colors from '@styles/Colors';
 
@@ -20,9 +20,7 @@ const ConnectCloud: React.FC = () => {
       footerText={
         <Text className="regular middle" color={Colors.slate400}>
           Learn more about{' '}
-          <ExternalLink href="https://docs.testkube.io/testkube-cloud/articles/transition-from-oss">
-            connecting to Testkube Cloud
-          </ExternalLink>
+          <ExternalLink href={externalLinks.transitionFromOSS}>connecting to Testkube Cloud</ExternalLink>
         </Text>
       }
     >
@@ -34,12 +32,10 @@ const ConnectCloud: React.FC = () => {
             <Text className="regular middle" color={Colors.slate400}>
               Multiple environments, Teams, RBAC and unique collaboration features.
             </Text>
-            <ExternalLink href="https://docs.testkube.io/testkube-cloud/articles/intro">
-              Learn more about Testkube Cloud
-            </ExternalLink>
+            <ExternalLink href={externalLinks.cloudIntro}>Learn more about Testkube Cloud</ExternalLink>
           </FullWidthSpace>
         </FullWidthSpace>
-        <Button type="primary" onClick={openOSSToCloudMigrateLink}>
+        <Button type="primary" onClick={() => window.open(externalLinks.OSStoCloudMigration, '_self')}>
           Connect your Testkube Cloud account
         </Button>
       </FullWidthSpace>

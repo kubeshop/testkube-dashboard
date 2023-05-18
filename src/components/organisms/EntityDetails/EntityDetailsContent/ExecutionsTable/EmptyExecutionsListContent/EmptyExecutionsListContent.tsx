@@ -4,6 +4,8 @@ import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
+
 import {Permissions, usePermission} from '@permissions/base';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
@@ -61,7 +63,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         onButtonClick={() => dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}))}
         actionType="create"
       >
-        <HelpCard isLink link="https://docs.testkube.io/articles/creating-test-suites">
+        <HelpCard isLink link={externalLinks.createTestSuite}>
           Learn how to add test suites
         </HelpCard>
       </EmptyListContent>

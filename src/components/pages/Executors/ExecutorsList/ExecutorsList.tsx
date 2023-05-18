@@ -10,6 +10,7 @@ import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
 
+import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
@@ -96,7 +97,7 @@ const Executors: React.FC = () => {
       description={
         <>
           Executors are the type of tests which can be run by testkube. Learn more about{' '}
-          <ExternalLink href="https://docs.testkube.io/test-types/container-executor">executors</ExternalLink>
+          <ExternalLink href={externalLinks.containerExecutor}>executors</ExternalLink>
         </>
       }
       headerButton={

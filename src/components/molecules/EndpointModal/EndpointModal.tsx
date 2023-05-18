@@ -4,6 +4,8 @@ import {ExternalLink} from '@atoms';
 
 import {Button, FullWidthSpace, Input, Modal, Text} from '@custom-antd';
 
+import {externalLinks} from '@utils/externalLinks';
+
 import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 import Colors from '@styles/Colors';
@@ -57,9 +59,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
           <Text>
             We could not detect the right Testkube API endpoint for you. Please enter the API endpoint for your
             installation (e.g. from the output of the Testkube installer)&nbsp;
-            <ExternalLink href="https://docs.testkube.io/articles/testkube-dashboard-api-endpoint">
-              Learn more...
-            </ExternalLink>
+            <ExternalLink href={externalLinks.apiEndpoint}>Learn more...</ExternalLink>
           </Text>
           <FullWidthSpace size={12}>
             <Input
