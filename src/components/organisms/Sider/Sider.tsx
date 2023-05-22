@@ -102,9 +102,9 @@ const Sider: React.FC = () => {
       icon: 'cog',
       onClick: () => navigate('/settings'),
     },
-    {icon: 'github', onClick: window.open(externalLinks.github)},
-    {icon: 'documentation', onClick: window.open(externalLinks.documentation)},
-    {icon: 'discord', onClick: window.open(externalLinks.discord)},
+    {icon: 'github', onClick: () => window.open(externalLinks.github)},
+    {icon: 'documentation', onClick: () => window.open(externalLinks.documentation)},
+    {icon: 'discord', onClick: () => window.open(externalLinks.discord)},
   ];
 
   const renderedMenuItems = useMemo(() => {
