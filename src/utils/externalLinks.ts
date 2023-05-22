@@ -21,4 +21,5 @@ export enum externalLinks {
   transitionFromOSS = 'https://docs.testkube.io/testkube-cloud/articles/transition-from-oss',
   cloudIntro = 'https://docs.testkube.io/testkube-cloud/articles/intro',
   testTriggers = 'https://docs.testkube.io/articles/test-triggers',
+  addingTimeout = 'https://docs.testkube.io/articles/adding-timeout/',
 }

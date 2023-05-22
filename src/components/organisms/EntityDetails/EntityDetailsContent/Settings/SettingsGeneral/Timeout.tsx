@@ -2,10 +2,13 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {FormItem, FullWidthSpace} from '@custom-antd';
+import {ExternalLink} from '@atoms';
+
+import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
 import {digits} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -66,6 +69,11 @@ const Timeout: React.FC = () => {
           form.resetFields();
         }}
         enabled={mayEdit}
+        footerText={
+          <Text className="regular middle">
+            Learn more about <ExternalLink href={externalLinks.addingTimeout}>Timeouts</ExternalLink>
+          </Text>
+        }
       >
         <FullWidthSpace size={32} direction="vertical">
           <FormItem name="activeDeadlineSeconds" rules={[digits]}>
