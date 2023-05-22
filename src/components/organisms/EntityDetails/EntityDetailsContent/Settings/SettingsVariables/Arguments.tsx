@@ -59,11 +59,11 @@ const Arguments: React.FC = () => {
     return updateTest({
       id: entityDetails.name,
       data: successRecord,
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Variables were successfully updated.');
       });
-    });
   };
 
   const onChange = () => {

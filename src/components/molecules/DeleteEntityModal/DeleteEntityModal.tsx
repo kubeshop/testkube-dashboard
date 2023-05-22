@@ -45,18 +45,17 @@ const DeleteEntityModal: React.FC<{
 
   const onDelete = () => {
     deleteEntity(idToDelete || name)
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
+        notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
 
-          setModalOpen(false);
+        setModalOpen(false);
 
-          if (onConfirm) {
-            onConfirm();
-          } else {
-            navigate(defaultStackRoute);
-          }
-        });
+        if (onConfirm) {
+          onConfirm();
+        } else {
+          navigate(defaultStackRoute);
+        }
       })
       .catch(error => {
         notificationCall('failed', error.title, error.message);

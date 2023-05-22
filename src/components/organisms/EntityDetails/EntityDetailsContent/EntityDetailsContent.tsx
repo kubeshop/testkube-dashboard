@@ -89,7 +89,7 @@ const EntityDetailsContent: React.FC = () => {
     handleLoading();
     const runEntity = runRequestsMap[entity];
 
-    runEntity({
+    return runEntity({
       id: name,
       data: {
         namespace,
@@ -98,12 +98,11 @@ const EntityDetailsContent: React.FC = () => {
         },
       },
     })
-      .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          analyticsTrack('trackEvents', {
-            type,
-            uiEvent: `run-${entity}`,
-          });
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
+        analyticsTrack('trackEvents', {
+          type,
+          uiEvent: `run-${entity}`,
         });
       })
       .catch(error => {

@@ -111,11 +111,11 @@ const SettingsTests: React.FC = () => {
         ...entityDetails,
         steps: currentSteps,
       },
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Steps were successfully updated.');
       });
-    });
   };
 
   const onSelectStep = (value: string) => {

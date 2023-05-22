@@ -64,7 +64,7 @@ const TestCreationModalContent: React.FC = () => {
   }, [form.getFieldValue('testType')]);
 
   const onSuccess = (res: RTKResponse<MetadataResponse<Test>>) => {
-    displayDefaultNotificationFlow(res, () => {
+    return displayDefaultNotificationFlow(res).then(() => {
       if ('data' in res) {
         analyticsTrack('trackEvents', {
           type: res.data.spec?.type,

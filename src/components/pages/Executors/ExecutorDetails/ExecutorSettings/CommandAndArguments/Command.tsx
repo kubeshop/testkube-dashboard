@@ -44,12 +44,12 @@ const Command: React.FC = () => {
         ...executor,
         command: values.command.split(' '),
       },
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Command was successfully updated.');
         dispatch(updateCurrentExecutorData({command: values.command!.split(' ')}));
       });
-    });
   };
 
   useEffect(() => {

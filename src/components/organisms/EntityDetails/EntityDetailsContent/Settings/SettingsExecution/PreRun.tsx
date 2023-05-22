@@ -46,11 +46,9 @@ const PreRun: React.FC = () => {
           preRunScript: values.command,
         },
       },
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `Pre-Run command was successfully updated.`);
-      });
-    });
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', `Pre-Run command was successfully updated.`));
   };
 
   return (

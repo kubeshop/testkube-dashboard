@@ -57,14 +57,14 @@ const Variables: React.FC = () => {
       },
     };
 
-    updateEntity({
+    return updateEntity({
       id: entityDetails.name,
       data: successRecord,
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', `Variables were successfully updated.`);
       });
-    });
   };
 
   return (

@@ -47,12 +47,12 @@ const Arguments: React.FC = () => {
         name: executorName,
         args: values.arguments,
       },
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Arguments were successfully updated.');
         dispatch(updateCurrentExecutorData({args: values.arguments}));
       });
-    });
   };
 
   useEffect(() => {

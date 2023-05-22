@@ -8,7 +8,7 @@ export type DefaultRequestError = {
   status?: number;
 };
 
-const getErrorFromResponse = (res?: RTKResponse<unknown>) => {
+export const getErrorFromResponse = (res?: RTKResponse<unknown>): unknown => {
   if (res && 'error' in res) {
     let errorObject = null;
 
@@ -33,17 +33,13 @@ const getErrorFromResponse = (res?: RTKResponse<unknown>) => {
   }
 };
 
-export function displayDefaultNotificationFlow<T = unknown>(
-  res?: RTKResponse<T>,
-  success?: () => void
-): {title: string; message?: string} | void {
+export async function displayDefaultNotificationFlow<T = unknown>(res?: RTKResponse<T>) {
   const error = getErrorFromResponse(res);
 
   if (error) {
     throw error;
   }
-
-  success?.();
+  return res;
 }
 
 export function displayDefaultErrorNotification(err: DefaultRequestError) {

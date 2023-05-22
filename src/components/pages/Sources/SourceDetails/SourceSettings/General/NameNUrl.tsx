@@ -60,12 +60,12 @@ const NameNUrl: React.FC = () => {
       },
     };
 
-    return updateSource(body).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    return updateSource(body)
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Source was successfully updated.');
         dispatch(setCurrentSource(body));
       });
-    });
   };
 
   return (

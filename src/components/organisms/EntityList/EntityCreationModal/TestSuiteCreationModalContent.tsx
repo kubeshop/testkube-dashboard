@@ -50,18 +50,17 @@ const TestSuiteCreationModalContent: React.FC = () => {
       ...values,
       labels: decomposeLabels(localLabels),
     })
+      .then(res => displayDefaultNotificationFlow(res))
       .then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          if ('data' in res) {
-            analyticsTrack('trackEvents', {
-              uiEvent: 'create-test-suites',
-            });
+        if (res && 'data' in res) {
+          analyticsTrack('trackEvents', {
+            uiEvent: 'create-test-suites',
+          });
 
-            dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
+          dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
 
-            navigate(`/test-suites/executions/${res.data.metadata.name}`);
-          }
-        });
+          navigate(`/test-suites/executions/${res.data.metadata.name}`);
+        }
       })
       .catch(err => {
         setError(err);

@@ -69,14 +69,14 @@ const Authentication: React.FC = () => {
       },
     };
 
-    return updateSource(body).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
-        if ('data' in res) {
+    return updateSource(body)
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(res => {
+        if (res && 'data' in res) {
           notificationCall('passed', 'Source was successfully updated.');
           dispatch(setCurrentSource({...body, ...res.data.spec}));
         }
       });
-    });
   };
 
   return (

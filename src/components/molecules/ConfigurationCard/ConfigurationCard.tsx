@@ -108,12 +108,12 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                     </Button>
                     <Button
                       onClick={() => {
-                        validateFields?.()
-                          .then(() => {
-                            return onConfirm?.();
-                          })
+                        Promise.resolve(validateFields?.())
+                          .then(() => onConfirm?.())
                           .catch((err: ErrorNotificationConfig) => {
-                            setError(err);
+                            if (err.message || err.title) {
+                              setError(err);
+                            }
 
                             if (!inTopInViewport && topRef && topRef.current) {
                               topRef.current.scrollIntoView();

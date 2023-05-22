@@ -195,9 +195,9 @@ const Triggers: React.FC = () => {
       return triggerPayload;
     });
 
-    return updateTriggers(body).then(res => {
-      return displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
-    });
+    return updateTriggers(body)
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', 'Triggers successfully updated'));
   };
 
   const isLoading = keyMapLoading || testsLoading || testSuitesLoading || triggersLoading;
@@ -216,14 +216,7 @@ const Triggers: React.FC = () => {
         <ConfigurationCard
           title="Cluster events"
           description="Testkube can listen to cluster events and trigger specific actions. Events and actions are related to labelled resources."
-          onConfirm={() => {
-            return form
-              .validateFields()
-              .then(onSave)
-              .catch(() => {
-                return {title: 'Invalid triggers data'};
-              });
-          }}
+          onConfirm={onSave}
           onCancel={() => {
             setDefaultTriggersData(triggersList || []);
             form.resetFields();

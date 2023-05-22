@@ -43,12 +43,12 @@ const PrivateRegistry: React.FC = () => {
         ...executor,
         imagePullSecrets: newImagePullSecrets,
       },
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         dispatch(updateCurrentExecutorData({imagePullSecrets: newImagePullSecrets}));
         notificationCall('passed', 'Private registry was successfully updated.');
       });
-    });
   };
 
   useEffect(() => {

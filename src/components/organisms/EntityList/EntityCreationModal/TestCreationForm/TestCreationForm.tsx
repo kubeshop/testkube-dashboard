@@ -86,7 +86,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
     addTest(requestBody)
       .then(res => {
-        onSuccess(res);
+        return onSuccess(res);
       })
       .catch(err => {
         setError(err);

@@ -25,11 +25,11 @@ const SettingsTest: React.FC = () => {
         ...entityDetails,
         ...data,
       },
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', `Test settings was successfully updated.`);
       });
-    });
   };
 
   return (

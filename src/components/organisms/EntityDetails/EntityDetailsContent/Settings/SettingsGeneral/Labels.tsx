@@ -41,12 +41,12 @@ const Labels: React.FC = () => {
         ...entityDetails,
         labels: decomposeLabels(localLabels),
       },
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
         setWasTouched(false);
       });
-    });
   };
 
   const onCancel = () => {

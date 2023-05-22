@@ -43,12 +43,12 @@ const ContainerImagePanel: React.FC = () => {
         ...executor,
         ...values,
       },
-    }).then(res => {
-      return displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Container image was successfully updated.');
         dispatch(updateCurrentExecutorData({image: values.image}));
       });
-    });
   };
 
   useEffect(() => {
