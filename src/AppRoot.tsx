@@ -32,9 +32,9 @@ import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
 import {externalLinks} from './utils/externalLinks';
 
-const pjson = require('../package.json');
+import env from './env';
 
-const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
+const pjson = require('../package.json');
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
@@ -68,15 +68,15 @@ const AppRoot: React.FC = () => {
   useEffect(() => {
     if (!isTelemetryEnabled) {
       // @ts-ignore
-      window[`ga-disable-G-945BK09GDC`] = true;
+      window[`ga-disable-${env.ga4Key}`] = true;
       if (posthog.__loaded) {
         posthog.opt_out_capturing();
       }
     } else if (process.env.NODE_ENV !== 'development') {
       // @ts-ignore:
-      window[`ga-disable-G-945BK09GDC`] = false;
-      if (!posthog.__loaded) {
-        posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
+      window[`ga-disable-${env.ga4Key}`] = false;
+      if (env.posthogKey && !posthog.__loaded) {
+        posthog.init(env.posthogKey, {
           opt_out_capturing_by_default: true,
           mask_all_text: true,
           persistence: 'localStorage',
@@ -88,10 +88,12 @@ const AppRoot: React.FC = () => {
           },
         });
       }
-      posthog.opt_in_capturing();
+      if (posthog.__loaded) {
+        posthog.opt_in_capturing();
+      }
 
-      if (!window.location.href.includes('testkube.io')) {
-        const ga4react = new GA4React('G-945BK09GDC');
+      if (env.ga4Key && !window.location.href.includes('testkube.io')) {
+        const ga4react = new GA4React(env.ga4Key);
         ga4react.initialize().catch(() => {});
       }
     }
@@ -153,7 +155,7 @@ const AppRoot: React.FC = () => {
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(AnalyticsProvider, {
       disabled: !isTelemetryEnabled,
-      privateKey: segmentIOKey,
+      writeKey: env.segmentKey,
       appVersion: pjson.version,
       featureFlags,
     })
