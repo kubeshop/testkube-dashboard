@@ -3,6 +3,8 @@ import {QueryDefinition} from '@reduxjs/toolkit/src/query/endpointDefinitions';
 
 import {Entity} from '@models/entity';
 
+import {externalLinks} from '@utils/externalLinks';
+
 import {useGetTestSuiteDefinitionQuery} from '@services/testSuites';
 import {useGetTestDefinitionQuery} from '@services/tests';
 
@@ -16,12 +18,12 @@ export const settingsDefinitionData: Record<
 > = {
   'test-suites': {
     description: 'Validate and export your test suite configuration',
-    helpLinkUrl: 'https://docs.testkube.io/articles/creating-test-suites',
+    helpLinkUrl: externalLinks.createTestSuite,
     query: useGetTestSuiteDefinitionQuery,
   },
   tests: {
     description: 'Validate and export your test configuration',
-    helpLinkUrl: 'https://docs.testkube.io/articles/creating-tests',
+    helpLinkUrl: externalLinks.createTest,
     query: useGetTestDefinitionQuery,
   },
 };

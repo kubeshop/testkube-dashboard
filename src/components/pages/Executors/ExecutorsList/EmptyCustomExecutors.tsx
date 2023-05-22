@@ -2,6 +2,8 @@ import React from 'react';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
+
 interface EmptyCustomExecutorsProps {
   onButtonClick: () => void;
 }
@@ -19,13 +21,13 @@ const EmptyCustomExecutors: React.FC<EmptyCustomExecutorsProps> = props => {
       onButtonClick={onButtonClick}
       actionType="create"
     >
-      <HelpCard isLink link="https://docs.testkube.io/test-types/container-executor">
+      <HelpCard isLink link={externalLinks.containerExecutor}>
         What is an executor?
       </HelpCard>
-      <HelpCard isLink link="https://docs.testkube.io/test-types/container-executor">
+      <HelpCard isLink link={externalLinks.containerExecutor}>
         Learn how to easily create a container based executor
       </HelpCard>
-      <HelpCard isLink link="https://docs.testkube.io/test-types/container-executor#creating-a-custom-executor">
+      <HelpCard isLink link={externalLinks.customExecutor}>
         Want to add more complex executors?
       </HelpCard>
     </EmptyListContent>

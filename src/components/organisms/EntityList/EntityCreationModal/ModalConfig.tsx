@@ -1,6 +1,6 @@
 import {ModalConfigProps} from '@models/modal';
 
-import {openCustomExecutorDocumentation} from '@utils/externalLinks';
+import {externalLinks} from '@utils/externalLinks';
 
 import TestCreationModalContent from './TestCreationModalContent';
 import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
@@ -24,5 +24,5 @@ export const TestModalConfig: ModalConfigProps = {
 export const defaultHintConfig = {
   title: 'Missing a test type?',
   description: 'Add test types through testkube executors.',
-  openLink: openCustomExecutorDocumentation,
+  openLink: () => window.open(externalLinks.containerExecutor),
 };

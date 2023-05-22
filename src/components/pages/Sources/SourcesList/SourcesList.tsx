@@ -9,6 +9,7 @@ import {Button, Modal, Skeleton, Text} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
 
+import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 
 import {useGetSourcesQuery} from '@services/sources';
@@ -65,7 +66,7 @@ const Sources: React.FC = () => {
       description={
         <>
           Define global sources you can refer to in your tests. Learn more about{' '}
-          <ExternalLink href="https://docs.testkube.io/articles/test-sources">Sources</ExternalLink>
+          <ExternalLink href={externalLinks.testSources}>Sources</ExternalLink>
         </>
       }
       headerButton={

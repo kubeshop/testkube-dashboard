@@ -9,6 +9,7 @@ import {ExternalLink} from '@atoms';
 
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
@@ -107,10 +108,7 @@ const Variables: React.FC = () => {
         description={descriptionMap[entity]}
         footerText={
           <>
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/articles/adding-tests-variables/">
-              Environment variables
-            </ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.variables}>Environment variables</ExternalLink>
           </>
         }
         onConfirm={onClickSave}

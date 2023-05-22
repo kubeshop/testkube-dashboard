@@ -19,6 +19,7 @@ import {Text, Title} from '@custom-antd';
 
 import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
@@ -176,10 +177,7 @@ const SettingsTests: React.FC = () => {
         description="Define the tests and their order of execution for this test suite"
         footerText={
           <>
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/using-testkube/test-suites/testsuites-creating/">
-              Tests in a test suite
-            </ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
           </>
         }
         onConfirm={saveSteps}

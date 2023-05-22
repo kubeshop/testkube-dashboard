@@ -13,6 +13,8 @@ import {ExternalLink} from '@atoms';
 
 import {Text} from '@custom-antd';
 
+import {externalLinks} from '@utils/externalLinks';
+
 import {useAbortAllTestExecutionsMutation, useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
@@ -23,7 +25,7 @@ const TestsPageDescription: React.FC = () => {
   return (
     <Text className="regular middle" color={Colors.slate400}>
       Explore your tests at a glance... Learn more about{' '}
-      <ExternalLink href="https://docs.testkube.io/">testing with Testkube</ExternalLink>
+      <ExternalLink href={externalLinks.documentation}>testing with Testkube</ExternalLink>
     </Text>
   );
 };
