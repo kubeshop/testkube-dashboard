@@ -9,7 +9,7 @@ import {Button, Input} from '@custom-antd';
 
 import {Hint} from '@molecules';
 
-import {openCustomExecutorDocumentation} from '@utils/externalLinks';
+import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -87,7 +87,7 @@ const AddExecutorsModal: React.FC = () => {
       <Hint
         title="Need help?"
         description="We’ll guide you to easily create your very specific container based executor."
-        openLink={openCustomExecutorDocumentation}
+        openLink={() => window.open(externalLinks.containerExecutor)}
       />
     </AddExecutorsModalContainer>
   );

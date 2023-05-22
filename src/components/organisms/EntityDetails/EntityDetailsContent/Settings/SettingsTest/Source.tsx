@@ -22,7 +22,7 @@ import {
 } from '@organisms/TestConfigurationForm';
 import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
-import {testSourceLink} from '@utils/externalLinks';
+import {externalLinks} from '@utils/externalLinks';
 import {required} from '@utils/form';
 import {
   GetSourceFormValues,
@@ -114,7 +114,7 @@ const Source: React.FC<SourceProps> = props => {
         }}
         footerText={
           <>
-            Learn more about <ExternalLink href={testSourceLink}>test sources</ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.sourcesDocumentation}>test sources</ExternalLink>
           </>
         }
         forceEnableButtons={Boolean(

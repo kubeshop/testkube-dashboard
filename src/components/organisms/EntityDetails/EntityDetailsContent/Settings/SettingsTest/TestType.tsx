@@ -12,6 +12,7 @@ import {FormItem, FullWidthSpace} from '@custom-antd';
 import {ConfigurationCard} from '@molecules';
 
 import {remapExecutors} from '@utils/executors';
+import {externalLinks} from '@utils/externalLinks';
 import {required} from '@utils/form';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -51,8 +52,7 @@ const TestType: React.FC<TestTypeProps> = props => {
         }}
         footerText={
           <>
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/category/test-types">test types and executors</ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.testTypes}>test types and executors</ExternalLink>
           </>
         }
         enabled={mayEdit}

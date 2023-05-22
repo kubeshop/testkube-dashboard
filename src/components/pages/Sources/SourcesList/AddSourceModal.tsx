@@ -13,7 +13,7 @@ import {Button, Input} from '@custom-antd';
 
 import {Hint} from '@molecules';
 
-import {openSourcesDocumentation} from '@utils/externalLinks';
+import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -101,7 +101,7 @@ const AddSourceModal: React.FC = () => {
       <Hint
         title="Need help?"
         description="We’ll guide you to easily create your very specific test source."
-        openLink={openSourcesDocumentation}
+        openLink={() => window.open(externalLinks.sourcesApi)}
       />
     </AddSourceModalContainer>
   );

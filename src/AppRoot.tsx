@@ -30,6 +30,7 @@ import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
+import {externalLinks} from './utils/externalLinks';
 
 const pjson = require('../package.json');
 
@@ -130,7 +131,7 @@ const AppRoot: React.FC = () => {
   const config = useMemo(
     () => ({
       pageTitle: 'Testkube',
-      discordUrl: 'https://discord.com/invite/hfq44wtR6Q',
+      discordUrl: externalLinks.discord,
     }),
     []
   );

@@ -8,6 +8,7 @@ import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
 import {digits} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -67,13 +68,12 @@ const Timeout: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
         footerText={
           <Text className="regular middle">
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/articles/creating-test-suites">Timeouts</ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.addingTimeout}>Timeouts</ExternalLink>
           </Text>
         }
-        enabled={mayEdit}
       >
         <FullWidthSpace size={32} direction="vertical">
           <FormItem name="activeDeadlineSeconds" rules={[digits]}>

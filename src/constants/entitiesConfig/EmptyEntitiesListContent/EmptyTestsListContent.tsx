@@ -1,5 +1,7 @@
 import {EmptyListContent, HelpCard} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
+
 const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
   const {action} = props;
 
@@ -13,10 +15,10 @@ const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
       onButtonClick={action}
       actionType="create"
     >
-      <HelpCard isLink link="https://docs.testkube.io/articles/creating-tests">
+      <HelpCard isLink link={externalLinks.createTest}>
         Learn how to add tests
       </HelpCard>
-      <HelpCard isLink link="https://docs.testkube.io/test-types/container-executor">
+      <HelpCard isLink link={externalLinks.containerExecutor}>
         How to add your very own test types and executors?
       </HelpCard>
     </EmptyListContent>

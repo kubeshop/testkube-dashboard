@@ -10,6 +10,7 @@ import {Button, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
+import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {useUpdateTestMutation} from '@services/tests';
@@ -141,10 +142,7 @@ const Arguments: React.FC = () => {
         description="Define arguments which will be passed to the test executor."
         footerText={
           <>
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests">
-              Arguments
-            </ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.arguments}>Arguments</ExternalLink>
           </>
         }
         isButtonsDisabled={isButtonsDisabled}
