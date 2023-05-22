@@ -30,6 +30,7 @@ import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
+import env from './env';
 
 const pjson = require('../package.json');
 
@@ -66,14 +67,15 @@ const AppRoot: React.FC = () => {
 
   useEffect(() => {
     if (!isTelemetryEnabled) {
-      // @ts-ignore
-      window[`ga-disable-G-945BK09GDC`] = true;
+      if (env.ga4Key) {
+        // @ts-ignore
+        window[`ga-disable-${env.ga4Key}`] = true;
+      }
+
       if (posthog.__loaded) {
         posthog.opt_out_capturing();
       }
     } else if (process.env.NODE_ENV !== 'development') {
-      // @ts-ignore:
-      window[`ga-disable-G-945BK09GDC`] = false;
       if (!posthog.__loaded) {
         posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
           opt_out_capturing_by_default: true,
@@ -87,11 +89,17 @@ const AppRoot: React.FC = () => {
           },
         });
       }
+
       posthog.opt_in_capturing();
 
       if (!window.location.href.includes('testkube.io')) {
-        const ga4react = new GA4React('G-945BK09GDC');
-        ga4react.initialize().catch(() => {});
+        if (env.ga4Key) {
+          // @ts-ignore:
+          window[`ga-disable-${env.ga4Key}`] = false;
+
+          const ga4react = new GA4React(env.ga4Key);
+          ga4react.initialize().catch(() => {});
+        }
       }
     }
   }, [isTelemetryEnabled]);
