@@ -101,7 +101,7 @@ const App: React.FC<any> = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      {!isTestkubeCloudLaunchBannerHidden && (
+      {!isTestkubeCloudLaunchBannerHidden ? (
         <MessagePanelWrapper>
           <MessagePanel
             buttons={[
@@ -134,7 +134,7 @@ const App: React.FC<any> = () => {
             description="One centralised place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
           />
         </MessagePanelWrapper>
-      )}
+      ) : null}
       <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
       <Routes>
         <Route path="tests/*" element={<Tests />} />

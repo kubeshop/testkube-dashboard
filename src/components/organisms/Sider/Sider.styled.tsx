@@ -85,7 +85,7 @@ export const StyledSiderLink = styled(SiderLink)`
 `;
 
 export const StyledOtherItem = styled.div<{
-  $size?: number;
+  $size: number;
 }>`
   display: flex;
   justify-content: center;
@@ -95,7 +95,7 @@ export const StyledOtherItem = styled.div<{
 
   svg {
     width: ${({$size}) => $size}px;
-    width: ${({$size}) => $size}px;
+    height: ${({$size}) => $size}px;
 
     fill: #64748b;
 

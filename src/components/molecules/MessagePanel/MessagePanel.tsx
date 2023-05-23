@@ -65,29 +65,30 @@ const MessagePanel: React.FC<MessagePanelProps> = props => {
         </MessageDescriptionText>
       </MessageDescription>
       <FullWidthSpace style={{flex: 0}}>
-        {buttons &&
-          buttons.map(button => {
-            if ('isLink' in button) {
-              return (
-                <a href={button.linkConfig.href} target={button.linkConfig.target}>
-                  <Button $customType={button.type} key={button.type}>
-                    {button.text}
-                  </Button>
-                </a>
-              );
-            }
+        {buttons
+          ? buttons.map(button => {
+              if ('isLink' in button) {
+                return (
+                  <a href={button.linkConfig.href} target={button.linkConfig.target}>
+                    <Button $customType={button.type} key={button.type}>
+                      {button.text}
+                    </Button>
+                  </a>
+                );
+              }
 
-            return (
-              <Button $customType={button.type} key={button.type}>
-                {button.text}
-              </Button>
-            );
-          })}
-        {isClosable && (
+              return (
+                <Button $customType={button.type} key={button.type}>
+                  {button.text}
+                </Button>
+              );
+            })
+          : null}
+        {isClosable ? (
           <CloseButtonWrapper>
             <CloseOutlined onClick={onClose} />
           </CloseButtonWrapper>
-        )}
+        ) : null}
       </FullWidthSpace>
     </MessagePanelWrapper>
   );
