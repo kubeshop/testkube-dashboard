@@ -105,17 +105,17 @@ const SettingsTests: React.FC = () => {
   }, [initialSteps]);
 
   const saveSteps = () => {
-    updateTestSuite({
+    return updateTestSuite({
       id: entityDetails.name,
       data: {
         ...entityDetails,
         steps: currentSteps,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Steps were successfully updated.');
       });
-    });
   };
 
   const onSelectStep = (value: string) => {

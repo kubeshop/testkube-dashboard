@@ -19,17 +19,17 @@ const SettingsTest: React.FC = () => {
   const [updateTestMutation] = useUpdateTestMutation();
 
   const updateTest = (data: Object) => {
-    updateTestMutation({
+    return updateTestMutation({
       id: entityDetails.name,
       data: {
         ...entityDetails,
         ...data,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', `Test settings was successfully updated.`);
       });
-    });
   };
 
   return (

@@ -34,8 +34,10 @@ const PreRun: React.FC = () => {
 
   const command = entityDetails?.executionRequest?.preRunScript;
 
-  const onSave = (values: PreRunFormValues) => {
-    updateTest({
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateTest({
       id: entityDetails.name,
       data: {
         ...entityDetails,
@@ -44,17 +46,14 @@ const PreRun: React.FC = () => {
           preRunScript: values.command,
         },
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `Pre-Run command was successfully updated.`);
-      });
-    });
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', `Pre-Run command was successfully updated.`));
   };
 
   return (
     <Form
       form={form}
-      onFinish={onSave}
       name="execution-settings-pre-run"
       initialValues={{command}}
       disabled={!isPreRunAvailable}
@@ -63,9 +62,7 @@ const PreRun: React.FC = () => {
       <ConfigurationCard
         title="Pre-Run phase"
         description="You can run a command or a script (relative to your source root) which will be executed before the test itself is started."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}

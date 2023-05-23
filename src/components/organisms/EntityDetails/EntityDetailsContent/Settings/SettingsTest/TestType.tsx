@@ -35,8 +35,10 @@ const TestType: React.FC<TestTypeProps> = props => {
   const executors = useAppSelector(selectExecutors);
   const remappedExecutors = remapExecutors(executors);
 
-  const onSave = (values: TestTypeFormValues) => {
-    updateTest({type: values.type});
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateTest({type: values.type});
   };
 
   return (
@@ -44,9 +46,7 @@ const TestType: React.FC<TestTypeProps> = props => {
       <ConfigurationCard
         title="Test type"
         description="Define the test type for this test."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}

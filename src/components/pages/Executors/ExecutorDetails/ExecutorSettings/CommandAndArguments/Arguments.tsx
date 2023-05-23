@@ -37,20 +37,22 @@ const Arguments: React.FC = () => {
 
   const [form] = Form.useForm<ArgumentsFormFields>();
 
-  const onSubmit = (values: ArgumentsFormFields) => {
-    updateCustomExecutor({
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
+
+    return updateCustomExecutor({
       executorId: executorName,
       body: {
         ...executor,
         name: executorName,
         args: values.arguments,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Arguments were successfully updated.');
         dispatch(updateCurrentExecutorData({args: values.arguments}));
       });
-    });
   };
 
   useEffect(() => {
@@ -65,15 +67,12 @@ const Arguments: React.FC = () => {
       name="executor-settings-arguments-list"
       initialValues={{arguments: args}}
       layout="vertical"
-      onFinish={onSubmit}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Arguments for your command"
         description="Define the arguments for your command"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}

@@ -32,10 +32,11 @@ const Timeout: React.FC = () => {
 
   const [updateTest] = useUpdateTestMutation();
 
-  const onSave = (values: TimeoutForm) => {
+  const onSave = () => {
+    const values = form.getFieldsValue();
     const {activeDeadlineSeconds} = values;
 
-    updateTest({
+    return updateTest({
       id: name,
       data: {
         ...entityDetails,
@@ -44,17 +45,14 @@ const Timeout: React.FC = () => {
           activeDeadlineSeconds: activeDeadlineSeconds ? Number(activeDeadlineSeconds) : 0,
         },
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', 'Test Timeout was successfully updated.');
-      });
-    });
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', 'Test Timeout was successfully updated.'));
   };
 
   return (
     <Form
       form={form}
-      onFinish={onSave}
       name="general-settings-name-description"
       initialValues={{activeDeadlineSeconds: executionRequest?.activeDeadlineSeconds}}
       disabled={!mayEdit}
@@ -62,9 +60,7 @@ const Timeout: React.FC = () => {
       <ConfigurationCard
         title="Timeout"
         description="Define the timeout in seconds after which this test will fail."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}

@@ -39,18 +39,18 @@ const Schedule: React.FC = () => {
   const [wasTouched, setWasTouched] = useState(false);
 
   const onSave = () => {
-    updateEntity({
+    return updateEntity({
       id: name,
       data: {
         ...entityDetails,
         schedule: cronString,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
+        setWasTouched(false);
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
       });
-      setWasTouched(false);
-    });
   };
 
   const onCancel = () => {

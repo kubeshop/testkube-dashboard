@@ -1,16 +1,17 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 
 import {Form, FormInstance, Input, Select} from 'antd';
 
 import {Executor} from '@models/executors';
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Option} from '@models/form';
+import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 import {Test} from '@models/test';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
-import {LabelsSelect} from '@molecules';
+import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {
@@ -20,6 +21,8 @@ import {
   StringContentFields,
 } from '@organisms/TestConfigurationForm';
 import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
+
+import useInViewport from '@hooks/useInViewport';
 
 import {remapExecutors} from '@utils/executors';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -63,8 +66,12 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
   const remappedCustomTestSources = remapTestSources(testSources);
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
+  const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
   const [addTest, {isLoading}] = useAddTestMutation();
+
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
 
   const onSave = (values: TestCreationFormValues) => {
     const {testSource, testType} = values;
@@ -77,9 +84,17 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
       ...getCustomSourceField(testSource),
     };
 
-    addTest(requestBody).then(res => {
-      onSuccess(res);
-    });
+    addTest(requestBody)
+      .then(res => {
+        return onSuccess(res);
+      })
+      .catch(err => {
+        setError(err);
+
+        if (!inTopInViewport && topRef && topRef.current) {
+          topRef.current.scrollIntoView();
+        }
+      });
   };
 
   const selectedExecutor = useMemo(() => {
@@ -88,8 +103,10 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
   return (
     <Form form={form} layout="vertical" name="test-creation" onFinish={onSave} style={{flex: 1}} labelAlign="right">
+      <div ref={topRef} />
       <StyledFormSpace size={24} direction="vertical">
         <Text className="regular big">Test details</Text>
+        {error ? <NotificationContent status="failed" message={error.message} title={error.title} /> : null}
         <FormItem
           name="name"
           label="Name"

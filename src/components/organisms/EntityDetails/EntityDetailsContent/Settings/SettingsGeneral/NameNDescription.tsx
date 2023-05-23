@@ -38,8 +38,10 @@ const NameNDescription: React.FC = () => {
   const name = entityDetails?.name;
   const description = entityDetails?.description;
 
-  const onSave = (values: NameNDescriptionFormValues) => {
-    updateEntity({
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateEntity({
       id: entityDetails.name,
       data: {
         ...entityDetails,
@@ -49,27 +51,17 @@ const NameNDescription: React.FC = () => {
           description: values.description,
         },
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
-      });
-    });
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`));
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onSave}
-      name="general-settings-name-description"
-      initialValues={{name, description}}
-      disabled={!mayEdit}
-    >
+    <Form form={form} name="general-settings-name-description" initialValues={{name, description}} disabled={!mayEdit}>
       <ConfigurationCard
         title={`${uppercaseFirstSymbol(namingMap[entity])} name & description`}
         description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}
