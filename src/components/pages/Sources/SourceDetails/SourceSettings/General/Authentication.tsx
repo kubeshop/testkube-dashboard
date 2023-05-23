@@ -1,15 +1,18 @@
 import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
-import {FullWidthSpace} from '@custom-antd';
+
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
-import {ConfigurationCard, notificationCall, SecretFormItem} from '@molecules';
+import {FullWidthSpace} from '@custom-antd';
 
-import {dummySecret} from '@utils/sources';
+import {ConfigurationCard, SecretFormItem, notificationCall} from '@molecules';
+
 import {displayDefaultNotificationFlow} from '@utils/notification';
+import {dummySecret} from '@utils/sources';
 
 import {useUpdateSourceMutation} from '@services/sources';
 
@@ -49,31 +52,31 @@ const Authentication: React.FC = () => {
     setIsClearedUsername(!usernameSecret);
   }, [repository]);
 
-  const onFinish = (values: AuthenticationFormValues) => {
-    if (!source) {
-      notificationCall('failed', 'Something went wrong.');
-    } else {
-      const token = values.token || '';
-      const username = values.username || '';
-      const body = {
-        ...source,
-        repository: {
-          ...source.repository,
-          ...(!tokenSecret || isClearedToken ? {token, tokenSecret: undefined} : {}),
-          ...(!usernameSecret || isClearedUsername ? {username, usernameSecret: undefined} : {}),
-        },
-      };
+  const onFinish = () => {
+    const values = form.getFieldsValue();
 
-      // @ts-ignore:
-      updateSource(body).then(res => {
-        displayDefaultNotificationFlow(res, () => {
-          if ('data' in res) {
-            notificationCall('passed', 'Source was successfully updated.');
-            dispatch(setCurrentSource({...body, ...res.data.spec}));
-          }
-        });
-      });
+    if (!source) {
+      return new Promise<ErrorNotificationConfig>(() => ({title: 'Something went wrong'}));
     }
+    const token = values.token || '';
+    const username = values.username || '';
+    const body = {
+      ...source,
+      repository: {
+        ...source.repository,
+        ...(!tokenSecret || isClearedToken ? {token, tokenSecret: undefined} : {}),
+        ...(!usernameSecret || isClearedUsername ? {username, usernameSecret: undefined} : {}),
+      },
+    };
+
+    return updateSource(body)
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(res => {
+        if (res && 'data' in res) {
+          notificationCall('passed', 'Source was successfully updated.');
+          dispatch(setCurrentSource({...body, ...res.data.spec}));
+        }
+      });
   };
 
   return (
@@ -82,15 +85,12 @@ const Authentication: React.FC = () => {
       initialValues={defaults}
       name="general-settings-authentication"
       layout="vertical"
-      onFinish={onFinish}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Authentication"
         description="Add authentication related information required by your git repository"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onFinish}
         onCancel={() => {
           form.resetFields();
         }}

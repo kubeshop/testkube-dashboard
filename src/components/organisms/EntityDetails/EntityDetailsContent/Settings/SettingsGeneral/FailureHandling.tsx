@@ -42,8 +42,10 @@ const FailureHandling: React.FC = () => {
 
   const negativeTest = entityDetails?.executionRequest?.negativeTest;
 
-  const onSave = (values: FailureHandlingFormValues) => {
-    updateTest({
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateTest({
       id: entityDetails.name,
       data: {
         ...entityDetails,
@@ -52,27 +54,17 @@ const FailureHandling: React.FC = () => {
           negativeTest: values.negativeTest,
         },
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `Test was successfully updated.`);
-      });
-    });
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', `Test was successfully updated.`));
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onSave}
-      initialValues={{negativeTest}}
-      name="general-settings-failure-handling"
-      disabled={!mayEdit}
-    >
+    <Form form={form} initialValues={{negativeTest}} name="general-settings-failure-handling" disabled={!mayEdit}>
       <ConfigurationCard
         title="Failure handling"
         description="Define how Testkube should treat occurring errors."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}

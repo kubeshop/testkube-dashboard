@@ -34,20 +34,22 @@ const Command: React.FC = () => {
 
   const [form] = Form.useForm<CommandFormFields>();
 
-  const onSubmit = (values: CommandFormFields) => {
-    updateCustomExecutor({
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
+
+    return updateCustomExecutor({
       executorId: name,
       body: {
         name,
         ...executor,
         command: values.command.split(' '),
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Command was successfully updated.');
         dispatch(updateCurrentExecutorData({command: values.command!.split(' ')}));
       });
-    });
   };
 
   useEffect(() => {
@@ -62,15 +64,12 @@ const Command: React.FC = () => {
       name="general-settings-name-type"
       initialValues={{command: command?.join(' ')}}
       layout="vertical"
-      onFinish={onSubmit}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Command"
         description="Define the command your image needs to run"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}

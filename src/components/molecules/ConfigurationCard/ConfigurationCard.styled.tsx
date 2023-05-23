@@ -47,3 +47,7 @@ export const StyledFooterText = styled.div`
   margin: auto;
   margin-right: 20px;
 `;
+
+export const StyledNotificationContainer = styled.div`
+  padding: 20px 20px 0;
+`;

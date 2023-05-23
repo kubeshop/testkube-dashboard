@@ -82,10 +82,11 @@ const Source: React.FC<SourceProps> = props => {
   const [isClearedToken, setIsClearedToken] = useState(!additionalFormValues.token);
   const [isClearedUsername, setIsClearedUsername] = useState(!additionalFormValues.username);
 
-  const onSave = (values: SourceFormValues) => {
+  const onSave = () => {
+    const values = form.getFieldsValue();
     const {testSource: newTestSource} = values;
 
-    updateTest({
+    return updateTest({
       content: getSourcePayload(values, testSources),
       ...getCustomSourceField(newTestSource),
     });
@@ -98,15 +99,12 @@ const Source: React.FC<SourceProps> = props => {
       initialValues={{testSource: source, ...additionalFormValues}}
       layout="vertical"
       labelAlign="right"
-      onFinish={onSave}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Source"
         description="Define the source for your test"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
           setIsClearedUsername(!additionalFormValues.username);

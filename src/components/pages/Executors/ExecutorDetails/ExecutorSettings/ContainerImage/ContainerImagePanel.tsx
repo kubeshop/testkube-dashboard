@@ -33,20 +33,22 @@ const ContainerImagePanel: React.FC = () => {
 
   const [form] = Form.useForm<ContainerImageFormFields>();
 
-  const onSubmit = (values: ContainerImageFormFields) => {
-    updateCustomExecutor({
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
+
+    return updateCustomExecutor({
       executorId: name,
       body: {
         name,
         ...executor,
         ...values,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Container image was successfully updated.');
         dispatch(updateCurrentExecutorData({image: values.image}));
       });
-    });
   };
 
   useEffect(() => {
@@ -56,20 +58,11 @@ const ContainerImagePanel: React.FC = () => {
   }, [image]);
 
   return (
-    <Form
-      form={form}
-      name="general-settings-name-type"
-      initialValues={{image}}
-      layout="vertical"
-      onFinish={onSubmit}
-      disabled={!mayEdit}
-    >
+    <Form form={form} name="general-settings-name-type" initialValues={{image}} layout="vertical" disabled={!mayEdit}>
       <ConfigurationCard
         title="Container image"
-        description="Define the image you want to use for this executor. We defer by default to Dockerhub – but you can also insert a URL to your very own image"
-        onConfirm={() => {
-          form.submit();
-        }}
+        description="Define the image you want to use for this executor. We defer by default to Dockerhub - but you can also insert a URL to your very own image"
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}

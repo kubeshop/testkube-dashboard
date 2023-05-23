@@ -8,7 +8,7 @@ export {default as CookiesBanner} from './CookiesBanner';
 export {default as LogOutput} from './LogOutput';
 export {TestsVariablesList, ExecutionsVariablesList} from './Variables';
 export {default as EntityGrid} from './EntityGrid';
-export {default as notificationCall} from './Notification';
+export {notificationCall, NotificationContent} from './Notification';
 export {default as EndpointModal} from './EndpointModal';
 export {default as ConfigurationCard} from './ConfigurationCard';
 export {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs} from './ExecutionDetails';

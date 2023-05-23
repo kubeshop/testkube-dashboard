@@ -35,18 +35,18 @@ const Labels: React.FC = () => {
   const entityLabels = entityDetails?.labels || {};
 
   const onSave = () => {
-    updateEntity({
+    return updateEntity({
       id: entityDetails.name,
       data: {
         ...entityDetails,
         labels: decomposeLabels(localLabels),
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
         setWasTouched(false);
       });
-    });
   };
 
   const onCancel = () => {

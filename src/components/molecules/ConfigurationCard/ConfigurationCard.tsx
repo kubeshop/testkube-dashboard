@@ -1,11 +1,16 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {ErrorNotificationConfig} from '@models/notifications';
+
 import {Button, Text} from '@custom-antd';
+
+import useInViewport from '@hooks/useInViewport';
 
 import Colors from '@styles/Colors';
 
+import {NotificationContent} from '../Notification';
 import {
   StyledChildren,
   StyledContainer,
@@ -13,6 +18,7 @@ import {
   StyledFooterButtonsContainer,
   StyledFooterText,
   StyledHeader,
+  StyledNotificationContainer,
 } from './ConfigurationCard.styled';
 
 type ConfigurationCardProps = {
@@ -20,7 +26,7 @@ type ConfigurationCardProps = {
   description: string | ReactElement;
   isWarning?: boolean;
   footerText?: React.ReactNode;
-  onConfirm?: () => void;
+  onConfirm?: () => Promise<ErrorNotificationConfig | void> | void;
   confirmButtonText?: string;
   onCancel?: () => void;
   isButtonsDisabled?: boolean;
@@ -45,10 +51,14 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     isEditable = true,
     enabled = true,
   } = props;
+  const [error, setError] = useState<ErrorNotificationConfig | null>(null);
+
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
 
   return (
     <StyledContainer isWarning={isWarning}>
-      <StyledHeader>
+      <StyledHeader ref={topRef}>
         <Text className="regular big" color={Colors.slate50}>
           {title}
         </Text>
@@ -56,7 +66,16 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
           {description}
         </Text>
       </StyledHeader>
-      {children ? <StyledChildren $isActionsVisible={enabled || !isEditable}>{children}</StyledChildren> : null}
+      {children ? (
+        <>
+          {error ? (
+            <StyledNotificationContainer>
+              <NotificationContent status="failed" message={error.message} title={error.title} />
+            </StyledNotificationContainer>
+          ) : null}
+          <StyledChildren $isActionsVisible={enabled || !isEditable}>{children}</StyledChildren>
+        </>
+      ) : null}
       {(enabled && onConfirm) || footerText ? (
         <StyledFooter>
           {footerText && (
@@ -68,7 +87,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
           )}
           {enabled ? (
             <Form.Item noStyle shouldUpdate>
-              {({isFieldsTouched, getFieldsValue}) => {
+              {({isFieldsTouched, getFieldsValue, validateFields}) => {
                 let disabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
 
                 if (forceEnableButtons) {
@@ -77,10 +96,36 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
 
                 return (
                   <StyledFooterButtonsContainer>
-                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || disabled}>
+                    <Button
+                      onClick={() => {
+                        onCancel?.();
+                        setError(null);
+                      }}
+                      $customType="secondary"
+                      hidden={!onCancel || disabled}
+                    >
                       Cancel
                     </Button>
-                    <Button onClick={onConfirm} $customType={isWarning ? 'warning' : 'primary'} disabled={disabled} hidden={!onConfirm}>
+                    <Button
+                      onClick={() => {
+                        setError(null);
+                        Promise.resolve(validateFields?.())
+                          .then(() => onConfirm?.())
+                          .catch((err: ErrorNotificationConfig) => {
+                            if (err.message || err.title) {
+                              setError(err);
+                            }
+
+                            if (!inTopInViewport && topRef && topRef.current) {
+                              topRef.current.scrollIntoView();
+                            }
+                          });
+                      }}
+                      $customType={isWarning ? 'warning' : 'primary'}
+                      disabled={disabled}
+                      hidden={!onConfirm}
+                      htmlType="submit"
+                    >
                       {confirmButtonText}
                     </Button>
                   </StyledFooterButtonsContainer>
