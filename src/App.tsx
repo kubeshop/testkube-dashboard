@@ -1,27 +1,32 @@
-import React, {lazy, Suspense, useContext, useEffect, useRef, useState} from 'react';
+import React, {Suspense, lazy, useContext, useEffect, useRef, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
+import {useUpdate} from 'react-use';
+
+import {config} from '@constants/config';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 import {setSources} from '@redux/reducers/sourcesSlice';
 
-import {useGetExecutorsQuery} from '@services/executors';
-import {useGetSourcesQuery} from '@services/sources';
-import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
-
-import {PollingIntervals} from '@utils/numbers';
-import {safeRefetch} from '@utils/fetchUtils';
-
-import {MainContext} from '@contexts';
+import {EndpointModal, MessagePanel} from '@molecules';
+import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
+import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
+import notificationCall from '@molecules/Notification';
 
 import {EndpointProcessing, Loading, NotFound} from '@pages';
 
-import {EndpointModal} from '@molecules';
-import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
-import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
-import notificationCall from '@molecules/Notification';
+import {safeRefetch} from '@utils/fetchUtils';
+import {PollingIntervals} from '@utils/numbers';
+
+import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
+import {useGetExecutorsQuery} from '@services/executors';
+import {useGetSourcesQuery} from '@services/sources';
+
+import {MainContext} from '@contexts';
+
+import {MessagePanelWrapper} from './App.styled';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -49,6 +54,10 @@ const App: React.FC<any> = () => {
   });
 
   const [isEndpointModalVisible, setEndpointModalState] = useState(false);
+
+  const update = useUpdate();
+
+  const isTestkubeCloudLaunchBannerHidden = localStorage.getItem(config.isTestkubeCloudLaunchBannerHidden);
 
   useEffect(() => {
     dispatch(setIsFullScreenLogOutput(false));
@@ -79,7 +88,7 @@ const App: React.FC<any> = () => {
       return;
     }
 
-    getApiDetails(apiEndpoint).catch((error) => {
+    getApiDetails(apiEndpoint).catch(() => {
       // Handle race condition
       if (getApiEndpoint() !== apiEndpoint) {
         return;
@@ -91,27 +100,69 @@ const App: React.FC<any> = () => {
     });
   }, [apiEndpoint]);
 
-  return <Suspense fallback={<Loading />}>
-    <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
-    <Routes>
-      <Route path="tests/*" element={<Tests />} />
-      <Route path="test-suites/*" element={<TestSuites />} />
-      <Route path="executors/*" element={<Executors />} />
-      <Route path="sources/*" element={<Sources />} />
-      <Route path="triggers" element={<Triggers />} />
-      <Route path="settings" element={<GlobalSettings />} />
-      <Route
-        path="/apiEndpoint"
-        element={isApiEndpointLocked() ? <Navigate to="/" replace /> : <EndpointProcessing />}
-      />
-      <Route path="/" element={<Navigate to="/tests" replace />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
-    <CSSTransition nodeRef={logRef} in={isFullScreenLogOutput} timeout={1000} classNames="full-screen-log-output" unmountOnExit>
-      <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
-    </CSSTransition>
-  </Suspense>;
+  return (
+    <Suspense fallback={<Loading />}>
+      {!isTestkubeCloudLaunchBannerHidden && (
+        <MessagePanelWrapper>
+          <MessagePanel
+            buttons={[
+              {
+                type: 'secondary',
+                text: 'Learn more',
+                isLink: true,
+                linkConfig: {
+                  href: 'https://testkube.io/pricing',
+                  target: '_blank',
+                },
+              },
+              {
+                type: 'primary',
+                text: 'Connect to Testkube Cloud',
+                isLink: true,
+                linkConfig: {
+                  href: 'https://cloud.testkube.io/system-init?cloudMigrate=true',
+                  target: '_blank',
+                },
+              },
+            ]}
+            onClose={() => {
+              localStorage.setItem(config.isTestkubeCloudLaunchBannerHidden, 'true');
+              update();
+            }}
+            isClosable
+            type="default"
+            title="🎉 We have just launched Testkube Cloud! 🎉"
+            description="One centralised place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
+          />
+        </MessagePanelWrapper>
+      )}
+      <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
+      <Routes>
+        <Route path="tests/*" element={<Tests />} />
+        <Route path="test-suites/*" element={<TestSuites />} />
+        <Route path="executors/*" element={<Executors />} />
+        <Route path="sources/*" element={<Sources />} />
+        <Route path="triggers" element={<Triggers />} />
+        <Route path="settings" element={<GlobalSettings />} />
+        <Route
+          path="/apiEndpoint"
+          element={isApiEndpointLocked() ? <Navigate to="/" replace /> : <EndpointProcessing />}
+        />
+        <Route path="/" element={<Navigate to="/tests" replace />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
+      <CSSTransition
+        nodeRef={logRef}
+        in={isFullScreenLogOutput}
+        timeout={1000}
+        classNames="full-screen-log-output"
+        unmountOnExit
+      >
+        <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
+      </CSSTransition>
+    </Suspense>
+  );
 };
 
 export default App;

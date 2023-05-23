@@ -55,8 +55,11 @@ enum Colors {
   teal900 = '#164e63',
 
   indigo50 = '#EEF2FF',
+  indigo100 = '#E0E7FF',
+  indigo200 = '#C7D2FE',
   indigo300 = '#A5B4FC',
   indigo400 = '#818CF8',
+  indigo600 = '#4F46E5',
   indigo900 = '#312e81',
 
   amber100 = '#FEF3C7',

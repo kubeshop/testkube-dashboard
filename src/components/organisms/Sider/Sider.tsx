@@ -1,11 +1,15 @@
 import {useContext, useMemo} from 'react';
 
-import {Space, Tooltip} from 'antd';
+import {Dropdown, Space, Tooltip} from 'antd';
+
+import {QuestionCircleOutlined} from '@ant-design/icons';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 
 import {Icon} from '@atoms';
+
+import {Text} from '@custom-antd';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -18,9 +22,13 @@ import {ReactComponent as TriggersIcon} from '@assets/triggers.svg';
 
 import {ReactComponent as SettingIcon} from '@icons/setting.svg';
 
+import Colors from '@styles/Colors';
+
 import {DashboardContext} from '@contexts';
 
 import {
+  DropdownList,
+  DropdownListItem,
   StyledLogo,
   StyledNavigationMenu,
   StyledOther,
@@ -102,9 +110,39 @@ const Sider: React.FC = () => {
       icon: 'cog',
       onClick: () => navigate('/settings'),
     },
-    {icon: 'github', onClick: () => window.open(externalLinks.github)},
-    {icon: 'documentation', onClick: () => window.open(externalLinks.documentation)},
-    {icon: 'discord', onClick: () => window.open(externalLinks.discord)},
+    {
+      dropdownComponent: (
+        <Dropdown
+          dropdownRender={() => (
+            <DropdownList>
+              <DropdownListItem>
+                <a href={externalLinks.github} target="_blank">
+                  <Text color={Colors.slate400}>Github</Text>
+                </a>
+              </DropdownListItem>
+              <DropdownListItem>
+                <a href={externalLinks.documentation} target="_blank">
+                  <Text color={Colors.slate400}>Documentation</Text>
+                </a>
+              </DropdownListItem>
+              <DropdownListItem>
+                <a href={externalLinks.discord} target="_blank">
+                  <Text color={Colors.slate400}>Discord</Text>
+                </a>
+              </DropdownListItem>
+            </DropdownList>
+          )}
+          trigger={['click']}
+        >
+          <QuestionCircleOutlined
+            style={{
+              fontSize: 20,
+            }}
+          />
+        </Dropdown>
+      ),
+    },
+    {icon: 'cloudMigrate', size: 32, onClick: () => window.open(externalLinks.OSStoCloudMigration)},
   ];
 
   const renderedMenuItems = useMemo(() => {
@@ -131,10 +169,14 @@ const Sider: React.FC = () => {
 
   const renderedOtherMenuItems = useMemo(() => {
     return otherMenuItems.map(otherMenuItem => {
-      const {icon, onClick} = otherMenuItem;
+      const {icon, onClick, size = 20, dropdownComponent} = otherMenuItem;
+
+      if (dropdownComponent) {
+        return <StyledOtherItem $size={size}>{dropdownComponent}</StyledOtherItem>;
+      }
 
       return (
-        <StyledOtherItem key={icon}>
+        <StyledOtherItem key={icon} $size={size}>
           {/* @ts-ignore */}
           <Icon name={icon} onClick={onClick} />
         </StyledOtherItem>
