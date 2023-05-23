@@ -108,6 +108,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                     </Button>
                     <Button
                       onClick={() => {
+                        setError(null);
                         Promise.resolve(validateFields?.())
                           .then(() => onConfirm?.())
                           .catch((err: ErrorNotificationConfig) => {
