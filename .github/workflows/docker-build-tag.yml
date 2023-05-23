@@ -49,8 +49,8 @@ jobs:
             TARGET=${{ matrix.path }}
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SEGMENT_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
-            REACT_APP_POSTHOG_KEY=phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo
-            REACT_APP_GOOGLE_ANALYTICS_ID=G-945BK09GDC
+            REACT_APP_POSTHOG_KEY=${{ secrets.REACT_APP_POSTHOG_KEY }}
+            REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
           cache-from: type=gha,scope=${{ matrix.name }}
           cache-to: type=gha,mode=max,scope=${{ matrix.name }}
