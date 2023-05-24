@@ -343,6 +343,7 @@ export const GlobalStyle = createGlobalStyle`
   
   /* Popover */
 
+  /* stylelint-disable selector-class-pattern */
   .ant-popover-placement-rightBottom {
     .ant-popover-arrow  {
       bottom: 4px;
