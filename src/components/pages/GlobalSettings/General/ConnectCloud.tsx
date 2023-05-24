@@ -1,10 +1,8 @@
-import {Button} from 'antd';
-
 import {CloudUploadOutlined} from '@ant-design/icons';
 
 import {ExternalLink} from '@atoms';
 
-import {FullWidthSpace, Text} from '@custom-antd';
+import {Button, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
@@ -35,7 +33,7 @@ const ConnectCloud: React.FC = () => {
             <ExternalLink href={externalLinks.cloudIntro}>Learn more about Testkube Cloud</ExternalLink>
           </FullWidthSpace>
         </FullWidthSpace>
-        <Button type="primary" onClick={() => window.open(externalLinks.OSStoCloudMigration, '_self')}>
+        <Button $customType="primary" onClick={() => window.open(externalLinks.OSStoCloudMigration, '_self')}>
           Connect your Testkube Cloud account
         </Button>
       </FullWidthSpace>

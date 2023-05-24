@@ -340,7 +340,6 @@ export const GlobalStyle = createGlobalStyle`
       color: ${Colors.slate500};
     }
   }
-
   /* Form */
 
   .ant-form-vertical {
