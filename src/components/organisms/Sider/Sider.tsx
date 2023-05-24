@@ -113,6 +113,7 @@ const Sider: React.FC = () => {
     {
       dropdownComponent: (
         <Popover
+          align={{offset: [0, 10]}}
           placement="rightBottom"
           content={
             <>
@@ -141,11 +142,7 @@ const Sider: React.FC = () => {
           }
           trigger={['hover']}
         >
-          <QuestionCircleOutlined
-            style={{
-              fontSize: 20,
-            }}
-          />
+          <QuestionCircleOutlined style={{fontSize: 20}} />
         </Popover>
       ),
     },

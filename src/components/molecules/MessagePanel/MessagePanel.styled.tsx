@@ -56,18 +56,7 @@ export const MessageDescriptionText = styled(Text)`
   a {
     font-weight: 500;
     text-decoration: underline;
-  }
-
-  &.error {
-    a {
-      color: ${Colors.rose200};
-    }
-  }
-
-  &.warning {
-    a {
-      color: ${Colors.amber200};
-    }
+    color: inherit;
   }
 `;
 

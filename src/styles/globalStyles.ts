@@ -340,16 +340,6 @@ export const GlobalStyle = createGlobalStyle`
       color: ${Colors.slate500};
     }
   }
-  
-  /* Popover */
-
-  /* stylelint-disable selector-class-pattern */
-  .ant-popover-placement-rightBottom {
-    .ant-popover-arrow  {
-      bottom: 4px;
-    }
-  }
-
   /* Form */
 
   .ant-form-vertical {
