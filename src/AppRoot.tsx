@@ -34,8 +34,6 @@ import {externalLinks} from './utils/externalLinks';
 
 import env from './env';
 
-const pjson = require('../package.json');
-
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
@@ -82,11 +80,15 @@ const AppRoot: React.FC = () => {
           mask_all_text: true,
           persistence: 'localStorage',
           property_blacklist: ['$current_url', '$host', '$referrer', '$referring_domain'],
+          ip: false,
           loaded: instance => {
             instance.onFeatureFlags(flags => {
               setFeatureFlags(flags);
             });
           },
+        });
+        posthog.register({
+          version: env.version,
         });
       }
       if (posthog.__loaded) {
@@ -157,7 +159,7 @@ const AppRoot: React.FC = () => {
     .append(AnalyticsProvider, {
       disabled: !isTelemetryEnabled,
       writeKey: env.segmentKey,
-      appVersion: pjson.version,
+      appVersion: env.version,
       featureFlags,
     })
     .append(MainContext.Provider, {value: mainContextValue})
