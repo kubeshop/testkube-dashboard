@@ -1,6 +1,6 @@
 import {useContext, useMemo} from 'react';
 
-import {Dropdown, Space, Tooltip} from 'antd';
+import {Popover, Tooltip} from 'antd';
 
 import {QuestionCircleOutlined} from '@ant-design/icons';
 
@@ -9,7 +9,7 @@ import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 
 import {Icon} from '@atoms';
 
-import {Text} from '@custom-antd';
+import {FullWidthSpace, Text} from '@custom-antd';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -27,7 +27,6 @@ import Colors from '@styles/Colors';
 import {DashboardContext} from '@contexts';
 
 import {
-  DropdownList,
   DropdownListItem,
   StyledLogo,
   StyledNavigationMenu,
@@ -109,40 +108,54 @@ const Sider: React.FC = () => {
     {
       icon: 'cog',
       onClick: () => navigate('/settings'),
+      title: 'Settings',
     },
     {
       dropdownComponent: (
-        <Dropdown
-          dropdownRender={() => (
-            <DropdownList>
-              <DropdownListItem>
-                <a href={externalLinks.github} target="_blank">
-                  <Text color={Colors.slate400}>Github</Text>
-                </a>
-              </DropdownListItem>
+        <Popover
+          open
+          placement="rightBottom"
+          content={
+            <>
               <DropdownListItem>
                 <a href={externalLinks.documentation} target="_blank">
-                  <Text color={Colors.slate400}>Documentation</Text>
+                  <Text color={Colors.slate300} className="regular middle">
+                    Documentation
+                  </Text>
                 </a>
               </DropdownListItem>
               <DropdownListItem>
                 <a href={externalLinks.discord} target="_blank">
-                  <Text color={Colors.slate400}>Discord</Text>
+                  <Text color={Colors.slate300} className="regular middle">
+                    Discord community
+                  </Text>
                 </a>
               </DropdownListItem>
-            </DropdownList>
-          )}
-          trigger={['click']}
+              <DropdownListItem>
+                <a href={externalLinks.github} target="_blank">
+                  <Text color={Colors.slate300} className="regular middle">
+                    GitHub
+                  </Text>
+                </a>
+              </DropdownListItem>
+            </>
+          }
+          trigger={['hover']}
         >
           <QuestionCircleOutlined
             style={{
               fontSize: 20,
             }}
           />
-        </Dropdown>
+        </Popover>
       ),
     },
-    {icon: 'cloudMigrate', size: 32, onClick: () => window.open(externalLinks.OSStoCloudMigration)},
+    {
+      icon: 'cloudMigrate',
+      title: 'Connect to Testkube Cloud',
+      size: 32,
+      onClick: () => window.open(externalLinks.OSStoCloudMigration),
+    },
   ];
 
   const renderedMenuItems = useMemo(() => {
@@ -169,7 +182,7 @@ const Sider: React.FC = () => {
 
   const renderedOtherMenuItems = useMemo(() => {
     return otherMenuItems.map(otherMenuItem => {
-      const {icon, onClick, size = 20, dropdownComponent} = otherMenuItem;
+      const {icon, onClick, size = 20, dropdownComponent, title} = otherMenuItem;
 
       if (dropdownComponent) {
         return <StyledOtherItem $size={size}>{dropdownComponent}</StyledOtherItem>;
@@ -177,8 +190,10 @@ const Sider: React.FC = () => {
 
       return (
         <StyledOtherItem key={icon} $size={size}>
-          {/* @ts-ignore */}
-          <Icon name={icon} onClick={onClick} />
+          <Tooltip title={title} placement="right">
+            {/* @ts-ignore */}
+            <Icon name={icon} onClick={onClick} />
+          </Tooltip>
         </StyledOtherItem>
       );
     });
@@ -188,7 +203,7 @@ const Sider: React.FC = () => {
     <StyledSider width={100} data-cy="navigation-sider" $isFullScreenLogOutput={isFullScreenLogOutput}>
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
-          <Space size={30} direction="vertical">
+          <FullWidthSpace size={30} direction="vertical">
             {showLogoInSider ? (
               <StyledLogo>
                 <SiderLink href="/tests">
@@ -197,7 +212,7 @@ const Sider: React.FC = () => {
               </StyledLogo>
             ) : null}
             {renderedMenuItems}
-          </Space>
+          </FullWidthSpace>
         </StyledNavigationMenu>
         {showSocialLinksInSider ? (
           <StyledOther size={20} direction="vertical">

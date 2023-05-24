@@ -340,6 +340,14 @@ export const GlobalStyle = createGlobalStyle`
       color: ${Colors.slate500};
     }
   }
+  
+  /* Popover */
+
+  .ant-popover-placement-rightBottom {
+    .ant-popover-arrow  {
+      bottom: 4px;
+    }
+  }
 
   /* Form */
 

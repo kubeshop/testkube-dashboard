@@ -117,23 +117,11 @@ export const StyledOtherItem = styled.div<{
   }
 `;
 
-export const DropdownList = styled.ul`
-  border-radius: 4px;
-  background: ${Colors.slate800};
-  margin: 0;
-  padding: 0;
-
-  list-style-type: none;
-`;
-
 export const DropdownListItem = styled.li`
   display: flex;
-  gap: 8px;
   align-items: center;
 
   height: 50px;
-
-  color: ${Colors.slate400};
 
   cursor: pointer;
   transition: 0.3s;
