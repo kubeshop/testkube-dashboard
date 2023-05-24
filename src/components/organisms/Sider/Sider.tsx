@@ -113,7 +113,6 @@ const Sider: React.FC = () => {
     {
       dropdownComponent: (
         <Popover
-          open
           placement="rightBottom"
           content={
             <>
