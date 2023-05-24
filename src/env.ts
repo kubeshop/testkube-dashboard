@@ -11,6 +11,7 @@ const build: BuildTimeEnvironment = {
 const env: DynamicEnvironment = {
   apiUrl: values?.REACT_APP_API_SERVER_ENDPOINT,
   basename: values?.REACT_APP_ROOT_ROUTE,
+  disableTelemetry: values?.REACT_APP_DISABLE_TELEMETRY === 'true',
 };
 
 type BuildTimeEnvironment = {
@@ -22,6 +23,7 @@ type BuildTimeEnvironment = {
 type DynamicEnvironment = {
   apiUrl: string;
   basename: string;
+  disableTelemetry: boolean;
 };
 
 export default {

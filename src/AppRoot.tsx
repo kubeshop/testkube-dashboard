@@ -50,8 +50,9 @@ const AppRoot: React.FC = () => {
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
   const [featureFlags, setFeatureFlags] = useState<string[]>([]);
+  const isTelemetryAvailable = clusterConfig?.enableTelemetry && !env.disableTelemetry;
   const isTelemetryEnabled = useMemo(
-    () => !isCookiesVisible && clusterConfig?.enableTelemetry && localStorage.getItem('isGADisabled') === '0',
+    () => !isCookiesVisible && isTelemetryAvailable && localStorage.getItem('isGADisabled') === '0',
     [isCookiesVisible, clusterConfig]
   );
 
@@ -174,7 +175,7 @@ const AppRoot: React.FC = () => {
             </Content>
           </StyledLayoutContentWrapper>
         </Layout>
-        {isCookiesVisible && clusterConfig?.enableTelemetry ? (
+        {isCookiesVisible && isTelemetryAvailable ? (
           <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
         ) : null}
       </>
