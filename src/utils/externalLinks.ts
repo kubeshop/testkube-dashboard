@@ -22,4 +22,5 @@ export enum externalLinks {
   cloudIntro = 'https://docs.testkube.io/testkube-cloud/articles/intro',
   testTriggers = 'https://docs.testkube.io/articles/test-triggers',
   addingTimeout = 'https://docs.testkube.io/articles/adding-timeout/',
+  contactUs = 'https://calendly.com/bruno-at-kubeshop/15-minute-meeting',
 }
