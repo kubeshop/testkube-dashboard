@@ -5,6 +5,7 @@ const build: BuildTimeEnvironment = {
   posthogKey: process.env.REACT_APP_POSTHOG_KEY,
   segmentKey: process.env.REACT_APP_SEGMENT_KEY,
   ga4Key: process.env.REACT_APP_GOOGLE_ANALYTICS_ID,
+  version: process.env.REACT_APP_VERSION || 'dev',
 };
 
 // Dynamic variables
@@ -17,6 +18,7 @@ type BuildTimeEnvironment = {
   posthogKey?: string;
   segmentKey?: string;
   ga4Key?: string;
+  version: string;
 }
 
 type DynamicEnvironment = {

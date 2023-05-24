@@ -34,8 +34,6 @@ import {externalLinks} from './utils/externalLinks';
 
 import env from './env';
 
-const pjson = require('../package.json');
-
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
@@ -156,7 +154,7 @@ const AppRoot: React.FC = () => {
     .append(AnalyticsProvider, {
       disabled: !isTelemetryEnabled,
       writeKey: env.segmentKey,
-      appVersion: pjson.version,
+      appVersion: env.version,
       featureFlags,
     })
     .append(MainContext.Provider, {value: mainContextValue})
