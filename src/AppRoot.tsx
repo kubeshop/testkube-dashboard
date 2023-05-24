@@ -30,9 +30,8 @@ import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import {externalLinks} from './utils/externalLinks';
-
 import env from './env';
+import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
@@ -148,6 +147,7 @@ const AppRoot: React.FC = () => {
       baseUrl: '',
       showLogoInSider: true,
       showSocialLinksInSider: true,
+      showTestkubeCloudBanner: true
     }),
     [navigate, location]
   );
