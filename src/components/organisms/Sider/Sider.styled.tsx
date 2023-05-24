@@ -130,18 +130,18 @@ export const DropdownListItem = styled.li`
     flex: 1;
 
     padding: 14px;
-  }
 
-  &:hover {
-    .testkube-text {
-      color: ${Colors.whitePure};
-    }
+    &:hover {
+      .testkube-text {
+        color: ${Colors.whitePure};
+      }
 
-    svg {
-      path {
-        fill: ${Colors.whitePure};
+      svg {
+        path {
+          fill: ${Colors.whitePure};
 
-        transition: 0.3s;
+          transition: 0.3s;
+        }
       }
     }
   }
