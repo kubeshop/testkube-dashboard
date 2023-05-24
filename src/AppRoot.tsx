@@ -79,6 +79,7 @@ const AppRoot: React.FC = () => {
           mask_all_text: true,
           persistence: 'localStorage',
           property_blacklist: ['$current_url', '$host', '$referrer', '$referring_domain'],
+          ip: false,
           loaded: instance => {
             instance.onFeatureFlags(flags => {
               setFeatureFlags(flags);
