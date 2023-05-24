@@ -85,6 +85,9 @@ const AppRoot: React.FC = () => {
             });
           },
         });
+        posthog.register({
+          version: env.version,
+        });
       }
       if (posthog.__loaded) {
         posthog.opt_in_capturing();
