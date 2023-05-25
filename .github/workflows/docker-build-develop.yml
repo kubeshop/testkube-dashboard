@@ -32,7 +32,7 @@ jobs:
           DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
         with:
-          destination_container_repo: kubeshop/testkube-dashboard
+          destination_container_repo: ${{ github.repository }}
           provider: dockerhub
           short_description: 'Testkube Kubernetes Dashboard'
           readme_file: './README.md'
