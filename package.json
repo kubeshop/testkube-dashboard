@@ -110,7 +110,7 @@
     "lint:src": "eslint --max-warnings 0 \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
     "lintfix": "eslint --fix \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint \"./src/**/*.{ts,tsx}\"",
-    "precommit": "npm run lint",
+    "precommit": "npm run format:all && npm run lint",
     "format:all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" --cache",
     "prepare": "husky install",
     "release:patch": "standard-version --release-as patch",
