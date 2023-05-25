@@ -2,13 +2,13 @@ import {useContext} from 'react';
 
 import {Space} from 'antd';
 
-import {notificationCall} from '@molecules';
+import {EntityDetailsContext} from '@contexts';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {notificationCall} from '@molecules';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {EntityDetailsContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import Source from './Source';
 import TestType from './TestType';

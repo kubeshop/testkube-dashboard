@@ -1,24 +1,24 @@
 import {useContext, useEffect, useMemo, useState} from 'react';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectSources, setSources} from '@redux/reducers/sourcesSlice';
-
 import {ExternalLink} from '@atoms';
+
+import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal, Skeleton, Text} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
 
-import {externalLinks} from '@utils/externalLinks';
-import {safeRefetch} from '@utils/fetchUtils';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectSources, setSources} from '@redux/reducers/sourcesSlice';
 
 import {useGetSourcesQuery} from '@services/sources';
 
 import Colors from '@styles/Colors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {DashboardContext, MainContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {safeRefetch} from '@utils/fetchUtils';
 
 import AddSourceModal from './AddSourceModal';
 import EmptySources from './EmptySources';

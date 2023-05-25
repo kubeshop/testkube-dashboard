@@ -1,6 +1,6 @@
-import {memo, MouseEvent, useCallback, useEffect, useRef, useState} from 'react';
-import useWebSocket from 'react-use-websocket';
+import {MouseEvent, memo, useCallback, useEffect, useRef, useState} from 'react';
 import {useAsync} from 'react-use';
+import useWebSocket from 'react-use-websocket';
 
 import Ansi from 'ansi-to-react';
 
@@ -13,9 +13,9 @@ import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {getRtkIdToken} from '@utils/fetchUtils';
 
-import {useCountLines, useLastLines} from './utils';
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
+import {useCountLines, useLastLines} from './utils';
 
 export type LogOutputProps = {
   logOutput?: string;
@@ -162,10 +162,14 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       <StyledLogTextContainer>
         {visibleLogs ? (
           <StyledPreLogText>
-            {!expanded && lines >= initialLines ? <>
-              <a href='#' onClick={onExpand}>Click to show all {lines} lines...</a>
-              <br />
-            </> : null}
+            {!expanded && lines >= initialLines ? (
+              <>
+                <a href="#" onClick={onExpand}>
+                  Click to show all {lines} lines...
+                </a>
+                <br />
+              </>
+            ) : null}
             <Ansi useClasses>{visibleLogs}</Ansi>
           </StyledPreLogText>
         ) : null}

@@ -26,7 +26,7 @@ export const constructExecutedString = (duration: Duration, countToDisplay: numb
 
 export const formatDuration = (duration: number) => {
   const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor(duration % 3600 / 60);
+  const minutes = Math.floor((duration % 3600) / 60);
   const seconds = Math.floor(duration % 60);
   if (hours > 0) {
     return `${hours}h ${minutes}m ${seconds}s`;

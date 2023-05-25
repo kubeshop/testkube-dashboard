@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const StyledContainer = styled.div<{$isDragging?: boolean, $disabled: boolean}>`
+export const StyledContainer = styled.div<{$isDragging?: boolean; $disabled: boolean}>`
   display: flex;
   flex-direction: row;
   align-items: center;

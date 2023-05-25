@@ -2,18 +2,18 @@ import {useContext, useEffect} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
+import {MainContext} from '@contexts';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 export type PrivateRegistryFormFields = {
   privateRegistry: string;

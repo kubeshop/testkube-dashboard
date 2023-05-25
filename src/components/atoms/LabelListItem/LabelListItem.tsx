@@ -1,6 +1,6 @@
-import {EntityKey, EntityValue} from '@models/entityMap';
-
 import {SplitLabelText} from '@atoms';
+
+import {EntityKey, EntityValue} from '@models/entityMap';
 
 import {StyledLabelListItem} from './LabelListItem.styled';
 

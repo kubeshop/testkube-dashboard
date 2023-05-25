@@ -4,17 +4,17 @@ import {Form} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
+import {EntityDetailsContext} from '@contexts';
+
 import {Option} from '@models/form';
 
 import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
-
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
+import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {namingMap, updateRequestsMap} from '../utils';
 

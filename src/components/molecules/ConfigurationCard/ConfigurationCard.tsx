@@ -2,15 +2,16 @@ import React, {ReactElement, useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {ErrorNotificationConfig} from '@models/notifications';
-
 import {Button, Text} from '@custom-antd';
 
 import useInViewport from '@hooks/useInViewport';
 
+import {ErrorNotificationConfig} from '@models/notifications';
+
 import Colors from '@styles/Colors';
 
 import {NotificationContent} from '../Notification';
+
 import {
   StyledChildren,
   StyledContainer,

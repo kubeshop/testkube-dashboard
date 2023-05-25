@@ -2,11 +2,11 @@ import {useContext} from 'react';
 
 import {Tabs} from 'antd';
 
+import {ExecutionDetailsContext} from '@contexts';
+
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {ExecutionStepsList} from '@molecules';
-
-import {ExecutionDetailsContext} from '@contexts';
 
 const TestSuiteExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);

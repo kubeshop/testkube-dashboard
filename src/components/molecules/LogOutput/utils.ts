@@ -26,5 +26,5 @@ export const getLastLines = (text: string, lines: number): string => {
 export const useCountLines = (text: string) => useMemo(() => countLines(text), [text]);
 
 export const useLastLines = (text: string, maxLines: number): string => {
-  return useMemo(() => countLines(text) <= maxLines ? text : getLastLines(text, maxLines), [text, maxLines]);
+  return useMemo(() => (countLines(text) <= maxLines ? text : getLastLines(text, maxLines)), [text, maxLines]);
 };

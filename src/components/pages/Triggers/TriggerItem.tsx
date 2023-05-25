@@ -1,25 +1,24 @@
+import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Select} from 'antd';
 
-import {DeleteOutlined} from '@ant-design/icons';
+import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
+
+import {ExecutorIcon} from '@atoms';
+
+import {Input, Text} from '@custom-antd';
 
 import {Executor} from '@models/executors';
 import {Option as OptionType} from '@models/form';
 import {TestForTrigger} from '@models/test';
 import {TestSuiteForTrigger} from '@models/testSuite';
 
-import {getTestExecutorIcon} from '@redux/utils/executorIcon';
-
-import {ExecutorIcon} from '@atoms';
-
-import {Input, Text} from '@custom-antd';
-
 import {LabelsSelect} from '@molecules';
 
-import {requiredNoText} from '@utils/form';
-
-import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
+import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import Colors from '@styles/Colors';
+
+import {requiredNoText} from '@utils/form';
 
 import {StyledTestOptionWrapper, TextWrapper, TriggerFormItem, TriggerItemContainer} from './Triggers.styled';
 

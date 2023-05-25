@@ -1,17 +1,16 @@
-import {Form, FormInstance, Input, Select} from 'antd';
-
 import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, PauseOutlined, RightOutlined} from '@ant-design/icons';
-
-import {VariableInForm} from '@models/variable';
+import {Form, FormInstance, Input, Select} from 'antd';
 
 import {Button, Text} from '@custom-antd';
 
-import {validateDuplicateValueByKey} from '@utils';
-import {required} from '@utils/form';
+import {VariableInForm} from '@models/variable';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import Colors from '@styles/Colors';
 
-import {Permissions, usePermission} from '@permissions/base';
+import {validateDuplicateValueByKey} from '@utils';
+import {required} from '@utils/form';
 
 import {duplicateKeyMessage, emptyVariableObject, typeOptions} from './VariablesFormList.constants';
 import {

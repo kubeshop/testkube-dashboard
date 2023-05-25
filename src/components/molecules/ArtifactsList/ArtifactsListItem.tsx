@@ -2,15 +2,15 @@ import {useState} from 'react';
 
 import {FileOutlined} from '@ant-design/icons';
 
-import {Artifact} from '@models/artifact';
-
 import {Text} from '@custom-antd';
 
-import {DefaultRequestError, displayDefaultErrorNotification} from '@utils/notification';
+import {Artifact} from '@models/artifact';
 
 import {downloadArtifact} from '@services/artifacts';
 
 import Colors from '@styles/Colors';
+
+import {DefaultRequestError, displayDefaultErrorNotification} from '@utils/notification';
 
 import {ArtifactsListItemContainer, StyledDownloadIcon, StyledLoader, StyledSpace} from './ArtifactsListItem.styled';
 

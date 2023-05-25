@@ -1,38 +1,37 @@
 import {memo, useContext, useEffect, useMemo, useState} from 'react';
 
+import {DownOutlined} from '@ant-design/icons';
 import {Dropdown, Form} from 'antd';
 
-import {DownOutlined} from '@ant-design/icons';
+import {ExternalLink} from '@atoms';
+
+import {MainContext} from '@contexts';
+
+import {Button, Skeleton, Text} from '@custom-antd';
 
 import {TestForTrigger} from '@models/test';
 import {TestSuiteForTrigger} from '@models/testSuite';
 import {TestTrigger, TestTriggerFormEntity} from '@models/triggers';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-
-import {ExternalLink} from '@atoms';
-
-import {Button, Skeleton, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {PageBlueprint} from '@organisms';
 
-import {externalLinks} from '@utils/externalLinks';
-import {safeRefetch} from '@utils/fetchUtils';
-import {displayDefaultNotificationFlow} from '@utils/notification';
-import {PollingIntervals} from '@utils/numbers';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectNamespace} from '@redux/reducers/configSlice';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {safeRefetch} from '@utils/fetchUtils';
+import {displayDefaultNotificationFlow} from '@utils/notification';
+import {PollingIntervals} from '@utils/numbers';
 
 import AddTriggerOption from './AddTriggerOption';
 import TriggerItem from './TriggerItem';

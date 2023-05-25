@@ -2,22 +2,22 @@ import {useContext, useEffect} from 'react';
 
 import {Form} from 'antd';
 
+import {CommandInput} from '@atoms';
+
+import {MainContext} from '@contexts';
+
 import {Executor} from '@models/executors';
+
+import {ConfigurationCard, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
-import {CommandInput} from '@atoms';
-
-import {ConfigurationCard, notificationCall} from '@molecules';
-
-import {displayDefaultNotificationFlow} from '@utils/notification';
-
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type CommandFormFields = {
   command: string;

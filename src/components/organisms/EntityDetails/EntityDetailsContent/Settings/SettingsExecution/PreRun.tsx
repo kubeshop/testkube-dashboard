@@ -4,17 +4,17 @@ import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
 
+import {EntityDetailsContext} from '@contexts';
+
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type PreRunFormValues = {
   command: string;

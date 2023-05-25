@@ -1,6 +1,5 @@
-import {Tooltip} from 'antd';
-
 import {QuestionCircleOutlined} from '@ant-design/icons';
+import {Tooltip} from 'antd';
 
 import {Asterisk} from '@atoms';
 

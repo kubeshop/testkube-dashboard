@@ -6,19 +6,19 @@ import {intervalToDuration} from 'date-fns';
 
 import {StatusIcon} from '@atoms';
 
-import {Text} from '@custom-antd';
+import {EntityDetailsContext} from '@contexts';
 
-import {DotsDropdown, RunningContext} from '@molecules';
+import {Text} from '@custom-antd';
 
 import useIsRunning from '@hooks/useIsRunning';
 
-import {constructExecutedString, formatExecutionDate} from '@utils/formatDate';
-
-import Colors from '@styles/Colors';
+import {DotsDropdown, RunningContext} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext} from '@contexts';
+import Colors from '@styles/Colors';
+
+import {constructExecutedString, formatExecutionDate} from '@utils/formatDate';
 
 import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from './ExecutionDetailsDrawer.styled';
 import {getHeaderValues} from './utils';

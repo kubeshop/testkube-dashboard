@@ -2,12 +2,12 @@ import {useMemo} from 'react';
 
 import stripAnsi from 'strip-ansi';
 
-import {LogAction} from '@models/log';
-
 import {CopyButton, DownloadButton} from '@atoms';
 
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
+
+import {LogAction} from '@models/log';
 
 import FullScreenAction from './FullscreenLogOutput/FullScreenAction';
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';

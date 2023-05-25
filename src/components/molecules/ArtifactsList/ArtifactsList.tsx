@@ -1,8 +1,8 @@
 import {useMemo} from 'react';
 
-import {Artifact} from '@models/artifact';
-
 import {Skeleton, Text} from '@custom-antd';
+
+import {Artifact} from '@models/artifact';
 
 import Colors from '@styles/Colors';
 

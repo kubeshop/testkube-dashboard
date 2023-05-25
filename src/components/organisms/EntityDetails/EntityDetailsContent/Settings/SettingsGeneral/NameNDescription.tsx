@@ -2,17 +2,17 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
+import {EntityDetailsContext} from '@contexts';
+
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
+import {Permissions, usePermission} from '@permissions/base';
+
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
-
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {namingMap, updateRequestsMap} from '../utils';
 

@@ -2,9 +2,9 @@ import {memo, useEffect, useState} from 'react';
 
 import {Popover} from 'antd';
 
-import {VariableInForm} from '@models/variable';
-
 import {Text} from '@custom-antd';
+
+import {VariableInForm} from '@models/variable';
 
 import Colors from '@styles/Colors';
 

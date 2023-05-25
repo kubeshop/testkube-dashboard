@@ -1,12 +1,12 @@
 import {useContext, useEffect, useState} from 'react';
 
+import {MainContext} from '@contexts';
+
 import {Artifact} from '@models/artifact';
 
 import {ArtifactsList} from '@molecules';
 
 import {useGetTestExecutionArtifactsQuery} from '@services/tests';
-
-import {MainContext} from '@contexts';
 
 type TestExecutionDetailsArtifactsProps = {
   id: string;

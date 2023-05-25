@@ -3,9 +3,11 @@ import {useFirstMountState} from 'react-use';
 
 import {FormItem} from '@custom-antd';
 
-import {Branch, Commit, RevisionSwitcher} from '.';
 import {StyledFormSpace} from '../../organisms/TestConfigurationForm/TestConfigurationForm.styled';
+
 import {TooltipStatus} from './tooltipUtils';
+
+import {Branch, Commit, RevisionSwitcher} from '.';
 
 type RevisionProps = {
   message?: string;

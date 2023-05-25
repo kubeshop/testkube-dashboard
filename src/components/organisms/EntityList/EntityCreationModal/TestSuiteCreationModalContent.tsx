@@ -2,24 +2,24 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {Option} from '@models/form';
-import {ErrorNotificationConfig} from '@models/notifications';
-
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
+
+import useInViewport from '@hooks/useInViewport';
+
+import {Option} from '@models/form';
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import useInViewport from '@hooks/useInViewport';
-
-import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
-import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
+import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {StyledFormSpace} from './CreationModal.styled';
 

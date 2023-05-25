@@ -2,21 +2,21 @@ import {useContext, useEffect} from 'react';
 
 import {Form, Input} from 'antd';
 
+import {MainContext} from '@contexts';
+
 import {Executor} from '@models/executors';
+
+import {ConfigurationCard, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {useUpdateCustomExecutorMutation} from '@services/executors';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
-
-import {useUpdateCustomExecutorMutation} from '@services/executors';
-
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
 
 export type ContainerImageFormFields = {
   image: Executor['executor']['image'];

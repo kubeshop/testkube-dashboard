@@ -3,16 +3,16 @@ import {Helmet} from 'react-helmet';
 
 import {Tabs} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executorsSlice';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
 
-import {safeRefetch} from '@utils/fetchUtils';
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executorsSlice';
 
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {safeRefetch} from '@utils/fetchUtils';
 
 import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';

@@ -6,9 +6,9 @@ import {Button, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
-import {externalLinks} from '@utils/externalLinks';
-
 import Colors from '@styles/Colors';
+
+import {externalLinks} from '@utils/externalLinks';
 
 const ConnectCloud: React.FC = () => {
   return (

@@ -1,3 +1,7 @@
+import {ExternalLink} from '@atoms';
+
+import {Text} from '@custom-antd';
+
 import {EntityListBlueprint} from '@models/entity';
 
 import {initialTestsFiltersState} from '@redux/initialState';
@@ -9,15 +13,11 @@ import {
   setTestsFilters,
 } from '@redux/reducers/testsSlice';
 
-import {ExternalLink} from '@atoms';
-
-import {Text} from '@custom-antd';
-
-import {externalLinks} from '@utils/externalLinks';
-
 import {useAbortAllTestExecutionsMutation, useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
+
+import {externalLinks} from '@utils/externalLinks';
 
 import {EmptyTestsListContent} from './EmptyEntitiesListContent';
 

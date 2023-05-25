@@ -4,34 +4,35 @@ import {usePrevious} from 'react-use';
 
 import {LoadingOutlined} from '@ant-design/icons';
 
+import {ScrollTrigger} from '@atoms';
+
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+
+import {Button, Modal} from '@custom-antd';
+
+import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
+
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
 import {OnDataChangeInterface} from '@models/onDataChange';
 import {TestWithExecutionRedux} from '@models/test';
 import {TestSuiteWithExecutionRedux} from '@models/testSuite';
 
-import {initialPageSize} from '@redux/initialState';
-
-import {ScrollTrigger} from '@atoms';
-
-import {Button, Modal} from '@custom-antd';
-
 import {EntityGrid} from '@molecules';
 
-import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {initialPageSize} from '@redux/initialState';
+
+import {useApiEndpoint} from '@services/apiEndpoint';
 
 import {safeRefetch} from '@utils/fetchUtils';
 import {compareFiltersObject} from '@utils/objects';
 
-import {useApiEndpoint} from '@services/apiEndpoint';
-
-import {Permissions, usePermission} from '@permissions/base';
-
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
-
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
+
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
 import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';

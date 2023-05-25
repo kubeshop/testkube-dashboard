@@ -1,10 +1,9 @@
 import {PropsWithChildren, useEffect, useMemo} from 'react';
 
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import {AnalyticsBrowser, Context, Plugin} from '@segment/analytics-next';
 
 import {AnalyticsContext} from '@contexts';
-
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 type AnalyticsProviderProps = {
   disabled?: boolean;

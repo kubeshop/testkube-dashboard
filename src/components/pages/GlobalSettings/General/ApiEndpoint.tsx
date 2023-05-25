@@ -8,11 +8,11 @@ import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {externalLinks} from '@utils/externalLinks';
-
 import {isApiEndpointLocked, useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 import Colors from '@styles/Colors';
+
+import {externalLinks} from '@utils/externalLinks';
 
 type ApiEndpointFormValues = {
   endpoint: string;

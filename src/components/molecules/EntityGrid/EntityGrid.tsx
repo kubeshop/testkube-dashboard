@@ -15,13 +15,7 @@ const EntityGrid: React.FC<EntityGridProps> = props => {
     return data.map((item: any, index) => {
       const key = `entity_grid_item-${index}`;
 
-      return (
-        <EntityGridItem
-          item={item}
-          onClick={onNavigateToDetails}
-          key={key}
-        />
-      );
+      return <EntityGridItem item={item} onClick={onNavigateToDetails} key={key} />;
     });
   }, [data]);
 

@@ -3,6 +3,10 @@ import {useParams} from 'react-router-dom';
 import {useAsync} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
+import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
+
+import useStateCallback from '@hooks/useStateCallback';
+
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {ExecutionMetrics, Metrics} from '@models/metrics';
 import {Test} from '@models/test';
@@ -13,17 +17,14 @@ import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
-import useStateCallback from '@hooks/useStateCallback';
+import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
-import {useWsEndpoint} from '@services/apiEndpoint';
-
-import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
-
 import EntityDetailsContent from '../EntityDetailsContent';
 import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
+
 import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
 
 const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {

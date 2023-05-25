@@ -1,26 +1,26 @@
 import {useContext, useMemo, useState} from 'react';
 
+import {WarningOutlined} from '@ant-design/icons';
 import {Form, Select, Tooltip} from 'antd';
 
-import {WarningOutlined} from '@ant-design/icons';
-
 import parser from 'cron-parser';
+
+import {EntityDetailsContext} from '@contexts';
 
 import {FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
+import {Permissions, usePermission} from '@permissions/base';
 
 import Colors from '@styles/Colors';
 import Fonts from '@styles/Fonts';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
+import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {namingMap, updateRequestsMap} from '../utils';
+
 import CronInput from './CronInput';
 import NextExecution from './NextExecution';
 import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';

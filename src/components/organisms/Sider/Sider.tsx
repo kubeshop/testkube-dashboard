@@ -1,17 +1,7 @@
 import {useContext, useMemo} from 'react';
 
-import {Popover, Tooltip} from 'antd';
-
 import {QuestionCircleOutlined} from '@ant-design/icons';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
-
-import {Icon} from '@atoms';
-
-import {FullWidthSpace, Text} from '@custom-antd';
-
-import {externalLinks} from '@utils/externalLinks';
+import {Popover, Tooltip} from 'antd';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 import {ReactComponent as SourcesIcon} from '@assets/sources.svg';
@@ -20,11 +10,20 @@ import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
 import {ReactComponent as TriggersIcon} from '@assets/triggers.svg';
 
+import {Icon} from '@atoms';
+
+import {DashboardContext} from '@contexts';
+
+import {FullWidthSpace, Text} from '@custom-antd';
+
 import {ReactComponent as SettingIcon} from '@icons/setting.svg';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 
 import Colors from '@styles/Colors';
 
-import {DashboardContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
 
 import {
   DropdownListItem,

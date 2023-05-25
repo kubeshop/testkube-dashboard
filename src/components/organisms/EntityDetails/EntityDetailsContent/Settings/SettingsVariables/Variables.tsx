@@ -2,20 +2,20 @@ import React, {useContext, useEffect, useMemo} from 'react';
 
 import {Form} from 'antd';
 
+import {ExternalLink} from '@atoms';
+
+import {EntityDetailsContext} from '@contexts';
+
 import {Entity} from '@models/entity';
 import {VariableInForm} from '@models/variable';
 
-import {ExternalLink} from '@atoms';
-
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
-
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {updateRequestsMap} from '../utils';
 

@@ -4,13 +4,13 @@ import {Space} from 'antd';
 
 import styled from 'styled-components';
 
-import {Button, Text, Title} from '@custom-antd';
-
 import {ReactComponent as EmptySearch} from '@assets/empty-search.svg';
 
-import Colors from '@styles/Colors';
-
 import {MainContext} from '@contexts';
+
+import {Button, Text, Title} from '@custom-antd';
+
+import Colors from '@styles/Colors';
 
 import {StyledButtonContainer} from './EntityListContent.styled';
 

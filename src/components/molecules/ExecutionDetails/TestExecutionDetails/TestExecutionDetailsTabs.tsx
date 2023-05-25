@@ -5,18 +5,18 @@ import {Tabs} from 'antd';
 import debounce from 'lodash.debounce';
 import {Tab} from 'rc-tabs/lib/interface';
 
+import {ExecutionDetailsContext} from '@contexts';
+
+import useIsRunning from '@hooks/useIsRunning';
+
 import {Execution} from '@models/execution';
+
+import {CLICommands, ExecutionsVariablesList} from '@molecules';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
-import {CLICommands, ExecutionsVariablesList} from '@molecules';
-
-import useIsRunning from '@hooks/useIsRunning';
-
 import {decomposeVariables} from '@utils/variables';
-
-import {ExecutionDetailsContext} from '@contexts';
 
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
 

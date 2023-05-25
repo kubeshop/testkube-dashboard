@@ -4,13 +4,14 @@ import {ExternalLink} from '@atoms';
 
 import {Button, FullWidthSpace, Input, Modal, Text} from '@custom-antd';
 
-import {externalLinks} from '@utils/externalLinks';
-
 import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 import Colors from '@styles/Colors';
 
+import {externalLinks} from '@utils/externalLinks';
+
 import notificationCall from '../Notification/Notification';
+
 import {StyledSearchUrlForm} from './EndpointModal.styled';
 
 type EndpointModalProps = {

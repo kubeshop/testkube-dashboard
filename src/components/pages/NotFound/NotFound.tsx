@@ -1,12 +1,12 @@
 import {useCallback, useContext} from 'react';
 
-import {Button, Title} from '@custom-antd';
-
 import notFoundImage from '@assets/not-found-image.svg';
 
-import Colors from '@styles/Colors';
-
 import {DashboardContext} from '@contexts';
+
+import {Button, Title} from '@custom-antd';
+
+import Colors from '@styles/Colors';
 
 import {StyledNotFoundContainer, StyledNotFoundDescription, StyledNotFoundImage} from './NotFound.styled';
 

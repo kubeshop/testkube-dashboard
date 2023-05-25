@@ -1,12 +1,12 @@
 import React, {useContext, useRef} from 'react';
 
-import {EntityListContext} from '@organisms/EntityList/EntityListContainer/EntityListContainer';
+import {MainContext} from '@contexts';
 
 import useInViewport from '@hooks/useInViewport';
 
-import {PollingIntervals} from '@utils/numbers';
+import {EntityListContext} from '@organisms/EntityList/EntityListContainer/EntityListContainer';
 
-import {MainContext} from '@contexts';
+import {PollingIntervals} from '@utils/numbers';
 
 import EntityGridItemPure from './EntityGridItemPure';
 

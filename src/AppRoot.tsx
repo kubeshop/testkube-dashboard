@@ -7,7 +7,10 @@ import {Content} from 'antd/lib/layout/layout';
 import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
-import {useAppDispatch} from '@redux/hooks';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
+
+import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 
 import {CookiesBanner} from '@molecules';
 
@@ -15,17 +18,14 @@ import {Sider} from '@organisms';
 
 import {ErrorBoundary} from '@pages';
 
-import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import {composeProviders} from '@utils/composeProviders';
+import {useAppDispatch} from '@redux/hooks';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
-import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
-
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
-import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
+import {composeProviders} from '@utils/composeProviders';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
@@ -147,7 +147,7 @@ const AppRoot: React.FC = () => {
       baseUrl: '',
       showLogoInSider: true,
       showSocialLinksInSider: true,
-      showTestkubeCloudBanner: true
+      showTestkubeCloudBanner: true,
     }),
     [navigate, location]
   );
