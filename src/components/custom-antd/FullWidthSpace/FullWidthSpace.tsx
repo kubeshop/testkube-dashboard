@@ -1,9 +1,9 @@
-import {SpaceProps} from 'antd';
+import {FullWidthSpaceProps, StyledSpace} from './FullWidthSpace.styled';
 
-import {StyledSpace} from './FullWidthSpace.styled';
+const FullWidthSpace: React.FC<FullWidthSpaceProps> = props => {
+  const {justify = 'flex-start', ...rest} = props;
 
-const FullWidthSpace: React.FC<SpaceProps> = props => {
-  return <StyledSpace {...props} />;
+  return <StyledSpace justify={justify} {...rest} />;
 };
 
 export default FullWidthSpace;
