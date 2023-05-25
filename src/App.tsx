@@ -23,7 +23,7 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import {MessagePanelWrapper} from './App.styled';
 
@@ -34,11 +34,12 @@ const Sources = lazy(() => import('@pages').then(module => ({default: module.Sou
 const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
 const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
-const App: React.FC<any> = () => {
+const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);
+  const {showTestkubeCloudBanner} = useContext(DashboardContext);
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
   const logRef = useRef<HTMLDivElement>(null);
@@ -101,7 +102,7 @@ const App: React.FC<any> = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      {!isTestkubeCloudLaunchBannerHidden ? (
+      {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
         <MessagePanelWrapper>
           <MessagePanel
             buttons={[
