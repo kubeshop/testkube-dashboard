@@ -111,6 +111,7 @@
     "lintfix": "eslint --fix \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint \"./src/**/*.{ts,tsx}\"",
     "precommit": "npm run format:all && npm run lint",
+    "format:check": "prettier \"src/**/*.{js,jsx,ts,tsx}\" --cache --check",
     "format:all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" --cache",
     "prepare": "husky install",
     "release:patch": "standard-version --release-as patch",

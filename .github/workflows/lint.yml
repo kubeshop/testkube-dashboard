@@ -55,6 +55,10 @@ jobs:
         if: always()
         run: npm run lint
 
+      - name: Prettier Formatting
+        if: always()
+        run: npm run format:check
+
       - name: StyleLint Checking
         if: always()
         run: npm run stylelint
