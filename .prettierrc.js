@@ -27,7 +27,7 @@ module.exports = {
   printWidth: 120,
   trailingComma: 'es5',
   bracketSpacing: false,
-  jsxBracketSameLine: false,
+  bracketSameLine: false,
   proseWrap: 'always',
   quoteProps: 'as-needed',
   tabWidth: 2,
