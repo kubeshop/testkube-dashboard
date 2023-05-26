@@ -2,24 +2,24 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {Test} from '@models/test';
-
 import {ExternalLink} from '@atoms';
+
+import {EntityDetailsContext} from '@contexts';
 
 import {Button, FullWidthSpace, Text} from '@custom-antd';
 
+import {Test} from '@models/test';
+
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
-import {externalLinks} from '@utils/externalLinks';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {ArgumentsWrapper} from './Arguments.styled';
 import {dash, doubleDash, space, stringSpace} from './utils';

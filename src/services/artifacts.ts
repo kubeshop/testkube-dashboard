@@ -6,7 +6,7 @@ export const downloadArtifact = async (
   fileName: string,
   executionId: string,
   testName?: string,
-  testSuiteName?: string,
+  testSuiteName?: string
 ) => {
   // Build URL
   const encodedFileName = encodeURIComponent(fileName);

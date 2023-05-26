@@ -2,17 +2,17 @@ import {useContext} from 'react';
 
 import {Form, Popover} from 'antd';
 
+import {EntityDetailsContext} from '@contexts';
+
 import {Checkbox, FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {StyledPopoverContainer, StyledQuestionCircleOutlined} from '../Settings.styled';
 

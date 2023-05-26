@@ -1,17 +1,17 @@
 import React, {useContext, useMemo} from 'react';
 
+import {EntityDetailsContext, MainContext} from '@contexts';
+
+import {Text} from '@custom-antd';
+
 import {Entity} from '@models/entity';
 import {ExecutionStatusEnum} from '@models/execution';
 import {TestExecutor} from '@models/testExecutors';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
-
-import {Text} from '@custom-antd';
-
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
 import CopyCommand from './CopyCommand';
 

@@ -4,6 +4,8 @@ import {Form} from 'antd';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
+import {EntityDetailsContext, ModalContext} from '@contexts';
+
 import {Entity} from '@models/entity';
 
 import {ConfigurationCard} from '@molecules';
@@ -11,8 +13,6 @@ import DeleteEntityModal from '@molecules/DeleteEntityModal';
 
 import {useDeleteTestSuiteMutation} from '@services/testSuites';
 import {useDeleteTestMutation} from '@services/tests';
-
-import {EntityDetailsContext, ModalContext} from '@contexts';
 
 import {namingMap} from '../utils';
 

@@ -11,7 +11,7 @@ type ScrollTriggerProps = {
 };
 
 const ScrollTrigger: React.FC<ScrollTriggerProps> = props => {
-  const { offset = 0, disabled = false, onScroll } = props;
+  const {offset = 0, disabled = false, onScroll} = props;
   const style = useMemo(() => ({top: `${-offset}px`}), [offset]);
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
@@ -20,11 +20,9 @@ const ScrollTrigger: React.FC<ScrollTriggerProps> = props => {
     if (isInViewport && !disabled) {
       onScroll();
     }
-  }, [ isInViewport, disabled ]);
+  }, [isInViewport, disabled]);
 
-  return (
-    <StyledScrollTrigger ref={ref} style={style} />
-  );
+  return <StyledScrollTrigger ref={ref} style={style} />;
 };
 
 export default memo(ScrollTrigger);

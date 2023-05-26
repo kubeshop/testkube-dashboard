@@ -1,8 +1,8 @@
 import {useState} from 'react';
 
-import {Path, Repository, Revision, SecretFormItem} from '@molecules';
-
 import useValidateRepository, {ValidationState} from '@hooks/useValidateRepository';
+
+import {Path, Repository, Revision, SecretFormItem} from '@molecules';
 
 import {useValidateRepositoryMutation} from '@services/repository';
 

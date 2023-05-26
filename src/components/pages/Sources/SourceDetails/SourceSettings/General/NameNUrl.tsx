@@ -2,21 +2,21 @@ import {useContext, useEffect} from 'react';
 
 import {Form} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
+import {MainContext} from '@contexts';
 
 import {Input} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
 import {useUpdateSourceMutation} from '@services/sources';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {required} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type NameNUrlFormValues = {
   name: string;

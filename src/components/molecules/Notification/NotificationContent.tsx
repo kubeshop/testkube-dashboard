@@ -1,6 +1,6 @@
-import {ErrorNotificationConfig} from '@models/notifications';
-
 import {Text} from '@custom-antd';
+
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import Colors from '@styles/Colors';
 

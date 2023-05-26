@@ -2,12 +2,12 @@ import React, {useEffect} from 'react';
 
 import {Form} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
-
 import {Input} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
 type NameNTypeFormValues = {
   name: string;
@@ -28,13 +28,7 @@ const NameNType: React.FC = () => {
   }, [name, type]);
 
   return (
-    <Form
-      form={form}
-      name="general-settings-name-type"
-      initialValues={{name, type}}
-      layout="vertical"
-      disabled
-    >
+    <Form form={form} name="general-settings-name-type" initialValues={{name, type}} layout="vertical" disabled>
       <ConfigurationCard
         title="Executor name & type"
         description="Define the name and type of the executor which will be displayed across the Dashboard and CLI"

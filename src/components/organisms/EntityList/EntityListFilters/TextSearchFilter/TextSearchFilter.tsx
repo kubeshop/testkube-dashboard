@@ -2,17 +2,16 @@ import {useContext, useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {useDebounce} from 'react-use';
 
+import {SearchOutlined} from '@ant-design/icons';
 import {Input} from 'antd';
 
-import {SearchOutlined} from '@ant-design/icons';
+import {MainContext} from '@contexts';
 
 import {FilterProps} from '@models/filters';
 
 import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
-
-import {MainContext} from '@contexts';
 
 const TextSearchFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, entity, queryParam, isFiltersDisabled} = props;

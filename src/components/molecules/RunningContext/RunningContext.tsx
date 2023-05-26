@@ -3,19 +3,19 @@ import {Link} from 'react-router-dom';
 
 import {Tooltip} from 'antd';
 
+import {ExternalLink} from '@atoms';
+
+import {MainContext} from '@contexts';
+
+import {Text} from '@custom-antd';
+
 import {Entity} from '@models/entity';
 
 import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
-import {ExternalLink} from '@atoms';
-
-import {Text} from '@custom-antd';
-
-import {hasProtocol} from '@utils/strings';
-
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {hasProtocol} from '@utils/strings';
 
 export enum RunningContextType {
   userUI = 'user-ui',

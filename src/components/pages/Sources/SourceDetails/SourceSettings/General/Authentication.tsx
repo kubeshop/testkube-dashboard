@@ -2,23 +2,23 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {MainContext} from '@contexts';
+
+import {FullWidthSpace} from '@custom-antd';
+
 import {ErrorNotificationConfig} from '@models/notifications';
+
+import {ConfigurationCard, SecretFormItem, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
-import {FullWidthSpace} from '@custom-antd';
-
-import {ConfigurationCard, SecretFormItem, notificationCall} from '@molecules';
+import {useUpdateSourceMutation} from '@services/sources';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {dummySecret} from '@utils/sources';
-
-import {useUpdateSourceMutation} from '@services/sources';
-
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
 
 type AuthenticationFormValues = {
   token: string;

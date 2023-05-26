@@ -1,4 +1,4 @@
-import React, {createContext, PropsWithChildren, ReactElement, useContext, useMemo, useRef} from 'react';
+import React, {PropsWithChildren, ReactElement, createContext, useContext, useMemo, useRef} from 'react';
 
 // Interface
 
@@ -42,15 +42,13 @@ export interface PermissionsContextData<T extends PermissionsResolver<any, any>>
   resolver: T;
 }
 
-export function PermissionsProvider<T extends PermissionsResolver<any, any>>(props: PropsWithChildren<PermissionsProviderProps<T>>): ReactElement | null {
+export function PermissionsProvider<T extends PermissionsResolver<any, any>>(
+  props: PropsWithChildren<PermissionsProviderProps<T>>
+): ReactElement | null {
   const {scope, resolver, children} = props;
   const value = useMemo<PermissionsContextData<T>>(() => ({scope, resolver}), [scope, resolver]);
 
-  return (
-    <PermissionsContext.Provider value={value}>
-      {children}
-    </PermissionsContext.Provider>
-  );
+  return <PermissionsContext.Provider value={value}>{children}</PermissionsContext.Provider>;
 }
 
 export function createUsePermissionHook<T extends PermissionsResolver<any, any>>(): PermissionsResolverFn<T> {
@@ -93,7 +91,7 @@ export function createUsePermissionHook<T extends PermissionsResolver<any, any>>
 
     return useMemo(
       () => resolver.has(permission, {...baseScope, ...localScope}),
-      [permission, localScope, baseScope, resolver],
+      [permission, localScope, baseScope, resolver]
     );
   };
 }

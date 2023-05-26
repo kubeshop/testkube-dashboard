@@ -4,19 +4,19 @@ import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
+import {EntityDetailsContext} from '@contexts';
+
 import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {externalLinks} from '@utils/externalLinks';
-import {digits} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {digits} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type TimeoutForm = {
   activeDeadlineSeconds?: number;

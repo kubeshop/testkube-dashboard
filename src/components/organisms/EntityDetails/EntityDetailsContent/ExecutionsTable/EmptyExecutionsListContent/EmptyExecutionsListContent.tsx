@@ -1,14 +1,14 @@
 import React, {useContext} from 'react';
 
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+import {EntityDetailsContext, MainContext} from '@contexts';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
-import {externalLinks} from '@utils/externalLinks';
-
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+
+import {externalLinks} from '@utils/externalLinks';
 
 type EmptyExecutionsListContentProps = {
   triggerRun: () => void;

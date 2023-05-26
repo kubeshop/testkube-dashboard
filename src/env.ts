@@ -20,7 +20,7 @@ type BuildTimeEnvironment = {
   segmentKey?: string;
   ga4Key?: string;
   version: string;
-}
+};
 
 type DynamicEnvironment = {
   apiUrl: string;

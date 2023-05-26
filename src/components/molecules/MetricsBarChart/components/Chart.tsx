@@ -2,12 +2,13 @@ import {useMemo} from 'react';
 
 import {format, getDayOfYear} from 'date-fns';
 
-import {formatDuration} from '@utils/formatDate';
-
 import {SecondaryStatusColors, StatusColors} from '@styles/Colors';
+
+import {formatDuration} from '@utils/formatDate';
 
 import {BarChartConfig} from '../MetricsBarChart';
 import {BarWrapper as Bar, SvgWrapper} from '../MetricsBarChart.styled';
+
 import BarWithTooltip from './BarWithTooltip';
 
 type ChartProps = {

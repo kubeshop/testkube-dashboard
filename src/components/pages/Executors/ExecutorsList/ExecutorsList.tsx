@@ -2,29 +2,30 @@ import {useContext, useEffect, useMemo, useState} from 'react';
 
 import {Tabs} from 'antd';
 
-import {getTestExecutorIcon} from '@redux/utils/executorIcon';
+import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 
 import {ExecutorIcon, ExternalLink} from '@atoms';
+
+import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
 
-import {externalLinks} from '@utils/externalLinks';
-import {safeRefetch} from '@utils/fetchUtils';
+import {Permissions, usePermission} from '@permissions/base';
 
-import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
+import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
 
 import Colors from '@styles/Colors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {DashboardContext, MainContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {safeRefetch} from '@utils/fetchUtils';
 
 import {executorsList} from '../utils';
+
 import AddExecutorsModal from './AddExecutorsModal';
 import EmptyCustomExecutors from './EmptyCustomExecutors';
 import {

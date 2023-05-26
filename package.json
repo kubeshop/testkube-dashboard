@@ -28,7 +28,7 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
-    "@trivago/prettier-plugin-sort-imports": "^3.1.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/file-saver": "^2.0.5",
     "@types/jest": "27.0.2",
     "@types/lodash.debounce": "^4.0.7",
@@ -46,7 +46,7 @@
     "craco-alias": "3.0.1",
     "cypress": "8.7.0",
     "eslint-config-airbnb": "18.2.1",
-    "eslint-config-prettier": "8.7.0",
+    "eslint-config-prettier": "8.8.0",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-prettier": "4.2.1",
@@ -57,7 +57,7 @@
     "husky": "8.0.3",
     "less": "4.1.2",
     "postcss-styled-syntax": "0.4.0",
-    "prettier": "2.6.2",
+    "prettier": "2.8.8",
     "react-scripts": "5.0.1",
     "stylelint": "15.3.0",
     "stylelint-config-recommended": "11.0.0",
@@ -106,12 +106,13 @@
     "test:update": "craco test --updateSnapshot",
     "eject": "react-scripts eject",
     "lint": "npm run lint:config && npm run lint:src",
-    "lint:config": "eslint --max-warnings 0 .",
-    "lint:src": "eslint --max-warnings 0 \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
-    "lintfix": "eslint --fix \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
+    "lint:config": "eslint --max-warnings 0 . --cache --cache-location=node_modules/.cache/.eslint-config",
+    "lint:src": "eslint --max-warnings 0 \"src/**/*.{js,jsx,ts,tsx}\" --cache --cache-location=node_modules/.cache/.eslint-src",
+    "lintfix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint \"./src/**/*.{ts,tsx}\"",
-    "precommit": "npm run lint",
-    "format:all": "prettier --write \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
+    "precommit": "npm run format:all && npm run lint",
+    "format:check": "prettier \"src/**/*.{js,jsx,ts,tsx}\" --cache --check",
+    "format:all": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" --cache",
     "prepare": "husky install",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
@@ -121,16 +122,6 @@
     "cy:open:demo": "cypress open",
     "cy:open:dev": "cypress open -c baseUrl=http://localhost:3000",
     "less": "lessc --js src/antd-theme/antd-customized.less src/antd-theme/antd-customized.css"
-  },
-  "lint-staged": {
-    "\"{src,test}/**/*.{js,jsx,ts,tsx}\"": [
-      "eslint \"{src,test}/**/*.{js,jsx,ts,tsx}\" --fix",
-      "git add"
-    ],
-    ".": [
-      "eslint . --fix",
-      "git add"
-    ]
   },
   "browserslist": {
     "production": [
@@ -142,12 +133,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
     ]
   }
 }

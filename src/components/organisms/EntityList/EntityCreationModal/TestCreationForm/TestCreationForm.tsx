@@ -2,14 +2,16 @@ import React, {useMemo, useRef, useState} from 'react';
 
 import {Form, FormInstance, Input, Select} from 'antd';
 
+import {Button, FormItem, Text} from '@custom-antd';
+
+import useInViewport from '@hooks/useInViewport';
+
 import {Executor} from '@models/executors';
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 import {Test} from '@models/test';
-
-import {Button, FormItem, Text} from '@custom-antd';
 
 import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
@@ -22,7 +24,7 @@ import {
 } from '@organisms/TestConfigurationForm';
 import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
-import useInViewport from '@hooks/useInViewport';
+import {useAddTestMutation} from '@services/tests';
 
 import {remapExecutors} from '@utils/executors';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -33,8 +35,6 @@ import {
   remapTestSources,
   testSourceBaseOptions,
 } from '@utils/sources';
-
-import {useAddTestMutation} from '@services/tests';
 
 import {LabelsWrapper, StyledFormSpace} from '../CreationModal.styled';
 

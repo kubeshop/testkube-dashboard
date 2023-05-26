@@ -22,14 +22,17 @@ export const StyledSkeleton = styled(Skeleton)<{additionalStyles?: AdditionalSke
     &.ant-skeleton-active {
       .ant-skeleton-paragraph {
         & > li {
-          background: ${props => props.additionalStyles?.color ? props.additionalStyles?.color : Colors.slate800};
+          background: ${props => (props.additionalStyles?.color ? props.additionalStyles?.color : Colors.slate800)};
 
           &::after {
-            background: linear-gradient(90deg,
-            ${props => `${props.additionalStyles?.color ? props.additionalStyles?.color : Colors.slate800}`} 25%,
-            ${props =>
-                    `${props.additionalStyles?.contrastColor ? props.additionalStyles?.contrastColor : Colors.slate700}`} 37%,
-            ${props => `${props.additionalStyles?.color ? props.additionalStyles?.color : Colors.slate800}`} 63%);
+            background: linear-gradient(
+              90deg,
+              ${props => `${props.additionalStyles?.color ? props.additionalStyles?.color : Colors.slate800}`} 25%,
+              ${props =>
+                  `${props.additionalStyles?.contrastColor ? props.additionalStyles?.contrastColor : Colors.slate700}`}
+                37%,
+              ${props => `${props.additionalStyles?.color ? props.additionalStyles?.color : Colors.slate800}`} 63%
+            );
           }
         }
       }

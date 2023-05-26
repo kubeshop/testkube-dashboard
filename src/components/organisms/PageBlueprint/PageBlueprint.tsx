@@ -3,11 +3,11 @@ import {Helmet} from 'react-helmet';
 
 import {Space} from 'antd';
 
+import {ConfigContext} from '@contexts';
+
 import {Text, Title} from '@custom-antd';
 
 import Colors from '@styles/Colors';
-
-import {ConfigContext} from '@contexts';
 
 import {PageBlueprintHeader, PageBlueprintWrapper} from './PageBlueprint.styled';
 

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import {Metrics} from '@models/metrics';
-
 import {Title} from '@custom-antd';
 
-import {formatDuration} from '@utils/formatDate';
+import {Metrics} from '@models/metrics';
 
 import Colors from '@styles/Colors';
+
+import {formatDuration} from '@utils/formatDate';
 
 import {CustomText, SummaryGridItem, SummaryGridWrapper} from './SummaryGrid.styled';
 

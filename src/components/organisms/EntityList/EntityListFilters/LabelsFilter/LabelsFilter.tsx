@@ -1,25 +1,24 @@
 import {useContext, useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 
+import {FilterFilled} from '@ant-design/icons';
 import {Space} from 'antd';
 
-import {FilterFilled} from '@ant-design/icons';
+import {MainContext} from '@contexts';
+
+import {Button, Input, Title} from '@custom-antd';
+
+import usePressEnter from '@hooks/usePressEnter';
 
 import {Entity, EntityArray} from '@models/entityMap';
 import {FilterProps} from '@models/filters';
 
-import {initialPageSize} from '@redux/initialState';
-
-import {Button, Input, Title} from '@custom-antd';
-
 import {notificationCall} from '@molecules';
 import {FilterMenuFooter, StyledFilterDropdown, StyledFilterLabel, StyledFilterMenu} from '@molecules/FilterMenu';
 
-import usePressEnter from '@hooks/usePressEnter';
+import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
-
-import {MainContext} from '@contexts';
 
 import {EmptyButton, StyledKeyValueRow, StyledLabelsMenuContainer} from './LabelsFilter.styled';
 

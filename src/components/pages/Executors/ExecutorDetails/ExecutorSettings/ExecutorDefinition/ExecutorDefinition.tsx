@@ -2,19 +2,19 @@ import {useContext} from 'react';
 
 import {Form} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
-
 import {CopyButton, DownloadButton, Pre} from '@atoms';
-
-import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
-
-import {useGetExecutorDefinitionQuery} from '@services/executors';
 
 import {MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
+
+import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
+
+import {useGetExecutorDefinitionQuery} from '@services/executors';
 
 const ExecutorDefinition = () => {
   const {isClusterAvailable} = useContext(MainContext);

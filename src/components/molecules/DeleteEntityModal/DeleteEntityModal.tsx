@@ -5,18 +5,18 @@ import {Input} from 'antd';
 import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {Button, FullWidthSpace, Text} from '@custom-antd';
+import {DashboardContext, ModalContext} from '@contexts';
 
-import {notificationCall} from '@molecules';
+import {Button, FullWidthSpace, Text} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
+import {notificationCall} from '@molecules';
 
 import Colors from '@styles/Colors';
 
-import {DashboardContext, ModalContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
+import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {FooterSpace} from './DeleteEntityModal.styled';
 

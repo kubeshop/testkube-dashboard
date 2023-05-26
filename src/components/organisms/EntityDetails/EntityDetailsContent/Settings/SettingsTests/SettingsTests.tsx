@@ -1,33 +1,32 @@
 import {memo, useContext, useEffect, useMemo, useRef, useState} from 'react';
 
-import {Form, Select} from 'antd';
-
 import {ClockCircleOutlined} from '@ant-design/icons';
+import {Form, Select} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
+import {ExecutorIcon, ExternalLink} from '@atoms';
+
+import {EntityDetailsContext, MainContext} from '@contexts';
+
+import {Text, Title} from '@custom-antd';
+
 import {TestSuiteStepTest} from '@models/test';
 import {TestSuite, TestSuiteStep} from '@models/testSuite';
+
+import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
-import {ExecutorIcon, ExternalLink} from '@atoms';
-
-import {Text, Title} from '@custom-antd';
-
-import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
-
-import {externalLinks} from '@utils/externalLinks';
-import {displayDefaultNotificationFlow} from '@utils/notification';
-
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import DelayModal from './DelayModal';
 import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './SettingsTests.styled';

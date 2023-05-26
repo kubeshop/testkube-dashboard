@@ -1,24 +1,23 @@
 import React, {useContext, useEffect, useState} from 'react';
 
+import {LoadingOutlined} from '@ant-design/icons';
 import {Drawer} from 'antd';
 
-import {LoadingOutlined} from '@ant-design/icons';
+import {EntityDetailsContext, ExecutionDetailsContext, MainContext} from '@contexts';
+import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
+
+import useIsMobile from '@hooks/useIsMobile';
 
 import {Entity} from '@models/entity';
 
 import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCall} from '@molecules';
-
-import useIsMobile from '@hooks/useIsMobile';
-
-import {PollingIntervals} from '@utils/numbers';
 
 import {useGetTestSuiteExecutionByIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestExecutionByIdQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {EntityDetailsContext, ExecutionDetailsContext, MainContext} from '@contexts';
-import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
+import {PollingIntervals} from '@utils/numbers';
 
 import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
 import ExecutionDetailsDrawerHeader from './ExecutionDetailsDrawerHeader';

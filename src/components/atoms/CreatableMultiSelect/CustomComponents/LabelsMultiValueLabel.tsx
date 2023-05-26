@@ -1,10 +1,10 @@
 import {MultiValueGenericProps} from 'react-select';
 
-import {Option} from '@models/form';
-
 import {SplitLabelText} from '@atoms';
 
 import {Text} from '@custom-antd';
+
+import {Option} from '@models/form';
 
 import {StyledMultiLabel} from '../CreatableMultiSelect.styled';
 

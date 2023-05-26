@@ -5,10 +5,7 @@ import {useUpdate} from 'react-use';
 
 import {config} from '@constants/config';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
-import {setExecutors} from '@redux/reducers/executorsSlice';
-import {setSources} from '@redux/reducers/sourcesSlice';
+import {DashboardContext, MainContext} from '@contexts';
 
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
@@ -16,14 +13,17 @@ import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 
 import {EndpointProcessing, Loading, NotFound} from '@pages';
 
-import {safeRefetch} from '@utils/fetchUtils';
-import {PollingIntervals} from '@utils/numbers';
+import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {setExecutors} from '@redux/reducers/executorsSlice';
+import {setSources} from '@redux/reducers/sourcesSlice';
 
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {safeRefetch} from '@utils/fetchUtils';
+import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
 

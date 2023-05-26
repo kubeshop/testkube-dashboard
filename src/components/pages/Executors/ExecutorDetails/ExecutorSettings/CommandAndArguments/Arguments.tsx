@@ -1,24 +1,23 @@
 import {useContext, useEffect} from 'react';
 
+import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input} from 'antd';
 
-import {DeleteOutlined} from '@ant-design/icons';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
+import {MainContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {required} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {StyledButtonsContainer, StyledLabelsSpace, SymbolWrapper, VariablesListContainer} from './Arguments.styled';
 

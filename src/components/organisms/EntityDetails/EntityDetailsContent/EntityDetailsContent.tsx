@@ -6,31 +6,31 @@ import {Select, Space, Tabs} from 'antd';
 import {BaseQueryFn, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {Entity} from '@models/entity';
-import {Option as OptionType} from '@models/form';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectRedirectTarget} from '@redux/reducers/configSlice';
-
 import {ExecutorIcon} from '@atoms';
 
-import {Button, Text} from '@custom-antd';
+import {AnalyticsContext, ConfigContext, DashboardContext, EntityDetailsContext} from '@contexts';
 
-import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextType, notificationCall} from '@molecules';
+import {Button, Text} from '@custom-antd';
 
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Entity} from '@models/entity';
+import {Option as OptionType} from '@models/form';
+
+import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextType, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {AnalyticsContext, ConfigContext, DashboardContext, EntityDetailsContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';

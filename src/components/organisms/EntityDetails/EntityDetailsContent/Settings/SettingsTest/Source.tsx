@@ -2,15 +2,11 @@ import {memo, useMemo, useState} from 'react';
 
 import {Form, Select} from 'antd';
 
-import {Test} from '@models/test';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-import {selectSources} from '@redux/reducers/sourcesSlice';
-
 import {ExternalLink} from '@atoms';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
+
+import {Test} from '@models/test';
 
 import {ConfigurationCard} from '@molecules';
 
@@ -21,6 +17,12 @@ import {
   StringContentFields,
 } from '@organisms/TestConfigurationForm';
 import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
+
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
+import {selectSources} from '@redux/reducers/sourcesSlice';
 
 import {externalLinks} from '@utils/externalLinks';
 import {required} from '@utils/form';
@@ -33,8 +35,6 @@ import {
   remapTestSources,
   testSourceBaseOptions,
 } from '@utils/sources';
-
-import {Permissions, usePermission} from '@permissions/base';
 
 const additionalFields: SourceFields = {
   git: SourceEditFormFields,

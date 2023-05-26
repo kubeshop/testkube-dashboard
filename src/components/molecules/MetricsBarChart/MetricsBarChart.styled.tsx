@@ -17,10 +17,9 @@ export const BarsWrapper = styled.div<{
 
   ${invisibleScroll}
 
-  ${({$isDetailsView}) => (
+  ${({$isDetailsView}) =>
     // Ensure that axis is visible for details
-    $isDetailsView ? 'margin-left: 30px;' : ''
-  )}
+    $isDetailsView ? 'margin-left: 30px;' : ''}
 `;
 
 export const ChartWrapper = styled.div<{
@@ -32,9 +31,7 @@ export const ChartWrapper = styled.div<{
 
   ${invisibleScroll}
 
-  ${({$isDetailsView, $wrapperWidth}) => (
-    $isDetailsView ? '' : `width: ${$wrapperWidth}px;`
-  )}
+  ${({$isDetailsView, $wrapperWidth}) => ($isDetailsView ? '' : `width: ${$wrapperWidth}px;`)}
   min-width: 100%;
 `;
 

@@ -1,28 +1,27 @@
 import React, {useContext, useRef, useState} from 'react';
 
+import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 import {Input as AntdInput, Form} from 'antd';
 
-import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
+import {DashboardContext} from '@contexts';
+
+import {Button, Input} from '@custom-antd';
+
+import useInViewport from '@hooks/useInViewport';
 
 import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 
+import {Hint, NotificationContent} from '@molecules';
+
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
-import {Button, Input} from '@custom-antd';
-
-import {Hint, NotificationContent} from '@molecules';
-
-import useInViewport from '@hooks/useInViewport';
+import {useCreateSourceMutation} from '@services/sources';
 
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
-
-import {useCreateSourceMutation} from '@services/sources';
-
-import {DashboardContext} from '@contexts';
 
 import {AddSourceModalContainer} from './SourcesList.styled';
 

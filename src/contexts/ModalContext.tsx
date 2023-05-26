@@ -1,4 +1,5 @@
-import React, {createContext, FC, PropsWithChildren, ReactElement, useContext, useMemo, useState} from 'react';
+import React, {FC, PropsWithChildren, ReactElement, createContext, useContext, useMemo, useState} from 'react';
+
 import {Modal} from '@custom-antd';
 
 interface ModalConfig {
@@ -24,18 +25,17 @@ export const ModalHandler: FC<PropsWithChildren<{}>> = ({children}) => {
     content: <></>,
   });
 
-  const value = useMemo(() => ({
-    modalOpen,
-    modalConfig,
-    setModalOpen,
-    setModalConfig,
-  }), [modalOpen, modalConfig]);
-
-  return (
-    <ModalContext.Provider value={value}>
-      {children}
-    </ModalContext.Provider>
+  const value = useMemo(
+    () => ({
+      modalOpen,
+      modalConfig,
+      setModalOpen,
+      setModalConfig,
+    }),
+    [modalOpen, modalConfig]
   );
+
+  return <ModalContext.Provider value={value}>{children}</ModalContext.Provider>;
 };
 
 export const ModalOutlet: FC = () => {

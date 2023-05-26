@@ -2,24 +2,24 @@ import {useContext, useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {DashboardContext} from '@contexts';
+
+import {Button, Input} from '@custom-antd';
+
+import useInViewport from '@hooks/useInViewport';
+
 import {ErrorNotificationConfig} from '@models/notifications';
+
+import {Hint, NotificationContent} from '@molecules';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
-import {Button, Input} from '@custom-antd';
-
-import {Hint, NotificationContent} from '@molecules';
-
-import useInViewport from '@hooks/useInViewport';
+import {useCreateExecutorMutation} from '@services/executors';
 
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
-
-import {useCreateExecutorMutation} from '@services/executors';
-
-import {DashboardContext} from '@contexts';
 
 import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 

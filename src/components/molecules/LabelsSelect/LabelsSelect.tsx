@@ -1,17 +1,17 @@
 import React, {useContext} from 'react';
 
-import {Option} from '@models/form';
-
 import {CreatableMultiSelect} from '@atoms';
 import {LabelsMultiValueLabel, LabelsOption} from '@atoms/CreatableMultiSelect/CustomComponents';
 
-import {PollingIntervals} from '@utils/numbers';
+import {MainContext} from '@contexts';
 
-import {useGetLabelsQuery} from '@services/labels';
+import {Option} from '@models/form';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {MainContext} from '@contexts';
+import {useGetLabelsQuery} from '@services/labels';
+
+import {PollingIntervals} from '@utils/numbers';
 
 import {composeLabels} from './utils';
 

@@ -2,20 +2,20 @@ import {memo} from 'react';
 
 import {Form, Select} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-
 import {ExternalLink} from '@atoms';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
+
 import {remapExecutors} from '@utils/executors';
 import {externalLinks} from '@utils/externalLinks';
 import {required} from '@utils/form';
-
-import {Permissions, usePermission} from '@permissions/base';
 
 type TestTypeProps = {
   type: string;

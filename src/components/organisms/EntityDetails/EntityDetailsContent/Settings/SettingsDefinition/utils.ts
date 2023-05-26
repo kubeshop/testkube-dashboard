@@ -3,10 +3,10 @@ import {QueryDefinition} from '@reduxjs/toolkit/src/query/endpointDefinitions';
 
 import {Entity} from '@models/entity';
 
-import {externalLinks} from '@utils/externalLinks';
-
 import {useGetTestSuiteDefinitionQuery} from '@services/testSuites';
 import {useGetTestDefinitionQuery} from '@services/tests';
+
+import {externalLinks} from '@utils/externalLinks';
 
 export const settingsDefinitionData: Record<
   Entity,

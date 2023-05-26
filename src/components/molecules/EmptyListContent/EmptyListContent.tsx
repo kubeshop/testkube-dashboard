@@ -1,19 +1,19 @@
 import {PropsWithChildren, ReactElement, useContext} from 'react';
 
+import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
+
 import {ExternalLink} from '@atoms';
+
+import {ConfigContext, MainContext} from '@contexts';
 
 import {Button, Text, Title} from '@custom-antd';
 
 import {HelpCard} from '@molecules';
 import {StyledHelpCardsContainer, StyledLastHelpCardContainer} from '@molecules/HelpCard/HelpCard.styled';
 
-import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
-
-import Colors from '@styles/Colors';
-
 import {Permissions, usePermission} from '@permissions/base';
 
-import {ConfigContext, MainContext} from '@contexts';
+import Colors from '@styles/Colors';
 
 import {StyledEmptyListContainer} from './EmptyListContent.styled';
 

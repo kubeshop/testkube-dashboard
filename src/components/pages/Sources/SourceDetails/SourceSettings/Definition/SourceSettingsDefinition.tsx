@@ -2,19 +2,19 @@ import {useContext} from 'react';
 
 import {Form} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
-
 import {CopyButton, DownloadButton, Pre} from '@atoms';
-
-import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
-
-import {useGetSourceDefinitionQuery} from '@services/sources';
 
 import {MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
+
+import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
+
+import {useGetSourceDefinitionQuery} from '@services/sources';
 
 const SourceSettingsDefinition = () => {
   const {isClusterAvailable} = useContext(MainContext);

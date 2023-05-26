@@ -2,9 +2,9 @@ import TextArea from 'antd/lib/input/TextArea';
 
 import {FormItem} from '@custom-antd';
 
-import {required} from '@utils/form';
-
 import Fonts from '@styles/Fonts';
+
+import {required} from '@utils/form';
 
 const StringContentFields: React.FC = () => {
   return (

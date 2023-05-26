@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 
-import {Entity} from '@models/entity';
+import {EntityDetailsContext, MainContext} from '@contexts';
 
-import {useAppSelector} from '@redux/hooks';
-import {closeSettingsTabConfig, selectRedirectTarget} from '@redux/reducers/configSlice';
+import {Entity} from '@models/entity';
 
 import {SettingsLeftNavigation, StyledSettingsContainer, StyledTabContentContainer} from '@molecules';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {useAppSelector} from '@redux/hooks';
+import {closeSettingsTabConfig, selectRedirectTarget} from '@redux/reducers/configSlice';
 
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
 import SettingsExecution from './SettingsExecution';
