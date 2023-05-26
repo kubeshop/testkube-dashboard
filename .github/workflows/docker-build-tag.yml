@@ -41,6 +41,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Push README to Dockerhub
+        uses: christian-korneck/update-container-description-action@v1
+        env:
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
+        with:
+          destination_container_repo: ${{ github.repository }}
+          provider: dockerhub
+          short_description: 'Testkube Kubernetes Dashboard'
+          readme_file: './README.md'
+
       - name: Build image and push to Docker Hub
         uses: docker/build-push-action@v3
         with:
