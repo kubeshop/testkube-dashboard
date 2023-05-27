@@ -1,4 +1,5 @@
 import {EntityMap} from './entityMap';
+import {Option} from './form';
 
 export enum TriggerResources {
   'pod' = 'pod',
@@ -18,10 +19,10 @@ export enum TriggerAction {
 
 export type TriggerExecution = 'test' | 'testsuite';
 
-export type LabelSelector = {matchExpressions: MatchExpression[]; matchLabels: MatchLabels};
+export type LabelSelector = {matchLabels: MatchLabels};
 
 export type MatchExpression = {key: string; operator: string; values: string[]};
-export type MatchLabels = EntityMap;
+export type MatchLabels = Record<string, string>;
 
 export type TestTrigger = {
   name: string;
@@ -39,7 +40,7 @@ type TestTriggerTypes = 'name' | 'labels';
 
 export type TestTriggerFormEntity = {
   type?: [TestTriggerTypes, TestTriggerTypes];
-  resourceSelector: `${string}/${string}` | MatchLabels;
+  resourceSelector?: `${string}/${string}` | MatchLabels;
   testSelector: string | MatchLabels;
   action: `${TriggerAction} ${TriggerExecution}`;
   name: string;
@@ -53,9 +54,9 @@ export type TestTriggerFormEntity = {
 export type TriggerType = 'label-label' | 'name-label' | 'name-name' | 'label-name';
 
 export type TestTriggerSelector = {
-  name: string;
+  name?: string;
   namespace?: string;
-  labelSelector: LabelSelector;
+  labelSelector?: LabelSelector;
 };
 
 export type TriggersKeyMap = {

@@ -14,6 +14,18 @@ export const triggersApi = createApi({
     getTriggersList: builder.query<TestTrigger[], void | null>({
       query: () => ({url: `/triggers`}),
     }),
+    getTriggerById: builder.query<TestTrigger, string>({
+      query: id => ({
+        url: `/triggers/${id}`,
+      }),
+    }),
+    getTriggerDefinition: builder.query<string, string>({
+      query: id => ({
+        url: `/triggers/${id}`,
+        responseHandler: 'text',
+        headers: {accept: 'text/yaml'},
+      }),
+    }),
     createTrigger: builder.mutation<any, any>({
       query: body => ({
         url: `/triggers`,
@@ -21,11 +33,26 @@ export const triggersApi = createApi({
         body,
       }),
     }),
+    updateTriggerById: builder.mutation<any, TestTrigger>({
+      query: body => {
+        return {
+          url: `/triggers/${body.name}`,
+          method: 'PATCH',
+          body,
+        };
+      },
+    }),
     updateTriggers: builder.mutation<void, any>({
       query: body => ({
         url: `/triggers`,
         method: 'PATCH',
         body,
+      }),
+    }),
+    deleteTrigger: builder.mutation<void, string>({
+      query: id => ({
+        url: `/triggers/${id}`,
+        method: 'DELETE',
       }),
     }),
   }),
@@ -35,5 +62,13 @@ export const triggersApi = createApi({
 triggersApi.useGetTriggersKeyMapQuery = memoizeQuery(triggersApi.useGetTriggersKeyMapQuery);
 triggersApi.useGetTriggersListQuery = memoizeQuery(triggersApi.useGetTriggersListQuery);
 
-export const {useGetTriggersKeyMapQuery, useCreateTriggerMutation, useGetTriggersListQuery, useUpdateTriggersMutation} =
-  triggersApi;
+export const {
+  useGetTriggersKeyMapQuery,
+  useCreateTriggerMutation,
+  useGetTriggersListQuery,
+  useUpdateTriggersMutation,
+  useGetTriggerByIdQuery,
+  useGetTriggerDefinitionQuery,
+  useDeleteTriggerMutation,
+  useUpdateTriggerByIdMutation,
+} = triggersApi;

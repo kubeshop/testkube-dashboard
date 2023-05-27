@@ -1,1 +1,1 @@
-export {default} from './Triggers';
+export {default} from './TriggersNew';
