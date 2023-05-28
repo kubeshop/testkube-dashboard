@@ -1,19 +1,19 @@
 import {Form} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {ConditionFormItems} from '@organisms';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
 import {useShallowGlobalStore} from '@store/GlobalStore';
 
-import {Permissions, usePermission} from '@permissions/base';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {getResourceIdentifierSelector} from '../../../utils';
 

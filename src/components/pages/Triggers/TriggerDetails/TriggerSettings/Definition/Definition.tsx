@@ -4,16 +4,16 @@ import {Form} from 'antd';
 
 import {CopyButton, DownloadButton, Pre} from '@atoms';
 
-import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
+import {MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
+import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
+
 import {useGetTriggerDefinitionQuery} from '@services/triggers';
 
 import {useShallowGlobalStore} from '@store/GlobalStore';
-
-import {MainContext} from '@contexts';
 
 const TriggerDefinition = () => {
   const {isClusterAvailable} = useContext(MainContext);

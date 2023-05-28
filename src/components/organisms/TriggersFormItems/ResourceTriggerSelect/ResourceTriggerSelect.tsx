@@ -2,6 +2,14 @@ import {useContext, useMemo} from 'react';
 
 import {Form, Select} from 'antd';
 
+import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
+
+import {ExecutorIcon} from '@atoms';
+
+import {MainContext} from '@contexts';
+
+import {Text} from '@custom-antd';
+
 import {TestForTrigger} from '@models/test';
 import {TestSuiteForTrigger} from '@models/testSuite';
 
@@ -9,20 +17,12 @@ import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
-import {ExecutorIcon} from '@atoms';
-
-import {Text} from '@custom-antd';
-
-import {required} from '@utils/form';
-
-import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
-
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {required} from '@utils/form';
 
 import {StyledResourceOptionWrapper} from './ResourceTriggerSelect.styled';
 

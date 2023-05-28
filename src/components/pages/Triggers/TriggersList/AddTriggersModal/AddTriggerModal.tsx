@@ -2,29 +2,30 @@ import React, {useContext, useRef, useState} from 'react';
 
 import {Form, Space, Steps} from 'antd';
 
-import {Option} from '@models/form';
-import {ErrorNotificationConfig} from '@models/notifications';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
+import {DashboardContext} from '@contexts';
 
 import {Button, Input, Text} from '@custom-antd';
+
+import useInViewport from '@hooks/useInViewport';
+
+import {Option} from '@models/form';
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import {NotificationContent} from '@molecules';
 
 import {ActionFormItems, ConditionFormItems} from '@organisms';
 
-import useInViewport from '@hooks/useInViewport';
+import {useAppSelector} from '@redux/hooks';
+import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useCreateTriggerMutation} from '@services/triggers';
 
-import Colors from '@styles/Colors';
-
-import {DashboardContext} from '@contexts';
-
 import {displayDefaultNotificationFlow} from '@src/utils/notification';
 
+import Colors from '@styles/Colors';
+
 import {getResourceIdentifierSelector} from '../../utils';
+
 import {StyledButtonsContainer, StyledNotificationContainer, StyledStepDescription} from './AddTriggersModal.styled';
 
 type AddSourceFormValues = {

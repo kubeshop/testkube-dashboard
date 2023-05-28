@@ -5,9 +5,9 @@ import {Form, Input, Select, Space} from 'antd';
 
 import {LabelsSelect} from '@molecules';
 
-import {required} from '@utils/form';
-
 import {useShallowGlobalStore} from '@store/GlobalStore';
+
+import {required} from '@utils/form';
 
 import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 

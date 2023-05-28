@@ -4,12 +4,12 @@ import {Input} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {useShallowGlobalStore} from '@store/GlobalStore';
-
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTriggerByIdMutation} from '@src/services/triggers';
 import {displayDefaultNotificationFlow} from '@src/utils/notification';
+
+import {useShallowGlobalStore} from '@store/GlobalStore';
 
 const Name: React.FC = () => {
   const {currentTrigger, setCurrentTrigger} = useShallowGlobalStore(state => ({

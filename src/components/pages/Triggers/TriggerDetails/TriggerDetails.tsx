@@ -3,15 +3,15 @@ import {Helmet} from 'react-helmet';
 
 import {Tabs} from 'antd';
 
-import useLocation from '@hooks/useLocation';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
-import {safeRefetch} from '@utils/fetchUtils';
+import useLocation from '@hooks/useLocation';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
 
 import {useShallowGlobalStore} from '@store/GlobalStore';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {safeRefetch} from '@utils/fetchUtils';
 
 import {StyledContainer, StyledPageHeader} from './TriggerDetails.styled';
 import TriggerSettings from './TriggerSettings';

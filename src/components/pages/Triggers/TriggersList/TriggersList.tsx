@@ -2,20 +2,20 @@ import {useContext, useEffect, useMemo, useState} from 'react';
 
 import {ExternalLink} from '@atoms';
 
+import {DashboardContext, MainContext} from '@contexts';
+
 import {Button, Modal, Skeleton, Text} from '@custom-antd';
 
 import {PageBlueprint} from '@organisms';
 
-import {externalLinks} from '@utils/externalLinks';
-import {safeRefetch} from '@utils/fetchUtils';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery} from '@services/triggers';
 
 import {useShallowGlobalStore} from '@store/GlobalStore';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {DashboardContext, MainContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {safeRefetch} from '@utils/fetchUtils';
 
 import AddTriggerModal from './AddTriggersModal';
 import EmptyTriggers from './EmptyTriggers';
