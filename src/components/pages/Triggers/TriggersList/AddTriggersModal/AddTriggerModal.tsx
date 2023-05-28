@@ -103,7 +103,7 @@ const AddTriggerModal: React.FC = () => {
           ) : null}
           <Text className="regular middle">Name</Text>
           <Input
-            placeholder="e.g.: my-test-trigger"
+            placeholder="e.g.: container-deployment-xyz"
             value={name}
             onChange={event => {
               setName(event.target.value);
@@ -127,12 +127,14 @@ const AddTriggerModal: React.FC = () => {
                 }}
                 shouldUpdate
               >
-                {({getFieldsValue}) => (
+                {({getFieldsValue, validateFields}) => (
                   <Button
                     $customType="primary"
                     onClick={() => {
-                      setCurrentStep(1);
-                      setFirstStepValues(getFieldsValue());
+                      validateFields().then(() => {
+                        setCurrentStep(1);
+                        setFirstStepValues(getFieldsValue());
+                      });
                     }}
                   >
                     Next

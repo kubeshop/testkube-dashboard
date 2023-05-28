@@ -32,7 +32,7 @@ const ActionFormItems = () => {
   return (
     <>
       <Form.Item label="Testkube action" required name="action" rules={[required]}>
-        <Select options={actionOptions} placeholder="Trigger a cluster event" />
+        <Select options={actionOptions} placeholder="Select a testkube related action" />
       </Form.Item>
       <Form.Item noStyle shouldUpdate>
         {({getFieldValue}) => {

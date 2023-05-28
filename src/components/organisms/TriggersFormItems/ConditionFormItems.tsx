@@ -26,12 +26,14 @@ const ConditionFormItems = () => {
   return (
     <>
       <Form.Item label="K8s resource" required name="resource" rules={[required]}>
-        <Select options={resourcesOptions} placeholder="K8s resource" />
+        <Select options={resourcesOptions} placeholder="Select a K8s resource" />
       </Form.Item>
       <Form.Item noStyle shouldUpdate>
-        {({getFieldValue}) => {
+        {({getFieldValue, getFieldError}) => {
           const label = getFieldValue('resourceLabelSelector');
           const name = getFieldValue('resourceNameSelector');
+
+          const isValid = !(getFieldError('resourceLabelSelector').length > 0);
 
           if (isFirst) {
             setSwitcherValue(name ? 'name' : 'label');
@@ -42,7 +44,7 @@ const ConditionFormItems = () => {
               <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
               {switcherValue === 'label' ? (
                 <Form.Item label="Resource identifier" required name="resourceLabelSelector" rules={[required]}>
-                  <LabelsSelect defaultLabels={label} />
+                  <LabelsSelect defaultLabels={label} validation={isValid} />
                 </Form.Item>
               ) : (
                 <Form.Item label="Resource identifier" required name="resourceNameSelector" rules={[required]}>
@@ -65,7 +67,7 @@ const ConditionFormItems = () => {
 
           return (
             <Form.Item label="Triggered event" name="event" rules={[required]}>
-              <Select options={eventsOptions} disabled={!triggerResource} placeholder="Trigger a cluster event" />
+              <Select options={eventsOptions} disabled={!triggerResource} placeholder="Select cluster event" />
             </Form.Item>
           );
         }}
