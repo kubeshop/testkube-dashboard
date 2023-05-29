@@ -1,5 +1,6 @@
-import React, {FC, memo, useContext} from 'react';
+import React, {FC, useContext} from 'react';
 import {Helmet} from 'react-helmet';
+
 import {ConfigContext} from '@contexts';
 
 interface HeadProps {
@@ -15,6 +16,6 @@ const Head: FC<HeadProps> = ({title, description}) => {
       {description ? <meta name="description" content={description} /> : null}
     </Helmet>
   );
-}
+};
 
 export default Head;

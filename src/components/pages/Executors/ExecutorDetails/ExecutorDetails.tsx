@@ -13,9 +13,10 @@ import {useGetExecutorDetailsQuery} from '@services/executors';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
+import Head from '@src/Head';
+
 import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
-import Head from '@src/Head';
 
 const ExecutorDetails: React.FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
