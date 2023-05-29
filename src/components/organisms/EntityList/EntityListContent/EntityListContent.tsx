@@ -1,12 +1,9 @@
 import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
-import {Helmet} from 'react-helmet';
 import {usePrevious} from 'react-use';
-
-import {LoadingOutlined} from '@ant-design/icons';
 
 import {ScrollTrigger} from '@atoms';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
 
@@ -28,6 +25,8 @@ import {useApiEndpoint} from '@services/apiEndpoint';
 
 import {safeRefetch} from '@utils/fetchUtils';
 import {compareFiltersObject} from '@utils/objects';
+
+import Head from '@src/Head';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
@@ -63,7 +62,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const {pageTitle: mainPageTitle} = useContext(ConfigContext);
   const {dispatch, isClusterAvailable} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
   const apiEndpoint = useApiEndpoint();
@@ -155,11 +153,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   return (
     <StyledContainer>
-      <Helmet>
-        <title>{`${pageTitle} | ${mainPageTitle}`}</title>
-        {/* FIXME: PageDescription is React component */}
-        <meta name="description" content={`${PageDescription}`} />
-      </Helmet>
+      {/* FIXME: PageDescription is React component */}
+      <Head title={pageTitle} description={`${PageDescription}`} />
+
       {dataLayers[entity]}
       <Header>
         <EntityListHeader

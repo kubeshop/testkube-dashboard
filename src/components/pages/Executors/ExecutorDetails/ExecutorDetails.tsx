@@ -1,9 +1,8 @@
 import {useContext, useEffect, useState} from 'react';
-import {Helmet} from 'react-helmet';
 
 import {Tabs} from 'antd';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
 
@@ -16,11 +15,11 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
+import Head from '@src/Head';
 
 const ExecutorDetails: React.FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
-  const {pageTitle} = useContext(ConfigContext);
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
 
@@ -42,9 +41,8 @@ const ExecutorDetails: React.FC = () => {
 
   return (
     <StyledContainer>
-      <Helmet>
-        <title>{`${name} | Executors | ${pageTitle}`}</title>
-      </Helmet>
+      <Head title={`${name} | Executors`} />
+
       <StyledPageHeader onBack={() => navigate('/executors')} title={name} className="testkube-pageheader" />
       <Tabs
         activeKey={activeTabKey}
