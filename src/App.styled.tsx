@@ -7,5 +7,5 @@ export const StyledLayoutContentWrapper = styled(Layout)`
 `;
 
 export const MessagePanelWrapper = styled.div`
-  padding: 20px 40px 0 0;
+  padding: 20px 30px 0 0;
 `;
