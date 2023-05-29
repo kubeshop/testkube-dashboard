@@ -49,6 +49,8 @@ export const StyledSiderChildContainer = styled.div`
   width: 100px;
   min-height: 100%;
   overflow: auto;
+  top: 0;
+  bottom: 0;
 `;
 
 export const StyledNavigationMenu = styled.div`
