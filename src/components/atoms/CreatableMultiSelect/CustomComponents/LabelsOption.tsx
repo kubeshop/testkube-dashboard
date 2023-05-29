@@ -15,16 +15,9 @@ const LabelsOption = (props: OptionProps<Option>) => {
   const {children, innerRef, innerProps, options, value} = props;
 
   const isChildren = typeof children === 'string';
-  const isCreateOption = options[0].label === children && children !== value;
+  const isCreateOption = isChildren && options[0].label === children;
 
-  const allowClick =
-    isChildren && isCreateOption
-      ? Boolean(
-          children.match(
-            /(Create (([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]:\s?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?))/g
-          )
-        )
-      : true;
+  const allowClick = !isCreateOption || children.includes(value);
 
   const modifyChildren = () => {
     if (!isChildren) {

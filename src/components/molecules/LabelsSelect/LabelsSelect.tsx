@@ -17,7 +17,7 @@ import {composeLabels} from './utils';
 
 type LabelsSelectProps = {
   onChange?: (value: readonly Option[]) => void;
-  defaultLabels?: readonly Option[];
+  defaultLabels?: Record<string, string> | Option[];
   options?: {[key: string]: string[]};
   placeholder?: string;
   validation?: boolean;
