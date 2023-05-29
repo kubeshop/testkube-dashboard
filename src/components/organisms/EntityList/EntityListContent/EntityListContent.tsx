@@ -36,7 +36,7 @@ import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
 import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
-import EntityListTitle from './EntityListHeader';
+import EntityListHeader from './EntityListHeader';
 import EntityListLoader from './EntityListLoader';
 import EntityListSkeleton from './EntityListSkeleton';
 
@@ -157,19 +157,16 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     <StyledContainer>
       <Helmet>
         <title>{`${pageTitle} | ${mainPageTitle}`}</title>
+        {/* FIXME: PageDescription is React component */}
         <meta name="description" content={`${PageDescription}`} />
       </Helmet>
       {dataLayers[entity]}
       <Header>
-        <EntityListTitle
-          pageTitle={
-            <>
-              {pageTitle} {isApplyingFilters && !isFirstTimeLoading ? <LoadingOutlined /> : null}
-            </>
-          }
-        >
-          <PageDescription />
-        </EntityListTitle>
+        <EntityListHeader
+          loading={isApplyingFilters && !isFirstTimeLoading}
+          title={pageTitle}
+          description={<PageDescription />}
+        />
         {filtersComponentsIds && filtersComponentsIds.length ? (
           <StyledFiltersSection>
             <Filters
