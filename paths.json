@@ -42,7 +42,9 @@
       "@redux": ["src/redux/"],
       "@redux/*": ["src/redux/*"],
       "@permissions": ["src/permissions/"],
-      "@permissions/*": ["src/permissions/*"]
+      "@permissions/*": ["src/permissions/*"],
+      "@store": ["src/store/"],
+      "@store/*": ["src/store/*"]
     }
   }
 }
