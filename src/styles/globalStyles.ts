@@ -11,12 +11,16 @@ export const invisibleScroll = `
 `;
 
 export const GlobalStyle = createGlobalStyle`
+  #root, html, body {
+    height: initial;
+    min-height: 100vh;
+  }
+
   #root {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    min-height: 100%;
   }
 
   body {
