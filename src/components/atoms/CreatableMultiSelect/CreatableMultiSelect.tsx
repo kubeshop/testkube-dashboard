@@ -1,7 +1,7 @@
 import React, {KeyboardEvent, useRef, useState} from 'react';
 import {MultiValueGenericProps, OptionProps} from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { useDebounce } from 'react-use';
+import {useDebounce} from 'react-use';
 
 import usePressEnter from '@hooks/usePressEnter';
 
@@ -65,9 +65,13 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     }
   };
 
-  useDebounce(() => {
-    setApplyValidationStyles(validation);
-  }, 100, [validation]);
+  useDebounce(
+    () => {
+      setApplyValidationStyles(validation);
+    },
+    100,
+    [validation]
+  );
 
   return (
     <CreatableSelect
