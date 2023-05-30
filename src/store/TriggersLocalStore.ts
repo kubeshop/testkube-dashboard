@@ -1,17 +1,17 @@
-import { useRef } from "react";
-import { create} from 'zustand';
+import {useRef} from "react";
+import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 import createTriggersSlice, {TriggersSlice} from './TriggersSlice';
 
-const useTriggerLocalStore = () => {
+const useTriggersLocalStore = () => {
     const useStoreRef = useRef(
         create<TriggersSlice>()(
             devtools(
               (...a) => ({
                 ...createTriggersSlice(...a),
               }),
-              {name: 'Local Store Zustand', enabled: process.env.NODE_ENV === 'development'}
+              {name: 'Triggers Local Store Zustand', enabled: process.env.NODE_ENV === 'development'}
             )
           )
     );
@@ -22,4 +22,4 @@ const useTriggerLocalStore = () => {
     return [useShallowLocalStore];
 }; 
 
-export default useTriggerLocalStore;
+export default useTriggersLocalStore;
