@@ -19,8 +19,11 @@ export const decomposeLabels = (labels: readonly Option[]): Record<string, strin
   }, {});
 };
 
-export const composeLabels = (labelsObject?: readonly Option[]): Option[] => {
+export const composeLabels = (labelsObject?: Record<string, Option>): Option[] => {
   return Object.entries(labelsObject || {}).map(([key, value]) => {
+    if (value.label && value.value && value.value === value.label) {
+      return value;
+    }
     const labelString = `${key}${value ? `:${value}` : ''}`;
 
     return {
@@ -29,3 +32,6 @@ export const composeLabels = (labelsObject?: readonly Option[]): Option[] => {
     };
   });
 };
+
+export const labelRegex =
+  /^(([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]:\s?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])+)$/;

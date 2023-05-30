@@ -13,27 +13,19 @@ import {useGetLabelsQuery} from '@services/labels';
 
 import {PollingIntervals} from '@utils/numbers';
 
-import {composeLabels} from './utils';
+import {composeLabels, labelRegex} from './utils';
 
 type LabelsSelectProps = {
   onChange?: (value: readonly Option[]) => void;
-  defaultLabels?: readonly Option[];
+  defaultLabels?: Record<string, Option>;
   options?: {[key: string]: string[]};
   placeholder?: string;
   validation?: boolean;
   menuPlacement?: 'auto' | 'bottom' | 'top';
 };
 
-const isValidLabel = (value: string) => {
-  const match = value?.match(
-    /(([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]:\s?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?)/g
-  );
-
-  if (match) {
-    return match[0] === value;
-  }
-
-  return false;
+const isValidLabel = (value?: string) => {
+  return value != null && labelRegex.test(value);
 };
 
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
