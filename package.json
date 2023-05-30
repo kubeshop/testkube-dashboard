@@ -95,7 +95,8 @@
     "react-use": "17.4.0",
     "react-use-websocket": "^4.2.0",
     "strip-ansi": "^7.0.1",
-    "styled-components": "5.3.5"
+    "styled-components": "5.3.5",
+    "zustand": "^4.3.7"
   },
   "scripts": {
     "start": "sh scripts/env.sh && cp env-config.js ./public/ && npm run less && NODE_OPTIONS=--openssl-legacy-provider craco start",
