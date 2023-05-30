@@ -34,4 +34,4 @@ export const composeLabels = (labelsObject?: Record<string, Option>): Option[] =
 };
 
 export const labelRegex =
-  /^(([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]:\s?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])+)$/g;
+  /^(([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]:\s?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])+)$/;

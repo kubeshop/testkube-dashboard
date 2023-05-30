@@ -14,7 +14,7 @@ type SplitLabelProps = {
 const SplitLabelText: React.FC<SplitLabelProps> = props => {
   const {value, textClassName = 'regular'} = props;
 
-  if (!value.match(labelRegex)) {
+  if (!labelRegex.test(value)) {
     return (
       <Text color={Colors.slate200} className={textClassName}>
         {value}

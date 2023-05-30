@@ -25,7 +25,7 @@ type LabelsSelectProps = {
 };
 
 const isValidLabel = (value?: string) => {
-  return Boolean(value?.match(labelRegex));
+  return value != null && labelRegex.test(value);
 };
 
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {

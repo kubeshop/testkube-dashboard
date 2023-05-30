@@ -13,7 +13,7 @@ const LabelsOption = (props: OptionProps<Option>) => {
   const {children, innerRef, innerProps, value} = props;
 
   const isChildren = typeof children === 'string';
-  const allowClick = value.match(labelRegex);
+  const allowClick = labelRegex.test(value);
 
   if (allowClick && isChildren) {
     return (
