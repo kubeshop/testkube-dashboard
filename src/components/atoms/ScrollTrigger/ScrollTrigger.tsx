@@ -32,4 +32,4 @@ const ScrollTrigger: React.FC<ScrollTriggerProps> = ({onScroll, ...rest}) => (
   onScroll ? <InternalScrollTrigger onScroll={onScroll} {...rest} /> : null
 );
 
-export default memo(ScrollTrigger);
+export default ScrollTrigger;
