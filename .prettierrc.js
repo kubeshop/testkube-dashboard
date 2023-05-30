@@ -1,6 +1,8 @@
 const {loadConfig: loadTsConfig} = require('tsconfig-paths');
 
-const paths = Object.keys(loadTsConfig('./tsconfig.json').paths)
+const {join} = require('node:path');
+
+const paths = Object.keys(loadTsConfig(join(__dirname, 'tsconfig.json')).paths)
   .map(path => path.replace(/\/\*$/, ''))
   .sort()
   .filter((x, i, a) => a.indexOf(x) === i);
