@@ -1,4 +1,4 @@
-import React, {KeyboardEvent, useEffect, useRef, useState} from 'react';
+import React, {KeyboardEvent, useRef} from 'react';
 import {MultiValueGenericProps, OptionProps} from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
@@ -49,8 +49,6 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
 
   const ref = useRef(null);
 
-  const [applyValidationStyles, setApplyValidationStyles] = useState(validation);
-
   const onEvent = usePressEnter();
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -63,12 +61,6 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
       event.preventDefault();
     }
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setApplyValidationStyles(validation);
-    }, 100);
-  }, [validation]);
 
   return (
     <CreatableSelect
@@ -88,7 +80,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
       }}
       formatCreateLabel={formatCreateLabel}
       theme={customTheme}
-      styles={customStyles(applyValidationStyles)}
+      styles={customStyles(validation)}
       components={{
         Option: CustomOptionComponent,
         MultiValueLabel: CustomMultiValueLabelComponent,
