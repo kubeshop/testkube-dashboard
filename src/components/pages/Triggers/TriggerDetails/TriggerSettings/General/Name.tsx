@@ -9,10 +9,12 @@ import {Permissions, usePermission} from '@permissions/base';
 import {useUpdateTriggerByIdMutation} from '@src/services/triggers';
 import {displayDefaultNotificationFlow} from '@src/utils/notification';
 
-import {useShallowGlobalStore} from '@store/GlobalStore';
+import useTriggersLocalStore from '@store/TriggersLocalStore';
 
 const Name: React.FC = () => {
-  const {currentTrigger, setCurrentTrigger} = useShallowGlobalStore(state => ({
+  const [useShallowLocalStore] = useTriggersLocalStore();
+
+  const {currentTrigger, setCurrentTrigger} = useShallowLocalStore(state => ({
     currentTrigger: state.currentTrigger!,
     setCurrentTrigger: state.setCurrentTrigger,
   }));

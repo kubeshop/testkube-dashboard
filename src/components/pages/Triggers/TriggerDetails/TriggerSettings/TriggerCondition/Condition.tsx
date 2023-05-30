@@ -11,14 +11,16 @@ import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import {useShallowGlobalStore} from '@store/GlobalStore';
+import useTriggersLocalStore from '@store/TriggersLocalStore';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {getResourceIdentifierSelector} from '../../../utils';
 
 const Condition: React.FC = () => {
-  const {currentTrigger, setCurrentTrigger} = useShallowGlobalStore(state => ({
+  const [useShallowLocalStore] = useTriggersLocalStore();
+
+  const {currentTrigger, setCurrentTrigger} = useShallowLocalStore(state => ({
     currentTrigger: state.currentTrigger!,
     setCurrentTrigger: state.setCurrentTrigger,
   }));

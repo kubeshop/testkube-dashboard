@@ -8,10 +8,12 @@ import {ConfigurationCard, DeleteEntityModal} from '@molecules';
 
 import {useDeleteTriggerMutation} from '@services/triggers';
 
-import {useShallowGlobalStore} from '@store/GlobalStore';
+import useTriggersLocalStore from '@store/TriggersLocalStore';
 
 const Delete: React.FC = () => {
-  const {currentTrigger} = useShallowGlobalStore(state => ({
+  const [useShallowLocalStore] = useTriggersLocalStore();
+
+  const {currentTrigger} = useShallowLocalStore(state => ({
     currentTrigger: state.currentTrigger!,
   }));
 

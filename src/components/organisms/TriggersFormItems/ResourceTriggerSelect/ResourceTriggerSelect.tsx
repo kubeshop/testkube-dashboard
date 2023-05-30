@@ -10,9 +10,6 @@ import {MainContext} from '@contexts';
 
 import {Text} from '@custom-antd';
 
-import {TestForTrigger} from '@models/test';
-import {TestSuiteForTrigger} from '@models/testSuite';
-
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
@@ -38,7 +35,7 @@ const ResourceTriggerSelect = () => {
     skip: !isClusterAvailable,
   });
 
-  const testsData: TestForTrigger[] = useMemo(() => {
+  const testsData = useMemo(() => {
     return tests.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
@@ -46,7 +43,7 @@ const ResourceTriggerSelect = () => {
     }));
   }, [tests]);
 
-  const testSuitesData: TestSuiteForTrigger[] = useMemo(() => {
+  const testSuitesData = useMemo(() => {
     return testSuites.map(item => ({
       name: item.testSuite.name,
       namespace: item.testSuite.namespace,

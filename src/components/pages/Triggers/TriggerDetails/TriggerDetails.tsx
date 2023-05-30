@@ -9,7 +9,7 @@ import useLocation from '@hooks/useLocation';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
 
-import {useShallowGlobalStore} from '@store/GlobalStore';
+import useTriggersLocalStore from '@store/TriggersLocalStore';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
@@ -21,8 +21,9 @@ const TriggerDetails = () => {
   const {location, navigate} = useContext(DashboardContext);
   const {pageTitle} = useContext(ConfigContext);
 
-  const {currentTrigger, setCurrentTrigger, setTriggersKeyMap} = useShallowGlobalStore(state => ({
-    currentTrigger: state.currentTrigger,
+  const [useShallowLocalStore] = useTriggersLocalStore();
+
+  const {setCurrentTrigger, setTriggersKeyMap} = useShallowLocalStore(state => ({
     setCurrentTrigger: state.setCurrentTrigger,
     setTriggersKeyMap: state.setTriggersKeyMap,
   }));
@@ -61,7 +62,7 @@ const TriggerDetails = () => {
       <StyledPageHeader onBack={() => navigate('/triggers')} title={name} className="testkube-pageheader" />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {currentTrigger ? <TriggerSettings /> : null}
+          {triggerDetails ? <TriggerSettings /> : null}
         </Tabs.TabPane>
       </Tabs>
     </StyledContainer>

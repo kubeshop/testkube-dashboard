@@ -13,12 +13,14 @@ import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
 
 import {useGetTriggerDefinitionQuery} from '@services/triggers';
 
-import {useShallowGlobalStore} from '@store/GlobalStore';
+import useTriggersLocalStore from '@store/TriggersLocalStore';
 
 const TriggerDefinition = () => {
   const {isClusterAvailable} = useContext(MainContext);
 
-  const {currentTrigger} = useShallowGlobalStore(state => ({
+  const [useShallowLocalStore] = useTriggersLocalStore();
+
+  const {currentTrigger} = useShallowLocalStore(state => ({
     currentTrigger: state.currentTrigger!,
   }));
 

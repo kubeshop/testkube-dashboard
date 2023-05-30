@@ -12,7 +12,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery} from '@services/triggers';
 
-import {useShallowGlobalStore} from '@store/GlobalStore';
+import useTriggersLocalStore from '@store/TriggersLocalStore';
 
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -22,16 +22,16 @@ import EmptyTriggers from './EmptyTriggers';
 import {StyledTriggersGrid, StyledTriggersSkeletonWrapper, TriggerContainer} from './TriggersList.styled';
 
 const Triggers: React.FC = () => {
-  const {triggersList, setTriggersList, setTriggersKeyMap} = useShallowGlobalStore(state => ({
-    triggersList: state.triggersList,
-    setTriggersList: state.setTriggersList,
+  const [useShallowLocalStore] = useTriggersLocalStore();
+
+  const {setTriggersKeyMap} = useShallowLocalStore(state => ({
     setTriggersKeyMap: state.setTriggersKeyMap,
   }));
 
   const {isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
 
-  const {data: triggers, refetch, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
+  const {data: triggersList = [], refetch, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
   const {data: triggersKeyMap, refetch: refetchKeyMap} = useGetTriggersKeyMapQuery(null, {skip: !isClusterAvailable});
 
   const [isAddTriggerModalVisible, setAddTriggerModalVisibility] = useState(false);
@@ -40,12 +40,6 @@ const Triggers: React.FC = () => {
   const onNavigateToDetails = (name: string) => {
     navigate(`/triggers/${name}`);
   };
-
-  useEffect(() => {
-    if (triggers) {
-      setTriggersList(triggers);
-    }
-  }, [triggers]);
 
   useEffect(() => {
     if (triggersKeyMap) {
