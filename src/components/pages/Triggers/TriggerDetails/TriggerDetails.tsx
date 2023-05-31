@@ -9,7 +9,7 @@ import useLocation from '@hooks/useLocation';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
 
-import useTriggersLocalStore from '@store/TriggersLocalStore';
+import {useStore} from '@store';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
@@ -22,9 +22,7 @@ const TriggerDetails = () => {
   const {location, navigate} = useContext(DashboardContext);
   const {pageTitle} = useContext(ConfigContext);
 
-  const [useShallowLocalStore] = useTriggersLocalStore();
-
-  const {setCurrentTrigger, setTriggersKeyMap} = useShallowLocalStore(state => ({
+  const {setCurrentTrigger, setTriggersKeyMap} = useStore(state => ({
     setCurrentTrigger: state.setCurrentTrigger,
     setTriggersKeyMap: state.setTriggersKeyMap,
   }));
