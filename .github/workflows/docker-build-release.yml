@@ -1,6 +1,7 @@
-name: Publish Docker image with a commit hash tag
+name: Release build
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - release/**
