@@ -150,7 +150,7 @@ const App: React.FC = () => {
           <Route path="test-suites/*" element={<TestSuites />} />
           <Route path="executors/*" element={<Executors />} />
           <Route path="sources/*" element={<Sources />} />
-          <Route path="triggers" element={<Triggers />} />
+          <Route path="triggers/*" element={<Triggers />} />
           <Route path="settings" element={<GlobalSettings />} />
           <Route
             path="/apiEndpoint"

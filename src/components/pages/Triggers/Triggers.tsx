@@ -5,7 +5,7 @@ import {NotFound} from '@pages';
 import TriggerDetails from './TriggerDetails';
 import TriggersList from './TriggersList';
 
-const Sources: React.FC = () => {
+const Triggers: React.FC = () => {
   return (
     <>
       <Routes>
@@ -18,4 +18,4 @@ const Sources: React.FC = () => {
   );
 };
 
-export default Sources;
+export default Triggers;

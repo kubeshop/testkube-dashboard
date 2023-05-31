@@ -15,13 +15,11 @@ export const StyledTriggersGrid = styled.div`
 
 export const TriggerContainer = styled.div`
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
   align-items: space-between;
   flex: 1;
   gap: 12px;
-
   padding: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
