@@ -30,7 +30,7 @@ COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 8080
 WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
-RUN chmod +x env.sh
+RUN chmod +x env.sh && chmod ugo+w /etc/nginx/nginx.conf
 
 RUN touch ./env-config.js
 RUN chmod a+w ./env-config.js
