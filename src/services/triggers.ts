@@ -14,6 +14,11 @@ export const triggersApi = createApi({
     getTriggersList: builder.query<TestTrigger[], void | null>({
       query: () => ({url: `/triggers`}),
     }),
+    getTriggerById: builder.query<TestTrigger, string>({
+      query: id => ({
+        url: `/triggers/${id}`,
+      }),
+    }),
     createTrigger: builder.mutation<any, any>({
       query: body => ({
         url: `/triggers`,
@@ -35,5 +40,10 @@ export const triggersApi = createApi({
 triggersApi.useGetTriggersKeyMapQuery = memoizeQuery(triggersApi.useGetTriggersKeyMapQuery);
 triggersApi.useGetTriggersListQuery = memoizeQuery(triggersApi.useGetTriggersListQuery);
 
-export const {useGetTriggersKeyMapQuery, useCreateTriggerMutation, useGetTriggersListQuery, useUpdateTriggersMutation} =
-  triggersApi;
+export const {
+  useGetTriggersKeyMapQuery,
+  useCreateTriggerMutation,
+  useGetTriggersListQuery,
+  useUpdateTriggersMutation,
+  useGetTriggerByIdQuery,
+} = triggersApi;
