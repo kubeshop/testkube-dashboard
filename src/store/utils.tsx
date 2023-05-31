@@ -4,6 +4,10 @@ import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 
+type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
+  ? False
+  : True;
+
 export const createStoreFactory =
   <T,>(name: string, createSlice: StateCreator<T>) =>
   () =>
@@ -13,6 +17,29 @@ export const createStoreFactory =
         enabled: process.env.NODE_ENV === 'development',
       })
     );
+
+class StoreFactoryBuilder<T> {
+  private name: string;
+  private slice: StateCreator<T>;
+
+  public constructor(name: string, slice: StateCreator<T>) {
+    this.name = name;
+    this.slice = slice;
+  }
+
+  public with<U>(
+    next: HasAnyKeys<T, keyof U, never, StateCreator<U>>
+  ): HasAnyKeys<T, keyof U, never, StoreFactoryBuilder<T & U>> {
+    // @ts-ignore:
+    return new StoreFactoryBuilder<T & U>(this.name, (...a) => ({...this.slice(...a), ...next(...a)}));
+  }
+
+  public end(): () => UseBoundStore<StoreApi<T>> {
+    return createStoreFactory(this.name, this.slice);
+  }
+}
+
+export const createStoreBuilder = (name: string) => new StoreFactoryBuilder(name, () => ({}));
 
 export const connectStore = <T,>(createStore: () => UseBoundStore<StoreApi<T>>) => {
   type ShallowComponent = FC<PropsWithChildren<{}>>;
