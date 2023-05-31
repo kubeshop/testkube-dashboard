@@ -20,13 +20,15 @@ type SecretFormItemProps = {
 };
 
 const SecretFormItem: React.FC<SecretFormItemProps> = props => {
-  const {isClearedValue, setIsClearedValue, name, label, status = TooltipStatus.None, message} = props;
+  const {isClearedValue = true, setIsClearedValue, name, label, status = TooltipStatus.None, message} = props;
 
   const rules = isClearedValue ? [{pattern: secretRegex, message: `Invalid ${name} value`}] : [];
 
   return (
     <Form.Item noStyle shouldUpdate>
-      {({setFieldValue}) => {
+      {({setFieldValue, getFieldValue}) => {
+        const fieldValue = getFieldValue(name);
+
         return (
           <>
             <FormItem
@@ -38,7 +40,7 @@ const SecretFormItem: React.FC<SecretFormItemProps> = props => {
             >
               <Input.Password placeholder={isClearedValue ? label : dummySecret} disabled={!isClearedValue} />
             </FormItem>
-            {isClearedValue === false ? (
+            {fieldValue || isClearedValue === false ? (
               <Text
                 style={{display: 'inline-block', cursor: 'pointer', marginTop: '5px'}}
                 className="middle regular"

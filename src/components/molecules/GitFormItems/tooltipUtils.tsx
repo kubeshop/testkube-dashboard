@@ -11,8 +11,8 @@ export enum TooltipStatus {
 
 export const tooltipIcons: Record<TooltipStatus, JSX.Element | undefined> = {
   loading: <LoadingOutlined style={{cursor: 'auto'}} />,
-  success: <CheckCircleFilled style={{color: Colors.lime400, cursor: 'auto', paddingBottom: '2px'}} />,
-  error: <WarningFilled style={{color: Colors.amber400, paddingBottom: '2px'}} />,
+  success: <CheckCircleFilled style={{color: Colors.lime400, cursor: 'auto'}} />,
+  error: <WarningFilled style={{color: Colors.amber400}} />,
   none: undefined,
 };
 
