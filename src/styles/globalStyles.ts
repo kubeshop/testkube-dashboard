@@ -215,13 +215,20 @@ export const GlobalStyle = createGlobalStyle`
 
   /* Dropdown */
 
+  .triggers-dropdown {
+    .ant-dropdown-menu {
+      background: ${Colors.slate900};
+
+      .ant-dropdown-menu-item {
+        background: ${Colors.slate700};
+      }
+    }
+  }
+
   .ant-dropdown-menu {
-    background: ${Colors.slate800};
     padding: 0;
 
     .ant-dropdown-menu-item {
-      background: ${Colors.slate700};
-
       &:hover {
         background: transparent;
       }
