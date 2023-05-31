@@ -22,6 +22,9 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
+import {initializeStore} from '@store';
+
+import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
@@ -35,6 +38,8 @@ const Triggers = lazy(() => import('@pages').then(module => ({default: module.Tr
 const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
 const App: React.FC = () => {
+  const [StoreProvider] = initializeStore();
+
   const dispatch = useAppDispatch();
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
@@ -100,69 +105,72 @@ const App: React.FC = () => {
     });
   }, [apiEndpoint]);
 
-  return (
-    <Suspense fallback={<Loading />}>
-      {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
-        <MessagePanelWrapper>
-          <MessagePanel
-            buttons={[
-              {
-                type: 'secondary',
-                text: 'Learn more',
-                isLink: true,
-                linkConfig: {
-                  href: 'https://testkube.io/pricing',
-                  target: '_blank',
+  return composeProviders()
+    .append(Suspense, {fallback: <Loading />})
+    .append(StoreProvider, {})
+    .render(
+      <Suspense fallback={<Loading />}>
+        {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
+          <MessagePanelWrapper>
+            <MessagePanel
+              buttons={[
+                {
+                  type: 'secondary',
+                  text: 'Learn more',
+                  isLink: true,
+                  linkConfig: {
+                    href: 'https://testkube.io/pricing',
+                    target: '_blank',
+                  },
                 },
-              },
-              {
-                type: 'primary',
-                text: 'Connect to Testkube Cloud',
-                isLink: true,
-                linkConfig: {
-                  href: 'https://cloud.testkube.io/system-init?cloudMigrate=true',
-                  target: '_blank',
+                {
+                  type: 'primary',
+                  text: 'Connect to Testkube Cloud',
+                  isLink: true,
+                  linkConfig: {
+                    href: 'https://cloud.testkube.io/system-init?cloudMigrate=true',
+                    target: '_blank',
+                  },
                 },
-              },
-            ]}
-            onClose={() => {
-              localStorage.setItem(config.isTestkubeCloudLaunchBannerHidden, 'true');
-              update();
-            }}
-            isClosable
-            type="default"
-            title="🎉 We have just launched Testkube Cloud! 🎉"
-            description="One centralised place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
+              ]}
+              onClose={() => {
+                localStorage.setItem(config.isTestkubeCloudLaunchBannerHidden, 'true');
+                update();
+              }}
+              isClosable
+              type="default"
+              title="🎉 We have just launched Testkube Cloud! 🎉"
+              description="One centralised place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
+            />
+          </MessagePanelWrapper>
+        ) : null}
+        <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
+        <Routes>
+          <Route path="tests/*" element={<Tests />} />
+          <Route path="test-suites/*" element={<TestSuites />} />
+          <Route path="executors/*" element={<Executors />} />
+          <Route path="sources/*" element={<Sources />} />
+          <Route path="triggers" element={<Triggers />} />
+          <Route path="settings" element={<GlobalSettings />} />
+          <Route
+            path="/apiEndpoint"
+            element={isApiEndpointLocked() ? <Navigate to="/" replace /> : <EndpointProcessing />}
           />
-        </MessagePanelWrapper>
-      ) : null}
-      <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
-      <Routes>
-        <Route path="tests/*" element={<Tests />} />
-        <Route path="test-suites/*" element={<TestSuites />} />
-        <Route path="executors/*" element={<Executors />} />
-        <Route path="sources/*" element={<Sources />} />
-        <Route path="triggers" element={<Triggers />} />
-        <Route path="settings" element={<GlobalSettings />} />
-        <Route
-          path="/apiEndpoint"
-          element={isApiEndpointLocked() ? <Navigate to="/" replace /> : <EndpointProcessing />}
-        />
-        <Route path="/" element={<Navigate to="/tests" replace />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
-      <CSSTransition
-        nodeRef={logRef}
-        in={isFullScreenLogOutput}
-        timeout={1000}
-        classNames="full-screen-log-output"
-        unmountOnExit
-      >
-        <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
-      </CSSTransition>
-    </Suspense>
-  );
+          <Route path="/" element={<Navigate to="/tests" replace />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
+        <CSSTransition
+          nodeRef={logRef}
+          in={isFullScreenLogOutput}
+          timeout={1000}
+          classNames="full-screen-log-output"
+          unmountOnExit
+        >
+          <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
+        </CSSTransition>
+      </Suspense>
+    );
 };
 
 export default App;
