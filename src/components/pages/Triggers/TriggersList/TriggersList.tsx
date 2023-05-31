@@ -12,7 +12,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery} from '@services/triggers';
 
-import useTriggersLocalStore from '@store/TriggersLocalStore';
+import {useStore} from '@store';
 
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -26,9 +26,7 @@ import EmptyTriggers from './EmptyTriggers';
 import {StyledTriggersGrid, StyledTriggersSkeletonWrapper, TriggerContainer} from './TriggersList.styled';
 
 const Triggers: React.FC = () => {
-  const [useShallowLocalStore] = useTriggersLocalStore();
-
-  const {setTriggersKeyMap} = useShallowLocalStore(state => ({
+  const {setTriggersKeyMap} = useStore(state => ({
     setTriggersKeyMap: state.setTriggersKeyMap,
   }));
 
