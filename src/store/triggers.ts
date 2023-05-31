@@ -9,11 +9,9 @@ export interface TriggersSlice {
   setCurrentTrigger: (trigger: TestTrigger) => void;
 }
 
-const createTriggersSlice: StateCreator<TriggersSlice> = set => ({
+export const createTriggersSlice: StateCreator<TriggersSlice> = set => ({
   triggersKeyMap: undefined,
   currentTrigger: undefined,
   setTriggersKeyMap: (newTriggersKeyMap: TriggersKeyMap) => set({triggersKeyMap: newTriggersKeyMap}),
   setCurrentTrigger: (newTrigger: TestTrigger) => set({currentTrigger: newTrigger}),
 });
-
-export default createTriggersSlice;
