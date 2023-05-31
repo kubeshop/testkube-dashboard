@@ -4,7 +4,7 @@ import {Form, Space, Steps} from 'antd';
 
 import {DashboardContext} from '@contexts';
 
-import {Button, Input, Text} from '@custom-antd';
+import {Input, Text} from '@custom-antd';
 
 import useInViewport from '@hooks/useInViewport';
 
@@ -13,8 +13,6 @@ import {ErrorNotificationConfig} from '@models/notifications';
 
 import {NotificationContent} from '@molecules';
 
-import {ActionFormItems, ConditionFormItems} from '@organisms';
-
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
@@ -22,18 +20,16 @@ import {useCreateTriggerMutation} from '@services/triggers';
 
 import {displayDefaultNotificationFlow} from '@src/utils/notification';
 
-import Colors from '@styles/Colors';
-
 import {getResourceIdentifierSelector} from '../../utils';
 
-import {StyledButtonsContainer, StyledNotificationContainer, StyledStepDescription} from './AddTriggersModal.styled';
+import {StyledNotificationContainer} from './AddTriggersModal.styled';
+import ModalFirstStep from './ModalFirstStep';
+import ModalSecondStep from './ModalSecondStep';
 
-type AddSourceFormValues = {
-  name: string;
-  uri: string;
-  token?: string;
-  username?: string;
-};
+export enum StepsEnum {
+  condition = 0,
+  action = 1,
+}
 
 const AddTriggerModal: React.FC = () => {
   const {navigate} = useContext(DashboardContext);
@@ -43,7 +39,7 @@ const AddTriggerModal: React.FC = () => {
   const appNamespace = useAppSelector(selectNamespace);
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(StepsEnum.condition);
   const [name, setName] = useState('');
   const [firstStepValues, setFirstStepValues] = useState<Record<string, string | Option[]>>({});
 
@@ -113,62 +109,10 @@ const AddTriggerModal: React.FC = () => {
         </Space>
         <Steps current={currentStep} items={[{title: 'Condition'}, {title: 'Action'}]} />
         <Form layout="vertical" onFinish={onFinish} form={form} name="add-trigger-form">
-          {currentStep === 0 ? (
-            <>
-              <StyledStepDescription>
-                <Text color={Colors.slate400} className="regular middle">
-                  Define the conditions to be met for the trigger to be called.
-                </Text>
-              </StyledStepDescription>
-              <ConditionFormItems />
-              <Form.Item
-                style={{
-                  textAlign: 'end',
-                  marginBottom: 0,
-                }}
-                shouldUpdate
-              >
-                {({getFieldsValue, validateFields}) => (
-                  <Button
-                    $customType="primary"
-                    onClick={() => {
-                      validateFields().then(() => {
-                        setCurrentStep(1);
-                        setFirstStepValues(getFieldsValue());
-                      });
-                    }}
-                  >
-                    Next
-                  </Button>
-                )}
-              </Form.Item>
-            </>
+          {currentStep === StepsEnum.condition ? (
+            <ModalFirstStep setCurrentStep={setCurrentStep} setFirstStepValues={setFirstStepValues} />
           ) : (
-            <>
-              <StyledStepDescription>
-                <Text color={Colors.slate400} className="regular middle">
-                  Define the action to be performed on testkube once the conditions are met.
-                </Text>
-              </StyledStepDescription>
-              <ActionFormItems />
-              <Form.Item style={{marginBottom: 0}} shouldUpdate>
-                {({isFieldsTouched}) => (
-                  <StyledButtonsContainer>
-                    <Button
-                      $customType="secondary"
-                      onClick={() => {
-                        setCurrentStep(0);
-                      }}
-                    >
-                      Back
-                    </Button>
-                    <Button htmlType="submit" $customType="primary" loading={isLoading} disabled={!isFieldsTouched()}>
-                      {isLoading ? 'Creating...' : 'Create'}
-                    </Button>
-                  </StyledButtonsContainer>
-                )}
-              </Form.Item>
-            </>
+            <ModalSecondStep setCurrentStep={setCurrentStep} isLoading={isLoading} />
           )}
         </Form>
       </Space>
