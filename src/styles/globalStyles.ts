@@ -387,7 +387,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   /* Steps */
-
   .ant-steps-item-active {
     .ant-steps-item-container {
       .ant-steps-item-content {
@@ -397,7 +396,7 @@ export const GlobalStyle = createGlobalStyle`
       }
     }
   }
-
+  
   .ant-steps-item-wait {
     .ant-steps-item-container {
       .ant-steps-item-icon {
@@ -413,7 +412,7 @@ export const GlobalStyle = createGlobalStyle`
       }
     }
   }
-
+  
   .ant-steps-item-finish {
     .ant-steps-item-container {
       .ant-steps-item-content {
@@ -423,7 +422,7 @@ export const GlobalStyle = createGlobalStyle`
       }
     }
   }
-
+  
   .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
     background-color: transparent;
     border: 1px dashed ${Colors.slate500};
