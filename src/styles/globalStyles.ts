@@ -215,7 +215,7 @@ export const GlobalStyle = createGlobalStyle`
 
   /* Dropdown */
 
-  .triggers-dropdown {
+  .light-dropdown{
     .ant-dropdown-menu {
       background: ${Colors.slate900};
 
