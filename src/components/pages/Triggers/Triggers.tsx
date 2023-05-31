@@ -263,7 +263,7 @@ const Triggers: React.FC = () => {
                   ) : null}
                   {isTriggersAvailable ? (
                     <Dropdown
-                      overlayClassName="triggers-dropdown"
+                      overlayClassName="light-dropdown"
                       menu={{
                         items: addTriggerOptions.map(({key, ...restProps}) => ({
                           key,
