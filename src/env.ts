@@ -1,18 +1,25 @@
+import {applyUrlOverrides, getValue, renderOverridesIndicator} from './overrides';
+
+// Load overrides
+applyUrlOverrides();
+renderOverridesIndicator();
+
+// Obtain dynamic variables from server
 const values = (window as any)._env_;
 
 // Build-time variables
 const build: BuildTimeEnvironment = {
-  posthogKey: process.env.REACT_APP_POSTHOG_KEY,
-  segmentKey: process.env.REACT_APP_SEGMENT_KEY,
-  ga4Key: process.env.REACT_APP_GOOGLE_ANALYTICS_ID,
-  version: process.env.REACT_APP_VERSION || 'dev',
+  posthogKey: getValue('REACT_APP_POSTHOG_KEY', process.env.REACT_APP_POSTHOG_KEY),
+  segmentKey: getValue('REACT_APP_SEGMENT_KEY', process.env.REACT_APP_SEGMENT_KEY),
+  ga4Key: getValue('REACT_APP_GOOGLE_ANALYTICS_ID', process.env.REACT_APP_GOOGLE_ANALYTICS_ID),
+  version: getValue('REACT_APP_VERSION', process.env.REACT_APP_VERSION) || 'dev',
 };
 
 // Dynamic variables
 const env: DynamicEnvironment = {
-  apiUrl: values?.REACT_APP_API_SERVER_ENDPOINT,
-  basename: values?.REACT_APP_ROOT_ROUTE,
-  disableTelemetry: values?.REACT_APP_DISABLE_TELEMETRY === 'true',
+  apiUrl: getValue('REACT_APP_API_SERVER_ENDPOINT', values?.REACT_APP_API_SERVER_ENDPOINT),
+  basename: getValue('REACT_APP_ROOT_ROUTE', values?.REACT_APP_ROOT_ROUTE),
+  disableTelemetry: getValue('REACT_APP_DISABLE_TELEMETRY', values?.REACT_APP_DISABLE_TELEMETRY) === 'true',
 };
 
 type BuildTimeEnvironment = {
