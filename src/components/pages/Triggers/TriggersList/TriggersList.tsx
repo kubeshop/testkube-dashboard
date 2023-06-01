@@ -17,11 +17,7 @@ import {useStore} from '@store';
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 
-<<<<<<< HEAD
-import AddTriggerModal from './AddTriggersModal';
-=======
 import AddTriggerModal from './AddTriggerModal';
->>>>>>> a9e00eca (triggers pages)
 import EmptyTriggers from './EmptyTriggers';
 import {StyledTriggersGrid, StyledTriggersSkeletonWrapper, TriggerContainer} from './TriggersList.styled';
 
