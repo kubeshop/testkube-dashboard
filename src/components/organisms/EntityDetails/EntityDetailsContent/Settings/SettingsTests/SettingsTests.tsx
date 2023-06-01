@@ -45,14 +45,14 @@ const SettingsTests: React.FC = () => {
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
+  const {data: testsList} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
     skip: !isClusterAvailable || !entityDetails.name,
   });
-  const {data: allTestsList = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
+  const {data: allTestsList} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
   const testsData: TestSuiteStepTest[] = useMemo(() => {
-    return testsList.map(item => ({
+    return (testsList || []).map(item => ({
       name: item.name,
       namespace: item.namespace,
       type: getTestExecutorIcon(executors, item.type),
@@ -60,7 +60,7 @@ const SettingsTests: React.FC = () => {
   }, [testsList]);
 
   const allTestsData: TestSuiteStepTest[] = useMemo(() => {
-    return allTestsList.map(item => ({
+    return (allTestsList || []).map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
       type: getTestExecutorIcon(executors, item.test.type),
