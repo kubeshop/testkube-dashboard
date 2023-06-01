@@ -18,6 +18,10 @@ import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useCreateTriggerMutation} from '@services/triggers';
 
+import {displayDefaultNotificationFlow} from '@utils/notification';
+
+import {getResourceIdentifierSelector} from '../../utils';
+
 import {StyledNotificationContainer} from './AddTriggerModal.styled';
 import ModalFirstStep from './ModalFirstStep';
 import ModalSecondStep from './ModalSecondStep';
@@ -44,7 +48,45 @@ const AddTriggerModal: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const onFinish = () => {};
+  const onFinish = () => {
+    const values = form.getFieldsValue();
+
+    const resourceSelector = getResourceIdentifierSelector(
+      firstStepValues.resourceLabelSelector || firstStepValues.resourceNameSelector,
+      appNamespace
+    );
+
+    const testSelector = getResourceIdentifierSelector(
+      values.testLabelSelector || values.testNameSelector,
+      appNamespace
+    );
+
+    const [action, execution] = values.action.split(' ');
+
+    const body = {
+      ...(name ? {name} : {}),
+      resource: firstStepValues.resource,
+      event: firstStepValues.event,
+      action,
+      execution,
+      testSelector,
+      resourceSelector,
+    };
+    createTrigger(body)
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(res => {
+        if (res && 'data' in res) {
+          navigate(`/triggers/${res.data.name}`);
+        }
+      })
+      .catch(err => {
+        setError(err);
+
+        if (!inTopInViewport && topRef && topRef.current) {
+          topRef.current.scrollIntoView();
+        }
+      });
+  };
 
   return (
     <>
@@ -65,7 +107,7 @@ const AddTriggerModal: React.FC = () => {
             }}
           />
         </Space>
-        <Steps current={currentStep} items={[{title: 'Condition'}, {title: 'Action'}]} />{' '}
+        <Steps current={currentStep} items={[{title: 'Condition'}, {title: 'Action'}]} />
         <Form layout="vertical" onFinish={onFinish} form={form} name="add-trigger-form">
           {currentStep === StepsEnum.condition ? (
             <ModalFirstStep setCurrentStep={setCurrentStep} setFirstStepValues={setFirstStepValues} />

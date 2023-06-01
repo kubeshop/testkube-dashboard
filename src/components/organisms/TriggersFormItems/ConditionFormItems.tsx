@@ -5,16 +5,14 @@ import {Form, Input, Select, Space} from 'antd';
 
 import {LabelsSelect} from '@molecules';
 
-import useTriggersLocalStore from '@store/TriggersLocalStore';
+import {useStore} from '@store';
 
 import {required} from '@utils/form';
 
 import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 
 const ConditionFormItems = () => {
-  const [useShallowLocalStore] = useTriggersLocalStore();
-
-  const {triggersKeyMap} = useShallowLocalStore(state => ({
+  const {triggersKeyMap} = useStore(state => ({
     triggersKeyMap: state.triggersKeyMap!,
   }));
 

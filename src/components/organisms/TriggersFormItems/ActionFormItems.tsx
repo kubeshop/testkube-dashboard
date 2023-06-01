@@ -5,7 +5,7 @@ import {Form, Select, Space} from 'antd';
 
 import {LabelsSelect} from '@molecules';
 
-import useTriggersLocalStore from '@store/TriggersLocalStore';
+import {useStore} from '@store';
 
 import {required} from '@utils/form';
 
@@ -13,9 +13,7 @@ import ResourceTriggerSelect from './ResourceTriggerSelect';
 import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 
 const ActionFormItems = () => {
-  const [useShallowLocalStore] = useTriggersLocalStore();
-
-  const {triggersKeyMap} = useShallowLocalStore(state => ({
+  const {triggersKeyMap} = useStore(state => ({
     triggersKeyMap: state.triggersKeyMap!,
   }));
 

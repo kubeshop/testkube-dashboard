@@ -93,7 +93,7 @@ const Triggers: React.FC = () => {
             return <Skeleton additionalStyles={{lineHeight: 120}} key={key} />;
           })}
         </StyledTriggersSkeletonWrapper>
-      ) : renderedTriggersGrid && renderedTriggersGrid.length ? (
+      ) : renderedTriggersGrid?.length ? (
         <StyledTriggersGrid>{renderedTriggersGrid}</StyledTriggersGrid>
       ) : (
         <EmptyTriggers

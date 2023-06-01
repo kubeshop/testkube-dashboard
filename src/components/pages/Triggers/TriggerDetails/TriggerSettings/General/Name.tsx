@@ -6,15 +6,14 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useUpdateTriggerByIdMutation} from '@src/services/triggers';
-import {displayDefaultNotificationFlow} from '@src/utils/notification';
+import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import useTriggersLocalStore from '@store/TriggersLocalStore';
+import {useStore} from '@store';
+
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 const Name: React.FC = () => {
-  const [useShallowLocalStore] = useTriggersLocalStore();
-
-  const {currentTrigger, setCurrentTrigger} = useShallowLocalStore(state => ({
+  const {currentTrigger, setCurrentTrigger} = useStore(state => ({
     currentTrigger: state.currentTrigger!,
     setCurrentTrigger: state.setCurrentTrigger,
   }));

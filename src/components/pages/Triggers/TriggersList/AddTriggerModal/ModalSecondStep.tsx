@@ -1,8 +1,9 @@
 import {Form} from 'antd';
 
-import {Button, Text} from '@src/components/custom-antd';
+import {Button, Text} from '@custom-antd';
 
-// import {ActionFormItems} from '@src/components/organisms';
+import {ActionFormItems} from '@organisms';
+
 import Colors from '@styles/Colors';
 
 import {StepsEnum} from './AddTriggerModal';
@@ -23,7 +24,7 @@ const ModalSecondStep: React.FC<ModalSecondStepProps> = props => {
           Define the action to be performed on testkube once the conditions are met.
         </Text>
       </StyledStepDescription>
-      {/* <ActionFormItems /> */}
+      <ActionFormItems />
       <Form.Item style={{marginBottom: 0}} shouldUpdate>
         {({isFieldsTouched}) => (
           <StyledButtonsContainer>

@@ -2,7 +2,8 @@ import {Form} from 'antd';
 
 import {Button, Text} from '@custom-antd';
 
-// import {ConditionFormItems} from '@organisms';
+import {ConditionFormItems} from '@organisms';
+
 import Colors from '@styles/Colors';
 
 import {StepsEnum} from './AddTriggerModal';
@@ -23,7 +24,7 @@ const ModalFirstStep: React.FC<ModalFirstStepProps> = props => {
           Define the conditions to be met for the trigger to be called.
         </Text>
       </StyledStepDescription>
-      {/* <ConditionFormItems /> */}
+      <ConditionFormItems />
       <Form.Item
         style={{
           textAlign: 'end',
@@ -31,11 +32,14 @@ const ModalFirstStep: React.FC<ModalFirstStepProps> = props => {
         }}
         shouldUpdate
       >
-        {() => (
+        {({getFieldsValue, validateFields}) => (
           <Button
             $customType="primary"
             onClick={() => {
-              setCurrentStep(StepsEnum.action);
+              validateFields().then(() => {
+                setCurrentStep(StepsEnum.action);
+                setFirstStepValues(getFieldsValue());
+              });
             }}
           >
             Next
