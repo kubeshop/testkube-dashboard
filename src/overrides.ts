@@ -4,7 +4,7 @@ import {config} from '@constants/config';
 // so E2E tests may be completed easily on any environment.
 let overrides: Record<string, any> = JSON.parse(localStorage.getItem(config.overrides) || '{}');
 
-export const hasOverridesApplied = () => {
+export const areOverridesApplied = () => {
   return Object.keys(overrides).length > 0;
 };
 
@@ -20,7 +20,7 @@ export const resetOverrides = () => {
 // Create red line on top of the dashboard, to indicate overrides enabled
 export const renderOverridesIndicator = () => {
   const element = document.querySelector('#overrides-indicator');
-  if (hasOverridesApplied()) {
+  if (areOverridesApplied()) {
     if (!element) {
       const newElement = document.createElement('div');
       newElement.id = 'overrides-indicator';
