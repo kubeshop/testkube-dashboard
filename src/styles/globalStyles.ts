@@ -408,8 +408,8 @@ export const GlobalStyle = createGlobalStyle`
         }
 
       }
-      .ant-steps-item-content {
 
+      .ant-steps-item-content {
         .ant-steps-item-title {
           color: ${Colors.slate500};
         }
