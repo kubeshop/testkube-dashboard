@@ -400,12 +400,16 @@ export const GlobalStyle = createGlobalStyle`
   .ant-steps-item-wait {
     .ant-steps-item-container {
       .ant-steps-item-icon {
+
         border-color: ${Colors.slate500};
+
         .ant-steps-icon {
           color: ${Colors.slate500};
         }
+
       }
       .ant-steps-item-content {
+
         .ant-steps-item-title {
           color: ${Colors.slate500};
         }
@@ -422,7 +426,7 @@ export const GlobalStyle = createGlobalStyle`
       }
     }
   }
-  
+
   .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
     background-color: transparent;
     border: 1px dashed ${Colors.slate500};
