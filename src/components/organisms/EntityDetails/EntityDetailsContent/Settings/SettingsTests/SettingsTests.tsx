@@ -99,7 +99,7 @@ const SettingsTests: React.FC = () => {
 
   useEffect(() => {
     if (currentSteps !== initialSteps) {
-      setCurrentSteps([]);
+      setCurrentSteps(initialSteps);
     }
   }, [initialSteps]);
 
