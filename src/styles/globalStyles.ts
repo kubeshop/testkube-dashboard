@@ -387,7 +387,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   /* Steps */
-  
+
   .ant-steps-item-active {
     .ant-steps-item-container {
       .ant-steps-item-content {
@@ -400,18 +400,23 @@ export const GlobalStyle = createGlobalStyle`
   .ant-steps-item-wait {
     .ant-steps-item-container {
       .ant-steps-item-icon {
+
         border-color: ${Colors.slate500};
+
         .ant-steps-icon {
           color: ${Colors.slate500};
         }
+
       }
       .ant-steps-item-content {
+
         .ant-steps-item-title {
           color: ${Colors.slate500};
         }
       }
     }
   }
+  
   .ant-steps-item-finish {
     .ant-steps-item-container {
       .ant-steps-item-content {

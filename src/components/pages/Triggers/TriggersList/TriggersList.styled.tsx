@@ -7,6 +7,7 @@ export const StyledTriggersGrid = styled.div`
   display: grid;
   grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
   gap: 32px;
+
   @media ${maxDevice.laptop} {
     grid-template-columns: 1fr;
   }
@@ -26,6 +27,7 @@ export const TriggerContainer = styled.div`
   background: ${Colors.slate800};
   cursor: pointer;
   transition: 0.3s;
+
   &:hover {
     border: 1px solid ${Colors.indigo400};
     background: ${Colors.slate850};
