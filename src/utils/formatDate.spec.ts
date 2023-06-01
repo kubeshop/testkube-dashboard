@@ -3,7 +3,7 @@ import {formatDuration} from './formatDate';
 const SECOND = 1;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
-const time = (hours = 0, minutes = 0, seconds = 0) => (hours * HOUR + minutes * MINUTE + seconds);
+const time = (hours = 0, minutes = 0, seconds = 0) => hours * HOUR + minutes * MINUTE + seconds;
 
 describe('utils', () => {
   describe('formatDuration', () => {

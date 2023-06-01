@@ -2,17 +2,18 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
+import {EntityDetailsContext} from '@contexts';
+
+import {FormItem, FullWidthSpace} from '@custom-antd';
+
 import {ConfigurationCard, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
-
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
 import {namingMap, updateRequestsMap} from '../utils';
 
 const {TextArea} = Input;
@@ -37,8 +38,10 @@ const NameNDescription: React.FC = () => {
   const name = entityDetails?.name;
   const description = entityDetails?.description;
 
-  const onSave = (values: NameNDescriptionFormValues) => {
-    updateEntity({
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateEntity({
       id: entityDetails.name,
       data: {
         ...entityDetails,
@@ -48,40 +51,30 @@ const NameNDescription: React.FC = () => {
           description: values.description,
         },
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
-      });
-    });
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`));
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onSave}
-      name="general-settings-name-description"
-      initialValues={{name, description}}
-      disabled={!mayEdit}
-    >
+    <Form form={form} name="general-settings-name-description" initialValues={{name, description}} disabled={!mayEdit}>
       <ConfigurationCard
         title={`${uppercaseFirstSymbol(namingMap[entity])} name & description`}
         description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}
         enabled={mayEdit}
       >
-        <StyledSpace size={32} direction="vertical">
-          <StyledFormItem name="name" rules={[required]}>
+        <FullWidthSpace size={32} direction="vertical">
+          <FormItem name="name" rules={[required]}>
             <Input placeholder="Name" disabled />
-          </StyledFormItem>
-          <StyledFormItem name="description">
+          </FormItem>
+          <FormItem name="description">
             <TextArea placeholder="Description" autoSize={{minRows: 2, maxRows: 3}} />
-          </StyledFormItem>
-        </StyledSpace>
+          </FormItem>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

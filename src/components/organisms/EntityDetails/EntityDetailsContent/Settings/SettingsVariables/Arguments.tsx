@@ -1,24 +1,25 @@
 import React, {useContext, useEffect, useState} from 'react';
 
-import {Form, Input, Space} from 'antd';
-
-import {Test} from '@models/test';
+import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {Button, Text} from '@custom-antd';
+import {EntityDetailsContext} from '@contexts';
+
+import {Button, FullWidthSpace, Text} from '@custom-antd';
+
+import {Test} from '@models/test';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {ArgumentsWrapper} from './Arguments.styled';
 import {dash, doubleDash, space, stringSpace} from './utils';
@@ -43,7 +44,8 @@ const Arguments: React.FC = () => {
   const [isPrettified, setPrettifiedState] = useState(true);
   const [isButtonsDisabled, setIsButtonsDisabled] = useState(true);
 
-  const onSaveForm = (values: ArgumentsFormValues) => {
+  const onSaveForm = () => {
+    const values = form.getFieldsValue();
     const argVal = !values.args.length ? [] : values.args.trim().split('\n');
 
     const successRecord = {
@@ -54,14 +56,14 @@ const Arguments: React.FC = () => {
       },
     };
 
-    updateTest({
+    return updateTest({
       id: entityDetails.name,
       data: successRecord,
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Variables were successfully updated.');
       });
-    });
   };
 
   const onChange = () => {
@@ -132,7 +134,6 @@ const Arguments: React.FC = () => {
       form={form}
       name="general-settings-name-description"
       onChange={onChange}
-      onFinish={onSaveForm}
       initialValues={{args: argsValue}}
       disabled={!mayEdit}
     >
@@ -141,16 +142,11 @@ const Arguments: React.FC = () => {
         description="Define arguments which will be passed to the test executor."
         footerText={
           <>
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/test-types/executor-soapui/#using-parameters-and-arguments-in-your-tests">
-              Arguments
-            </ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.arguments}>Arguments</ExternalLink>
           </>
         }
         isButtonsDisabled={isButtonsDisabled}
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSaveForm}
         onCancel={() => {
           setArgsValue(entityArgs.join(' '));
           form.setFieldValue(['args'], entityArgs.join(' '));
@@ -160,7 +156,7 @@ const Arguments: React.FC = () => {
       >
         <ArgumentsWrapper>
           <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
-          <Space size={16} direction="vertical" style={{width: '100%'}}>
+          <FullWidthSpace size={16} direction="vertical">
             <Text className="regular middle" color={Colors.slate400}>
               Arguments passed to the executor (concat and passed directly to the executor)
             </Text>
@@ -180,7 +176,7 @@ value
             <Button onClick={prettifyArgs} $customType="secondary" disabled={isPrettified}>
               Prettify
             </Button>
-          </Space>
+          </FullWidthSpace>
         </ArgumentsWrapper>
       </ConfigurationCard>
     </Form>

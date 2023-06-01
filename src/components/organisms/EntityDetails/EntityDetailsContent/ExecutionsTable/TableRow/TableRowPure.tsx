@@ -2,22 +2,22 @@ import React, {memo, useCallback, useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
+import {StatusIcon} from '@atoms';
+
 import {Text} from '@custom-antd';
 
-import {StatusIcon} from '@atoms';
+import useIsRunning from '@hooks/useIsRunning';
 
 import {DotsDropdown} from '@molecules';
 
-import useIsRunning from '@hooks/useIsRunning';
+import Colors from '@styles/Colors';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
-import Colors from '@styles/Colors';
-
 import {DetailsWrapper, DotsWrapper, ItemColumn, ItemRow, ItemWrapper, StatusText} from './TableRow.styled';
 
-const TableRowPure: React.FC<{data: any; onAbortExecution: any, mayManageExecution: boolean}> = memo(props => {
+const TableRowPure: React.FC<{data: any; onAbortExecution: any; mayManageExecution: boolean}> = memo(props => {
   const {data, onAbortExecution, mayManageExecution} = props;
   const {status, number, startTime, name, id, durationMs} = data;
 
@@ -57,9 +57,7 @@ const TableRowPure: React.FC<{data: any; onAbortExecution: any, mayManageExecuti
             <StatusText color={Colors.slate200} $isRunning={isRunning}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </StatusText>
-            {renderedExecutionActions &&
-            renderedExecutionActions.length &&
-            mayManageExecution ? (
+            {renderedExecutionActions && renderedExecutionActions.length && mayManageExecution ? (
               <DotsWrapper
                 onClick={e => {
                   e.stopPropagation();

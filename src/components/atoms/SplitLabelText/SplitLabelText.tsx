@@ -2,6 +2,8 @@ import React from 'react';
 
 import {Text} from '@custom-antd';
 
+import {labelRegex} from '@molecules/LabelsSelect/utils';
+
 import Colors from '@styles/Colors';
 
 type SplitLabelProps = {
@@ -12,9 +14,9 @@ type SplitLabelProps = {
 const SplitLabelText: React.FC<SplitLabelProps> = props => {
   const {value, textClassName = 'regular'} = props;
 
-  if (!value.includes(':')) {
+  if (!labelRegex.test(value)) {
     return (
-      <Text color={Colors.slate400} className={textClassName}>
+      <Text color={Colors.slate200} className={textClassName}>
         {value}
       </Text>
     );

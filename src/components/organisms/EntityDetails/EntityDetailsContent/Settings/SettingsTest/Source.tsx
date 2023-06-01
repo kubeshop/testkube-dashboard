@@ -2,13 +2,11 @@ import {memo, useMemo, useState} from 'react';
 
 import {Form, Select} from 'antd';
 
-import {Test} from '@models/test';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-import {selectSources} from '@redux/reducers/sourcesSlice';
-
 import {ExternalLink} from '@atoms';
+
+import {FormItem, FullWidthSpace} from '@custom-antd';
+
+import {Test} from '@models/test';
 
 import {ConfigurationCard} from '@molecules';
 
@@ -20,7 +18,13 @@ import {
 } from '@organisms/TestConfigurationForm';
 import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
-import {testSourceLink} from '@utils/externalLinks';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
+import {selectSources} from '@redux/reducers/sourcesSlice';
+
+import {externalLinks} from '@utils/externalLinks';
 import {required} from '@utils/form';
 import {
   GetSourceFormValues,
@@ -31,10 +35,6 @@ import {
   remapTestSources,
   testSourceBaseOptions,
 } from '@utils/sources';
-
-import {Permissions, usePermission} from '@permissions/base';
-
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
 
 const additionalFields: SourceFields = {
   git: SourceEditFormFields,
@@ -82,10 +82,11 @@ const Source: React.FC<SourceProps> = props => {
   const [isClearedToken, setIsClearedToken] = useState(!additionalFormValues.token);
   const [isClearedUsername, setIsClearedUsername] = useState(!additionalFormValues.username);
 
-  const onSave = (values: SourceFormValues) => {
+  const onSave = () => {
+    const values = form.getFieldsValue();
     const {testSource: newTestSource} = values;
 
-    updateTest({
+    return updateTest({
       content: getSourcePayload(values, testSources),
       ...getCustomSourceField(newTestSource),
     });
@@ -98,15 +99,12 @@ const Source: React.FC<SourceProps> = props => {
       initialValues={{testSource: source, ...additionalFormValues}}
       layout="vertical"
       labelAlign="right"
-      onFinish={onSave}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Source"
         description="Define the source for your test"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
           setIsClearedUsername(!additionalFormValues.username);
@@ -114,7 +112,7 @@ const Source: React.FC<SourceProps> = props => {
         }}
         footerText={
           <>
-            Learn more about <ExternalLink href={testSourceLink}>test sources</ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.sourcesDocumentation}>test sources</ExternalLink>
           </>
         }
         forceEnableButtons={Boolean(
@@ -122,10 +120,10 @@ const Source: React.FC<SourceProps> = props => {
         )}
         enabled={mayEdit}
       >
-        <StyledSpace size={24} direction="vertical">
-          <StyledFormItem name="testSource" rules={[required]}>
+        <FullWidthSpace size={24} direction="vertical">
+          <FormItem name="testSource" rules={[required]}>
             <Select showSearch options={sourcesOptions} />
-          </StyledFormItem>
+          </FormItem>
           <Form.Item
             noStyle
             shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
@@ -156,7 +154,7 @@ const Source: React.FC<SourceProps> = props => {
               return getAdditionalFieldsComponent(testSource, additionalFields, childrenProps[testSource]);
             }}
           </Form.Item>
-        </StyledSpace>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

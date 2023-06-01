@@ -22,6 +22,7 @@ interface DotsDropdownProps {
   withPadding?: boolean;
   wrapperStyle?: React.CSSProperties;
   trigger?: ('click' | 'hover' | 'contextMenu')[];
+  overlayClassName?: string;
 }
 
 const DotsDropdown: React.FC<DotsDropdownProps> = ({
@@ -30,9 +31,11 @@ const DotsDropdown: React.FC<DotsDropdownProps> = ({
   withPadding = true,
   wrapperStyle = {},
   trigger = ['click'],
+  overlayClassName = 'light-dropdown',
 }) => {
   return (
     <Dropdown
+      overlayClassName={overlayClassName}
       trigger={trigger}
       menu={{
         items,

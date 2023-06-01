@@ -2,11 +2,11 @@ import React from 'react';
 
 import {ClockCircleOutlined, DeleteOutlined} from '@ant-design/icons';
 
-import {TestSuiteStepDelay, TestSuiteStepExecuteTest} from '@models/testSuite';
-
 import {ExecutorIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
+
+import {TestSuiteStepDelay, TestSuiteStepExecuteTest} from '@models/testSuite';
 
 import Colors from '@styles/Colors';
 

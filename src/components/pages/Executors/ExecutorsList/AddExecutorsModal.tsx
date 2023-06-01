@@ -1,21 +1,25 @@
-import {useContext} from 'react';
+import {useContext, useRef, useState} from 'react';
 
 import {Form} from 'antd';
+
+import {DashboardContext} from '@contexts';
+
+import {Button, Input} from '@custom-antd';
+
+import useInViewport from '@hooks/useInViewport';
+
+import {ErrorNotificationConfig} from '@models/notifications';
+
+import {Hint, NotificationContent} from '@molecules';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
-import {Button, Input} from '@custom-antd';
-
-import {Hint} from '@molecules';
-
-import {openCustomExecutorDocumentation} from '@utils/externalLinks';
-import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
-
 import {useCreateExecutorMutation} from '@services/executors';
 
-import {DashboardContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 
@@ -34,6 +38,11 @@ const AddExecutorsModal: React.FC = () => {
 
   const namespace = useAppSelector(selectNamespace);
 
+  const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
+
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
+
   const onFinish = (values: AddExecutorsFormValues) => {
     const body = {
       ...values,
@@ -44,18 +53,31 @@ const AddExecutorsModal: React.FC = () => {
 
     delete body.type;
 
-    createExecutor(body).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        if ('data' in res) {
+    createExecutor(body)
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(res => {
+        if (res && 'data' in res) {
           navigate(`/executors/${res.data.metadata.name}`);
         }
+      })
+      .catch(err => {
+        setError(err);
+
+        if (!inTopInViewport && topRef && topRef.current) {
+          topRef.current.scrollIntoView();
+        }
       });
-    });
   };
 
   return (
     <AddExecutorsModalContainer>
+      <div ref={topRef} />
       <Form style={{flex: 1}} layout="vertical" onFinish={onFinish} form={form}>
+        {error ? (
+          <div style={{marginBottom: '20px'}}>
+            <NotificationContent status="failed" message={error.message} title={error.title} />
+          </div>
+        ) : null}
         <Form.Item
           label="Name"
           required
@@ -87,7 +109,7 @@ const AddExecutorsModal: React.FC = () => {
       <Hint
         title="Need help?"
         description="We’ll guide you to easily create your very specific container based executor."
-        openLink={openCustomExecutorDocumentation}
+        openLink={() => window.open(externalLinks.containerExecutor)}
       />
     </AddExecutorsModalContainer>
   );

@@ -1,14 +1,18 @@
 import {useState} from 'react';
 
-import {Form, Input, Space} from 'antd';
+import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {FormItem, Text} from '@custom-antd';
+import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {isApiEndpointLocked, useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
+
+import Colors from '@styles/Colors';
+
+import {externalLinks} from '@utils/externalLinks';
 
 type ApiEndpointFormValues = {
   endpoint: string;
@@ -55,11 +59,9 @@ const ApiEndpoint: React.FC = () => {
         title="Testkube API endpoint"
         description="Please provide the TestKube API endpoint for your installation. The endpoint needs to be accessible from your browser"
         footerText={
-          <Text className="regular middle">
+          <Text className="regular middle" color={`${Colors.slate400}`}>
             Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/articles/common-issues/#why-is-the-testkube-dashboard-not-working-or-does-not-return-results">
-              testkube API endpoints
-            </ExternalLink>
+            <ExternalLink href={externalLinks.dashboardNotWorking}>testkube API endpoints</ExternalLink>
           </Text>
         }
         onConfirm={() => {
@@ -71,11 +73,11 @@ const ApiEndpoint: React.FC = () => {
         confirmButtonText={isLoading ? 'Loading...' : 'Save'}
         enabled={!disabled}
       >
-        <Space size={32} direction="vertical" style={{width: '100%'}}>
+        <FullWidthSpace size={32} direction="vertical">
           <FormItem name="endpoint">
             <Input placeholder="Endpoint" />
           </FormItem>
-        </Space>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

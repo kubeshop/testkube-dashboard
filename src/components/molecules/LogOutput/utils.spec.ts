@@ -41,12 +41,12 @@ describe('molecules', () => {
 
     describe('useCountLines', () => {
       it('should return number of lines', () => {
-        const { result } = renderHook(() => useCountLines('\nabc'.repeat(100)));
+        const {result} = renderHook(() => useCountLines('\nabc'.repeat(100)));
         expect(result.current).toBe(101);
       });
 
       it('should react to text change', () => {
-        const { result, rerender } = renderHook(({text}) => useCountLines(text), {
+        const {result, rerender} = renderHook(({text}) => useCountLines(text), {
           initialProps: {text: '\nabc'.repeat(100)},
         });
         rerender({text: '\nabc'.repeat(1000)});
@@ -56,17 +56,17 @@ describe('molecules', () => {
 
     describe('useLastLines', () => {
       it('should return all text when there is less lines', () => {
-        const { result } = renderHook(() => useLastLines('\nabc'.repeat(100), 1000));
+        const {result} = renderHook(() => useLastLines('\nabc'.repeat(100), 1000));
         expect(result.current).toBe('\nabc'.repeat(100));
       });
 
       it('should cut text to last lines', () => {
-        const { result } = renderHook(() => useLastLines('abc\n'.repeat(100), 10));
+        const {result} = renderHook(() => useLastLines('abc\n'.repeat(100), 10));
         expect(result.current).toBe('abc\n'.repeat(9));
       });
 
       it('should react to text change', () => {
-        const { result, rerender } = renderHook(({text}) => useLastLines(text, 200), {
+        const {result, rerender} = renderHook(({text}) => useLastLines(text, 200), {
           initialProps: {text: '\nabc'.repeat(100)},
         });
         rerender({text: 'abc\n'.repeat(1000)});
@@ -74,7 +74,7 @@ describe('molecules', () => {
       });
 
       it('should react to lines change', () => {
-        const { result, rerender } = renderHook(({max}) => useLastLines('abc\n'.repeat(1000), max), {
+        const {result, rerender} = renderHook(({max}) => useLastLines('abc\n'.repeat(1000), max), {
           initialProps: {max: 100},
         });
         rerender({max: 200});

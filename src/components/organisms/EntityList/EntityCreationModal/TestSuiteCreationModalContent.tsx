@@ -1,22 +1,25 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {Option} from '@models/form';
-
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
-import {LabelsSelect} from '@molecules';
+import useInViewport from '@hooks/useInViewport';
+
+import {Option} from '@models/form';
+import {ErrorNotificationConfig} from '@models/notifications';
+
+import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
-import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
+import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {StyledFormSpace} from './CreationModal.styled';
 
@@ -37,13 +40,19 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
+  const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
+
+  const topRef = useRef<HTMLDivElement>(null);
+  const inTopInViewport = useInViewport(topRef);
+
   const onFinish = (values: TestSuiteCreationModalFormValues) => {
     addTestSuite({
       ...values,
       labels: decomposeLabels(localLabels),
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        if ('data' in res) {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(res => {
+        if (res && 'data' in res) {
           analyticsTrack('trackEvents', {
             uiEvent: 'create-test-suites',
           });
@@ -52,8 +61,14 @@ const TestSuiteCreationModalContent: React.FC = () => {
 
           navigate(`/test-suites/executions/${res.data.metadata.name}`);
         }
+      })
+      .catch(err => {
+        setError(err);
+
+        if (!inTopInViewport && topRef && topRef.current) {
+          topRef.current.scrollIntoView();
+        }
       });
-    });
   };
 
   useEffect(() => {
@@ -69,8 +84,10 @@ const TestSuiteCreationModalContent: React.FC = () => {
       onFinish={onFinish}
       initialValues={{name: '', description: '', labels: []}}
     >
+      <div ref={topRef} />
       <StyledFormSpace size={24} direction="vertical">
         <Text className="regular big">Test suite details</Text>
+        {error ? <NotificationContent status="failed" message={error.message} title={error.title} /> : null}
         <FormItem name="name" rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}>
           <Input placeholder="Name" />
         </FormItem>

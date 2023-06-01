@@ -11,12 +11,16 @@ export const invisibleScroll = `
 `;
 
 export const GlobalStyle = createGlobalStyle`
+  #root, html, body {
+    height: initial;
+    min-height: 100vh;
+  }
+
   #root {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    min-height: 100%;
   }
 
   body {
@@ -211,13 +215,20 @@ export const GlobalStyle = createGlobalStyle`
 
   /* Dropdown */
 
+  .light-dropdown{
+    .ant-dropdown-menu {
+      background: ${Colors.slate900};
+
+      .ant-dropdown-menu-item {
+        background: ${Colors.slate700};
+      }
+    }
+  }
+
   .ant-dropdown-menu {
-    background: ${Colors.slate800};
     padding: 0;
 
     .ant-dropdown-menu-item {
-      background: ${Colors.slate700};
-
       &:hover {
         background: transparent;
       }
@@ -340,7 +351,6 @@ export const GlobalStyle = createGlobalStyle`
       color: ${Colors.slate500};
     }
   }
-
   /* Form */
 
   .ant-form-vertical {

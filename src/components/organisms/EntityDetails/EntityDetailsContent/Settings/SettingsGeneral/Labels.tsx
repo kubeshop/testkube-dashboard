@@ -4,17 +4,17 @@ import {Form} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
+import {EntityDetailsContext} from '@contexts';
+
 import {Option} from '@models/form';
 
 import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
-
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
+import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {namingMap, updateRequestsMap} from '../utils';
 
@@ -35,18 +35,18 @@ const Labels: React.FC = () => {
   const entityLabels = entityDetails?.labels || {};
 
   const onSave = () => {
-    updateEntity({
+    return updateEntity({
       id: entityDetails.name,
       data: {
         ...entityDetails,
         labels: decomposeLabels(localLabels),
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
         setWasTouched(false);
       });
-    });
   };
 
   const onCancel = () => {

@@ -4,12 +4,12 @@ import {Form} from 'antd';
 
 import {CopyButton, DownloadButton, ExternalLink, Pre} from '@atoms';
 
-import {ConfigurationCard, Definition} from '@molecules';
+import {EntityDetailsContext, MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {ConfigurationCard, Definition} from '@molecules';
 
 import {settingsDefinitionData} from './utils';
 

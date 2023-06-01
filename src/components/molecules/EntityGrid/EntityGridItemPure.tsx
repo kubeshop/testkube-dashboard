@@ -8,10 +8,10 @@ import {Text} from '@custom-antd';
 
 import {LabelsList, MetricsBarChart} from '@molecules';
 
+import Colors from '@styles/Colors';
+
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
-
-import Colors from '@styles/Colors';
 
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
 

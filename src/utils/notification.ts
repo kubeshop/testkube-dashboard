@@ -8,21 +8,38 @@ export type DefaultRequestError = {
   status?: number;
 };
 
-export function displayDefaultNotificationFlow<T = unknown>(res?: RTKResponse<T>, success?: () => void) {
-  if (res && 'error' in res && 'data' in res.error) {
-    if (res.error.data) {
+export const getErrorFromResponse = (res?: RTKResponse<unknown>): unknown => {
+  if (res && 'error' in res) {
+    let errorObject = null;
+
+    if ('data' in res.error) {
       // @ts-ignore
       const errorTitle = res.error.data?.title || 'Unknown error';
       // @ts-ignore
       const errorDetails = res.error.data?.detail || 'Something went wrong';
 
-      notificationCall('failed', errorTitle, errorDetails);
+      errorObject = {
+        title: errorTitle,
+        message: errorDetails,
+      };
     } else if ('error' in res.error) {
-      notificationCall('failed', res.error.error);
+      errorObject = {
+        // @ts-ignore
+        title: res?.error?.error,
+      };
     }
-  } else {
-    success && success();
+
+    return errorObject;
   }
+};
+
+export async function displayDefaultNotificationFlow<T = unknown>(res?: RTKResponse<T>) {
+  const error = getErrorFromResponse(res);
+
+  if (error) {
+    throw error;
+  }
+  return res;
 }
 
 export function displayDefaultErrorNotification(err: DefaultRequestError) {

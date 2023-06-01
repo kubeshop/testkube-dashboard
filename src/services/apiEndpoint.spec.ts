@@ -1,6 +1,6 @@
 import {createElement} from 'react';
-import {act, renderHook} from '@testing-library/react';
 
+import {act, renderHook} from '@testing-library/react';
 import axios from 'axios';
 
 import {config} from '@constants/config';
@@ -11,7 +11,8 @@ import env from '../env';
 
 import {
   getApiDetails,
-  getApiEndpoint, isApiEndpointLocked,
+  getApiEndpoint,
+  isApiEndpointLocked,
   sanitizeApiEndpoint,
   saveApiEndpoint,
   useApiEndpoint,
@@ -150,12 +151,12 @@ describe('services', () => {
         expect(localStorage.getItem(config.apiEndpoint)).toBe('http://abc/v1');
       });
 
-      it('should change Axios\' base URL to the endpoint', () => {
+      it("should change Axios' base URL to the endpoint", () => {
         saveApiEndpoint('abc');
         expect(axios.defaults.baseURL).toBe('http://abc/v1');
       });
 
-      it('should empty Axios\' base URL when no endpoint provided', () => {
+      it("should empty Axios' base URL when no endpoint provided", () => {
         saveApiEndpoint('');
         expect(axios.defaults.baseURL).toBe(undefined);
       });
@@ -206,16 +207,16 @@ describe('services', () => {
 
       it('should successfully obtain server info', async () => {
         fetchMock.mockImplementationOnce(async () => ({
-          json: async () => ({ version, commit, namespace }),
+          json: async () => ({version, commit, namespace}),
         }));
-        expect(await getApiDetails('api')).toEqual({ url: 'http://api/v1', namespace });
+        expect(await getApiDetails('api')).toEqual({url: 'http://api/v1', namespace});
       });
 
       it('should fall back namespace to the "testkube"', async () => {
         fetchMock.mockImplementationOnce(async () => ({
-          json: async () => ({ version, commit }),
+          json: async () => ({version, commit}),
         }));
-        expect(await getApiDetails('api')).toEqual({ url: 'http://api/v1', namespace: 'testkube' });
+        expect(await getApiDetails('api')).toEqual({url: 'http://api/v1', namespace: 'testkube'});
       });
 
       it('should detect problems with server connection', async () => {
@@ -229,7 +230,7 @@ describe('services', () => {
 
       it('should detect invalid response schema from the server', async () => {
         fetchMock.mockImplementationOnce(async () => ({
-          json: async () => ({ hello: 'world' }),
+          json: async () => ({hello: 'world'}),
         }));
         const spy = jest.fn();
         await getApiDetails('api').catch(spy);
@@ -242,8 +243,10 @@ describe('services', () => {
       const dispatch = createAutoResetSpy();
       const initialEndpoint = 'http://initial/v1';
 
-      const wrapper = ({ children }) => createElement(MainContext.Provider, {value: {dispatch}}, children);
-      const {result: {current: update}} = renderHook(() => useUpdateApiEndpoint(), {wrapper});
+      const wrapper = ({children}) => createElement(MainContext.Provider, {value: {dispatch}}, children);
+      const {
+        result: {current: update},
+      } = renderHook(() => useUpdateApiEndpoint(), {wrapper});
 
       beforeEach(() => {
         saveApiEndpoint(initialEndpoint);
@@ -262,7 +265,7 @@ describe('services', () => {
 
       it('should save namespace & endpoint when the server is fine', async () => {
         fetchMock.mockImplementationOnce(async () => ({
-          json: async () => ({ version, commit, namespace }),
+          json: async () => ({version, commit, namespace}),
         }));
 
         expect(await update('new')).toBe(true);
@@ -283,7 +286,7 @@ describe('services', () => {
 
       it('should ignore server success when race condition occurs', async () => {
         fetchMock.mockImplementationOnce(async () => ({
-          json: async () => ({ version, commit, namespace }),
+          json: async () => ({version, commit, namespace}),
         }));
 
         const promise = update('new');

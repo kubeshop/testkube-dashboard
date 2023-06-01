@@ -1,12 +1,14 @@
 import React, {useContext} from 'react';
 
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+import {EntityDetailsContext, MainContext} from '@contexts';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+
+import {externalLinks} from '@utils/externalLinks';
 
 type EmptyExecutionsListContentProps = {
   triggerRun: () => void;
@@ -61,7 +63,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         onButtonClick={() => dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}))}
         actionType="create"
       >
-        <HelpCard isLink link="https://docs.testkube.io/articles/creating-test-suites">
+        <HelpCard isLink link={externalLinks.createTestSuite}>
           Learn how to add test suites
         </HelpCard>
       </EmptyListContent>

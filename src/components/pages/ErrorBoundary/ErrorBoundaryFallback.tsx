@@ -1,14 +1,14 @@
 import {useCallback, useContext} from 'react';
 
+import notFoundImage from '@assets/not-found-image.svg';
+
 import {ExternalLink} from '@atoms';
+
+import {ConfigContext, DashboardContext} from '@contexts';
 
 import {Button, Title} from '@custom-antd';
 
-import notFoundImage from '@assets/not-found-image.svg';
-
 import Colors from '@styles/Colors';
-
-import {ConfigContext, DashboardContext} from '@contexts';
 
 import {StyledErrorContainer, StyledErrorDescription, StyledErrorImage} from './ErrorBoundary.styled';
 
@@ -31,9 +31,8 @@ const ErrorBoundaryFallback: React.FC = () => {
         refreshing this page.
       </StyledErrorDescription>
       <StyledErrorDescription>
-        Feel free to reach out to us on{' '}
-        <ExternalLink href={discordUrl}>Discord</ExternalLink> if the error continuous to
-        exist.
+        Feel free to reach out to us on <ExternalLink href={discordUrl}>Discord</ExternalLink> if the error continuous
+        to exist.
       </StyledErrorDescription>
       <Button type="primary" onClick={onButtonClick}>
         Back to the Dashboard

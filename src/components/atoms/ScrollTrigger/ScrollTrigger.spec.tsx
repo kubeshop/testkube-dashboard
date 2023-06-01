@@ -1,5 +1,5 @@
-import {act, render} from '@testing-library/react';
 import {intersectionObserver} from '@shopify/jest-dom-mocks';
+import {act, render} from '@testing-library/react';
 
 import {ScrollTrigger} from '@atoms';
 
@@ -20,7 +20,7 @@ describe('atoms', () => {
         const result = render(<ScrollTrigger onScroll={onScroll} />);
 
         act(() => {
-          intersectionObserver.simulate({ isIntersecting: true });
+          intersectionObserver.simulate({isIntersecting: true});
         });
 
         expect(onScroll).toHaveBeenCalledTimes(1);
@@ -30,7 +30,7 @@ describe('atoms', () => {
         const onScroll = jest.fn();
         const result = render(<ScrollTrigger disabled onScroll={onScroll} />);
 
-        act(() => intersectionObserver.simulate({ isIntersecting: true }));
+        act(() => intersectionObserver.simulate({isIntersecting: true}));
 
         expect(onScroll).toHaveBeenCalledTimes(0);
       });
@@ -40,7 +40,7 @@ describe('atoms', () => {
         const result = render(<ScrollTrigger disabled onScroll={onScroll} />);
 
         act(() => {
-          intersectionObserver.simulate({ isIntersecting: true });
+          intersectionObserver.simulate({isIntersecting: true});
           result.rerender(<ScrollTrigger onScroll={onScroll} />);
         });
 

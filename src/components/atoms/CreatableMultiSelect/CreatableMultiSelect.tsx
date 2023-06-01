@@ -2,9 +2,9 @@ import React, {KeyboardEvent, useRef} from 'react';
 import {MultiValueGenericProps, OptionProps} from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
-import {Option} from '@models/form';
-
 import usePressEnter from '@hooks/usePressEnter';
+
+import {Option} from '@models/form';
 
 import {customStyles, customTheme} from './CreatableMultiSelect.styled';
 import {

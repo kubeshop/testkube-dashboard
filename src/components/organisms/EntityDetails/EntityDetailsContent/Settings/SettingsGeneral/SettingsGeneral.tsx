@@ -2,9 +2,9 @@ import {useContext} from 'react';
 
 import {Space} from 'antd';
 
-import {Permissions, usePermission} from '@permissions/base';
-
 import {EntityDetailsContext} from '@contexts';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import Delete from './Delete';
 import FailureHandling from './FailureHandling';

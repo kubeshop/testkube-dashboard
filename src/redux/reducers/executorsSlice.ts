@@ -51,11 +51,11 @@ export const executorsSlice = createSlice({
     },
     updateCurrentExecutorData: (state: Draft<ExecutorsState>, action: PayloadAction<Partial<Executor['executor']>>) => {
       if (state.currentExecutor) {
-        state.executorsList = state.executorsList.map(executor => (
+        state.executorsList = state.executorsList.map(executor =>
           executor.name === state.currentExecutor
             ? {...executor, executor: {...executor.executor, ...action.payload}}
             : executor
-        ));
+        );
       }
     },
   },
@@ -63,14 +63,9 @@ export const executorsSlice = createSlice({
 
 export const selectExecutors = (state: RootState) => state.executors.executorsList;
 export const selectExecutorsFeaturesMap = (state: RootState) => state.executors.executorsFeaturesMap;
-export const selectCurrentExecutor = (state: RootState) => (
-  state.executors.executorsList.find(executor => executor.name === state.executors.currentExecutor) as Executor
-);
+export const selectCurrentExecutor = (state: RootState) =>
+  state.executors.executorsList.find(executor => executor.name === state.executors.currentExecutor) as Executor;
 
-export const {
-  setExecutors,
-  setCurrentExecutor,
-  updateCurrentExecutorData,
-} = executorsSlice.actions;
+export const {setExecutors, setCurrentExecutor, updateCurrentExecutorData} = executorsSlice.actions;
 
 export default executorsSlice.reducer;

@@ -1,12 +1,12 @@
 import {useContext, useEffect, useState} from 'react';
 import {useDebounce} from 'react-use';
 
-import {Entity} from '@models/entity';
-import {FilterProps} from '@models/filters';
+import {MainContext} from '@contexts';
 
 import {Input} from '@custom-antd';
 
-import {MainContext} from '@contexts';
+import {Entity} from '@models/entity';
+import {FilterProps} from '@models/filters';
 
 const inputValueQueryParams: Record<Entity, string> = {
   'test-suites': 'textSearch',

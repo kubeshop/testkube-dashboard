@@ -2,19 +2,19 @@ import {useContext} from 'react';
 
 import {Form, Popover} from 'antd';
 
-import {Checkbox, Text} from '@custom-antd';
+import {EntityDetailsContext} from '@contexts';
+
+import {Checkbox, FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {Permissions, usePermission} from '@permissions/base';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {EntityDetailsContext} from '@contexts';
-
-import {StyledFormItem, StyledPopoverContainer, StyledQuestionCircleOutlined} from '../Settings.styled';
+import {StyledPopoverContainer, StyledQuestionCircleOutlined} from '../Settings.styled';
 
 const popoverContent = (
   <StyledPopoverContainer>
@@ -42,8 +42,10 @@ const FailureHandling: React.FC = () => {
 
   const negativeTest = entityDetails?.executionRequest?.negativeTest;
 
-  const onSave = (values: FailureHandlingFormValues) => {
-    updateTest({
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateTest({
       id: entityDetails.name,
       data: {
         ...entityDetails,
@@ -52,40 +54,30 @@ const FailureHandling: React.FC = () => {
           negativeTest: values.negativeTest,
         },
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', `Test was successfully updated.`);
-      });
-    });
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', `Test was successfully updated.`));
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onSave}
-      initialValues={{negativeTest}}
-      name="general-settings-failure-handling"
-      disabled={!mayEdit}
-    >
+    <Form form={form} initialValues={{negativeTest}} name="general-settings-failure-handling" disabled={!mayEdit}>
       <ConfigurationCard
         title="Failure handling"
         description="Define how Testkube should treat occurring errors."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}
         enabled={mayEdit}
       >
-        <StyledFormItem name="negativeTest" valuePropName="checked">
+        <FormItem name="negativeTest" valuePropName="checked">
           <Checkbox>
             Invert test result
             <Popover content={popoverContent}>
               <StyledQuestionCircleOutlined />
             </Popover>
           </Checkbox>
-        </StyledFormItem>
+        </FormItem>
       </ConfigurationCard>
     </Form>
   );

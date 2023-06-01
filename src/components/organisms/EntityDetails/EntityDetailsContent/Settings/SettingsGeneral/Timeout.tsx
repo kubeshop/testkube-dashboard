@@ -4,20 +4,19 @@ import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {Text} from '@custom-antd';
+import {EntityDetailsContext} from '@contexts';
+
+import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {digits} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext} from '@contexts';
-
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
+import {externalLinks} from '@utils/externalLinks';
+import {digits} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type TimeoutForm = {
   activeDeadlineSeconds?: number;
@@ -25,17 +24,19 @@ type TimeoutForm = {
 
 const Timeout: React.FC = () => {
   const {entityDetails} = useContext(EntityDetailsContext);
-  const mayEdit = usePermission(Permissions.editEntity);
   const {executionRequest, name} = entityDetails;
+
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<TimeoutForm>();
 
   const [updateTest] = useUpdateTestMutation();
 
-  const onSave = (values: TimeoutForm) => {
+  const onSave = () => {
+    const values = form.getFieldsValue();
     const {activeDeadlineSeconds} = values;
 
-    updateTest({
+    return updateTest({
       id: name,
       data: {
         ...entityDetails,
@@ -44,17 +45,14 @@ const Timeout: React.FC = () => {
           activeDeadlineSeconds: activeDeadlineSeconds ? Number(activeDeadlineSeconds) : 0,
         },
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
-        notificationCall('passed', 'Test Timeout was successfully updated.');
-      });
-    });
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', 'Test Timeout was successfully updated.'));
   };
 
   return (
     <Form
       form={form}
-      onFinish={onSave}
       name="general-settings-name-description"
       initialValues={{activeDeadlineSeconds: executionRequest?.activeDeadlineSeconds}}
       disabled={!mayEdit}
@@ -62,27 +60,22 @@ const Timeout: React.FC = () => {
       <ConfigurationCard
         title="Timeout"
         description="Define the timeout in seconds after which this test will fail."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}
+        enabled={mayEdit}
         footerText={
           <Text className="regular middle">
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/articles/creating-test-suites">
-              Timeouts
-            </ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.addingTimeout}>Timeouts</ExternalLink>
           </Text>
         }
-        enabled={mayEdit}
       >
-        <StyledSpace size={32} direction="vertical" style={{width: '100%'}}>
-          <StyledFormItem name="activeDeadlineSeconds" rules={[digits]} style={{marginBottom: '0px'}}>
+        <FullWidthSpace size={32} direction="vertical">
+          <FormItem name="activeDeadlineSeconds" rules={[digits]}>
             <Input placeholder="Timeout in seconds" />
-          </StyledFormItem>
-        </StyledSpace>
+          </FormItem>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

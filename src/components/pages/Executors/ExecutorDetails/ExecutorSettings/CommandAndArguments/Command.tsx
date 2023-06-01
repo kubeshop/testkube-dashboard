@@ -2,22 +2,22 @@ import {useContext, useEffect} from 'react';
 
 import {Form} from 'antd';
 
+import {CommandInput} from '@atoms';
+
+import {MainContext} from '@contexts';
+
 import {Executor} from '@models/executors';
+
+import {ConfigurationCard, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
-import {CommandInput} from '@atoms';
-
-import {ConfigurationCard, notificationCall} from '@molecules';
-
-import {displayDefaultNotificationFlow} from '@utils/notification';
-
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type CommandFormFields = {
   command: string;
@@ -34,20 +34,22 @@ const Command: React.FC = () => {
 
   const [form] = Form.useForm<CommandFormFields>();
 
-  const onSubmit = (values: CommandFormFields) => {
-    updateCustomExecutor({
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
+
+    return updateCustomExecutor({
       executorId: name,
       body: {
         name,
         ...executor,
         command: values.command.split(' '),
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Command was successfully updated.');
         dispatch(updateCurrentExecutorData({command: values.command!.split(' ')}));
       });
-    });
   };
 
   useEffect(() => {
@@ -62,15 +64,12 @@ const Command: React.FC = () => {
       name="general-settings-name-type"
       initialValues={{command: command?.join(' ')}}
       layout="vertical"
-      onFinish={onSubmit}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Command"
         description="Define the command your image needs to run"
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}

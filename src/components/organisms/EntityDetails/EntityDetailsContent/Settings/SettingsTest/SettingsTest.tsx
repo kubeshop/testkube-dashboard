@@ -2,13 +2,13 @@ import {useContext} from 'react';
 
 import {Space} from 'antd';
 
-import {notificationCall} from '@molecules';
+import {EntityDetailsContext} from '@contexts';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {notificationCall} from '@molecules';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {EntityDetailsContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import Source from './Source';
 import TestType from './TestType';
@@ -19,17 +19,17 @@ const SettingsTest: React.FC = () => {
   const [updateTestMutation] = useUpdateTestMutation();
 
   const updateTest = (data: Object) => {
-    updateTestMutation({
+    return updateTestMutation({
       id: entityDetails.name,
       data: {
         ...entityDetails,
         ...data,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', `Test settings was successfully updated.`);
       });
-    });
   };
 
   return (

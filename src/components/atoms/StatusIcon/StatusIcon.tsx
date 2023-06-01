@@ -3,6 +3,7 @@ import {Icon} from '@atoms';
 import Colors from '@styles/Colors';
 
 import {IconProps} from '../Icon/types';
+
 import {StyledStatusIcon} from './StatusIcon.styled';
 
 interface IconStyle {

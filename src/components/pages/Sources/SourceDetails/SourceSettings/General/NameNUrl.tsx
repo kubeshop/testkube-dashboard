@@ -2,21 +2,21 @@ import {useContext, useEffect} from 'react';
 
 import {Form} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
+import {MainContext} from '@contexts';
 
 import {Input} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {required} from '@utils/form';
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
 import {useUpdateSourceMutation} from '@services/sources';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {required} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type NameNUrlFormValues = {
   name: string;
@@ -25,8 +25,11 @@ type NameNUrlFormValues = {
 
 const NameNUrl: React.FC = () => {
   const source = useAppSelector(selectCurrentSource);
+
   const {dispatch} = useContext(MainContext);
+
   const mayEdit = usePermission(Permissions.editEntity);
+
   const [form] = Form.useForm<NameNUrlFormValues>();
 
   const [updateSource] = useUpdateSourceMutation();
@@ -40,7 +43,9 @@ const NameNUrl: React.FC = () => {
     form.resetFields();
   }, [name, uri]);
 
-  const onFinish = (values: NameNUrlFormValues) => {
+  const onFinish = () => {
+    const values = form.getFieldsValue();
+
     if (!source) {
       notificationCall('failed', 'Something went wrong.');
       return;
@@ -55,29 +60,20 @@ const NameNUrl: React.FC = () => {
       },
     };
 
-    updateSource(body).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    return updateSource(body)
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Source was successfully updated.');
         dispatch(setCurrentSource(body));
       });
-    });
   };
 
   return (
-    <Form
-      form={form}
-      name="general-settings-name-url"
-      initialValues={defaults}
-      layout="vertical"
-      onFinish={onFinish}
-      disabled={!mayEdit}
-    >
+    <Form form={form} name="general-settings-name-url" initialValues={defaults} layout="vertical" disabled={!mayEdit}>
       <ConfigurationCard
         title="Source name & repository URL"
         description="Define the name and repository URL of the source which will be later available in your tests."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onFinish}
         onCancel={() => {
           form.resetFields();
         }}

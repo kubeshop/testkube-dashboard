@@ -2,15 +2,15 @@ import React, {memo, useContext, useEffect, useMemo} from 'react';
 
 import {Space} from 'antd';
 
+import {MainContext} from '@contexts';
+
+import useURLSearchParams from '@hooks/useURLSearchParams';
+
 import {EntityListBlueprint} from '@models/entity';
 import {FilterProps, FilterType} from '@models/filters';
 import {SearchParams} from '@models/searchParams';
 
-import useURLSearchParams from '@hooks/useURLSearchParams';
-
 import {validateSearchParams} from '@utils/fetchUtils';
-
-import {MainContext} from '@contexts';
 
 import LabelsFilter from './LabelsFilter';
 import StatusFilter from './StatusFilter';

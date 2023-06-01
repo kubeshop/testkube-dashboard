@@ -2,12 +2,12 @@ import {useState} from 'react';
 
 import {Form} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
-
 import {Modal} from '@custom-antd';
 
 import {ConfigurationCard, DeleteEntityModal} from '@molecules';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
 
 import {useDeleteSourceMutation} from '@services/sources';
 

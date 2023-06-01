@@ -1,14 +1,13 @@
 import {PropsWithChildren, useEffect, useMemo} from 'react';
 
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import {AnalyticsBrowser, Context, Plugin} from '@segment/analytics-next';
 
 import {AnalyticsContext} from '@contexts';
 
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
-
 type AnalyticsProviderProps = {
   disabled?: boolean;
-  privateKey: string;
+  writeKey?: string;
   appVersion: string;
   featureFlags: string[];
 };
@@ -42,15 +41,15 @@ const CleanSensitiveDataPlugin: Plugin = {
 };
 
 export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProps>> = props => {
-  const {disabled, privateKey, children, appVersion, featureFlags} = props;
+  const {disabled, writeKey, children, appVersion, featureFlags} = props;
 
   const notDevEnv = process.env.NODE_ENV !== 'development';
 
   const analytics = useMemo(() => {
-    if (!disabled && privateKey && notDevEnv) {
-      return AnalyticsBrowser.load({writeKey: privateKey, plugins: [CleanSensitiveDataPlugin]});
+    if (!disabled && writeKey && notDevEnv) {
+      return AnalyticsBrowser.load({writeKey, plugins: [CleanSensitiveDataPlugin]});
     }
-  }, [disabled, privateKey]);
+  }, [disabled, writeKey]);
 
   const hostname = window.location.hostname;
 
@@ -81,7 +80,7 @@ export const AnalyticsProvider: React.FC<PropsWithChildren<AnalyticsProviderProp
       analyticsTrack,
       featureFlags,
     }),
-    [disabled, privateKey, hostname, appVersion]
+    [disabled, writeKey, hostname, appVersion]
   );
 
   return <AnalyticsContext.Provider value={value}>{children}</AnalyticsContext.Provider>;

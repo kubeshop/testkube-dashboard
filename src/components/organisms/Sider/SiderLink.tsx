@@ -1,4 +1,5 @@
-import {useContext, AnchorHTMLAttributes, useCallback, MouseEvent} from 'react';
+import {AnchorHTMLAttributes, MouseEvent, useCallback, useContext} from 'react';
+
 import classNames from 'classnames';
 
 import {DashboardContext} from '@contexts';
@@ -17,16 +18,19 @@ const SiderLink: React.FC<SiderLinkProps & AnchorHTMLAttributes<HTMLAnchorElemen
 }) => {
   const {baseUrl, navigate, location} = useContext(DashboardContext);
   const finalClassName = classNames(className, {
-    active: (
-      (location.pathname === href || location.pathname.startsWith(`${href}/`)) ||
-      (active && (active.test(location.pathname) || active.test(window.location.pathname)))
-    ),
+    active:
+      location.pathname === href ||
+      location.pathname.startsWith(`${href}/`) ||
+      (active && (active.test(location.pathname) || active.test(window.location.pathname))),
   });
 
-  const onClick = useCallback((event: MouseEvent) => {
-    event.preventDefault();
-    navigate(href!);
-  }, [navigate]);
+  const onClick = useCallback(
+    (event: MouseEvent) => {
+      event.preventDefault();
+      navigate(href!);
+    },
+    [navigate]
+  );
 
   return (
     <a href={`${baseUrl}${href}`} className={finalClassName} onClick={onClick} {...rest}>

@@ -3,9 +3,9 @@ import React, {useCallback, useContext} from 'react';
 import {Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
-import {Skeleton} from '@custom-antd';
-
 import {EntityDetailsContext} from '@contexts';
+
+import {Skeleton} from '@custom-antd';
 
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
@@ -36,11 +36,14 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
 
   const isEmptyExecutions = !executionsList?.results || !executionsList?.results.length;
 
-  const onAbortExecution = useCallback((executionId: string) => {
-    if (id) {
-      abortExecution({executionId, id});
-    }
-  }, [id, abortExecution]);
+  const onAbortExecution = useCallback(
+    (executionId: string) => {
+      if (id) {
+        abortExecution({executionId, id});
+      }
+    },
+    [id, abortExecution]
+  );
   if (isFirstTimeLoading) {
     return (
       <>

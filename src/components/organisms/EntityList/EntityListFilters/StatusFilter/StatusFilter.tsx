@@ -4,9 +4,9 @@ import {useDebounce} from 'react-use';
 
 import {FilterFilled} from '@ant-design/icons';
 
-import {FilterProps} from '@models/filters';
+import {MainContext} from '@contexts';
 
-import {initialPageSize} from '@redux/initialState';
+import {FilterProps} from '@models/filters';
 
 import {
   FilterMenuFooter,
@@ -17,11 +17,11 @@ import {
   StyledFilterMenuItem,
 } from '@molecules/FilterMenu';
 
-import {uppercaseFirstSymbol} from '@utils/strings';
+import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {uppercaseFirstSymbol} from '@utils/strings';
 
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 

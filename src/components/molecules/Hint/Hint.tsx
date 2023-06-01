@@ -1,11 +1,11 @@
 import {memo} from 'react';
 
+import {ReactComponent as WizardHintImage} from '@assets/wizardHint.svg';
+import {ReactComponent as WizardHintEmpty} from '@assets/wizardHintEmpty.svg';
+
 import {ExecutorIcon} from '@atoms';
 
 import {Button, Text, Title} from '@custom-antd';
-
-import {ReactComponent as WizardHintImage} from '@assets/wizardHint.svg';
-import {ReactComponent as WizardHintEmpty} from '@assets/wizardHintEmpty.svg';
 
 import Colors from '@styles/Colors';
 

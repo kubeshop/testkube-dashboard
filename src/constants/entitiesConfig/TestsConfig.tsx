@@ -1,3 +1,7 @@
+import {ExternalLink} from '@atoms';
+
+import {Text} from '@custom-antd';
+
 import {EntityListBlueprint} from '@models/entity';
 
 import {initialTestsFiltersState} from '@redux/initialState';
@@ -9,13 +13,11 @@ import {
   setTestsFilters,
 } from '@redux/reducers/testsSlice';
 
-import {ExternalLink} from '@atoms';
-
-import {Text} from '@custom-antd';
-
 import {useAbortAllTestExecutionsMutation, useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
+
+import {externalLinks} from '@utils/externalLinks';
 
 import {EmptyTestsListContent} from './EmptyEntitiesListContent';
 
@@ -23,7 +25,7 @@ const TestsPageDescription: React.FC = () => {
   return (
     <Text className="regular middle" color={Colors.slate400}>
       Explore your tests at a glance... Learn more about{' '}
-      <ExternalLink href="https://docs.testkube.io/">testing with Testkube</ExternalLink>
+      <ExternalLink href={externalLinks.documentation}>testing with Testkube</ExternalLink>
     </Text>
   );
 };

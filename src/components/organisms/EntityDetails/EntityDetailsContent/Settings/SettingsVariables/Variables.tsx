@@ -2,19 +2,20 @@ import React, {useContext, useEffect, useMemo} from 'react';
 
 import {Form} from 'antd';
 
+import {ExternalLink} from '@atoms';
+
+import {EntityDetailsContext} from '@contexts';
+
 import {Entity} from '@models/entity';
 import {VariableInForm} from '@models/variable';
 
-import {ExternalLink} from '@atoms';
-
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
-
-import {displayDefaultNotificationFlow} from '@utils/notification';
-import {decomposeVariables, formatVariables} from '@utils/variables';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {EntityDetailsContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {displayDefaultNotificationFlow} from '@utils/notification';
+import {decomposeVariables, formatVariables} from '@utils/variables';
 
 import {updateRequestsMap} from '../utils';
 
@@ -46,7 +47,8 @@ const Variables: React.FC = () => {
     form.resetFields();
   }, [variables]);
 
-  const onSaveForm = (value: VariablesFormValues) => {
+  const onSaveForm = () => {
+    const value = form.getFieldsValue();
     const successRecord = {
       ...entityDetails,
       executionRequest: {
@@ -55,24 +57,19 @@ const Variables: React.FC = () => {
       },
     };
 
-    updateEntity({
+    return updateEntity({
       id: entityDetails.name,
       data: successRecord,
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', `Variables were successfully updated.`);
       });
-    });
-  };
-
-  const onClickSave = () => {
-    form.submit();
   };
 
   return (
     <Form
       form={form}
-      onFinish={onSaveForm}
       onFieldsChange={(_: any) => {
         if (_[0]) {
           const action = _[0];
@@ -107,13 +104,10 @@ const Variables: React.FC = () => {
         description={descriptionMap[entity]}
         footerText={
           <>
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/articles/adding-tests-variables/">
-              Environment variables
-            </ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.variables}>Environment variables</ExternalLink>
           </>
         }
-        onConfirm={onClickSave}
+        onConfirm={onSaveForm}
         onCancel={() => {
           form.resetFields();
         }}

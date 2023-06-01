@@ -1,13 +1,13 @@
 import React, {useCallback, useMemo, useRef} from 'react';
 
-import {getLiteralColor} from '@models/command';
-
 import {CopyButton, DownloadButton, Pre} from '@atoms';
 
 import {Text} from '@custom-antd';
 
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
+
+import {getLiteralColor} from '@models/command';
 
 import Colors from '@styles/Colors';
 

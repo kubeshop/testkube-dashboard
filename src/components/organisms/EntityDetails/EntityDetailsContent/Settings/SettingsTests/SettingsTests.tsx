@@ -1,32 +1,32 @@
 import {memo, useContext, useEffect, useMemo, useRef, useState} from 'react';
 
-import {Form, Select} from 'antd';
-
 import {ClockCircleOutlined} from '@ant-design/icons';
+import {Form, Select} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
+import {ExecutorIcon, ExternalLink} from '@atoms';
+
+import {EntityDetailsContext, MainContext} from '@contexts';
+
+import {Text, Title} from '@custom-antd';
+
 import {TestSuiteStepTest} from '@models/test';
 import {TestSuite, TestSuiteStep} from '@models/testSuite';
+
+import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
-import {ExecutorIcon, ExternalLink} from '@atoms';
-
-import {Text, Title} from '@custom-antd';
-
-import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
-
-import {displayDefaultNotificationFlow} from '@utils/notification';
-
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import DelayModal from './DelayModal';
 import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './SettingsTests.styled';
@@ -45,14 +45,14 @@ const SettingsTests: React.FC = () => {
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data: testsList = []} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
+  const {data: testsList} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
     skip: !isClusterAvailable || !entityDetails.name,
   });
-  const {data: allTestsList = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
+  const {data: allTestsList} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
   const testsData: TestSuiteStepTest[] = useMemo(() => {
-    return testsList.map(item => ({
+    return (testsList || []).map(item => ({
       name: item.name,
       namespace: item.namespace,
       type: getTestExecutorIcon(executors, item.type),
@@ -60,7 +60,7 @@ const SettingsTests: React.FC = () => {
   }, [testsList]);
 
   const allTestsData: TestSuiteStepTest[] = useMemo(() => {
-    return allTestsList.map(item => ({
+    return (allTestsList || []).map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
       type: getTestExecutorIcon(executors, item.test.type),
@@ -99,22 +99,22 @@ const SettingsTests: React.FC = () => {
 
   useEffect(() => {
     if (currentSteps !== initialSteps) {
-      setCurrentSteps([]);
+      setCurrentSteps(initialSteps);
     }
   }, [initialSteps]);
 
   const saveSteps = () => {
-    updateTestSuite({
+    return updateTestSuite({
       id: entityDetails.name,
       data: {
         ...entityDetails,
         steps: currentSteps,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         notificationCall('passed', 'Steps were successfully updated.');
       });
-    });
   };
 
   const onSelectStep = (value: string) => {
@@ -176,10 +176,7 @@ const SettingsTests: React.FC = () => {
         description="Define the tests and their order of execution for this test suite"
         footerText={
           <>
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/using-testkube/test-suites/testsuites-creating/">
-              Tests in a test suite
-            </ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
           </>
         }
         onConfirm={saveSteps}

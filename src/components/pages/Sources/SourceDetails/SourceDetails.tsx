@@ -3,16 +3,16 @@ import {Helmet} from 'react-helmet';
 
 import {Tabs} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
 
-import {safeRefetch} from '@utils/fetchUtils';
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
 import {useGetSourceDetailsQuery} from '@services/sources';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {safeRefetch} from '@utils/fetchUtils';
 
 import {StyledContainer, StyledPageHeader} from './SourceDetails.styled';
 import SourceSettings from './SourceSettings';

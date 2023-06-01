@@ -1,37 +1,37 @@
 import {memo, useContext, useEffect, useMemo, useState} from 'react';
 
+import {DownOutlined} from '@ant-design/icons';
 import {Dropdown, Form} from 'antd';
 
-import {DownOutlined} from '@ant-design/icons';
+import {ExternalLink} from '@atoms';
+
+import {MainContext} from '@contexts';
+
+import {Button, Skeleton, Text} from '@custom-antd';
 
 import {TestForTrigger} from '@models/test';
 import {TestSuiteForTrigger} from '@models/testSuite';
 import {TestTrigger, TestTriggerFormEntity} from '@models/triggers';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-
-import {ExternalLink} from '@atoms';
-
-import {Button, Skeleton, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {PageBlueprint} from '@organisms';
 
-import {safeRefetch} from '@utils/fetchUtils';
-import {displayDefaultNotificationFlow} from '@utils/notification';
-import {PollingIntervals} from '@utils/numbers';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectNamespace} from '@redux/reducers/configSlice';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 import {useGetTriggersKeyMapQuery, useGetTriggersListQuery, useUpdateTriggersMutation} from '@services/triggers';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
+import {safeRefetch} from '@utils/fetchUtils';
+import {displayDefaultNotificationFlow} from '@utils/notification';
+import {PollingIntervals} from '@utils/numbers';
 
 import AddTriggerOption from './AddTriggerOption';
 import TriggerItem from './TriggerItem';
@@ -174,7 +174,9 @@ const Triggers: React.FC = () => {
     };
   };
 
-  const onSave = (values: TriggersFormValues) => {
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
     const body = values.triggers.map(trigger => {
       const [action, execution] = trigger.action.split(' ');
 
@@ -192,9 +194,9 @@ const Triggers: React.FC = () => {
       return triggerPayload;
     });
 
-    updateTriggers(body).then(res => {
-      displayDefaultNotificationFlow(res, () => notificationCall('passed', 'Triggers successfully updated'));
-    });
+    return updateTriggers(body)
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => notificationCall('passed', 'Triggers successfully updated'));
   };
 
   const isLoading = keyMapLoading || testsLoading || testSuitesLoading || triggersLoading;
@@ -205,9 +207,7 @@ const Triggers: React.FC = () => {
       description={
         <>
           Listen for events and run specific testkube actions.{' '}
-          <ExternalLink href="https://docs.testkube.io/articles/test-triggers">
-            Learn more about Triggers
-          </ExternalLink>
+          <ExternalLink href={externalLinks.testTriggers}>Learn more about Triggers</ExternalLink>
         </>
       }
     >
@@ -215,12 +215,7 @@ const Triggers: React.FC = () => {
         <ConfigurationCard
           title="Cluster events"
           description="Testkube can listen to cluster events and trigger specific actions. Events and actions are related to labelled resources."
-          onConfirm={() => {
-            form
-              .validateFields()
-              .then(() => form.submit())
-              .catch(() => notificationCall('failed', 'Validate you triggers data, please'));
-          }}
+          onConfirm={onSave}
           onCancel={() => {
             setDefaultTriggersData(triggersList || []);
             form.resetFields();
@@ -268,6 +263,7 @@ const Triggers: React.FC = () => {
                   ) : null}
                   {isTriggersAvailable ? (
                     <Dropdown
+                      overlayClassName="light-dropdown"
                       menu={{
                         items: addTriggerOptions.map(({key, ...restProps}) => ({
                           key,

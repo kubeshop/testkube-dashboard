@@ -49,6 +49,8 @@ export const StyledSiderChildContainer = styled.div`
   width: 100px;
   min-height: 100%;
   overflow: auto;
+  top: 0;
+  bottom: 0;
 `;
 
 export const StyledNavigationMenu = styled.div`
@@ -84,7 +86,9 @@ export const StyledSiderLink = styled(SiderLink)`
   }
 `;
 
-export const StyledOtherItem = styled.div`
+export const StyledOtherItem = styled.div<{
+  $size: number;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,8 +96,8 @@ export const StyledOtherItem = styled.div`
   transition: 0.3s;
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: ${({$size}) => $size}px;
+    height: ${({$size}) => $size}px;
 
     fill: #64748b;
 
@@ -111,6 +115,36 @@ export const StyledOtherItem = styled.div`
       fill: ${Colors.whitePure};
 
       transition: 0.3s all;
+    }
+  }
+`;
+
+export const DropdownListItem = styled.li`
+  display: flex;
+  align-items: center;
+
+  height: 50px;
+
+  cursor: pointer;
+  transition: 0.3s;
+
+  a {
+    flex: 1;
+
+    padding: 14px;
+
+    &:hover {
+      .testkube-text {
+        color: ${Colors.whitePure};
+      }
+
+      svg {
+        path {
+          fill: ${Colors.whitePure};
+
+          transition: 0.3s;
+        }
+      }
     }
   }
 `;

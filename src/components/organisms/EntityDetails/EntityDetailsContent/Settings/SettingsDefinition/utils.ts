@@ -6,6 +6,8 @@ import {Entity} from '@models/entity';
 import {useGetTestSuiteDefinitionQuery} from '@services/testSuites';
 import {useGetTestDefinitionQuery} from '@services/tests';
 
+import {externalLinks} from '@utils/externalLinks';
+
 export const settingsDefinitionData: Record<
   Entity,
   {
@@ -16,12 +18,12 @@ export const settingsDefinitionData: Record<
 > = {
   'test-suites': {
     description: 'Validate and export your test suite configuration',
-    helpLinkUrl: 'https://docs.testkube.io/articles/creating-test-suites',
+    helpLinkUrl: externalLinks.createTestSuite,
     query: useGetTestSuiteDefinitionQuery,
   },
   tests: {
     description: 'Validate and export your test configuration',
-    helpLinkUrl: 'https://docs.testkube.io/articles/creating-tests',
+    helpLinkUrl: externalLinks.createTest,
     query: useGetTestDefinitionQuery,
   },
 };

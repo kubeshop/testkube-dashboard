@@ -47,8 +47,11 @@ jobs:
           push: true
           build-args: |
             TARGET=${{ matrix.path }}
+            REACT_APP_VERSION=${{ steps.tag.outputs.tag }}
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
-            REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
+            REACT_APP_SEGMENT_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
+            REACT_APP_POSTHOG_KEY=${{ secrets.REACT_APP_POSTHOG_KEY }}
+            REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
           cache-from: type=gha,scope=${{ matrix.name }}
           cache-to: type=gha,mode=max,scope=${{ matrix.name }}

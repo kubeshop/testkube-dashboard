@@ -2,21 +2,21 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
+
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Test} from '@models/test';
+
+import {Hint} from '@molecules';
+import {HintProps} from '@molecules/Hint/Hint';
 
 import {useAppSelector} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
-import {Hint} from '@molecules';
-import {HintProps} from '@molecules/Hint/Hint';
-
-import {openCustomExecutorDocumentation} from '@utils/externalLinks';
+import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
-
-import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
 
 import {TestCreationModalWrapper} from './CreationModal.styled';
 import {defaultHintConfig} from './ModalConfig';
@@ -46,7 +46,7 @@ const TestCreationModalContent: React.FC = () => {
         setHintConfig({
           title: 'Testing with custom executor',
           description: 'Discover all the features and examples around custom executors',
-          openLink: openCustomExecutorDocumentation,
+          openLink: () => window.open(externalLinks.containerExecutor),
         });
       }
 
@@ -64,7 +64,7 @@ const TestCreationModalContent: React.FC = () => {
   }, [form.getFieldValue('testType')]);
 
   const onSuccess = (res: RTKResponse<MetadataResponse<Test>>) => {
-    displayDefaultNotificationFlow(res, () => {
+    return displayDefaultNotificationFlow(res).then(() => {
       if ('data' in res) {
         analyticsTrack('trackEvents', {
           type: res.data.spec?.type,

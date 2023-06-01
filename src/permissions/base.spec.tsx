@@ -5,10 +5,10 @@ import {BasePermissionsResolver, Permissions, PermissionsProvider, PermissionsRe
 // The original renderHook method from '@testing-library/react' doesn't allow passing props to wrapper,
 // while it's needed for testing this feature completely.
 // eslint-disable-next-line react/no-unused-prop-types
-type TestProps<T> = {permission: Permissions, scope?: T, local?: T, resolver: PermissionsResolver<any>};
+type TestProps<T> = {permission: Permissions; scope?: T; local?: T; resolver: PermissionsResolver<any>};
 const renderUsePermissionHook = (props: TestProps<any>) => {
   const result: {current: boolean} = {current: undefined};
-  const update = (value) => {
+  const update = value => {
     result.current = value;
   };
 
@@ -68,7 +68,7 @@ describe('permissions', () => {
 
     it('should react to local scope update', () => {
       type Scope = {id?: string};
-      const resolver = {has: (_, {id}: Scope) => (id === 'test-id')};
+      const resolver = {has: (_, {id}: Scope) => id === 'test-id'};
       const scope: Scope = {};
       const localScope = {id: 'test-id'};
       const initialProps = {resolver, permission, local: localScope, scope};
@@ -80,7 +80,7 @@ describe('permissions', () => {
 
     it('should react to local scope creation', () => {
       type Scope = {id?: string};
-      const resolver = {has: (_, {id}: Scope) => (id === 'test-id')};
+      const resolver = {has: (_, {id}: Scope) => id === 'test-id'};
       const scope: Scope = {};
       const localScope = {id: 'test-id'};
       const initialProps = {resolver, permission, local: localScope, scope};
@@ -92,7 +92,7 @@ describe('permissions', () => {
 
     it('should react to local scope deletion', () => {
       type Scope = {id?: string};
-      const resolver = {has: (_, {id}: Scope) => (id === 'test-id')};
+      const resolver = {has: (_, {id}: Scope) => id === 'test-id'};
       const scope: Scope = {};
       const localScope = {id: 'test-id'};
       const initialProps = {resolver, permission, local: localScope, scope};
@@ -103,7 +103,7 @@ describe('permissions', () => {
 
     it('should react to global scope update', () => {
       type Scope = {id?: string};
-      const resolver = {has: (_, {id}: Scope) => (id === 'test-id')};
+      const resolver = {has: (_, {id}: Scope) => id === 'test-id'};
       const scope: Scope = {id: 'test-id'};
       const initialProps = {resolver, permission, scope};
       const {result, rerender} = renderUsePermissionHook(initialProps);

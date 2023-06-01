@@ -2,14 +2,14 @@ import {useContext, useState} from 'react';
 
 import {Tooltip} from 'antd';
 
+import {MainContext} from '@contexts';
+
 import {useAppSelector} from '@redux/hooks';
 import {
   closeFullScreenLogOutput,
   selectFullScreenLogOutput,
   setIsFullScreenLogOutput,
 } from '@redux/reducers/configSlice';
-
-import {MainContext} from '@contexts';
 
 import {StyledExpandAltOutlined, StyledFullscreenExitOutlined} from '../LogOutput.styled';
 

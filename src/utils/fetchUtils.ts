@@ -3,17 +3,16 @@ import {useMemo, useRef} from 'react';
 import {BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery} from '@reduxjs/toolkit/dist/query';
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {ParsedQuery} from 'query-string';
-
 import {isEqual} from 'lodash';
+import {ParsedQuery} from 'query-string';
 
 import {searchParamsLists} from '@constants/searchParams';
 
 import {SearchParamKey, SearchParamsKeys, SearchParamsType, ValidatedSearchParams} from '@models/searchParams';
 
-import {isArraylikeQueryParam} from '@utils/strings';
-
 import {getApiEndpoint} from '@services/apiEndpoint';
+
+import {isArraylikeQueryParam} from '@utils/strings';
 
 const prohibitedValues = ['undefined', 'null'];
 
@@ -150,7 +149,8 @@ export async function safeRefetch<T>(refetchFn: () => Promise<T>): Promise<T | n
 // when the actual data is the same.
 export function memoizeQuery<T extends UseQuery<any>>(
   hook: T,
-  transformData = (x: ReturnType<T>['data']) => x): ReturnType<T>['data'] {
+  transformData = (x: ReturnType<T>['data']) => x
+): ReturnType<T>['data'] {
   return ((...args: Parameters<T>) => {
     type U = ReturnType<T>['data'];
     const result = (hook as any)(...args);

@@ -7,7 +7,10 @@ import {Content} from 'antd/lib/layout/layout';
 import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
-import {useAppDispatch} from '@redux/hooks';
+import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
+
+import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 
 import {CookiesBanner} from '@molecules';
 
@@ -15,25 +18,20 @@ import {Sider} from '@organisms';
 
 import {ErrorBoundary} from '@pages';
 
-import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import {composeProviders} from '@utils/composeProviders';
+import {useAppDispatch} from '@redux/hooks';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
-import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
-
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
-import {ModalHandler, ModalOutlet} from '@contexts/ModalContext';
+import {composeProviders} from '@utils/composeProviders';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-
-const pjson = require('../package.json');
-
-const segmentIOKey = process.env.REACT_APP_SEGMENT_WRITE_KEY || '';
+import env from './env';
+import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
@@ -49,8 +47,9 @@ const AppRoot: React.FC = () => {
 
   const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
   const [featureFlags, setFeatureFlags] = useState<string[]>([]);
+  const isTelemetryAvailable = clusterConfig?.enableTelemetry && !env.disableTelemetry;
   const isTelemetryEnabled = useMemo(
-    () => !isCookiesVisible && clusterConfig?.enableTelemetry && localStorage.getItem('isGADisabled') === '0',
+    () => !isCookiesVisible && isTelemetryAvailable && localStorage.getItem('isGADisabled') === '0',
     [isCookiesVisible, clusterConfig]
   );
 
@@ -67,30 +66,36 @@ const AppRoot: React.FC = () => {
   useEffect(() => {
     if (!isTelemetryEnabled) {
       // @ts-ignore
-      window[`ga-disable-G-945BK09GDC`] = true;
+      window[`ga-disable-${env.ga4Key}`] = true;
       if (posthog.__loaded) {
         posthog.opt_out_capturing();
       }
     } else if (process.env.NODE_ENV !== 'development') {
       // @ts-ignore:
-      window[`ga-disable-G-945BK09GDC`] = false;
-      if (!posthog.__loaded) {
-        posthog.init('phc_DjQgd6iqP8qrhQN6fjkuGeTIk004coiDRmIdbZLRooo', {
+      window[`ga-disable-${env.ga4Key}`] = false;
+      if (env.posthogKey && !posthog.__loaded) {
+        posthog.init(env.posthogKey, {
           opt_out_capturing_by_default: true,
           mask_all_text: true,
           persistence: 'localStorage',
           property_blacklist: ['$current_url', '$host', '$referrer', '$referring_domain'],
+          ip: false,
           loaded: instance => {
             instance.onFeatureFlags(flags => {
               setFeatureFlags(flags);
             });
           },
         });
+        posthog.register({
+          version: env.version,
+        });
       }
-      posthog.opt_in_capturing();
+      if (posthog.__loaded) {
+        posthog.opt_in_capturing();
+      }
 
-      if (!window.location.href.includes('testkube.io')) {
-        const ga4react = new GA4React('G-945BK09GDC');
+      if (env.ga4Key && !window.location.href.includes('testkube.io')) {
+        const ga4react = new GA4React(env.ga4Key);
         ga4react.initialize().catch(() => {});
       }
     }
@@ -130,7 +135,7 @@ const AppRoot: React.FC = () => {
   const config = useMemo(
     () => ({
       pageTitle: 'Testkube',
-      discordUrl: 'https://discord.com/invite/hfq44wtR6Q',
+      discordUrl: externalLinks.discord,
     }),
     []
   );
@@ -142,6 +147,7 @@ const AppRoot: React.FC = () => {
       baseUrl: '',
       showLogoInSider: true,
       showSocialLinksInSider: true,
+      showTestkubeCloudBanner: true,
     }),
     [navigate, location]
   );
@@ -152,12 +158,13 @@ const AppRoot: React.FC = () => {
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(AnalyticsProvider, {
       disabled: !isTelemetryEnabled,
-      privateKey: segmentIOKey,
-      appVersion: pjson.version,
+      writeKey: env.segmentKey,
+      appVersion: env.version,
       featureFlags,
     })
     .append(MainContext.Provider, {value: mainContextValue})
     .append(ModalHandler, {})
+    .append(ModalOutletProvider, {})
     .render(
       <>
         <Layout>
@@ -170,10 +177,9 @@ const AppRoot: React.FC = () => {
             </Content>
           </StyledLayoutContentWrapper>
         </Layout>
-        {isCookiesVisible && clusterConfig?.enableTelemetry ? (
+        {isCookiesVisible && isTelemetryAvailable ? (
           <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
         ) : null}
-        <ModalOutlet />
       </>
     );
 };

@@ -35,8 +35,11 @@ jobs:
         with:
           push: true
           build-args: |
+            REACT_APP_VERSION=${{ steps.github_sha.outputs.sha_short }}
             REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
-            REACT_APP_SEGMENT_WRITE_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
+            REACT_APP_SEGMENT_KEY=${{ secrets.REACT_APP_SEGMENT_WRITE_KEY }}
+            REACT_APP_POSTHOG_KEY=${{ secrets.REACT_APP_POSTHOG_KEY }}
+            REACT_APP_GOOGLE_ANALYTICS_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
           tags: ${{ github.repository }}:${{ steps.github_sha.outputs.sha_short }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

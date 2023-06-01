@@ -2,18 +2,18 @@ import {useContext, useEffect} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
+import {MainContext} from '@contexts';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
+import {Permissions, usePermission} from '@permissions/base';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
 
 import {useUpdateCustomExecutorMutation} from '@services/executors';
 
-import {Permissions, usePermission} from '@permissions/base';
-
-import {MainContext} from '@contexts';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 export type PrivateRegistryFormFields = {
   privateRegistry: string;
@@ -32,21 +32,23 @@ const PrivateRegistry: React.FC = () => {
 
   const [form] = Form.useForm<PrivateRegistryFormFields>();
 
-  const onSubmit = (values: PrivateRegistryFormFields) => {
+  const onSubmit = () => {
+    const values = form.getFieldsValue();
     const newImagePullSecrets = values.privateRegistry ? [{name: values.privateRegistry}] : [];
-    updateCustomExecutor({
+
+    return updateCustomExecutor({
       executorId: name,
       body: {
         name,
         ...executor,
         imagePullSecrets: newImagePullSecrets,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
         dispatch(updateCurrentExecutorData({imagePullSecrets: newImagePullSecrets}));
         notificationCall('passed', 'Private registry was successfully updated.');
       });
-    });
   };
 
   useEffect(() => {
@@ -61,25 +63,18 @@ const PrivateRegistry: React.FC = () => {
       name="general-settings-name-type"
       initialValues={{privateRegistry}}
       layout="vertical"
-      onFinish={onSubmit}
       disabled={!mayEdit}
     >
       <ConfigurationCard
         title="Private registry"
         description="In case your image is on a private registry please add the name of your credential secret."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSubmit}
         onCancel={() => {
           form.resetFields();
         }}
         enabled={mayEdit}
       >
-        <Form.Item
-          label="Secret ref name"
-          name="privateRegistry"
-          style={{flex: 1, marginBottom: '0'}}
-        >
+        <Form.Item label="Secret ref name" name="privateRegistry" style={{flex: 1, marginBottom: '0'}}>
           <Input placeholder="Secret ref name" />
         </Form.Item>
       </ConfigurationCard>

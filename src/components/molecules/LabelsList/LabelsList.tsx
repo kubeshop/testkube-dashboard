@@ -1,8 +1,8 @@
 import {Popover} from 'antd';
 
-import {EntityKey, EntityMap} from '@models/entityMap';
-
 import {LabelListItem} from '@atoms';
+
+import {EntityKey, EntityMap} from '@models/entityMap';
 
 import {LabelsPopover, StyledLabelsList} from './LabelsList.styled';
 

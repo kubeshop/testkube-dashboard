@@ -1,27 +1,26 @@
 import {useContext, useMemo, useState} from 'react';
 
-import {Form, Select, Tooltip} from 'antd';
-
 import {WarningOutlined} from '@ant-design/icons';
+import {Form, Select, Tooltip} from 'antd';
 
 import parser from 'cron-parser';
 
-import {Text} from '@custom-antd';
+import {EntityDetailsContext} from '@contexts';
+
+import {FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
+import {Permissions, usePermission} from '@permissions/base';
 
 import Colors from '@styles/Colors';
 import Fonts from '@styles/Fonts';
 
-import {Permissions, usePermission} from '@permissions/base';
+import {displayDefaultNotificationFlow} from '@utils/notification';
+import {uppercaseFirstSymbol} from '@utils/strings';
 
-import {EntityDetailsContext} from '@contexts';
-
-import {StyledSpace} from '../Settings.styled';
 import {namingMap, updateRequestsMap} from '../utils';
+
 import CronInput from './CronInput';
 import NextExecution from './NextExecution';
 import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
@@ -40,18 +39,18 @@ const Schedule: React.FC = () => {
   const [wasTouched, setWasTouched] = useState(false);
 
   const onSave = () => {
-    updateEntity({
+    return updateEntity({
       id: name,
       data: {
         ...entityDetails,
         schedule: cronString,
       },
-    }).then(res => {
-      displayDefaultNotificationFlow(res, () => {
+    })
+      .then(res => displayDefaultNotificationFlow(res))
+      .then(() => {
+        setWasTouched(false);
         notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
       });
-      setWasTouched(false);
-    });
   };
 
   const onCancel = () => {
@@ -100,7 +99,7 @@ const Schedule: React.FC = () => {
         enabled={enabled}
         forceEnableButtons={wasTouched}
       >
-        <StyledSpace direction="vertical" size={32}>
+        <FullWidthSpace direction="vertical" size={32}>
           <StyledColumn>
             <Text className="middle regular">Schedule template</Text>
             <Select
@@ -165,7 +164,7 @@ const Schedule: React.FC = () => {
               </StyledRow>
             </>
           ) : null}
-        </StyledSpace>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

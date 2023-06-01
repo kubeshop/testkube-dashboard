@@ -2,19 +2,20 @@ import {memo} from 'react';
 
 import {Form, Select} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-
 import {ExternalLink} from '@atoms';
+
+import {FormItem, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
-import {remapExecutors} from '@utils/executors';
-import {required} from '@utils/form';
-
 import {Permissions, usePermission} from '@permissions/base';
 
-import {StyledFormItem, StyledSpace} from '../Settings.styled';
+import {useAppSelector} from '@redux/hooks';
+import {selectExecutors} from '@redux/reducers/executorsSlice';
+
+import {remapExecutors} from '@utils/executors';
+import {externalLinks} from '@utils/externalLinks';
+import {required} from '@utils/form';
 
 type TestTypeProps = {
   type: string;
@@ -34,8 +35,10 @@ const TestType: React.FC<TestTypeProps> = props => {
   const executors = useAppSelector(selectExecutors);
   const remappedExecutors = remapExecutors(executors);
 
-  const onSave = (values: TestTypeFormValues) => {
-    updateTest({type: values.type});
+  const onSave = () => {
+    const values = form.getFieldsValue();
+
+    return updateTest({type: values.type});
   };
 
   return (
@@ -43,27 +46,22 @@ const TestType: React.FC<TestTypeProps> = props => {
       <ConfigurationCard
         title="Test type"
         description="Define the test type for this test."
-        onConfirm={() => {
-          form.submit();
-        }}
+        onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
         }}
         footerText={
           <>
-            Learn more about{' '}
-            <ExternalLink href="https://docs.testkube.io/category/test-types">
-              test types and executors
-            </ExternalLink>
+            Learn more about <ExternalLink href={externalLinks.testTypes}>test types and executors</ExternalLink>
           </>
         }
         enabled={mayEdit}
       >
-        <StyledSpace size={32} direction="vertical">
-          <StyledFormItem name="type" rules={[required]}>
+        <FullWidthSpace size={32} direction="vertical">
+          <FormItem name="type" rules={[required]}>
             <Select showSearch options={remappedExecutors} />
-          </StyledFormItem>
-        </StyledSpace>
+          </FormItem>
+        </FullWidthSpace>
       </ConfigurationCard>
     </Form>
   );

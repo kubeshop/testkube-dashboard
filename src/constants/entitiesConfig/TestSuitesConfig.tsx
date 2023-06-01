@@ -1,3 +1,5 @@
+import {Text} from '@custom-antd';
+
 import {EntityListBlueprint} from '@models/entity';
 
 import {initialTestSuitesFiltersState} from '@redux/initialState';
@@ -8,8 +10,6 @@ import {
   setTestSuites,
   setTestSuitesFilters,
 } from '@redux/reducers/testSuitesSlice';
-
-import {Text} from '@custom-antd';
 
 import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuiteExecutions';
 import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';

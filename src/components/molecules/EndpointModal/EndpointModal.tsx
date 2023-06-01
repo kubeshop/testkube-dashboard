@@ -1,18 +1,17 @@
-import React, {useContext, useEffect, useState} from 'react';
-
-import {Space} from 'antd';
+import React, {useEffect, useState} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {Button, Input, Modal, Text} from '@custom-antd';
+import {Button, FullWidthSpace, Input, Modal, Text} from '@custom-antd';
 
 import {useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
 import Colors from '@styles/Colors';
 
-import {MainContext} from '@contexts';
+import {externalLinks} from '@utils/externalLinks';
 
 import notificationCall from '../Notification/Notification';
+
 import {StyledSearchUrlForm} from './EndpointModal.styled';
 
 type EndpointModalProps = {
@@ -23,7 +22,6 @@ type EndpointModalProps = {
 const EndpointModal: React.FC<EndpointModalProps> = props => {
   const {setModalState, visible} = props;
 
-  const {dispatch} = useContext(MainContext);
   const currentApiEndpoint = useApiEndpoint();
   const updateApiEndpoint = useUpdateApiEndpoint();
 
@@ -32,6 +30,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
 
   const updateEndpoint = async (event: React.FormEvent) => {
     event.preventDefault();
+
     setLoading(true);
     try {
       await updateApiEndpoint(value);
@@ -61,11 +60,9 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
           <Text>
             We could not detect the right Testkube API endpoint for you. Please enter the API endpoint for your
             installation (e.g. from the output of the Testkube installer)&nbsp;
-            <ExternalLink href="https://docs.testkube.io/articles/testkube-dashboard-api-endpoint">
-              Learn more...
-            </ExternalLink>
+            <ExternalLink href={externalLinks.apiEndpoint}>Learn more...</ExternalLink>
           </Text>
-          <Space style={{width: '100%'}} size={12}>
+          <FullWidthSpace size={12}>
             <Input
               id="url"
               name="url"
@@ -86,7 +83,7 @@ const EndpointModal: React.FC<EndpointModalProps> = props => {
             >
               Save
             </Button>
-          </Space>
+          </FullWidthSpace>
           <Text color={Colors.slate400} className="regular middle" style={{width: '100%'}}>
             Please make sure the endpoint is accessible from your browser.
           </Text>

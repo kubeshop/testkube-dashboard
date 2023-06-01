@@ -2,12 +2,12 @@ import {useState} from 'react';
 
 import {Form} from 'antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
-
 import {Modal} from '@custom-antd';
 
 import {ConfigurationCard, DeleteEntityModal} from '@molecules';
+
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
 import {useDeleteExecutorMutation} from '@services/executors';
 
