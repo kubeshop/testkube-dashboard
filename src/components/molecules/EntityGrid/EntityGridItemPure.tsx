@@ -1,7 +1,5 @@
 import React, {forwardRef, memo, useCallback} from 'react';
 
-import {Tooltip} from 'antd';
-
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
@@ -14,10 +12,10 @@ import {LabelsList, MetricsBarChart} from '@molecules';
 
 import Colors from '@styles/Colors';
 
-import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
-import {formatDuration, formatExecutionDate} from '@utils/formatDate';
+import {formatDuration} from '@utils/formatDate';
 
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
+import EntityGridItemExecutionTime from './EntityGridItemExecutionTime';
 
 interface Item {
   type: string;
@@ -68,18 +66,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
             </div>
           </ItemColumn>
           <ItemColumn>
-            <Tooltip
-              title={latestExecution?.startTime ? formatExecutionDate(new Date(latestExecution?.startTime)) : null}
-              placement="bottomRight"
-              mouseEnterDelay={0.39}
-              mouseLeaveDelay={0.1}
-            >
-              <Text color={Colors.slate200} className="regular small">
-                {latestExecution?.startTime
-                  ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
-                  : null}
-              </Text>
-            </Tooltip>
+            <EntityGridItemExecutionTime time={latestExecution?.startTime} />
           </ItemColumn>
         </ItemRow>
         <RowsWrapper>
