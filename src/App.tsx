@@ -119,7 +119,7 @@ const App: React.FC = () => {
                   text: 'Learn more',
                   isLink: true,
                   linkConfig: {
-                    href: 'https://testkube.io/pricing',
+                    href: 'https://testkube.io/get-started',
                     target: '_blank',
                   },
                 },
