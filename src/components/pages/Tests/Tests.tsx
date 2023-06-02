@@ -1,12 +1,14 @@
 import {Outlet, Route, Routes} from 'react-router-dom';
 
-import {EntityDetailsBlueprintRenderer, EntityListBlueprintRenderer, NotFound} from '@pages';
+import {EntityDetailsBlueprintRenderer, NotFound} from '@pages';
+
+import TestsList from './TestsList';
 
 const Tests: React.FC = () => {
   return (
     <>
       <Routes>
-        <Route index element={<EntityListBlueprintRenderer entity="tests" />} />
+        <Route index element={<TestsList />} />
         <Route path="executions/:id" element={<EntityDetailsBlueprintRenderer entity="tests" />} />
         <Route path="executions/:id/execution/:execId" element={<EntityDetailsBlueprintRenderer entity="tests" />} />
         <Route path="*" element={<NotFound />} />

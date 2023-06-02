@@ -27,11 +27,11 @@ import {selectRedirectTarget} from '@redux/reducers/configSlice';
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
 
+import Head from '@src/Head';
+
 import Colors from '@styles/Colors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-
-import Head from '@src/Head';
 
 import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';

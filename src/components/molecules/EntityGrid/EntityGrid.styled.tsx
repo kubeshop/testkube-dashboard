@@ -13,7 +13,7 @@ export const StyledEntityGrid = styled.div`
   }
 `;
 
-export const ItemWrapper = styled.div`
+export const ItemWrapper = styled.a`
   display: flex;
   align-items: space-between;
   gap: 15px;

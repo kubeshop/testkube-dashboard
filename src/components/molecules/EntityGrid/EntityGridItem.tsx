@@ -12,7 +12,7 @@ import EntityGridItemPure from './EntityGridItemPure';
 
 const EntityGridItem: React.FC<any> = props => {
   const {item, onClick} = props;
-  const {dataItem} = item;
+  const {dataItem, latestExecution} = item;
 
   const {isClusterAvailable} = useContext(MainContext);
   const {useGetMetrics, entity} = useContext(EntityListContext);
@@ -25,7 +25,17 @@ const EntityGridItem: React.FC<any> = props => {
     {skip: !isInViewport || !isClusterAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
-  return <EntityGridItemPure ref={ref} item={item} onClick={onClick} entity={entity} metrics={metrics} />;
+  // FIXME: href
+  return (
+    <EntityGridItemPure
+      ref={ref}
+      item={dataItem}
+      latestExecution={latestExecution}
+      href={'#'}
+      entity={entity!}
+      metrics={metrics}
+    />
+  );
 };
 
 export default EntityGridItem;

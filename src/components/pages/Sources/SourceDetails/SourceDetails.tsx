@@ -11,9 +11,9 @@ import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlic
 
 import {useGetSourceDetailsQuery} from '@services/sources';
 
-import {safeRefetch} from '@utils/fetchUtils';
-
 import Head from '@src/Head';
+
+import {safeRefetch} from '@utils/fetchUtils';
 
 import {StyledContainer, StyledPageHeader} from './SourceDetails.styled';
 import SourceSettings from './SourceSettings';

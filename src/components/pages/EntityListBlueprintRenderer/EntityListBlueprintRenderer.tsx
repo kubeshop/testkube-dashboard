@@ -1,19 +1,17 @@
 import TestSuitesEntity from '@constants/entitiesConfig/TestSuitesConfig';
-import TestsEntity from '@constants/entitiesConfig/TestsConfig';
 
 import {Entity, EntityListBlueprint, EntityListBlueprintProps} from '@models/entity';
 
 import {EntityListContainer} from '@organisms';
 
-const entities: Record<Entity, EntityListBlueprint> = {
+const entities: Partial<Record<Entity, EntityListBlueprint>> = {
   'test-suites': TestSuitesEntity,
-  tests: TestsEntity,
 };
 
 const EntityListBlueprintRenderer: React.FC<EntityListBlueprintProps> = props => {
   const {entity} = props;
 
-  return <EntityListContainer {...entities[entity]} />;
+  return <EntityListContainer {...entities[entity]!} />;
 };
 
 export default EntityListBlueprintRenderer;

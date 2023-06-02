@@ -1,10 +1,15 @@
-import React, {forwardRef, memo, useCallback} from 'react';
+import React, {RefObject, forwardRef, memo, useCallback, useContext} from 'react';
 
 import {Tooltip} from 'antd';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
+import {DashboardContext} from '@contexts';
+
 import {Text} from '@custom-antd';
+
+import {Entity} from '@models/entity';
+import {Execution} from '@models/execution';
 
 import {LabelsList, MetricsBarChart} from '@molecules';
 
@@ -15,29 +20,43 @@ import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
 
-const EntityGridItemPure: React.FC<any> = memo(
-  forwardRef<HTMLDivElement, any>((props, ref) => {
-    const {item, onClick, entity, metrics} = props;
-    const {dataItem, latestExecution} = item;
+interface EntityGridItemPureProps {
+  item: any;
+  metrics: any;
+  href: string;
+  entity: Entity;
+  latestExecution?: Execution;
+  ref?: RefObject<HTMLAnchorElement>;
+}
+
+const EntityGridItemPure: React.FC<EntityGridItemPureProps> = memo(
+  forwardRef<HTMLAnchorElement, any>((props, ref) => {
+    const {item, latestExecution, href, entity, metrics} = props;
+    const {navigate} = useContext(DashboardContext);
 
     const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
     const executions = metrics?.executions;
     const dataTestValue = `${entity}-list-item`;
 
-    const click = useCallback(() => {
-      onClick(item);
-    }, [onClick, item]);
-
     return (
-      <ItemWrapper onClick={click} ref={ref} data-test={dataTestValue}>
+      <ItemWrapper
+        href={href}
+        onClick={e => {
+          e.preventDefault();
+          // TODO Make it working for Cloud
+          navigate(href);
+        }}
+        ref={ref}
+        data-test={dataTestValue}
+      >
         <DetailsWrapper>
           <ItemRow $flex={0}>
             <ItemColumn $isStretch>
               <StatusIcon status={status} />
-              {dataItem?.type ? <ExecutorIcon type={dataItem?.testIcon} /> : null}
+              {item.type ? <ExecutorIcon type={item.testIcon} /> : null}
               <div style={{overflow: 'hidden', flex: 1, display: 'flex'}}>
-                <Text className="regular big" ellipsis title={dataItem?.name}>
-                  {dataItem?.name}
+                <Text className="regular big" ellipsis title={item.name}>
+                  {item.name}
                 </Text>
               </div>
             </ItemColumn>
@@ -58,9 +77,7 @@ const EntityGridItemPure: React.FC<any> = memo(
           </ItemRow>
           <RowsWrapper>
             <ItemRow $flex={1}>
-              {dataItem?.labels ? (
-                <LabelsList labels={dataItem?.labels} shouldSkipLabels howManyLabelsToShow={2} />
-              ) : null}
+              {item.labels ? <LabelsList labels={item.labels} shouldSkipLabels howManyLabelsToShow={2} /> : null}
             </ItemRow>
             <ItemRow $flex={1}>
               <StyledMetricItem>

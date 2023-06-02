@@ -11,9 +11,9 @@ import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executo
 
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
-import {safeRefetch} from '@utils/fetchUtils';
-
 import Head from '@src/Head';
+
+import {safeRefetch} from '@utils/fetchUtils';
 
 import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';

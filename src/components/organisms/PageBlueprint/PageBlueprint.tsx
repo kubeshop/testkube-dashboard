@@ -4,9 +4,9 @@ import {Space} from 'antd';
 
 import {Text, Title} from '@custom-antd';
 
-import Colors from '@styles/Colors';
-
 import Head from '@src/Head';
+
+import Colors from '@styles/Colors';
 
 import {PageBlueprintHeader, PageBlueprintWrapper} from './PageBlueprint.styled';
 

@@ -23,17 +23,17 @@ import {initialPageSize} from '@redux/initialState';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 
+import Head from '@src/Head';
+
 import {safeRefetch} from '@utils/fetchUtils';
 import {compareFiltersObject} from '@utils/objects';
-
-import Head from '@src/Head';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 
 import EmptyDataWithFilters from './EmptyDataWithFilters';
-import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
+import {TestSuitesDataLayer} from './EntityDataLayers';
 import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
 import EntityListHeader from './EntityListHeader';
 import EntityListLoader from './EntityListLoader';
@@ -80,8 +80,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     setContentProps(args);
   };
 
-  const dataLayers: Record<Entity, JSX.Element> = {
-    tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
+  const dataLayers: Partial<Record<Entity, JSX.Element>> = {
+    // tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
     'test-suites': <TestSuitesDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
   };
 
