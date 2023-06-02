@@ -1,14 +1,13 @@
 import {useContext, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
+import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
-import useLocation from '@hooks/useLocation';
-
 import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executorsSlice';
+import {selectCurrentExecutor, setCurrentExecutor, setExecutorData} from '@redux/reducers/executorsSlice';
 
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
@@ -19,26 +18,28 @@ import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails: React.FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {navigate, location} = useContext(DashboardContext);
   const {pageTitle} = useContext(ConfigContext);
+  const {id: name} = useParams() as {id: string};
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
 
-  const name = useLocation().lastPathSegment;
-
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: executorDetails, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
+  const {data: executor, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
 
   const isPageDisabled = !name;
 
   useEffect(() => {
     dispatch(setCurrentExecutor(name));
+    safeRefetch(refetch);
   }, [name]);
 
   useEffect(() => {
-    safeRefetch(refetch);
-  }, [location]);
+    if (executor) {
+      dispatch(setExecutorData({name, executor}));
+    }
+  }, [executor]);
 
   return (
     <StyledContainer>

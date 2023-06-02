@@ -67,7 +67,7 @@ export const applyUrlOverrides = () => {
     setOverrides({...overrides, ...newOverrides});
 
     // Delete the overrides from URL
-    const newSearch = params.toString().replace(/^\?$/, '');
+    const newSearch = `?${params.toString()}`.replace(/^\?$/, '');
     if (newSearch !== window.location.search) {
       window.history.replaceState(null, '', window.location.pathname + newSearch);
     }
