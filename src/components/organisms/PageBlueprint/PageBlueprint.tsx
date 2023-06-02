@@ -1,11 +1,10 @@
-import {PropsWithChildren, useContext} from 'react';
-import {Helmet} from 'react-helmet';
+import {PropsWithChildren} from 'react';
 
 import {Space} from 'antd';
 
-import {ConfigContext} from '@contexts';
-
 import {Text, Title} from '@custom-antd';
+
+import PageMetadata from '@pages/PageMetadata';
 
 import Colors from '@styles/Colors';
 
@@ -19,14 +18,11 @@ type PageBlueprintProps = {
 
 const PageBlueprint: React.FC<PropsWithChildren<PageBlueprintProps>> = props => {
   const {children, title, description, headerButton} = props;
-  const {pageTitle} = useContext(ConfigContext);
 
   return (
     <PageBlueprintWrapper>
-      <Helmet>
-        <title>{`${title} | ${pageTitle}`}</title>
-        <meta name="description" content={`${description}`} />
-      </Helmet>
+      <PageMetadata title={title} description={typeof description === 'string' ? description : undefined} />
+
       <PageBlueprintHeader>
         <Space direction="vertical" size={15}>
           <Title color={Colors.slate50} ellipsis>
