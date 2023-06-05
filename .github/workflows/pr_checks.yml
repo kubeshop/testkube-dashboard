@@ -128,7 +128,7 @@ jobs:
   #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
   #         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
   e2e-tests:
-    if: github.event.deployment_status.state == 'success' && github.base_ref == 'develop' # Run only on PRs to develop branch (temporary)
+    if: (github.event.deployment_status.state == 'success' && github.base_ref == 'develop') # Run only on PRs to develop branch (temporary)
     concurrency: oss-e2e-tests-dev-env # temporary - tests need to be adjusted to allow concurrent execution
     name: E2E tests
     # needs: deploy
