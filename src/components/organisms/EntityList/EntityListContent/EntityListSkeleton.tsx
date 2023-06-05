@@ -2,10 +2,14 @@ import {Skeleton} from '@custom-antd';
 
 import {StyledEntityListSkeletonWrapper} from './EntityListContent.styled';
 
-const EntityListSkeleton: React.FC = () => {
+interface EntityListSkeletonProps {
+  height?: number;
+}
+
+const EntityListSkeleton: React.FC<EntityListSkeletonProps> = ({height = 120}) => {
   const skeletonConfig = {
     additionalStyles: {
-      lineHeight: 120,
+      lineHeight: height,
     },
   };
 
