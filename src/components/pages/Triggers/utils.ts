@@ -8,7 +8,7 @@ export const getResourceIdentifierSelector = (
   appNamespace: string
 ): TestTriggerSelector => {
   if (typeof formValue === 'string') {
-    if (formValue?.includes('/')) {
+    if (formValue.includes('/')) {
       const [namespace, name] = formValue.split('/');
 
       return {

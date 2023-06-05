@@ -19,7 +19,7 @@ import AddTriggerModal from './AddTriggerModal';
 import EmptyTriggers from './EmptyTriggers';
 import {StyledTriggersGrid, StyledTriggersSkeletonWrapper, TriggerContainer} from './TriggersList.styled';
 
-const Triggers: React.FC = () => {
+const TriggersList: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
 
@@ -97,4 +97,4 @@ const Triggers: React.FC = () => {
   );
 };
 
-export default Triggers;
+export default TriggersList;

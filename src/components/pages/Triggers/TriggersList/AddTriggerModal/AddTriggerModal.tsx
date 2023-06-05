@@ -83,7 +83,7 @@ const AddTriggerModal: React.FC = () => {
       resourceSelector,
     };
     createTrigger(body)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
         if (res && 'data' in res) {
           navigate(`/triggers/${res.data.name}`);

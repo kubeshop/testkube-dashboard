@@ -51,9 +51,11 @@ const Name: React.FC = () => {
         onCancel={() => {
           form.resetFields();
         }}
-        enabled={mayEdit}
+        isButtonsDisabled
+        enabled={false}
+        isEditable={false}
       >
-        <Form.Item label="Name" required name="name">
+        <Form.Item label="Name" name="name">
           <Input placeholder="e.g.: my-test-trigger" disabled />
         </Form.Item>
       </ConfigurationCard>

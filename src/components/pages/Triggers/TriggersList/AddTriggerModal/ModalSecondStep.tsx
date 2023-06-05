@@ -1,6 +1,4 @@
-import {Form} from 'antd';
-
-import {Button, Text} from '@custom-antd';
+import {Button, FormItem, Text} from '@custom-antd';
 
 import {ActionFormItems} from '@organisms';
 
@@ -25,7 +23,7 @@ const ModalSecondStep: React.FC<ModalSecondStepProps> = props => {
         </Text>
       </StyledStepDescription>
       <ActionFormItems />
-      <Form.Item style={{marginBottom: 0}} shouldUpdate>
+      <FormItem shouldUpdate>
         {({isFieldsTouched}) => (
           <StyledButtonsContainer>
             <Button
@@ -36,12 +34,17 @@ const ModalSecondStep: React.FC<ModalSecondStepProps> = props => {
             >
               Back
             </Button>
-            <Button htmlType="submit" $customType="primary" loading={isLoading} disabled={!isFieldsTouched()}>
+            <Button
+              htmlType="submit"
+              $customType="primary"
+              loading={isLoading}
+              disabled={!isFieldsTouched() || isLoading}
+            >
               {isLoading ? 'Creating...' : 'Create'}
             </Button>
           </StyledButtonsContainer>
         )}
-      </Form.Item>
+      </FormItem>
     </>
   );
 };
