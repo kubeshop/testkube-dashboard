@@ -131,7 +131,7 @@ jobs:
     if: github.event.deployment_status.state == 'success' && github.base_ref == 'develop' # Run only on PRs to develop branch (temporary)
     concurrency: oss-e2e-tests-dev-env # temporary - tests need to be adjusted to allow concurrent execution
     name: E2E tests
-    needs: deploy
+    # needs: deploy
     runs-on: ubuntu-latest
     steps:
     # TODO: test need to be created first!
