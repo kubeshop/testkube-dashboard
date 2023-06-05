@@ -70,4 +70,5 @@ function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElem
   );
 }
 
-export default memo(EntityGrid);
+// Must be cast back, so generics will work
+export default memo(EntityGrid) as typeof EntityGrid;
