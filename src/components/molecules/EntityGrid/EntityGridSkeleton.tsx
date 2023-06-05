@@ -1,12 +1,12 @@
 import {Skeleton} from '@custom-antd';
 
-import {StyledEntityListSkeletonWrapper} from './EntityListContent.styled';
+import {StyledEntityGridSkeletonWrapper} from './EntityGrid.styled';
 
-interface EntityListSkeletonProps {
+interface EntityGridSkeletonProps {
   height?: number;
 }
 
-const EntityListSkeleton: React.FC<EntityListSkeletonProps> = ({height = 120}) => {
+const EntityGridSkeleton: React.FC<EntityGridSkeletonProps> = ({height = 120}) => {
   const skeletonConfig = {
     additionalStyles: {
       lineHeight: height,
@@ -14,14 +14,14 @@ const EntityListSkeleton: React.FC<EntityListSkeletonProps> = ({height = 120}) =
   };
 
   return (
-    <StyledEntityListSkeletonWrapper>
+    <StyledEntityGridSkeletonWrapper>
       {new Array(6).fill(0).map((_, index) => {
         const key = `skeleton-item-${index}`;
 
         return <Skeleton key={key} {...skeletonConfig} />;
       })}
-    </StyledEntityListSkeletonWrapper>
+    </StyledEntityGridSkeletonWrapper>
   );
 };
 
-export default EntityListSkeleton;
+export default EntityGridSkeleton;

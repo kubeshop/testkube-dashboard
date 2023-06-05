@@ -2,10 +2,9 @@ import React, {FC, ReactElement, memo, useMemo} from 'react';
 
 import {ScrollTrigger} from '@atoms';
 
-import EntityListLoader from '@organisms/EntityList/EntityListContent/EntityListLoader';
-import EntityListSkeleton from '@organisms/EntityList/EntityListContent/EntityListSkeleton';
-
 import {StyledEntityGrid} from './EntityGrid.styled';
+import EntityGridLoader from './EntityGridLoader';
+import EntityGridSkeleton from './EntityGridSkeleton';
 
 type OptionalProp<T, U extends keyof T> = Omit<T, U> & Partial<Pick<T, U>>;
 
@@ -51,7 +50,7 @@ function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElem
   );
 
   if (loadingInitially) {
-    return <EntityListSkeleton height={itemHeight} />;
+    return <EntityGridSkeleton height={itemHeight} />;
   }
 
   if (!loadingInitially && !data?.length) {
@@ -66,7 +65,7 @@ function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElem
         disabled={!hasMore || loadingMore}
         onScroll={onScrollEnd}
       />
-      {loadingMore ? <EntityListLoader /> : null}
+      {loadingMore ? <EntityGridLoader /> : null}
     </>
   );
 }
