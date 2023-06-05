@@ -12,7 +12,9 @@ type BaseEntityGridProps<T extends {item: any}> = {
   data?: T['item'][];
   Component: FC<T>;
   componentProps: Omit<T, 'item'>;
+  maxColumns?: number;
   itemHeight?: number;
+  minItemWidth?: number;
   scrollOffset?: number;
   empty?: ReactElement<any, any>;
   loadingInitially?: boolean;
@@ -30,7 +32,9 @@ function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElem
     data,
     Component,
     componentProps,
+    maxColumns,
     itemHeight = 150,
+    minItemWidth = 300,
     scrollOffset,
     empty,
     loadingInitially = false,
@@ -59,7 +63,9 @@ function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElem
 
   return (
     <>
-      <StyledEntityGrid>{elements}</StyledEntityGrid>
+      <StyledEntityGrid $columns={maxColumns} $itemWidth={minItemWidth}>
+        {elements}
+      </StyledEntityGrid>
       <ScrollTrigger
         offset={scrollOffset ?? itemHeight * 1.5}
         disabled={!hasMore || loadingMore}

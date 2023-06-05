@@ -67,6 +67,7 @@ const Sources: React.FC = () => {
       }
     >
       <EntityGrid
+        maxColumns={2}
         data={sourcesList}
         Component={SourceCard}
         componentProps={{onClick: source => navigate(`/sources/${source.name}`)}}

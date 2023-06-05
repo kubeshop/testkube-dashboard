@@ -76,6 +76,7 @@ const Executors: React.FC = () => {
             key: 'custom',
             children: (
               <EntityGrid
+                maxColumns={3}
                 data={customExecutors}
                 Component={CustomExecutorCard}
                 componentProps={{onClick: executor => navigate(`/executors/${executor.name}`)}}
@@ -88,7 +89,9 @@ const Executors: React.FC = () => {
           {
             label: 'Official executors',
             key: 'official',
-            children: <EntityGrid data={executorsList} Component={ExecutorCard} componentProps={{executors}} />,
+            children: (
+              <EntityGrid maxColumns={3} data={executorsList} Component={ExecutorCard} componentProps={{executors}} />
+            ),
           },
         ]}
       />
