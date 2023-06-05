@@ -1,131 +1,134 @@
-name: PR
+name: E2E tests
 
 on:
-  pull_request:
-    branches:
-      - main
-      - master
-      - develop
+  [deployment_status]
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#       - master
+#       - develop
 
 jobs:
-  deploy: # Vercel Preview
-    runs-on: ubuntu-latest
+  # deploy: # Vercel Preview
+  #   runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: true
-      matrix:
-        node-version: [20]
+  #   strategy:
+  #     fail-fast: true
+  #     matrix:
+  #       node-version: [20]
 
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    outputs:
-      preview-url: ${{ steps.vercel.outputs.preview-url }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-          submodules: true
+  #   if: ${{ github.actor != 'dependabot[bot]' }}
+  #   outputs:
+  #     preview-url: ${{ steps.vercel.outputs.preview-url }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: ${{ github.head_ref }}
+  #         submodules: true
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
 
-      - name: Generate preview
-        uses: amondnet/vercel-action@v20 #deploy
-        id: vercel
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          scope: ${{ secrets.VERCEL_TEAM_ID }}
+  #     - name: Generate preview
+  #       uses: amondnet/vercel-action@v20 #deploy
+  #       id: vercel
+  #       with:
+  #         vercel-token: ${{ secrets.VERCEL_TOKEN }}
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+  #         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+  #         scope: ${{ secrets.VERCEL_TEAM_ID }}
 
-      - name: Notify Slack
-        id: slack
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "PR Preview - ${{ github.head_ref }} :rocket:",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "A new preview for *Testkube Dashboard* has been generated on Vercel for PR: <https://github.com/kubeshop/testkube-dashboard/pull/${{ github.event.number }}|${{ github.event.pull_request.title }} #${{ github.event.number }}>"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "image",
-                      "image_url": "https://cdn-icons-png.flaticon.com/512/1240/1240447.png",
-                      "alt_text": "images"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "Author: *${{ github.event.pull_request.user.login }}*"
-                    }
-                  ]
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "image",
-                      "image_url": "https://cdn-icons-png.flaticon.com/512/785/785139.png",
-                      "alt_text": "images"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "Branch: *${{ github.head_ref }}*"
-                    }
-                  ]
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "image",
-                      "image_url": "https://cdn-icons-png.flaticon.com/512/2881/2881142.png",
-                      "alt_text": "images"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "Commit: *${{ github.sha }}*"
-                    }
-                  ]
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ steps.vercel.outputs.preview-url }}|View preview>"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+  #     - name: Notify Slack
+  #       id: slack
+  #       uses: slackapi/slack-github-action@v1.23.0
+  #       with:
+  #         # For posting a rich message using Block Kit
+  #         payload: |
+  #           {
+  #             "blocks": [
+  #               {
+  #                 "type": "header",
+  #                 "text": {
+  #                   "type": "plain_text",
+  #                   "text": "PR Preview - ${{ github.head_ref }} :rocket:",
+  #                   "emoji": true
+  #                 }
+  #               },
+  #               {
+  #                 "type": "section",
+  #                 "text": {
+  #                   "type": "mrkdwn",
+  #                   "text": "A new preview for *Testkube Dashboard* has been generated on Vercel for PR: <https://github.com/kubeshop/testkube-dashboard/pull/${{ github.event.number }}|${{ github.event.pull_request.title }} #${{ github.event.number }}>"
+  #                 }
+  #               },
+  #               {
+  #                 "type": "divider"
+  #               },
+  #               {
+  #                 "type": "context",
+  #                 "elements": [
+  #                   {
+  #                     "type": "image",
+  #                     "image_url": "https://cdn-icons-png.flaticon.com/512/1240/1240447.png",
+  #                     "alt_text": "images"
+  #                   },
+  #                   {
+  #                     "type": "mrkdwn",
+  #                     "text": "Author: *${{ github.event.pull_request.user.login }}*"
+  #                   }
+  #                 ]
+  #               },
+  #               {
+  #                 "type": "context",
+  #                 "elements": [
+  #                   {
+  #                     "type": "image",
+  #                     "image_url": "https://cdn-icons-png.flaticon.com/512/785/785139.png",
+  #                     "alt_text": "images"
+  #                   },
+  #                   {
+  #                     "type": "mrkdwn",
+  #                     "text": "Branch: *${{ github.head_ref }}*"
+  #                   }
+  #                 ]
+  #               },
+  #               {
+  #                 "type": "context",
+  #                 "elements": [
+  #                   {
+  #                     "type": "image",
+  #                     "image_url": "https://cdn-icons-png.flaticon.com/512/2881/2881142.png",
+  #                     "alt_text": "images"
+  #                   },
+  #                   {
+  #                     "type": "mrkdwn",
+  #                     "text": "Commit: *${{ github.sha }}*"
+  #                   }
+  #                 ]
+  #               },
+  #               {
+  #                 "type": "divider"
+  #               },
+  #               {
+  #                 "type": "section",
+  #                 "text": {
+  #                   "type": "mrkdwn",
+  #                   "text": "<${{ steps.vercel.outputs.preview-url }}|View preview>"
+  #                 }
+  #               }
+  #             ]
+  #           }
+  #       env:
+  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+  #         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
   e2e-tests:
-    if: github.base_ref == 'develop' # Run only on PRs to develop branch (temporary)
+    if: github.event.deployment_status.state == 'success' && github.base_ref == 'develop' # Run only on PRs to develop branch (temporary)
     concurrency: oss-e2e-tests-dev-env # temporary - tests need to be adjusted to allow concurrent execution
     name: E2E tests
     needs: deploy
@@ -141,5 +144,6 @@ jobs:
         test: dashboard-e2e-tests
         ref: ${{ github.head_ref }}
         variables:
-          BASE_URL="${{ needs.deploy.outputs.preview-url }}"
+          # BASE_URL="${{ needs.deploy.outputs.preview-url }}"
+          BASE_URL="${{ github.event.deployment_status.target_url }}"
           API_URL=localhost:8088/v1
