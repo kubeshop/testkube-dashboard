@@ -1,4 +1,4 @@
-name: E2E tests
+name: Wait for Vercel and run E2E tests
 
 on:
   pull_request:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   wait-for-vercel: # Used instead of deployment_status to allow base branch filtering - it's possible to get base.ref only for PRs - otherwise results would be inconsistent
+    name: Waiting for Vercel
     runs-on: ubuntu-latest
     outputs:
       preview-url: ${{ steps.waitForVercel.outputs.url }}
@@ -35,3 +36,4 @@ jobs:
         variables: |
           BASE_URL="${{ needs.wait-for-vercel.outputs.preview-url }}"
           API_URL="testkube-api-server.testkube.svc.cluster.local:8088/v1"
+          DASHBOARD_API_URL="dev.testkube.io/results/v1"
