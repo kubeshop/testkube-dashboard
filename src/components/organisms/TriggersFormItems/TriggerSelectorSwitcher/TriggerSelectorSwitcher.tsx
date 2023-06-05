@@ -1,8 +1,8 @@
 import {Segmented} from 'antd';
 
 type TriggerSelectorSwitcherProps = {
-  value: string | number;
-  onChange: (value: string | number) => void;
+  value: string;
+  onChange: (value: string) => void;
 };
 
 const TriggerSelectorSwitcher: React.FC<TriggerSelectorSwitcherProps> = props => {
@@ -15,7 +15,7 @@ const TriggerSelectorSwitcher: React.FC<TriggerSelectorSwitcherProps> = props =>
         {label: 'BY NAME', value: 'name'},
       ]}
       value={value}
-      onChange={onChange}
+      onChange={x => onChange(String(x))}
     />
   );
 };

@@ -17,7 +17,7 @@ const ActionFormItems = () => {
     triggersKeyMap: state.triggersKeyMap!,
   }));
 
-  const [switcherValue, setSwitcherValue] = useState<string | number>('label');
+  const [switcherValue, setSwitcherValue] = useState('label');
 
   const isFirst = useFirstMountState();
 

@@ -1,11 +1,10 @@
 import {useContext, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
+import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
-
-import useLocation from '@hooks/useLocation';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
 
@@ -26,7 +25,7 @@ const TriggerDetails = () => {
     setTriggersKeyMap: state.setTriggersKeyMap,
   }));
 
-  const name = useLocation().lastPathSegment;
+  const name = useParams().id!;
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
@@ -49,8 +48,7 @@ const TriggerDetails = () => {
 
   useEffect(() => {
     safeRefetch(refetch);
-    safeRefetch(refetchKeyMap);
-  }, [location]);
+  }, [name]);
 
   return (
     <StyledContainer>

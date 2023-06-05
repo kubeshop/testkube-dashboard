@@ -10,9 +10,7 @@ import {PageBlueprint} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useGetTriggersKeyMapQuery, useGetTriggersListQuery} from '@services/triggers';
-
-import {useStore} from '@store';
+import {useGetTriggersListQuery} from '@services/triggers';
 
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -22,15 +20,10 @@ import EmptyTriggers from './EmptyTriggers';
 import {StyledTriggersGrid, StyledTriggersSkeletonWrapper, TriggerContainer} from './TriggersList.styled';
 
 const Triggers: React.FC = () => {
-  const {setTriggersKeyMap} = useStore(state => ({
-    setTriggersKeyMap: state.setTriggersKeyMap,
-  }));
-
   const {isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
 
   const {data: triggersList = [], refetch, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
-  const {data: triggersKeyMap, refetch: refetchKeyMap} = useGetTriggersKeyMapQuery(null, {skip: !isClusterAvailable});
 
   const [isAddTriggerModalVisible, setAddTriggerModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
@@ -40,14 +33,7 @@ const Triggers: React.FC = () => {
   };
 
   useEffect(() => {
-    if (triggersKeyMap) {
-      setTriggersKeyMap(triggersKeyMap);
-    }
-  }, [triggersKeyMap]);
-
-  useEffect(() => {
     safeRefetch(refetch);
-    safeRefetch(refetchKeyMap);
   }, [location]);
 
   const renderedTriggersGrid = useMemo(() => {

@@ -1,8 +1,8 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Space, Steps} from 'antd';
 
-import {DashboardContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import {Input, Text} from '@custom-antd';
 
@@ -16,8 +16,11 @@ import {NotificationContent} from '@molecules';
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
-import {useCreateTriggerMutation} from '@services/triggers';
+import {useCreateTriggerMutation, useGetTriggersKeyMapQuery} from '@services/triggers';
 
+import {useStore} from '@store';
+
+import {safeRefetch} from '@utils/fetchUtils';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {getResourceIdentifierSelector} from '../../utils';
@@ -32,11 +35,18 @@ export enum StepsEnum {
 }
 
 const AddTriggerModal: React.FC = () => {
-  const {navigate} = useContext(DashboardContext);
+  const {isClusterAvailable} = useContext(MainContext);
+  const {location, navigate} = useContext(DashboardContext);
+
+  const {setTriggersKeyMap} = useStore(state => ({
+    setTriggersKeyMap: state.setTriggersKeyMap,
+  }));
 
   const [createTrigger, {isLoading}] = useCreateTriggerMutation();
 
   const appNamespace = useAppSelector(selectNamespace);
+
+  const {data: triggersKeyMap, refetch: refetchKeyMap} = useGetTriggersKeyMapQuery(null, {skip: !isClusterAvailable});
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
   const [currentStep, setCurrentStep] = useState(StepsEnum.condition);
@@ -87,6 +97,16 @@ const AddTriggerModal: React.FC = () => {
         }
       });
   };
+
+  useEffect(() => {
+    if (triggersKeyMap) {
+      setTriggersKeyMap(triggersKeyMap);
+    }
+  }, [triggersKeyMap]);
+
+  useEffect(() => {
+    safeRefetch(refetchKeyMap);
+  }, [location]);
 
   return (
     <>

@@ -16,7 +16,7 @@ const ConditionFormItems = () => {
     triggersKeyMap: state.triggersKeyMap!,
   }));
 
-  const [switcherValue, setSwitcherValue] = useState<string | number>('label');
+  const [switcherValue, setSwitcherValue] = useState('label');
 
   const isFirst = useFirstMountState();
 
@@ -57,13 +57,12 @@ const ConditionFormItems = () => {
       </Form.Item>
       <Form.Item noStyle shouldUpdate>
         {({getFieldValue}) => {
-          let eventsOptions;
-
           const triggerResource = getFieldValue('resource');
 
-          if (events && triggerResource) {
-            eventsOptions = events[triggerResource].map((item: string) => ({label: item, value: item}));
-          }
+          const eventsOptions =
+            events && triggerResource
+              ? events[triggerResource].map((item: string) => ({label: item, value: item}))
+              : [];
 
           return (
             <Form.Item label="Triggered event" name="event" rules={[required]}>
