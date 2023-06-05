@@ -134,7 +134,10 @@ jobs:
     # needs: deploy
     runs-on: ubuntu-latest
     steps:
-    # TODO: test need to be created first!
+    - name: values #TODO: remove after tests
+      run: echo "${{ github.event.deployment }}" | true
+    - name: values #TODO: remove after tests
+      run: echo "${{ github.event.deployment_status.deployment.ref }}" | true
     - name: Run E2E tests
       uses: kubeshop/testkube-run-action@v1
       with:
