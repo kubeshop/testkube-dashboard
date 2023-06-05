@@ -4,16 +4,6 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const ExecutorsWrapper = styled.div`
-  overflow: auto;
-
-  padding: 40px 40px 40px 1vw;
-`;
-
-export const ExecutorsHeader = styled.div`
-  padding-bottom: 30px;
-`;
-
 export const ExecutorsGridItem = styled(Space)`
   justify-content: space-between;
 
