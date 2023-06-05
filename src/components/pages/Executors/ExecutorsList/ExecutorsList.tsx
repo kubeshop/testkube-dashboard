@@ -8,7 +8,9 @@ import {ExecutorIcon, ExternalLink} from '@atoms';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
+import {Button, Modal, Text, Title} from '@custom-antd';
+
+import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
@@ -27,13 +29,9 @@ import {safeRefetch} from '@utils/fetchUtils';
 import {executorsList} from '../utils';
 
 import AddExecutorsModal from './AddExecutorsModal';
+import CustomExecutorCard from './CustomExecutorCard';
 import EmptyCustomExecutors from './EmptyCustomExecutors';
-import {
-  CustomExecutorContainer,
-  ExecutorsGrid,
-  ExecutorsGridItem,
-  ExecutorsListSkeletonWrapper,
-} from './ExecutorsList.styled';
+import {ExecutorsGrid, ExecutorsGridItem} from './ExecutorsList.styled';
 
 const Executors: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
@@ -47,10 +45,6 @@ const Executors: React.FC = () => {
   const {data: executors, isLoading, refetch} = useGetExecutorsQuery(null, {skip: !isClusterAvailable});
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
-
-  const onNavigateToDetails = (name: string) => {
-    navigate(`/executors/${name}`);
-  };
 
   useEffect(() => {
     safeRefetch(refetch);
@@ -79,18 +73,6 @@ const Executors: React.FC = () => {
       );
     });
   }, [executorsList, executors]);
-
-  const renderedCustomExecutorsGrid = useMemo(() => {
-    return customExecutors.map(executorItem => {
-      return (
-        <CustomExecutorContainer onClick={() => onNavigateToDetails(executorItem.name)} key={executorItem.name}>
-          <Text className="regular big">{executorItem.name}</Text>
-          <Text color={Colors.slate500}>{executorItem.executor.executorType}</Text>
-          <Text color={Colors.slate500}>{executorItem.executor.image}</Text>
-        </CustomExecutorContainer>
-      );
-    });
-  }, [customExecutors]);
 
   return (
     <PageBlueprint
@@ -122,21 +104,14 @@ const Executors: React.FC = () => {
           {
             label: 'Custom executors',
             key: 'custom',
-            children: isLoading ? (
-              <ExecutorsListSkeletonWrapper>
-                {new Array(6).fill(0).map((_, index) => {
-                  const key = `skeleton-item-${index}`;
-
-                  return <Skeleton additionalStyles={{lineHeight: 80}} key={key} />;
-                })}
-              </ExecutorsListSkeletonWrapper>
-            ) : renderedCustomExecutorsGrid && renderedCustomExecutorsGrid.length ? (
-              <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
-            ) : (
-              <EmptyCustomExecutors
-                onButtonClick={() => {
-                  setAddExecutorModalVisibility(true);
-                }}
+            children: (
+              <EntityGrid
+                data={customExecutors}
+                Component={CustomExecutorCard}
+                componentProps={{onClick: executor => navigate(`/executors/${executor.name}`)}}
+                empty={<EmptyCustomExecutors onButtonClick={() => setAddExecutorModalVisibility(true)} />}
+                itemHeight={66}
+                loadingInitially={isLoading}
               />
             ),
           },
