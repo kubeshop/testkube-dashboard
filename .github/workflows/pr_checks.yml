@@ -135,9 +135,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: values #TODO: remove after tests
-      run: echo "${{ github.event.deployment }}" | true
+      run: echo "${{ github.event.deployment.ref }}" | true
     - name: values #TODO: remove after tests
-      run: echo "${{ github.event.deployment_status.deployment.ref }}" | true
+      run: echo "${{ github.event.workflow_run.head_branch }}" | true
+    - name: values #TODO: remove after tests
+      run: echo "${{ github.event.deployment_status.workflow_run.head_branch }}" | true
     - name: Run E2E tests
       uses: kubeshop/testkube-run-action@v1
       with:
