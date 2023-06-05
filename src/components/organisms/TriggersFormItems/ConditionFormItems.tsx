@@ -11,16 +11,13 @@ import {required} from '@utils/form';
 import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 
 const ConditionFormItems = () => {
-  const {triggersKeyMap, currentTrigger} = useStore(state => ({
+  const {triggersKeyMap} = useStore(state => ({
     triggersKeyMap: state.triggersKeyMap!,
-    currentTrigger: state.currentTrigger!,
   }));
 
   const [switcherValue, setSwitcherValue] = useState('label');
 
-  const {
-    resourceSelector: {name: nameSelector},
-  } = currentTrigger;
+  const nameSelector = Form.useFormInstance().getFieldValue('resourceNameSelector');
 
   useEffect(() => {
     setSwitcherValue(nameSelector ? 'name' : 'label');

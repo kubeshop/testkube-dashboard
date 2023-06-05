@@ -29,6 +29,7 @@ const Condition: React.FC = () => {
   const [updateTrigger] = useUpdateTriggerByIdMutation();
 
   const [form] = Form.useForm();
+
   const initialValues = getActionFormValues(currentTrigger);
 
   const onFinish = () => {
