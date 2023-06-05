@@ -14,7 +14,7 @@ type BaseEntityGridProps<T extends {item: any}> = {
   componentProps: Omit<T, 'item'>;
   itemHeight?: number;
   scrollOffset?: number;
-  empty: ReactElement<any, any>;
+  empty?: ReactElement<any, any>;
   loadingInitially?: boolean;
   loadingMore?: boolean;
   hasMore?: boolean;
@@ -53,7 +53,7 @@ function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElem
     return <EntityGridSkeleton height={itemHeight} />;
   }
 
-  if (!loadingInitially && !data?.length) {
+  if (!loadingInitially && !data?.length && empty) {
     return empty;
   }
 
