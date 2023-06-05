@@ -1,6 +1,6 @@
-import {useContext, useMemo} from 'react';
+import {FC, useContext, useMemo} from 'react';
 
-import {Form, Select} from 'antd';
+import {Select} from 'antd';
 
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 
@@ -19,13 +19,17 @@ import {useGetAllTestsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
-import {required} from '@utils/form';
-
 import {StyledResourceOptionWrapper} from './ResourceTriggerSelect.styled';
 
 const {Option, OptGroup} = Select;
 
-const ResourceTriggerSelect = () => {
+interface ResourceTriggerSelectProps {
+  disabled?: boolean;
+  value?: string;
+  onChange?: (value: string) => void;
+}
+
+const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
   const {isClusterAvailable} = useContext(MainContext);
 
   const executors = useAppSelector(selectExecutors);
@@ -51,34 +55,32 @@ const ResourceTriggerSelect = () => {
   }, [testSuites]);
 
   return (
-    <Form.Item label="Testkube resource" required name="testNameSelector" rules={[required]}>
-      <Select optionLabelProp="key" placeholder="Your testkube resource">
-        {testsData.length > 0 ? (
-          <OptGroup label="Tests">
-            {testsData.map(item => (
-              <Option key={item.name}>
-                <StyledResourceOptionWrapper>
-                  <ExecutorIcon type={getTestExecutorIcon(executors, item.type)} />
-                  <Text className="regular middle">{item.name}</Text>
-                </StyledResourceOptionWrapper>
-              </Option>
-            ))}
-          </OptGroup>
-        ) : null}
-        {testSuitesData.length > 0 ? (
-          <OptGroup label="Test Suites">
-            {testSuitesData.map(item => (
-              <Option key={item.name}>
-                <StyledResourceOptionWrapper>
-                  <TestSuitesIcon fill={Colors.slate100} />
-                  <Text className="regular middle">{item.name}</Text>
-                </StyledResourceOptionWrapper>
-              </Option>
-            ))}
-          </OptGroup>
-        ) : null}
-      </Select>
-    </Form.Item>
+    <Select optionLabelProp="key" placeholder="Your testkube resource" {...props}>
+      {testsData.length > 0 ? (
+        <OptGroup label="Tests">
+          {testsData.map(item => (
+            <Option key={item.name}>
+              <StyledResourceOptionWrapper>
+                <ExecutorIcon type={getTestExecutorIcon(executors, item.type)} />
+                <Text className="regular middle">{item.name}</Text>
+              </StyledResourceOptionWrapper>
+            </Option>
+          ))}
+        </OptGroup>
+      ) : null}
+      {testSuitesData.length > 0 ? (
+        <OptGroup label="Test Suites">
+          {testSuitesData.map(item => (
+            <Option key={item.name}>
+              <StyledResourceOptionWrapper>
+                <TestSuitesIcon fill={Colors.slate100} />
+                <Text className="regular middle">{item.name}</Text>
+              </StyledResourceOptionWrapper>
+            </Option>
+          ))}
+        </OptGroup>
+      ) : null}
+    </Select>
   );
 };
 

@@ -51,7 +51,9 @@ const ActionFormItems = () => {
                   <LabelsSelect defaultLabels={label} />
                 </Form.Item>
               ) : (
-                <ResourceTriggerSelect />
+                <Form.Item label="Testkube resource" required name="testNameSelector" rules={[required]}>
+                  <ResourceTriggerSelect />
+                </Form.Item>
               )}
             </Space>
           );
