@@ -1,13 +1,27 @@
 name: E2E tests
 
 on:
-  [deployment_status] # temporary - it's not possible to get PR events (github.event.pull_request.base.ref), so results for base branch other than dev may be inconsistent
+  pull_request:
+    branches:
+      - develop # Run only on PRs to develop branch (temporary)
 
 jobs:
+  wait-for-vercel: # Used instead of deployment_status to allow base branch filtering - it's possible to get base.ref only for PRs - otherwise results would be inconsistent
+    runs-on: ubuntu-latest
+    outputs:
+      preview-url: ${{ steps.waitForVercel.outputs.url }}
+    steps:
+    - name: Waiting for 200 from the Vercel Preview
+      uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+      id: waitForVercel
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        max_timeout: 180
+
   e2e-tests:
-    if: github.event.deployment_status.state == 'success' # Run after Vercel preview is deployed
-    concurrency: oss-e2e-tests-dev-env # temporary - tests need to be adjusted to allow concurrent execution
     name: E2E tests
+    needs: wait-for-vercel
+    concurrency: oss-e2e-tests-dev-env # temporary - tests need to be adjusted to allow concurrent execution
     runs-on: ubuntu-latest
     steps:
     - name: Run E2E tests
@@ -19,5 +33,5 @@ jobs:
         test: dashboard-e2e-tests
         ref: ${{ github.head_ref }}
         variables: |
-          BASE_URL="${{ github.event.deployment_status.target_url }}"
+          BASE_URL="${{ needs.wait-for-vercel.outputs.preview-url }}"
           API_URL="testkube-api-server.testkube.svc.cluster.local:8088/v1"
