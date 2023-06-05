@@ -25,7 +25,7 @@ const InternalScrollTrigger: React.FC<ScrollTriggerProps> = memo(props => {
   return <StyledScrollTrigger ref={ref} style={style} />;
 });
 
-const ScrollTrigger: React.FC<ScrollTriggerProps> = ({onScroll, ...rest}) =>
-  onScroll ? <InternalScrollTrigger onScroll={onScroll} {...rest} /> : null;
+const ScrollTrigger: React.FC<ScrollTriggerProps> = ({onScroll, disabled, ...rest}) =>
+  onScroll && !disabled ? <InternalScrollTrigger onScroll={onScroll} {...rest} /> : null;
 
 export default ScrollTrigger;
