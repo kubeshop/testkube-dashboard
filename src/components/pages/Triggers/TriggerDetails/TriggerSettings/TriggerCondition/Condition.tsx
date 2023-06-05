@@ -15,7 +15,7 @@ import {useStore} from '@store';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {getResourceIdentifierSelector} from '../../../utils';
+import {getConditionFormValues, getResourceIdentifierSelector} from '../../../utils';
 
 const Condition: React.FC = () => {
   const {currentTrigger, setCurrentTrigger} = useStore(state => ({
@@ -30,13 +30,7 @@ const Condition: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const {
-    resourceSelector: {name, namespace, labelSelector: currentLabelSelector},
-    resource,
-    event,
-  } = currentTrigger;
-  const nameSelector = name && namespace ? `${namespace}/${name}` : null;
-  const labelSelector = currentLabelSelector?.matchLabels;
+  const initialValues = getConditionFormValues(currentTrigger);
 
   const onFinish = () => {
     const values = form.getFieldsValue();
@@ -55,20 +49,17 @@ const Condition: React.FC = () => {
 
     return updateTrigger(body)
       .then(res => displayDefaultNotificationFlow(res))
-      .then(() => {
-        notificationCall('passed', 'Trigger was successfully updated.');
-        setCurrentTrigger(body);
+      .then(res => {
+        if (res && 'data' in res) {
+          notificationCall('passed', 'Trigger was successfully updated.');
+          setCurrentTrigger(res.data);
+          form.setFieldsValue(getConditionFormValues(res.data));
+        }
       });
   };
 
   return (
-    <Form
-      form={form}
-      name="trigger-condition"
-      initialValues={{resource, resourceLabelSelector: labelSelector, resourceNameSelector: nameSelector, event}}
-      layout="vertical"
-      disabled={!mayEdit}
-    >
+    <Form form={form} name="trigger-condition" initialValues={initialValues} layout="vertical" disabled={!mayEdit}>
       <ConfigurationCard
         title="Trigger condition"
         description="Define the conditions to be met for the trigger to be called."

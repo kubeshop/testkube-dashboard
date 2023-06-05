@@ -1,5 +1,4 @@
-import {useState} from 'react';
-import {useFirstMountState} from 'react-use';
+import {useEffect, useState} from 'react';
 
 import {Form, Input, Select, Space} from 'antd';
 
@@ -12,13 +11,20 @@ import {required} from '@utils/form';
 import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 
 const ConditionFormItems = () => {
-  const {triggersKeyMap} = useStore(state => ({
+  const {triggersKeyMap, currentTrigger} = useStore(state => ({
     triggersKeyMap: state.triggersKeyMap!,
+    currentTrigger: state.currentTrigger!,
   }));
 
   const [switcherValue, setSwitcherValue] = useState('label');
 
-  const isFirst = useFirstMountState();
+  const {
+    resourceSelector: {name: nameSelector},
+  } = currentTrigger;
+
+  useEffect(() => {
+    setSwitcherValue(nameSelector ? 'name' : 'label');
+  }, [nameSelector]);
 
   const resourcesOptions = triggersKeyMap?.resources.map(item => ({label: item, value: item}));
   const events = triggersKeyMap?.events;
@@ -31,13 +37,7 @@ const ConditionFormItems = () => {
       <Form.Item noStyle shouldUpdate>
         {({getFieldValue, getFieldError}) => {
           const label = getFieldValue('resourceLabelSelector');
-          const name = getFieldValue('resourceNameSelector');
-
           const isValid = !(getFieldError('resourceLabelSelector').length > 0);
-
-          if (isFirst) {
-            setSwitcherValue(name ? 'name' : 'label');
-          }
 
           return (
             <Space size={16} direction="vertical" style={{width: '100%'}}>

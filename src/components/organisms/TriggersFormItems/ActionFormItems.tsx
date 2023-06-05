@@ -1,5 +1,4 @@
-import {useState} from 'react';
-import {useFirstMountState} from 'react-use';
+import {useEffect, useState} from 'react';
 
 import {Form, Select, Space} from 'antd';
 
@@ -13,13 +12,20 @@ import ResourceTriggerSelect from './ResourceTriggerSelect';
 import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 
 const ActionFormItems = () => {
-  const {triggersKeyMap} = useStore(state => ({
+  const {triggersKeyMap, currentTrigger} = useStore(state => ({
     triggersKeyMap: state.triggersKeyMap!,
+    currentTrigger: state.currentTrigger!,
   }));
 
   const [switcherValue, setSwitcherValue] = useState('label');
 
-  const isFirst = useFirstMountState();
+  const {
+    resourceSelector: {name: nameSelector},
+  } = currentTrigger;
+
+  useEffect(() => {
+    setSwitcherValue(nameSelector ? 'name' : 'label');
+  }, [nameSelector]);
 
   const actionOptions = triggersKeyMap?.actions
     .map((actionItem: string) =>
@@ -29,26 +35,23 @@ const ActionFormItems = () => {
       })
     )
     .flat();
+
   return (
     <>
       <Form.Item label="Testkube action" required name="action" rules={[required]}>
         <Select options={actionOptions} placeholder="Select a testkube related action" />
       </Form.Item>
       <Form.Item noStyle shouldUpdate>
-        {({getFieldValue}) => {
+        {({getFieldValue, getFieldError}) => {
           const label = getFieldValue('testLabelSelector');
-          const name = getFieldValue('testNameSelector');
-
-          if (isFirst) {
-            setSwitcherValue(name ? 'name' : 'label');
-          }
+          const isValid = !(getFieldError('resourceLabelSelector').length > 0);
 
           return (
             <Space size={16} direction="vertical" style={{width: '100%'}}>
               <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
               {switcherValue === 'label' ? (
                 <Form.Item label="Testkube resource" required name="testLabelSelector" rules={[required]}>
-                  <LabelsSelect defaultLabels={label} />
+                  <LabelsSelect defaultLabels={label} validation={isValid} />
                 </Form.Item>
               ) : (
                 <Form.Item label="Testkube resource" required name="testNameSelector" rules={[required]}>

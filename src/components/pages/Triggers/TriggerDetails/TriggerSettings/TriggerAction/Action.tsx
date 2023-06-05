@@ -14,11 +14,12 @@ import {displayDefaultNotificationFlow} from '@src/utils/notification';
 
 import {useStore} from '@store';
 
-import {getResourceIdentifierSelector} from '../../../utils';
+import {getActionFormValues, getResourceIdentifierSelector} from '../../../utils';
 
 const Condition: React.FC = () => {
-  const {currentTrigger} = useStore(state => ({
+  const {currentTrigger, setCurrentTrigger} = useStore(state => ({
     currentTrigger: state.currentTrigger!,
+    setCurrentTrigger: state.setCurrentTrigger,
   }));
 
   const appNamespace = useAppSelector(selectNamespace);
@@ -28,14 +29,7 @@ const Condition: React.FC = () => {
   const [updateTrigger] = useUpdateTriggerByIdMutation();
 
   const [form] = Form.useForm();
-
-  const {
-    testSelector: {name, labelSelector: currentLabelSelector},
-    action,
-    execution,
-  } = currentTrigger;
-  const nameSelector = name;
-  const labelSelector = currentLabelSelector?.matchLabels;
+  const initialValues = getActionFormValues(currentTrigger);
 
   const onFinish = () => {
     const values = form.getFieldsValue();
@@ -44,34 +38,28 @@ const Condition: React.FC = () => {
       values.testLabelSelector || values.testNameSelector,
       appNamespace
     );
-    const [_action, _execution] = values.action.split(' ');
+    const [action, execution] = values.action.split(' ');
 
     const body = {
       ...currentTrigger,
-      action: _action,
-      execution: _execution,
+      action,
+      execution,
       testSelector,
     };
 
     return updateTrigger(body)
       .then(res => displayDefaultNotificationFlow(res))
-      .then(() => {
-        notificationCall('passed', 'Trigger was successfully updated.');
+      .then(res => {
+        if (res && 'data' in res) {
+          notificationCall('passed', 'Trigger was successfully updated.');
+          setCurrentTrigger(res.data);
+          form.setFieldsValue(getActionFormValues(res.data));
+        }
       });
   };
 
   return (
-    <Form
-      form={form}
-      name="trigger-action"
-      initialValues={{
-        testNameSelector: nameSelector,
-        testLabelSelector: labelSelector,
-        action: `${action} ${execution}`,
-      }}
-      layout="vertical"
-      disabled={!mayEdit}
-    >
+    <Form form={form} name="trigger-action" initialValues={initialValues} layout="vertical" disabled={!mayEdit}>
       <ConfigurationCard
         title="Action"
         description="Define the action to be performed on testkube once the conditions are met."
