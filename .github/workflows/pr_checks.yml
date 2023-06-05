@@ -145,4 +145,4 @@ jobs:
         ref: ${{ github.head_ref }}
         variables: |
           BASE_URL="${{ github.event.deployment_status.target_url }}"
-          API_URL="localhost:8088/v1"
+          API_URL="testkube-api-server.testkube.svc.cluster.local:8088/v1"
