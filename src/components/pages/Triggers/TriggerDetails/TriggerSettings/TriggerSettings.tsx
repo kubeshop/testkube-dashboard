@@ -1,29 +1,21 @@
-import {useState} from 'react';
+import {memo} from 'react';
 
-import {SettingsLeftNavigation, StyledSettingsContainer, StyledTabContentContainer} from '@molecules';
+import {SettingsLayout} from '@molecules';
 
 import Definition from './Definition';
 import General from './General';
 import TriggerAction from './TriggerAction';
 import TriggerCondition from './TriggerCondition';
 
-const tabsConfig: Array<JSX.Element> = [<General />, <TriggerCondition />, <TriggerAction />, <Definition />];
+const TriggerSettings = () => (
+  <SettingsLayout
+    tabs={[
+      {id: 'general', label: 'General', children: <General />},
+      {id: 'condition', label: 'Trigger Condition', children: <TriggerCondition />},
+      {id: 'action', label: 'Trigger Action', children: <TriggerAction />},
+      {id: 'definition', label: 'Definition', children: <Definition />},
+    ]}
+  />
+);
 
-const navigationOptionsConfig: string[] = ['General', 'Trigger Condition', 'Trigger Action', 'Definition'];
-
-const TriggerSettings = () => {
-  const [selectedSettingsTab, setSelectedSettingsTab] = useState(0);
-
-  return (
-    <StyledSettingsContainer>
-      <SettingsLeftNavigation
-        options={navigationOptionsConfig}
-        selectedOption={selectedSettingsTab}
-        setSelectedOption={setSelectedSettingsTab}
-      />
-      <StyledTabContentContainer>{tabsConfig[selectedSettingsTab]}</StyledTabContentContainer>
-    </StyledSettingsContainer>
-  );
-};
-
-export default TriggerSettings;
+export default memo(TriggerSettings);
