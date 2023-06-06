@@ -385,6 +385,52 @@ export const GlobalStyle = createGlobalStyle`
     line-height: 16px;
     letter-spacing: 0.05em;
   }
+
+  /* Steps */
+  .ant-steps-item-active {
+    .ant-steps-item-container {
+      .ant-steps-item-content {
+        .ant-steps-item-title {
+          color: ${Colors.indigo400}; 
+        }
+      }
+    }
+  }
+  
+  .ant-steps-item-wait {
+    .ant-steps-item-container {
+      .ant-steps-item-icon {
+
+        border-color: ${Colors.slate500};
+
+        .ant-steps-icon {
+          color: ${Colors.slate500};
+        }
+
+      }
+
+      .ant-steps-item-content {
+        .ant-steps-item-title {
+          color: ${Colors.slate500};
+        }
+      }
+    }
+  }
+  
+  .ant-steps-item-finish {
+    .ant-steps-item-container {
+      .ant-steps-item-content {
+        .ant-steps-item-title {
+          color: ${Colors.indigo400}; 
+        }
+      }
+    }
+  }
+
+  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
+    background-color: transparent;
+    border: 1px dashed ${Colors.slate500};
+  }
 `;
 
 /* Media Sizes */

@@ -71,7 +71,7 @@ const RunningContext: React.FC<RunningContextProps> = props => {
     ) : (
       'Test Suite'
     ),
-    testtrigger: <Link to="/triggers">{context || 'Test Trigger'}</Link>,
+    testtrigger: <Link to={`/triggers/${context}`}>{context || 'Test Trigger'}</Link>,
     default: 'Unknown run context',
   };
 

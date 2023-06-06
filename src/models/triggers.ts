@@ -18,10 +18,10 @@ export enum TriggerAction {
 
 export type TriggerExecution = 'test' | 'testsuite';
 
-export type LabelSelector = {matchExpressions: MatchExpression[]; matchLabels: MatchLabels};
+export type LabelSelector = {matchExpressions?: MatchExpression[]; matchLabels: MatchLabels};
 
 export type MatchExpression = {key: string; operator: string; values: string[]};
-export type MatchLabels = EntityMap;
+export type MatchLabels = Record<string, string>;
 
 export type TestTrigger = {
   name: string;
@@ -53,9 +53,9 @@ export type TestTriggerFormEntity = {
 export type TriggerType = 'label-label' | 'name-label' | 'name-name' | 'label-name';
 
 export type TestTriggerSelector = {
-  name: string;
+  name?: string;
   namespace?: string;
-  labelSelector: LabelSelector;
+  labelSelector?: LabelSelector;
 };
 
 export type TriggersKeyMap = {
