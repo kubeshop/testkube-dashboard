@@ -110,6 +110,7 @@ const Sider: React.FC = () => {
       title: 'Settings',
     },
     {
+      icon: 'documentation',
       dropdownComponent: (
         <Popover
           align={{offset: [0, 13]}}
@@ -180,7 +181,11 @@ const Sider: React.FC = () => {
       const {icon, onClick, size = 20, dropdownComponent, title} = otherMenuItem;
 
       if (dropdownComponent) {
-        return <StyledOtherItem $size={size}>{dropdownComponent}</StyledOtherItem>;
+        return (
+          <StyledOtherItem key={icon} $size={size}>
+            {dropdownComponent}
+          </StyledOtherItem>
+        );
       }
 
       return (
