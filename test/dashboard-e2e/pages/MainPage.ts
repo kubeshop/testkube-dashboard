@@ -7,7 +7,7 @@ export class MainPage{
     }
 
     async visitMainPage(){
-      await this.page.goto(`/apiEndpoint?apiEndpoint=${process.env.API_URL}`);
+      await this.page.goto(`/apiEndpoint?apiEndpoint=${process.env.DASHBOARD_API_URL}`);
     
       await this.page.addInitScript(() => {
         window.localStorage.setItem('isGADisabled', '1');
