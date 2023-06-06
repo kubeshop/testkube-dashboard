@@ -5,7 +5,7 @@ import {Tabs} from 'antd';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import {PageWrapper} from '@organisms';
+import {PageHeader, PageWrapper} from '@organisms';
 
 import PageMetadata from '@pages/PageMetadata';
 
@@ -16,7 +16,6 @@ import {useGetExecutorDetailsQuery} from '@services/executors';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
-import {StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails: React.FC = () => {
@@ -47,7 +46,7 @@ const ExecutorDetails: React.FC = () => {
     <PageWrapper>
       <PageMetadata title={`${name} | Executors`} />
 
-      <StyledPageHeader onBack={() => navigate('/executors')} title={name} className="testkube-pageheader" />
+      <PageHeader onBack={() => navigate('/executors')} title={name} />
       <Tabs
         activeKey={activeTabKey}
         onChange={setActiveTabKey}

@@ -1,41 +1,42 @@
-import React, {FC, PropsWithChildren, ReactNode, memo} from 'react';
+import React, {FC, ReactNode, memo} from 'react';
 
 import {LoadingOutlined} from '@ant-design/icons';
-import {Space} from 'antd';
+import {PageHeaderProps as AntdPageHeaderProps, Space} from 'antd';
 
-import {Text, Title} from '@custom-antd';
+import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
 import {StyledPageHeader} from './PageBlueprint.styled';
 
-interface PageHeaderProps {
-  title: string;
+type PageHeaderProps = {
   description?: ReactNode;
-  buttons?: ReactNode;
   loading?: boolean;
-}
+} & AntdPageHeaderProps;
 
-const PageHeader: FC<PropsWithChildren<PageHeaderProps>> = ({title, description, buttons, loading, children}) => (
-  <StyledPageHeader>
-    <Space direction="vertical" size={15}>
-      <Title color={Colors.slate50} ellipsis>
-        {title}
-        {loading ? (
-          <>
-            {' '}
-            <LoadingOutlined />
-          </>
+const PageHeader: FC<PageHeaderProps> = ({title, description, loading, children, ...props}) => (
+  <StyledPageHeader
+    {...props}
+    title={
+      loading ? (
+        <>
+          {title} <LoadingOutlined />
+        </>
+      ) : (
+        title
+      )
+    }
+  >
+    {React.Children.count(children) > 0 || description ? (
+      <Space direction="vertical" size={15}>
+        {description ? (
+          <Text className="regular middle" color={Colors.slate400}>
+            {description}
+          </Text>
         ) : null}
-      </Title>
-      {description ? (
-        <Text className="regular middle" color={Colors.slate400}>
-          {description}
-        </Text>
-      ) : null}
-      {children}
-    </Space>
-    {buttons ? <div>{buttons}</div> : null}
+        {children}
+      </Space>
+    ) : null}
   </StyledPageHeader>
 );
 

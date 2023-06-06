@@ -17,7 +17,7 @@ const PageBlueprint: React.FC<PropsWithChildren<PageBlueprintProps>> = props => 
   return (
     <PageWrapper>
       <PageMetadata title={title} description={typeof description === 'string' ? description : undefined} />
-      <PageHeader title={title} description={description} buttons={headerButton} />
+      <PageHeader title={title} description={description} extra={headerButton} />
       {children}
     </PageWrapper>
   );

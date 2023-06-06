@@ -19,7 +19,7 @@ import {Option as OptionType} from '@models/form';
 
 import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextType, notificationCall} from '@molecules';
 
-import {PageWrapper} from '@organisms';
+import {PageHeader, PageWrapper} from '@organisms';
 
 import PageMetadata from '@pages/PageMetadata';
 
@@ -35,7 +35,7 @@ import Colors from '@styles/Colors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {EntityDetailsHeaderIcon, StyledPageHeader} from './EntityDetailsContent.styled';
+import {EntityDetailsHeaderIcon} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
@@ -138,7 +138,7 @@ const EntityDetailsContent: React.FC = () => {
     <PageWrapper>
       <PageMetadata title={name} description={description} />
 
-      <StyledPageHeader
+      <PageHeader
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
         extra={[
@@ -179,7 +179,7 @@ const EntityDetailsContent: React.FC = () => {
             </Text>
           ) : null}
         </Space>
-      </StyledPageHeader>
+      </PageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} /> : null}
       <Tabs
         activeKey={activeTabKey}

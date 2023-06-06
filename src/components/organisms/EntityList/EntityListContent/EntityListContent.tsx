@@ -175,7 +175,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       <PageHeader
         title={pageTitle}
         description={<PageDescription />}
-        buttons={createButton}
+        extra={createButton}
         loading={isApplyingFilters && !isFirstTimeLoading}
       >
         {filters}

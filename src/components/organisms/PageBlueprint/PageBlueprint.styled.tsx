@@ -1,3 +1,5 @@
+import {PageHeader as AntdPageHeader} from 'antd';
+
 import styled from 'styled-components';
 
 export const PageWrapper = styled.div`
@@ -9,9 +11,14 @@ export const PageWrapper = styled.div`
   padding: 30px 30px 60px 0;
 `;
 
-export const StyledPageHeader = styled.div`
-  padding-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+export const StyledPageHeader = styled(AntdPageHeader)`
+  &.ant-page-header {
+    margin-bottom: 12px;
+    padding: 0;
+
+    .ant-page-header-heading-left,
+    .ant-page-header-heading-extra {
+      margin: 0;
+    }
+  }
 `;
