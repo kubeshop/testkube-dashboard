@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from 'react';
-import {Helmet} from 'react-helmet';
 
 import {Select, Space, Tabs} from 'antd';
 
@@ -8,7 +7,7 @@ import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ExecutorIcon} from '@atoms';
 
-import {AnalyticsContext, ConfigContext, DashboardContext, EntityDetailsContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, EntityDetailsContext} from '@contexts';
 
 import {Button, Text} from '@custom-antd';
 
@@ -19,6 +18,8 @@ import {Entity} from '@models/entity';
 import {Option as OptionType} from '@models/form';
 
 import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextType, notificationCall} from '@molecules';
+
+import PageMetadata from '@pages/PageMetadata';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -48,7 +49,6 @@ const filterOptions: OptionType[] = [
 const EntityDetailsContent: React.FC = () => {
   const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
     useContext(EntityDetailsContext);
-  const {pageTitle} = useContext(ConfigContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
@@ -134,10 +134,8 @@ const EntityDetailsContent: React.FC = () => {
 
   return (
     <StyledContainer>
-      <Helmet>
-        <title>{name ? `${name} | ${pageTitle}` : pageTitle}</title>
-        <meta name="description" content={`${description}`} />
-      </Helmet>
+      <PageMetadata title={name} description={description} />
+
       <StyledPageHeader
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
