@@ -1,10 +1,12 @@
-import {useContext, useEffect, useMemo, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {ExternalLink} from '@atoms';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import {Button, Modal, Skeleton, Text} from '@custom-antd';
+import {Button, Modal} from '@custom-antd';
+
+import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
@@ -17,7 +19,7 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import AddTriggerModal from './AddTriggerModal';
 import EmptyTriggers from './EmptyTriggers';
-import {StyledTriggersGrid, StyledTriggersSkeletonWrapper, TriggerContainer} from './TriggersList.styled';
+import TriggerCard from './TriggerCard';
 
 const TriggersList: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
@@ -28,30 +30,16 @@ const TriggersList: React.FC = () => {
   const [isAddTriggerModalVisible, setAddTriggerModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
 
-  const onNavigateToDetails = (name: string) => {
-    navigate(`/triggers/${name}`);
-  };
-
   useEffect(() => {
     safeRefetch(refetch);
   }, [location]);
-
-  const renderedTriggersGrid = useMemo(() => {
-    return triggersList.map(triggerItem => {
-      return (
-        <TriggerContainer onClick={() => onNavigateToDetails(triggerItem.name)} key={triggerItem.name}>
-          <Text className="regular big">{triggerItem.name}</Text>
-        </TriggerContainer>
-      );
-    });
-  }, [triggersList]);
 
   return (
     <PageBlueprint
       title="Triggers"
       description={
         <>
-          Listen for events and run specific testkube actions. Learn more about{' '}
+          Listen for events and run specific Testkube actions. Learn more about{' '}
           <ExternalLink href={externalLinks.testTriggers}>Triggers</ExternalLink>
         </>
       }
@@ -67,23 +55,15 @@ const TriggersList: React.FC = () => {
         ) : null
       }
     >
-      {isLoading ? (
-        <StyledTriggersSkeletonWrapper>
-          {new Array(6).fill(0).map((_, index) => {
-            const key = `skeleton-item-${index}`;
-
-            return <Skeleton additionalStyles={{lineHeight: 120}} key={key} />;
-          })}
-        </StyledTriggersSkeletonWrapper>
-      ) : renderedTriggersGrid?.length ? (
-        <StyledTriggersGrid>{renderedTriggersGrid}</StyledTriggersGrid>
-      ) : (
-        <EmptyTriggers
-          onButtonClick={() => {
-            setAddTriggerModalVisibility(true);
-          }}
-        />
-      )}
+      <EntityGrid
+        maxColumns={3}
+        data={triggersList}
+        Component={TriggerCard}
+        componentProps={{onClick: trigger => navigate(`/triggers/${trigger.name}`)}}
+        empty={<EmptyTriggers onButtonClick={() => setAddTriggerModalVisibility(true)} />}
+        itemHeight={66}
+        loadingInitially={isLoading}
+      />
       {isAddTriggerModalVisible ? (
         <Modal
           title="Create a new trigger"

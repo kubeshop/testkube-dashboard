@@ -1,10 +1,11 @@
 import {useContext, useEffect, useState} from 'react';
-import {Helmet} from 'react-helmet';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
+
+import PageMetadata from '@pages/PageMetadata';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
 
@@ -18,7 +19,6 @@ import TriggerSettings from './TriggerSettings';
 const TriggerDetails = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
-  const {pageTitle} = useContext(ConfigContext);
 
   const {setCurrentTrigger, setTriggersKeyMap} = useStore(state => ({
     setCurrentTrigger: state.setCurrentTrigger,
@@ -52,9 +52,8 @@ const TriggerDetails = () => {
 
   return (
     <StyledContainer>
-      <Helmet>
-        <title>{`${name} | Triggers | ${pageTitle}`}</title>
-      </Helmet>
+      <PageMetadata title={`${name} | Triggers`} />
+
       <StyledPageHeader onBack={() => navigate('/triggers')} title={name} className="testkube-pageheader" />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
