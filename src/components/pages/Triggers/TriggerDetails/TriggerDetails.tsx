@@ -5,6 +5,8 @@ import {Tabs} from 'antd';
 
 import {DashboardContext, MainContext} from '@contexts';
 
+import {PageHeader, PageWrapper} from '@organisms';
+
 import PageMetadata from '@pages/PageMetadata';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
@@ -13,7 +15,6 @@ import {useStore} from '@store';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
-import {StyledContainer, StyledPageHeader} from './TriggerDetails.styled';
 import TriggerSettings from './TriggerSettings';
 
 const TriggerDetails = () => {
@@ -51,16 +52,16 @@ const TriggerDetails = () => {
   }, [name]);
 
   return (
-    <StyledContainer>
+    <PageWrapper>
       <PageMetadata title={`${name} | Triggers`} />
 
-      <StyledPageHeader onBack={() => navigate('/triggers')} title={name} className="testkube-pageheader" />
+      <PageHeader onBack={() => navigate('/triggers')} title={name} />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
           {triggerDetails ? <TriggerSettings /> : null}
         </Tabs.TabPane>
       </Tabs>
-    </StyledContainer>
+    </PageWrapper>
   );
 };
 
