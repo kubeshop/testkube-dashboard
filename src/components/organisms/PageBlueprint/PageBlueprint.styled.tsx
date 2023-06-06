@@ -11,6 +11,17 @@ export const PageWrapper = styled.div`
   padding: 30px 30px 60px 0;
 `;
 
+export const ToolbarContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const ToolbarContent = styled.div``;
+
+export const ToolbarExtra = styled.div`
+  margin-left: auto;
+`;
+
 export const StyledPageHeader = styled(AntdPageHeader)`
   &.ant-page-header {
     margin-bottom: 12px;

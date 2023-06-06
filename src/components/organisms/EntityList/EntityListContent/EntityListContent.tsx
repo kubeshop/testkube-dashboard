@@ -16,7 +16,7 @@ import {TestSuite} from '@models/testSuite';
 import {EntityGrid} from '@molecules';
 import EntityGridItem from '@molecules/EntityGrid/EntityGridItem';
 
-import {PageHeader, PageWrapper} from '@organisms';
+import {PageHeader, PageToolbar, PageWrapper} from '@organisms';
 
 import PageMetadata from '@pages/PageMetadata';
 
@@ -175,10 +175,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       <PageHeader
         title={pageTitle}
         description={<PageDescription />}
-        extra={createButton}
         loading={isApplyingFilters && !isFirstTimeLoading}
       >
-        {filters}
+        <PageToolbar extra={createButton}>{filters}</PageToolbar>
       </PageHeader>
 
       {dataLayers[entity]}

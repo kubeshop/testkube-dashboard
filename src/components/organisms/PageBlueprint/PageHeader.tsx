@@ -1,9 +1,9 @@
 import React, {FC, ReactNode, memo} from 'react';
 
 import {LoadingOutlined} from '@ant-design/icons';
-import {PageHeaderProps as AntdPageHeaderProps, Space} from 'antd';
+import {PageHeaderProps as AntdPageHeaderProps} from 'antd';
 
-import {Text} from '@custom-antd';
+import {FullWidthSpace, Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
@@ -28,14 +28,14 @@ const PageHeader: FC<PageHeaderProps> = ({title, description, loading, children,
     }
   >
     {React.Children.count(children) > 0 || description ? (
-      <Space direction="vertical" size={15}>
+      <FullWidthSpace direction="vertical" size={15}>
         {description ? (
           <Text className="regular middle" color={Colors.slate400}>
             {description}
           </Text>
         ) : null}
         {children}
-      </Space>
+      </FullWidthSpace>
     ) : null}
   </StyledPageHeader>
 );
