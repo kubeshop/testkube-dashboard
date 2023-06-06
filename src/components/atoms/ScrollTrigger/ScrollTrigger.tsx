@@ -7,10 +7,10 @@ import {StyledScrollTrigger} from './ScrollTrigger.styled';
 type ScrollTriggerProps = {
   offset?: number;
   disabled?: boolean;
-  onScroll: () => void;
+  onScroll?: () => void;
 };
 
-const ScrollTrigger: React.FC<ScrollTriggerProps> = props => {
+const InternalScrollTrigger: React.FC<ScrollTriggerProps> = memo(props => {
   const {offset = 0, disabled = false, onScroll} = props;
   const style = useMemo(() => ({top: `${-offset}px`}), [offset]);
   const ref = useRef(null);
@@ -18,11 +18,14 @@ const ScrollTrigger: React.FC<ScrollTriggerProps> = props => {
 
   useEffect(() => {
     if (isInViewport && !disabled) {
-      onScroll();
+      onScroll?.();
     }
   }, [isInViewport, disabled]);
 
   return <StyledScrollTrigger ref={ref} style={style} />;
-};
+});
 
-export default memo(ScrollTrigger);
+const ScrollTrigger: React.FC<ScrollTriggerProps> = ({onScroll, disabled, ...rest}) =>
+  onScroll && !disabled ? <InternalScrollTrigger onScroll={onScroll} {...rest} /> : null;
+
+export default ScrollTrigger;
