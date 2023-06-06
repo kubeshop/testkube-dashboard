@@ -14,8 +14,8 @@ import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
 import {OnDataChangeInterface} from '@models/onDataChange';
-import {TestWithExecutionRedux} from '@models/test';
-import {TestSuiteWithExecutionRedux} from '@models/testSuite';
+import {Test} from '@models/test';
+import {TestSuite} from '@models/testSuite';
 
 import {EntityGrid} from '@molecules';
 
@@ -92,8 +92,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   };
 
   const onNavigateToDetails = useCallback(
-    (item: TestWithExecutionRedux | TestSuiteWithExecutionRedux) => {
-      navigate(`/${entity}/executions/${item.dataItem.name}`);
+    (item: Test | TestSuite) => {
+      navigate(`/${entity}/executions/${item.name}`);
     },
     [navigate, entity]
   );

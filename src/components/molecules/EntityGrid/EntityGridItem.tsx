@@ -12,10 +12,10 @@ import EntityGridItemPure from './EntityGridItemPure';
 
 const EntityGridItem: React.FC<any> = props => {
   const {item, onClick} = props;
-  const {dataItem} = item;
+  const {dataItem, latestExecution} = item;
 
   const {isClusterAvailable} = useContext(MainContext);
-  const {useGetMetrics, entity, useAbortAllExecutions} = useContext(EntityListContext);
+  const {useGetMetrics, entity} = useContext(EntityListContext);
 
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
@@ -25,16 +25,14 @@ const EntityGridItem: React.FC<any> = props => {
     {skip: !isInViewport || !isClusterAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
-  const [abortAllExecutions] = useAbortAllExecutions();
-
   return (
     <EntityGridItemPure
       ref={ref}
-      item={item}
+      item={dataItem}
+      latestExecution={latestExecution}
       onClick={onClick}
-      entity={entity}
       metrics={metrics}
-      abortAllExecutions={abortAllExecutions}
+      dataTest={`${entity}-list-item`}
     />
   );
 };
