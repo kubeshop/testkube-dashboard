@@ -1,10 +1,8 @@
 import React, {useContext, useRef} from 'react';
 
-import {MainContext} from '@contexts';
+import {EntityListContext, MainContext} from '@contexts';
 
 import useInViewport from '@hooks/useInViewport';
-
-import {EntityListContext} from '@organisms/EntityList/EntityListContainer/EntityListContainer';
 
 import {PollingIntervals} from '@utils/numbers';
 

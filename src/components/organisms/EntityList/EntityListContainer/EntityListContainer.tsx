@@ -1,27 +1,10 @@
-import {createContext} from 'react';
+import {EntityListContext} from '@contexts';
 
-import {Entity, EntityListBlueprint} from '@models/entity';
+import {EntityListBlueprint} from '@models/entity';
 
 import {useAppSelector} from '@redux/hooks';
 
 import EntityListContent from '../EntityListContent';
-
-export const EntityListContext = createContext<{
-  dataSource: any;
-  queryFilters: any;
-  setQueryFilters: any;
-  allFilters: any;
-  useGetMetrics: any;
-  entity?: Entity;
-  useAbortAllExecutions: any;
-}>({
-  dataSource: [],
-  queryFilters: {},
-  setQueryFilters: () => {},
-  allFilters: {},
-  useGetMetrics: () => {},
-  useAbortAllExecutions: () => {},
-});
 
 const EntityListContainer: React.FC<EntityListBlueprint> = props => {
   const {

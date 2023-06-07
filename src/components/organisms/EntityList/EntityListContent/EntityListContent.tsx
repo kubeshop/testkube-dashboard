@@ -1,7 +1,7 @@
 import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
 import {usePrevious} from 'react-use';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext, EntityListContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
 
@@ -30,7 +30,6 @@ import {safeRefetch} from '@utils/fetchUtils';
 import {compareFiltersObject} from '@utils/objects';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
-import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 
 import EmptyDataWithFilters from './EmptyDataWithFilters';
