@@ -1,10 +1,14 @@
+import {FC} from 'react';
+
 import {EmptyListContent, HelpCard} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
 
-const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
-  const {action} = props;
+interface EmptyTestsProps {
+  onButtonClick: () => void;
+}
 
+const EmptyTests: FC<EmptyTestsProps> = ({onButtonClick}) => {
   return (
     <EmptyListContent
       title="Create your first test in a few easy steps."
@@ -12,7 +16,7 @@ const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
       buttonText="Add a new test"
       emptyListReadonlyTitle="No tests found"
       emptyListReadonlyDescription="We could not find any tests in this environment."
-      onButtonClick={action}
+      onButtonClick={onButtonClick}
       actionType="create"
     >
       <HelpCard isLink link={externalLinks.createTest}>
@@ -25,4 +29,4 @@ const EmptyTestsListContent: React.FC<{action: () => void}> = props => {
   );
 };
 
-export default EmptyTestsListContent;
+export default EmptyTests;
