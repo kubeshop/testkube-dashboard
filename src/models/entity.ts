@@ -1,6 +1,9 @@
 import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
+import {TestWithExecution} from '@models/test';
+import {TestSuiteWithExecution} from '@models/testSuite';
+
 export type Entity = 'test-suites' | 'tests';
 
 export type ReduxSlices = 'testSuites' | 'tests' | 'executions' | 'labels' | 'config';
@@ -28,7 +31,6 @@ export type EntityListBlueprint = {
    * Hook to get data using RTK approach.
    */
 
-  useGetData?: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useGetMetrics?: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useAbortAllExecutions?: UseMutation<MutationDefinition<any, any, any, any, any>>;
 
@@ -61,4 +63,8 @@ export type EntityListBlueprint = {
   addEntityButtonText?: string;
 
   dataTestID?: string;
+
+  data: TestSuiteWithExecution[] | TestWithExecution[];
+  isLoading: boolean;
+  isFetching: boolean;
 };

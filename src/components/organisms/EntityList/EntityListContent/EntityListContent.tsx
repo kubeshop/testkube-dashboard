@@ -1,5 +1,4 @@
 import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
-import {usePrevious} from 'react-use';
 
 import {DashboardContext, EntityListContext, MainContext} from '@contexts';
 
@@ -9,7 +8,6 @@ import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
-import {OnDataChangeInterface} from '@models/onDataChange';
 import {Test} from '@models/test';
 import {TestSuite} from '@models/testSuite';
 
@@ -26,14 +24,12 @@ import {initialPageSize} from '@redux/initialState';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 
-import {safeRefetch} from '@utils/fetchUtils';
 import {compareFiltersObject} from '@utils/objects';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import Filters from '../EntityListFilters';
 
 import EmptyDataWithFilters from './EmptyDataWithFilters';
-import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
 import {EmptyListWrapper, StyledFiltersSection} from './EntityListContent.styled';
 
 const modalTypes: Record<Entity, ModalConfigProps> = {
@@ -51,6 +47,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     initialFiltersState,
     addEntityButtonText,
     dataTestID,
+    data = [],
+    isLoading = false,
+    isFetching = false,
   } = props;
 
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
@@ -63,23 +62,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
   const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
-  const prevQueryFilters = usePrevious(queryFilters) || queryFilters;
-
-  const [contentProps, setContentProps] = useState<OnDataChangeInterface>({
-    data: [],
-    isLoading: false,
-    isFetching: false,
-    refetch: () => Promise.resolve(),
-  });
-
-  const onDataChange = (args: OnDataChangeInterface) => {
-    setContentProps(args);
-  };
-
-  const dataLayers: Record<Entity, JSX.Element> = {
-    tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-    'test-suites': <TestSuitesDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-  };
 
   const resetFilters = () => {
     dispatch(setQueryFilters(initialFiltersState));
@@ -93,51 +75,46 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   );
 
   const onScrollBottom = () => {
+    setIsLoadingNext(true);
     dispatch(setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize}));
   };
 
   useEffect(() => {
-    if (!setData || contentProps.isLoading || contentProps.isFetching) {
+    if (!setData || isLoading || isFetching) {
       return;
     }
 
-    if (contentProps.data && contentProps.data.length) {
+    if (data && data.length) {
       setFirstTimeLoading(false);
-      dispatch(setData(contentProps.data));
+      dispatch(setData(data));
 
       return;
     }
 
-    if (!contentProps.data || !contentProps.data.length) {
+    if (!data || !data.length) {
       setFirstTimeLoading(false);
       // if no results - set result as an empty array because not all the time we get an empty array from backend
       dispatch(setData([]));
     }
-  }, [contentProps.data, contentProps.isLoading, contentProps.isFetching]);
+  }, [data, isLoading, isFetching]);
 
   useEffect(() => {
     setFirstTimeLoading(true);
-
-    return () => {
-      setFirstTimeLoading(true);
-    };
   }, [entity, apiEndpoint]);
 
   useEffect(() => {
     setIsApplyingFilters(true);
+  }, [queryFilters]);
 
-    if (queryFilters.pageSize > prevQueryFilters.pageSize) {
-      setIsLoadingNext(true);
-    }
-
-    safeRefetch(contentProps.refetch).then(() => {
-      setIsApplyingFilters(false);
+  useEffect(() => {
+    if (!isFetching) {
       setIsLoadingNext(false);
-    });
-  }, [queryFilters, contentProps.refetch]);
+      setIsApplyingFilters(false);
+    }
+  }, [isFetching]);
 
   const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
-  const isEmptyData = (dataSource?.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
+  const isEmptyData = (dataSource?.length === 0 || !dataSource) && isFiltersEmpty && !isLoading;
 
   const addEntityAction = () => {
     setIsModalVisible(true);
@@ -173,8 +150,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
           </StyledFiltersSection>
         </PageToolbar>
       </PageHeader>
-
-      {dataLayers[entity]}
 
       <EntityGrid
         maxColumns={2}
