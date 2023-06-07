@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import {FC} from 'react';
 
 import {ExternalLink} from '@atoms';
 
@@ -52,7 +52,6 @@ const TestsList: FC = () => (
       useGetData={useGetTestsQuery}
       setData={setTests}
       initialFiltersState={initialTestsFiltersState}
-      filtersComponentsIds={useMemo(() => ['textSearch', 'selector', 'status'], [])}
       dataTestID="add-a-new-test-btn"
     />
   </EntityListContext.Provider>

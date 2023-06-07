@@ -1,15 +1,9 @@
 import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {FilterType} from './filters';
-
 export type Entity = 'test-suites' | 'tests';
 
 export type ReduxSlices = 'testSuites' | 'tests' | 'executions' | 'labels' | 'config';
-
-export type EntityListBlueprintProps = {
-  entity: Entity;
-};
 
 export type EntityListBlueprint = {
   route?: string;
@@ -28,7 +22,6 @@ export type EntityListBlueprint = {
 
   emptyDataComponent: any;
 
-  filtersComponentsIds?: FilterType[];
   initialFiltersState: any;
 
   /**

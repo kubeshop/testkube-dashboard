@@ -6,9 +6,7 @@ import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {isEqual} from 'lodash';
 import {ParsedQuery} from 'query-string';
 
-import {searchParamsLists} from '@constants/searchParams';
-
-import {SearchParamKey, SearchParamsKeys, SearchParamsType, ValidatedSearchParams} from '@models/searchParams';
+import {SearchParamKey, SearchParamsKeys, ValidatedSearchParams} from '@models/searchParams';
 
 import {getApiEndpoint} from '@services/apiEndpoint';
 
@@ -22,8 +20,8 @@ const prohibitedValues = ['undefined', 'null'];
  * TODO: finish queryparams purifying
  */
 
-export const validateSearchParams = (params: ParsedQuery, paramsType: SearchParamsType): ValidatedSearchParams => {
-  const possibleSearchParams: SearchParamsKeys = searchParamsLists[paramsType];
+export const validateSearchParams = (params: ParsedQuery): ValidatedSearchParams => {
+  const possibleSearchParams: SearchParamsKeys = ['textSearch', 'selector', 'status'];
   const unidentifiedSearchParams: string[] = [];
 
   const paramsList = Object.entries(params);

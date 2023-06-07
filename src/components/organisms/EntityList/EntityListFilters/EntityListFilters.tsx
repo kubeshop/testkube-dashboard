@@ -1,4 +1,4 @@
-import React, {memo, useContext, useEffect, useMemo} from 'react';
+import {FC, memo, useContext, useEffect} from 'react';
 
 import {Space} from 'antd';
 
@@ -6,9 +6,8 @@ import {MainContext} from '@contexts';
 
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
-import {EntityListBlueprint} from '@models/entity';
-import {FilterProps, FilterType} from '@models/filters';
-import {SearchParams} from '@models/searchParams';
+import {Entity} from '@models/entity';
+import {FilterProps} from '@models/filters';
 
 import {validateSearchParams} from '@utils/fetchUtils';
 
@@ -16,38 +15,25 @@ import LabelsFilter from './LabelsFilter';
 import StatusFilter from './StatusFilter';
 import TextSearchFilter from './TextSearchFilter';
 
-const filtersComponents: Record<FilterType, React.FC<FilterProps>> = {
-  textSearch: TextSearchFilter,
-  selector: LabelsFilter,
-  status: StatusFilter,
-};
-
-const EntityListFilters: React.FC<
-  Pick<EntityListBlueprint, 'filtersComponentsIds' | 'entity'> & FilterProps
-> = props => {
-  const {filtersComponentsIds, isFiltersDisabled, ...rest} = props;
+const EntityListFilters: FC<{entity: Entity} & FilterProps> = props => {
+  const {isFiltersDisabled, ...rest} = props;
   const {setFilters, filters, entity} = rest;
 
   const {dispatch} = useContext(MainContext);
 
   const searchParams = useURLSearchParams();
 
-  const renderedFilters = useMemo(() => {
-    return filtersComponentsIds?.map((filterComponentId: FilterType) => {
-      const Component = filtersComponents[filterComponentId];
-      return <Component {...rest} isFiltersDisabled={isFiltersDisabled} key={filterComponentId} />;
-    });
-  }, [filtersComponentsIds, isFiltersDisabled, rest]);
-
   useEffect(() => {
     if (Object.entries(searchParams).length) {
-      dispatch(setFilters({...filters, ...validateSearchParams(searchParams, SearchParams[entity])}));
+      dispatch(setFilters({...filters, ...validateSearchParams(searchParams)}));
     }
   }, [entity]);
 
   return (
     <Space data-cy="filters-container" size={16} wrap>
-      {renderedFilters}
+      <TextSearchFilter {...rest} isFiltersDisabled={isFiltersDisabled} />
+      <LabelsFilter {...rest} isFiltersDisabled={isFiltersDisabled} />
+      <StatusFilter {...rest} isFiltersDisabled={isFiltersDisabled} />
     </Space>
   );
 };

@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import {FC} from 'react';
 
 import {EntityListContext} from '@contexts';
 
@@ -44,7 +44,6 @@ const TestSuitesList: FC = () => (
       useGetData={useGetTestSuitesQuery}
       setData={setTestSuites}
       initialFiltersState={initialTestSuitesFiltersState}
-      filtersComponentsIds={useMemo(() => ['textSearch', 'selector', 'status'], [])}
       dataTestID="add-a-new-test-suite-btn"
     />
   </EntityListContext.Provider>

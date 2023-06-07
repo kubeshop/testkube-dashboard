@@ -47,7 +47,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     pageDescription: PageDescription,
     emptyDataComponent: EmptyData,
     entity,
-    filtersComponentsIds,
     setData,
     initialFiltersState,
     addEntityButtonText,
@@ -148,19 +147,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   useTrackTimeAnalytics(`${entity}-list`);
 
-  const filters =
-    filtersComponentsIds && filtersComponentsIds.length ? (
-      <StyledFiltersSection>
-        <Filters
-          setFilters={setQueryFilters}
-          filters={queryFilters}
-          filtersComponentsIds={filtersComponentsIds}
-          entity={entity}
-          isFiltersDisabled={isEmptyData || !isClusterAvailable}
-        />
-      </StyledFiltersSection>
-    ) : null;
-
   const createButton = mayCreate ? (
     <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID} disabled={!isClusterAvailable}>
       {addEntityButtonText}
@@ -176,7 +162,16 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         description={<PageDescription />}
         loading={isApplyingFilters && !isFirstTimeLoading}
       >
-        <PageToolbar extra={createButton}>{filters}</PageToolbar>
+        <PageToolbar extra={createButton}>
+          <StyledFiltersSection>
+            <Filters
+              setFilters={setQueryFilters}
+              filters={queryFilters}
+              entity={entity}
+              isFiltersDisabled={isEmptyData || !isClusterAvailable}
+            />
+          </StyledFiltersSection>
+        </PageToolbar>
       </PageHeader>
 
       {dataLayers[entity]}
