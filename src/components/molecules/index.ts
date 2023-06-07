@@ -21,8 +21,12 @@ export {default as MetricsBarChart} from './MetricsBarChart';
 export {default as LabelsSelect} from './LabelsSelect';
 export {default as Hint} from './Hint';
 export {default as SettingsLeftNavigation} from './SettingsLeftNavigation';
-export {StyledTabContentContainer} from './SettingsLayout';
-export {StyledSettingsContainer} from './SettingsLayout';
+export {
+  default as SettingsLayout,
+  type SettingsLayoutTab,
+  StyledSettingsContainer,
+  StyledTabContentContainer,
+} from './SettingsLayout';
 export {default as DeleteEntityModal} from './DeleteEntityModal';
 export {default as Definition} from './Definition';
 export {default as DotsDropdown} from './DotsDropdown';
