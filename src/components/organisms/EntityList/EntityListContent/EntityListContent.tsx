@@ -1,6 +1,6 @@
 import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
 
-import {DashboardContext, EntityListContext, MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
 
@@ -8,11 +8,9 @@ import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {Entity, EntityListBlueprint} from '@models/entity';
 import {ModalConfigProps} from '@models/modal';
-import {Test} from '@models/test';
-import {TestSuite} from '@models/testSuite';
 
 import {EntityGrid} from '@molecules';
-import EntityGridItem from '@molecules/EntityGrid/EntityGridItem';
+import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
 import {PageHeader, PageToolbar, PageWrapper} from '@organisms';
 
@@ -42,6 +40,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     pageTitle,
     pageDescription: PageDescription,
     emptyDataComponent: EmptyData,
+    CardComponent,
     entity,
     setData,
     initialFiltersState,
@@ -50,6 +49,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     data = [],
     isLoading = false,
     isFetching = false,
+    queryFilters,
+    dataSource,
+    setQueryFilters,
   } = props;
 
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
@@ -61,14 +63,13 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {navigate} = useContext(DashboardContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
-  const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
 
   const resetFilters = () => {
     dispatch(setQueryFilters(initialFiltersState));
   };
 
   const onNavigateToDetails = useCallback(
-    (item: Test | TestSuite) => {
+    (item: Item) => {
       navigate(`/${entity}/executions/${item.name}`);
     },
     [navigate, entity]
@@ -154,7 +155,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       <EntityGrid
         maxColumns={2}
         data={dataSource}
-        Component={EntityGridItem}
+        Component={CardComponent}
         componentProps={{onClick: onNavigateToDetails}}
         empty={
           <EmptyListWrapper>

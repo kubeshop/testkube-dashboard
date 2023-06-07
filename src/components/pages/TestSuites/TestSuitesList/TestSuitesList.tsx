@@ -1,25 +1,24 @@
 import {FC, useContext} from 'react';
 
-import {EntityListContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {EntityListContent} from '@organisms';
 
 import {useAppSelector} from '@redux/hooks';
 import {initialTestSuitesFiltersState} from '@redux/initialState';
 import {
-  selectAllTestSuitesFilters,
   selectTestSuites,
   selectTestSuitesFilters,
   setTestSuites,
   setTestSuitesFilters,
 } from '@redux/reducers/testSuitesSlice';
 
-import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuiteExecutions';
-import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
+import {useGetTestSuitesQuery} from '@services/testSuites';
 
 import {PollingIntervals} from '@utils/numbers';
 
 import EmptyTestSuites from './EmptyTestSuites';
+import TestSuiteCard from './TestSuiteCard';
 
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
@@ -33,33 +32,24 @@ const TestSuitesList: FC = () => {
   });
 
   return (
-    <EntityListContext.Provider
-      value={{
-        entity: 'test-suites',
-        queryFilters,
-        dataSource: useAppSelector(selectTestSuites),
-        allFilters: useAppSelector(selectAllTestSuitesFilters),
-        setQueryFilters: setTestSuitesFilters,
-        useGetMetrics: useGetTestSuiteExecutionMetricsQuery,
-        useAbortAllExecutions: useAbortAllTestSuiteExecutionsMutation,
-      }}
-    >
-      <EntityListContent
-        entity="test-suites"
-        route="/dashboard/test-suites"
-        reduxSliceName="testSuites"
-        pageTitle="Test Suites"
-        addEntityButtonText="Add a new test suite"
-        pageDescription={PageDescription}
-        emptyDataComponent={EmptyTestSuites}
-        setData={setTestSuites}
-        initialFiltersState={initialTestSuitesFiltersState}
-        dataTestID="add-a-new-test-suite-btn"
-        data={data || []}
-        isLoading={isLoading}
-        isFetching={isFetching}
-      />
-    </EntityListContext.Provider>
+    <EntityListContent
+      CardComponent={TestSuiteCard}
+      entity="test-suites"
+      route="/dashboard/test-suites"
+      pageTitle="Test Suites"
+      addEntityButtonText="Add a new test suite"
+      pageDescription={PageDescription}
+      emptyDataComponent={EmptyTestSuites}
+      setData={setTestSuites}
+      initialFiltersState={initialTestSuitesFiltersState}
+      dataTestID="add-a-new-test-suite-btn"
+      queryFilters={queryFilters}
+      setQueryFilters={setTestSuitesFilters}
+      dataSource={useAppSelector(selectTestSuites)}
+      data={data || []}
+      isLoading={isLoading}
+      isFetching={isFetching}
+    />
   );
 };
 

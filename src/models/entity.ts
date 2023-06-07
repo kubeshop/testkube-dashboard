@@ -1,8 +1,12 @@
-import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
-import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {FC} from 'react';
+
+import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {TestWithExecution} from '@models/test';
 import {TestSuiteWithExecution} from '@models/testSuite';
+
+import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
 export type Entity = 'test-suites' | 'tests';
 
@@ -15,23 +19,19 @@ export type EntityListBlueprint = {
 
   pageDescription?: any;
 
-  /**
-   * Redux entity which reflects the provided dashboard entity
-   */
-
-  reduxSliceName?: ReduxSlices;
-
   entity: Entity;
 
   emptyDataComponent: any;
 
   initialFiltersState: any;
 
+  // TODO: Fix types
+  CardComponent: FC<{item: any; onClick: (item: Item) => void}>;
+
   /**
    * Hook to get data using RTK approach.
    */
 
-  useGetMetrics?: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useAbortAllExecutions?: UseMutation<MutationDefinition<any, any, any, any, any>>;
 
   /**
@@ -63,6 +63,9 @@ export type EntityListBlueprint = {
   addEntityButtonText?: string;
 
   dataTestID?: string;
+
+  queryFilters: any;
+  dataSource: any;
 
   data: TestSuiteWithExecution[] | TestWithExecution[];
   isLoading: boolean;

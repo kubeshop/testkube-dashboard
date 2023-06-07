@@ -2,26 +2,21 @@ import {FC, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {EntityListContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {EntityListContent} from '@organisms';
 
 import {useAppSelector} from '@redux/hooks';
 import {initialTestsFiltersState} from '@redux/initialState';
-import {
-  selectAllTestsFilters,
-  selectTests,
-  selectTestsFilters,
-  setTests,
-  setTestsFilters,
-} from '@redux/reducers/testsSlice';
+import {selectTests, selectTestsFilters, setTests, setTestsFilters} from '@redux/reducers/testsSlice';
 
-import {useAbortAllTestExecutionsMutation, useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
+import {useGetTestsQuery} from '@services/tests';
 
 import {externalLinks} from '@utils/externalLinks';
 import {PollingIntervals} from '@utils/numbers';
 
 import EmptyTests from './EmptyTests';
+import TestCard from './TestCard';
 
 const PageDescription: FC = () => (
   <>
@@ -40,33 +35,24 @@ const TestsList: FC = () => {
   });
 
   return (
-    <EntityListContext.Provider
-      value={{
-        entity: 'tests',
-        queryFilters,
-        dataSource: useAppSelector(selectTests),
-        allFilters: useAppSelector(selectAllTestsFilters),
-        setQueryFilters: setTestsFilters,
-        useGetMetrics: useGetTestExecutionMetricsQuery,
-        useAbortAllExecutions: useAbortAllTestExecutionsMutation,
-      }}
-    >
-      <EntityListContent
-        entity="tests"
-        route="/dashboard/tests"
-        reduxSliceName="tests"
-        pageTitle="Tests"
-        addEntityButtonText="Add a new test"
-        pageDescription={PageDescription}
-        emptyDataComponent={EmptyTests}
-        setData={setTests}
-        initialFiltersState={initialTestsFiltersState}
-        dataTestID="add-a-new-test-btn"
-        data={data || []}
-        isLoading={isLoading}
-        isFetching={isFetching}
-      />
-    </EntityListContext.Provider>
+    <EntityListContent
+      CardComponent={TestCard}
+      entity="tests"
+      route="/dashboard/tests"
+      pageTitle="Tests"
+      addEntityButtonText="Add a new test"
+      pageDescription={PageDescription}
+      emptyDataComponent={EmptyTests}
+      setData={setTests}
+      initialFiltersState={initialTestsFiltersState}
+      dataTestID="add-a-new-test-btn"
+      queryFilters={queryFilters}
+      setQueryFilters={setTestsFilters}
+      dataSource={useAppSelector(selectTests)}
+      data={data || []}
+      isLoading={isLoading}
+      isFetching={isFetching}
+    />
   );
 };
 

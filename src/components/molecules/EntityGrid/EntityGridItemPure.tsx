@@ -8,7 +8,7 @@ import useExecutorIcon from '@hooks/useExecutorIcon';
 
 import {Execution} from '@models/execution';
 import {ExecutionMetrics} from '@models/metrics';
-import {LatestExecution} from '@models/test';
+import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {LabelsList, MetricsBarChart} from '@molecules';
 
@@ -19,10 +19,10 @@ import {formatDuration} from '@utils/formatDate';
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
 import EntityGridItemExecutionTime from './EntityGridItemExecutionTime';
 
-interface Item {
-  type: string;
+export interface Item {
+  type?: string;
   name: string;
-  labels: Record<string, string>;
+  labels?: Record<string, string>;
 }
 
 interface Metrics {
@@ -34,7 +34,7 @@ interface Metrics {
 
 interface EntityGridItemPureProps {
   item: Item;
-  latestExecution?: LatestExecution | Execution;
+  latestExecution?: TestSuiteExecution | Execution;
   metrics?: Metrics;
   onClick: (item: Item) => void;
   dataTest: string;
@@ -50,7 +50,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
 
   const status =
     (latestExecution as Execution)?.executionResult?.status ||
-    (latestExecution as LatestExecution)?.status ||
+    (latestExecution as TestSuiteExecution)?.status ||
     'pending';
   const executions = metrics?.executions;
 
