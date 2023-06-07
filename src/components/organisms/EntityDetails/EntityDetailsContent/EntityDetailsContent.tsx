@@ -11,6 +11,7 @@ import {AnalyticsContext, DashboardContext, EntityDetailsContext} from '@context
 
 import {Button, Text} from '@custom-antd';
 
+import useExecutorIcon from '@hooks/useExecutorIcon';
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
@@ -85,7 +86,7 @@ const EntityDetailsContent: React.FC = () => {
   const description = entityDetails?.description;
   const labels = entityDetails?.labels;
   const type = entityDetails?.type;
-  const testIcon = entityDetails?.testIcon;
+  const testIcon = useExecutorIcon(entityDetails);
 
   const onRunButtonClick = async () => {
     handleLoading();

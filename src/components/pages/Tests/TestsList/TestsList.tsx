@@ -1,4 +1,4 @@
-import {FC, useContext, useMemo} from 'react';
+import {FC, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
@@ -8,7 +8,6 @@ import {EntityListContent} from '@organisms';
 
 import {useAppSelector} from '@redux/hooks';
 import {initialTestsFiltersState} from '@redux/initialState';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {
   selectAllTestsFilters,
   selectTests,
@@ -16,7 +15,6 @@ import {
   setTests,
   setTestsFilters,
 } from '@redux/reducers/testsSlice';
-import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useAbortAllTestExecutionsMutation, useGetTestExecutionMetricsQuery, useGetTestsQuery} from '@services/tests';
 
@@ -35,24 +33,11 @@ const PageDescription: FC = () => (
 const TestsList: FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const queryFilters = useAppSelector(selectTestsFilters);
-  const executors = useAppSelector(selectExecutors); // FIXME: Get rid of executors necessity
 
-  const {
-    data: _data,
-    isLoading,
-    isFetching,
-  } = useGetTestsQuery(queryFilters || null, {
+  const {data, isLoading, isFetching} = useGetTestsQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable,
   });
-  const data = useMemo(
-    () =>
-      (_data || []).map(test => ({
-        ...test,
-        test: {...test.test, testIcon: getTestExecutorIcon(executors, test.test.type)},
-      })),
-    [_data]
-  );
 
   return (
     <EntityListContext.Provider
@@ -77,7 +62,7 @@ const TestsList: FC = () => {
         setData={setTests}
         initialFiltersState={initialTestsFiltersState}
         dataTestID="add-a-new-test-btn"
-        data={data}
+        data={data || []}
         isLoading={isLoading}
         isFetching={isFetching}
       />

@@ -1,8 +1,10 @@
-import React, {forwardRef, memo, useCallback} from 'react';
+import React, {FC, forwardRef, memo, useCallback} from 'react';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
+
+import useExecutorIcon from '@hooks/useExecutorIcon';
 
 import {Execution} from '@models/execution';
 import {ExecutionMetrics} from '@models/metrics';
@@ -19,7 +21,6 @@ import EntityGridItemExecutionTime from './EntityGridItemExecutionTime';
 
 interface Item {
   type: string;
-  testIcon?: string;
   name: string;
   labels: Record<string, string>;
 }
@@ -38,6 +39,11 @@ interface EntityGridItemPureProps {
   onClick: (item: Item) => void;
   dataTest: string;
 }
+
+const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
+  const icon = useExecutorIcon(item);
+  return item.type ? <ExecutorIcon type={icon} /> : null;
+});
 
 const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
   const {item, latestExecution, onClick, dataTest, metrics} = props;
@@ -58,7 +64,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
         <ItemRow $flex={0}>
           <ItemColumn $isStretch>
             <StatusIcon status={status} />
-            {item.type ? <ExecutorIcon type={item.testIcon} /> : null}
+            <EntityGridItemTestIcon item={item} />
             <div style={{overflow: 'hidden', flex: 1, display: 'flex'}}>
               <Text className="regular big" ellipsis title={item.name}>
                 {item.name}
