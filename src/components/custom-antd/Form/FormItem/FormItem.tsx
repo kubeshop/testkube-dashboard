@@ -2,11 +2,16 @@ import {FormItemProps} from 'antd';
 
 import {StyledFormItem, StyledFormItemLabel} from '../Form.styled';
 
-const FormItem: React.FC<FormItemProps> = props => {
-  const {children, label, ...rest} = props;
+type FormItemCustomProps = {
+  flex?: number;
+};
 
-  const formItemsProps: FormItemProps = {
+const FormItem: React.FC<FormItemProps & FormItemCustomProps> = props => {
+  const {children, label, flex = 1, ...rest} = props;
+
+  const formItemsProps: FormItemProps & FormItemCustomProps = {
     ...(label ? {label: <StyledFormItemLabel>{label}</StyledFormItemLabel>} : {}),
+    flex,
     ...rest,
   };
 

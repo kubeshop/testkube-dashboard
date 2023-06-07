@@ -33,7 +33,7 @@ export const triggersApi = createApi({
         body,
       }),
     }),
-    updateTriggerById: builder.mutation<any, TestTrigger>({
+    updateTriggerById: builder.mutation<TestTrigger, TestTrigger>({
       query: body => {
         return {
           url: `/triggers/${body.name}`,

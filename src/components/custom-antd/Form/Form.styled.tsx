@@ -11,8 +11,13 @@ export const StyledFormItemLabel = styled.label`
   font-weight: 300;
 `;
 
-export const StyledFormItem = styled(AntdFormItem)`
-  flex: 1;
+export const StyledFormItem = styled(AntdFormItem)<{flex?: number}>`
+  flex: ${({flex}) => flex};
 
   margin-bottom: 0;
+`;
+
+export const SymbolWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;

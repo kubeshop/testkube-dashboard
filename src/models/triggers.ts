@@ -23,6 +23,18 @@ export type LabelSelector = {matchExpressions?: MatchExpression[]; matchLabels: 
 export type MatchExpression = {key: string; operator: string; values: string[]};
 export type MatchLabels = Record<string, string>;
 
+export enum TriggerConditionStatus {
+  'True' = 'True',
+  'False' = 'False',
+  'Unknown' = 'Unknown',
+}
+
+export type TriggerCondition = {
+  reason?: string;
+  status: TriggerConditionStatus;
+  type: string;
+};
+
 export type TestTrigger = {
   name: string;
   namespace?: string;
@@ -33,6 +45,10 @@ export type TestTrigger = {
   action: TriggerAction;
   execution: TriggerExecution;
   testSelector: TestTriggerSelector;
+  conditionSpec: {
+    conditions?: TriggerCondition[];
+    timeout?: number;
+  };
 };
 
 type TestTriggerTypes = 'name' | 'labels';
