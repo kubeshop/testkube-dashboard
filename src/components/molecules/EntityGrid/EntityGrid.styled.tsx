@@ -82,3 +82,17 @@ export const StyledMetricItem = styled.div`
 
   padding-top: 5px;
 `;
+
+export const StyledEntityGridSkeletonWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 32px;
+`;
+
+export const StyledEntityGridLoaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  min-height: 80px;
+`;

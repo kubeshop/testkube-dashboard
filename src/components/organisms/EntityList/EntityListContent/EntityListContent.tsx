@@ -3,8 +3,6 @@ import {usePrevious} from 'react-use';
 
 import {LoadingOutlined} from '@ant-design/icons';
 
-import {ScrollTrigger} from '@atoms';
-
 import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
@@ -18,6 +16,7 @@ import {Test} from '@models/test';
 import {TestSuite} from '@models/testSuite';
 
 import {EntityGrid} from '@molecules';
+import EntityGridItem from '@molecules/EntityGrid/EntityGridItem';
 
 import PageMetadata from '@pages/PageMetadata';
 
@@ -38,8 +37,6 @@ import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
 import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
 import EntityListTitle from './EntityListHeader';
-import EntityListLoader from './EntityListLoader';
-import EntityListSkeleton from './EntityListSkeleton';
 
 const modalTypes: Record<Entity, ModalConfigProps> = {
   'test-suites': TestSuiteModalConfig,
@@ -190,27 +187,25 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
           </StyledFiltersSection>
         ) : null}
       </Header>
-      {isFirstTimeLoading ? (
-        <EntityListSkeleton />
-      ) : !dataSource || !dataSource.length ? (
-        <EmptyListWrapper>
-          {isFiltersEmpty ? (
-            <EmptyData action={addEntityAction} />
-          ) : (
-            <EmptyDataWithFilters resetFilters={resetFilters} />
-          )}
-        </EmptyListWrapper>
-      ) : (
-        <>
-          <EntityGrid data={dataSource} onNavigateToDetails={onNavigateToDetails} />
-          <ScrollTrigger
-            offset={200}
-            disabled={queryFilters.pageSize > dataSource.length || isLoadingNext}
-            onScroll={onScrollBottom}
-          />
-          {isLoadingNext ? <EntityListLoader /> : null}
-        </>
-      )}
+      <EntityGrid
+        data={dataSource}
+        Component={EntityGridItem}
+        componentProps={{onClick: onNavigateToDetails}}
+        empty={
+          <EmptyListWrapper>
+            {isFiltersEmpty ? (
+              <EmptyData action={addEntityAction} />
+            ) : (
+              <EmptyDataWithFilters resetFilters={resetFilters} />
+            )}
+          </EmptyListWrapper>
+        }
+        itemHeight={163.85}
+        loadingInitially={isFirstTimeLoading}
+        loadingMore={isLoadingNext}
+        hasMore={!isLoadingNext && queryFilters.pageSize <= dataSource.length}
+        onScrollEnd={onScrollBottom}
+      />
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
       ) : null}
