@@ -1,8 +1,6 @@
 import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
 import {usePrevious} from 'react-use';
 
-import {LoadingOutlined} from '@ant-design/icons';
-
 import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
@@ -17,6 +15,8 @@ import {TestSuite} from '@models/testSuite';
 
 import {EntityGrid} from '@molecules';
 import EntityGridItem from '@molecules/EntityGrid/EntityGridItem';
+
+import {PageHeader, PageToolbar, PageWrapper} from '@organisms';
 
 import PageMetadata from '@pages/PageMetadata';
 
@@ -35,8 +35,7 @@ import Filters from '../EntityListFilters';
 
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
-import {EmptyListWrapper, Header, StyledContainer, StyledFiltersSection} from './EntityListContent.styled';
-import EntityListTitle from './EntityListHeader';
+import {EmptyListWrapper, StyledFiltersSection} from './EntityListContent.styled';
 
 const modalTypes: Record<Entity, ModalConfigProps> = {
   'test-suites': TestSuiteModalConfig,
@@ -150,43 +149,39 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   useTrackTimeAnalytics(`${entity}-list`);
 
+  const filters =
+    filtersComponentsIds && filtersComponentsIds.length ? (
+      <StyledFiltersSection>
+        <Filters
+          setFilters={setQueryFilters}
+          filters={queryFilters}
+          filtersComponentsIds={filtersComponentsIds}
+          entity={entity}
+          isFiltersDisabled={isEmptyData || !isClusterAvailable}
+        />
+      </StyledFiltersSection>
+    ) : null;
+
+  const createButton = mayCreate ? (
+    <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID} disabled={!isClusterAvailable}>
+      {addEntityButtonText}
+    </Button>
+  ) : null;
+
   return (
-    <StyledContainer>
+    <PageWrapper>
       <PageMetadata title={pageTitle} />
 
+      <PageHeader
+        title={pageTitle}
+        description={<PageDescription />}
+        loading={isApplyingFilters && !isFirstTimeLoading}
+      >
+        <PageToolbar extra={createButton}>{filters}</PageToolbar>
+      </PageHeader>
+
       {dataLayers[entity]}
-      <Header>
-        <EntityListTitle
-          pageTitle={
-            <>
-              {pageTitle} {isApplyingFilters && !isFirstTimeLoading ? <LoadingOutlined /> : null}
-            </>
-          }
-        >
-          <PageDescription />
-        </EntityListTitle>
-        {filtersComponentsIds && filtersComponentsIds.length ? (
-          <StyledFiltersSection>
-            <Filters
-              setFilters={setQueryFilters}
-              filters={queryFilters}
-              filtersComponentsIds={filtersComponentsIds}
-              entity={entity}
-              isFiltersDisabled={isEmptyData || !isClusterAvailable}
-            />
-            {mayCreate ? (
-              <Button
-                $customType="primary"
-                onClick={addEntityAction}
-                data-test={dataTestID}
-                disabled={!isClusterAvailable}
-              >
-                {addEntityButtonText}
-              </Button>
-            ) : null}
-          </StyledFiltersSection>
-        ) : null}
-      </Header>
+
       <EntityGrid
         maxColumns={2}
         data={dataSource}
@@ -210,7 +205,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       {isModalVisible ? (
         <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
       ) : null}
-    </StyledContainer>
+    </PageWrapper>
   );
 };
 

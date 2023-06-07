@@ -19,6 +19,8 @@ import {Option as OptionType} from '@models/form';
 
 import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextType, notificationCall} from '@molecules';
 
+import {PageHeader, PageWrapper} from '@organisms';
+
 import PageMetadata from '@pages/PageMetadata';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -33,7 +35,7 @@ import Colors from '@styles/Colors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
+import {EntityDetailsHeaderIcon} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
@@ -133,10 +135,10 @@ const EntityDetailsContent: React.FC = () => {
   const isPageDisabled = !name;
 
   return (
-    <StyledContainer>
+    <PageWrapper>
       <PageMetadata title={name} description={description} />
 
-      <StyledPageHeader
+      <PageHeader
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
         extra={[
@@ -177,7 +179,7 @@ const EntityDetailsContent: React.FC = () => {
             </Text>
           ) : null}
         </Space>
-      </StyledPageHeader>
+      </PageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} /> : null}
       <Tabs
         activeKey={activeTabKey}
@@ -214,7 +216,7 @@ const EntityDetailsContent: React.FC = () => {
           },
         ]}
       />
-    </StyledContainer>
+    </PageWrapper>
   );
 };
 

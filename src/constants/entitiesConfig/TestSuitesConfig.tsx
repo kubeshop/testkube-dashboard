@@ -1,5 +1,3 @@
-import {Text} from '@custom-antd';
-
 import {EntityListBlueprint} from '@models/entity';
 
 import {initialTestSuitesFiltersState} from '@redux/initialState';
@@ -14,16 +12,10 @@ import {
 import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuiteExecutions';
 import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
 
-import Colors from '@styles/Colors';
-
 import {EmptyTestSuitesListContent} from './EmptyEntitiesListContent';
 
 const TestSuitesPageDescription: React.FC = () => {
-  return (
-    <Text className="regular middle" color={Colors.slate400}>
-      Explore your test suites at a glance...
-    </Text>
-  );
+  return <>Explore your test suites at a glance...</>;
 };
 
 export const TestSuitesEntity: EntityListBlueprint = {

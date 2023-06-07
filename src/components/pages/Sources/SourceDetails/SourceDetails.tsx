@@ -6,6 +6,8 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
 
+import {PageHeader, PageWrapper} from '@organisms';
+
 import PageMetadata from '@pages/PageMetadata';
 
 import {useAppSelector} from '@redux/hooks';
@@ -15,7 +17,6 @@ import {useGetSourceDetailsQuery} from '@services/sources';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
-import {StyledContainer, StyledPageHeader} from './SourceDetails.styled';
 import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
@@ -43,16 +44,16 @@ const SourceDetails = () => {
   }, [location]);
 
   return (
-    <StyledContainer>
+    <PageWrapper>
       <PageMetadata title={`${name} | Sources`} />
 
-      <StyledPageHeader onBack={() => navigate('/sources')} title={name} className="testkube-pageheader" />
+      <PageHeader onBack={() => navigate('/sources')} title={name} />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
           {currentSourceDetails ? <SourceSettings /> : null}
         </Tabs.TabPane>
       </Tabs>
-    </StyledContainer>
+    </PageWrapper>
   );
 };
 

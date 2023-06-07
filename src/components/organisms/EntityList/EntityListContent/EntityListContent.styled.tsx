@@ -27,15 +27,6 @@ export const StyledButtonContainer = styled.div`
   gap: 8px;
 `;
 
-export const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 20px;
-
-  padding: 0 30px 60px 0;
-`;
-
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
