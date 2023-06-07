@@ -1,4 +1,4 @@
-import {FC, useContext} from 'react';
+import {FC, useContext, useMemo} from 'react';
 
 import {ExternalLink} from '@atoms';
 
@@ -49,7 +49,7 @@ const TestsList: FC = () => {
       queryFilters={queryFilters}
       setQueryFilters={setTestsFilters}
       dataSource={useAppSelector(selectTests)}
-      data={data || []}
+      data={useMemo(() => data || [], [data])}
       isLoading={isLoading}
       isFetching={isFetching}
     />
