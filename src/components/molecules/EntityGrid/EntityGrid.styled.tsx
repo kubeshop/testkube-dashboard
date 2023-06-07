@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 import {maxDevice} from '@styles/MediaQueries';
 
-export const StyledEntityGrid = styled.div`
+export const StyledEntityGrid = styled.div<{$columns?: number; $itemWidth: number}>`
   display: grid;
-  grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+  grid-template-columns: ${({$columns, $itemWidth}) =>
+    `repeat(${$columns ?? 'auto-fit'}, minmax(${$itemWidth}px, 1fr))`};
   gap: 32px;
 
   @media ${maxDevice.laptop} {

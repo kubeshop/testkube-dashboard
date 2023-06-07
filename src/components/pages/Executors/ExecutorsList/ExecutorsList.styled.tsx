@@ -14,24 +14,6 @@ export const ExecutorsHeader = styled.div`
   padding-bottom: 30px;
 `;
 
-export const ExecutorsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-  gap: 32px;
-
-  padding-bottom: 30px;
-
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-`;
-
-export const ExecutorsListSkeletonWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px 32px;
-`;
-
 export const ExecutorsGridItem = styled(Space)`
   justify-content: space-between;
 

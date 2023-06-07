@@ -1,17 +1,6 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
-import {maxDevice} from '@styles/MediaQueries';
-
-export const StyledTriggersGrid = styled.div`
-  display: grid;
-  grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
-  gap: 32px;
-
-  @media ${maxDevice.laptop} {
-    grid-template-columns: 1fr;
-  }
-`;
 
 export const TriggerContainer = styled.div`
   overflow: hidden;
@@ -35,10 +24,4 @@ export const TriggerContainer = styled.div`
 
     background: ${Colors.slate850};
   }
-`;
-
-export const StyledTriggersSkeletonWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px 32px;
 `;

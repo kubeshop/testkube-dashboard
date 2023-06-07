@@ -188,6 +188,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         ) : null}
       </Header>
       <EntityGrid
+        maxColumns={2}
         data={dataSource}
         Component={EntityGridItem}
         componentProps={{onClick: onNavigateToDetails}}

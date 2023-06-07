@@ -1,10 +1,12 @@
-import {useContext, useEffect, useMemo, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {ExternalLink} from '@atoms';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import {Button, Modal, Skeleton, Text} from '@custom-antd';
+import {Button, Modal} from '@custom-antd';
+
+import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
@@ -15,14 +17,12 @@ import {selectSources, setSources} from '@redux/reducers/sourcesSlice';
 
 import {useGetSourcesQuery} from '@services/sources';
 
-import Colors from '@styles/Colors';
-
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 
 import AddSourceModal from './AddSourceModal';
 import EmptySources from './EmptySources';
-import {SourceContainer, SourcesGrid, SourcesListSkeletonWrapper} from './SourcesList.styled';
+import SourceCard from './SourceCard';
 
 const Sources: React.FC = () => {
   const sourcesList = useAppSelector(selectSources);
@@ -35,10 +35,6 @@ const Sources: React.FC = () => {
   const [isAddSourceModalVisible, setAddSourceModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
 
-  const onNavigateToDetails = (name: string) => {
-    navigate(`/sources/${name}`);
-  };
-
   useEffect(() => {
     if (sources) {
       dispatch(setSources(sources));
@@ -48,17 +44,6 @@ const Sources: React.FC = () => {
   useEffect(() => {
     safeRefetch(refetch);
   }, [location]);
-
-  const renderedSourcesGrid = useMemo(() => {
-    return sourcesList.map(sourceItem => {
-      return (
-        <SourceContainer onClick={() => onNavigateToDetails(sourceItem.name)} key={sourceItem.name}>
-          <Text className="regular big">{sourceItem.name}</Text>
-          <Text color={Colors.slate500}>{sourceItem.repository?.uri}</Text>
-        </SourceContainer>
-      );
-    });
-  }, [sourcesList]);
 
   return (
     <PageBlueprint
@@ -81,23 +66,15 @@ const Sources: React.FC = () => {
         ) : null
       }
     >
-      {isLoading ? (
-        <SourcesListSkeletonWrapper>
-          {new Array(6).fill(0).map((_, index) => {
-            const key = `skeleton-item-${index}`;
-
-            return <Skeleton additionalStyles={{lineHeight: 80}} key={key} />;
-          })}
-        </SourcesListSkeletonWrapper>
-      ) : renderedSourcesGrid && renderedSourcesGrid.length ? (
-        <SourcesGrid>{renderedSourcesGrid}</SourcesGrid>
-      ) : (
-        <EmptySources
-          onButtonClick={() => {
-            setAddSourceModalVisibility(true);
-          }}
-        />
-      )}
+      <EntityGrid
+        maxColumns={2}
+        data={sourcesList}
+        Component={SourceCard}
+        componentProps={{onClick: source => navigate(`/sources/${source.name}`)}}
+        empty={<EmptySources onButtonClick={() => setAddSourceModalVisibility(true)} />}
+        itemHeight={66}
+        loadingInitially={isLoading}
+      />
       {isAddSourceModalVisible ? (
         <Modal
           title="Create a new source"
