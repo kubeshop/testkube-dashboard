@@ -2,8 +2,11 @@ import {FC, useMemo} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {EntityListContainer} from '@organisms';
+import {EntityListContext} from '@contexts';
 
+import {EntityListContent} from '@organisms';
+
+import {useAppSelector} from '@redux/hooks';
 import {initialTestsFiltersState} from '@redux/initialState';
 import {
   selectAllTestsFilters,
@@ -27,26 +30,32 @@ const PageDescription: FC = () => (
 );
 
 const TestsList: FC = () => (
-  <EntityListContainer
-    entity="tests"
-    route="/dashboard/tests"
-    reduxSliceName="tests"
-    pageTitle="Tests"
-    addEntityButtonText="Add a new test"
-    pageDescription={PageDescription}
-    emptyDataComponent={EmptyTests}
-    useGetData={useGetTestsQuery}
-    useGetMetrics={useGetTestExecutionMetricsQuery}
-    useAbortAllExecutions={useAbortAllTestExecutionsMutation}
-    setData={setTests}
-    selectData={selectTests}
-    setQueryFilters={setTestsFilters}
-    selectQueryFilters={selectTestsFilters}
-    selectAllFilters={selectAllTestsFilters}
-    initialFiltersState={initialTestsFiltersState}
-    filtersComponentsIds={useMemo(() => ['textSearch', 'selector', 'status'], [])}
-    dataTestID="add-a-new-test-btn"
-  />
+  <EntityListContext.Provider
+    value={{
+      entity: 'tests',
+      dataSource: useAppSelector(selectTests),
+      queryFilters: useAppSelector(selectTestsFilters),
+      allFilters: useAppSelector(selectAllTestsFilters),
+      setQueryFilters: setTestsFilters,
+      useGetMetrics: useGetTestExecutionMetricsQuery,
+      useAbortAllExecutions: useAbortAllTestExecutionsMutation,
+    }}
+  >
+    <EntityListContent
+      entity="tests"
+      route="/dashboard/tests"
+      reduxSliceName="tests"
+      pageTitle="Tests"
+      addEntityButtonText="Add a new test"
+      pageDescription={PageDescription}
+      emptyDataComponent={EmptyTests}
+      useGetData={useGetTestsQuery}
+      setData={setTests}
+      initialFiltersState={initialTestsFiltersState}
+      filtersComponentsIds={useMemo(() => ['textSearch', 'selector', 'status'], [])}
+      dataTestID="add-a-new-test-btn"
+    />
+  </EntityListContext.Provider>
 );
 
 export default TestsList;

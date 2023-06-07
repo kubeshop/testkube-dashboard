@@ -1,7 +1,10 @@
 import {FC, useMemo} from 'react';
 
-import {EntityListContainer} from '@organisms';
+import {EntityListContext} from '@contexts';
 
+import {EntityListContent} from '@organisms';
+
+import {useAppSelector} from '@redux/hooks';
 import {initialTestSuitesFiltersState} from '@redux/initialState';
 import {
   selectAllTestSuitesFilters,
@@ -19,26 +22,32 @@ import EmptyTestSuites from './EmptyTestSuites';
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
 const TestSuitesList: FC = () => (
-  <EntityListContainer
-    entity="test-suites"
-    route="/dashboard/test-suites"
-    reduxSliceName="testSuites"
-    pageTitle="Test Suites"
-    addEntityButtonText="Add a new test suite"
-    pageDescription={PageDescription}
-    emptyDataComponent={EmptyTestSuites}
-    useGetData={useGetTestSuitesQuery}
-    useGetMetrics={useGetTestSuiteExecutionMetricsQuery}
-    useAbortAllExecutions={useAbortAllTestSuiteExecutionsMutation}
-    setData={setTestSuites}
-    selectData={selectTestSuites}
-    setQueryFilters={setTestSuitesFilters}
-    selectQueryFilters={selectTestSuitesFilters}
-    selectAllFilters={selectAllTestSuitesFilters}
-    initialFiltersState={initialTestSuitesFiltersState}
-    filtersComponentsIds={useMemo(() => ['textSearch', 'selector', 'status'], [])}
-    dataTestID="add-a-new-test-suite-btn"
-  />
+  <EntityListContext.Provider
+    value={{
+      entity: 'test-suites',
+      dataSource: useAppSelector(selectTestSuites),
+      queryFilters: useAppSelector(selectTestSuitesFilters),
+      allFilters: useAppSelector(selectAllTestSuitesFilters),
+      setQueryFilters: setTestSuitesFilters,
+      useGetMetrics: useGetTestSuiteExecutionMetricsQuery,
+      useAbortAllExecutions: useAbortAllTestSuiteExecutionsMutation,
+    }}
+  >
+    <EntityListContent
+      entity="test-suites"
+      route="/dashboard/test-suites"
+      reduxSliceName="testSuites"
+      pageTitle="Test Suites"
+      addEntityButtonText="Add a new test suite"
+      pageDescription={PageDescription}
+      emptyDataComponent={EmptyTestSuites}
+      useGetData={useGetTestSuitesQuery}
+      setData={setTestSuites}
+      initialFiltersState={initialTestSuitesFiltersState}
+      filtersComponentsIds={useMemo(() => ['textSearch', 'selector', 'status'], [])}
+      dataTestID="add-a-new-test-suite-btn"
+    />
+  </EntityListContext.Provider>
 );
 
 export default TestSuitesList;
