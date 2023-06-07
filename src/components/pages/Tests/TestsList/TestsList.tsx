@@ -38,14 +38,13 @@ const TestsList: FC = () => {
     <EntityListContent
       CardComponent={TestCard}
       entity="tests"
-      route="/dashboard/tests"
       pageTitle="Tests"
       addEntityButtonText="Add a new test"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTests}
       setData={setTests}
       initialFiltersState={initialTestsFiltersState}
-      dataTestID="add-a-new-test-btn"
+      dataTest="add-a-new-test-btn"
       queryFilters={queryFilters}
       setQueryFilters={setTestsFilters}
       dataSource={useAppSelector(selectTests)}

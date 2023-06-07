@@ -45,7 +45,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     setData,
     initialFiltersState,
     addEntityButtonText,
-    dataTestID,
+    dataTest,
     data = [],
     isLoading = false,
     isFetching = false,
@@ -126,7 +126,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   useTrackTimeAnalytics(`${entity}-list`);
 
   const createButton = mayCreate ? (
-    <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID} disabled={!isClusterAvailable}>
+    <Button $customType="primary" onClick={addEntityAction} data-test={dataTest} disabled={!isClusterAvailable}>
       {addEntityButtonText}
     </Button>
   ) : null;
