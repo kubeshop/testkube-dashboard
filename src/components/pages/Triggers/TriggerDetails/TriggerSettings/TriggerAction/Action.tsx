@@ -9,10 +9,11 @@ import {Permissions, usePermission} from '@permissions/base';
 import {useAppSelector} from '@redux/hooks';
 import {selectNamespace} from '@redux/reducers/configSlice';
 
-import {useUpdateTriggerByIdMutation} from '@src/services/triggers';
-import {displayDefaultNotificationFlow} from '@src/utils/notification';
+import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
 import {useStore} from '@store';
+
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {getActionFormValues, getResourceIdentifierSelector} from '../../../utils';
 

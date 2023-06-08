@@ -5,13 +5,13 @@ import {Button, FormItem, FormRow, FullWidthSpace} from '@custom-antd';
 import {SymbolWrapper} from '@custom-antd/Form/Form.styled';
 import FormItemLabel from '@custom-antd/Form/FormItem/FormItemLabel';
 
+import {TestTrigger} from '@models/triggers';
+
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
-
-import {TestTrigger} from '@src/models/triggers';
 
 import {useStore} from '@store';
 

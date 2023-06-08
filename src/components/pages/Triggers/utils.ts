@@ -1,9 +1,7 @@
 import {Option} from '@models/form';
-import {TestTriggerSelector} from '@models/triggers';
+import {TestTrigger, TestTriggerSelector} from '@models/triggers';
 
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
-
-import {TestTrigger} from '@src/models/triggers';
 
 export const getResourceIdentifierSelector = (
   formValue: string | readonly Option[],
