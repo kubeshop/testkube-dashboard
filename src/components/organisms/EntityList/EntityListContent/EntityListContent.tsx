@@ -2,14 +2,14 @@ import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
 
 import {isEqual} from 'lodash';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext, MainContext, ModalContext} from '@contexts';
+import {ModalConfig} from '@contexts/ModalContext';
 
-import {Button, Modal} from '@custom-antd';
+import {Button} from '@custom-antd';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {Entity, EntityListBlueprint} from '@models/entity';
-import {ModalConfigProps} from '@models/modal';
 
 import {EntityGrid} from '@molecules';
 import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
@@ -30,7 +30,7 @@ import Filters from '../EntityListFilters';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {EmptyListWrapper, StyledFiltersSection} from './EntityListContent.styled';
 
-const modalTypes: Record<Entity, ModalConfigProps> = {
+const modalTypes: Record<Entity, ModalConfig> = {
   'test-suites': TestSuiteModalConfig,
   tests: TestModalConfig,
 };
@@ -53,12 +53,12 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   } = props;
 
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   const {dispatch, isClusterAvailable} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
+  const {setModalConfig, setModalOpen} = useContext(ModalContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
 
@@ -103,10 +103,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const isEmptyData = !data?.length && isFiltersEmpty && !isLoading;
 
   const addEntityAction = () => {
-    setIsModalVisible(true);
+    setModalConfig(modalTypes[entity]);
+    setModalOpen(true);
   };
-
-  const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
   useTrackTimeAnalytics(`${entity}-list`);
 
@@ -156,9 +155,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         hasMore={!isLoadingNext && data && queryFilters.pageSize <= data.length}
         onScrollEnd={onScrollBottom}
       />
-      {isModalVisible ? (
-        <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
-      ) : null}
     </PageWrapper>
   );
 };

@@ -1,11 +1,11 @@
-import {ModalConfigProps} from '@models/modal';
+import {ModalConfig} from '@contexts/ModalContext';
 
 import {externalLinks} from '@utils/externalLinks';
 
 import TestCreationModalContent from './TestCreationModalContent';
 import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
-export const TestSuiteModalConfig: ModalConfigProps = {
+export const TestSuiteModalConfig: ModalConfig = {
   title: 'Create a test suite',
   width: 528,
   content: <TestSuiteCreationModalContent />,
@@ -13,7 +13,7 @@ export const TestSuiteModalConfig: ModalConfigProps = {
   dataTestModalRoot: 'add-a-new-test-suite-modal',
 };
 
-export const TestModalConfig: ModalConfigProps = {
+export const TestModalConfig: ModalConfig = {
   title: 'Create a test',
   width: 880,
   content: <TestCreationModalContent />,
