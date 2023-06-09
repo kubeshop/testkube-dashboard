@@ -1,4 +1,4 @@
-import {FC, useContext} from 'react';
+import {FC, useContext, useEffect} from 'react';
 
 import {ExternalLink} from '@atoms';
 
@@ -26,13 +26,17 @@ const PageDescription: FC = () => (
 );
 
 const TestsList: FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
   const queryFilters = useAppSelector(selectTestsFilters);
 
   const {data, isLoading, isFetching} = useGetTestsQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable,
   });
+
+  useEffect(() => {
+    dispatch(setTests(data || []));
+  }, [data]);
 
   return (
     <EntityListContent
@@ -42,13 +46,11 @@ const TestsList: FC = () => {
       addEntityButtonText="Add a new test"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTests}
-      setData={setTests}
       initialFiltersState={initialTestsFiltersState}
       dataTest="add-a-new-test-btn"
       queryFilters={queryFilters}
       setQueryFilters={setTestsFilters}
-      dataSource={useAppSelector(selectTests)}
-      data={data}
+      data={useAppSelector(selectTests)}
       isLoading={isLoading}
       isFetching={isFetching}
     />

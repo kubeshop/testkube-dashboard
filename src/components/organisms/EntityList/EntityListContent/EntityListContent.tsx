@@ -42,15 +42,13 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     emptyDataComponent: EmptyData,
     CardComponent,
     entity,
-    setData,
     initialFiltersState,
     addEntityButtonText,
     dataTest,
-    data,
     isLoading = false,
     isFetching = false,
     queryFilters,
-    dataSource,
+    data,
     setQueryFilters,
   } = props;
 
@@ -81,11 +79,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   };
 
   useEffect(() => {
-    if (!setData || isLoading || isFetching) {
+    if (isLoading || isFetching) {
       return;
     }
     setFirstTimeLoading(false);
-    dispatch(setData(data || []));
   }, [data, isLoading, isFetching]);
 
   useEffect(() => {
@@ -104,7 +101,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   }, [isFetching]);
 
   const isFiltersEmpty = isEqual(initialFiltersState, queryFilters);
-  const isEmptyData = (dataSource?.length === 0 || !dataSource) && isFiltersEmpty && !isLoading;
+  const isEmptyData = !data?.length && isFiltersEmpty && !isLoading;
 
   const addEntityAction = () => {
     setIsModalVisible(true);
@@ -143,7 +140,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
       <EntityGrid
         maxColumns={2}
-        data={dataSource}
+        data={data}
         Component={CardComponent}
         componentProps={{onClick: onNavigateToDetails}}
         empty={
@@ -158,7 +155,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         itemHeight={163.85}
         loadingInitially={isFirstTimeLoading}
         loadingMore={isLoadingNext}
-        hasMore={!isLoadingNext && queryFilters.pageSize <= dataSource.length}
+        hasMore={!isLoadingNext && data && queryFilters.pageSize <= data.length}
         onScrollEnd={onScrollBottom}
       />
       {isModalVisible ? (

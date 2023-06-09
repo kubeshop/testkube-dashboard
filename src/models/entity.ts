@@ -1,7 +1,7 @@
 import {FC} from 'react';
 
-import {TestWithExecution} from '@models/test';
-import {TestSuiteWithExecution} from '@models/testSuite';
+import {TestWithExecutionRedux} from '@models/test';
+import {TestSuiteWithExecutionRedux} from '@models/testSuite';
 
 import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
@@ -38,9 +38,8 @@ export type EntityListBlueprint = {
   dataTest?: string;
 
   queryFilters: any;
-  dataSource: any;
+  data?: TestSuiteWithExecutionRedux[] | TestWithExecutionRedux[];
 
-  data?: TestSuiteWithExecution[] | TestWithExecution[];
   isLoading: boolean;
   isFetching: boolean;
 };

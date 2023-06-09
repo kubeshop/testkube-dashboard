@@ -1,4 +1,4 @@
-import {FC, useContext} from 'react';
+import {FC, useContext, useEffect} from 'react';
 
 import {MainContext} from '@contexts';
 
@@ -23,13 +23,17 @@ import TestSuiteCard from './TestSuiteCard';
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
 const TestSuitesList: FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const {dispatch, isClusterAvailable} = useContext(MainContext);
   const queryFilters = useAppSelector(selectTestSuitesFilters);
 
   const {data, isLoading, isFetching} = useGetTestSuitesQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable,
   });
+
+  useEffect(() => {
+    dispatch(setTestSuites(data || []));
+  }, [data]);
 
   return (
     <EntityListContent
@@ -39,13 +43,11 @@ const TestSuitesList: FC = () => {
       addEntityButtonText="Add a new test suite"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTestSuites}
-      setData={setTestSuites}
       initialFiltersState={initialTestSuitesFiltersState}
       dataTest="add-a-new-test-suite-btn"
       queryFilters={queryFilters}
       setQueryFilters={setTestSuitesFilters}
-      dataSource={useAppSelector(selectTestSuites)}
-      data={data}
+      data={useAppSelector(selectTestSuites)}
       isLoading={isLoading}
       isFetching={isFetching}
     />
