@@ -1,5 +1,7 @@
 import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
 
+import {isEqual} from 'lodash';
+
 import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
@@ -21,8 +23,6 @@ import {Permissions, usePermission} from '@permissions/base';
 import {initialPageSize} from '@redux/initialState';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
-
-import {compareFiltersObject} from '@utils/objects';
 
 import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import Filters from '../EntityListFilters';
@@ -103,7 +103,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     }
   }, [isFetching]);
 
-  const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
+  const isFiltersEmpty = isEqual(initialFiltersState, queryFilters);
   const isEmptyData = (dataSource?.length === 0 || !dataSource) && isFiltersEmpty && !isLoading;
 
   const addEntityAction = () => {
