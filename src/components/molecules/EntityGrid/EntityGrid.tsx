@@ -1,5 +1,7 @@
 import React, {FC, ReactElement, memo, useMemo} from 'react';
 
+import {get as getIn} from 'lodash';
+
 import {ScrollTrigger} from '@atoms';
 
 import {StyledEntityGrid} from './EntityGrid.styled';
@@ -21,6 +23,7 @@ type BaseEntityGridProps<T extends {item: any}> = {
   loadingMore?: boolean;
   hasMore?: boolean;
   onScrollEnd?: () => void;
+  itemKey?: string;
 };
 
 type EntityGridProps<T extends {item: any}> = {} extends Omit<T, 'item' | 'key'>
@@ -41,14 +44,14 @@ function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElem
     loadingMore = false,
     hasMore = false,
     onScrollEnd,
+    itemKey,
   } = props;
 
   const elements = useMemo(
     () =>
       data?.map((item, index) => {
         const itemProps = {...componentProps, item} as T;
-        // eslint-disable-next-line react/no-array-index-key
-        return <Component {...itemProps} key={`entity_grid_item-${index}`} />;
+        return <Component {...itemProps} key={itemKey ? getIn(item, itemKey) : `item-${index}`} />;
       }),
     [data]
   );

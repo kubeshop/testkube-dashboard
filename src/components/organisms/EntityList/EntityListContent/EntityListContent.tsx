@@ -130,6 +130,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       </PageHeader>
 
       <EntityGrid
+        itemKey="dataItem.name"
         maxColumns={2}
         data={data}
         Component={CardComponent}
