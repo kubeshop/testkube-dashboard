@@ -84,19 +84,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     if (!setData || isLoading || isFetching) {
       return;
     }
-
-    if (data && data.length) {
-      setFirstTimeLoading(false);
-      dispatch(setData(data));
-
-      return;
-    }
-
-    if (!data || !data.length) {
-      setFirstTimeLoading(false);
-      // if no results - set result as an empty array because not all the time we get an empty array from backend
-      dispatch(setData([]));
-    }
+    setFirstTimeLoading(false);
+    dispatch(setData(data || []));
   }, [data, isLoading, isFetching]);
 
   useEffect(() => {
