@@ -1,6 +1,7 @@
 import {FC, useContext, useEffect} from 'react';
 
 import {MainContext} from '@contexts';
+import {ModalConfig} from '@contexts/ModalContext';
 
 import {EntityListContent} from '@organisms';
 
@@ -19,8 +20,17 @@ import {PollingIntervals} from '@utils/numbers';
 
 import EmptyTestSuites from './EmptyTestSuites';
 import TestSuiteCard from './TestSuiteCard';
+import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
+
+const createModal: ModalConfig = {
+  title: 'Create a test suite',
+  width: 528,
+  content: <TestSuiteCreationModalContent />,
+  dataTestCloseBtn: 'add-a-new-test-suite-modal-close-button',
+  dataTestModalRoot: 'add-a-new-test-suite-modal',
+};
 
 const TestSuitesList: FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
@@ -50,6 +60,7 @@ const TestSuitesList: FC = () => {
       data={useAppSelector(selectTestSuites)}
       isLoading={isLoading}
       isFetching={isFetching}
+      createModalConfig={createModal}
     />
   );
 };

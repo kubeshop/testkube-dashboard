@@ -3,6 +3,7 @@ import {FC, useContext, useEffect} from 'react';
 import {ExternalLink} from '@atoms';
 
 import {MainContext} from '@contexts';
+import {ModalConfig} from '@contexts/ModalContext';
 
 import {EntityListContent} from '@organisms';
 
@@ -17,6 +18,7 @@ import {PollingIntervals} from '@utils/numbers';
 
 import EmptyTests from './EmptyTests';
 import TestCard from './TestCard';
+import TestCreationModalContent from './TestCreationModalContent';
 
 const PageDescription: FC = () => (
   <>
@@ -24,6 +26,14 @@ const PageDescription: FC = () => (
     <ExternalLink href={externalLinks.documentation}>testing with Testkube</ExternalLink>
   </>
 );
+
+export const createModal: ModalConfig = {
+  title: 'Create a test',
+  width: 880,
+  content: <TestCreationModalContent />,
+  dataTestCloseBtn: 'add-a-new-test-modal-close-button',
+  dataTestModalRoot: 'add-a-new-test-modal',
+};
 
 const TestsList: FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
@@ -53,6 +63,7 @@ const TestsList: FC = () => {
       data={useAppSelector(selectTests)}
       isLoading={isLoading}
       isFetching={isFetching}
+      createModalConfig={createModal}
     />
   );
 };

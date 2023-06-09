@@ -3,13 +3,12 @@ import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
 import {isEqual} from 'lodash';
 
 import {DashboardContext, MainContext, ModalContext} from '@contexts';
-import {ModalConfig} from '@contexts/ModalContext';
 
 import {Button} from '@custom-antd';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {Entity, EntityListBlueprint} from '@models/entity';
+import {EntityListBlueprint} from '@models/entity';
 
 import {EntityGrid} from '@molecules';
 import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
@@ -24,16 +23,10 @@ import {initialPageSize} from '@redux/initialState';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 
-import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
 import Filters from '../EntityListFilters';
 
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {EmptyListWrapper, StyledFiltersSection} from './EntityListContent.styled';
-
-const modalTypes: Record<Entity, ModalConfig> = {
-  'test-suites': TestSuiteModalConfig,
-  tests: TestModalConfig,
-};
 
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {
@@ -50,6 +43,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     queryFilters,
     data,
     setQueryFilters,
+    createModalConfig,
   } = props;
 
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
@@ -103,7 +97,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const isEmptyData = !data?.length && isFiltersEmpty && !isLoading;
 
   const addEntityAction = () => {
-    setModalConfig(modalTypes[entity]);
+    setModalConfig(createModalConfig);
     setModalOpen(true);
   };
 

@@ -1,5 +1,7 @@
 import {FC} from 'react';
 
+import {ModalConfig} from '@contexts/ModalContext';
+
 import {TestWithExecutionRedux} from '@models/test';
 import {TestSuiteWithExecutionRedux} from '@models/testSuite';
 
@@ -39,6 +41,8 @@ export type EntityListBlueprint = {
 
   queryFilters: any;
   data?: TestSuiteWithExecutionRedux[] | TestWithExecutionRedux[];
+
+  createModalConfig: ModalConfig;
 
   isLoading: boolean;
   isFetching: boolean;
