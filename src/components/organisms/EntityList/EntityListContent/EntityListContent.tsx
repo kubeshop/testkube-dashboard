@@ -1,6 +1,7 @@
 import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
+import {useSearchParams} from 'react-router-dom';
 
-import {isEqual} from 'lodash';
+import {isEqual, merge} from 'lodash';
 
 import {DashboardContext, MainContext, ModalContext} from '@contexts';
 
@@ -55,6 +56,39 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    dispatch(
+      setQueryFilters(
+        merge({}, queryFilters, initialFiltersState, {
+          textSearch: searchParams.get('textSearch'),
+          status: searchParams.get('status')?.split(',').filter(Boolean),
+          selector: searchParams.get('selector')?.split(',').filter(Boolean),
+        })
+      )
+    );
+  }, []);
+
+  useEffect(() => {
+    if (queryFilters.textSearch) {
+      searchParams.set('textSearch', queryFilters.textSearch);
+    } else {
+      searchParams.delete('textSearch');
+    }
+    if (queryFilters.status?.length) {
+      searchParams.set('status', queryFilters.status.join(','));
+    } else {
+      searchParams.delete('status');
+    }
+    if (queryFilters.selector?.length) {
+      searchParams.set('selector', queryFilters.selector.join(','));
+    } else {
+      searchParams.delete('selector');
+    }
+    setSearchParams(searchParams);
+  }, [queryFilters]);
 
   const resetFilters = () => {
     dispatch(setQueryFilters(initialFiltersState));

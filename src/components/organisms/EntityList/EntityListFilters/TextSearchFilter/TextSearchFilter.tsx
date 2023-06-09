@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
 import {useDebounce} from 'react-use';
 
 import {SearchOutlined} from '@ant-design/icons';
@@ -17,7 +16,6 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [inputValue, setInputValue] = useState(filters.textSearch);
 
@@ -25,23 +23,14 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
     setInputValue(e.target.value);
   };
 
-  useDebounce(
+  const [, cancel] = useDebounce(
     () => {
-      const paramValue = {textSearch: inputValue};
-
-      dispatch(setFilters({...filters, ...paramValue, pageSize: initialPageSize}));
-
-      if (inputValue) {
-        searchParams.set('textSearch', inputValue);
-        setSearchParams(searchParams);
-      } else {
-        searchParams.delete('textSearch');
-        setSearchParams(searchParams);
-      }
+      dispatch(setFilters({...filters, textSearch: inputValue, pageSize: initialPageSize}));
     },
     300,
     [inputValue]
   );
+  useEffect(cancel, []);
 
   useEffect(() => {
     setInputValue(filters.textSearch);

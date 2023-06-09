@@ -4,51 +4,10 @@ import {BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery} from '@redu
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {isEqual} from 'lodash';
-import {ParsedQuery} from 'query-string';
-
-import {SearchParamKey, SearchParamsKeys, ValidatedSearchParams} from '@models/searchParams';
 
 import {getApiEndpoint} from '@services/apiEndpoint';
 
-import {isArraylikeQueryParam} from '@utils/strings';
-
 const prohibitedValues = ['undefined', 'null'];
-
-/**
- * Returns a valid object to Redux store by filtering unknown fields of the given params
- *
- * TODO: finish queryparams purifying
- */
-
-export const validateSearchParams = (params: ParsedQuery): ValidatedSearchParams => {
-  const possibleSearchParams: SearchParamsKeys = ['textSearch', 'selector', 'status'];
-  const unidentifiedSearchParams: string[] = [];
-
-  const paramsList = Object.entries(params);
-
-  const validatedParamsList = paramsList
-    .map(([paramKey, paramValue]) => {
-      // Negative lookahead: assume that paramKey is not a valid SearchParamKey
-      if (!possibleSearchParams.includes(paramKey as SearchParamKey)) {
-        unidentifiedSearchParams.push(paramKey);
-      }
-
-      const finalParamValue =
-        isArraylikeQueryParam(paramKey) && typeof paramValue === 'string' ? paramValue.split(',') : paramValue;
-
-      return [paramKey, finalParamValue];
-    })
-    .filter(([paramKey]) => {
-      return !unidentifiedSearchParams.includes(paramKey as SearchParamKey);
-    });
-
-  /**
-   * TODO: finish queryparams purifying
-   * purifyQueryParams(unidentifiedSearchParams);
-   */
-
-  return Object.fromEntries(validatedParamsList);
-};
 
 export const paramsSerializer = (params: object) => {
   return Object.entries(params)
