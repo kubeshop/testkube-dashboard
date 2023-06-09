@@ -130,7 +130,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             <Filters
               setFilters={setQueryFilters}
               filters={queryFilters}
-              entity={entity}
               isFiltersDisabled={isEmptyData || !isClusterAvailable}
             />
           </StyledFiltersSection>

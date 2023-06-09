@@ -14,7 +14,7 @@ import {initialPageSize} from '@redux/initialState';
 import Colors from '@styles/Colors';
 
 const TextSearchFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters, entity, queryParam, isFiltersDisabled} = props;
+  const {filters, setFilters, queryParam, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,7 +47,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
 
   useEffect(() => {
     setInputValue(filters[queryParamField]);
-  }, [filters, entity]);
+  }, [filters]);
 
   return (
     <Input

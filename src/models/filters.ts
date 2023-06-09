@@ -1,5 +1,3 @@
-import {Entity} from './entity';
-
 export type FilterType = 'textSearch' | 'selector' | 'status';
 
 export type FilterProps = {
@@ -8,5 +6,4 @@ export type FilterProps = {
   queryParam?: string;
   placeholderText?: string;
   isFiltersDisabled: boolean;
-  entity: Entity;
 };
