@@ -6,12 +6,6 @@ export const HeaderContainer = styled.div`
   padding-bottom: 20px;
 `;
 
-export const EmptyListWrapper = styled.div`
-  display: flex;
-  flex: auto;
-  align-items: center;
-`;
-
 export const StyledFiltersSection = styled.div`
   display: flex;
   justify-content: space-between;

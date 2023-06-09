@@ -26,7 +26,7 @@ import {useApiEndpoint} from '@services/apiEndpoint';
 import Filters from '../EntityListFilters';
 
 import EmptyDataWithFilters from './EmptyDataWithFilters';
-import {EmptyListWrapper, StyledFiltersSection} from './EntityListContent.styled';
+import {StyledFiltersSection} from './EntityListContent.styled';
 
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {
@@ -136,13 +136,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         Component={CardComponent}
         componentProps={{onClick: onNavigateToDetails}}
         empty={
-          <EmptyListWrapper>
-            {isFiltersEmpty ? (
-              <EmptyData action={addEntityAction} />
-            ) : (
-              <EmptyDataWithFilters resetFilters={resetFilters} />
-            )}
-          </EmptyListWrapper>
+          isFiltersEmpty ? <EmptyData action={addEntityAction} /> : <EmptyDataWithFilters resetFilters={resetFilters} />
         }
         itemHeight={163.85}
         loadingInitially={isFirstTimeLoading}
