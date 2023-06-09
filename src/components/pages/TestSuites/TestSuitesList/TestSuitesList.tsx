@@ -1,4 +1,4 @@
-import {FC, useContext, useMemo} from 'react';
+import {FC, useContext} from 'react';
 
 import {MainContext} from '@contexts';
 
@@ -45,7 +45,7 @@ const TestSuitesList: FC = () => {
       queryFilters={queryFilters}
       setQueryFilters={setTestSuitesFilters}
       dataSource={useAppSelector(selectTestSuites)}
-      data={useMemo(() => data || [], [data])}
+      data={data}
       isLoading={isLoading}
       isFetching={isFetching}
     />

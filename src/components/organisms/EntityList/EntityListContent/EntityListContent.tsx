@@ -46,7 +46,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     initialFiltersState,
     addEntityButtonText,
     dataTest,
-    data = [],
+    data,
     isLoading = false,
     isFetching = false,
     queryFilters,

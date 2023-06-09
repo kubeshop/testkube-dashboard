@@ -40,7 +40,7 @@ export type EntityListBlueprint = {
   queryFilters: any;
   dataSource: any;
 
-  data: TestSuiteWithExecution[] | TestWithExecution[];
+  data?: TestSuiteWithExecution[] | TestWithExecution[];
   isLoading: boolean;
   isFetching: boolean;
 };
