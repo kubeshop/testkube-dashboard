@@ -79,10 +79,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   };
 
   useEffect(() => {
-    if (isLoading || isFetching) {
-      return;
+    if (!isLoading && !isFetching) {
+      setFirstTimeLoading(false);
     }
-    setFirstTimeLoading(false);
   }, [data, isLoading, isFetching]);
 
   useEffect(() => {
