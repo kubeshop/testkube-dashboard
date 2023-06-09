@@ -30,7 +30,7 @@ export const testSourceBaseOptions: Option[] = [
 ];
 
 export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) => {
-  const {testSource, username, token, string, file, ...rest} = values;
+  const {testSource, username, token, string, file, testType, name, ...rest} = values;
 
   if (rest.commit) {
     rest.branch = '';
@@ -97,12 +97,13 @@ export const getSourcePayload = (values: any, testSources: SourceWithRepository[
     if (!isTestSourceExists) {
       notificationCall('failed', 'Provided test source does not exist');
     }
-  } else {
-    return {
-      ...(testSource === 'file-uri' ? {type: 'string'} : isCustomGit ? {type: ''} : {type: testSource}),
-      ...testSourceSpecificFields,
-    };
+
+    return testSourceSpecificFields;
   }
+  return {
+    ...(testSource === 'file-uri' ? {type: 'string'} : isCustomGit ? {type: ''} : {type: testSource}),
+    ...testSourceSpecificFields,
+  };
 };
 
 export const getCustomSourceField = (testSource: string) => {
