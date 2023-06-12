@@ -4,12 +4,21 @@ import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 
+declare const customizableFunctionSymbol: unique symbol;
+type OpaqueCustomizableFunction = {readonly [customizableFunctionSymbol]: unique symbol};
+export type CustomizableFunction<T> = T & OpaqueCustomizableFunction;
+type UnwrapCustomizableFunction<T> = T extends CustomizableFunction<infer U> ? U : never;
+
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
   : True;
+type ObjectWithCustomizableFunctions<T> = Pick<T, {[K in keyof T]: T[K] extends OpaqueCustomizableFunction ? K : never}[keyof T]>;
 type ObjectWithoutFunctions<T> = Pick<T, {[K in keyof T]: T[K] extends (...args: any) => any ? never : K}[keyof T]>;
+type ObjectWithoutStaticFunctions<T> = ObjectWithoutFunctions<T> & {
+  [K in keyof ObjectWithCustomizableFunctions<T>]: UnwrapCustomizableFunction<ObjectWithCustomizableFunctions<T>[K]>;
+};
 
-type InitialState<T> = Partial<ObjectWithoutFunctions<T>>;
+type InitialState<T> = Partial<ObjectWithoutStaticFunctions<T>>;
 type StoreFactory<T> = (initialState?: InitialState<T>) => UseBoundStore<StoreApi<T>>;
 
 export const createStoreFactory =
