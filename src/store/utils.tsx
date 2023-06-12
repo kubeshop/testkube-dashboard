@@ -12,13 +12,10 @@ type UnwrapCustomizable<T> = T extends Customizable<infer U> ? U : never;
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
   : True;
-type ObjectWithCustomizableFunctions<T> = Pick<
-  T,
-  {[K in keyof T]: T[K] extends OpaqueCustomizable ? K : never}[keyof T]
->;
+type ObjectWithCustomizable<T> = Pick<T, {[K in keyof T]: T[K] extends OpaqueCustomizable ? K : never}[keyof T]>;
 type ObjectWithoutFunctions<T> = Pick<T, {[K in keyof T]: T[K] extends (...args: any) => any ? never : K}[keyof T]>;
 type ObjectWithoutStaticFunctions<T> = ObjectWithoutFunctions<T> & {
-  [K in keyof ObjectWithCustomizableFunctions<T>]: UnwrapCustomizable<ObjectWithCustomizableFunctions<T>[K]>;
+  [K in keyof ObjectWithCustomizable<T>]: UnwrapCustomizable<ObjectWithCustomizable<T>[K]>;
 };
 
 type InitialState<T> = Partial<ObjectWithoutStaticFunctions<T>>;
