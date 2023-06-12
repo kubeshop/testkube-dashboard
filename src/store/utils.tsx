@@ -76,7 +76,7 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
     return context.use(selector);
   };
 
-  const useNewStore = (initialState?: InitialState<T>): [ShallowComponent, StoreSelector] => {
+  const useNewStore = (initialState?: InitialState<T>, deps: any[] = []): [ShallowComponent, StoreSelector] => {
     // Ensure that this store is not created yet in this place
     const context = useContext(StoreContext);
     if (context?.use) {
@@ -84,13 +84,13 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
     }
 
     // Build the store
-    const store = useMemo(() => createStore(initialState), []);
+    const store = useMemo(() => createStore(initialState), deps);
     const use: StoreSelector = selector => store(selector, shallow);
     const Provider: ShallowComponent = useMemo(
       () =>
         ({children}) =>
           <StoreContext.Provider value={{use}}>{children}</StoreContext.Provider>,
-      []
+      deps
     );
 
     return [Provider, store];
