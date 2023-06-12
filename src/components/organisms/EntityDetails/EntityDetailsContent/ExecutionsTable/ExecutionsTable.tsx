@@ -72,7 +72,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
       ]}
       onRow={(record: any) => ({
         onClick: () => {
-          onRowSelect(record, true);
+          onRowSelect(record);
         },
       })}
       rowSelection={{...rowSelection}}
