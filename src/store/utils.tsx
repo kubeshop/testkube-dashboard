@@ -10,6 +10,8 @@ type OpaqueCustomizable = {readonly [customizableSymbol]: unique symbol};
 export type Customizable<T> = T & OpaqueCustomizable;
 type UnwrapCustomizable<T> = T extends Customizable<infer U> ? U : never;
 
+export const makeCustomizable = <T,>(value: T) => value as Customizable<T>;
+
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
   : True;
