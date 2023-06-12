@@ -4,6 +4,7 @@ import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 
+// Customizable<Function> allows to store a function that could be replaced
 declare const customizableSymbol: unique symbol;
 type OpaqueCustomizable = {readonly [customizableSymbol]: unique symbol};
 export type Customizable<T> = T & OpaqueCustomizable;
