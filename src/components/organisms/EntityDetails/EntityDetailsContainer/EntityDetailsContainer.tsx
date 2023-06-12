@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {useAsync} from 'react-use';
+import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
 import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
@@ -39,16 +39,15 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   } = props;
 
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {navigate} = useContext(DashboardContext);
   const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
   const wsRoot = useWsEndpoint();
 
-  const params = useParams();
-  const {id, execId = ''} = params;
+  const {id, execId} = useParams();
 
   const [daysFilterValue, setDaysFilterValue] = useState(defaultDaysFilterValue);
   const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
-  const [selectedRow, selectRow] = useState();
+  const [selectedRow, selectRow] = useState<string | undefined>();
   const [executionsList, setExecutionsList] = useStateCallback<any>(null);
   const [metricsState, setMetricsState] = useState<Metrics | undefined>(undefined);
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
@@ -208,18 +207,13 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const defaultUrl = `/${entity}/executions/${entityDetails?.name}`;
 
   const onRowSelect = useCallback(
-    (dataItem: any, isManual?: boolean) => {
-      selectRow(dataItem);
-
-      if (isManual) {
-        navigate(`${defaultUrl}/execution/${dataItem?.id}`);
-      }
+    (dataItem: any) => {
+      navigate(`${defaultUrl}/execution/${dataItem?.id}`);
     },
-    [selectRow, navigate, defaultUrl]
+    [navigate, defaultUrl]
   );
 
   const unselectRow = useCallback(() => {
-    selectRow(undefined);
     navigate(defaultUrl);
   }, [selectRow, navigate, defaultUrl]);
 
@@ -228,36 +222,37 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   }, [metrics]);
 
   useEffect(() => {
-    if (params.execId && executionsList?.results.length > 0) {
+    if (execId && executionsList?.results.length > 0) {
       const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
       const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
-      indexOfDisplayedExecution ? setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10)) : setDaysFilterValue(0);
+      if (indexOfDisplayedExecution) {
+        setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10));
+      } else {
+        setDaysFilterValue(0);
+      }
     }
-  }, [params, executionsList]);
+  }, [execId, executionsList]);
 
   useEffect(() => {
-    if (params.execId) {
-      onRowSelect({id: execId}, false);
+    if (execId) {
+      selectRow(execId);
     }
-  }, [params]);
+  }, [execId]);
 
   useEffect(() => {
     safeRefetch(refetch);
-
-    const interval = setInterval(() => {
-      safeRefetch(refetchMetrics);
-    }, 2000);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, [entity, daysFilterValue]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setFirstTimeLoading(false);
-    }, 2000);
+  useInterval(() => safeRefetch(refetchMetrics), 2000);
 
+  useEffect(() => {
+    setFirstTimeLoading(true);
+  }, [id]);
+
+  useEffect(() => {
+    if (executions) {
+      setFirstTimeLoading(false);
+    }
     setExecutionsList(executions);
   }, [executions]);
 
@@ -291,7 +286,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     abortExecution,
     abortAllExecutions,
     isFirstTimeLoading,
-    setFirstTimeLoading,
   };
 
   return (

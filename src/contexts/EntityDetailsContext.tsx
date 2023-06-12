@@ -7,23 +7,22 @@ const EntityDetailsContext = createContext<{
   executionsList: any;
   entityDetails: any;
   entity: Entity;
-  onRowSelect: (dataItem: any, isManual?: boolean) => void;
-  selectRow: React.Dispatch<React.SetStateAction<undefined>>;
+  onRowSelect: (dataItem: any) => void;
+  selectRow: (id?: string) => void;
   isRowSelected: boolean;
   selectedRow?: any;
   unselectRow: () => void;
   id?: string;
   execId?: string;
   defaultStackRoute: string;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentPage: (page: number) => void;
   currentPage: number;
   metrics?: Metrics;
   daysFilterValue: number;
-  setDaysFilterValue: React.Dispatch<React.SetStateAction<number>>;
+  setDaysFilterValue: (days: number) => void;
   abortExecution: any;
   abortAllExecutions: any;
   isFirstTimeLoading: boolean;
-  setFirstTimeLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
   executionsList: {},
   entityDetails: {},
@@ -44,7 +43,6 @@ const EntityDetailsContext = createContext<{
   abortExecution: () => {},
   abortAllExecutions: () => {},
   isFirstTimeLoading: true,
-  setFirstTimeLoading: () => {},
 });
 
 export default EntityDetailsContext;
