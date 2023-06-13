@@ -57,7 +57,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       openExecutionDetails: (dataItem: any) => {
         navigate(`/${entity}/executions/${id}/execution/${dataItem?.id}`);
       },
-      unselectRow: () => {
+      closeExecutionDetails: () => {
         navigate(`/${entity}/executions/${id}`);
       },
     },

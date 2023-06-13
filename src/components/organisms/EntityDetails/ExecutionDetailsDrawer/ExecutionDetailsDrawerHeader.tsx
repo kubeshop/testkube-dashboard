@@ -28,8 +28,8 @@ type ExecutionDetailsDrawerHeaderProps = {
 };
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
-  const {unselectRow, entity, execId, abortExecution} = useEntityDetailsStore(x => ({
-    unselectRow: x.unselectRow,
+  const {closeExecutionDetails, entity, execId, abortExecution} = useEntityDetailsStore(x => ({
+    closeExecutionDetails: x.closeExecutionDetails,
     entity: x.entity,
     execId: x.execId,
     abortExecution: x.abortExecution,
@@ -90,7 +90,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
             {renderedExecutionActions && renderedExecutionActions.length && mayManageExecution ? (
               <DotsDropdown items={renderedExecutionActions} />
             ) : null}
-            <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
+            <CloseOutlined onClick={closeExecutionDetails} style={{color: Colors.slate400, fontSize: 20}} />
           </ItemColumn>
         </ItemRow>
         <ItemRow $flex={1}>
@@ -101,7 +101,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
               <RunningContext
                 type={runningContext?.type}
                 context={runningContext?.context}
-                unselectRow={unselectRow}
+                closeExecutionDetails={closeExecutionDetails}
                 entity={entity}
               />
             </Text>

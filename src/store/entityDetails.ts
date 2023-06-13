@@ -24,7 +24,7 @@ export interface EntityDetailsSlice {
   setDetails: Private<(details: any) => void>;
   setExecId: Private<(execId?: string) => void>;
   openExecutionDetails: Customizable<(dataItem: any) => void>;
-  unselectRow: Customizable<() => void>; // TODO: Use "openExecutionDetails" instead?
+  closeExecutionDetails: Customizable<() => void>;
   abortExecution: Customizable<any>; // TODO: Add types
   abortAllExecutions: Customizable<any>; // TODO: Add types
 }
@@ -43,7 +43,7 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   setCurrentPage: currentPage => set({currentPage}),
   setDaysFilterValue: daysFilterValue => set({daysFilterValue}),
   openExecutionDetails: makeCustomizable(() => {}),
-  unselectRow: makeCustomizable(() => {}),
+  closeExecutionDetails: makeCustomizable(() => {}),
   abortExecution: makeCustomizable(() => {}),
   abortAllExecutions: makeCustomizable(() => {}),
   setDetails: makePrivate(details => set({details})),

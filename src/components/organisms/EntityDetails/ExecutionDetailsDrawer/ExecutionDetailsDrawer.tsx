@@ -79,8 +79,8 @@ const loaderBodyStyle = {
 };
 
 const ExecutionDetailsDrawer: React.FC = () => {
-  const {unselectRow, entity, execId} = useEntityDetailsStore(x => ({
-    unselectRow: x.unselectRow,
+  const {closeExecutionDetails, entity, execId} = useEntityDetailsStore(x => ({
+    closeExecutionDetails: x.closeExecutionDetails,
     entity: x.entity,
     execId: x.execId,
   }));
@@ -138,7 +138,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
           placement="right"
           open={Boolean(execId)}
           width={drawerWidth}
-          onClose={unselectRow}
+          onClose={closeExecutionDetails}
         >
           <ExecutionDetailsDrawerWrapper
             $isRowSelected={Boolean(execId)}
@@ -155,7 +155,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
           closable={false}
           open={Boolean(execId)}
           width={drawerWidth}
-          onClose={unselectRow}
+          onClose={closeExecutionDetails}
         >
           <LoadingOutlined />
         </Drawer>
