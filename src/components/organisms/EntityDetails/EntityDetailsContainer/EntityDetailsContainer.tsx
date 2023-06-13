@@ -63,7 +63,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
         navigate(`/${entity}/executions/${id}`);
       },
     },
-    [entity, id, execId, defaultStackRoute, navigate, useAbortExecution, useAbortAllExecutions]
+    [entity, id, defaultStackRoute, navigate, useAbortExecution, useAbortAllExecutions]
   );
 
   const {
