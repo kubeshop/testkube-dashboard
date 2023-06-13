@@ -18,11 +18,20 @@ type CustomizableObject<T> = UnmarkObject<
 >;
 export const makeCustomizable = <T,>(value: T) => value as Customizable<T>;
 
+// Private<T> makes the value not available for children
+declare const privateSymbol: unique symbol;
+export type Private<T> = Mark<T, typeof privateSymbol>;
+type IsPrivate<T> = HasMark<T, typeof privateSymbol>;
+type PublicObject<T> = Pick<T, {[K in keyof T]: T[K] extends IsPrivate<T[K]> ? never : K}[keyof T]>;
+
+export const makePrivate = <T,>(value: T) => value as Private<T>;
+
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
   : True;
 
 type InitialState<T> = Partial<UnmarkAllObject<CustomizableObject<T>>>;
+type PublicState<T> = UnmarkAllObject<PublicObject<T>>;
 type StoreFactory<T> = (initialState?: InitialState<T>) => UseBoundStore<StoreApi<T>>;
 
 export const createStoreFactory =
@@ -66,10 +75,11 @@ export const createStoreBuilder = (name: string) => new StoreFactoryBuilder(name
 
 export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   type ShallowComponent = FC<PropsWithChildren<{}>>;
-  type StoreSelector = <U>(selector: (state: UnwrapState<T>) => U) => U;
+  type StoreSelector = <U>(selector: (state: UnmarkAllObject<T>) => U) => U;
+  type PublicStoreSelector = <U>(selector: (state: PublicState<T>) => U) => U;
   const StoreContext = createContext<{use?: StoreSelector}>(undefined!);
 
-  const useStore: StoreSelector = selector => {
+  const useStore: PublicStoreSelector = selector => {
     const context = useContext(StoreContext);
     if (!context?.use) {
       throw new Error('Store was not injected.');
