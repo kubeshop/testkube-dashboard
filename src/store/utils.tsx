@@ -8,7 +8,7 @@ type Fn = (...args: any) => any;
 
 // Customizable<Function> allows to store a function that could be replaced
 declare const customizableSymbol: unique symbol;
-export type Customizable<T> = {readonly [customizableSymbol]: T};
+export type Customizable<T> = T & {readonly [customizableSymbol]: unique symbol};
 type UnwrapCustomizable<T> = T extends Customizable<infer U> ? U : T;
 type IsCustomizable<T> = T extends Customizable<T> ? T : T extends Fn ? never : T;
 type CustomizableObject<T> = Pick<T, {[K in keyof T]: T[K] extends IsCustomizable<T[K]> ? K : never}[keyof T]>;
