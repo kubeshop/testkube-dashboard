@@ -52,7 +52,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       id,
       execId,
       defaultStackRoute,
-      selectedRow: execId,
       abortExecution,
       abortAllExecutions,
       openExecutionDetails: (dataItem: any) => {
@@ -74,8 +73,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setExecutions,
     isFirstTimeLoading,
     setIsFirstTimeLoading: setFirstTimeLoading,
-    selectedRow,
-    selectRow,
     daysFilterValue,
     setDaysFilterValue,
     setDetails,
@@ -89,8 +86,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setExecutions: x.setExecutions,
     isFirstTimeLoading: x.isFirstTimeLoading,
     setIsFirstTimeLoading: x.setIsFirstTimeLoading,
-    selectedRow: x.selectedRow,
-    selectRow: x.selectRow,
     daysFilterValue: x.daysFilterValue,
     setDaysFilterValue: x.setDaysFilterValue,
     setDetails: x.setDetails,
@@ -242,12 +237,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       }
     }
   }, [execId, executions]);
-
-  useEffect(() => {
-    if (execId) {
-      selectRow(execId);
-    }
-  }, [execId]);
 
   useEffect(() => {
     safeRefetch(refetch);

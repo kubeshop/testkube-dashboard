@@ -19,26 +19,26 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
 
   const {
     executions,
-    selectedRow,
     currentPage,
     setCurrentPage,
     openExecutionDetails,
     id,
+    execId,
     abortExecution,
     isFirstTimeLoading,
   } = useEntityDetailsStore(x => ({
     executions: x.executions,
-    selectedRow: x.selectedRow,
     currentPage: x.currentPage,
     setCurrentPage: x.setCurrentPage,
     openExecutionDetails: x.openExecutionDetails,
     id: x.id,
+    execId: x.execId,
     abortExecution: x.abortExecution,
     isFirstTimeLoading: x.isFirstTimeLoading,
   }));
 
   const rowSelection: TableRowSelection<any> = {
-    selectedRowKeys: selectedRow ? [selectedRow] : [],
+    selectedRowKeys: execId ? [execId] : [],
     columnWidth: 0,
     renderCell: () => null,
   };

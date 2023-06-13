@@ -16,8 +16,6 @@ export interface EntityDetailsSlice {
   metrics?: Metrics;
   daysFilterValue: number;
   currentPage: number;
-  selectedRow?: string; // TODO: Use "execId" instead?
-  selectRow: (id?: string) => void;
   setCurrentPage: (page: number) => void;
   setDaysFilterValue: (days: number) => void;
   setMetrics: Private<(metrics?: Metrics) => void>;
@@ -42,9 +40,7 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   metrics: undefined,
   daysFilterValue: 7,
   currentPage: 1,
-  selectedRow: undefined,
   setCurrentPage: currentPage => set({currentPage}),
-  selectRow: (selectedRow?) => set({selectedRow}),
   setDaysFilterValue: daysFilterValue => set({daysFilterValue}),
   openExecutionDetails: makeCustomizable(() => {}),
   unselectRow: makeCustomizable(() => {}),
