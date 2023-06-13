@@ -16,7 +16,6 @@ export interface EntityDetailsSlice {
   metrics?: Metrics;
   daysFilterValue: number;
   currentPage: number;
-  isRowSelected: boolean; // TODO: Use "selectedRow" instead
   selectedRow?: string; // TODO: Use "execId" instead?
   selectRow: (id?: string) => void;
   setCurrentPage: (page: number) => void;
@@ -26,7 +25,6 @@ export interface EntityDetailsSlice {
   setIsFirstTimeLoading: Private<(value: boolean) => void>;
   setDetails: Private<(details: any) => void>;
   setExecId: Private<(execId?: string) => void>;
-  setIsRowSelected: Private<(isRowSelected: boolean) => void>; // TODO: Use "selectRow" instead?
   openExecutionDetails: Customizable<(dataItem: any) => void>;
   unselectRow: Customizable<() => void>; // TODO: Use "openExecutionDetails" instead?
   abortExecution: Customizable<any>; // TODO: Add types
@@ -44,7 +42,6 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   metrics: undefined,
   daysFilterValue: 7,
   currentPage: 1,
-  isRowSelected: false,
   selectedRow: undefined,
   setCurrentPage: currentPage => set({currentPage}),
   selectRow: (selectedRow?) => set({selectedRow}),
@@ -58,7 +55,6 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   setMetrics: makePrivate(metrics => set({metrics})),
   setExecutions: makePrivate(executions => set({executions})),
   setIsFirstTimeLoading: makePrivate(isFirstTimeLoading => set({isFirstTimeLoading})),
-  setIsRowSelected: makePrivate(isRowSelected => set({isRowSelected})),
 });
 
 const createEntityDetailsStore = createStoreFactory('entityDetails', createEntityDetailsSlice);

@@ -79,8 +79,7 @@ const loaderBodyStyle = {
 };
 
 const ExecutionDetailsDrawer: React.FC = () => {
-  const {isRowSelected, selectedRow, unselectRow, entity, execId} = useEntityDetailsStore(x => ({
-    isRowSelected: x.isRowSelected,
+  const {selectedRow, unselectRow, entity, execId} = useEntityDetailsStore(x => ({
     selectedRow: x.selectedRow,
     unselectRow: x.unselectRow,
     entity: x.entity,
@@ -138,12 +137,12 @@ const ExecutionDetailsDrawer: React.FC = () => {
           mask
           maskClosable
           placement="right"
-          open={isRowSelected}
+          open={Boolean(selectedRow)}
           width={drawerWidth}
           onClose={unselectRow}
         >
           <ExecutionDetailsDrawerWrapper
-            $isRowSelected={isRowSelected}
+            $isRowSelected={Boolean(selectedRow)}
             transition={{type: 'just'}}
             drawerWidth={drawerWidth}
           >
@@ -155,7 +154,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
           bodyStyle={loaderBodyStyle}
           headerStyle={headerStyle}
           closable={false}
-          open={isRowSelected}
+          open={Boolean(selectedRow)}
           width={drawerWidth}
           onClose={unselectRow}
         >

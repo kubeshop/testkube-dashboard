@@ -52,7 +52,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       id,
       execId,
       defaultStackRoute,
-      isRowSelected: Boolean(execId),
       selectedRow: execId,
       abortExecution,
       abortAllExecutions,
@@ -77,7 +76,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setIsFirstTimeLoading: setFirstTimeLoading,
     selectedRow,
     selectRow,
-    setIsRowSelected,
     daysFilterValue,
     setDaysFilterValue,
     setDetails,
@@ -97,7 +95,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setDaysFilterValue: x.setDaysFilterValue,
     setDetails: x.setDetails,
     setExecId: x.setExecId,
-    setIsRowSelected: x.setIsRowSelected,
   }));
 
   const {isClusterAvailable} = useContext(MainContext);
@@ -286,10 +283,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   useEffect(() => {
     setMetricsState(metrics);
   }, [usePrivateStore, metrics]);
-
-  useEffect(() => {
-    setIsRowSelected(Boolean(selectedRow));
-  }, [usePrivateStore, selectedRow]);
 
   return (
     <StoreProvider>
