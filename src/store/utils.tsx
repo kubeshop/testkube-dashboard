@@ -4,14 +4,18 @@ import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 
+import {HasMark, Mark, UnmarkAll, UnmarkAllObject, UnmarkObject} from '@utils/typeMarkers';
+
 type Fn = (...args: any) => any;
 
 // Customizable<Function> allows to store a function that could be replaced
 declare const customizableSymbol: unique symbol;
-export type Customizable<T> = T & {readonly [customizableSymbol]: unique symbol};
-type UnwrapCustomizable<T> = T extends Customizable<infer U> ? U : T;
-type IsCustomizable<T> = T extends Customizable<T> ? T : T extends Fn ? never : T;
-type CustomizableObject<T> = Pick<T, {[K in keyof T]: T[K] extends IsCustomizable<T[K]> ? K : never}[keyof T]>;
+export type Customizable<T> = Mark<T, typeof customizableSymbol>;
+type IsCustomizable<T> = T extends HasMark<T, typeof customizableSymbol> ? T : UnmarkAll<T> extends Fn ? never : T;
+type CustomizableObject<T> = UnmarkObject<
+  Pick<T, {[K in keyof T]: T[K] extends IsCustomizable<T[K]> ? K : never}[keyof T]>,
+  typeof customizableSymbol
+>;
 
 export const makeCustomizable = <T,>(value: T) => value as Customizable<T>;
 
@@ -19,8 +23,7 @@ type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T ex
   ? False
   : True;
 
-type UnwrapState<T> = {[K in keyof T]: UnwrapCustomizable<T[K]>};
-type InitialState<T> = Partial<UnwrapState<CustomizableObject<T>>>;
+type InitialState<T> = Partial<UnmarkAllObject<CustomizableObject<T>>>;
 type StoreFactory<T> = (initialState?: InitialState<T>) => UseBoundStore<StoreApi<T>>;
 
 export const createStoreFactory =
