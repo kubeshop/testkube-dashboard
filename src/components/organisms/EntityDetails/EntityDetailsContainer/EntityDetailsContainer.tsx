@@ -65,14 +65,12 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   );
 
   const {
-    setMetrics: setMetricsState,
-    metrics: metricsState,
-    currentPage,
+    metrics,
+    setMetrics,
     setCurrentPage,
     executions,
     setExecutions,
-    isFirstTimeLoading,
-    setIsFirstTimeLoading: setFirstTimeLoading,
+    setIsFirstTimeLoading,
     daysFilterValue,
     setDaysFilterValue,
     setDetails,
@@ -80,11 +78,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   } = usePrivateStore(x => ({
     metrics: x.metrics,
     setMetrics: x.setMetrics,
-    currentPage: x.currentPage,
     setCurrentPage: x.setCurrentPage,
     executions: x.executions,
     setExecutions: x.setExecutions,
-    isFirstTimeLoading: x.isFirstTimeLoading,
     setIsFirstTimeLoading: x.setIsFirstTimeLoading,
     daysFilterValue: x.daysFilterValue,
     setDaysFilterValue: x.setDaysFilterValue,
@@ -105,7 +101,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     pollingInterval: PollingIntervals.everyTwoSeconds,
     skip: !isClusterAvailable,
   });
-  const {data: metrics, refetch: refetchMetrics} = useGetMetrics({
+  const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics({
     id,
     last: daysFilterValue,
     skip: !isClusterAvailable,
@@ -127,9 +123,9 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               status: wsData.testExecution.executionResult.status,
             };
 
-            setMetricsState({
-              ...metrics,
-              executions: [metricToPush, ...((metrics.executions && metrics.executions) || [])],
+            setMetrics({
+              ...metrics!,
+              executions: [metricToPush, ...(metrics?.executions || [])],
             });
 
             setExecutions({
@@ -245,12 +241,12 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   useInterval(() => safeRefetch(refetchMetrics), 2000);
 
   useEffect(() => {
-    setFirstTimeLoading(true);
+    setIsFirstTimeLoading(true);
   }, [id]);
 
   useEffect(() => {
     if (rawExecutions) {
-      setFirstTimeLoading(false);
+      setIsFirstTimeLoading(false);
     }
     setExecutions(rawExecutions);
   }, [usePrivateStore, rawExecutions]);
@@ -270,8 +266,8 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   }, [usePrivateStore, execId]);
 
   useEffect(() => {
-    setMetricsState(metrics);
-  }, [usePrivateStore, metrics]);
+    setMetrics(rawMetrics);
+  }, [usePrivateStore, rawMetrics]);
 
   return (
     <StoreProvider>
