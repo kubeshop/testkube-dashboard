@@ -1,12 +1,14 @@
 import React, {useContext} from 'react';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
 import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -17,7 +19,10 @@ type EmptyExecutionsListContentProps = {
 const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = props => {
   const {triggerRun} = props;
 
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+    entity: x.entity,
+    entityDetails: x.entityDetails,
+  }));
   const {dispatch} = useContext(MainContext);
   const mayRun = usePermission(Permissions.runEntity);
 

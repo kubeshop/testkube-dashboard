@@ -1,4 +1,4 @@
-import {useContext, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 
 import {WarningOutlined} from '@ant-design/icons';
 import {Form, Select, Tooltip} from 'antd';
@@ -6,13 +6,13 @@ import {Form, Select, Tooltip} from 'antd';
 import parser from 'cron-parser';
 import {capitalize} from 'lodash';
 
-import {EntityDetailsContext} from '@contexts';
-
 import {FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 import Fonts from '@styles/Fonts';
@@ -27,7 +27,10 @@ import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
 import {custom, quickOptions} from './utils';
 
 const Schedule: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+    entity: x.entity,
+    entityDetails: x.entityDetails,
+  }));
   const enabled = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();

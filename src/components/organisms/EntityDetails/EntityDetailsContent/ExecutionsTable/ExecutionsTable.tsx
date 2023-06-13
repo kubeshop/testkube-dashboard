@@ -1,11 +1,11 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useCallback} from 'react';
 
 import {Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
-import {EntityDetailsContext} from '@contexts';
-
 import {Skeleton} from '@custom-antd';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
@@ -26,10 +26,19 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
     id,
     abortExecution,
     isFirstTimeLoading,
-  } = useContext(EntityDetailsContext);
+  } = useEntityDetailsStore(x => ({
+    executionsList: x.executionsList,
+    selectedRow: x.selectedRow,
+    currentPage: x.currentPage,
+    setCurrentPage: x.setCurrentPage,
+    onRowSelect: x.onRowSelect,
+    id: x.id,
+    abortExecution: x.abortExecution,
+    isFirstTimeLoading: x.isFirstTimeLoading,
+  }));
 
   const rowSelection: TableRowSelection<any> = {
-    selectedRowKeys: selectedRow ? [selectedRow.id] : [],
+    selectedRowKeys: selectedRow ? [selectedRow] : [],
     columnWidth: 0,
     renderCell: () => null,
   };

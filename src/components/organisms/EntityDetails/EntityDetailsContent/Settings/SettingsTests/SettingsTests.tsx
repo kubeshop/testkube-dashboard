@@ -7,7 +7,7 @@ import {nanoid} from '@reduxjs/toolkit';
 
 import {ExecutorIcon, ExternalLink} from '@atoms';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {Text, Title} from '@custom-antd';
 
@@ -27,6 +27,8 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
 
+import {useEntityDetailsStore} from '@store/entityDetails';
+
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {convertTestSuiteV2ToV3, isTestSuiteV2} from '@utils/testSuites';
@@ -44,7 +46,9 @@ interface LocalStep extends TestSuiteStep {
 
 const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {entityDetails: rawEntityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
+  const {entityDetails: rawEntityDetails} = useEntityDetailsStore(x => ({
+    entityDetails: x.entityDetails as TestSuite,
+  }));
 
   const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawEntityDetails));
   const entityDetails = useMemo(

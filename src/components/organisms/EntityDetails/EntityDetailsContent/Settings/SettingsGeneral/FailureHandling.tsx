@@ -1,8 +1,4 @@
-import {useContext} from 'react';
-
 import {Form, Popover} from 'antd';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {Checkbox, FormItem, Text} from '@custom-antd';
 
@@ -11,6 +7,8 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -29,7 +27,7 @@ type FailureHandlingFormValues = {
 };
 
 const FailureHandling: React.FC = () => {
-  const {entityDetails} = useContext(EntityDetailsContext);
+  const {entityDetails} = useEntityDetailsStore(x => ({entityDetails: x.entityDetails}));
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<FailureHandlingFormValues>();

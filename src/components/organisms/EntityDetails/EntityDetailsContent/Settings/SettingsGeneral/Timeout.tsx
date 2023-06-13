@@ -1,10 +1,6 @@
-import {useContext} from 'react';
-
 import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {FormItem, FullWidthSpace, Text} from '@custom-antd';
 
@@ -13,6 +9,8 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {digits} from '@utils/form';
@@ -23,7 +21,7 @@ type TimeoutForm = {
 };
 
 const Timeout: React.FC = () => {
-  const {entityDetails} = useContext(EntityDetailsContext);
+  const {entityDetails} = useEntityDetailsStore(x => ({entityDetails: x.entityDetails}));
   const {executionRequest, name} = entityDetails;
 
   const mayEdit = usePermission(Permissions.editEntity);

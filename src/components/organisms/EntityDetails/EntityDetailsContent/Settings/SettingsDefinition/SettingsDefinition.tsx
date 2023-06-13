@@ -1,8 +1,6 @@
-import {useContext} from 'react';
-
-import {EntityDetailsContext} from '@contexts';
-
 import {Definition} from '@molecules';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
@@ -10,7 +8,10 @@ import {testkubeCRDBases} from '@utils/externalLinks';
 import {settingsDefinitionData} from './utils';
 
 const SettingsDefinition = () => {
-  const {entityDetails, entity} = useContext(EntityDetailsContext);
+  const {entityDetails, entity} = useEntityDetailsStore(x => ({
+    entityDetails: x.entityDetails,
+    entity: x.entity,
+  }));
 
   const sectionData = settingsDefinitionData[entity];
   const config =

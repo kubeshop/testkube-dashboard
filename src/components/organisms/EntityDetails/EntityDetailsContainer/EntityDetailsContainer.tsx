@@ -1,15 +1,14 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
-import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import useExecutorIcon from '@hooks/useExecutorIcon';
-import useStateCallback from '@hooks/useStateCallback';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
-import {ExecutionMetrics, Metrics} from '@models/metrics';
+import {ExecutionMetrics} from '@models/metrics';
 import {Test} from '@models/test';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from '@models/websocket';
@@ -18,6 +17,8 @@ import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
+
+import {initializeEntityDetailsStore} from '@store/entityDetails';
 
 import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
@@ -38,19 +39,71 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     useAbortAllExecutions,
   } = props;
 
-  const {isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
-  const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
-  const wsRoot = useWsEndpoint();
-
   const {id, execId} = useParams();
 
-  const [daysFilterValue, setDaysFilterValue] = useState(defaultDaysFilterValue);
-  const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
-  const [selectedRow, selectRow] = useState<string | undefined>();
-  const [executionsList, setExecutionsList] = useStateCallback<any>(null);
-  const [metricsState, setMetricsState] = useState<Metrics | undefined>(undefined);
-  const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
+  const {navigate} = useContext(DashboardContext);
+
+  const [abortExecution] = useAbortExecution();
+  const [abortAllExecutions] = useAbortAllExecutions();
+
+  const [StoreProvider, usePrivateStore] = initializeEntityDetailsStore(
+    {
+      entity,
+      id,
+      execId,
+      defaultStackRoute,
+      isRowSelected: Boolean(execId),
+      selectedRow: execId,
+      abortExecution,
+      abortAllExecutions,
+      onRowSelect: (dataItem: any) => {
+        navigate(`/${entity}/executions/${id}/execution/${dataItem?.id}`);
+      },
+      unselectRow: () => {
+        navigate(`/${entity}/executions/${id}`);
+      },
+    },
+    [entity, id, execId, defaultStackRoute, navigate, useAbortExecution, useAbortAllExecutions]
+  );
+
+  const {
+    setMetrics: setMetricsState,
+    metrics: metricsState,
+    currentPage,
+    setCurrentPage,
+    executionsList,
+    setExecutionsList,
+    isFirstTimeLoading,
+    setIsFirstTimeLoading: setFirstTimeLoading,
+    selectedRow,
+    selectRow,
+    setIsRowSelected,
+    daysFilterValue,
+    setDaysFilterValue,
+    entityDetails: entityDetailsWithIcon,
+    setEntityDetails,
+    setExecId,
+  } = usePrivateStore(x => ({
+    metrics: x.metrics,
+    setMetrics: x.setMetrics,
+    currentPage: x.currentPage,
+    setCurrentPage: x.setCurrentPage,
+    executionsList: x.executionsList,
+    setExecutionsList: x.setExecutionsList,
+    isFirstTimeLoading: x.isFirstTimeLoading,
+    setIsFirstTimeLoading: x.setIsFirstTimeLoading,
+    selectedRow: x.selectedRow,
+    selectRow: x.selectRow,
+    daysFilterValue: x.daysFilterValue,
+    setDaysFilterValue: x.setDaysFilterValue,
+    entityDetails: x.entityDetails,
+    setEntityDetails: x.setEntityDetails,
+    setExecId: x.setExecId,
+    setIsRowSelected: x.setIsRowSelected,
+  }));
+
+  const {isClusterAvailable} = useContext(MainContext);
+  const wsRoot = useWsEndpoint();
 
   const executors = useAppSelector(selectExecutors);
 
@@ -67,8 +120,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     last: daysFilterValue,
     skip: !isClusterAvailable,
   });
-  const [abortExecution] = useAbortExecution();
-  const [abortAllExecutions] = useAbortAllExecutions();
 
   const onWebSocketData = (wsData: WSDataWithTestExecution | WSDataWithTestSuiteExecution) => {
     try {
@@ -86,21 +137,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               status: wsData.testExecution.executionResult.status,
             };
 
-            setMetricsState(prev => {
-              if (prev) {
-                return {...prev, executions: [metricToPush, ...((prev.executions && prev.executions) || [])]};
-              }
+            setMetricsState({
+              ...metrics,
+              executions: [metricToPush, ...((metrics.executions && metrics.executions) || [])],
             });
 
-            setExecutionsList(
-              {
-                ...executionsList,
-                results: [adjustedExecution, ...executionsList.results],
-              },
-              () => {
-                safeRefetch(refetchMetrics);
-              }
-            );
+            setExecutionsList({
+              ...executionsList,
+              results: [adjustedExecution, ...executionsList.results],
+            });
+            safeRefetch(refetchMetrics);
           }
 
           if (wsData.type === WSEventType.END_TEST_SUCCESS && id === wsData.testExecution.testName) {
@@ -109,21 +155,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
             });
 
             if (targetIndex !== -1) {
-              setExecutionsList(
-                {
-                  ...executionsList,
-                  results: executionsList.results.map((item: Test, index: number) => {
-                    if (index === targetIndex) {
-                      return {...item, ...wsData.testExecution, status: wsData.testExecution.executionResult.status};
-                    }
-
-                    return item;
-                  }),
-                },
-                () => {
-                  safeRefetch(refetchMetrics);
-                }
-              );
+              setExecutionsList({
+                ...executionsList,
+                results: executionsList.results.map((item: Test, index: number) => {
+                  if (index === targetIndex) {
+                    return {...item, ...wsData.testExecution, status: wsData.testExecution.executionResult.status};
+                  }
+                  return item;
+                }),
+              });
+              safeRefetch(refetchMetrics);
             }
           }
         } else {
@@ -145,15 +186,11 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               status: wsData.testSuiteExecution.status,
             };
 
-            setExecutionsList(
-              {
-                ...executionsList,
-                results: [adjustedExecution, ...executionsList.results],
-              },
-              () => {
-                safeRefetch(refetchMetrics);
-              }
-            );
+            setExecutionsList({
+              ...executionsList,
+              results: [adjustedExecution, ...executionsList.results],
+            });
+            safeRefetch(refetchMetrics);
           }
 
           if (wsData.type === WSEventType.END_TEST_SUITE_SUCCESS && id === wsData.testSuiteExecution.testSuite.name) {
@@ -162,21 +199,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
             });
 
             if (targetIndex !== -1) {
-              setExecutionsList(
-                {
-                  ...executionsList,
-                  results: executionsList.results.map((item: TestSuiteExecution, index: number) => {
-                    if (index === targetIndex) {
-                      return {...item, ...wsData.testSuiteExecution, status: wsData.testSuiteExecution.status};
-                    }
-
-                    return item;
-                  }),
-                },
-                () => {
-                  safeRefetch(refetchMetrics);
-                }
-              );
+              setExecutionsList({
+                ...executionsList,
+                results: executionsList.results.map((item: TestSuiteExecution, index: number) => {
+                  if (index === targetIndex) {
+                    return {...item, ...wsData.testSuiteExecution, status: wsData.testSuiteExecution.status};
+                  }
+                  return item;
+                }),
+              });
+              safeRefetch(refetchMetrics);
             }
           }
         }
@@ -203,23 +235,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     },
     !tokenLoading
   );
-
-  const defaultUrl = `/${entity}/executions/${entityDetails?.name}`;
-
-  const onRowSelect = useCallback(
-    (dataItem: any) => {
-      navigate(`${defaultUrl}/execution/${dataItem?.id}`);
-    },
-    [navigate, defaultUrl]
-  );
-
-  const unselectRow = useCallback(() => {
-    navigate(defaultUrl);
-  }, [selectRow, navigate, defaultUrl]);
-
-  useEffect(() => {
-    setMetricsState(metrics);
-  }, [metrics]);
 
   useEffect(() => {
     if (execId && executionsList?.results.length > 0) {
@@ -254,47 +269,37 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       setFirstTimeLoading(false);
     }
     setExecutionsList(executions);
-  }, [executions]);
+  }, [usePrivateStore, executions]);
 
   const testIcon = useExecutorIcon(entityDetails);
 
-  const entityDetailsWithIcon = useMemo(
-    () => ({
+  // TODO: Create utility to sync local values with the Zustand store
+  useEffect(() => {
+    setEntityDetails({
       ...entityDetails,
       ...(testIcon ? {testIcon} : {}),
-    }),
-    [entityDetails, testIcon]
-  );
+    });
+  }, [usePrivateStore, entityDetails, testIcon]);
 
-  const entityDetailsContextValues = {
-    executionsList,
-    entityDetails: entityDetailsWithIcon,
-    entity,
-    onRowSelect,
-    isRowSelected: Boolean(selectedRow),
-    selectedRow,
-    selectRow,
-    unselectRow,
-    id,
-    execId,
-    defaultStackRoute,
-    setCurrentPage,
-    currentPage,
-    metrics: metricsState,
-    daysFilterValue,
-    setDaysFilterValue,
-    abortExecution,
-    abortAllExecutions,
-    isFirstTimeLoading,
-  };
+  useEffect(() => {
+    setExecId(execId);
+  }, [usePrivateStore, execId]);
+
+  useEffect(() => {
+    setMetricsState(metrics);
+  }, [usePrivateStore, metrics]);
+
+  useEffect(() => {
+    setIsRowSelected(Boolean(selectedRow));
+  }, [usePrivateStore, selectedRow]);
 
   return (
-    <EntityDetailsContext.Provider value={entityDetailsContextValues}>
+    <StoreProvider>
       <EntityDetailsWrapper>
         <EntityDetailsContent />
         <ExecutionDetailsDrawer />
       </EntityDetailsWrapper>
-    </EntityDetailsContext.Provider>
+    </StoreProvider>
   );
 };
 

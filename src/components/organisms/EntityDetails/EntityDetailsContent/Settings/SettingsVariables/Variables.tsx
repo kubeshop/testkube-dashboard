@@ -1,10 +1,8 @@
-import React, {useContext, useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import {Form} from 'antd';
 
 import {ExternalLink} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {Entity} from '@models/entity';
 import {VariableInForm} from '@models/variable';
@@ -12,6 +10,8 @@ import {VariableInForm} from '@models/variable';
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -30,7 +30,10 @@ type VariablesFormValues = {
 };
 
 const Variables: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+    entity: x.entity,
+    entityDetails: x.entityDetails,
+  }));
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();

@@ -1,12 +1,10 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useMemo} from 'react';
 
 import {CloseOutlined} from '@ant-design/icons';
 
 import {intervalToDuration} from 'date-fns';
 
 import {StatusIcon} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {Text} from '@custom-antd';
 
@@ -15,6 +13,8 @@ import useIsRunning from '@hooks/useIsRunning';
 import {DotsDropdown, RunningContext} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
@@ -28,7 +28,12 @@ type ExecutionDetailsDrawerHeaderProps = {
 };
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
-  const {unselectRow, entity, execId, abortExecution} = useContext(EntityDetailsContext);
+  const {unselectRow, entity, execId, abortExecution} = useEntityDetailsStore(x => ({
+    unselectRow: x.unselectRow,
+    entity: x.entity,
+    execId: x.execId,
+    abortExecution: x.abortExecution,
+  }));
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
   const {data} = props;

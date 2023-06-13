@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {LoadingOutlined} from '@ant-design/icons';
 import {Drawer} from 'antd';
 
-import {EntityDetailsContext, ExecutionDetailsContext, MainContext} from '@contexts';
+import {ExecutionDetailsContext, MainContext} from '@contexts';
 import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
 
 import useIsMobile from '@hooks/useIsMobile';
@@ -15,6 +15,8 @@ import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCal
 import {useGetTestSuiteExecutionByIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestExecutionByIdQuery} from '@services/tests';
 
+import {useEntityDetailsStore} from '@store/entityDetails';
+
 import {PollingIntervals} from '@utils/numbers';
 
 import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
@@ -22,7 +24,7 @@ import ExecutionDetailsDrawerHeader from './ExecutionDetailsDrawerHeader';
 
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityDetailsContext);
+  const {execId} = useEntityDetailsStore(x => ({execId: x.execId}));
   const {isClusterAvailable} = useContext(MainContext);
 
   // @ts-ignore
@@ -41,7 +43,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
 const TestExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityDetailsContext);
+  const {execId} = useEntityDetailsStore(x => ({execId: x.execId}));
   const {isClusterAvailable} = useContext(MainContext);
 
   // @ts-ignore
@@ -77,7 +79,13 @@ const loaderBodyStyle = {
 };
 
 const ExecutionDetailsDrawer: React.FC = () => {
-  const {isRowSelected, selectedRow, unselectRow, entity, execId} = useContext(EntityDetailsContext);
+  const {isRowSelected, selectedRow, unselectRow, entity, execId} = useEntityDetailsStore(x => ({
+    isRowSelected: x.isRowSelected,
+    selectedRow: x.selectedRow,
+    unselectRow: x.unselectRow,
+    entity: x.entity,
+    execId: x.execId,
+  }));
 
   const isMobile = useIsMobile();
 

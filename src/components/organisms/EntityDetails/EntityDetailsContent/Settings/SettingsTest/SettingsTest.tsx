@@ -1,12 +1,10 @@
-import {useContext} from 'react';
-
 import {Space} from 'antd';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {notificationCall} from '@molecules';
 
 import {useUpdateTestMutation} from '@services/tests';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -14,7 +12,7 @@ import Source from './Source';
 import TestType from './TestType';
 
 const SettingsTest: React.FC = () => {
-  const {entityDetails} = useContext(EntityDetailsContext);
+  const {entityDetails} = useEntityDetailsStore(x => ({entityDetails: x.entityDetails}));
 
   const [updateTestMutation] = useUpdateTestMutation();
 

@@ -1,10 +1,6 @@
-import {useContext} from 'react';
-
 import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
@@ -14,6 +10,8 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
+import {useEntityDetailsStore} from '@store/entityDetails';
+
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type PreRunFormValues = {
@@ -21,7 +19,10 @@ type PreRunFormValues = {
 };
 
 const PreRun: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+    entity: x.entity,
+    entityDetails: x.entityDetails,
+  }));
   const isPreRunAvailable = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<PreRunFormValues>();

@@ -1,10 +1,8 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {Button, FullWidthSpace, Text} from '@custom-antd';
 
@@ -15,6 +13,8 @@ import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
+
+import {useEntityDetailsStore} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
@@ -31,7 +31,7 @@ type ArgumentsFormValues = {
 const Arguments: React.FC = () => {
   const [form] = Form.useForm<ArgumentsFormValues>();
 
-  const {entityDetails} = useContext(EntityDetailsContext);
+  const {entityDetails} = useEntityDetailsStore(x => ({entityDetails: x.entityDetails}));
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateTest] = useUpdateTestMutation();

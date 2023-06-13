@@ -7,7 +7,7 @@ import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ExecutorIcon} from '@atoms';
 
-import {DashboardContext, EntityDetailsContext} from '@contexts';
+import {AnalyticsContext, DashboardContext} from '@contexts';
 
 import {Button, Text} from '@custom-antd';
 
@@ -32,6 +32,8 @@ import {selectSettingsTabConfig} from '@redux/reducers/configSlice';
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
 
+import {useEntityDetailsStore} from '@store/entityDetails';
+
 import Colors from '@styles/Colors';
 
 import {useTelemetry} from '@telemetry';
@@ -53,7 +55,15 @@ const filterOptions: OptionType[] = [
 
 const EntityDetailsContent: React.FC = () => {
   const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
-    useContext(EntityDetailsContext);
+    useEntityDetailsStore(x => ({
+      entity: x.entity,
+      entityDetails: x.entityDetails,
+      defaultStackRoute: x.defaultStackRoute,
+      metrics: x.metrics,
+      daysFilterValue: x.daysFilterValue,
+      setDaysFilterValue: x.setDaysFilterValue,
+      abortAllExecutions: x.abortAllExecutions,
+    }));
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);

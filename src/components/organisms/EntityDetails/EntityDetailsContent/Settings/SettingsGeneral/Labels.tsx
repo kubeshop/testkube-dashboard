@@ -1,12 +1,10 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 
 import {Form} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
 import {capitalize} from 'lodash';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {Option} from '@models/form';
 
@@ -15,12 +13,17 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {Permissions, usePermission} from '@permissions/base';
 
+import {useEntityDetailsStore} from '@store/entityDetails';
+
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {namingMap, updateRequestsMap} from '../utils';
 
 const Labels: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+    entity: x.entity,
+    entityDetails: x.entityDetails,
+  }));
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();
