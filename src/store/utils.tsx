@@ -95,13 +95,15 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
     }
 
     // Build the store
-    const store = useMemo(() => createStore(initialState), deps);
-    const use: StoreSelector = selector => store(selector as any, shallow);
+    const use: StoreSelector = useMemo(() => {
+      const store = createStore(initialState);
+      return selector => store(selector as any, shallow);
+    }, deps);
     const Provider: ShallowComponent = useMemo(
       () =>
         ({children}) =>
           <StoreContext.Provider value={{use}}>{children}</StoreContext.Provider>,
-      deps
+      [use]
     );
 
     return [Provider, use];
