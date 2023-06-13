@@ -16,7 +16,6 @@ type CustomizableObject<T> = UnmarkObject<
   Pick<T, {[K in keyof T]: T[K] extends IsCustomizable<T[K]> ? K : never}[keyof T]>,
   typeof customizableSymbol
 >;
-
 export const makeCustomizable = <T,>(value: T) => value as Customizable<T>;
 
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
