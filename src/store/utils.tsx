@@ -4,24 +4,23 @@ import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 
+type Fn = (...args: any) => any;
+
 // Customizable<Function> allows to store a function that could be replaced
 declare const customizableSymbol: unique symbol;
-type OpaqueCustomizable = {readonly [customizableSymbol]: unique symbol};
-export type Customizable<T> = T & OpaqueCustomizable;
-type UnwrapCustomizable<T> = T extends Customizable<infer U> ? U : never;
+export type Customizable<T> = {readonly [customizableSymbol]: T};
+type UnwrapCustomizable<T> = T extends Customizable<infer U> ? U : T;
+type IsCustomizable<T> = T extends Customizable<T> ? T : T extends Fn ? never : T;
+type CustomizableObject<T> = Pick<T, {[K in keyof T]: T[K] extends IsCustomizable<T[K]> ? K : never}[keyof T]>;
 
 export const makeCustomizable = <T,>(value: T) => value as Customizable<T>;
 
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
   : True;
-type ObjectWithCustomizable<T> = Pick<T, {[K in keyof T]: T[K] extends OpaqueCustomizable ? K : never}[keyof T]>;
-type ObjectWithoutFunctions<T> = Pick<T, {[K in keyof T]: T[K] extends (...args: any) => any ? never : K}[keyof T]>;
-type ObjectWithoutStaticFunctions<T> = ObjectWithoutFunctions<T> & {
-  [K in keyof ObjectWithCustomizable<T>]: UnwrapCustomizable<ObjectWithCustomizable<T>[K]>;
-};
 
-type InitialState<T> = Partial<ObjectWithoutStaticFunctions<T>>;
+type UnwrapState<T> = {[K in keyof T]: UnwrapCustomizable<T[K]>};
+type InitialState<T> = Partial<UnwrapState<CustomizableObject<T>>>;
 type StoreFactory<T> = (initialState?: InitialState<T>) => UseBoundStore<StoreApi<T>>;
 
 export const createStoreFactory =
@@ -65,7 +64,7 @@ export const createStoreBuilder = (name: string) => new StoreFactoryBuilder(name
 
 export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   type ShallowComponent = FC<PropsWithChildren<{}>>;
-  type StoreSelector = <U>(selector: (state: T) => U) => U;
+  type StoreSelector = <U>(selector: (state: UnwrapState<T>) => U) => U;
   const StoreContext = createContext<{use?: StoreSelector}>(undefined!);
 
   const useStore: StoreSelector = selector => {
@@ -85,7 +84,7 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
 
     // Build the store
     const store = useMemo(() => createStore(initialState), deps);
-    const use: StoreSelector = selector => store(selector, shallow);
+    const use: StoreSelector = selector => store(selector as any, shallow);
     const Provider: ShallowComponent = useMemo(
       () =>
         ({children}) =>
@@ -93,7 +92,7 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
       deps
     );
 
-    return [Provider, store];
+    return [Provider, use];
   };
 
   return {
