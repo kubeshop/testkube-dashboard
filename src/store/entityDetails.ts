@@ -14,18 +14,18 @@ export interface EntityDetailsSlice {
   executions: any;
   details: any;
   metrics?: Metrics;
-  daysFilterValue: number; // TODO: Rename
+  daysFilterValue: number;
   currentPage: number;
   isRowSelected: boolean; // TODO: Use "selectedRow" instead
   selectedRow?: string; // TODO: Use "execId" instead?
   selectRow: (id?: string) => void;
   setCurrentPage: (page: number) => void;
-  setDaysFilterValue: (days: number) => void; // TODO: Rename
+  setDaysFilterValue: (days: number) => void;
   setMetrics: Private<(metrics?: Metrics) => void>;
   setExecutions: Private<(executions: any) => void>;
   setIsFirstTimeLoading: Private<(value: boolean) => void>;
   setDetails: Private<(details: any) => void>;
-  setExecId: Private<(execId?: string) => void>; // TODO: Rename
+  setExecId: Private<(execId?: string) => void>;
   setIsRowSelected: Private<(isRowSelected: boolean) => void>; // TODO: Use "selectRow" instead?
   openExecutionDetails: Customizable<(dataItem: any) => void>;
   unselectRow: Customizable<() => void>; // TODO: Use "openExecutionDetails" instead?
