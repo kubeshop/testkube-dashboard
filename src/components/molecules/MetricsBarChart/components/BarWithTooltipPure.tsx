@@ -24,23 +24,23 @@ import type {BarConfig} from './BarWithTooltip';
 const tooltipYOffsetMargin = 5;
 
 type BarConfigPure = BarConfig & {
-  executionsList: any;
-  onRowSelect: (dataItem: any) => void;
+  executions: any;
+  openExecutionDetails: (dataItem: any) => void;
 };
 
 const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
-  const {width, height, color, tooltipData, hoverColor, date, chartHeight, executionsList, onRowSelect} = props;
+  const {width, height, color, tooltipData, hoverColor, date, chartHeight, executions, openExecutionDetails} = props;
   const {status, duration, name, startTime} = tooltipData;
 
   const onBarClicked = useCallback(() => {
-    if (executionsList?.results) {
-      const targetRecord = executionsList.results.find((item: any) => item.name === name);
+    if (executions?.results) {
+      const targetRecord = executions.results.find((item: any) => item.name === name);
 
       if (targetRecord) {
-        onRowSelect(targetRecord);
+        openExecutionDetails(targetRecord);
       }
     }
-  }, [executionsList?.results, onRowSelect, name]);
+  }, [executions?.results, openExecutionDetails, name]);
 
   const popoverContent = useMemo(
     () => (

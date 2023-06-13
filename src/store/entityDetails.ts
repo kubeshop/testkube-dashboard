@@ -11,8 +11,8 @@ export interface EntityDetailsSlice {
   id?: string;
   execId?: string;
   defaultStackRoute: string; // TODO: Think if it's needed
-  executionsList: any; // TODO: Rename to "executions"
-  entityDetails: any; // TODO: Rename to "details"
+  executions: any;
+  details: any;
   metrics?: Metrics;
   daysFilterValue: number; // TODO: Rename
   currentPage: number;
@@ -22,13 +22,13 @@ export interface EntityDetailsSlice {
   setCurrentPage: (page: number) => void;
   setDaysFilterValue: (days: number) => void; // TODO: Rename
   setMetrics: Private<(metrics?: Metrics) => void>;
-  setExecutionsList: Private<(executions: any) => void>; // TODO: Rename
+  setExecutions: Private<(executions: any) => void>;
   setIsFirstTimeLoading: Private<(value: boolean) => void>;
-  setEntityDetails: Private<(details: any) => void>; // TODO: Rename
+  setDetails: Private<(details: any) => void>;
   setExecId: Private<(execId?: string) => void>; // TODO: Rename
   setIsRowSelected: Private<(isRowSelected: boolean) => void>; // TODO: Use "selectRow" instead?
-  onRowSelect: Customizable<(dataItem: any) => void>; // TODO: Rename, as it's navigation
-  unselectRow: Customizable<() => void>; // TODO: Use "onRowSelect" instead?
+  openExecutionDetails: Customizable<(dataItem: any) => void>;
+  unselectRow: Customizable<() => void>; // TODO: Use "openExecutionDetails" instead?
   abortExecution: Customizable<any>; // TODO: Add types
   abortAllExecutions: Customizable<any>; // TODO: Add types
 }
@@ -39,8 +39,8 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   id: undefined,
   execId: undefined,
   defaultStackRoute: '/tests',
-  executionsList: undefined,
-  entityDetails: undefined,
+  executions: undefined,
+  details: undefined,
   metrics: undefined,
   daysFilterValue: 7,
   currentPage: 1,
@@ -49,14 +49,14 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   setCurrentPage: currentPage => set({currentPage}),
   selectRow: (selectedRow?) => set({selectedRow}),
   setDaysFilterValue: daysFilterValue => set({daysFilterValue}),
-  onRowSelect: makeCustomizable(() => {}),
+  openExecutionDetails: makeCustomizable(() => {}),
   unselectRow: makeCustomizable(() => {}),
   abortExecution: makeCustomizable(() => {}),
   abortAllExecutions: makeCustomizable(() => {}),
-  setEntityDetails: makePrivate(entityDetails => set({entityDetails})),
+  setDetails: makePrivate(details => set({details})),
   setExecId: makePrivate(execId => set({execId})),
   setMetrics: makePrivate(metrics => set({metrics})),
-  setExecutionsList: makePrivate(executionsList => set({executionsList})),
+  setExecutions: makePrivate(executions => set({executions})),
   setIsFirstTimeLoading: makePrivate(isFirstTimeLoading => set({isFirstTimeLoading})),
   setIsRowSelected: makePrivate(isRowSelected => set({isRowSelected})),
 });

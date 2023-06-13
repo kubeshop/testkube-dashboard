@@ -27,28 +27,28 @@ type FailureHandlingFormValues = {
 };
 
 const FailureHandling: React.FC = () => {
-  const {entityDetails} = useEntityDetailsStore(x => ({entityDetails: x.entityDetails}));
+  const {details} = useEntityDetailsStore(x => ({details: x.details}));
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<FailureHandlingFormValues>();
 
   const [updateTest] = useUpdateTestMutation();
 
-  if (!entityDetails) {
+  if (!details) {
     return null;
   }
 
-  const negativeTest = entityDetails?.executionRequest?.negativeTest;
+  const negativeTest = details?.executionRequest?.negativeTest;
 
   const onSave = () => {
     const values = form.getFieldsValue();
 
     return updateTest({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         executionRequest: {
-          ...entityDetails.executionRequest,
+          ...details.executionRequest,
           negativeTest: values.negativeTest,
         },
       },

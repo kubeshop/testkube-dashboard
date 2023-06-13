@@ -56,7 +56,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       selectedRow: execId,
       abortExecution,
       abortAllExecutions,
-      onRowSelect: (dataItem: any) => {
+      openExecutionDetails: (dataItem: any) => {
         navigate(`/${entity}/executions/${id}/execution/${dataItem?.id}`);
       },
       unselectRow: () => {
@@ -71,8 +71,8 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     metrics: metricsState,
     currentPage,
     setCurrentPage,
-    executionsList,
-    setExecutionsList,
+    executions,
+    setExecutions,
     isFirstTimeLoading,
     setIsFirstTimeLoading: setFirstTimeLoading,
     selectedRow,
@@ -80,24 +80,22 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setIsRowSelected,
     daysFilterValue,
     setDaysFilterValue,
-    entityDetails: entityDetailsWithIcon,
-    setEntityDetails,
+    setDetails,
     setExecId,
   } = usePrivateStore(x => ({
     metrics: x.metrics,
     setMetrics: x.setMetrics,
     currentPage: x.currentPage,
     setCurrentPage: x.setCurrentPage,
-    executionsList: x.executionsList,
-    setExecutionsList: x.setExecutionsList,
+    executions: x.executions,
+    setExecutions: x.setExecutions,
     isFirstTimeLoading: x.isFirstTimeLoading,
     setIsFirstTimeLoading: x.setIsFirstTimeLoading,
     selectedRow: x.selectedRow,
     selectRow: x.selectRow,
     daysFilterValue: x.daysFilterValue,
     setDaysFilterValue: x.setDaysFilterValue,
-    entityDetails: x.entityDetails,
-    setEntityDetails: x.setEntityDetails,
+    setDetails: x.setDetails,
     setExecId: x.setExecId,
     setIsRowSelected: x.setIsRowSelected,
   }));
@@ -107,11 +105,11 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data: executions, refetch} = useGetExecutions(
+  const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
     {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable}
   );
-  const {data: entityDetails} = useGetEntityDetails(id, {
+  const {data: rawDetails} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.everyTwoSeconds,
     skip: !isClusterAvailable,
   });
@@ -123,7 +121,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   const onWebSocketData = (wsData: WSDataWithTestExecution | WSDataWithTestSuiteExecution) => {
     try {
-      if (executionsList) {
+      if (executions) {
         if ('testExecution' in wsData) {
           if (wsData.type === WSEventType.START_TEST && id === wsData.testExecution.testName) {
             const adjustedExecution = {
@@ -142,22 +140,22 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               executions: [metricToPush, ...((metrics.executions && metrics.executions) || [])],
             });
 
-            setExecutionsList({
-              ...executionsList,
-              results: [adjustedExecution, ...executionsList.results],
+            setExecutions({
+              ...executions,
+              results: [adjustedExecution, ...executions.results],
             });
             safeRefetch(refetchMetrics);
           }
 
           if (wsData.type === WSEventType.END_TEST_SUCCESS && id === wsData.testExecution.testName) {
-            const targetIndex = executionsList.results.findIndex((item: any) => {
+            const targetIndex = executions.results.findIndex((item: any) => {
               return item.id === wsData.testExecution.id;
             });
 
             if (targetIndex !== -1) {
-              setExecutionsList({
-                ...executionsList,
-                results: executionsList.results.map((item: Test, index: number) => {
+              setExecutions({
+                ...executions,
+                results: executions.results.map((item: Test, index: number) => {
                   if (index === targetIndex) {
                     return {...item, ...wsData.testExecution, status: wsData.testExecution.executionResult.status};
                   }
@@ -186,22 +184,22 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               status: wsData.testSuiteExecution.status,
             };
 
-            setExecutionsList({
-              ...executionsList,
-              results: [adjustedExecution, ...executionsList.results],
+            setExecutions({
+              ...executions,
+              results: [adjustedExecution, ...executions.results],
             });
             safeRefetch(refetchMetrics);
           }
 
           if (wsData.type === WSEventType.END_TEST_SUITE_SUCCESS && id === wsData.testSuiteExecution.testSuite.name) {
-            const targetIndex = executionsList.results.findIndex((item: TestSuiteExecution) => {
+            const targetIndex = executions.results.findIndex((item: TestSuiteExecution) => {
               return item.id === wsData.testSuiteExecution.id;
             });
 
             if (targetIndex !== -1) {
-              setExecutionsList({
-                ...executionsList,
-                results: executionsList.results.map((item: TestSuiteExecution, index: number) => {
+              setExecutions({
+                ...executions,
+                results: executions.results.map((item: TestSuiteExecution, index: number) => {
                   if (index === targetIndex) {
                     return {...item, ...wsData.testSuiteExecution, status: wsData.testSuiteExecution.status};
                   }
@@ -237,16 +235,16 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   );
 
   useEffect(() => {
-    if (execId && executionsList?.results.length > 0) {
-      const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
-      const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
+    if (execId && executions?.results.length > 0) {
+      const executionDetails = executions?.results?.find((execution: any) => execution.id === execId);
+      const indexOfDisplayedExecution = executionDetails ? executions.results?.indexOf(executionDetails) + 1 : null;
       if (indexOfDisplayedExecution) {
         setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10));
       } else {
         setDaysFilterValue(0);
       }
     }
-  }, [execId, executionsList]);
+  }, [execId, executions]);
 
   useEffect(() => {
     if (execId) {
@@ -265,21 +263,21 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   }, [id]);
 
   useEffect(() => {
-    if (executions) {
+    if (rawExecutions) {
       setFirstTimeLoading(false);
     }
-    setExecutionsList(executions);
-  }, [usePrivateStore, executions]);
+    setExecutions(rawExecutions);
+  }, [usePrivateStore, rawExecutions]);
 
-  const testIcon = useExecutorIcon(entityDetails);
+  const testIcon = useExecutorIcon(rawDetails);
 
   // TODO: Create utility to sync local values with the Zustand store
   useEffect(() => {
-    setEntityDetails({
-      ...entityDetails,
+    setDetails({
+      ...rawDetails,
       ...(testIcon ? {testIcon} : {}),
     });
-  }, [usePrivateStore, entityDetails, testIcon]);
+  }, [usePrivateStore, rawDetails, executors, entity]);
 
   useEffect(() => {
     setExecId(execId);

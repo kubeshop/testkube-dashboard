@@ -19,9 +19,9 @@ type PreRunFormValues = {
 };
 
 const PreRun: React.FC = () => {
-  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+  const {entity, details} = useEntityDetailsStore(x => ({
     entity: x.entity,
-    entityDetails: x.entityDetails,
+    details: x.details,
   }));
   const isPreRunAvailable = usePermission(Permissions.editEntity);
 
@@ -29,21 +29,21 @@ const PreRun: React.FC = () => {
 
   const [updateTest] = useUpdateTestMutation();
 
-  if (!entity || !entityDetails) {
+  if (!entity || !details) {
     return null;
   }
 
-  const command = entityDetails?.executionRequest?.preRunScript;
+  const command = details?.executionRequest?.preRunScript;
 
   const onSave = () => {
     const values = form.getFieldsValue();
 
     return updateTest({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         executionRequest: {
-          ...entityDetails.executionRequest,
+          ...details.executionRequest,
           preRunScript: values.command,
         },
       },

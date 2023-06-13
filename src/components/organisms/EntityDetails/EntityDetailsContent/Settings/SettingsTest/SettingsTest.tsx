@@ -12,15 +12,15 @@ import Source from './Source';
 import TestType from './TestType';
 
 const SettingsTest: React.FC = () => {
-  const {entityDetails} = useEntityDetailsStore(x => ({entityDetails: x.entityDetails}));
+  const {details} = useEntityDetailsStore(x => ({details: x.details}));
 
   const [updateTestMutation] = useUpdateTestMutation();
 
   const updateTest = (data: Object) => {
     return updateTestMutation({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         ...data,
       },
     })
@@ -32,8 +32,8 @@ const SettingsTest: React.FC = () => {
 
   return (
     <Space size={30} direction="vertical">
-      <TestType type={entityDetails.type} updateTest={updateTest} />
-      <Source entityDetails={entityDetails} updateTest={updateTest} />
+      <TestType type={details.type} updateTest={updateTest} />
+      <Source details={details} updateTest={updateTest} />
     </Space>
   );
 };

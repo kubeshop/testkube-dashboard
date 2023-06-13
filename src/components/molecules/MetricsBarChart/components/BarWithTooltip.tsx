@@ -15,11 +15,11 @@ export type BarConfig = {
 };
 
 const BarWithTooltip: React.FC<BarConfig> = props => {
-  const {executionsList, onRowSelect} = useEntityDetailsStore(x => ({
-    executionsList: x.executionsList,
-    onRowSelect: x.onRowSelect,
+  const {executions, openExecutionDetails} = useEntityDetailsStore(x => ({
+    executions: x.executions,
+    openExecutionDetails: x.openExecutionDetails,
   }));
-  return <BarWithTooltipPure {...props} executionsList={executionsList} onRowSelect={onRowSelect} />;
+  return <BarWithTooltipPure {...props} executions={executions} openExecutionDetails={openExecutionDetails} />;
 };
 
 export default BarWithTooltip;

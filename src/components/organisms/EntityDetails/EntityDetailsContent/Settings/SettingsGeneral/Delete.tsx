@@ -24,14 +24,14 @@ const useDeleteMutations: Record<Entity, UseMutation<any>> = {
 };
 
 const Delete: React.FC = () => {
-  const {entity, entityDetails, defaultStackRoute} = useEntityDetailsStore(x => ({
+  const {entity, details, defaultStackRoute} = useEntityDetailsStore(x => ({
     entity: x.entity,
-    entityDetails: x.entityDetails,
+    details: x.details,
     defaultStackRoute: x.defaultStackRoute,
   }));
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
-  if (!entity || !entityDetails) {
+  if (!entity || !details) {
     return null;
   }
 
@@ -43,7 +43,7 @@ const Delete: React.FC = () => {
         <DeleteEntityModal
           defaultStackRoute={defaultStackRoute}
           useDeleteMutation={useDeleteMutations[entity]}
-          name={entityDetails.name}
+          name={details.name}
           entityLabel={namingMap[entity]}
         />
       ),

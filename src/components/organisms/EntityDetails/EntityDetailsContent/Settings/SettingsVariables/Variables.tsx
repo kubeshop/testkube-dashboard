@@ -30,9 +30,9 @@ type VariablesFormValues = {
 };
 
 const Variables: React.FC = () => {
-  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+  const {entity, details} = useEntityDetailsStore(x => ({
     entity: x.entity,
-    entityDetails: x.entityDetails,
+    details: x.details,
   }));
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -40,8 +40,8 @@ const Variables: React.FC = () => {
   const [form] = Form.useForm<VariablesFormValues>();
 
   const variables = useMemo(() => {
-    return decomposeVariables(entityDetails?.executionRequest?.variables);
-  }, [entityDetails?.executionRequest?.variables]);
+    return decomposeVariables(details?.executionRequest?.variables);
+  }, [details?.executionRequest?.variables]);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -53,15 +53,15 @@ const Variables: React.FC = () => {
   const onSaveForm = () => {
     const value = form.getFieldsValue();
     const successRecord = {
-      ...entityDetails,
+      ...details,
       executionRequest: {
-        ...entityDetails.executionRequest,
+        ...details.executionRequest,
         variables: formatVariables(value['variables-list']),
       },
     };
 
     return updateEntity({
-      id: entityDetails.name,
+      id: details.name,
       data: successRecord,
     })
       .then(res => displayDefaultNotificationFlow(res))

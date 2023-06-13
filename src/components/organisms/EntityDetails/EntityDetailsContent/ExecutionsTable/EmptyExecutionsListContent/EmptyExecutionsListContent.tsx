@@ -19,14 +19,14 @@ type EmptyExecutionsListContentProps = {
 const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = props => {
   const {triggerRun} = props;
 
-  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+  const {entity, details} = useEntityDetailsStore(x => ({
     entity: x.entity,
-    entityDetails: x.entityDetails,
+    details: x.details,
   }));
   const {dispatch} = useContext(MainContext);
   const mayRun = usePermission(Permissions.runEntity);
 
-  if (!entityDetails) {
+  if (!details) {
     return null;
   }
 
@@ -59,7 +59,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
     );
   }
 
-  if (!entityDetails.steps || entityDetails.steps.length === 0) {
+  if (!details.steps || details.steps.length === 0) {
     return (
       <EmptyListContent
         title="Congrats, now add your tests to this suite"

@@ -46,14 +46,14 @@ interface LocalStep extends TestSuiteStep {
 
 const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {entityDetails: rawEntityDetails} = useEntityDetailsStore(x => ({
-    entityDetails: x.entityDetails as TestSuite,
+  const {details: rawDetails} = useEntityDetailsStore(x => ({
+    details: x.details as TestSuite,
   }));
 
-  const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawEntityDetails));
-  const entityDetails = useMemo(
-    () => (isV2 ? convertTestSuiteV2ToV3(rawEntityDetails) : rawEntityDetails),
-    [rawEntityDetails]
+  const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawDetails));
+  const details = useMemo(
+    () => (isV2 ? convertTestSuiteV2ToV3(rawDetails) : rawDetails),
+    [rawDetails]
   );
 
   const mayEdit = usePermission(Permissions.editEntity);
@@ -64,8 +64,8 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
 
   const executors = useAppSelector(selectExecutors);
 
-  const {data: testsList} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
-    skip: !isClusterAvailable || !entityDetails.name,
+  const {data: testsList} = useGetTestsListForTestSuiteQuery(details.name, {
+    skip: !isClusterAvailable || !details.name,
   });
   const {data: allTestsList} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
@@ -87,14 +87,14 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
   }, [allTestsList]);
 
   const hasParallelSteps = useMemo(
-    () => entityDetails?.steps?.some(step => step.execute.length > 1),
-    [entityDetails.steps]
+    () => details?.steps?.some(step => step.execute.length > 1),
+    [details.steps]
   );
 
   const initialSteps: LocalStep[] = useMemo(
     () =>
-      entityDetails.steps
-        ? entityDetails.steps.map(step => {
+      details.steps
+        ? details.steps.map(step => {
             const id = nanoid();
 
             const firstItemInStep = step.execute[0];
@@ -114,7 +114,7 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
             };
           })
         : [],
-    [entityDetails?.steps, testsData]
+    [details?.steps, testsData]
   );
 
   const [currentSteps = initialSteps, setCurrentSteps] = useState<LocalStep[]>([]);
@@ -129,9 +129,9 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
 
   const saveSteps = () => {
     return updateTestSuite({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         steps: currentSteps.map(step => {
           return {
             stopTestOnFailure: step.stopTestOnFailure,

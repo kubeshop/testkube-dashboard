@@ -20,9 +20,9 @@ import {displayDefaultNotificationFlow} from '@utils/notification';
 import {namingMap, updateRequestsMap} from '../utils';
 
 const Labels: React.FC = () => {
-  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+  const {entity, details} = useEntityDetailsStore(x => ({
     entity: x.entity,
-    entityDetails: x.entityDetails,
+    details: x.details,
   }));
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -32,17 +32,17 @@ const Labels: React.FC = () => {
   const [wasTouched, setWasTouched] = useState(false);
   const [labelsKey, setLabelsKey] = useState(nanoid());
 
-  if (!entity || !entityDetails) {
+  if (!entity || !details) {
     return null;
   }
 
-  const entityLabels = entityDetails?.labels || {};
+  const entityLabels = details?.labels || {};
 
   const onSave = () => {
     return updateEntity({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         labels: decomposeLabels(localLabels),
       },
     })

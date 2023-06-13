@@ -18,20 +18,20 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   const {triggerRun} = props;
 
   const {
-    executionsList,
+    executions,
     selectedRow,
     currentPage,
     setCurrentPage,
-    onRowSelect,
+    openExecutionDetails,
     id,
     abortExecution,
     isFirstTimeLoading,
   } = useEntityDetailsStore(x => ({
-    executionsList: x.executionsList,
+    executions: x.executions,
     selectedRow: x.selectedRow,
     currentPage: x.currentPage,
     setCurrentPage: x.setCurrentPage,
-    onRowSelect: x.onRowSelect,
+    openExecutionDetails: x.openExecutionDetails,
     id: x.id,
     abortExecution: x.abortExecution,
     isFirstTimeLoading: x.isFirstTimeLoading,
@@ -43,7 +43,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
     renderCell: () => null,
   };
 
-  const isEmptyExecutions = !executionsList?.results || !executionsList?.results.length;
+  const isEmptyExecutions = !executions?.results || !executions?.results.length;
 
   const onAbortExecution = useCallback(
     (executionId: string) => {
@@ -71,7 +71,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
     <Table
       className="custom-table"
       showHeader={false}
-      dataSource={executionsList?.results}
+      dataSource={executions?.results}
       columns={[
         {
           render: data => {
@@ -81,7 +81,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
       ]}
       onRow={(record: any) => ({
         onClick: () => {
-          onRowSelect(record);
+          openExecutionDetails(record);
         },
       })}
       rowSelection={{...rowSelection}}

@@ -31,12 +31,12 @@ type ArgumentsFormValues = {
 const Arguments: React.FC = () => {
   const [form] = Form.useForm<ArgumentsFormValues>();
 
-  const {entityDetails} = useEntityDetailsStore(x => ({entityDetails: x.entityDetails}));
+  const {details} = useEntityDetailsStore(x => ({
+    details: x.details as Test,
+  }));
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateTest] = useUpdateTestMutation();
-
-  const details = entityDetails as Test;
 
   const entityArgs = details.executionRequest?.args || [];
 
@@ -57,7 +57,7 @@ const Arguments: React.FC = () => {
     };
 
     return updateTest({
-      id: entityDetails.name,
+      id: details.name,
       data: successRecord,
     })
       .then(res => displayDefaultNotificationFlow(res))

@@ -27,16 +27,16 @@ import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
 import {custom, quickOptions} from './utils';
 
 const Schedule: React.FC = () => {
-  const {entity, entityDetails} = useEntityDetailsStore(x => ({
+  const {entity, details} = useEntityDetailsStore(x => ({
     entity: x.entity,
-    entityDetails: x.entityDetails,
+    details: x.details,
   }));
   const enabled = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();
 
-  const name = entityDetails?.name;
-  const schedule = entityDetails?.schedule;
+  const name = details?.name;
+  const schedule = details?.schedule;
 
   const [cronString, setCronString] = useState(schedule || '');
   const [wasTouched, setWasTouched] = useState(false);
@@ -45,7 +45,7 @@ const Schedule: React.FC = () => {
     return updateEntity({
       id: name,
       data: {
-        ...entityDetails,
+        ...details,
         schedule: cronString,
       },
     })

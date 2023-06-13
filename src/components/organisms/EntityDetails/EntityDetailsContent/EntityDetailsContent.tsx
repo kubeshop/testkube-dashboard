@@ -54,10 +54,10 @@ const filterOptions: OptionType[] = [
 ];
 
 const EntityDetailsContent: React.FC = () => {
-  const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
+  const {entity, details, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
     useEntityDetailsStore(x => ({
       entity: x.entity,
-      entityDetails: x.entityDetails,
+      details: x.details,
       defaultStackRoute: x.defaultStackRoute,
       metrics: x.metrics,
       daysFilterValue: x.daysFilterValue,
@@ -93,12 +93,12 @@ const EntityDetailsContent: React.FC = () => {
   useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
   useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
 
-  const name = entityDetails?.name;
-  const namespace = entityDetails?.namespace;
-  const description = entityDetails?.description;
-  const labels = entityDetails?.labels;
-  const type = entityDetails?.type;
-  const testIcon = useExecutorIcon(entityDetails);
+  const name = details?.name;
+  const namespace = details?.namespace;
+  const description = details?.description;
+  const labels = details?.labels;
+  const type = details?.type;
+  const testIcon = useExecutorIcon(details);
 
   const onRunButtonClick = async () => {
     handleLoading();

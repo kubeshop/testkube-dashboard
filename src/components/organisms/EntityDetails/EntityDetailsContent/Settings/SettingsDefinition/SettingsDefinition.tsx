@@ -8,8 +8,8 @@ import {testkubeCRDBases} from '@utils/externalLinks';
 import {settingsDefinitionData} from './utils';
 
 const SettingsDefinition = () => {
-  const {entityDetails, entity} = useEntityDetailsStore(x => ({
-    entityDetails: x.entityDetails,
+  const {details, entity} = useEntityDetailsStore(x => ({
+    details: x.details,
     entity: x.entity,
   }));
 
@@ -41,7 +41,7 @@ const SettingsDefinition = () => {
     <Definition
       useGetDefinitionQuery={sectionData.query}
       useUpdateDefinitionMutation={sectionData.mutation}
-      name={entityDetails.name}
+      name={entity.name}
       {...config}
     />
   );

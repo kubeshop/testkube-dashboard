@@ -21,8 +21,8 @@ type TimeoutForm = {
 };
 
 const Timeout: React.FC = () => {
-  const {entityDetails} = useEntityDetailsStore(x => ({entityDetails: x.entityDetails}));
-  const {executionRequest, name} = entityDetails;
+  const {details} = useEntityDetailsStore(x => ({details: x.details}));
+  const {executionRequest, name} = details;
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -37,7 +37,7 @@ const Timeout: React.FC = () => {
     return updateTest({
       id: name,
       data: {
-        ...entityDetails,
+        ...details,
         executionRequest: {
           ...executionRequest,
           activeDeadlineSeconds: activeDeadlineSeconds ? Number(activeDeadlineSeconds) : 0,
