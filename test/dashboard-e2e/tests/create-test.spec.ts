@@ -2,6 +2,7 @@ import { test } from '@playwright/test';
 
 import { TestDataHandler } from '../data-handlers/test-data-handlers';
 import { ApiHelpers } from '../api/api-helpers';
+const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
 import { CommonHelpers } from '../helpers/common-helpers';
 import { MainPage } from '../pages/MainPage';
 import { CreateTestPage } from '../pages/CreateTestPage';
@@ -16,8 +17,7 @@ const testNames = ['cypress-git', 'k6-git', 'postman-git'];
 for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
   test(`Creating test for ${testName}`, async ({ page }) => {
     const testData = TestDataHandler.getTest(testName);
-  
-    const apiHelpers=new ApiHelpers(process.env.API_URL);
+
     await apiHelpers.assureTestNotCreated(testData.name);
     const mainPage=new MainPage(page);
     await mainPage.visitMainPage();

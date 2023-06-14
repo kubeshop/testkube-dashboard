@@ -2,6 +2,7 @@ import { test } from '@playwright/test';
 
 import { TestDataHandler } from '../data-handlers/test-data-handlers';
 import { ApiHelpers } from '../api/api-helpers';
+const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
 import { MainPage } from '../pages/MainPage';
 import { TestExecutionsPage } from '../pages/TestExecutionsPage';
 
@@ -16,8 +17,7 @@ for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
   test(`Run test ${testName}`, async ({ page }) => {
     const testData = TestDataHandler.getTest(testName);
     const realTestName = testData.name;
-
-    const apiHelpers=new ApiHelpers(process.env.API_URL);
+    
     await apiHelpers.assureTestCreated(testData, false);
     const lastExecutionNumber = await apiHelpers.getLastExecutionNumber(realTestName);
     

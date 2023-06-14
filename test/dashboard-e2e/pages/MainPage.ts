@@ -7,11 +7,32 @@ export class MainPage{
     }
 
     async visitMainPage(){
-      await this.page.goto(`/apiEndpoint?apiEndpoint=${process.env.DASHBOARD_API_URL}`);
+      if (process.env.CLOUD_CONTEXT) {
+        const userToken = process.env.BEARER_TOKEN
+        const apiEndpoint = process.env.CLOUD_API_URL
+
+        await this.page.addInitScript(()=>{
+            window.localStorage.setItem('isLoggedIn', '1');
+            window.localStorage.setItem('isGADisabled', '1');
+        });
+
+        await this.page.addInitScript(userToken => {
+            window.localStorage.setItem('idToken', userToken);
+        }, userToken);
+
+        await this.page.addInitScript(apiEndpoint => {
+            window.localStorage.setItem('apiEndpoint', apiEndpoint);
+        }, apiEndpoint);
+
+        await this.page.goto('/')
+      } else {
+        await this.page.goto(`/apiEndpoint?apiEndpoint=${process.env.DASHBOARD_API_URL}`);
     
-      await this.page.addInitScript(() => {
-        window.localStorage.setItem('isGADisabled', '1');
-      });
+        await this.page.addInitScript(() => {
+          window.localStorage.setItem('isGADisabled', '1');
+        });
+      }
+
     }
 
     async openCreateTestDialog() {

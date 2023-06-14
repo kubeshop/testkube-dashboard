@@ -1,17 +1,26 @@
 import superagent from 'superagent';
 
 export class ApiHelpers {
-    constructor(apiUrl) {
+    constructor(apiUrl, cloudContext='', bearerToken='') {
         this.API_URL = apiUrl;
+        this.CLOUD_CONTEXT = cloudContext;
+        this.BEARER_TOKEN = bearerToken;
     }
 
     async getTests() {
         const request = `${this.API_URL}/tests`;
 
         try {
-            const response = await superagent.get(request);
+            if(!this.CLOUD_CONTEXT) {
+                const response = await superagent.get(request);
 
-            return response.body;
+                return response.body;
+            } 
+                const response = await superagent.get(request)
+                    .set('Authorization', `Bearer ${this.BEARER_TOKEN}`);
+
+                return JSON.parse(response.text);
+            
         } catch (e) {
             throw Error(`getTests failed on "${request}" with: "${e}"`);
         }
@@ -21,11 +30,20 @@ export class ApiHelpers {
         const request = `${this.API_URL}/tests`;
         
         try {
-            const response = await superagent.post(request)
-                .set('Content-Type', 'application/json')
-                .send(testData);
+            if(!this.CLOUD_CONTEXT) {
+                const response = await superagent.post(request)
+                    .set('Content-Type', 'application/json')
+                    .send(testData);
     
-            return response.body;
+                return response.body;
+            } 
+                const response = await superagent.post(request)
+                    .set('Content-Type', 'application/json')
+                    .set('Authorization', `Bearer ${this.BEARER_TOKEN}`)
+                    .send(testData);
+
+                return JSON.parse(response.text);
+            
         } catch (e) {
             throw Error(`createTest failed on "${request}" with: "${e}"`);
         }
@@ -35,9 +53,12 @@ export class ApiHelpers {
         const request = `${this.API_URL}/tests/${testName}/executions/${executionId}`;
 
         try {
-            const response = await superagent.patch(request);
-
-            return response;
+            if(!this.CLOUD_CONTEXT) {
+                return await superagent.patch(request);
+            } 
+                return await superagent.patch(request)
+                    .set('Authorization', `Bearer ${this.BEARER_TOKEN}`);
+            
         } catch (e) {
             throw Error(`abortTest failed on "${request}" with: "${e}"`);
         }
@@ -47,7 +68,12 @@ export class ApiHelpers {
         const request = `${this.API_URL}/tests/${testName}`;
 
         try {
-            await superagent.delete(request);
+            if(!this.CLOUD_CONTEXT) {
+                await superagent.delete(request);
+            } else {
+                await superagent.delete(request)
+                    .set('Authorization', `Bearer ${this.BEARER_TOKEN}`);
+            }
         } catch (e) {
             throw Error(`removeTest failed on "${request}" with: "${e}"`);
         }
@@ -57,11 +83,20 @@ export class ApiHelpers {
         const request = `${this.API_URL}/tests/${testData.name}`;
         
         try {
-            const response = await superagent.patch(request)
-                .set('Content-Type', 'application/json')
-                .send(testData);
+            if(!this.CLOUD_CONTEXT) {
+                const response = await superagent.patch(request)
+                    .set('Content-Type', 'application/json')
+                    .send(testData);
     
-            return response.body;
+                return response.body;
+            } 
+                const response = await superagent.patch(request)
+                    .set('Content-Type', 'application/json')
+                    .set('Authorization', `Bearer ${this.BEARER_TOKEN}`)
+                    .send(testData);
+    
+                return JSON.parse(response.text);
+            
         } catch (e) {
             throw Error(`updateTest failed on "${request}" with: "${e}"`);
         }
@@ -118,9 +153,16 @@ export class ApiHelpers {
         const request = `${this.API_URL}/tests/${testName}`;
 
         try {
-            const response = await superagent.get(request);
+            if(!this.CLOUD_CONTEXT) {
+                const response = await superagent.get(request);
 
-            return response.body;
+                return response.body;
+            } 
+                const response = await superagent.get(request)
+                    .set('Authorization', `Bearer ${this.BEARER_TOKEN}`);
+
+                return JSON.parse(response.text);
+            
         } catch (e) {
             throw Error(`getTestData failed on "${request}" with: "${e}"`);
         }
@@ -130,7 +172,15 @@ export class ApiHelpers {
         const request = `${this.API_URL}/tests/${testName}/executions`;
 
         try {
-            const response = await superagent.get(request);
+            let response;
+
+            if(!this.CLOUD_CONTEXT) {
+                response = await superagent.get(request);
+            } else {
+                response = await superagent.get(request)
+                    .set('Authorization', `Bearer ${this.BEARER_TOKEN}`);
+            }
+
             const totalsResults = response.body.totals.results;
     
             if(totalsResults === 0) {
