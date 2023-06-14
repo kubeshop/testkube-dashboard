@@ -19,11 +19,17 @@ import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {TestCreationModalWrapper} from './CreationModal.styled';
-import {defaultHintConfig} from './ModalConfig';
 import TestCreationForm from './TestCreationForm';
+
+const defaultHintConfig = {
+  title: 'Missing a test type?',
+  description: 'Add test types through testkube executors.',
+  openLink: () => window.open(externalLinks.containerExecutor),
+};
 
 const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
+  const testType = Form.useWatch('testType', form);
 
   const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
@@ -35,9 +41,7 @@ const TestCreationModalContent: React.FC = () => {
   const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);
 
   useEffect(() => {
-    const selectedExecutor = executors.find(executor =>
-      executor.executor?.types?.includes(form.getFieldValue('testType'))
-    );
+    const selectedExecutor = executors.find(executor => executor.executor?.types?.includes(testType));
 
     if (!selectedExecutor) {
       setHintConfig(defaultHintConfig);
@@ -61,7 +65,7 @@ const TestCreationModalContent: React.FC = () => {
 
       form.setFieldValue('testSource', null);
     }
-  }, [form.getFieldValue('testType')]);
+  }, [testType]);
 
   const onSuccess = (res: RTKResponse<MetadataResponse<Test>>) => {
     return displayDefaultNotificationFlow(res).then(() => {

@@ -2,10 +2,13 @@ import React, {FC, PropsWithChildren, ReactElement, createContext, useContext, u
 
 import {Modal} from '@custom-antd';
 
-interface ModalConfig {
+export interface ModalConfig {
   width: number;
   title: string;
   content: ReactElement;
+  footer?: ReactElement;
+  dataTestModalRoot?: string;
+  dataTestCloseBtn?: string;
 }
 
 export interface ModalContextInterface {

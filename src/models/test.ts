@@ -32,7 +32,6 @@ export type Test = {
   variables?: Variables;
   executorArgs?: string[];
   executionRequest: ExecutionRequest;
-  testIcon?: string;
   status?: {
     latestExecution?: LatestExecution;
   };

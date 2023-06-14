@@ -1,4 +1,3 @@
-export {default as TextFilter} from './TextFilter';
 export {default as CLICommands} from './CLICommands';
 export {default as CopyCommand} from './CLICommands/CopyCommand';
 export {default as LabelsList} from './LabelsList';

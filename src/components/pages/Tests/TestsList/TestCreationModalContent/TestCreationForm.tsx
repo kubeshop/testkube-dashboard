@@ -36,7 +36,7 @@ import {
   testSourceBaseOptions,
 } from '@utils/sources';
 
-import {LabelsWrapper, StyledFormSpace} from '../CreationModal.styled';
+import {LabelsWrapper, StyledFormSpace} from './CreationModal.styled';
 
 type TestCreationFormValues = {
   name: string;

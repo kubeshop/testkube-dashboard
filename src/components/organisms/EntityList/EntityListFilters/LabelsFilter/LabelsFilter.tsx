@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
 
 import {FilterFilled} from '@ant-design/icons';
 import {Space} from 'antd';
@@ -31,7 +30,6 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [isVisible, setVisibilityState] = useState(false);
   const [labelsMapping, setLabelsMapping] = useState<EntityArray>([]);
@@ -137,15 +135,6 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     }
 
     dispatch(setFilters({...filters, selector: resultedFilters, pageSize: initialPageSize}));
-
-    searchParams.delete('selector');
-    setSearchParams(searchParams);
-
-    resultedFilters.forEach(filter => {
-      searchParams.append('selector', filter);
-    });
-    setSearchParams(searchParams);
-
     onOpenChange(false);
   };
 
@@ -153,9 +142,6 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     setLabelsMapping([defaultKeyValuePair]);
     onOpenChange(false);
     dispatch(setFilters({...filters, selector: [], pageSize: initialPageSize}));
-
-    searchParams.delete('selector');
-    setSearchParams(searchParams);
   };
 
   const menu = (
