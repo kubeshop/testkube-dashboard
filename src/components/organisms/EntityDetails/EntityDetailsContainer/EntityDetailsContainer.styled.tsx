@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
 export const EntityDetailsWrapper = styled.div`
-  overflow: hidden;
+  overflow-x: hidden;
 
   display: flex;
-
-  height: 100%;
 `;
