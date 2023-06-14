@@ -1,10 +1,10 @@
 import {useEffect, useMemo, useState} from 'react';
+import ReactGA from 'react-ga4';
 import {useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
-import GA4React, {useGA4React} from 'ga-4-react';
 import posthog from 'posthog-js';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
@@ -37,7 +37,6 @@ const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
   const dispatch = useAppDispatch();
-  const ga4React = useGA4React();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -65,14 +64,10 @@ const AppRoot: React.FC = () => {
 
   useEffect(() => {
     if (!isTelemetryEnabled) {
-      // @ts-ignore
-      window[`ga-disable-${env.ga4Key}`] = true;
       if (posthog.__loaded) {
         posthog.opt_out_capturing();
       }
     } else if (process.env.NODE_ENV !== 'development') {
-      // @ts-ignore:
-      window[`ga-disable-${env.ga4Key}`] = false;
       if (env.posthogKey && !posthog.__loaded) {
         posthog.init(env.posthogKey, {
           opt_out_capturing_by_default: true,
@@ -94,36 +89,38 @@ const AppRoot: React.FC = () => {
         posthog.opt_in_capturing();
       }
 
-      if (env.ga4Key && !window.location.href.includes('testkube.io')) {
-        const ga4react = new GA4React(env.ga4Key);
-        ga4react.initialize().catch(() => {});
+      if (env.ga4Keys.length > 0) {
+        ReactGA.initialize(env.ga4Keys.map(trackingId => ({trackingId})));
+        ReactGA.event('gtm.js');
+        ReactGA.gtag('consent', 'update', {
+          ad_storage: 'granted',
+          analytics_storage: 'granted',
+          functionality_storage: 'granted',
+          personalization_storage: 'granted',
+          security_storage: 'granted',
+        });
       }
     }
   }, [isTelemetryEnabled]);
 
   const mainContextValue = useMemo(
     () => ({
-      ga4React,
       dispatch,
       clusterConfig,
       isClusterAvailable: true,
     }),
-    [ga4React, dispatch, clusterConfig]
+    [dispatch, clusterConfig]
   );
 
   useEffect(() => {
     posthog.capture('$pageview');
 
-    if (ga4React) {
-      ga4React.pageview(location.pathname);
-    }
+    ReactGA.send({hitType: 'pageview', page: location.pathname});
   }, [location.pathname]);
 
   useEffect(() => {
-    if (ga4React) {
-      ga4React.gtag('event', 'user_info', {api_host: window.location.host, os: window.navigator.userAgent});
-    }
-  }, [ga4React]);
+    ReactGA.event('user_info', {os: window.navigator.userAgent});
+  }, []);
 
   useEffect(() => {
     refetchClusterConfig();
