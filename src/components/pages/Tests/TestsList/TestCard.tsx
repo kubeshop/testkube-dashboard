@@ -15,9 +15,10 @@ import {PollingIntervals} from '@utils/numbers';
 export interface TestCardProps {
   item: TestWithExecutionRedux;
   onClick: (item: Item) => void;
+  onAbort: (item: Item) => void;
 }
 
-const TestCard: FC<TestCardProps> = ({item: {dataItem, latestExecution}, onClick}) => {
+const TestCard: FC<TestCardProps> = ({item: {dataItem, latestExecution}, onClick, onAbort}) => {
   const {isClusterAvailable} = useContext(MainContext);
 
   const ref = useRef(null);
@@ -34,6 +35,7 @@ const TestCard: FC<TestCardProps> = ({item: {dataItem, latestExecution}, onClick
       item={dataItem}
       latestExecution={latestExecution}
       onClick={onClick}
+      onAbort={onAbort}
       metrics={metrics}
       dataTest="tests-list-item"
     />

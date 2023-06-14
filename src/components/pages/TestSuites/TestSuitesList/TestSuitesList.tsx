@@ -1,7 +1,11 @@
-import {FC, useContext, useEffect} from 'react';
+import {FC, useCallback, useContext, useEffect} from 'react';
 
-import {MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 import {ModalConfig} from '@contexts/ModalContext';
+
+import {TestSuite} from '@models/testSuite';
+
+import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
@@ -14,7 +18,7 @@ import {
   setTestSuitesFilters,
 } from '@redux/reducers/testSuitesSlice';
 
-import {useGetTestSuitesQuery} from '@services/testSuites';
+import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -34,6 +38,7 @@ const createModal: ModalConfig = {
 
 const TestSuitesList: FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const queryFilters = useAppSelector(selectTestSuitesFilters);
 
   const {data, isLoading, isFetching} = useGetTestSuitesQuery(queryFilters || null, {
@@ -45,9 +50,21 @@ const TestSuitesList: FC = () => {
     dispatch(setTestSuites(data || []));
   }, [data]);
 
+  const [abortAll] = useAbortAllTestSuiteExecutionsMutation();
+  const onItemClick = useCallback((item: TestSuite) => navigate(`/tests/executions/${item.name}`), []);
+  const onItemAbort = useCallback((item: TestSuite) => {
+    abortAll({id: item.name})
+      .unwrap()
+      .catch(() => {
+        notificationCall('failed', 'Something went wrong during test execution abortion');
+      });
+  }, []);
+
   return (
     <EntityListContent
       CardComponent={TestSuiteCard}
+      onItemClick={onItemClick}
+      onItemAbort={onItemAbort}
       entity="test-suites"
       pageTitle="Test Suites"
       addEntityButtonText="Add a new test suite"

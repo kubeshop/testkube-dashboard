@@ -1,9 +1,13 @@
-import {FC, useContext, useEffect} from 'react';
+import {FC, useCallback, useContext, useEffect} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 import {ModalConfig} from '@contexts/ModalContext';
+
+import {Test} from '@models/test';
+
+import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
@@ -11,7 +15,7 @@ import {useAppSelector} from '@redux/hooks';
 import {initialTestsFiltersState} from '@redux/initialState';
 import {selectTests, selectTestsFilters, setTests, setTestsFilters} from '@redux/reducers/testsSlice';
 
-import {useGetTestsQuery} from '@services/tests';
+import {useAbortAllTestExecutionsMutation, useGetTestsQuery} from '@services/tests';
 
 import {externalLinks} from '@utils/externalLinks';
 import {PollingIntervals} from '@utils/numbers';
@@ -37,6 +41,7 @@ export const createModal: ModalConfig = {
 
 const TestsList: FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
   const queryFilters = useAppSelector(selectTestsFilters);
 
   const {data, isLoading, isFetching} = useGetTestsQuery(queryFilters || null, {
@@ -48,9 +53,21 @@ const TestsList: FC = () => {
     dispatch(setTests(data || []));
   }, [data]);
 
+  const [abortAll] = useAbortAllTestExecutionsMutation();
+  const onItemClick = useCallback((item: Test) => navigate(`/tests/executions/${item.name}`), []);
+  const onItemAbort = useCallback((item: Test) => {
+    abortAll({id: item.name})
+      .unwrap()
+      .catch(() => {
+        notificationCall('failed', 'Something went wrong during test execution abortion');
+      });
+  }, []);
+
   return (
     <EntityListContent
       CardComponent={TestCard}
+      onItemClick={onItemClick}
+      onItemAbort={onItemAbort}
       entity="tests"
       pageTitle="Tests"
       addEntityButtonText="Add a new test"

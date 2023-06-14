@@ -10,7 +10,7 @@ import {Execution} from '@models/execution';
 import {ExecutionMetrics} from '@models/metrics';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
-import {LabelsList, MetricsBarChart} from '@molecules';
+import {DotsDropdown, LabelsList, MetricsBarChart} from '@molecules';
 
 import Colors from '@styles/Colors';
 
@@ -37,6 +37,7 @@ interface EntityGridItemPureProps {
   latestExecution?: TestSuiteExecution | Execution;
   metrics?: Metrics;
   onClick: (item: Item) => void;
+  onAbort: (item: Item) => void;
   dataTest: string;
 }
 
@@ -46,7 +47,7 @@ const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
 });
 
 const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
-  const {item, latestExecution, onClick, dataTest, metrics} = props;
+  const {item, latestExecution, onClick, onAbort, dataTest, metrics} = props;
 
   const status =
     (latestExecution as Execution)?.executionResult?.status ||
@@ -57,6 +58,14 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
   const click = useCallback(() => {
     onClick(item);
   }, [onClick, item]);
+
+  const abort = useCallback(
+    (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.stopPropagation();
+      onAbort(item);
+    },
+    [onAbort, item]
+  );
 
   return (
     <ItemWrapper onClick={click} ref={ref} data-test={dataTest}>
@@ -73,6 +82,14 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
           </ItemColumn>
           <ItemColumn>
             <EntityGridItemExecutionTime time={latestExecution?.startTime} />
+            <DotsDropdown
+              items={[
+                {
+                  key: 1,
+                  label: <span onClick={abort}>Abort all executions</span>,
+                },
+              ]}
+            />
           </ItemColumn>
         </ItemRow>
         <RowsWrapper>

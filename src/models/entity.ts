@@ -21,7 +21,7 @@ export type EntityListBlueprint = {
   initialFiltersState: any;
 
   // TODO: Fix types
-  CardComponent: FC<{item: any; onClick: (item: Item) => void}>;
+  CardComponent: FC<{item: any; onClick: (item: Item) => void; onAbort: (item: Item) => void}>;
 
   /**
    * RTK action to set data fetched from Backend to the Redux store
@@ -46,4 +46,7 @@ export type EntityListBlueprint = {
 
   isLoading: boolean;
   isFetching: boolean;
+
+  onItemClick: (item: any) => void;
+  onItemAbort: (item: any) => void;
 };

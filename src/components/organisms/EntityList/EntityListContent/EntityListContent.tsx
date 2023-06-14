@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 
 import {isEqual, merge} from 'lodash';
@@ -12,7 +12,6 @@ import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 import {EntityListBlueprint} from '@models/entity';
 
 import {EntityGrid} from '@molecules';
-import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
 import {PageHeader, PageToolbar, PageWrapper} from '@organisms';
 
@@ -45,6 +44,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     data,
     setQueryFilters,
     createModalConfig,
+    onItemClick,
+    onItemAbort,
   } = props;
 
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
@@ -94,13 +95,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const resetFilters = () => {
     dispatch(setQueryFilters(initialFiltersState));
   };
-
-  const onNavigateToDetails = useCallback(
-    (item: Item) => {
-      navigate(`/${entity}/executions/${item.name}`);
-    },
-    [navigate, entity]
-  );
 
   const onScrollBottom = () => {
     setIsLoadingNext(true);
@@ -169,7 +163,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         maxColumns={2}
         data={data}
         Component={CardComponent}
-        componentProps={{onClick: onNavigateToDetails}}
+        componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
         empty={
           isFiltersEmpty ? <EmptyData action={addEntityAction} /> : <EmptyDataWithFilters resetFilters={resetFilters} />
         }
