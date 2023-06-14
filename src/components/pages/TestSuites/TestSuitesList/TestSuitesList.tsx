@@ -56,7 +56,7 @@ const TestSuitesList: FC = () => {
     abortAll({id: item.name})
       .unwrap()
       .catch(() => {
-        notificationCall('failed', 'Something went wrong during test execution abortion');
+        notificationCall('failed', 'Something went wrong during test suite execution abortion');
       });
   }, []);
 
