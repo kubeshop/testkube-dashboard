@@ -72,22 +72,23 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   }, []);
 
   useEffect(() => {
+    const newSearchParams = new URLSearchParams(searchParams);
     if (queryFilters.textSearch) {
-      searchParams.set('textSearch', queryFilters.textSearch);
+      newSearchParams.set('textSearch', queryFilters.textSearch);
     } else {
-      searchParams.delete('textSearch');
+      newSearchParams.delete('textSearch');
     }
     if (queryFilters.status?.length) {
-      searchParams.set('status', queryFilters.status.join(','));
+      newSearchParams.set('status', queryFilters.status.join(','));
     } else {
-      searchParams.delete('status');
+      newSearchParams.delete('status');
     }
     if (queryFilters.selector?.length) {
-      searchParams.set('selector', queryFilters.selector.join(','));
+      newSearchParams.set('selector', queryFilters.selector.join(','));
     } else {
-      searchParams.delete('selector');
+      newSearchParams.delete('selector');
     }
-    setSearchParams(searchParams);
+    setSearchParams(newSearchParams);
   }, [queryFilters]);
 
   const resetFilters = () => {
