@@ -46,6 +46,8 @@ const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
   return item.type ? <ExecutorIcon type={icon} /> : null;
 });
 
+const isRunningStatus = (status: string) => ['running', 'queued'].includes(status);
+
 const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
   const {item, latestExecution, onClick, onAbort, dataTest, metrics} = props;
 
@@ -54,6 +56,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
     (latestExecution as TestSuiteExecution)?.status ||
     'pending';
   const executions = metrics?.executions;
+  const isRunning = isRunningStatus(status) || executions?.some(execution => isRunningStatus(execution.status));
 
   const click = useCallback(() => {
     onClick(item);
@@ -82,14 +85,9 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
           </ItemColumn>
           <ItemColumn>
             <EntityGridItemExecutionTime time={latestExecution?.startTime} />
-            <DotsDropdown
-              items={[
-                {
-                  key: 1,
-                  label: <span onClick={abort}>Abort all executions</span>,
-                },
-              ]}
-            />
+            {isRunning ? (
+              <DotsDropdown items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]} />
+            ) : null}
           </ItemColumn>
         </ItemRow>
         <RowsWrapper>
