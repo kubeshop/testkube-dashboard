@@ -86,7 +86,10 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
           <ItemColumn>
             <EntityGridItemExecutionTime time={latestExecution?.startTime} />
             {isRunning ? (
-              <DotsDropdown items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]} />
+              <DotsDropdown
+                placement="bottomRight"
+                items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]}
+              />
             ) : null}
           </ItemColumn>
         </ItemRow>
