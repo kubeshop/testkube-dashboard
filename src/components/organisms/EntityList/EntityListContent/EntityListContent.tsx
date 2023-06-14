@@ -61,15 +61,14 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    dispatch(
-      setQueryFilters(
-        merge({}, queryFilters, initialFiltersState, {
-          textSearch: searchParams.get('textSearch'),
-          status: searchParams.get('status')?.split(',').filter(Boolean),
-          selector: searchParams.get('selector')?.split(',').filter(Boolean),
-        })
-      )
-    );
+    const filters = merge({}, initialFiltersState, queryFilters, {
+      textSearch: searchParams.get('textSearch') ?? undefined,
+      status: searchParams.get('status')?.split(',').filter(Boolean) ?? undefined,
+      selector: searchParams.get('selector')?.split(',').filter(Boolean) ?? undefined,
+    });
+    if (!isEqual(filters, queryFilters)) {
+      dispatch(setQueryFilters(filters));
+    }
   }, []);
 
   useEffect(() => {
