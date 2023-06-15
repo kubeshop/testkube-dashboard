@@ -25,6 +25,7 @@ import {useAppDispatch} from '@redux/hooks';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
@@ -115,7 +116,7 @@ const AppRoot: React.FC = () => {
   useEffect(() => {
     posthog.capture('$pageview');
 
-    ReactGA.send({hitType: 'pageview', page: location.pathname});
+    ReactGA.send({hitType: 'pageview', page: `${location.pathname}${anonymizeQueryString(location.search)}`});
   }, [location.pathname]);
 
   useEffect(() => {
