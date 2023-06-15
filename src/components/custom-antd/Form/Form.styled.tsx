@@ -11,8 +11,8 @@ export const StyledFormItemLabel = styled.label`
   font-weight: 300;
 `;
 
-export const StyledFormItem = styled(AntdFormItem)<{flex?: number}>`
-  flex: ${({flex}) => flex};
+export const StyledFormItem = styled(AntdFormItem)<{$flexGrow?: number | string}>`
+  flex: ${({$flexGrow}) => $flexGrow};
 
   margin-bottom: 0;
 `;
