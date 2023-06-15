@@ -90,9 +90,12 @@ const AppRoot: React.FC = () => {
         posthog.opt_in_capturing();
       }
 
-      if (env.ga4Keys.length > 0) {
-        ReactGA.initialize(env.ga4Keys.map(trackingId => ({trackingId})));
-        ReactGA.event('gtm.js');
+      if (env.ga4Key) {
+        ReactGA.initialize(env.ga4Key, {
+          // To make GTM- keys working properly with react-ga4,
+          // we need to override the script URL.
+          gtagUrl: env.ga4Key.startsWith('GTM-') ? 'https://www.googletagmanager.com/gtm.js' : undefined,
+        });
         ReactGA.gtag('consent', 'update', {
           ad_storage: 'granted',
           analytics_storage: 'granted',
