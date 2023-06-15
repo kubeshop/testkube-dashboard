@@ -25,6 +25,7 @@ import {useAppDispatch} from '@redux/hooks';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
@@ -89,9 +90,12 @@ const AppRoot: React.FC = () => {
         posthog.opt_in_capturing();
       }
 
-      if (env.ga4Keys.length > 0) {
-        ReactGA.initialize(env.ga4Keys.map(trackingId => ({trackingId})));
-        ReactGA.event('gtm.js');
+      if (env.ga4Key) {
+        ReactGA.initialize(env.ga4Key, {
+          // To make GTM- keys working properly with react-ga4,
+          // we need to override the script URL.
+          gtagUrl: env.ga4Key.startsWith('GTM-') ? 'https://www.googletagmanager.com/gtm.js' : undefined,
+        });
         ReactGA.gtag('consent', 'update', {
           ad_storage: 'granted',
           analytics_storage: 'granted',
@@ -115,7 +119,7 @@ const AppRoot: React.FC = () => {
   useEffect(() => {
     posthog.capture('$pageview');
 
-    ReactGA.send({hitType: 'pageview', page: location.pathname});
+    ReactGA.send({hitType: 'pageview', page: `${location.pathname}${anonymizeQueryString(location.search)}`});
   }, [location.pathname]);
 
   useEffect(() => {

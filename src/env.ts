@@ -11,10 +11,7 @@ const values = (window as any)._env_;
 const build: BuildTimeEnvironment = {
   posthogKey: getValue('REACT_APP_POSTHOG_KEY', process.env.REACT_APP_POSTHOG_KEY),
   segmentKey: getValue('REACT_APP_SEGMENT_KEY', process.env.REACT_APP_SEGMENT_KEY),
-  ga4Keys: (getValue('REACT_APP_GOOGLE_ANALYTICS_ID', process.env.REACT_APP_GOOGLE_ANALYTICS_ID) || '')
-    .split(',')
-    .map(key => key.trim())
-    .filter(Boolean),
+  ga4Key: getValue('REACT_APP_GOOGLE_ANALYTICS_ID', process.env.REACT_APP_GOOGLE_ANALYTICS_ID),
   version: getValue('REACT_APP_VERSION', process.env.REACT_APP_VERSION) || 'dev',
 };
 
@@ -28,7 +25,7 @@ const env: DynamicEnvironment = {
 type BuildTimeEnvironment = {
   posthogKey?: string;
   segmentKey?: string;
-  ga4Keys: string[];
+  ga4Key?: string;
   version: string;
 };
 
