@@ -5,6 +5,7 @@ import useWebSocket from 'react-use-websocket';
 
 import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
 
+import useExecutorIcon from '@hooks/useExecutorIcon';
 import useStateCallback from '@hooks/useStateCallback';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
@@ -15,7 +16,6 @@ import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
-import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
@@ -261,7 +261,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setExecutionsList(executions);
   }, [executions]);
 
-  const testIcon = entity === 'tests' ? getTestExecutorIcon(executors, entityDetails?.type) : undefined;
+  const testIcon = useExecutorIcon(entityDetails);
 
   const entityDetailsWithIcon = useMemo(
     () => ({

@@ -25,11 +25,6 @@ export const testSuitesSlice = createSlice({
 
 export const selectTestSuites = (state: RootState) => state.testSuites.dataList;
 export const selectTestSuitesFilters = (state: RootState) => state.testSuites.filters;
-export const selectAllTestSuitesFilters = (state: RootState) => ({
-  filters: state.testSuites.filters,
-  filtered: state.testSuites.filtered,
-  totals: state.testSuites.totals,
-});
 
 export const {setTestSuites, setTestSuitesFilters} = testSuitesSlice.actions;
 

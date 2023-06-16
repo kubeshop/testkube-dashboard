@@ -63,11 +63,6 @@ export type TestSuiteWithExecutionRedux = {
   latestExecution?: TestSuiteExecution;
 };
 
-export type TestSuiteForTrigger = {
-  name: TestSuite['name'];
-  namespace: TestSuite['namespace'];
-};
-
 export type TestSuiteFilters = {
   textSearch: string;
   pageSize: number;

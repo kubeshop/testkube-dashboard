@@ -1,20 +1,17 @@
-import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
-import {usePrevious} from 'react-use';
+import React, {memo, useContext, useEffect, useState} from 'react';
+import {useSearchParams} from 'react-router-dom';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {isEqual, merge} from 'lodash';
 
-import {Button, Modal} from '@custom-antd';
+import {DashboardContext, MainContext, ModalContext} from '@contexts';
+
+import {Button} from '@custom-antd';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {Entity, EntityListBlueprint} from '@models/entity';
-import {ModalConfigProps} from '@models/modal';
-import {OnDataChangeInterface} from '@models/onDataChange';
-import {Test} from '@models/test';
-import {TestSuite} from '@models/testSuite';
+import {EntityListBlueprint} from '@models/entity';
 
 import {EntityGrid} from '@molecules';
-import EntityGridItem from '@molecules/EntityGrid/EntityGridItem';
 
 import {PageHeader, PageToolbar, PageWrapper} from '@organisms';
 
@@ -26,144 +23,116 @@ import {initialPageSize} from '@redux/initialState';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 
-import {safeRefetch} from '@utils/fetchUtils';
-import {compareFiltersObject} from '@utils/objects';
-
-import {TestModalConfig, TestSuiteModalConfig} from '../EntityCreationModal';
-import {EntityListContext} from '../EntityListContainer/EntityListContainer';
 import Filters from '../EntityListFilters';
 
 import EmptyDataWithFilters from './EmptyDataWithFilters';
-import {TestSuitesDataLayer, TestsDataLayer} from './EntityDataLayers';
-import {EmptyListWrapper, StyledFiltersSection} from './EntityListContent.styled';
-
-const modalTypes: Record<Entity, ModalConfigProps> = {
-  'test-suites': TestSuiteModalConfig,
-  tests: TestModalConfig,
-};
+import {StyledFiltersSection} from './EntityListContent.styled';
 
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {
     pageTitle,
     pageDescription: PageDescription,
     emptyDataComponent: EmptyData,
+    CardComponent,
     entity,
-    filtersComponentsIds,
-    setData,
     initialFiltersState,
     addEntityButtonText,
-    dataTestID,
+    dataTest,
+    isLoading = false,
+    isFetching = false,
+    queryFilters,
+    data,
+    setQueryFilters,
+    createModalConfig,
+    onItemClick,
+    onItemAbort,
   } = props;
 
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   const {dispatch, isClusterAvailable} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
+  const {setModalConfig, setModalOpen} = useContext(ModalContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
-  const {queryFilters, dataSource, setQueryFilters} = useContext(EntityListContext);
-  const prevQueryFilters = usePrevious(queryFilters) || queryFilters;
 
-  const [contentProps, setContentProps] = useState<OnDataChangeInterface>({
-    data: [],
-    isLoading: false,
-    isFetching: false,
-    refetch: () => Promise.resolve(),
-  });
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const onDataChange = (args: OnDataChangeInterface) => {
-    setContentProps(args);
-  };
+  useEffect(() => {
+    const filters = merge({}, initialFiltersState, queryFilters, {
+      textSearch: searchParams.get('textSearch') ?? undefined,
+      status: searchParams.get('status')?.split(',').filter(Boolean) ?? undefined,
+      selector: searchParams.get('selector')?.split(',').filter(Boolean) ?? undefined,
+    });
+    if (!isEqual(filters, queryFilters)) {
+      dispatch(setQueryFilters(filters));
+    }
+  }, []);
 
-  const dataLayers: Record<Entity, JSX.Element> = {
-    tests: <TestsDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-    'test-suites': <TestSuitesDataLayer onDataChange={onDataChange} queryFilters={queryFilters} />,
-  };
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (queryFilters.textSearch) {
+      newSearchParams.set('textSearch', queryFilters.textSearch);
+    } else {
+      newSearchParams.delete('textSearch');
+    }
+    if (queryFilters.status?.length) {
+      newSearchParams.set('status', queryFilters.status.join(','));
+    } else {
+      newSearchParams.delete('status');
+    }
+    if (queryFilters.selector?.length) {
+      newSearchParams.set('selector', queryFilters.selector.join(','));
+    } else {
+      newSearchParams.delete('selector');
+    }
+    setSearchParams(newSearchParams);
+  }, [queryFilters]);
 
   const resetFilters = () => {
     dispatch(setQueryFilters(initialFiltersState));
   };
 
-  const onNavigateToDetails = useCallback(
-    (item: Test | TestSuite) => {
-      navigate(`/${entity}/executions/${item.name}`);
-    },
-    [navigate, entity]
-  );
-
   const onScrollBottom = () => {
+    setIsLoadingNext(true);
     dispatch(setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize}));
   };
 
   useEffect(() => {
-    if (!setData || contentProps.isLoading || contentProps.isFetching) {
-      return;
-    }
-
-    if (contentProps.data && contentProps.data.length) {
+    if (!isLoading && !isFetching) {
       setFirstTimeLoading(false);
-      dispatch(setData(contentProps.data));
-
-      return;
     }
-
-    if (!contentProps.data || !contentProps.data.length) {
-      setFirstTimeLoading(false);
-      // if no results - set result as an empty array because not all the time we get an empty array from backend
-      dispatch(setData([]));
-    }
-  }, [contentProps.data, contentProps.isLoading, contentProps.isFetching]);
+  }, [data, isLoading, isFetching]);
 
   useEffect(() => {
     setFirstTimeLoading(true);
-
-    return () => {
-      setFirstTimeLoading(true);
-    };
   }, [entity, apiEndpoint]);
 
   useEffect(() => {
     setIsApplyingFilters(true);
+  }, [queryFilters]);
 
-    if (queryFilters.pageSize > prevQueryFilters.pageSize) {
-      setIsLoadingNext(true);
-    }
-
-    safeRefetch(contentProps.refetch).then(() => {
-      setIsApplyingFilters(false);
+  useEffect(() => {
+    if (!isFetching) {
       setIsLoadingNext(false);
-    });
-  }, [queryFilters, contentProps.refetch]);
+      setIsApplyingFilters(false);
+    }
+  }, [isFetching]);
 
-  const isFiltersEmpty = compareFiltersObject(initialFiltersState, queryFilters);
-  const isEmptyData = (dataSource?.length === 0 || !dataSource) && isFiltersEmpty && !contentProps.isLoading;
+  const isFiltersEmpty = isEqual(initialFiltersState, queryFilters);
+  const isEmptyData = !data?.length && isFiltersEmpty && !isLoading;
 
   const addEntityAction = () => {
-    setIsModalVisible(true);
+    setModalConfig(createModalConfig);
+    setModalOpen(true);
   };
-
-  const creationModalConfig: ModalConfigProps = modalTypes[entity];
 
   useTrackTimeAnalytics(`${entity}-list`);
 
-  const filters =
-    filtersComponentsIds && filtersComponentsIds.length ? (
-      <StyledFiltersSection>
-        <Filters
-          setFilters={setQueryFilters}
-          filters={queryFilters}
-          filtersComponentsIds={filtersComponentsIds}
-          entity={entity}
-          isFiltersDisabled={isEmptyData || !isClusterAvailable}
-        />
-      </StyledFiltersSection>
-    ) : null;
-
   const createButton = mayCreate ? (
-    <Button $customType="primary" onClick={addEntityAction} data-test={dataTestID} disabled={!isClusterAvailable}>
+    <Button $customType="primary" onClick={addEntityAction} data-test={dataTest} disabled={!isClusterAvailable}>
       {addEntityButtonText}
     </Button>
   ) : null;
@@ -177,34 +146,32 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         description={<PageDescription />}
         loading={isApplyingFilters && !isFirstTimeLoading}
       >
-        <PageToolbar extra={createButton}>{filters}</PageToolbar>
+        <PageToolbar extra={createButton}>
+          <StyledFiltersSection>
+            <Filters
+              setFilters={setQueryFilters}
+              filters={queryFilters}
+              isFiltersDisabled={isEmptyData || !isClusterAvailable}
+            />
+          </StyledFiltersSection>
+        </PageToolbar>
       </PageHeader>
 
-      {dataLayers[entity]}
-
       <EntityGrid
+        itemKey="dataItem.name"
         maxColumns={2}
-        data={dataSource}
-        Component={EntityGridItem}
-        componentProps={{onClick: onNavigateToDetails}}
+        data={data}
+        Component={CardComponent}
+        componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
         empty={
-          <EmptyListWrapper>
-            {isFiltersEmpty ? (
-              <EmptyData action={addEntityAction} />
-            ) : (
-              <EmptyDataWithFilters resetFilters={resetFilters} />
-            )}
-          </EmptyListWrapper>
+          isFiltersEmpty ? <EmptyData action={addEntityAction} /> : <EmptyDataWithFilters resetFilters={resetFilters} />
         }
         itemHeight={163.85}
         loadingInitially={isFirstTimeLoading}
         loadingMore={isLoadingNext}
-        hasMore={!isLoadingNext && queryFilters.pageSize <= dataSource.length}
+        hasMore={!isLoadingNext && data && queryFilters.pageSize <= data.length}
         onScrollEnd={onScrollBottom}
       />
-      {isModalVisible ? (
-        <Modal {...creationModalConfig} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
-      ) : null}
     </PageWrapper>
   );
 };
