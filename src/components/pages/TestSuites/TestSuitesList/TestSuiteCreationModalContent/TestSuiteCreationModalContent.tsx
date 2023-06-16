@@ -37,7 +37,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
-  const {setModalConfig, setModalOpen} = useContext(ModalContext);
+  const {closeModal} = useContext(ModalContext);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
@@ -62,13 +62,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
           dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
 
           navigate(`/test-suites/executions/${res.data.metadata.name}`);
-
-          setModalOpen(false);
-          setModalConfig({
-            width: 500,
-            title: '',
-            content: <></>,
-          });
+          closeModal();
         }
       })
       .catch(err => {

@@ -34,7 +34,7 @@ const TestCreationModalContent: React.FC = () => {
   const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
-  const {setModalConfig, setModalOpen} = useContext(ModalContext);
+  const {closeModal} = useContext(ModalContext);
 
   const executors = useAppSelector(selectExecutors);
   const testSources = useAppSelector(selectSources);
@@ -79,12 +79,7 @@ const TestCreationModalContent: React.FC = () => {
         dispatch(setRedirectTarget({targetTestId: res.data.metadata.name}));
 
         navigate(`/tests/executions/${res.data.metadata.name}`);
-        setModalOpen(false);
-        setModalConfig({
-          width: 500,
-          title: '',
-          content: <></>,
-        });
+        closeModal();
       }
     });
   };
