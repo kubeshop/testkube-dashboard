@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 
 export interface ICustomButtonProps extends AntdButtonProps {
-  $customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'warning';
+  $customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'warning' | 'github' | 'gitlab';
   hidden?: boolean;
   $withPadding?: boolean;
 }
 
-const buttomTypesStyles: {[key: string]: string} = {
+const buttonTypesStyles: Record<string, string> = {
   primary: `
     color: ${Colors.whitePure};
     border-color: transparent;
@@ -71,10 +71,34 @@ const buttomTypesStyles: {[key: string]: string} = {
       background: transparent;
     }
   `,
+  github: `
+    color: ${Colors.whitePure};
+    border-color: transparent;
+    background: ${Colors.slate700};
+    &:focus,
+    &:hover,
+    &:active {
+      color: ${Colors.whitePure};
+      border-color: ${Colors.slate700};
+      background: transparent;
+    }
+  `,
+  gitlab: `
+    color: ${Colors.whitePure};
+    border-color: transparent;
+    background: ${Colors.violet800};
+    &:focus,
+    &:hover,
+    &:active {
+      color: ${Colors.whitePure};
+      border-color: ${Colors.violet800};
+      background: transparent;
+    }
+  `,
 };
 
 export const AntdCustomStyledButton = styled(AntdButton)<ICustomButtonProps>`
-  ${props => buttomTypesStyles[props.$customType || 'primary']};
+  ${props => buttonTypesStyles[props.$customType || 'primary']};
   ${props =>
     !props.$withPadding
       ? `
