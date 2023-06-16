@@ -72,6 +72,7 @@ enum Colors {
   amber90099 = '#78350F99',
 
   violet400 = '#a78bfa',
+  violet800 = '#5B21B6',
 
   // Greys
   grey1000 = '#141414',
