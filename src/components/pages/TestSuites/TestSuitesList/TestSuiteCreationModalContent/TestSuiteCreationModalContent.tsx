@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, MainContext, ModalContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
@@ -33,9 +33,11 @@ type TestSuiteCreationModalFormValues = {
 
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm<TestSuiteCreationModalFormValues>();
+
   const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
+  const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
@@ -60,6 +62,13 @@ const TestSuiteCreationModalContent: React.FC = () => {
           dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
 
           navigate(`/test-suites/executions/${res.data.metadata.name}`);
+
+          setModalOpen(false);
+          setModalConfig({
+            width: 500,
+            title: '',
+            content: <></>,
+          });
         }
       })
       .catch(err => {

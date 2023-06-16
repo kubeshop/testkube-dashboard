@@ -4,11 +4,7 @@ import {EmptyListContent, HelpCard} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
 
-interface EmptyTestsProps {
-  onButtonClick: () => void;
-}
-
-const EmptyTests: FC<EmptyTestsProps> = ({onButtonClick}) => {
+const EmptyTests: FC<{action: () => void}> = ({action}) => {
   return (
     <EmptyListContent
       title="Create your first test in a few easy steps."
@@ -16,7 +12,7 @@ const EmptyTests: FC<EmptyTestsProps> = ({onButtonClick}) => {
       buttonText="Add a new test"
       emptyListReadonlyTitle="No tests found"
       emptyListReadonlyDescription="We could not find any tests in this environment."
-      onButtonClick={onButtonClick}
+      onButtonClick={action}
       actionType="create"
     >
       <HelpCard isLink link={externalLinks.createTest}>

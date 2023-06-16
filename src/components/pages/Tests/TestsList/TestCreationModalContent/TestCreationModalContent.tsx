@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {AnalyticsContext, DashboardContext, MainContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, MainContext, ModalContext} from '@contexts';
 
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Test} from '@models/test';
@@ -34,6 +34,7 @@ const TestCreationModalContent: React.FC = () => {
   const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
+  const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
   const executors = useAppSelector(selectExecutors);
   const testSources = useAppSelector(selectSources);
@@ -78,6 +79,12 @@ const TestCreationModalContent: React.FC = () => {
         dispatch(setRedirectTarget({targetTestId: res.data.metadata.name}));
 
         navigate(`/tests/executions/${res.data.metadata.name}`);
+        setModalOpen(false);
+        setModalConfig({
+          width: 500,
+          title: '',
+          content: <></>,
+        });
       }
     });
   };
