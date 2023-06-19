@@ -61,8 +61,9 @@ export class CreateTestPage{
         await this.selectTestType(testData.type);
         await this.selectTestSource(testData.content);
         
-        const label = Object.entries(testData.labels)[0].join(':')
-        await this.selectLabel(label)
+        for (const [name, value] of Object.entries(testData.labels)) {
+          await this.selectLabel(`${name}:${value}`);
+        }
     }
 
     async _clickCreateTestButton() {
