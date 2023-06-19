@@ -69,6 +69,7 @@
   "dependencies": {
     "@ant-design/icons": "4.7.0",
     "@fingerprintjs/fingerprintjs": "^3.3.5",
+    "@monaco-editor/react": "^4.5.1",
     "@reduxjs/toolkit": "1.9.1",
     "@segment/analytics-next": "^1.43.0",
     "ansi-to-react": "^6.1.6",

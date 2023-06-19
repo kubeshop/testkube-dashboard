@@ -1,4 +1,4 @@
-import {useContext, useEffect} from 'react';
+import {useContext, useEffect, useRef} from 'react';
 
 import {Form} from 'antd';
 
@@ -9,7 +9,8 @@ import {MainContext} from '@contexts';
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
-import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
+import {ConfigurationCard} from '@molecules';
+import DefinitionMonaco from '@molecules/Definition/DefinitionMonaco';
 
 import {useGetTriggerDefinitionQuery} from '@services/triggers';
 
@@ -32,22 +33,29 @@ const TriggerDefinition = () => {
   });
   const filename = useLocation().lastPathSegment;
 
+  const monacoRef = useRef(null);
+
+  const onSave = () => {
+    // @ts-ignore
+    console.log(monacoRef?.current?.getValue());
+  };
+
   useEffect(() => {
     if (currentTrigger) {
       refetch();
     }
   }, [currentTrigger]);
+
   return (
     <Form name="definition-form">
-      <ConfigurationCard title="Definition" description="Validate and export your trigger configuration">
+      <ConfigurationCard
+        title="Definition"
+        description="Validate and export your trigger configuration"
+        onConfirm={onSave}
+        forceEnableButtons
+      >
         {definition ? (
-          <DefinitionContent content={definition}>
-            {isSecureContext ? (
-              <CopyButton content={definition} />
-            ) : (
-              <DownloadButton filename={filename} extension="yaml" content={definition} />
-            )}
-          </DefinitionContent>
+          <DefinitionMonaco content={definition} monacoRef={monacoRef} />
         ) : (
           <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
         )}
