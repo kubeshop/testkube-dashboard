@@ -20,7 +20,7 @@ import {
   useWsEndpoint,
 } from './apiEndpoint';
 
-function replaceEnvEach<K extends keyof typeof env>(name: K, value: (typeof env)[K]): void {
+function replaceEnvEach<K extends keyof typeof env>(name: K, value: typeof env[K]): void {
   let restore: typeof value;
   beforeEach(() => {
     restore = env[name];
