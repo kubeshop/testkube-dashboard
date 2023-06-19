@@ -1,17 +1,16 @@
 import { test } from '@playwright/test';
-
 import { TestDataHandler } from '../data-handlers/test-data-handlers';
 import { ApiHelpers } from '../api/api-helpers';
-const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
 import { CommonHelpers } from '../helpers/common-helpers';
 import { MainPage } from '../pages/MainPage';
 import { CreateTestPage } from '../pages/CreateTestPage';
+const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
 
-test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
-    window.localStorage.setItem('isGADisabled', '1');
-  });
-});
+// test.beforeEach(async ({ page }) => {
+//   await page.addInitScript(() => {
+//     window.localStorage.setItem('isGADisabled', '1');
+//   });
+// });
 
 const testNames = ['cypress-git', 'k6-git', 'postman-git'];
 for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
