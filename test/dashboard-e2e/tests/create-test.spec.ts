@@ -45,7 +45,3 @@ test.skip(`Create test from String`, async ({ page }) => {
 test.skip(`Create test from Git source`, async ({ page }) => {
 
 });
-
-test.skip(`Create test with Labels`, async ({ page }) => {
-
-});
