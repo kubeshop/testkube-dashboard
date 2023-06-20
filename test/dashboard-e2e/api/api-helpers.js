@@ -15,7 +15,7 @@ export class ApiHelpers {
                 .set('Content-Type', 'application/json')
                 .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
 
-            return this.parseResponse(response);;
+            return ApiHelpers.parseResponse(response);
             
         } catch (e) {
             throw Error(`getTests failed on "${request}" with: "${e}"`);
@@ -31,7 +31,7 @@ export class ApiHelpers {
                 .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '')
                 .send(testData);
 
-            return this.parseResponse(response);
+            return ApiHelpers.parseResponse(response);
         } catch (e) {
             throw Error(`createTest failed on "${request}" with: "${e}"`);
         }
@@ -69,7 +69,7 @@ export class ApiHelpers {
                 .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '')
                 .send(testData);
 
-            return this.parseResponse(response);
+            return ApiHelpers.parseResponse(response);
         } catch (e) {
             throw Error(`updateTest failed on "${request}" with: "${e}"`);
         }
@@ -130,7 +130,7 @@ export class ApiHelpers {
                 .set('Content-Type', 'application/json')
                 .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
 
-            return this.parseResponse(response);
+            return ApiHelpers.parseResponse(response);
         } catch (e) {
             throw Error(`getTestData failed on "${request}" with: "${e}"`);
         }
