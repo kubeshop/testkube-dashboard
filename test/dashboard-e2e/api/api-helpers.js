@@ -159,7 +159,8 @@ export class ApiHelpers {
         }
     }
 
-    parseResponse(response) { // Workaround for empty response.body
-        return !this.cloudContext ? response.body : JSON.parse(response.text);
+    static parseResponse(response) {
+        // Cloud is missing the `content-type`, so there is no JSON response in `response.body`
+        return JSON.parse(response.text);
     }
 }

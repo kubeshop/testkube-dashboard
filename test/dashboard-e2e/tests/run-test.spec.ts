@@ -5,12 +5,6 @@ import { MainPage } from '../pages/MainPage';
 import { TestExecutionsPage } from '../pages/TestExecutionsPage';
 const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
 
-// test.beforeEach(async ({ page }) => {
-//   await page.addInitScript(() => {
-//     window.localStorage.setItem('isGADisabled', '1');
-//   });
-// });
-
 const testNames = ['cypress-git-created', 'k6-git-created', 'postman-git-created'];
 for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
   test(`Run test ${testName}`, async ({ page }) => {
