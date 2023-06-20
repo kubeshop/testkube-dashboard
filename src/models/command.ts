@@ -19,6 +19,15 @@ export const literalToColor: Record<string, Colors> = {
   connect: Colors.amber400,
   cloud: Colors.amber400,
   environment: Colors.amber400,
+  init: Colors.amber400,
+  brew: Colors.indigo300,
+  choco: Colors.indigo300,
+  curl: Colors.indigo300,
+  wget: Colors.indigo300,
+  sh: Colors.indigo300,
+  sudo: Colors.indigo300,
+  echo: Colors.amber400,
+  source: Colors.amber400,
 };
 
 export const getLiteralColor = (literal: string): Colors => {
