@@ -1,4 +1,4 @@
-import {useContext, useEffect, useRef} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
@@ -18,6 +18,7 @@ import {useStore} from '@store';
 
 const TriggerDefinition = () => {
   const {isClusterAvailable} = useContext(MainContext);
+  const [value, setValue] = useState('');
 
   const {currentTrigger} = useStore(state => ({
     currentTrigger: state.currentTrigger!,
@@ -34,6 +35,10 @@ const TriggerDefinition = () => {
   const filename = useLocation().lastPathSegment;
 
   const monacoRef = useRef(null);
+
+  useEffect(() => {
+    setValue(definition);
+  }, [definition]);
 
   const onSave = () => {
     // @ts-ignore
@@ -55,7 +60,7 @@ const TriggerDefinition = () => {
         forceEnableButtons
       >
         {definition ? (
-          <DefinitionMonaco content={definition} monacoRef={monacoRef} />
+          <DefinitionMonaco value={value} onChange={setValue} />
         ) : (
           <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
         )}
