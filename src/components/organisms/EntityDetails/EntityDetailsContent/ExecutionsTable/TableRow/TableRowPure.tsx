@@ -54,7 +54,7 @@ const TableRowPure: React.FC<{data: any; onAbortExecution: any; mayManageExecuti
             </Text>
           </ItemColumn>
           <ItemColumn>
-            <StatusText color={Colors.slate200} $isRunning={isRunning}>
+            <StatusText className="regular small" color={Colors.slate200} $isRunning={isRunning}>
               {durationMs ? formatDuration(durationMs / 1000) : isRunning ? 'Running' : 'No data'}
             </StatusText>
             {renderedExecutionActions && renderedExecutionActions.length && mayManageExecution ? (
