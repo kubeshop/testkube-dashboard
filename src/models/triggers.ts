@@ -68,6 +68,8 @@ export type TestTriggerFormEntity = {
 
 export type TriggerType = 'label-label' | 'name-label' | 'name-name' | 'label-name';
 
+export type TriggerConditionStatusString = string;
+
 export type TestTriggerSelector = {
   name?: string;
   namespace?: string;
@@ -79,6 +81,7 @@ export type TriggersKeyMap = {
   events: TriggerEvent;
   actions: TriggerAction[];
   executions: TriggerExecution[];
+  conditions: TriggerConditionStatusString[];
 };
 
 export type AddTriggerOption = {

@@ -19,9 +19,10 @@ import {requiredNoText} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 const ResourceCondition: React.FC = () => {
-  const {currentTrigger, setCurrentTrigger} = useStore(state => ({
+  const {currentTrigger, setCurrentTrigger, triggersKeyMap} = useStore(state => ({
     currentTrigger: state.currentTrigger!,
     setCurrentTrigger: state.setCurrentTrigger,
+    triggersKeyMap: state.triggersKeyMap!,
   }));
 
   const mayEdit = usePermission(Permissions.editEntity);
@@ -107,26 +108,10 @@ const ResourceCondition: React.FC = () => {
                         <FormRow key={key}>
                           <FormItem {...restField} name={[name, 'type']} rules={[requiredNoText]} flex={2}>
                             <Select
-                              options={[
-                                // options to be defined, these hardcoded ones are not actual
-                                {label: 'Progressing', value: 'Progressing'},
-                                {
-                                  label: 'Available',
-                                  value: 'Available',
-                                },
-                                {
-                                  label: 'Degraded',
-                                  value: 'Degraded',
-                                },
-                                {
-                                  label: 'Upgradeable',
-                                  value: 'Upgradeable',
-                                },
-                                {
-                                  label: 'ProgressDeadlineExceeded',
-                                  value: 'ProgressDeadlineExceeded',
-                                },
-                              ]}
+                              options={triggersKeyMap.conditions.map(condition => ({
+                                label: condition,
+                                value: condition,
+                              }))}
                               placeholder="Type"
                             />
                           </FormItem>

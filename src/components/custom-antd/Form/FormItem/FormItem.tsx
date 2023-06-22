@@ -9,10 +9,10 @@ type FormItemCustomProps = {
 const FormItem: React.FC<FormItemProps & FormItemCustomProps> = props => {
   const {children, label, flex = 1, ...rest} = props;
 
-  const formItemsProps: FormItemProps & {$flexGrow?: number | string} = {
+  const formItemsProps: FormItemProps & {$flex: number | string} = {
     ...(label ? {label: <StyledFormItemLabel>{label}</StyledFormItemLabel>} : {}),
     ...rest,
-    $flexGrow: flex,
+    $flex: flex,
   };
 
   return <StyledFormItem {...formItemsProps}>{children}</StyledFormItem>;
