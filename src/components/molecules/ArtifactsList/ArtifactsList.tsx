@@ -1,13 +1,18 @@
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 
-import {Skeleton, Text} from '@custom-antd';
+import {Button, Skeleton, Text} from '@custom-antd';
 
 import {Artifact} from '@models/artifact';
 
+import {downloadArtifactArchive} from '@services/artifacts';
+
 import Colors from '@styles/Colors';
+
+import {DefaultRequestError, displayDefaultErrorNotification} from '@utils/notification';
 
 import {ArtifactsListContainer} from './ArtifactsList.styled';
 import ArtifactsListItem from './ArtifactsListItem';
+import {StyledDownloadAllContainer} from './ArtifactsListItem.styled';
 
 type ArtifactsListProps = {
   artifacts: Artifact[];
@@ -19,6 +24,8 @@ type ArtifactsListProps = {
 
 const ArtifactsList: React.FC<ArtifactsListProps> = props => {
   const {artifacts, testExecutionId, testName, testSuiteName, isLoading} = props;
+
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const renderedArtifactsList = useMemo(() => {
     if (isLoading) {
@@ -55,7 +62,27 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
     });
   }, [artifacts, testExecutionId, isLoading]);
 
-  return <ArtifactsListContainer>{renderedArtifactsList}</ArtifactsListContainer>;
+  const handleDownloadAll = async () => {
+    try {
+      setIsDownloading(true);
+      await downloadArtifactArchive(testExecutionId, `${testName}-${testExecutionId}`);
+    } catch (err) {
+      displayDefaultErrorNotification(err as DefaultRequestError);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  return (
+    <ArtifactsListContainer>
+      {artifacts.length > 0 ? (
+        <StyledDownloadAllContainer>
+          <Button onClick={handleDownloadAll}>{!isDownloading ? 'Download all' : 'Downloading...'}</Button>
+        </StyledDownloadAllContainer>
+      ) : null}
+      {renderedArtifactsList}
+    </ArtifactsListContainer>
+  );
 };
 
 export default ArtifactsList;

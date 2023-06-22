@@ -39,3 +39,37 @@ export const downloadArtifact = async (
   document.body.removeChild(a);
   window.URL.revokeObjectURL(blobUrl);
 };
+
+export const downloadArtifactArchive = async (executionId: string, fileName: string) => {
+  const url = `/executions/${executionId}/artifact-archive`;
+  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl(undefined)}${url}`;
+  const idToken = await getRtkIdToken();
+
+  // Call the API to retrieve file or signed URL
+  let response = await fetch(finalUrl, {
+    headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
+  });
+
+  // @ts-ignore
+  // const reader = response.body.getReader();
+  // const {value} = await reader.read();
+
+  // const blobUrl = window.URL.createObjectURL(new Blob([value!]));
+
+  // console.log(blobUrl, response);
+  // Download the file
+  // const blobUrl = window.URL.createObjectURL(await response.blob());
+  // if (response.headers.get('content-type') === 'application/json') {
+
+  response = await fetch(await response.url);
+
+  // Download the file
+  const blobUrl = window.URL.createObjectURL(await response.blob());
+  const a = document.createElement('a');
+  a.href = blobUrl;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(blobUrl);
+};
