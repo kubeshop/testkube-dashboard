@@ -1,13 +1,12 @@
 import {Form, Input} from 'antd';
 
-import {FormItem, Text} from '@custom-antd';
+import {FormItem, FormItemLabel, Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
 import {dummySecret} from '@utils/sources';
 import {secretRegex} from '@utils/strings';
 
-import FormItemLabel from './FormItemLabel';
 import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 
 type SecretFormItemProps = {

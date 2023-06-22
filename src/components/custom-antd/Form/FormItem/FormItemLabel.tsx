@@ -16,6 +16,7 @@ type FormItemLabelProps = {
 
 const FormItemLabel: React.FC<FormItemLabelProps> = props => {
   const {status, text, tooltipMessage, required} = props;
+
   return (
     <>
       <Text className="regular middle" color={status === 'error' ? Colors.amber400 : Colors.slate200}>
