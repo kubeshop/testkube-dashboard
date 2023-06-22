@@ -10,3 +10,4 @@ export {default as Checkbox} from './Checkbox';
 export {default as FullWidthSpace} from './FullWidthSpace';
 export {default as FormRow} from './Form/FormRow';
 export {default as FormItemLabel} from './Form/FormItem/FormItemLabel';
+export {FormIconWrapper} from './Form/Form.styled';

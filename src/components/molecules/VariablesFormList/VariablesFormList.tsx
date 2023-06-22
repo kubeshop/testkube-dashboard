@@ -1,7 +1,7 @@
 import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, PauseOutlined, RightOutlined} from '@ant-design/icons';
 import {Form, FormInstance, Input, Select} from 'antd';
 
-import {Button, Text} from '@custom-antd';
+import {Button, FormIconWrapper, FormRow, FullWidthSpace, Text} from '@custom-antd';
 
 import {VariableInForm} from '@models/variable';
 
@@ -13,13 +13,7 @@ import {validateDuplicateValueByKey} from '@utils';
 import {required} from '@utils/form';
 
 import {duplicateKeyMessage, emptyVariableObject, typeOptions} from './VariablesFormList.constants';
-import {
-  StyledButtonsContainer,
-  StyledKeyFormItem,
-  StyledLabelsSpace,
-  SymbolWrapper,
-  VariablesListContainer,
-} from './VariablesFormList.styled';
+import {StyledButtonsContainer, StyledKeyFormItem} from './VariablesFormList.styled';
 
 type VariablesFormListProps = {
   data: VariableInForm[];
@@ -35,11 +29,11 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
   return (
     <Form.List name="variables-list" initialValue={data}>
       {(fields, {add, remove}) => (
-        <VariablesListContainer>
+        <FullWidthSpace size={20} direction="vertical">
           {fields && fields.length
             ? fields.map(({key, name, ...restField}) => {
                 return (
-                  <StyledLabelsSpace key={key}>
+                  <FormRow key={key}>
                     <Form.Item
                       {...restField}
                       name={[name, 'type']}
@@ -70,9 +64,9 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                     >
                       <Input allowClear placeholder="Your variable name" />
                     </StyledKeyFormItem>
-                    <SymbolWrapper>
+                    <FormIconWrapper>
                       <PauseOutlined style={{transform: 'rotate(90deg)', color: Colors.slate500}} />
-                    </SymbolWrapper>
+                    </FormIconWrapper>
                     <Form.Item noStyle shouldUpdate>
                       {() => {
                         const neededFieldValue = form.getFieldValue('variables-list');
@@ -89,9 +83,9 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                               >
                                 <Input placeholder="Referenced secret name" />
                               </Form.Item>
-                              <SymbolWrapper>
+                              <FormIconWrapper>
                                 <RightOutlined style={{fontSize: 12, color: Colors.slate500}} />
-                              </SymbolWrapper>
+                              </FormIconWrapper>
                               <Form.Item
                                 {...restField}
                                 name={[name, 'secretRefKey']}
@@ -122,11 +116,11 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                       }}
                     </Form.Item>
                     {isButtonVisible ? (
-                      <SymbolWrapper>
+                      <FormIconWrapper>
                         <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
-                      </SymbolWrapper>
+                      </FormIconWrapper>
                     ) : null}
-                  </StyledLabelsSpace>
+                  </FormRow>
                 );
               })
             : !isButtonVisible && <Text className="regular">No existing variables or secrets in this test.</Text>}
@@ -137,7 +131,7 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
               </Button>
             </StyledButtonsContainer>
           ) : null}
-        </VariablesListContainer>
+        </FullWidthSpace>
       )}
     </Form.List>
   );

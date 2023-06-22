@@ -1,8 +1,7 @@
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input, InputNumber, Select} from 'antd';
 
-import {Button, FormItem, FormItemLabel, FormRow, FullWidthSpace} from '@custom-antd';
-import {SymbolWrapper} from '@custom-antd/Form/Form.styled';
+import {Button, FormIconWrapper, FormItem, FormItemLabel, FormRow, FullWidthSpace} from '@custom-antd';
 
 import {TestTrigger, TriggerConditionStatus} from '@models/triggers';
 
@@ -108,30 +107,31 @@ const ResourceCondition: React.FC = () => {
               <FullWidthSpace size={16} direction="vertical">
                 {!isResourceConditionsListEmpty ? (
                   <FullWidthSpace direction="vertical" size={16}>
-                    {fields?.map(({key, name, ...restField}) => {
-                      return (
-                        <FormRow key={key}>
-                          <FormItem {...restField} name={[name, 'type']} rules={[requiredNoText]} flex={2}>
-                            <Select
-                              options={triggersKeyMap.conditions.map(condition => ({
-                                label: condition,
-                                value: condition,
-                              }))}
-                              placeholder="Type"
-                            />
-                          </FormItem>
-                          <FormItem {...restField} name={[name, 'status']} rules={[requiredNoText]} flex={2}>
-                            <Select options={selectOptions} placeholder="Status" />
-                          </FormItem>
-                          <FormItem {...restField} name={[name, 'reason']} flex={4}>
-                            <Input placeholder="Reason" />
-                          </FormItem>
-                          <SymbolWrapper>
-                            <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
-                          </SymbolWrapper>
-                        </FormRow>
-                      );
-                    })}
+                    {fields.length &&
+                      fields?.map(({key, name, ...restField}) => {
+                        return (
+                          <FormRow key={key}>
+                            <FormItem {...restField} name={[name, 'type']} rules={[requiredNoText]} flex={2}>
+                              <Select
+                                options={triggersKeyMap.conditions?.map(condition => ({
+                                  label: condition,
+                                  value: condition,
+                                }))}
+                                placeholder="Type"
+                              />
+                            </FormItem>
+                            <FormItem {...restField} name={[name, 'status']} rules={[requiredNoText]} flex={2}>
+                              <Select options={selectOptions} placeholder="Status" />
+                            </FormItem>
+                            <FormItem {...restField} name={[name, 'reason']} flex={4}>
+                              <Input placeholder="Reason" />
+                            </FormItem>
+                            <FormIconWrapper>
+                              <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
+                            </FormIconWrapper>
+                          </FormRow>
+                        );
+                      })}
                   </FullWidthSpace>
                 ) : null}
                 <FormRow justify="center">

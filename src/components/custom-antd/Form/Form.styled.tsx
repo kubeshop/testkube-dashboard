@@ -17,7 +17,7 @@ export const StyledFormItem = styled(AntdFormItem)<{$flex: number | string}>`
   margin-bottom: 0;
 `;
 
-export const SymbolWrapper = styled.div`
+export const FormIconWrapper = styled.div`
   display: flex;
   align-items: center;
 `;

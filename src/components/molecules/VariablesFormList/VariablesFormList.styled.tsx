@@ -4,11 +4,6 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const VariablesListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 export const StyledLabelsSpace = styled.div<{noGap?: boolean}>`
   display: flex;
   align-items: flex-start;
@@ -38,7 +33,7 @@ export const StyledButtonsContainer = styled.div`
   width: 100%;
 `;
 
-export const SymbolWrapper = styled.div`
+export const FormIconWrapper = styled.div`
   display: flex;
   align-items: center;
 
