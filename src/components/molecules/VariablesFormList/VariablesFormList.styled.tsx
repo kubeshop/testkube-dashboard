@@ -32,10 +32,3 @@ export const StyledButtonsContainer = styled.div`
 
   width: 100%;
 `;
-
-export const FormIconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-
-  height: 100%;
-`;
