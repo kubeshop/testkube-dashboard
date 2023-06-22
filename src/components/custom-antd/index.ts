@@ -9,3 +9,4 @@ export {default as Modal} from './Modal';
 export {default as Checkbox} from './Checkbox';
 export {default as FullWidthSpace} from './FullWidthSpace';
 export {default as FormRow} from './Form/FormRow';
+export {default as FormItemLabel} from './Form/FormItem/FormItemLabel';

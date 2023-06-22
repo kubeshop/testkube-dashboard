@@ -1,9 +1,8 @@
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input, InputNumber, Select} from 'antd';
 
-import {Button, FormItem, FormRow, FullWidthSpace} from '@custom-antd';
+import {Button, FormItem, FormItemLabel, FormRow, FullWidthSpace} from '@custom-antd';
 import {SymbolWrapper} from '@custom-antd/Form/Form.styled';
-import FormItemLabel from '@custom-antd/Form/FormItem/FormItemLabel';
 
 import {TestTrigger, TriggerConditionStatus} from '@models/triggers';
 
@@ -58,6 +57,12 @@ const ResourceCondition: React.FC = () => {
   };
 
   const isResourceConditionsListEmpty = resourceConditionValue && !resourceConditionValue.length;
+
+  const selectOptions = [
+    {label: TriggerConditionStatus.True, value: TriggerConditionStatus.True},
+    {label: TriggerConditionStatus.False, value: TriggerConditionStatus.False},
+    {label: TriggerConditionStatus.Unknown, value: TriggerConditionStatus.Unknown},
+  ];
 
   return (
     <Form
@@ -116,14 +121,7 @@ const ResourceCondition: React.FC = () => {
                             />
                           </FormItem>
                           <FormItem {...restField} name={[name, 'status']} rules={[requiredNoText]} flex={2}>
-                            <Select
-                              options={[
-                                {label: TriggerConditionStatus.True, value: TriggerConditionStatus.True},
-                                {label: TriggerConditionStatus.False, value: TriggerConditionStatus.False},
-                                {label: TriggerConditionStatus.Unknown, value: TriggerConditionStatus.Unknown},
-                              ]}
-                              placeholder="Status"
-                            />
+                            <Select options={selectOptions} placeholder="Status" />
                           </FormItem>
                           <FormItem {...restField} name={[name, 'reason']} flex={4}>
                             <Input placeholder="Reason" />

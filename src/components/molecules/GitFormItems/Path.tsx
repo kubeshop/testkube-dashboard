@@ -1,8 +1,7 @@
 import {Input} from 'antd';
 
-import {FormItem} from '@custom-antd';
+import {FormItem, FormItemLabel} from '@custom-antd';
 
-import FormItemLabel from './FormItemLabel';
 import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 
 export const pathPlaceholders: Record<string, string> = {
