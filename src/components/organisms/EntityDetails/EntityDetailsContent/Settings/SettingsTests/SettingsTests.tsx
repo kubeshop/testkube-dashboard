@@ -219,7 +219,7 @@ const SettingsTests: React.FC = () => {
               style={{width: '100%', marginTop: 15, marginBottom: 30}}
               value={null}
               showSearch
-              size="large"
+              size="middle"
             >
               <Option value="delay">
                 <StyledOptionWrapper>
