@@ -9,7 +9,7 @@ import {MainContext} from '@contexts';
 import {ConfigurationCard} from '@molecules';
 import DefinitionMonaco from '@molecules/Definition/DefinitionMonaco';
 
-import {useGetTriggerDefinitionQuery} from '@services/triggers';
+import {useGetTriggerDefinitionQuery, useUpdateTriggerDefinitionMutation} from '@services/triggers';
 
 import {testkubeCRDBases} from '@src/utils/externalLinks';
 
@@ -31,6 +31,8 @@ const TriggerDefinition = () => {
     skip: !isClusterAvailable,
   });
 
+  const [updateTrigger] = useUpdateTriggerDefinitionMutation();
+
   useEffect(() => {
     setValue(definition);
   }, [definition]);
@@ -42,7 +44,9 @@ const TriggerDefinition = () => {
   }, [currentTrigger]);
 
   const onSave = () => {
-    console.log(value);
+    updateTrigger({name: currentTrigger.name, value}).then(res => {
+      console.log(res);
+    });
   };
 
   return (

@@ -19,7 +19,6 @@ type DefinitionProps = {
 
 const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => {
   const {value, onChange, isDefinitionLoading, crdUrl} = props;
-
   const {crd, loading: isCRDLoading} = useCRD(crdUrl);
 
   useEffect(() => {
@@ -35,7 +34,7 @@ const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => 
       enableSchemaRequest: false,
 
       schemas: crd?.spec.versions.map((version: any) => ({
-        crdUrl,
+        uri: crdUrl,
         fileMatch: ['*'],
         schema: version.schema.openAPIV3Schema as JSONSchema4,
       })),

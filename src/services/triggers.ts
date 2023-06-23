@@ -42,6 +42,16 @@ export const triggersApi = createApi({
         };
       },
     }),
+    updateTriggerDefinition: builder.mutation<any, any>({
+      query: body => {
+        return {
+          url: `/triggers/${body.name}`,
+          method: 'PATCH',
+          headers: {'Content-Type': 'text/yaml'},
+          body: body.value,
+        };
+      },
+    }),
     updateTriggers: builder.mutation<void, any>({
       query: body => ({
         url: `/triggers`,
@@ -71,4 +81,5 @@ export const {
   useGetTriggerDefinitionQuery,
   useDeleteTriggerMutation,
   useUpdateTriggerByIdMutation,
+  useUpdateTriggerDefinitionMutation,
 } = triggersApi;
