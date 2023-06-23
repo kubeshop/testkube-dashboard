@@ -24,3 +24,13 @@ export enum externalLinks {
   addingTimeout = 'https://docs.testkube.io/articles/adding-timeout/',
   contactUs = 'https://calendly.com/bruno-at-kubeshop/15-minute-meeting',
 }
+
+export enum testkubeCRDBases {
+  executors = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/executor.testkube.io_executors.yaml',
+  webhooks = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/executor.testkube.io_webhooks.yaml',
+  scripts = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_scripts.yaml',
+  tests = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_tests.yaml',
+  sources = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_testsources.yaml',
+  testSuites = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_testsuites.yaml',
+  triggers = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/main/config/crd/bases/tests.testkube.io_testtriggers.yaml',
+}

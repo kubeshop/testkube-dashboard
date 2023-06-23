@@ -1,18 +1,17 @@
-import {useContext, useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {CopyButton, DownloadButton, Pre} from '@atoms';
+import {Pre} from '@atoms';
 
 import {MainContext} from '@contexts';
-
-import useLocation from '@hooks/useLocation';
-import useSecureContext from '@hooks/useSecureContext';
 
 import {ConfigurationCard} from '@molecules';
 import DefinitionMonaco from '@molecules/Definition/DefinitionMonaco';
 
 import {useGetTriggerDefinitionQuery} from '@services/triggers';
+
+import {testkubeCRDBases} from '@src/utils/externalLinks';
 
 import {useStore} from '@store';
 
@@ -24,7 +23,6 @@ const TriggerDefinition = () => {
     currentTrigger: state.currentTrigger!,
   }));
 
-  const isSecureContext = useSecureContext();
   const {
     data: definition = '',
     isLoading,
@@ -32,24 +30,20 @@ const TriggerDefinition = () => {
   } = useGetTriggerDefinitionQuery(currentTrigger.name, {
     skip: !isClusterAvailable,
   });
-  const filename = useLocation().lastPathSegment;
-
-  const monacoRef = useRef(null);
 
   useEffect(() => {
     setValue(definition);
   }, [definition]);
-
-  const onSave = () => {
-    // @ts-ignore
-    console.log(monacoRef?.current?.getValue());
-  };
 
   useEffect(() => {
     if (currentTrigger) {
       refetch();
     }
   }, [currentTrigger]);
+
+  const onSave = () => {
+    console.log(value);
+  };
 
   return (
     <Form name="definition-form">
@@ -59,10 +53,15 @@ const TriggerDefinition = () => {
         onConfirm={onSave}
         forceEnableButtons
       >
-        {definition ? (
-          <DefinitionMonaco value={value} onChange={setValue} />
+        {definition || isLoading ? (
+          <DefinitionMonaco
+            value={value}
+            onChange={setValue}
+            isDefinitionLoading={isLoading}
+            crdUrl={testkubeCRDBases.triggers}
+          />
         ) : (
-          <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
+          <Pre> No definition data</Pre>
         )}
       </ConfigurationCard>
     </Form>
