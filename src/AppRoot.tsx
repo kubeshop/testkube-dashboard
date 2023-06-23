@@ -1,11 +1,11 @@
-import {useEffect, useMemo, useState} from 'react';
-import ReactGA from 'react-ga4';
+import {useEffect, useMemo} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
+import {useAsync, useUpdate} from 'react-use';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
-import posthog from 'posthog-js';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
@@ -25,13 +25,13 @@ import {useAppDispatch} from '@redux/hooks';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import {useTelemetry} from '@telemetry';
+
 import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
 
-import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import env from './env';
 import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
@@ -40,72 +40,43 @@ const AppRoot: React.FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-
+  const telemetry = useTelemetry();
   const apiEndpoint = useApiEndpoint();
+  const rerender = useUpdate();
 
   const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
 
-  const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
-  const [featureFlags, setFeatureFlags] = useState<string[]>([]);
-  const isTelemetryAvailable = clusterConfig?.enableTelemetry && !env.disableTelemetry;
-  const isTelemetryEnabled = useMemo(
-    () => !isCookiesVisible && isTelemetryAvailable && localStorage.getItem('isGADisabled') === '0',
-    [isCookiesVisible, clusterConfig]
-  );
+  const telemetryConsent = localStorage.getItem('isGADisabled');
+  const isTelemetryAvailable = telemetry.configured && clusterConfig?.enableTelemetry;
+  const isCookiesVisible = !telemetryConsent;
 
   const onAcceptCookies = () => {
     localStorage.setItem('isGADisabled', '0');
-    setCookiesVisibility(false);
+    rerender();
   };
 
   const onDeclineCookies = () => {
     localStorage.setItem('isGADisabled', '1');
-    setCookiesVisibility(false);
+    rerender();
   };
 
+  // Pause/resume telemetry based on the cluster settings
   useEffect(() => {
-    if (!isTelemetryEnabled) {
-      if (posthog.__loaded) {
-        posthog.opt_out_capturing();
-      }
-    } else if (process.env.NODE_ENV !== 'development') {
-      if (env.posthogKey && !posthog.__loaded) {
-        posthog.init(env.posthogKey, {
-          opt_out_capturing_by_default: true,
-          mask_all_text: true,
-          persistence: 'localStorage',
-          property_blacklist: ['$current_url', '$host', '$referrer', '$referring_domain'],
-          ip: false,
-          loaded: instance => {
-            instance.onFeatureFlags(flags => {
-              setFeatureFlags(flags);
-            });
-          },
-        });
-        posthog.register({
-          version: env.version,
-        });
-      }
-      if (posthog.__loaded) {
-        posthog.opt_in_capturing();
-      }
-
-      if (env.ga4Key) {
-        ReactGA.initialize(env.ga4Key, {
-          // To make GTM- keys working properly with react-ga4,
-          // we need to override the script URL.
-          gtagUrl: env.ga4Key.startsWith('GTM-') ? 'https://www.googletagmanager.com/gtm.js' : undefined,
-        });
-        ReactGA.gtag('consent', 'update', {
-          ad_storage: 'granted',
-          analytics_storage: 'granted',
-          functionality_storage: 'granted',
-          personalization_storage: 'granted',
-          security_storage: 'granted',
-        });
-      }
+    if (clusterConfig?.enableTelemetry) {
+      telemetry.resume();
+    } else {
+      telemetry.pause();
     }
-  }, [isTelemetryEnabled]);
+  }, [clusterConfig]);
+
+  // Disable/enable telemetry based on user consent
+  useEffect(() => {
+    if (telemetryConsent === '0') {
+      telemetry.enable();
+    } else {
+      telemetry.disable();
+    }
+  }, [telemetryConsent]);
 
   const mainContextValue = useMemo(
     () => ({
@@ -116,15 +87,25 @@ const AppRoot: React.FC = () => {
     [dispatch, clusterConfig]
   );
 
-  useEffect(() => {
-    posthog.capture('$pageview');
+  const {value: visitorId} = useAsync(async () => {
+    const fp = await FingerprintJS.load();
+    const value = await fp.get();
+    return value.visitorId;
+  });
 
-    ReactGA.send({hitType: 'pageview', page: `${location.pathname}${anonymizeQueryString(location.search)}`});
-  }, [location.pathname]);
+  useEffect(() => {
+    if (visitorId) {
+      telemetry.set({userID: visitorId});
+    }
+  }, [visitorId, clusterConfig]);
 
   useEffect(() => {
-    ReactGA.event('user_info', {os: window.navigator.userAgent});
-  }, []);
+    telemetry.set({browserName: window.navigator.userAgent});
+  }, [clusterConfig]);
+
+  useEffect(() => {
+    telemetry.pageView(`${location.pathname}${anonymizeQueryString(location.search)}`);
+  }, [location.pathname, clusterConfig]);
 
   useEffect(() => {
     refetchClusterConfig();
@@ -157,12 +138,6 @@ const AppRoot: React.FC = () => {
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
-    .append(AnalyticsProvider, {
-      disabled: !isTelemetryEnabled,
-      writeKey: env.segmentKey,
-      appVersion: env.version,
-      featureFlags,
-    })
     .append(MainContext.Provider, {value: mainContextValue})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})

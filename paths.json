@@ -44,7 +44,9 @@
       "@permissions": ["src/permissions/"],
       "@permissions/*": ["src/permissions/*"],
       "@store": ["src/store/"],
-      "@store/*": ["src/store/*"]
+      "@store/*": ["src/store/*"],
+      "@telemetry": ["src/telemetry/"],
+      "@telemetry/*": ["src/telemetry/*"]
     }
   }
 }

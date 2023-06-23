@@ -1,21 +1,18 @@
-import {useContext, useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useEvent, useInterval} from 'react-use';
 
-import {AnalyticsContext} from '@contexts';
+import {useTelemetry} from '@telemetry';
 
 const useTrackTimeAnalytics = (type: string, condition = true) => {
-  const {analyticsTrack} = useContext(AnalyticsContext);
   const [hidden, setHidden] = useState(document.hidden);
   const durationRef = useRef(0);
+  const telemetry = useTelemetry();
 
   useEvent('visibilitychange', () => setHidden(document.hidden), document);
 
   const conditionalTrack = () => {
     if (condition && durationRef.current > 100) {
-      analyticsTrack('trackTime', {
-        duration: durationRef.current,
-        page: type,
-      });
+      telemetry.event('trackTime', {duration: durationRef.current, type});
     }
   };
 
