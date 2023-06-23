@@ -65,7 +65,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
   const handleDownloadAll = async () => {
     try {
       setIsDownloading(true);
-      await downloadArtifactArchive(testExecutionId, `${testName}-${testExecutionId}`);
+      await downloadArtifactArchive(`${testName}-${testExecutionId}`, testExecutionId);
     } catch (err) {
       displayDefaultErrorNotification(err as DefaultRequestError);
     } finally {
@@ -75,7 +75,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
 
   return (
     <ArtifactsListContainer>
-      {artifacts.length > 0 ? (
+      {artifacts.length > 2 ? (
         <StyledDownloadAllContainer>
           <Button onClick={handleDownloadAll}>{!isDownloading ? 'Download all' : 'Downloading...'}</Button>
         </StyledDownloadAllContainer>

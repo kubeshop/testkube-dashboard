@@ -40,7 +40,7 @@ export const downloadArtifact = async (
   window.URL.revokeObjectURL(blobUrl);
 };
 
-export const downloadArtifactArchive = async (executionId: string, fileName: string) => {
+export const downloadArtifactArchive = async (fileName: string, executionId: string) => {
   const url = `/executions/${executionId}/artifact-archive`;
   const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl(undefined)}${url}`;
   const idToken = await getRtkIdToken();
@@ -50,24 +50,17 @@ export const downloadArtifactArchive = async (executionId: string, fileName: str
     headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
   });
 
-  // @ts-ignore
-  // const reader = response.body.getReader();
-  // const {value} = await reader.read();
-
-  // const blobUrl = window.URL.createObjectURL(new Blob([value!]));
-
-  // console.log(blobUrl, response);
-  // Download the file
-  // const blobUrl = window.URL.createObjectURL(await response.blob());
-  // if (response.headers.get('content-type') === 'application/json') {
-
-  response = await fetch(await response.url);
+  // When the signed URL is returned, follow it
+  if (response.headers.get('content-type') === 'application/json') {
+    response = await fetch((await response.json()).data.url);
+  }
 
   // Download the file
   const blobUrl = window.URL.createObjectURL(await response.blob());
   const a = document.createElement('a');
   a.href = blobUrl;
-  a.download = fileName;
+  // tar.gz format for archive
+  a.download = `${fileName}.tar.gz`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
