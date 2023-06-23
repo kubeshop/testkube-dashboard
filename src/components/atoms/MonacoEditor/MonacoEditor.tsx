@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import MonacoEditor, {EditorDidMount} from 'react-monaco-editor';
+import React, {lazy, useEffect, useState} from 'react';
+import {EditorDidMount} from 'react-monaco-editor';
 
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
 import Colors from '@styles/Colors';
+
+const MonacoEditor = lazy(() => import('react-monaco-editor'));
 
 type TkMonacoEditorProps = {
   language: string;
@@ -47,7 +49,7 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
       ],
       colors: {
         'editor.background': Colors.slate800,
-        'editor.selectionBackground': Colors.indigo500,
+        'editor.selectionBackground': Colors.indigo400,
       },
     });
     setEditor(mountedEditor);
@@ -63,8 +65,7 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
         editor.layout({width: editor.getLayoutInfo().width, height: 300});
         return;
       }
-      // additional 2 lines for a bit of free space
-      const contentHeight = model.getLineCount() * (lineHeight + 2);
+      const contentHeight = model.getLineCount() * lineHeight;
 
       editor.layout({width: editor.getLayoutInfo().width, height: contentHeight});
     }

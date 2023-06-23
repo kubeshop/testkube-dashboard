@@ -1,11 +1,8 @@
 import {Skeleton} from '@custom-antd';
 
-type DefinitionSkeletonProps = {
-  lineHeight: number;
-};
+const lineHeight = 22;
 
-const DefinitionSkeleton: React.FC<DefinitionSkeletonProps> = props => {
-  const {lineHeight} = props;
+const DefinitionSkeleton = () => {
   return (
     <>
       <Skeleton additionalStyles={{lineHeight}} paragraph={{rows: 1, width: 400}} />
