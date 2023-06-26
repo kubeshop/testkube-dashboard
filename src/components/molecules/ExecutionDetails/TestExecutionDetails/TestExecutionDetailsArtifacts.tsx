@@ -12,10 +12,11 @@ type TestExecutionDetailsArtifactsProps = {
   id: string;
   testName?: string;
   testSuiteName?: string;
+  startTime?: string;
 };
 
 const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps> = props => {
-  const {id, testName, testSuiteName} = props;
+  const {id, testName, testSuiteName, startTime} = props;
 
   const {isClusterAvailable} = useContext(MainContext);
 
@@ -38,6 +39,7 @@ const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps
       isLoading={isLoading}
       testName={testName}
       testSuiteName={testSuiteName}
+      startTime={startTime}
     />
   );
 };
