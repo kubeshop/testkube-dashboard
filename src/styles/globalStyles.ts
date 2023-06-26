@@ -431,10 +431,6 @@ export const GlobalStyle = createGlobalStyle`
     background-color: transparent;
     border: 1px dashed ${Colors.slate500};
   }
-
-  .overflow-guard {
-    border-radius: 4px !important;
-  }
 `;
 
 /* Media Sizes */
