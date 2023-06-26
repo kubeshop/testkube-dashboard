@@ -1,6 +1,6 @@
 {
     "cypress-git": {
-        "name": "internal-dashboard-e2e-cypress-git",
+        "name": "temp-e2e-cypress-git",
         "type": "cypress/project",
         "content": {
             "type": "git",
@@ -12,11 +12,11 @@
             }
         },
         "labels": {
-            "core-tests": "dashboard-e2e-internal"
+            "core-tests": "dashboard-e2e-internal-temp"
         }
     },
     "cypress-git-created": {
-        "name": "internal-dashboard-e2e-cypress-git-created",
+        "name": "temp-e2e-cypress-git-created",
         "type": "cypress/project",
         "content": {
             "type": "git",
@@ -28,11 +28,11 @@
             }
         },
         "labels": {
-            "core-tests": "dashboard-e2e-internal"
+            "core-tests": "dashboard-e2e-internal-temp"
         }
     },
     "k6-git": {
-        "name": "internal-dashboard-e2e-k6-git",
+        "name": "temp-e2e-k6-git",
         "type": "k6/script",
         "content": {
             "type": "git",
@@ -44,11 +44,11 @@
             }
         },
         "labels": {
-            "core-tests": "dashboard-e2e-internal"
+            "core-tests": "dashboard-e2e-internal-temp"
         }
     },
     "k6-git-created": {
-        "name": "internal-dashboard-e2e-k6-git-created",
+        "name": "temp-e2e-k6-git-created",
         "type": "k6/script",
         "content": {
             "type": "git",
@@ -60,11 +60,11 @@
             }
         },
         "labels": {
-            "core-tests": "dashboard-e2e-internal"
+            "core-tests": "dashboard-e2e-internal-temp"
         }
     },
     "postman-git": {
-        "name": "internal-dashboard-e2e-postman-git",
+        "name": "temp-e2e-postman-git",
         "type": "postman/collection",
         "content": {
             "type": "git",
@@ -76,11 +76,11 @@
             }
         },
         "labels": {
-            "core-tests": "dashboard-e2e-internal"
+            "core-tests": "dashboard-e2e-internal-temp"
         }
     },
     "postman-git-created": {
-        "name": "internal-dashboard-e2e-postman-git-created",
+        "name": "temp-e2e-postman-git-created",
         "type": "postman/collection",
         "content": {
             "type": "git",
@@ -92,11 +92,11 @@
             }
         },
         "labels": {
-            "core-tests": "dashboard-e2e-internal"
+            "core-tests": "dashboard-e2e-internal-temp"
         }
     },
     "postman-negative-test": {
-        "name": "internal-dashboard-e2e-postman-git-ran-negative-test",
+        "name": "temp-e2e-postman-git-ran-neg-test",
         "type": "postman/collection",
         "content": {
             "type": "git",
@@ -108,11 +108,11 @@
             }
         },
         "labels": {
-            "core-tests": "cli-internal"
+            "core-tests": "cli-internal-temp"
         }
     },
     "postman-negative-init": {
-        "name": "internal-dashboard-e2e-postman-git-ran-negative-init",
+        "name": "temp-e2e-postman-git-ran-neg-init",
         "type": "postman/collection",
         "content": {
             "type": "git",
@@ -124,7 +124,7 @@
             }
         },
         "labels": {
-            "core-tests": "cli-internal"
+            "core-tests": "cli-internal-temp"
         }
     }
 }

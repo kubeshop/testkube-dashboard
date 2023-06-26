@@ -5,11 +5,13 @@ import { CommonHelpers } from '../helpers/common-helpers';
 import { MainPage } from '../pages/MainPage';
 import { CreateTestPage } from '../pages/CreateTestPage';
 const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
+const testDataHandler=new TestDataHandler(process.env.RUN_ID);
+
 
 const testNames = ['cypress-git', 'k6-git', 'postman-git'];
 for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
   test(`Creating test for ${testName}`, async ({ page }) => {
-    const testData = TestDataHandler.getTest(testName);
+    const testData = testDataHandler.getTest(testName);
 
     await apiHelpers.assureTestNotCreated(testData.name);
     const mainPage=new MainPage(page);
@@ -17,8 +19,8 @@ for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
     await mainPage.openCreateTestDialog();
   
     const createTestPage=new CreateTestPage(page);
-    await createTestPage.createTest(testName);
-  
+    await createTestPage.createTest(testData);
+
     await page.waitForURL(`**/tests/executions/${testData.name}`);
   
     const createdTestData = await apiHelpers.getTestData(testData.name);
