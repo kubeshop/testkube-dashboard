@@ -27,6 +27,8 @@ for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
 
     await testExecutionsPage.openExecutionDetails(executionName); // openLatestExecutionDetails?
 
+    // cleanup
     await apiHelpers.abortTest(realTestName, executionName); // abort test not to waste compute resources
+    await apiHelpers.removeTest(realTestName)
 });
 }
