@@ -60,7 +60,7 @@ export const downloadArtifactArchive = async (fileName: string, executionId: str
   const a = document.createElement('a');
   a.href = blobUrl;
   // tar.gz format for archive
-  a.download = `${fileName}.tar.gz`;
+  a.download = fileName;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

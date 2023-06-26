@@ -20,10 +20,11 @@ type ArtifactsListProps = {
   isLoading?: boolean;
   testName?: string;
   testSuiteName?: string;
+  startTime?: string;
 };
 
 const ArtifactsList: React.FC<ArtifactsListProps> = props => {
-  const {artifacts, testExecutionId, testName, testSuiteName, isLoading} = props;
+  const {artifacts, testExecutionId, testName, testSuiteName, isLoading, startTime} = props;
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -65,7 +66,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
   const handleDownloadAll = async () => {
     try {
       setIsDownloading(true);
-      await downloadArtifactArchive(`${testName}-${testExecutionId}`, testExecutionId);
+      await downloadArtifactArchive(`${testName}-${startTime}-${testExecutionId}.tar.gz`, testExecutionId);
     } catch (err) {
       displayDefaultErrorNotification(err as DefaultRequestError);
     } finally {
