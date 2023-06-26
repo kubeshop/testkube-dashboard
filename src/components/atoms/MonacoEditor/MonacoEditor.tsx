@@ -1,7 +1,5 @@
 import React, {lazy, useEffect, useState} from 'react';
-import {EditorDidMount} from 'react-monaco-editor';
-
-import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
+import {EditorDidMount, monaco as monacoEditor} from 'react-monaco-editor';
 
 import Colors from '@styles/Colors';
 
@@ -31,7 +29,14 @@ const options = {
   selectOnLineNumbers: true,
   readOnly: false,
   automaticLayout: true,
+  padding: {
+    top: 12,
+    bottom: 12,
+  },
 };
+
+const defaultEditorHeight = 300;
+const editorMaxHeight = window.screen.height * 0.5;
 
 const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
   const {value, onChange, language, height} = props;
@@ -50,6 +55,7 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
       colors: {
         'editor.background': Colors.slate800,
         'editor.selectionBackground': Colors.indigo400,
+        'editor.lineHighlightBackground': Colors.slate600,
       },
     });
     setEditor(mountedEditor);
@@ -62,12 +68,17 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
 
       // if default value is empty, display a default height
       if (!model || !model.getValue()) {
-        editor.layout({width: editor.getLayoutInfo().width, height: 300});
+        editor.layout({width: editor.getLayoutInfo().width, height: defaultEditorHeight});
         return;
       }
-      const contentHeight = model.getLineCount() * lineHeight;
 
-      editor.layout({width: editor.getLayoutInfo().width, height: contentHeight});
+      // add 1 line for better view
+      const contentHeight = (model.getLineCount() + 1) * lineHeight;
+
+      editor.layout({
+        width: editor.getLayoutInfo().width,
+        height: contentHeight > editorMaxHeight ? editorMaxHeight : contentHeight,
+      });
     }
   }, [editor, height]);
 

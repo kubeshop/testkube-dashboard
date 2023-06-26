@@ -51,3 +51,10 @@ export const StyledFooterText = styled.div`
 export const StyledNotificationContainer = styled.div`
   padding: 20px 20px 0;
 `;
+
+// height calculated to contain 3 min height notifications
+export const StyledErrorsContainer = styled.div`
+  max-height: 240px;
+
+  overflow-y: auto;
+`;
