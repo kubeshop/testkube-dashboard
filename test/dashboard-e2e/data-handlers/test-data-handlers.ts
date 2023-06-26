@@ -16,8 +16,7 @@ export class TestDataHandler {
         const id = this.runId ? this.runId : TestDataHandler.getRandomId();
         const randomizedTestName = `${testName}-${id}`;
         const croppedTestName = randomizedTestName.substring(0, maxNameLength);
-        console.log(`getRandomizedName name: ${croppedTestName}`)
-
+        
         return croppedTestName;
     }
 
