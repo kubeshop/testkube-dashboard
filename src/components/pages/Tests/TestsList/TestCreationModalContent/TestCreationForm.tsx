@@ -113,7 +113,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
           rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}
           required
         >
-          <Input placeholder="e.g.: my-test" autoComplete="off"/>
+          <Input placeholder="e.g.: my-test" autoComplete="nope" aria-autocomplete="none" />
         </FormItem>
         <FormItem name="testType" label="Type" rules={[required]} required>
           <Select placeholder="Select from available executors..." showSearch options={remappedExecutors} />
