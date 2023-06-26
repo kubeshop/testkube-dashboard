@@ -18,14 +18,12 @@ for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
     const mainPage=new MainPage(page);
     await mainPage.visitMainPage();
     await mainPage.openCreateTestDialog();
-  
+
     const createTestPage=new CreateTestPage(page);
     await createTestPage.createTest(testData);
-
     await page.waitForURL(`**/tests/executions/${realTestName}`);
   
     const createdTestData = await apiHelpers.getTestData(realTestName);
-  
     await CommonHelpers.validateTest(testData, createdTestData);
 
     // cleanup
