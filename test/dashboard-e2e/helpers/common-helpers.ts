@@ -3,7 +3,7 @@ import { expect } from '@playwright/test';
 export class CommonHelpers {
     static validateTest(testData, createdTestData) {
         expect(testData.name).toEqual(createdTestData.name);
-        // TODO: label
+        CommonHelpers.validateLabels(testData.labels, createdTestData.labels);
         expect(testData.type).toEqual(createdTestData.type);
         expect(testData.content.type).toEqual(createdTestData.content.type);
 
@@ -19,9 +19,12 @@ export class CommonHelpers {
     static validateTestSuite(testSuiteData, createdTestSuiteData) {
         expect(testSuiteData.name).toEqual(testSuiteData.name);
         expect(testSuiteData.description).toEqual(createdTestSuiteData.description);
+        CommonHelpers.validateLabels(testSuiteData.labels, createdTestSuiteData.labels);
+    }
 
-        for (const [name, value] of Object.entries(testSuiteData.labels)) {
-            expect(createdTestSuiteData.labels[name]).toEqual(value);
+    static validateLabels(labels, createdLabels) {
+        for (const [name, value] of Object.entries(labels)) {
+            expect(createdLabels[name]).toEqual(value);
         }
     }
 }
