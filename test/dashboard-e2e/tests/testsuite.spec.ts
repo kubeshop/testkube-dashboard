@@ -35,4 +35,11 @@ test(`Creating Test Suite`, async ({ page }) => {
     // // cleanup
     await apiHelpers.removeTestSuite(realTestSuiteName)
   });
+
+  test.skip(`Test suite - add tests`, async ({ page }) => {
+
+  });
   
+  test.skip(`Test suite - edit tests`, async ({ page }) => {
+
+  });
