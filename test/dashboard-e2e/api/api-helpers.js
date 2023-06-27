@@ -127,7 +127,7 @@ export class ApiHelpers {
     
             return false;
         } catch (e) {
-            throw Error(`isTestCreated failed for "${testSuiteName}" with: "${e}"`);
+            throw Error(`isTestSuiteCreated failed for "${testSuiteName}" with: "${e}"`);
         }
     }
 
