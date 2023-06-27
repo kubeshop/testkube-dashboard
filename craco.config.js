@@ -18,6 +18,7 @@ module.exports = {
               },
             },
           ],
+          features: ['caretOperations', 'clipboard', 'contextmenu', 'hover', 'indentation', 'lineSelection', 'suggest']
         }),
       ],
     },
