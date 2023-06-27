@@ -9,8 +9,6 @@ import { CreateTestSuitePage } from '../pages/CreateTestSuitePage';
 const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
 const testDataHandler=new TestDataHandler(process.env.RUN_ID);
 
-
-
 test(`Creating Test Suite`, async ({ page }) => {
     const testSuiteName = 'testsuite-empty'
     const testSuiteData = testDataHandler.getTestSuite(testSuiteName);
@@ -37,3 +35,4 @@ test(`Creating Test Suite`, async ({ page }) => {
     // // cleanup
     await apiHelpers.removeTestSuite(realTestSuiteName)
   });
+  

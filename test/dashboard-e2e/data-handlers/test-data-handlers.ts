@@ -29,13 +29,8 @@ export class TestDataHandler {
     }
 
     getTestSuite(testSuiteName) {
-        console.log('getTestSuite testSuiteName: ')
-        console.log(testSuiteName)
-
         let testSuite = testSuitesData[testSuiteName]
-        testSuite.name = this.getRandomizedName(testSuite.name)
-        console.log('getTestSuite testSuite.name: ')
-        console.log(testSuite.name)
+        testSuite.name = this.getRandomizedName(testSuite.name);
 
         return testSuite;
     }

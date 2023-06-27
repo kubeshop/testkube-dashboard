@@ -76,7 +76,6 @@ export class ApiHelpers {
     }
 
     async removeTestSuite(testSuiteName) {
-        console.log('removeTestSuite')
         const request = `${this.apiUrl}/test-suites/${testSuiteName}`;
 
         try {
@@ -118,13 +117,11 @@ export class ApiHelpers {
     }
 
     async isTestSuiteCreated(testSuiteName) {
-        console.log('isTestSuiteCreated')
         try {
             const currentTestSuites = await this.getTestSuites();
             const testSuite = currentTestSuites.find(singleTestSuite => singleTestSuite.name === testSuiteName);
     
             if(testSuite !== undefined) {
-                console.log('isTestSuiteCreated true')
                 return true;
             }
     
@@ -148,15 +145,12 @@ export class ApiHelpers {
     }
 
     async assureTestSuiteNotCreated(testSuiteName) {
-        console.log('assureTestSuiteNotCreated')
         try {
             const alreadyCreated = await this.isTestSuiteCreated(testSuiteName);
             if(alreadyCreated) {
-                console.log('assureTestSuiteNotCreatedalreadyCreated')
                 await this.removeTestSuite(testSuiteName);
             }
 
-            console.log('assureTestSuiteNotCreated not created!')
             return true;
         } catch (e) {
             throw Error(`assureTestSuiteNotCreated failed for "${testSuiteName}" with: "${e}"`);

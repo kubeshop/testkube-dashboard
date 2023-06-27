@@ -18,7 +18,10 @@ export class CommonHelpers {
 
     static validateTestSuite(testSuiteData, createdTestSuiteData) {
         expect(testSuiteData.name).toEqual(testSuiteData.name);
-        // TODO: label
         expect(testSuiteData.description).toEqual(createdTestSuiteData.description);
+
+        for (const [name, value] of Object.entries(testSuiteData.labels)) {
+            expect(createdTestSuiteData.labels[name]).toEqual(value);
+        }
     }
 }
