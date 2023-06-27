@@ -1,5 +1,4 @@
 import type { Page } from  '@playwright/test';
-// import { TestDataHandler } from '../data-handlers/test-data-handlers';
 
 export class CreateTestSuitePage{
     readonly page: Page;
