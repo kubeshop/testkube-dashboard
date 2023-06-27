@@ -7,8 +7,8 @@ export class CreateTestPage{
         this.page=page;
     }
     
-    async createTest(testName) {
-        await this._fillInTestDetails(testName);
+    async createTest(testData) {
+        await this._fillInTestDetails(testData);
         await this._clickCreateTestButton();
     }
 
@@ -55,8 +55,7 @@ export class CreateTestPage{
         await this.page.click(`div[class*="list-holder"] div[title="${value}"]`);
     }
 
-    async _fillInTestDetails(testName) {
-        const testData = TestDataHandler.getTest(testName);
+    async _fillInTestDetails(testData) {
         await this.setBasicInput(testData.name, 'name');
         await this.selectTestType(testData.type);
         await this.selectTestSource(testData.content);
