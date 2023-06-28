@@ -13,10 +13,8 @@
     <tr valign="top">
       <td>
         <strong>copyCommand</strong><br>
-        <code>tk.ui.copyCommand</code><br>
-        <p align="center">
-          Fired when the user copy some command from the UI.
-        </p>
+        <code>tk.ui.copyCommand</code><br><br>
+        Fired when the user copy some command from the UI.
       </td>
       <td>
         <table>
