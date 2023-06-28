@@ -17,7 +17,7 @@
         <code>tk.ui.copyCommand</code>
       </td>
       <td>
-        Fired when the user copy some command from the UI.
+        Fired when the user copy some command.
       </td>
       <td>
         <table>
