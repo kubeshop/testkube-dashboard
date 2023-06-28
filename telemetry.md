@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th>Event</th>
+      <th>Description</th>
       <th>Properties</th>
     </tr>
   </thead>
@@ -13,7 +14,9 @@
     <tr valign="top">
       <td>
         <strong>copyCommand</strong><br>
-        <code>tk.ui.copyCommand</code><br><br>
+        <code>tk.ui.copyCommand</code>
+      </td>
+      <td>
         Fired when the user copy some command from the UI.
       </td>
       <td>
