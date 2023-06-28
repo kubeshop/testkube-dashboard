@@ -17,7 +17,7 @@ import env from './env';
   const container = document.getElementById('root');
   const root = createRoot(container!);
 
-  const app = {name: 'oss-ui', version: env.version};
+  const app = {name: 'testkube:ui/oss', version: env.version};
   const basename = env.basename || '';
 
   // If the user wants to specify a PathPrefix in Ingress controller we should
@@ -30,7 +30,7 @@ import env from './env';
 
   root.render(
     <React.StrictMode>
-      <TelemetryProvider prefix="testkube.ui." app={app} gtmId={env.disableTelemetry ? undefined : env.gtmKey} disabled>
+      <TelemetryProvider prefix="tk.ui." app={app} gtmId={env.disableTelemetry ? undefined : env.gtmKey} paused>
         <ReduxProvider store={store}>
           <BrowserRouter basename={basename}>
             <GlobalStyle />

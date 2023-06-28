@@ -31,4 +31,4 @@ const useTrackTimeAnalytics = (type: string, condition = true) => {
   }, [hidden, condition]);
 };
 
-export default process.env.NODE_ENV === 'development' ? () => {} : useTrackTimeAnalytics;
+export default useTrackTimeAnalytics;

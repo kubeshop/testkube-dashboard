@@ -70,6 +70,7 @@ export class TelemetryService {
     this.gtmId = options.gtmId;
     this.dataLayerName = options.dataLayerName || 'dataLayer';
     this.app = options.app;
+    this.ensureAppMetaTags();
     // @ts-ignore: ensure dummy dataLayer is there.
     if (!window[this.dataLayerName]) {
       // @ts-ignore:
@@ -94,6 +95,23 @@ export class TelemetryService {
     }
   }
 
+  public ensureAppMetaTags() {
+    let name = document.querySelector<HTMLMetaElement>('meta[name="app-name"]');
+    let version = document.querySelector<HTMLMetaElement>('meta[name="app-version"]');
+    if (!name) {
+      name = document.createElement('meta');
+      name.name = 'app-name';
+      document.head.appendChild(name);
+    }
+    if (!version) {
+      version = document.createElement('meta');
+      version.name = 'app-version';
+      document.head.appendChild(version);
+    }
+    name.content = this.app.name;
+    version.content = this.app.version;
+  }
+
   public get configured(): boolean {
     return Boolean(this.gtmId);
   }
@@ -109,11 +127,17 @@ export class TelemetryService {
    * Example: cluster has or may have disabled telemetry.
    */
   public pause(): void {
-    this.paused = true;
+    if (!this.paused) {
+      this.paused = true;
+      this.dataLayer({event: `${this.prefix}pause`});
+    }
   }
 
   public resume(): void {
-    this.paused = false;
+    if (this.paused) {
+      this.paused = false;
+      this.dataLayer({event: `${this.prefix}resume`});
+    }
   }
 
   /**
@@ -143,7 +167,9 @@ export class TelemetryService {
     validateDevRestrictedProperties(userData, ['event']);
     validateDevProperties(userData);
     this.groupDev('Data Set', () => {
-      if (!this.paused) {
+      if (this.paused) {
+        this.logDev('Ignored:', {...userData});
+      } else {
         this.setUserData({...this.userData, ...userData});
         this.logDev('Appended:', {...userData});
         this.dataLayer({...this.userData, event: `${this.prefix}set`});
@@ -163,7 +189,9 @@ export class TelemetryService {
 
   public pageView(pagePath: string): void {
     this.groupDev(`Page View: ${pagePath}`, () => {
-      if (!this.paused) {
+      if (this.paused) {
+        this.logDev('Ignored:', {event: 'page_view', eventModel: {page_path: pagePath}});
+      } else {
         this.dataLayer({event: 'page_view', eventModel: {page_path: pagePath}});
       }
     });
@@ -193,7 +221,9 @@ export class TelemetryService {
       validateDevProperties(data);
 
       // Send the event
-      if (!this.paused) {
+      if (this.paused) {
+        this.logDev('Ignored:', message);
+      } else {
         this.dataLayer(message);
       }
     });
@@ -210,7 +240,15 @@ export class TelemetryService {
     }
   }
 
-  private dataLayer(dataLayer: object): void {
+  // eslint-disable-next-line no-dupe-class-members
+  private dataLayer(dataLayer: object): void;
+  // eslint-disable-next-line no-dupe-class-members
+  private dataLayer(arg1: string, arg2: string, ...args: any): void;
+  // eslint-disable-next-line no-dupe-class-members
+  private dataLayer(): void {
+    // GTM allows arguments object in the data layer, but doesn't use array.
+    // eslint-disable-next-line prefer-rest-params
+    const dataLayer = arguments.length > 1 ? arguments : arguments[0];
     this.logDev('DataLayer:', dataLayer);
     GTM.dataLayer({dataLayer, dataLayerName: this.dataLayerName});
   }
@@ -251,6 +289,8 @@ export class TelemetryService {
     } else {
       this.initialized = true;
       this.logDev('Initialized GTM');
+
+      // Initialize GTM
       GTM.initialize({
         gtmId: this.gtmId,
         dataLayerName: this.dataLayerName,
