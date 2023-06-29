@@ -2,6 +2,8 @@ import GTM from 'react-gtm-module';
 
 import {mapValues} from 'lodash';
 
+import env from '@src/env';
+
 export type DataLayerObject = Record<string, string | number | null | undefined>;
 
 export interface TelemetryServiceApp {
@@ -20,7 +22,7 @@ export interface TelemetryServiceOptions {
 }
 
 const validateDevProperties = (data?: Record<string, any>): void => {
-  if (process.env.NODE_ENV === 'production') {
+  if (!env.debugTelemetry) {
     return;
   }
   const invalid = Object.entries(data || {})
@@ -43,7 +45,7 @@ const validateDevProperties = (data?: Record<string, any>): void => {
 };
 
 const validateDevRestrictedProperties = (data: Record<string, any> | undefined, restricted: string[]): void => {
-  if (process.env.NODE_ENV === 'production') {
+  if (!env.debugTelemetry) {
     return;
   }
   const keys = Object.keys(data || {});
@@ -255,7 +257,7 @@ export class TelemetryService {
 
   // eslint-disable-next-line class-methods-use-this
   private groupDev(name: string, fn: () => void): void {
-    if (process.env.NODE_ENV === 'production') {
+    if (!env.debugTelemetry) {
       return;
     }
     const tags = [
@@ -273,7 +275,7 @@ export class TelemetryService {
 
   // eslint-disable-next-line class-methods-use-this
   private logDev(...args: any): void {
-    if (process.env.NODE_ENV === 'production') {
+    if (!env.debugTelemetry) {
       return;
     }
     // eslint-disable-next-line no-console

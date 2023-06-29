@@ -21,6 +21,9 @@ export const dynamic: DynamicEnvironment = {
   basename: getValue('REACT_APP_ROOT_ROUTE', provided?.REACT_APP_ROOT_ROUTE),
   disableTelemetry: getValue('REACT_APP_DISABLE_TELEMETRY', provided?.REACT_APP_DISABLE_TELEMETRY) === 'true',
   crdOperatorRevision: getValue('REACT_APP_CRD_OPERATOR_REVISION', provided?.REACT_APP_CRD_OPERATOR_REVISION) || 'main',
+  debugTelemetry:
+    getValue('REACT_APP_DEBUG_TELEMETRY', provided?.REACT_APP_DEBUG_TELEMETRY) === 'true' ||
+    process.env.NODE_ENV !== 'production',
 };
 
 export interface BuildTimeEnvironment {
@@ -35,6 +38,7 @@ export interface DynamicEnvironment {
   basename: string;
   disableTelemetry: boolean;
   crdOperatorRevision: string;
+  debugTelemetry: boolean;
 }
 
 export default {
