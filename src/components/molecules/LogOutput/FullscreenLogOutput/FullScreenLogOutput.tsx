@@ -35,11 +35,6 @@ const FullScreenLogOutput = forwardRef<HTMLDivElement, Pick<LogOutputProps, 'act
       }
     }, 300);
 
-    useEffect(() => {
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
-    }, []);
     useEffect(scrollToBottom, [ref.current]);
 
     return (
