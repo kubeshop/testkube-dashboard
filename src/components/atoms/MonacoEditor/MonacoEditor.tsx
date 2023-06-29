@@ -1,5 +1,5 @@
 import React, {lazy, useEffect, useState} from 'react';
-import {EditorDidMount, monaco as monacoEditor} from 'react-monaco-editor';
+import type {EditorDidMount, monaco as monacoEditor} from 'react-monaco-editor';
 
 import Colors from '@styles/Colors';
 

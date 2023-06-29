@@ -1,5 +1,4 @@
 import React, {PropsWithChildren, Suspense, useContext, useEffect, useState} from 'react';
-import {monaco as monacoEditor} from 'react-monaco-editor';
 
 import {Form} from 'antd';
 
@@ -7,7 +6,6 @@ import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {JSONSchema4} from 'json-schema';
-import {setDiagnosticsOptions} from 'monaco-yaml';
 
 import {MonacoEditor, Pre} from '@atoms';
 
@@ -62,24 +60,27 @@ const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => 
     if (!crd) {
       return;
     }
-    setDiagnosticsOptions({
-      hover: true,
-      validate: true,
-      completion: true,
-      format: true,
-      isKubernetes: true,
-      enableSchemaRequest: false,
+    import('monaco-yaml').then(monacoYaml => {
+      monacoYaml.setDiagnosticsOptions({
+        hover: true,
+        validate: true,
+        completion: true,
+        format: true,
+        isKubernetes: true,
+        enableSchemaRequest: false,
 
-      schemas: crd?.spec.versions.map((version: any) => ({
-        uri: crdUrl,
-        fileMatch: ['*'],
-        schema: version.schema.openAPIV3Schema as JSONSchema4,
-      })),
+        schemas: crd?.spec.versions.map((version: any) => ({
+          uri: crdUrl,
+          fileMatch: ['*'],
+          schema: version.schema.openAPIV3Schema as JSONSchema4,
+        })),
+      });
     });
   }, [crd]);
 
-  const onSave = () => {
-    const errors = monacoEditor.editor.getModelMarkers({owner: 'yaml'});
+  const onSave = async () => {
+    const monaco = await import('react-monaco-editor').then(editor => editor.monaco);
+    const errors = monaco.editor.getModelMarkers({owner: 'yaml'});
 
     if (errors.length > 0) {
       const errorMessages = {
