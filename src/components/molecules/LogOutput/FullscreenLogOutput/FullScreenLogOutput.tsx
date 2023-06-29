@@ -1,7 +1,7 @@
 import {MouseEvent, forwardRef, useCallback, useEffect, useRef, useState} from 'react';
 
 import Ansi from 'ansi-to-react';
-import debounce from 'lodash.debounce';
+import {debounce} from 'lodash';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
