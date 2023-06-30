@@ -111,9 +111,9 @@ export class ApiHelpers {
 
     async removeExecutor(executorName) {
         const requestUrl = `${this.apiUrl}/executors/${executorName}`;
-        const respnose = await this.makeDelete(requestUrl);
+        const response = await this.makeDelete(requestUrl);
 
-        return respponse;
+        return response;
     }
 
     async updateTest(testData) {
