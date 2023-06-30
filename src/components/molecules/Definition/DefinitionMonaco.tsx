@@ -1,22 +1,21 @@
 import React, {PropsWithChildren, Suspense, useContext, useEffect, useState} from 'react';
+import type {monaco} from 'react-monaco-editor';
 
 import {Form} from 'antd';
 
 import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {JSONSchema4} from 'json-schema';
-
-import {MonacoEditor, Pre} from '@atoms';
+import {Pre} from '@atoms';
 
 import {MainContext} from '@contexts';
-
-import useCRD from '@hooks/useCRD';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {uppercaseFirstSymbol} from '@utils/strings';
+
+import KubernetesResourceEditor from '../KubernetesResourceEditor';
 
 import DefinitionSkeleton from './DefinitionSkeleton';
 
@@ -34,10 +33,9 @@ const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => 
 
   const {isClusterAvailable} = useContext(MainContext);
 
-  const {crd, loading: isCRDLoading} = useCRD(crdUrl);
-
   const [value, setValue] = useState('');
   const [wasTouched, setWasTouched] = useState(false);
+  const [markerErrors, setMarkerErrors] = useState<monaco.editor.IMarker[]>([]);
 
   const [update] = useUpdateDefinitionMutation();
   const {
@@ -56,35 +54,10 @@ const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => 
     setValue(definition);
   }, [definition]);
 
-  useEffect(() => {
-    if (!crd) {
-      return;
-    }
-    import('monaco-yaml').then(monacoYaml => {
-      monacoYaml.setDiagnosticsOptions({
-        hover: true,
-        validate: true,
-        completion: true,
-        format: true,
-        isKubernetes: true,
-        enableSchemaRequest: false,
-
-        schemas: crd?.spec.versions.map((version: any) => ({
-          uri: crdUrl,
-          fileMatch: ['*'],
-          schema: version.schema.openAPIV3Schema as JSONSchema4,
-        })),
-      });
-    });
-  }, [crd]);
-
   const onSave = async () => {
-    const monaco = await import('react-monaco-editor').then(editor => editor.monaco);
-    const errors = monaco.editor.getModelMarkers({owner: 'yaml'});
-
-    if (errors.length > 0) {
+    if (markerErrors.length > 0) {
       const errorMessages = {
-        errors: errors.map(x => {
+        errors: markerErrors.map(x => {
           return {
             title: `Line ${x.startLineNumber}:${x.endColumn} ${x.message}`,
           };
@@ -109,20 +82,25 @@ const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => 
         title="Definition"
         description={`Validate and update your ${label} configuration`}
         onConfirm={onSave}
+        onCancel={() => {
+          setValue(definition);
+          setWasTouched(false);
+        }}
         isButtonsDisabled={!wasTouched}
         forceEnableButtons={wasTouched}
       >
-        {isCRDLoading || isDefinitionLoading ? (
+        {isDefinitionLoading ? (
           <DefinitionSkeleton />
         ) : definition ? (
           <Suspense fallback={<DefinitionSkeleton />}>
-            <MonacoEditor
-              language="yaml"
+            <KubernetesResourceEditor
               value={value}
-              onChange={x => {
-                setValue(x);
+              onChange={(newValue, errors) => {
+                setValue(newValue);
                 setWasTouched(true);
+                setMarkerErrors(errors);
               }}
+              crdUrl={crdUrl}
             />
           </Suspense>
         ) : (

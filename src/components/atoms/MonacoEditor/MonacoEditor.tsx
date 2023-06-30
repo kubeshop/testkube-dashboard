@@ -1,5 +1,5 @@
 import React, {lazy, useEffect, useState} from 'react';
-import type {EditorDidMount, monaco as monacoEditor} from 'react-monaco-editor';
+import type {EditorDidMount, monaco} from 'react-monaco-editor';
 
 import Colors from '@styles/Colors';
 
@@ -40,7 +40,7 @@ const editorMaxHeight = window.screen.height * 0.5;
 
 const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
   const {value, onChange, language, height} = props;
-  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor | null>(null);
+  const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   const handleEditorDidMount: EditorDidMount = (mountedEditor, monaco) => {
     monaco.editor.defineTheme('testkube-theme', {
