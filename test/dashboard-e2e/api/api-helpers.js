@@ -22,6 +22,21 @@ export class ApiHelpers {
         }
     }
 
+    async getTestSuites() {
+        const request = `${this.apiUrl}/test-suites`;
+
+        try {
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+
+            return ApiHelpers.parseResponse(response);
+            
+        } catch (e) {
+            throw Error(`getTestSuites failed on "${request}" with: "${e}"`);
+        }
+    }
+
     async createTest(testData) {
         const request = `${this.apiUrl}/tests`;
         
@@ -60,6 +75,17 @@ export class ApiHelpers {
         }
     }
 
+    async removeTestSuite(testSuiteName) {
+        const request = `${this.apiUrl}/test-suites/${testSuiteName}`;
+
+        try {
+            await superagent.delete(request)
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+        } catch (e) {
+            throw Error(`removeTestSuite failed on "${request}" with: "${e}"`);
+        }
+    }
+
     async updateTest(testData) {
         const request = `${this.apiUrl}/tests/${testData.name}`;
         
@@ -90,6 +116,21 @@ export class ApiHelpers {
         }
     }
 
+    async isTestSuiteCreated(testSuiteName) {
+        try {
+            const currentTestSuites = await this.getTestSuites();
+            const testSuite = currentTestSuites.find(singleTestSuite => singleTestSuite.name === testSuiteName);
+    
+            if(testSuite !== undefined) {
+                return true;
+            }
+    
+            return false;
+        } catch (e) {
+            throw Error(`isTestSuiteCreated failed for "${testSuiteName}" with: "${e}"`);
+        }
+    }
+
     async assureTestNotCreated(testName) {
         try {
             const alreadyCreated = await this.isTestCreated(testName);
@@ -100,6 +141,19 @@ export class ApiHelpers {
             return true;
         } catch (e) {
             throw Error(`assureTestNotCreated failed for "${testName}" with: "${e}"`);
+        }
+    }
+
+    async assureTestSuiteNotCreated(testSuiteName) {
+        try {
+            const alreadyCreated = await this.isTestSuiteCreated(testSuiteName);
+            if(alreadyCreated) {
+                await this.removeTestSuite(testSuiteName);
+            }
+
+            return true;
+        } catch (e) {
+            throw Error(`assureTestSuiteNotCreated failed for "${testSuiteName}" with: "${e}"`);
         }
     }
 
@@ -133,6 +187,20 @@ export class ApiHelpers {
             return ApiHelpers.parseResponse(response);
         } catch (e) {
             throw Error(`getTestData failed on "${request}" with: "${e}"`);
+        }
+    }
+
+    async getTestSuiteData(testSuiteName) {
+        const request = `${this.apiUrl}/test-suites/${testSuiteName}`;
+
+        try {
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+
+            return ApiHelpers.parseResponse(response);
+        } catch (e) {
+            throw Error(`getTestSuiteData failed on "${request}" with: "${e}"`);
         }
     }
 
