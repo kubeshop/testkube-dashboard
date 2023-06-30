@@ -1,5 +1,7 @@
 import {memo, useContext, useMemo} from 'react';
 
+import {ClockCircleOutlined} from '@ant-design/icons';
+
 import {nanoid} from '@reduxjs/toolkit';
 
 import classNames from 'classnames';
@@ -44,30 +46,27 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       return 'code';
     }
 
-    const {execution} = step;
+    const {execute} = step;
+    const {execution} = execute[0];
     const {executionResult} = execution;
     const {status} = executionResult;
 
     return status;
   };
 
-  const getExecutionStepName = (step: TestSuiteStepExecutionResult) => {
-    return step.execution.name;
+  const getExecutionStepName = (step: any) => {
+    return step.name;
   };
 
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
-    const {
-      executionName,
-      step: executeStep,
-      execution: {id},
-    } = step;
+    const {executionName, step: executeStep, execute} = step;
 
     if ('execute' in executeStep) {
       if (iconSet === 'default') {
         dispatch(
           setRedirectTarget({
             targetTestId: executionName,
-            targetTestExecutionId: id,
+            targetTestExecutionId: execute[0].execution.id,
           })
         );
       } else if (iconSet === 'definition') {
@@ -79,7 +78,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
         );
       }
 
-      return navigate(`/tests/executions/${executeStep.execute.name}/execution/${id}`);
+      return navigate(`/tests/executions/${execute[0].step.test}/execution/${execute[0].execution.id}`);
     }
   };
 
@@ -88,7 +87,8 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       const icon = getExecutionStepIcon(step);
       const executionName = getExecutionStepName(step);
 
-      const {step: stepResult, execution} = step;
+      const {step: stepResult, execute} = step;
+      const {execution} = execute[0];
       const {
         executionResult: {status},
         testType,
@@ -99,22 +99,26 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       let isClickable = false;
       let content;
 
-      if ('delay' in stepResult) {
+      const delay = stepResult.execute[0].delay;
+      const test = stepResult.execute[0].test;
+
+      if (delay) {
         content = (
           <>
-            <ExecutorIcon />
-            <ExecutionName name={`Delay - ${stepResult.delay.duration}ms`} />
+            <ClockCircleOutlined style={{fontSize: '26px'}} />
+            <ExecutionName name={`Delay - ${delay}`} />
             <div />
           </>
         );
-      } else if ('execute' in stepResult) {
-        isClickable = (execution?.id && iconSet === 'default') || iconSet === 'definition';
+      } else if (test) {
+        isClickable =
+          (execution?.executionResult.status !== 'queued' && iconSet === 'default') || iconSet === 'definition';
 
         content = (
           <>
             <ExecutorIcon type={stepIcon} />
-            <ExecutionName name={executionName || stepResult.execute.name || ''} />
-            <StyledExternalLinkIcon />
+            <ExecutionName name={executionName || test || ''} />
+            {isClickable ? <StyledExternalLinkIcon /> : <div />}
           </>
         );
       }

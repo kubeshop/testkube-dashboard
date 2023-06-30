@@ -1,41 +1,35 @@
 import {EntityMap} from '@models/entityMap';
-import {ObjectRef} from '@models/objectRef';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {Execution} from './execution';
 import {Variables} from './variable';
 
-export type TestSuiteStepDelay = {
-  duration: number;
-};
+export interface AdditionalStepFields extends TestSuiteExecuteStep {
+  stopTestOnFailure?: boolean;
+  id?: string;
+}
 
-export type TestSuiteStepExecuteTest = {
-  namespace?: string;
-  name: string;
-  type: string;
-};
-
-export interface TestSuiteStepAbstract {
+export interface TestSuiteExecuteStep {
+  delay?: string;
+  test?: string;
+}
+export interface TestSuiteStep {
   stopTestOnFailure: boolean;
-  // Used for form
-  id?: string | number;
+  execute: TestSuiteExecuteStep[];
 }
 
-export interface TestSuiteStepWithExecute extends TestSuiteStepAbstract {
-  execute: TestSuiteStepExecuteTest;
+export interface LocalStep extends AdditionalStepFields {
+  type?: string;
 }
 
-export interface TestSuiteStepWithDelay extends TestSuiteStepAbstract {
-  delay: TestSuiteStepDelay;
-}
-
-export type TestSuiteStep = TestSuiteStepWithExecute | TestSuiteStepWithDelay;
+export type LocalStepsList = LocalStep[];
 
 export type TestSuiteStepExecutionResult = {
-  description?: string;
   step: TestSuiteStep;
-  test: ObjectRef;
-  execution: Execution;
+  execute: {
+    execution: Execution;
+    step: TestSuiteExecuteStep;
+  }[];
 };
 
 export type TestSuite = {
