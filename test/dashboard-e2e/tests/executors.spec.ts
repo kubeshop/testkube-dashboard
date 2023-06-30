@@ -27,8 +27,8 @@ test(`Create custom container executor`, async ({ page }) => {
     const createExecutorPage=new CreateExecutorPage(page);
     await createExecutorPage.createExecutor(executorData);
 
+    //validation
     await page.waitForURL(`**/executors/${realExecutorName}`);
-  
     const createdExecutorData = await apiHelpers.getExecutorData(realExecutorName);
     await CommonHelpers.validateExecutor(executorData, createdExecutorData);
 
