@@ -6,6 +6,8 @@ export class ApiHelpers {
         this.cloudContext = cloudContext;
         this.bearerToken = bearerToken;
     }
+    
+    // TODO: getResource/createResource/updateResource/deleteResource for Tests/TestSuites/Executors not to duplicate things
 
     async getTests() {
         const request = `${this.apiUrl}/tests`;
@@ -34,6 +36,21 @@ export class ApiHelpers {
             
         } catch (e) {
             throw Error(`getTestSuites failed on "${request}" with: "${e}"`);
+        }
+    }
+
+    async getExecutors() {
+        const request = `${this.apiUrl}/executors`;
+
+        try {
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+
+            return ApiHelpers.parseResponse(response);
+            
+        } catch (e) {
+            throw Error(`getExecutors failed on "${request}" with: "${e}"`);
         }
     }
 
@@ -86,6 +103,17 @@ export class ApiHelpers {
         }
     }
 
+    async removeExecutor(executorName) {
+        const request = `${this.apiUrl}/executors/${executorName}`;
+
+        try {
+            await superagent.delete(request)
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+        } catch (e) {
+            throw Error(`removeExecutor failed on "${request}" with: "${e}"`);
+        }
+    }
+
     async updateTest(testData) {
         const request = `${this.apiUrl}/tests/${testData.name}`;
         
@@ -131,6 +159,21 @@ export class ApiHelpers {
         }
     }
 
+    async isExecutorCreated(executorName) {
+        try {
+            const currentExecutors = await this.getExecutors();
+            const executor = currentExecutors.find(singleExecutor => singleExecutor.name === executorName);
+    
+            if(executor !== undefined) {
+                return true;
+            }
+    
+            return false;
+        } catch (e) {
+            throw Error(`isExecutorCreated failed for "${executorName}" with: "${e}"`);
+        }
+    }
+
     async assureTestNotCreated(testName) {
         try {
             const alreadyCreated = await this.isTestCreated(testName);
@@ -154,6 +197,19 @@ export class ApiHelpers {
             return true;
         } catch (e) {
             throw Error(`assureTestSuiteNotCreated failed for "${testSuiteName}" with: "${e}"`);
+        }
+    }
+
+    async assureExecutorNotCreated(executorName) {
+        try {
+            const alreadyCreated = await this.isExecutorCreated(executorName);
+            if(alreadyCreated) {
+                await this.removeExecutor(testSuiteName);
+            }
+
+            return true;
+        } catch (e) {
+            throw Error(`assureExecutorNotCreated failed for "${executorName}" with: "${e}"`);
         }
     }
 
@@ -201,6 +257,20 @@ export class ApiHelpers {
             return ApiHelpers.parseResponse(response);
         } catch (e) {
             throw Error(`getTestSuiteData failed on "${request}" with: "${e}"`);
+        }
+    }
+
+    async getExecutorData(executorName) {
+        const request = `${this.apiUrl}/executors/${executorName}`;
+
+        try {
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+
+            return ApiHelpers.parseResponse(response);
+        } catch (e) {
+            throw Error(`getExecutorData failed on "${request}" with: "${e}"`);
         }
     }
 
