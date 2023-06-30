@@ -1,6 +1,7 @@
 import {MouseEvent, forwardRef, useCallback, useEffect, useRef, useState} from 'react';
 
 import Ansi from 'ansi-to-react';
+import {debounce} from 'lodash';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
@@ -12,7 +13,7 @@ import {useCountLines, useLastLines} from '../utils';
 import {StyledFullscreenLogOutputContainer} from './FullscreenLogOutput.styled';
 
 const FullScreenLogOutput = forwardRef<HTMLDivElement, Pick<LogOutputProps, 'actions' | 'logOutput' | 'initialLines'>>(
-  (props, ref) => {
+  (props, ref: any) => {
     const {logOutput = '', initialLines = 300} = props;
 
     const [expanded, setExpanded] = useState(false);
@@ -28,20 +29,20 @@ const FullScreenLogOutput = forwardRef<HTMLDivElement, Pick<LogOutputProps, 'act
 
     const {logOutputDOMRect} = useAppSelector(selectFullScreenLogOutput);
 
-    const scrollToBottom: (behavior?: ScrollBehavior) => void = () => {
-      if (bottomRef && bottomRef.current) {
-        bottomRef.current.scrollIntoView({behavior: 'auto', block: 'end'});
+    const scrollToBottom = debounce(() => {
+      if (ref.current) {
+        ref.current.scrollTo(0, ref.current.scrollHeight);
       }
-    };
+    }, 300);
 
-    useEffect(() => {
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
-    }, []);
+    useEffect(scrollToBottom, [ref.current]);
 
     return (
-      <StyledFullscreenLogOutputContainer ref={ref} logOutputDOMRect={logOutputDOMRect}>
+      <StyledFullscreenLogOutputContainer
+        ref={ref}
+        logOutputDOMRect={logOutputDOMRect}
+        onTransitionEnd={scrollToBottom}
+      >
         <StyledLogTextContainer>
           {visibleLogs ? (
             <StyledPreLogText>

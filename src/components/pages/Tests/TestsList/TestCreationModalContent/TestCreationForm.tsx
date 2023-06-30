@@ -159,7 +159,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
             const childrenProps: Record<SourceType, Partial<Props>> = {
               git: {executorType, getFieldValue},
               custom: {executorType},
-              string: {},
+              string: {executorType},
               'file-uri': {},
             };
 
