@@ -1,46 +1,27 @@
-import {useContext} from 'react';
+import {Definition} from '@molecules';
 
-import {Form} from 'antd';
+import {useAppDispatch, useAppSelector} from '@redux/hooks';
+import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
-import {CopyButton, DownloadButton, Pre} from '@atoms';
+import {useGetSourceDefinitionQuery, useUpdateSourceDefinitionMutation} from '@services/sources';
 
-import {MainContext} from '@contexts';
+import {testkubeCRDBases} from '@utils/externalLinks';
 
-import useLocation from '@hooks/useLocation';
-import useSecureContext from '@hooks/useSecureContext';
-
-import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
-
-import {useGetSourceDefinitionQuery} from '@services/sources';
-
-const SourceSettingsDefinition = () => {
-  const {isClusterAvailable} = useContext(MainContext);
-
+const SourceDefinition = () => {
   const source = useAppSelector(selectCurrentSource)!;
-  const isSecureContext = useSecureContext();
-  const {data: definition = '', isLoading} = useGetSourceDefinitionQuery(source?.name, {skip: !isClusterAvailable});
-  const filename = useLocation().lastPathSegment;
+
+  const dispatch = useAppDispatch();
 
   return (
-    <Form name="definition-form">
-      <ConfigurationCard title="Definition" description="Validate and export your source configuration">
-        {definition ? (
-          <DefinitionContent content={definition}>
-            {isSecureContext ? (
-              <CopyButton content={definition} />
-            ) : (
-              <DownloadButton filename={filename} extension="yaml" content={definition} />
-            )}
-          </DefinitionContent>
-        ) : (
-          <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
-        )}
-      </ConfigurationCard>
-    </Form>
+    <Definition
+      useGetDefinitionQuery={useGetSourceDefinitionQuery}
+      useUpdateDefinitionMutation={useUpdateSourceDefinitionMutation}
+      label="source"
+      setEntity={dispatch(setCurrentSource)}
+      name={source.name}
+      crdUrl={testkubeCRDBases.sources}
+    />
   );
 };
 
-export default SourceSettingsDefinition;
+export default SourceDefinition;

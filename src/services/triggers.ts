@@ -1,5 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {YamlEditBody} from '@models/fetch';
 import {TestTrigger, TriggersKeyMap} from '@models/triggers';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
@@ -42,7 +43,7 @@ export const triggersApi = createApi({
         };
       },
     }),
-    updateTriggerDefinition: builder.mutation<any, any>({
+    updateTriggerDefinition: builder.mutation<any, YamlEditBody>({
       query: body => {
         return {
           url: `/triggers/${body.name}`,

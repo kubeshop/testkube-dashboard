@@ -1,4 +1,4 @@
-import DefinitionMonaco from '@molecules/Definition/DefinitionMonaco';
+import {Definition} from '@molecules';
 
 import {useGetTriggerDefinitionQuery, useUpdateTriggerDefinitionMutation} from '@services/triggers';
 
@@ -13,7 +13,7 @@ const TriggerDefinition = () => {
   }));
 
   return (
-    <DefinitionMonaco
+    <Definition
       useGetDefinitionQuery={useGetTriggerDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateTriggerDefinitionMutation}
       label="trigger"

@@ -31,6 +31,6 @@ export enum testkubeCRDBases {
   scripts = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_scripts.yaml',
   tests = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_tests.yaml',
   sources = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_testsources.yaml',
-  testSuites = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_testsuites.yaml',
+  'test-suites' = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/develop/config/crd/bases/tests.testkube.io_testsuites.yaml',
   triggers = 'https://raw.githubusercontent.com/kubeshop/testkube-operator/main/config/crd/bases/tests.testkube.io_testtriggers.yaml',
 }

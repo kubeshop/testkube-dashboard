@@ -1,5 +1,4 @@
 import {useEffect} from 'react';
-import type {monaco} from 'react-monaco-editor';
 
 import {JSONSchema4} from 'json-schema';
 
@@ -10,20 +9,13 @@ import useCRD from '@hooks/useCRD';
 interface KubernetesResourceEditorProps {
   crdUrl: string;
   value: string;
-  onChange: (value: string, errors: monaco.editor.IMarker[]) => void;
+  onChange: (value: string) => void;
 }
 
 const KubernetesResourceEditor: React.FC<KubernetesResourceEditorProps> = props => {
   const {crdUrl, onChange, value} = props;
 
   const {crd} = useCRD(crdUrl);
-
-  const handleChangeWithMarkers = async (newValue: string) => {
-    const monaco = await import('react-monaco-editor').then(editor => editor.monaco);
-    const errors = monaco.editor.getModelMarkers({owner: 'yaml'});
-
-    onChange(newValue, errors);
-  };
 
   useEffect(() => {
     if (!crd) {
@@ -47,7 +39,7 @@ const KubernetesResourceEditor: React.FC<KubernetesResourceEditorProps> = props 
     });
   }, [crd]);
 
-  return <MonacoEditor language="yaml" onChange={handleChangeWithMarkers} value={value} />;
+  return <MonacoEditor language="yaml" onChange={onChange} value={value} />;
 };
 
 export default KubernetesResourceEditor;

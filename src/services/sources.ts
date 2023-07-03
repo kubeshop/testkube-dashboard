@@ -1,5 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {YamlEditBody} from '@models/fetch';
 import {Repository} from '@models/repository';
 import {CreateSourceResult, SourceWithRepository} from '@models/sources';
 
@@ -61,6 +62,16 @@ export const sourcesApi = createApi({
         };
       },
     }),
+    updateSourceDefinition: builder.mutation<any, YamlEditBody>({
+      query: body => {
+        return {
+          url: `/test-sources/${body.name}`,
+          method: 'PATCH',
+          headers: {'Content-Type': 'text/yaml'},
+          body: body.value,
+        };
+      },
+    }),
   }),
 });
 
@@ -74,4 +85,5 @@ export const {
   useCreateSourceMutation,
   useDeleteSourceMutation,
   useUpdateSourceMutation,
+  useUpdateSourceDefinitionMutation,
 } = sourcesApi;
