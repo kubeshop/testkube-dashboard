@@ -107,7 +107,11 @@ const EntityDetailsContent: React.FC = () => {
     })
       .then(res => displayDefaultNotificationFlow(res))
       .then(() => {
-        telemetry.event(`run${capitalize(entity)}`, {type});
+        if (entity === 'tests') {
+          telemetry.event('runTest', {type});
+        } else {
+          telemetry.event('runTestSuite');
+        }
       })
       .catch(error => {
         notificationCall('failed', error.title, error.message);
