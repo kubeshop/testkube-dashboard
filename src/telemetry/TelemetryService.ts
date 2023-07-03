@@ -2,8 +2,6 @@ import GTM from 'react-gtm-module';
 
 import {mapValues} from 'lodash';
 
-import env from '@src/env';
-
 export type DataLayerObject = Record<string, string | number | null | undefined>;
 
 export interface TelemetryServiceApp {
