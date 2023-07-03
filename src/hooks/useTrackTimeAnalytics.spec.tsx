@@ -30,7 +30,7 @@ interface TestWrapperProps extends TestInnerComponentProps {
 }
 
 const TestWrapper: FC<TestWrapperProps> = ({name, condition, track}) => (
-  <TelemetryContext.Provider value={{track} as any}>
+  <TelemetryContext.Provider value={{telemetry: {event: track}} as any}>
     <TestInnerComponent name={name} condition={condition} />
   </TelemetryContext.Provider>
 );

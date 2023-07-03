@@ -3,7 +3,7 @@ import {useEvent, useInterval} from 'react-use';
 
 import {useTelemetry} from '@telemetry';
 
-const useTrackTimeAnalytics = (type: string, condition = true) => {
+const useTrackTimeAnalytics = (page: string, condition = true) => {
   const [hidden, setHidden] = useState(document.hidden);
   const durationRef = useRef(0);
   const telemetry = useTelemetry();
@@ -12,7 +12,7 @@ const useTrackTimeAnalytics = (type: string, condition = true) => {
 
   const conditionalTrack = () => {
     if (condition && durationRef.current > 100) {
-      telemetry.event('trackTime', {duration: durationRef.current, type});
+      telemetry.event('trackTime', {duration: durationRef.current, page});
     }
   };
 
