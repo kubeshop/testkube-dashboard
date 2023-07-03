@@ -20,8 +20,8 @@ export class TestExecutionsPage {
     await expect(isClosed).toBeFalsy();
   }
 
-  async checkExecutionLogs() {
-    const logs = await this.page.locator('//code');
-    await expect(logs).toContainText(`{"status":"running"}`);
+  async validateExecutionLogContents(content: string | RegExp) {
+    const logs = await this.page.locator('xpath=//pre[@data-test="log-output"]');
+    await expect(logs).toContainText(content);
   }
 }

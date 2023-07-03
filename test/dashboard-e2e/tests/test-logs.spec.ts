@@ -9,7 +9,7 @@ import {TestExecutionsPage} from '../pages/TestExecutionsPage';
 const apiHelpers = new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
 
 test(`Run test logs`, async ({page}) => {
-  const testData = TestDataHandler.getTest('cypress-git-created');
+  const testData = TestDataHandler.getTest('k6-git-created');
   const realTestName = testData.name;
 
   await apiHelpers.assureTestCreated(testData, false);
@@ -25,12 +25,10 @@ test(`Run test logs`, async ({page}) => {
   const currentExecutionNumber = lastExecutionNumber + 1;
   const executionName = `${realTestName}-${currentExecutionNumber}`;
 
-  await page.waitForTimeout(5000);
   await testExecutionsPage.openExecutionDetails(executionName); // openLatestExecutionDetails?
 
-  await testExecutionsPage.checkWebSocketOpened();
-
-  await testExecutionsPage.checkExecutionLogs();
+  await page.waitForTimeout(5000);
+  await testExecutionsPage.validateExecutionLogContents('Environment variables read successfully');
 
   await apiHelpers.abortTest(realTestName, executionName); // abort test not to waste compute resources
 });

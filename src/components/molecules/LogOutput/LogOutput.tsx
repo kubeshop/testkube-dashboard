@@ -161,7 +161,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       <LogOutputHeader logOutput={logs} actions={actions} title={title} />
       <StyledLogTextContainer>
         {visibleLogs ? (
-          <StyledPreLogText>
+          <StyledPreLogText data-testid="log-output">
             {!expanded && lines >= initialLines ? (
               <>
                 <a href="#" onClick={onExpand}>
