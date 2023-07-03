@@ -4,11 +4,6 @@ import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {Execution} from './execution';
 import {Variables} from './variable';
 
-export interface AdditionalStepFields extends TestSuiteStep {
-  stopTestOnFailure?: boolean;
-  id?: string;
-}
-
 export interface TestSuiteStep {
   delay?: string;
   test?: string;
@@ -16,10 +11,6 @@ export interface TestSuiteStep {
 export interface TestSuiteBatchStep {
   stopTestOnFailure: boolean;
   execute: TestSuiteStep[];
-}
-
-export interface LocalStep extends AdditionalStepFields {
-  type?: string;
 }
 
 export type TestSuiteStepExecutionResult = {

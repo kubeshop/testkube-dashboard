@@ -12,7 +12,7 @@ import {EntityDetailsContext, MainContext} from '@contexts';
 import {Text, Title} from '@custom-antd';
 
 import {TestSuiteStepTest} from '@models/test';
-import {LocalStep, TestSuite} from '@models/testSuite';
+import {TestSuite, TestSuiteStep} from '@models/testSuite';
 
 import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
 
@@ -32,6 +32,12 @@ import DelayModal from './DelayModal';
 import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './SettingsTests.styled';
 
 const {Option} = Select;
+
+interface LocalStep extends TestSuiteStep {
+  type?: string;
+  stopTestOnFailure?: boolean;
+  id?: string;
+}
 
 const SettingsTests: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
@@ -198,8 +204,8 @@ const SettingsTests: React.FC = () => {
             </EmptyTestsContainer>
           ) : null}
           <DragNDropList
-            items={currentSteps}
-            setItems={setCurrentSteps}
+            value={currentSteps}
+            onChange={setCurrentSteps}
             onDelete={deleteStep}
             scrollRef={scrollRef}
             ContainerComponent={StyledStepsList}

@@ -1,8 +1,6 @@
 import React, {PropsWithChildren, memo} from 'react';
 import {DragDropContext, Draggable, DropResult, DroppableProvided, DroppableStateSnapshot} from 'react-beautiful-dnd';
 
-import {LocalStep} from '@models/testSuite';
-
 import {reorder} from '@utils/array';
 
 import StrictModeDroppable from './StrictModeDroppable';
@@ -15,8 +13,8 @@ interface ItemComponentProps {
 }
 
 type DragNDropListProps = {
-  items: LocalStep[];
-  setItems: (steps: LocalStep[]) => void;
+  value: any[];
+  onChange: (steps: any[]) => void;
   ContainerComponent: React.FC<
     PropsWithChildren<{
       isDragging: DroppableStateSnapshot['isDraggingOver'];
@@ -30,16 +28,16 @@ type DragNDropListProps = {
 };
 
 const DragNDropList: React.FC<DragNDropListProps> = props => {
-  const {items = [], setItems, onDelete, scrollRef, ItemComponent, ContainerComponent, disabled = false} = props;
+  const {value = [], onChange, onDelete, scrollRef, ItemComponent, ContainerComponent, disabled = false} = props;
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination || result.source.index === result.destination.index) {
       return;
     }
 
-    const reorderedItems = reorder(items, result.source.index, result.destination.index);
+    const reorderedItems = reorder(value, result.source.index, result.destination.index);
 
-    setItems(reorderedItems);
+    onChange(reorderedItems);
   };
 
   const onDragStart = () => {
@@ -55,7 +53,7 @@ const DragNDropList: React.FC<DragNDropListProps> = props => {
       <StrictModeDroppable droppableId="droppable" isDropDisabled={disabled}>
         {(provided, snapshot) => (
           <ContainerComponent {...provided.droppableProps} ref={provided.innerRef} isDragging={snapshot.isDraggingOver}>
-            {items.map((item, index) => (
+            {value.map((item, index) => (
               <Draggable key={item.id} draggableId={String(item.id)} index={index} isDragDisabled={disabled}>
                 {(providedDraggable, snapshotDraggable) => (
                   <div
