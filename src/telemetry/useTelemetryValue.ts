@@ -9,7 +9,11 @@ export const useTelemetryValue = (key: string, value: DataLayerValue, ignoreEmpt
   const prevDisabled = useRef<boolean>(telemetry.disabled);
 
   function update() {
-    if (!telemetry.disabled && (value !== prevValue.current || prevDisabled.current) && (!ignoreEmpty || value != null)) {
+    if (
+      !telemetry.disabled &&
+      (value !== prevValue.current || prevDisabled.current) &&
+      (!ignoreEmpty || value != null)
+    ) {
       telemetry.set({[key]: value});
     }
     prevDisabled.current = telemetry.disabled;
