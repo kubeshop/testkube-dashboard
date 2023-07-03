@@ -4,31 +4,29 @@ import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {Execution} from './execution';
 import {Variables} from './variable';
 
-export interface AdditionalStepFields extends TestSuiteExecuteStep {
+export interface AdditionalStepFields extends TestSuiteStep {
   stopTestOnFailure?: boolean;
   id?: string;
 }
 
-export interface TestSuiteExecuteStep {
+export interface TestSuiteStep {
   delay?: string;
   test?: string;
 }
-export interface TestSuiteStep {
+export interface TestSuiteBatchStep {
   stopTestOnFailure: boolean;
-  execute: TestSuiteExecuteStep[];
+  execute: TestSuiteStep[];
 }
 
 export interface LocalStep extends AdditionalStepFields {
   type?: string;
 }
 
-export type LocalStepsList = LocalStep[];
-
 export type TestSuiteStepExecutionResult = {
-  step: TestSuiteStep;
+  step: TestSuiteBatchStep;
   execute: {
     execution: Execution;
-    step: TestSuiteExecuteStep;
+    step: TestSuiteStep;
   }[];
 };
 
@@ -36,9 +34,9 @@ export type TestSuite = {
   name: string;
   namespace?: string;
   description?: string;
-  before?: TestSuiteStep[];
-  steps?: TestSuiteStep[];
-  after?: TestSuiteStep[];
+  before?: TestSuiteBatchStep[];
+  steps?: TestSuiteBatchStep[];
+  after?: TestSuiteBatchStep[];
   labels?: EntityMap;
   schedule?: string;
   repeats?: number;

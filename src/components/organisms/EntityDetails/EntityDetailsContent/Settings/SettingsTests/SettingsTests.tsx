@@ -12,7 +12,7 @@ import {EntityDetailsContext, MainContext} from '@contexts';
 import {Text, Title} from '@custom-antd';
 
 import {TestSuiteStepTest} from '@models/test';
-import {LocalStepsList, TestSuite} from '@models/testSuite';
+import {LocalStep, TestSuite} from '@models/testSuite';
 
 import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
 
@@ -67,7 +67,7 @@ const SettingsTests: React.FC = () => {
     }));
   }, [allTestsList]);
 
-  const initialSteps: LocalStepsList = useMemo(
+  const initialSteps: LocalStep[] = useMemo(
     () =>
       entityDetails.steps
         ? entityDetails.steps.map(step => {
@@ -93,7 +93,7 @@ const SettingsTests: React.FC = () => {
     [entityDetails?.steps, testsData]
   );
 
-  const [currentSteps = initialSteps, setCurrentSteps] = useState<LocalStepsList>([]);
+  const [currentSteps = initialSteps, setCurrentSteps] = useState<LocalStep[]>([]);
 
   const wasTouched = currentSteps !== initialSteps;
 

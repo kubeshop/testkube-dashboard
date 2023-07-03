@@ -54,11 +54,11 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     return status;
   };
 
-  const getExecutionStepName = (step: any) => {
-    return step.name;
+  const getExecutionStepName = (step: TestSuiteStepExecutionResult) => {
+    return step.step.execute[0].test;
   };
 
-  const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
+  const onShowClick = (step: TestSuiteStepExecutionResult & {executionName?: string}) => {
     const {executionName, step: executeStep, execute} = step;
 
     if ('execute' in executeStep) {

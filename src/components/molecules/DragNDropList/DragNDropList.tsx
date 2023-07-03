@@ -1,7 +1,7 @@
 import React, {PropsWithChildren, memo} from 'react';
 import {DragDropContext, Draggable, DropResult, DroppableProvided, DroppableStateSnapshot} from 'react-beautiful-dnd';
 
-import {LocalStepsList} from '@models/testSuite';
+import {LocalStep} from '@models/testSuite';
 
 import {reorder} from '@utils/array';
 
@@ -15,8 +15,8 @@ interface ItemComponentProps {
 }
 
 type DragNDropListProps = {
-  items: LocalStepsList;
-  setItems: (steps: LocalStepsList) => void;
+  items: LocalStep[];
+  setItems: (steps: LocalStep[]) => void;
   ContainerComponent: React.FC<
     PropsWithChildren<{
       isDragging: DroppableStateSnapshot['isDraggingOver'];
