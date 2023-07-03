@@ -1,4 +1,4 @@
-import {memo, useContext, useMemo} from 'react';
+import {memo, useContext, useMemo, useState} from 'react';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
 
@@ -12,7 +12,7 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
-import {ExecutionName} from '@molecules';
+import {ExecutionName, NotificationContent} from '@molecules';
 
 import {useAppSelector} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
@@ -24,6 +24,7 @@ import {
   StyledExecutionStepsListItem,
   StyledExternalLinkIcon,
   StyledSpace,
+  WarningContainer,
 } from './ExecutionStepsList.styled';
 
 type IconSet = 'default' | 'definition';
@@ -40,6 +41,8 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const {navigate} = useContext(DashboardContext);
 
   const executors = useAppSelector(selectExecutors);
+
+  const [isWarning, setIsWarning] = useState(false);
 
   const getExecutionStepIcon = (step: TestSuiteStepExecutionResult) => {
     if (iconSet === 'definition') {
@@ -94,6 +97,10 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
         testType,
       } = execution;
 
+      if (execute.length > 1) {
+        setIsWarning(true);
+      }
+
       const stepIcon = getTestExecutorIcon(executors, testType);
       const listItemKey = execution?.id || nanoid();
       let isClickable = false;
@@ -147,7 +154,19 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     });
   }, [executionSteps]);
 
-  return <StyledExecutionStepsList>{renderedDefinitionsList}</StyledExecutionStepsList>;
+  return (
+    <StyledExecutionStepsList>
+      {isWarning ? (
+        <WarningContainer>
+          <NotificationContent
+            status="error"
+            title="We do not yet support test suite parallelization, displayed execution result might be wrong"
+          />
+        </WarningContainer>
+      ) : null}
+      {renderedDefinitionsList}
+    </StyledExecutionStepsList>
+  );
 };
 
 export default memo(ExecutionStepsList);

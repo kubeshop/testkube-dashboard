@@ -63,3 +63,7 @@ export const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   width: 20px;
   height: 30px;
 `;
+
+export const WarningContainer = styled.div`
+  margin-bottom: 20px;
+`;
