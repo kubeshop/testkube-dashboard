@@ -1,4 +1,6 @@
-import {memo, useContext, useMemo} from 'react';
+import {memo, useContext, useMemo, useState} from 'react';
+
+import {ClockCircleOutlined} from '@ant-design/icons';
 
 import {nanoid} from '@reduxjs/toolkit';
 
@@ -10,7 +12,7 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
-import {ExecutionName} from '@molecules';
+import {ExecutionName, NotificationContent} from '@molecules';
 
 import {useAppSelector} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
@@ -22,6 +24,7 @@ import {
   StyledExecutionStepsListItem,
   StyledExternalLinkIcon,
   StyledSpace,
+  WarningContainer,
 } from './ExecutionStepsList.styled';
 
 type IconSet = 'default' | 'definition';
@@ -39,12 +42,15 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
 
   const executors = useAppSelector(selectExecutors);
 
+  const [isWarning, setIsWarning] = useState(false);
+
   const getExecutionStepIcon = (step: TestSuiteStepExecutionResult) => {
     if (iconSet === 'definition') {
       return 'code';
     }
 
-    const {execution} = step;
+    const {execute} = step;
+    const {execution} = execute[0];
     const {executionResult} = execution;
     const {status} = executionResult;
 
@@ -52,22 +58,18 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   };
 
   const getExecutionStepName = (step: TestSuiteStepExecutionResult) => {
-    return step.execution.name;
+    return step.step.execute[0].test;
   };
 
-  const onShowClick = (step: TestSuiteStepExecutionResult & {executionName: string}) => {
-    const {
-      executionName,
-      step: executeStep,
-      execution: {id},
-    } = step;
+  const onShowClick = (step: TestSuiteStepExecutionResult & {executionName?: string}) => {
+    const {executionName, step: executeStep, execute} = step;
 
     if ('execute' in executeStep) {
       if (iconSet === 'default') {
         dispatch(
           setRedirectTarget({
             targetTestId: executionName,
-            targetTestExecutionId: id,
+            targetTestExecutionId: execute[0].execution.id,
           })
         );
       } else if (iconSet === 'definition') {
@@ -79,7 +81,7 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
         );
       }
 
-      return navigate(`/tests/executions/${executeStep.execute.name}/execution/${id}`);
+      return navigate(`/tests/executions/${execute[0].step.test}/execution/${execute[0].execution.id}`);
     }
   };
 
@@ -88,33 +90,42 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
       const icon = getExecutionStepIcon(step);
       const executionName = getExecutionStepName(step);
 
-      const {step: stepResult, execution} = step;
+      const {step: stepResult, execute} = step;
+      const {execution} = execute[0];
       const {
         executionResult: {status},
         testType,
       } = execution;
+
+      if (execute.length > 1) {
+        setIsWarning(true);
+      }
 
       const stepIcon = getTestExecutorIcon(executors, testType);
       const listItemKey = execution?.id || nanoid();
       let isClickable = false;
       let content;
 
-      if ('delay' in stepResult) {
+      const delay = stepResult.execute[0].delay;
+      const test = stepResult.execute[0].test;
+
+      if (delay) {
         content = (
           <>
-            <ExecutorIcon />
-            <ExecutionName name={`Delay - ${stepResult.delay.duration}ms`} />
+            <ClockCircleOutlined style={{fontSize: '26px'}} />
+            <ExecutionName name={`Delay - ${delay}`} />
             <div />
           </>
         );
-      } else if ('execute' in stepResult) {
-        isClickable = (execution?.id && iconSet === 'default') || iconSet === 'definition';
+      } else if (test) {
+        isClickable =
+          (execution?.executionResult.status !== 'queued' && iconSet === 'default') || iconSet === 'definition';
 
         content = (
           <>
             <ExecutorIcon type={stepIcon} />
-            <ExecutionName name={executionName || stepResult.execute.name || ''} />
-            <StyledExternalLinkIcon />
+            <ExecutionName name={executionName || test || ''} />
+            {isClickable ? <StyledExternalLinkIcon /> : <div />}
           </>
         );
       }
@@ -143,7 +154,19 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     });
   }, [executionSteps]);
 
-  return <StyledExecutionStepsList>{renderedDefinitionsList}</StyledExecutionStepsList>;
+  return (
+    <StyledExecutionStepsList>
+      {isWarning ? (
+        <WarningContainer>
+          <NotificationContent
+            status="error"
+            title="We do not yet support test suite parallelization, displayed execution result might be wrong"
+          />
+        </WarningContainer>
+      ) : null}
+      {renderedDefinitionsList}
+    </StyledExecutionStepsList>
+  );
 };
 
 export default memo(ExecutionStepsList);

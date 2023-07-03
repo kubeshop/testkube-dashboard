@@ -22,7 +22,6 @@ jobs:
   e2e-tests:
     name: E2E tests
     needs: wait-for-vercel
-    concurrency: oss-e2e-tests-dev-env # temporary - tests need to be adjusted to allow concurrent execution
     runs-on: ubuntu-latest
     steps:
     - name: Run E2E tests
@@ -37,3 +36,5 @@ jobs:
           BASE_URL="${{ needs.wait-for-vercel.outputs.preview-url }}"
           API_URL="testkube-api-server.testkube.svc.cluster.local:8088/v1"
           DASHBOARD_API_URL="https://dev.testkube.io/results/v1"
+          BASIC_AUTH_USER="testkube-admin"
+          BASIC_AUTH_PASS="${{ secrets.TESTKUBE_DEVELOP_NGINX_PASS }}"

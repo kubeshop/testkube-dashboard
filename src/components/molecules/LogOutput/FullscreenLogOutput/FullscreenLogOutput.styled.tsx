@@ -47,7 +47,7 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
     left: 100px;
 
     width: calc(100% - 100px);
-    height: 100vh;
+    height: 100%;
   }
 
   &.full-screen-log-output-exit {
@@ -55,7 +55,7 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
     left: 100px;
 
     width: calc(100% - 100px);
-    height: 100vh;
+    height: 100%;
   }
 
   &.full-screen-log-output-exit-active {
