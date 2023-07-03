@@ -33,6 +33,12 @@ import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './Setti
 
 const {Option} = Select;
 
+interface LocalStep extends TestSuiteStep {
+  type?: string;
+  stopTestOnFailure?: boolean;
+  id?: string;
+}
+
 const SettingsTests: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {entityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
@@ -67,33 +73,33 @@ const SettingsTests: React.FC = () => {
     }));
   }, [allTestsList]);
 
-  const initialSteps: TestSuiteStep[] = useMemo(
+  const initialSteps: LocalStep[] = useMemo(
     () =>
       entityDetails.steps
         ? entityDetails.steps.map(step => {
             const id = nanoid();
 
-            if ('delay' in step) {
+            const firstItemInStep = step.execute[0];
+
+            if ('delay' in firstItemInStep) {
               return {
-                ...step,
+                ...firstItemInStep,
                 id,
               };
             }
 
             return {
-              ...step,
+              ...firstItemInStep,
               id,
-              execute: {
-                ...step.execute,
-                type: testsData.find(item => item.name === step.execute.name)?.type || '',
-              },
+              type: testsData.find(item => item.name === firstItemInStep.test)?.type || '',
+              stopTestOnFailure: step.stopTestOnFailure,
             };
           })
         : [],
     [entityDetails?.steps, testsData]
   );
 
-  const [currentSteps = initialSteps, setCurrentSteps] = useState<TestSuiteStep[]>([]);
+  const [currentSteps = initialSteps, setCurrentSteps] = useState<LocalStep[]>([]);
 
   const wasTouched = currentSteps !== initialSteps;
 
@@ -108,7 +114,12 @@ const SettingsTests: React.FC = () => {
       id: entityDetails.name,
       data: {
         ...entityDetails,
-        steps: currentSteps,
+        steps: currentSteps.map(step => {
+          return {
+            stopTestOnFailure: step.stopTestOnFailure,
+            execute: [{...(step.test ? {test: step.test} : {delay: step.delay})}],
+          };
+        }),
       },
     })
       .then(res => displayDefaultNotificationFlow(res))
@@ -121,17 +132,14 @@ const SettingsTests: React.FC = () => {
     if (value === 'delay') {
       setIsDelayModalVisible(true);
     } else {
-      const {name, namespace, type} = JSON.parse(value);
+      const {name, type} = JSON.parse(value);
 
       setCurrentSteps([
         ...currentSteps,
         {
-          execute: {
-            name,
-            type,
-            namespace,
-          },
+          test: name,
           id: nanoid(),
+          type,
           stopTestOnFailure: false,
         },
       ]);
@@ -142,9 +150,7 @@ const SettingsTests: React.FC = () => {
     setCurrentSteps([
       ...currentSteps,
       {
-        delay: {
-          duration: value,
-        },
+        delay: `${value}ms`,
         id: nanoid(),
         stopTestOnFailure: false,
       },
@@ -198,8 +204,8 @@ const SettingsTests: React.FC = () => {
             </EmptyTestsContainer>
           ) : null}
           <DragNDropList
-            items={currentSteps}
-            setItems={setCurrentSteps}
+            value={currentSteps}
+            onChange={setCurrentSteps}
             onDelete={deleteStep}
             scrollRef={scrollRef}
             ContainerComponent={StyledStepsList}
