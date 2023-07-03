@@ -30,7 +30,13 @@ import env from './env';
 
   root.render(
     <React.StrictMode>
-      <TelemetryProvider prefix="tk.ui." app={app} gtmId={env.disableTelemetry ? undefined : env.gtmKey} paused>
+      <TelemetryProvider
+        prefix="tk.ui."
+        app={app}
+        gtmId={env.disableTelemetry ? undefined : env.gtmKey}
+        debug={env.debugTelemetry}
+        paused
+      >
         <ReduxProvider store={store}>
           <BrowserRouter basename={basename}>
             <GlobalStyle />

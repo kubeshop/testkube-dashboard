@@ -16,45 +16,11 @@ export interface TelemetryServiceOptions {
   gtmId?: string;
   disabled?: boolean;
   paused?: boolean;
+  debug?: boolean;
   dataLayerName?: string;
   userDataStorageKey?: string;
   app: TelemetryServiceApp;
 }
-
-const validateDevProperties = (data?: Record<string, any>): void => {
-  if (!env.debugTelemetry) {
-    return;
-  }
-  const invalid = Object.entries(data || {})
-    .filter(
-      ([, value]) =>
-        typeof value !== 'string' &&
-        (typeof value !== 'number' || Number.isNaN(value)) &&
-        typeof value !== 'undefined' &&
-        value !== null
-    )
-    .map(([key]) => key);
-  if (invalid.length > 0) {
-    // eslint-disable-next-line no-console
-    console.error(
-      '  ',
-      'The event should have only "string", "number" or empty properties. Invalid values received in:',
-      invalid
-    );
-  }
-};
-
-const validateDevRestrictedProperties = (data: Record<string, any> | undefined, restricted: string[]): void => {
-  if (!env.debugTelemetry) {
-    return;
-  }
-  const keys = Object.keys(data || {});
-  const invalid = keys.filter(key => restricted.includes(key));
-  if (invalid.length > 0) {
-    // eslint-disable-next-line no-console
-    console.error('  ', `The event should not have [${restricted.join(', ')}] properties. Received:`, invalid);
-  }
-};
 
 export class TelemetryService {
   private readonly prefix: string;
@@ -64,6 +30,7 @@ export class TelemetryService {
   private readonly userDataStorageKey?: string;
   private enabled = false;
   private paused = false;
+  private debug = false;
   private initialized = false;
   private userData: DataLayerObject = {};
 
@@ -72,6 +39,7 @@ export class TelemetryService {
     this.gtmId = options.gtmId;
     this.dataLayerName = options.dataLayerName || 'dataLayer';
     this.app = options.app;
+    this.debug = Boolean(options.debug);
     this.ensureAppMetaTags();
     // @ts-ignore: ensure dummy dataLayer is there.
     if (!window[this.dataLayerName]) {
@@ -166,8 +134,8 @@ export class TelemetryService {
 
   public set(userData?: DataLayerObject): void {
     // Show debugging information for the event in development
-    validateDevRestrictedProperties(userData, ['event']);
-    validateDevProperties(userData);
+    this.validateDevRestrictedProperties(userData, ['event']);
+    this.validateDevProperties(userData);
     this.groupDev('Data Set', () => {
       if (this.paused) {
         this.logDev('Ignored:', {...userData});
@@ -219,8 +187,8 @@ export class TelemetryService {
     // Show debugging information for the event in development
     this.groupDev(`Event: ${event}`, () => {
       this.logDev('Data:', {...data});
-      validateDevRestrictedProperties(data, ['event']);
-      validateDevProperties(data);
+      this.validateDevRestrictedProperties(data, ['event']);
+      this.validateDevProperties(data);
 
       // Send the event
       if (this.paused) {
@@ -257,7 +225,7 @@ export class TelemetryService {
 
   // eslint-disable-next-line class-methods-use-this
   private groupDev(name: string, fn: () => void): void {
-    if (!env.debugTelemetry) {
+    if (!this.debug) {
       return;
     }
     const tags = [
@@ -273,9 +241,44 @@ export class TelemetryService {
     console.groupEnd();
   }
 
+  private validateDevRestrictedProperties(data: Record<string, any> | undefined, restricted: string[]): void {
+    if (!this.debug) {
+      return;
+    }
+    const keys = Object.keys(data || {});
+    const invalid = keys.filter(key => restricted.includes(key));
+    if (invalid.length > 0) {
+      // eslint-disable-next-line no-console
+      console.error('  ', `The event should not have [${restricted.join(', ')}] properties. Received:`, invalid);
+    }
+  }
+
+  private validateDevProperties(data?: Record<string, any>): void {
+    if (!this.debug) {
+      return;
+    }
+    const invalid = Object.entries(data || {})
+      .filter(
+        ([, value]) =>
+          typeof value !== 'string' &&
+          (typeof value !== 'number' || Number.isNaN(value)) &&
+          typeof value !== 'undefined' &&
+          value !== null
+      )
+      .map(([key]) => key);
+    if (invalid.length > 0) {
+      // eslint-disable-next-line no-console
+      console.error(
+        '  ',
+        'The event should have only "string", "number" or empty properties. Invalid values received in:',
+        invalid
+      );
+    }
+  }
+
   // eslint-disable-next-line class-methods-use-this
   private logDev(...args: any): void {
-    if (!env.debugTelemetry) {
+    if (!this.debug) {
       return;
     }
     // eslint-disable-next-line no-console
