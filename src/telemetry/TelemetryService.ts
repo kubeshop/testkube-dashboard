@@ -2,7 +2,8 @@ import GTM from 'react-gtm-module';
 
 import {mapValues} from 'lodash';
 
-export type DataLayerObject = Record<string, string | number | null | undefined>;
+export type DataLayerValue = string | number | null | undefined;
+export type DataLayerObject = Record<string, DataLayerValue>;
 
 export interface TelemetryServiceApp {
   name: string;
@@ -31,6 +32,7 @@ export class TelemetryService {
   private debug = false;
   private initialized = false;
   private userData: DataLayerObject = {};
+  private statusListeners = new Set<() => void>();
 
   public constructor(options: TelemetryServiceOptions) {
     this.prefix = options.prefix || '';
@@ -195,6 +197,16 @@ export class TelemetryService {
         this.dataLayer(message);
       }
     });
+  }
+
+  public onStatusChange(fn: () => void): () => void {
+    const wrappedListener = () => fn();
+    this.statusListeners.add(wrappedListener);
+    return () => this.statusListeners.delete(wrappedListener);
+  }
+
+  private emitStatusChange(): void {
+    this.statusListeners.forEach(listener => listener());
   }
 
   private setUserData(data: DataLayerObject): void {

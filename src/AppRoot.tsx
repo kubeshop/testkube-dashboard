@@ -23,7 +23,7 @@ import {useAppDispatch} from '@redux/hooks';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
-import {useTelemetry} from '@telemetry';
+import {useTelemetry, useTelemetryValue} from '@telemetry';
 
 import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
@@ -68,15 +68,8 @@ const AppRoot: React.FC = () => {
     return value.visitorId;
   });
 
-  useEffect(() => {
-    if (visitorId) {
-      telemetry.set({userID: visitorId});
-    }
-  }, [visitorId, clusterConfig]);
-
-  useEffect(() => {
-    telemetry.set({browserName: window.navigator.userAgent});
-  }, [clusterConfig]);
+  useTelemetryValue('userID', visitorId, true);
+  useTelemetryValue('browserName', window.navigator.userAgent);
 
   useEffect(() => {
     telemetry.pageView(`${location.pathname}${anonymizeQueryString(location.search)}`);
