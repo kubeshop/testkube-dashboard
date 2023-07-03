@@ -7,9 +7,10 @@ import {MainPage} from '../pages/MainPage';
 import {TestExecutionsPage} from '../pages/TestExecutionsPage';
 
 const apiHelpers = new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
+const testDataHandler = new TestDataHandler(process.env.RUN_ID);
 
 test(`Run test logs`, async ({page}) => {
-  const testData = TestDataHandler.getTest('k6-git-created');
+  const testData = testDataHandler.getTest('k6-git-created');
   const realTestName = testData.name;
 
   await apiHelpers.assureTestCreated(testData, false);
