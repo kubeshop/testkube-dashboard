@@ -8,11 +8,12 @@ const MonacoEditor = lazy(() => import('react-monaco-editor'));
 type TkMonacoEditorProps = {
   language: string;
   height?: string;
+  minHeight?: number;
   value: string;
   onChange: (value: string) => void;
 };
 
-const lineHeight = 22;
+export const lineHeight = 22;
 
 const options = {
   contextmenu: true,
@@ -39,7 +40,7 @@ const defaultEditorHeight = 300;
 const editorMaxHeight = window.screen.height * 0.5;
 
 const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
-  const {value, onChange, language, height} = props;
+  const {value, onChange, language, height, minHeight = defaultEditorHeight} = props;
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   const handleEditorDidMount: EditorDidMount = (mountedEditor, monaco) => {
@@ -65,10 +66,11 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
     // if height is set, don't calculate it dynamically
     if (editor && !height) {
       const model = editor.getModel();
+      const width = editor.getLayoutInfo().width;
 
       // if default value is empty, display a default height
       if (!model || !model.getValue()) {
-        editor.layout({width: editor.getLayoutInfo().width, height: defaultEditorHeight});
+        editor.layout({width, height: defaultEditorHeight});
         return;
       }
 
@@ -76,8 +78,8 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
       const contentHeight = (model.getLineCount() + 1) * lineHeight;
 
       editor.layout({
-        width: editor.getLayoutInfo().width,
-        height: contentHeight > editorMaxHeight ? editorMaxHeight : contentHeight,
+        width,
+        height: Math.max(minHeight, Math.min(contentHeight, editorMaxHeight)),
       });
     }
   }, [editor, height]);

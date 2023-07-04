@@ -116,10 +116,10 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                         Promise.resolve(validateFields?.())
                           .then(() => onConfirm?.())
                           .catch((err: ErrorNotification) => {
-                            if ('title' in err) {
-                              setErrors([err]);
-                            } else if ('errors' in err) {
+                            if ('errors' in err) {
                               setErrors(err.errors);
+                            } else if (err.title || err.message) {
+                              setErrors([err]);
                             }
 
                             if (!inTopInViewport && topRef && topRef.current) {

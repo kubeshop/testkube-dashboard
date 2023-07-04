@@ -6,6 +6,7 @@ import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {JSONSchema4} from 'json-schema';
+import {capitalize} from 'lodash';
 
 import {Pre} from '@atoms';
 
@@ -14,7 +15,6 @@ import {MainContext} from '@contexts';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
 
 import KubernetesResourceEditor from '../KubernetesResourceEditor';
 
@@ -63,7 +63,14 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
       const errorMessages = {
         errors: markerErrors.map(x => {
           return {
-            title: `Line ${x.startLineNumber}:${x.endColumn} ${x.message}`,
+            title: (
+              <>
+                {x.message}{' '}
+                <em>
+                  (line {x.startLineNumber}:{x.startColumn})
+                </em>
+              </>
+            ),
           };
         }),
       };
@@ -71,10 +78,10 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
     }
 
     return update({name, value})
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
         if (res && 'data' in res) {
-          notificationCall('passed', `${uppercaseFirstSymbol(label)} was successfully updated.`);
+          notificationCall('passed', `${capitalize(label)} was successfully updated.`);
           setEntity?.(res.data);
         }
       });

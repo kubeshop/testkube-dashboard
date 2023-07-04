@@ -63,14 +63,12 @@ export const sourcesApi = createApi({
       },
     }),
     updateSourceDefinition: builder.mutation<any, YamlEditBody>({
-      query: body => {
-        return {
-          url: `/test-sources/${body.name}`,
-          method: 'PATCH',
-          headers: {'Content-Type': 'text/yaml'},
-          body: body.value,
-        };
-      },
+      query: body => ({
+        url: `/test-sources/${body.name}`,
+        method: 'PATCH',
+        headers: {'content-type': 'text/yaml'},
+        body: body.value,
+      }),
     }),
   }),
 });

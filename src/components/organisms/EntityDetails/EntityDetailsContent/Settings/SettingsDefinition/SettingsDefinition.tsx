@@ -9,13 +9,14 @@ import {testkubeCRDBases} from '@utils/externalLinks';
 
 import {settingsDefinitionData} from './utils';
 
-const SourceDefinition = () => {
+const SettingsDefinition = () => {
   const {entityDetails, entity} = useContext(EntityDetailsContext);
 
   const sectionData = settingsDefinitionData[entity];
-  const config: Partial<DefinitionProps> =
+  const config = (
     entity === 'tests'
       ? {
+          label: 'test',
           crdUrl: testkubeCRDBases.tests,
           overrideSchema: createSchemaOverride($ => {
             $.required('spec', 'apiVersion', 'kind');
@@ -25,6 +26,7 @@ const SourceDefinition = () => {
           }),
         }
       : {
+          label: 'test suite',
           crdUrl: testkubeCRDBases.testSuites,
           overrideSchema: createSchemaOverride($ => {
             $.required('spec', 'apiVersion', 'kind');
@@ -32,17 +34,17 @@ const SourceDefinition = () => {
             $.property('apiVersion').merge({pattern: '^tests\\.testkube\\.io/v[23]$'});
             $.property('kind').merge({const: 'TestSuite'});
           }),
-        };
+        }
+  ) satisfies Partial<DefinitionProps>;
 
   return (
     <Definition
       useGetDefinitionQuery={sectionData.query}
       useUpdateDefinitionMutation={sectionData.mutation}
-      label={entity.slice(0, -1)}
       name={entityDetails.name}
       {...config}
     />
   );
 };
 
-export default SourceDefinition;
+export default SettingsDefinition;

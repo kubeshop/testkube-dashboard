@@ -1,11 +1,13 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
+import {capitalize} from 'lodash';
+
 import {EntityMap} from '@models/entityMap';
 import {Executor, ExecutorFeature, ExecutorsState} from '@models/executors';
 
 import initialState from '@redux/initialState';
 
-import {isURL, uppercaseFirstSymbol} from '@utils/strings';
+import {isURL} from '@utils/strings';
 
 import {RootState} from '../store';
 
@@ -42,7 +44,7 @@ export const executorsSlice = createSlice({
 
           return {
             ...executor,
-            displayName: uppercaseFirstSymbol(iconURI),
+            displayName: capitalize(iconURI),
           };
         }) || {};
     },

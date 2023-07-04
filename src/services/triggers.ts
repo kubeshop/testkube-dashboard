@@ -35,23 +35,19 @@ export const triggersApi = createApi({
       }),
     }),
     updateTriggerById: builder.mutation<TestTrigger, TestTrigger>({
-      query: body => {
-        return {
-          url: `/triggers/${body.name}`,
-          method: 'PATCH',
-          body,
-        };
-      },
+      query: body => ({
+        url: `/triggers/${body.name}`,
+        method: 'PATCH',
+        body,
+      }),
     }),
     updateTriggerDefinition: builder.mutation<any, YamlEditBody>({
-      query: body => {
-        return {
-          url: `/triggers/${body.name}`,
-          method: 'PATCH',
-          headers: {'Content-Type': 'text/yaml'},
-          body: body.value,
-        };
-      },
+      query: body => ({
+        url: `/triggers/${body.name}`,
+        method: 'PATCH',
+        headers: {'content-type': 'text/yaml'},
+        body: body.value,
+      }),
     }),
     updateTriggers: builder.mutation<void, any>({
       query: body => ({

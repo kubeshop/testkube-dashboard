@@ -20,6 +20,7 @@ const env: DynamicEnvironment = {
   apiUrl: getValue('REACT_APP_API_SERVER_ENDPOINT', values?.REACT_APP_API_SERVER_ENDPOINT),
   basename: getValue('REACT_APP_ROOT_ROUTE', values?.REACT_APP_ROOT_ROUTE),
   disableTelemetry: getValue('REACT_APP_DISABLE_TELEMETRY', values?.REACT_APP_DISABLE_TELEMETRY) === 'true',
+  crdOperatorRevision: getValue('REACT_APP_CRD_OPERATOR_REVISION', values?.REACT_APP_CRD_OPERATOR_REVISION) || 'main',
 };
 
 type BuildTimeEnvironment = {
@@ -33,6 +34,7 @@ type DynamicEnvironment = {
   apiUrl: string;
   basename: string;
   disableTelemetry: boolean;
+  crdOperatorRevision: string;
 };
 
 export default {

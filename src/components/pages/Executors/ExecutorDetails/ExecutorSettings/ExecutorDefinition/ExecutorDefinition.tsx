@@ -18,7 +18,7 @@ const ExecutorDefinition = () => {
       useGetDefinitionQuery={useGetExecutorDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateExecutorDefinitionMutation}
       label="executor"
-      setEntity={dispatch(setCurrentExecutor)}
+      setEntity={value => dispatch(setCurrentExecutor(value))}
       name={executor.name}
       crdUrl={testkubeCRDBases.executors}
       overrideSchema={createSchemaOverride($ => {

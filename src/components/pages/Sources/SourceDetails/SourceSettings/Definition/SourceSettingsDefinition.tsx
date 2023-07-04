@@ -8,7 +8,7 @@ import {useGetSourceDefinitionQuery, useUpdateSourceDefinitionMutation} from '@s
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
-const SourceDefinition = () => {
+const SourceSettingsDefinition = () => {
   const source = useAppSelector(selectCurrentSource)!;
 
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ const SourceDefinition = () => {
       useGetDefinitionQuery={useGetSourceDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateSourceDefinitionMutation}
       label="source"
-      setEntity={dispatch(setCurrentSource)}
+      setEntity={value => dispatch(setCurrentSource(value))}
       name={source.name}
       crdUrl={testkubeCRDBases.sources}
       overrideSchema={createSchemaOverride($ => {
@@ -31,4 +31,4 @@ const SourceDefinition = () => {
   );
 };
 
-export default SourceDefinition;
+export default SourceSettingsDefinition;

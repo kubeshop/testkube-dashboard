@@ -4,6 +4,8 @@ import {Form} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
+import {capitalize} from 'lodash';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {Option} from '@models/form';
@@ -14,7 +16,6 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {namingMap, updateRequestsMap} from '../utils';
 
@@ -44,7 +45,7 @@ const Labels: React.FC = () => {
     })
       .then(res => displayDefaultNotificationFlow(res))
       .then(() => {
-        notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`);
+        notificationCall('passed', `${capitalize(namingMap[entity])} was successfully updated.`);
         setWasTouched(false);
       });
   };
