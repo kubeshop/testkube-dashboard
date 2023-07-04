@@ -1,12 +1,8 @@
 import {motion} from 'framer-motion';
 import styled from 'styled-components';
 
-import Colors from '@styles/Colors';
-
 export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected: boolean; drawerWidth: string}>`
   position: relative;
-  overflow-y: hidden;
-  overflow-x: hidden;
 
   display: flex;
   flex-direction: column;
@@ -16,8 +12,6 @@ export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected:
 
   margin: 0;
   padding: ${({$isRowSelected}) => ($isRowSelected ? '45px 30px' : '0')};
-
-  background: ${Colors.slate800};
 `;
 
 export const DrawerHeader = styled.div`
