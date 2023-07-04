@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {FC, useEffect} from 'react';
 
 import {JSONSchema4} from 'json-schema';
 
@@ -7,13 +7,14 @@ import {MonacoEditor} from '@atoms';
 import useCRD from '@hooks/useCRD';
 
 interface KubernetesResourceEditorProps {
-  crdUrl: string;
+  crdUrl?: string;
   value: string;
   onChange: (value: string) => void;
+  overrideSchema?: (schema: JSONSchema4) => JSONSchema4;
 }
 
-const KubernetesResourceEditor: React.FC<KubernetesResourceEditorProps> = props => {
-  const {crdUrl, onChange, value} = props;
+const KubernetesResourceEditor: FC<KubernetesResourceEditorProps> = props => {
+  const {crdUrl, onChange, value, overrideSchema = x => x} = props;
 
   const {crd} = useCRD(crdUrl);
 
@@ -33,7 +34,7 @@ const KubernetesResourceEditor: React.FC<KubernetesResourceEditorProps> = props 
         schemas: crd?.spec.versions.map((version: any) => ({
           uri: crdUrl,
           fileMatch: ['*'],
-          schema: version.schema.openAPIV3Schema as JSONSchema4,
+          schema: overrideSchema(version.schema.openAPIV3Schema),
         })),
       });
     });

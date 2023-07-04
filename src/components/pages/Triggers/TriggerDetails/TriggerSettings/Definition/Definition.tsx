@@ -4,6 +4,7 @@ import {useGetTriggerDefinitionQuery, useUpdateTriggerDefinitionMutation} from '
 
 import {useStore} from '@store';
 
+import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
 const TriggerDefinition = () => {
@@ -20,6 +21,12 @@ const TriggerDefinition = () => {
       setEntity={setCurrentTrigger}
       name={currentTrigger.name}
       crdUrl={testkubeCRDBases.triggers}
+      overrideSchema={createSchemaOverride($ => {
+        $.required('spec', 'apiVersion', 'kind');
+        $.property('metadata').required('name');
+        $.property('apiVersion').merge({const: 'tests.testkube.io/v1'});
+        $.property('kind').merge({const: 'TestTrigger'});
+      })}
     />
   );
 };

@@ -5,6 +5,7 @@ import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlic
 
 import {useGetSourceDefinitionQuery, useUpdateSourceDefinitionMutation} from '@services/sources';
 
+import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
 const SourceDefinition = () => {
@@ -20,6 +21,12 @@ const SourceDefinition = () => {
       setEntity={dispatch(setCurrentSource)}
       name={source.name}
       crdUrl={testkubeCRDBases.sources}
+      overrideSchema={createSchemaOverride($ => {
+        $.required('spec', 'apiVersion', 'kind');
+        $.property('metadata').required('name');
+        $.property('apiVersion').merge({const: 'tests.testkube.io/v1'});
+        $.property('kind').merge({const: 'TestSource'});
+      })}
     />
   );
 };

@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from 'react';
 import {parse} from 'yaml';
 
 const crdCache: Record<string, Promise<any>> = {};
-const useCRD = (url: string) => {
+const useCRD = (url = '') => {
   const prevUrl = useRef('');
   const [loading, setLoading] = useState(true);
   const [raw, setRaw] = useState('');
@@ -15,10 +15,14 @@ const useCRD = (url: string) => {
       return;
     }
     prevUrl.current = url;
-    setLoading(true);
     setRaw('');
     setCrd(null);
     setError(null);
+    if (url === '') {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
 
     if (!crdCache[url]) {
       crdCache[url] = fetch(url);

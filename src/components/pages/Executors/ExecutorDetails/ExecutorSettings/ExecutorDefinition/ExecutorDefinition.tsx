@@ -5,6 +5,7 @@ import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executo
 
 import {useGetExecutorDefinitionQuery, useUpdateExecutorDefinitionMutation} from '@services/executors';
 
+import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
 const ExecutorDefinition = () => {
@@ -20,6 +21,12 @@ const ExecutorDefinition = () => {
       setEntity={dispatch(setCurrentExecutor)}
       name={executor.name}
       crdUrl={testkubeCRDBases.executors}
+      overrideSchema={createSchemaOverride($ => {
+        $.required('spec', 'apiVersion', 'kind');
+        $.property('metadata').required('name');
+        $.property('apiVersion').merge({const: 'tests.testkube.io/v1'});
+        $.property('kind').merge({const: 'Executor'});
+      })}
     />
   );
 };

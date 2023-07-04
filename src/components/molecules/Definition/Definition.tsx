@@ -5,6 +5,8 @@ import {Form} from 'antd';
 import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
+import {JSONSchema4} from 'json-schema';
+
 import {Pre} from '@atoms';
 
 import {MainContext} from '@contexts';
@@ -18,17 +20,18 @@ import KubernetesResourceEditor from '../KubernetesResourceEditor';
 
 import DefinitionSkeleton from './DefinitionSkeleton';
 
-type DefinitionProps = {
+export type DefinitionProps = {
   useGetDefinitionQuery: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useUpdateDefinitionMutation: UseMutation<MutationDefinition<any, any, any, any, any>>;
   setEntity?: (data: any) => void;
   name: string;
   label: string;
-  crdUrl: string;
+  crdUrl?: string;
+  overrideSchema?: (schema: JSONSchema4) => JSONSchema4;
 };
 
-const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => {
-  const {name, setEntity, useGetDefinitionQuery, useUpdateDefinitionMutation, crdUrl, label} = props;
+const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
+  const {name, setEntity, useGetDefinitionQuery, useUpdateDefinitionMutation, crdUrl, label, overrideSchema} = props;
 
   const {isClusterAvailable} = useContext(MainContext);
 
@@ -101,6 +104,7 @@ const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => 
                 setWasTouched(true);
               }}
               crdUrl={crdUrl}
+              overrideSchema={overrideSchema}
             />
           </Suspense>
         ) : (
@@ -111,4 +115,4 @@ const DefinitionMonaco: React.FC<PropsWithChildren<DefinitionProps>> = props => 
   );
 };
 
-export default DefinitionMonaco;
+export default Definition;
