@@ -5,8 +5,6 @@ import {Select, Space, Tabs} from 'antd';
 import {BaseQueryFn, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {capitalize} from 'lodash';
-
 import {ExecutorIcon} from '@atoms';
 
 import {DashboardContext, EntityDetailsContext} from '@contexts';
