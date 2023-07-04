@@ -46,7 +46,7 @@
       <td rowspan="1">
         Fired when the test suite has been triggered to run by "Run" button.
       </td>
-      <td colspan="2" align="center"><i>None</i></td>
+      <td colspan="2" valign="middle" align="center"><i>None</i></td>
     </tr>
     <tr valign="top">
       <td rowspan="1">
@@ -67,7 +67,7 @@
       <td rowspan="1">
         Fired when the test suite has been created using modal.
       </td>
-      <td colspan="2" align="center"><i>None</i></td>
+      <td colspan="2" valign="middle" align="center"><i>None</i></td>
     </tr>
     <tr valign="top">
       <td rowspan="2">
