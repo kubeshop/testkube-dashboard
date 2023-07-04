@@ -2,7 +2,7 @@ import {useContext} from 'react';
 
 import {EntityDetailsContext} from '@contexts';
 
-import {Definition, DefinitionProps} from '@molecules';
+import {Definition} from '@molecules';
 
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
@@ -13,7 +13,7 @@ const SettingsDefinition = () => {
   const {entityDetails, entity} = useContext(EntityDetailsContext);
 
   const sectionData = settingsDefinitionData[entity];
-  const config = (
+  const config =
     entity === 'tests'
       ? {
           label: 'test',
@@ -34,8 +34,7 @@ const SettingsDefinition = () => {
             $.property('apiVersion').merge({pattern: '^tests\\.testkube\\.io/v[23]$'});
             $.property('kind').merge({const: 'TestSuite'});
           }),
-        }
-  ) satisfies Partial<DefinitionProps>;
+        };
 
   return (
     <Definition

@@ -27,7 +27,7 @@ export {
   StyledTabContentContainer,
 } from './SettingsLayout';
 export {default as DeleteEntityModal} from './DeleteEntityModal';
-export {default as Definition, type DefinitionProps} from './Definition';
+export {default as Definition} from './Definition';
 export {default as DotsDropdown} from './DotsDropdown';
 export {Commit} from './GitFormItems';
 export {Branch} from './GitFormItems';

@@ -1,1 +1,1 @@
-export {default, type DefinitionProps} from './Definition';
+export {default} from './Definition';

@@ -20,7 +20,7 @@ import KubernetesResourceEditor from '../KubernetesResourceEditor';
 
 import DefinitionSkeleton from './DefinitionSkeleton';
 
-export type DefinitionProps = {
+type DefinitionProps = {
   useGetDefinitionQuery: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useUpdateDefinitionMutation: UseMutation<MutationDefinition<any, any, any, any, any>>;
   setEntity?: (data: any) => void;
