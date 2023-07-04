@@ -1,5 +1,14 @@
 # Telemetry
 
+## Data layer
+
+| Name          | Description                                                                                             | Example                                                                                                                 |
+|---------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| `userID`      | User's fingerprint using [**FingerprintJS**](https://www.npmjs.com/package/@fingerprintjs/fingerprintjs) | `6cdf3bbba90bebbcaa11e260a47d734e`                                                                                      |
+| `browserName` | User agent                                                                                              | `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36` |
+| `appName`     | Application name                                                                                        | `testkube:ui/oss`, `testkube:ui/cloud` or `testkube:ui/enterprise`                                                      |
+| `appVersion`  | Application version                                                                                     | `a7268ce`, `1.1.2-rc-ead479f` or `1.12.2`                                                                               | 
+
 ## Events
 
 <table>
@@ -16,6 +25,16 @@
     </tr>
   </thead>
   <tbody>
+    <tr valign="top">
+      <td rowspan="1">
+        <strong>initialized</strong><br>
+        <code>tk.ui.initialized</code>
+      </td>
+      <td rowspan="1">
+        Fired when the application is started
+      </td>
+      <td colspan="2" valign="middle" align="center"><i>None</i></td>
+    </tr>
     <tr valign="top">
       <td rowspan="1">
         <strong>copyCommand</strong><br>
