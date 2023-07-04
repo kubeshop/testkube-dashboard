@@ -1,3 +1,4 @@
+const path = require('node:path');
 const CracoAlias = require('craco-alias');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin');
@@ -27,6 +28,12 @@ module.exports = {
         webpackConfig.optimization.minimizer = [new TerserWebpackPlugin({sourceMap: false, parallel: true})];
         webpackConfig.optimization.minimize = true;
       }
+
+      // Delete Prettier functionality from monaco-yaml, as it's very heavy
+      const prettierStub = path.join(__dirname, 'stubs', 'prettier.js');
+      webpackConfig.resolve.alias['prettier/standalone.js$'] = prettierStub;
+      webpackConfig.resolve.alias['prettier/parser-yaml.js$'] = prettierStub;
+
       return webpackConfig;
     },
   },
