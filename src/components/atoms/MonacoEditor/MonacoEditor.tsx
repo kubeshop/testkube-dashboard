@@ -1,5 +1,6 @@
-import React, {lazy, useEffect, useMemo, useState} from 'react';
+import React, {lazy, useEffect, useState} from 'react';
 import type {EditorDidMount, monaco} from 'react-monaco-editor';
+import {useWindowSize} from 'react-use';
 
 import Colors from '@styles/Colors';
 
@@ -61,9 +62,7 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
     setEditor(mountedEditor);
   };
 
-  const editorMaxHeight = useMemo(() => {
-    return window.innerHeight * 0.5;
-  }, [window.innerHeight]);
+  const editorMaxHeight = useWindowSize().height * 0.5;
 
   useEffect(() => {
     // if height is set, don't calculate it dynamically
@@ -85,7 +84,7 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
         height: Math.max(minHeight, Math.min(contentHeight, editorMaxHeight)),
       });
     }
-  }, [editor, height]);
+  }, [editor, height, editorMaxHeight]);
 
   return (
     <MonacoEditor
