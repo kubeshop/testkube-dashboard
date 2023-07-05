@@ -25,10 +25,9 @@ const useCRD = (url = '') => {
     setLoading(true);
 
     if (!crdCache[url]) {
-      crdCache[url] = fetch(url);
+      crdCache[url] = fetch(url).then(res => res.text());
     }
     crdCache[url]
-      .then(res => res.text())
       .then(text => {
         if (url !== prevUrl.current) {
           return;
