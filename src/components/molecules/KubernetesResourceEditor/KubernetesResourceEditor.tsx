@@ -19,9 +19,6 @@ const KubernetesResourceEditor: FC<KubernetesResourceEditorProps> = props => {
   const {crd} = useCRD(crdUrl);
 
   useEffect(() => {
-    if (!crd) {
-      return;
-    }
     import('monaco-yaml').then(monacoYaml => {
       monacoYaml.setDiagnosticsOptions({
         hover: true,
@@ -31,11 +28,12 @@ const KubernetesResourceEditor: FC<KubernetesResourceEditorProps> = props => {
         isKubernetes: true,
         enableSchemaRequest: false,
 
-        schemas: crd?.spec.versions.map((version: any) => ({
-          uri: crdUrl,
-          fileMatch: ['*'],
-          schema: overrideSchema(version.schema.openAPIV3Schema),
-        })),
+        schemas:
+          crd?.spec.versions.map((version: any) => ({
+            uri: crdUrl,
+            fileMatch: ['*'],
+            schema: overrideSchema(version.schema.openAPIV3Schema),
+          })) || [],
       });
     });
   }, [crd]);

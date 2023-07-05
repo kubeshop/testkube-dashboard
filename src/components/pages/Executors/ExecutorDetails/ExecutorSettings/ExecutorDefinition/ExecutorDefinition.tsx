@@ -24,7 +24,7 @@ const ExecutorDefinition = () => {
       overrideSchema={createSchemaOverride($ => {
         $.required('spec', 'apiVersion', 'kind');
         $.property('metadata').required('name');
-        $.property('apiVersion').merge({const: 'tests.testkube.io/v1'});
+        $.property('apiVersion').merge({const: 'executor.testkube.io/v1'});
         $.property('kind').merge({const: 'Executor'});
       })}
     />
