@@ -31,7 +31,7 @@ EXPOSE 8080
 WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
 COPY ./scripts/inject-base-href.sh .
-RUN chmod +x env.sh inject-base-href.sh && chmod ugo+w /etc/nginx/nginx.conf
+RUN chmod +x env.sh inject-base-href.sh && chmod ugo+w /etc/nginx/nginx.conf index.html
 
 RUN touch ./env-config.js
 RUN chmod a+w ./env-config.js
