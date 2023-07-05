@@ -40,42 +40,31 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
       const groupKey = step.execute.map(item => item.execution?.id || Math.random()).join('-');
 
       const items = step.execute
-        .map(({execution}, index) => {
-          const result = step.step.execute[index];
+        .map(({execution}, index) => ({execution, result: step.step.execute[index]}))
+        .filter(({result}) => result.delay || result.test)
+        .map(({execution, result}) => {
           const status = execution.executionResult?.status;
           if (result.delay) {
             return {
               status,
+              icon: <ClockCircleOutlined style={{fontSize: '26px'}} />,
+              name: `Delay - ${result.delay}`,
               url: null,
-              content: (
-                <>
-                  <ClockCircleOutlined style={{fontSize: '26px'}} />
-                  <ExecutionName name={`Delay - ${result.delay}`} />
-                </>
-              ),
             };
           }
-          if (result.test) {
-            const stepIcon = getTestExecutorIcon(executors, execution.testType);
-            return {
-              status,
-              url: status !== 'queued'
+          return {
+            status,
+            icon: <ExecutorIcon type={getTestExecutorIcon(executors, execution.testType)} />,
+            name: result.test!,
+            url:
+              status !== 'queued'
                 ? execution?.id
                   ? `/tests/executions/${result.test}/execution/${execution.id}`
                   : `/tests/executions/${result.test}`
                 : null,
-              content: (
-                <>
-                  <ExecutorIcon type={stepIcon} />
-                  <ExecutionName name={result.test!} />
-                </>
-              ),
-            };
-          }
-          return {url: null, status, clickable: false, content: null};
+          };
         })
-        .filter(x => x.content)
-        .map(({url, status, content}, index) => (
+        .map(({status, icon, name, url}, index) => (
           <ExecutionStepsListItemExecution
             // eslint-disable-next-line react/no-array-index-key
             key={`item-${index}`}
@@ -84,7 +73,8 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
           >
             <StyledSpace size={15}>
               {status ? <StatusIcon status={status} /> : null}
-              {content}
+              {icon}
+              <ExecutionName name={name} />
               {url ? <StyledExternalLinkIcon /> : <div />}
             </StyledSpace>
           </ExecutionStepsListItemExecution>
