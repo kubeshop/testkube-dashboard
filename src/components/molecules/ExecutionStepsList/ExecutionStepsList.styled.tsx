@@ -24,7 +24,7 @@ export const ExecutionStepsListItem = styled.ul`
   margin: 10px 0 10px 30px;
   border-left: 4px solid ${Colors.slate600};
 
-  &:before {
+  &::before {
     counter-increment: steps;
     content: counter(steps);
     position: absolute;
