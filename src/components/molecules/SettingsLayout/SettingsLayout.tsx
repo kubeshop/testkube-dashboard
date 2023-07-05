@@ -1,4 +1,4 @@
-import {FC, ReactElement, memo, useCallback, useLayoutEffect, useMemo, useState} from 'react';
+import {FC, ReactElement, createElement, memo, useCallback, useLayoutEffect, useMemo, useState} from 'react';
 
 import {SettingsLeftNavigation, StyledTabContentContainer} from '@molecules';
 
@@ -7,7 +7,7 @@ import {StyledSettingsContainer} from './SettingsLayout.styled';
 export interface SettingsLayoutTab {
   id: string;
   label: string;
-  children: ReactElement<any, any> | null;
+  children: FC<{setId(id: string): void}> | ReactElement<any, any> | null;
 }
 
 interface SettingsLayoutProps {
@@ -44,10 +44,14 @@ const SettingsLayout: FC<SettingsLayoutProps> = ({tabs, active, onChange}) => {
     [tabs, active, onChange]
   );
 
+  const render = tabs[selectedOption]?.children;
+
   return (
     <StyledSettingsContainer>
       <SettingsLeftNavigation options={labels} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
-      <StyledTabContentContainer key={id}>{tabs[selectedOption]?.children}</StyledTabContentContainer>
+      <StyledTabContentContainer key={id}>
+        {typeof render === 'function' ? createElement(render, {setId}) : render}
+      </StyledTabContentContainer>
     </StyledSettingsContainer>
   );
 };
