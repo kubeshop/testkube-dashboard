@@ -30,7 +30,8 @@ COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 8080
 WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
-RUN chmod +x env.sh && chmod ugo+w /etc/nginx/nginx.conf
+COPY ./scripts/inject-base-href.sh .
+RUN chmod +x env.sh inject-base-href.sh && chmod ugo+w /etc/nginx/nginx.conf
 
 RUN touch ./env-config.js
 RUN chmod a+w ./env-config.js
@@ -41,6 +42,7 @@ CMD [ \
   "/bin/sh", \
   "-c", \
   "/usr/share/nginx/html/env.sh && \
+   /usr/share/nginx/html/inject-base-href.sh && \
   export DISABLE_IPV6=\"$([[ \"$ENABLE_IPV6\" = \"true\" ]] && echo \"false\" || echo \"true\")\" && \
    envsubst '$DISABLE_IPV6' < /etc/nginx/nginx.conf.tmpl | sed -e '1h;2,$H;$!d;g' -e 's/# cut true.*# end//g' > /etc/nginx/nginx.conf && \
    nginx -g \"daemon off;\"" ]
