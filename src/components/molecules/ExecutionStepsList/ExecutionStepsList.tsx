@@ -57,7 +57,7 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
             icon: <ExecutorIcon type={getTestExecutorIcon(executors, execution.testType)} />,
             name: result.test!,
             url:
-              status !== 'queued'
+              status !== 'queued' && status !== 'aborted'
                 ? execution?.id
                   ? `/tests/executions/${result.test}/execution/${execution.id}`
                   : `/tests/executions/${result.test}`
