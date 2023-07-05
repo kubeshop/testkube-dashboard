@@ -6,14 +6,13 @@ import classNames from 'classnames';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
 import {ExecutionName} from '@molecules';
 
 import {useAppSelector} from '@redux/hooks';
-import {setRedirectTarget} from '@redux/reducers/configSlice';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
@@ -35,34 +34,9 @@ type ExecutionStepsListProps = {
 const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const {executionSteps, iconSet = 'default'} = props;
 
-  const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
 
   const executors = useAppSelector(selectExecutors);
-
-  const onShowClick = (step: TestSuiteStepExecutionResult & {executionName?: string}) => {
-    const {executionName, step: executeStep, execute} = step;
-
-    if ('execute' in executeStep) {
-      if (iconSet === 'default') {
-        dispatch(
-          setRedirectTarget({
-            targetTestId: executionName,
-            targetTestExecutionId: execute[0].execution.id,
-          })
-        );
-      } else if (iconSet === 'definition') {
-        dispatch(
-          setRedirectTarget({
-            targetTestId: executionName,
-            targetTestExecutionId: null,
-          })
-        );
-      }
-
-      return navigate(`/tests/executions/${execute[0].step.test}/execution/${execute[0].execution.id}`);
-    }
-  };
 
   const elements = useMemo(() => {
     return executionSteps?.map(step => {
@@ -77,12 +51,11 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             return {
               icon,
               status,
-              clickable: false,
+              url: null,
               content: (
                 <>
                   <ClockCircleOutlined style={{fontSize: '26px'}} />
                   <ExecutionName name={`Delay - ${result.delay}`} />
-                  <div />
                 </>
               ),
             };
@@ -92,31 +65,34 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
             const clickable = (status !== 'queued' && iconSet === 'default') || iconSet === 'definition';
             return {
               icon,
-              executionName: execution.name,
               status,
-              clickable,
+              url: clickable
+                ? execution?.id
+                  ? `/tests/executions/${result.test}/execution/${execution.id}`
+                  : `/tests/executions/${result.test}`
+                : null,
               content: (
                 <>
                   <ExecutorIcon type={stepIcon} />
                   <ExecutionName name={result.test!} />
-                  {clickable ? <StyledExternalLinkIcon /> : <div />}
                 </>
               ),
             };
           }
-          return {icon, status, clickable: false, content: null};
+          return {icon, url: null, status, clickable: false, content: null};
         })
         .filter(x => x.content)
-        .map(({icon, executionName, status, content, clickable}, index) => (
+        .map(({icon, url, status, content}, index) => (
           <ExecutionStepsListItemExecution
             // eslint-disable-next-line react/no-array-index-key
             key={`item-${index}`}
-            className={classNames({clickable})}
-            onClick={clickable ? () => onShowClick({...step, executionName}) : undefined}
+            className={classNames({clickable: url})}
+            onClick={url ? () => navigate(url) : undefined}
           >
             <StyledSpace size={15}>
               {icon ? <StatusIcon status={status} /> : null}
               {content}
+              {url ? <StyledExternalLinkIcon /> : <div />}
             </StyledSpace>
           </ExecutionStepsListItemExecution>
         ));
