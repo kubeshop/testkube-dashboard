@@ -4,6 +4,7 @@ import {WarningOutlined} from '@ant-design/icons';
 import {Form, Select, Tooltip} from 'antd';
 
 import parser from 'cron-parser';
+import {capitalize} from 'lodash';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -17,7 +18,6 @@ import Colors from '@styles/Colors';
 import Fonts from '@styles/Fonts';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {namingMap, updateRequestsMap} from '../utils';
 
@@ -49,7 +49,7 @@ const Schedule: React.FC = () => {
       .then(res => displayDefaultNotificationFlow(res))
       .then(() => {
         setWasTouched(false);
-        notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} schedule was successfully updated.`);
+        notificationCall('passed', `${capitalize(namingMap[entity])} schedule was successfully updated.`);
       });
   };
 

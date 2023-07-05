@@ -2,6 +2,8 @@ import {useCallback, useContext, useMemo, useState} from 'react';
 
 import {FilterFilled} from '@ant-design/icons';
 
+import {capitalize} from 'lodash';
+
 import {MainContext} from '@contexts';
 
 import {FilterProps} from '@models/filters';
@@ -18,8 +20,6 @@ import {
 import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
-
-import {uppercaseFirstSymbol} from '@utils/strings';
 
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
@@ -61,7 +61,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
             onChange={() => handleClick(status)}
             data-cy={status}
           >
-            {uppercaseFirstSymbol(status)}
+            {capitalize(status)}
           </StyledFilterCheckbox>
         </StyledFilterMenuItem>
       );

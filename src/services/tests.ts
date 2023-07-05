@@ -1,7 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Artifact} from '@models/artifact';
-import {MetadataResponse} from '@models/fetch';
+import {MetadataResponse, YamlEditBody} from '@models/fetch';
 import {Test, TestFilters, TestWithExecution} from '@models/test';
 
 import {dynamicBaseQuery, memoizeQuery, paramsSerializer} from '@utils/fetchUtils';
@@ -108,6 +108,14 @@ export const testsApi = createApi({
         method: 'POST',
       }),
     }),
+    updateTestDefinition: builder.mutation<any, YamlEditBody>({
+      query: body => ({
+        url: `/tests/${body.name}`,
+        method: 'PATCH',
+        headers: {'content-type': 'text/yaml'},
+        body: body.value,
+      }),
+    }),
   }),
 });
 
@@ -141,4 +149,5 @@ export const {
   useRunTestMutation,
   useAbortTestExecutionMutation,
   useAbortAllTestExecutionsMutation,
+  useUpdateTestDefinitionMutation,
 } = testsApi;

@@ -1,6 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {MetadataResponse} from '@models/fetch';
+import {MetadataResponse, YamlEditBody} from '@models/fetch';
 import {Test} from '@models/test';
 import {TestSuiteFilters, TestSuiteWithExecution} from '@models/testSuite';
 
@@ -81,6 +81,14 @@ export const testSuitesApi = createApi({
         method: 'POST',
       }),
     }),
+    updateTestSuiteDefinition: builder.mutation<any, YamlEditBody>({
+      query: body => ({
+        url: `/test-suites/${body.name}`,
+        method: 'PATCH',
+        headers: {'content-type': 'text/yaml'},
+        body: body.value,
+      }),
+    }),
   }),
 });
 
@@ -103,4 +111,5 @@ export const {
   useAbortTestSuiteExecutionMutation,
   useGetTestsListForTestSuiteQuery,
   useAbortAllTestSuiteExecutionsMutation,
+  useUpdateTestSuiteDefinitionMutation,
 } = testSuitesApi;

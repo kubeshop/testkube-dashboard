@@ -1,3 +1,5 @@
+import env from '../env';
+
 export enum externalLinks {
   documentation = 'https://docs.testkube.io/',
   github = 'https://github.com/kubeshop/testkube',
@@ -24,3 +26,16 @@ export enum externalLinks {
   addingTimeout = 'https://docs.testkube.io/articles/adding-timeout/',
   contactUs = 'https://calendly.com/bruno-at-kubeshop/15-minute-meeting',
 }
+
+const crdCdn = `https://raw.githubusercontent.com/kubeshop/testkube-operator/${encodeURIComponent(
+  env.crdOperatorRevision
+)}/config/crd/bases`;
+export const testkubeCRDBases = {
+  executors: `${crdCdn}/executor.testkube.io_executors.yaml`,
+  webhooks: `${crdCdn}/executor.testkube.io_webhooks.yaml`,
+  scripts: `${crdCdn}/tests.testkube.io_scripts.yaml`,
+  tests: `${crdCdn}/tests.testkube.io_tests.yaml`,
+  sources: `${crdCdn}/tests.testkube.io_testsources.yaml`,
+  testSuites: `${crdCdn}/tests.testkube.io_testsuites.yaml`,
+  triggers: `${crdCdn}/tests.testkube.io_testtriggers.yaml`,
+};
