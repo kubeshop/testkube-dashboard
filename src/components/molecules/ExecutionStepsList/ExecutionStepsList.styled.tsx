@@ -6,7 +6,9 @@ import {ReactComponent as ExternalLinkIcon} from '@assets/external.svg';
 
 import Colors from '@styles/Colors';
 
-export const StyledExecutionStepsList = styled.ul`
+export const ExecutionStepsListContainer = styled.ul`
+  counter-reset: steps;
+
   display: flex;
   flex-direction: column;
 
@@ -16,7 +18,31 @@ export const StyledExecutionStepsList = styled.ul`
   list-style-type: none;
 `;
 
-export const StyledExecutionStepsListItem = styled.li`
+export const ExecutionStepsListItem = styled.ul`
+  position: relative;
+  padding: 0 0 0 6px;
+  margin: 10px 0 10px 30px;
+  border-left: 4px solid ${Colors.slate600};
+
+  &:before {
+    counter-increment: steps;
+    content: counter(steps);
+    position: absolute;
+    right: 100%;
+    margin-right: 10px;
+    margin-top: 4.5px;
+    background: ${Colors.slate600};
+    color: ${Colors.slate800};
+    font-weight: bold;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+    border-radius: 3px;
+    text-align: center;
+  }
+`;
+
+export const ExecutionStepsListItemExecution = styled.li`
   display: flex;
   align-items: center;
 
@@ -62,8 +88,4 @@ export const StyledSpace = styled(Space)`
 export const StyledExternalLinkIcon = styled(ExternalLinkIcon)`
   width: 20px;
   height: 30px;
-`;
-
-export const WarningContainer = styled.div`
-  margin-bottom: 20px;
 `;

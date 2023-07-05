@@ -1,8 +1,6 @@
-import {memo, useContext, useMemo, useState} from 'react';
+import {memo, useContext, useMemo} from 'react';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
-
-import {nanoid} from '@reduxjs/toolkit';
 
 import classNames from 'classnames';
 
@@ -12,7 +10,7 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
-import {ExecutionName, NotificationContent} from '@molecules';
+import {ExecutionName} from '@molecules';
 
 import {useAppSelector} from '@redux/hooks';
 import {setRedirectTarget} from '@redux/reducers/configSlice';
@@ -20,11 +18,11 @@ import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {
-  StyledExecutionStepsList,
-  StyledExecutionStepsListItem,
+  ExecutionStepsListContainer,
+  ExecutionStepsListItem,
+  ExecutionStepsListItemExecution,
   StyledExternalLinkIcon,
   StyledSpace,
-  WarningContainer,
 } from './ExecutionStepsList.styled';
 
 type IconSet = 'default' | 'definition';
@@ -41,25 +39,6 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
   const {navigate} = useContext(DashboardContext);
 
   const executors = useAppSelector(selectExecutors);
-
-  const [isWarning, setIsWarning] = useState(false);
-
-  const getExecutionStepIcon = (step: TestSuiteStepExecutionResult) => {
-    if (iconSet === 'definition') {
-      return 'code';
-    }
-
-    const {execute} = step;
-    const {execution} = execute[0];
-    const {executionResult} = execution;
-    const {status} = executionResult;
-
-    return status;
-  };
-
-  const getExecutionStepName = (step: TestSuiteStepExecutionResult) => {
-    return step.step.execute[0].test;
-  };
 
   const onShowClick = (step: TestSuiteStepExecutionResult & {executionName?: string}) => {
     const {executionName, step: executeStep, execute} = step;
@@ -85,88 +64,72 @@ const ExecutionStepsList: React.FC<ExecutionStepsListProps> = props => {
     }
   };
 
-  const renderedDefinitionsList = useMemo(() => {
+  const elements = useMemo(() => {
     return executionSteps?.map(step => {
-      const icon = getExecutionStepIcon(step);
-      const executionName = getExecutionStepName(step);
+      const groupKey = step.execute.map(item => item.execution?.id || Math.random()).join('-');
 
-      const {step: stepResult, execute} = step;
-      const {execution} = execute[0];
-      const {
-        executionResult: {status},
-        testType,
-      } = execution;
+      const items = step.execute
+        .map(({execution}, index) => {
+          const result = step.step.execute[index];
+          const status = execution.executionResult?.status;
+          const icon = iconSet === 'definition' ? 'code' : status;
+          if (result.delay) {
+            return {
+              icon,
+              status,
+              clickable: false,
+              content: (
+                <>
+                  <ClockCircleOutlined style={{fontSize: '26px'}} />
+                  <ExecutionName name={`Delay - ${result.delay}`} />
+                  <div />
+                </>
+              ),
+            };
+          }
+          if (result.test) {
+            const stepIcon = getTestExecutorIcon(executors, execution.testType);
+            const clickable = (status !== 'queued' && iconSet === 'default') || iconSet === 'definition';
+            return {
+              icon,
+              executionName: execution.name,
+              status,
+              clickable,
+              content: (
+                <>
+                  <ExecutorIcon type={stepIcon} />
+                  <ExecutionName name={result.test!} />
+                  {clickable ? <StyledExternalLinkIcon /> : <div />}
+                </>
+              ),
+            };
+          }
+          return {icon, status, clickable: false, content: null};
+        })
+        .filter(x => x.content)
+        .map(({icon, executionName, status, content, clickable}, index) => (
+          <ExecutionStepsListItemExecution
+            // eslint-disable-next-line react/no-array-index-key
+            key={`item-${index}`}
+            className={classNames({clickable})}
+            onClick={clickable ? () => onShowClick({...step, executionName}) : undefined}
+          >
+            <StyledSpace size={15}>
+              {icon ? <StatusIcon status={status} /> : null}
+              {content}
+            </StyledSpace>
+          </ExecutionStepsListItemExecution>
+        ));
 
-      if (execute.length > 1) {
-        setIsWarning(true);
-      }
-
-      const stepIcon = getTestExecutorIcon(executors, testType);
-      const listItemKey = execution?.id || nanoid();
-      let isClickable = false;
-      let content;
-
-      const delay = stepResult.execute[0].delay;
-      const test = stepResult.execute[0].test;
-
-      if (delay) {
-        content = (
-          <>
-            <ClockCircleOutlined style={{fontSize: '26px'}} />
-            <ExecutionName name={`Delay - ${delay}`} />
-            <div />
-          </>
-        );
-      } else if (test) {
-        isClickable =
-          (execution?.executionResult.status !== 'queued' && iconSet === 'default') || iconSet === 'definition';
-
-        content = (
-          <>
-            <ExecutorIcon type={stepIcon} />
-            <ExecutionName name={executionName || test || ''} />
-            {isClickable ? <StyledExternalLinkIcon /> : <div />}
-          </>
-        );
-      }
-
-      const listItemClassNames = classNames({
-        clickable: isClickable,
-      });
-
-      // TODO: improve this
       return (
-        <StyledExecutionStepsListItem
-          key={listItemKey}
-          className={listItemClassNames}
-          onClick={() => {
-            if (isClickable) {
-              onShowClick({...step, executionName});
-            }
-          }}
-        >
-          <StyledSpace size={15}>
-            {icon ? <StatusIcon status={status} /> : null}
-            {content}
-          </StyledSpace>
-        </StyledExecutionStepsListItem>
+        <li key={groupKey}>
+          <ExecutionStepsListItem>{items}</ExecutionStepsListItem>
+        </li>
       );
     });
   }, [executionSteps]);
 
-  return (
-    <StyledExecutionStepsList>
-      {isWarning ? (
-        <WarningContainer>
-          <NotificationContent
-            status="error"
-            title="We do not yet support test suite parallelization, displayed execution result might be wrong"
-          />
-        </WarningContainer>
-      ) : null}
-      {renderedDefinitionsList}
-    </StyledExecutionStepsList>
-  );
+  return <ExecutionStepsListContainer>{elements}</ExecutionStepsListContainer>;
 };
 
 export default memo(ExecutionStepsList);
