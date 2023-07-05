@@ -74,7 +74,7 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
   }, [allTestsList]);
 
   const hasParallelSteps = useMemo(
-    () => entityDetails?.steps?.some(step => step.execute.length > 0),
+    () => entityDetails?.steps?.some(step => step.execute.length > 1),
     [entityDetails.steps]
   );
 
