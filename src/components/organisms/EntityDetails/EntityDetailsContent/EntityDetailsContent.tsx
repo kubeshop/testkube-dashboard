@@ -27,7 +27,7 @@ import PageMetadata from '@pages/PageMetadata';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectRedirectTarget} from '@redux/reducers/configSlice';
+import {selectSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
@@ -57,7 +57,7 @@ const EntityDetailsContent: React.FC = () => {
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
 
-  const {settingsTabConfig} = useAppSelector(selectRedirectTarget);
+  const settingsTabConfig = useAppSelector(selectSettingsTabConfig);
 
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();

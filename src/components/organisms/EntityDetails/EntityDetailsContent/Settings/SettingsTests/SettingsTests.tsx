@@ -1,7 +1,7 @@
 import {memo, useContext, useEffect, useMemo, useRef, useState} from 'react';
 
-import {ClockCircleOutlined} from '@ant-design/icons';
-import {Form, Select} from 'antd';
+import {ClockCircleOutlined, WarningOutlined} from '@ant-design/icons';
+import {Button, Form, Select} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
@@ -39,7 +39,7 @@ interface LocalStep extends TestSuiteStep {
   id?: string;
 }
 
-const SettingsTests: React.FC = () => {
+const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => {
   const {isClusterAvailable} = useContext(MainContext);
   const {entityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
 
@@ -72,6 +72,11 @@ const SettingsTests: React.FC = () => {
       type: getTestExecutorIcon(executors, item.test.type),
     }));
   }, [allTestsList]);
+
+  const hasParallelSteps = useMemo(
+    () => entityDetails?.steps?.some(step => step.execute.length > 1),
+    [entityDetails.steps]
+  );
 
   const initialSteps: LocalStep[] = useMemo(
     () =>
@@ -175,6 +180,43 @@ const SettingsTests: React.FC = () => {
     scrollToBottom();
   }, [currentSteps?.length]);
 
+  // TODO: Delete when we will support parallel editor
+  if (hasParallelSteps) {
+    return (
+      <Form name="define-tests-form">
+        <ConfigurationCard
+          title="Tests"
+          description="Define the tests and their order of execution for this test suite"
+          footerText={
+            <>
+              Learn more about{' '}
+              <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
+            </>
+          }
+        >
+          <EmptyTestsContainer>
+            <Title level={3} className="text-center">
+              <WarningOutlined /> This test suite is using parallel execution.
+            </Title>
+            <Text className="regular middle text-center" style={{maxWidth: 600}}>
+              Unfortunately, we do not support visual editor for it yet.
+            </Text>
+            <Text className="regular middle text-center" style={{maxWidth: 600}}>
+              We are working hard to deliver it for you soon. Until then, you may use{' '}
+              <strong>
+                <em>Definition</em>
+              </strong>{' '}
+              tab, to modify the test suite definition using YAML.
+            </Text>
+            <Button style={{marginTop: 15}} type="primary" onClick={openDefinition}>
+              Edit YAML definition
+            </Button>
+          </EmptyTestsContainer>
+        </ConfigurationCard>
+      </Form>
+    );
+  }
+
   return (
     <Form name="define-tests-form">
       <ConfigurationCard
@@ -186,7 +228,7 @@ const SettingsTests: React.FC = () => {
           </>
         }
         onConfirm={saveSteps}
-        onCancel={() => setCurrentSteps([])}
+        onCancel={() => setCurrentSteps(initialSteps)}
         isButtonsDisabled={!wasTouched}
         isEditable={mayEdit}
         enabled={mayEdit}

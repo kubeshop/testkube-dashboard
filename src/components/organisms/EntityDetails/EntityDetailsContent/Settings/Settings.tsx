@@ -1,4 +1,4 @@
-import React, {ReactElement, useContext} from 'react';
+import React, {FC, ReactElement, useCallback, useContext} from 'react';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -27,11 +27,15 @@ const testSettings = (
   />
 );
 
+const WrappedSettingsTests: FC<{setId(id: string): void}> = ({setId}) => (
+  <SettingsTests openDefinition={useCallback(() => setId('definition'), [])} />
+);
+
 const testSuiteSettings = (
   <SettingsLayout
     tabs={[
       {id: 'general', label: 'General', children: <General />},
-      {id: 'tests', label: 'Tests', children: <SettingsTests />},
+      {id: 'tests', label: 'Tests', children: WrappedSettingsTests},
       {id: 'variables', label: 'Variables & Secrets', children: <SettingsVariables />},
       {id: 'scheduling', label: 'Scheduling', children: <SettingsScheduling />},
       {id: 'definition', label: 'Definition', children: <SettingsDefinition />},
