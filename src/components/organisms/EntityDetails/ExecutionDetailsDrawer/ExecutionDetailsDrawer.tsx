@@ -15,8 +15,6 @@ import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCal
 import {useGetTestSuiteExecutionByIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestExecutionByIdQuery} from '@services/tests';
 
-import Colors from '@styles/Colors';
-
 import {PollingIntervals} from '@utils/numbers';
 
 import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
@@ -70,12 +68,11 @@ const components: Record<Entity, JSX.Element> = {
   tests: <TestExecutionDetailsTabs />,
 };
 
-const headerStyle = {borderBottom: 0, padding: '40px 30px 0', backgroundColor: Colors.slate800};
+const headerStyle = {borderBottom: 0, padding: '40px 30px 0'};
 const loaderBodyStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: Colors.slate800,
   fontSize: '48px',
 };
 
