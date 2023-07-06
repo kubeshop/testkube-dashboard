@@ -228,7 +228,7 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
           </>
         }
         onConfirm={saveSteps}
-        onCancel={() => setCurrentSteps([])}
+        onCancel={() => setCurrentSteps(initialSteps)}
         isButtonsDisabled={!wasTouched}
         isEditable={mayEdit}
         enabled={mayEdit}
