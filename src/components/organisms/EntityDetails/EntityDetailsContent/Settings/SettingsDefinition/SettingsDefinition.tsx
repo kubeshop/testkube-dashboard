@@ -1,52 +1,48 @@
 import {useContext} from 'react';
 
-import {Form} from 'antd';
+import {EntityDetailsContext} from '@contexts';
 
-import {CopyButton, DownloadButton, ExternalLink, Pre} from '@atoms';
+import {Definition} from '@molecules';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
-
-import useLocation from '@hooks/useLocation';
-import useSecureContext from '@hooks/useSecureContext';
-
-import {ConfigurationCard, Definition} from '@molecules';
+import {createSchemaOverride} from '@utils/createSchemaOverride';
+import {testkubeCRDBases} from '@utils/externalLinks';
 
 import {settingsDefinitionData} from './utils';
 
-const SettingsDefinition: React.FC = () => {
+const SettingsDefinition = () => {
   const {entityDetails, entity} = useContext(EntityDetailsContext);
-  const {isClusterAvailable} = useContext(MainContext);
 
-  const {name} = entityDetails;
   const sectionData = settingsDefinitionData[entity];
-  const {data: definition = '', isLoading} = sectionData.query(name, {skip: !isClusterAvailable});
-  const isSecureContext = useSecureContext();
-  const filename = useLocation().lastPathSegment;
+  const config =
+    entity === 'tests'
+      ? {
+          label: 'test',
+          crdUrl: testkubeCRDBases.tests,
+          overrideSchema: createSchemaOverride($ => {
+            $.required('spec', 'apiVersion', 'kind');
+            $.property('metadata').required('name');
+            $.property('apiVersion').merge({pattern: '^tests\\.testkube\\.io/v3$'});
+            $.property('kind').merge({const: 'Test'});
+          }),
+        }
+      : {
+          label: 'test suite',
+          crdUrl: testkubeCRDBases.testSuites,
+          overrideSchema: createSchemaOverride($ => {
+            $.required('spec', 'apiVersion', 'kind');
+            $.property('metadata').required('name');
+            $.property('apiVersion').merge({pattern: '^tests\\.testkube\\.io/v[23]$'});
+            $.property('kind').merge({const: 'TestSuite'});
+          }),
+        };
 
   return (
-    <Form name="definition-form">
-      <ConfigurationCard
-        title="Definition"
-        description={sectionData.description}
-        footerText={
-          <>
-            Learn more about <ExternalLink href={sectionData.helpLinkUrl}>Definitions</ExternalLink>
-          </>
-        }
-      >
-        {definition ? (
-          <Definition content={definition}>
-            {isSecureContext ? (
-              <CopyButton content={definition} />
-            ) : (
-              <DownloadButton filename={filename} extension="yaml" content={definition} />
-            )}
-          </Definition>
-        ) : (
-          <Pre>{isLoading ? 'Loading...' : 'No definition data'}</Pre>
-        )}
-      </ConfigurationCard>
-    </Form>
+    <Definition
+      useGetDefinitionQuery={sectionData.query}
+      useUpdateDefinitionMutation={sectionData.mutation}
+      name={entityDetails.name}
+      {...config}
+    />
   );
 };
 

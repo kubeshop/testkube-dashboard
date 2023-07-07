@@ -1,7 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Executor} from '@models/executors';
-import {MetadataResponse} from '@models/fetch';
+import {MetadataResponse, YamlEditBody} from '@models/fetch';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
@@ -46,6 +46,14 @@ export const executorsApi = createApi({
         method: 'DELETE',
       }),
     }),
+    updateExecutorDefinition: builder.mutation<any, YamlEditBody>({
+      query: body => ({
+        url: `/executors/${body.name}`,
+        method: 'PATCH',
+        headers: {'content-type': 'text/yaml'},
+        body: body.value,
+      }),
+    }),
   }),
 });
 
@@ -59,4 +67,5 @@ export const {
   useGetExecutorDetailsQuery,
   useDeleteExecutorMutation,
   useUpdateCustomExecutorMutation,
+  useUpdateExecutorDefinitionMutation,
 } = executorsApi;

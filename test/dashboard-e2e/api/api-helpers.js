@@ -1,67 +1,101 @@
 import superagent from 'superagent';
 
 export class ApiHelpers {
-    constructor(apiUrl) {
-        this.API_URL = apiUrl;
+    constructor(apiUrl, cloudContext, bearerToken) {
+        this.apiUrl = apiUrl;
+        this.cloudContext = cloudContext;
+        this.bearerToken = bearerToken;
     }
 
     async getTests() {
-        const request = `${this.API_URL}/tests`;
+        const request = `${this.apiUrl}/tests`;
 
         try {
-            const response = await superagent.get(request);
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
 
-            return response.body;
+            return ApiHelpers.parseResponse(response);
+            
         } catch (e) {
             throw Error(`getTests failed on "${request}" with: "${e}"`);
         }
     }
 
+    async getTestSuites() {
+        const request = `${this.apiUrl}/test-suites`;
+
+        try {
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+
+            return ApiHelpers.parseResponse(response);
+            
+        } catch (e) {
+            throw Error(`getTestSuites failed on "${request}" with: "${e}"`);
+        }
+    }
+
     async createTest(testData) {
-        const request = `${this.API_URL}/tests`;
+        const request = `${this.apiUrl}/tests`;
         
         try {
             const response = await superagent.post(request)
                 .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '')
                 .send(testData);
-    
-            return response.body;
+
+            return ApiHelpers.parseResponse(response);
         } catch (e) {
             throw Error(`createTest failed on "${request}" with: "${e}"`);
         }
     }
 
     async abortTest(testName, executionId) {
-        const request = `${this.API_URL}/tests/${testName}/executions/${executionId}`;
+        const request = `${this.apiUrl}/tests/${testName}/executions/${executionId}`;
 
         try {
-            const response = await superagent.patch(request);
-
-            return response;
+            return await superagent.patch(request)
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+            
         } catch (e) {
             throw Error(`abortTest failed on "${request}" with: "${e}"`);
         }
     }
     
     async removeTest(testName) {
-        const request = `${this.API_URL}/tests/${testName}`;
+        const request = `${this.apiUrl}/tests/${testName}`;
 
         try {
-            await superagent.delete(request);
+            await superagent.delete(request)
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
         } catch (e) {
             throw Error(`removeTest failed on "${request}" with: "${e}"`);
         }
     }
 
+    async removeTestSuite(testSuiteName) {
+        const request = `${this.apiUrl}/test-suites/${testSuiteName}`;
+
+        try {
+            await superagent.delete(request)
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+        } catch (e) {
+            throw Error(`removeTestSuite failed on "${request}" with: "${e}"`);
+        }
+    }
+
     async updateTest(testData) {
-        const request = `${this.API_URL}/tests/${testData.name}`;
+        const request = `${this.apiUrl}/tests/${testData.name}`;
         
         try {
             const response = await superagent.patch(request)
                 .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '')
                 .send(testData);
-    
-            return response.body;
+
+            return ApiHelpers.parseResponse(response);
         } catch (e) {
             throw Error(`updateTest failed on "${request}" with: "${e}"`);
         }
@@ -82,6 +116,21 @@ export class ApiHelpers {
         }
     }
 
+    async isTestSuiteCreated(testSuiteName) {
+        try {
+            const currentTestSuites = await this.getTestSuites();
+            const testSuite = currentTestSuites.find(singleTestSuite => singleTestSuite.name === testSuiteName);
+    
+            if(testSuite !== undefined) {
+                return true;
+            }
+    
+            return false;
+        } catch (e) {
+            throw Error(`isTestSuiteCreated failed for "${testSuiteName}" with: "${e}"`);
+        }
+    }
+
     async assureTestNotCreated(testName) {
         try {
             const alreadyCreated = await this.isTestCreated(testName);
@@ -92,6 +141,19 @@ export class ApiHelpers {
             return true;
         } catch (e) {
             throw Error(`assureTestNotCreated failed for "${testName}" with: "${e}"`);
+        }
+    }
+
+    async assureTestSuiteNotCreated(testSuiteName) {
+        try {
+            const alreadyCreated = await this.isTestSuiteCreated(testSuiteName);
+            if(alreadyCreated) {
+                await this.removeTestSuite(testSuiteName);
+            }
+
+            return true;
+        } catch (e) {
+            throw Error(`assureTestSuiteNotCreated failed for "${testSuiteName}" with: "${e}"`);
         }
     }
 
@@ -115,22 +177,41 @@ export class ApiHelpers {
     }
 
     async getTestData(testName) {
-        const request = `${this.API_URL}/tests/${testName}`;
+        const request = `${this.apiUrl}/tests/${testName}`;
 
         try {
-            const response = await superagent.get(request);
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
 
-            return response.body;
+            return ApiHelpers.parseResponse(response);
         } catch (e) {
             throw Error(`getTestData failed on "${request}" with: "${e}"`);
         }
     }
 
-    async getLastExecutionNumber(testName) {
-        const request = `${this.API_URL}/tests/${testName}/executions`;
+    async getTestSuiteData(testSuiteName) {
+        const request = `${this.apiUrl}/test-suites/${testSuiteName}`;
 
         try {
-            const response = await superagent.get(request);
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+
+            return ApiHelpers.parseResponse(response);
+        } catch (e) {
+            throw Error(`getTestSuiteData failed on "${request}" with: "${e}"`);
+        }
+    }
+
+    async getLastExecutionNumber(testName) {
+        const request = `${this.apiUrl}/tests/${testName}/executions`;
+
+        try {
+            const response = await superagent.get(request)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+
             const totalsResults = response.body.totals.results;
     
             if(totalsResults === 0) {
@@ -144,5 +225,10 @@ export class ApiHelpers {
         } catch (e) {
             throw Error(`getLastExecutionNumber failed on "${request}" with: "${e}"`);
         }
+    }
+
+    static parseResponse(response) {
+        // Cloud is missing the `content-type`, so there is no JSON response in `response.body`
+        return JSON.parse(response.text);
     }
 }

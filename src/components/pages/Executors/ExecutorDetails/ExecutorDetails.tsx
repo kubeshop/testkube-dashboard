@@ -1,10 +1,13 @@
 import {useContext, useEffect, useState} from 'react';
-import {Helmet} from 'react-helmet';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
+
+import {PageHeader, PageWrapper} from '@organisms';
+
+import PageMetadata from '@pages/PageMetadata';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentExecutor, setCurrentExecutor, setExecutorData} from '@redux/reducers/executorsSlice';
@@ -13,13 +16,11 @@ import {useGetExecutorDetailsQuery} from '@services/executors';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
-import {StyledContainer, StyledPageHeader} from './ExecutorDetails.styled';
 import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails: React.FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {navigate, location} = useContext(DashboardContext);
-  const {pageTitle} = useContext(ConfigContext);
+  const {navigate} = useContext(DashboardContext);
   const {id: name} = useParams() as {id: string};
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
@@ -42,11 +43,10 @@ const ExecutorDetails: React.FC = () => {
   }, [executor]);
 
   return (
-    <StyledContainer>
-      <Helmet>
-        <title>{`${name} | Executors | ${pageTitle}`}</title>
-      </Helmet>
-      <StyledPageHeader onBack={() => navigate('/executors')} title={name} className="testkube-pageheader" />
+    <PageWrapper>
+      <PageMetadata title={`${name} | Executors`} />
+
+      <PageHeader onBack={() => navigate('/executors')} title={name} />
       <Tabs
         activeKey={activeTabKey}
         onChange={setActiveTabKey}
@@ -60,7 +60,7 @@ const ExecutorDetails: React.FC = () => {
           },
         ]}
       />
-    </StyledContainer>
+    </PageWrapper>
   );
 };
 

@@ -1,3 +1,5 @@
+import {memo} from 'react';
+
 import {Popover} from 'antd';
 
 import {LabelListItem} from '@atoms';
@@ -63,4 +65,4 @@ const LabelsList: React.FC<LabelsListProps> = props => {
   );
 };
 
-export default LabelsList;
+export default memo(LabelsList);

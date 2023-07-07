@@ -6,15 +6,16 @@ import {ExecutorIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {TestSuiteStepDelay, TestSuiteStepExecuteTest} from '@models/testSuite';
+import '@models/testSuite';
 
 import Colors from '@styles/Colors';
 
 import {StyledContainer, StyledIconsWrapper, StyledNameContainer} from './TestSuiteStepCard.styled';
 
 type TestSuiteStepCardProps = {
-  execute?: TestSuiteStepExecuteTest;
-  delay?: TestSuiteStepDelay;
+  test?: string;
+  type?: string;
+  delay?: string;
   onDelete: (index: number) => void;
   index: number;
   isDragging?: boolean;
@@ -22,25 +23,25 @@ type TestSuiteStepCardProps = {
 };
 
 const TestSuiteStepCard: React.FC<TestSuiteStepCardProps> = props => {
-  const {execute, delay, onDelete, index, isDragging, disabled = false} = props;
+  const {test, type, delay, onDelete, index, isDragging, disabled = false} = props;
 
-  let name = '';
-  let type = '';
+  let renderName;
+  let renderType;
 
   if (delay) {
-    name = `${delay.duration}ms`;
-    type = 'delay';
-  } else if (execute) {
-    name = execute.name;
-    type = execute.type;
+    renderName = typeof delay === 'string' ? delay : `${delay}ms`;
+    renderType = 'delay';
+  } else if (test) {
+    renderName = test;
+    renderType = type;
   }
 
   return (
     <StyledContainer $disabled={disabled} $isDragging={isDragging}>
-      {type === 'delay' ? <ClockCircleOutlined /> : <ExecutorIcon type={type} />}
+      {renderType === 'delay' ? <ClockCircleOutlined /> : <ExecutorIcon type={renderType} />}
       <StyledNameContainer>
         <Text className="regular" color={Colors.slate200}>
-          {name}
+          {renderName}
         </Text>
       </StyledNameContainer>
       {disabled ? null : (

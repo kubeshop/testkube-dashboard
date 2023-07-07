@@ -1,5 +1,4 @@
 import type { Page } from  '@playwright/test';
-import { TestDataHandler } from '../data-handlers/test-data-handlers';
 
 export class CreateTestPage{
     readonly page: Page;
@@ -7,13 +6,19 @@ export class CreateTestPage{
         this.page=page;
     }
     
-    async createTest(testName) {
-        await this._fillInTestDetails(testName);
+    async createTest(testData) {
+        await this._fillInTestDetails(testData);
         await this._clickCreateTestButton();
     }
 
     async selectTestType(testType) {
         await this.setSelectionSearch(testType, "testType");
+    }
+
+    async selectLabel(labelName) {
+        await this.page.click('xpath=//div[@id="test-creation_labels"]')
+        await this.page.locator('xpath=//div[@id="test-creation_labels"]//input').fill(labelName)
+        await this.page.keyboard.press('Enter');
     }
 
     async selectTestSource(contentData) {
@@ -49,11 +54,14 @@ export class CreateTestPage{
         await this.page.click(`div[class*="list-holder"] div[title="${value}"]`);
     }
 
-    async _fillInTestDetails(testName) {
-        const testData = TestDataHandler.getTest(testName);
+    async _fillInTestDetails(testData) {
         await this.setBasicInput(testData.name, 'name');
         await this.selectTestType(testData.type);
         await this.selectTestSource(testData.content);
+        
+        for (const [name, value] of Object.entries(testData.labels)) {
+          await this.selectLabel(`${name}:${value}`);
+        }
     }
 
     async _clickCreateTestButton() {

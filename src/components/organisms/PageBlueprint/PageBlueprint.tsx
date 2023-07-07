@@ -1,15 +1,9 @@
-import {PropsWithChildren, useContext} from 'react';
-import {Helmet} from 'react-helmet';
+import {PropsWithChildren} from 'react';
 
-import {Space} from 'antd';
+import PageMetadata from '@pages/PageMetadata';
 
-import {ConfigContext} from '@contexts';
-
-import {Text, Title} from '@custom-antd';
-
-import Colors from '@styles/Colors';
-
-import {PageBlueprintHeader, PageBlueprintWrapper} from './PageBlueprint.styled';
+import {PageWrapper} from './PageBlueprint.styled';
+import PageHeader from './PageHeader';
 
 type PageBlueprintProps = {
   title: string;
@@ -19,27 +13,13 @@ type PageBlueprintProps = {
 
 const PageBlueprint: React.FC<PropsWithChildren<PageBlueprintProps>> = props => {
   const {children, title, description, headerButton} = props;
-  const {pageTitle} = useContext(ConfigContext);
 
   return (
-    <PageBlueprintWrapper>
-      <Helmet>
-        <title>{`${title} | ${pageTitle}`}</title>
-        <meta name="description" content={`${description}`} />
-      </Helmet>
-      <PageBlueprintHeader>
-        <Space direction="vertical" size={15}>
-          <Title color={Colors.slate50} ellipsis>
-            {title}
-          </Title>
-          <Text className="regular middle" color={Colors.slate400}>
-            {description}
-          </Text>
-        </Space>
-        {headerButton}
-      </PageBlueprintHeader>
+    <PageWrapper>
+      <PageMetadata title={title} description={typeof description === 'string' ? description : undefined} />
+      <PageHeader title={title} description={description} extra={headerButton} />
       {children}
-    </PageBlueprintWrapper>
+    </PageWrapper>
   );
 };
 

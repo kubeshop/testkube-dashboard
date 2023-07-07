@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from 'react';
-import {Helmet} from 'react-helmet';
 
 import {Select, Space, Tabs} from 'antd';
 
@@ -8,10 +7,11 @@ import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ExecutorIcon} from '@atoms';
 
-import {AnalyticsContext, ConfigContext, DashboardContext, EntityDetailsContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, EntityDetailsContext} from '@contexts';
 
 import {Button, Text} from '@custom-antd';
 
+import useExecutorIcon from '@hooks/useExecutorIcon';
 import useLoadingIndicator from '@hooks/useLoadingIndicator';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
@@ -20,10 +20,14 @@ import {Option as OptionType} from '@models/form';
 
 import {CLICommands, DotsDropdown, LabelsList, MetricsBarChart, RunningContextType, notificationCall} from '@molecules';
 
+import {PageHeader, PageWrapper} from '@organisms';
+
+import PageMetadata from '@pages/PageMetadata';
+
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
-import {selectRedirectTarget} from '@redux/reducers/configSlice';
+import {selectSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
@@ -32,7 +36,7 @@ import Colors from '@styles/Colors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {EntityDetailsHeaderIcon, StyledContainer, StyledPageHeader} from './EntityDetailsContent.styled';
+import {EntityDetailsHeaderIcon} from './EntityDetailsContent.styled';
 import ExecutionsTable from './ExecutionsTable';
 import Settings from './Settings';
 import SummaryGrid from './SummaryGrid';
@@ -48,13 +52,12 @@ const filterOptions: OptionType[] = [
 const EntityDetailsContent: React.FC = () => {
   const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
     useContext(EntityDetailsContext);
-  const {pageTitle} = useContext(ConfigContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
 
-  const {settingsTabConfig} = useAppSelector(selectRedirectTarget);
+  const settingsTabConfig = useAppSelector(selectSettingsTabConfig);
 
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();
@@ -83,7 +86,7 @@ const EntityDetailsContent: React.FC = () => {
   const description = entityDetails?.description;
   const labels = entityDetails?.labels;
   const type = entityDetails?.type;
-  const testIcon = entityDetails?.testIcon;
+  const testIcon = useExecutorIcon(entityDetails);
 
   const onRunButtonClick = async () => {
     handleLoading();
@@ -133,12 +136,10 @@ const EntityDetailsContent: React.FC = () => {
   const isPageDisabled = !name;
 
   return (
-    <StyledContainer>
-      <Helmet>
-        <title>{name ? `${name} | ${pageTitle}` : pageTitle}</title>
-        <meta name="description" content={`${description}`} />
-      </Helmet>
-      <StyledPageHeader
+    <PageWrapper>
+      <PageMetadata title={name} description={description} />
+
+      <PageHeader
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
         extra={[
@@ -179,7 +180,7 @@ const EntityDetailsContent: React.FC = () => {
             </Text>
           ) : null}
         </Space>
-      </StyledPageHeader>
+      </PageHeader>
       {!isMetricsEmpty ? <SummaryGrid metrics={metrics} /> : null}
       <Tabs
         activeKey={activeTabKey}
@@ -216,7 +217,7 @@ const EntityDetailsContent: React.FC = () => {
           },
         ]}
       />
-    </StyledContainer>
+    </PageWrapper>
   );
 };
 

@@ -1,50 +1,33 @@
 import {EntityMap} from '@models/entityMap';
-import {ObjectRef} from '@models/objectRef';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {Execution} from './execution';
 import {Variables} from './variable';
 
-export type TestSuiteStepDelay = {
-  duration: number;
-};
-
-export type TestSuiteStepExecuteTest = {
-  namespace?: string;
-  name: string;
-  type: string;
-};
-
-export interface TestSuiteStepAbstract {
+export interface TestSuiteStep {
+  delay?: string;
+  test?: string;
+}
+export interface TestSuiteBatchStep {
   stopTestOnFailure: boolean;
-  // Used for form
-  id?: string | number;
+  execute: TestSuiteStep[];
 }
-
-export interface TestSuiteStepWithExecute extends TestSuiteStepAbstract {
-  execute: TestSuiteStepExecuteTest;
-}
-
-export interface TestSuiteStepWithDelay extends TestSuiteStepAbstract {
-  delay: TestSuiteStepDelay;
-}
-
-export type TestSuiteStep = TestSuiteStepWithExecute | TestSuiteStepWithDelay;
 
 export type TestSuiteStepExecutionResult = {
-  description?: string;
-  step: TestSuiteStep;
-  test: ObjectRef;
-  execution: Execution;
+  step: TestSuiteBatchStep;
+  execute: {
+    execution: Execution;
+    step: TestSuiteStep;
+  }[];
 };
 
 export type TestSuite = {
   name: string;
   namespace?: string;
   description?: string;
-  before?: TestSuiteStep[];
-  steps?: TestSuiteStep[];
-  after?: TestSuiteStep[];
+  before?: TestSuiteBatchStep[];
+  steps?: TestSuiteBatchStep[];
+  after?: TestSuiteBatchStep[];
   labels?: EntityMap;
   schedule?: string;
   repeats?: number;
@@ -61,11 +44,6 @@ export type TestSuiteWithExecution = {
 export type TestSuiteWithExecutionRedux = {
   dataItem: TestSuite;
   latestExecution?: TestSuiteExecution;
-};
-
-export type TestSuiteForTrigger = {
-  name: TestSuite['name'];
-  namespace: TestSuite['namespace'];
 };
 
 export type TestSuiteFilters = {

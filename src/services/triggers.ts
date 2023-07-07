@@ -1,5 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {YamlEditBody} from '@models/fetch';
 import {TestTrigger, TriggersKeyMap} from '@models/triggers';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
@@ -14,11 +15,38 @@ export const triggersApi = createApi({
     getTriggersList: builder.query<TestTrigger[], void | null>({
       query: () => ({url: `/triggers`}),
     }),
+    getTriggerById: builder.query<TestTrigger, string>({
+      query: id => ({
+        url: `/triggers/${id}`,
+      }),
+    }),
+    getTriggerDefinition: builder.query<string, string>({
+      query: id => ({
+        url: `/triggers/${id}`,
+        responseHandler: 'text',
+        headers: {accept: 'text/yaml'},
+      }),
+    }),
     createTrigger: builder.mutation<any, any>({
       query: body => ({
         url: `/triggers`,
         method: 'POST',
         body,
+      }),
+    }),
+    updateTriggerById: builder.mutation<TestTrigger, TestTrigger>({
+      query: body => ({
+        url: `/triggers/${body.name}`,
+        method: 'PATCH',
+        body,
+      }),
+    }),
+    updateTriggerDefinition: builder.mutation<any, YamlEditBody>({
+      query: body => ({
+        url: `/triggers/${body.name}`,
+        method: 'PATCH',
+        headers: {'content-type': 'text/yaml'},
+        body: body.value,
       }),
     }),
     updateTriggers: builder.mutation<void, any>({
@@ -28,6 +56,12 @@ export const triggersApi = createApi({
         body,
       }),
     }),
+    deleteTrigger: builder.mutation<void, string>({
+      query: id => ({
+        url: `/triggers/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -35,5 +69,14 @@ export const triggersApi = createApi({
 triggersApi.useGetTriggersKeyMapQuery = memoizeQuery(triggersApi.useGetTriggersKeyMapQuery);
 triggersApi.useGetTriggersListQuery = memoizeQuery(triggersApi.useGetTriggersListQuery);
 
-export const {useGetTriggersKeyMapQuery, useCreateTriggerMutation, useGetTriggersListQuery, useUpdateTriggersMutation} =
-  triggersApi;
+export const {
+  useGetTriggersKeyMapQuery,
+  useCreateTriggerMutation,
+  useGetTriggersListQuery,
+  useUpdateTriggersMutation,
+  useGetTriggerByIdQuery,
+  useGetTriggerDefinitionQuery,
+  useDeleteTriggerMutation,
+  useUpdateTriggerByIdMutation,
+  useUpdateTriggerDefinitionMutation,
+} = triggersApi;

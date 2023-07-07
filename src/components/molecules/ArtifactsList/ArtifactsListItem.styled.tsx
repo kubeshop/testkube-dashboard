@@ -59,3 +59,8 @@ export const StyledDownloadIcon = styled(DownloadOutlined)`
     }
   }
 `;
+
+export const StyledDownloadAllContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;

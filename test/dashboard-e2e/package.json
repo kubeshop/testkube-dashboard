@@ -11,6 +11,7 @@
     "@playwright/test": "^1.32.3",
     "@types/node": "^18.15.13",
     "dotenv": "16.0.3",
-    "superagent": "8.0.0"
+    "superagent": "8.0.0",
+    "uuid": "9.0.0"
   }
 }

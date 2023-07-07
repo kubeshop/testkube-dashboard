@@ -1,13 +1,10 @@
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {FC, ReactElement, useCallback, useContext} from 'react';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {EntityDetailsContext} from '@contexts';
 
 import {Entity} from '@models/entity';
 
-import {SettingsLeftNavigation, StyledSettingsContainer, StyledTabContentContainer} from '@molecules';
-
-import {useAppSelector} from '@redux/hooks';
-import {closeSettingsTabConfig, selectRedirectTarget} from '@redux/reducers/configSlice';
+import {SettingsLayout} from '@molecules';
 
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
 import SettingsExecution from './SettingsExecution';
@@ -17,61 +14,43 @@ import SettingsTest from './SettingsTest';
 import SettingsTests from './SettingsTests';
 import SettingsVariables from './SettingsVariables';
 
-const tabConfig: Record<Entity, JSX.Element[]> = {
-  'test-suites': [
-    <General />,
-    <SettingsTests />,
-    <SettingsVariables />,
-    <SettingsScheduling />,
-    <SettingsDefinition />,
-  ],
-  tests: [
-    <General />,
-    <SettingsTest />,
-    <SettingsExecution />,
-    <SettingsVariables />,
-    <SettingsScheduling />,
-    <SettingsDefinition />,
-  ],
-};
+const testSettings = (
+  <SettingsLayout
+    tabs={[
+      {id: 'general', label: 'General', children: <General />},
+      {id: 'test', label: 'Test', children: <SettingsTest />},
+      {id: 'execution', label: 'Execution', children: <SettingsExecution />},
+      {id: 'variables', label: 'Variables & Secrets', children: <SettingsVariables />},
+      {id: 'scheduling', label: 'Scheduling', children: <SettingsScheduling />},
+      {id: 'definition', label: 'Definition', children: <SettingsDefinition />},
+    ]}
+  />
+);
 
-const navigationOptionsConfig: Record<Entity, string[]> = {
-  'test-suites': ['General', 'Tests', 'Variables & Secrets', 'Scheduling', 'Definition'],
-  tests: ['General', 'Test', 'Execution', 'Variables & Secrets', 'Scheduling', 'Definition'],
+const WrappedSettingsTests: FC<{setId(id: string): void}> = ({setId}) => (
+  <SettingsTests openDefinition={useCallback(() => setId('definition'), [])} />
+);
+
+const testSuiteSettings = (
+  <SettingsLayout
+    tabs={[
+      {id: 'general', label: 'General', children: <General />},
+      {id: 'tests', label: 'Tests', children: WrappedSettingsTests},
+      {id: 'variables', label: 'Variables & Secrets', children: <SettingsVariables />},
+      {id: 'scheduling', label: 'Scheduling', children: <SettingsScheduling />},
+      {id: 'definition', label: 'Definition', children: <SettingsDefinition />},
+    ]}
+  />
+);
+
+const tabsConfigMap: Record<Entity, ReactElement<any, any>> = {
+  'test-suites': testSuiteSettings,
+  tests: testSettings,
 };
 
 const Settings: React.FC = () => {
-  const {dispatch} = useContext(MainContext);
   const {entity} = useContext(EntityDetailsContext);
-  const [selectedSettingsTab, setSelectedSettingsTab] = useState(0);
-
-  const {settingsTabConfig} = useAppSelector(selectRedirectTarget);
-
-  useEffect(() => {
-    if (settingsTabConfig && entity === settingsTabConfig.entity) {
-      setSelectedSettingsTab(
-        typeof settingsTabConfig.tab === 'string'
-          ? navigationOptionsConfig[entity].findIndex(tab => tab === settingsTabConfig.tab)
-          : settingsTabConfig.tab
-      );
-      dispatch(closeSettingsTabConfig());
-    }
-  }, [settingsTabConfig, dispatch]);
-
-  const subTabsMap = useMemo(() => tabConfig[entity], [entity]);
-
-  return (
-    <StyledSettingsContainer>
-      {entity ? (
-        <SettingsLeftNavigation
-          options={navigationOptionsConfig[entity]}
-          selectedOption={selectedSettingsTab}
-          setSelectedOption={setSelectedSettingsTab}
-        />
-      ) : null}
-      <StyledTabContentContainer>{subTabsMap[selectedSettingsTab]}</StyledTabContentContainer>
-    </StyledSettingsContainer>
-  );
+  return tabsConfigMap[entity];
 };
 
 export default Settings;

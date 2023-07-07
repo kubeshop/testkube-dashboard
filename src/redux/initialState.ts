@@ -73,9 +73,6 @@ const initialExecutorsState: ExecutorsState = {
 const initialConfigState: ConfigState = {
   namespace: 'testkube',
   redirectTarget: {
-    runTarget: false,
-    targetTestExecutionId: null,
-    targetTestId: null,
     settingsTabConfig: null,
   },
   fullScreenLogOutput: {

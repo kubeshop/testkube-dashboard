@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
 import {useDebounce} from 'react-use';
 
 import {SearchOutlined} from '@ant-design/icons';
@@ -14,40 +13,28 @@ import {initialPageSize} from '@redux/initialState';
 import Colors from '@styles/Colors';
 
 const TextSearchFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters, entity, queryParam, isFiltersDisabled} = props;
+  const {filters, setFilters, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
-  const [searchParams, setSearchParams] = useSearchParams();
 
-  const queryParamField = queryParam || 'textSearch';
-
-  const [inputValue, setInputValue] = useState(filters[queryParamField]);
+  const [inputValue, setInputValue] = useState(filters.textSearch);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  useDebounce(
+  const [, cancel] = useDebounce(
     () => {
-      const paramValue = {[queryParamField]: inputValue};
-
-      dispatch(setFilters({...filters, ...paramValue, pageSize: initialPageSize}));
-
-      if (inputValue) {
-        searchParams.set(queryParamField, inputValue);
-        setSearchParams(searchParams);
-      } else {
-        searchParams.delete(queryParamField);
-        setSearchParams(searchParams);
-      }
+      dispatch(setFilters({...filters, textSearch: inputValue, pageSize: initialPageSize}));
     },
     300,
     [inputValue]
   );
+  useEffect(cancel, []);
 
   useEffect(() => {
-    setInputValue(filters[queryParamField]);
-  }, [filters, entity]);
+    setInputValue(filters.textSearch);
+  }, [filters]);
 
   return (
     <Input

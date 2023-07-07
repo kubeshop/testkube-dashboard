@@ -1,0 +1,40 @@
+name: Wait for Vercel and run E2E tests
+
+on:
+  pull_request:
+    branches:
+      - develop # Run only on PRs to develop branch (temporary)
+
+jobs:
+  wait-for-vercel: # Used instead of deployment_status to allow base branch filtering - it's possible to get base.ref only for PRs - otherwise results would be inconsistent
+    name: Waiting for Vercel
+    runs-on: ubuntu-latest
+    outputs:
+      preview-url: ${{ steps.waitForVercel.outputs.url }}
+    steps:
+    - name: Waiting for 200 from the Vercel Preview
+      uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+      id: waitForVercel
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        max_timeout: 180
+
+  e2e-tests:
+    name: E2E tests
+    needs: wait-for-vercel
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run E2E tests
+      uses: kubeshop/testkube-run-action@v1
+      with:
+        # Instance
+        url: https://dev.testkube.io/results/v1
+        # Options
+        test: dashboard-e2e-tests
+        ref: ${{ github.head_ref }}
+        variables: |
+          BASE_URL="${{ needs.wait-for-vercel.outputs.preview-url }}"
+          API_URL="testkube-api-server.testkube.svc.cluster.local:8088/v1"
+          DASHBOARD_API_URL="https://dev.testkube.io/results/v1"
+          BASIC_AUTH_USER="testkube-admin"
+          BASIC_AUTH_PASS="${{ secrets.TESTKUBE_DEVELOP_NGINX_PASS }}"

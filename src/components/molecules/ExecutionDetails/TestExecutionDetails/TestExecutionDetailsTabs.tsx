@@ -42,6 +42,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     id,
     testName,
     testSuiteName,
+    startTime,
   } = testData;
 
   const isRunning = useIsRunning(status);
@@ -92,7 +93,14 @@ const TestExecutionDetailsTabs: React.FC = () => {
       ? {
           key: 'ArtifactsPane',
           label: 'Artifacts',
-          children: <TestExecutionDetailsArtifacts id={id} testName={testName} testSuiteName={testSuiteName} />,
+          children: (
+            <TestExecutionDetailsArtifacts
+              id={id}
+              testName={testName}
+              testSuiteName={testSuiteName}
+              startTime={startTime.toString()}
+            />
+          ),
         }
       : null,
     {

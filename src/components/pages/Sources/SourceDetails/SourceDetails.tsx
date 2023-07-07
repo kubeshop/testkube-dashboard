@@ -1,11 +1,14 @@
 import {useContext, useEffect, useState} from 'react';
-import {Helmet} from 'react-helmet';
 
 import {Tabs} from 'antd';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {DashboardContext, MainContext} from '@contexts';
 
 import useLocation from '@hooks/useLocation';
+
+import {PageHeader, PageWrapper} from '@organisms';
+
+import PageMetadata from '@pages/PageMetadata';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
@@ -14,13 +17,11 @@ import {useGetSourceDetailsQuery} from '@services/sources';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
-import {StyledContainer, StyledPageHeader} from './SourceDetails.styled';
 import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
-  const {pageTitle} = useContext(ConfigContext);
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);
 
@@ -43,17 +44,16 @@ const SourceDetails = () => {
   }, [location]);
 
   return (
-    <StyledContainer>
-      <Helmet>
-        <title>{`${name} | Sources | ${pageTitle}`}</title>
-      </Helmet>
-      <StyledPageHeader onBack={() => navigate('/sources')} title={name} className="testkube-pageheader" />
+    <PageWrapper>
+      <PageMetadata title={`${name} | Sources`} />
+
+      <PageHeader onBack={() => navigate('/sources')} title={name} />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
           {currentSourceDetails ? <SourceSettings /> : null}
         </Tabs.TabPane>
       </Tabs>
-    </StyledContainer>
+    </PageWrapper>
   );
 };
 

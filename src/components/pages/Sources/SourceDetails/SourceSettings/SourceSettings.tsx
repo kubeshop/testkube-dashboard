@@ -1,27 +1,17 @@
-import {useState} from 'react';
+import {memo} from 'react';
 
-import {SettingsLeftNavigation, StyledSettingsContainer, StyledTabContentContainer} from '@molecules';
+import {SettingsLayout} from '@molecules';
 
 import SourceSettingsDefinition from './Definition';
 import General from './General';
 
-const tabsConfig: Array<JSX.Element> = [<General />, <SourceSettingsDefinition />];
+const SourceSettings = () => (
+  <SettingsLayout
+    tabs={[
+      {id: 'general', label: 'General', children: <General />},
+      {id: 'definition', label: 'Definition', children: <SourceSettingsDefinition />},
+    ]}
+  />
+);
 
-const navigationOptionsConfig: string[] = ['General', 'Definition'];
-
-const SourceSettings = () => {
-  const [selectedSettingsTab, setSelectedSettingsTab] = useState(0);
-
-  return (
-    <StyledSettingsContainer>
-      <SettingsLeftNavigation
-        options={navigationOptionsConfig}
-        selectedOption={selectedSettingsTab}
-        setSelectedOption={setSelectedSettingsTab}
-      />
-      <StyledTabContentContainer>{tabsConfig[selectedSettingsTab]}</StyledTabContentContainer>
-    </StyledSettingsContainer>
-  );
-};
-
-export default SourceSettings;
+export default memo(SourceSettings);

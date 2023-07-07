@@ -5,7 +5,7 @@ import {TestContent} from '@models/test';
 import {TestExecutor} from '@models/testExecutors';
 import {Variables} from '@models/variable';
 
-export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued' | 'cancelled';
+export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued' | 'cancelled' | 'aborted';
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
 export type ExecutionStepResultStatusEnum = 'success' | 'error';
 

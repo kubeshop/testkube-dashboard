@@ -1,6 +1,7 @@
 import React, {useContext, useMemo} from 'react';
+import ReactGA from 'react-ga4';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {EntityDetailsContext} from '@contexts';
 
 import {Text} from '@custom-antd';
 
@@ -114,7 +115,6 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const mayDelete = usePermission(Permissions.deleteEntity);
 
   const {entity} = useContext(EntityDetailsContext);
-  const {ga4React} = useContext(MainContext);
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -148,9 +148,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
       const commandString = command(testTarget);
 
       const onCopy = () => {
-        if (ga4React) {
-          ga4React.gtag('event', 'copy_command', {command: label});
-        }
+        ReactGA.event('copy_command', {command: label});
       };
 
       return <CopyCommand key={label} command={commandString} label={label} bg={bg} onCopy={onCopy} highlightSyntax />;

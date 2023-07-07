@@ -1,8 +1,8 @@
 import {useCallback, useContext, useMemo, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
-import {useDebounce} from 'react-use';
 
 import {FilterFilled} from '@ant-design/icons';
+
+import {capitalize} from 'lodash';
 
 import {MainContext} from '@contexts';
 
@@ -21,15 +21,12 @@ import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
 
-import {uppercaseFirstSymbol} from '@utils/strings';
-
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [isVisible, setVisibilityState] = useState(false);
 
@@ -55,20 +52,6 @@ const StatusFilter: React.FC<FilterProps> = props => {
     [dispatch, setFilters, filters]
   );
 
-  useDebounce(
-    () => {
-      if (filters.status.length > 0) {
-        searchParams.set('status', filters.status);
-        setSearchParams(searchParams);
-      } else {
-        searchParams.delete('status');
-        setSearchParams(searchParams);
-      }
-    },
-    300,
-    [filters.status]
-  );
-
   const renderedStatuses = useMemo(() => {
     return statusList.map(status => {
       return (
@@ -78,7 +61,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
             onChange={() => handleClick(status)}
             data-cy={status}
           >
-            {uppercaseFirstSymbol(status)}
+            {capitalize(status)}
           </StyledFilterCheckbox>
         </StyledFilterMenuItem>
       );
@@ -88,9 +71,6 @@ const StatusFilter: React.FC<FilterProps> = props => {
   const resetFilter = () => {
     dispatch(setFilters({...filters, status: [], pageSize: initialPageSize}));
     onOpenChange(false);
-
-    searchParams.delete('status');
-    setSearchParams(searchParams);
   };
 
   const menu = (

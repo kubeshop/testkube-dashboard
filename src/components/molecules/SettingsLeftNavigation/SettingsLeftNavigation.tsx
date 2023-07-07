@@ -1,3 +1,5 @@
+import {memo} from 'react';
+
 import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
@@ -26,4 +28,4 @@ const SettingsLeftNavigation: React.FC<SettingsLeftNavigationProps> = props => {
   );
 };
 
-export default SettingsLeftNavigation;
+export default memo(SettingsLeftNavigation);

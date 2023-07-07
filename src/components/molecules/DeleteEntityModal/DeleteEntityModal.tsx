@@ -5,6 +5,8 @@ import {Input} from 'antd';
 import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
+import {capitalize} from 'lodash';
+
 import {DashboardContext, ModalContext} from '@contexts';
 
 import {Button, FullWidthSpace, Text} from '@custom-antd';
@@ -16,7 +18,6 @@ import {notificationCall} from '@molecules';
 import Colors from '@styles/Colors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {FooterSpace} from './DeleteEntityModal.styled';
 
@@ -47,7 +48,7 @@ const DeleteEntityModal: React.FC<{
     deleteEntity(idToDelete || name)
       .then(res => displayDefaultNotificationFlow(res))
       .then(() => {
-        notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
+        notificationCall('passed', `${capitalize(entityLabel)} was successfully deleted.`);
 
         setModalOpen(false);
 
@@ -82,7 +83,7 @@ const DeleteEntityModal: React.FC<{
         forever.
       </Text>
       <Input
-        placeholder={`${uppercaseFirstSymbol(entityLabel)} name`}
+        placeholder={`${capitalize(entityLabel)} name`}
         onChange={e => {
           setName(e.target.value);
         }}

@@ -1,25 +1,21 @@
-import {useContext, useEffect, useMemo, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import {Tabs} from 'antd';
 
-import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
-
-import {ExecutorIcon, ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import {Button, Modal, Skeleton, Text, Title} from '@custom-antd';
+import {Button, Modal} from '@custom-antd';
+
+import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {getTestExecutorIcon} from '@redux/utils/executorIcon';
-
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
-
-import Colors from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -27,13 +23,9 @@ import {safeRefetch} from '@utils/fetchUtils';
 import {executorsList} from '../utils';
 
 import AddExecutorsModal from './AddExecutorsModal';
+import CustomExecutorCard from './CustomExecutorCard';
 import EmptyCustomExecutors from './EmptyCustomExecutors';
-import {
-  CustomExecutorContainer,
-  ExecutorsGrid,
-  ExecutorsGridItem,
-  ExecutorsListSkeletonWrapper,
-} from './ExecutorsList.styled';
+import ExecutorCard from './ExecutorCard';
 
 const Executors: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
@@ -48,49 +40,9 @@ const Executors: React.FC = () => {
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
-  const onNavigateToDetails = (name: string) => {
-    navigate(`/executors/${name}`);
-  };
-
   useEffect(() => {
     safeRefetch(refetch);
   }, [apiEndpoint]);
-
-  const renderedExecutorsGrid = useMemo(() => {
-    return executorsList.map(executorItem => {
-      const {type, title, description, docLink} = executorItem;
-
-      const isExecutor = type !== 'custom';
-      const executorIcon = getTestExecutorIcon(executors || [], type);
-
-      return (
-        <ExternalLink href={docLink} key={docLink}>
-          <ExecutorsGridItem className={isExecutor ? 'executor' : 'custom-executor'} direction="vertical" size={20}>
-            <Title level={3} color={Colors.slate400} className="dashboard-title regular">
-              {isExecutor ? <ExecutorIcon type={executorIcon} /> : <ExecutorsIcon />}
-              {title}
-            </Title>
-            <Text color={Colors.slate400} className="regular middle">
-              {description}
-            </Text>
-            <Button $customType="secondary">Learn more</Button>
-          </ExecutorsGridItem>
-        </ExternalLink>
-      );
-    });
-  }, [executorsList, executors]);
-
-  const renderedCustomExecutorsGrid = useMemo(() => {
-    return customExecutors.map(executorItem => {
-      return (
-        <CustomExecutorContainer onClick={() => onNavigateToDetails(executorItem.name)} key={executorItem.name}>
-          <Text className="regular big">{executorItem.name}</Text>
-          <Text color={Colors.slate500}>{executorItem.executor.executorType}</Text>
-          <Text color={Colors.slate500}>{executorItem.executor.image}</Text>
-        </CustomExecutorContainer>
-      );
-    });
-  }, [customExecutors]);
 
   return (
     <PageBlueprint
@@ -122,28 +74,24 @@ const Executors: React.FC = () => {
           {
             label: 'Custom executors',
             key: 'custom',
-            children: isLoading ? (
-              <ExecutorsListSkeletonWrapper>
-                {new Array(6).fill(0).map((_, index) => {
-                  const key = `skeleton-item-${index}`;
-
-                  return <Skeleton additionalStyles={{lineHeight: 80}} key={key} />;
-                })}
-              </ExecutorsListSkeletonWrapper>
-            ) : renderedCustomExecutorsGrid && renderedCustomExecutorsGrid.length ? (
-              <ExecutorsGrid>{renderedCustomExecutorsGrid}</ExecutorsGrid>
-            ) : (
-              <EmptyCustomExecutors
-                onButtonClick={() => {
-                  setAddExecutorModalVisibility(true);
-                }}
+            children: (
+              <EntityGrid
+                maxColumns={3}
+                data={customExecutors}
+                Component={CustomExecutorCard}
+                componentProps={{onClick: executor => navigate(`/executors/${executor.name}`)}}
+                empty={<EmptyCustomExecutors onButtonClick={() => setAddExecutorModalVisibility(true)} />}
+                itemHeight={66}
+                loadingInitially={isLoading}
               />
             ),
           },
           {
             label: 'Official executors',
             key: 'official',
-            children: <ExecutorsGrid>{renderedExecutorsGrid}</ExecutorsGrid>,
+            children: (
+              <EntityGrid maxColumns={3} data={executorsList} Component={ExecutorCard} componentProps={{executors}} />
+            ),
           },
         ]}
       />

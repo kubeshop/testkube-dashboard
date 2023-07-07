@@ -1,99 +1,133 @@
-import React, {forwardRef, memo, useCallback} from 'react';
-
-import {Tooltip} from 'antd';
+import React, {FC, forwardRef, memo, useCallback} from 'react';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
-import {LabelsList, MetricsBarChart} from '@molecules';
+import useExecutorIcon from '@hooks/useExecutorIcon';
+
+import {Execution} from '@models/execution';
+import {ExecutionMetrics} from '@models/metrics';
+import {TestSuiteExecution} from '@models/testSuiteExecution';
+
+import {DotsDropdown, LabelsList, MetricsBarChart} from '@molecules';
 
 import Colors from '@styles/Colors';
 
-import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
-import {formatDuration, formatExecutionDate} from '@utils/formatDate';
+import {formatDuration} from '@utils/formatDate';
 
 import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
+import EntityGridItemExecutionTime from './EntityGridItemExecutionTime';
 
-const EntityGridItemPure: React.FC<any> = memo(
-  forwardRef<HTMLDivElement, any>((props, ref) => {
-    const {item, onClick, entity, metrics} = props;
-    const {dataItem, latestExecution} = item;
+export interface Item {
+  type?: string;
+  name: string;
+  labels?: Record<string, string>;
+}
 
-    const status = latestExecution ? latestExecution?.executionResult?.status || latestExecution?.status : 'pending';
-    const executions = metrics?.executions;
-    const dataTestValue = `${entity}-list-item`;
+interface Metrics {
+  executions: ExecutionMetrics[];
+  failedExecutions: number;
+  passFailRatio: number;
+  executionDurationP50ms: number;
+}
 
-    const click = useCallback(() => {
-      onClick(item);
-    }, [onClick, item]);
+interface EntityGridItemPureProps {
+  item: Item;
+  latestExecution?: TestSuiteExecution | Execution;
+  metrics?: Metrics;
+  onClick: (item: Item) => void;
+  onAbort: (item: Item) => void;
+  dataTest: string;
+}
 
-    return (
-      <ItemWrapper onClick={click} ref={ref} data-test={dataTestValue}>
-        <DetailsWrapper>
-          <ItemRow $flex={0}>
-            <ItemColumn $isStretch>
-              <StatusIcon status={status} />
-              {dataItem?.type ? <ExecutorIcon type={dataItem?.testIcon} /> : null}
-              <div style={{overflow: 'hidden', flex: 1, display: 'flex'}}>
-                <Text className="regular big" ellipsis title={dataItem?.name}>
-                  {dataItem?.name}
-                </Text>
-              </div>
-            </ItemColumn>
-            <ItemColumn>
-              <Tooltip
-                title={latestExecution?.startTime ? formatExecutionDate(new Date(latestExecution?.startTime)) : null}
+const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
+  const icon = useExecutorIcon(item);
+  return item.type ? <ExecutorIcon type={icon} /> : null;
+});
+
+const isRunningStatus = (status: string) => ['running', 'queued'].includes(status);
+
+const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
+  const {item, latestExecution, onClick, onAbort, dataTest, metrics} = props;
+
+  const status =
+    (latestExecution as Execution)?.executionResult?.status ||
+    (latestExecution as TestSuiteExecution)?.status ||
+    'pending';
+  const executions = metrics?.executions;
+  const isRunning = isRunningStatus(status) || executions?.some(execution => isRunningStatus(execution.status));
+
+  const click = useCallback(() => {
+    onClick(item);
+  }, [onClick, item]);
+
+  const abort = useCallback(
+    (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.stopPropagation();
+      onAbort(item);
+    },
+    [onAbort, item]
+  );
+
+  return (
+    <ItemWrapper onClick={click} ref={ref} data-test={dataTest}>
+      <DetailsWrapper>
+        <ItemRow $flex={0}>
+          <ItemColumn $isStretch>
+            <StatusIcon status={status} />
+            <EntityGridItemTestIcon item={item} />
+            <div style={{overflow: 'hidden', flex: 1, display: 'flex'}}>
+              <Text className="regular big" ellipsis title={item.name}>
+                {item.name}
+              </Text>
+            </div>
+          </ItemColumn>
+          <ItemColumn>
+            <EntityGridItemExecutionTime time={latestExecution?.startTime} />
+            {isRunning ? (
+              <DotsDropdown
                 placement="bottomRight"
-                mouseEnterDelay={0.39}
-                mouseLeaveDelay={0.1}
-              >
-                <Text color={Colors.slate200} className="regular small">
-                  {latestExecution?.startTime
-                    ? displayTimeBetweenDates(new Date(), new Date(latestExecution?.startTime)).long
-                    : null}
-                </Text>
-              </Tooltip>
-            </ItemColumn>
+                items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]}
+              />
+            ) : null}
+          </ItemColumn>
+        </ItemRow>
+        <RowsWrapper>
+          <ItemRow $flex={1}>
+            {item.labels ? <LabelsList labels={item.labels} shouldSkipLabels howManyLabelsToShow={2} /> : null}
           </ItemRow>
-          <RowsWrapper>
-            <ItemRow $flex={1}>
-              {dataItem?.labels ? (
-                <LabelsList labels={dataItem?.labels} shouldSkipLabels howManyLabelsToShow={2} />
-              ) : null}
-            </ItemRow>
-            <ItemRow $flex={1}>
-              <StyledMetricItem>
-                <Text className="small uppercase" color={Colors.slate500}>
-                  pass/fail ratio
-                </Text>
-                <Text className="big regular">
-                  {metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '0%'}
-                </Text>
-              </StyledMetricItem>
-              <StyledMetricItem>
-                <Text className="small uppercase" color={Colors.slate500}>
-                  p50
-                </Text>
-                <Text className="big regular">
-                  {metrics?.executionDurationP50ms ? formatDuration(metrics?.executionDurationP50ms / 1000) : '-'}
-                </Text>
-              </StyledMetricItem>
-              <StyledMetricItem>
-                <Text className="small uppercase" color={Colors.slate500}>
-                  failed executions
-                </Text>
-                <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
-              </StyledMetricItem>
-              <StyledMetricItem>
-                <MetricsBarChart data={executions} chartHeight={38} barWidth={6} />
-              </StyledMetricItem>
-            </ItemRow>
-          </RowsWrapper>
-        </DetailsWrapper>
-      </ItemWrapper>
-    );
-  })
-);
+          <ItemRow $flex={1}>
+            <StyledMetricItem>
+              <Text className="small uppercase" color={Colors.slate500}>
+                pass/fail ratio
+              </Text>
+              <Text className="big regular">
+                {metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '0%'}
+              </Text>
+            </StyledMetricItem>
+            <StyledMetricItem>
+              <Text className="small uppercase" color={Colors.slate500}>
+                p50
+              </Text>
+              <Text className="big regular">
+                {metrics?.executionDurationP50ms ? formatDuration(metrics?.executionDurationP50ms / 1000) : '-'}
+              </Text>
+            </StyledMetricItem>
+            <StyledMetricItem>
+              <Text className="small uppercase" color={Colors.slate500}>
+                failed executions
+              </Text>
+              <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
+            </StyledMetricItem>
+            <StyledMetricItem>
+              <MetricsBarChart data={executions} chartHeight={38} barWidth={6} />
+            </StyledMetricItem>
+          </ItemRow>
+        </RowsWrapper>
+      </DetailsWrapper>
+    </ItemWrapper>
+  );
+});
 
-export default EntityGridItemPure;
+export default memo(EntityGridItemPure);

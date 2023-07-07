@@ -8,6 +8,7 @@ export const SummaryGridWrapper = styled.div`
   display: grid;
   gap: 12px;
   grid-template-columns: 1fr;
+  margin: 20px 0;
 
   @media (min-width: 507px) {
     grid-template-columns: 1fr 1fr;

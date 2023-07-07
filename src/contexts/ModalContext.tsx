@@ -2,10 +2,13 @@ import React, {FC, PropsWithChildren, ReactElement, createContext, useContext, u
 
 import {Modal} from '@custom-antd';
 
-interface ModalConfig {
+export interface ModalConfig {
   width: number;
   title: string;
   content: ReactElement;
+  footer?: ReactElement;
+  dataTestModalRoot?: string;
+  dataTestCloseBtn?: string;
 }
 
 export interface ModalContextInterface {
@@ -13,17 +16,25 @@ export interface ModalContextInterface {
   modalConfig: ModalConfig;
   setModalOpen: (open: boolean) => void;
   setModalConfig: (config: ModalConfig) => void;
+  closeModal: () => void;
 }
 
 const ModalContext = createContext<ModalContextInterface>(undefined!);
 
+const defaultModalConfig = {
+  width: 500,
+  title: '',
+  content: <></>,
+};
+
 export const ModalHandler: FC<PropsWithChildren<{}>> = ({children}) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalConfig, setModalConfig] = useState({
-    width: 500,
-    title: '',
-    content: <></>,
-  });
+  const [modalConfig, setModalConfig] = useState(defaultModalConfig);
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalConfig(defaultModalConfig);
+  };
 
   const value = useMemo(
     () => ({
@@ -31,6 +42,7 @@ export const ModalHandler: FC<PropsWithChildren<{}>> = ({children}) => {
       modalConfig,
       setModalOpen,
       setModalConfig,
+      closeModal,
     }),
     [modalOpen, modalConfig]
   );

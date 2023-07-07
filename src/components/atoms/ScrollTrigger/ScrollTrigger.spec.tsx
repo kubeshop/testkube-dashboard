@@ -35,7 +35,7 @@ describe('atoms', () => {
         expect(onScroll).toHaveBeenCalledTimes(0);
       });
 
-      it('should emit event when the disabled ScrollTrigger is in viewport, and it is changed to enabled', () => {
+      it('should not emit event immediately after the ScrollTrigger is enabled', () => {
         const onScroll = jest.fn();
         const result = render(<ScrollTrigger disabled onScroll={onScroll} />);
 
@@ -44,7 +44,7 @@ describe('atoms', () => {
           result.rerender(<ScrollTrigger onScroll={onScroll} />);
         });
 
-        expect(onScroll).toHaveBeenCalledTimes(1);
+        expect(onScroll).toHaveBeenCalledTimes(0);
       });
     });
 

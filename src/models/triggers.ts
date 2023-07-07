@@ -18,10 +18,22 @@ export enum TriggerAction {
 
 export type TriggerExecution = 'test' | 'testsuite';
 
-export type LabelSelector = {matchExpressions: MatchExpression[]; matchLabels: MatchLabels};
+export type LabelSelector = {matchExpressions?: MatchExpression[]; matchLabels: MatchLabels};
 
 export type MatchExpression = {key: string; operator: string; values: string[]};
-export type MatchLabels = EntityMap;
+export type MatchLabels = Record<string, string>;
+
+export enum TriggerConditionStatus {
+  'True' = 'True',
+  'False' = 'False',
+  'Unknown' = 'Unknown',
+}
+
+export type TriggerCondition = {
+  reason?: string;
+  status: TriggerConditionStatus;
+  type: string;
+};
 
 export type TestTrigger = {
   name: string;
@@ -33,6 +45,10 @@ export type TestTrigger = {
   action: TriggerAction;
   execution: TriggerExecution;
   testSelector: TestTriggerSelector;
+  conditionSpec: {
+    conditions?: TriggerCondition[];
+    timeout?: number;
+  };
 };
 
 type TestTriggerTypes = 'name' | 'labels';
@@ -52,10 +68,12 @@ export type TestTriggerFormEntity = {
 
 export type TriggerType = 'label-label' | 'name-label' | 'name-name' | 'label-name';
 
+export type TriggerConditionStatusString = string;
+
 export type TestTriggerSelector = {
-  name: string;
+  name?: string;
   namespace?: string;
-  labelSelector: LabelSelector;
+  labelSelector?: LabelSelector;
 };
 
 export type TriggersKeyMap = {
@@ -63,6 +81,7 @@ export type TriggersKeyMap = {
   events: TriggerEvent;
   actions: TriggerAction[];
   executions: TriggerExecution[];
+  conditions: TriggerConditionStatusString[];
 };
 
 export type AddTriggerOption = {

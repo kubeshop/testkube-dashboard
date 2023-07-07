@@ -5,7 +5,7 @@ import {Form, Input} from 'antd';
 
 import {MainContext} from '@contexts';
 
-import {Button} from '@custom-antd';
+import {Button, FormIconWrapper, FormItem, FormRow, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
@@ -19,7 +19,7 @@ import {useUpdateCustomExecutorMutation} from '@services/executors';
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {StyledButtonsContainer, StyledLabelsSpace, SymbolWrapper, VariablesListContainer} from './Arguments.styled';
+import {StyledButtonsContainer} from './Arguments.styled';
 
 type ArgumentsFormFields = {
   arguments: string[];
@@ -79,17 +79,17 @@ const Arguments: React.FC = () => {
       >
         <Form.List name="arguments">
           {(fields, {add, remove}) => (
-            <VariablesListContainer>
+            <FullWidthSpace size={20} direction="vertical">
               {fields.map(({key, name, ...restField}) => {
                 return (
-                  <StyledLabelsSpace key={key}>
-                    <Form.Item {...restField} name={[name]} style={{flex: 1, marginBottom: '0'}} rules={[required]}>
+                  <FormRow key={key}>
+                    <FormItem {...restField} name={[name]} rules={[required]}>
                       <Input placeholder="Your argument value" />
-                    </Form.Item>
-                    <SymbolWrapper>
+                    </FormItem>
+                    <FormIconWrapper>
                       <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
-                    </SymbolWrapper>
-                  </StyledLabelsSpace>
+                    </FormIconWrapper>
+                  </FormRow>
                 );
               })}
               <StyledButtonsContainer>
@@ -97,7 +97,7 @@ const Arguments: React.FC = () => {
                   Add a new argument
                 </Button>
               </StyledButtonsContainer>
-            </VariablesListContainer>
+            </FullWidthSpace>
           )}
         </Form.List>
       </ConfigurationCard>

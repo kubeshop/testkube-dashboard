@@ -1,14 +1,35 @@
+import {PageHeader as AntdPageHeader} from 'antd';
+
 import styled from 'styled-components';
 
-export const PageBlueprintWrapper = styled.div`
-  overflow: auto;
+export const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 20px;
 
-  padding: 0 30px 0 0;
+  padding: 30px 30px 60px 0;
 `;
 
-export const PageBlueprintHeader = styled.div`
-  padding-top: 30px;
-  padding-bottom: 30px;
+export const ToolbarContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+`;
+
+export const ToolbarContent = styled.div``;
+
+export const ToolbarExtra = styled.div`
+  margin-left: auto;
+`;
+
+export const StyledPageHeader = styled(AntdPageHeader)`
+  &.ant-page-header {
+    margin-bottom: 12px;
+    padding: 0;
+
+    .ant-page-header-heading-left,
+    .ant-page-header-heading-extra {
+      margin: 0;
+    }
+  }
 `;

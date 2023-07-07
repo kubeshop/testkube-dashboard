@@ -1,10 +1,9 @@
 import {Input} from 'antd';
 
-import {FormItem} from '@custom-antd';
+import {FormItem, FormItemLabel} from '@custom-antd';
 
 import {required} from '@utils/form';
 
-import FormItemLabel from './FormItemLabel';
 import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 
 type CommitProps = {

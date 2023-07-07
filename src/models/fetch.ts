@@ -13,3 +13,8 @@ export type MetadataResponse<Meta = {}> = {
   metadata: Meta;
   spec?: Meta;
 };
+
+export type YamlEditBody = {
+  name: string;
+  value: string;
+};

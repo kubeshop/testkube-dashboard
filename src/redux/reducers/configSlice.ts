@@ -13,9 +13,6 @@ export const configSlice = createSlice({
     setNamespace: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.namespace = action.payload;
     },
-    setRedirectTarget: (state: Draft<ConfigState>, action: PayloadAction<any>) => {
-      state.redirectTarget = action.payload;
-    },
     setLogOutput: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.fullScreenLogOutput.logOutput += action.payload;
     },
@@ -39,13 +36,12 @@ export const configSlice = createSlice({
 });
 
 export const selectNamespace = (state: RootState) => state.config.namespace;
-export const selectRedirectTarget = (state: RootState) => state.config.redirectTarget;
+export const selectSettingsTabConfig = (state: RootState) => state.config.redirectTarget.settingsTabConfig;
 export const selectFullScreenLogOutput = (state: RootState) => state.config.fullScreenLogOutput;
 
 export const {
   setIsFullScreenLogOutput,
   closeFullScreenLogOutput,
-  setRedirectTarget,
   setLogOutput,
   setSettingsTabConfig,
   closeSettingsTabConfig,

@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import Colors from '@styles/Colors';
 import {maxDevice} from '@styles/MediaQueries';
 
-export const StyledEntityGrid = styled.div`
+export const StyledEntityGrid = styled.div<{$columns?: number; $itemWidth: number}>`
   display: grid;
-  grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+  grid-template-columns: ${({$columns, $itemWidth}) =>
+    `repeat(${$columns ?? 'auto-fit'}, minmax(${$itemWidth}px, 1fr))`};
   gap: 32px;
 
   @media ${maxDevice.laptop} {
@@ -81,4 +82,18 @@ export const StyledMetricItem = styled.div`
   flex-basis: 115px;
 
   padding-top: 5px;
+`;
+
+export const StyledEntityGridSkeletonWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 32px;
+`;
+
+export const StyledEntityGridLoaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  min-height: 80px;
 `;
