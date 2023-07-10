@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {AnalyticsContext, DashboardContext, MainContext, ModalContext} from '@contexts';
+import {AnalyticsContext, DashboardContext, ModalContext} from '@contexts';
 
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Test} from '@models/test';
@@ -11,7 +11,6 @@ import {Hint} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 
 import {useAppSelector} from '@redux/hooks';
-import {setRedirectTarget} from '@redux/reducers/configSlice';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
 
@@ -31,7 +30,6 @@ const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
   const testType = Form.useWatch('testType', form);
 
-  const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
   const {closeModal} = useContext(ModalContext);
@@ -75,8 +73,6 @@ const TestCreationModalContent: React.FC = () => {
           type: res.data.spec?.type,
           uiEvent: 'create-tests',
         });
-
-        dispatch(setRedirectTarget({targetTestId: res.data.metadata.name}));
 
         navigate(`/tests/executions/${res.data.metadata.name}`);
         closeModal();

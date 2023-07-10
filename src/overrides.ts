@@ -77,3 +77,10 @@ export const applyUrlOverrides = () => {
 export const getValue = <T>(name: string, value: T): T => {
   return name in overrides ? overrides[name] : value;
 };
+
+export const getArrayValue = (name: string, value?: string): any[] => {
+  return (getValue(name, value) || '')
+    .split(',')
+    .map((x: string) => x.trim())
+    .filter(Boolean);
+};

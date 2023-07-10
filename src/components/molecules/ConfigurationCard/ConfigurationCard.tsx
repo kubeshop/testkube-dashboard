@@ -6,7 +6,7 @@ import {Button, Text} from '@custom-antd';
 
 import useInViewport from '@hooks/useInViewport';
 
-import {ErrorNotificationConfig} from '@models/notifications';
+import {ErrorNotification, ErrorNotificationConfig} from '@models/notifications';
 
 import Colors from '@styles/Colors';
 
@@ -15,6 +15,7 @@ import {NotificationContent} from '../Notification';
 import {
   StyledChildren,
   StyledContainer,
+  StyledErrorsContainer,
   StyledFooter,
   StyledFooterButtonsContainer,
   StyledFooterText,
@@ -27,7 +28,7 @@ type ConfigurationCardProps = {
   description: string | ReactElement;
   isWarning?: boolean;
   footerText?: React.ReactNode;
-  onConfirm?: () => Promise<ErrorNotificationConfig | void> | void;
+  onConfirm?: () => Promise<ErrorNotification | void> | void;
   confirmButtonText?: string;
   onCancel?: () => void;
   isButtonsDisabled?: boolean;
@@ -52,7 +53,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     isEditable = true,
     enabled = true,
   } = props;
-  const [error, setError] = useState<ErrorNotificationConfig | null>(null);
+  const [errors, setErrors] = useState<ErrorNotificationConfig[] | null>(null);
 
   const topRef = useRef<HTMLDivElement>(null);
   const inTopInViewport = useInViewport(topRef);
@@ -69,11 +70,13 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
       </StyledHeader>
       {children ? (
         <>
-          {error ? (
-            <StyledNotificationContainer>
-              <NotificationContent status="failed" message={error.message} title={error.title} />
-            </StyledNotificationContainer>
-          ) : null}
+          <StyledErrorsContainer>
+            {errors?.map(x => (
+              <StyledNotificationContainer key={x.title}>
+                <NotificationContent status="failed" message={x.message} title={x.title} />
+              </StyledNotificationContainer>
+            )) || null}
+          </StyledErrorsContainer>
           <StyledChildren $isActionsVisible={enabled || !isEditable}>{children}</StyledChildren>
         </>
       ) : null}
@@ -100,7 +103,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                     <Button
                       onClick={() => {
                         onCancel?.();
-                        setError(null);
+                        setErrors(null);
                       }}
                       $customType="secondary"
                       hidden={!onCancel || disabled}
@@ -109,12 +112,14 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                     </Button>
                     <Button
                       onClick={() => {
-                        setError(null);
+                        setErrors(null);
                         Promise.resolve(validateFields?.())
                           .then(() => onConfirm?.())
-                          .catch((err: ErrorNotificationConfig) => {
-                            if (err.message || err.title) {
-                              setError(err);
+                          .catch((err: ErrorNotification) => {
+                            if ('errors' in err) {
+                              setErrors(err.errors);
+                            } else if (err.title || err.message) {
+                              setErrors([err]);
                             }
 
                             if (!inTopInViewport && topRef && topRef.current) {

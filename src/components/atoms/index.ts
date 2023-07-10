@@ -16,3 +16,4 @@ export {default as ExternalLink} from './ExternalLink';
 export {default as DownloadButton} from './DownloadButton';
 export {default as Asterisk} from './Asterisk';
 export {default as CommandInput} from './CommandInput';
+export {default as MonacoEditor} from './MonacoEditor';

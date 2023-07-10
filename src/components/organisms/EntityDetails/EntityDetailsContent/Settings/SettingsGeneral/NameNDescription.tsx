@@ -2,6 +2,8 @@ import {useContext} from 'react';
 
 import {Form, Input} from 'antd';
 
+import {capitalize} from 'lodash';
+
 import {EntityDetailsContext} from '@contexts';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
@@ -12,7 +14,6 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {namingMap, updateRequestsMap} from '../utils';
 
@@ -53,13 +54,13 @@ const NameNDescription: React.FC = () => {
       },
     })
       .then(res => displayDefaultNotificationFlow(res))
-      .then(() => notificationCall('passed', `${uppercaseFirstSymbol(namingMap[entity])} was successfully updated.`));
+      .then(() => notificationCall('passed', `${capitalize(namingMap[entity])} was successfully updated.`));
   };
 
   return (
     <Form form={form} name="general-settings-name-description" initialValues={{name, description}} disabled={!mayEdit}>
       <ConfigurationCard
-        title={`${uppercaseFirstSymbol(namingMap[entity])} name & description`}
+        title={`${capitalize(namingMap[entity])} name & description`}
         description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
         onConfirm={onSave}
         onCancel={() => {

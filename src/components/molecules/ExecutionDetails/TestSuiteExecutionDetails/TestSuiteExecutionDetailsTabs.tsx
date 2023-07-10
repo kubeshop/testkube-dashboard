@@ -12,7 +12,7 @@ const TestSuiteExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
 
   const testSuiteData = data as TestSuiteExecution;
-  const {stepResults} = testSuiteData;
+  const {executeStepResults} = testSuiteData;
 
   return (
     <Tabs
@@ -20,7 +20,7 @@ const TestSuiteExecutionDetailsTabs: React.FC = () => {
         {
           key: 'AllStepsPane',
           label: 'All Steps',
-          children: <ExecutionStepsList executionSteps={stepResults} />,
+          children: <ExecutionStepsList executionSteps={executeStepResults} />,
         },
       ]}
     />

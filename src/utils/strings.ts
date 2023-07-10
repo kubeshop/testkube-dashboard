@@ -7,10 +7,6 @@ export const hasProtocol = (url: string) => {
   return /^http(s)?:\/\/.*/.test(url);
 };
 
-export const uppercaseFirstSymbol = (word: string) => {
-  return word[0].toUpperCase() + word.slice(1);
-};
-
 export const isURL = (url: string) => {
   return /^http(s)?:\/\/.*/.test(url);
 };
