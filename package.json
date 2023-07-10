@@ -103,7 +103,7 @@
   },
   "scripts": {
     "start": "sh scripts/env.sh && cp env-config.js ./public/ && npm run less && NODE_OPTIONS=--openssl-legacy-provider craco start",
-    "build": "npm run less && NODE_OPTIONS=--openssl-legacy-provider craco --max_old_space_size=4096 build",
+    "build": "npm run less && NODE_OPTIONS=--openssl-legacy-provider PUBLIC_URL=. craco --max_old_space_size=4096 build",
     "test": "craco test --watchAll=false",
     "test:watch": "craco test --detectOpenHandles",
     "test:coverage": "craco test --coverage --watchAll=false",
