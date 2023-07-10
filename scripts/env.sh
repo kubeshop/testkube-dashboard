@@ -1,6 +1,6 @@
 #!/bin/sh
 
-OUTPUT_FILE=env-config.js
+OUT=env-config.js
 VARIABLES=(
   REACT_APP_API_SERVER_ENDPOINT
   REACT_APP_ROOT_ROUTE
@@ -8,9 +8,9 @@ VARIABLES=(
   REACT_APP_CRD_OPERATOR_REVISION
 )
 
-echo "window._env_ = {" > "$OUTPUT_FILE"
+echo "window._env_ = {" > "${OUT}"
 for name in ${VARIABLES[@]}; do
   value="$(eval "echo \"\$${name}\"")"
-  echo "${name}: '${value}'," >> "$OUTPUT_FILE"
+  echo "${name}: '${value}'," >> "${OUT}"
 done
-echo "};" >> "$OUTPUT_FILE"
+echo "};" >> "${OUT}"
