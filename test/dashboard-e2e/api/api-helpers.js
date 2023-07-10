@@ -67,6 +67,12 @@ export class ApiHelpers {
         return this.makeGet(requestUrl);
     }
 
+    async getTestSources() {
+        const requestUrl = `${this.apiUrl}/test-sources`;
+
+        return this.makeGet(requestUrl);
+    }
+
     async getExecutors() {
         const requestUrl = `${this.apiUrl}/executors`;
 
@@ -99,6 +105,12 @@ export class ApiHelpers {
 
     async removeTestSuite(testSuiteName) {
         const requestUrl = `${this.apiUrl}/test-suites/${testSuiteName}`;
+
+        return this.makeDelete(requestUrl);
+    }
+
+    async removeTestSource(testSourceName) {
+        const requestUrl = `${this.apiUrl}/test-sources/${testSourceName}`;
 
         return this.makeDelete(requestUrl);
     }
@@ -155,6 +167,16 @@ export class ApiHelpers {
         }
     }
 
+    async isTestSourceCreated(testSourceName) {
+        try {
+            const currentTestSources = await this.getTestSources();
+            
+            return currentTestSources.some(({name}) => name === testSourceName);
+        } catch (e) {
+            throw Error(`isTestSourceCreated failed for "${testSourceName}" with: "${e}"`);
+        }
+    }
+
     async assureTestNotCreated(testName) {
         try {
             const alreadyCreated = await this.isTestCreated(testName);
@@ -193,6 +215,18 @@ export class ApiHelpers {
         }
     }
 
+    async assureTestSourceNotCreated(testSourceName) {
+        try {
+            const alreadyCreated = await this.isTestSourceCreated(testSourceName);
+            if(alreadyCreated) {
+                await this.removeTestSource(testSourceName);
+            }
+
+        } catch (e) {
+            throw Error(`assureTestSourceNotCreated failed for "${testSourceName}" with: "${e}"`);
+        }
+    }
+
     async assureTestCreated(testData, fullCleanup=false) {
         try {
             const alreadyCreated = await this.isTestCreated(testData.name);
@@ -220,6 +254,12 @@ export class ApiHelpers {
 
     async getTestSuiteData(testSuiteName) {
         const requestUrl = `${this.apiUrl}/test-suites/${testSuiteName}`;
+
+        return this.makeGet(requestUrl);
+    }
+
+    async getTestSourceData(testSourceName) {
+        const requestUrl = `${this.apiUrl}/test-sources/${testSourceName}`;
 
         return this.makeGet(requestUrl);
     }

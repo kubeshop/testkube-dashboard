@@ -22,6 +22,14 @@ export class CommonHelpers {
         CommonHelpers.validateLabels(testSuiteData.labels, createdTestSuiteData.labels);
     }
 
+    static validateTestSource(testSourceData, createdTestSourceData) {
+        expect(testSourceData.name).toEqual(createdTestSourceData.name);
+
+        for (const [name, value] of Object.entries(testSourceData.repository)) {
+            expect(createdTestSourceData.repository[name]).toEqual(value);
+        }
+    }
+
     static validateExecutor(executorData, createdExecutorData) {
         expect(executorData.name).toEqual(createdExecutorData.name);
         expect(executorData.image).toEqual(createdExecutorData.executor.image);

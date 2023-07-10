@@ -1,0 +1,10 @@
+{
+    "testsource-k6-testkube-1": {
+        "name": "temp-ts-k6-testkube-1",
+        "repository": {
+            "type": "git",
+            "uri": "https://github.com/kubeshop/testkube.git"
+        },
+        "namespace": "testkube"
+    }
+}
