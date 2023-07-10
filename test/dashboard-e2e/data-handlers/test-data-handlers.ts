@@ -24,23 +24,29 @@ export class TestDataHandler {
 
     getTest(testName) {
         let test = testsData[testName]
-        test.name = this.getRandomizedName(test.name)
 
-        return test;
+        return {
+            ...test,
+            name: this.getRandomizedName(test.name),
+        };
     }
 
     getTestSuite(testSuiteName) {
         let testSuite = testSuitesData[testSuiteName]
-        testSuite.name = this.getRandomizedName(testSuite.name);
 
-        return testSuite;
+        return {
+            ...testSuite,
+            name: this.getRandomizedName(testSuite.name),
+        };
     }
 
     getExecutor(executorName) {
-        let executor = executorData[executorName]
-        executor.name = this.getRandomizedName(executor.name);
-        executor.types[0] = this.getRandomizedName(executor.types[0]);
+        let executor = executorData[executorName];
 
-        return executor;
+        return {
+            ...executor,
+            name: this.getRandomizedName(executor.name), 
+            types: [ this.getRandomizedName(executor.types[0]), ...executor.types.slice(1) ],
+        };
     }
 }

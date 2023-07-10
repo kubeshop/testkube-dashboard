@@ -29,7 +29,7 @@ export class ApiHelpers {
 
             return ApiHelpers.parseResponse(response);
         } catch (e) {
-            throw Error(`createTest failed on "${requestUrl}" with: "${e}"`);
+            throw Error(`makePost failed on "${requestUrl}" with: "${e}"`);
         }
     }
 
@@ -42,7 +42,7 @@ export class ApiHelpers {
 
             return ApiHelpers.parseResponse(response);
         } catch (e) {
-            throw Error(`updateTest failed on "${requestUrl}" with: "${e}"`);
+            throw Error(`makePatch failed on "${requestUrl}" with: "${e}"`);
         }
     }
 
@@ -51,36 +51,32 @@ export class ApiHelpers {
             await superagent.delete(requestUrl)
                 .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
         } catch (e) {
-            throw Error(`removeTest failed on "${requestUrl}" with: "${e}"`);
+            throw Error(`makeDelete failed on "${requestUrl}" with: "${e}"`);
         }
     }
 
     async getTests() {
         const requestUrl = `${this.apiUrl}/tests`;
-        const response = await this.makeGet(requestUrl);
 
-        return response;
+        return this.makeGet(requestUrl);
     }
 
     async getTestSuites() {
         const requestUrl = `${this.apiUrl}/test-suites`;
-        const response = await this.makeGet(requestUrl);
 
-        return response;
+        return this.makeGet(requestUrl);
     }
 
     async getExecutors() {
         const requestUrl = `${this.apiUrl}/executors`;
-        const response = await this.makeGet(requestUrl);
 
-        return response;
+        return this.makeGet(requestUrl);
     }
 
     async createTest(testData) {
         const requestUrl = `${this.apiUrl}/tests`;
-        const response = await this.makePost(requestUrl, testData);
 
-        return response;
+        return this.makePost(requestUrl, testData);
     }
 
     async abortTest(testName, executionId) {
@@ -97,30 +93,26 @@ export class ApiHelpers {
     
     async removeTest(testName) {
         const requestUrl = `${this.apiUrl}/tests/${testName}`;
-        const response = await this.makeDelete(requestUrl);
-
-        return response;
+        
+        return this.makeDelete(requestUrl);
     }
 
     async removeTestSuite(testSuiteName) {
         const requestUrl = `${this.apiUrl}/test-suites/${testSuiteName}`;
-        const response = await this.makeDelete(requestUrl);
 
-        return response;
+        return this.makeDelete(requestUrl);
     }
 
     async removeExecutor(executorName) {
         const requestUrl = `${this.apiUrl}/executors/${executorName}`;
-        const response = await this.makeDelete(requestUrl);
 
-        return response;
+        return this.makeDelete(requestUrl);
     }
 
     async updateTest(testData) {
         const requestUrl = `${this.apiUrl}/tests/${testData.name}`;
-        const response = await this.makePatch(requestUrl, testData);
-
-        return response;
+        
+        return this.makePatch(requestUrl, testData);
     }
 
     async isTestCreated(testName) {
@@ -156,13 +148,8 @@ export class ApiHelpers {
     async isExecutorCreated(executorName) {
         try {
             const currentExecutors = await this.getExecutors();
-            const executor = currentExecutors.find(singleExecutor => singleExecutor.name === executorName);
-    
-            if(executor !== undefined) {
-                return true;
-            }
-    
-            return false;
+            
+            return currentExecutors.some(({name}) => name === executorName);
         } catch (e) {
             throw Error(`isExecutorCreated failed for "${executorName}" with: "${e}"`);
         }
@@ -201,7 +188,6 @@ export class ApiHelpers {
                 await this.removeExecutor(testSuiteName);
             }
 
-            return true;
         } catch (e) {
             throw Error(`assureExecutorNotCreated failed for "${executorName}" with: "${e}"`);
         }
@@ -228,23 +214,20 @@ export class ApiHelpers {
 
     async getTestData(testName) {
         const requestUrl = `${this.apiUrl}/tests/${testName}`;
-        const response = await this.makeGet(requestUrl);
 
-        return response;
+        return this.makeGet(requestUrl);
     }
 
     async getTestSuiteData(testSuiteName) {
         const requestUrl = `${this.apiUrl}/test-suites/${testSuiteName}`;
-        const response = await this.makeGet(requestUrl);
 
-        return response;
+        return this.makeGet(requestUrl);
     }
 
     async getExecutorData(executorName) {
         const requestUrl = `${this.apiUrl}/executors/${executorName}`;
-        const response = await this.makeGet(requestUrl);
 
-        return response;
+        return this.makeGet(requestUrl);
     }
 
     async getLastExecutionNumber(testName) {
