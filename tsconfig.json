@@ -21,7 +21,8 @@
     "strict": true
   },
   "include": [
-    "src"
+    "src",
+    "test/dashboard-e2e"
   ],
   "extends": "./paths.json",
   "exclude": [
