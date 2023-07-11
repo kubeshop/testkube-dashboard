@@ -4,10 +4,6 @@ test.skip(`Delete test suite`, async ({ page }) => {
 
 });
 
-test.skip(`Test suite - edit tests`, async ({ page }) => {
-
-});
-
 test.skip(`Test suite - edit label`, async ({ page }) => {
 
 });

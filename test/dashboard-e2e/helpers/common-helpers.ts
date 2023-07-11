@@ -17,9 +17,16 @@ export class CommonHelpers {
     }
 
     static validateTestSuite(testSuiteData, createdTestSuiteData) {
-        expect(testSuiteData.name).toEqual(testSuiteData.name);
+        expect(testSuiteData.name).toEqual(createdTestSuiteData.name);
         expect(testSuiteData.description).toEqual(createdTestSuiteData.description);
         CommonHelpers.validateLabels(testSuiteData.labels, createdTestSuiteData.labels);
+    }
+
+    static validateExecutor(executorData, createdExecutorData) {
+        expect(executorData.name).toEqual(createdExecutorData.name);
+        expect(executorData.image).toEqual(createdExecutorData.executor.image);
+        expect(executorData.types).toEqual(createdExecutorData.executor.types);
+        expect(executorData.executorType).toEqual(createdExecutorData.executor.executorType);
     }
 
     static validateLabels(labels, createdLabels) {

@@ -42,3 +42,7 @@ test.skip(`Create test from String`, async ({ page }) => {
 test.skip(`Create test from Git source`, async ({ page }) => {
 
 });
+
+test.skip(`Create test for Custom Container Executor`, async ({ page }) => {
+
+});

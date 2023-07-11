@@ -7,49 +7,76 @@ export class ApiHelpers {
         this.bearerToken = bearerToken;
     }
 
-    async getTests() {
-        const request = `${this.apiUrl}/tests`;
-
+    async makeGet(requestUrl) {
         try {
-            const response = await superagent.get(request)
+            const response = await superagent.get(requestUrl)
                 .set('Content-Type', 'application/json')
                 .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
 
             return ApiHelpers.parseResponse(response);
             
         } catch (e) {
-            throw Error(`getTests failed on "${request}" with: "${e}"`);
+            throw Error(`makeGet failed on "${requestUrl}" with: "${e}"`);
         }
+    }
+
+    async makePost(requestUrl, requestData) {
+        try {
+            const response = await superagent.post(requestUrl)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '')
+                .send(requestData);
+
+            return ApiHelpers.parseResponse(response);
+        } catch (e) {
+            throw Error(`makePost failed on "${requestUrl}" with: "${e}"`);
+        }
+    }
+
+    async makePatch(requestUrl, requestData) {
+        try {
+            const response = await superagent.patch(requestUrl)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '')
+                .send(requestData);
+
+            return ApiHelpers.parseResponse(response);
+        } catch (e) {
+            throw Error(`makePatch failed on "${requestUrl}" with: "${e}"`);
+        }
+    }
+
+    async makeDelete(requestUrl) {
+        try {
+            await superagent.delete(requestUrl)
+                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+        } catch (e) {
+            throw Error(`makeDelete failed on "${requestUrl}" with: "${e}"`);
+        }
+    }
+
+    async getTests() {
+        const requestUrl = `${this.apiUrl}/tests`;
+
+        return this.makeGet(requestUrl);
     }
 
     async getTestSuites() {
-        const request = `${this.apiUrl}/test-suites`;
+        const requestUrl = `${this.apiUrl}/test-suites`;
 
-        try {
-            const response = await superagent.get(request)
-                .set('Content-Type', 'application/json')
-                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+        return this.makeGet(requestUrl);
+    }
 
-            return ApiHelpers.parseResponse(response);
-            
-        } catch (e) {
-            throw Error(`getTestSuites failed on "${request}" with: "${e}"`);
-        }
+    async getExecutors() {
+        const requestUrl = `${this.apiUrl}/executors`;
+
+        return this.makeGet(requestUrl);
     }
 
     async createTest(testData) {
-        const request = `${this.apiUrl}/tests`;
-        
-        try {
-            const response = await superagent.post(request)
-                .set('Content-Type', 'application/json')
-                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '')
-                .send(testData);
+        const requestUrl = `${this.apiUrl}/tests`;
 
-            return ApiHelpers.parseResponse(response);
-        } catch (e) {
-            throw Error(`createTest failed on "${request}" with: "${e}"`);
-        }
+        return this.makePost(requestUrl, testData);
     }
 
     async abortTest(testName, executionId) {
@@ -65,40 +92,27 @@ export class ApiHelpers {
     }
     
     async removeTest(testName) {
-        const request = `${this.apiUrl}/tests/${testName}`;
-
-        try {
-            await superagent.delete(request)
-                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
-        } catch (e) {
-            throw Error(`removeTest failed on "${request}" with: "${e}"`);
-        }
+        const requestUrl = `${this.apiUrl}/tests/${testName}`;
+        
+        return this.makeDelete(requestUrl);
     }
 
     async removeTestSuite(testSuiteName) {
-        const request = `${this.apiUrl}/test-suites/${testSuiteName}`;
+        const requestUrl = `${this.apiUrl}/test-suites/${testSuiteName}`;
 
-        try {
-            await superagent.delete(request)
-                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
-        } catch (e) {
-            throw Error(`removeTestSuite failed on "${request}" with: "${e}"`);
-        }
+        return this.makeDelete(requestUrl);
+    }
+
+    async removeExecutor(executorName) {
+        const requestUrl = `${this.apiUrl}/executors/${executorName}`;
+
+        return this.makeDelete(requestUrl);
     }
 
     async updateTest(testData) {
-        const request = `${this.apiUrl}/tests/${testData.name}`;
+        const requestUrl = `${this.apiUrl}/tests/${testData.name}`;
         
-        try {
-            const response = await superagent.patch(request)
-                .set('Content-Type', 'application/json')
-                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '')
-                .send(testData);
-
-            return ApiHelpers.parseResponse(response);
-        } catch (e) {
-            throw Error(`updateTest failed on "${request}" with: "${e}"`);
-        }
+        return this.makePatch(requestUrl, testData);
     }
 
     async isTestCreated(testName) {
@@ -131,6 +145,16 @@ export class ApiHelpers {
         }
     }
 
+    async isExecutorCreated(executorName) {
+        try {
+            const currentExecutors = await this.getExecutors();
+            
+            return currentExecutors.some(({name}) => name === executorName);
+        } catch (e) {
+            throw Error(`isExecutorCreated failed for "${executorName}" with: "${e}"`);
+        }
+    }
+
     async assureTestNotCreated(testName) {
         try {
             const alreadyCreated = await this.isTestCreated(testName);
@@ -157,6 +181,18 @@ export class ApiHelpers {
         }
     }
 
+    async assureExecutorNotCreated(executorName) {
+        try {
+            const alreadyCreated = await this.isExecutorCreated(executorName);
+            if(alreadyCreated) {
+                await this.removeExecutor(testSuiteName);
+            }
+
+        } catch (e) {
+            throw Error(`assureExecutorNotCreated failed for "${executorName}" with: "${e}"`);
+        }
+    }
+
     async assureTestCreated(testData, fullCleanup=false) {
         try {
             const alreadyCreated = await this.isTestCreated(testData.name);
@@ -177,53 +213,40 @@ export class ApiHelpers {
     }
 
     async getTestData(testName) {
-        const request = `${this.apiUrl}/tests/${testName}`;
+        const requestUrl = `${this.apiUrl}/tests/${testName}`;
 
-        try {
-            const response = await superagent.get(request)
-                .set('Content-Type', 'application/json')
-                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
-
-            return ApiHelpers.parseResponse(response);
-        } catch (e) {
-            throw Error(`getTestData failed on "${request}" with: "${e}"`);
-        }
+        return this.makeGet(requestUrl);
     }
 
     async getTestSuiteData(testSuiteName) {
-        const request = `${this.apiUrl}/test-suites/${testSuiteName}`;
+        const requestUrl = `${this.apiUrl}/test-suites/${testSuiteName}`;
 
-        try {
-            const response = await superagent.get(request)
-                .set('Content-Type', 'application/json')
-                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
+        return this.makeGet(requestUrl);
+    }
 
-            return ApiHelpers.parseResponse(response);
-        } catch (e) {
-            throw Error(`getTestSuiteData failed on "${request}" with: "${e}"`);
-        }
+    async getExecutorData(executorName) {
+        const requestUrl = `${this.apiUrl}/executors/${executorName}`;
+
+        return this.makeGet(requestUrl);
     }
 
     async getLastExecutionNumber(testName) {
-        const request = `${this.apiUrl}/tests/${testName}/executions`;
+        const requestUrl = `${this.apiUrl}/tests/${testName}/executions`;
 
         try {
-            const response = await superagent.get(request)
-                .set('Content-Type', 'application/json')
-                .set('Authorization', this.cloudContext ? `Bearer ${this.bearerToken}` : '');
-
-            const totalsResults = response.body.totals.results;
+            const response = await this.makeGet(requestUrl);
+            const totalsResults = response.totals.results;
     
             if(totalsResults === 0) {
                 return totalsResults;
             }
             
-            const lastExecutionResults = response.body.results[0];
+            const lastExecutionResults = response.results[0];
 
             return lastExecutionResults.number;
 
         } catch (e) {
-            throw Error(`getLastExecutionNumber failed on "${request}" with: "${e}"`);
+            throw Error(`getLastExecutionNumber failed on "${requestUrl}" with: "${e}"`);
         }
     }
 

@@ -1,5 +1,6 @@
 import testsData from '../fixtures/tests.json';
 import testSuitesData from '../fixtures/testsuites.json';
+import executorData from '../fixtures/executors.json';
 import { v4 as uuidv4 } from 'uuid';
 
 export class TestDataHandler {
@@ -23,15 +24,29 @@ export class TestDataHandler {
 
     getTest(testName) {
         let test = testsData[testName]
-        test.name = this.getRandomizedName(test.name)
 
-        return test;
+        return {
+            ...test,
+            name: this.getRandomizedName(test.name),
+        };
     }
 
     getTestSuite(testSuiteName) {
         let testSuite = testSuitesData[testSuiteName]
-        testSuite.name = this.getRandomizedName(testSuite.name);
 
-        return testSuite;
+        return {
+            ...testSuite,
+            name: this.getRandomizedName(testSuite.name),
+        };
+    }
+
+    getExecutor(executorName) {
+        let executor = executorData[executorName];
+
+        return {
+            ...executor,
+            name: this.getRandomizedName(executor.name), 
+            types: [ this.getRandomizedName(executor.types[0]), ...executor.types.slice(1) ],
+        };
     }
 }
