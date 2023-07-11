@@ -5,6 +5,7 @@ import { CommonHelpers } from '../helpers/common-helpers';
 import { MainPage } from '../pages/MainPage';
 import { NavigationSiderPage } from '../pages/NavigationSiderPage';
 import { TestSourcesPage } from '../pages/TestSourcesPage';
+import { CreateTestSourcePage } from '../pages/CreateTestSourcePage';
 import { TestSourceGeneralSettingsPage } from '../pages/TestSourceGeneralSettingsPage';
 const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
 const testDataHandler=new TestDataHandler(process.env.RUN_ID);
