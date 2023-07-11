@@ -11,4 +11,9 @@ export class TestSourceGeneralSettingsPage{
       await this.page.locator(`xpath=//div[@role="dialog"]//input`).fill(testSourceName); //TODO: data-test
       await this.page.click('xpath=//div[@role="dialog"]//span[text()="Delete"]'); //TODO: data-test
     }
+
+    async updateRepoUri(uri) {
+      await this.page.locator(`//input[@id="general-settings-name-url_uri"]`).fill(uri);
+      await this.page.click('xpath=//form[@id="general-settings-name-url"]//button[@type="submit"]');
+    }
 }

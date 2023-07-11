@@ -36,8 +36,40 @@ test(`Create test source`, async ({ page }) => {
     await apiHelpers.removeTestSource(realTestSourceName)
 });
 
-test.skip(`Edit test source`, async ({ page }) => {
+test.skip(`Create test source (auth)`, async ({ page }) => {
+});
 
+test(`Edit test source`, async ({ page }) => {
+    const testSourceName = 'testsource-k6-testkube-created-1'
+    const testSourceData = testDataHandler.getTestSource(testSourceName);
+    const realTestSourceName = testSourceData.name;
+
+    const targetSourceData = {
+        ...testSourceData,
+        repository: {
+            uri: `https://github.com/kubeshop/testkube-dashboard.git`
+        },
+    };
+
+    await apiHelpers.assureTestSourceCreated(testSourceData);
+
+    const mainPage=new MainPage(page);
+    await mainPage.visitMainPage();
+
+    const navigationSiderPage=new NavigationSiderPage(page);
+    await navigationSiderPage.openMenuItem('sources');
+
+    const testSourcesPage=new TestSourcesPage(page);
+    await testSourcesPage.openTestSourceDetails(realTestSourceName);
+
+    const testSourceGeneralSettingsPage=new TestSourceGeneralSettingsPage(page);
+    await testSourceGeneralSettingsPage.updateRepoUri(targetSourceData.repository.uri)
+
+    const createdTestSourceData = await apiHelpers.getTestSourceData(realTestSourceName);
+    await CommonHelpers.validateTestSource(targetSourceData, createdTestSourceData);
+
+    // // cleanup
+    await apiHelpers.removeTestSource(realTestSourceName)
 });
 
 test(`Delete test source`, async ({ page }) => {
