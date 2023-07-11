@@ -1,9 +1,11 @@
 {
-    "container-executor-curl-1": {
-        "name": "temp-executor-curl",
-        "image": "curlimages/curl:7.85.0",
-        "namespace": "testkube",
-        "types": ["temp-executor-curl-1/id"],
-        "executorType": "container"
-    }
+  "container-executor-curl-1": {
+    "name": "temp-executor-curl",
+    "image": "curlimages/curl:7.85.0",
+    "namespace": "testkube",
+    "types": [
+      "temp-executor-curl-1/id"
+    ],
+    "executorType": "container"
+  }
 }

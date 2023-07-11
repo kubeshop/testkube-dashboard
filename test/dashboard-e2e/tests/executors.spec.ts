@@ -1,57 +1,49 @@
-import { test } from '@playwright/test';
-import { TestDataHandler } from '../data-handlers/test-data-handlers';
-import { ApiHelpers } from '../api/api-helpers';
-import { CommonHelpers } from '../helpers/common-helpers';
-import { MainPage } from '../pages/MainPage';
-import { NavigationSiderPage } from '../pages/NavigationSiderPage';
-import { CreateExecutorPage } from '../pages/CreateExecutorPage';
-import { ExecutorsPage } from '../pages/ExecutorsPage';
-const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
-const testDataHandler=new TestDataHandler(process.env.RUN_ID);
+import {test} from '@playwright/test';
 
-test(`Create custom container executor`, async ({ page }) => {
-    const executorName = 'container-executor-curl-1'
-    const executorData = testDataHandler.getExecutor(executorName);
-    const realExecutorName = executorData.name;
+import {ApiHelpers} from '../helpers/api-helpers';
+import {validateExecutor} from '../helpers/common';
+import {TestDataHandler} from '../helpers/test-data-handler';
+import {CreateExecutorPage} from '../pages/CreateExecutorPage';
+import {ExecutorsPage} from '../pages/ExecutorsPage';
+import {MainPage} from '../pages/MainPage';
+import {NavigationSiderPage} from '../pages/NavigationSiderPage';
 
-    await apiHelpers.assureExecutorNotCreated(realExecutorName);
-    const mainPage=new MainPage(page);
-    await mainPage.visitMainPage();
+const api = new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
+const testDataHandler = new TestDataHandler(process.env.RUN_ID);
 
-    const navigationSiderPage=new NavigationSiderPage(page);
-    await navigationSiderPage.openMenuItem('executors');
+test(`Create custom container executor`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
 
-    const executorsPage=new ExecutorsPage(page);
-    await executorsPage.openCreateExecutorDialog();
+  await api.assureExecutorNotCreated(realExecutorName);
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
 
-    const createExecutorPage=new CreateExecutorPage(page);
-    await createExecutorPage.createExecutor(executorData);
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
 
-    //validation
-    await page.waitForURL(`**/executors/${realExecutorName}`);
-    const createdExecutorData = await apiHelpers.getExecutorData(realExecutorName);
-    await CommonHelpers.validateExecutor(executorData, createdExecutorData);
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openCreateExecutorDialog();
 
-    // // cleanup
-    await apiHelpers.removeExecutor(realExecutorName)
+  const createExecutorPage = new CreateExecutorPage(page);
+  await createExecutorPage.createExecutor(executorData);
+
+  // Validation
+  await page.waitForURL(`**/executors/${realExecutorName}`);
+  const createdExecutorData = await api.getExecutorData(realExecutorName);
+  await validateExecutor(executorData, createdExecutorData);
+
+  // Cleanup
+  await api.removeExecutor(realExecutorName);
 });
 
-test.skip(`Custom container executor - general settings`, async ({ page }) => {
+test.skip(`Custom container executor - general settings`, async ({page}) => {});
 
-});
+test.skip(`Custom container executor - delete executor`, async ({page}) => {});
 
-test.skip(`Custom container executor - delete executor`, async ({ page }) => {
+test.skip(`Custom container executor - container image`, async ({page}) => {});
 
-});
+test.skip(`Custom container executor - command and arguments`, async ({page}) => {});
 
-test.skip(`Custom container executor - container image`, async ({ page }) => {
-
-});
-
-test.skip(`Custom container executor - command and arguments`, async ({ page }) => {
-
-});
-
-test.skip(`Custom container executor - definition`, async ({ page }) => {
-
-});
+test.skip(`Custom container executor - definition`, async ({page}) => {});
