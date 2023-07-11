@@ -1,6 +1,6 @@
 const path = require('node:path');
-const CracoAlias = require('craco-alias');
 const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   webpack: {
@@ -23,6 +23,10 @@ module.exports = {
       ],
     },
     configure: webpackConfig => {
+      webpackConfig.resolve.plugins.push(new TsconfigPathsPlugin({
+        extensions: webpackConfig.resolve.extensions,
+      }));
+
       // Delete Prettier functionality from monaco-yaml, as it's very heavy
       const prettierStub = path.join(__dirname, 'stubs', 'prettier.js');
       webpackConfig.resolve.alias['prettier/standalone.js$'] = prettierStub;
@@ -31,16 +35,4 @@ module.exports = {
       return webpackConfig;
     },
   },
-  plugins: [
-    {
-      plugin: CracoAlias,
-      options: {
-        source: 'tsconfig',
-        baseUrl: './',
-        tsConfigPath: './paths.json',
-        unsafeAllowModulesOutsideOfSrc: false,
-        debug: false,
-      },
-    },
-  ],
 };
