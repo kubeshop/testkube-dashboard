@@ -129,7 +129,7 @@ export type GetSourceFormValues = {
 export const getSourceFormValues = (entityDetails: Test, testSources: SourceWithRepository[]): GetSourceFormValues => {
   const {content} = entityDetails;
 
-  if (!content || !content.type) {
+  if (!content?.type) {
     return {source: ''};
   }
 
