@@ -24,11 +24,6 @@ module.exports = {
       ],
     },
     configure: webpackConfig => {
-      if (process.env.NODE_ENV !== 'development') {
-        webpackConfig.optimization.minimizer = [new TerserWebpackPlugin({sourceMap: false, parallel: true})];
-        webpackConfig.optimization.minimize = true;
-      }
-
       // Delete Prettier functionality from monaco-yaml, as it's very heavy
       const prettierStub = path.join(__dirname, 'stubs', 'prettier.js');
       webpackConfig.resolve.alias['prettier/standalone.js$'] = prettierStub;
