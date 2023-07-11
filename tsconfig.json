@@ -21,8 +21,7 @@
     "strict": true
   },
   "include": [
-    "src",
-    "cypress"
+    "src"
   ],
   "extends": "./paths.json",
   "exclude": [

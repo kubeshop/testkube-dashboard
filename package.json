@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git@github.com:kubeshop/testkube-dashboard.git"
   },
+  "workspaces": [
+    "test/dashboard-e2e"
+  ],
   "engines": {
     "node": "^18.13.0 || ^20.0.0",
     "npm": "^9.0.0"
@@ -44,7 +47,6 @@
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
     "craco-alias": "3.0.1",
-    "cypress": "8.7.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-import": "2.27.5",
@@ -108,6 +110,9 @@
     "test:watch": "craco test --detectOpenHandles",
     "test:coverage": "craco test --coverage --watchAll=false",
     "test:update": "craco test --updateSnapshot",
+    "e2e": "npm --prefix test/dashboard-e2e test",
+    "e2e:watch": "npm --prefix test/dashboard-e2e start",
+    "e2e:install": "npx playwright install",
     "eject": "react-scripts eject",
     "lint": "npm run lint:config && npm run lint:src",
     "lint:config": "eslint --max-warnings 0 . --cache --cache-location=node_modules/.cache/.eslint-config",
@@ -121,10 +126,6 @@
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
-    "cy:test:demo": "cypress run",
-    "cy:test:dev": "cypress run -c baseUrl=http://localhost:3000",
-    "cy:open:demo": "cypress open",
-    "cy:open:dev": "cypress open -c baseUrl=http://localhost:3000",
     "less": "lessc --js src/antd-theme/antd-customized.less src/antd-theme/antd-customized.css"
   },
   "browserslist": {

@@ -1,6 +1,8 @@
 node_modules
 build
 cache
+playwright-report
+test-results
 lib
 dist
 .husky
