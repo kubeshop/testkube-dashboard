@@ -9,4 +9,8 @@ export class TestSourcesPage{
     async openCreateTestSourceDialog() {
       await this.page.click('xpath=//button//span[contains(text(),"Create a new source")]'); //TODO: data-test
     }
+
+    async openTestSourceDetails(testSourceName) {
+      await this.page.click(`xpath=//div/span[text()="${testSourceName}"]`);
+    }
 }

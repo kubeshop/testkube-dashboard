@@ -85,6 +85,12 @@ export class ApiHelpers {
         return this.makePost(requestUrl, testData);
     }
 
+    async createTestSource(testSourceData) {
+        const requestUrl = `${this.apiUrl}/test-sources`;
+
+        return this.makePost(requestUrl, testSourceData);
+    }
+
     async abortTest(testName, executionId) {
         const request = `${this.apiUrl}/tests/${testName}/executions/${executionId}`;
 
@@ -125,6 +131,12 @@ export class ApiHelpers {
         const requestUrl = `${this.apiUrl}/tests/${testData.name}`;
         
         return this.makePatch(requestUrl, testData);
+    }
+
+    async updateTestSource(testSourceData) {
+        const requestUrl = `${this.apiUrl}/test-sources/${testSourceData.name}`;
+        
+        return this.makePatch(requestUrl, testSourceData);
     }
 
     async isTestCreated(testName) {
@@ -243,6 +255,20 @@ export class ApiHelpers {
             }
         } catch (e) {
             throw Error(`assureTestCreated failed for "${testData.name}" with: "${e}"`);
+        }
+    }
+
+    async assureTestSourceCreated(testSourceData) {
+        try {
+            const alreadyCreated = await this.isTestSourceCreated(testSourceData.name);
+
+            if(alreadyCreated) {
+                await this.updateTestSource(testSourceData);
+            } else {
+                await this.createTestSource(testSourceData);
+            }
+        } catch (e) {
+            throw Error(`assureTestSourceCreated failed for "${testSourceData.name}" with: "${e}"`);
         }
     }
 
