@@ -1,8 +1,8 @@
 import {v4 as uuidv4} from 'uuid';
 
-import executorData from '../fixtures/executors.json';
-import testsData from '../fixtures/tests.json';
-import testSuitesData from '../fixtures/testsuites.json';
+import executorData from '../fixtures/executors';
+import testsData from '../fixtures/tests';
+import testSuitesData from '../fixtures/testsuites';
 
 // TODO: Use functions instead
 export class TestDataHandler {
