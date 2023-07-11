@@ -1,6 +1,5 @@
 const path = require('node:path');
 const CracoAlias = require('craco-alias');
-const TerserWebpackPlugin = require('terser-webpack-plugin');
 const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
