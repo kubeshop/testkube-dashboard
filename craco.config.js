@@ -1,6 +1,10 @@
 const path = require('node:path');
+const {pathsToModuleNameMapper} = require('ts-jest');
+const {loadConfig: loadTsConfig} = require('tsconfig-paths');
 const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+
+const {paths} = loadTsConfig('.');
 
 module.exports = {
   webpack: {
@@ -34,5 +38,14 @@ module.exports = {
 
       return webpackConfig;
     },
+  },
+  jest: {
+    configure: (config) => ({
+      ...config,
+      moduleNameMapper: {
+        ...config.moduleNameMapper,
+        ...pathsToModuleNameMapper(paths, {prefix: '<rootDir>/'}),
+      },
+    }),
   },
 };
