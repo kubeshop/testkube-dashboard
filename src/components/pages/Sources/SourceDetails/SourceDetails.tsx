@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useState} from 'react';
 
 import {Tabs} from 'antd';
 
@@ -30,6 +30,7 @@ const SourceDetails = () => {
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
   const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
+  const reload = useCallback(() => safeRefetch(refetch), [refetch]);
 
   const isPageDisabled = !name;
 
@@ -40,7 +41,7 @@ const SourceDetails = () => {
   }, [sourceDetails]);
 
   useEffect(() => {
-    safeRefetch(refetch);
+    reload();
   }, [location]);
 
   return (
@@ -50,7 +51,7 @@ const SourceDetails = () => {
       <PageHeader onBack={() => navigate('/sources')} title={name} />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {currentSourceDetails ? <SourceSettings /> : null}
+          {currentSourceDetails ? <SourceSettings reload={reload} /> : null}
         </Tabs.TabPane>
       </Tabs>
     </PageWrapper>

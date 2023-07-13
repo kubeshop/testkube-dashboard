@@ -1,24 +1,27 @@
+import {FC} from 'react';
+
 import {Definition} from '@molecules';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
 
 import {useGetSourceDefinitionQuery, useUpdateSourceDefinitionMutation} from '@services/sources';
 
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
-const SourceSettingsDefinition = () => {
+interface SourceSettingsDefinitionProps {
+  reload: () => void;
+}
+
+const SourceSettingsDefinition: FC<SourceSettingsDefinitionProps> = ({reload}) => {
   const source = useAppSelector(selectCurrentSource)!;
-
-  const dispatch = useAppDispatch();
-
   return (
     <Definition
       useGetDefinitionQuery={useGetSourceDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateSourceDefinitionMutation}
       label="source"
-      onUpdate={value => dispatch(setCurrentSource(value))}
+      onUpdate={reload}
       name={source.name}
       crdUrl={testkubeCRDBases.sources}
       overrideSchema={createSchemaOverride($ => {
