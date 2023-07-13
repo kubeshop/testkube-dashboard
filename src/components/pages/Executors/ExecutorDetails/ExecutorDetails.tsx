@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
@@ -28,12 +28,13 @@ const ExecutorDetails: React.FC = () => {
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
   const {data: executor, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
+  const reload = useCallback(() => safeRefetch(refetch), [refetch]);
 
   const isPageDisabled = !name;
 
   useEffect(() => {
     dispatch(setCurrentExecutor(name));
-    safeRefetch(refetch);
+    reload();
   }, [name]);
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const ExecutorDetails: React.FC = () => {
             key: 'Settings',
             label: 'Settings',
             disabled: isPageDisabled,
-            children: currentExecutorDetails ? <ExecutorSettings /> : null,
+            children: currentExecutorDetails ? <ExecutorSettings reload={reload} /> : null,
           },
         ]}
       />
