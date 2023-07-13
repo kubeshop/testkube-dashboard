@@ -23,7 +23,7 @@ import DefinitionSkeleton from './DefinitionSkeleton';
 type DefinitionProps = {
   useGetDefinitionQuery: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useUpdateDefinitionMutation: UseMutation<MutationDefinition<any, any, any, any, any>>;
-  setEntity?: (data: any) => void;
+  onUpdate?: (response: any) => void;
   name: string;
   label: string;
   crdUrl?: string;
@@ -31,7 +31,7 @@ type DefinitionProps = {
 };
 
 const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
-  const {name, setEntity, useGetDefinitionQuery, useUpdateDefinitionMutation, crdUrl, label, overrideSchema} = props;
+  const {name, onUpdate, useGetDefinitionQuery, useUpdateDefinitionMutation, crdUrl, label, overrideSchema} = props;
 
   const {isClusterAvailable} = useContext(MainContext);
 
@@ -60,7 +60,8 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
     const markerErrors = monaco.editor.getModelMarkers({owner: 'yaml'});
 
     if (markerErrors.length > 0) {
-      const errorMessages = {
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return Promise.reject({
         errors: markerErrors.map(x => {
           return {
             title: (
@@ -73,8 +74,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
             ),
           };
         }),
-      };
-      throw errorMessages;
+      });
     }
 
     return update({name, value})
@@ -82,7 +82,8 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
       .then(res => {
         if (res && 'data' in res) {
           notificationCall('passed', `${capitalize(label)} was successfully updated.`);
-          setEntity?.(res.data);
+          onUpdate?.(res.data);
+          refetch();
         }
       });
   };

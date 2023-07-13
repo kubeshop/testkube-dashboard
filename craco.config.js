@@ -1,7 +1,10 @@
 const path = require('node:path');
-const CracoAlias = require('craco-alias');
-const TerserWebpackPlugin = require('terser-webpack-plugin');
+const {pathsToModuleNameMapper} = require('ts-jest');
+const {loadConfig: loadTsConfig} = require('tsconfig-paths');
 const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+
+const {paths} = loadTsConfig('.');
 
 module.exports = {
   webpack: {
@@ -24,10 +27,9 @@ module.exports = {
       ],
     },
     configure: webpackConfig => {
-      if (process.env.NODE_ENV !== 'development') {
-        webpackConfig.optimization.minimizer = [new TerserWebpackPlugin({sourceMap: false, parallel: true})];
-        webpackConfig.optimization.minimize = true;
-      }
+      webpackConfig.resolve.plugins.push(new TsconfigPathsPlugin({
+        extensions: webpackConfig.resolve.extensions,
+      }));
 
       // Delete Prettier functionality from monaco-yaml, as it's very heavy
       const prettierStub = path.join(__dirname, 'stubs', 'prettier.js');
@@ -37,16 +39,13 @@ module.exports = {
       return webpackConfig;
     },
   },
-  plugins: [
-    {
-      plugin: CracoAlias,
-      options: {
-        source: 'tsconfig',
-        baseUrl: './',
-        tsConfigPath: './paths.json',
-        unsafeAllowModulesOutsideOfSrc: false,
-        debug: false,
+  jest: {
+    configure: (config) => ({
+      ...config,
+      moduleNameMapper: {
+        ...config.moduleNameMapper,
+        ...pathsToModuleNameMapper(paths, {prefix: '<rootDir>/'}),
       },
-    },
-  ],
+    }),
+  },
 };

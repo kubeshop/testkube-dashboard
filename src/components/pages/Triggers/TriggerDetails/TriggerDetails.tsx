@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
@@ -32,6 +32,7 @@ const TriggerDetails = () => {
 
   const {data: triggerDetails, refetch} = useGetTriggerByIdQuery(name, {skip: !isClusterAvailable});
   const {data: triggersKeyMap, refetch: refetchKeyMap} = useGetTriggersKeyMapQuery(null, {skip: !isClusterAvailable});
+  const reload = useCallback(() => safeRefetch(refetch), [refetch]);
 
   const isPageDisabled = !name;
 
@@ -48,7 +49,7 @@ const TriggerDetails = () => {
   }, [triggersKeyMap]);
 
   useEffect(() => {
-    safeRefetch(refetch);
+    reload();
   }, [name]);
 
   return (
@@ -58,7 +59,7 @@ const TriggerDetails = () => {
       <PageHeader onBack={() => navigate('/triggers')} title={name} />
       <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
         <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {triggerDetails ? <TriggerSettings /> : null}
+          {triggerDetails ? <TriggerSettings reload={reload} /> : null}
         </Tabs.TabPane>
       </Tabs>
     </PageWrapper>

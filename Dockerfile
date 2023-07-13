@@ -16,7 +16,6 @@ ENV REACT_APP_VERSION=$REACT_APP_VERSION
 
 ENV PATH /app/node_modules/.bin:$PATH
 COPY ./package.json /app/
-RUN apt update && apt install -y chromium
 # install  dependencies
 RUN npm install --legacy-peer-deps
 # copy everything to /app directory

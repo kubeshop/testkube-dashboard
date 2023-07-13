@@ -1,23 +1,26 @@
-import type { Page } from  '@playwright/test';
+import type {Page} from '@playwright/test';
 
-export class CreateTestSourcePage{
-    readonly page: Page;
-    constructor(page:Page){
-        this.page=page;
-    }
+import type {TestSourceData} from '../types';
 
-    async createTestSource(testSourceData) {
-        await this.setBasicInput(testSourceData.name, 'name');
-        await this.setBasicInput(testSourceData.repository.uri, 'uri');
+export class CreateTestSourcePage {
+  public readonly page: Page;
 
-        await this.clickCreateTestSourceButton();
-    }
+  public constructor(page: Page) {
+    this.page = page;
+  }
 
-    async setBasicInput(value, inputName) {
-        await this.page.locator(`[id="add-source-form_${inputName}"]`).fill(value); //TODO: data-test
-    }
+  public async createTestSource(testSourceData: TestSourceData): Promise<void> {
+    await this.setBasicInput(testSourceData.name, 'name');
+    await this.setBasicInput(testSourceData.repository.uri, 'uri');
 
-    async clickCreateTestSourceButton() {
-        await this.page.click('xpath=//div[@role="dialog"]//button[@type="submit"]');
-    }
+    await this.clickCreateTestSourceButton();
+  }
+
+  public async setBasicInput(value: string | number, inputName: string): Promise<void> {
+    await this.page.locator(`[id="add-source-form_${inputName}"]`).fill(`${value}`); // TODO: data-test
+  }
+
+  public async clickCreateTestSourceButton(): Promise<void> {
+    await this.page.click('xpath=//div[@role="dialog"]//button[@type="submit"]');
+  }
 }

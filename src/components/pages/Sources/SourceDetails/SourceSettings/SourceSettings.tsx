@@ -1,15 +1,19 @@
-import {memo} from 'react';
+import {FC, memo} from 'react';
 
 import {SettingsLayout} from '@molecules';
 
 import SourceSettingsDefinition from './Definition';
 import General from './General';
 
-const SourceSettings = () => (
+interface SourceSettingsProps {
+  reload: () => void;
+}
+
+const SourceSettings: FC<SourceSettingsProps> = ({reload}) => (
   <SettingsLayout
     tabs={[
       {id: 'general', label: 'General', children: <General />},
-      {id: 'definition', label: 'Definition', children: <SourceSettingsDefinition />},
+      {id: 'definition', label: 'Definition', children: <SourceSettingsDefinition reload={reload} />},
     ]}
   />
 );

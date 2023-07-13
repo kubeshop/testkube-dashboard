@@ -9,8 +9,8 @@
 
 # testing
 /coverage
-/cypress/screenshots
-/cypress/videos
+playwright-report
+test-results
 
 # production
 /build

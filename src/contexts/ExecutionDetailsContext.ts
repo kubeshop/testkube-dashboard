@@ -4,7 +4,7 @@ import {Execution} from '@models/execution';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 export interface ExecutionDetailsOnDataChangeInterface {
-  data: Nullable<Execution | TestSuiteExecution>;
+  data: Execution | TestSuiteExecution | null;
   isLoading: boolean;
   isFetching: boolean;
   refetch: Function;
@@ -13,7 +13,7 @@ export interface ExecutionDetailsOnDataChangeInterface {
 
 export type ExecutionDetailsContextProps = {
   onDataChange: (args: ExecutionDetailsOnDataChangeInterface) => void;
-  data: Nullable<Execution | TestSuiteExecution>;
+  data: Execution | TestSuiteExecution | null;
 };
 
 const ExecutionDetailsContext = createContext<ExecutionDetailsContextProps>({
