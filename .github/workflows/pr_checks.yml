@@ -17,7 +17,7 @@ jobs:
       id: waitForVercel
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        max_timeout: 180
+        max_timeout: 300
 
   e2e-tests:
     name: E2E tests
