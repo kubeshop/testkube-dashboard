@@ -18,7 +18,7 @@ const SourceSettingsDefinition = () => {
       useGetDefinitionQuery={useGetSourceDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateSourceDefinitionMutation}
       label="source"
-      setEntity={value => dispatch(setCurrentSource(value))}
+      onUpdate={value => dispatch(setCurrentSource(value))}
       name={source.name}
       crdUrl={testkubeCRDBases.sources}
       overrideSchema={createSchemaOverride($ => {

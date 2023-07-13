@@ -18,7 +18,7 @@ const TriggerDefinition = () => {
       useGetDefinitionQuery={useGetTriggerDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateTriggerDefinitionMutation}
       label="trigger"
-      setEntity={setCurrentTrigger}
+      onUpdate={setCurrentTrigger}
       name={currentTrigger.name}
       crdUrl={testkubeCRDBases.triggers}
       overrideSchema={createSchemaOverride($ => {
