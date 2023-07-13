@@ -122,7 +122,7 @@
     "precommit": "npm run format:all && npm run lint",
     "format:check": "prettier \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache --check",
     "format:all": "prettier --write \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache",
-    "prepare": "husky install",
+    "prepare": "husky install || exit 0",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
