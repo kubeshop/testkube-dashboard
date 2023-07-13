@@ -1,3 +1,5 @@
+import {Executor} from '@models/executors';
+
 import {remapExecutors} from './executors';
 
 describe('executors', () => {
@@ -14,7 +16,7 @@ describe('executors', () => {
             types: ['exec4', 'exec5', 'exec6'],
           },
         },
-      ];
+      ] as Executor[];
       const result = remapExecutors(executors);
 
       expect(result).toEqual([
@@ -39,7 +41,7 @@ describe('executors', () => {
             executorType: 'exec2',
           },
         },
-      ];
+      ] as Executor[];
       const result = remapExecutors(executors);
 
       expect(result).toEqual([
@@ -49,7 +51,7 @@ describe('executors', () => {
     });
 
     it('should return an array of the executors if it does not have types or executorType fields', () => {
-      const executors = [];
+      const executors: any[] = [];
       const result = remapExecutors(executors);
 
       expect(result).toEqual([]);
