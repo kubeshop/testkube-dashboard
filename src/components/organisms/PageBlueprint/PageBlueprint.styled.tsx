@@ -2,7 +2,9 @@ import {PageHeader as AntdPageHeader} from 'antd';
 
 import styled from 'styled-components';
 
-export const PageWrapper = styled.div`
+export const PageWrapper = styled.div<{$isOss?: boolean}>`
+  overflow: ${({$isOss}) => ($isOss ? 'hidden' : 'auto')};
+
   display: flex;
   flex-direction: column;
   flex: 1;

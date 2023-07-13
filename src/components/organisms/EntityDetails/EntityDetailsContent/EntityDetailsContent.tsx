@@ -53,7 +53,7 @@ const EntityDetailsContent: React.FC = () => {
   const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
     useContext(EntityDetailsContext);
   const {analyticsTrack} = useContext(AnalyticsContext);
-  const {navigate} = useContext(DashboardContext);
+  const {navigate, isOss} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
 
@@ -136,7 +136,7 @@ const EntityDetailsContent: React.FC = () => {
   const isPageDisabled = !name;
 
   return (
-    <PageWrapper>
+    <PageWrapper $isOss={isOss}>
       <PageMetadata title={name} description={description} />
 
       <PageHeader

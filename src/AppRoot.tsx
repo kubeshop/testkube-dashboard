@@ -149,6 +149,7 @@ const AppRoot: React.FC = () => {
       showLogoInSider: true,
       showSocialLinksInSider: true,
       showTestkubeCloudBanner: true,
+      isOss: true,
     }),
     [navigate, location]
   );
