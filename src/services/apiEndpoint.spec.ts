@@ -243,7 +243,8 @@ describe('services', () => {
       const dispatch = createAutoResetSpy();
       const initialEndpoint = 'http://initial/v1';
 
-      const wrapper = ({children}:{children: any}) => createElement(MainContext.Provider, {value: {dispatch}} as any, children);
+      const wrapper = ({children}: {children: any}) =>
+        createElement(MainContext.Provider, {value: {dispatch}} as any, children);
       const {
         result: {current: update},
       } = renderHook(() => useUpdateApiEndpoint(), {wrapper});
