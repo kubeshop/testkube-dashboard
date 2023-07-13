@@ -3,7 +3,7 @@ import {addSeconds, subDays, subHours, subMinutes, subSeconds} from 'date-fns';
 import {displayTimeBetweenDates} from './displayTimeBetweenDates';
 
 const currentDate = new Date('2023-01-25T11:55:59.238Z');
-const displayTimeFromCurrentDate = date => displayTimeBetweenDates(currentDate, date);
+const displayTimeFromCurrentDate = (date: Date) => displayTimeBetweenDates(currentDate, date);
 
 describe('If the duration of the time is', () => {
   it('within the next few seconds', () => {
