@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "playwright test --ui --debug",
+    "test": "playwright test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.32.3",
+    "@playwright/test": "1.32.3",
     "@types/node": "^18.15.13",
+    "@types/superagent": "^4.1.18",
+    "@types/uuid": "^9.0.2",
     "dotenv": "16.0.3",
     "superagent": "8.0.0",
     "uuid": "9.0.0"
