@@ -3,7 +3,7 @@ import {Layout} from 'antd';
 import styled from 'styled-components';
 
 export const StyledLayoutContentWrapper = styled(Layout)`
-  overflow: hidden;
+  overflow: auto;
 `;
 
 export const MessagePanelWrapper = styled.div`
