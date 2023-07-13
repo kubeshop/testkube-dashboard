@@ -1,3 +1,5 @@
+import {FC} from 'react';
+
 import {Definition} from '@molecules';
 
 import {useGetTriggerDefinitionQuery, useUpdateTriggerDefinitionMutation} from '@services/triggers';
@@ -7,8 +9,12 @@ import {useStore} from '@store';
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
-const TriggerDefinition = () => {
-  const {currentTrigger, setCurrentTrigger} = useStore(state => ({
+interface TriggerDefinitionProps {
+  reload: () => void;
+}
+
+const TriggerDefinition: FC<TriggerDefinitionProps> = ({reload}) => {
+  const {currentTrigger} = useStore(state => ({
     currentTrigger: state.currentTrigger!,
     setCurrentTrigger: state.setCurrentTrigger,
   }));
@@ -18,7 +24,7 @@ const TriggerDefinition = () => {
       useGetDefinitionQuery={useGetTriggerDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateTriggerDefinitionMutation}
       label="trigger"
-      setEntity={setCurrentTrigger}
+      onUpdate={reload}
       name={currentTrigger.name}
       crdUrl={testkubeCRDBases.triggers}
       overrideSchema={createSchemaOverride($ => {
