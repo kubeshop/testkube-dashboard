@@ -1,6 +1,8 @@
 import type {Page} from '@playwright/test';
 import {escape} from 'node:querystring';
 
+import config from '../config';
+
 export class MainPage {
   public readonly page: Page;
 
@@ -9,16 +11,13 @@ export class MainPage {
   }
 
   public async visitMainPage(): Promise<void> {
-    // TODO: Move these envs to separate file
-    if (process.env.CLOUD_CONTEXT) {
+    if (config.cloudContext) {
       await this.page.addInitScript(userToken => {
         window.localStorage.setItem('isLoggedIn', '1');
         window.localStorage.setItem('idToken', userToken);
-      }, process.env.BEARER_TOKEN);
+      }, config.bearerToken);
     }
-
-    const apiEndpoint = process.env.DASHBOARD_API_URL || '';
-    await this.page.goto(`/?~api_server_endpoint=${escape(apiEndpoint)}&disable_telemetry=true`);
+    await this.page.goto(`/?~api_server_endpoint=${escape(config.dashboardApiUrl)}&disable_telemetry=true`);
   }
 
   public async openCreateTestDialog(): Promise<void> {

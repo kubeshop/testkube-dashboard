@@ -1,12 +1,13 @@
 import {test} from '@playwright/test';
 
+import config from '../config';
 import {ApiHelpers} from '../helpers/api-helpers';
 import {TestDataHandler} from '../helpers/test-data-handler';
 import {MainPage} from '../pages/MainPage';
 import {TestExecutionsPage} from '../pages/TestExecutionsPage';
 
-const api = new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
-const testDataHandler = new TestDataHandler(process.env.RUN_ID);
+const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
+const testDataHandler = new TestDataHandler(config.runId);
 
 const testNames = ['cypress-git-created', 'k6-git-created', 'postman-git-created'];
 // eslint-disable-next-line no-restricted-syntax
