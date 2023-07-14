@@ -12,7 +12,11 @@ import {Pre} from '@atoms';
 
 import {MainContext} from '@contexts';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {FullWidthSpace} from '@custom-antd';
+
+import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
+
+import {ConfigurationCard, InlineNotification, notificationCall} from '@molecules';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -34,6 +38,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
   const {name, onUpdate, useGetDefinitionQuery, useUpdateDefinitionMutation, crdUrl, label, overrideSchema} = props;
 
   const {isClusterAvailable} = useContext(MainContext);
+  const isSupported = useClusterVersionMatch('>=1.13.0', true);
 
   const [value, setValue] = useState('');
   const [wasTouched, setWasTouched] = useState(false);
@@ -89,37 +94,53 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
   };
 
   return (
-    <Form name="definition-form">
-      <ConfigurationCard
-        title="Definition"
-        description={`Validate and update your ${label} configuration`}
-        onConfirm={onSave}
-        onCancel={() => {
-          setValue(definition);
-          setWasTouched(false);
-        }}
-        isButtonsDisabled={!wasTouched}
-        forceEnableButtons={wasTouched}
-      >
-        {isDefinitionLoading ? (
-          <DefinitionSkeleton />
-        ) : definition ? (
-          <Suspense fallback={<DefinitionSkeleton />}>
-            <KubernetesResourceEditor
-              value={value}
-              onChange={newValue => {
-                setValue(newValue);
-                setWasTouched(true);
-              }}
-              crdUrl={crdUrl}
-              overrideSchema={overrideSchema}
-            />
-          </Suspense>
-        ) : (
-          <Pre> No definition data</Pre>
-        )}
-      </ConfigurationCard>
-    </Form>
+    <FullWidthSpace size={16} direction="vertical">
+      {isSupported ? null : (
+        <InlineNotification
+          type="error"
+          title="Your agent needs to be updated"
+          description={
+            <>
+              You are running an older agent on this environment. Update your Testkube installation to use this editor
+              and other new features.
+            </>
+          }
+        />
+      )}
+      <Form name="definition-form">
+        <ConfigurationCard
+          title="Definition"
+          description={`Validate and update your ${label} configuration`}
+          onConfirm={onSave}
+          onCancel={() => {
+            setValue(definition);
+            setWasTouched(false);
+          }}
+          isButtonsDisabled={!isSupported || !wasTouched}
+          forceEnableButtons={isSupported && wasTouched}
+          enabled={isSupported}
+        >
+          {isDefinitionLoading ? (
+            <DefinitionSkeleton />
+          ) : definition ? (
+            <Suspense fallback={<DefinitionSkeleton />}>
+              <KubernetesResourceEditor
+                value={value}
+                disabled={!isSupported}
+                onChange={newValue => {
+                  setValue(newValue);
+                  setWasTouched(true);
+                }}
+                crdUrl={crdUrl}
+                overrideSchema={overrideSchema}
+              />
+            </Suspense>
+          ) : (
+            <Pre> No definition data</Pre>
+          )}
+        </ConfigurationCard>
+      </Form>
+    </FullWidthSpace>
   );
 };
 
