@@ -1,5 +1,6 @@
 import {test} from '@playwright/test';
 
+import config from '../config';
 import {ApiHelpers} from '../helpers/api-helpers';
 import {validateExecutor} from '../helpers/common';
 import {TestDataHandler} from '../helpers/test-data-handler';
@@ -8,8 +9,8 @@ import {ExecutorsPage} from '../pages/ExecutorsPage';
 import {MainPage} from '../pages/MainPage';
 import {NavigationSiderPage} from '../pages/NavigationSiderPage';
 
-const api = new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
-const testDataHandler = new TestDataHandler(process.env.RUN_ID);
+const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
+const testDataHandler = new TestDataHandler(config.runId);
 
 test(`Create custom container executor`, async ({page}) => {
   const executorName = 'container-executor-curl-1';
