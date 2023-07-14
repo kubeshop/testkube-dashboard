@@ -1,4 +1,4 @@
-import React, {lazy, useEffect, useState} from 'react';
+import React, {lazy, useEffect, useMemo, useState} from 'react';
 import type {EditorDidMount, monaco} from 'react-monaco-editor';
 import {useWindowSize} from 'react-use';
 
@@ -11,6 +11,7 @@ type TkMonacoEditorProps = {
   height?: string;
   minHeight?: number;
   value: string;
+  disabled?: boolean;
   onChange: (value: string) => void;
 };
 
@@ -40,8 +41,9 @@ const options = {
 const defaultEditorHeight = 300;
 
 const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
-  const {value, onChange, language, height, minHeight = defaultEditorHeight} = props;
+  const {value, onChange, language, disabled = false, height, minHeight = defaultEditorHeight} = props;
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const editorOptions = useMemo(() => ({...options, readOnly: disabled}), [disabled]);
 
   const handleEditorDidMount: EditorDidMount = (mountedEditor, monaco) => {
     monaco.editor.defineTheme('testkube-theme', {
@@ -92,7 +94,7 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
       value={value}
       onChange={onChange}
       theme="testkube-theme"
-      options={options}
+      options={editorOptions}
       editorDidMount={handleEditorDidMount}
       height={height}
     />

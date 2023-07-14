@@ -44,6 +44,7 @@
     "@types/react-router-dom": "5.3.3",
     "@types/react-syntax-highlighter": "^15.5.5",
     "@types/react-transition-group": "4.4.4",
+    "@types/semver": "^7.5.0",
     "@types/styled-components": "5.1.18",
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
@@ -100,6 +101,7 @@
     "react-transition-group": "4.4.2",
     "react-use": "17.4.0",
     "react-use-websocket": "^4.2.0",
+    "semver": "^7.5.4",
     "strip-ansi": "^7.0.1",
     "styled-components": "5.3.5",
     "zustand": "^4.3.7"

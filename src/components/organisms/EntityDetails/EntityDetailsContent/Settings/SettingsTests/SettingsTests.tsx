@@ -11,7 +11,8 @@ import {EntityDetailsContext, MainContext} from '@contexts';
 
 import {Text, Title} from '@custom-antd';
 
-import {Entity} from '@models/entity';
+import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
+
 import {TestSuiteStepTest} from '@models/test';
 import {TestSuite, TestSuiteStep} from '@models/testSuite';
 
@@ -30,8 +31,6 @@ import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {convertTestSuiteV2ToV3, isTestSuiteV2} from '@utils/testSuites';
 
-import {settingsDefinitionData} from '../SettingsDefinition/utils';
-
 import DelayModal from './DelayModal';
 import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './SettingsTests.styled';
 
@@ -45,23 +44,11 @@ interface LocalStep extends TestSuiteStep {
 
 const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {
-    entityDetails: rawEntityDetails,
-    entity,
-    id,
-  } = useContext(EntityDetailsContext) as {entityDetails: TestSuite; entity: Entity; id: string};
+  const {entityDetails: rawEntityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
 
-  // Detect the API version of the resource
-  const useGetDefinitionQuery = settingsDefinitionData[entity]!.query;
-  const {data: definition, isLoading, refetch} = useGetDefinitionQuery(id, {skip: !isClusterAvailable});
-  const version = useMemo(() => (definition || '').match(/(?:^|\n)apiVersion:.+\/(v\d+)/)?.[1], [definition]);
-
-  const isV2 = useMemo(
-    () => rawEntityDetails && (version === 'v2' || isTestSuiteV2(rawEntityDetails)),
-    [rawEntityDetails]
-  );
+  const isV2 = useClusterVersionMatch('>=1.13.0', false);
   const entityDetails = useMemo(
-    () => (isV2 ? convertTestSuiteV2ToV3(rawEntityDetails) : rawEntityDetails),
+    () => (isTestSuiteV2(rawEntityDetails) ? convertTestSuiteV2ToV3(rawEntityDetails) : rawEntityDetails),
     [rawEntityDetails]
   );
 
@@ -247,7 +234,7 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
     <Form name="define-tests-form">
       <ConfigurationCard
         title="Tests"
-        description={`Define the tests and their order of execution for this test suite`}
+        description="Define the tests and their order of execution for this test suite"
         footerText={
           <>
             Learn more about <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
