@@ -12,7 +12,7 @@ const config = {
 
   runId: process.env.RUN_ID,
 
-  namespace: process.env.TESTKUBE_NAMESPACE ? process.env.TESTKUBE_NAMESPACE : 'testkube'
+  namespace: process.env.TESTKUBE_NAMESPACE ? process.env.TESTKUBE_NAMESPACE : 'testkube',
 };
 
 if (!config.apiUrl) {
