@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
 
+import config from '../config';
 import {ApiHelpers} from '../helpers/api-helpers';
 import {validateTestSource} from '../helpers/common';
 import {TestDataHandler} from '../helpers/test-data-handler';
@@ -9,15 +10,15 @@ import {NavigationSiderPage} from '../pages/NavigationSiderPage';
 import {TestSourceGeneralSettingsPage} from '../pages/TestSourceGeneralSettingsPage';
 import {TestSourcesPage} from '../pages/TestSourcesPage';
 
-const apiHelpers = new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
-const testDataHandler = new TestDataHandler(process.env.RUN_ID);
+const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
+const testDataHandler = new TestDataHandler(config.runId);
 
 test(`Create test source`, async ({page}) => {
   const testSourceName = 'testsource-k6-testkube-1';
   const testSourceData = testDataHandler.getTestSource(testSourceName);
   const realTestSourceName = testSourceData.name;
 
-  await apiHelpers.assureTestSourceNotCreated(realTestSourceName);
+  await api.assureTestSourceNotCreated(realTestSourceName);
 
   const mainPage = new MainPage(page);
   await mainPage.visitMainPage();
@@ -32,11 +33,11 @@ test(`Create test source`, async ({page}) => {
   await createTestSourcePage.createTestSource(testSourceData);
   await page.waitForURL(`**/sources/${realTestSourceName}`);
 
-  const createdTestSourceData = await apiHelpers.getTestSourceData(realTestSourceName);
+  const createdTestSourceData = await api.getTestSourceData(realTestSourceName);
   await validateTestSource(testSourceData, createdTestSourceData);
 
   // // cleanup
-  await apiHelpers.removeTestSource(realTestSourceName);
+  await api.removeTestSource(realTestSourceName);
 });
 
 test.skip(`Create test source (auth)`, async ({page}) => {});
@@ -53,7 +54,7 @@ test(`Edit test source`, async ({page}) => {
     },
   };
 
-  await apiHelpers.assureTestSourceCreated(testSourceData);
+  await api.assureTestSourceCreated(testSourceData);
 
   const mainPage = new MainPage(page);
   await mainPage.visitMainPage();
@@ -67,11 +68,11 @@ test(`Edit test source`, async ({page}) => {
   const testSourceGeneralSettingsPage = new TestSourceGeneralSettingsPage(page);
   await testSourceGeneralSettingsPage.updateRepoUri(targetSourceData.repository.uri);
 
-  const createdTestSourceData = await apiHelpers.getTestSourceData(realTestSourceName);
+  const createdTestSourceData = await api.getTestSourceData(realTestSourceName);
   await validateTestSource(targetSourceData, createdTestSourceData);
 
   // // cleanup
-  await apiHelpers.removeTestSource(realTestSourceName);
+  await api.removeTestSource(realTestSourceName);
 });
 
 test(`Delete test source`, async ({page}) => {
@@ -79,7 +80,7 @@ test(`Delete test source`, async ({page}) => {
   const testSourceData = testDataHandler.getTestSource(testSourceName);
   const realTestSourceName = testSourceData.name;
 
-  await apiHelpers.assureTestSourceCreated(testSourceData);
+  await api.assureTestSourceCreated(testSourceData);
 
   const mainPage = new MainPage(page);
   await mainPage.visitMainPage();
@@ -94,7 +95,7 @@ test(`Delete test source`, async ({page}) => {
   await testSourceGeneralSettingsPage.deleteTestSource(realTestSourceName);
 
   await page.waitForURL(`**/sources`);
-  const isDeleted = !(await apiHelpers.isTestSourceCreated(realTestSourceName));
+  const isDeleted = !(await api.isTestSourceCreated(realTestSourceName));
   expect(isDeleted).toBeTruthy();
 });
 
