@@ -62,3 +62,7 @@ jobs:
       - name: StyleLint Checking
         if: always()
         run: npm run stylelint
+
+      - name: TypeScript Types
+        if: always()
+        run: npm run ts-check

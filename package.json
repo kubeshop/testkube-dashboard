@@ -122,6 +122,7 @@
     "lint:src": "eslint --max-warnings 0 \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache --cache-location=node_modules/.cache/.eslint-src",
     "lintfix": "eslint --fix \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint \"./src/**/*.{ts,tsx}\"",
+    "ts-check": "tsc -p tsconfig.json --noEmit",
     "precommit": "npm run format:all && npm run lint",
     "format:check": "prettier \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache --check",
     "format:all": "prettier --write \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache",
