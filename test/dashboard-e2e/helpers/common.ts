@@ -34,10 +34,7 @@ export function validateTestSource(
 ): void {
   expect(testSourceData.name).toEqual(createdTestSourceData.name);
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const [name, value] of Object.entries(testSourceData.repository)) {
-    expect(createdTestSourceData.repository[name]).toEqual(value);
-  }
+  expect(createdTestSourceData.repository).toMatchObject(testSourceData.repository);
 }
 
 export function validateExecutor(executorData: Partial<ExecutorData>, createdExecutorData: ExecutorData): void {
