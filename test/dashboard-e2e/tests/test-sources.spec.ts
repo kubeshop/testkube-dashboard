@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
 
+import config from '../config';
 import {ApiHelpers} from '../helpers/api-helpers';
 import {validateTestSource} from '../helpers/common';
 import {TestDataHandler} from '../helpers/test-data-handler';
@@ -9,7 +10,7 @@ import {NavigationSiderPage} from '../pages/NavigationSiderPage';
 import {TestSourceGeneralSettingsPage} from '../pages/TestSourceGeneralSettingsPage';
 import {TestSourcesPage} from '../pages/TestSourcesPage';
 
-const apiHelpers = new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
+const apiHelpers = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
 const testDataHandler = new TestDataHandler(process.env.RUN_ID);
 
 test(`Create test source`, async ({page}) => {

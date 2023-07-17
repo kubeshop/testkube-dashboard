@@ -7,9 +7,9 @@ import testSuitesData from '../fixtures/testsuites';
 
 // TODO: Use functions instead
 export class TestDataHandler {
-  public runId: string;
+  public runId: string|undefined;
 
-  public constructor(runId: string) {
+  public constructor(runId: string|undefined) {
     this.runId = runId;
   }
 
