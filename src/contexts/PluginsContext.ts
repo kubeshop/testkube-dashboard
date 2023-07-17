@@ -6,7 +6,15 @@ export enum PluginKeys {
   ExecutionDetailTabs = 'executionDetailTabs',
 }
 
-export type Plugins = Record<PluginKeys, any[]>;
+export interface PluginData {
+  data: any;
+  index?: number;
+}
+
+// export type Plugins = Record<PluginKeys, any[]>;
+
+// datastructure that adds index to each plugin
+export type Plugins = Record<PluginKeys, PluginData[]>;
 
 export interface PluginsContextProps {
   pluginManager: PluginManager;

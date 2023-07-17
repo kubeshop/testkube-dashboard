@@ -157,9 +157,12 @@ const AppRoot: React.FC = () => {
   const pluginManager = createPluginManager({
     executionDetailTabs: [
       {
-        key: 'testNewTab',
-        label: 'AI Inisghts OSS',
-        children: <div>This is a cloud only feature. Please connect to cloud or migrate your current agent.</div>,
+        data: {
+          key: 'testNewTab',
+          label: 'AI Inisghts OSS',
+          children: <div>This is a cloud only feature. Please connect to cloud or migrate your current agent.</div>,
+        },
+        index: 1,
       },
     ],
   });

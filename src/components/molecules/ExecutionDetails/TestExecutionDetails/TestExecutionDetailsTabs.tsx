@@ -117,12 +117,11 @@ const TestExecutionDetailsTabs: React.FC = () => {
           children: <ExecutionsVariablesList variables={decomposedVars} />,
         }
       : null,
-    ...pluginManager.get<Tab>(PluginKeys.ExecutionDetailTabs),
   ].filter(Boolean) as Tab[];
 
   return (
     <div ref={ref}>
-      <Tabs items={defaultExecutionDetailsTabs} />
+      <Tabs items={pluginManager.insertPluginsToArray(PluginKeys.ExecutionDetailTabs, defaultExecutionDetailsTabs)} />
     </div>
   );
 };

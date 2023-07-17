@@ -1,4 +1,4 @@
-import {PluginKeys, Plugins} from '@src/contexts/PluginsContext';
+import {PluginData, PluginKeys, Plugins} from '@src/contexts/PluginsContext';
 
 export class PluginManager {
   private plugins: Plugins;
@@ -7,7 +7,7 @@ export class PluginManager {
     plugins ? (this.plugins = plugins) : (this.plugins = initDefaultPlugins());
   }
 
-  public get<T>(key: PluginKeys): T[] {
+  public get(key: PluginKeys): PluginData[] {
     return this.plugins[key];
   }
 
@@ -15,12 +15,16 @@ export class PluginManager {
     return this.plugins;
   }
 
-  public add<T>(key: PluginKeys, plugin: T): void {
+  public add(key: PluginKeys, plugin: PluginData): void {
     this.plugins[key].push(plugin);
   }
 
-  public addAtIndex<T>(key: PluginKeys, plugin: T, index: number): void {
-    this.plugins[key].splice(index, 0, plugin);
+  public insertPluginsToArray<T>(key: PluginKeys, array: T[]): T[] {
+    const components = [...array];
+    this.plugins[key].forEach(plugin => {
+      plugin.index ? components.splice(plugin.index, 0, plugin.data) : components.push(plugin.data);
+    });
+    return components;
   }
 }
 
