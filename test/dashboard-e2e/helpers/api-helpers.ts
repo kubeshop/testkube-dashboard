@@ -1,6 +1,6 @@
 import superagent from 'superagent';
 
-import type {ExecutorData, TestData, TestExecutionListResponse, TestSuiteData} from '../types';
+import type {ExecutorData, TestData, TestExecutionListResponse, TestSourceData, TestSuiteData} from '../types';
 
 export class ApiHelpers {
   public apiUrl: string;
@@ -76,12 +76,20 @@ export class ApiHelpers {
     return this.makeGet(`${this.apiUrl}/test-suites`);
   }
 
+  public async getTestSources(): Promise<TestSourceData[]> {
+    return this.makeGet(`${this.apiUrl}/test-sources`);
+  }
+
   public async getExecutors(): Promise<ExecutorData[]> {
     return this.makeGet(`${this.apiUrl}/executors`);
   }
 
   public async createTest(testData: Partial<TestData>): Promise<TestData> {
     return this.makePost(`${this.apiUrl}/tests`, testData);
+  }
+
+  public async createTestSource(testSourceData: Partial<TestSourceData>): Promise<TestSourceData> {
+    return this.makePost(`${this.apiUrl}/test-sources`, testSourceData);
   }
 
   public async abortTest(testName: string, executionId: string): Promise<any> {
@@ -96,12 +104,20 @@ export class ApiHelpers {
     return this.makeDelete(`${this.apiUrl}/test-suites/${testSuiteName}`);
   }
 
+  public async removeTestSource(testSourceName: string): Promise<any> {
+    return this.makeDelete(`${this.apiUrl}/test-sources/${testSourceName}`);
+  }
+
   public async removeExecutor(executorName: string): Promise<any> {
     return this.makeDelete(`${this.apiUrl}/executors/${executorName}`);
   }
 
   public async updateTest(testData: Partial<TestData>): Promise<any> {
     return this.makePatch(`${this.apiUrl}/tests/${testData.name}`, testData);
+  }
+
+  public async updateTestSource(testSourceData: Partial<TestSourceData>): Promise<any> {
+    return this.makePatch(`${this.apiUrl}/test-sources/${testSourceData.name}`, testSourceData);
   }
 
   public async isTestCreated(testName: string): Promise<boolean> {
@@ -119,6 +135,15 @@ export class ApiHelpers {
       return currentTestSuites.find(testSuite => testSuite.name === testSuiteName) !== undefined;
     } catch (e) {
       throw Error(`isTestSuiteCreated failed for "${testSuiteName}" with: "${e}"`);
+    }
+  }
+
+  public async isTestSourceCreated(testSourceName: string): Promise<boolean> {
+    try {
+      const currentTestSources = await this.getTestSources();
+      return currentTestSources.some(({name}) => name === testSourceName);
+    } catch (e) {
+      throw Error(`isTestSourceCreated failed for "${testSourceName}" with: "${e}"`);
     }
   }
 
@@ -151,6 +176,17 @@ export class ApiHelpers {
     }
   }
 
+  public async assureTestSourceNotCreated(testSourceName: string): Promise<void> {
+    try {
+      const alreadyCreated = await this.isTestSourceCreated(testSourceName);
+      if (alreadyCreated) {
+        await this.removeTestSource(testSourceName);
+      }
+    } catch (e) {
+      throw Error(`assureTestSourceNotCreated failed for "${testSourceName}" with: "${e}"`);
+    }
+  }
+
   public async assureExecutorNotCreated(executorName: string): Promise<void> {
     try {
       if (await this.isExecutorCreated(executorName)) {
@@ -178,12 +214,30 @@ export class ApiHelpers {
     }
   }
 
+  public async assureTestSourceCreated(testSourceData: Partial<TestSuiteData>): Promise<void> {
+    try {
+      const alreadyCreated = await this.isTestSourceCreated(testSourceData.name);
+
+      if (alreadyCreated) {
+        await this.updateTestSource(testSourceData);
+      } else {
+        await this.createTestSource(testSourceData);
+      }
+    } catch (e) {
+      throw Error(`assureTestSourceCreated failed for "${testSourceData.name}" with: "${e}"`);
+    }
+  }
+
   public async getTestData(testName: string): Promise<TestData> {
     return this.makeGet(`${this.apiUrl}/tests/${testName}`);
   }
 
   public async getTestSuiteData(testSuiteName: string): Promise<TestSuiteData> {
     return this.makeGet(`${this.apiUrl}/test-suites/${testSuiteName}`);
+  }
+
+  public async getTestSourceData(testSourceName: string): Promise<TestSourceData> {
+    return this.makeGet(`${this.apiUrl}/test-sources/${testSourceName}`);
   }
 
   public async getExecutorData(executorName: string): Promise<ExecutorData> {
