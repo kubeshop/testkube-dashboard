@@ -22,11 +22,7 @@
   },
   "include": [
     "src",
-    "cypress"
+    "test/dashboard-e2e"
   ],
-  "extends": "./paths.json",
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.spec.tsx"
-  ]
+  "extends": "./paths.json"
 }

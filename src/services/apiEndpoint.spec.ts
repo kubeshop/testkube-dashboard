@@ -99,7 +99,7 @@ describe('services', () => {
       });
 
       describe('Falling back when no environment is set', () => {
-        replaceEnvEach('apiUrl', null);
+        replaceEnvEach('apiUrl', '');
 
         it('should be null', () => {
           saveApiEndpoint('');
@@ -118,7 +118,7 @@ describe('services', () => {
       });
 
       describe('Environment variable not available', () => {
-        replaceEnvEach('apiUrl', null);
+        replaceEnvEach('apiUrl', '');
 
         it('should detect API Endpoint as not locked', () => {
           expect(isApiEndpointLocked()).toBe(false);
@@ -243,7 +243,8 @@ describe('services', () => {
       const dispatch = createAutoResetSpy();
       const initialEndpoint = 'http://initial/v1';
 
-      const wrapper = ({children}) => createElement(MainContext.Provider, {value: {dispatch}}, children);
+      const wrapper = ({children}: {children: any}) =>
+        createElement(MainContext.Provider, {value: {dispatch}} as any, children);
       const {
         result: {current: update},
       } = renderHook(() => useUpdateApiEndpoint(), {wrapper});

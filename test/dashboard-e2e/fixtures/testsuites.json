@@ -1,9 +1,0 @@
-{
-    "testsuite-empty": {
-        "name": "temp-ts-1",
-        "description": "testsuite-description-1",
-        "labels": {
-            "testsuite": "label1"
-        }
-    }
-}

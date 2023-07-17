@@ -7,6 +7,7 @@ import {MonacoEditor} from '@atoms';
 import useCRD from '@hooks/useCRD';
 
 interface KubernetesResourceEditorProps {
+  disabled?: boolean;
   crdUrl?: string;
   value: string;
   onChange: (value: string) => void;
@@ -14,7 +15,7 @@ interface KubernetesResourceEditorProps {
 }
 
 const KubernetesResourceEditor: FC<KubernetesResourceEditorProps> = props => {
-  const {crdUrl, onChange, value, overrideSchema = x => x} = props;
+  const {disabled, crdUrl, onChange, value, overrideSchema = x => x} = props;
 
   const {crd} = useCRD(crdUrl);
 
@@ -38,7 +39,7 @@ const KubernetesResourceEditor: FC<KubernetesResourceEditorProps> = props => {
     });
   }, [crd]);
 
-  return <MonacoEditor language="yaml" onChange={onChange} value={value} />;
+  return <MonacoEditor language="yaml" onChange={onChange} value={value} disabled={disabled} />;
 };
 
 export default KubernetesResourceEditor;

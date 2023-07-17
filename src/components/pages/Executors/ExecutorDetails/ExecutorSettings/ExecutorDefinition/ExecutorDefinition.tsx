@@ -1,24 +1,27 @@
+import {FC} from 'react';
+
 import {Definition} from '@molecules';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, setCurrentExecutor} from '@redux/reducers/executorsSlice';
+import {useAppSelector} from '@redux/hooks';
+import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
 
 import {useGetExecutorDefinitionQuery, useUpdateExecutorDefinitionMutation} from '@services/executors';
 
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
-const ExecutorDefinition = () => {
+interface ExecutorDefinitionProps {
+  reload: () => void;
+}
+
+const ExecutorDefinition: FC<ExecutorDefinitionProps> = ({reload}) => {
   const executor = useAppSelector(selectCurrentExecutor)!;
-
-  const dispatch = useAppDispatch();
-
   return (
     <Definition
       useGetDefinitionQuery={useGetExecutorDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateExecutorDefinitionMutation}
       label="executor"
-      setEntity={value => dispatch(setCurrentExecutor(value))}
+      onUpdate={reload}
       name={executor.name}
       crdUrl={testkubeCRDBases.executors}
       overrideSchema={createSchemaOverride($ => {

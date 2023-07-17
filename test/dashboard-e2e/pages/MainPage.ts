@@ -1,34 +1,31 @@
-import type { Page } from  '@playwright/test';
+import type {Page} from '@playwright/test';
+import {escape} from 'node:querystring';
 
-export class MainPage{
-    readonly page: Page;
-    constructor(page:Page){
-        this.page=page;
+import config from '../config';
+
+export class MainPage {
+  public readonly page: Page;
+
+  public constructor(page: Page) {
+    this.page = page;
+  }
+
+  public async visitMainPage(): Promise<void> {
+    if (config.cloudContext) {
+      await this.page.addInitScript(userToken => {
+        window.localStorage.setItem('isLoggedIn', '1');
+        window.localStorage.setItem('idToken', userToken);
+      }, config.bearerToken);
     }
+    await this.page.goto(`/?~api_server_endpoint=${escape(config.dashboardApiUrl)}&disable_telemetry=true`);
+  }
 
-    async visitMainPage(){
-      if (process.env.CLOUD_CONTEXT) {
-        const userToken = process.env.BEARER_TOKEN
-        
-        await this.page.addInitScript(()=>{
-            window.localStorage.setItem('isLoggedIn', '1');
-        });
+  public async openCreateTestDialog(): Promise<void> {
+    await this.page.click('button[data-test="add-a-new-test-btn"]');
+  }
 
-        await this.page.addInitScript(userToken => {
-            window.localStorage.setItem('idToken', userToken);
-        }, userToken);
-      }
-
-      const apiEndpoint = process.env.DASHBOARD_API_URL
-      await this.page.goto(`/?~api_server_endpoint=${apiEndpoint}&disable_telemetry=true`);
-    }
-
-    async openCreateTestDialog() {
-      await this.page.click('button[data-test="add-a-new-test-btn"]');
-    }
-
-    async openTestExecutionDetails(realTestName) {
-      await this.page.locator(`input[data-cy="search-filter"]`).fill(realTestName);
-      await this.page.click(`xpath=//div[@data-test="tests-list-item" and .//span[text()="${realTestName}"]]`);
-    }
+  public async openTestExecutionDetails(testName: string): Promise<void> {
+    await this.page.locator(`input[data-cy="search-filter"]`).fill(testName);
+    await this.page.click(`xpath=//div[@data-test="tests-list-item" and .//span[text()="${testName}"]]`);
+  }
 }

@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import {FC, memo} from 'react';
 
 import {SettingsLayout} from '@molecules';
 
@@ -7,13 +7,17 @@ import General from './General';
 import TriggerAction from './TriggerAction';
 import TriggerCondition from './TriggerCondition';
 
-const TriggerSettings = () => (
+interface TriggerSettingsProps {
+  reload: () => void;
+}
+
+const TriggerSettings: FC<TriggerSettingsProps> = ({reload}) => (
   <SettingsLayout
     tabs={[
       {id: 'general', label: 'General', children: <General />},
       {id: 'condition', label: 'Trigger Condition', children: <TriggerCondition />},
       {id: 'action', label: 'Trigger Action', children: <TriggerAction />},
-      {id: 'definition', label: 'Definition', children: <Definition />},
+      {id: 'definition', label: 'Definition', children: <Definition reload={reload} />},
     ]}
   />
 );
