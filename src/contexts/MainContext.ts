@@ -7,6 +7,7 @@ import {useAppDispatch} from '@redux/hooks';
 export type MainContextProps = {
   dispatch: ReturnType<typeof useAppDispatch>;
   clusterConfig?: ClusterConfig;
+  clusterVersion?: string;
   isClusterAvailable: boolean;
 };
 

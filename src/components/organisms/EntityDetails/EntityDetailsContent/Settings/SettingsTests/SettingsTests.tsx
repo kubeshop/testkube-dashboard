@@ -11,6 +11,8 @@ import {EntityDetailsContext, MainContext} from '@contexts';
 
 import {Text, Title} from '@custom-antd';
 
+import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
+
 import {TestSuiteStepTest} from '@models/test';
 import {TestSuite, TestSuiteStep} from '@models/testSuite';
 
@@ -27,6 +29,7 @@ import {useGetAllTestsQuery} from '@services/tests';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
+import {convertTestSuiteV2ToV3, isTestSuiteV2} from '@utils/testSuites';
 
 import DelayModal from './DelayModal';
 import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './SettingsTests.styled';
@@ -41,7 +44,13 @@ interface LocalStep extends TestSuiteStep {
 
 const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {entityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
+  const {entityDetails: rawEntityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
+
+  const isV2 = useClusterVersionMatch('>=1.13.0', false);
+  const entityDetails = useMemo(
+    () => (isTestSuiteV2(rawEntityDetails) ? convertTestSuiteV2ToV3(rawEntityDetails) : rawEntityDetails),
+    [rawEntityDetails]
+  );
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -122,7 +131,11 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
         steps: currentSteps.map(step => {
           return {
             stopTestOnFailure: step.stopTestOnFailure,
-            execute: [{...(step.test ? {test: step.test} : {delay: step.delay})}],
+            execute: isV2
+              ? step.test
+                ? {name: step.test}
+                : {delay: step.delay}
+              : [step.test ? {test: step.test} : {delay: step.delay}],
           };
         }),
       },
