@@ -6,6 +6,7 @@ import debounce from 'lodash.debounce';
 import {Tab} from 'rc-tabs/lib/interface';
 
 import {ExecutionDetailsContext} from '@contexts';
+import PluginsContext, {PluginKeys} from '@contexts/PluginsContext';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -24,6 +25,7 @@ const LogOutput = lazy(() => import('@molecules').then(module => ({default: modu
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
+  const {pluginManager} = useContext(PluginsContext);
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -83,7 +85,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     }
   }, [isRunning, id]);
 
-  const items = [
+  const defaultExecutionDetailsTabs = [
     {
       key: 'LogOutputPane',
       label: 'Log Output',
@@ -115,11 +117,12 @@ const TestExecutionDetailsTabs: React.FC = () => {
           children: <ExecutionsVariablesList variables={decomposedVars} />,
         }
       : null,
+    ...pluginManager.get<Tab>(PluginKeys.ExecutionDetailTabs),
   ].filter(Boolean) as Tab[];
 
   return (
     <div ref={ref}>
-      <Tabs items={items} />
+      <Tabs items={defaultExecutionDetailsTabs} />
     </div>
   );
 };

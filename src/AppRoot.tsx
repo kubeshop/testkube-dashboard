@@ -32,6 +32,7 @@ import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
 import env from './env';
+import createPluginManager from './utils/createPluginManager';
 import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
@@ -153,6 +154,16 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
+  const pluginManager = createPluginManager({
+    executionDetailTabs: [
+      {
+        key: 'testNewTab',
+        label: 'AI Inisghts OSS',
+        children: <div>This is a cloud only feature. Please connect to cloud or migrate your current agent.</div>,
+      },
+    ],
+  });
+
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
@@ -173,7 +184,7 @@ const AppRoot: React.FC = () => {
           <StyledLayoutContentWrapper>
             <Content>
               <ErrorBoundary>
-                <App />
+                <App pluginManager={pluginManager} />
               </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>

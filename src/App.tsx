@@ -29,6 +29,8 @@ import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
+import PluginsContext from './contexts/PluginsContext';
+import {PluginManager} from './utils/createPluginManager';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -37,7 +39,11 @@ const Sources = lazy(() => import('@pages').then(module => ({default: module.Sou
 const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
 const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
-const App: React.FC = () => {
+export interface AppProps {
+  pluginManager: PluginManager;
+}
+
+const App: React.FC<AppProps> = ({pluginManager}) => {
   const [StoreProvider] = initializeStore();
 
   const dispatch = useAppDispatch();
@@ -108,6 +114,7 @@ const App: React.FC = () => {
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
     .append(StoreProvider, {})
+    .append(PluginsContext.Provider, {value: {pluginManager}})
     .render(
       <Suspense fallback={<Loading />}>
         {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
