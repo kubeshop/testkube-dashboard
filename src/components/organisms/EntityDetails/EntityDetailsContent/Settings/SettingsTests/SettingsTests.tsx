@@ -46,9 +46,9 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
   const {isClusterAvailable} = useContext(MainContext);
   const {entityDetails: rawEntityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
 
-  const isV2 = useClusterVersionMatch('>=1.13.0', false);
+  const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawEntityDetails));
   const entityDetails = useMemo(
-    () => (isTestSuiteV2(rawEntityDetails) ? convertTestSuiteV2ToV3(rawEntityDetails) : rawEntityDetails),
+    () => (isV2 ? convertTestSuiteV2ToV3(rawEntityDetails) : rawEntityDetails),
     [rawEntityDetails]
   );
 
