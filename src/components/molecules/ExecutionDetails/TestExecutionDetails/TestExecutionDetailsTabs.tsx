@@ -119,9 +119,11 @@ const TestExecutionDetailsTabs: React.FC = () => {
       : null,
   ].filter(Boolean) as Tab[];
 
+  const items = pluginManager.insertPluginsToArray(PluginKeys.ExecutionDetailTabs, defaultExecutionDetailsTabs);
+
   return (
     <div ref={ref}>
-      <Tabs items={pluginManager.insertPluginsToArray(PluginKeys.ExecutionDetailTabs, defaultExecutionDetailsTabs)} />
+      <Tabs items={items} />
     </div>
   );
 };

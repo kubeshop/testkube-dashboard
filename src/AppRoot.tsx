@@ -154,18 +154,7 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
-  const pluginManager = createPluginManager({
-    executionDetailTabs: [
-      {
-        data: {
-          key: 'testNewTab',
-          label: 'AI Inisghts OSS',
-          children: <div>This is a cloud only feature. Please connect to cloud or migrate your current agent.</div>,
-        },
-        index: 1,
-      },
-    ],
-  });
+  const pluginManager = createPluginManager();
 
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})
