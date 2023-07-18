@@ -1,4 +1,4 @@
-import {PluginData, PluginKeys, Plugins} from '@src/contexts/PluginsContext';
+import {PluginData, PluginKeys, Plugins} from '@contexts/PluginsContext';
 
 export class PluginManager {
   private plugins: Plugins;
