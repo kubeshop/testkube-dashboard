@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {AnalyticsContext, DashboardContext, ModalContext} from '@contexts';
+import {DashboardContext, ModalContext} from '@contexts';
 
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Test} from '@models/test';
@@ -13,6 +13,8 @@ import {HintProps} from '@molecules/Hint/Hint';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {selectSources} from '@redux/reducers/sourcesSlice';
+
+import {useTelemetry} from '@telemetry';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -31,8 +33,8 @@ const TestCreationModalContent: React.FC = () => {
   const testType = Form.useWatch('testType', form);
 
   const {navigate} = useContext(DashboardContext);
-  const {analyticsTrack} = useContext(AnalyticsContext);
   const {closeModal} = useContext(ModalContext);
+  const telemetry = useTelemetry();
 
   const executors = useAppSelector(selectExecutors);
   const testSources = useAppSelector(selectSources);
@@ -69,10 +71,7 @@ const TestCreationModalContent: React.FC = () => {
   const onSuccess = (res: RTKResponse<MetadataResponse<Test>>) => {
     return displayDefaultNotificationFlow(res).then(() => {
       if ('data' in res) {
-        analyticsTrack('trackEvents', {
-          type: res.data.spec?.type,
-          uiEvent: 'create-tests',
-        });
+        telemetry.event('createTest', {type: res.data.spec?.type});
 
         navigate(`/tests/executions/${res.data.metadata.name}`);
         closeModal();

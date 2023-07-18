@@ -3,7 +3,6 @@ export {default as CopyCommand} from './CLICommands/CopyCommand';
 export {default as LabelsList} from './LabelsList';
 export {default as ExecutionStepsList} from './ExecutionStepsList';
 export {default as ExecutionName} from './ExecutionName';
-export {default as CookiesBanner} from './CookiesBanner';
 export {default as LogOutput} from './LogOutput';
 export {TestsVariablesList, ExecutionsVariablesList} from './Variables';
 export {default as EntityGrid} from './EntityGrid';
