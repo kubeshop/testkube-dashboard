@@ -25,6 +25,8 @@ export enum externalLinks {
   testTriggers = 'https://docs.testkube.io/articles/test-triggers',
   addingTimeout = 'https://docs.testkube.io/articles/adding-timeout/',
   contactUs = 'https://calendly.com/bruno-at-kubeshop/15-minute-meeting',
+  organizationMembers = 'https://docs.testkube.io/testkube-cloud/articles/organization-management#members',
+  environmentMembers = 'https://docs.testkube.io/testkube-cloud/articles/environment-management#managing-environment-member-roles',
 }
 
 const crdCdn = `https://raw.githubusercontent.com/kubeshop/testkube-operator/${encodeURIComponent(
