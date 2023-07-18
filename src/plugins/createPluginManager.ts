@@ -1,4 +1,4 @@
-import {Plugin, PluginSlots} from '@src/plugins/PluginsContext';
+import {Plugin, PluginSlots} from '@plugins/PluginsContext';
 
 export class PluginManager {
   private plugins: Plugin[];

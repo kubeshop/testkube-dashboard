@@ -2,8 +2,6 @@ import {lazy, useContext, useEffect, useRef, useState} from 'react';
 
 import {Tabs} from 'antd';
 
-import PluginsContext from '@plugins/PluginsContext';
-import {insertPluginsToArray} from '@plugins/utils';
 import debounce from 'lodash.debounce';
 import {Tab} from 'rc-tabs/lib/interface';
 
@@ -14,6 +12,9 @@ import useIsRunning from '@hooks/useIsRunning';
 import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList} from '@molecules';
+
+import PluginsContext from '@plugins/PluginsContext';
+import {insertPluginsToArray} from '@plugins/utils';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
