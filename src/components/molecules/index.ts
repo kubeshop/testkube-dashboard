@@ -11,7 +11,6 @@ export {default as EndpointModal} from './EndpointModal';
 export {default as ConfigurationCard} from './ConfigurationCard';
 export {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs} from './ExecutionDetails';
 export {default as ArtifactsList} from './ArtifactsList';
-export {default as TestSuiteStepCard} from './TestSuiteStepCard';
 export {default as HelpCard} from './HelpCard';
 export {default as EmptyListContent} from './EmptyListContent';
 export {default as MetricsBarChart} from './MetricsBarChart';
