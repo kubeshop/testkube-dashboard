@@ -32,7 +32,7 @@ import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
 import env from './env';
-import createPluginManager from './utils/createPluginManager';
+import createPluginManager from './plugins/createPluginManager';
 import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {

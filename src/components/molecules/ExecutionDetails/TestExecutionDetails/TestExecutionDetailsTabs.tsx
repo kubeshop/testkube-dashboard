@@ -2,11 +2,12 @@ import {lazy, useContext, useEffect, useRef, useState} from 'react';
 
 import {Tabs} from 'antd';
 
+import PluginsContext from '@plugins/PluginsContext';
+import {insertPluginsToArray} from '@plugins/utils';
 import debounce from 'lodash.debounce';
 import {Tab} from 'rc-tabs/lib/interface';
 
 import {ExecutionDetailsContext} from '@contexts';
-import PluginsContext, {PluginKeys} from '@contexts/PluginsContext';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -25,7 +26,7 @@ const LogOutput = lazy(() => import('@molecules').then(module => ({default: modu
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
-  const {pluginManager} = useContext(PluginsContext);
+  const {pluginSlots} = useContext(PluginsContext);
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -119,7 +120,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
       : null,
   ].filter(Boolean) as Tab[];
 
-  const items = pluginManager.insertPluginsToArray(PluginKeys.ExecutionDetailTabs, defaultExecutionDetailsTabs);
+  const items = insertPluginsToArray(pluginSlots['executionDetailsTabs'], defaultExecutionDetailsTabs);
 
   return (
     <div ref={ref}>

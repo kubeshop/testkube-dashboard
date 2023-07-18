@@ -29,8 +29,8 @@ import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
-import PluginsContext from './contexts/PluginsContext';
-import {PluginManager} from './utils/createPluginManager';
+import PluginsContext from './plugins/PluginsContext';
+import {PluginManager} from './plugins/createPluginManager';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -114,7 +114,11 @@ const App: React.FC<AppProps> = ({pluginManager}) => {
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
     .append(StoreProvider, {})
-    .append(PluginsContext.Provider, {value: {pluginManager}})
+    .append(PluginsContext.Provider, {
+      value: {
+        pluginSlots: pluginManager.setup(),
+      },
+    })
     .render(
       <Suspense fallback={<Loading />}>
         {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
