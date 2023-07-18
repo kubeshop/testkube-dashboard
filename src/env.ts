@@ -11,7 +11,7 @@ export const provided = (window as any)._env_;
 export const build: BuildTimeEnvironment = {
   posthogKey: getValue('REACT_APP_POSTHOG_KEY', process.env.REACT_APP_POSTHOG_KEY),
   segmentKey: getValue('REACT_APP_SEGMENT_KEY', process.env.REACT_APP_SEGMENT_KEY),
-  gtmKey: getValue('REACT_APP_GOOGLE_ANALYTICS_ID', process.env.REACT_APP_GOOGLE_ANALYTICS_ID),
+  gtmKey: getValue('REACT_APP_GTM_ID', process.env.REACT_APP_GTM_ID),
   version: getValue('REACT_APP_VERSION', process.env.REACT_APP_VERSION) || 'dev',
 };
 
