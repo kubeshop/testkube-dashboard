@@ -40,7 +40,7 @@ jobs:
           cache-name: cache-node-modules
         with:
           # caching node_modules
-          path: node_modules
+          path: '**/node_modules'
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -62,3 +62,7 @@ jobs:
       - name: StyleLint Checking
         if: always()
         run: npm run stylelint
+
+      - name: TypeScript Types
+        if: always()
+        run: npm run ts-check
