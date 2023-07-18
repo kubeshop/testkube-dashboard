@@ -31,6 +31,7 @@ const DelayModal: React.FC<DelayModalProps> = props => {
     }
 
     setDelayValue(null);
+    setIsDelayModalVisible(false);
   };
 
   useEffect(() => {
@@ -50,7 +51,13 @@ const DelayModal: React.FC<DelayModalProps> = props => {
       title="Add a delay"
       footer={
         <>
-          <Button $customType="secondary" onClick={() => setIsDelayModalVisible(false)}>
+          <Button
+            $customType="secondary"
+            onClick={() => {
+              setIsDelayModalVisible(false);
+              setDelayValue(null);
+            }}
+          >
             Cancel
           </Button>
           <Button $customType="primary" onClick={onConfirm} disabled={!isDelayInteger}>
@@ -67,7 +74,7 @@ const DelayModal: React.FC<DelayModalProps> = props => {
           <Text className="regular middle">Delay in ms</Text>
           <InputNumber
             ref={delayInputRef}
-            placeholder="Delay"
+            placeholder="e.g.: 1000"
             controls={false}
             value={delayValue}
             onChange={value => setDelayValue(value)}

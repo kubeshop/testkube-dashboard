@@ -2,6 +2,8 @@ import {ReactNode} from 'react';
 
 import styled from 'styled-components';
 
+import Colors from '@styles/Colors';
+
 export const EmptyTestsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,6 +17,8 @@ export const StyledOptionWrapper = styled.span`
   display: flex;
   align-items: center;
   gap: 12px;
+
+  padding-top: 7px;
 
   svg {
     width: 24px;
@@ -40,4 +44,40 @@ export const StyledStepsList = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
+`;
+
+export const TestNodeContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+
+  width: 300px;
+  height: 68px;
+  padding: 20px;
+
+  border-radius: 4px;
+
+  background-color: ${Colors.slate800};
+`;
+
+export const IntersectionContainer = styled.div`
+  border-radius: 10px;
+  padding: 12px;
+
+  background-color: ${Colors.slate800};
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${Colors.slate700};
+  }
+
+  transition: 0.3s all;
+`;
+
+export const ReactFlowContainer = styled.div`
+  width: 100%;
+  height: 400px;
 `;

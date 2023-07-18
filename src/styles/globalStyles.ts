@@ -431,6 +431,43 @@ export const GlobalStyle = createGlobalStyle`
     background-color: transparent;
     border: 1px dashed ${Colors.slate500};
   }
+
+  .react-flow__edge-path, .react-flow__connection-path {
+    stroke: ${Colors.indigo400};
+  }
+
+  .react-flow__handle {
+    border: 2px solid ${Colors.indigo900};
+    background: ${Colors.indigo400};
+    width: 10px;
+    height: 10px;
+  }
+  
+  .react-flow__attribution {
+    display: none;
+  }
+
+  .react-flow__controls-button {
+    width: 30px;
+    height: 30px;
+
+    border-bottom: 0;
+    background: ${Colors.slate800};
+
+    &:hover {
+      background-color: ${Colors.slate700};
+
+      svg {
+        fill: ${Colors.indigo400}
+      }
+    }
+
+    transition: 0.3s all;
+
+    svg {
+      fill: ${Colors.whitePure};
+    }
+  }
 `;
 
 /* Media Sizes */
