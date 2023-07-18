@@ -2,7 +2,7 @@ import {createContext} from 'react';
 
 export interface PluginData {
   data: any;
-  index?: number;
+  priority?: number;
 }
 
 export type PluginSlots = Record<string, any[]>;
