@@ -1,11 +1,13 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import {Provider} from 'react-redux';
+import {Provider as ReduxProvider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 
 import {store} from '@redux/store';
 
 import {GlobalStyle} from '@styles/globalStyles';
+
+import {TelemetryProvider} from '@telemetry';
 
 import AppRoot from './AppRoot';
 import './antd-theme/antd-customized.css';
@@ -15,7 +17,8 @@ import env from './env';
   const container = document.getElementById('root');
   const root = createRoot(container!);
 
-  const basename = env?.basename || '';
+  const app = {name: 'testkube:ui/oss', version: env.version};
+  const basename = env.basename || '';
 
   // If the user wants to specify a PathPrefix in Ingress controller we should
   // set a basename to BrowserRouter. But since react-router-dom v6 they stopped
@@ -27,12 +30,20 @@ import env from './env';
 
   root.render(
     <React.StrictMode>
-      <Provider store={store}>
-        <BrowserRouter basename={basename}>
-          <GlobalStyle />
-          <AppRoot />
-        </BrowserRouter>
-      </Provider>
+      <TelemetryProvider
+        prefix="tk.ui."
+        app={app}
+        gtmId={env.disableTelemetry ? undefined : env.gtmKey}
+        debug={env.debugTelemetry}
+        paused
+      >
+        <ReduxProvider store={store}>
+          <BrowserRouter basename={basename}>
+            <GlobalStyle />
+            <AppRoot />
+          </BrowserRouter>
+        </ReduxProvider>
+      </TelemetryProvider>
     </React.StrictMode>
   );
 })();

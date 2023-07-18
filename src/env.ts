@@ -11,7 +11,7 @@ export const provided = (window as any)._env_;
 export const build: BuildTimeEnvironment = {
   posthogKey: getValue('REACT_APP_POSTHOG_KEY', process.env.REACT_APP_POSTHOG_KEY),
   segmentKey: getValue('REACT_APP_SEGMENT_KEY', process.env.REACT_APP_SEGMENT_KEY),
-  ga4Key: getValue('REACT_APP_GOOGLE_ANALYTICS_ID', process.env.REACT_APP_GOOGLE_ANALYTICS_ID),
+  gtmKey: getValue('REACT_APP_GTM_ID', process.env.REACT_APP_GTM_ID),
   version: getValue('REACT_APP_VERSION', process.env.REACT_APP_VERSION) || 'dev',
 };
 
@@ -21,12 +21,15 @@ export const dynamic: DynamicEnvironment = {
   basename: getValue('REACT_APP_ROOT_ROUTE', provided?.REACT_APP_ROOT_ROUTE),
   disableTelemetry: getValue('REACT_APP_DISABLE_TELEMETRY', provided?.REACT_APP_DISABLE_TELEMETRY) === 'true',
   crdOperatorRevision: getValue('REACT_APP_CRD_OPERATOR_REVISION', provided?.REACT_APP_CRD_OPERATOR_REVISION) || 'main',
+  debugTelemetry:
+    getValue('REACT_APP_DEBUG_TELEMETRY', provided?.REACT_APP_DEBUG_TELEMETRY) === 'true' ||
+    process.env.NODE_ENV !== 'production',
 };
 
 export interface BuildTimeEnvironment {
   posthogKey?: string;
   segmentKey?: string;
-  ga4Key?: string;
+  gtmKey?: string;
   version: string;
 }
 
@@ -35,6 +38,7 @@ export interface DynamicEnvironment {
   basename: string;
   disableTelemetry: boolean;
   crdOperatorRevision: string;
+  debugTelemetry: boolean;
 }
 
 export default {

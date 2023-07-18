@@ -7,7 +7,7 @@ import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ExecutorIcon} from '@atoms';
 
-import {AnalyticsContext, DashboardContext, EntityDetailsContext} from '@contexts';
+import {DashboardContext, EntityDetailsContext} from '@contexts';
 
 import {Button, Text} from '@custom-antd';
 
@@ -34,6 +34,8 @@ import {useRunTestMutation} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
+import {useTelemetry} from '@telemetry';
+
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {EntityDetailsHeaderIcon} from './EntityDetailsContent.styled';
@@ -52,10 +54,10 @@ const filterOptions: OptionType[] = [
 const EntityDetailsContent: React.FC = () => {
   const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
     useContext(EntityDetailsContext);
-  const {analyticsTrack} = useContext(AnalyticsContext);
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
+  const telemetry = useTelemetry();
 
   const settingsTabConfig = useAppSelector(selectSettingsTabConfig);
 
@@ -103,10 +105,11 @@ const EntityDetailsContent: React.FC = () => {
     })
       .then(res => displayDefaultNotificationFlow(res))
       .then(() => {
-        analyticsTrack('trackEvents', {
-          type,
-          uiEvent: `run-${entity}`,
-        });
+        if (entity === 'tests') {
+          telemetry.event('runTest', {type});
+        } else {
+          telemetry.event('runTestSuite');
+        }
       })
       .catch(error => {
         notificationCall('failed', error.title, error.message);
