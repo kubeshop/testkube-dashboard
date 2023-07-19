@@ -26,7 +26,7 @@ const LogOutput = lazy(() => import('@molecules').then(module => ({default: modu
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
-  const {pluginSlots} = useContext(PluginsContext);
+  const {pluginItems} = useContext(PluginsContext);
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -120,7 +120,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
       : null,
   ].filter(Boolean) as Tab[];
 
-  const items = insertPluginsToArray(pluginSlots['executionDetailsTabs'], defaultExecutionDetailsTabs, {id});
+  const items = insertPluginsToArray(pluginItems['executionDetailsTabs'], defaultExecutionDetailsTabs, {id});
 
   return (
     <div ref={ref}>

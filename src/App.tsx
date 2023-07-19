@@ -116,7 +116,7 @@ const App: React.FC<AppProps> = ({pluginManager}) => {
     .append(StoreProvider, {})
     .append(PluginsContext.Provider, {
       value: {
-        pluginSlots: pluginManager.setup(),
+        pluginItems: pluginManager.setup(),
       },
     })
     .render(
