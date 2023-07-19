@@ -15,6 +15,7 @@
     "no-empty-source": null,
     "block-no-empty": null,
     "declaration-block-no-duplicate-properties": null,
+    "selector-class-pattern": null,
     "color-no-invalid-hex": true,
     "comment-no-empty": true,
     "declaration-block-no-shorthand-property-overrides": true,
