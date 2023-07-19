@@ -16,7 +16,7 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetAllTestsQuery} from '@services/tests';
 
-import {StyledDelayModalContent, StyledOptionWrapper} from './SettingsTests.styled';
+import {StyledDelayModalContent, StyledOptionWrapper} from '../SettingsTests.styled';
 
 type TestModalProps = {
   isTestModalVisible: boolean;

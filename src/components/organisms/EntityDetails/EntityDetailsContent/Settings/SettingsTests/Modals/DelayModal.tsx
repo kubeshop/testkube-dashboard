@@ -6,7 +6,7 @@ import {Button, Modal, Text} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
 
-import {StyledDelayModalContent} from './SettingsTests.styled';
+import {StyledDelayModalContent} from '../SettingsTests.styled';
 
 type DelayModalProps = {
   isDelayModalVisible: boolean;

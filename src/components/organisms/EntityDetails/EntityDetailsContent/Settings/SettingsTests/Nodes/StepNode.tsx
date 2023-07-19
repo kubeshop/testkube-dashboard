@@ -11,17 +11,17 @@ import {LocalStep} from '@models/testSuite';
 
 import {DotsDropdown} from '@molecules';
 
-import {TestNodeContainer} from './SettingsTests.styled';
+import {TestNodeContainer} from '../SettingsTests.styled';
 
-type CustomNodeProps = {
+type StepNodeProps = {
   data: LocalStep & {
-    group: number | string;
-    removeNode: (id: string, col: number | string) => void;
+    group: number;
+    removeNode: (id: string, col: number) => void;
   };
   id: string;
 };
 
-const CustomNode: React.FC<CustomNodeProps> = props => {
+const StepNode: React.FC<StepNodeProps> = props => {
   const {data, id} = props;
   const {type, test, delay} = data;
 
@@ -46,4 +46,4 @@ const CustomNode: React.FC<CustomNodeProps> = props => {
   );
 };
 
-export default CustomNode;
+export default StepNode;

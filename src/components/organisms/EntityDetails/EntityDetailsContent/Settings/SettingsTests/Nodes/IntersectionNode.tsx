@@ -2,7 +2,7 @@ import {Handle, Position} from 'reactflow';
 
 import {Dropdown} from 'antd';
 
-import {IntersectionContainer} from './SettingsTests.styled';
+import {IntersectionContainer} from '../SettingsTests.styled';
 
 type IntersectionNodeProps = {
   data: {
