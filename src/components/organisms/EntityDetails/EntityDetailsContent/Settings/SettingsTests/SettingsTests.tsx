@@ -1,5 +1,5 @@
-import {memo, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import ReactFlow, {Controls, Edge, Node, NodeChange, applyNodeChanges} from 'reactflow';
+import {memo, useContext, useEffect, useMemo, useState} from 'react';
+import ReactFlow, {Controls, Edge, Node} from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import {Form} from 'antd';
@@ -99,8 +99,6 @@ const SettingsTests = () => {
   const [steps, setSteps] = useState(initialSteps);
   const [nodes, setNodes] = useState<ExtendedNode[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
-
-  const onNodesChange = useCallback((changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)), []);
 
   const wasTouched = steps !== initialSteps;
 
@@ -261,7 +259,7 @@ const SettingsTests = () => {
           </EmptyTestsContainer>
         ) : (
           <ReactFlowContainer>
-            <ReactFlow nodeTypes={nodeTypes} nodes={nodes} edges={edges} onNodesChange={onNodesChange}>
+            <ReactFlow nodeTypes={nodeTypes} nodes={nodes} edges={edges}>
               <Controls position="bottom-right" showInteractive={false} />
             </ReactFlow>
           </ReactFlowContainer>
