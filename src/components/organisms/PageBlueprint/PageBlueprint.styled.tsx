@@ -7,6 +7,7 @@ export const PageWrapper = styled.div`
   flex-direction: column;
   flex: 1;
   gap: 20px;
+  width: 100%;
 
   padding: 30px 30px 60px 0;
 `;

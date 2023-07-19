@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext, useMemo} from 'react';
 
 import {Tabs} from 'antd';
 
@@ -8,10 +8,15 @@ import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {ExecutionStepsList} from '@molecules';
 
-const TestSuiteExecutionDetailsTabs: React.FC = () => {
-  const {data} = useContext(ExecutionDetailsContext);
+import {convertTestSuiteV2ExecutionToV3, isTestSuiteV2Execution} from '@utils/testSuites';
 
-  const testSuiteData = data as TestSuiteExecution;
+const TestSuiteExecutionDetailsTabs: React.FC = () => {
+  const {data} = useContext(ExecutionDetailsContext) as {data: TestSuiteExecution};
+
+  const testSuiteData = useMemo(
+    () => (isTestSuiteV2Execution(data) ? convertTestSuiteV2ExecutionToV3(data) : data),
+    [data]
+  );
   const {executeStepResults} = testSuiteData;
 
   return (

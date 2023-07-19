@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {AnalyticsContext, DashboardContext, MainContext, ModalContext} from '@contexts';
+import {DashboardContext, MainContext, ModalContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
@@ -17,6 +17,8 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
+
+import {useTelemetry} from '@telemetry';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -36,8 +38,8 @@ const TestSuiteCreationModalContent: React.FC = () => {
 
   const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
-  const {analyticsTrack} = useContext(AnalyticsContext);
   const {closeModal} = useContext(ModalContext);
+  const telemetry = useTelemetry();
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
@@ -55,9 +57,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
       .then(res => displayDefaultNotificationFlow(res))
       .then(res => {
         if (res && 'data' in res) {
-          analyticsTrack('trackEvents', {
-            uiEvent: 'create-test-suites',
-          });
+          telemetry.event('createTestSuite');
 
           dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
 

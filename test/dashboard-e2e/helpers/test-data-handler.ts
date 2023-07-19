@@ -2,6 +2,7 @@ import {v4 as uuidv4} from 'uuid';
 
 import executorData from '../fixtures/executors';
 import testsData from '../fixtures/tests';
+import testSourcesData from '../fixtures/testsources';
 import testSuitesData from '../fixtures/testsuites';
 
 // TODO: Use functions instead
@@ -36,6 +37,15 @@ export class TestDataHandler {
     return {
       ...testSuite,
       name: this.getRandomizedName(testSuite.name),
+    };
+  }
+
+  public getTestSource(testSourceName: string): any {
+    let testSource = (testSourcesData as any)[testSourceName];
+
+    return {
+      ...testSource,
+      name: this.getRandomizedName(testSource.name),
     };
   }
 
