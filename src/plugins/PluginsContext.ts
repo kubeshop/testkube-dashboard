@@ -1,11 +1,11 @@
 import {createContext} from 'react';
 
 export interface PluginData {
-  data: any;
+  getComponent: (props?: any) => any;
   priority?: number;
 }
 
-export type PluginSlots = Record<string, any[]>;
+export type PluginSlots = Record<string, PluginData[]>;
 
 export interface Plugin {
   name: string;
