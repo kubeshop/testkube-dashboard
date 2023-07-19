@@ -7,6 +7,8 @@ import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
+import {ReactComponent as NewIcon} from '@assets/newIcon.svg';
+
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
@@ -31,6 +33,8 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
+import TestExecutionDetailsArtifacts from './components/molecules/ExecutionDetails/TestExecutionDetails/TestExecutionDetailsArtifacts';
+import {PluginItems} from './plugins/PluginsContext';
 import createPluginManager from './plugins/createPluginManager';
 import {externalLinks} from './utils/externalLinks';
 
@@ -105,6 +109,28 @@ const AppRoot: React.FC = () => {
   );
 
   const pluginManager = createPluginManager();
+
+  pluginManager.add({
+    name: 'ai-insights',
+    setup: (pluginItems: PluginItems) => {
+      pluginItems['executionDetailsTabs'].push({
+        // this is a new Tab
+        getComponent: (props: {id: string}) => {
+          return {
+            key: 'ai-insights-tab',
+            // TODO create component for this
+            label: (
+              <div style={{display: 'flex', gap: '8px'}}>
+                AI Inisghts <NewIcon />
+              </div>
+            ),
+            children: <TestExecutionDetailsArtifacts {...props} />,
+          };
+        },
+        order: 1,
+      });
+    },
+  });
 
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})
