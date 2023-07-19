@@ -31,7 +31,6 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import env from './env';
 import createPluginManager from './plugins/createPluginManager';
 import {externalLinks} from './utils/externalLinks';
 
