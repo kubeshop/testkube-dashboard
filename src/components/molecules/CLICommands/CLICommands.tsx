@@ -1,5 +1,4 @@
 import React, {useContext, useMemo} from 'react';
-import ReactGA from 'react-ga4';
 
 import {EntityDetailsContext} from '@contexts';
 
@@ -13,6 +12,8 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
+
+import {useTelemetry} from '@telemetry';
 
 import CopyCommand from './CopyCommand';
 
@@ -115,6 +116,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const mayDelete = usePermission(Permissions.deleteEntity);
 
   const {entity} = useContext(EntityDetailsContext);
+  const telemetry = useTelemetry();
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -148,7 +150,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
       const commandString = command(testTarget);
 
       const onCopy = () => {
-        ReactGA.event('copy_command', {command: label});
+        telemetry.event('copyCommand', {command: label});
       };
 
       return <CopyCommand key={label} command={commandString} label={label} bg={bg} onCopy={onCopy} highlightSyntax />;
