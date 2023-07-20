@@ -10,14 +10,14 @@ import {ExternalLink} from '@atoms';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
 
-import {Button, Title} from '@custom-antd';
+import {Button, FullWidthSpace, Title} from '@custom-antd';
 
 import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
 
 import {TestSuiteStepTest} from '@models/test';
 import {LocalStep, TestSuite} from '@models/testSuite';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {ConfigurationCard, InlineNotification, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -99,13 +99,13 @@ const SettingsTests = () => {
     setSteps(initialSteps);
   }, [testsData]);
 
-  const showModal = (value: string, group: number | string) => {
-    if (value === 'test') {
-      setIsTestModalVisible(true);
-    } else {
-      setIsDelayModalVisible(true);
-    }
+  const showTestModal = (group: number | string) => {
+    setIsTestModalVisible(true);
+    setCurrentGroup(group);
+  };
 
+  const showDelayModal = (group: number | string) => {
+    setIsDelayModalVisible(true);
     setCurrentGroup(group);
   };
 
@@ -160,46 +160,59 @@ const SettingsTests = () => {
   };
 
   return (
-    <Form name="define-tests-form">
-      <ConfigurationCard
-        title="Tests"
-        description="Define the tests and their order of execution for this test suite"
-        footerText={
-          <>
-            Learn more about <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
-          </>
-        }
-        onConfirm={onSave}
-        onCancel={() => setSteps(initialSteps)}
-        isButtonsDisabled={!wasTouched}
-        isEditable={mayEdit}
-        enabled={mayEdit}
-        forceEnableButtons={wasTouched}
-      >
-        {!steps?.length ? (
-          <EmptyTestsContainer>
-            <Title level={2} className="text-center">
-              This test suite doesn&#39;t have any tests yet
-            </Title>
-            <Button $customType="primary" onClick={() => showModal('test', 0)}>
-              Add your first test
-            </Button>
-          </EmptyTestsContainer>
-        ) : (
-          <TestSuiteStepsFlow steps={steps} setSteps={setSteps} showModal={showModal} isV2={isV2} />
-        )}
-        <DelayModal
-          isDelayModalVisible={isDelayModalVisible}
-          setIsDelayModalVisible={setIsDelayModalVisible}
-          addDelay={addNode}
+    <FullWidthSpace size={16} direction="vertical">
+      {!isV2 ? null : (
+        <InlineNotification
+          type="error"
+          title="Your agent needs to be updated"
+          description={
+            <>
+              You are running an older agent on this environment. Update your Testkube installation enable parallel
+              tests and other new features.
+            </>
+          }
         />
-        <TestModal
-          isTestModalVisible={isTestModalVisible}
-          setIsTestModalVisible={setIsTestModalVisible}
-          addTest={addNode}
-        />
-      </ConfigurationCard>
-    </Form>
+      )}
+      <Form name="define-tests-form">
+        <ConfigurationCard
+          title="Tests"
+          description="Define the tests and their order of execution for this test suite"
+          footerText={
+            <>
+              Learn more about{' '}
+              <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
+            </>
+          }
+          onConfirm={onSave}
+          onCancel={() => setSteps(initialSteps)}
+          isButtonsDisabled={!wasTouched}
+          isEditable={mayEdit}
+          enabled={mayEdit}
+          forceEnableButtons={wasTouched}
+        >
+          {!steps?.length ? (
+            <EmptyTestsContainer>
+              <Title level={2} className="text-center">
+                This test suite doesn&#39;t have any tests yet
+              </Title>
+              <Button $customType="primary" onClick={() => showTestModal(0)}>
+                Add your first test
+              </Button>
+            </EmptyTestsContainer>
+          ) : (
+            <TestSuiteStepsFlow
+              steps={steps}
+              setSteps={setSteps}
+              showTestModal={showTestModal}
+              showDelayModal={showDelayModal}
+              isV2={isV2}
+            />
+          )}
+          <DelayModal visible={isDelayModalVisible} onClose={() => setIsDelayModalVisible(false)} onSubmit={addNode} />
+          <TestModal visible={isTestModalVisible} onClose={() => setIsTestModalVisible(false)} onSubmit={addNode} />
+        </ConfigurationCard>
+      </Form>
+    </FullWidthSpace>
   );
 };
 

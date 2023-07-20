@@ -11,13 +11,13 @@ import {notificationCall} from '@src/components/molecules';
 import {StyledDelayModalContent} from '../SettingsTests.styled';
 
 type DelayModalProps = {
-  isDelayModalVisible: boolean;
-  setIsDelayModalVisible: (flag: boolean) => void;
-  addDelay: (delay: string) => void;
+  visible: boolean;
+  onClose: () => void;
+  onSubmit: (delay: string) => void;
 };
 
 const DelayModal: React.FC<DelayModalProps> = props => {
-  const {isDelayModalVisible, setIsDelayModalVisible, addDelay} = props;
+  const {visible, onClose, onSubmit} = props;
 
   const [delayValue, setDelayValue] = useState<string>('');
 
@@ -27,10 +27,10 @@ const DelayModal: React.FC<DelayModalProps> = props => {
 
   const onConfirm = () => {
     if (/^([0-9]|([1-9][0-9]+))(ms|s|m|h)?$/.test(delayValue)) {
-      addDelay(delayValue);
+      onSubmit(delayValue);
 
       setDelayValue('');
-      setIsDelayModalVisible(false);
+      onClose();
     } else {
       notificationCall('failed', 'Invalid delay format');
     }
@@ -38,17 +38,17 @@ const DelayModal: React.FC<DelayModalProps> = props => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (isDelayModalVisible && delayInputRef.current) {
+      if (visible && delayInputRef.current) {
         // @ts-ignore
         delayInputRef.current!.focus();
       }
     }, 100);
-  }, [isDelayModalVisible]);
+  }, [visible]);
 
   return (
     <Modal
-      setIsModalVisible={setIsDelayModalVisible}
-      isModalVisible={isDelayModalVisible}
+      setIsModalVisible={onClose}
+      isModalVisible={visible}
       width={528}
       title="Add a delay"
       footer={
@@ -56,7 +56,7 @@ const DelayModal: React.FC<DelayModalProps> = props => {
           <Button
             $customType="secondary"
             onClick={() => {
-              setIsDelayModalVisible(false);
+              onClose();
               setDelayValue('');
             }}
           >

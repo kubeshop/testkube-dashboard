@@ -3,13 +3,12 @@ import ReactFlow, {Controls, Edge, Node} from 'reactflow';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {notificationCall} from '@src/components/molecules';
 import {LocalStep} from '@src/models/testSuite';
 
 import AddNode from './Nodes/AddNode';
 import IntersectionNode from './Nodes/IntersectionNode';
 import StepNode from './Nodes/StepNode';
-import {ReactFlowContainer} from './SettingsTests.styled';
+import {ReactFlowContainer, intersectionHeight, intersectionWidth, itemHeight, itemWidth} from './SettingsTests.styled';
 
 interface ExtendedNode extends Node {
   group?: number | string;
@@ -18,15 +17,12 @@ interface ExtendedNode extends Node {
 type TestSuiteStepsFlowProps = {
   steps: LocalStep[][];
   setSteps: (steps: LocalStep[][]) => void;
-  showModal: (value: string, group: number | string) => void;
+  showTestModal: (group: number | string) => void;
+  showDelayModal: (group: number | string) => void;
   isV2: boolean;
 };
 
 // Configure
-export const intersectionWidth = 32;
-export const intersectionHeight = 46;
-export const itemWidth = 300;
-export const itemHeight = 68;
 const horizontalGap = 150;
 const verticalGapBeforeAdd = 20;
 const verticalGapBetweenItems = 32;
@@ -47,7 +43,7 @@ const getItemPosition = (group: number, itemIndex: number) => ({
 });
 
 const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
-  const {steps, setSteps, showModal, isV2} = props;
+  const {steps, setSteps, showDelayModal, showTestModal, isV2} = props;
 
   const [nodes, setNodes] = useState<ExtendedNode[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
@@ -56,8 +52,6 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
     if (steps[group].length === 1) {
       if (steps[group][0].id === id) {
         setSteps([...steps.slice(0, group), ...steps.slice(group + 1)]);
-      } else {
-        notificationCall('failed', 'Step was not removed');
       }
     } else {
       setSteps([...steps.slice(0, group), steps[group].filter(item => item.id !== id), ...steps.slice(group + 1)]);
@@ -83,7 +77,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
           type: 'add',
           id: nanoid(),
           position: getAddPosition(index, step.length),
-          data: {showModal, group: index},
+          data: {showDelayModal, showTestModal, group: index},
         });
       }
 
@@ -92,7 +86,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         type: 'intersection',
         id: nanoid(),
         position: getIntersectionPosition(index + 1),
-        data: {showModal, group: intersectionGroup},
+        data: {showDelayModal, showTestModal, group: intersectionGroup},
         group: intersectionGroup,
       });
     });

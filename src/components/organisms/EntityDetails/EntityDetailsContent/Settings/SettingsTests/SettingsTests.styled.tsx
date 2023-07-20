@@ -4,7 +4,10 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-import {intersectionHeight, intersectionWidth, itemHeight, itemWidth} from './TestSuiteStepsFlow';
+export const intersectionWidth = 32;
+export const intersectionHeight = 46;
+export const itemWidth = 300;
+export const itemHeight = 68;
 
 export const EmptyTestsContainer = styled.div`
   display: flex;

@@ -6,7 +6,8 @@ import {IntersectionContainer} from '../SettingsTests.styled';
 
 type IntersectionNodeProps = {
   data: {
-    showModal: (value: string, group: number | string) => void;
+    showTestModal: (group: number | string) => void;
+    showDelayModal: (group: number | string) => void;
     group: number | string;
   };
 };
@@ -21,8 +22,8 @@ const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
         trigger={['hover']}
         menu={{
           items: [
-            {key: 1, label: <span onClick={() => data.showModal('test', data.group)}>Add a test</span>},
-            {key: 2, label: <span onClick={() => data.showModal('delay', data.group)}>Add a delay</span>},
+            {key: 1, label: <span onClick={() => data.showTestModal(data.group)}>Add a test</span>},
+            {key: 2, label: <span onClick={() => data.showDelayModal(data.group)}>Add a delay</span>},
           ],
         }}
       >

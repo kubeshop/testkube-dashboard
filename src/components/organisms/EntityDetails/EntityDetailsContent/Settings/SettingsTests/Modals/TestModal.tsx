@@ -19,14 +19,14 @@ import {useGetAllTestsQuery} from '@services/tests';
 import {StyledDelayModalContent, StyledOptionWrapper} from '../SettingsTests.styled';
 
 type TestModalProps = {
-  isTestModalVisible: boolean;
-  setIsTestModalVisible: (flag: boolean) => void;
-  addTest: (test: {name: string; type: string}) => void;
+  visible: boolean;
+  onClose: () => void;
+  onSubmit: (test: {name: string; type: string}) => void;
 };
 const {Option} = Select;
 
 const TestModal: React.FC<TestModalProps> = props => {
-  const {isTestModalVisible, setIsTestModalVisible, addTest} = props;
+  const {visible, onClose, onSubmit} = props;
 
   const {data: allTestsList} = useGetAllTestsQuery();
 
@@ -37,10 +37,10 @@ const TestModal: React.FC<TestModalProps> = props => {
   const onEvent = usePressEnter();
 
   const onConfirm = () => {
-    addTest(JSON.parse(testValue!));
+    onSubmit(JSON.parse(testValue!));
 
     setTestValue(null);
-    setIsTestModalVisible(false);
+    onClose();
   };
 
   const allTestsData: TestSuiteStepTest[] = useMemo(() => {
@@ -53,8 +53,8 @@ const TestModal: React.FC<TestModalProps> = props => {
 
   return (
     <Modal
-      setIsModalVisible={setIsTestModalVisible}
-      isModalVisible={isTestModalVisible}
+      setIsModalVisible={onClose}
+      isModalVisible={visible}
       width={528}
       title="Add a Test"
       footer={
@@ -62,7 +62,7 @@ const TestModal: React.FC<TestModalProps> = props => {
           <Button
             $customType="secondary"
             onClick={() => {
-              setIsTestModalVisible(false);
+              onClose();
               setTestValue(null);
             }}
           >
