@@ -1,5 +1,7 @@
 import {FC, PropsWithChildren, createContext, useContext, useMemo} from 'react';
 
+import {capitalize} from 'lodash';
+
 import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
@@ -7,6 +9,13 @@ import {shallow} from 'zustand/shallow';
 import {HasMark, Mark, UnmarkAll, UnmarkAllObject, UnmarkObject} from '@utils/typeMarkers';
 
 type Fn = (...args: any) => any;
+
+/**
+ * In [magicSet] property,
+ * Zustand stores created here will have a function,
+ * to transparently update any property in store.
+ */
+const magicSet = Symbol('set data');
 
 // Customizable<Function> allows to store a function that could be replaced
 declare const customizableSymbol: unique symbol;
@@ -34,6 +43,14 @@ type InitialState<T> = Partial<UnmarkAllObject<CustomizableObject<T>>>;
 type PublicState<T> = UnmarkAllObject<PublicObject<T>>;
 type StoreFactory<T> = (initialState?: InitialState<T>) => UseBoundStore<StoreApi<T>>;
 
+const setterCache: Record<string, string> = {};
+const getSetterName = (key: string) => {
+  if (!setterCache[key]) {
+    setterCache[key] = `set${capitalize(key)}`;
+  }
+  return setterCache[key];
+};
+
 export const createStoreFactory =
   <T,>(name: string, createSlice: StateCreator<T>): StoreFactory<T> =>
   (initialState?) =>
@@ -42,6 +59,16 @@ export const createStoreFactory =
         (...a) => ({
           ...createSlice(...a),
           ...initialState,
+          [magicSet]: <K extends keyof T,>(key: K, value: T[K]) => {
+            const state = a[2].getState();
+            const setData = a[0];
+            const setterName = getSetterName(key as string);
+            if ((state as any)[setterName]) {
+              (state as any)[setterName](value);
+            } else {
+              setData({[key]: value} as any);
+            }
+          },
         }),
         {
           name: `${name} - Zustand Store`,
@@ -73,10 +100,21 @@ class StoreFactoryBuilder<T> {
 
 export const createStoreBuilder = (name: string) => new StoreFactoryBuilder(name, () => ({}));
 
+const applyStateUpdate = <T,>(state: T, data: Partial<T>) => {
+  Object.keys(data).forEach((_key) => {
+    const key = _key as keyof T;
+    if (data[key] !== state[key]) {
+      (state as any)[magicSet](key, data[key]);
+    }
+  });
+};
+
 export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   type ShallowComponent = FC<PropsWithChildren<{}>>;
   type StoreSelector = <U>(selector: (state: UnmarkAllObject<T>) => U) => U;
   type PublicStoreSelector = <U>(selector: (state: PublicState<T>) => U) => U;
+  type StoreSync = (data: Partial<UnmarkAllObject<T>>) => void;
+  type PublicStoreSync = (data: Partial<PublicState<T>>) => void;
   const StoreContext = createContext<{use?: StoreSelector}>(undefined!);
 
   const useStore: PublicStoreSelector = selector => {
@@ -87,7 +125,11 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
     return context.use(selector);
   };
 
-  const useNewStore = (initialState?: InitialState<T>, deps: any[] = []): [ShallowComponent, StoreSelector] => {
+  const useStoreSync: PublicStoreSync = (data) => {
+    useStore(state => applyStateUpdate(state, data));
+  };
+
+  const useNewStore = (initialState?: InitialState<T>, deps: any[] = []): [ShallowComponent, StoreSelector, StoreSync] => {
     // Ensure that this store is not created yet in this place
     const context = useContext(StoreContext);
     if (context?.use) {
@@ -99,6 +141,7 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
       const store = createStore(initialState);
       return selector => store(selector as any, shallow);
     }, deps);
+    const sync: StoreSync = useMemo(() => (data) => use(state => applyStateUpdate(state, data)), deps);
     const Provider: ShallowComponent = useMemo(
       () =>
         ({children}) =>
@@ -106,11 +149,12 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
       [use]
     );
 
-    return [Provider, use];
+    return [Provider, use, sync];
   };
 
   return {
     use: useStore,
+    sync: useStoreSync,
     init: useNewStore,
   };
 };

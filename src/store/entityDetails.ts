@@ -54,4 +54,8 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
 });
 
 const createEntityDetailsStore = createStoreFactory('entityDetails', createEntityDetailsSlice);
-export const {use: useEntityDetailsStore, init: initializeEntityDetailsStore} = connectStore(createEntityDetailsStore);
+export const {
+  use: useEntityDetailsStore,
+  sync: useEntityDetailsStoreSync,
+  init: initializeEntityDetailsStore,
+} = connectStore(createEntityDetailsStore);
