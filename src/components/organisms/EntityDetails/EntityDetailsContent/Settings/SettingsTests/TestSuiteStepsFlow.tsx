@@ -106,17 +106,19 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
     nodes.forEach(node => {
       const currentId = node.id;
 
-      const nextIntersection =
-        typeof node.group === 'number' && nodes.find(x => x.group === `${node.group}-intersection`);
+      const isIntersection = node.group && /-intersection$/.test(String(node.group));
 
-      if (nextIntersection) {
-        newEdges.push({id: `${currentId}-${nextIntersection.id}`, source: currentId, target: nextIntersection.id});
-      } else {
+      if (isIntersection) {
         const filteredNodes = nodes.filter(x => x.group === Number(String(node.group).split('-')[0]) + 1);
-
         filteredNodes.forEach(nextNode => {
           newEdges.push({id: `${currentId}-${nextNode.id}`, source: currentId, target: nextNode.id});
         });
+      } else {
+        const nextIntersection =
+          typeof node.group === 'number' && nodes.find(x => x.group === `${node.group}-intersection`);
+        if (nextIntersection) {
+          newEdges.push({id: `${currentId}-${nextIntersection.id}`, source: currentId, target: nextIntersection.id});
+        }
       }
     });
 
