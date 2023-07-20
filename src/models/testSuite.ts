@@ -7,6 +7,7 @@ import {Variables} from './variable';
 export interface TestSuiteStep {
   delay?: string;
   test?: string;
+  namespace?: string;
 }
 
 export interface LocalStep extends TestSuiteStep {

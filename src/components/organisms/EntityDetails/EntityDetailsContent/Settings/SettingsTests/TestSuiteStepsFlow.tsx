@@ -18,6 +18,7 @@ type TestSuiteStepsFlowProps = {
   steps: LocalStep[][];
   setSteps: (steps: LocalStep[][]) => void;
   showModal: (value: string, group: number | string) => void;
+  isV2: boolean;
 };
 
 // Configure
@@ -45,7 +46,7 @@ const getItemPosition = (group: number, itemIndex: number) => ({
 });
 
 const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
-  const {steps, setSteps, showModal} = props;
+  const {steps, setSteps, showModal, isV2} = props;
 
   const [nodes, setNodes] = useState<ExtendedNode[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
@@ -76,12 +77,14 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         }))
       );
 
-      newNodes.push({
-        type: 'intersection',
-        id: nanoid(),
-        position: getAddPosition(index, step.length),
-        data: {showModal, group: index, withoutHandles: true},
-      });
+      if (!isV2) {
+        newNodes.push({
+          type: 'intersection',
+          id: nanoid(),
+          position: getAddPosition(index, step.length),
+          data: {showModal, group: index, withoutHandles: true},
+        });
+      }
 
       const intersectionGroup = `${index}-intersection`;
       newNodes.push({

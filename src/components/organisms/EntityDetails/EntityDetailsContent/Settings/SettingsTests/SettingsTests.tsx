@@ -129,9 +129,20 @@ const SettingsTests = () => {
 
   const onSave = () => {
     const resultSteps = steps.map((items, i) => {
+      const stopOnFailure = Boolean(entityDetails?.steps?.[i]?.stopOnFailure);
+      const execute = items.map(item => pick(item, ['delay', 'test', 'namespace']));
+
+      const v2Execute =
+        'test' in execute[0]
+          ? {
+              name: execute[0].test,
+              namespace: execute[0].namespace,
+            }
+          : {delay: execute[0].delay};
+
       return {
-        execute: items.map(item => pick(item, ['delay', 'test'])),
-        stopOnFailure: Boolean(entityDetails?.steps?.[i]?.stopOnFailure),
+        execute: isV2 ? v2Execute : execute,
+        stopOnFailure,
       };
     });
 
@@ -175,7 +186,7 @@ const SettingsTests = () => {
             </Button>
           </EmptyTestsContainer>
         ) : (
-          <TestSuiteStepsFlow steps={steps} setSteps={setSteps} showModal={showModal} />
+          <TestSuiteStepsFlow steps={steps} setSteps={setSteps} showModal={showModal} isV2={isV2} />
         )}
         <DelayModal
           isDelayModalVisible={isDelayModalVisible}
