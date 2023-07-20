@@ -432,10 +432,12 @@ export const GlobalStyle = createGlobalStyle`
     border: 1px dashed ${Colors.slate500};
   }
 
+  /* stylelint-disable-next-line selector-class-pattern */
   .react-flow__edge-path, .react-flow__connection-path {
     stroke: ${Colors.indigo400};
   }
 
+  /* stylelint-disable-next-line selector-class-pattern */
   .react-flow__handle {
     border: 2px solid ${Colors.indigo900};
     background: ${Colors.indigo400};
@@ -443,10 +445,12 @@ export const GlobalStyle = createGlobalStyle`
     height: 10px;
   }
   
+  /* stylelint-disable-next-line selector-class-pattern */
   .react-flow__attribution {
     display: none;
   }
 
+  /* stylelint-disable-next-line selector-class-pattern */
   .react-flow__controls-button {
     width: 30px;
     height: 30px;

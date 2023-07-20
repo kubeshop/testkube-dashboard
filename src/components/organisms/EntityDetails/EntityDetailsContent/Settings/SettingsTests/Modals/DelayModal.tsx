@@ -1,37 +1,39 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
-import {InputNumber} from 'antd';
+import {Input} from 'antd';
 
-import {Button, Modal, Text} from '@custom-antd';
+import {Button, Modal} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
+
+import {notificationCall} from '@src/components/molecules';
 
 import {StyledDelayModalContent} from '../SettingsTests.styled';
 
 type DelayModalProps = {
   isDelayModalVisible: boolean;
   setIsDelayModalVisible: (flag: boolean) => void;
-  addDelay: (delay: number) => void;
+  addDelay: (delay: string) => void;
 };
 
 const DelayModal: React.FC<DelayModalProps> = props => {
   const {isDelayModalVisible, setIsDelayModalVisible, addDelay} = props;
 
-  const [delayValue, setDelayValue] = useState<string | null>(null);
-
-  const isDelayInteger = useMemo(() => Number.isInteger(delayValue), [delayValue]);
+  const [delayValue, setDelayValue] = useState<string>('');
 
   const delayInputRef = useRef(null);
 
   const onEvent = usePressEnter();
 
   const onConfirm = () => {
-    if (isDelayInteger) {
-      addDelay(Number(delayValue));
-    }
+    if (/^([0-9]|([1-9][0-9]+))(ms|s|m|h)?$/.test(delayValue)) {
+      addDelay(delayValue);
 
-    setDelayValue(null);
-    setIsDelayModalVisible(false);
+      setDelayValue('');
+      setIsDelayModalVisible(false);
+    } else {
+      notificationCall('failed', 'Invalid delay format');
+    }
   };
 
   useEffect(() => {
@@ -55,12 +57,12 @@ const DelayModal: React.FC<DelayModalProps> = props => {
             $customType="secondary"
             onClick={() => {
               setIsDelayModalVisible(false);
-              setDelayValue(null);
+              setDelayValue('');
             }}
           >
             Cancel
           </Button>
-          <Button $customType="primary" onClick={onConfirm} disabled={!isDelayInteger}>
+          <Button $customType="primary" onClick={onConfirm}>
             Add delay
           </Button>
         </>
@@ -71,13 +73,11 @@ const DelayModal: React.FC<DelayModalProps> = props => {
             onEvent(event, onConfirm);
           }}
         >
-          <Text className="regular middle">Delay in ms</Text>
-          <InputNumber
+          <Input
             ref={delayInputRef}
-            placeholder="e.g.: 1000"
-            controls={false}
+            placeholder="e.g.: 1000, 2s"
             value={delayValue}
-            onChange={value => setDelayValue(value)}
+            onChange={e => setDelayValue(e.target.value)}
           />
         </StyledDelayModalContent>
       }

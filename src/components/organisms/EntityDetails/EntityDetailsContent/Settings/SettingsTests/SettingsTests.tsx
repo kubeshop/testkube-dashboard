@@ -4,6 +4,8 @@ import {Form} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
+import pick from 'lodash/pick';
+
 import {ExternalLink} from '@atoms';
 
 import {EntityDetailsContext, MainContext} from '@contexts';
@@ -107,9 +109,11 @@ const SettingsTests = () => {
     setCurrentGroup(group);
   };
 
-  const addNode = (data: number | {name: string; type: string}) => {
+  const addNode = (data: string | {name: string; type: string}) => {
     const item =
-      typeof data === 'number' ? {id: nanoid(), delay: `${data}ms`} : {id: nanoid(), test: data.name, type: data.type};
+      typeof data === 'object'
+        ? {id: nanoid(), test: data.name, type: data.type}
+        : {id: nanoid(), delay: !Number.isNaN(Number(data)) ? `${data}ms` : data};
 
     if (typeof currentGroup === 'number') {
       setSteps([
@@ -126,16 +130,7 @@ const SettingsTests = () => {
   const onSave = () => {
     const resultSteps = steps.map((items, i) => {
       return {
-        execute: items.map(item => {
-          if ('delay' in item) {
-            return {
-              delay: item.delay,
-            };
-          }
-          return {
-            test: item.test,
-          };
-        }),
+        execute: items.map(item => pick(item, ['delay', 'test'])),
         stopOnFailure: Boolean(entityDetails?.steps?.[i]?.stopOnFailure),
       };
     });
@@ -170,7 +165,7 @@ const SettingsTests = () => {
         enabled={mayEdit}
         forceEnableButtons={wasTouched}
       >
-        {steps?.length === 0 ? (
+        {!steps?.length ? (
           <EmptyTestsContainer>
             <Title level={2} className="text-center">
               This test suite doesn&#39;t have any tests yet

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
+import {intersectionHeight, intersectionWidth, itemHeight, itemWidth} from './TestSuiteStepsFlow';
+
 export const EmptyTestsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,8 +55,8 @@ export const TestNodeContainer = styled.div`
   align-items: center;
   gap: 12px;
 
-  width: 300px;
-  height: 68px;
+  width: ${itemWidth}px;
+  height: ${itemHeight}px;
   padding: 20px;
 
   border-radius: 4px;
@@ -65,6 +67,8 @@ export const TestNodeContainer = styled.div`
 export const IntersectionContainer = styled.div`
   border-radius: 10px;
   padding: 12px;
+  width: ${intersectionWidth}px;
+  height: ${intersectionHeight}px;
 
   background-color: ${Colors.slate800};
 
