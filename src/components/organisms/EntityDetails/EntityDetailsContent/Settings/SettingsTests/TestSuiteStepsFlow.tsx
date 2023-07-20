@@ -6,6 +6,7 @@ import {nanoid} from '@reduxjs/toolkit';
 import {notificationCall} from '@src/components/molecules';
 import {LocalStep} from '@src/models/testSuite';
 
+import AddNode from './Nodes/AddNode';
 import IntersectionNode from './Nodes/IntersectionNode';
 import StepNode from './Nodes/StepNode';
 import {ReactFlowContainer} from './SettingsTests.styled';
@@ -69,7 +70,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
     steps.forEach((step, index) => {
       newNodes.push(
         ...step.map((item, itemIndex) => ({
-          type: 'test',
+          type: 'step',
           id: item.id!,
           data: {...item, removeNode, group: index},
           position: getItemPosition(index, itemIndex),
@@ -79,10 +80,10 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
 
       if (!isV2) {
         newNodes.push({
-          type: 'intersection',
+          type: 'add',
           id: nanoid(),
           position: getAddPosition(index, step.length),
-          data: {showModal, group: index, withoutHandles: true},
+          data: {showModal, group: index},
         });
       }
 
@@ -125,7 +126,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
     setEdges(newEdges);
   }, [nodes]);
 
-  const nodeTypes = useMemo(() => ({test: StepNode, intersection: IntersectionNode}), []);
+  const nodeTypes = useMemo(() => ({step: StepNode, intersection: IntersectionNode, add: AddNode}), []);
 
   return (
     <ReactFlowContainer>

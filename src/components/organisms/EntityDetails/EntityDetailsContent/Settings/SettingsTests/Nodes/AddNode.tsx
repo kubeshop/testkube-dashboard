@@ -1,21 +1,20 @@
-import {Handle, Position} from 'reactflow';
-
 import {Dropdown} from 'antd';
 
 import {IntersectionContainer} from '../SettingsTests.styled';
 
-type IntersectionNodeProps = {
+type AddNodeProps = {
   data: {
+    stepLength: number;
     showModal: (value: string, group: number | string) => void;
     group: number | string;
   };
 };
-const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
+
+const AddNode: React.FC<AddNodeProps> = props => {
   const {data} = props;
 
   return (
     <>
-      <Handle type="target" position={Position.Left} />
       <Dropdown
         overlayClassName="light-dropdown"
         trigger={['hover']}
@@ -28,9 +27,8 @@ const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
       >
         <IntersectionContainer>+</IntersectionContainer>
       </Dropdown>
-      <Handle type="source" position={Position.Right} />
     </>
   );
 };
 
-export default IntersectionNode;
+export default AddNode;

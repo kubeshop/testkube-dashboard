@@ -36,10 +36,7 @@ const StepNode: React.FC<StepNodeProps> = props => {
             {renderText}
           </Text>
         </Tooltip>
-        <DotsDropdown
-          trigger={['hover']}
-          items={[{key: 1, label: <span onClick={() => data.removeNode(id, data.group)}>Remove</span>}]}
-        />
+        <DotsDropdown items={[{key: 1, label: <span onClick={() => data.removeNode(id, data.group)}>Remove</span>}]} />
       </TestNodeContainer>
       <Handle type="source" position={Position.Right} />
     </>
