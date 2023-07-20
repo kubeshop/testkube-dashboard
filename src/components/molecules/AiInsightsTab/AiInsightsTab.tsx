@@ -1,4 +1,4 @@
-import {usePluginState} from '@src/plugins/pluginHooks';
+import {usePluginState} from '@plugins/pluginHooks';
 
 const AiInsightsTab = () => {
   const [aiInsightsProps] = usePluginState<{id: string}>('executionDetailsTabs');
