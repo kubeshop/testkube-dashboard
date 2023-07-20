@@ -3,7 +3,6 @@ import {lazy, useContext, useEffect, useRef, useState} from 'react';
 import {Tabs} from 'antd';
 
 import debounce from 'lodash.debounce';
-import {Tab} from 'rc-tabs/lib/interface';
 
 import {ExecutionDetailsContext} from '@contexts';
 
@@ -13,8 +12,7 @@ import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList} from '@molecules';
 
-import PluginsContext from '@plugins/PluginsContext';
-import {insertPluginsToArray} from '@plugins/utils';
+import {usePluginSlotList, usePluginState} from '@plugins/pluginHooks';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
@@ -27,7 +25,7 @@ const LogOutput = lazy(() => import('@molecules').then(module => ({default: modu
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
-  const {pluginItems} = useContext(PluginsContext);
+  const [, setPluginData] = usePluginState<{id: string}>('executionDetailsTabs');
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -54,6 +52,10 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const decomposedVars = decomposeVariables(variables || {});
 
   const whetherToShowArtifactsTab = executorsFeaturesMap[testType]?.includes('artifacts');
+
+  useEffect(() => {
+    setPluginData({id});
+  }, [id]);
 
   useEffect(() => {
     if (ref && ref.current) {
@@ -89,39 +91,61 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   const defaultExecutionDetailsTabs = [
     {
-      key: 'LogOutputPane',
-      label: 'Log Output',
-      children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />,
+      component: {
+        key: 'LogOutputPane',
+        label: 'Log Output',
+        children: (
+          <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />
+        ),
+      },
+      metaData: {
+        order: Infinity,
+      },
     },
     whetherToShowArtifactsTab
       ? {
-          key: 'ArtifactsPane',
-          label: 'Artifacts',
-          children: (
-            <TestExecutionDetailsArtifacts
-              id={id}
-              testName={testName}
-              testSuiteName={testSuiteName}
-              startTime={startTime.toString()}
-            />
-          ),
+          component: {
+            key: 'ArtifactsPane',
+            label: 'Artifacts',
+            children: (
+              <TestExecutionDetailsArtifacts
+                id={id}
+                testName={testName}
+                testSuiteName={testSuiteName}
+                startTime={startTime.toString()}
+              />
+            ),
+          },
+          metaData: {
+            order: 3,
+          },
         }
       : null,
     {
-      key: 'CLICommands',
-      label: 'CLI Commands',
-      children: <CLICommands isExecutions type={testType} id={id} modifyMap={{status}} />,
+      component: {
+        key: 'CLICommands',
+        label: 'CLI Commands',
+        children: <CLICommands isExecutions type={testType} id={id} modifyMap={{status}} />,
+      },
+      metaData: {
+        order: 2,
+      },
     },
     decomposedVars.length
       ? {
-          key: 'Variables',
-          label: 'Variables',
-          children: <ExecutionsVariablesList variables={decomposedVars} />,
+          component: {
+            key: 'Variables',
+            label: 'Variables',
+            children: <ExecutionsVariablesList variables={decomposedVars} />,
+          },
+          metaData: {
+            order: 1,
+          },
         }
       : null,
-  ].filter(Boolean) as Tab[];
+  ];
 
-  const items = insertPluginsToArray(pluginItems['executionDetailsTabs'], defaultExecutionDetailsTabs, {id});
+  const items = usePluginSlotList('executionDetailsTabs', defaultExecutionDetailsTabs);
 
   return (
     <div ref={ref}>

@@ -1,4 +1,6 @@
-import {Plugin, PluginItems} from '@plugins/PluginsContext';
+import {Plugin} from '@plugins/PluginsContext';
+
+import PluginScope from './PluginScope';
 
 export class PluginManager {
   private plugins: Plugin[];
@@ -17,16 +19,10 @@ export class PluginManager {
     }
   }
 
-  public setup(): PluginItems {
-    const pluginItems: PluginItems = {
-      executionDetailsTabs: [],
-      executionDetailsBanner: [],
-    };
-    this.plugins.forEach(plugin => {
-      plugin.setup(pluginItems);
-    });
-
-    return pluginItems;
+  setup() {
+    const scope = new PluginScope();
+    this.plugins.forEach(plugin => plugin.setup(scope));
+    return scope;
   }
 }
 

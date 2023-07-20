@@ -1,4 +1,4 @@
-import React, {Suspense, lazy, useContext, useEffect, useRef, useState} from 'react';
+import React, {Suspense, lazy, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 import {useUpdate} from 'react-use';
@@ -29,8 +29,8 @@ import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
+import {PluginManager} from './plugins/PluginManager';
 import PluginsContext from './plugins/PluginsContext';
-import {PluginManager} from './plugins/createPluginManager';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -111,12 +111,14 @@ const App: React.FC<AppProps> = ({pluginManager}) => {
     });
   }, [apiEndpoint]);
 
+  const scope = useMemo(() => pluginManager.setup(), []);
+
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
     .append(StoreProvider, {})
     .append(PluginsContext.Provider, {
       value: {
-        pluginItems: pluginManager.setup(),
+        scope,
       },
     })
     .render(

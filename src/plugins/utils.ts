@@ -1,17 +1,15 @@
-import {PluginData} from './PluginsContext';
-
-export const insertPluginsToArray = <T, K>(pluginsArray: PluginData[], array: T[], props: K): T[] => {
-  const components = [...array];
-  pluginsArray.forEach(plugin => {
-    const {getComponent} = plugin;
-
-    const order = plugin.order ?? -Infinity;
-    const indexToInsert = components.findIndex((item, index) => index < order);
-    if (indexToInsert === -1) {
-      components.push(getComponent(props));
+export const orderArray = (array: any[]) => {
+  const result: any[] = [];
+  array.forEach((item: any) => {
+    if (!item) {
+      return;
+    }
+    const index = result.findIndex(x => x.metaData.order < item.metaData.order);
+    if (index === -1) {
+      result.push(item);
     } else {
-      components.splice(order, 0, getComponent(props));
+      result.splice(index, 0, item);
     }
   });
-  return components;
+  return result.map(x => x.component);
 };

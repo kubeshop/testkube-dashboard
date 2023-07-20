@@ -39,3 +39,4 @@ export {default as RunningContext} from './RunningContext';
 export {RunningContextType} from './RunningContext';
 export {default as MessagePanel} from './MessagePanel';
 export {default as InlineNotification} from './InlineNotification';
+export {default as AiInsightsTab} from './AiInsightsTab';

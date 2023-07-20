@@ -1,24 +1,25 @@
 import {createContext} from 'react';
 
-export interface PluginData {
-  getComponent: (props?: any) => any;
-  order?: number;
-}
+import {PluginMetaData} from './PluginMetaData';
+import PluginScope from './PluginScope';
 
-export type PluginItems = Record<string, PluginData[]>;
+export interface PluginData {
+  component: any;
+  metaData: PluginMetaData;
+}
 
 export interface Plugin {
   name: string;
-  setup: (pluginItems: PluginItems) => void;
+  setup: (scope: PluginScope) => void;
   order?: number;
 }
 
 export interface PluginsContextProps {
-  pluginItems: PluginItems;
+  scope: PluginScope;
 }
 
 const PluginsContext = createContext<PluginsContextProps>({
-  pluginItems: {} as PluginItems,
+  scope: {} as PluginScope,
 });
 
 export default PluginsContext;

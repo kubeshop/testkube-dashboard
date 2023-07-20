@@ -33,9 +33,9 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import TestExecutionDetailsArtifacts from './components/molecules/ExecutionDetails/TestExecutionDetails/TestExecutionDetailsArtifacts';
-import {PluginItems} from './plugins/PluginsContext';
-import createPluginManager from './plugins/createPluginManager';
+import {AiInsightsTab} from './components/molecules';
+import createPluginManager from './plugins/PluginManager';
+import PluginScope from './plugins/PluginScope';
 import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
@@ -112,22 +112,21 @@ const AppRoot: React.FC = () => {
 
   pluginManager.add({
     name: 'ai-insights',
-    setup: (pluginItems: PluginItems) => {
-      pluginItems['executionDetailsTabs'].push({
-        // this is a new Tab
-        getComponent: (props: {id: string}) => {
-          return {
-            key: 'ai-insights-tab',
-            // TODO create component for this
-            label: (
-              <div style={{display: 'flex', gap: '8px'}}>
-                AI Inisghts <NewIcon />
-              </div>
-            ),
-            children: <TestExecutionDetailsArtifacts {...props} />,
-          };
+    setup: (scope: PluginScope) => {
+      scope.appendSlot('executionDetailsTabs', {
+        component: {
+          key: 'ai-insights-tab',
+          // TODO create component for this
+          label: (
+            <div style={{display: 'flex', gap: '8px'}}>
+              AI Inisghts <NewIcon />
+            </div>
+          ),
+          children: <AiInsightsTab />,
         },
-        order: 1,
+        metaData: {
+          order: 4,
+        },
       });
     },
   });
