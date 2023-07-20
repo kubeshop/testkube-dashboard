@@ -10,7 +10,7 @@ export interface EntityDetailsSlice {
   isFirstTimeLoading: boolean;
   id?: string;
   execId?: string;
-  defaultStackRoute: string; // TODO: Think if it's needed
+  defaultStackRoute: string;
   executions: any;
   details: any;
   metrics?: Metrics;
@@ -25,8 +25,8 @@ export interface EntityDetailsSlice {
   setExecId: Private<(execId?: string) => void>;
   openExecutionDetails: Customizable<(dataItem: any) => void>;
   closeExecutionDetails: Customizable<() => void>;
-  abortExecution: Customizable<any>; // TODO: Add types
-  abortAllExecutions: Customizable<any>; // TODO: Add types
+  abortExecution: Customizable<(data: {id: string; executionId: string}) => Promise<any>>;
+  abortAllExecutions: Customizable<(data: {id: string}) => Promise<any>>;
 }
 
 const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
@@ -44,8 +44,8 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   setDaysFilterValue: daysFilterValue => set({daysFilterValue}),
   openExecutionDetails: makeCustomizable(() => {}),
   closeExecutionDetails: makeCustomizable(() => {}),
-  abortExecution: makeCustomizable(() => {}),
-  abortAllExecutions: makeCustomizable(() => {}),
+  abortExecution: makeCustomizable(() => Promise.resolve()),
+  abortAllExecutions: makeCustomizable(() => Promise.resolve()),
   setDetails: makePrivate(details => set({details})),
   setExecId: makePrivate(execId => set({execId})),
   setMetrics: makePrivate(metrics => set({metrics})),
