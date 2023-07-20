@@ -167,8 +167,8 @@ const SettingsTests = () => {
           title="Your agent needs to be updated"
           description={
             <>
-              You are running an older agent on this environment. Update your Testkube installation enable parallel
-              tests and other new features.
+              You are running an older agent on this environment. Updating your Testkube will enable parallel tests and
+              other new features.
             </>
           }
         />

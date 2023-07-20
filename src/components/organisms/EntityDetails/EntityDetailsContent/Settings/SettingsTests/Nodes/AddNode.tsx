@@ -1,6 +1,6 @@
-import {Dropdown} from 'antd';
-
 import {IntersectionContainer} from '../SettingsTests.styled';
+
+import AddStepDropdown from './AddStepDropdown';
 
 type AddNodeProps = {
   data: {
@@ -16,18 +16,9 @@ const AddNode: React.FC<AddNodeProps> = props => {
 
   return (
     <>
-      <Dropdown
-        overlayClassName="light-dropdown"
-        trigger={['hover']}
-        menu={{
-          items: [
-            {key: 1, label: <span onClick={() => data.showTestModal(data.group)}>Add a test</span>},
-            {key: 2, label: <span onClick={() => data.showDelayModal(data.group)}>Add a delay</span>},
-          ],
-        }}
-      >
+      <AddStepDropdown data={data}>
         <IntersectionContainer>+</IntersectionContainer>
-      </Dropdown>
+      </AddStepDropdown>
     </>
   );
 };

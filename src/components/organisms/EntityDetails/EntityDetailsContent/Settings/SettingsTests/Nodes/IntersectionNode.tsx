@@ -1,8 +1,8 @@
 import {Handle, Position} from 'reactflow';
 
-import {Dropdown} from 'antd';
-
 import {IntersectionContainer} from '../SettingsTests.styled';
+
+import AddStepDropdown from './AddStepDropdown';
 
 type IntersectionNodeProps = {
   data: {
@@ -17,18 +17,9 @@ const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
   return (
     <>
       <Handle type="target" position={Position.Left} />
-      <Dropdown
-        overlayClassName="light-dropdown"
-        trigger={['hover']}
-        menu={{
-          items: [
-            {key: 1, label: <span onClick={() => data.showTestModal(data.group)}>Add a test</span>},
-            {key: 2, label: <span onClick={() => data.showDelayModal(data.group)}>Add a delay</span>},
-          ],
-        }}
-      >
+      <AddStepDropdown data={data}>
         <IntersectionContainer>+</IntersectionContainer>
-      </Dropdown>
+      </AddStepDropdown>
       <Handle type="source" position={Position.Right} />
     </>
   );
