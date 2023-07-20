@@ -21,8 +21,6 @@ export interface EntityDetailsSlice {
   setMetrics: Private<(metrics?: Metrics) => void>;
   setExecutions: Private<(executions: any) => void>;
   setIsFirstTimeLoading: Private<(value: boolean) => void>;
-  setDetails: Private<(details: any) => void>;
-  setExecId: Private<(execId?: string) => void>;
   openExecutionDetails: Customizable<(dataItem: any) => void>;
   closeExecutionDetails: Customizable<() => void>;
   abortExecution: Customizable<(data: {id: string; executionId: string}) => Promise<any>>;
@@ -46,8 +44,6 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   closeExecutionDetails: makeCustomizable(() => {}),
   abortExecution: makeCustomizable(() => Promise.resolve()),
   abortAllExecutions: makeCustomizable(() => Promise.resolve()),
-  setDetails: makePrivate(details => set({details})),
-  setExecId: makePrivate(execId => set({execId})),
   setMetrics: makePrivate(metrics => set({metrics})),
   setExecutions: makePrivate(executions => set({executions})),
   setIsFirstTimeLoading: makePrivate(isFirstTimeLoading => set({isFirstTimeLoading})),

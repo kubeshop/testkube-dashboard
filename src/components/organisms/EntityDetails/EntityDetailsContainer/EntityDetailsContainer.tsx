@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useMemo} from 'react';
 import {useParams} from 'react-router-dom';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
@@ -46,7 +46,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [abortExecution] = useAbortExecution();
   const [abortAllExecutions] = useAbortAllExecutions();
 
-  const [StoreProvider, usePrivateStore] = initializeEntityDetailsStore(
+  const [StoreProvider, usePrivateStore, usePrivateStoreSync] = initializeEntityDetailsStore(
     {
       entity,
       id,
@@ -73,8 +73,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setIsFirstTimeLoading,
     daysFilterValue,
     setDaysFilterValue,
-    setDetails,
-    setExecId,
   } = usePrivateStore(x => ({
     metrics: x.metrics,
     setMetrics: x.setMetrics,
@@ -84,8 +82,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setIsFirstTimeLoading: x.setIsFirstTimeLoading,
     daysFilterValue: x.daysFilterValue,
     setDaysFilterValue: x.setDaysFilterValue,
-    setDetails: x.setDetails,
-    setExecId: x.setExecId,
   }));
 
   const {isClusterAvailable} = useContext(MainContext);
@@ -253,21 +249,17 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   const testIcon = useExecutorIcon(rawDetails);
 
-  // TODO: Create utility to sync local values with the Zustand store
-  useEffect(() => {
-    setDetails({
-      ...rawDetails,
-      ...(testIcon ? {testIcon} : {}),
-    });
-  }, [usePrivateStore, rawDetails, executors, entity]);
-
-  useEffect(() => {
-    setExecId(execId);
-  }, [usePrivateStore, execId]);
-
-  useEffect(() => {
-    setMetrics(rawMetrics);
-  }, [usePrivateStore, rawMetrics]);
+  usePrivateStoreSync({
+    execId,
+    metrics: rawMetrics,
+    details: useMemo(
+      () => ({
+        ...rawDetails,
+        ...(testIcon ? {testIcon} : {}),
+      }),
+      [usePrivateStore, rawDetails, executors, entity]
+    ),
+  });
 
   return (
     <StoreProvider>
