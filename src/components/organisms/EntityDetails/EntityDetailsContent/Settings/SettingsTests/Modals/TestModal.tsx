@@ -37,7 +37,10 @@ const TestModal: React.FC<TestModalProps> = props => {
   const onEvent = usePressEnter();
 
   const onConfirm = () => {
-    onSubmit(JSON.parse(testValue!));
+    const testData = allTestsData.find(x => x.name === testValue!);
+    if (testData) {
+      onSubmit({name: testData.name, type: testData.type!});
+    }
 
     setTestValue(null);
     onClose();
@@ -81,7 +84,7 @@ const TestModal: React.FC<TestModalProps> = props => {
         >
           <Select onChange={setTestValue} value={testValue} showSearch placeholder="Select a test..." size="middle">
             {allTestsData.map(item => (
-              <Option value={JSON.stringify(item)} key={item.name}>
+              <Option value={item.name} key={item.name}>
                 <StyledOptionWrapper>
                   <ExecutorIcon type={item.type} />
                   <Text className="regular middle">{item.name}</Text>
