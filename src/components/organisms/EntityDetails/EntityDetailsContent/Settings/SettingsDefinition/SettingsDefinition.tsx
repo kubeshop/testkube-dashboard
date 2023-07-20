@@ -41,7 +41,7 @@ const SettingsDefinition = () => {
     <Definition
       useGetDefinitionQuery={sectionData.query}
       useUpdateDefinitionMutation={sectionData.mutation}
-      name={entity.name}
+      name={details.name}
       {...config}
     />
   );

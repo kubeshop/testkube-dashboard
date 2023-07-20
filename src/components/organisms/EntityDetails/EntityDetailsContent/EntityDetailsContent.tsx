@@ -7,7 +7,7 @@ import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ExecutorIcon} from '@atoms';
 
-import {AnalyticsContext, DashboardContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {Button, Text} from '@custom-antd';
 
