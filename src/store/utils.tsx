@@ -1,7 +1,6 @@
 import {FC, PropsWithChildren, createContext, useContext, useMemo} from 'react';
 
 import {capitalize} from 'lodash';
-
 import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
@@ -59,7 +58,7 @@ export const createStoreFactory =
         (...a) => ({
           ...createSlice(...a),
           ...initialState,
-          [magicSet]: <K extends keyof T,>(key: K, value: T[K]) => {
+          [magicSet]: <K extends keyof T>(key: K, value: T[K]) => {
             const state = a[2].getState();
             const setData = a[0];
             const setterName = getSetterName(key as string);
@@ -101,7 +100,7 @@ class StoreFactoryBuilder<T> {
 export const createStoreBuilder = (name: string) => new StoreFactoryBuilder(name, () => ({}));
 
 const applyStateUpdate = <T,>(state: T, data: Partial<T>) => {
-  Object.keys(data).forEach((_key) => {
+  Object.keys(data).forEach(_key => {
     const key = _key as keyof T;
     if (data[key] !== state[key]) {
       (state as any)[magicSet](key, data[key]);
@@ -125,11 +124,14 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
     return context.use(selector);
   };
 
-  const useStoreSync: PublicStoreSync = (data) => {
+  const useStoreSync: PublicStoreSync = data => {
     useStore(state => applyStateUpdate(state, data));
   };
 
-  const useNewStore = (initialState?: InitialState<T>, deps: any[] = []): [ShallowComponent, StoreSelector, StoreSync] => {
+  const useNewStore = (
+    initialState?: InitialState<T>,
+    deps: any[] = []
+  ): [ShallowComponent, StoreSelector, StoreSync] => {
     // Ensure that this store is not created yet in this place
     const context = useContext(StoreContext);
     if (context?.use) {
@@ -141,7 +143,7 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
       const store = createStore(initialState);
       return selector => store(selector as any, shallow);
     }, deps);
-    const sync: StoreSync = useMemo(() => (data) => use(state => applyStateUpdate(state, data)), deps);
+    const sync: StoreSync = useMemo(() => data => use(state => applyStateUpdate(state, data)), deps);
     const Provider: ShallowComponent = useMemo(
       () =>
         ({children}) =>
