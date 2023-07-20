@@ -51,10 +51,7 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
   }));
 
   const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawDetails));
-  const details = useMemo(
-    () => (isV2 ? convertTestSuiteV2ToV3(rawDetails) : rawDetails),
-    [rawDetails]
-  );
+  const details = useMemo(() => (isV2 ? convertTestSuiteV2ToV3(rawDetails) : rawDetails), [rawDetails]);
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -86,10 +83,7 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
     }));
   }, [allTestsList]);
 
-  const hasParallelSteps = useMemo(
-    () => details?.steps?.some(step => step.execute.length > 1),
-    [details.steps]
-  );
+  const hasParallelSteps = useMemo(() => details?.steps?.some(step => step.execute.length > 1), [details.steps]);
 
   const initialSteps: LocalStep[] = useMemo(
     () =>
