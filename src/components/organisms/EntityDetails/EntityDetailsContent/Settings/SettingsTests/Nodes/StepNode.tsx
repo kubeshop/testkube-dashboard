@@ -17,7 +17,7 @@ type StepNodeProps = {
   data: {
     item: LocalStep;
     group: number;
-    removeNode: (id: string, col: number) => void;
+    deleteNode: (id: string, group: number) => void;
   };
   id: string;
 };
@@ -39,7 +39,7 @@ const StepNode: React.FC<StepNodeProps> = props => {
             </Text>
           </TestNodeNameContainer>
         </Tooltip>
-        <DotsDropdown items={[{key: 1, label: <span onClick={() => data.removeNode(id, data.group)}>Remove</span>}]} />
+        <DotsDropdown items={[{key: 1, label: <span onClick={() => data.deleteNode(id, data.group)}>Delete</span>}]} />
       </TestNodeContainer>
       <Handle type="source" position={Position.Right} isConnectable={false} />
     </>

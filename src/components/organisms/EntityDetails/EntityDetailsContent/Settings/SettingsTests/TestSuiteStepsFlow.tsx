@@ -48,7 +48,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
   const [nodes, setNodes] = useState<ExtendedNode[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
 
-  const removeNode = (id: string, group: number) => {
+  const deleteNode = (id: string, group: number) => {
     if (steps[group].length === 1) {
       if (steps[group][0].id === id) {
         setSteps([...steps.slice(0, group), ...steps.slice(group + 1)]);
@@ -62,18 +62,11 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
     const newNodes: ExtendedNode[] = [];
 
     steps.forEach((step, group) => {
-      const common = {
-        showDelayModal,
-        showTestModal,
-        last: group === steps.length - 1,
-        group,
-      };
-
       newNodes.push(
         ...step.map((item, itemIndex) => ({
           type: 'step',
           id: item.id!,
-          data: {removeNode, item, ...common},
+          data: {deleteNode, item, last: group === steps.length - 1, group},
           position: getItemPosition(group, itemIndex),
         }))
       );
@@ -83,7 +76,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
           type: 'add',
           id: nanoid(),
           position: getAddPosition(group, step.length),
-          data: {...common},
+          data: {showDelayModal, showTestModal, group},
         });
       }
     });

@@ -117,7 +117,7 @@ const SettingsTests = () => {
     const nextIndex = Math.ceil(index);
 
     if (prevIndex === nextIndex) {
-      setSteps([...steps.slice(0, index), [...(steps[index] || []), item], ...steps.slice(index + 1)]);
+      setSteps([...steps.slice(0, index), [...steps[index], item], ...steps.slice(index + 1)]);
     } else {
       setSteps([...steps.slice(0, nextIndex), [item], ...steps.slice(nextIndex)]);
     }
