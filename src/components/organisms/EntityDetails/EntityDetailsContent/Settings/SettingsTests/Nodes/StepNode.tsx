@@ -14,7 +14,8 @@ import {DotsDropdown} from '@molecules';
 import {TestNodeContainer, TestNodeNameContainer} from '../SettingsTests.styled';
 
 type StepNodeProps = {
-  data: LocalStep & {
+  data: {
+    item: LocalStep;
     group: number;
     removeNode: (id: string, col: number) => void;
   };
@@ -23,7 +24,7 @@ type StepNodeProps = {
 
 const StepNode: React.FC<StepNodeProps> = props => {
   const {data, id} = props;
-  const {type, test, delay} = data;
+  const {type, test, delay} = data.item;
 
   const renderText = test || delay;
   return (

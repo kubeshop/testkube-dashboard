@@ -4,7 +4,6 @@ import AddStepDropdown from './AddStepDropdown';
 
 type AddNodeProps = {
   data: {
-    stepLength: number;
     showTestModal: (group: number) => void;
     showDelayModal: (group: number) => void;
     group: number;

@@ -30,11 +30,11 @@ const itemVerticalSpace = verticalGapBetweenItems + 68;
 const itemHorizontalSpace = itemWidth + horizontalGap;
 
 const getIntersectionPosition = (group: number) => ({
-  x: group * itemHorizontalSpace - (horizontalGap / 2 + intersectionWidth / 2),
+  x: (group + 1) * itemHorizontalSpace - (horizontalGap + intersectionWidth) / 2,
   y: (itemHeight - intersectionHeight) / 2,
 });
 const getAddPosition = (group: number, groupLength: number) => ({
-  x: group * itemHorizontalSpace + (itemWidth / 2 - intersectionWidth / 2),
+  x: group * itemHorizontalSpace + (itemWidth - intersectionWidth) / 2,
   y: groupLength * itemVerticalSpace - verticalGapBeforeAdd,
 });
 const getItemPosition = (group: number, itemIndex: number) => ({
@@ -61,13 +61,20 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
   useEffect(() => {
     const newNodes: ExtendedNode[] = [];
 
-    steps.forEach((step, index) => {
+    steps.forEach((step, group) => {
+      const common = {
+        showDelayModal,
+        showTestModal,
+        last: group === steps.length - 1,
+        group,
+      };
+
       newNodes.push(
         ...step.map((item, itemIndex) => ({
           type: 'step',
           id: item.id!,
-          data: {...item, removeNode, group: index},
-          position: getItemPosition(index, itemIndex),
+          data: {removeNode, item, ...common},
+          position: getItemPosition(group, itemIndex),
         }))
       );
 
@@ -75,16 +82,16 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         newNodes.push({
           type: 'add',
           id: nanoid(),
-          position: getAddPosition(index, step.length),
-          data: {showDelayModal, showTestModal, group: index},
+          position: getAddPosition(group, step.length),
+          data: {...common},
         });
       }
 
       newNodes.push({
         type: 'intersection',
         id: nanoid(),
-        position: getIntersectionPosition(index + 1),
-        data: {showDelayModal, showTestModal, group: index, last: index === steps.length - 1},
+        position: getIntersectionPosition(group),
+        data: {...common},
       });
     });
 
@@ -93,21 +100,28 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
 
   // add edges
   useEffect(() => {
-    const newEdges: Edge[] = [];
-
-    nodes.forEach(node => {
+    const newEdges: Edge[] = nodes.reduce((result, node) => {
       if (node.type === 'intersection') {
-        const filteredNodes = nodes.filter(x => x.type === 'step' && x.data.group === node.data.group + 1);
-        filteredNodes.forEach(nextNode => {
-          newEdges.push({id: `${node.id}-${nextNode.id}`, source: node.id, target: nextNode.id});
-        });
-      } else if (node.type === 'step') {
-        const nextIntersection = nodes.find(x => x.type === 'intersection' && x.data.group === node.data.group);
-        if (nextIntersection) {
-          newEdges.push({id: `${node.id}-${nextIntersection.id}`, source: node.id, target: nextIntersection.id});
-        }
+        const nextNodes = nodes.filter(x => x.type === 'step' && x.data.group === node.data.group + 1);
+        return [
+          ...result,
+          ...nextNodes.map(nextNode => ({
+            id: `${node.id}-${nextNode.id}`,
+            source: node.id,
+            target: nextNode.id,
+            focusable: false,
+          })),
+        ];
       }
-    });
+      if (node.type === 'step') {
+        const nextIntersection = nodes.find(x => x.type === 'intersection' && x.data.group === node.data.group)!;
+        return [
+          ...result,
+          {id: `${node.id}-${nextIntersection.id}`, source: node.id, target: nextIntersection.id, focusable: false},
+        ];
+      }
+      return result;
+    }, [] as Edge[]);
 
     setEdges(newEdges);
   }, [nodes]);
