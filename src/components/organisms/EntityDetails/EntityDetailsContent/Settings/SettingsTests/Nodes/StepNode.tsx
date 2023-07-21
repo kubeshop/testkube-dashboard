@@ -26,10 +26,10 @@ const StepNode: React.FC<StepNodeProps> = props => {
   const {data, id} = props;
   const {type, test, delay} = data.item;
 
-  const renderText = test || delay;
+  const renderText = test ?? (/^[0-9]+$/.test(`${delay}`) ? `${delay}ms` : delay);
   return (
     <>
-      {data.group === 0 ? null : <Handle type="target" position={Position.Left} isConnectable={false} />}
+      <Handle type="target" position={Position.Left} isConnectable={false} />
       <TestNodeContainer>
         {delay ? <ClockCircleOutlined style={{fontSize: '20px'}} /> : <ExecutorIcon type={type} />}
         <Tooltip title={renderText}>

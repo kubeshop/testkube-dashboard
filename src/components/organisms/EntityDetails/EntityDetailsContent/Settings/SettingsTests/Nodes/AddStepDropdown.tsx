@@ -4,6 +4,7 @@ import {Dropdown} from 'antd';
 
 type AddStepDropdownProps = {
   children: ReactNode;
+  before?: boolean;
   data: {
     showTestModal: (group: number) => void;
     showDelayModal: (group: number) => void;
@@ -12,7 +13,8 @@ type AddStepDropdownProps = {
 };
 
 const AddStepDropdown: React.FC<AddStepDropdownProps> = props => {
-  const {data, children} = props;
+  const {data, before = false, children} = props;
+  const group = data.group + (before ? -0.5 : 0);
 
   return (
     <Dropdown
@@ -20,8 +22,8 @@ const AddStepDropdown: React.FC<AddStepDropdownProps> = props => {
       trigger={['hover']}
       menu={{
         items: [
-          {key: 1, label: <span onClick={() => data.showTestModal(data.group)}>Add a test</span>},
-          {key: 2, label: <span onClick={() => data.showDelayModal(data.group)}>Add a delay</span>},
+          {key: 1, label: <span onClick={() => data.showTestModal(group)}>Add a test</span>},
+          {key: 2, label: <span onClick={() => data.showDelayModal(group)}>Add a delay</span>},
         ],
       }}
     >

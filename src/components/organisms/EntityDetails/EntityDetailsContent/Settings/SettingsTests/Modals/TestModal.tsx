@@ -21,7 +21,7 @@ import {StyledDelayModalContent, StyledOptionWrapper} from '../SettingsTests.sty
 type TestModalProps = {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (test: {name: string; type: string}) => void;
+  onSubmit: (test: {test: string; type: string}) => void;
 };
 const {Option} = Select;
 
@@ -39,7 +39,7 @@ const TestModal: React.FC<TestModalProps> = props => {
   const onConfirm = () => {
     const testData = allTestsData.find(x => x.name === testValue!);
     if (testData) {
-      onSubmit({name: testData.name, type: testData.type!});
+      onSubmit({test: testData.name, type: testData.type!});
     }
 
     setTestValue(null);

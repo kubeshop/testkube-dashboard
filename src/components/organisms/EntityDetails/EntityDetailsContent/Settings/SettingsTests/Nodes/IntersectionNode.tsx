@@ -17,8 +17,8 @@ const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
 
   return (
     <>
-      <Handle type="target" position={Position.Left} isConnectable={false} />
-      <AddStepDropdown data={data}>
+      {data.group === 0 ? null : <Handle type="target" position={Position.Left} isConnectable={false} />}
+      <AddStepDropdown data={data} before>
         <IntersectionContainer>+</IntersectionContainer>
       </AddStepDropdown>
       {data.last ? null : <Handle type="source" position={Position.Right} isConnectable={false} />}

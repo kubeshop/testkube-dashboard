@@ -30,15 +30,15 @@ const itemVerticalSpace = verticalGapBetweenItems + 68;
 const itemHorizontalSpace = itemWidth + horizontalGap;
 
 const getIntersectionPosition = (group: number) => ({
-  x: (group + 1) * itemHorizontalSpace - (horizontalGap + intersectionWidth) / 2,
+  x: group * itemHorizontalSpace + horizontalGap / 2 - intersectionWidth,
   y: (itemHeight - intersectionHeight) / 2,
 });
 const getAddPosition = (group: number, groupLength: number) => ({
-  x: group * itemHorizontalSpace + (itemWidth - intersectionWidth) / 2,
+  x: (group + 1) * itemHorizontalSpace - itemWidth / 2 - intersectionWidth,
   y: groupLength * itemVerticalSpace - verticalGapBeforeAdd,
 });
 const getItemPosition = (group: number, itemIndex: number) => ({
-  x: group * itemHorizontalSpace,
+  x: group * itemHorizontalSpace + (itemWidth - intersectionWidth) / 2,
   y: itemIndex * itemVerticalSpace,
 });
 
@@ -86,14 +86,21 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
           data: {...common},
         });
       }
+    });
 
+    for (let group = 0; group <= steps.length; group += 1) {
       newNodes.push({
         type: 'intersection',
         id: nanoid(),
         position: getIntersectionPosition(group),
-        data: {...common},
+        data: {
+          showDelayModal,
+          showTestModal,
+          last: group === steps.length,
+          group,
+        },
       });
-    });
+    }
 
     setNodes(newNodes);
   }, [steps]);
@@ -102,7 +109,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
   useEffect(() => {
     const newEdges: Edge[] = nodes.reduce((result, node) => {
       if (node.type === 'intersection') {
-        const nextNodes = nodes.filter(x => x.type === 'step' && x.data.group === node.data.group + 1);
+        const nextNodes = nodes.filter(x => x.type === 'step' && x.data.group === node.data.group);
         return [
           ...result,
           ...nextNodes.map(nextNode => ({
@@ -114,7 +121,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         ];
       }
       if (node.type === 'step') {
-        const nextIntersection = nodes.find(x => x.type === 'intersection' && x.data.group === node.data.group)!;
+        const nextIntersection = nodes.find(x => x.type === 'intersection' && x.data.group === node.data.group + 1)!;
         return [
           ...result,
           {id: `${node.id}-${nextIntersection.id}`, source: node.id, target: nextIntersection.id, focusable: false},

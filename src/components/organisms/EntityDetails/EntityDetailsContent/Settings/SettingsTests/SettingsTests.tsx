@@ -91,7 +91,7 @@ const SettingsTests = () => {
 
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
   const [isTestModalVisible, setIsTestModalVisible] = useState(false);
-  const [currentGroup, setCurrentGroup] = useState<number | string>(0);
+  const [currentGroup, setCurrentGroup] = useState<number>(0);
 
   const [steps, setSteps] = useState(initialSteps);
 
@@ -111,23 +111,20 @@ const SettingsTests = () => {
     setCurrentGroup(group);
   };
 
-  const addNode = (data: string | {name: string; type: string}) => {
-    const item =
-      typeof data === 'object'
-        ? {id: nanoid(), test: data.name, type: data.type}
-        : {id: nanoid(), delay: !Number.isNaN(Number(data)) ? `${data}ms` : data};
+  // index may be i.e. 3.5, which means inserting between index 3 and 4
+  const insertStep = (item: LocalStep, index: number) => {
+    const prevIndex = Math.floor(index);
+    const nextIndex = Math.ceil(index);
 
-    if (typeof currentGroup === 'number') {
-      setSteps([
-        ...steps.slice(0, currentGroup),
-        [...(steps[currentGroup] || []), item],
-        ...steps.slice(currentGroup + 1),
-      ]);
+    if (prevIndex === nextIndex) {
+      setSteps([...steps.slice(0, index), [...(steps[index] || []), item], ...steps.slice(index + 1)]);
     } else {
-      const index = Number(currentGroup.split('-')[0]) + 1;
-      setSteps([...steps.slice(0, index), [item], ...steps.slice(index)]);
+      setSteps([...steps.slice(0, nextIndex), [item], ...steps.slice(nextIndex)]);
     }
   };
+
+  const addTest = (test: {test: string; type: string}) => insertStep({id: nanoid(), ...test}, currentGroup);
+  const addDelay = (delay: string) => insertStep({id: nanoid(), delay}, currentGroup);
 
   const onSave = () => {
     const resultSteps = steps.map((items, i) => {
@@ -197,7 +194,7 @@ const SettingsTests = () => {
               <Title level={2} className="text-center">
                 This test suite doesn&#39;t have any tests yet
               </Title>
-              <Button $customType="primary" onClick={() => showTestModal(0)}>
+              <Button $customType="primary" onClick={() => showTestModal(-0.5)}>
                 Add your first test
               </Button>
             </EmptyTestsContainer>
@@ -210,8 +207,8 @@ const SettingsTests = () => {
               isV2={isV2}
             />
           )}
-          <DelayModal visible={isDelayModalVisible} onClose={() => setIsDelayModalVisible(false)} onSubmit={addNode} />
-          <TestModal visible={isTestModalVisible} onClose={() => setIsTestModalVisible(false)} onSubmit={addNode} />
+          <DelayModal visible={isDelayModalVisible} onClose={() => setIsDelayModalVisible(false)} onSubmit={addDelay} />
+          <TestModal visible={isTestModalVisible} onClose={() => setIsTestModalVisible(false)} onSubmit={addTest} />
         </ConfigurationCard>
       </Form>
     </FullWidthSpace>
