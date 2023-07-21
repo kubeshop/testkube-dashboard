@@ -90,7 +90,6 @@
     "node-fetch": "^2.6.12",
     "query-string": "7.1.1",
     "react": "18.1.0",
-    "react-beautiful-dnd": "^13.1.0",
     "react-dom": "18.1.0",
     "react-gtm-module": "^2.0.11",
     "react-helmet": "^6.1.0",
@@ -102,6 +101,7 @@
     "react-use": "17.4.0",
     "react-use-websocket": "^4.2.0",
     "semver": "^7.5.4",
+    "reactflow": "^11.7.4",
     "strip-ansi": "^7.0.1",
     "styled-components": "5.3.5",
     "zustand": "^4.3.7"

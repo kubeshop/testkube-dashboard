@@ -36,56 +36,58 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
   const executors = useAppSelector(selectExecutors);
 
   const elements = useMemo(() => {
-    return executionSteps?.map(step => {
-      const groupKey = step.execute.map(item => item.execution?.id || Math.random()).join('-');
+    return executionSteps
+      ?.filter(step => step.execute?.length)
+      .map(step => {
+        const groupKey = step.execute.map(item => item.execution?.id || Math.random()).join('-');
 
-      const items = step.execute
-        .map(({execution}, index) => ({execution, result: step.step.execute[index]}))
-        .filter(({result}) => result.delay || result.test)
-        .map(({execution, result}) => {
-          const status = execution.executionResult?.status;
-          if (result.delay) {
+        const items = step.execute
+          .map(({execution}, index) => ({execution, result: step.step.execute[index]}))
+          .filter(({result}) => result.delay || result.test)
+          .map(({execution, result}) => {
+            const status = execution.executionResult?.status;
+            if (result.delay) {
+              return {
+                status,
+                icon: <ClockCircleOutlined style={{fontSize: '26px'}} />,
+                name: `Delay - ${result.delay}`,
+                url: null,
+              };
+            }
             return {
               status,
-              icon: <ClockCircleOutlined style={{fontSize: '26px'}} />,
-              name: `Delay - ${result.delay}`,
-              url: null,
+              icon: <ExecutorIcon type={getTestExecutorIcon(executors, execution.testType)} />,
+              name: result.test!,
+              url:
+                status !== 'queued' && status !== 'aborted'
+                  ? execution?.id
+                    ? `/tests/executions/${result.test}/execution/${execution.id}`
+                    : `/tests/executions/${result.test}`
+                  : null,
             };
-          }
-          return {
-            status,
-            icon: <ExecutorIcon type={getTestExecutorIcon(executors, execution.testType)} />,
-            name: result.test!,
-            url:
-              status !== 'queued' && status !== 'aborted'
-                ? execution?.id
-                  ? `/tests/executions/${result.test}/execution/${execution.id}`
-                  : `/tests/executions/${result.test}`
-                : null,
-          };
-        })
-        .map(({status, icon, name, url}, index) => (
-          <ExecutionStepsListItemExecution
-            // eslint-disable-next-line react/no-array-index-key
-            key={`item-${index}`}
-            className={classNames({clickable: url})}
-            onClick={url ? () => navigate(url) : undefined}
-          >
-            <StyledSpace size={15}>
-              {status ? <StatusIcon status={status} /> : null}
-              {icon}
-              <ExecutionName name={name} />
-              {url ? <StyledExternalLinkIcon /> : <div />}
-            </StyledSpace>
-          </ExecutionStepsListItemExecution>
-        ));
+          })
+          .map(({status, icon, name, url}, index) => (
+            <ExecutionStepsListItemExecution
+              // eslint-disable-next-line react/no-array-index-key
+              key={`item-${index}`}
+              className={classNames({clickable: url})}
+              onClick={url ? () => navigate(url) : undefined}
+            >
+              <StyledSpace size={15}>
+                {status ? <StatusIcon status={status} /> : null}
+                {icon}
+                <ExecutionName name={name} />
+                {url ? <StyledExternalLinkIcon /> : <div />}
+              </StyledSpace>
+            </ExecutionStepsListItemExecution>
+          ));
 
-      return (
-        <li key={groupKey}>
-          <ExecutionStepsListItem>{items}</ExecutionStepsListItem>
-        </li>
-      );
-    });
+        return (
+          <li key={groupKey}>
+            <ExecutionStepsListItem>{items}</ExecutionStepsListItem>
+          </li>
+        );
+      });
   }, [executionSteps]);
 
   return <ExecutionStepsListContainer>{elements}</ExecutionStepsListContainer>;

@@ -7,9 +7,15 @@ import {Variables} from './variable';
 export interface TestSuiteStep {
   delay?: string;
   test?: string;
+  namespace?: string;
+}
+
+export interface LocalStep extends TestSuiteStep {
+  type?: string;
+  id: string;
 }
 export interface TestSuiteBatchStep {
-  stopTestOnFailure: boolean;
+  stopOnFailure: boolean;
   execute: TestSuiteStep[];
 }
 
