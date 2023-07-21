@@ -126,17 +126,18 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
     setEdges(newEdges);
   }, [nodes]);
 
-  const nodeTypes = useMemo(() => ({step: StepNode, intersection: IntersectionNode, add: AddNode}), []);
+  const flowOptions: Partial<Parameters<typeof ReactFlow>[0]> = useMemo(
+    () => ({
+      nodeTypes: {step: StepNode, intersection: IntersectionNode, add: AddNode},
+      nodeOrigin: [0.5, 0.5],
+      defaultEdgeOptions: {interactionWidth: 0},
+    }),
+    []
+  );
 
   return (
     <ReactFlowContainer>
-      <ReactFlow
-        nodeTypes={nodeTypes}
-        nodes={nodes}
-        edges={edges}
-        nodeOrigin={[0.5, 0.5]}
-        defaultEdgeOptions={{interactionWidth: 0}}
-      >
+      <ReactFlow nodes={nodes} edges={edges} {...flowOptions}>
         <Controls position="bottom-right" showInteractive={false} />
       </ReactFlow>
     </ReactFlowContainer>
