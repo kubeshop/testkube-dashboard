@@ -67,6 +67,10 @@ export const TestNodeContainer = styled.div`
   background-color: ${Colors.slate800};
 `;
 
+export const TestNodeNameContainer = styled.div`
+  overflow: hidden;
+`;
+
 export const IntersectionContainer = styled.div`
   border-radius: 10px;
   padding: 12px;

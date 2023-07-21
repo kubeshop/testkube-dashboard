@@ -11,7 +11,7 @@ import {LocalStep} from '@models/testSuite';
 
 import {DotsDropdown} from '@molecules';
 
-import {TestNodeContainer} from '../SettingsTests.styled';
+import {TestNodeContainer, TestNodeNameContainer} from '../SettingsTests.styled';
 
 type StepNodeProps = {
   data: LocalStep & {
@@ -32,9 +32,11 @@ const StepNode: React.FC<StepNodeProps> = props => {
       <TestNodeContainer>
         {delay ? <ClockCircleOutlined style={{fontSize: '20px'}} /> : <ExecutorIcon type={type} />}
         <Tooltip title={renderText}>
-          <Text className="regular middle" ellipsis>
-            {renderText}
-          </Text>
+          <TestNodeNameContainer>
+            <Text className="regular middle" ellipsis>
+              {renderText}
+            </Text>
+          </TestNodeNameContainer>
         </Tooltip>
         <DotsDropdown items={[{key: 1, label: <span onClick={() => data.removeNode(id, data.group)}>Remove</span>}]} />
       </TestNodeContainer>
