@@ -68,23 +68,25 @@ const SettingsTests = () => {
       return [];
     }
 
-    return entityDetails.steps.map(step => {
-      return step.execute.map(item => {
-        const id = nanoid();
-        if ('delay' in item) {
+    return entityDetails.steps
+      .filter(step => step.execute?.length)
+      .map(step => {
+        return step.execute.map(item => {
+          const id = nanoid();
+          if ('delay' in item) {
+            return {
+              ...item,
+              id,
+            };
+          }
+
           return {
             ...item,
             id,
+            type: testsData.find(x => x.name === item.test)?.type || '',
           };
-        }
-
-        return {
-          ...item,
-          id,
-          type: testsData.find(x => x.name === item.test)?.type || '',
-        };
+        });
       });
-    });
   }, [testsData]);
 
   const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
