@@ -113,16 +113,12 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
             id: `${node.id}-${nextNode.id}`,
             source: node.id,
             target: nextNode.id,
-            focusable: false,
           })),
         ];
       }
       if (node.type === 'step') {
         const nextIntersection = nodes.find(x => x.type === 'intersection' && x.data.group === node.data.group + 1)!;
-        return [
-          ...result,
-          {id: `${node.id}-${nextIntersection.id}`, source: node.id, target: nextIntersection.id, focusable: false},
-        ];
+        return [...result, {id: `${node.id}-${nextIntersection.id}`, source: node.id, target: nextIntersection.id}];
       }
       return result;
     }, [] as Edge[]);
@@ -134,7 +130,13 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
 
   return (
     <ReactFlowContainer>
-      <ReactFlow nodeTypes={nodeTypes} nodes={nodes} edges={edges} nodeOrigin={[0.5, 0.5]}>
+      <ReactFlow
+        nodeTypes={nodeTypes}
+        nodes={nodes}
+        edges={edges}
+        nodeOrigin={[0.5, 0.5]}
+        defaultEdgeOptions={{interactionWidth: 0}}
+      >
         <Controls position="bottom-right" showInteractive={false} />
       </ReactFlow>
     </ReactFlowContainer>
