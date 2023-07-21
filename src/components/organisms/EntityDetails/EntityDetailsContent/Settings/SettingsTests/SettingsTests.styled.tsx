@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-export const intersectionWidth = 32;
-export const intersectionHeight = 46;
+export const addWidth = 32;
+export const addHeight = 46;
 export const itemWidth = 300;
 export const itemHeight = 68;
 
@@ -74,8 +74,8 @@ export const TestNodeNameContainer = styled.div`
 export const IntersectionContainer = styled.div`
   border-radius: 10px;
   padding: 12px;
-  width: ${intersectionWidth}px;
-  height: ${intersectionHeight}px;
+  width: ${addWidth}px;
+  height: ${addHeight}px;
 
   background-color: ${Colors.slate800};
 

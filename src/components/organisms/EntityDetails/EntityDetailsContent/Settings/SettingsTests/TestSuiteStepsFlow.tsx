@@ -8,7 +8,7 @@ import {LocalStep} from '@src/models/testSuite';
 import AddNode from './Nodes/AddNode';
 import IntersectionNode from './Nodes/IntersectionNode';
 import StepNode from './Nodes/StepNode';
-import {ReactFlowContainer, intersectionHeight, intersectionWidth, itemHeight, itemWidth} from './SettingsTests.styled';
+import {ReactFlowContainer, addHeight, itemHeight, itemWidth} from './SettingsTests.styled';
 
 interface ExtendedNode extends Node {
   group?: number | string;
@@ -26,21 +26,19 @@ type TestSuiteStepsFlowProps = {
 const horizontalGap = 150;
 const verticalGapBeforeAdd = 20;
 const verticalGapBetweenItems = 32;
-const itemVerticalSpace = verticalGapBetweenItems + 68;
-const itemHorizontalSpace = itemWidth + horizontalGap;
 
-const getIntersectionPosition = (group: number) => ({
-  x: group * itemHorizontalSpace + horizontalGap / 2 - intersectionWidth,
-  y: (itemHeight - intersectionHeight) / 2,
-});
-const getAddPosition = (group: number, groupLength: number) => ({
-  x: (group + 1) * itemHorizontalSpace - itemWidth / 2 - intersectionWidth,
-  y: groupLength * itemVerticalSpace - verticalGapBeforeAdd,
-});
 const getItemPosition = (group: number, itemIndex: number) => ({
-  x: group * itemHorizontalSpace + (itemWidth - intersectionWidth) / 2,
-  y: itemIndex * itemVerticalSpace,
+  x: itemWidth / 2 + group * (itemWidth + horizontalGap),
+  y: itemHeight / 2 + itemIndex * (verticalGapBetweenItems + itemHeight),
 });
+const getIntersectionPosition = (group: number) => {
+  const {x, y} = getItemPosition(group, 0);
+  return {x: x - itemWidth / 2 - horizontalGap / 2, y};
+};
+const getAddPosition = (group: number, groupLength: number) => {
+  const {x, y} = getItemPosition(group, groupLength - 1);
+  return {x, y: y + itemHeight / 2 + verticalGapBeforeAdd + addHeight / 2};
+};
 
 const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
   const {steps, setSteps, showDelayModal, showTestModal, isV2} = props;
@@ -130,7 +128,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
 
   return (
     <ReactFlowContainer>
-      <ReactFlow nodeTypes={nodeTypes} nodes={nodes} edges={edges}>
+      <ReactFlow nodeTypes={nodeTypes} nodes={nodes} edges={edges} nodeOrigin={[0.5, 0.5]}>
         <Controls position="bottom-right" showInteractive={false} />
       </ReactFlow>
     </ReactFlowContainer>
