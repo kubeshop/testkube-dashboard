@@ -28,6 +28,7 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 
 import {externalLinks} from '@utils/externalLinks';
+import {formatMilliseconds} from '@utils/formatMilliseconds';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {convertTestSuiteV2ToV3, isTestSuiteV2} from '@utils/testSuites';
 
@@ -131,18 +132,14 @@ const SettingsTests = () => {
       const stopOnFailure = Boolean(entityDetails?.steps?.[i]?.stopOnFailure);
       const execute = items.map(item => pick(item, ['delay', 'test', 'namespace']));
 
-      const v2Execute =
-        'test' in execute[0]
-          ? {
-              name: execute[0].test,
-              namespace: execute[0].namespace,
-            }
-          : {delay: execute[0].delay};
-
-      return {
-        execute: isV2 ? v2Execute : execute,
-        stopOnFailure,
-      };
+      if (isV2) {
+        const step = execute[0];
+        if ('test' in step) {
+          return {execute: {name: step.test}, stopTestOnFailure: stopOnFailure};
+        }
+        return {delay: {duration: formatMilliseconds(step.delay!)}};
+      }
+      return {execute, stopOnFailure};
     });
 
     return updateTestSuite({
