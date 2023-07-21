@@ -27,18 +27,19 @@ const horizontalGap = 150;
 const verticalGapBeforeAdd = 20;
 const verticalGapBetweenItems = 32;
 
-const getItemPosition = (group: number, itemIndex: number) => ({
-  x: itemWidth / 2 + group * (itemWidth + horizontalGap),
-  y: itemHeight / 2 + itemIndex * (verticalGapBetweenItems + itemHeight),
+const getItemPosition = (group: number, itemIndex: number, offsetY: number) => ({
+  x: horizontalGap + itemWidth / 2 + group * (itemWidth + horizontalGap),
+  y: itemHeight / 2 + itemIndex * (verticalGapBetweenItems + itemHeight) + offsetY,
 });
-const getIntersectionPosition = (group: number) => {
-  const {x, y} = getItemPosition(group, 0);
+const getIntersectionPosition = (group: number, offsetY: number) => {
+  const {x, y} = getItemPosition(group, 0, offsetY);
   return {x: x - itemWidth / 2 - horizontalGap / 2, y};
 };
-const getAddPosition = (group: number, groupLength: number) => {
-  const {x, y} = getItemPosition(group, groupLength - 1);
+const getAddPosition = (group: number, groupLength: number, offsetY: number) => {
+  const {x, y} = getItemPosition(group, groupLength - 1, offsetY);
   return {x, y: y + itemHeight / 2 + verticalGapBeforeAdd + addHeight / 2};
 };
+const getHeight = (maxLength: number) => getItemPosition(0, maxLength - 1, 0).y + itemHeight / 2;
 
 const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
   const {steps, setSteps, showDelayModal, showTestModal, isV2} = props;
@@ -58,14 +59,19 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
 
   useEffect(() => {
     const newNodes: ExtendedNode[] = [];
+    const maxItemsLength = Math.max(...steps.map(x => x.length));
+    const chartHeight = getHeight(maxItemsLength);
 
     steps.forEach((step, group) => {
+      const groupHeight = getHeight(step.length);
+      const groupOffsetY = (chartHeight - groupHeight) / 2;
+
       newNodes.push(
         ...step.map((item, itemIndex) => ({
           type: 'step',
           id: item.id!,
           data: {deleteNode, item, last: group === steps.length - 1, group},
-          position: getItemPosition(group, itemIndex),
+          position: getItemPosition(group, itemIndex, groupOffsetY),
         }))
       );
 
@@ -73,7 +79,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         newNodes.push({
           type: 'add',
           id: nanoid(),
-          position: getAddPosition(group, step.length),
+          position: getAddPosition(group, step.length, groupOffsetY),
           data: {showDelayModal, showTestModal, group},
         });
       }
@@ -83,7 +89,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
       newNodes.push({
         type: 'intersection',
         id: nanoid(),
-        position: getIntersectionPosition(group),
+        position: getIntersectionPosition(group, (chartHeight - itemHeight) / 2),
         data: {
           showDelayModal,
           showTestModal,
