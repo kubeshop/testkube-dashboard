@@ -28,7 +28,7 @@ const StepNode: React.FC<StepNodeProps> = props => {
   const renderText = test || delay;
   return (
     <>
-      {data.group === 0 ? null : <Handle type="target" position={Position.Left} />}
+      {data.group === 0 ? null : <Handle type="target" position={Position.Left} isConnectable={false} />}
       <TestNodeContainer>
         {delay ? <ClockCircleOutlined style={{fontSize: '20px'}} /> : <ExecutorIcon type={type} />}
         <Tooltip title={renderText}>
@@ -38,7 +38,7 @@ const StepNode: React.FC<StepNodeProps> = props => {
         </Tooltip>
         <DotsDropdown items={[{key: 1, label: <span onClick={() => data.removeNode(id, data.group)}>Remove</span>}]} />
       </TestNodeContainer>
-      <Handle type="source" position={Position.Right} />
+      <Handle type="source" position={Position.Right} isConnectable={false} />
     </>
   );
 };

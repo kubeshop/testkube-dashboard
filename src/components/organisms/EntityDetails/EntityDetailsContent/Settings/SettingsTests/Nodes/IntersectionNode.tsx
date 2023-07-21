@@ -17,11 +17,11 @@ const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
 
   return (
     <>
-      <Handle type="target" position={Position.Left} />
+      <Handle type="target" position={Position.Left} isConnectable={false} />
       <AddStepDropdown data={data}>
         <IntersectionContainer>+</IntersectionContainer>
       </AddStepDropdown>
-      {data.last ? null : <Handle type="source" position={Position.Right} />}
+      {data.last ? null : <Handle type="source" position={Position.Right} isConnectable={false} />}
     </>
   );
 };
