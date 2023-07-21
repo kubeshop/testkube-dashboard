@@ -101,12 +101,12 @@ const SettingsTests = () => {
     setSteps(initialSteps);
   }, [testsData]);
 
-  const showTestModal = (group: number | string) => {
+  const showTestModal = (group: number) => {
     setIsTestModalVisible(true);
     setCurrentGroup(group);
   };
 
-  const showDelayModal = (group: number | string) => {
+  const showDelayModal = (group: number) => {
     setIsDelayModalVisible(true);
     setCurrentGroup(group);
   };

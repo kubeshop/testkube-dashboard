@@ -17,8 +17,8 @@ interface ExtendedNode extends Node {
 type TestSuiteStepsFlowProps = {
   steps: LocalStep[][];
   setSteps: (steps: LocalStep[][]) => void;
-  showTestModal: (group: number | string) => void;
-  showDelayModal: (group: number | string) => void;
+  showTestModal: (group: number) => void;
+  showDelayModal: (group: number) => void;
   isV2: boolean;
 };
 
@@ -68,7 +68,6 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
           id: item.id!,
           data: {...item, removeNode, group: index},
           position: getItemPosition(index, itemIndex),
-          group: index,
         }))
       );
 
@@ -81,13 +80,11 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         });
       }
 
-      const intersectionGroup = `${index}-intersection`;
       newNodes.push({
         type: 'intersection',
         id: nanoid(),
         position: getIntersectionPosition(index + 1),
-        data: {showDelayModal, showTestModal, group: intersectionGroup, last: index === steps.length - 1},
-        group: intersectionGroup,
+        data: {showDelayModal, showTestModal, group: index, last: index === steps.length - 1},
       });
     });
 
@@ -99,19 +96,15 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
     const newEdges: Edge[] = [];
 
     nodes.forEach(node => {
-      const currentId = node.id;
-
-      const isIntersection = node.group && /-intersection$/.test(String(node.group));
-
-      if (isIntersection) {
-        const filteredNodes = nodes.filter(x => x.group === Number(String(node.group).split('-')[0]) + 1);
+      if (node.type === 'intersection') {
+        const filteredNodes = nodes.filter(x => x.type === 'step' && x.data.group === node.data.group + 1);
         filteredNodes.forEach(nextNode => {
-          newEdges.push({id: `${currentId}-${nextNode.id}`, source: currentId, target: nextNode.id});
+          newEdges.push({id: `${node.id}-${nextNode.id}`, source: node.id, target: nextNode.id});
         });
-      } else {
-        const nextIntersection = nodes.find(x => x.group === `${node.group}-intersection`);
+      } else if (node.type === 'step') {
+        const nextIntersection = nodes.find(x => x.type === 'intersection' && x.data.group === node.data.group);
         if (nextIntersection) {
-          newEdges.push({id: `${currentId}-${nextIntersection.id}`, source: currentId, target: nextIntersection.id});
+          newEdges.push({id: `${node.id}-${nextIntersection.id}`, source: node.id, target: nextIntersection.id});
         }
       }
     });
