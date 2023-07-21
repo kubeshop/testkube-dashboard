@@ -86,7 +86,7 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         type: 'intersection',
         id: nanoid(),
         position: getIntersectionPosition(index + 1),
-        data: {showDelayModal, showTestModal, group: intersectionGroup},
+        data: {showDelayModal, showTestModal, group: intersectionGroup, last: index === steps.length - 1},
         group: intersectionGroup,
       });
     });

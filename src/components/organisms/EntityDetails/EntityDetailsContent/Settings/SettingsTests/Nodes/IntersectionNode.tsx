@@ -9,6 +9,7 @@ type IntersectionNodeProps = {
     showTestModal: (group: number | string) => void;
     showDelayModal: (group: number | string) => void;
     group: number | string;
+    last: boolean;
   };
 };
 const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
@@ -20,7 +21,7 @@ const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
       <AddStepDropdown data={data}>
         <IntersectionContainer>+</IntersectionContainer>
       </AddStepDropdown>
-      <Handle type="source" position={Position.Right} />
+      {data.last ? null : <Handle type="source" position={Position.Right} />}
     </>
   );
 };
