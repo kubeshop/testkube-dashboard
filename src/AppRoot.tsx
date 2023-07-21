@@ -7,8 +7,6 @@ import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
-import {ReactComponent as NewIcon} from '@assets/newIcon.svg';
-
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
@@ -33,6 +31,7 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
+import NewTab from './components/atoms/NewTab/NewTab';
 import {AiInsightsTab} from './components/molecules';
 import createPluginManager from './plugins/PluginManager';
 import PluginScope from './plugins/PluginScope';
@@ -117,11 +116,7 @@ const AppRoot: React.FC = () => {
         component: {
           key: 'ai-insights-tab',
           // TODO create component for this
-          label: (
-            <div style={{display: 'flex', gap: '8px'}}>
-              AI Inisghts <NewIcon />
-            </div>
-          ),
+          label: <NewTab title="AI Insights" />,
           children: <AiInsightsTab />,
         },
         metaData: {
