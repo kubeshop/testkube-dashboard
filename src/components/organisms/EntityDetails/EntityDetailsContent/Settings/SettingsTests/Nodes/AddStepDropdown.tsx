@@ -22,8 +22,8 @@ const AddStepDropdown: React.FC<AddStepDropdownProps> = props => {
       trigger={['hover']}
       menu={{
         items: [
-          {key: 1, label: <span onClick={() => data.showTestModal(group)}>Add a test</span>},
-          {key: 2, label: <span onClick={() => data.showDelayModal(group)}>Add a delay</span>},
+          {key: 1, label: 'Add a test', onClick: () => data.showTestModal(group)},
+          {key: 2, label: 'Add a delay', onClick: () => data.showDelayModal(group)},
         ],
       }}
     >
