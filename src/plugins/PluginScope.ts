@@ -1,4 +1,4 @@
-import {PluginMetaData} from './interfaces';
+import {SlotMetaData} from './types';
 
 class PluginScope {
   private state: Record<string, any>;
@@ -9,19 +9,19 @@ class PluginScope {
     this.slots = {};
   }
 
-  getState<T>(name: string): T {
+  public getState<T>(name: string): T {
     return this.state[name];
   }
 
-  setState(name: string, value: any) {
+  public setState(name: string, value: any) {
     this.state[name] = value;
   }
 
-  getSlot(name: string) {
+  public getSlot(name: string) {
     return this.slots[name] || [];
   }
 
-  appendSlot(name: string, value: any, metadata: PluginMetaData = {}) {
+  public appendSlot(name: string, value: any, metadata: SlotMetaData = {}) {
     this.slots[name] = this.slots[name] || [];
     this.slots[name].push({value, metadata});
   }

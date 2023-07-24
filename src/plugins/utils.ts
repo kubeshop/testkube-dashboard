@@ -4,7 +4,7 @@ export const orderArray = (array: any[]) => {
     if (!item) {
       return;
     }
-    const index = result.findIndex(x => x.metadata.order < item.metadata.order);
+    const index = result.findIndex(x => (x.metadata?.order ?? -Infinity) < (item.metadata?.order ?? -Infinity));
     if (index === -1) {
       result.push(item);
     } else {

@@ -1,5 +1,5 @@
 import PluginScope from './PluginScope';
-import {Plugin} from './interfaces';
+import {Plugin} from './types';
 
 export class PluginManager {
   private plugins: Plugin[];

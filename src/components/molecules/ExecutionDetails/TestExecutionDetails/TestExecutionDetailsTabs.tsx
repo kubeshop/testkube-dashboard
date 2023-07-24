@@ -25,7 +25,7 @@ const LogOutput = lazy(() => import('@molecules').then(module => ({default: modu
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
-  const [, setPluginData] = usePluginState<{id: string}>('executionDetailsTabs');
+  const [, setPluginData] = usePluginState<{testExecution: Execution}>('testExecutionTabs');
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -34,7 +34,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const [oldScroll, setOldScroll] = useState(0);
   const [isAutoScrolled, setAutoScrolledState] = useState(false);
 
-  const testData = data as Execution;
+  const testExecution = data as Execution;
 
   const {
     testType,
@@ -45,7 +45,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     testName,
     testSuiteName,
     startTime,
-  } = testData;
+  } = testExecution;
 
   const isRunning = useIsRunning(status);
 
@@ -54,7 +54,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const whetherToShowArtifactsTab = executorsFeaturesMap[testType]?.includes('artifacts');
 
   useEffect(() => {
-    setPluginData({id});
+    setPluginData({testExecution});
   }, [id]);
 
   useEffect(() => {
@@ -146,7 +146,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
       : null,
   ];
 
-  const items = usePluginSlotList('executionDetailsTabs', defaultExecutionDetailsTabs);
+  const items = usePluginSlotList('testExecutionTabs', defaultExecutionDetailsTabs);
 
   return (
     <div ref={ref}>

@@ -6,6 +6,6 @@ export interface Plugin {
   order?: number;
 }
 
-export interface PluginMetaData {
+export interface SlotMetaData {
   order?: number;
 }

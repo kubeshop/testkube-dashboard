@@ -114,7 +114,7 @@ const AppRoot: React.FC = () => {
     name: 'ai-insights',
     setup: (scope: PluginScope) => {
       scope.appendSlot(
-        'executionDetailsTabs',
+        'testExecutionTabs',
         {
           key: 'ai-insights-tab',
           // TODO create component for this
