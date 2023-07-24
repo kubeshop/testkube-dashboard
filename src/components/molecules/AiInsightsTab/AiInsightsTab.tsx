@@ -3,15 +3,16 @@ import {Execution} from '@models/execution';
 import {usePluginState} from '@plugins/pluginHooks';
 
 interface AiInsightsTabProps {
-  testExecution: Execution;
+  execution: Execution;
+  test: any;
 }
 
 const AiInsightsTab = () => {
-  const [{testExecution}] = usePluginState<AiInsightsTabProps>('testExecutionTabs');
+  const [{execution}] = usePluginState<AiInsightsTabProps>('testExecutionTabs');
   return (
     <div>
       This is a cloud only feature. Please log in to cloud in order to use this feature for id
-      {testExecution.id}
+      {execution.id}
     </div>
   );
 };

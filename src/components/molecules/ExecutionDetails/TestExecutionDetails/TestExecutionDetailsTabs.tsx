@@ -4,7 +4,7 @@ import {Tabs} from 'antd';
 
 import debounce from 'lodash.debounce';
 
-import {ExecutionDetailsContext} from '@contexts';
+import {EntityDetailsContext, ExecutionDetailsContext} from '@contexts';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -13,6 +13,7 @@ import {Execution} from '@models/execution';
 import {CLICommands, ExecutionsVariablesList} from '@molecules';
 
 import {usePluginSlotList, usePluginState} from '@plugins/pluginHooks';
+import {TestExecutionTabsInterface} from '@plugins/types';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
@@ -25,7 +26,8 @@ const LogOutput = lazy(() => import('@molecules').then(module => ({default: modu
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
-  const [, setPluginData] = usePluginState<{testExecution: Execution}>('testExecutionTabs');
+  const {entityDetails} = useContext(EntityDetailsContext);
+  const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -34,7 +36,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const [oldScroll, setOldScroll] = useState(0);
   const [isAutoScrolled, setAutoScrolledState] = useState(false);
 
-  const testExecution = data as Execution;
+  const execution = data as Execution;
 
   const {
     testType,
@@ -45,7 +47,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     testName,
     testSuiteName,
     startTime,
-  } = testExecution;
+  } = execution;
 
   const isRunning = useIsRunning(status);
 
@@ -54,7 +56,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const whetherToShowArtifactsTab = executorsFeaturesMap[testType]?.includes('artifacts');
 
   useEffect(() => {
-    setPluginData({testExecution});
+    setTestExecutionTabsData({execution, test: entityDetails});
   }, [id]);
 
   useEffect(() => {

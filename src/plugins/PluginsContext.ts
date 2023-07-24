@@ -6,8 +6,5 @@ export interface PluginsContextProps {
   scope: PluginScope;
 }
 
-const PluginsContext = createContext<PluginsContextProps>({
-  scope: {} as PluginScope,
-});
-
+const PluginsContext = createContext<PluginsContextProps>(undefined!);
 export default PluginsContext;

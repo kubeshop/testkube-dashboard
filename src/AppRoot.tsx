@@ -7,10 +7,16 @@ import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
+import {ReactComponent as NewIcon} from '@assets/newIcon.svg';
+
+import {IconLabel} from '@atoms';
+
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+
+import {AiInsightsTab} from '@molecules';
 
 import {Sider} from '@organisms';
 
@@ -18,8 +24,8 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import createPluginManager from '@plugins/PluginManager';
 import PluginScope from '@plugins/PluginScope';
+import {Plugin} from '@plugins/types';
 
 import {useAppDispatch} from '@redux/hooks';
 
@@ -34,8 +40,6 @@ import {safeRefetch} from '@utils/fetchUtils';
 
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import NewTab from './components/atoms/NewTab/NewTab';
-import {AiInsightsTab} from './components/molecules';
 import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
@@ -108,25 +112,24 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
-  const pluginManager = createPluginManager();
-
-  pluginManager.add({
-    name: 'ai-insights',
-    setup: (scope: PluginScope) => {
-      scope.appendSlot(
-        'testExecutionTabs',
-        {
-          key: 'ai-insights-tab',
-          // TODO create component for this
-          label: <NewTab title="AI Insights" />,
-          children: <AiInsightsTab />,
-        },
-        {
-          order: 4,
-        }
-      );
+  const plugins: Plugin[] = [
+    {
+      name: 'ai-insights',
+      setup: (scope: PluginScope) => {
+        scope.appendSlot(
+          'testExecutionTabs',
+          {
+            key: 'ai-insights-tab',
+            label: <IconLabel title="AI Insights" icon={<NewIcon />} />,
+            children: <AiInsightsTab />,
+          },
+          {
+            order: 4,
+          }
+        );
+      },
     },
-  });
+  ];
 
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})
@@ -142,7 +145,7 @@ const AppRoot: React.FC = () => {
           <StyledLayoutContentWrapper>
             <Content>
               <ErrorBoundary>
-                <App pluginManager={pluginManager} />
+                <App plugins={plugins} />
               </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>

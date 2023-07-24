@@ -1,3 +1,5 @@
+import {Execution} from '@models/execution';
+
 import PluginScope from './PluginScope';
 
 export interface Plugin {
@@ -8,4 +10,9 @@ export interface Plugin {
 
 export interface SlotMetaData {
   order?: number;
+}
+
+export interface TestExecutionTabsInterface {
+  execution: Execution;
+  test: any;
 }
