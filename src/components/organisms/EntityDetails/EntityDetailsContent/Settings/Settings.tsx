@@ -24,6 +24,7 @@ const testSettings = (
       {id: 'scheduling', label: 'Scheduling', children: <SettingsScheduling />},
       {id: 'definition', label: 'Definition', children: <SettingsDefinition />},
     ]}
+    active="test"
   />
 );
 
@@ -36,6 +37,7 @@ const testSuiteSettings = (
       {id: 'scheduling', label: 'Scheduling', children: <SettingsScheduling />},
       {id: 'definition', label: 'Definition', children: <SettingsDefinition />},
     ]}
+    active="tests"
   />
 );
 

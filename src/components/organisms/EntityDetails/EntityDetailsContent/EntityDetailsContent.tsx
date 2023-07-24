@@ -122,6 +122,10 @@ const EntityDetailsContent: React.FC = () => {
     });
   };
 
+  const onEditTestsClick = () => {
+    setActiveTabKey('Settings');
+  };
+
   const avatar = type
     ? {
         avatar: {
@@ -158,7 +162,10 @@ const EntityDetailsContent: React.FC = () => {
           ) : null,
           <DotsDropdown
             key="entity-options"
-            items={[{key: 1, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>}]}
+            items={[
+              {key: 1, label: <span onClick={onEditTestsClick}>Edit Test</span>},
+              {key: 2, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>},
+            ]}
             wrapperStyle={{backgroundColor: Colors.slate800}}
           />,
           <Button

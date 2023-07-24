@@ -39,7 +39,7 @@ const SettingsLayout: FC<SettingsLayoutProps> = ({tabs, active, onChange}) => {
       if (active == null) {
         setId(newId);
       }
-      onChange?.(newId);
+      onChange ? onChange(newId) : setId(newId);
     },
     [tabs, active, onChange]
   );
