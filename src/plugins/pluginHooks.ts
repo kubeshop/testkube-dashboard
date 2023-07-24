@@ -1,11 +1,12 @@
-import {useContext, useMemo} from 'react';
+import {useCallback, useContext, useMemo} from 'react';
 
 import PluginsContext from './PluginsContext';
 import {orderArray} from './utils';
 
 export const usePluginState = <T>(name: string) => {
   const {scope} = useContext(PluginsContext);
-  const pair: [T, (value: T) => void] = [scope.getData<T>(name), scope.setData.bind(scope, name)];
+  const setStateCallback = useCallback((value: any) => scope.setState.bind(name, value), [name, scope]);
+  const pair: [T, (value: T) => void] = [scope.getState<T>(name), setStateCallback];
   return pair;
 };
 

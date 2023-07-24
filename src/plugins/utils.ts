@@ -4,12 +4,12 @@ export const orderArray = (array: any[]) => {
     if (!item) {
       return;
     }
-    const index = result.findIndex(x => x.metaData.order < item.metaData.order);
+    const index = result.findIndex(x => x.metadata.order < item.metadata.order);
     if (index === -1) {
       result.push(item);
     } else {
       result.splice(index, 0, item);
     }
   });
-  return result.map(x => x.component);
+  return result.map(x => x.value);
 };

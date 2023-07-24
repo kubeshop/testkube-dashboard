@@ -1,6 +1,5 @@
-import {Plugin} from '@plugins/PluginsContext';
-
 import PluginScope from './PluginScope';
+import {Plugin} from './interfaces';
 
 export class PluginManager {
   private plugins: Plugin[];
@@ -11,7 +10,7 @@ export class PluginManager {
 
   public add(plugin: Plugin): void {
     const order = plugin.order ?? -Infinity;
-    const index = this.plugins.findIndex(item => item.order && item.order < order);
+    const index = this.plugins.findIndex(item => (item.order ?? -Infinity) < order);
     if (index === -1) {
       this.plugins = [...this.plugins, plugin];
     } else {

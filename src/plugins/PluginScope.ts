@@ -1,29 +1,29 @@
-import {PluginData} from './PluginsContext';
+import {PluginMetaData} from './interfaces';
 
 class PluginScope {
-  private data: Record<string, any>;
+  private state: Record<string, any>;
   private slots: Record<string, any>;
 
   public constructor() {
-    this.data = {};
+    this.state = {};
     this.slots = {};
   }
 
-  getData<T>(name: string): T {
-    return this.data[name];
+  getState<T>(name: string): T {
+    return this.state[name];
   }
 
-  setData(name: string, value: any) {
-    this.data[name] = value;
+  setState(name: string, value: any) {
+    this.state[name] = value;
   }
 
-  getSlot(name: string): PluginData[] {
+  getSlot(name: string) {
     return this.slots[name] || [];
   }
 
-  appendSlot(name: string, {component, metaData}: PluginData) {
+  appendSlot(name: string, value: any, metadata: PluginMetaData = {}) {
     this.slots[name] = this.slots[name] || [];
-    this.slots[name].push({component, metaData});
+    this.slots[name].push({value, metadata});
   }
 }
 

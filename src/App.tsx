@@ -13,6 +13,9 @@ import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 
 import {EndpointProcessing, Loading, NotFound} from '@pages';
 
+import {PluginManager} from '@plugins/PluginManager';
+import PluginsContext from '@plugins/PluginsContext';
+
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
@@ -29,8 +32,6 @@ import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
-import {PluginManager} from './plugins/PluginManager';
-import PluginsContext from './plugins/PluginsContext';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));

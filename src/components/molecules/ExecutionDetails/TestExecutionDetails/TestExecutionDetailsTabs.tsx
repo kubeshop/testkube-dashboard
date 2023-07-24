@@ -91,20 +91,21 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   const defaultExecutionDetailsTabs = [
     {
-      component: {
+      value: {
         key: 'LogOutputPane',
         label: 'Log Output',
         children: (
           <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />
         ),
       },
-      metaData: {
+      metadata: {
         order: Infinity,
       },
     },
+    // TODO: refactor using visibility metadata
     whetherToShowArtifactsTab
       ? {
-          component: {
+          value: {
             key: 'ArtifactsPane',
             label: 'Artifacts',
             children: (
@@ -116,29 +117,29 @@ const TestExecutionDetailsTabs: React.FC = () => {
               />
             ),
           },
-          metaData: {
+          metadata: {
             order: 3,
           },
         }
       : null,
     {
-      component: {
+      value: {
         key: 'CLICommands',
         label: 'CLI Commands',
         children: <CLICommands isExecutions type={testType} id={id} modifyMap={{status}} />,
       },
-      metaData: {
+      metadata: {
         order: 2,
       },
     },
     decomposedVars.length
       ? {
-          component: {
+          value: {
             key: 'Variables',
             label: 'Variables',
             children: <ExecutionsVariablesList variables={decomposedVars} />,
           },
-          metaData: {
+          metadata: {
             order: 1,
           },
         }

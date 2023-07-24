@@ -18,6 +18,9 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
+import createPluginManager from '@plugins/PluginManager';
+import PluginScope from '@plugins/PluginScope';
+
 import {useAppDispatch} from '@redux/hooks';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
@@ -33,8 +36,6 @@ import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
 import NewTab from './components/atoms/NewTab/NewTab';
 import {AiInsightsTab} from './components/molecules';
-import createPluginManager from './plugins/PluginManager';
-import PluginScope from './plugins/PluginScope';
 import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
@@ -112,17 +113,18 @@ const AppRoot: React.FC = () => {
   pluginManager.add({
     name: 'ai-insights',
     setup: (scope: PluginScope) => {
-      scope.appendSlot('executionDetailsTabs', {
-        component: {
+      scope.appendSlot(
+        'executionDetailsTabs',
+        {
           key: 'ai-insights-tab',
           // TODO create component for this
           label: <NewTab title="AI Insights" />,
           children: <AiInsightsTab />,
         },
-        metaData: {
+        {
           order: 4,
-        },
-      });
+        }
+      );
     },
   });
 
