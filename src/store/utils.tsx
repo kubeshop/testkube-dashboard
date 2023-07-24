@@ -1,16 +1,41 @@
-import {FC, PropsWithChildren, createContext, useContext, useMemo} from 'react';
+import {Context, FC, PropsWithChildren, createContext, useContext, useMemo} from 'react';
 
 import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 
+import {ExcludeMark, Mark, UnmarkAllObject} from '@utils/typeMarkers';
+
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
   : True;
-type ObjectWithoutFunctions<T> = Pick<T, {[K in keyof T]: T[K] extends (...args: any) => any ? never : K}[keyof T]>;
 
-type InitialState<T> = Partial<ObjectWithoutFunctions<T>>;
-type StoreFactory<T> = (initialState?: InitialState<T>) => UseBoundStore<StoreApi<T>>;
+type Store<T> = UseBoundStore<StoreApi<T>>;
+type BareStore<T> = <U>(selector: (state: T) => U, equals?: (a: U, b: U) => boolean) => U;
+
+declare const internal: unique symbol;
+type InternalMark = typeof internal;
+export type Internal<T> = Mark<T, InternalMark>;
+
+declare const nonPublic: unique symbol;
+type NonPublicMark = typeof nonPublic;
+export type NonPublic<T> = Mark<T, NonPublicMark>;
+
+type NonPublicState<T> = UnmarkAllObject<ExcludeMark<T, InternalMark>>;
+type InitialState<T> = Partial<NonPublicState<T>>;
+type PublicState<T> = UnmarkAllObject<ExcludeMark<T, InternalMark | NonPublicMark>>;
+
+type StoreFactory<T> = (initialState?: InitialState<T>) => Store<T>;
+
+type StoreSelector<T> = <U>(selector: (state: T) => U) => U;
+
+declare const sliceMetadata: unique symbol;
+type SliceMetadataSymbol = typeof sliceMetadata;
+export type SliceFactory<T> = StateCreator<UnmarkAllObject<T>> & Record<SliceMetadataSymbol, T>;
+
+export const createSliceFactory = <T,>(createSlice: StateCreator<UnmarkAllObject<T>>): StateCreator<T> => {
+  return createSlice as StateCreator<T>;
+};
 
 export const createStoreFactory =
   <T,>(name: string, createSlice: StateCreator<T>): StoreFactory<T> =>
@@ -51,41 +76,54 @@ class StoreFactoryBuilder<T> {
 
 export const createStoreBuilder = (name: string) => new StoreFactoryBuilder(name, () => ({}));
 
+const createStoreContext = <T,>() => createContext<{store: BareStore<T>}>(undefined!);
+
+const createUseStoreHook =
+  <T,>(StoreContext: Context<{store: BareStore<T>}>): (() => BareStore<T> | undefined) =>
+  () =>
+    useContext(StoreContext)?.store;
+
+const useStoreShallow = <T, U>(store: BareStore<T> | undefined, selector: (state: T) => U): U => {
+  if (!store) {
+    throw new Error('Store was not injected.');
+  }
+  return store(selector, shallow);
+};
+
+const createUseStoreShallowHook = <T,>(StoreContext: Context<{store: BareStore<T>}>): StoreSelector<T> => {
+  const useStore = createUseStoreHook(StoreContext);
+  return selector => useStoreShallow(useStore(), selector);
+};
+
 export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   type ShallowComponent = FC<PropsWithChildren<{}>>;
-  type StoreSelector = <U>(selector: (state: T) => U) => U;
-  const StoreContext = createContext<{use?: StoreSelector}>(undefined!);
+  type NonPublicSelector = StoreSelector<NonPublicState<T>>;
 
-  const useStore: StoreSelector = selector => {
-    const context = useContext(StoreContext);
-    if (!context?.use) {
-      throw new Error('Store was not injected.');
-    }
-    return context.use(selector);
-  };
+  const StoreContext = createStoreContext<PublicState<T>>();
+  const useStore = createUseStoreHook(StoreContext);
+  const useStoreSelector = createUseStoreShallowHook(StoreContext);
 
-  const useNewStore = (initialState?: InitialState<T>): [ShallowComponent, StoreSelector] => {
+  const useNewStore = (initialState?: InitialState<T>): [ShallowComponent, NonPublicSelector] => {
     // Ensure that this store is not created yet in this place
-    const context = useContext(StoreContext);
-    if (context?.use) {
+    if (useStore()) {
       throw new Error('The store was already injected.');
     }
 
     // Build the store
     const store = useMemo(() => createStore(initialState), []);
-    const use: StoreSelector = selector => store(selector, shallow);
     const Provider: ShallowComponent = useMemo(
       () =>
         ({children}) =>
-          <StoreContext.Provider value={{use}}>{children}</StoreContext.Provider>,
+          <StoreContext.Provider value={{store}}>{children}</StoreContext.Provider>,
       []
     );
 
-    return [Provider, store];
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return [Provider, selector => useStoreShallow(store, selector)];
   };
 
   return {
-    use: useStore,
+    use: useStoreSelector,
     init: useNewStore,
   };
 };
