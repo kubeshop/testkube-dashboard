@@ -112,24 +112,27 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
-  const plugins: Plugin[] = [
-    {
-      name: 'ai-insights',
-      setup: (scope: PluginScope) => {
-        scope.appendSlot(
-          'testExecutionTabs',
-          {
-            key: 'ai-insights-tab',
-            label: <IconLabel title="AI Insights" icon={<NewIcon />} />,
-            children: <AiInsightsTab />,
-          },
-          {
-            order: 4,
-          }
-        );
+  const plugins: Plugin[] = useMemo(
+    () => [
+      {
+        name: 'ai-insights',
+        setup: (scope: PluginScope) => {
+          scope.appendSlot(
+            'testExecutionTabs',
+            {
+              key: 'ai-insights-tab',
+              label: <IconLabel title="AI Insights" icon={<NewIcon />} />,
+              children: <AiInsightsTab />,
+            },
+            {
+              order: 4,
+            }
+          );
+        },
       },
-    },
-  ];
+    ],
+    []
+  );
 
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})

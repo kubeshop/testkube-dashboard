@@ -57,7 +57,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   useEffect(() => {
     setTestExecutionTabsData({execution, test: entityDetails});
-  }, [id]);
+  }, [execution, entityDetails]);
 
   useEffect(() => {
     if (ref && ref.current) {
@@ -146,7 +146,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
           },
         }
       : null,
-  ];
+  ].filter(Boolean);
 
   const items = usePluginSlotList('testExecutionTabs', defaultExecutionDetailsTabs);
 
