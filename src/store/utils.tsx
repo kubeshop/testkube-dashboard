@@ -22,9 +22,14 @@ declare const nonPublic: unique symbol;
 type NonPublicMark = typeof nonPublic;
 export type NonPublic<T> = Mark<T, NonPublicMark>;
 
+declare const nonPublicWrite: unique symbol;
+type NonPublicWriteMark = typeof nonPublicWrite;
+export type NonPublicWrite<T> = Mark<T, NonPublicWriteMark>;
+
 type NonPublicState<T> = UnmarkAllObject<OmitMark<T, InternalMark>>;
 type InitialState<T> = Partial<NonPublicState<T>>;
-type PublicState<T> = UnmarkAllObject<OmitMark<T, InternalMark | NonPublicMark>>;
+type PublicReadState<T> = UnmarkAllObject<OmitMark<T, InternalMark | NonPublicMark>>;
+type PublicWriteState<T> = UnmarkAllObject<OmitMark<T, InternalMark | NonPublicMark | NonPublicWriteMark>>;
 
 /**
  * In [magicSet] property, we will store a magic function,
@@ -165,11 +170,11 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   type NonPublicSync = StoreSync<NonPublicState<T>>;
   type NonPublicSetFactory = StoreSetFactory<NonPublicState<T>>;
 
-  const StoreContext = createStoreContext<PublicState<T>>();
+  const StoreContext = createStoreContext<PublicReadState<T>>();
   const useLocalStore = createUseStoreHook(StoreContext);
   const useLocalStoreState = createUseStoreStateHook(StoreContext);
-  const useLocalStoreSync = createUseStoreSyncHook(StoreContext);
-  const useLocalStoreSetter = createUseStoreSetterHook(StoreContext);
+  const useLocalStoreSync = createUseStoreSyncHook(StoreContext as StoreContext<PublicWriteState<T>>);
+  const useLocalStoreSetter = createUseStoreSetterHook(StoreContext as StoreContext<PublicWriteState<T>>);
 
   const useNewStore = (
     initialState?: InitialState<T>
