@@ -49,6 +49,8 @@ type StoreSelector<T> = <U>(selector: (state: T) => U) => U;
 type StoreSync<T> = (data: Partial<BaseState<T>>) => void;
 type StoreSetValue<T, K extends keyof T> = (value: T[K] | ((prev: T[K], state: T) => T[K])) => void;
 type StoreSetFactory<T> = <K extends keyof T>(key: K) => StoreSetValue<T, K>;
+type StoreField<T, K extends keyof T> = [T[K], StoreSetValue<T, K>];
+type StoreFieldFactory<T> = <K extends keyof T>(key: K) => StoreField<T, K>;
 interface StorePick<T> {
   <K extends keyof T>(): {};
   <K extends keyof T>(...keys: K[]): {[K2 in K]: T[K2]};
@@ -183,12 +185,25 @@ const createUseStoreSetterHook = <T,>(StoreContext: StoreContext<T>): StoreSetFa
   return key => useStoreSetter(useStore(), key);
 };
 
+export const useStoreField = <T, K extends keyof T>(store: BareStore<T> | undefined, key: K): StoreField<T, K> => {
+  if (!store) {
+    throw new Error('Store was not injected.');
+  }
+  return [useStoreState(store, state => state[key]), useStoreSetter(store, key)];
+};
+
+const createUseStoreFieldHook = <T,>(StoreContext: StoreContext<T>): StoreFieldFactory<T> => {
+  const useStore = createUseStoreHook(StoreContext);
+  return key => useStoreField(useStore(), key);
+};
+
 export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   type ShallowComponent = FC<PropsWithChildren<{}>>;
   type NonPublicSelector = StoreSelector<NonPublicState<T>>;
   type NonPublicPick = StorePick<NonPublicState<T>>;
   type NonPublicSync = StoreSync<NonPublicState<T>>;
   type NonPublicSetFactory = StoreSetFactory<NonPublicState<T>>;
+  type NonPublicFieldFactory = StoreFieldFactory<NonPublicState<T>>;
 
   const StoreContext = createStoreContext<PublicReadState<T>>();
   const useLocalStore = createUseStoreHook(StoreContext);
@@ -196,12 +211,19 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   const useLocalStorePick = createUseStorePickHook(StoreContext);
   const useLocalStoreSync = createUseStoreSyncHook(StoreContext as StoreContext<PublicWriteState<T>>);
   const useLocalStoreSetter = createUseStoreSetterHook(StoreContext as StoreContext<PublicWriteState<T>>);
+  const useLocalStoreField = createUseStoreFieldHook(StoreContext as StoreContext<PublicWriteState<T>>);
 
   const useNewStore = (
     initialState?: InitialState<T>
   ): [
     ShallowComponent,
-    {use: NonPublicSelector; sync: NonPublicSync; pick: NonPublicPick; useSetter: NonPublicSetFactory}
+    {
+      use: NonPublicSelector;
+      sync: NonPublicSync;
+      pick: NonPublicPick;
+      useField: NonPublicFieldFactory;
+      useSetter: NonPublicSetFactory;
+    }
   ] => {
     // Ensure that this store is not created yet in this place
     if (useLocalStore()) {
@@ -227,6 +249,8 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         pick: (...keys) => useStorePick(store as BareStore<NonPublicState<T>>, ...(keys as any)),
         // eslint-disable-next-line react-hooks/rules-of-hooks
+        useField: key => useStoreField(store as BareStore<NonPublicState<T>>, key),
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useSetter: key => useStoreSetter(store as BareStore<NonPublicState<T>>, key),
       },
     ];
@@ -235,6 +259,7 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   return {
     use: useLocalStoreState,
     useSetter: useLocalStoreSetter,
+    useField: useLocalStoreField,
     pick: useLocalStorePick,
     sync: useLocalStoreSync,
     init: useNewStore,

@@ -117,6 +117,7 @@ const createFooStore = createStoreFactory('Foo', createFooSlice);
 export const {
   use: useFoo,
   useSetter: useFooSetter,
+  useField: useFooField,
   pick: useFooPick,
   sync: useFooSync,
   init: initializeFoo,
@@ -136,6 +137,7 @@ export const Parent: React.FC = () => {
     sync: usePrivateFooSync,
     pick: usePrivateFooPick,
     useSetter: usePrivateFooSetter,
+    useField: usePrivateFooField,
   }] = initializeFoo(/* optional initial state */);
   
   // // If you don't want to manipulate the store in this component,
@@ -152,7 +154,7 @@ export const Parent: React.FC = () => {
 }
 
 // Child.ts
-import {useFoo, useFooPick, useFooSetter, useFooSync} from '@store/foo';
+import {useFoo, useFooField, useFooPick, useFooSetter, useFooSync} from '@store/foo';
 
 export const Child: React.FC = () => {
   // Read single value from the state, or compute one
@@ -169,6 +171,9 @@ export const Child: React.FC = () => {
   // it will either call the corresponding setter in the store (like `setBar` or `setBaz`),
   // or if it doesn't exist - replace the property in place.
   const setBar = useFooSetter('bar');
+  
+  // Use React-state like format for values
+  const [bar, setBar] = useFooField('bar');
 
   // Synchronize value in the store with local one.
   // Don't forget to use useMemo, if you create an object here.
@@ -222,7 +227,7 @@ instead of being in the context of the application.
 You may use common hooks with such store too, using their global version:
 
 ```tsx
-import {useStorePick, useStoreSetter, useStoreState, useStoreSync} from '@store/utils';
+import {useStorePick, useStoreSetter, useStoreState, useStoreSync, useStoreField} from '@store/utils';
 import {fooStore} from '@store/foo';
 
 function Component() {
@@ -234,6 +239,9 @@ function Component() {
 
   // Create a value setter; you don't need to memoize it, it's already handled.
   const setBar = useStoreSetter(fooStore, 'bar');
+
+  // Create React-state-like access
+  const [bar, setBar] = useStoreField(fooStore, 'bar');
 
   // Synchronize value in the store with local one.
   useStoreSync(fooStore, {
@@ -281,18 +289,21 @@ const createFooSlice = createSliceFactory<FooSlice>(set => ({
 // [...]
 
 // Usage:
-import {initializeFoo, useFoo, useFooSetter, useFooSync} from '@store/foo';
+import {initializeFoo, useFoo, useFooField, useFooSetter, useFooSync} from '@store/foo';
 
 const Parent: React.FC = () => {
-  const [, {use, useSetter, sync}] = initializeFoo();
+  const [, {use, useField, useSetter, sync}] = initializeFoo();
 
   // ERROR: 'setFoo' is not recognized on 'state'
   const setFoo = use(state => state.setFoo);
 
-  // SUCCESS: It will use setFoo internally anyway
+  // SUCCESS: It will use `setFoo` internally anyway
+  const [foo, setFoo] = useField('foo');
+
+  // SUCCESS: It will use `setFoo` internally anyway
   const setFoo = useSetter('foo');
 
-  // SUCCESS: It will use setFoo internally anyway
+  // SUCCESS: It will use `setFoo` internally anyway
   sync({foo: 'some-value'});
 };
 
@@ -300,10 +311,13 @@ const Child: React.FC = () => {
   // ERROR: 'setFoo' is not recognized on 'state'
   const setFoo = useFoo(state => state.setFoo);
   
-  // SUCCESS: It will use setFoo internally anyway
+  // SUCCESS: It will use `setFoo` internally anyway
+  const [foo, setFoo] = useFooField('foo');
+  
+  // SUCCESS: It will use `setFoo` internally anyway
   const setFoo = useFooSetter('foo');
   
-  // SUCCESS: It will use setFoo internally anyway
+  // SUCCESS: It will use `setFoo` internally anyway
   useFooSync({foo: 'some-value'});
 };
 ```
@@ -330,16 +344,19 @@ const createFooSlice = createSliceFactory<FooSlice>(set => ({
 // [...]
 
 // Usage:
-import {initializeFoo, useFoo, useFooPick, useFooSetter, useFooSync} from '@store/foo';
+import {initializeFoo, useFoo, useFooField, useFooPick, useFooSetter, useFooSync} from '@store/foo';
 
 const Parent: React.FC = () => {
-  const [, {use, useSetter, pick, sync}] = initializeFoo();
+  const [, {use, useSetter, useField, pick, sync}] = initializeFoo();
 
   // SUCCESS: 'foo' is available from non-public hooks
   const foo = use(state => state.foo);
 
   // SUCCESS: 'foo' is available from non-public hooks
   const {foo} = pick('foo');
+
+  // SUCCESS: 'foo' is available from non-public hooks
+  const [foo, setFoo] = useField('foo');
 
   // SUCCESS: 'foo' is available from non-public hooks
   const setFoo = useSetter('foo');
@@ -357,6 +374,9 @@ const Child: React.FC = () => {
 
   // ERROR: 'foo' is invalid argument for useFooPick
   const {foo} = useFooPick('foo');
+  
+  // ERROR: `foo` is invalid argument useFooField
+  const [foo, setFoo] = useFooField('foo');
   
   // ERROR: `foo` is invalid argument useFooSetter
   const setFoo = useFooSetter('foo');
@@ -390,16 +410,19 @@ const createFooSlice = createSliceFactory<FooSlice>(set => ({
 // [...]
 
 // Usage:
-import {initializeFoo, useFoo, useFooPick, useFooSetter, useFooSync} from '@store/foo';
+import {initializeFoo, useFoo, useFooField, useFooPick, useFooSetter, useFooSync} from '@store/foo';
 
 const Parent: React.FC = () => {
-  const [, {use, useSetter, pick, sync}] = initializeFoo();
+  const [, {use, useSetter, useField, pick, sync}] = initializeFoo();
 
   // SUCCESS: 'foo' is publicly readable
   const foo = use(state => state.foo);
 
   // SUCCESS: 'foo' is publicly readable
   const {foo} = pick('foo');
+
+  // SUCCESS: 'foo' is writable from non-public hooks
+  const [foo, setFoo] = useField('foo');
 
   // SUCCESS: 'foo' is writable from non-public hooks
   const setFoo = useSetter('foo');
@@ -414,6 +437,9 @@ const Child: React.FC = () => {
 
   // SUCCESS: 'foo' is publicly readable
   const {foo} = useFooPick('foo');
+  
+  // ERROR: `foo` is not writable from public hooks
+  const [foo, setFoo] = useFooField('foo');
   
   // ERROR: `foo` is not writable from public hooks
   const setFoo = useFooSetter('foo');
