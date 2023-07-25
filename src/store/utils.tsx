@@ -199,7 +199,10 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
 
   const useNewStore = (
     initialState?: InitialState<T>
-  ): [ShallowComponent, NonPublicSelector, NonPublicSync, NonPublicPick, NonPublicSetFactory] => {
+  ): [
+    ShallowComponent,
+    {use: NonPublicSelector; sync: NonPublicSync; pick: NonPublicPick; useSetter: NonPublicSetFactory}
+  ] => {
     // Ensure that this store is not created yet in this place
     if (useLocalStore()) {
       throw new Error('The store was already injected.');
@@ -216,14 +219,16 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
 
     return [
       Provider,
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      selector => useStoreState(store, selector),
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      data => useStoreSync(store as BareStore<NonPublicState<T>>, data),
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      (...keys) => useStorePick(store as BareStore<NonPublicState<T>>, ...(keys as any)),
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      key => useStoreSetter(store as BareStore<NonPublicState<T>>, key),
+      {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        use: selector => useStoreState(store, selector),
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        sync: data => useStoreSync(store as BareStore<NonPublicState<T>>, data),
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        pick: (...keys) => useStorePick(store as BareStore<NonPublicState<T>>, ...(keys as any)),
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useSetter: key => useStoreSetter(store as BareStore<NonPublicState<T>>, key),
+      },
     ];
   };
 
