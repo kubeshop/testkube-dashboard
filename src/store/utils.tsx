@@ -47,7 +47,8 @@ type StoreContext<T> = Context<{store: BareStore<T>}>;
 
 type StoreSelector<T> = <U>(selector: (state: T) => U) => U;
 type StoreSync<T> = (data: Partial<BaseState<T>>) => void;
-type StoreSetFactory<T> = <K extends keyof T>(key: K) => (value: T[K]) => void;
+type StoreSetValue<T, K extends keyof T> = (value: T[K] | ((prev: T[K], state: T) => T[K])) => void;
+type StoreSetFactory<T> = <K extends keyof T>(key: K) => StoreSetValue<T, K>;
 
 declare const sliceMetadata: unique symbol;
 type SliceMetadataSymbol = typeof sliceMetadata;
@@ -142,13 +143,16 @@ const useStoreSync = <T,>(store: BareStore<T> | undefined, data: Partial<BaseSta
   });
 };
 
-const useStoreSetter = <T, K extends keyof T>(store: BareStore<T> | undefined, key: K): ((value: T[K]) => void) => {
+const useStoreSetter = <T, K extends keyof T>(store: BareStore<T> | undefined, key: K): StoreSetValue<T, K> => {
   if (!store) {
     throw new Error('Store was not injected.');
   }
   return useCallback(
     value => {
-      store(state => internalSet(state, key, value));
+      store(state => {
+        const nextValue = typeof value === 'function' ? (value as any)(state[key], state) : value;
+        internalSet(state, key, nextValue);
+      });
     },
     [store, key]
   );
