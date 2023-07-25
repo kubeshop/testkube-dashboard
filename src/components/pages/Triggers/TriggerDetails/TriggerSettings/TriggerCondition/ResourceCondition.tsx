@@ -11,17 +11,14 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useMainField, useMainPick} from '@store';
 
 import {requiredNoText} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 const ResourceCondition: React.FC = () => {
-  const {currentTrigger, setCurrentTrigger, triggersKeyMap} = useStore(state => ({
-    currentTrigger: state.currentTrigger!,
-    setCurrentTrigger: state.setCurrentTrigger,
-    triggersKeyMap: state.triggersKeyMap!,
-  }));
+  const [currentTrigger, setCurrentTrigger] = useMainField('currentTrigger');
+  const {triggersKeyMap} = useMainPick('triggersKeyMap');
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -34,7 +31,7 @@ const ResourceCondition: React.FC = () => {
     const {timeout, conditions} = form.getFieldsValue();
 
     const body = {
-      ...currentTrigger,
+      ...currentTrigger!,
       conditionSpec: {
         conditions,
         ...(timeout && {timeout}),
@@ -113,7 +110,7 @@ const ResourceCondition: React.FC = () => {
                           <FormRow key={key}>
                             <FormItem {...restField} name={[name, 'type']} rules={[requiredNoText]} flex={2}>
                               <Select
-                                options={triggersKeyMap.conditions?.map(condition => ({
+                                options={triggersKeyMap?.conditions?.map(condition => ({
                                   label: condition,
                                   value: condition,
                                 }))}

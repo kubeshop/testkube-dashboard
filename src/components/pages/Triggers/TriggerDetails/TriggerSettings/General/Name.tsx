@@ -8,15 +8,12 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useMainField} from '@store';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 const Name: React.FC = () => {
-  const {currentTrigger, setCurrentTrigger} = useStore(state => ({
-    currentTrigger: state.currentTrigger!,
-    setCurrentTrigger: state.setCurrentTrigger,
-  }));
+  const [currentTrigger, setCurrentTrigger] = useMainField('currentTrigger');
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -30,7 +27,7 @@ const Name: React.FC = () => {
     const values = form.getFieldsValue();
 
     const body = {
-      ...currentTrigger,
+      ...currentTrigger!,
       name: values.name,
     };
 

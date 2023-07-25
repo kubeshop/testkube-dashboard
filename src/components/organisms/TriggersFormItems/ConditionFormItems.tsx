@@ -4,16 +4,14 @@ import {Form, Input, Select, Space} from 'antd';
 
 import {LabelsSelect} from '@molecules';
 
-import {useStore} from '@store';
+import {useMainPick} from '@store';
 
 import {required} from '@utils/form';
 
 import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 
 const ConditionFormItems = () => {
-  const {triggersKeyMap} = useStore(state => ({
-    triggersKeyMap: state.triggersKeyMap!,
-  }));
+  const {triggersKeyMap} = useMainPick('triggersKeyMap');
 
   const [switcherValue, setSwitcherValue] = useState('label');
 

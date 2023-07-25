@@ -11,17 +11,14 @@ import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useMainField} from '@store';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {getConditionFormValues, getResourceIdentifierSelector} from '../../../utils';
 
 const Condition: React.FC = () => {
-  const {currentTrigger, setCurrentTrigger} = useStore(state => ({
-    currentTrigger: state.currentTrigger!,
-    setCurrentTrigger: state.setCurrentTrigger,
-  }));
+  const [currentTrigger, setCurrentTrigger] = useMainField('currentTrigger');
   const appNamespace = useAppSelector(selectNamespace);
 
   const mayEdit = usePermission(Permissions.editEntity);
@@ -30,7 +27,7 @@ const Condition: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const initialValues = getConditionFormValues(currentTrigger);
+  const initialValues = getConditionFormValues(currentTrigger!);
 
   const onFinish = () => {
     const values = form.getFieldsValue();
@@ -41,7 +38,7 @@ const Condition: React.FC = () => {
     );
 
     const body = {
-      ...currentTrigger,
+      ...currentTrigger!,
       resource: values.resource,
       event: values.event,
       resourceSelector,

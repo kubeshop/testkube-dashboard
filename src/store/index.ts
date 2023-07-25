@@ -3,6 +3,11 @@ import {connectStore, createStoreBuilder} from '@store/utils';
 
 const createStore = createStoreBuilder('Dashboard').with(createTriggersSlice).end();
 
-const {use: useStore, init: initializeStore} = connectStore(createStore);
-
-export {useStore, initializeStore};
+export const {
+  use: useMain,
+  useSetter: useMainSetter,
+  useField: useMainField,
+  pick: useMainPick,
+  sync: useMainSync,
+  init: initializeMainStore,
+} = connectStore(createStore);

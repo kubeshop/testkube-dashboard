@@ -4,7 +4,7 @@ import {Form, Select, Space} from 'antd';
 
 import {LabelsSelect} from '@molecules';
 
-import {useStore} from '@store';
+import {useMainPick} from '@store';
 
 import {required} from '@utils/form';
 
@@ -12,9 +12,7 @@ import ResourceTriggerSelect from './ResourceTriggerSelect';
 import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 
 const ActionFormItems = () => {
-  const {triggersKeyMap} = useStore(state => ({
-    triggersKeyMap: state.triggersKeyMap!,
-  }));
+  const {triggersKeyMap} = useMainPick('triggersKeyMap');
 
   const [switcherValue, setSwitcherValue] = useState('label');
 
@@ -26,7 +24,7 @@ const ActionFormItems = () => {
 
   const actionOptions = triggersKeyMap?.actions
     .map((actionItem: string) =>
-      triggersKeyMap.executions.map(executionItem => {
+      triggersKeyMap!.executions.map(executionItem => {
         const label = `${actionItem} ${executionItem}`;
         return {label, value: label};
       })

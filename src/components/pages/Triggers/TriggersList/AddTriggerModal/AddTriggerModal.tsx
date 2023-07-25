@@ -18,7 +18,7 @@ import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useCreateTriggerMutation, useGetTriggersKeyMapQuery} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useMainSetter} from '@store';
 
 import {safeRefetch} from '@utils/fetchUtils';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -38,9 +38,7 @@ const AddTriggerModal: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
 
-  const {setTriggersKeyMap} = useStore(state => ({
-    setTriggersKeyMap: state.setTriggersKeyMap,
-  }));
+  const setTriggersKeyMap = useMainSetter('triggersKeyMap');
 
   const [createTrigger, {isLoading}] = useCreateTriggerMutation();
 

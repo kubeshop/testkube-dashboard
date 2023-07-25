@@ -25,7 +25,7 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {initializeStore} from '@store';
+import {initializeMainStore} from '@store';
 
 import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -45,8 +45,8 @@ export interface AppProps {
   plugins: Plugin[];
 }
 
-const App: React.FC<AppProps> = ({plugins}) => {
-  const [StoreProvider] = initializeStore();
+const App: React.FC = ({plugins}) => {
+  const [StoreProvider] = initializeMainStore();
 
   const dispatch = useAppDispatch();
   const location = useLocation();
