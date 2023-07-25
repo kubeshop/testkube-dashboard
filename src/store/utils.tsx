@@ -122,7 +122,7 @@ const createUseStoreHook =
   () =>
     useContext(StoreContext)?.store;
 
-const useStoreState = <T, U>(store: BareStore<T> | undefined, selector: (state: T) => U): U => {
+export const useStoreState = <T, U>(store: BareStore<T> | undefined, selector: (state: T) => U): U => {
   if (!store) {
     throw new Error('Store was not injected.');
   }
@@ -134,9 +134,9 @@ const createUseStoreStateHook = <T,>(StoreContext: StoreContext<T>): StoreSelect
   return selector => useStoreState(useStore(), selector);
 };
 
-function useStorePick<T, K extends keyof T>(store: BareStore<T> | undefined): {};
-function useStorePick<T, K extends keyof T>(store: BareStore<T> | undefined, ...keys: K[]): {[K2 in K]: T[K2]};
-function useStorePick<T, K extends keyof T>(store: BareStore<T> | undefined, ...keys: K[]): {[K2 in K]: T[K2]} {
+export function useStorePick<T, K extends keyof T>(store: BareStore<T> | undefined): {};
+export function useStorePick<T, K extends keyof T>(store: BareStore<T> | undefined, ...keys: K[]): {[K2 in K]: T[K2]};
+export function useStorePick<T, K extends keyof T>(store: BareStore<T> | undefined, ...keys: K[]): {[K2 in K]: T[K2]} {
   return useStoreState(store, state => pick(state, keys)) as {[K2 in K]: T[K2]};
 }
 
@@ -145,7 +145,7 @@ const createUseStorePickHook = <T,>(StoreContext: StoreContext<T>): StorePick<T>
   return (...keys) => useStorePick(useStore(), ...(keys as any));
 };
 
-const useStoreSync = <T,>(store: BareStore<T> | undefined, data: Partial<BaseState<T>>) => {
+export const useStoreSync = <T,>(store: BareStore<T> | undefined, data: Partial<BaseState<T>>) => {
   if (!store) {
     throw new Error('Store was not injected.');
   }
@@ -158,7 +158,12 @@ const useStoreSync = <T,>(store: BareStore<T> | undefined, data: Partial<BaseSta
   });
 };
 
-const useStoreSetter = <T, K extends keyof T>(store: BareStore<T> | undefined, key: K): StoreSetValue<T, K> => {
+const createUseStoreSyncHook = <T,>(StoreContext: StoreContext<T>): ((data: Partial<T>) => void) => {
+  const useStore = createUseStoreHook(StoreContext);
+  return (data: Partial<T>) => useStoreSync(useStore(), data);
+};
+
+export const useStoreSetter = <T, K extends keyof T>(store: BareStore<T> | undefined, key: K): StoreSetValue<T, K> => {
   if (!store) {
     throw new Error('Store was not injected.');
   }
@@ -176,11 +181,6 @@ const useStoreSetter = <T, K extends keyof T>(store: BareStore<T> | undefined, k
 const createUseStoreSetterHook = <T,>(StoreContext: StoreContext<T>): StoreSetFactory<T> => {
   const useStore = createUseStoreHook(StoreContext);
   return key => useStoreSetter(useStore(), key);
-};
-
-const createUseStoreSyncHook = <T,>(StoreContext: StoreContext<T>): ((data: Partial<T>) => void) => {
-  const useStore = createUseStoreHook(StoreContext);
-  return (data: Partial<T>) => useStoreSync(useStore(), data);
 };
 
 export const connectStore = <T,>(createStore: StoreFactory<T>) => {
