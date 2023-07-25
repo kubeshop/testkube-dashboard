@@ -1,4 +1,4 @@
-import {Context, FC, PropsWithChildren, createContext, useContext, useMemo} from 'react';
+import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useMemo} from 'react';
 
 import {capitalize} from 'lodash';
 import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
@@ -42,6 +42,7 @@ type StoreContext<T> = Context<{store: BareStore<T>}>;
 
 type StoreSelector<T> = <U>(selector: (state: T) => U) => U;
 type StoreSync<T> = (data: Partial<BaseState<T>>) => void;
+type StoreSetFactory<T> = <K extends keyof T>(key: K) => (value: T[K]) => void;
 
 declare const sliceMetadata: unique symbol;
 type SliceMetadataSymbol = typeof sliceMetadata;
@@ -102,6 +103,10 @@ export const createStoreBuilder = (name: string) => new StoreFactoryBuilder(name
 
 const createStoreContext = <T,>() => createContext<{store: BareStore<T>}>(undefined!);
 
+const internalSet = <T, K extends keyof T>(state: T, key: K, value: T[K]): void => {
+  (state as EnhancedState<T>)[magicSet](key, value);
+};
+
 const createUseStoreHook =
   <T,>(StoreContext: StoreContext<T>): (() => BareStore<T> | undefined) =>
   () =>
@@ -126,10 +131,27 @@ const useStoreSync = <T,>(store: BareStore<T> | undefined, data: Partial<BaseSta
   store(state => {
     (Object.keys(data) as (keyof BaseState<T>)[]).forEach(key => {
       if (data[key] !== state[key]) {
-        (state as EnhancedState<T>)[magicSet](key, data[key] as any);
+        internalSet(state, key, data[key]);
       }
     });
   });
+};
+
+const useStoreSetter = <T, K extends keyof T>(store: BareStore<T> | undefined, key: K): ((value: T[K]) => void) => {
+  if (!store) {
+    throw new Error('Store was not injected.');
+  }
+  return useCallback(
+    value => {
+      store(state => internalSet(state, key, value));
+    },
+    [store, key]
+  );
+};
+
+const createUseStoreSetterHook = <T,>(StoreContext: StoreContext<T>): StoreSetFactory<T> => {
+  const useStore = createUseStoreHook(StoreContext);
+  return key => useStoreSetter(useStore(), key);
 };
 
 const createUseStoreSyncHook = <T,>(StoreContext: StoreContext<T>): ((data: Partial<T>) => void) => {
@@ -141,13 +163,17 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   type ShallowComponent = FC<PropsWithChildren<{}>>;
   type NonPublicSelector = StoreSelector<NonPublicState<T>>;
   type NonPublicSync = StoreSync<NonPublicState<T>>;
+  type NonPublicSetFactory = StoreSetFactory<NonPublicState<T>>;
 
   const StoreContext = createStoreContext<PublicState<T>>();
   const useLocalStore = createUseStoreHook(StoreContext);
   const useLocalStoreState = createUseStoreStateHook(StoreContext);
   const useLocalStoreSync = createUseStoreSyncHook(StoreContext);
+  const useLocalStoreSetter = createUseStoreSetterHook(StoreContext);
 
-  const useNewStore = (initialState?: InitialState<T>): [ShallowComponent, NonPublicSelector, NonPublicSync] => {
+  const useNewStore = (
+    initialState?: InitialState<T>
+  ): [ShallowComponent, NonPublicSelector, NonPublicSync, NonPublicSetFactory] => {
     // Ensure that this store is not created yet in this place
     if (useLocalStore()) {
       throw new Error('The store was already injected.');
@@ -167,12 +193,15 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       selector => useStoreState(store, selector),
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      data => useStoreSync(store, data as Partial<BaseState<T>>),
+      data => useStoreSync(store as BareStore<NonPublicState<T>>, data),
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      key => useStoreSetter(store as BareStore<NonPublicState<T>>, key),
     ];
   };
 
   return {
     use: useLocalStoreState,
+    useSetter: useLocalStoreSetter,
     sync: useLocalStoreSync,
     init: useNewStore,
   };
