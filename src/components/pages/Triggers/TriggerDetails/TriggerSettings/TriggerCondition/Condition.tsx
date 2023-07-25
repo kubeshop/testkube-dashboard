@@ -11,14 +11,14 @@ import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import {useMainField} from '@store';
+import {useTriggersField} from '@store/triggers';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {getConditionFormValues, getResourceIdentifierSelector} from '../../../utils';
 
 const Condition: React.FC = () => {
-  const [currentTrigger, setCurrentTrigger] = useMainField('currentTrigger');
+  const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
   const appNamespace = useAppSelector(selectNamespace);
 
   const mayEdit = usePermission(Permissions.editEntity);

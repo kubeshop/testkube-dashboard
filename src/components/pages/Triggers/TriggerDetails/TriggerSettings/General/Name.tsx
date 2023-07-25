@@ -8,12 +8,12 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import {useMainField} from '@store';
+import {useTriggersField} from '@store/triggers';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 const Name: React.FC = () => {
-  const [currentTrigger, setCurrentTrigger] = useMainField('currentTrigger');
+  const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
 
   const mayEdit = usePermission(Permissions.editEntity);
 

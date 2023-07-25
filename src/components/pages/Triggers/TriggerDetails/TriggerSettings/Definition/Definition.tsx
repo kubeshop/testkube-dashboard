@@ -4,7 +4,7 @@ import {Definition} from '@molecules';
 
 import {useGetTriggerDefinitionQuery, useUpdateTriggerDefinitionMutation} from '@services/triggers';
 
-import {useMainField} from '@store';
+import {useTriggersField} from '@store/triggers';
 
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
@@ -14,7 +14,7 @@ interface TriggerDefinitionProps {
 }
 
 const TriggerDefinition: FC<TriggerDefinitionProps> = ({reload}) => {
-  const [currentTrigger, setCurrentTrigger] = useMainField('currentTrigger');
+  const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
 
   return (
     <Definition

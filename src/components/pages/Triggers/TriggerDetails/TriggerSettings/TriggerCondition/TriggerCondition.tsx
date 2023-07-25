@@ -1,17 +1,17 @@
 import {Space} from 'antd';
 
-import {useMainPick} from '@store';
+import {useTriggersPick} from '@store/triggers';
 
 import Condition from './Condition';
 import ResourceCondition from './ResourceCondition';
 
 const TriggerCondition: React.FC = () => {
-  const {triggersKeyMap} = useMainPick('triggersKeyMap');
+  const {keyMap} = useTriggersPick('keyMap');
 
   return (
     <Space size={30} direction="vertical">
       <Condition />
-      {triggersKeyMap?.conditions ? <ResourceCondition /> : null}
+      {keyMap?.conditions ? <ResourceCondition /> : null}
     </Space>
   );
 };

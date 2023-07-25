@@ -11,7 +11,7 @@ import PageMetadata from '@pages/PageMetadata';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
 
-import {useMainPick, useMainSync} from '@store';
+import {useTriggersPick, useTriggersSync} from '@store/triggers';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
@@ -31,10 +31,10 @@ const TriggerDetails = () => {
 
   const isPageDisabled = !name;
 
-  const currentState = useMainPick('triggersKeyMap', 'currentTrigger');
-  useMainSync({
-    triggersKeyMap: triggersKeyMap ?? currentState.triggersKeyMap,
-    currentTrigger: triggerDetails ?? currentState.currentTrigger,
+  const currentState = useTriggersPick('keyMap', 'current');
+  useTriggersSync({
+    keyMap: triggersKeyMap ?? currentState.keyMap,
+    current: triggerDetails ?? currentState.current,
   });
 
   useEffect(() => {
