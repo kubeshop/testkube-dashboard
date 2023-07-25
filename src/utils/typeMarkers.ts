@@ -20,8 +20,5 @@ export type UnmarkAllObject<T> = {[K in keyof T]: UnmarkAll<T[K]>};
 export type MatchingMarkKeys<T, M extends symbol> = {
   [K in keyof T]: T[K] extends HasMark<T[K], M> ? K : never;
 }[keyof T];
-export type NotMatchingMarkKeys<T, M extends symbol> = {
-  [K in keyof T]: T[K] extends HasMark<T[K], M> ? never : K;
-}[keyof T];
-export type ExcludeMark<T, M extends symbol> = Pick<T, NotMatchingMarkKeys<T, M>>;
+export type OmitMark<T, M extends symbol> = Omit<T, MatchingMarkKeys<T, M>>;
 export type PickMark<T, M extends symbol> = Pick<T, MatchingMarkKeys<T, M>>;
