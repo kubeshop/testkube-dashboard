@@ -1,5 +1,7 @@
-const {randomUUID} = require('node:crypto');
 import dotenv from 'dotenv';
+
+const {randomUUID} = require('node:crypto');
+
 dotenv.config();
 
 const config = {

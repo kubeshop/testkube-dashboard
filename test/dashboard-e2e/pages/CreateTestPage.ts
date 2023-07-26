@@ -2,6 +2,8 @@ import type {Page} from '@playwright/test';
 
 import type {TestData} from '../types';
 
+const path = require('path');
+
 export class CreateTestPage {
   public readonly page: Page;
 
@@ -40,6 +42,13 @@ export class CreateTestPage {
     } else if (type === 'string') {
       await this.setSelectionSearch('String', 'testSource');
       await this.setBasicInput(contentData.data, 'string');
+    } else if (type === 'file') {
+      await this.setSelectionSearch('File', 'testSource');
+      // await this.setBasicInput(contentData.data, 'string');
+      await this.page.setInputFiles(
+        'xpath=//span[@class="ant-upload"]//input[@type="file"]',
+        this.getAbsoluteFixtureFilePath(contentData.fixture_file_path)
+      );
     } else {
       throw Error('Type not supported by selectTestSource - extend CreateTestPage');
     }
@@ -69,5 +78,9 @@ export class CreateTestPage {
 
   private async clickCreateTestButton(): Promise<void> {
     await this.page.click('button[data-test="add-a-new-test-create-button"]');
+  }
+
+  private getAbsoluteFixtureFilePath(fixtureFileName: string) {
+    return path.resolve(`fixtures/files/${fixtureFileName}`);
   }
 }
