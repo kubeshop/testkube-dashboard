@@ -131,4 +131,19 @@ export default {
       'core-tests': 'cli-internal-temp',
     },
   },
+  'k6-string': {
+    name: 'temp-k6-string',
+    type: 'k6/script',
+    labels: {
+      'core-tests': 'dashboard-e2e-internal-temp',
+    },
+    content: {
+      type: 'string',
+      data: `import http from 'k6/http';
+
+export default function () {
+  http.get('https://testkube.kubeshop.io/');
+}`,
+    },
+  },
 };

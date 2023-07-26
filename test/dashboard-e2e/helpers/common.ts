@@ -19,6 +19,10 @@ export function validateTest(testData: Partial<TestData>, createdTestData: TestD
     Object.keys(testData.content.repository).forEach(key => {
       expect(testData.content.repository[key]).toEqual(createdTestData.content.repository[key]);
     });
+  } else if (testData.content.type === 'string') {
+    Object.keys(testData.content).forEach(key => {
+      expect(testData.content[key]).toEqual(createdTestData.content[key]);
+    });
   }
 }
 

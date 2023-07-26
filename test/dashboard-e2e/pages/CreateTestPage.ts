@@ -25,7 +25,9 @@ export class CreateTestPage {
   }
 
   public async selectTestSource(contentData: any): Promise<any> {
-    if (contentData.type === 'git') {
+    const {type} = contentData;
+
+    if (type === 'git') {
       const repositoryData = contentData.repository as Record<string, string | number>;
       await this.setSelectionSearch('Git', 'testSource');
       // eslint-disable-next-line no-restricted-syntax
@@ -35,13 +37,16 @@ export class CreateTestPage {
           await this.setBasicInput(value, key);
         }
       }
+    } else if (type === 'string') {
+      await this.setSelectionSearch('String', 'testSource');
+      await this.setBasicInput(contentData.data, 'string');
     } else {
       throw Error('Type not supported by selectTestSource - extend CreateTestPage');
     }
   }
 
   public async setBasicInput(value: string | number, inputName: string): Promise<void> {
-    await this.page.locator(`input[id="test-creation_${inputName}"]`).fill(`${value}`);
+    await this.page.locator(`[id="test-creation_${inputName}"]`).fill(`${value}`);
   }
 
   public async setSelectionSearch(value: string | number, inputName: string): Promise<void> {

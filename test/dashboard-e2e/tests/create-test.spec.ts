@@ -36,7 +36,26 @@ for (const testName of testNames) {
 
 test.skip(`Create test from File`, async ({page}) => {});
 
-test.skip(`Create test from String`, async ({page}) => {});
+test(`Create test from String`, async ({page}) => {
+  const testName = 'k6-string'
+  const testData = testDataHandler.getTest(testName);
+  const realTestName = testData.name;
+
+  await api.assureTestNotCreated(realTestName);
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+  await mainPage.openCreateTestDialog();
+
+  const createTestPage = new CreateTestPage(page);
+  await createTestPage.createTest(testData);
+  await page.waitForURL(`**/tests/executions/${realTestName}`);
+
+  const createdTestData = await api.getTestData(realTestName);
+  await validateTest(testData, createdTestData);
+
+  // cleanup
+  await api.removeTest(realTestName);
+});
 
 test.skip(`Create test from Git source`, async ({page}) => {});
 

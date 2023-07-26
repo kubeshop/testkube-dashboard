@@ -1,4 +1,6 @@
 const {randomUUID} = require('node:crypto');
+import dotenv from 'dotenv';
+dotenv.config();
 
 const config = {
   ci: process.env.CI ?? '0',
