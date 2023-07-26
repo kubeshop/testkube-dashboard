@@ -47,10 +47,8 @@ export class CreateTestPage {
       // await this.setBasicInput(contentData.data, 'string');
       await this.page.setInputFiles(
         'xpath=//span[@class="ant-upload"]//input[@type="file"]',
-        this.getAbsoluteFixtureFilePath(contentData.fixture_file_path)
+        CreateTestPage.getAbsoluteFixtureFilePath(contentData.fixture_file_path)
       );
-    } else {
-      throw Error('Type not supported by selectTestSource - extend CreateTestPage');
     }
   }
 
@@ -80,7 +78,7 @@ export class CreateTestPage {
     await this.page.click('button[data-test="add-a-new-test-create-button"]');
   }
 
-  private getAbsoluteFixtureFilePath(fixtureFileName: string) {
+  private static getAbsoluteFixtureFilePath(fixtureFileName: string) {
     return path.resolve(`fixtures/files/${fixtureFileName}`);
   }
 }
