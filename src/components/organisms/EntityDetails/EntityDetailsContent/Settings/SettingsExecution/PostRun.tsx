@@ -16,15 +16,15 @@ import {useUpdateTestMutation} from '@services/tests';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-type PreRunFormValues = {
+type PostRunFormValues = {
   command: string;
 };
 
-const PreRun: React.FC = () => {
+const PostRun: React.FC = () => {
   const {entity, entityDetails} = useContext(EntityDetailsContext);
-  const isPreRunAvailable = usePermission(Permissions.editEntity);
+  const isPostRunAvailable = usePermission(Permissions.editEntity);
 
-  const [form] = Form.useForm<PreRunFormValues>();
+  const [form] = Form.useForm<PostRunFormValues>();
 
   const [updateTest] = useUpdateTestMutation();
 
@@ -32,7 +32,7 @@ const PreRun: React.FC = () => {
     return null;
   }
 
-  const command = entityDetails?.executionRequest?.preRunScript;
+  const command = entityDetails?.executionRequest?.postRunScript;
 
   const onSave = () => {
     const values = form.getFieldsValue();
@@ -43,25 +43,25 @@ const PreRun: React.FC = () => {
         ...entityDetails,
         executionRequest: {
           ...entityDetails.executionRequest,
-          preRunScript: values.command,
+          postRunScript: values.command,
         },
       },
     })
       .then(displayDefaultNotificationFlow)
-      .then(() => notificationCall('passed', `Pre-Run command was successfully updated.`));
+      .then(() => notificationCall('passed', `Post-Run command was successfully updated.`));
   };
 
   return (
     <Form
       form={form}
-      name="execution-settings-pre-run"
+      name="execution-settings-post-run"
       initialValues={{command}}
-      disabled={!isPreRunAvailable}
+      disabled={!isPostRunAvailable}
       layout="vertical"
     >
       <ConfigurationCard
-        title="Pre-Run phase"
-        description="You can run a command or a script (relative to your source root) which will be executed before the test itself is started."
+        title="Post execution / Teardown phase"
+        description="Overwrite the default command which is run after a successful test execution"
         onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
@@ -77,4 +77,4 @@ const PreRun: React.FC = () => {
   );
 };
 
-export default PreRun;
+export default PostRun;
