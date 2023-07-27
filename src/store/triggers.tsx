@@ -1,16 +1,18 @@
+import {StateCreator} from 'zustand';
+
 import {TestTrigger, TriggersKeyMap} from '@models/triggers';
 
-import {connectStore, createSliceFactory, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from '@store/utils';
 
 interface TriggersSlice {
   keyMap?: TriggersKeyMap;
   current?: TestTrigger;
 }
 
-const createTriggersSlice = createSliceFactory<TriggersSlice>(set => ({
+const createTriggersSlice: StateCreator<TriggersSlice> = set => ({
   keyMap: undefined,
   current: undefined,
-}));
+});
 
 const createTriggersStore = createStoreFactory('Triggers', createTriggersSlice);
 
