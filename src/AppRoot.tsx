@@ -7,16 +7,25 @@ import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
+import {ReactComponent as NewIcon} from '@assets/newIcon.svg';
+
+import {IconLabel} from '@atoms';
+
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+
+import {AiInsightsTab} from '@molecules';
 
 import {Sider} from '@organisms';
 
 import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
+
+import PluginScope from '@plugins/PluginScope';
+import {Plugin} from '@plugins/types';
 
 import {useAppDispatch} from '@redux/hooks';
 
@@ -103,6 +112,28 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
+  const plugins: Plugin[] = useMemo(
+    () => [
+      {
+        name: 'ai-insights',
+        setup: (scope: PluginScope) => {
+          scope.appendSlot(
+            'testExecutionTabs',
+            {
+              key: 'ai-insights-tab',
+              label: <IconLabel title="AI Insights" icon={<NewIcon />} />,
+              children: <AiInsightsTab />,
+            },
+            {
+              order: 4,
+            }
+          );
+        },
+      },
+    ],
+    []
+  );
+
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
@@ -117,7 +148,7 @@ const AppRoot: React.FC = () => {
           <StyledLayoutContentWrapper>
             <Content>
               <ErrorBoundary>
-                <App />
+                <App plugins={plugins} />
               </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>

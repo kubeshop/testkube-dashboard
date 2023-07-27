@@ -45,6 +45,8 @@
       "@permissions/*": ["src/permissions/*"],
       "@store": ["src/store/"],
       "@store/*": ["src/store/*"],
+      "@plugins": ["src/plugins/"],
+      "@plugins/*": ["src/plugins/*"],
       "@telemetry": ["src/telemetry/"],
       "@telemetry/*": ["src/telemetry/*"]
     }
