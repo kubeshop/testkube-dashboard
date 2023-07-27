@@ -18,7 +18,6 @@ const createTriggersStore = createStoreFactory('Triggers', createTriggersSlice);
 
 export const {
   use: useTriggers,
-  useSetter: useTriggersSetter,
   useField: useTriggersField,
   pick: useTriggersPick,
   sync: useTriggersSync,

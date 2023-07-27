@@ -114,7 +114,6 @@ const createFooStore = createStoreFactory('Foo', createFooSlice);
 
 export const {
   use: useFoo,
-  useSetter: useFooSetter,
   useField: useFooField,
   pick: useFooPick,
   sync: useFooSync,
@@ -134,7 +133,6 @@ export const Parent: React.FC = () => {
     use: useFoo,
     sync: useFooSync,
     pick: useFooPick,
-    useSetter: useFooSetter,
     useField: useFooField,
   }] = initializeFoo(/* optional initial state */);
   
@@ -161,16 +159,12 @@ export const Child: React.FC = () => {
   // Read multiple values from the state
   const {bar, baz} = useFooPick('bar', 'baz');
 
-  // Create a value setter.
+  // Use React-state like format for values
   //
-  // You don't need to memoize it, it's already handled.
-  //
-  // When the change is detected,
+  // You don't need to memoize the setter, it's already handled.
+  // When the function is called,
   // it will either call the corresponding setter in the store (like `setBar` or `setBaz`),
   // or if it doesn't exist - replace the property in place.
-  const setBar = useFooSetter('bar');
-  
-  // Use React-state like format for values
   const [bar, setBar] = useFooField('bar');
 
   // Synchronize value in the store with local one.

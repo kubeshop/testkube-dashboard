@@ -142,7 +142,6 @@ const createUseStoreField =
 
 const createStoreHooks = <T,>(useStore: StoreFn<T>) => ({
   use: createUseStoreGet(useStore),
-  useSetter: createUseStoreSetter(useStore),
   useField: createUseStoreField(useStore),
   pick: createUseStorePick(useStore),
   sync: createUseStoreSync(useStore),
