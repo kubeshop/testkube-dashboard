@@ -60,8 +60,8 @@ const PostRun: React.FC = () => {
       layout="vertical"
     >
       <ConfigurationCard
-        title="Post execution / Teardown phase"
-        description="Overwrite the default command which is run after a successful test execution"
+        title="Post-Run phase"
+        description="You can run a command or a script (relative to your source root) which will be executed after the test itself has ended."
         onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
