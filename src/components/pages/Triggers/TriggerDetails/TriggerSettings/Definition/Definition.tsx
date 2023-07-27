@@ -4,7 +4,7 @@ import {Definition} from '@molecules';
 
 import {useGetTriggerDefinitionQuery, useUpdateTriggerDefinitionMutation} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useTriggersField} from '@store/triggers';
 
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
@@ -14,10 +14,7 @@ interface TriggerDefinitionProps {
 }
 
 const TriggerDefinition: FC<TriggerDefinitionProps> = ({reload}) => {
-  const {currentTrigger} = useStore(state => ({
-    currentTrigger: state.currentTrigger!,
-    setCurrentTrigger: state.setCurrentTrigger,
-  }));
+  const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
 
   return (
     <Definition
@@ -25,7 +22,7 @@ const TriggerDefinition: FC<TriggerDefinitionProps> = ({reload}) => {
       useUpdateDefinitionMutation={useUpdateTriggerDefinitionMutation}
       label="trigger"
       onUpdate={reload}
-      name={currentTrigger.name}
+      name={currentTrigger!.name}
       crdUrl={testkubeCRDBases.triggers}
       overrideSchema={createSchemaOverride($ => {
         $.required('spec', 'apiVersion', 'kind');

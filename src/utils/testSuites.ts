@@ -11,7 +11,11 @@ function mapExecute(execute: any): TestSuiteStep[] {
   if (!execute) {
     return [];
   }
-  return ([] as TestSuiteStep[]).concat(execute!).map(item => ('name' in item ? {test: item.name as string} : item));
+  return ([] as TestSuiteStep[])
+    .concat(execute!)
+    .map(item =>
+      'name' in item ? {test: item.name as string} : 'duration' in item ? {delay: (item as any).duration} : item
+    );
 }
 
 export function convertTestSuiteV2ToV3(suite: TestSuite): TestSuite {
@@ -19,7 +23,7 @@ export function convertTestSuiteV2ToV3(suite: TestSuite): TestSuite {
     ...suite,
     steps: suite.steps?.map(step => ({
       ...step,
-      execute: mapExecute(step.execute!),
+      execute: mapExecute(step.execute || (step as any).delay!),
     })),
   };
 }

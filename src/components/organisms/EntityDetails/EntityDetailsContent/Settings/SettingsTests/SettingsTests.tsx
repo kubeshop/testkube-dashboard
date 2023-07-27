@@ -1,22 +1,23 @@
-import {memo, useContext, useEffect, useMemo, useRef, useState} from 'react';
+import {memo, useContext, useEffect, useMemo, useState} from 'react';
 
-import {ClockCircleOutlined, WarningOutlined} from '@ant-design/icons';
-import {Button, Form, Select} from 'antd';
+import {Form} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {ExecutorIcon, ExternalLink} from '@atoms';
+import pick from 'lodash/pick';
+
+import {ExternalLink} from '@atoms';
 
 import {MainContext} from '@contexts';
 
-import {Text, Title} from '@custom-antd';
+import {Button, FullWidthSpace, Title} from '@custom-antd';
 
 import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
 
 import {TestSuiteStepTest} from '@models/test';
-import {TestSuite, TestSuiteStep} from '@models/testSuite';
+import {LocalStep, TestSuite} from '@models/testSuite';
 
-import {ConfigurationCard, DragNDropList, TestSuiteStepCard, notificationCall} from '@molecules';
+import {ConfigurationCard, InlineNotification, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -25,26 +26,20 @@ import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
-import {useGetAllTestsQuery} from '@services/tests';
 
 import {useEntityDetailsStore} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
+import {formatMilliseconds} from '@utils/formatMilliseconds';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {convertTestSuiteV2ToV3, isTestSuiteV2} from '@utils/testSuites';
 
-import DelayModal from './DelayModal';
-import {EmptyTestsContainer, StyledOptionWrapper, StyledStepsList} from './SettingsTests.styled';
+import DelayModal from './Modals/DelayModal';
+import TestModal from './Modals/TestModal';
+import {EmptyTestsContainer} from './SettingsTests.styled';
+import TestSuiteStepsFlow from './TestSuiteStepsFlow';
 
-const {Option} = Select;
-
-interface LocalStep extends TestSuiteStep {
-  type?: string;
-  stopTestOnFailure?: boolean;
-  id?: string;
-}
-
-const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => {
+const SettingsTests = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {details: rawDetails} = useEntityDetailsStore(x => ({
     details: x.details as TestSuite,
@@ -53,18 +48,13 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
   const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawDetails));
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ToV3(rawDetails) : rawDetails), [rawDetails]);
 
-  const mayEdit = usePermission(Permissions.editEntity);
-
-  const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
-
-  const scrollRef = useRef<HTMLDivElement>(null);
-
   const executors = useAppSelector(selectExecutors);
+
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const {data: testsList} = useGetTestsListForTestSuiteQuery(details.name, {
     skip: !isClusterAvailable || !details.name,
   });
-  const {data: allTestsList} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
   const testsData: TestSuiteStepTest[] = useMemo(() => {
@@ -75,125 +65,111 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
     }));
   }, [testsList]);
 
-  const allTestsData: TestSuiteStepTest[] = useMemo(() => {
-    return (allTestsList || []).map(item => ({
-      name: item.test.name,
-      namespace: item.test.namespace,
-      type: getTestExecutorIcon(executors, item.test.type),
-    }));
-  }, [allTestsList]);
+  const initialSteps: LocalStep[][] = useMemo(() => {
+    if (!details.steps) {
+      return [];
+    }
 
-  const hasParallelSteps = useMemo(() => details?.steps?.some(step => step.execute.length > 1), [details.steps]);
-
-  const initialSteps: LocalStep[] = useMemo(
-    () =>
-      details.steps
-        ? details.steps.map(step => {
-            const id = nanoid();
-
-            const firstItemInStep = step.execute[0];
-
-            if ('delay' in firstItemInStep) {
-              return {
-                ...firstItemInStep,
-                id,
-              };
-            }
-
+    return details.steps
+      .filter(step => step.execute?.length)
+      .map(step => {
+        return step.execute.map(item => {
+          const id = nanoid();
+          if ('delay' in item) {
             return {
-              ...firstItemInStep,
+              ...item,
               id,
-              type: testsData.find(item => item.name === firstItemInStep.test)?.type || '',
-              stopTestOnFailure: step.stopTestOnFailure,
             };
-          })
-        : [],
-    [details?.steps, testsData]
-  );
+          }
 
-  const [currentSteps = initialSteps, setCurrentSteps] = useState<LocalStep[]>([]);
+          return {
+            ...item,
+            id,
+            type: testsData.find(x => x.name === item.test)?.type || '',
+          };
+        });
+      });
+  }, [testsData]);
 
-  const wasTouched = currentSteps !== initialSteps;
+  const [isDelayModalVisible, setIsDelayModalVisible] = useState(false);
+  const [isTestModalVisible, setIsTestModalVisible] = useState(false);
+  const [currentGroup, setCurrentGroup] = useState<number>(0);
+
+  const [steps, setSteps] = useState(initialSteps);
+
+  const wasTouched = steps !== initialSteps;
 
   useEffect(() => {
-    if (currentSteps !== initialSteps) {
-      setCurrentSteps(initialSteps);
-    }
-  }, [initialSteps]);
+    setSteps(initialSteps);
+  }, [testsData]);
 
-  const saveSteps = () => {
+  const showTestModal = (group: number) => {
+    setIsTestModalVisible(true);
+    setCurrentGroup(group);
+  };
+
+  const showDelayModal = (group: number) => {
+    setIsDelayModalVisible(true);
+    setCurrentGroup(group);
+  };
+
+  // index may be i.e. 3.5, which means inserting between index 3 and 4
+  const insertStep = (item: LocalStep, index: number) => {
+    const prevIndex = Math.floor(index);
+    const nextIndex = Math.ceil(index);
+
+    if (prevIndex === nextIndex) {
+      setSteps([...steps.slice(0, index), [...steps[index], item], ...steps.slice(index + 1)]);
+    } else {
+      setSteps([...steps.slice(0, nextIndex), [item], ...steps.slice(nextIndex)]);
+    }
+  };
+
+  const addTest = (test: {test: string; type: string}) => insertStep({id: nanoid(), ...test}, currentGroup);
+  const addDelay = (delay: string) => insertStep({id: nanoid(), delay}, currentGroup);
+
+  const onSave = () => {
+    const resultSteps = steps.map((items, i) => {
+      const stopOnFailure = Boolean(details?.steps?.[i]?.stopOnFailure);
+      const execute = items.map(item => pick(item, ['delay', 'test', 'namespace']));
+
+      if (isV2) {
+        const step = execute[0];
+        if ('test' in step) {
+          return {execute: {name: step.test}, stopTestOnFailure: stopOnFailure};
+        }
+        return {delay: {duration: formatMilliseconds(step.delay!)}};
+      }
+      return {execute, stopOnFailure};
+    });
+
     return updateTestSuite({
       id: details.name,
       data: {
         ...details,
-        steps: currentSteps.map(step => {
-          return {
-            stopTestOnFailure: step.stopTestOnFailure,
-            execute: isV2
-              ? step.test
-                ? {name: step.test}
-                : {delay: step.delay}
-              : [step.test ? {test: step.test} : {delay: step.delay}],
-          };
-        }),
+        steps: resultSteps,
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', 'Steps were successfully updated.');
       });
   };
 
-  const onSelectStep = (value: string) => {
-    if (value === 'delay') {
-      setIsDelayModalVisible(true);
-    } else {
-      const {name, type} = JSON.parse(value);
-
-      setCurrentSteps([
-        ...currentSteps,
-        {
-          test: name,
-          id: nanoid(),
-          type,
-          stopTestOnFailure: false,
-        },
-      ]);
-    }
-  };
-
-  const addDelay = (value: number) => {
-    setCurrentSteps([
-      ...currentSteps,
-      {
-        delay: `${value}ms`,
-        id: nanoid(),
-        stopTestOnFailure: false,
-      },
-    ]);
-    setIsDelayModalVisible(false);
-  };
-
-  const deleteStep = (index: number) => {
-    setCurrentSteps([...currentSteps.slice(0, index), ...currentSteps.slice(index + 1)]);
-  };
-
-  const scrollToBottom = () => {
-    if (!scrollRef.current) {
-      return;
-    }
-
-    // @ts-ignore
-    scrollRef.current.scrollIntoView({behavior: 'smooth'});
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [currentSteps?.length]);
-
-  // TODO: Delete when we will support parallel editor
-  if (hasParallelSteps) {
-    return (
+  return (
+    <FullWidthSpace size={16} direction="vertical">
+      {!isV2 ? null : (
+        <InlineNotification
+          type="error"
+          title="Your agent needs to be updated"
+          description={
+            <>
+              You are running an older agent on this environment. Updating your Testkube will enable parallel tests and
+              other new features.
+            </>
+          }
+        />
+      )}
       <Form name="define-tests-form">
         <ConfigurationCard
           title="Tests"
@@ -204,101 +180,36 @@ const SettingsTests: React.FC<{openDefinition(): void}> = ({openDefinition}) => 
               <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
             </>
           }
+          onConfirm={onSave}
+          onCancel={() => setSteps(initialSteps)}
+          isButtonsDisabled={!wasTouched}
+          isEditable={mayEdit}
+          enabled={mayEdit}
+          forceEnableButtons={wasTouched}
         >
-          <EmptyTestsContainer>
-            <Title level={3} className="text-center">
-              <WarningOutlined /> This test suite is using parallel execution.
-            </Title>
-            <Text className="regular middle text-center" style={{maxWidth: 600}}>
-              Unfortunately, we do not support visual editor for it yet.
-            </Text>
-            <Text className="regular middle text-center" style={{maxWidth: 600}}>
-              We are working hard to deliver it for you soon. Until then, you may use{' '}
-              <strong>
-                <em>Definition</em>
-              </strong>{' '}
-              tab, to modify the test suite definition using YAML.
-            </Text>
-            <Button style={{marginTop: 15}} type="primary" onClick={openDefinition}>
-              Edit YAML definition
-            </Button>
-          </EmptyTestsContainer>
-        </ConfigurationCard>
-      </Form>
-    );
-  }
-
-  return (
-    <Form name="define-tests-form">
-      <ConfigurationCard
-        title="Tests"
-        description="Define the tests and their order of execution for this test suite"
-        footerText={
-          <>
-            Learn more about <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
-          </>
-        }
-        onConfirm={saveSteps}
-        onCancel={() => setCurrentSteps(initialSteps)}
-        isButtonsDisabled={!wasTouched}
-        isEditable={mayEdit}
-        enabled={mayEdit}
-        forceEnableButtons={wasTouched}
-      >
-        <>
-          {currentSteps?.length === 0 ? (
+          {!steps?.length ? (
             <EmptyTestsContainer>
               <Title level={2} className="text-center">
-                Add your tests to this test suite
+                This test suite doesn&#39;t have any tests yet
               </Title>
-              <Text className="regular middle text-center">
-                Select tests from the dropdown below to add them to this suite
-              </Text>
+              <Button $customType="primary" onClick={() => showTestModal(-0.5)}>
+                Add your first test
+              </Button>
             </EmptyTestsContainer>
-          ) : null}
-          <DragNDropList
-            value={currentSteps}
-            onChange={setCurrentSteps}
-            onDelete={deleteStep}
-            scrollRef={scrollRef}
-            ContainerComponent={StyledStepsList}
-            ItemComponent={TestSuiteStepCard}
-            disabled={!mayEdit}
-          />
-          <DelayModal
-            isDelayModalVisible={isDelayModalVisible}
-            setIsDelayModalVisible={setIsDelayModalVisible}
-            addDelay={addDelay}
-          />
-          {mayEdit ? (
-            <Select
-              placeholder="Add a test or delay"
-              showArrow
-              onChange={onSelectStep}
-              style={{width: '100%', marginTop: 15, marginBottom: 30}}
-              value={null}
-              showSearch
-              size="middle"
-            >
-              <Option value="delay">
-                <StyledOptionWrapper>
-                  <ClockCircleOutlined />
-                  <Text className="regular middle">Delay</Text>
-                </StyledOptionWrapper>
-              </Option>
-              {allTestsData.map(item => (
-                <Option value={JSON.stringify(item)} key={item.name}>
-                  <StyledOptionWrapper>
-                    <ExecutorIcon type={item.type} />
-                    <Text className="regular middle">{item.name}</Text>
-                  </StyledOptionWrapper>
-                </Option>
-              ))}
-            </Select>
-          ) : null}
-        </>
-      </ConfigurationCard>
-    </Form>
+          ) : (
+            <TestSuiteStepsFlow
+              steps={steps}
+              setSteps={setSteps}
+              showTestModal={showTestModal}
+              showDelayModal={showDelayModal}
+              isV2={isV2}
+            />
+          )}
+          <DelayModal visible={isDelayModalVisible} onClose={() => setIsDelayModalVisible(false)} onSubmit={addDelay} />
+          <TestModal visible={isTestModalVisible} onClose={() => setIsTestModalVisible(false)} onSubmit={addTest} />
+        </ConfigurationCard>
+      </Form>
+    </FullWidthSpace>
   );
 };
 

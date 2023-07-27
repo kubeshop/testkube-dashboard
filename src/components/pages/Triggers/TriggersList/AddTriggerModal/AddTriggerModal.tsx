@@ -18,7 +18,7 @@ import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useCreateTriggerMutation, useGetTriggersKeyMapQuery} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useTriggersPick, useTriggersSync} from '@store/triggers';
 
 import {safeRefetch} from '@utils/fetchUtils';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -37,10 +37,6 @@ export enum StepsEnum {
 const AddTriggerModal: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
-
-  const {setTriggersKeyMap} = useStore(state => ({
-    setTriggersKeyMap: state.setTriggersKeyMap,
-  }));
 
   const [createTrigger, {isLoading}] = useCreateTriggerMutation();
 
@@ -98,11 +94,10 @@ const AddTriggerModal: React.FC = () => {
       });
   };
 
-  useEffect(() => {
-    if (triggersKeyMap) {
-      setTriggersKeyMap(triggersKeyMap);
-    }
-  }, [triggersKeyMap]);
+  const currentData = useTriggersPick('keyMap');
+  useTriggersSync({
+    keyMap: triggersKeyMap ?? currentData.keyMap,
+  });
 
   useEffect(() => {
     safeRefetch(refetchKeyMap);

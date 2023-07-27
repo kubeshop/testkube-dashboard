@@ -1,73 +1,63 @@
-import {FC, PropsWithChildren, createContext, useContext, useMemo} from 'react';
+import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useMemo} from 'react';
 
-import {capitalize} from 'lodash';
+import {capitalize, pick} from 'lodash';
 import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
-
-import {HasMark, Mark, UnmarkAll, UnmarkAllObject, UnmarkObject} from '@utils/typeMarkers';
-
-type Fn = (...args: any) => any;
-
-/**
- * In [magicSet] property,
- * Zustand stores created here will have a function,
- * to transparently update any property in store.
- */
-const magicSet = Symbol('set data');
-
-// Customizable<Function> allows to store a function that could be replaced
-declare const customizableSymbol: unique symbol;
-export type Customizable<T> = Mark<T, typeof customizableSymbol>;
-type IsCustomizable<T> = T extends HasMark<T, typeof customizableSymbol> ? T : UnmarkAll<T> extends Fn ? never : T;
-type CustomizableObject<T> = UnmarkObject<
-  Pick<T, {[K in keyof T]: T[K] extends IsCustomizable<T[K]> ? K : never}[keyof T]>,
-  typeof customizableSymbol
->;
-export const makeCustomizable = <T,>(value: T) => value as Customizable<T>;
-
-// Private<T> makes the value not available for children
-declare const privateSymbol: unique symbol;
-export type Private<T> = Mark<T, typeof privateSymbol>;
-type IsPrivate<T> = HasMark<T, typeof privateSymbol>;
-type PublicObject<T> = Pick<T, {[K in keyof T]: T[K] extends IsPrivate<T[K]> ? never : K}[keyof T]>;
-
-export const makePrivate = <T,>(value: T) => value as Private<T>;
 
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
   : True;
 
-type InitialState<T> = Partial<UnmarkAllObject<CustomizableObject<T>>>;
-type PublicState<T> = UnmarkAllObject<PublicObject<T>>;
-type StoreFactory<T> = (initialState?: InitialState<T>) => UseBoundStore<StoreApi<T>>;
+type Store<T> = UseBoundStore<StoreApi<T>>;
+type StoreFn<T> = () => Store<T>;
 
-const setterCache: Record<string, string> = {};
-const getSetterName = (key: string) => {
-  if (!setterCache[key]) {
-    setterCache[key] = `set${capitalize(key)}`;
-  }
-  return setterCache[key];
-};
+type StoreFactory<T> = (initialState?: Partial<T>) => Store<T>;
+type StoreContext<T> = Context<{store: Store<T>}>;
+type StoreContextProvider = FC<PropsWithChildren<{}>>;
+
+type StoreGet<T> = <U>(selector: (state: T) => U) => U;
+type StoreSync<T> = (data: Partial<T>) => void;
+type StoreSetValue<T, K extends keyof T> = (value: T[K] | ((prev: T[K], state: T) => T[K])) => void;
+type StoreSetFactory<T> = <K extends keyof T>(key: K) => StoreSetValue<T, K>;
+type StoreField<T, K extends keyof T> = [T[K], StoreSetValue<T, K>];
+type StoreFieldFactory<T> = <K extends keyof T>(key: K) => StoreField<T, K>;
+type StorePick<T> = <K extends keyof T = never>(...keys: K[]) => Pick<T, K>;
+
+/**
+ * Magic setter is used for useStoreSetter and useStoreSync hooks.
+ * It provides a hidden function, that may replace any value in state.
+ */
+const magicSet = Symbol('set data');
+type MagicSetter<T> = <K extends keyof T>(key: K, value: T[K]) => void;
+type MagicSetterState<T> = Record<typeof magicSet, MagicSetter<T>>;
+type MagicSetterSlice<T> = StateCreator<MagicSetterState<T>>;
+const createMagicSlice =
+  <T,>(): MagicSetterSlice<T> =>
+  (setData, _, api) => ({
+    [magicSet]: (key, value) => {
+      const state: any = api.getState();
+      const setter = `set${capitalize(key as string)}`;
+      if (setter in state) {
+        state[setter](value);
+      } else {
+        setData({[key]: value} as any);
+      }
+    },
+  });
+const getMagicSetter = <T,>(state: T): MagicSetter<T> => (state as MagicSetterState<T>)[magicSet];
+const callMagicSetter = <T, K extends keyof T>(state: T, key: K, value: T[K]): void =>
+  getMagicSetter(state)(key, value);
 
 export const createStoreFactory =
   <T,>(name: string, createSlice: StateCreator<T>): StoreFactory<T> =>
   (initialState?) =>
-    create<T>()(
+    create<T & MagicSetterState<T>>()(
       devtools(
         (...a) => ({
           ...createSlice(...a),
           ...initialState,
-          [magicSet]: <K extends keyof T>(key: K, value: T[K]) => {
-            const state = a[2].getState();
-            const setData = a[0];
-            const setterName = getSetterName(key as string);
-            if ((state as any)[setterName]) {
-              (state as any)[setterName](value);
-            } else {
-              setData({[key]: value} as any);
-            }
-          },
+          ...createMagicSlice<T>()(...a),
         }),
         {
           name: `${name} - Zustand Store`,
@@ -77,8 +67,8 @@ export const createStoreFactory =
     );
 
 class StoreFactoryBuilder<T> {
-  private name: string;
-  private slice: StateCreator<T>;
+  private readonly name: string;
+  private readonly slice: StateCreator<T>;
 
   public constructor(name: string, slice: StateCreator<T>) {
     this.name = name;
@@ -99,64 +89,88 @@ class StoreFactoryBuilder<T> {
 
 export const createStoreBuilder = (name: string) => new StoreFactoryBuilder(name, () => ({}));
 
-const applyStateUpdate = <T,>(state: T, data: Partial<T>) => {
-  Object.keys(data).forEach(_key => {
-    const key = _key as keyof T;
-    if (data[key] !== state[key]) {
-      (state as any)[magicSet](key, data[key]);
-    }
-  });
-};
+const createStoreContext = <T,>() => createContext<{store: Store<T>}>(undefined!);
 
-export const connectStore = <T,>(createStore: StoreFactory<T>) => {
-  type ShallowComponent = FC<PropsWithChildren<{}>>;
-  type StoreSelector = <U>(selector: (state: UnmarkAllObject<T>) => U) => U;
-  type PublicStoreSelector = <U>(selector: (state: PublicState<T>) => U) => U;
-  type StoreSync = (data: Partial<UnmarkAllObject<T>>) => void;
-  type PublicStoreSync = (data: Partial<PublicState<T>>) => void;
-  const StoreContext = createContext<{use?: StoreSelector}>(undefined!);
-
-  const useStore: PublicStoreSelector = selector => {
-    const context = useContext(StoreContext);
-    if (!context?.use) {
+const createUseStore =
+  <T,>(StoreContext: StoreContext<T>): StoreFn<T> =>
+  () => {
+    const store = useContext(StoreContext)?.store;
+    if (!store) {
       throw new Error('Store was not injected.');
     }
-    return context.use(selector);
+    return store;
   };
 
-  const useStoreSync: PublicStoreSync = data => {
-    useStore(state => applyStateUpdate(state, data));
-  };
+const createUseStoreGet =
+  <T,>(useStore: StoreFn<T>): StoreGet<T> =>
+  selector =>
+    useStore()(selector, shallow);
 
-  const useNewStore = (
-    initialState?: InitialState<T>,
-    deps: any[] = []
-  ): [ShallowComponent, StoreSelector, StoreSync] => {
-    // Ensure that this store is not created yet in this place
-    const context = useContext(StoreContext);
-    if (context?.use) {
-      throw new Error('The store was already injected.');
-    }
+const createUseStorePick =
+  <T,>(useStore: StoreFn<T>): StorePick<T> =>
+  <K extends keyof T>(...keys: K[]) =>
+    createUseStoreGet(useStore)(state => pick(state, keys) as Pick<T, K>);
 
-    // Build the store
-    const use: StoreSelector = useMemo(() => {
-      const store = createStore(initialState);
-      return selector => store(selector as any, shallow);
-    }, deps);
-    const sync: StoreSync = useMemo(() => data => use(state => applyStateUpdate(state, data)), deps);
-    const Provider: ShallowComponent = useMemo(
-      () =>
-        ({children}) =>
-          <StoreContext.Provider value={{use}}>{children}</StoreContext.Provider>,
-      [use]
+const createUseStoreSync =
+  <T,>(useStore: StoreFn<T>): StoreSync<T> =>
+  data =>
+    useStore()(state => {
+      (Object.keys(data) as (keyof T)[]).forEach(key => {
+        if (data[key] !== state[key]) {
+          callMagicSetter(state, key, data[key]);
+        }
+      });
+    });
+
+const createUseStoreSetter =
+  <T,>(useStore: StoreFn<T>): StoreSetFactory<T> =>
+  key =>
+    useCallback(
+      value => {
+        useStore()(state => {
+          const nextValue = typeof value === 'function' ? (value as any)(state[key], state) : value;
+          callMagicSetter(state, key, nextValue);
+        });
+      },
+      [useStore, key]
     );
 
-    return [Provider, use, sync];
+const createUseStoreField =
+  <T,>(useStore: StoreFn<T>): StoreFieldFactory<T> =>
+  key =>
+    [createUseStoreGet(useStore)(state => state[key]), createUseStoreSetter(useStore)(key)];
+
+const createStoreHooks = <T,>(useStore: StoreFn<T>) => ({
+  use: createUseStoreGet(useStore),
+  useField: createUseStoreField(useStore),
+  pick: createUseStorePick(useStore),
+  sync: createUseStoreSync(useStore),
+});
+
+export const connectStore = <T,>(createStore: StoreFactory<T>) => {
+  const StoreContext = createStoreContext<T>();
+
+  const useInitializeStore = (initialState?: Partial<T>) => {
+    // Build the store
+    const store = useMemo(() => createStore(initialState), []);
+    const Provider: StoreContextProvider = useMemo(
+      () =>
+        ({children}) => {
+          // Ensure that this store is not created yet in this place
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          if ((useContext(StoreContext) as any)?.store) {
+            throw new Error('The store was already injected.');
+          }
+          return <StoreContext.Provider value={{store}}>{children}</StoreContext.Provider>;
+        },
+      []
+    );
+
+    return [Provider, createStoreHooks(() => store)] as const;
   };
 
   return {
-    use: useStore,
-    sync: useStoreSync,
-    init: useNewStore,
+    ...createStoreHooks(createUseStore(StoreContext)),
+    init: useInitializeStore,
   };
 };

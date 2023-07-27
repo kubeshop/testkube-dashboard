@@ -1,4 +1,4 @@
-import React, {Suspense, lazy, useContext, useEffect, useRef, useState} from 'react';
+import React, {Suspense, lazy, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 import {useUpdate} from 'react-use';
@@ -13,6 +13,9 @@ import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 
 import {EndpointProcessing, Loading, NotFound} from '@pages';
 
+import PluginsContext from '@plugins/PluginsContext';
+import {Plugin} from '@plugins/types';
+
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
@@ -22,13 +25,14 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {initializeStore} from '@store';
+import {initializeTriggersStore} from '@store/triggers';
 
 import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
+import createPluginManager from './plugins/PluginManager';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -37,8 +41,12 @@ const Sources = lazy(() => import('@pages').then(module => ({default: module.Sou
 const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
 const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
-const App: React.FC = () => {
-  const [StoreProvider] = initializeStore();
+export interface AppProps {
+  plugins: Plugin[];
+}
+
+const App: React.FC<AppProps> = ({plugins}) => {
+  const [TriggersProvider] = initializeTriggersStore();
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -105,9 +113,20 @@ const App: React.FC = () => {
     });
   }, [apiEndpoint]);
 
+  const scope = useMemo(() => {
+    const pluginManager = createPluginManager();
+    plugins.forEach(plugin => pluginManager.add(plugin));
+    return pluginManager.setup();
+  }, [plugins]);
+
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
-    .append(StoreProvider, {})
+    .append(TriggersProvider, {})
+    .append(PluginsContext.Provider, {
+      value: {
+        scope,
+      },
+    })
     .render(
       <Suspense fallback={<Loading />}>
         {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
