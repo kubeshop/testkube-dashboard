@@ -150,9 +150,9 @@ const createStoreHooks = <T,>(useStore: StoreFn<T>) => ({
 export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   const StoreContext = createStoreContext<T>();
 
-  const useInitializeStore = (initialState?: Partial<T>) => {
+  const useInitializeStore = (initialState?: Partial<T>, deps: any[] = []) => {
     // Build the store
-    const store = useMemo(() => createStore(initialState), []);
+    const store = useMemo(() => createStore(initialState), deps);
     const Provider: StoreContextProvider = useMemo(
       () =>
         ({children}) => {
@@ -163,10 +163,10 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
           }
           return <StoreContext.Provider value={{store}}>{children}</StoreContext.Provider>;
         },
-      []
+      [store]
     );
 
-    return [Provider, createStoreHooks(() => store)] as const;
+    return [Provider, useMemo(() => createStoreHooks(() => store), [store])] as const;
   };
 
   return {
