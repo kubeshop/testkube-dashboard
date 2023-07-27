@@ -17,16 +17,10 @@ export function validateTest(testData: Partial<TestData>, createdTestData: TestD
   // testSources
   if (testData.content.type === 'git') {
     expect(testData.content.type).toEqual(createdTestData.content.type);
-
-    Object.keys(testData.content.repository).forEach(key => {
-      expect(testData.content.repository[key]).toEqual(createdTestData.content.repository[key]);
-    });
+    expect(testData.content.repository).toEqual(createdTestData.content.repository);
   } else if (testData.content.type === 'string') {
     expect(testData.content.type).toEqual(createdTestData.content.type);
-
-    Object.keys(testData.content).forEach(key => {
-      expect(testData.content[key]).toEqual(createdTestData.content[key]);
-    });
+    expect(createdTestData.content).toMatchObject(testData.content);
   } else if (testData.content.type === 'file') {
     expect(createdTestData.content.type).toEqual('string');
     expect(createdTestData.content.data).toEqual(

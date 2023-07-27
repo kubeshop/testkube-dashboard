@@ -44,7 +44,6 @@ export class CreateTestPage {
       await this.setBasicInput(contentData.data, 'string');
     } else if (type === 'file') {
       await this.setSelectionSearch('File', 'testSource');
-      // await this.setBasicInput(contentData.data, 'string');
       await this.page.setInputFiles(
         'xpath=//span[@class="ant-upload"]//input[@type="file"]',
         CreateTestPage.getAbsoluteFixtureFilePath(contentData.fixture_file_path)
@@ -79,6 +78,6 @@ export class CreateTestPage {
   }
 
   private static getAbsoluteFixtureFilePath(fixtureFileName: string) {
-    return path.resolve(`fixtures/files/${fixtureFileName}`);
+    return path.resolve(__dirname, `../fixtures/files/${fixtureFileName}`);
   }
 }
