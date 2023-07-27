@@ -8,7 +8,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -27,7 +27,7 @@ type FailureHandlingFormValues = {
 };
 
 const FailureHandling: React.FC = () => {
-  const {details} = useEntityDetailsStore(x => ({details: x.details}));
+  const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<FailureHandlingFormValues>();

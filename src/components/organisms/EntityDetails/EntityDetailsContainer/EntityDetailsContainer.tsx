@@ -46,7 +46,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
   const [abortExecution] = useAbortExecution();
   const [abortAllExecutions] = useAbortAllExecutions();
 
-  const [StoreProvider, usePrivateStore, usePrivateStoreSync] = initializeEntityDetailsStore(
+  const [StoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] = initializeEntityDetailsStore(
     {
       entity,
       id,
@@ -64,25 +64,11 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     [entity, id, defaultStackRoute, navigate, useAbortExecution, useAbortAllExecutions]
   );
 
-  const {
-    metrics,
-    setMetrics,
-    setCurrentPage,
-    executions,
-    setExecutions,
-    setIsFirstTimeLoading,
-    daysFilterValue,
-    setDaysFilterValue,
-  } = usePrivateStore(x => ({
-    metrics: x.metrics,
-    setMetrics: x.setMetrics,
-    setCurrentPage: x.setCurrentPage,
-    executions: x.executions,
-    setExecutions: x.setExecutions,
-    setIsFirstTimeLoading: x.setIsFirstTimeLoading,
-    daysFilterValue: x.daysFilterValue,
-    setDaysFilterValue: x.setDaysFilterValue,
-  }));
+  const [metrics, setMetrics] = useEntityDetailsField('metrics');
+  const [, setCurrentPage] = useEntityDetailsField('currentPage');
+  const [executions, setExecutions] = useEntityDetailsField('executions');
+  const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
+  const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
 
   const {isClusterAvailable} = useContext(MainContext);
   const wsRoot = useWsEndpoint();
@@ -245,11 +231,11 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       setIsFirstTimeLoading(false);
     }
     setExecutions(rawExecutions);
-  }, [usePrivateStore, rawExecutions]);
+  }, [StoreProvider, rawExecutions]);
 
   const testIcon = useExecutorIcon(rawDetails);
 
-  usePrivateStoreSync({
+  useEntityDetailsSync({
     execId,
     metrics: rawMetrics,
     details: useMemo(
@@ -257,7 +243,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
         ...rawDetails,
         ...(testIcon ? {testIcon} : {}),
       }),
-      [usePrivateStore, rawDetails, executors, entity]
+      [rawDetails, testIcon]
     ),
   });
 

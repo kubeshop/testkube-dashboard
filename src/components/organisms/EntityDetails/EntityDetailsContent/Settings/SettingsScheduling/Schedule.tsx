@@ -12,7 +12,7 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 import Fonts from '@styles/Fonts';
@@ -27,10 +27,7 @@ import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
 import {custom, quickOptions} from './utils';
 
 const Schedule: React.FC = () => {
-  const {entity, details} = useEntityDetailsStore(x => ({
-    entity: x.entity,
-    details: x.details,
-  }));
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const enabled = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();

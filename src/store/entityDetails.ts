@@ -3,7 +3,7 @@ import {StateCreator} from 'zustand';
 import {Entity} from '@models/entity';
 import {Metrics} from '@models/metrics';
 
-import {Customizable, Private, connectStore, createStoreFactory, makeCustomizable, makePrivate} from '@store/utils';
+import {connectStore, createStoreFactory} from '@store/utils';
 
 export interface EntityDetailsSlice {
   entity: Entity;
@@ -18,13 +18,10 @@ export interface EntityDetailsSlice {
   currentPage: number;
   setCurrentPage: (page: number) => void;
   setDaysFilterValue: (days: number) => void;
-  setMetrics: Private<(metrics?: Metrics) => void>;
-  setExecutions: Private<(executions: any) => void>;
-  setIsFirstTimeLoading: Private<(value: boolean) => void>;
-  openExecutionDetails: Customizable<(dataItem: any) => void>;
-  closeExecutionDetails: Customizable<() => void>;
-  abortExecution: Customizable<(data: {id: string; executionId: string}) => Promise<any>>;
-  abortAllExecutions: Customizable<(data: {id: string}) => Promise<any>>;
+  openExecutionDetails: (dataItem: any) => void;
+  closeExecutionDetails: () => void;
+  abortExecution: (data: {id: string; executionId: string}) => Promise<any>;
+  abortAllExecutions: (data: {id: string}) => Promise<any>;
 }
 
 const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
@@ -40,18 +37,17 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   currentPage: 1,
   setCurrentPage: currentPage => set({currentPage}),
   setDaysFilterValue: daysFilterValue => set({daysFilterValue}),
-  openExecutionDetails: makeCustomizable(() => {}),
-  closeExecutionDetails: makeCustomizable(() => {}),
-  abortExecution: makeCustomizable(() => Promise.resolve()),
-  abortAllExecutions: makeCustomizable(() => Promise.resolve()),
-  setMetrics: makePrivate(metrics => set({metrics})),
-  setExecutions: makePrivate(executions => set({executions})),
-  setIsFirstTimeLoading: makePrivate(isFirstTimeLoading => set({isFirstTimeLoading})),
+  openExecutionDetails: () => {},
+  closeExecutionDetails: () => {},
+  abortExecution: () => Promise.resolve(),
+  abortAllExecutions: () => Promise.resolve(),
 });
 
 const createEntityDetailsStore = createStoreFactory('entityDetails', createEntityDetailsSlice);
 export const {
-  use: useEntityDetailsStore,
-  sync: useEntityDetailsStoreSync,
+  use: useEntityDetails,
+  useField: useEntityDetailsField,
+  pick: useEntityDetailsPick,
+  sync: useEntityDetailsSync,
   init: initializeEntityDetailsStore,
 } = connectStore(createEntityDetailsStore);

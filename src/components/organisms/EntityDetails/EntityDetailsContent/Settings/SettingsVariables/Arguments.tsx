@@ -14,7 +14,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
@@ -31,9 +31,7 @@ type ArgumentsFormValues = {
 const Arguments: React.FC = () => {
   const [form] = Form.useForm<ArgumentsFormValues>();
 
-  const {details} = useEntityDetailsStore(x => ({
-    details: x.details as Test,
-  }));
+  const {details} = useEntityDetailsPick('details') as {details: Test};
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateTest] = useUpdateTestMutation();

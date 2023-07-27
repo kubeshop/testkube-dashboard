@@ -13,17 +13,14 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {namingMap, updateRequestsMap} from '../utils';
 
 const Labels: React.FC = () => {
-  const {entity, details} = useEntityDetailsStore(x => ({
-    entity: x.entity,
-    details: x.details,
-  }));
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();

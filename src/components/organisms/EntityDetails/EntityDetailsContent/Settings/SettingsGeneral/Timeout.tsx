@@ -10,7 +10,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {digits} from '@utils/form';
@@ -21,7 +21,7 @@ type TimeoutForm = {
 };
 
 const Timeout: React.FC = () => {
-  const {details} = useEntityDetailsStore(x => ({details: x.details}));
+  const {details} = useEntityDetailsPick('details');
   const {executionRequest, name} = details;
 
   const mayEdit = usePermission(Permissions.editEntity);

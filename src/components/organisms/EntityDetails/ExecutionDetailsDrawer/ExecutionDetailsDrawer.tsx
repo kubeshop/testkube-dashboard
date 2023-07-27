@@ -15,7 +15,7 @@ import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCal
 import {useGetTestSuiteExecutionByIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestExecutionByIdQuery} from '@services/tests';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -24,7 +24,7 @@ import ExecutionDetailsDrawerHeader from './ExecutionDetailsDrawerHeader';
 
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useEntityDetailsStore(x => ({execId: x.execId}));
+  const {execId} = useEntityDetailsPick('execId');
   const {isClusterAvailable} = useContext(MainContext);
 
   // @ts-ignore
@@ -43,7 +43,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
 const TestExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useEntityDetailsStore(x => ({execId: x.execId}));
+  const {execId} = useEntityDetailsPick('execId');
   const {isClusterAvailable} = useContext(MainContext);
 
   // @ts-ignore
@@ -79,11 +79,7 @@ const loaderBodyStyle = {
 };
 
 const ExecutionDetailsDrawer: React.FC = () => {
-  const {closeExecutionDetails, entity, execId} = useEntityDetailsStore(x => ({
-    closeExecutionDetails: x.closeExecutionDetails,
-    entity: x.entity,
-    execId: x.execId,
-  }));
+  const {closeExecutionDetails, entity, execId} = useEntityDetailsPick('closeExecutionDetails', 'entity', 'execId');
 
   const isMobile = useIsMobile();
 

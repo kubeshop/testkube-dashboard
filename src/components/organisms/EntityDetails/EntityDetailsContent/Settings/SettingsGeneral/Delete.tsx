@@ -14,7 +14,7 @@ import DeleteEntityModal from '@molecules/DeleteEntityModal';
 import {useDeleteTestSuiteMutation} from '@services/testSuites';
 import {useDeleteTestMutation} from '@services/tests';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {namingMap} from '../utils';
 
@@ -24,11 +24,7 @@ const useDeleteMutations: Record<Entity, UseMutation<any>> = {
 };
 
 const Delete: React.FC = () => {
-  const {entity, details, defaultStackRoute} = useEntityDetailsStore(x => ({
-    entity: x.entity,
-    details: x.details,
-    defaultStackRoute: x.defaultStackRoute,
-  }));
+  const {entity, details, defaultStackRoute} = useEntityDetailsPick('entity', 'details', 'defaultStackRoute');
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
   if (!entity || !details) {

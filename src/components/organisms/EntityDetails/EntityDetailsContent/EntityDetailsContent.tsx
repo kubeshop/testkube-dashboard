@@ -32,7 +32,7 @@ import {selectSettingsTabConfig} from '@redux/reducers/configSlice';
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
@@ -54,16 +54,14 @@ const filterOptions: OptionType[] = [
 ];
 
 const EntityDetailsContent: React.FC = () => {
-  const {entity, details, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
-    useEntityDetailsStore(x => ({
-      entity: x.entity,
-      details: x.details,
-      defaultStackRoute: x.defaultStackRoute,
-      metrics: x.metrics,
-      daysFilterValue: x.daysFilterValue,
-      setDaysFilterValue: x.setDaysFilterValue,
-      abortAllExecutions: x.abortAllExecutions,
-    }));
+  const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
+  const {entity, details, defaultStackRoute, metrics, abortAllExecutions} = useEntityDetailsPick(
+    'entity',
+    'details',
+    'defaultStackRoute',
+    'metrics',
+    'abortAllExecutions'
+  );
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);

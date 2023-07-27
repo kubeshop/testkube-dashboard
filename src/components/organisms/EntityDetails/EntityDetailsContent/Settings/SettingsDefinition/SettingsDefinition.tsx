@@ -1,6 +1,6 @@
 import {Definition} from '@molecules';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
@@ -8,10 +8,7 @@ import {testkubeCRDBases} from '@utils/externalLinks';
 import {settingsDefinitionData} from './utils';
 
 const SettingsDefinition = () => {
-  const {details, entity} = useEntityDetailsStore(x => ({
-    details: x.details,
-    entity: x.entity,
-  }));
+  const {details, entity} = useEntityDetailsPick('details', 'entity');
 
   const sectionData = settingsDefinitionData[entity];
   const config =

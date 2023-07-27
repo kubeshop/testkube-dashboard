@@ -11,7 +11,7 @@ import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecule
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -30,10 +30,7 @@ type VariablesFormValues = {
 };
 
 const Variables: React.FC = () => {
-  const {entity, details} = useEntityDetailsStore(x => ({
-    entity: x.entity,
-    details: x.details,
-  }));
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();

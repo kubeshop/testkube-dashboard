@@ -10,7 +10,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -19,10 +19,7 @@ type PreRunFormValues = {
 };
 
 const PreRun: React.FC = () => {
-  const {entity, details} = useEntityDetailsStore(x => ({
-    entity: x.entity,
-    details: x.details,
-  }));
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const isPreRunAvailable = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<PreRunFormValues>();

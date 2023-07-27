@@ -4,7 +4,7 @@ import {Entity} from '@models/entity';
 
 import {SettingsLayout} from '@molecules';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
 import SettingsExecution from './SettingsExecution';
@@ -45,7 +45,7 @@ const tabsConfigMap: Record<Entity, ReactElement<any, any>> = {
 };
 
 const Settings: React.FC = () => {
-  const {entity} = useEntityDetailsStore(x => ({entity: x.entity}));
+  const {entity} = useEntityDetailsPick('entity');
   return tabsConfigMap[entity];
 };
 

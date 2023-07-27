@@ -5,7 +5,7 @@ import {TableRowSelection} from 'antd/lib/table/interface';
 
 import {Skeleton} from '@custom-antd';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
 
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
@@ -17,25 +17,15 @@ type ExecutionsTableProps = {
 const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   const {triggerRun} = props;
 
-  const {
-    executions,
-    currentPage,
-    setCurrentPage,
-    openExecutionDetails,
-    id,
-    execId,
-    abortExecution,
-    isFirstTimeLoading,
-  } = useEntityDetailsStore(x => ({
-    executions: x.executions,
-    currentPage: x.currentPage,
-    setCurrentPage: x.setCurrentPage,
-    openExecutionDetails: x.openExecutionDetails,
-    id: x.id,
-    execId: x.execId,
-    abortExecution: x.abortExecution,
-    isFirstTimeLoading: x.isFirstTimeLoading,
-  }));
+  const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
+  const {executions, openExecutionDetails, id, execId, abortExecution, isFirstTimeLoading} = useEntityDetailsPick(
+    'executions',
+    'openExecutionDetails',
+    'id',
+    'execId',
+    'abortExecution',
+    'isFirstTimeLoading'
+  );
 
   const rowSelection: TableRowSelection<any> = {
     selectedRowKeys: execId ? [execId] : [],

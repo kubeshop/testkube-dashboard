@@ -14,7 +14,7 @@ import {DotsDropdown, RunningContext} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
@@ -28,12 +28,12 @@ type ExecutionDetailsDrawerHeaderProps = {
 };
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
-  const {closeExecutionDetails, entity, execId, abortExecution} = useEntityDetailsStore(x => ({
-    closeExecutionDetails: x.closeExecutionDetails,
-    entity: x.entity,
-    execId: x.execId,
-    abortExecution: x.abortExecution,
-  }));
+  const {closeExecutionDetails, entity, execId, abortExecution} = useEntityDetailsPick(
+    'closeExecutionDetails',
+    'entity',
+    'execId',
+    'abortExecution'
+  );
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
   const {data} = props;

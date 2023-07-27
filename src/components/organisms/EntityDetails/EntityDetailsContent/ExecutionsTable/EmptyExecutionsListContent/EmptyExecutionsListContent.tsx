@@ -8,7 +8,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -19,10 +19,7 @@ type EmptyExecutionsListContentProps = {
 const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = props => {
   const {triggerRun} = props;
 
-  const {entity, details} = useEntityDetailsStore(x => ({
-    entity: x.entity,
-    details: x.details,
-  }));
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const {dispatch} = useContext(MainContext);
   const mayRun = usePermission(Permissions.runEntity);
 

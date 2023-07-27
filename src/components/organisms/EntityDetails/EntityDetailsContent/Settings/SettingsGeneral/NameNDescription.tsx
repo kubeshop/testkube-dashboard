@@ -8,7 +8,7 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -23,10 +23,7 @@ type NameNDescriptionFormValues = {
 };
 
 const NameNDescription: React.FC = () => {
-  const {entity, details} = useEntityDetailsStore(x => ({
-    entity: x.entity,
-    details: x.details,
-  }));
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<NameNDescriptionFormValues>();

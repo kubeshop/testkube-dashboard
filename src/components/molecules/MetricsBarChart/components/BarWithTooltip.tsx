@@ -1,4 +1,4 @@
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 
@@ -15,10 +15,7 @@ export type BarConfig = {
 };
 
 const BarWithTooltip: React.FC<BarConfig> = props => {
-  const {executions, openExecutionDetails} = useEntityDetailsStore(x => ({
-    executions: x.executions,
-    openExecutionDetails: x.openExecutionDetails,
-  }));
+  const {executions, openExecutionDetails} = useEntityDetailsPick('executions', 'openExecutionDetails');
   return <BarWithTooltipPure {...props} executions={executions} openExecutionDetails={openExecutionDetails} />;
 };
 

@@ -4,7 +4,7 @@ import {notificationCall} from '@molecules';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -12,7 +12,7 @@ import Source from './Source';
 import TestType from './TestType';
 
 const SettingsTest: React.FC = () => {
-  const {details} = useEntityDetailsStore(x => ({details: x.details}));
+  const {details} = useEntityDetailsPick('details');
 
   const [updateTestMutation] = useUpdateTestMutation();
 

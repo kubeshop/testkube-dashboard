@@ -27,7 +27,7 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 
-import {useEntityDetailsStore} from '@store/entityDetails';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {formatMilliseconds} from '@utils/formatMilliseconds';
@@ -41,9 +41,7 @@ import TestSuiteStepsFlow from './TestSuiteStepsFlow';
 
 const SettingsTests = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {details: rawDetails} = useEntityDetailsStore(x => ({
-    details: x.details as TestSuite,
-  }));
+  const {details: rawDetails} = useEntityDetailsPick('details') as {details: TestSuite};
 
   const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawDetails));
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ToV3(rawDetails) : rawDetails), [rawDetails]);
