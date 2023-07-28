@@ -472,6 +472,22 @@ export const GlobalStyle = createGlobalStyle`
       fill: ${Colors.whitePure};
     }
   }
+
+  /* Switch */
+
+  .ant-switch {
+    background-color: ${Colors.slate600};
+  }
+
+  .ant-switch-checked {
+    background-color: ${Colors.indigo400};
+  }
+
+  .ant-switch-handle {
+    &::before {
+      background-color: ${Colors.whitePure};
+    }
+  }
 `;
 
 /* Media Sizes */
