@@ -41,15 +41,14 @@ const ExecutionDetailsDrawer: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {closeExecutionDetails, entity, execId} = useEntityDetailsPick('closeExecutionDetails', 'entity', 'execId');
   const {data: currentData} = useExecutionDetailsPick('data');
-  const currentStatus = (currentData as Execution)?.executionResult?.status || (currentData as TestSuiteExecution)?.status;
+  const currentStatus =
+    (currentData as Execution)?.executionResult?.status || (currentData as TestSuiteExecution)?.status;
 
   const {useGetExecutionDetails} = useEntityDetailsConfig(entity);
   const {data, error} = useGetExecutionDetails(execId!, {
     pollingInterval: PollingIntervals.everySecond,
-    skip: (
-      !isClusterAvailable || !execId ||
-      (currentStatus && !['queued', 'pending', 'running'].includes(currentStatus))
-    )
+    skip:
+      !isClusterAvailable || !execId || (currentStatus && !['queued', 'pending', 'running'].includes(currentStatus)),
   });
   const changed = useExecutionDetailsSync({data, error});
   const prevData = usePrevious(data);
