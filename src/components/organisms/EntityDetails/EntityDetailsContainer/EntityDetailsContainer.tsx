@@ -16,6 +16,7 @@ import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from
 import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {initializeEntityDetailsStore} from '@store/entityDetails';
+import {initializeExecutionDetailsStore} from '@store/executionDetails';
 
 import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
@@ -33,6 +34,7 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
 
   const {navigate} = useContext(DashboardContext);
 
+  const [ExecutionStoreProvider] = initializeExecutionDetailsStore();
   const [StoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] = initializeEntityDetailsStore(
     {
       entity,
@@ -223,10 +225,12 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
 
   return (
     <StoreProvider>
-      <EntityDetailsWrapper>
-        <EntityDetailsContent />
-        <ExecutionDetailsDrawer />
-      </EntityDetailsWrapper>
+      <ExecutionStoreProvider>
+        <EntityDetailsWrapper>
+          <EntityDetailsContent />
+          <ExecutionDetailsDrawer />
+        </EntityDetailsWrapper>
+      </ExecutionStoreProvider>
     </StoreProvider>
   );
 };
