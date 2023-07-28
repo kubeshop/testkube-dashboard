@@ -3,6 +3,7 @@ import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {
   useAbortAllTestExecutionsMutation,
   useAbortTestExecutionMutation,
+  useGetTestExecutionByIdQuery,
   useGetTestExecutionMetricsQuery,
   useGetTestExecutionsByIdQuery,
   useGetTestQuery,
@@ -15,6 +16,7 @@ const TestExecutionsConfig: EntityDetailsBlueprint = {
   defaultStackRoute: '/tests',
   useAbortExecution: useAbortTestExecutionMutation,
   useAbortAllExecutions: useAbortAllTestExecutionsMutation,
+  useGetExecutionDetails: useGetTestExecutionByIdQuery,
 };
 
 export default TestExecutionsConfig;
