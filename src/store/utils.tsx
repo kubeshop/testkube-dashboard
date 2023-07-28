@@ -17,7 +17,7 @@ type StoreContext<T> = Context<{store: Store<T>}>;
 type StoreContextProvider = FC<PropsWithChildren<{}>>;
 
 type StoreGet<T> = <U>(selector: (state: T) => U) => U;
-type StoreSync<T> = (data: Partial<T>) => void;
+type StoreSync<T> = (data: Partial<T>) => boolean;
 type StoreSetValue<T, K extends keyof T> = (value: T[K] | ((prev: T[K], state: T) => T[K])) => void;
 type StoreSetFactory<T> = <K extends keyof T>(key: K) => StoreSetValue<T, K>;
 type StoreField<T, K extends keyof T> = [T[K], StoreSetValue<T, K>];
@@ -98,14 +98,16 @@ const createUseStoreSync =
   <T,>(useStore: StoreFn<T>): StoreSync<T> =>
   data => {
     const store = useStore();
+    let state = store.getState();
     useLayoutEffect(() => {
-      const state = store.getState();
+      state = store.getState();
       (Object.keys(data) as (keyof T)[]).forEach(key => {
         if (data[key] !== state[key]) {
           internalSet(store, state, key, data[key]);
         }
       });
     }, [store, data]);
+    return (Object.keys(data) as (keyof T)[]).some(key => data[key] !== state[key]);
   };
 
 const createUseStoreSetter =
