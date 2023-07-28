@@ -11,11 +11,13 @@ import {MainContext} from '@contexts';
 import useIsMobile from '@hooks/useIsMobile';
 
 import {Entity} from '@models/entity';
+import {Execution} from '@models/execution';
+import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCall} from '@molecules';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
-import {useExecutionDetailsSync} from '@store/executionDetails';
+import {useExecutionDetailsPick, useExecutionDetailsSync} from '@store/executionDetails';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -38,11 +40,16 @@ const loaderBodyStyle = {
 const ExecutionDetailsDrawer: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {closeExecutionDetails, entity, execId} = useEntityDetailsPick('closeExecutionDetails', 'entity', 'execId');
+  const {data: currentData} = useExecutionDetailsPick('data');
+  const currentStatus = (currentData as Execution)?.executionResult?.status || (currentData as TestSuiteExecution)?.status;
 
   const {useGetExecutionDetails} = useEntityDetailsConfig(entity);
   const {data, error} = useGetExecutionDetails(execId!, {
     pollingInterval: PollingIntervals.everySecond,
-    skip: !isClusterAvailable || !execId, // TODO: Skip when the execution is already loaded and finished
+    skip: (
+      !isClusterAvailable || !execId ||
+      (currentStatus && !['queued', 'pending', 'running'].includes(currentStatus))
+    )
   });
   const changed = useExecutionDetailsSync({data, error});
   const prevData = usePrevious(data);
