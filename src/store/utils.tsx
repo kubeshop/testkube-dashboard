@@ -1,4 +1,4 @@
-import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useMemo} from 'react';
+import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useLayoutEffect, useMemo} from 'react';
 
 import {capitalize, pick} from 'lodash';
 import {StateCreator, StoreApi, createStore as create, useStore as useSelector} from 'zustand';
@@ -98,7 +98,7 @@ const createUseStoreSync =
   <T,>(useStore: StoreFn<T>): StoreSync<T> =>
   data => {
     const store = useStore();
-    useEffect(() => {
+    useLayoutEffect(() => {
       const state = store.getState();
       (Object.keys(data) as (keyof T)[]).forEach(key => {
         if (data[key] !== state[key]) {
