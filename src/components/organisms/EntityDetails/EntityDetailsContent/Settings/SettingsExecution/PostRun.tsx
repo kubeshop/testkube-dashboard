@@ -1,6 +1,10 @@
+import {useContext} from 'react';
+
 import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
+
+import {EntityDetailsContext} from '@contexts';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
@@ -10,56 +14,54 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {useEntityDetailsPick} from '@store/entityDetails';
-
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-type PreRunFormValues = {
+type PostRunFormValues = {
   command: string;
 };
 
-const PreRun: React.FC = () => {
-  const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const isPreRunAvailable = usePermission(Permissions.editEntity);
+const PostRun: React.FC = () => {
+  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const isPostRunAvailable = usePermission(Permissions.editEntity);
 
-  const [form] = Form.useForm<PreRunFormValues>();
+  const [form] = Form.useForm<PostRunFormValues>();
 
   const [updateTest] = useUpdateTestMutation();
 
-  if (!entity || !details) {
+  if (!entity || !entityDetails) {
     return null;
   }
 
-  const command = details?.executionRequest?.preRunScript;
+  const command = entityDetails?.executionRequest?.postRunScript;
 
   const onSave = () => {
     const values = form.getFieldsValue();
 
     return updateTest({
-      id: details.name,
+      id: entityDetails.name,
       data: {
-        ...details,
+        ...entityDetails,
         executionRequest: {
-          ...details.executionRequest,
-          preRunScript: values.command,
+          ...entityDetails.executionRequest,
+          postRunScript: values.command,
         },
       },
     })
       .then(displayDefaultNotificationFlow)
-      .then(() => notificationCall('passed', `Pre-Run command was successfully updated.`));
+      .then(() => notificationCall('passed', `Post-Run command was successfully updated.`));
   };
 
   return (
     <Form
       form={form}
-      name="execution-settings-pre-run"
+      name="execution-settings-post-run"
       initialValues={{command}}
-      disabled={!isPreRunAvailable}
+      disabled={!isPostRunAvailable}
       layout="vertical"
     >
       <ConfigurationCard
-        title="Pre-Run phase"
-        description="You can run a command or a script (relative to your source root) which will be executed before the test itself is started."
+        title="Post-Run phase"
+        description="You can run a command or a script (relative to your source root) which will be executed after the test itself has ended."
         onConfirm={onSave}
         onCancel={() => {
           form.resetFields();
@@ -75,4 +77,4 @@ const PreRun: React.FC = () => {
   );
 };
 
-export default PreRun;
+export default PostRun;

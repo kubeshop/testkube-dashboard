@@ -105,7 +105,7 @@ const createUseStoreSync =
           internalSet(store, state, key, data[key]);
         }
       });
-    }, [data]);
+    }, [store, data]);
   };
 
 const createUseStoreSetter =
