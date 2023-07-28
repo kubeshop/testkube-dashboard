@@ -16,8 +16,6 @@ export interface EntityDetailsSlice {
   metrics?: Metrics;
   daysFilterValue: number;
   currentPage: number;
-  setCurrentPage: (page: number) => void;
-  setDaysFilterValue: (days: number) => void;
   openExecutionDetails: (id: string) => void;
   closeExecutionDetails: () => void;
   abortExecution: (data: {id: string; executionId: string}) => Promise<any>;
@@ -35,8 +33,6 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   metrics: undefined,
   daysFilterValue: 7,
   currentPage: 1,
-  setCurrentPage: currentPage => set({currentPage}),
-  setDaysFilterValue: daysFilterValue => set({daysFilterValue}),
   openExecutionDetails: () => {},
   closeExecutionDetails: () => {},
   abortExecution: () => Promise.resolve(),
