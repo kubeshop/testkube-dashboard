@@ -16,7 +16,7 @@ export type BarConfig = {
 
 const BarWithTooltip: React.FC<BarConfig> = props => {
   const {executions, openExecutionDetails} = useEntityDetailsPick('executions', 'openExecutionDetails');
-  return <BarWithTooltipPure {...props} executions={executions} openExecutionDetails={openExecutionDetails} />;
+  return <BarWithTooltipPure {...props} executions={executions} onSelect={openExecutionDetails} />;
 };
 
 export default BarWithTooltip;

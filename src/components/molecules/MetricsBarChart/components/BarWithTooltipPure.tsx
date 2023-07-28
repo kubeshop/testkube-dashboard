@@ -25,11 +25,11 @@ const tooltipYOffsetMargin = 5;
 
 type BarConfigPure = BarConfig & {
   executions: any;
-  openExecutionDetails: (id: string) => void;
+  onSelect: (id: string) => void;
 };
 
 const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
-  const {width, height, color, tooltipData, hoverColor, date, chartHeight, executions, openExecutionDetails} = props;
+  const {width, height, color, tooltipData, hoverColor, date, chartHeight, executions, onSelect} = props;
   const {status, duration, name, startTime} = tooltipData;
 
   const onBarClicked = useCallback(() => {
@@ -37,10 +37,10 @@ const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
       const targetRecord = executions.results.find((item: any) => item.name === name);
 
       if (targetRecord) {
-        openExecutionDetails(targetRecord.id);
+        onSelect(targetRecord.id);
       }
     }
-  }, [executions?.results, openExecutionDetails, name]);
+  }, [executions?.results, onSelect, name]);
 
   const popoverContent = useMemo(
     () => (
