@@ -1,7 +1,7 @@
-import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useMemo} from 'react';
+import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useMemo} from 'react';
 
 import {capitalize, pick} from 'lodash';
-import {StateCreator, StoreApi, UseBoundStore, create} from 'zustand';
+import {StateCreator, StoreApi, createStore as create, useStore as useSelector} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 
@@ -9,7 +9,7 @@ type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T ex
   ? False
   : True;
 
-type Store<T> = UseBoundStore<StoreApi<T>>;
+type Store<T> = StoreApi<T>;
 type StoreFn<T> = () => Store<T>;
 
 type StoreFactory<T> = (initialState?: Partial<T>) => Store<T>;
@@ -24,40 +24,23 @@ type StoreField<T, K extends keyof T> = [T[K], StoreSetValue<T, K>];
 type StoreFieldFactory<T> = <K extends keyof T>(key: K) => StoreField<T, K>;
 type StorePick<T> = <K extends keyof T = never>(...keys: K[]) => Pick<T, K>;
 
-/**
- * Magic setter is used for useStoreSetter and useStoreSync hooks.
- * It provides a hidden function, that may replace any value in state.
- */
-const magicSet = Symbol('set data');
-type MagicSetter<T> = <K extends keyof T>(key: K, value: T[K]) => void;
-type MagicSetterState<T> = Record<typeof magicSet, MagicSetter<T>>;
-type MagicSetterSlice<T> = StateCreator<MagicSetterState<T>>;
-const createMagicSlice =
-  <T,>(): MagicSetterSlice<T> =>
-  (setData, _, api) => ({
-    [magicSet]: (key, value) => {
-      const state: any = api.getState();
-      const setter = `set${capitalize(key as string)}`;
-      if (setter in state) {
-        state[setter](value);
-      } else {
-        setData({[key]: value} as any);
-      }
-    },
-  });
-const getMagicSetter = <T,>(state: T): MagicSetter<T> => (state as MagicSetterState<T>)[magicSet];
-const callMagicSetter = <T, K extends keyof T>(state: T, key: K, value: T[K]): void =>
-  getMagicSetter(state)(key, value);
+const internalSet = <T, K extends keyof T>(api: StoreApi<T>, state: T, key: K, value: T[K]) => {
+  const setter = `set${capitalize(key as string)}`;
+  if (setter in (state as any)) {
+    (state as any)[setter](value);
+  } else {
+    api.setState({[key]: value} as any);
+  }
+};
 
 export const createStoreFactory =
   <T,>(name: string, createSlice: StateCreator<T>): StoreFactory<T> =>
   (initialState?) =>
-    create<T & MagicSetterState<T>>()(
+    create<T>()(
       devtools(
         (...a) => ({
           ...createSlice(...a),
           ...initialState,
-          ...createMagicSlice<T>()(...a),
         }),
         {
           name: `${name} - Zustand Store`,
@@ -104,7 +87,7 @@ const createUseStore =
 const createUseStoreGet =
   <T,>(useStore: StoreFn<T>): StoreGet<T> =>
   selector =>
-    useStore()(selector, shallow);
+    useSelector(useStore(), selector, shallow);
 
 const createUseStorePick =
   <T,>(useStore: StoreFn<T>): StorePick<T> =>
@@ -113,27 +96,31 @@ const createUseStorePick =
 
 const createUseStoreSync =
   <T,>(useStore: StoreFn<T>): StoreSync<T> =>
-  data =>
-    useStore()(state => {
+  data => {
+    const store = useStore();
+    useEffect(() => {
+      const state = store.getState();
       (Object.keys(data) as (keyof T)[]).forEach(key => {
         if (data[key] !== state[key]) {
-          callMagicSetter(state, key, data[key]);
+          internalSet(store, state, key, data[key]);
         }
       });
-    });
+    }, [data]);
+  };
 
 const createUseStoreSetter =
   <T,>(useStore: StoreFn<T>): StoreSetFactory<T> =>
-  key =>
-    useCallback(
+  key => {
+    const store = useStore();
+    return useCallback(
       value => {
-        useStore()(state => {
-          const nextValue = typeof value === 'function' ? (value as any)(state[key], state) : value;
-          callMagicSetter(state, key, nextValue);
-        });
+        const state = store.getState();
+        const nextValue = typeof value === 'function' ? (value as any)(state[key], state) : value;
+        internalSet(store, state, key, nextValue);
       },
-      [useStore, key]
+      [store, key]
     );
+  };
 
 const createUseStoreField =
   <T,>(useStore: StoreFn<T>): StoreFieldFactory<T> =>
