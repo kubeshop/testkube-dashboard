@@ -13,9 +13,6 @@ import {Test} from '@models/test';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from '@models/websocket';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-
 import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {initializeEntityDetailsStore} from '@store/entityDetails';
@@ -72,8 +69,6 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
 
   const {isClusterAvailable} = useContext(MainContext);
   const wsRoot = useWsEndpoint();
-
-  const executors = useAppSelector(selectExecutors);
 
   const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
