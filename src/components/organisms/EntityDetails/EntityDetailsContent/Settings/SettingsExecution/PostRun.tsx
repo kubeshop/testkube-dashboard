@@ -1,10 +1,6 @@
-import {useContext} from 'react';
-
 import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
@@ -14,6 +10,8 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
+import {useEntityDetailsPick} from '@store/entityDetails';
+
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type PostRunFormValues = {
@@ -21,28 +19,28 @@ type PostRunFormValues = {
 };
 
 const PostRun: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {details} = useEntityDetailsPick('details');
   const isPostRunAvailable = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<PostRunFormValues>();
 
   const [updateTest] = useUpdateTestMutation();
 
-  if (!entity || !entityDetails) {
+  if (!details) {
     return null;
   }
 
-  const command = entityDetails?.executionRequest?.postRunScript;
+  const command = details?.executionRequest?.postRunScript;
 
   const onSave = () => {
     const values = form.getFieldsValue();
 
     return updateTest({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         executionRequest: {
-          ...entityDetails.executionRequest,
+          ...details.executionRequest,
           postRunScript: values.command,
         },
       },
