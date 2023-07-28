@@ -25,7 +25,7 @@ const tooltipYOffsetMargin = 5;
 
 type BarConfigPure = BarConfig & {
   executions: any;
-  openExecutionDetails: (dataItem: any) => void;
+  openExecutionDetails: (id: string) => void;
 };
 
 const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
@@ -37,7 +37,7 @@ const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
       const targetRecord = executions.results.find((item: any) => item.name === name);
 
       if (targetRecord) {
-        openExecutionDetails(targetRecord);
+        openExecutionDetails(targetRecord.id);
       }
     }
   }, [executions?.results, openExecutionDetails, name]);

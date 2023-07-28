@@ -18,7 +18,7 @@ export interface EntityDetailsSlice {
   currentPage: number;
   setCurrentPage: (page: number) => void;
   setDaysFilterValue: (days: number) => void;
-  openExecutionDetails: (dataItem: any) => void;
+  openExecutionDetails: (id: string) => void;
   closeExecutionDetails: () => void;
   abortExecution: (data: {id: string; executionId: string}) => Promise<any>;
   abortAllExecutions: (data: {id: string}) => Promise<any>;

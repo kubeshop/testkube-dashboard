@@ -71,7 +71,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
       ]}
       onRow={(record: any) => ({
         onClick: () => {
-          openExecutionDetails(record);
+          openExecutionDetails(record.id);
         },
       })}
       rowSelection={{...rowSelection}}

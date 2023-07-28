@@ -54,8 +54,8 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
       defaultStackRoute,
       abortExecution,
       abortAllExecutions,
-      openExecutionDetails: (dataItem: any) => {
-        navigate(`/${entity}/executions/${id}/execution/${dataItem?.id}`);
+      openExecutionDetails: (targetId: string) => {
+        navigate(`/${entity}/executions/${id}/execution/${targetId}`);
       },
       closeExecutionDetails: () => {
         navigate(`/${entity}/executions/${id}`);
