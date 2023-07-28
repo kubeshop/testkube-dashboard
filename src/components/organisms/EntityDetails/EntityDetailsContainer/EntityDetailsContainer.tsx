@@ -34,7 +34,7 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
 
   const {navigate} = useContext(DashboardContext);
 
-  const [ExecutionStoreProvider] = initializeExecutionDetailsStore();
+  const [ExecutionStoreProvider] = initializeExecutionDetailsStore({}, [execId]);
   const [StoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] = initializeEntityDetailsStore(
     {
       entity,
