@@ -15,6 +15,7 @@ import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+import {useLastCallback} from '@hooks/useLastCallback';
 
 import {AiInsightsTab} from '@molecules';
 
@@ -47,7 +48,7 @@ const AppRoot: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useLastCallback(useNavigate());
   const telemetry = useTelemetry();
   const apiEndpoint = useApiEndpoint();
 
