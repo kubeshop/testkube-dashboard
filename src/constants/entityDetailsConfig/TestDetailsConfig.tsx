@@ -9,7 +9,6 @@ import {
 } from '@services/tests';
 
 const TestExecutionsConfig: EntityDetailsBlueprint = {
-  entity: 'tests',
   useGetExecutions: useGetTestExecutionsByIdQuery,
   useGetEntityDetails: useGetTestQuery,
   useGetMetrics: useGetTestExecutionMetricsQuery,

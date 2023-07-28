@@ -6,6 +6,8 @@ import {intervalToDuration} from 'date-fns';
 
 import {StatusIcon} from '@atoms';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {Text} from '@custom-antd';
 
 import useIsRunning from '@hooks/useIsRunning';
@@ -28,12 +30,8 @@ type ExecutionDetailsDrawerHeaderProps = {
 };
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
-  const {closeExecutionDetails, entity, execId, abortExecution} = useEntityDetailsPick(
-    'closeExecutionDetails',
-    'entity',
-    'execId',
-    'abortExecution'
-  );
+  const {closeExecutionDetails, entity, execId} = useEntityDetailsPick('closeExecutionDetails', 'entity', 'execId');
+  const {useAbortExecution} = useEntityDetailsConfig(entity);
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
   const {data} = props;
@@ -47,6 +45,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
 
   const {name, number, startedTime, finishedTime, id} = headerValues;
 
+  const [abortExecution] = useAbortExecution();
   const onAbortExecution = () => {
     if (id && execId) {
       abortExecution({executionId: execId, id});

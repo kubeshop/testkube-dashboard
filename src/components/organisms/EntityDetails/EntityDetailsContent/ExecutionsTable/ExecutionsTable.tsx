@@ -3,6 +3,8 @@ import React, {useCallback} from 'react';
 import {Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {Skeleton} from '@custom-antd';
 
 import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
@@ -18,12 +20,12 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   const {triggerRun} = props;
 
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
-  const {executions, openExecutionDetails, id, execId, abortExecution, isFirstTimeLoading} = useEntityDetailsPick(
+  const {entity, executions, openExecutionDetails, id, execId, isFirstTimeLoading} = useEntityDetailsPick(
+    'entity',
     'executions',
     'openExecutionDetails',
     'id',
     'execId',
-    'abortExecution',
     'isFirstTimeLoading'
   );
 
@@ -35,6 +37,8 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
 
   const isEmptyExecutions = !executions?.results || !executions?.results.length;
 
+  const {useAbortExecution} = useEntityDetailsConfig(entity);
+  const [abortExecution] = useAbortExecution();
   const onAbortExecution = useCallback(
     (executionId: string) => {
       if (id) {

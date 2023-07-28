@@ -4,6 +4,8 @@ import {Form} from 'antd';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {ModalContext} from '@contexts';
 
 import {Entity} from '@models/entity';
@@ -24,7 +26,8 @@ const useDeleteMutations: Record<Entity, UseMutation<any>> = {
 };
 
 const Delete: React.FC = () => {
-  const {entity, details, defaultStackRoute} = useEntityDetailsPick('entity', 'details', 'defaultStackRoute');
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
+  const {defaultStackRoute} = useEntityDetailsConfig(entity);
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
   if (!entity || !details) {

@@ -7,6 +7,8 @@ import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ExecutorIcon} from '@atoms';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {DashboardContext} from '@contexts';
 
 import {Button, Text} from '@custom-antd';
@@ -55,13 +57,8 @@ const filterOptions: OptionType[] = [
 
 const EntityDetailsContent: React.FC = () => {
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
-  const {entity, details, defaultStackRoute, metrics, abortAllExecutions} = useEntityDetailsPick(
-    'entity',
-    'details',
-    'defaultStackRoute',
-    'metrics',
-    'abortAllExecutions'
-  );
+  const {entity, details, metrics} = useEntityDetailsPick('entity', 'details', 'metrics');
+  const {defaultStackRoute, useAbortAllExecutions} = useEntityDetailsConfig(entity);
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
@@ -124,6 +121,7 @@ const EntityDetailsContent: React.FC = () => {
       });
   };
 
+  const [abortAllExecutions] = useAbortAllExecutions();
   const onAbortAllExecutionsClick = () => {
     abortAllExecutions({id: name}).catch(() => {
       notificationCall('failed', `Something went wrong during ${entity} execution abortion`);

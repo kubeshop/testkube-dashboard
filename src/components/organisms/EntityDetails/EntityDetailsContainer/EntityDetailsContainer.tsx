@@ -3,9 +3,11 @@ import {useParams} from 'react-router-dom';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {DashboardContext, MainContext} from '@contexts';
 
-import {EntityDetailsBlueprint} from '@models/entityDetails';
+import {Entity} from '@models/entity';
 import {ExecutionMetrics} from '@models/metrics';
 import {Test} from '@models/test';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
@@ -23,32 +25,19 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
 
-const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {
-    entity,
-    useGetEntityDetails,
-    useGetMetrics,
-    defaultStackRoute,
-    useGetExecutions,
-    useAbortExecution,
-    useAbortAllExecutions,
-  } = props;
+const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
+  const {entity} = props;
+  const {useGetEntityDetails, useGetMetrics, useGetExecutions} = useEntityDetailsConfig(entity);
 
   const {id, execId} = useParams();
 
   const {navigate} = useContext(DashboardContext);
-
-  const [abortExecution] = useAbortExecution();
-  const [abortAllExecutions] = useAbortAllExecutions();
 
   const [StoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] = initializeEntityDetailsStore(
     {
       entity,
       id,
       execId,
-      defaultStackRoute,
-      abortExecution,
-      abortAllExecutions,
       openExecutionDetails: (targetId: string) => {
         navigate(`/${entity}/executions/${id}/execution/${targetId}`);
       },
@@ -56,7 +45,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
         navigate(`/${entity}/executions/${id}`);
       },
     },
-    [entity, id, defaultStackRoute, navigate, useAbortExecution, useAbortAllExecutions]
+    [entity, id, navigate]
   );
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
