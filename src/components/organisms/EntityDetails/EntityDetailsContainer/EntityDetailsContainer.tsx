@@ -1,11 +1,9 @@
-import React, {useContext, useEffect, useMemo} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
 import {DashboardContext, MainContext} from '@contexts';
-
-import useExecutorIcon from '@hooks/useExecutorIcon';
 
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {ExecutionMetrics} from '@models/metrics';
@@ -228,18 +226,10 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     setExecutions(rawExecutions);
   }, [StoreProvider, rawExecutions]);
 
-  const testIcon = useExecutorIcon(rawDetails);
-
   useEntityDetailsSync({
     execId,
     metrics: rawMetrics,
-    details: useMemo(
-      () => ({
-        ...rawDetails,
-        ...(testIcon ? {testIcon} : {}),
-      }),
-      [rawDetails, testIcon]
-    ),
+    details: rawDetails,
   });
 
   return (
