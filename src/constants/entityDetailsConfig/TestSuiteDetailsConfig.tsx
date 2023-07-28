@@ -16,7 +16,6 @@ const TestSuiteExecutionsConfig: EntityDetailsBlueprint = {
   useGetEntityDetails: useGetTestSuiteDetailsQuery,
   useGetMetrics: useGetTestSuiteExecutionMetricsQuery,
   defaultStackRoute: '/test-suites',
-  getExecutionsEndpoint: '/test-suite-executions',
   useAbortExecution: useAbortTestSuiteExecutionMutation,
   useAbortAllExecutions: useAbortAllTestSuiteExecutionsMutation,
 };
