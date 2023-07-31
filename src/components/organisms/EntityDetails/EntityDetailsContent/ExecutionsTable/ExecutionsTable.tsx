@@ -14,11 +14,11 @@ import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
 
 type ExecutionsTableProps = {
-  triggerRun: () => void;
+  onRun: () => void;
 };
 
 const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
-  const {triggerRun} = props;
+  const {onRun} = props;
 
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
   const {entity, executions, id, isFirstTimeLoading} = useEntityDetailsPick(
@@ -58,7 +58,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   }
 
   if (isEmptyExecutions) {
-    return <EmptyExecutionsListContent triggerRun={triggerRun} />;
+    return <EmptyExecutionsListContent onRun={onRun} />;
   }
 
   return (

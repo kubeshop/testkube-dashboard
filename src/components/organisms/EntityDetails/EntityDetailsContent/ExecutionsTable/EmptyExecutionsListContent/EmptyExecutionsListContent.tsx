@@ -13,11 +13,11 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 import {externalLinks} from '@utils/externalLinks';
 
 type EmptyExecutionsListContentProps = {
-  triggerRun: () => void;
+  onRun: () => void;
 };
 
 const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = props => {
-  const {triggerRun} = props;
+  const {onRun} = props;
 
   const {entity, details} = useEntityDetailsPick('entity', 'details');
   const {dispatch} = useContext(MainContext);
@@ -50,7 +50,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         title="Trigger your first run"
         description="Your test has no past executions. Trigger the first run!"
         buttonText="Run this test now"
-        onButtonClick={triggerRun}
+        onButtonClick={onRun}
         actionType="run"
       />
     );
@@ -77,7 +77,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
       title="Trigger your first run"
       description="Your test suite has no past executions. Trigger the first run!"
       buttonText="Run this test suite"
-      onButtonClick={triggerRun}
+      onButtonClick={onRun}
       actionType="run"
     />
   );

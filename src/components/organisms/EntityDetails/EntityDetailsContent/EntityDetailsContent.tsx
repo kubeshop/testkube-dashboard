@@ -208,7 +208,7 @@ const EntityDetailsContent: React.FC = () => {
                   executionDurationP50ms={metrics?.executionDurationP50ms}
                   executionDurationP95ms={metrics?.executionDurationP95ms}
                 />
-                <ExecutionsTable triggerRun={onRunButtonClick} />
+                <ExecutionsTable onRun={onRunButtonClick} />
               </>
             ),
           },
