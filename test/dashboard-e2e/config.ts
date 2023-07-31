@@ -1,3 +1,5 @@
+const {randomUUID} = require('node:crypto');
+
 const config = {
   ci: process.env.CI ?? '0',
   baseUrl: process.env.BASE_URL,
@@ -10,9 +12,9 @@ const config = {
   apiUrl: process.env.API_URL!,
   dashboardApiUrl: process.env.DASHBOARD_API_URL!,
 
-  runId: process.env.RUN_ID,
+  runId: process.env.RUN_ID || randomUUID().replace(/-/g, ''),
 
-  namespace: process.env.TESTKUBE_NAMESPACE ? process.env.TESTKUBE_NAMESPACE : 'testkube',
+  namespace: process.env.TESTKUBE_NAMESPACE || 'testkube',
 };
 
 if (!config.apiUrl) {
