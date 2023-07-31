@@ -8,7 +8,7 @@ export class TestSourceGeneralSettingsPage {
   }
 
   private async clickSubmitAndWaitForSubmission(xpath: string): Promise<void> {
-    await this.page.click(`${xpath}`);
+    await this.page.click(`${xpath}[not(@disabled)]`);
     await this.page.locator(`${xpath}[@disabled]`).waitFor({timeout: 3000});
   }
 
