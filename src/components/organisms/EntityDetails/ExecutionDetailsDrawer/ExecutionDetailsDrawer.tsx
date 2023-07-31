@@ -71,14 +71,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
   }, [error]);
 
   if (!id) {
-    return (
-      <Drawer
-        bodyStyle={loaderBodyStyle}
-        headerStyle={headerStyle}
-        closable={false}
-        width={drawerWidth}
-      />
-    );
+    return <Drawer bodyStyle={loaderBodyStyle} headerStyle={headerStyle} closable={false} width={drawerWidth} />;
   }
 
   if (!currentData) {
