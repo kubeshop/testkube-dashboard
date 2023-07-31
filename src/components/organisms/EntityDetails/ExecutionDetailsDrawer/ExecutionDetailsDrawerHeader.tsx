@@ -17,6 +17,7 @@ import {DotsDropdown, RunningContext} from '@molecules';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
+import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import Colors from '@styles/Colors';
 
@@ -30,7 +31,8 @@ type ExecutionDetailsDrawerHeaderProps = {
 };
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
-  const {closeExecutionDetails, entity, execId} = useEntityDetailsPick('closeExecutionDetails', 'entity', 'execId');
+  const {entity} = useEntityDetailsPick('entity');
+  const {close, id: execId} = useExecutionDetailsPick('close', 'id');
   const {useAbortExecution} = useEntityDetailsConfig(entity);
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
@@ -89,7 +91,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
             {renderedExecutionActions && renderedExecutionActions.length && mayManageExecution ? (
               <DotsDropdown items={renderedExecutionActions} />
             ) : null}
-            <CloseOutlined onClick={closeExecutionDetails} style={{color: Colors.slate400, fontSize: 20}} />
+            <CloseOutlined onClick={close} style={{color: Colors.slate400, fontSize: 20}} />
           </ItemColumn>
         </ItemRow>
         <ItemRow $flex={1}>
@@ -100,7 +102,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
               <RunningContext
                 type={runningContext?.type}
                 context={runningContext?.context}
-                closeExecutionDetails={closeExecutionDetails}
+                onClose={close}
                 entity={entity}
               />
             </Text>

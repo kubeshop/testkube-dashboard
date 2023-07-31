@@ -39,16 +39,15 @@ const loaderBodyStyle = {
 
 const ExecutionDetailsDrawer: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {closeExecutionDetails, entity, execId} = useEntityDetailsPick('closeExecutionDetails', 'entity', 'execId');
-  const {data: currentData} = useExecutionDetailsPick('data');
+  const {entity} = useEntityDetailsPick('entity');
+  const {close, id, data: currentData} = useExecutionDetailsPick('close', 'id', 'data');
   const currentStatus =
     (currentData as Execution)?.executionResult?.status || (currentData as TestSuiteExecution)?.status;
 
   const {useGetExecutionDetails} = useEntityDetailsConfig(entity);
-  const {data, error} = useGetExecutionDetails(execId!, {
+  const {data, error} = useGetExecutionDetails(id!, {
     pollingInterval: PollingIntervals.everySecond,
-    skip:
-      !isClusterAvailable || !execId || (currentStatus && !['queued', 'pending', 'running'].includes(currentStatus)),
+    skip: !isClusterAvailable || !id || (currentStatus && !['queued', 'pending', 'running'].includes(currentStatus)),
   });
   const changed = useExecutionDetailsSync({data, error});
   const prevData = usePrevious(data);
@@ -70,7 +69,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
     }
   }, [error]);
 
-  if (!execId) {
+  if (!id) {
     return null;
   }
 
@@ -80,9 +79,9 @@ const ExecutionDetailsDrawer: React.FC = () => {
         bodyStyle={loaderBodyStyle}
         headerStyle={headerStyle}
         closable={false}
-        open={Boolean(execId)}
+        open={Boolean(id)}
         width={drawerWidth}
-        onClose={closeExecutionDetails}
+        onClose={close}
       >
         <LoadingOutlined />
       </Drawer>
@@ -97,16 +96,12 @@ const ExecutionDetailsDrawer: React.FC = () => {
       mask
       maskClosable
       placement="right"
-      open={Boolean(execId)}
+      open={Boolean(id)}
       width={drawerWidth}
-      onClose={closeExecutionDetails}
+      onClose={close}
     >
-      <ExecutionDetailsDrawerWrapper
-        $isRowSelected={Boolean(execId)}
-        transition={{type: 'just'}}
-        drawerWidth={drawerWidth}
-      >
-        {execId ? components[entity] : null}
+      <ExecutionDetailsDrawerWrapper $isRowSelected={Boolean(id)} transition={{type: 'just'}} drawerWidth={drawerWidth}>
+        {id ? components[entity] : null}
       </ExecutionDetailsDrawerWrapper>
     </Drawer>
   );

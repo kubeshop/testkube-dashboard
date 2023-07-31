@@ -6,13 +6,18 @@ import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {connectStore, createStoreFactory} from '@store/utils';
 
 export interface ExecutionDetailsSlice {
+  id?: string;
   data: Execution | TestSuiteExecution | null;
   error: any;
+  open: (id: string) => void;
+  close: () => void;
 }
 
 const createExecutionDetailsSlice: StateCreator<ExecutionDetailsSlice> = set => ({
   data: null,
   error: null,
+  open: () => {},
+  close: () => {},
 });
 
 const createExecutionDetailsStore = createStoreFactory('executionDetails', createExecutionDetailsSlice);
