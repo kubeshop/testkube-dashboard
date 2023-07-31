@@ -1,10 +1,6 @@
-import {useContext} from 'react';
-
 import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
@@ -14,6 +10,8 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
+import {useEntityDetailsPick} from '@store/entityDetails';
+
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type PreRunFormValues = {
@@ -21,33 +19,33 @@ type PreRunFormValues = {
 };
 
 const PreRun: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const isPreRunAvailable = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<PreRunFormValues>();
 
   const [updateTest] = useUpdateTestMutation();
 
-  if (!entity || !entityDetails) {
+  if (!entity || !details) {
     return null;
   }
 
-  const command = entityDetails?.executionRequest?.preRunScript;
+  const command = details?.executionRequest?.preRunScript;
 
   const onSave = () => {
     const values = form.getFieldsValue();
 
     return updateTest({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         executionRequest: {
-          ...entityDetails.executionRequest,
+          ...details.executionRequest,
           preRunScript: values.command,
         },
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', `Pre-Run command was successfully updated.`));
   };
 

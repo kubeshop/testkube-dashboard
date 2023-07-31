@@ -1,10 +1,8 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {Button, FullWidthSpace, Text} from '@custom-antd';
 
@@ -15,6 +13,8 @@ import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
+
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
@@ -31,12 +31,10 @@ type ArgumentsFormValues = {
 const Arguments: React.FC = () => {
   const [form] = Form.useForm<ArgumentsFormValues>();
 
-  const {entityDetails} = useContext(EntityDetailsContext);
+  const {details} = useEntityDetailsPick('details') as {details: Test};
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateTest] = useUpdateTestMutation();
-
-  const details = entityDetails as Test;
 
   const entityArgs = details.executionRequest?.args || [];
 
@@ -57,7 +55,7 @@ const Arguments: React.FC = () => {
     };
 
     return updateTest({
-      id: entityDetails.name,
+      id: details.name,
       data: successRecord,
     })
       .then(res => displayDefaultNotificationFlow(res))

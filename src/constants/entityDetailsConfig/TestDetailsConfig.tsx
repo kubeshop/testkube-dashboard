@@ -3,22 +3,20 @@ import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {
   useAbortAllTestExecutionsMutation,
   useAbortTestExecutionMutation,
+  useGetTestExecutionByIdQuery,
   useGetTestExecutionMetricsQuery,
   useGetTestExecutionsByIdQuery,
   useGetTestQuery,
 } from '@services/tests';
 
 const TestExecutionsConfig: EntityDetailsBlueprint = {
-  entity: 'tests',
   useGetExecutions: useGetTestExecutionsByIdQuery,
   useGetEntityDetails: useGetTestQuery,
   useGetMetrics: useGetTestExecutionMetricsQuery,
   defaultStackRoute: '/tests',
-  getExecutionsEndpoint: (id: string) => {
-    return `/tests/${id}/executions`;
-  },
   useAbortExecution: useAbortTestExecutionMutation,
   useAbortAllExecutions: useAbortAllTestExecutionsMutation,
+  useGetExecutionDetails: useGetTestExecutionByIdQuery,
 };
 
 export default TestExecutionsConfig;

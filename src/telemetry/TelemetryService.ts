@@ -236,6 +236,7 @@ export class TelemetryService {
   // eslint-disable-next-line class-methods-use-this
   private groupDev(name: string, fn: () => void): void {
     if (!this.debug) {
+      fn();
       return;
     }
     const tags = [

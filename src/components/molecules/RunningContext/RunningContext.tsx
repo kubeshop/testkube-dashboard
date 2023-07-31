@@ -29,12 +29,12 @@ export enum RunningContextType {
 type RunningContextProps = {
   type?: RunningContextType;
   context?: string;
-  unselectRow: () => void;
+  onClose: () => void;
   entity: Entity;
 };
 
 const RunningContext: React.FC<RunningContextProps> = props => {
-  const {type = RunningContextType.default, context = '', unselectRow, entity} = props;
+  const {type = RunningContextType.default, context = '', onClose, entity} = props;
 
   const {dispatch} = useContext(MainContext);
 
@@ -56,7 +56,7 @@ const RunningContext: React.FC<RunningContextProps> = props => {
         Scheduler{' '}
         <ExternalLink
           onClick={() => {
-            unselectRow();
+            onClose();
             dispatch(setSettingsTabConfig({entity, tab: 'Scheduling'}));
           }}
         >

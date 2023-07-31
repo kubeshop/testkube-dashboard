@@ -1,6 +1,4 @@
-import React, {useContext, useMemo} from 'react';
-
-import {EntityDetailsContext} from '@contexts';
+import React, {useMemo} from 'react';
 
 import {Text} from '@custom-antd';
 
@@ -12,6 +10,8 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
+
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {useTelemetry} from '@telemetry';
 
@@ -115,7 +115,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const mayRun = usePermission(Permissions.runEntity);
   const mayDelete = usePermission(Permissions.deleteEntity);
 
-  const {entity} = useContext(EntityDetailsContext);
+  const {entity} = useEntityDetailsPick('entity');
   const telemetry = useTelemetry();
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);

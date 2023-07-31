@@ -1,4 +1,4 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useMemo} from 'react';
 
 import {CloseOutlined} from '@ant-design/icons';
 
@@ -6,7 +6,7 @@ import {intervalToDuration} from 'date-fns';
 
 import {StatusIcon} from '@atoms';
 
-import {EntityDetailsContext} from '@contexts';
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
 import {Text} from '@custom-antd';
 
@@ -15,6 +15,9 @@ import useIsRunning from '@hooks/useIsRunning';
 import {DotsDropdown, RunningContext} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useEntityDetailsPick} from '@store/entityDetails';
+import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import Colors from '@styles/Colors';
 
@@ -28,7 +31,9 @@ type ExecutionDetailsDrawerHeaderProps = {
 };
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
-  const {unselectRow, entity, execId, abortExecution} = useContext(EntityDetailsContext);
+  const {entity} = useEntityDetailsPick('entity');
+  const {close, id: execId} = useExecutionDetailsPick('close', 'id');
+  const {useAbortExecution} = useEntityDetailsConfig(entity);
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
   const {data} = props;
@@ -42,6 +47,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
 
   const {name, number, startedTime, finishedTime, id} = headerValues;
 
+  const [abortExecution] = useAbortExecution();
   const onAbortExecution = () => {
     if (id && execId) {
       abortExecution({executionId: execId, id});
@@ -85,7 +91,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
             {renderedExecutionActions && renderedExecutionActions.length && mayManageExecution ? (
               <DotsDropdown items={renderedExecutionActions} />
             ) : null}
-            <CloseOutlined onClick={unselectRow} style={{color: Colors.slate400, fontSize: 20}} />
+            <CloseOutlined onClick={close} style={{color: Colors.slate400, fontSize: 20}} />
           </ItemColumn>
         </ItemRow>
         <ItemRow $flex={1}>
@@ -96,7 +102,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
               <RunningContext
                 type={runningContext?.type}
                 context={runningContext?.context}
-                unselectRow={unselectRow}
+                onClose={close}
                 entity={entity}
               />
             </Text>

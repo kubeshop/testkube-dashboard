@@ -1,16 +1,14 @@
-import {useContext} from 'react';
-
 import {Form, Input} from 'antd';
 
 import {capitalize} from 'lodash';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -25,27 +23,27 @@ type NameNDescriptionFormValues = {
 };
 
 const NameNDescription: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<NameNDescriptionFormValues>();
 
   const [updateEntity] = updateRequestsMap[entity]();
 
-  if (!entity || !entityDetails) {
+  if (!entity || !details) {
     return null;
   }
 
-  const name = entityDetails?.name;
-  const description = entityDetails?.description;
+  const name = details?.name;
+  const description = details?.description;
 
   const onSave = () => {
     const values = form.getFieldsValue();
 
     return updateEntity({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         name: values.name,
         description: values.description,
         executionRequest: {

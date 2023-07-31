@@ -44,15 +44,15 @@ const additionalFields: SourceFields = {
 };
 
 type SourceProps = {
-  entityDetails: Test;
+  details: Test;
   updateTest: (data: any) => void;
 };
 
 type SourceFormValues = GetSourceFormValues & {testSource: string};
 
 const Source: React.FC<SourceProps> = props => {
-  const {entityDetails, updateTest} = props;
-  const {type} = entityDetails;
+  const {details, updateTest} = props;
+  const {type} = details;
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -66,7 +66,7 @@ const Source: React.FC<SourceProps> = props => {
     [executors, type]
   );
 
-  const {source, ...additionalFormValues} = getSourceFormValues(entityDetails, testSources);
+  const {source, ...additionalFormValues} = getSourceFormValues(details, testSources);
 
   const [form] = Form.useForm<SourceFormValues>();
 

@@ -1,10 +1,8 @@
-import React, {useContext, useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import {Form} from 'antd';
 
 import {ExternalLink} from '@atoms';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {Entity} from '@models/entity';
 import {VariableInForm} from '@models/variable';
@@ -12,6 +10,8 @@ import {VariableInForm} from '@models/variable';
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -30,15 +30,15 @@ type VariablesFormValues = {
 };
 
 const Variables: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();
   const [form] = Form.useForm<VariablesFormValues>();
 
   const variables = useMemo(() => {
-    return decomposeVariables(entityDetails?.executionRequest?.variables);
-  }, [entityDetails?.executionRequest?.variables]);
+    return decomposeVariables(details?.executionRequest?.variables);
+  }, [details?.executionRequest?.variables]);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -50,15 +50,15 @@ const Variables: React.FC = () => {
   const onSaveForm = () => {
     const value = form.getFieldsValue();
     const successRecord = {
-      ...entityDetails,
+      ...details,
       executionRequest: {
-        ...entityDetails.executionRequest,
+        ...details.executionRequest,
         variables: formatVariables(value['variables-list']),
       },
     };
 
     return updateEntity({
-      id: entityDetails.name,
+      id: details.name,
       data: successRecord,
     })
       .then(res => displayDefaultNotificationFlow(res))

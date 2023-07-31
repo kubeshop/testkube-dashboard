@@ -11,17 +11,14 @@ import {selectNamespace} from '@redux/reducers/configSlice';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useTriggersField} from '@store/triggers';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {getActionFormValues, getResourceIdentifierSelector} from '../../../utils';
 
 const Condition: React.FC = () => {
-  const {currentTrigger, setCurrentTrigger} = useStore(state => ({
-    currentTrigger: state.currentTrigger!,
-    setCurrentTrigger: state.setCurrentTrigger,
-  }));
+  const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
 
   const appNamespace = useAppSelector(selectNamespace);
 
@@ -31,7 +28,7 @@ const Condition: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const initialValues = getActionFormValues(currentTrigger);
+  const initialValues = getActionFormValues(currentTrigger!);
 
   const onFinish = () => {
     const values = form.getFieldsValue();
@@ -43,7 +40,7 @@ const Condition: React.FC = () => {
     const [action, execution] = values.action.split(' ');
 
     const body = {
-      ...currentTrigger,
+      ...currentTrigger!,
       action,
       execution,
       testSelector,
