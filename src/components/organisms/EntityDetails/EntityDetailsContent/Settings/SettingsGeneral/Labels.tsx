@@ -1,12 +1,10 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 
 import {Form} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
 
 import {capitalize} from 'lodash';
-
-import {EntityDetailsContext} from '@contexts';
 
 import {Option} from '@models/form';
 
@@ -15,12 +13,14 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {Permissions, usePermission} from '@permissions/base';
 
+import {useEntityDetailsPick} from '@store/entityDetails';
+
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {namingMap, updateRequestsMap} from '../utils';
 
 const Labels: React.FC = () => {
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = updateRequestsMap[entity]();
@@ -29,17 +29,17 @@ const Labels: React.FC = () => {
   const [wasTouched, setWasTouched] = useState(false);
   const [labelsKey, setLabelsKey] = useState(nanoid());
 
-  if (!entity || !entityDetails) {
+  if (!entity || !details) {
     return null;
   }
 
-  const entityLabels = entityDetails?.labels || {};
+  const entityLabels = details?.labels || {};
 
   const onSave = () => {
     return updateEntity({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         labels: decomposeLabels(localLabels),
       },
     })

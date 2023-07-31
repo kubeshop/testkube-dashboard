@@ -2,12 +2,14 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Select, Space, Tabs} from 'antd';
 
-import {BaseQueryFn, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
+import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ExecutorIcon} from '@atoms';
 
-import {DashboardContext, EntityDetailsContext} from '@contexts';
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
+import {DashboardContext} from '@contexts';
 
 import {Button, Text} from '@custom-antd';
 
@@ -32,6 +34,8 @@ import {selectSettingsTabConfig} from '@redux/reducers/configSlice';
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
 
+import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
+
 import Colors from '@styles/Colors';
 
 import {useTelemetry} from '@telemetry';
@@ -52,8 +56,9 @@ const filterOptions: OptionType[] = [
 ];
 
 const EntityDetailsContent: React.FC = () => {
-  const {entity, entityDetails, defaultStackRoute, metrics, daysFilterValue, setDaysFilterValue, abortAllExecutions} =
-    useContext(EntityDetailsContext);
+  const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
+  const {entity, details, metrics} = useEntityDetailsPick('entity', 'details', 'metrics');
+  const {defaultStackRoute, useAbortAllExecutions} = useEntityDetailsConfig(entity);
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
@@ -64,10 +69,7 @@ const EntityDetailsContent: React.FC = () => {
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();
 
-  const runRequestsMap: Record<
-    Entity,
-    MutationTrigger<MutationDefinition<any, BaseQueryFn<any, unknown, FetchBaseQueryError>, never, void, string>>
-  > = {
+  const runRequestsMap: Record<Entity, MutationTrigger<MutationDefinition<any, any, any, void>>> = {
     'test-suites': runTestSuite,
     tests: runTest,
   };
@@ -83,12 +85,12 @@ const EntityDetailsContent: React.FC = () => {
   useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
   useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
 
-  const name = entityDetails?.name;
-  const namespace = entityDetails?.namespace;
-  const description = entityDetails?.description;
-  const labels = entityDetails?.labels;
-  const type = entityDetails?.type;
-  const testIcon = useExecutorIcon(entityDetails);
+  const name = details?.name;
+  const namespace = details?.namespace;
+  const description = details?.description;
+  const labels = details?.labels;
+  const type = details?.type;
+  const testIcon = useExecutorIcon(details);
 
   const onRunButtonClick = async () => {
     handleLoading();
@@ -116,6 +118,7 @@ const EntityDetailsContent: React.FC = () => {
       });
   };
 
+  const [abortAllExecutions] = useAbortAllExecutions();
   const onAbortAllExecutionsClick = () => {
     abortAllExecutions({id: name}).catch(() => {
       notificationCall('failed', `Something went wrong during ${entity} execution abortion`);
@@ -202,7 +205,7 @@ const EntityDetailsContent: React.FC = () => {
                   executionDurationP50ms={metrics?.executionDurationP50ms}
                   executionDurationP95ms={metrics?.executionDurationP95ms}
                 />
-                <ExecutionsTable triggerRun={onRunButtonClick} />
+                <ExecutionsTable onRun={onRunButtonClick} />
               </>
             ),
           },

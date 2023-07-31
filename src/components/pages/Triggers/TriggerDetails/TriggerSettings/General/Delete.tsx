@@ -8,12 +8,10 @@ import {ConfigurationCard, DeleteEntityModal} from '@molecules';
 
 import {useDeleteTriggerMutation} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useTriggersPick} from '@store/triggers';
 
 const Delete: React.FC = () => {
-  const {currentTrigger} = useStore(state => ({
-    currentTrigger: state.currentTrigger!,
-  }));
+  const {current} = useTriggersPick('current');
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -40,7 +38,7 @@ const Delete: React.FC = () => {
             <DeleteEntityModal
               defaultStackRoute="/triggers"
               useDeleteMutation={useDeleteTriggerMutation}
-              name={currentTrigger.name || ''}
+              name={current?.name || ''}
               entityLabel="triggers"
             />
           }

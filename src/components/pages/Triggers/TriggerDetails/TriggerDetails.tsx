@@ -11,7 +11,7 @@ import PageMetadata from '@pages/PageMetadata';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useTriggersPick, useTriggersSync} from '@store/triggers';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
@@ -20,11 +20,6 @@ import TriggerSettings from './TriggerSettings';
 const TriggerDetails = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {location, navigate} = useContext(DashboardContext);
-
-  const {setCurrentTrigger, setTriggersKeyMap} = useStore(state => ({
-    setCurrentTrigger: state.setCurrentTrigger,
-    setTriggersKeyMap: state.setTriggersKeyMap,
-  }));
 
   const name = useParams().id!;
 
@@ -36,17 +31,11 @@ const TriggerDetails = () => {
 
   const isPageDisabled = !name;
 
-  useEffect(() => {
-    if (triggerDetails) {
-      setCurrentTrigger(triggerDetails);
-    }
-  }, [triggerDetails]);
-
-  useEffect(() => {
-    if (triggersKeyMap) {
-      setTriggersKeyMap(triggersKeyMap);
-    }
-  }, [triggersKeyMap]);
+  const currentState = useTriggersPick('keyMap', 'current');
+  useTriggersSync({
+    keyMap: triggersKeyMap ?? currentState.keyMap,
+    current: triggerDetails ?? currentState.current,
+  });
 
   useEffect(() => {
     reload();

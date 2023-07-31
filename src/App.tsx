@@ -25,7 +25,7 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {initializeStore} from '@store';
+import {initializeTriggersStore} from '@store/triggers';
 
 import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -46,7 +46,7 @@ export interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({plugins}) => {
-  const [StoreProvider] = initializeStore();
+  const [TriggersProvider] = initializeTriggersStore();
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -121,7 +121,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
-    .append(StoreProvider, {})
+    .append(TriggersProvider, {})
     .append(PluginsContext.Provider, {
       value: {
         scope,

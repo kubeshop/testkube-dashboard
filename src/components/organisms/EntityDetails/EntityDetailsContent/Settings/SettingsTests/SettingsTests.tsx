@@ -8,7 +8,7 @@ import pick from 'lodash/pick';
 
 import {ExternalLink} from '@atoms';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {Button, FullWidthSpace, Title} from '@custom-antd';
 
@@ -27,6 +27,8 @@ import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 
+import {useEntityDetailsPick} from '@store/entityDetails';
+
 import {externalLinks} from '@utils/externalLinks';
 import {formatMilliseconds} from '@utils/formatMilliseconds';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -39,20 +41,17 @@ import TestSuiteStepsFlow from './TestSuiteStepsFlow';
 
 const SettingsTests = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {entityDetails: rawEntityDetails} = useContext(EntityDetailsContext) as {entityDetails: TestSuite};
+  const {details: rawDetails} = useEntityDetailsPick('details') as {details: TestSuite};
 
-  const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawEntityDetails));
-  const entityDetails = useMemo(
-    () => (isV2 ? convertTestSuiteV2ToV3(rawEntityDetails) : rawEntityDetails),
-    [rawEntityDetails]
-  );
+  const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawDetails));
+  const details = useMemo(() => (isV2 ? convertTestSuiteV2ToV3(rawDetails) : rawDetails), [rawDetails]);
 
   const executors = useAppSelector(selectExecutors);
 
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const {data: testsList} = useGetTestsListForTestSuiteQuery(entityDetails.name, {
-    skip: !isClusterAvailable || !entityDetails.name,
+  const {data: testsList} = useGetTestsListForTestSuiteQuery(details.name, {
+    skip: !isClusterAvailable || !details.name,
   });
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
@@ -65,11 +64,11 @@ const SettingsTests = () => {
   }, [testsList]);
 
   const initialSteps: LocalStep[][] = useMemo(() => {
-    if (!entityDetails.steps) {
+    if (!details.steps) {
       return [];
     }
 
-    return entityDetails.steps
+    return details.steps
       .filter(step => step.execute?.length)
       .map(step => {
         return step.execute.map(item => {
@@ -129,7 +128,7 @@ const SettingsTests = () => {
 
   const onSave = () => {
     const resultSteps = steps.map((items, i) => {
-      const stopOnFailure = Boolean(entityDetails?.steps?.[i]?.stopOnFailure);
+      const stopOnFailure = Boolean(details?.steps?.[i]?.stopOnFailure);
       const execute = items.map(item => pick(item, ['delay', 'test', 'namespace']));
 
       if (isV2) {
@@ -143,9 +142,9 @@ const SettingsTests = () => {
     });
 
     return updateTestSuite({
-      id: entityDetails.name,
+      id: details.name,
       data: {
-        ...entityDetails,
+        ...details,
         steps: resultSteps,
       },
     })

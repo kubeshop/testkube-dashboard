@@ -23,7 +23,6 @@ type MetricsBarChartProps = {
   chartHeight?: number;
   barWidth?: number;
   isDetailsView?: boolean;
-  isRowSelected?: boolean;
 };
 
 const visibleDifferenctBetweenAxes = 17;

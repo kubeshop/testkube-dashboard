@@ -1,14 +1,12 @@
-import {useContext} from 'react';
-
 import {Space} from 'antd';
 
-import {EntityDetailsContext} from '@contexts';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Arguments from './Arguments';
 import Variables from './Variables';
 
 const SettingsVariables: React.FC = () => {
-  const {entity} = useContext(EntityDetailsContext);
+  const {entity} = useEntityDetailsPick('entity');
 
   return (
     <Space size={30} direction="vertical">

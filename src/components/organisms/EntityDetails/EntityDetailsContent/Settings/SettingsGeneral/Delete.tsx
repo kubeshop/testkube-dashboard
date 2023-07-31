@@ -4,7 +4,9 @@ import {Form} from 'antd';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {EntityDetailsContext, ModalContext} from '@contexts';
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
+import {ModalContext} from '@contexts';
 
 import {Entity} from '@models/entity';
 
@@ -14,6 +16,8 @@ import DeleteEntityModal from '@molecules/DeleteEntityModal';
 import {useDeleteTestSuiteMutation} from '@services/testSuites';
 import {useDeleteTestMutation} from '@services/tests';
 
+import {useEntityDetailsPick} from '@store/entityDetails';
+
 import {namingMap} from '../utils';
 
 const useDeleteMutations: Record<Entity, UseMutation<any>> = {
@@ -22,10 +26,11 @@ const useDeleteMutations: Record<Entity, UseMutation<any>> = {
 };
 
 const Delete: React.FC = () => {
-  const {entity, entityDetails, defaultStackRoute} = useContext(EntityDetailsContext);
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
+  const {defaultStackRoute} = useEntityDetailsConfig(entity);
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
-  if (!entity || !entityDetails) {
+  if (!entity || !details) {
     return null;
   }
 
@@ -37,7 +42,7 @@ const Delete: React.FC = () => {
         <DeleteEntityModal
           defaultStackRoute={defaultStackRoute}
           useDeleteMutation={useDeleteMutations[entity]}
-          name={entityDetails.name}
+          name={details.name}
           entityLabel={namingMap[entity]}
         />
       ),
