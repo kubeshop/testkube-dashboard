@@ -76,9 +76,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
         bodyStyle={loaderBodyStyle}
         headerStyle={headerStyle}
         closable={false}
-        open={false}
         width={drawerWidth}
-        onClose={close}
       />
     );
   }
@@ -89,9 +87,9 @@ const ExecutionDetailsDrawer: React.FC = () => {
         bodyStyle={loaderBodyStyle}
         headerStyle={headerStyle}
         closable={false}
-        open={Boolean(id)}
         width={drawerWidth}
         onClose={close}
+        open
       >
         <LoadingOutlined />
       </Drawer>
@@ -106,12 +104,12 @@ const ExecutionDetailsDrawer: React.FC = () => {
       mask
       maskClosable
       placement="right"
-      open={Boolean(id)}
       width={drawerWidth}
+      open
       onClose={close}
     >
-      <ExecutionDetailsDrawerWrapper $isRowSelected={Boolean(id)} transition={{type: 'just'}} drawerWidth={drawerWidth}>
-        {id ? components[entity] : null}
+      <ExecutionDetailsDrawerWrapper transition={{type: 'just'}} drawerWidth={drawerWidth} $isRowSelected>
+        {components[entity]}
       </ExecutionDetailsDrawerWrapper>
     </Drawer>
   );
