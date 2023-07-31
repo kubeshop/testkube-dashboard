@@ -8,14 +8,13 @@ export class TestSourceGeneralSettingsPage {
   }
 
   private async clickSubmitAndWaitForSubmission(xpath: string): Promise<void> {
-    await this.page.click(`${xpath}[not(@disabled)]`);
     await this.page.locator(`${xpath}[@disabled]`).waitFor({timeout: 3000});
   }
 
   public async deleteTestSource(testSourceName: string): Promise<void> {
     await this.page.click('//button/span[text()="Delete"]'); // TODO: data-test
     await this.page.locator(`xpath=//div[@role="dialog"]//input`).fill(testSourceName); // TODO: data-test
-    await this.clickSubmitAndWaitForSubmission('xpath=//div[@role="dialog"]//button[.//span[text()="Delete"]]'); // TODO: data-test
+    await this.page.click('xpath=//div[@role="dialog"]//button[.//span[text()="Delete"] and not(@disabled)]'); // TODO: data-test
   }
 
   public async updateRepoUri(uri: string): Promise<void> {
