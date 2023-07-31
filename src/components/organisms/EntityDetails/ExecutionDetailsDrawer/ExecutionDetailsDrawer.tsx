@@ -10,14 +10,13 @@ import {MainContext} from '@contexts';
 import useIsMobile from '@hooks/useIsMobile';
 
 import {Entity} from '@models/entity';
-import {Execution} from '@models/execution';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCall} from '@molecules';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick, useExecutionDetailsSync} from '@store/executionDetails';
 
+import {isExecutionFinished} from '@utils/isExecutionFinished';
 import {PollingIntervals} from '@utils/numbers';
 
 import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
@@ -39,19 +38,14 @@ const loaderBodyStyle = {
 const ExecutionDetailsDrawer: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {entity} = useEntityDetailsPick('entity');
-  const {close, id, data: currentData} = useExecutionDetailsPick('close', 'id', 'data');
-  const currentStatus =
-    (currentData as Execution)?.executionResult?.status || (currentData as TestSuiteExecution)?.status;
+  const {close, id, data} = useExecutionDetailsPick('close', 'id', 'data');
 
   const {useGetExecutionDetails} = useEntityDetailsConfig(entity);
-  const {data, error} = useGetExecutionDetails(id!, {
+  const {data: fetchedData, error} = useGetExecutionDetails(id!, {
     pollingInterval: PollingIntervals.everySecond,
-    skip:
-      !isClusterAvailable ||
-      !id ||
-      (id === currentData?.id && currentStatus && !['queued', 'pending', 'running'].includes(currentStatus)),
+    skip: !isClusterAvailable || !id || isExecutionFinished(data),
   });
-  useExecutionDetailsSync({data: id === data?.id ? data : null, error});
+  useExecutionDetailsSync({data: fetchedData, error});
 
   const isMobile = useIsMobile();
 
@@ -74,7 +68,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
     return <Drawer bodyStyle={loaderBodyStyle} headerStyle={headerStyle} closable={false} width={drawerWidth} />;
   }
 
-  if (!currentData) {
+  if (!data) {
     return (
       <Drawer
         bodyStyle={loaderBodyStyle}
@@ -91,7 +85,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
 
   return (
     <Drawer
-      title={<ExecutionDetailsDrawerHeader data={currentData} />}
+      title={<ExecutionDetailsDrawerHeader data={fetchedData} />}
       headerStyle={headerStyle}
       closable={false}
       mask
