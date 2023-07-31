@@ -1,23 +1,21 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import {useAsync} from 'react-use';
+import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
-import {DashboardContext, EntityDetailsContext, MainContext} from '@contexts';
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
-import useExecutorIcon from '@hooks/useExecutorIcon';
-import useStateCallback from '@hooks/useStateCallback';
+import {DashboardContext, MainContext} from '@contexts';
 
-import {EntityDetailsBlueprint} from '@models/entityDetails';
-import {ExecutionMetrics, Metrics} from '@models/metrics';
+import {Entity} from '@models/entity';
+import {ExecutionMetrics} from '@models/metrics';
 import {Test} from '@models/test';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from '@models/websocket';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-
 import {useWsEndpoint} from '@services/apiEndpoint';
+
+import {initializeEntityDetailsStore} from '@store/entityDetails';
 
 import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
@@ -27,53 +25,55 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
 
-const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
-  const {
-    entity,
-    useGetEntityDetails,
-    useGetMetrics,
-    defaultStackRoute,
-    useGetExecutions,
-    useAbortExecution,
-    useAbortAllExecutions,
-  } = props;
+const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
+  const {entity} = props;
+  const {useGetEntityDetails, useGetMetrics, useGetExecutions} = useEntityDetailsConfig(entity);
+
+  const {id, execId} = useParams();
+
+  const {navigate} = useContext(DashboardContext);
+
+  const [StoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] = initializeEntityDetailsStore(
+    {
+      entity,
+      id,
+      execId,
+      openExecutionDetails: (targetId: string) => {
+        navigate(`/${entity}/executions/${id}/execution/${targetId}`);
+      },
+      closeExecutionDetails: () => {
+        navigate(`/${entity}/executions/${id}`);
+      },
+    },
+    [entity, id, navigate]
+  );
+
+  const [metrics, setMetrics] = useEntityDetailsField('metrics');
+  const [, setCurrentPage] = useEntityDetailsField('currentPage');
+  const [executions, setExecutions] = useEntityDetailsField('executions');
+  const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
+  const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
 
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
-  const {daysFilterValue: defaultDaysFilterValue, currentPage: defaultCurrentPage} = useContext(EntityDetailsContext);
   const wsRoot = useWsEndpoint();
 
-  const params = useParams();
-  const {id, execId = ''} = params;
-
-  const [daysFilterValue, setDaysFilterValue] = useState(defaultDaysFilterValue);
-  const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
-  const [selectedRow, selectRow] = useState();
-  const [executionsList, setExecutionsList] = useStateCallback<any>(null);
-  const [metricsState, setMetricsState] = useState<Metrics | undefined>(undefined);
-  const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
-
-  const executors = useAppSelector(selectExecutors);
-
-  const {data: executions, refetch} = useGetExecutions(
+  const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
     {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable}
   );
-  const {data: entityDetails} = useGetEntityDetails(id, {
+  const {data: rawDetails} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.everyTwoSeconds,
     skip: !isClusterAvailable,
   });
-  const {data: metrics, refetch: refetchMetrics} = useGetMetrics({
+  const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics({
     id,
     last: daysFilterValue,
     skip: !isClusterAvailable,
   });
-  const [abortExecution] = useAbortExecution();
-  const [abortAllExecutions] = useAbortAllExecutions();
 
   const onWebSocketData = (wsData: WSDataWithTestExecution | WSDataWithTestSuiteExecution) => {
     try {
-      if (executionsList) {
+      if (executions) {
         if ('testExecution' in wsData) {
           if (wsData.type === WSEventType.START_TEST && id === wsData.testExecution.testName) {
             const adjustedExecution = {
@@ -87,44 +87,34 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               status: wsData.testExecution.executionResult.status,
             };
 
-            setMetricsState(prev => {
-              if (prev) {
-                return {...prev, executions: [metricToPush, ...((prev.executions && prev.executions) || [])]};
-              }
+            setMetrics({
+              ...metrics!,
+              executions: [metricToPush, ...(metrics?.executions || [])],
             });
 
-            setExecutionsList(
-              {
-                ...executionsList,
-                results: [adjustedExecution, ...executionsList.results],
-              },
-              () => {
-                safeRefetch(refetchMetrics);
-              }
-            );
+            setExecutions({
+              ...executions,
+              results: [adjustedExecution, ...executions.results],
+            });
+            safeRefetch(refetchMetrics);
           }
 
           if (wsData.type === WSEventType.END_TEST_SUCCESS && id === wsData.testExecution.testName) {
-            const targetIndex = executionsList.results.findIndex((item: any) => {
+            const targetIndex = executions.results.findIndex((item: any) => {
               return item.id === wsData.testExecution.id;
             });
 
             if (targetIndex !== -1) {
-              setExecutionsList(
-                {
-                  ...executionsList,
-                  results: executionsList.results.map((item: Test, index: number) => {
-                    if (index === targetIndex) {
-                      return {...item, ...wsData.testExecution, status: wsData.testExecution.executionResult.status};
-                    }
-
-                    return item;
-                  }),
-                },
-                () => {
-                  safeRefetch(refetchMetrics);
-                }
-              );
+              setExecutions({
+                ...executions,
+                results: executions.results.map((item: Test, index: number) => {
+                  if (index === targetIndex) {
+                    return {...item, ...wsData.testExecution, status: wsData.testExecution.executionResult.status};
+                  }
+                  return item;
+                }),
+              });
+              safeRefetch(refetchMetrics);
             }
           }
         } else {
@@ -146,38 +136,29 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
               status: wsData.testSuiteExecution.status,
             };
 
-            setExecutionsList(
-              {
-                ...executionsList,
-                results: [adjustedExecution, ...executionsList.results],
-              },
-              () => {
-                safeRefetch(refetchMetrics);
-              }
-            );
+            setExecutions({
+              ...executions,
+              results: [adjustedExecution, ...executions.results],
+            });
+            safeRefetch(refetchMetrics);
           }
 
           if (wsData.type === WSEventType.END_TEST_SUITE_SUCCESS && id === wsData.testSuiteExecution.testSuite.name) {
-            const targetIndex = executionsList.results.findIndex((item: TestSuiteExecution) => {
+            const targetIndex = executions.results.findIndex((item: TestSuiteExecution) => {
               return item.id === wsData.testSuiteExecution.id;
             });
 
             if (targetIndex !== -1) {
-              setExecutionsList(
-                {
-                  ...executionsList,
-                  results: executionsList.results.map((item: TestSuiteExecution, index: number) => {
-                    if (index === targetIndex) {
-                      return {...item, ...wsData.testSuiteExecution, status: wsData.testSuiteExecution.status};
-                    }
-
-                    return item;
-                  }),
-                },
-                () => {
-                  safeRefetch(refetchMetrics);
-                }
-              );
+              setExecutions({
+                ...executions,
+                results: executions.results.map((item: TestSuiteExecution, index: number) => {
+                  if (index === targetIndex) {
+                    return {...item, ...wsData.testSuiteExecution, status: wsData.testSuiteExecution.status};
+                  }
+                  return item;
+                }),
+              });
+              safeRefetch(refetchMetrics);
             }
           }
         }
@@ -205,102 +186,48 @@ const EntityDetailsContainer: React.FC<EntityDetailsBlueprint> = props => {
     !tokenLoading
   );
 
-  const defaultUrl = `/${entity}/executions/${entityDetails?.name}`;
-
-  const onRowSelect = useCallback(
-    (dataItem: any, isManual?: boolean) => {
-      selectRow(dataItem);
-
-      if (isManual) {
-        navigate(`${defaultUrl}/execution/${dataItem?.id}`);
+  useEffect(() => {
+    if (execId && executions?.results.length > 0) {
+      const executionDetails = executions?.results?.find((execution: any) => execution.id === execId);
+      const indexOfDisplayedExecution = executionDetails ? executions.results?.indexOf(executionDetails) + 1 : null;
+      if (indexOfDisplayedExecution) {
+        setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10));
+      } else {
+        setDaysFilterValue(0);
       }
-    },
-    [selectRow, navigate, defaultUrl]
-  );
-
-  const unselectRow = useCallback(() => {
-    selectRow(undefined);
-    navigate(defaultUrl);
-  }, [selectRow, navigate, defaultUrl]);
-
-  useEffect(() => {
-    setMetricsState(metrics);
-  }, [metrics]);
-
-  useEffect(() => {
-    if (params.execId && executionsList?.results.length > 0) {
-      const executionDetails = executionsList?.results?.find((execution: any) => execution.id === execId);
-      const indexOfDisplayedExecution = executionDetails ? executionsList.results?.indexOf(executionDetails) + 1 : null;
-      indexOfDisplayedExecution ? setCurrentPage(Math.ceil(indexOfDisplayedExecution / 10)) : setDaysFilterValue(0);
     }
-  }, [params, executionsList]);
-
-  useEffect(() => {
-    if (params.execId) {
-      onRowSelect({id: execId}, false);
-    }
-  }, [params]);
+  }, [execId, executions]);
 
   useEffect(() => {
     safeRefetch(refetch);
-
-    const interval = setInterval(() => {
-      safeRefetch(refetchMetrics);
-    }, 2000);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, [entity, daysFilterValue]);
 
+  useInterval(() => safeRefetch(refetchMetrics), 2000);
+
   useEffect(() => {
-    setTimeout(() => {
-      setFirstTimeLoading(false);
-    }, 2000);
+    setIsFirstTimeLoading(true);
+  }, [id]);
 
-    setExecutionsList(executions);
-  }, [executions]);
+  useEffect(() => {
+    if (rawExecutions) {
+      setIsFirstTimeLoading(false);
+    }
+    setExecutions(rawExecutions);
+  }, [StoreProvider, rawExecutions]);
 
-  const testIcon = useExecutorIcon(entityDetails);
-
-  const entityDetailsWithIcon = useMemo(
-    () => ({
-      ...entityDetails,
-      ...(testIcon ? {testIcon} : {}),
-    }),
-    [entityDetails, testIcon]
-  );
-
-  const entityDetailsContextValues = {
-    executionsList,
-    entityDetails: entityDetailsWithIcon,
-    entity,
-    onRowSelect,
-    isRowSelected: Boolean(selectedRow),
-    selectedRow,
-    selectRow,
-    unselectRow,
-    id,
+  useEntityDetailsSync({
     execId,
-    defaultStackRoute,
-    setCurrentPage,
-    currentPage,
-    metrics: metricsState,
-    daysFilterValue,
-    setDaysFilterValue,
-    abortExecution,
-    abortAllExecutions,
-    isFirstTimeLoading,
-    setFirstTimeLoading,
-  };
+    metrics: rawMetrics,
+    details: rawDetails,
+  });
 
   return (
-    <EntityDetailsContext.Provider value={entityDetailsContextValues}>
+    <StoreProvider>
       <EntityDetailsWrapper>
         <EntityDetailsContent />
         <ExecutionDetailsDrawer />
       </EntityDetailsWrapper>
-    </EntityDetailsContext.Provider>
+    </StoreProvider>
   );
 };
 

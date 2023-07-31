@@ -9,14 +9,10 @@ import {
 } from '@services/tests';
 
 const TestExecutionsConfig: EntityDetailsBlueprint = {
-  entity: 'tests',
   useGetExecutions: useGetTestExecutionsByIdQuery,
   useGetEntityDetails: useGetTestQuery,
   useGetMetrics: useGetTestExecutionMetricsQuery,
   defaultStackRoute: '/tests',
-  getExecutionsEndpoint: (id: string) => {
-    return `/tests/${id}/executions`;
-  },
   useAbortExecution: useAbortTestExecutionMutation,
   useAbortAllExecutions: useAbortAllTestExecutionsMutation,
 };

@@ -1,11 +1,13 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useCallback} from 'react';
 
 import {Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
-import {EntityDetailsContext} from '@contexts';
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
 import {Skeleton} from '@custom-antd';
+
+import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
 
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
@@ -17,25 +19,26 @@ type ExecutionsTableProps = {
 const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   const {triggerRun} = props;
 
-  const {
-    executionsList,
-    selectedRow,
-    currentPage,
-    setCurrentPage,
-    onRowSelect,
-    id,
-    abortExecution,
-    isFirstTimeLoading,
-  } = useContext(EntityDetailsContext);
+  const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
+  const {entity, executions, openExecutionDetails, id, execId, isFirstTimeLoading} = useEntityDetailsPick(
+    'entity',
+    'executions',
+    'openExecutionDetails',
+    'id',
+    'execId',
+    'isFirstTimeLoading'
+  );
 
   const rowSelection: TableRowSelection<any> = {
-    selectedRowKeys: selectedRow ? [selectedRow.id] : [],
+    selectedRowKeys: execId ? [execId] : [],
     columnWidth: 0,
     renderCell: () => null,
   };
 
-  const isEmptyExecutions = !executionsList?.results || !executionsList?.results.length;
+  const isEmptyExecutions = !executions?.results || !executions?.results.length;
 
+  const {useAbortExecution} = useEntityDetailsConfig(entity);
+  const [abortExecution] = useAbortExecution();
   const onAbortExecution = useCallback(
     (executionId: string) => {
       if (id) {
@@ -62,7 +65,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
     <Table
       className="custom-table"
       showHeader={false}
-      dataSource={executionsList?.results}
+      dataSource={executions?.results}
       columns={[
         {
           render: data => {
@@ -72,7 +75,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
       ]}
       onRow={(record: any) => ({
         onClick: () => {
-          onRowSelect(record, true);
+          openExecutionDetails(record.id);
         },
       })}
       rowSelection={{...rowSelection}}

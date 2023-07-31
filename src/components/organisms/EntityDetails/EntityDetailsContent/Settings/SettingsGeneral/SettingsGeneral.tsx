@@ -1,10 +1,8 @@
-import {useContext} from 'react';
-
 import {Space} from 'antd';
 
-import {EntityDetailsContext} from '@contexts';
-
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Delete from './Delete';
 import FailureHandling from './FailureHandling';
@@ -13,7 +11,7 @@ import NameNDescription from './NameNDescription';
 import Timeout from './Timeout';
 
 const SettingsGeneral: React.FC = () => {
-  const {entity} = useContext(EntityDetailsContext);
+  const {entity} = useEntityDetailsPick('entity');
   const mayDelete = usePermission(Permissions.deleteEntity);
 
   return (

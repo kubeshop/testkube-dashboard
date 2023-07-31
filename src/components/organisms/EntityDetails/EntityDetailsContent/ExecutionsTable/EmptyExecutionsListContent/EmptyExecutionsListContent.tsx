@@ -1,12 +1,14 @@
 import React, {useContext} from 'react';
 
-import {EntityDetailsContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
 import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -17,11 +19,11 @@ type EmptyExecutionsListContentProps = {
 const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = props => {
   const {triggerRun} = props;
 
-  const {entity, entityDetails} = useContext(EntityDetailsContext);
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const {dispatch} = useContext(MainContext);
   const mayRun = usePermission(Permissions.runEntity);
 
-  if (!entityDetails) {
+  if (!details) {
     return null;
   }
 
@@ -54,7 +56,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
     );
   }
 
-  if (!entityDetails.steps || entityDetails.steps.length === 0) {
+  if (!details.steps || details.steps.length === 0) {
     return (
       <EmptyListContent
         title="Congrats, now add your tests to this suite"

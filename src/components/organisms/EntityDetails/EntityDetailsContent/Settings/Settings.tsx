@@ -1,10 +1,10 @@
-import React, {ReactElement, useContext} from 'react';
-
-import {EntityDetailsContext} from '@contexts';
+import React, {ReactElement} from 'react';
 
 import {Entity} from '@models/entity';
 
 import {SettingsLayout} from '@molecules';
+
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import SettingsDefinition from './SettingsDefinition/SettingsDefinition';
 import SettingsExecution from './SettingsExecution';
@@ -45,7 +45,7 @@ const tabsConfigMap: Record<Entity, ReactElement<any, any>> = {
 };
 
 const Settings: React.FC = () => {
-  const {entity} = useContext(EntityDetailsContext);
+  const {entity} = useEntityDetailsPick('entity');
   return tabsConfigMap[entity];
 };
 

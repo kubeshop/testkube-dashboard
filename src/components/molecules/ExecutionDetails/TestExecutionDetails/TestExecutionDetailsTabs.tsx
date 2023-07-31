@@ -4,7 +4,7 @@ import {Tabs} from 'antd';
 
 import debounce from 'lodash.debounce';
 
-import {EntityDetailsContext, ExecutionDetailsContext} from '@contexts';
+import {ExecutionDetailsContext} from '@contexts';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -18,6 +18,8 @@ import {TestExecutionTabsInterface} from '@plugins/types';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
+import {useEntityDetailsPick} from '@store/entityDetails';
+
 import {decomposeVariables} from '@utils/variables';
 
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
@@ -26,7 +28,7 @@ const LogOutput = lazy(() => import('@molecules').then(module => ({default: modu
 
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useContext(ExecutionDetailsContext);
-  const {entityDetails} = useContext(EntityDetailsContext);
+  const {details} = useEntityDetailsPick('details');
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
@@ -56,8 +58,8 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const whetherToShowArtifactsTab = executorsFeaturesMap[testType]?.includes('artifacts');
 
   useEffect(() => {
-    setTestExecutionTabsData({execution, test: entityDetails});
-  }, [execution, entityDetails]);
+    setTestExecutionTabsData({execution, test: details});
+  }, [execution, details]);
 
   useEffect(() => {
     if (ref && ref.current) {

@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {LoadingOutlined} from '@ant-design/icons';
 import {Drawer} from 'antd';
 
-import {EntityDetailsContext, ExecutionDetailsContext, MainContext} from '@contexts';
+import {ExecutionDetailsContext, MainContext} from '@contexts';
 import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
 
 import useIsMobile from '@hooks/useIsMobile';
@@ -15,6 +15,8 @@ import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCal
 import {useGetTestSuiteExecutionByIdQuery} from '@services/testSuiteExecutions';
 import {useGetTestExecutionByIdQuery} from '@services/tests';
 
+import {useEntityDetailsPick} from '@store/entityDetails';
+
 import {PollingIntervals} from '@utils/numbers';
 
 import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
@@ -22,7 +24,7 @@ import ExecutionDetailsDrawerHeader from './ExecutionDetailsDrawerHeader';
 
 const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityDetailsContext);
+  const {execId} = useEntityDetailsPick('execId');
   const {isClusterAvailable} = useContext(MainContext);
 
   // @ts-ignore
@@ -41,7 +43,7 @@ const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
 
 const TestExecutionDetailsDataLayer: React.FC = () => {
   const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useContext(EntityDetailsContext);
+  const {execId} = useEntityDetailsPick('execId');
   const {isClusterAvailable} = useContext(MainContext);
 
   // @ts-ignore
@@ -77,7 +79,7 @@ const loaderBodyStyle = {
 };
 
 const ExecutionDetailsDrawer: React.FC = () => {
-  const {isRowSelected, selectedRow, unselectRow, entity, execId} = useContext(EntityDetailsContext);
+  const {closeExecutionDetails, entity, execId} = useEntityDetailsPick('closeExecutionDetails', 'entity', 'execId');
 
   const isMobile = useIsMobile();
 
@@ -130,16 +132,16 @@ const ExecutionDetailsDrawer: React.FC = () => {
           mask
           maskClosable
           placement="right"
-          open={isRowSelected}
+          open={Boolean(execId)}
           width={drawerWidth}
-          onClose={unselectRow}
+          onClose={closeExecutionDetails}
         >
           <ExecutionDetailsDrawerWrapper
-            $isRowSelected={isRowSelected}
+            $isRowSelected={Boolean(execId)}
             transition={{type: 'just'}}
             drawerWidth={drawerWidth}
           >
-            {selectedRow ? components[entity] : null}
+            {execId ? components[entity] : null}
           </ExecutionDetailsDrawerWrapper>
         </Drawer>
       ) : (
@@ -147,9 +149,9 @@ const ExecutionDetailsDrawer: React.FC = () => {
           bodyStyle={loaderBodyStyle}
           headerStyle={headerStyle}
           closable={false}
-          open={isRowSelected}
+          open={Boolean(execId)}
           width={drawerWidth}
-          onClose={unselectRow}
+          onClose={closeExecutionDetails}
         >
           <LoadingOutlined />
         </Drawer>
