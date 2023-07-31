@@ -1,4 +1,5 @@
 import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useLayoutEffect, useMemo} from 'react';
+import {useLatest} from 'react-use';
 
 import {capitalize, pick} from 'lodash';
 import {StateCreator, StoreApi, createStore as create, useStore as useSelector} from 'zustand';
@@ -142,6 +143,8 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   const useInitializeStore = (initialState?: Partial<T>, deps: any[] = []) => {
     // Build the store
     const store = useMemo(() => createStore(initialState), deps);
+    const storeRef = useLatest(store);
+
     const Provider: StoreContextProvider = useMemo(
       () =>
         ({children}) => {
@@ -150,9 +153,9 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
           if ((useContext(StoreContext) as any)?.store) {
             throw new Error('The store was already injected.');
           }
-          return <StoreContext.Provider value={{store}}>{children}</StoreContext.Provider>;
+          return <StoreContext.Provider value={{store: storeRef.current}}>{children}</StoreContext.Provider>;
         },
-      [store]
+      []
     );
 
     return [Provider, useMemo(() => createStoreHooks(() => store), [store])] as const;

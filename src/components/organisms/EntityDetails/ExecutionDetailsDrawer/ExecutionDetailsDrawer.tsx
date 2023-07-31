@@ -1,5 +1,4 @@
 import React, {useContext, useEffect} from 'react';
-import {usePrevious} from 'react-use';
 
 import {LoadingOutlined} from '@ant-design/icons';
 import {Drawer} from 'antd';
@@ -47,10 +46,12 @@ const ExecutionDetailsDrawer: React.FC = () => {
   const {useGetExecutionDetails} = useEntityDetailsConfig(entity);
   const {data, error} = useGetExecutionDetails(id!, {
     pollingInterval: PollingIntervals.everySecond,
-    skip: !isClusterAvailable || !id || (currentStatus && !['queued', 'pending', 'running'].includes(currentStatus)),
+    skip:
+      !isClusterAvailable ||
+      !id ||
+      (id === currentData?.id && currentStatus && !['queued', 'pending', 'running'].includes(currentStatus)),
   });
-  const changed = useExecutionDetailsSync({data, error});
-  const prevData = usePrevious(data);
+  useExecutionDetailsSync({data: id === data?.id ? data : null, error});
 
   const isMobile = useIsMobile();
 
@@ -70,10 +71,19 @@ const ExecutionDetailsDrawer: React.FC = () => {
   }, [error]);
 
   if (!id) {
-    return null;
+    return (
+      <Drawer
+        bodyStyle={loaderBodyStyle}
+        headerStyle={headerStyle}
+        closable={false}
+        open={false}
+        width={drawerWidth}
+        onClose={close}
+      />
+    );
   }
 
-  if (!data || (changed && !prevData)) {
+  if (!currentData) {
     return (
       <Drawer
         bodyStyle={loaderBodyStyle}
@@ -90,7 +100,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
 
   return (
     <Drawer
-      title={<ExecutionDetailsDrawerHeader data={data} />}
+      title={<ExecutionDetailsDrawerHeader data={currentData} />}
       headerStyle={headerStyle}
       closable={false}
       mask

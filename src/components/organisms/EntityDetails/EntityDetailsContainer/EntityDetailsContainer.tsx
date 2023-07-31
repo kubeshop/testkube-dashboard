@@ -49,13 +49,7 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
     [execId]
   );
   const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] =
-    initializeEntityDetailsStore(
-      {
-        entity,
-        id,
-      },
-      [entity, id, navigate]
-    );
+    initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
@@ -222,7 +216,7 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
       setIsFirstTimeLoading(false);
     }
     setExecutions(rawExecutions);
-  }, [EntityStoreProvider, rawExecutions]);
+  }, [useEntityDetailsSync, rawExecutions]);
 
   useEntityDetailsSync({
     metrics: rawMetrics,
