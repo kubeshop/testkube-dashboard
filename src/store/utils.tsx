@@ -1,4 +1,5 @@
 import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useLayoutEffect, useMemo} from 'react';
+import {useLatest} from 'react-use';
 
 import {capitalize, pick} from 'lodash';
 import {StateCreator, StoreApi, createStore as create, useStore as useSelector} from 'zustand';
@@ -17,7 +18,7 @@ type StoreContext<T> = Context<{store: Store<T>}>;
 type StoreContextProvider = FC<PropsWithChildren<{}>>;
 
 type StoreGet<T> = <U>(selector: (state: T) => U) => U;
-type StoreSync<T> = (data: Partial<T>) => void;
+type StoreSync<T> = (data: Partial<T>) => boolean;
 type StoreSetValue<T, K extends keyof T> = (value: T[K] | ((prev: T[K], state: T) => T[K])) => void;
 type StoreSetFactory<T> = <K extends keyof T>(key: K) => StoreSetValue<T, K>;
 type StoreField<T, K extends keyof T> = [T[K], StoreSetValue<T, K>];
@@ -98,14 +99,16 @@ const createUseStoreSync =
   <T,>(useStore: StoreFn<T>): StoreSync<T> =>
   data => {
     const store = useStore();
+    let state = store.getState();
     useLayoutEffect(() => {
-      const state = store.getState();
+      state = store.getState();
       (Object.keys(data) as (keyof T)[]).forEach(key => {
         if (data[key] !== state[key]) {
           internalSet(store, state, key, data[key]);
         }
       });
     }, [store, data]);
+    return (Object.keys(data) as (keyof T)[]).some(key => data[key] !== state[key]);
   };
 
 const createUseStoreSetter =
@@ -140,6 +143,8 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   const useInitializeStore = (initialState?: Partial<T>, deps: any[] = []) => {
     // Build the store
     const store = useMemo(() => createStore(initialState), deps);
+    const storeRef = useLatest(store);
+
     const Provider: StoreContextProvider = useMemo(
       () =>
         ({children}) => {
@@ -148,9 +153,9 @@ export const connectStore = <T,>(createStore: StoreFactory<T>) => {
           if ((useContext(StoreContext) as any)?.store) {
             throw new Error('The store was already injected.');
           }
-          return <StoreContext.Provider value={{store}}>{children}</StoreContext.Provider>;
+          return <StoreContext.Provider value={{store: storeRef.current}}>{children}</StoreContext.Provider>;
         },
-      [store]
+      []
     );
 
     return [Provider, useMemo(() => createStoreHooks(() => store), [store])] as const;

@@ -1,10 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 
 import {LoadingOutlined} from '@ant-design/icons';
 import {Drawer} from 'antd';
 
-import {ExecutionDetailsContext, MainContext} from '@contexts';
-import {ExecutionDetailsOnDataChangeInterface} from '@contexts/ExecutionDetailsContext';
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
+import {MainContext} from '@contexts';
 
 import useIsMobile from '@hooks/useIsMobile';
 
@@ -12,58 +13,14 @@ import {Entity} from '@models/entity';
 
 import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCall} from '@molecules';
 
-import {useGetTestSuiteExecutionByIdQuery} from '@services/testSuiteExecutions';
-import {useGetTestExecutionByIdQuery} from '@services/tests';
-
 import {useEntityDetailsPick} from '@store/entityDetails';
+import {useExecutionDetailsPick, useExecutionDetailsSync} from '@store/executionDetails';
 
+import {isExecutionFinished} from '@utils/isExecutionFinished';
 import {PollingIntervals} from '@utils/numbers';
 
 import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
 import ExecutionDetailsDrawerHeader from './ExecutionDetailsDrawerHeader';
-
-const TestSuiteExecutionDetailsDataLayer: React.FC = () => {
-  const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useEntityDetailsPick('execId');
-  const {isClusterAvailable} = useContext(MainContext);
-
-  // @ts-ignore
-  // we have checked if execId exists on <ExecutionDetails /> below
-  const {data, isLoading, isFetching, refetch, error} = useGetTestSuiteExecutionByIdQuery(execId, {
-    pollingInterval: PollingIntervals.everySecond,
-    skip: !isClusterAvailable,
-  });
-
-  useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch, error});
-  }, [data, isLoading, isFetching, error]);
-
-  return <></>;
-};
-
-const TestExecutionDetailsDataLayer: React.FC = () => {
-  const {onDataChange} = useContext(ExecutionDetailsContext);
-  const {execId} = useEntityDetailsPick('execId');
-  const {isClusterAvailable} = useContext(MainContext);
-
-  // @ts-ignore
-  // we have checked if execId exists on <ExecutionDetails /> below
-  const {data, isLoading, isFetching, refetch, error} = useGetTestExecutionByIdQuery(execId, {
-    pollingInterval: PollingIntervals.everySecond,
-    skip: !isClusterAvailable,
-  });
-
-  useEffect(() => {
-    onDataChange({data, isLoading, isFetching, refetch, error});
-  }, [data, isLoading, isFetching, error]);
-
-  return <></>;
-};
-
-const dataLayers: Record<Entity, JSX.Element> = {
-  'test-suites': <TestSuiteExecutionDetailsDataLayer />,
-  tests: <TestExecutionDetailsDataLayer />,
-};
 
 const components: Record<Entity, JSX.Element> = {
   'test-suites': <TestSuiteExecutionDetailsTabs />,
@@ -79,30 +36,20 @@ const loaderBodyStyle = {
 };
 
 const ExecutionDetailsDrawer: React.FC = () => {
-  const {closeExecutionDetails, entity, execId} = useEntityDetailsPick('closeExecutionDetails', 'entity', 'execId');
+  const {isClusterAvailable} = useContext(MainContext);
+  const {entity} = useEntityDetailsPick('entity');
+  const {close, id, data} = useExecutionDetailsPick('close', 'id', 'data');
+
+  const {useGetExecutionDetails} = useEntityDetailsConfig(entity);
+  const {data: fetchedData, error} = useGetExecutionDetails(id!, {
+    pollingInterval: PollingIntervals.everySecond,
+    skip: !isClusterAvailable || !id || isExecutionFinished(data),
+  });
+  useExecutionDetailsSync({data: fetchedData?.id === id ? fetchedData : null, error});
 
   const isMobile = useIsMobile();
 
   const drawerWidth = isMobile ? '100vw' : window.innerWidth * 0.85 < 1200 ? '85vw' : '1200px';
-
-  const [infoPanelProps, setInfoPanelProps] = useState<ExecutionDetailsOnDataChangeInterface>({
-    data: null,
-    isLoading: false,
-    isFetching: false,
-    refetch: () => {},
-    error: null,
-  });
-
-  const [error, setError] = useState<any>(null);
-
-  const {data} = infoPanelProps;
-
-  const onDataChange = (args: ExecutionDetailsOnDataChangeInterface) => {
-    if (JSON.stringify(error) !== JSON.stringify(args.error)) {
-      setError(args.error);
-    }
-    setInfoPanelProps(args);
-  };
 
   useEffect(() => {
     if (error) {
@@ -117,46 +64,41 @@ const ExecutionDetailsDrawer: React.FC = () => {
     }
   }, [error]);
 
-  if (!execId) {
-    return <></>;
+  if (!id) {
+    return <Drawer bodyStyle={loaderBodyStyle} headerStyle={headerStyle} closable={false} width={drawerWidth} />;
+  }
+
+  if (!data) {
+    return (
+      <Drawer
+        bodyStyle={loaderBodyStyle}
+        headerStyle={headerStyle}
+        closable={false}
+        width={drawerWidth}
+        onClose={close}
+        open
+      >
+        <LoadingOutlined />
+      </Drawer>
+    );
   }
 
   return (
-    <ExecutionDetailsContext.Provider value={{onDataChange, data}}>
-      {dataLayers[entity]}
-      {data ? (
-        <Drawer
-          title={<ExecutionDetailsDrawerHeader data={data} />}
-          headerStyle={headerStyle}
-          closable={false}
-          mask
-          maskClosable
-          placement="right"
-          open={Boolean(execId)}
-          width={drawerWidth}
-          onClose={closeExecutionDetails}
-        >
-          <ExecutionDetailsDrawerWrapper
-            $isRowSelected={Boolean(execId)}
-            transition={{type: 'just'}}
-            drawerWidth={drawerWidth}
-          >
-            {execId ? components[entity] : null}
-          </ExecutionDetailsDrawerWrapper>
-        </Drawer>
-      ) : (
-        <Drawer
-          bodyStyle={loaderBodyStyle}
-          headerStyle={headerStyle}
-          closable={false}
-          open={Boolean(execId)}
-          width={drawerWidth}
-          onClose={closeExecutionDetails}
-        >
-          <LoadingOutlined />
-        </Drawer>
-      )}
-    </ExecutionDetailsContext.Provider>
+    <Drawer
+      title={<ExecutionDetailsDrawerHeader data={fetchedData} />}
+      headerStyle={headerStyle}
+      closable={false}
+      mask
+      maskClosable
+      placement="right"
+      width={drawerWidth}
+      open
+      onClose={close}
+    >
+      <ExecutionDetailsDrawerWrapper transition={{type: 'just'}} drawerWidth={drawerWidth} $isRowSelected>
+        {components[entity]}
+      </ExecutionDetailsDrawerWrapper>
+    </Drawer>
   );
 };
 

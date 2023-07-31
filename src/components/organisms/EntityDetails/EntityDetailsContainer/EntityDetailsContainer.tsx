@@ -7,6 +7,8 @@ import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDe
 
 import {DashboardContext, MainContext} from '@contexts';
 
+import {useLastCallback} from '@hooks/useLastCallback';
+
 import {Entity} from '@models/entity';
 import {ExecutionMetrics} from '@models/metrics';
 import {Test} from '@models/test';
@@ -16,6 +18,7 @@ import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from
 import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {initializeEntityDetailsStore} from '@store/entityDetails';
+import {initializeExecutionDetailsStore} from '@store/executionDetails';
 
 import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
@@ -33,20 +36,20 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
 
   const {navigate} = useContext(DashboardContext);
 
-  const [StoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] = initializeEntityDetailsStore(
+  const [ExecutionStoreProvider] = initializeExecutionDetailsStore(
     {
-      entity,
-      id,
-      execId,
-      openExecutionDetails: (targetId: string) => {
+      id: execId,
+      open: useLastCallback((targetId: string) => {
         navigate(`/${entity}/executions/${id}/execution/${targetId}`);
-      },
-      closeExecutionDetails: () => {
+      }),
+      close: useLastCallback(() => {
         navigate(`/${entity}/executions/${id}`);
-      },
+      }),
     },
-    [entity, id, navigate]
+    [execId]
   );
+  const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] =
+    initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
@@ -213,21 +216,22 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
       setIsFirstTimeLoading(false);
     }
     setExecutions(rawExecutions);
-  }, [StoreProvider, rawExecutions]);
+  }, [useEntityDetailsSync, rawExecutions]);
 
   useEntityDetailsSync({
-    execId,
     metrics: rawMetrics,
     details: rawDetails,
   });
 
   return (
-    <StoreProvider>
-      <EntityDetailsWrapper>
-        <EntityDetailsContent />
-        <ExecutionDetailsDrawer />
-      </EntityDetailsWrapper>
-    </StoreProvider>
+    <EntityStoreProvider>
+      <ExecutionStoreProvider>
+        <EntityDetailsWrapper>
+          <EntityDetailsContent />
+          <ExecutionDetailsDrawer />
+        </EntityDetailsWrapper>
+      </ExecutionStoreProvider>
+    </EntityStoreProvider>
   );
 };
 

@@ -373,6 +373,13 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 
+  /* Drawer */
+
+  .ant-drawer:not(.ant-drawer-open) .ant-drawer-mask,
+  .ant-drawer:not(.ant-drawer-open) .ant-drawer-content-wrapper {
+    pointer-events: none;
+  }
+
   /* Segmented */
 
   .ant-segmented {
@@ -391,12 +398,12 @@ export const GlobalStyle = createGlobalStyle`
     .ant-steps-item-container {
       .ant-steps-item-content {
         .ant-steps-item-title {
-          color: ${Colors.indigo400}; 
+          color: ${Colors.indigo400};
         }
       }
     }
   }
-  
+
   .ant-steps-item-wait {
     .ant-steps-item-container {
       .ant-steps-item-icon {
@@ -416,12 +423,12 @@ export const GlobalStyle = createGlobalStyle`
       }
     }
   }
-  
+
   .ant-steps-item-finish {
     .ant-steps-item-container {
       .ant-steps-item-content {
         .ant-steps-item-title {
-          color: ${Colors.indigo400}; 
+          color: ${Colors.indigo400};
         }
       }
     }
@@ -444,7 +451,7 @@ export const GlobalStyle = createGlobalStyle`
     width: 10px;
     height: 10px;
   }
-  
+
   /* stylelint-disable-next-line selector-class-pattern */
   .react-flow__attribution {
     display: none;

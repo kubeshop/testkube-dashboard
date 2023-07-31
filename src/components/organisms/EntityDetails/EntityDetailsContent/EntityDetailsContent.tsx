@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Select, Space, Tabs} from 'antd';
 
-import {BaseQueryFn, FetchBaseQueryError, MutationDefinition} from '@reduxjs/toolkit/dist/query';
+import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {ExecutorIcon} from '@atoms';
@@ -69,10 +69,7 @@ const EntityDetailsContent: React.FC = () => {
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();
 
-  const runRequestsMap: Record<
-    Entity,
-    MutationTrigger<MutationDefinition<any, BaseQueryFn<any, unknown, FetchBaseQueryError>, never, void, string>>
-  > = {
+  const runRequestsMap: Record<Entity, MutationTrigger<MutationDefinition<any, any, any, void>>> = {
     'test-suites': runTestSuite,
     tests: runTest,
   };
@@ -208,7 +205,7 @@ const EntityDetailsContent: React.FC = () => {
                   executionDurationP50ms={metrics?.executionDurationP50ms}
                   executionDurationP95ms={metrics?.executionDurationP95ms}
                 />
-                <ExecutionsTable triggerRun={onRunButtonClick} />
+                <ExecutionsTable onRun={onRunButtonClick} />
               </>
             ),
           },

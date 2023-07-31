@@ -8,26 +8,26 @@ import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDe
 import {Skeleton} from '@custom-antd';
 
 import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
+import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
 
 type ExecutionsTableProps = {
-  triggerRun: () => void;
+  onRun: () => void;
 };
 
 const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
-  const {triggerRun} = props;
+  const {onRun} = props;
 
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
-  const {entity, executions, openExecutionDetails, id, execId, isFirstTimeLoading} = useEntityDetailsPick(
+  const {entity, executions, id, isFirstTimeLoading} = useEntityDetailsPick(
     'entity',
     'executions',
-    'openExecutionDetails',
     'id',
-    'execId',
     'isFirstTimeLoading'
   );
+  const {id: execId, open} = useExecutionDetailsPick('id', 'open');
 
   const rowSelection: TableRowSelection<any> = {
     selectedRowKeys: execId ? [execId] : [],
@@ -58,7 +58,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
   }
 
   if (isEmptyExecutions) {
-    return <EmptyExecutionsListContent triggerRun={triggerRun} />;
+    return <EmptyExecutionsListContent onRun={onRun} />;
   }
 
   return (
@@ -75,7 +75,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
       ]}
       onRow={(record: any) => ({
         onClick: () => {
-          openExecutionDetails(record.id);
+          open(record.id);
         },
       })}
       rowSelection={{...rowSelection}}

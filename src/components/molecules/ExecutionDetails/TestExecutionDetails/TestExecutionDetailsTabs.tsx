@@ -1,16 +1,14 @@
-import {lazy, useContext, useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 import {Tabs} from 'antd';
 
 import debounce from 'lodash.debounce';
 
-import {ExecutionDetailsContext} from '@contexts';
-
 import useIsRunning from '@hooks/useIsRunning';
 
 import {Execution} from '@models/execution';
 
-import {CLICommands, ExecutionsVariablesList} from '@molecules';
+import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
 
 import {usePluginSlotList, usePluginState} from '@plugins/pluginHooks';
 import {TestExecutionTabsInterface} from '@plugins/types';
@@ -19,15 +17,14 @@ import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
+import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import {decomposeVariables} from '@utils/variables';
 
 import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
 
-const LogOutput = lazy(() => import('@molecules').then(module => ({default: module.LogOutput})));
-
 const TestExecutionDetailsTabs: React.FC = () => {
-  const {data} = useContext(ExecutionDetailsContext);
+  const {data} = useExecutionDetailsPick('data');
   const {details} = useEntityDetailsPick('details');
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
 
@@ -43,7 +40,6 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const {
     testType,
     executionResult: {status, output},
-    name,
     variables,
     id,
     testName,

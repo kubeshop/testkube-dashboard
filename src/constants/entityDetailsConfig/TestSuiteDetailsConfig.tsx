@@ -1,6 +1,7 @@
 import {EntityDetailsBlueprint} from '@models/entityDetails';
 
 import {
+  useGetTestSuiteExecutionByIdQuery,
   useGetTestSuiteExecutionMetricsQuery,
   useGetTestSuiteExecutionsByTestIdQuery,
 } from '@services/testSuiteExecutions';
@@ -17,6 +18,7 @@ const TestSuiteExecutionsConfig: EntityDetailsBlueprint = {
   defaultStackRoute: '/test-suites',
   useAbortExecution: useAbortTestSuiteExecutionMutation,
   useAbortAllExecutions: useAbortAllTestSuiteExecutionsMutation,
+  useGetExecutionDetails: useGetTestSuiteExecutionByIdQuery,
 };
 
 export default TestSuiteExecutionsConfig;
