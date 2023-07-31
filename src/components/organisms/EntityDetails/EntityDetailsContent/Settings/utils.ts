@@ -11,7 +11,7 @@ export const namingMap: Record<Entity, string> = {
   tests: 'test',
 };
 
-export const updateRequestsMap: Record<Entity, UseMutation<MutationDefinition<any, any, never, void>>> = {
+export const updateRequestsMap: Record<Entity, UseMutation<MutationDefinition<any, any, any, void>>> = {
   'test-suites': useUpdateTestSuiteMutation,
   tests: useUpdateTestMutation,
 };

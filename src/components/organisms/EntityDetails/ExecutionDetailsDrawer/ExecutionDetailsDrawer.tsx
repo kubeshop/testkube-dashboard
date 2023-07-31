@@ -45,7 +45,7 @@ const ExecutionDetailsDrawer: React.FC = () => {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable || !id || isExecutionFinished(data),
   });
-  useExecutionDetailsSync({data: fetchedData, error});
+  useExecutionDetailsSync({data: fetchedData?.id === id ? fetchedData : null, error});
 
   const isMobile = useIsMobile();
 
