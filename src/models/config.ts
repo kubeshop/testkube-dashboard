@@ -4,9 +4,6 @@ type SettingsTabConfigType = {entity: Entity; tab: number | string};
 
 interface ConfigState {
   namespace: string;
-  redirectTarget: {
-    settingsTabConfig: SettingsTabConfigType | null;
-  };
   fullScreenLogOutput: {
     isFullScreenLogOutput: boolean;
     logOutput: string;

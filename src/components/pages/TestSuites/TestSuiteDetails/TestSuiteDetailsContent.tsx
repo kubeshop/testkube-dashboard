@@ -1,5 +1,8 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 
+import {DashboardContext} from '@contexts';
+
+import {useLastCallback} from '@hooks/useLastCallback';
 import useRunEntity from '@hooks/useRunEntity';
 
 import {PageWrapper} from '@organisms';
@@ -15,21 +18,27 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 import TestSuiteExecutionDetailsDrawer from './TestSuiteExecutionDetailsDrawer';
 import TestSuiteSettings from './TestSuiteSettings';
 
-const TestSuiteDetailsContent: FC = () => {
-  const {entity, details, metrics} = useEntityDetailsPick('entity', 'details', 'metrics');
+interface TestSuiteDetailsContentProps {
+  tab?: string;
+}
 
-  const name = details?.name;
-  const description = details?.description;
+const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab}) => {
+  const {id, entity, details, metrics} = useEntityDetailsPick('id', 'entity', 'details', 'metrics');
   const [isRunning, run] = useRunEntity(entity, details);
+
+  const {navigate} = useContext(DashboardContext);
+  const setTab = useLastCallback((nextTab: string) => {
+    navigate(`/test-suites/${id}/${nextTab}`);
+  });
 
   return (
     <EntityDetailsWrapper>
       <PageWrapper>
-        <PageMetadata title={name} description={description} />
+        <PageMetadata title={details?.name} description={details?.description} />
 
         <EntityDetailsContentHeader onRun={run} isRunning={isRunning} />
         <SummaryGrid metrics={metrics} />
-        <EntityDetailsContentTabs onRun={run} settings={<TestSuiteSettings />} />
+        <EntityDetailsContentTabs tab={tab} onTabChange={setTab} onRun={run} settings={<TestSuiteSettings />} />
       </PageWrapper>
       <TestSuiteExecutionDetailsDrawer />
     </EntityDetailsWrapper>

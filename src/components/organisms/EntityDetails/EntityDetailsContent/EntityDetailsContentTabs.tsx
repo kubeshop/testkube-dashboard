@@ -1,4 +1,4 @@
-import {FC, ReactNode, useEffect, useState} from 'react';
+import {FC, ReactNode} from 'react';
 
 import {Tabs} from 'antd';
 
@@ -8,40 +8,35 @@ import {CLICommands, MetricsBarChart} from '@molecules';
 
 import ExecutionsTable from '@organisms/EntityDetails/EntityDetailsContent/ExecutionsTable';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectSettingsTabConfig} from '@redux/reducers/configSlice';
-
 import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
 interface EntityDetailsContentTabsProps {
-  onRun: () => void;
   settings: ReactNode;
+  tab?: string;
+  onTabChange: (tab: string) => void;
+  onRun: () => void;
 }
 
-const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({onRun, settings}) => {
+const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({settings, tab, onTabChange, onRun}) => {
   const {entity, metrics, details} = useEntityDetailsPick('entity', 'metrics', 'details');
-  const settingsTabConfig = useAppSelector(selectSettingsTabConfig);
-  const [activeTabKey, setActiveTabKey] = useState('Executions');
 
-  useEffect(() => {
-    if (settingsTabConfig) {
-      setActiveTabKey('Settings');
-    }
-  }, [settingsTabConfig]);
+  useTrackTimeAnalytics(`${entity}-details`, tab !== 'settings');
+  useTrackTimeAnalytics(`${entity}-settings`, tab === 'settings');
 
-  useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
-  useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
+  if (!details) {
+    return null;
+  }
 
   return (
     <Tabs
-      activeKey={activeTabKey}
-      onChange={setActiveTabKey}
+      activeKey={tab || 'executions'}
+      onChange={onTabChange}
       destroyInactiveTabPane
       items={[
         {
-          key: 'Executions',
+          key: 'executions',
           label: 'Recent executions',
           disabled: !details,
           children: (
@@ -57,13 +52,13 @@ const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({onRun, set
           ),
         },
         {
-          key: 'CLICommands',
+          key: 'commands',
           label: 'CLI Commands',
           disabled: !details,
           children: <CLICommands name={details?.name} bg={Colors.slate800} />,
         },
         {
-          key: 'Settings',
+          key: 'settings',
           label: 'Settings',
           disabled: !details,
           children: settings,

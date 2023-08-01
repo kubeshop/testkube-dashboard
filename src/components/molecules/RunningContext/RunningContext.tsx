@@ -5,13 +5,11 @@ import {Tooltip} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {Text} from '@custom-antd';
 
 import {Entity} from '@models/entity';
-
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import Colors from '@styles/Colors';
 
@@ -27,6 +25,7 @@ export enum RunningContextType {
 }
 
 type RunningContextProps = {
+  id: string;
   type?: RunningContextType;
   context?: string;
   onClose: () => void;
@@ -34,9 +33,9 @@ type RunningContextProps = {
 };
 
 const RunningContext: React.FC<RunningContextProps> = props => {
-  const {type = RunningContextType.default, context = '', onClose, entity} = props;
+  const {id, type = RunningContextType.default, context = '', onClose, entity} = props;
 
-  const {dispatch} = useContext(MainContext);
+  const {navigate} = useContext(DashboardContext);
 
   const runContextMap = {
     'user-ui': 'Manual UI',
@@ -57,7 +56,8 @@ const RunningContext: React.FC<RunningContextProps> = props => {
         <ExternalLink
           onClick={() => {
             onClose();
-            dispatch(setSettingsTabConfig({entity, tab: 'Scheduling'}));
+            // TODO: Open "Scheduling" tab
+            navigate(`/${entity}/${id}/settings`);
           }}
         >
           {context}
@@ -67,7 +67,8 @@ const RunningContext: React.FC<RunningContextProps> = props => {
       'Scheduler'
     ),
     testsuite: context ? (
-      <Link to={`/test-suites/executions/test-suite/execution/${context}`}>{context}</Link>
+      // TODO: Point to actual execution?
+      <Link to={`/test-suites/${context.replace(/^ts-/, '').replace(/-[0-9]+$/, '')}`}>{context}</Link>
     ) : (
       'Test Suite'
     ),

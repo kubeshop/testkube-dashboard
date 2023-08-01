@@ -1,12 +1,10 @@
 import React, {useContext} from 'react';
 
-import {MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
-
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
@@ -19,8 +17,8 @@ type EmptyExecutionsListContentProps = {
 const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = props => {
   const {onRun} = props;
 
-  const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {dispatch} = useContext(MainContext);
+  const {id, entity, details} = useEntityDetailsPick('id', 'entity', 'details');
+  const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
 
   if (!details) {
@@ -62,7 +60,10 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         title="Congrats, now add your tests to this suite"
         description="In order to be able to run your test suite you need to define the tests you want to add."
         buttonText="Add your tests to this suite"
-        onButtonClick={() => dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}))}
+        onButtonClick={() => {
+          // TODO: Open "Tests" tab
+          navigate(`/test-suites/${id}/settings`);
+        }}
         actionType="create"
       >
         <HelpCard isLink link={externalLinks.createTestSuite}>

@@ -3,6 +3,8 @@ import {Outlet, Route, Routes} from 'react-router-dom';
 
 import {NotFound} from '@pages';
 
+import NavigateRewrite from '@src/NavigateRewrite';
+
 import TestSuiteDetails from './TestSuiteDetails';
 import TestSuitesList from './TestSuitesList';
 
@@ -10,9 +12,20 @@ const TestSuites: FC = () => {
   return (
     <>
       <Routes>
+        {/* Backwards compatibility */}
+        <Route path="executions/:id" element={<NavigateRewrite pattern="/test-suites/:id" />} />
+        <Route
+          path="executions/:id/execution/:execId"
+          element={<NavigateRewrite pattern="/test-suites/:id/executions/:execId" />}
+        />
+
         <Route index element={<TestSuitesList />} />
-        <Route path="executions/:id" element={<TestSuiteDetails />}>
-          <Route path="execution/:execId" element={null} />
+        <Route path=":id">
+          <Route index element={<TestSuiteDetails />} />
+          <Route path="executions" element={<TestSuiteDetails tab="executions" />} />
+          <Route path="commands" element={<TestSuiteDetails tab="commands" />} />
+          <Route path="settings" element={<TestSuiteDetails tab="settings" />} />
+          <Route path="executions/:execId" element={<TestSuiteDetails tab="executions" />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {DashboardContext, MainContext, ModalContext} from '@contexts';
+import {DashboardContext, ModalContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
@@ -13,8 +13,6 @@ import {ErrorNotificationConfig} from '@models/notifications';
 
 import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
-
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
@@ -36,7 +34,6 @@ type TestSuiteCreationModalFormValues = {
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm<TestSuiteCreationModalFormValues>();
 
-  const {dispatch} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
   const {closeModal} = useContext(ModalContext);
   const telemetry = useTelemetry();
@@ -59,9 +56,8 @@ const TestSuiteCreationModalContent: React.FC = () => {
         if (res && 'data' in res) {
           telemetry.event('createTestSuite');
 
-          dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
-
-          navigate(`/test-suites/executions/${res.data.metadata.name}`);
+          // TODO: Open "Tests" tab
+          navigate(`/test-suites/${res.data.metadata.name}/settings`);
           closeModal();
         }
       })

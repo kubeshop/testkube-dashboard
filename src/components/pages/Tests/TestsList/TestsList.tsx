@@ -54,7 +54,7 @@ const TestsList: FC = () => {
   }, [data]);
 
   const [abortAll] = useAbortAllTestExecutionsMutation();
-  const onItemClick = useCallback((item: Test) => navigate(`/tests/executions/${item.name}`), []);
+  const onItemClick = useCallback((item: Test) => navigate(`/tests/${item.name}`), []);
   const onItemAbort = useCallback((item: Test) => {
     abortAll({id: item.name})
       .unwrap()

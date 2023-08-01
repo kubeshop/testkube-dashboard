@@ -30,10 +30,10 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
     {
       id: execId,
       open: useLastCallback((targetId: string) => {
-        navigate(`/${entity}/executions/${id}/execution/${targetId}`);
+        navigate(`/${entity}/${id}/executions/${targetId}`);
       }),
       close: useLastCallback(() => {
-        navigate(`/${entity}/executions/${id}`);
+        navigate(`/${entity}/${id}`);
       }),
     },
     [execId]

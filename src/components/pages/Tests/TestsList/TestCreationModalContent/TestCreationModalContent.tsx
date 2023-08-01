@@ -73,7 +73,7 @@ const TestCreationModalContent: React.FC = () => {
       if ('data' in res) {
         telemetry.event('createTest', {type: res.data.spec?.type});
 
-        navigate(`/tests/executions/${res.data.metadata.name}`);
+        navigate(`/tests/${res.data.metadata.name}`);
         closeModal();
       }
     });

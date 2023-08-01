@@ -6,12 +6,16 @@ import ExecutionDetailsLayer from '@organisms/EntityDetails/ExecutionDetailsLaye
 
 import TestDetailsContent from './TestDetailsContent';
 
-const TestDetails: FC = () => {
+interface TestDetailsProps {
+  tab?: string;
+}
+
+const TestDetails: FC<TestDetailsProps> = ({tab}) => {
   const {id, execId} = useParams();
   return (
     <EntityDetailsLayer entity="tests" id={id!} execId={execId}>
       <ExecutionDetailsLayer entity="tests" id={id!} execId={execId}>
-        <TestDetailsContent />
+        <TestDetailsContent tab={tab} />
       </ExecutionDetailsLayer>
     </EntityDetailsLayer>
   );
