@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useMemo, useRef, useState} from 'react';
 
 import {Tabs} from 'antd';
 
@@ -16,6 +16,8 @@ import {TestExecutionTabsInterface} from '@plugins/types';
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
+import PluginsContext from '@src/plugins/PluginsContext';
+
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
@@ -26,7 +28,12 @@ import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
 const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useExecutionDetailsPick('data');
   const {details} = useEntityDetailsPick('details');
+  const {scope} = useContext(PluginsContext);
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
+  const bannerElement: JSX.Element = useMemo(
+    () => scope.getSlot('executionDetailsBanner')[0].value,
+    [scope.getSlot('executionDetailsBanner')]
+  );
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
@@ -150,6 +157,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   return (
     <div ref={ref}>
+      {/* {bannerElement} */}
       <Tabs items={items} />
     </div>
   );

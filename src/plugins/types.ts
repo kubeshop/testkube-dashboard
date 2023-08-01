@@ -10,6 +10,7 @@ export interface Plugin {
 
 export interface SlotMetaData {
   order?: number;
+  visibile?: (params: any) => boolean;
 }
 
 export interface TestExecutionTabsInterface {
