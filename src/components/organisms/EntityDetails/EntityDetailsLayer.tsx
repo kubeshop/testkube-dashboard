@@ -1,13 +1,10 @@
-import React, {useContext, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import React, {FC, PropsWithChildren, useContext, useEffect} from 'react';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
 import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
 import {DashboardContext, MainContext} from '@contexts';
-
-import {useLastCallback} from '@hooks/useLastCallback';
 
 import {Entity} from '@models/entity';
 import {ExecutionMetrics} from '@models/metrics';
@@ -18,36 +15,21 @@ import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from
 import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {initializeEntityDetailsStore} from '@store/entityDetails';
-import {initializeExecutionDetailsStore} from '@store/executionDetails';
 
 import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
-import EntityDetailsContent from '../EntityDetailsContent';
-import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
+interface EntityDetailsLayerProps {
+  entity: Entity;
+  id: string;
+  execId?: string;
+}
 
-import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
-
-const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
-  const {entity} = props;
+const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({entity, id, execId, children}) => {
   const {useGetEntityDetails, useGetMetrics, useGetExecutions} = useEntityDetailsConfig(entity);
-
-  const {id, execId} = useParams();
 
   const {navigate} = useContext(DashboardContext);
 
-  const [ExecutionStoreProvider] = initializeExecutionDetailsStore(
-    {
-      id: execId,
-      open: useLastCallback((targetId: string) => {
-        navigate(`/${entity}/executions/${id}/execution/${targetId}`);
-      }),
-      close: useLastCallback(() => {
-        navigate(`/${entity}/executions/${id}`);
-      }),
-    },
-    [execId]
-  );
   const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] =
     initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
 
@@ -222,16 +204,7 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
     details: rawDetails,
   });
 
-  return (
-    <EntityStoreProvider>
-      <ExecutionStoreProvider>
-        <EntityDetailsWrapper>
-          <EntityDetailsContent />
-          <ExecutionDetailsDrawer />
-        </EntityDetailsWrapper>
-      </ExecutionStoreProvider>
-    </EntityStoreProvider>
-  );
+  return <EntityStoreProvider>{children}</EntityStoreProvider>;
 };
 
-export default EntityDetailsContainer;
+export default EntityDetailsLayer;
