@@ -13,6 +13,7 @@ import Colors from '@styles/Colors';
 import {NotificationContent} from '../Notification';
 
 import {
+  HeaderAction,
   StyledChildren,
   StyledContainer,
   StyledErrorsContainer,
@@ -20,12 +21,14 @@ import {
   StyledFooterButtonsContainer,
   StyledFooterText,
   StyledHeader,
+  StyledHeaderContainer,
   StyledNotificationContainer,
 } from './ConfigurationCard.styled';
 
 type ConfigurationCardProps = {
   title: string;
   description: string | ReactElement;
+  headerAction?: ReactElement;
   isWarning?: boolean;
   footerText?: React.ReactNode;
   onConfirm?: () => Promise<ErrorNotification | void> | void;
@@ -42,6 +45,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
   const {
     title,
     description,
+    headerAction,
     isWarning = false,
     onConfirm,
     onCancel,
@@ -60,14 +64,17 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
 
   return (
     <StyledContainer isWarning={isWarning}>
-      <StyledHeader ref={topRef}>
-        <Text className="regular big" color={Colors.slate50}>
-          {title}
-        </Text>
-        <Text className="regular middle" color={Colors.slate400}>
-          {description}
-        </Text>
-      </StyledHeader>
+      <StyledHeaderContainer ref={topRef}>
+        <StyledHeader>
+          <Text className="regular big" color={Colors.slate50}>
+            {title}
+          </Text>
+          <Text className="regular middle" color={Colors.slate400}>
+            {description}
+          </Text>
+        </StyledHeader>
+        {headerAction && <HeaderAction>{headerAction}</HeaderAction>}
+      </StyledHeaderContainer>
       {children ? (
         <>
           <StyledErrorsContainer>
