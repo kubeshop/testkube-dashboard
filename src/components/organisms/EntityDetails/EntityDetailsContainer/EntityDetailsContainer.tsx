@@ -68,11 +68,10 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
     pollingInterval: PollingIntervals.everyTwoSeconds,
     skip: !isClusterAvailable,
   });
-  const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics({
-    id,
-    last: daysFilterValue,
-    skip: !isClusterAvailable,
-  });
+  const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
+    {id, last: daysFilterValue},
+    {skip: !isClusterAvailable}
+  );
 
   const onWebSocketData = (wsData: WSDataWithTestExecution | WSDataWithTestSuiteExecution) => {
     try {
