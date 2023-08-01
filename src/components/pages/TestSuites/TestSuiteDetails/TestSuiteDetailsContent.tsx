@@ -13,6 +13,7 @@ import PageMetadata from '@pages/PageMetadata';
 import {useEntityDetailsPick} from '@store/entityDetails';
 
 import TestSuiteExecutionDetailsDrawer from './TestSuiteExecutionDetailsDrawer';
+import TestSuiteSettings from './TestSuiteSettings';
 
 const TestSuiteDetailsContent: FC = () => {
   const {entity, details, metrics} = useEntityDetailsPick('entity', 'details', 'metrics');
@@ -28,7 +29,10 @@ const TestSuiteDetailsContent: FC = () => {
 
         <EntityDetailsContentHeader onRun={run} isRunning={isRunning} />
         <SummaryGrid metrics={metrics} />
-        <EntityDetailsContentTabs onRun={run} />
+        <EntityDetailsContentTabs
+          onRun={run}
+          settings={<TestSuiteSettings />}
+        />
       </PageWrapper>
       <TestSuiteExecutionDetailsDrawer />
     </EntityDetailsWrapper>

@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, ReactNode, useEffect, useState} from 'react';
 
 import {Tabs} from 'antd';
 
@@ -7,7 +7,6 @@ import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 import {CLICommands, MetricsBarChart} from '@molecules';
 
 import ExecutionsTable from '@organisms/EntityDetails/EntityDetailsContent/ExecutionsTable';
-import Settings from '@organisms/EntityDetails/EntityDetailsContent/Settings';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectSettingsTabConfig} from '@redux/reducers/configSlice';
@@ -18,9 +17,10 @@ import Colors from '@styles/Colors';
 
 interface EntityDetailsContentTabsProps {
   onRun: () => void;
+  settings: ReactNode;
 }
 
-const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({onRun}) => {
+const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({onRun, settings}) => {
   const {entity, metrics, details} = useEntityDetailsPick('entity', 'metrics', 'details');
   const settingsTabConfig = useAppSelector(selectSettingsTabConfig);
   const [activeTabKey, setActiveTabKey] = useState('Executions');
@@ -66,7 +66,7 @@ const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({onRun}) =>
           key: 'Settings',
           label: 'Settings',
           disabled: !details,
-          children: <Settings />,
+          children: settings,
         },
       ]}
     />
