@@ -54,7 +54,7 @@ const EntityDetailsContentHeader: FC<EntityDetailsContentHeaderProps> = ({onRun,
   };
 
   // TODO: Detect with /results/v1/tests/<name>/metrics?last=99999999&limit=1
-  const isMetricsEmpty = !metrics?.executions || !metrics?.executions.length;
+  const isMetricsEmpty = !metrics?.executions?.length;
 
   return (
     <PageHeader

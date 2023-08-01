@@ -68,15 +68,12 @@ const EntityDetailsContent: React.FC = () => {
       });
   };
 
-  // TODO: Detect with /results/v1/tests/<name>/metrics?last=99999999&limit=1
-  const isMetricsEmpty = !metrics?.executions || !metrics?.executions.length;
-
   return (
     <PageWrapper>
       <PageMetadata title={name} description={description} />
 
       <EntityDetailsContentHeader onRun={onRunButtonClick} isRunning={isRunning} />
-      {!isMetricsEmpty ? <SummaryGrid metrics={metrics} /> : null}
+      <SummaryGrid metrics={metrics} />
       <EntityDetailsContentTabs onRun={onRunButtonClick} />
     </PageWrapper>
   );
