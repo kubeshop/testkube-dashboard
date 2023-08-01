@@ -150,7 +150,7 @@ const EntityDetailsContent: React.FC = () => {
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
         extra={[
-          isMetricsEmpty ? (
+          !isMetricsEmpty ? (
             <Select
               placeholder="Last 7/30/90/Year/All days"
               options={filterOptions}
