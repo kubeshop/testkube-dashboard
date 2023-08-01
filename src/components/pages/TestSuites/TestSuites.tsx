@@ -12,7 +12,7 @@ const TestSuites: FC = () => {
       <Routes>
         <Route index element={<TestSuitesList />} />
         <Route path="executions/:id" element={<TestSuiteDetails />}>
-          <Route path="execution/:execId" />
+          <Route path="execution/:execId" element={null} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

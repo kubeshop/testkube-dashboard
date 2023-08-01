@@ -12,7 +12,7 @@ const Tests: FC = () => {
       <Routes>
         <Route index element={<TestsList />} />
         <Route path="executions/:id" element={<TestDetails />}>
-          <Route path="execution/:execId" />
+          <Route path="execution/:execId" element={null} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
