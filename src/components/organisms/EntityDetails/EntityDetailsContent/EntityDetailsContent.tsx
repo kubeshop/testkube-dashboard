@@ -137,6 +137,7 @@ const EntityDetailsContent: React.FC = () => {
       }
     : {};
 
+  // TODO: Detect with /results/v1/tests/<name>/metrics?last=99999999&limit=1
   const isMetricsEmpty = !metrics?.executions || !metrics?.executions.length;
 
   const isPageDisabled = !name;
@@ -149,7 +150,7 @@ const EntityDetailsContent: React.FC = () => {
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
         extra={[
-          !isMetricsEmpty ? (
+          isMetricsEmpty ? (
             <Select
               placeholder="Last 7/30/90/Year/All days"
               options={filterOptions}
