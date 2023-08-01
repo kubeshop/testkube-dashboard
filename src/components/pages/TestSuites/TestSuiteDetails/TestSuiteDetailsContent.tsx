@@ -29,10 +29,7 @@ const TestSuiteDetailsContent: FC = () => {
 
         <EntityDetailsContentHeader onRun={run} isRunning={isRunning} />
         <SummaryGrid metrics={metrics} />
-        <EntityDetailsContentTabs
-          onRun={run}
-          settings={<TestSuiteSettings />}
-        />
+        <EntityDetailsContentTabs onRun={run} settings={<TestSuiteSettings />} />
       </PageWrapper>
       <TestSuiteExecutionDetailsDrawer />
     </EntityDetailsWrapper>
