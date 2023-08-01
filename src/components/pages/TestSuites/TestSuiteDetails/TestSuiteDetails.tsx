@@ -4,8 +4,9 @@ import {useParams} from 'react-router-dom';
 import {EntityDetailsWrapper} from '@organisms/EntityDetails/EntityDetailsContainer/EntityDetailsContainer.styled';
 import EntityDetailsContent from '@organisms/EntityDetails/EntityDetailsContent';
 import EntityDetailsLayer from '@organisms/EntityDetails/EntityDetailsLayer';
-import ExecutionDetailsDrawer from '@organisms/EntityDetails/ExecutionDetailsDrawer';
 import ExecutionDetailsLayer from '@organisms/EntityDetails/ExecutionDetailsLayer';
+
+import TestSuiteExecutionDetailsDrawer from './TestSuiteExecutionDetailsDrawer';
 
 const TestSuiteDetails: FC = () => {
   const {id, execId} = useParams();
@@ -14,7 +15,7 @@ const TestSuiteDetails: FC = () => {
       <ExecutionDetailsLayer entity="test-suites" id={id!} execId={execId}>
         <EntityDetailsWrapper>
           <EntityDetailsContent />
-          <ExecutionDetailsDrawer />
+          <TestSuiteExecutionDetailsDrawer />
         </EntityDetailsWrapper>
       </ExecutionDetailsLayer>
     </EntityDetailsLayer>
