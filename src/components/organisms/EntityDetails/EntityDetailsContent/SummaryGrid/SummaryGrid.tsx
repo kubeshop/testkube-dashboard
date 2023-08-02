@@ -7,7 +7,7 @@ import {Metrics} from '@models/metrics';
 import {formatDuration} from '@utils/formatDate';
 
 import {SummaryGridWrapper} from './SummaryGrid.styled';
-import SummaryGridItem from './SummaryGridItem'
+import SummaryGridItem from './SummaryGridItem';
 
 type SummaryGridProps = {
   metrics?: Metrics;
