@@ -69,7 +69,7 @@ const TestSuitesList: FC = () => {
       onItemAbort={onItemAbort}
       entity="test-suites"
       pageTitle="Test Suites"
-      pageTitleAddon={usePluginSlot('testSuiteTitleIcon')}
+      pageTitleAddon={usePluginSlot('testSuiteTitleAddon')}
       addEntityButtonText="Add a new test suite"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTestSuites}
