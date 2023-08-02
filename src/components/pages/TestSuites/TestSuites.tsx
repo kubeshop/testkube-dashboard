@@ -3,7 +3,7 @@ import {Outlet, Route, Routes} from 'react-router-dom';
 
 import {NotFound} from '@pages';
 
-import NavigateRewrite from '@src/NavigateRewrite';
+import DashboardRewrite from '@src/DashboardRewrite';
 
 import TestSuiteDetails from './TestSuiteDetails';
 import TestSuitesList from './TestSuitesList';
@@ -12,12 +12,11 @@ const TestSuites: FC = () => {
   return (
     <>
       <Routes>
-        {/* TODO: Check if it works in Cloud Context */}
         {/* Backwards compatibility */}
-        <Route path="executions/:id" element={<NavigateRewrite pattern="/test-suites/:id" />} />
+        <Route path="executions/:id" element={<DashboardRewrite pattern="/test-suites/:id" />} />
         <Route
           path="executions/:id/execution/:execId"
-          element={<NavigateRewrite pattern="/test-suites/:id/executions/:execId" />}
+          element={<DashboardRewrite pattern="/test-suites/:id/executions/:execId" />}
         />
 
         <Route index element={<TestSuitesList />} />
