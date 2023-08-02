@@ -16,7 +16,7 @@ import PageMetadata from '@pages/PageMetadata';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
-import TestExecutionDrawer from './TestExecutionDrawer';
+import TestExecutionDrawer from './TestExecution/TestExecutionDrawer';
 import TestSettings from './TestSettings';
 
 interface TestDetailsContentProps {

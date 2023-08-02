@@ -8,14 +8,14 @@ import {ArtifactsList} from '@molecules';
 
 import {useGetTestExecutionArtifactsQuery} from '@services/tests';
 
-type TestExecutionDetailsArtifactsProps = {
+type TestExecutionArtifactsProps = {
   id: string;
   testName?: string;
   testSuiteName?: string;
   startTime?: string;
 };
 
-const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps> = props => {
+const TestExecutionArtifacts: React.FC<TestExecutionArtifactsProps> = props => {
   const {id, testName, testSuiteName, startTime} = props;
 
   const {isClusterAvailable} = useContext(MainContext);
@@ -44,4 +44,4 @@ const TestExecutionDetailsArtifacts: React.FC<TestExecutionDetailsArtifactsProps
   );
 };
 
-export default TestExecutionDetailsArtifacts;
+export default TestExecutionArtifacts;

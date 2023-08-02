@@ -9,7 +9,6 @@ export {default as EntityGrid} from './EntityGrid';
 export {notificationCall, NotificationContent} from './Notification';
 export {default as EndpointModal} from './EndpointModal';
 export {default as ConfigurationCard} from './ConfigurationCard';
-export {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs} from './ExecutionDetails';
 export {default as ArtifactsList} from './ArtifactsList';
 export {default as HelpCard} from './HelpCard';
 export {default as EmptyListContent} from './EmptyListContent';

@@ -21,9 +21,9 @@ import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import {decomposeVariables} from '@utils/variables';
 
-import TestExecutionDetailsArtifacts from './TestExecutionDetailsArtifacts';
+import TestExecutionArtifacts from './TestExecutionArtifacts';
 
-const TestExecutionDetailsTabs: React.FC = () => {
+const TestExecutionTabs: React.FC = () => {
   const {data} = useExecutionDetailsPick('data');
   const {details} = useEntityDetailsPick('details');
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
@@ -89,7 +89,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     }
   }, [isRunning, id]);
 
-  const defaultExecutionDetailsTabs = [
+  const defaultExecutionTabs = [
     {
       value: {
         key: 'LogOutputPane',
@@ -109,7 +109,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
             key: 'ArtifactsPane',
             label: 'Artifacts',
             children: (
-              <TestExecutionDetailsArtifacts
+              <TestExecutionArtifacts
                 id={id}
                 testName={testName}
                 testSuiteName={testSuiteName}
@@ -146,7 +146,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
       : null,
   ].filter(Boolean);
 
-  const items = usePluginSlotList('testExecutionTabs', defaultExecutionDetailsTabs);
+  const items = usePluginSlotList('testExecutionTabs', defaultExecutionTabs);
 
   return (
     <div ref={ref}>
@@ -155,4 +155,4 @@ const TestExecutionDetailsTabs: React.FC = () => {
   );
 };
 
-export default TestExecutionDetailsTabs;
+export default TestExecutionTabs;
