@@ -1,7 +1,6 @@
 import {FC} from 'react';
 
 import ExecutionDrawer from '@organisms/EntityDetails/ExecutionDrawer';
-
 import ExecutionDrawerHeader from '@organisms/EntityDetails/ExecutionDrawer/ExecutionDrawerHeader';
 
 import {useExecutionDetailsPick} from '@store/executionDetails';
