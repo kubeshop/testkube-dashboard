@@ -25,6 +25,7 @@ export const TagContainer = styled.div`
       color: ${Colors.lime300};
     }
   }
+
   &.warning {
     background: ${Colors.yellow900};
     border: 1px solid ${Colors.yellow600};
@@ -33,6 +34,7 @@ export const TagContainer = styled.div`
       color: ${Colors.yellow300};
     }
   }
+
   &.error {
     background: ${Colors.pink900};
     border: 1px solid ${Colors.pink600};
@@ -41,6 +43,7 @@ export const TagContainer = styled.div`
       color: ${Colors.pink300};
     }
   }
+
   &.info {
     background: ${Colors.sky900};
     border: 1px solid ${Colors.sky600};
