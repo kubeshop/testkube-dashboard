@@ -16,7 +16,7 @@ import PageMetadata from '@pages/PageMetadata';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
-import TestSuiteExecutionDetailsDrawer from './TestSuiteExecutionDetailsDrawer';
+import TestSuiteExecutionDrawer from './TestSuiteExecutionDrawer';
 import TestSuiteSettings from './TestSuiteSettings';
 
 interface TestSuiteDetailsContentProps {
@@ -57,7 +57,7 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
           settings={<TestSuiteSettings active={settingsTab} onChange={setSettingsTab} />}
         />
       </PageWrapper>
-      <TestSuiteExecutionDetailsDrawer />
+      <TestSuiteExecutionDrawer />
     </EntityDetailsWrapper>
   );
 };

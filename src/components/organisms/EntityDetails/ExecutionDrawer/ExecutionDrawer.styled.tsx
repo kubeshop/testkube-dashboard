@@ -1,7 +1,7 @@
 import {motion} from 'framer-motion';
 import styled from 'styled-components';
 
-export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected: boolean; drawerWidth: string}>`
+export const ExecutionDrawerWrapper = styled(motion.div)<{$isRowSelected: boolean; drawerWidth: string}>`
   position: relative;
 
   display: flex;

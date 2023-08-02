@@ -5,7 +5,7 @@ import {Drawer} from 'antd';
 
 import useIsMobile from '@hooks/useIsMobile';
 
-import {ExecutionDetailsDrawerWrapper} from './ExecutionDetailsDrawer.styled';
+import {ExecutionDrawerWrapper} from './ExecutionDrawer.styled';
 
 const headerStyle = {borderBottom: 0, padding: '40px 30px 0'};
 const loaderBodyStyle = {
@@ -15,14 +15,14 @@ const loaderBodyStyle = {
   fontSize: '48px',
 };
 
-interface ExecutionDetailsDrawerProps {
+interface ExecutionDrawerProps {
   header: ReactElement;
   open: boolean;
   loading?: boolean;
   onClose: () => void;
 }
 
-const ExecutionDetailsDrawer: FC<PropsWithChildren<ExecutionDetailsDrawerProps>> = ({
+const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({
   header,
   open,
   loading,
@@ -64,11 +64,11 @@ const ExecutionDetailsDrawer: FC<PropsWithChildren<ExecutionDetailsDrawerProps>>
       open
       onClose={onClose}
     >
-      <ExecutionDetailsDrawerWrapper transition={{type: 'just'}} drawerWidth={drawerWidth} $isRowSelected>
+      <ExecutionDrawerWrapper transition={{type: 'just'}} drawerWidth={drawerWidth} $isRowSelected>
         {children}
-      </ExecutionDetailsDrawerWrapper>
+      </ExecutionDrawerWrapper>
     </Drawer>
   );
 };
 
-export default ExecutionDetailsDrawer;
+export default ExecutionDrawer;

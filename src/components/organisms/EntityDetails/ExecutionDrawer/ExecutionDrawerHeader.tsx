@@ -22,9 +22,9 @@ import Colors from '@styles/Colors';
 
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
-import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from './ExecutionDetailsDrawer.styled';
+import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from './ExecutionDrawer.styled';
 
-const ExecutionDetailsDrawerHeader: FC = () => {
+const ExecutionDrawerHeader: FC = () => {
   const {entity, id} = useEntityDetailsPick('entity', 'id');
   const {close, data, id: execId} = useExecutionDetailsPick('close', 'data', 'id');
   const {useAbortExecution} = useEntityDetailsConfig(entity);
@@ -102,4 +102,4 @@ const ExecutionDetailsDrawerHeader: FC = () => {
   );
 };
 
-export default ExecutionDetailsDrawerHeader;
+export default ExecutionDrawerHeader;

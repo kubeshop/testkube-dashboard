@@ -16,7 +16,7 @@ import PageMetadata from '@pages/PageMetadata';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
-import TestExecutionDetailsDrawer from './TestExecutionDetailsDrawer';
+import TestExecutionDrawer from './TestExecutionDrawer';
 import TestSettings from './TestSettings';
 
 interface TestDetailsContentProps {
@@ -57,7 +57,7 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
           settings={<TestSettings active={settingsTab} onChange={setSettingsTab} />}
         />
       </PageWrapper>
-      <TestExecutionDetailsDrawer />
+      <TestExecutionDrawer />
     </EntityDetailsWrapper>
   );
 };
