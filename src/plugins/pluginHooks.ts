@@ -10,10 +10,7 @@ export const usePluginState = <T>(name: string) => {
   return pair;
 };
 
-export const useSinglePluginSlot = (name: string) => {
-  const {scope} = useContext(PluginsContext);
-  return scope.getSlot(name)[0]?.value;
-};
+export const usePluginSlot = (name: string) => usePluginSlotList(name)[0];
 
 export const usePluginSlotList = (name: string, defaults: any[] = []) => {
   const {scope} = useContext(PluginsContext);

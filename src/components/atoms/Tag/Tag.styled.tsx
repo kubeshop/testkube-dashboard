@@ -8,6 +8,7 @@ export const TagContainer = styled.div`
   align-items: center;
   gap: 8px;
   height: 24px;
+  cursor: default;
 
   border-radius: 4px;
   background: ${Colors.slate800};
