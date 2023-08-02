@@ -12,6 +12,7 @@ const Tests: FC = () => {
   return (
     <>
       <Routes>
+        {/* TODO: Check if it works in Cloud Context */}
         {/* Backwards compatibility */}
         <Route path="executions/:id" element={<NavigateRewrite pattern="/tests/:id" />} />
         <Route
