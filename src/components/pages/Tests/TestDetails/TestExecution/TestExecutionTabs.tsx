@@ -1,10 +1,6 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect} from 'react';
 
 import {Tabs} from 'antd';
-
-import debounce from 'lodash.debounce';
-
-import useIsRunning from '@hooks/useIsRunning';
 
 import {Execution} from '@models/execution';
 
@@ -24,18 +20,11 @@ import {decomposeVariables} from '@utils/variables';
 import TestExecutionArtifacts from './TestExecutionArtifacts';
 
 const TestExecutionTabs: React.FC = () => {
-  const {data} = useExecutionDetailsPick('data');
+  const {data: execution} = useExecutionDetailsPick('data') as {data: Execution};
   const {details} = useEntityDetailsPick('details');
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
-
-  const ref = useRef<HTMLDivElement>(null);
-
-  const [oldScroll, setOldScroll] = useState(0);
-  const [isAutoScrolled, setAutoScrolledState] = useState(false);
-
-  const execution = data as Execution;
 
   const {
     testType,
@@ -47,7 +36,7 @@ const TestExecutionTabs: React.FC = () => {
     startTime,
   } = execution;
 
-  const isRunning = useIsRunning(status);
+  const isRunning = status === 'running';
 
   const decomposedVars = decomposeVariables(variables || {});
 
@@ -57,46 +46,12 @@ const TestExecutionTabs: React.FC = () => {
     setTestExecutionTabsData({execution, test: details});
   }, [execution, details]);
 
-  useEffect(() => {
-    if (ref && ref.current) {
-      ref.current.onscroll = debounce(() => {
-        setOldScroll(prev => {
-          if (ref && ref.current) {
-            if (prev > ref.current?.scrollTop) {
-              setAutoScrolledState(false);
-            } else {
-              setAutoScrolledState(true);
-            }
-
-            return ref.current?.scrollTop;
-          }
-
-          return prev;
-        });
-      }, 50);
-    }
-  }, [oldScroll]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setAutoScrolledState(true);
-    }, 500);
-  }, [id]);
-
-  useEffect(() => {
-    if (isRunning) {
-      setAutoScrolledState(true);
-    }
-  }, [isRunning, id]);
-
   const defaultExecutionTabs = [
     {
       value: {
         key: 'LogOutputPane',
         label: 'Log Output',
-        children: (
-          <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />
-        ),
+        children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} />,
       },
       metadata: {
         order: Infinity,
@@ -148,11 +103,7 @@ const TestExecutionTabs: React.FC = () => {
 
   const items = usePluginSlotList('testExecutionTabs', defaultExecutionTabs);
 
-  return (
-    <div ref={ref}>
-      <Tabs items={items} />
-    </div>
-  );
+  return <Tabs items={items} />;
 };
 
 export default TestExecutionTabs;

@@ -4,6 +4,8 @@ import useWebSocket from 'react-use-websocket';
 
 import Ansi from 'ansi-to-react';
 
+import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
+
 import {LogAction} from '@models/log';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
@@ -23,10 +25,10 @@ export type LogOutputProps = {
   actions?: LogAction[];
   isRunning?: boolean;
   title?: string;
-  isAutoScrolled?: boolean;
   initialLines?: number;
 };
 
+// TODO: Add auto-scroll
 const LogOutput: React.FC<LogOutputProps> = props => {
   const dispatch = useAppDispatch();
 
@@ -36,12 +38,12 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     actions = ['copy', 'fullscreen'],
     isRunning,
     title,
-    isAutoScrolled,
     initialLines = 300,
   } = props;
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isScrolledToBottom = useScrolledToBottom(containerRef.current);
 
   const wsRoot = useWsEndpoint();
 
@@ -52,26 +54,12 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   const [expanded, setExpanded] = useState(false);
   const lines = useCountLines(logs);
-  const visibleLogs = useLastLines(logs, expanded ? Infinity : initialLines);
-
-  const scrollToBottom: (behavior?: ScrollBehavior) => void = (behavior = 'smooth') => {
-    if (bottomRef && bottomRef.current) {
-      bottomRef.current.scrollIntoView({behavior, block: 'end'});
-    }
-  };
+  const visibleLogs = useLastLines(logs, expanded || isRunning ? Infinity : initialLines);
 
   const onExpand = useCallback((event: MouseEvent) => {
     event.preventDefault();
     setExpanded(true);
   }, []);
-
-  const smoothScrollIfAutoscroll = useCallback(() => {
-    if (!isAutoScrolled) {
-      return;
-    }
-
-    scrollToBottom();
-  }, [isAutoScrolled]);
 
   // TODO: Consider getting token different way than using the one from RTK
   const {value: token, loading: tokenLoading} = useAsync(getRtkIdToken);
@@ -133,12 +121,14 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   }, [logs, isFullScreenLogOutput]);
 
   useEffect(() => {
-    smoothScrollIfAutoscroll();
+    if (containerRef.current && isScrolledToBottom) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight - containerRef.current.clientHeight;
+    }
   }, [logs]);
 
   useEffect(() => {
     setTimeout(() => {
-      scrollToBottom('auto');
+      bottomRef?.current?.scrollIntoView({behavior: 'auto', block: 'end'});
     }, 100);
   }, [executionId]);
 
