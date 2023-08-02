@@ -10,6 +10,8 @@ export const usePluginState = <T>(name: string) => {
   return pair;
 };
 
+export const usePluginSlot = (name: string) => usePluginSlotList(name)[0];
+
 export const usePluginSlotList = (name: string, defaults: any[] = []) => {
   const {scope} = useContext(PluginsContext);
   const elements = useMemo(() => orderArray([...defaults, ...scope.getSlot(name)]), [defaults, scope.getSlot(name)]);

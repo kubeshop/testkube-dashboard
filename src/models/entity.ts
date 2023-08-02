@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 
 import {ModalConfig} from '@contexts/ModalContext';
 
@@ -11,6 +11,8 @@ export type Entity = 'test-suites' | 'tests';
 
 export type EntityListBlueprint = {
   pageTitle: string;
+
+  pageTitleAddon?: ReactNode;
 
   pageDescription?: any;
 

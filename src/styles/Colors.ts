@@ -38,6 +38,7 @@ enum Colors {
   lime300 = '#BEF264',
 
   yellow900 = '#713F12',
+  yellow600 = '#CA8A04',
   yellow500 = '#EAB308',
   yellow400 = '#FACC15',
   yellow300 = '#FDE047',
