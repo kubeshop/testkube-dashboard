@@ -59,7 +59,7 @@ const EntityDetailsContentHeader: FC<EntityDetailsContentHeaderProps> = ({onRun,
   return (
     <PageHeader
       onBack={() => navigate(defaultStackRoute)}
-      title={details?.name || 'Loading...'}
+      title={details!.name}
       extra={[
         !isMetricsEmpty ? (
           <Select
@@ -89,7 +89,7 @@ const EntityDetailsContentHeader: FC<EntityDetailsContentHeaderProps> = ({onRun,
       ]}
       className="testkube-pageheader"
       avatar={
-        details?.type
+        details!.type
           ? {
               icon: (
                 <EntityDetailsHeaderIcon>
@@ -101,8 +101,8 @@ const EntityDetailsContentHeader: FC<EntityDetailsContentHeaderProps> = ({onRun,
       }
     >
       <Space size={10} direction="vertical">
-        {details?.labels ? <LabelsList labels={details.labels} /> : null}
-        {details?.description ? (
+        {details!.labels ? <LabelsList labels={details.labels} /> : null}
+        {details!.description ? (
           <Text color={Colors.slate400} className="middle">
             {details.description}
           </Text>

@@ -25,10 +25,6 @@ const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({settings, 
   useTrackTimeAnalytics(`${entity}-details`, tab !== 'settings');
   useTrackTimeAnalytics(`${entity}-settings`, tab === 'settings');
 
-  if (!details) {
-    return null;
-  }
-
   return (
     <Tabs
       activeKey={tab || 'executions'}
@@ -38,7 +34,6 @@ const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({settings, 
         {
           key: 'executions',
           label: 'Recent executions',
-          disabled: !details,
           children: (
             <>
               <MetricsBarChart
@@ -54,13 +49,11 @@ const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({settings, 
         {
           key: 'commands',
           label: 'CLI Commands',
-          disabled: !details,
-          children: <CLICommands name={details?.name} bg={Colors.slate800} />,
+          children: <CLICommands name={details!.name} bg={Colors.slate800} />,
         },
         {
           key: 'settings',
           label: 'Settings',
-          disabled: !details,
           children: settings,
         },
       ]}
