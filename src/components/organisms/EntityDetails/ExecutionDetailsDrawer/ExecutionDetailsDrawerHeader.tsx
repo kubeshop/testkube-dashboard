@@ -1,8 +1,6 @@
-import React, {useMemo} from 'react';
+import {FC, useMemo} from 'react';
 
 import {CloseOutlined} from '@ant-design/icons';
-
-import {intervalToDuration} from 'date-fns';
 
 import {StatusIcon} from '@atoms';
 
@@ -10,7 +8,8 @@ import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDe
 
 import {Text} from '@custom-antd';
 
-import useIsRunning from '@hooks/useIsRunning';
+import {Execution} from '@models/execution';
+import {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {DotsDropdown, RunningContext} from '@molecules';
 
@@ -21,31 +20,18 @@ import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import Colors from '@styles/Colors';
 
-import {constructExecutedString, formatExecutionDate} from '@utils/formatDate';
+import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
 import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from './ExecutionDetailsDrawer.styled';
-import {getHeaderValues} from './utils';
 
-type ExecutionDetailsDrawerHeaderProps = {
-  data: any;
-};
-
-const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
-  const {entity, id: entityId} = useEntityDetailsPick('entity', 'id');
-  const {close, id: execId} = useExecutionDetailsPick('close', 'id');
+const ExecutionDetailsDrawerHeader: FC = () => {
+  const {entity, id} = useEntityDetailsPick('entity', 'id');
+  const {close, data, id: execId} = useExecutionDetailsPick('close', 'data', 'id');
   const {useAbortExecution} = useEntityDetailsConfig(entity);
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
-  const {data} = props;
-  // @ts-ignore
-  const status = data?.executionResult?.status || data?.status;
-  const runningContext = data?.runningContext;
-
-  const isRunning = useIsRunning(status);
-
-  const headerValues = getHeaderValues(entity, data);
-
-  const {name, number, startedTime, finishedTime, id} = headerValues;
+  const status = (data as Execution)?.executionResult?.status || (data as TestSuiteExecution)?.status;
+  const isRunning = status === 'running';
 
   const [abortExecution] = useAbortExecution();
   const onAbortExecution = () => {
@@ -54,26 +40,10 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
     }
   };
 
-  const getDuration = () => {
-    try {
-      return constructExecutedString(intervalToDuration({start: startedTime, end: finishedTime}));
-      // eslint-disable-next-line no-empty
-    } catch (err) {}
-  };
-
-  const renderExecutionActions = () => {
-    let actionsArray = [];
-
-    if (isRunning) {
-      actionsArray.push({key: 1, label: <span onClick={onAbortExecution}>Abort execution</span>});
-    }
-
-    return actionsArray;
-  };
-
-  const renderedExecutionActions = useMemo(() => {
-    return renderExecutionActions();
-  }, [isRunning]);
+  const actions = useMemo(
+    () => [{key: 1, label: <span onClick={onAbortExecution}>Abort execution</span>}],
+    [useAbortExecution]
+  );
 
   return (
     <DrawerHeader>
@@ -83,45 +53,45 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
       <HeaderContent>
         <ItemRow $flex={1}>
           <ItemColumn>
-            <Text className="biggest bold" ellipsis title={name}>
-              {name}
+            <Text className="biggest bold" ellipsis title={data?.name}>
+              {data?.name}
             </Text>
           </ItemColumn>
           <ItemColumn className="flex-auto">
-            {renderedExecutionActions && renderedExecutionActions.length && mayManageExecution ? (
-              <DotsDropdown items={renderedExecutionActions} />
-            ) : null}
+            {isRunning && mayManageExecution ? <DotsDropdown items={actions} /> : null}
             <CloseOutlined onClick={close} style={{color: Colors.slate400, fontSize: 20}} />
           </ItemColumn>
         </ItemRow>
         <ItemRow $flex={1}>
           <ItemColumn>
-            {number ? <Text color={Colors.slate50}>#{number}</Text> : null}
+            {data?.number ? <Text color={Colors.slate50}>#{data?.number}</Text> : null}
             <Text ellipsis>
               <Text color={Colors.slate400}>Trigger:&nbsp;</Text>
               <RunningContext
-                id={entityId!}
-                type={runningContext?.type}
-                context={runningContext?.context}
+                id={id!}
+                type={data?.runningContext?.type}
+                context={data?.runningContext?.context}
                 onClose={close}
                 entity={entity}
               />
             </Text>
             <Text color={Colors.slate50}>
               <Text color={Colors.slate400}>Started:&nbsp;</Text>
-              {formatExecutionDate(startedTime)}
+              {formatExecutionDate(new Date(data?.startTime!))}
             </Text>
-            <Text color={Colors.slate50}>
-              <Text color={Colors.slate400}>Finished:&nbsp;</Text>
-              {isRunning ? 'running' : formatExecutionDate(finishedTime)}
-            </Text>
+            {isRunning ? null : (
+              <Text color={Colors.slate50}>
+                <Text color={Colors.slate400}>Finished:&nbsp;</Text>
+                {formatExecutionDate(new Date(data?.endTime!))}
+              </Text>
+            )}
             <Text color={Colors.slate50}>
               {isRunning ? (
                 'Running...'
               ) : (
                 <>
                   <Text color={Colors.slate400}>Execution time:&nbsp;</Text>
-                  {getDuration()}
+                  {formatDuration((Date.parse(data!.endTime!) - Date.parse(data!.startTime!)) / 1000)}
                 </>
               )}
             </Text>

@@ -11,7 +11,7 @@ const TestSuiteExecutionDetailsDrawer: FC = () => {
   const {close, id, data} = useExecutionDetailsPick('close', 'id', 'data');
   return (
     <ExecutionDetailsDrawer
-      header={<ExecutionDetailsDrawerHeader data={data} />}
+      header={<ExecutionDetailsDrawerHeader />}
       loading={!data}
       open={Boolean(id)}
       onClose={close}

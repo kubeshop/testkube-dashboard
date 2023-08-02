@@ -1,27 +1,9 @@
-import {Duration, format} from 'date-fns';
+import {format} from 'date-fns';
 
 import {executionDateFormat} from './strings';
 
 export const formatExecutionDate = (date: Date, formatString = executionDateFormat) => {
   return format(date, formatString);
-};
-
-export const constructExecutedString = (duration: Duration, countToDisplay: number = 2) => {
-  let finishString = '';
-  let counter = 0;
-
-  Object.entries(duration).forEach(([key, value]) => {
-    if (value && counter < countToDisplay) {
-      finishString += `${value}${key[0]} `;
-      counter += 1;
-    }
-  });
-
-  if (!finishString.length) {
-    return '0s';
-  }
-
-  return finishString.trim();
 };
 
 export const formatDuration = (duration: number) => {

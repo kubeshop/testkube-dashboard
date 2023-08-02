@@ -13,7 +13,7 @@ import {formatExecutionDate} from '@utils/formatDate';
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 
-const TimeAgo: FC<{time: Date | string}> = ({time}) => {
+const TimeAgo: FC<{time: Date | number | string}> = ({time}) => {
   const now = new Date();
   const then = new Date(time);
 
@@ -23,7 +23,7 @@ const TimeAgo: FC<{time: Date | string}> = ({time}) => {
   return <>{displayTimeBetweenDates(now, then).long}</>;
 };
 
-const EntityGridItemExecutionTime: FC<{time?: Date | string}> = ({time}) => (
+const EntityGridItemExecutionTime: FC<{time?: Date | number | string}> = ({time}) => (
   <Tooltip
     title={time ? formatExecutionDate(new Date(time)) : null}
     placement="bottomRight"
