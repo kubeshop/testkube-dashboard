@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo} from 'react';
+import React, {useContext, useEffect} from 'react';
 
 import {LoadingOutlined} from '@ant-design/icons';
 import {Drawer} from 'antd';
@@ -12,8 +12,6 @@ import useIsMobile from '@hooks/useIsMobile';
 import {Entity} from '@models/entity';
 
 import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCall} from '@molecules';
-
-import PluginsContext from '@src/plugins/PluginsContext';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick, useExecutionDetailsSync} from '@store/executionDetails';
@@ -48,11 +46,6 @@ const ExecutionDetailsDrawer: React.FC = () => {
     skip: !isClusterAvailable || !id || isExecutionFinished(data),
   });
   useExecutionDetailsSync({data: fetchedData?.id === id ? fetchedData : null, error});
-  const {scope} = useContext(PluginsContext);
-  const bannerElement: JSX.Element = useMemo(
-    () => scope.getSlot('executionDetailsBanner')[0].value,
-    [scope.getSlot('executionDetailsBanner')]
-  );
 
   const isMobile = useIsMobile();
 
