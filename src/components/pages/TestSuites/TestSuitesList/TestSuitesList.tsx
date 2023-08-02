@@ -9,6 +9,8 @@ import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
+import {useSinglePluginSlot} from '@plugins/pluginHooks';
+
 import {useAppSelector} from '@redux/hooks';
 import {initialTestSuitesFiltersState} from '@redux/initialState';
 import {
@@ -67,6 +69,7 @@ const TestSuitesList: FC = () => {
       onItemAbort={onItemAbort}
       entity="test-suites"
       pageTitle="Test Suites"
+      pageTitleIcon={useSinglePluginSlot('testSuiteTitleIcon')}
       addEntityButtonText="Add a new test suite"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTestSuites}

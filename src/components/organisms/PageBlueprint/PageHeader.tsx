@@ -7,14 +7,15 @@ import {FullWidthSpace, Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
-import {StyledPageHeader} from './PageBlueprint.styled';
+import {PageTitle, StyledPageHeader} from './PageBlueprint.styled';
 
 type PageHeaderProps = {
+  pageTitleIcon?: ReactNode;
   description?: ReactNode;
   loading?: boolean;
 } & AntdPageHeaderProps;
 
-const PageHeader: FC<PageHeaderProps> = ({title, description, loading, children, ...props}) => (
+const PageHeader: FC<PageHeaderProps> = ({title, pageTitleIcon, description, loading, children, ...props}) => (
   <StyledPageHeader
     {...props}
     title={
@@ -23,7 +24,9 @@ const PageHeader: FC<PageHeaderProps> = ({title, description, loading, children,
           {title} <LoadingOutlined />
         </>
       ) : (
-        title
+        <PageTitle>
+          {title} {pageTitleIcon}
+        </PageTitle>
       )
     }
   >

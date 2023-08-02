@@ -34,3 +34,9 @@ export const StyledPageHeader = styled(AntdPageHeader)`
     }
   }
 `;
+
+export const PageTitle = styled.div`
+  display: flex;
+  gap: 16px;
+  align-items: center;
+`;

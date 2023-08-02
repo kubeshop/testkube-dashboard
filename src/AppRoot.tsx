@@ -7,9 +7,7 @@ import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
-import {ReactComponent as NewIcon} from '@assets/newIcon.svg';
-
-import {IconLabel} from '@atoms';
+import {IconLabel, Tag} from '@atoms';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
@@ -122,7 +120,7 @@ const AppRoot: React.FC = () => {
             'testExecutionTabs',
             {
               key: 'ai-insights-tab',
-              label: <IconLabel title="AI Insights" icon={<NewIcon />} />,
+              label: <IconLabel title="AI Insights" icon={<Tag title="NEW" type="info" />} />,
               children: <AiInsightsTab />,
             },
             {
