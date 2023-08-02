@@ -1,11 +1,13 @@
 import React, {memo} from 'react';
 
+import {LoadingOutlined} from '@ant-design/icons';
+
 import {Metrics} from '@models/metrics';
 
 import {formatDuration} from '@utils/formatDate';
 
 import {SummaryGridWrapper} from './SummaryGrid.styled';
-import SummaryGridItem from './SummaryGridItem';
+import SummaryGridItem from './SummaryGridItem'
 
 type SummaryGridProps = {
   metrics?: Metrics;
@@ -15,7 +17,15 @@ const SummaryGrid: React.FC<SummaryGridProps> = memo(props => {
   const {metrics} = props;
 
   if (!metrics?.executions?.length) {
-    return null;
+    return (
+      <SummaryGridWrapper>
+        <SummaryGridItem title="PASS/FAIL RATIO" value={<LoadingOutlined />} />
+        <SummaryGridItem title="EXECUTION DURATION (P50)" value={<LoadingOutlined />} />
+        <SummaryGridItem title="EXECUTION DURATION (P95)" value={<LoadingOutlined />} />
+        <SummaryGridItem title="FAILED EXECUTIONS" value={<LoadingOutlined />} />
+        <SummaryGridItem title="TOTAL EXECUTIONS" value={<LoadingOutlined />} />
+      </SummaryGridWrapper>
+    );
   }
 
   return (
