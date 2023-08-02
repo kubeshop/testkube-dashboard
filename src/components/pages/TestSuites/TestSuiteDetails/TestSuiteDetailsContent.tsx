@@ -11,6 +11,7 @@ import EntityDetailsContentHeader from '@organisms/EntityDetails/EntityDetailsCo
 import EntityDetailsContentTabs from '@organisms/EntityDetails/EntityDetailsContent/EntityDetailsContentTabs';
 import SummaryGrid from '@organisms/EntityDetails/EntityDetailsContent/SummaryGrid';
 
+import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
@@ -24,7 +25,7 @@ interface TestSuiteDetailsContentProps {
 }
 
 const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, settingsTab}) => {
-  const {id, details, metrics} = useEntityDetailsPick('id', 'details', 'metrics');
+  const {id, details, error, metrics} = useEntityDetailsPick('id', 'details', 'error', 'metrics');
   const [isRunning, run] = useRunEntity('test-suites', details);
 
   const {navigate} = useContext(DashboardContext);
@@ -34,6 +35,13 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
   const setSettingsTab = useLastCallback((nextTab: string) => {
     navigate(`/test-suites/${id}/settings/${nextTab}`);
   });
+
+  if (error) {
+    return <Error title={error?.data?.title || 'Error'} description={error?.data?.detail || ''} />;
+  }
+  if (!details) {
+    return <Loading />;
+  }
 
   return (
     <EntityDetailsWrapper>

@@ -46,7 +46,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({ent
     {id, last: daysFilterValue},
     {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable}
   );
-  const {data: rawDetails} = useGetEntityDetails(id, {
+  const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.everyTwoSeconds,
     skip: !isClusterAvailable,
   });
@@ -202,6 +202,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({ent
   useEntityDetailsSync({
     metrics: rawMetrics,
     details: rawDetails,
+    error,
   });
 
   return <EntityStoreProvider>{children}</EntityStoreProvider>;
