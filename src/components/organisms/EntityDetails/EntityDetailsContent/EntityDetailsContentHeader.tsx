@@ -41,7 +41,7 @@ interface EntityDetailsContentHeaderProps {
 const EntityDetailsContentHeader: FC<EntityDetailsContentHeaderProps> = ({onRun, isRunning}) => {
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
-  const {entity, details, metrics} = useEntityDetailsPick('entity', 'details', 'metrics');
+  const {entity, details} = useEntityDetailsPick('entity', 'details');
   const {defaultStackRoute, useAbortAllExecutions} = useEntityDetailsConfig(entity);
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
   const testIcon = useExecutorIcon(details);
@@ -53,24 +53,19 @@ const EntityDetailsContentHeader: FC<EntityDetailsContentHeaderProps> = ({onRun,
     });
   };
 
-  // TODO: Detect with /results/v1/tests/<name>/metrics?last=99999999&limit=1
-  const isMetricsEmpty = !metrics?.executions?.length;
-
   return (
     <PageHeader
       onBack={() => navigate(defaultStackRoute)}
       title={details!.name}
       extra={[
-        !isMetricsEmpty ? (
-          <Select
-            placeholder="Last 7/30/90/Year/All days"
-            options={filterOptions}
-            style={{width: 250}}
-            value={daysFilterValue}
-            onChange={setDaysFilterValue}
-            key="days-filter-select"
-          />
-        ) : null,
+        <Select
+          placeholder="Last 7/30/90/Year/All days"
+          options={filterOptions}
+          style={{width: 250}}
+          value={daysFilterValue}
+          onChange={setDaysFilterValue}
+          key="days-filter-select"
+        />,
         <DotsDropdown
           key="entity-options"
           items={[{key: 1, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>}]}
