@@ -4,11 +4,12 @@ import {SettingsLayout} from '@molecules';
 import {SettingsLayoutProps} from '@molecules/SettingsLayout/SettingsLayout';
 
 import SettingsDefinition from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsDefinition/SettingsDefinition';
-import SettingsExecution from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsExecution';
-import General from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral/SettingsGeneral';
+import General from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral';
 import SettingsScheduling from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsScheduling';
-import SettingsTest from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsTest';
 import SettingsVariables from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsVariables';
+
+import SettingsExecution from './SettingsExecution';
+import SettingsTest from './SettingsTest';
 
 const tabs = [
   {id: 'general', label: 'General', children: <General />},
