@@ -10,12 +10,12 @@ import Colors from '@styles/Colors';
 import {PageTitle, StyledPageHeader} from './PageBlueprint.styled';
 
 type PageHeaderProps = {
-  pageTitleIcon?: ReactNode;
+  pageTitleAddon?: ReactNode;
   description?: ReactNode;
   loading?: boolean;
 } & AntdPageHeaderProps;
 
-const PageHeader: FC<PageHeaderProps> = ({title, pageTitleIcon, description, loading, children, ...props}) => (
+const PageHeader: FC<PageHeaderProps> = ({title, pageTitleAddon, description, loading, children, ...props}) => (
   <StyledPageHeader
     {...props}
     title={
@@ -25,7 +25,7 @@ const PageHeader: FC<PageHeaderProps> = ({title, pageTitleIcon, description, loa
         </>
       ) : (
         <PageTitle>
-          {title} {pageTitleIcon}
+          {title} {pageTitleAddon}
         </PageTitle>
       )
     }

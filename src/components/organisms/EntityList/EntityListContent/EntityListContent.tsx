@@ -31,7 +31,7 @@ import {StyledFiltersSection} from './EntityListContent.styled';
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {
     pageTitle,
-    pageTitleIcon,
+    pageTitleAddon,
     pageDescription: PageDescription,
     emptyDataComponent: EmptyData,
     CardComponent,
@@ -144,7 +144,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
       <PageHeader
         title={pageTitle}
-        pageTitleIcon={pageTitleIcon}
+        pageTitleAddon={pageTitleAddon}
         description={<PageDescription />}
         loading={isApplyingFilters && !isFirstTimeLoading}
       >

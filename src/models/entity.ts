@@ -12,7 +12,7 @@ export type Entity = 'test-suites' | 'tests';
 export type EntityListBlueprint = {
   pageTitle: string;
 
-  pageTitleIcon?: ReactNode;
+  pageTitleAddon?: ReactNode;
 
   pageDescription?: any;
 
