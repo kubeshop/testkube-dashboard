@@ -56,8 +56,7 @@ const RunningContext: React.FC<RunningContextProps> = props => {
         <ExternalLink
           onClick={() => {
             onClose();
-            // TODO: Open "Scheduling" tab
-            navigate(`/${entity}/${id}/settings`);
+            navigate(`/${entity}/${id}/settings/scheduling`);
           }}
         >
           {context}

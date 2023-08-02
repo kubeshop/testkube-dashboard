@@ -20,15 +20,19 @@ import TestSettings from './TestSettings';
 
 interface TestDetailsContentProps {
   tab?: string;
+  settingsTab?: string;
 }
 
-const TestDetailsContent: FC<TestDetailsContentProps> = ({tab}) => {
-  const {id, entity, details, metrics} = useEntityDetailsPick('id', 'entity', 'details', 'metrics');
-  const [isRunning, run] = useRunEntity(entity, details);
+const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => {
+  const {id, details, metrics} = useEntityDetailsPick('id', 'details', 'metrics');
+  const [isRunning, run] = useRunEntity('tests', details);
 
   const {navigate} = useContext(DashboardContext);
   const setTab = useLastCallback((nextTab: string) => {
     navigate(`/tests/${id}/${nextTab}`);
+  });
+  const setSettingsTab = useLastCallback((nextTab: string) => {
+    navigate(`/tests/${id}/settings/${nextTab}`);
   });
 
   return (
@@ -38,7 +42,12 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab}) => {
 
         <EntityDetailsContentHeader onRun={run} isRunning={isRunning} />
         <SummaryGrid metrics={metrics} />
-        <EntityDetailsContentTabs tab={tab} onTabChange={setTab} onRun={run} settings={<TestSettings />} />
+        <EntityDetailsContentTabs
+          tab={tab}
+          onTabChange={setTab}
+          onRun={run}
+          settings={<TestSettings active={settingsTab} onChange={setSettingsTab} />}
+        />
       </PageWrapper>
       <TestExecutionDetailsDrawer />
     </EntityDetailsWrapper>

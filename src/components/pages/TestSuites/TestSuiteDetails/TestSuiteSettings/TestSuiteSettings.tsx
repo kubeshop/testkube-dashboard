@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 
 import {SettingsLayout} from '@molecules';
+import {SettingsLayoutProps} from '@molecules/SettingsLayout/SettingsLayout';
 
 import SettingsDefinition from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsDefinition/SettingsDefinition';
 import General from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral/SettingsGeneral';
@@ -16,6 +17,8 @@ const tabs = [
   {id: 'definition', label: 'Definition', children: <SettingsDefinition />},
 ];
 
-const TestSuiteSettings: FC = () => <SettingsLayout tabs={tabs} />;
+type TestSuiteSettingsProps = Omit<SettingsLayoutProps, 'tabs'>;
+
+const TestSuiteSettings: FC<TestSuiteSettingsProps> = props => <SettingsLayout {...props} tabs={tabs} />;
 
 export default TestSuiteSettings;

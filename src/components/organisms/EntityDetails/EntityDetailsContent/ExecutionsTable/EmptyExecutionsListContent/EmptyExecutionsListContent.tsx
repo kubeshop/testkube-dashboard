@@ -61,8 +61,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         description="In order to be able to run your test suite you need to define the tests you want to add."
         buttonText="Add your tests to this suite"
         onButtonClick={() => {
-          // TODO: Open "Tests" tab
-          navigate(`/test-suites/${id}/settings`);
+          navigate(`/test-suites/${id}/settings/tests`);
         }}
         actionType="create"
       >

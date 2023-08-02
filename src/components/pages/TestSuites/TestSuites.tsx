@@ -22,10 +22,15 @@ const TestSuites: FC = () => {
         <Route index element={<TestSuitesList />} />
         <Route path=":id">
           <Route index element={<TestSuiteDetails />} />
-          <Route path="executions" element={<TestSuiteDetails tab="executions" />} />
           <Route path="commands" element={<TestSuiteDetails tab="commands" />} />
-          <Route path="settings" element={<TestSuiteDetails tab="settings" />} />
-          <Route path="executions/:execId" element={<TestSuiteDetails tab="executions" />} />
+          <Route path="executions" element={<TestSuiteDetails tab="executions" />}>
+            <Route index element={null} />
+            <Route path=":execId" element={null} />
+          </Route>
+          <Route path="settings" element={<TestSuiteDetails tab="settings" />}>
+            <Route index element={null} />
+            <Route path=":settingsTab" element={null} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

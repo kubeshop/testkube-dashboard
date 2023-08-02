@@ -55,9 +55,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
       .then(res => {
         if (res && 'data' in res) {
           telemetry.event('createTestSuite');
-
-          // TODO: Open "Tests" tab
-          navigate(`/test-suites/${res.data.metadata.name}/settings`);
+          navigate(`/test-suites/${res.data.metadata.name}/settings/tests`);
           closeModal();
         }
       })

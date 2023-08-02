@@ -11,11 +11,11 @@ interface TestSuiteDetailsProps {
 }
 
 const TestSuiteDetails: FC<TestSuiteDetailsProps> = ({tab}) => {
-  const {id, execId} = useParams();
+  const {id, execId, settingsTab} = useParams();
   return (
     <EntityDetailsLayer entity="test-suites" id={id!} execId={execId}>
       <ExecutionDetailsLayer entity="test-suites" id={id!} execId={execId}>
-        <TestSuiteDetailsContent tab={tab} />
+        <TestSuiteDetailsContent tab={tab} settingsTab={settingsTab} />
       </ExecutionDetailsLayer>
     </EntityDetailsLayer>
   );

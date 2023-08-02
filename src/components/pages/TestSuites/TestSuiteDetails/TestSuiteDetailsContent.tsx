@@ -20,15 +20,19 @@ import TestSuiteSettings from './TestSuiteSettings';
 
 interface TestSuiteDetailsContentProps {
   tab?: string;
+  settingsTab?: string;
 }
 
-const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab}) => {
-  const {id, entity, details, metrics} = useEntityDetailsPick('id', 'entity', 'details', 'metrics');
-  const [isRunning, run] = useRunEntity(entity, details);
+const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, settingsTab}) => {
+  const {id, details, metrics} = useEntityDetailsPick('id', 'details', 'metrics');
+  const [isRunning, run] = useRunEntity('test-suites', details);
 
   const {navigate} = useContext(DashboardContext);
   const setTab = useLastCallback((nextTab: string) => {
     navigate(`/test-suites/${id}/${nextTab}`);
+  });
+  const setSettingsTab = useLastCallback((nextTab: string) => {
+    navigate(`/test-suites/${id}/settings/${nextTab}`);
   });
 
   return (
@@ -38,7 +42,12 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab}) => {
 
         <EntityDetailsContentHeader onRun={run} isRunning={isRunning} />
         <SummaryGrid metrics={metrics} />
-        <EntityDetailsContentTabs tab={tab} onTabChange={setTab} onRun={run} settings={<TestSuiteSettings />} />
+        <EntityDetailsContentTabs
+          tab={tab}
+          onTabChange={setTab}
+          onRun={run}
+          settings={<TestSuiteSettings active={settingsTab} onChange={setSettingsTab} />}
+        />
       </PageWrapper>
       <TestSuiteExecutionDetailsDrawer />
     </EntityDetailsWrapper>
