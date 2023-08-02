@@ -32,7 +32,6 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 import {externalLinks} from '@utils/externalLinks';
 import {formatMilliseconds} from '@utils/formatMilliseconds';
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {convertTestSuiteV2ToV3, isTestSuiteV2} from '@utils/testSuites';
 
 import DelayModal from './Modals/DelayModal';
 import TestModal from './Modals/TestModal';
@@ -41,10 +40,9 @@ import TestSuiteStepsFlow from './TestSuiteStepsFlow';
 
 const SettingsTests = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {details: rawDetails} = useEntityDetailsPick('details') as {details: TestSuite};
+  const {details, isV2: rawIsV2} = useEntityDetailsPick('details', 'isV2') as {details: TestSuite; isV2: boolean};
 
-  const isV2 = useClusterVersionMatch('<1.13.0', isTestSuiteV2(rawDetails));
-  const details = useMemo(() => (isV2 ? convertTestSuiteV2ToV3(rawDetails) : rawDetails), [rawDetails]);
+  const isV2 = useClusterVersionMatch('<1.13.0', rawIsV2);
 
   const executors = useAppSelector(selectExecutors);
 

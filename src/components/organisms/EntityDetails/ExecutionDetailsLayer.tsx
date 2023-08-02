@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useContext, useEffect} from 'react';
+import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
 
 import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
@@ -14,6 +14,7 @@ import {initializeExecutionDetailsStore} from '@store/executionDetails';
 
 import {isExecutionFinished} from '@utils/isExecutionFinished';
 import {PollingIntervals} from '@utils/numbers';
+import {convertTestSuiteV2ExecutionToV3, isTestSuiteV2Execution} from '@utils/testSuites';
 
 export interface ExecutionDetailsLayerProps {
   entity: Entity;
@@ -42,11 +43,14 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
   const {isClusterAvailable} = useContext(MainContext);
 
   const {data} = pick('data');
-  const {data: fetchedData, error} = useGetExecutionDetails(execId!, {
+  const {data: rawFetchedData, error} = useGetExecutionDetails(execId!, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable || !execId || (data?.id === execId && isExecutionFinished(data)),
   });
-  sync({data: fetchedData?.id === execId ? fetchedData : null, error});
+  const fetchedData = rawFetchedData?.id === execId ? rawFetchedData : null;
+  const isV2 = isTestSuiteV2Execution(fetchedData);
+  const result = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(fetchedData) : fetchedData), [fetchedData]);
+  sync({data: result, error});
 
   useEffect(() => {
     if (error) {

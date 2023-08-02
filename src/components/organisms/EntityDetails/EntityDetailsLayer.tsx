@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useContext, useEffect} from 'react';
+import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
@@ -18,6 +18,7 @@ import {initializeEntityDetailsStore} from '@store/entityDetails';
 
 import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
+import {convertTestSuiteV2ExecutionToV3, isTestSuiteV2} from '@utils/testSuites';
 
 interface EntityDetailsLayerProps {
   entity: Entity;
@@ -46,14 +47,16 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({ent
     {id, last: daysFilterValue},
     {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable}
   );
-  const {data: rawDetails, error} = useGetEntityDetails(id, {
-    pollingInterval: PollingIntervals.everyTwoSeconds,
-    skip: !isClusterAvailable,
-  });
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
     {skip: !isClusterAvailable}
   );
+  const {data: rawDetails, error} = useGetEntityDetails(id, {
+    pollingInterval: PollingIntervals.everyTwoSeconds,
+    skip: !isClusterAvailable,
+  });
+  const isV2 = isTestSuiteV2(rawDetails);
+  const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);
 
   const onWebSocketData = (wsData: WSDataWithTestExecution | WSDataWithTestSuiteExecution) => {
     try {
@@ -199,11 +202,11 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({ent
     setExecutions(rawExecutions);
   }, [useEntityDetailsSync, rawExecutions]);
 
-  useEntityDetailsSync({
-    metrics: rawMetrics,
-    details: rawDetails,
-    error,
-  });
+  useEffect(() => {
+    setMetrics(rawMetrics);
+  }, [useEntityDetailsSync, rawMetrics]);
+
+  useEntityDetailsSync({details, isV2, error});
 
   return <EntityStoreProvider>{children}</EntityStoreProvider>;
 };
