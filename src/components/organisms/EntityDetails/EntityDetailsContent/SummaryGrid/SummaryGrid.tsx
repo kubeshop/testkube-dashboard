@@ -16,7 +16,7 @@ type SummaryGridProps = {
 const SummaryGrid: React.FC<SummaryGridProps> = memo(props => {
   const {metrics} = props;
 
-  if (!metrics?.executions?.length) {
+  if (!metrics) {
     return (
       <SummaryGridWrapper>
         <SummaryGridItem title="PASS/FAIL RATIO" value={<LoadingOutlined />} />
@@ -32,18 +32,18 @@ const SummaryGrid: React.FC<SummaryGridProps> = memo(props => {
     <SummaryGridWrapper>
       <SummaryGridItem
         title="PASS/FAIL RATIO"
-        value={metrics?.passFailRatio && `${metrics?.passFailRatio.toFixed(2)}%`}
+        value={metrics.passFailRatio && `${metrics.passFailRatio.toFixed(2)}%`}
       />
       <SummaryGridItem
         title="EXECUTION DURATION (P50)"
-        value={metrics?.executionDurationP50ms && formatDuration(metrics?.executionDurationP50ms / 1000)}
+        value={metrics.executionDurationP50ms && formatDuration(metrics.executionDurationP50ms / 1000)}
       />
       <SummaryGridItem
         title="EXECUTION DURATION (P95)"
-        value={metrics?.executionDurationP95ms && formatDuration(metrics?.executionDurationP95ms / 1000)}
+        value={metrics.executionDurationP95ms && formatDuration(metrics.executionDurationP95ms / 1000)}
       />
-      <SummaryGridItem title="FAILED EXECUTIONS" value={metrics?.failedExecutions} />
-      <SummaryGridItem title="TOTAL EXECUTIONS" value={metrics?.totalExecutions} />
+      <SummaryGridItem title="FAILED EXECUTIONS" value={metrics.failedExecutions} />
+      <SummaryGridItem title="TOTAL EXECUTIONS" value={metrics.totalExecutions} />
     </SummaryGridWrapper>
   );
 });
