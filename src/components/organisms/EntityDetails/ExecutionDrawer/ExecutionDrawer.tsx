@@ -22,13 +22,7 @@ interface ExecutionDrawerProps {
   onClose: () => void;
 }
 
-const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({
-  header,
-  open,
-  loading,
-  onClose,
-  children,
-}) => {
+const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({header, open, loading, onClose, children}) => {
   const isMobile = useIsMobile();
 
   const drawerWidth = isMobile ? '100vw' : window.innerWidth * 0.85 < 1200 ? '85vw' : '1200px';
