@@ -18,11 +18,12 @@ const AiInsightsTab = () => {
     <AiInsightContainer>
       <AiInsightContent>
         <LockedIcon />
+        <Text className="big bold"> This feature is available only in Testkube Cloud.</Text>
         <Text color={Colors.slate400}>
-          Please enable AI Hints for your organization in order to access this feature. Learn more
+          Start using Testkube Cloud to get AI insights for your test executions. Learn more
         </Text>
         <Button type="primary" onClick={() => {}}>
-          Enable AI Hints
+          Go to Testkube Cloud
         </Button>
       </AiInsightContent>
     </AiInsightContainer>
