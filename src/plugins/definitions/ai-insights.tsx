@@ -2,7 +2,7 @@ import {IconLabel, Tag} from '@atoms';
 
 import {AiInsightsTab} from '@molecules';
 
-import {Plugin} from '../types';
+import {Plugin, TestExecutionTabsInterface} from '@plugins/types';
 
 const getAiInsightsPlugin = (): Plugin => ({
   name: 'ai-insights',
@@ -16,6 +16,12 @@ const getAiInsightsPlugin = (): Plugin => ({
       },
       {
         order: 4,
+        visible: () => {
+          return (
+            scope.getState<TestExecutionTabsInterface>('testExecutionTabs')?.execution?.executionResult?.status ===
+            'failed'
+          );
+        },
       }
     );
   },
