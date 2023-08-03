@@ -2,6 +2,8 @@ import {Form, Input} from 'antd';
 
 import {capitalize} from 'lodash';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
@@ -13,8 +15,6 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {namingMap, updateRequestsMap} from '../utils';
-
 const {TextArea} = Input;
 
 type NameNDescriptionFormValues = {
@@ -24,11 +24,12 @@ type NameNDescriptionFormValues = {
 
 const NameNDescription: React.FC = () => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
+  const {label, useUpdateEntity} = useEntityDetailsConfig(entity);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<NameNDescriptionFormValues>();
 
-  const [updateEntity] = updateRequestsMap[entity]();
+  const [updateEntity] = useUpdateEntity();
 
   if (!entity || !details) {
     return null;
@@ -52,13 +53,13 @@ const NameNDescription: React.FC = () => {
       },
     })
       .then(res => displayDefaultNotificationFlow(res))
-      .then(() => notificationCall('passed', `${capitalize(namingMap[entity])} was successfully updated.`));
+      .then(() => notificationCall('passed', `${capitalize(label)} was successfully updated.`));
   };
 
   return (
     <Form form={form} name="general-settings-name-description" initialValues={{name, description}} disabled={!mayEdit}>
       <ConfigurationCard
-        title={`${capitalize(namingMap[entity])} name & description`}
+        title={`${capitalize(label)} name & description`}
         description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
         onConfirm={onSave}
         onCancel={() => {

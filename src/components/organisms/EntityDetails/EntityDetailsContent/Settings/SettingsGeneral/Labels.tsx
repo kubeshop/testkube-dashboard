@@ -6,6 +6,8 @@ import {nanoid} from '@reduxjs/toolkit';
 
 import {capitalize} from 'lodash';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {Option} from '@models/form';
 
 import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
@@ -17,13 +19,12 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {namingMap, updateRequestsMap} from '../utils';
-
 const Labels: React.FC = () => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
+  const {label, useUpdateEntity} = useEntityDetailsConfig(entity);
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const [updateEntity] = updateRequestsMap[entity]();
+  const [updateEntity] = useUpdateEntity();
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [wasTouched, setWasTouched] = useState(false);
@@ -45,7 +46,7 @@ const Labels: React.FC = () => {
     })
       .then(res => displayDefaultNotificationFlow(res))
       .then(() => {
-        notificationCall('passed', `${capitalize(namingMap[entity])} was successfully updated.`);
+        notificationCall('passed', `${capitalize(label)} was successfully updated.`);
         setWasTouched(false);
       });
   };
@@ -65,7 +66,7 @@ const Labels: React.FC = () => {
     <Form name="labels-form">
       <ConfigurationCard
         title="Labels"
-        description={`Define the labels you want to add for this ${namingMap[entity]}`}
+        description={`Define the labels you want to add for this ${label}`}
         isButtonsDisabled={!wasTouched}
         onConfirm={onSave}
         onCancel={onCancel}

@@ -2,32 +2,18 @@ import {useContext} from 'react';
 
 import {Form} from 'antd';
 
-import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
-
 import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
 import {ModalContext} from '@contexts';
 
-import {Entity} from '@models/entity';
-
 import {ConfigurationCard} from '@molecules';
 import DeleteEntityModal from '@molecules/DeleteEntityModal';
 
-import {useDeleteTestSuiteMutation} from '@services/testSuites';
-import {useDeleteTestMutation} from '@services/tests';
-
 import {useEntityDetailsPick} from '@store/entityDetails';
-
-import {namingMap} from '../utils';
-
-const useDeleteMutations: Record<Entity, UseMutation<any>> = {
-  'test-suites': useDeleteTestSuiteMutation,
-  tests: useDeleteTestMutation,
-};
 
 const Delete: React.FC = () => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {defaultStackRoute} = useEntityDetailsConfig(entity);
+  const {defaultStackRoute, label, useDeleteEntity} = useEntityDetailsConfig(entity);
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
   if (!entity || !details) {
@@ -36,14 +22,14 @@ const Delete: React.FC = () => {
 
   const onConfirm = () => {
     setModalConfig({
-      title: `Delete this ${namingMap[entity]}`,
+      title: `Delete this ${label}`,
       width: 600,
       content: (
         <DeleteEntityModal
           defaultStackRoute={defaultStackRoute}
-          useDeleteMutation={useDeleteMutations[entity]}
+          useDeleteMutation={useDeleteEntity}
           name={details.name}
-          entityLabel={namingMap[entity]}
+          entityLabel={label}
         />
       ),
     });
@@ -53,8 +39,8 @@ const Delete: React.FC = () => {
   return (
     <Form name="delete-entity-form">
       <ConfigurationCard
-        title={`Delete this ${namingMap[entity]}`}
-        description={`The ${namingMap[entity]} will be permanently deleted, including its deployments analytical history. This action is irreversible and can not be undone.`}
+        title={`Delete this ${label}`}
+        description={`The ${label} will be permanently deleted, including its deployments analytical history. This action is irreversible and can not be undone.`}
         onConfirm={onConfirm}
         isWarning
         confirmButtonText="Delete"

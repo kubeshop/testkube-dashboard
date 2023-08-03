@@ -8,17 +8,22 @@ import {
 import {
   useAbortAllTestSuiteExecutionsMutation,
   useAbortTestSuiteExecutionMutation,
+  useDeleteTestSuiteMutation,
   useGetTestSuiteDetailsQuery,
+  useUpdateTestSuiteMutation,
 } from '@services/testSuites';
 
 const TestSuiteExecutionsConfig: EntityDetailsBlueprint = {
   useGetExecutions: useGetTestSuiteExecutionsByTestIdQuery,
   useGetEntityDetails: useGetTestSuiteDetailsQuery,
   useGetMetrics: useGetTestSuiteExecutionMetricsQuery,
-  defaultStackRoute: '/test-suites',
   useAbortExecution: useAbortTestSuiteExecutionMutation,
   useAbortAllExecutions: useAbortAllTestSuiteExecutionsMutation,
   useGetExecutionDetails: useGetTestSuiteExecutionByIdQuery,
+  useUpdateEntity: useUpdateTestSuiteMutation,
+  useDeleteEntity: useDeleteTestSuiteMutation,
+  defaultStackRoute: '/test-suites',
+  label: 'test suite',
 };
 
 export default TestSuiteExecutionsConfig;

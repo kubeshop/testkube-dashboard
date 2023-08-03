@@ -6,6 +6,8 @@ import {Form, Select, Tooltip} from 'antd';
 import parser from 'cron-parser';
 import {capitalize} from 'lodash';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {FullWidthSpace, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
@@ -19,8 +21,6 @@ import Fonts from '@styles/Fonts';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {namingMap, updateRequestsMap} from '../utils';
-
 import CronInput from './CronInput';
 import NextExecution from './NextExecution';
 import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
@@ -28,9 +28,10 @@ import {custom, quickOptions} from './utils';
 
 const Schedule: React.FC = () => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
+  const {label, useUpdateEntity} = useEntityDetailsConfig(entity);
   const enabled = usePermission(Permissions.editEntity);
 
-  const [updateEntity] = updateRequestsMap[entity]();
+  const [updateEntity] = useUpdateEntity();
 
   const name = details?.name;
   const schedule = details?.schedule;
@@ -49,7 +50,7 @@ const Schedule: React.FC = () => {
       .then(res => displayDefaultNotificationFlow(res))
       .then(() => {
         setWasTouched(false);
-        notificationCall('passed', `${capitalize(namingMap[entity])} schedule was successfully updated.`);
+        notificationCall('passed', `${capitalize(label)} schedule was successfully updated.`);
       });
   };
 
@@ -92,7 +93,7 @@ const Schedule: React.FC = () => {
     <Form name="schedule-form">
       <ConfigurationCard
         title="Schedule"
-        description={`You can add a cronjob like schedule for your ${namingMap[entity]} which will then be executed automatically.`}
+        description={`You can add a cronjob like schedule for your ${label} which will then be executed automatically.`}
         onConfirm={onSave}
         onCancel={onCancel}
         isButtonsDisabled={!wasTouched}

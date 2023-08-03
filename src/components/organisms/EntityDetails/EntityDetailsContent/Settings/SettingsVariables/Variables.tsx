@@ -4,6 +4,8 @@ import {Form} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {Entity} from '@models/entity';
 import {VariableInForm} from '@models/variable';
 
@@ -17,8 +19,6 @@ import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
-import {updateRequestsMap} from '../utils';
-
 const descriptionMap: Record<Entity, string> = {
   'test-suites':
     'Define environment variables which will be shared across your tests. Variables defined at a Test Suite level will override those defined at a Test level.',
@@ -31,9 +31,10 @@ type VariablesFormValues = {
 
 const Variables: React.FC = () => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
+  const {useUpdateEntity} = useEntityDetailsConfig(entity);
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const [updateEntity] = updateRequestsMap[entity]();
+  const [updateEntity] = useUpdateEntity();
   const [form] = Form.useForm<VariablesFormValues>();
 
   const variables = useMemo(() => {
