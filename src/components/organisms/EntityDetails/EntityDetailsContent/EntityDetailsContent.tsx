@@ -137,8 +137,6 @@ const EntityDetailsContent: React.FC = () => {
       }
     : {};
 
-  const isMetricsEmpty = !metrics?.executions || !metrics?.executions.length;
-
   const isPageDisabled = !name;
 
   return (
@@ -149,16 +147,14 @@ const EntityDetailsContent: React.FC = () => {
         onBack={() => navigate(defaultStackRoute)}
         title={name || 'Loading...'}
         extra={[
-          !isMetricsEmpty ? (
-            <Select
-              placeholder="Last 7/30/90/Year/All days"
-              options={filterOptions}
-              style={{width: 250}}
-              value={daysFilterValue}
-              onChange={setDaysFilterValue}
-              key="days-filter-select"
-            />
-          ) : null,
+          <Select
+            placeholder="Last 7/30/90/Year/All days"
+            options={filterOptions}
+            style={{width: 250}}
+            value={daysFilterValue}
+            onChange={setDaysFilterValue}
+            key="days-filter-select"
+          />,
           <DotsDropdown
             key="entity-options"
             items={[{key: 1, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>}]}
