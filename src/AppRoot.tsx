@@ -19,7 +19,7 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import getAiInsightsPlugin from '@plugins/definitions/ai-insights';
+import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
 import {Plugin} from '@plugins/types';
 
 import {useAppDispatch} from '@redux/hooks';
@@ -107,7 +107,7 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
-  const plugins: Plugin[] = useMemo(() => [getAiInsightsPlugin()], []);
+  const plugins: Plugin[] = useMemo(() => [createAiInsightsPlugin()], []);
 
   return composeProviders()
     .append(ConfigContext.Provider, {value: config})

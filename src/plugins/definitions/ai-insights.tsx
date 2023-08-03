@@ -4,7 +4,7 @@ import {AiInsightsTab} from '@molecules';
 
 import {Plugin, TestExecutionTabsInterface} from '@plugins/types';
 
-const getAiInsightsPlugin = (): Plugin => ({
+const createAiInsightsPlugin = (): Plugin => ({
   name: 'ai-insights',
   setup: scope => {
     scope.appendSlot(
@@ -27,4 +27,4 @@ const getAiInsightsPlugin = (): Plugin => ({
   },
 });
 
-export default getAiInsightsPlugin;
+export default createAiInsightsPlugin;
