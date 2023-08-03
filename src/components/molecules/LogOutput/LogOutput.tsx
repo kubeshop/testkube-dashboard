@@ -28,7 +28,6 @@ export type LogOutputProps = {
   initialLines?: number;
 };
 
-// TODO: Add auto-scroll
 const LogOutput: React.FC<LogOutputProps> = props => {
   const dispatch = useAppDispatch();
 
