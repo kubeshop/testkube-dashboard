@@ -2,9 +2,9 @@ import {FC} from 'react';
 
 import {Space} from 'antd';
 
-import NameNDescription from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral/NameNDescription';
-import Labels from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral/Labels';
 import Delete from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral/Delete';
+import Labels from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral/Labels';
+import NameNDescription from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsGeneral/NameNDescription';
 
 import {Permissions, usePermission} from '@permissions/base';
 
