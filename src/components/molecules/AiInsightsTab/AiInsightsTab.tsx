@@ -23,7 +23,10 @@ const AiInsightsTab = () => {
         <Text className="big bold"> This feature is available only in Testkube Cloud.</Text>
         <Text color={Colors.slate400}>
           Start using Testkube Cloud to get AI insights for your test executions, as well as other exclusive features.
-          <a> Learn more</a>
+          <a href={externalLinks.testkubeCloud} target="_blank">
+            {' '}
+            Learn more
+          </a>
         </Text>
         <Button
           type="primary"
