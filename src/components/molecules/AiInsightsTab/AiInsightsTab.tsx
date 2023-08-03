@@ -28,7 +28,7 @@ const AiInsightsTab = () => {
         <Button
           type="primary"
           onClick={() => {
-            window.open(externalLinks.testkubeCloud, '_self');
+            window.open(externalLinks.testkubeCloud, '_blank');
           }}
         >
           Go to Testkube Cloud
