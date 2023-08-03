@@ -44,7 +44,7 @@ const ContainerImagePanel: React.FC = () => {
         ...values,
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', 'Container image was successfully updated.');
         dispatch(updateCurrentExecutorData({image: values.image}));

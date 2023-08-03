@@ -47,7 +47,7 @@ const Arguments: React.FC = () => {
         args: values.arguments,
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', 'Arguments were successfully updated.');
         dispatch(updateCurrentExecutorData({args: values.arguments}));

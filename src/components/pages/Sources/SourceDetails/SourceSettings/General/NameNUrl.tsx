@@ -61,7 +61,7 @@ const NameNUrl: React.FC = () => {
     };
 
     return updateSource(body)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', 'Source was successfully updated.');
         dispatch(setCurrentSource(body));

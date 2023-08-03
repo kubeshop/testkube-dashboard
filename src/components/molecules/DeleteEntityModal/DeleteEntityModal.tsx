@@ -46,7 +46,7 @@ const DeleteEntityModal: React.FC<{
 
   const onDelete = () => {
     deleteEntity(idToDelete || name)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', `${capitalize(entityLabel)} was successfully deleted.`);
 

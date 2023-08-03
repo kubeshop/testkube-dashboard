@@ -44,7 +44,7 @@ const PrivateRegistry: React.FC = () => {
         imagePullSecrets: newImagePullSecrets,
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         dispatch(updateCurrentExecutorData({imagePullSecrets: newImagePullSecrets}));
         notificationCall('passed', 'Private registry was successfully updated.');

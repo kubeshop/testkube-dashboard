@@ -43,7 +43,7 @@ const Labels: React.FC = () => {
         labels: decomposeLabels(localLabels),
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', `${capitalize(namingMap[entity])} was successfully updated.`);
         setWasTouched(false);

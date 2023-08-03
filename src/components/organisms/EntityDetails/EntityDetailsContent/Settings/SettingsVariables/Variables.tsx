@@ -61,7 +61,7 @@ const Variables: React.FC = () => {
       id: details.name,
       data: successRecord,
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', `Variables were successfully updated.`);
       });
