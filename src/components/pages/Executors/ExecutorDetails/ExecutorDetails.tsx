@@ -7,6 +7,7 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
+import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
 import {useAppSelector} from '@redux/hooks';
@@ -27,10 +28,8 @@ const ExecutorDetails: React.FC = () => {
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: executor, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
+  const {data: executor, error, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
   const reload = useCallback(() => safeRefetch(refetch), [refetch]);
-
-  const isPageDisabled = !name;
 
   useEffect(() => {
     dispatch(setCurrentExecutor(name));
@@ -42,6 +41,13 @@ const ExecutorDetails: React.FC = () => {
       dispatch(setExecutorData({name, executor}));
     }
   }, [executor]);
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+  if (!executor || !currentExecutorDetails) {
+    return <Loading />;
+  }
 
   return (
     <PageWrapper>
@@ -56,8 +62,7 @@ const ExecutorDetails: React.FC = () => {
           {
             key: 'Settings',
             label: 'Settings',
-            disabled: isPageDisabled,
-            children: currentExecutorDetails ? <ExecutorSettings reload={reload} /> : null,
+            children: <ExecutorSettings reload={reload} />,
           },
         ]}
       />
