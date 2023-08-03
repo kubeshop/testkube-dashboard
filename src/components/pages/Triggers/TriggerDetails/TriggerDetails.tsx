@@ -7,6 +7,7 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
+import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
@@ -19,17 +20,15 @@ import TriggerSettings from './TriggerSettings';
 
 const TriggerDetails = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {navigate} = useContext(DashboardContext);
 
   const name = useParams().id!;
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: triggerDetails, refetch} = useGetTriggerByIdQuery(name, {skip: !isClusterAvailable});
+  const {data: triggerDetails, error, refetch} = useGetTriggerByIdQuery(name, {skip: !isClusterAvailable});
   const {data: triggersKeyMap, refetch: refetchKeyMap} = useGetTriggersKeyMapQuery(null, {skip: !isClusterAvailable});
   const reload = useCallback(() => safeRefetch(refetch), [refetch]);
-
-  const isPageDisabled = !name;
 
   const currentState = useTriggersPick('keyMap', 'current');
   useTriggersSync({
@@ -41,16 +40,30 @@ const TriggerDetails = () => {
     reload();
   }, [name]);
 
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+  if (!triggerDetails) {
+    return <Loading />;
+  }
+
   return (
     <PageWrapper>
       <PageMetadata title={`${name} | Triggers`} />
 
       <PageHeader onBack={() => navigate('/triggers')} title={name} />
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {triggerDetails ? <TriggerSettings reload={reload} /> : null}
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
+        destroyInactiveTabPane
+        items={[
+          {
+            key: 'Settings',
+            label: 'Settings',
+            children: <TriggerSettings reload={reload} />,
+          },
+        ]}
+      />
     </PageWrapper>
   );
 };

@@ -13,7 +13,7 @@ export const sourcesSlice = createSlice({
     setSources: (state: Draft<SourcesState>, action: PayloadAction<SourceWithRepository[]>) => {
       state.sourcesList = action.payload;
     },
-    setCurrentSource: (state: Draft<SourcesState>, action: PayloadAction<SourceWithRepository>) => {
+    setCurrentSource: (state: Draft<SourcesState>, action: PayloadAction<SourceWithRepository | undefined>) => {
       state.currentSource = action.payload;
     },
   },

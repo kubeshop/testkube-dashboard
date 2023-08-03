@@ -8,6 +8,7 @@ import useLocation from '@hooks/useLocation';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
+import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
 import {useAppSelector} from '@redux/hooks';
@@ -29,31 +30,43 @@ const SourceDetails = () => {
 
   const [activeTabKey, setActiveTabKey] = useState('Settings');
 
-  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
+  const {data: sourceDetails, error, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
   const reload = useCallback(() => safeRefetch(refetch), [refetch]);
 
   const isPageDisabled = !name;
 
   useEffect(() => {
-    if (sourceDetails) {
-      dispatch(setCurrentSource(sourceDetails));
-    }
+    dispatch(setCurrentSource(sourceDetails));
   }, [sourceDetails]);
 
   useEffect(() => {
     reload();
   }, [location]);
 
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+  if (!sourceDetails || !currentSourceDetails) {
+    return <Loading />;
+  }
+
   return (
     <PageWrapper>
       <PageMetadata title={`${name} | Sources`} />
 
       <PageHeader onBack={() => navigate('/sources')} title={name} />
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {currentSourceDetails ? <SourceSettings reload={reload} /> : null}
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
+        destroyInactiveTabPane
+        items={[
+          {
+            key: 'Settings',
+            label: 'Settings',
+            children: <SourceSettings reload={reload} />,
+          },
+        ]}
+      />
     </PageWrapper>
   );
 };

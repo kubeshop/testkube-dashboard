@@ -137,8 +137,6 @@ const EntityDetailsContent: React.FC = () => {
       }
     : {};
 
-  const isPageDisabled = !name;
-
   return (
     <PageWrapper>
       <PageMetadata title={name} description={description} />
@@ -160,14 +158,7 @@ const EntityDetailsContent: React.FC = () => {
             items={[{key: 1, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>}]}
             wrapperStyle={{backgroundColor: Colors.slate800}}
           />,
-          <Button
-            key="run-now-button"
-            type="primary"
-            onClick={onRunButtonClick}
-            disabled={isPageDisabled}
-            hidden={!mayRun}
-            loading={isLoading}
-          >
+          <Button key="run-now-button" type="primary" onClick={onRunButtonClick} hidden={!mayRun} loading={isLoading}>
             Run now
           </Button>,
         ]}
@@ -192,7 +183,6 @@ const EntityDetailsContent: React.FC = () => {
           {
             key: 'Executions',
             label: 'Recent executions',
-            disabled: isPageDisabled,
             children: (
               <>
                 <MetricsBarChart
@@ -208,13 +198,11 @@ const EntityDetailsContent: React.FC = () => {
           {
             key: 'CLICommands',
             label: 'CLI Commands',
-            disabled: isPageDisabled,
             children: <CLICommands name={name} bg={Colors.slate800} />,
           },
           {
             key: 'Settings',
             label: 'Settings',
-            disabled: isPageDisabled,
             children: <Settings />,
           },
         ]}

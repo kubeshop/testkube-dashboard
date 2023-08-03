@@ -15,6 +15,8 @@ import {Test} from '@models/test';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from '@models/websocket';
 
+import {Error, Loading} from '@pages';
+
 import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {initializeEntityDetailsStore} from '@store/entityDetails';
@@ -64,7 +66,7 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
     {id, last: daysFilterValue},
     {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable}
   );
-  const {data: rawDetails} = useGetEntityDetails(id, {
+  const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.everyTwoSeconds,
     skip: !isClusterAvailable,
   });
@@ -221,15 +223,21 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
   useEntityDetailsSync({
     metrics: rawMetrics,
     details: rawDetails,
+    error,
   });
+
+  const errorPage = error && <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  const loadingPage = !rawDetails && <Loading />;
 
   return (
     <EntityStoreProvider>
       <ExecutionStoreProvider>
-        <EntityDetailsWrapper>
-          <EntityDetailsContent />
-          <ExecutionDetailsDrawer />
-        </EntityDetailsWrapper>
+        {errorPage || loadingPage || (
+          <EntityDetailsWrapper>
+            <EntityDetailsContent />
+            <ExecutionDetailsDrawer />
+          </EntityDetailsWrapper>
+        )}
       </ExecutionStoreProvider>
     </EntityStoreProvider>
   );

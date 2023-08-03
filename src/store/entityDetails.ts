@@ -11,6 +11,7 @@ export interface EntityDetailsSlice {
   id?: string;
   executions: any;
   details: any;
+  error?: any;
   metrics?: Metrics;
   daysFilterValue: number;
   currentPage: number;
@@ -22,6 +23,7 @@ const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   id: undefined,
   executions: undefined,
   details: undefined,
+  error: undefined,
   metrics: undefined,
   daysFilterValue: 7,
   currentPage: 1,
