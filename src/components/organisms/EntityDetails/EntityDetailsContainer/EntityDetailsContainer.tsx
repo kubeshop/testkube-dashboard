@@ -30,7 +30,7 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
 
-interface EntityDetailsContainerProps {
+export interface EntityDetailsContainerProps {
   entity: Entity;
   tab?: string;
 }
@@ -55,7 +55,7 @@ const EntityDetailsContainer: React.FC<EntityDetailsContainerProps> = props => {
     },
     [execId]
   );
-  const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] =
+  const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField, pick: useEntityDetailsPick}] =
     initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
@@ -231,8 +231,10 @@ const EntityDetailsContainer: React.FC<EntityDetailsContainerProps> = props => {
     error,
   });
 
+  const {details: currentDetails} = useEntityDetailsPick('details');
+
   const errorPage = error && <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
-  const loadingPage = !rawDetails && <Loading />;
+  const loadingPage = (!rawDetails || !currentDetails) && <Loading />;
 
   const setTab = useLastCallback((nextTab: string) => {
     navigate(`/${entity}/${id}/${nextTab}`);

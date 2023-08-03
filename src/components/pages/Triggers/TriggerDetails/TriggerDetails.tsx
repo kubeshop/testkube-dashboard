@@ -47,7 +47,7 @@ const TriggerDetails = () => {
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
-  if (!triggerDetails) {
+  if (!triggerDetails || !currentState.current) {
     return <Loading />;
   }
 
