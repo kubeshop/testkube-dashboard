@@ -6,7 +6,6 @@ import {ExternalLink} from '@atoms';
 
 import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
-import {Entity} from '@models/entity';
 import {VariableInForm} from '@models/variable';
 
 import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
@@ -19,19 +18,13 @@ import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {decomposeVariables, formatVariables} from '@utils/variables';
 
-const descriptionMap: Record<Entity, string> = {
-  'test-suites':
-    'Define environment variables which will be shared across your tests. Variables defined at a Test Suite level will override those defined at a Test level.',
-  tests: 'Define environment variables which will be shared across your test.',
-};
-
 type VariablesFormValues = {
   'variables-list': VariableInForm[];
 };
 
 const Variables: React.FC = () => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {useUpdateEntity} = useEntityDetailsConfig(entity);
+  const {useUpdateEntity, variablesDescription} = useEntityDetailsConfig(entity);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = useUpdateEntity();
@@ -102,7 +95,7 @@ const Variables: React.FC = () => {
     >
       <ConfigurationCard
         title="Variables & Secrets"
-        description={descriptionMap[entity]}
+        description={variablesDescription}
         footerText={
           <>
             Learn more about <ExternalLink href={externalLinks.variables}>Environment variables</ExternalLink>

@@ -1,3 +1,5 @@
+import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+
 import {Definition} from '@molecules';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
@@ -5,12 +7,11 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
-import {settingsDefinitionData} from './utils';
-
+// TODO: Split
 const SettingsDefinition = () => {
   const {details, entity} = useEntityDetailsPick('details', 'entity');
+  const {useGetDefinition, useUpdateDefinition} = useEntityDetailsConfig(entity);
 
-  const sectionData = settingsDefinitionData[entity];
   const config =
     entity === 'tests'
       ? {
@@ -36,8 +37,8 @@ const SettingsDefinition = () => {
 
   return (
     <Definition
-      useGetDefinitionQuery={sectionData.query}
-      useUpdateDefinitionMutation={sectionData.mutation}
+      useGetDefinitionQuery={useGetDefinition}
+      useUpdateDefinitionMutation={useUpdateDefinition}
       name={details.name}
       {...config}
     />
