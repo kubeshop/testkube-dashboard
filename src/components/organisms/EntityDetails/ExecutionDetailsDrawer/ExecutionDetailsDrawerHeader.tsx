@@ -31,7 +31,7 @@ type ExecutionDetailsDrawerHeaderProps = {
 };
 
 const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> = props => {
-  const {entity} = useEntityDetailsPick('entity');
+  const {id: entityId, entity} = useEntityDetailsPick('id', 'entity');
   const {close, id: execId} = useExecutionDetailsPick('close', 'id');
   const {useAbortExecution} = useEntityDetailsConfig(entity);
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
@@ -100,6 +100,7 @@ const ExecutionDetailsDrawerHeader: React.FC<ExecutionDetailsDrawerHeaderProps> 
             <Text ellipsis>
               <Text color={Colors.slate400}>Trigger:&nbsp;</Text>
               <RunningContext
+                id={entityId!}
                 type={runningContext?.type}
                 context={runningContext?.context}
                 onClose={close}

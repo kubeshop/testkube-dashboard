@@ -9,10 +9,14 @@ import TriggerCondition from './TriggerCondition';
 
 interface TriggerSettingsProps {
   reload: () => void;
+  tab: string;
+  onTabChange: (tab: string) => void;
 }
 
-const TriggerSettings: FC<TriggerSettingsProps> = ({reload}) => (
+const TriggerSettings: FC<TriggerSettingsProps> = ({reload, tab, onTabChange}) => (
   <SettingsLayout
+    active={tab}
+    onChange={onTabChange}
     tabs={[
       {id: 'general', label: 'General', children: <General />},
       {id: 'condition', label: 'Trigger Condition', children: <TriggerCondition />},

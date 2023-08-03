@@ -10,7 +10,10 @@ const Executors: React.FC = () => {
     <>
       <Routes>
         <Route index element={<ExecutorsList />} />
-        <Route path=":id" element={<ExecutorDetails />} />
+        <Route path=":id" element={<ExecutorDetails />}>
+          <Route index element={null} />
+          <Route path="settings/:settingsTab" element={null} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Outlet />

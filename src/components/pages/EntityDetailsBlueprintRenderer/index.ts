@@ -1,1 +1,1 @@
-export {default} from './EntityDetailsBlueprintRenderer';
+export {EntityDetailsContainer as default} from '@organisms';

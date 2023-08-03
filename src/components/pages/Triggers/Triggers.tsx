@@ -10,7 +10,10 @@ const Triggers: React.FC = () => {
     <>
       <Routes>
         <Route index element={<TriggersList />} />
-        <Route path=":id" element={<TriggerDetails />} />
+        <Route path=":id" element={<TriggerDetails />}>
+          <Route index element={null} />
+          <Route path="settings/:settingsTab" element={null} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Outlet />
