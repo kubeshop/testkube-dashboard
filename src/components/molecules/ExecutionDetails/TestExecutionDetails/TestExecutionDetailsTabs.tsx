@@ -1,8 +1,6 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect} from 'react';
 
 import {Tabs} from 'antd';
-
-import debounce from 'lodash.debounce';
 
 import useIsRunning from '@hooks/useIsRunning';
 
@@ -30,11 +28,6 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  const [oldScroll, setOldScroll] = useState(0);
-  const [isAutoScrolled, setAutoScrolledState] = useState(false);
-
   const execution = data as Execution;
 
   const {
@@ -57,46 +50,12 @@ const TestExecutionDetailsTabs: React.FC = () => {
     setTestExecutionTabsData({execution, test: details});
   }, [execution, details]);
 
-  useEffect(() => {
-    if (ref && ref.current) {
-      ref.current.onscroll = debounce(() => {
-        setOldScroll(prev => {
-          if (ref && ref.current) {
-            if (prev > ref.current?.scrollTop) {
-              setAutoScrolledState(false);
-            } else {
-              setAutoScrolledState(true);
-            }
-
-            return ref.current?.scrollTop;
-          }
-
-          return prev;
-        });
-      }, 50);
-    }
-  }, [oldScroll]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setAutoScrolledState(true);
-    }, 500);
-  }, [id]);
-
-  useEffect(() => {
-    if (isRunning) {
-      setAutoScrolledState(true);
-    }
-  }, [isRunning, id]);
-
   const defaultExecutionDetailsTabs = [
     {
       value: {
         key: 'LogOutputPane',
         label: 'Log Output',
-        children: (
-          <LogOutput logOutput={output} executionId={id} isRunning={isRunning} isAutoScrolled={isAutoScrolled} />
-        ),
+        children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} />,
       },
       metadata: {
         order: Infinity,
@@ -145,11 +104,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   const items = usePluginSlotList('testExecutionTabs', defaultExecutionDetailsTabs);
 
-  return (
-    <div ref={ref}>
-      <Tabs items={items} />
-    </div>
-  );
+  return <Tabs items={items} />;
 };
 
 export default TestExecutionDetailsTabs;
