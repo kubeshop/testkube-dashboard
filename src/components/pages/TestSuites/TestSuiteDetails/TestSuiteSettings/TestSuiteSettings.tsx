@@ -5,10 +5,10 @@ import {SettingsLayoutProps} from '@molecules/SettingsLayout/SettingsLayout';
 
 import SettingsDefinition from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsDefinition/SettingsDefinition';
 import SettingsScheduling from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsScheduling';
-import SettingsVariables from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsVariables';
 
 import SettingsGeneral from './SettingsGeneral';
 import SettingsTests from './SettingsTests';
+import SettingsVariables from './SettingsVariables';
 
 const tabs = [
   {id: 'general', label: 'General', children: <SettingsGeneral />},
