@@ -141,7 +141,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
         visible: () => decomposedVars.length,
       },
     },
-  ].filter(Boolean);
+  ];
 
   const items = usePluginSlotList('testExecutionTabs', defaultExecutionDetailsTabs);
 
