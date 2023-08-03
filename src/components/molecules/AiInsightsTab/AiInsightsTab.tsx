@@ -6,6 +6,8 @@ import {Execution} from '@models/execution';
 
 import Colors from '@styles/Colors';
 
+import {externalLinks} from '@utils/externalLinks';
+
 import {AiInsightContainer, AiInsightContent} from './AiInsightsTab.styled';
 
 interface AiInsightsTabProps {
@@ -20,9 +22,15 @@ const AiInsightsTab = () => {
         <LockedIcon />
         <Text className="big bold"> This feature is available only in Testkube Cloud.</Text>
         <Text color={Colors.slate400}>
-          Start using Testkube Cloud to get AI insights for your test executions. Learn more
+          Start using Testkube Cloud to get AI insights for your test executions, as well as other exclusive features.
+          Learn more
         </Text>
-        <Button type="primary" onClick={() => {}}>
+        <Button
+          type="primary"
+          onClick={() => {
+            window.open(externalLinks.testkubeCloud, '_self');
+          }}
+        >
           Go to Testkube Cloud
         </Button>
       </AiInsightContent>
