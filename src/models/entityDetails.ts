@@ -1,5 +1,6 @@
 import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+
 import {YamlEditBody} from '@models/fetch';
 
 export type EntityDetailsBlueprint = {

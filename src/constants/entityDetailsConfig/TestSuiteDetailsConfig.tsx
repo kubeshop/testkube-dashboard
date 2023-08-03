@@ -28,7 +28,8 @@ const TestSuiteExecutionsConfig: EntityDetailsBlueprint = {
   useUpdateDefinition: useUpdateTestSuiteDefinitionMutation,
   defaultStackRoute: '/test-suites',
   label: 'test suite',
-  variablesDescription: 'Define environment variables which will be shared across your tests. Variables defined at a Test Suite level will override those defined at a Test level.',
+  variablesDescription:
+    'Define environment variables which will be shared across your tests. Variables defined at a Test Suite level will override those defined at a Test level.',
 };
 
 export default TestSuiteExecutionsConfig;
