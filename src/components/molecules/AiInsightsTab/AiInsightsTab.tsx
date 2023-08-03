@@ -2,6 +2,8 @@ import {Execution} from '@models/execution';
 
 import {usePluginState} from '@plugins/pluginHooks';
 
+import {AiInsightContainer} from './AiInsightsTab.styled';
+
 interface AiInsightsTabProps {
   execution: Execution;
   test: any;
@@ -10,10 +12,10 @@ interface AiInsightsTabProps {
 const AiInsightsTab = () => {
   const [{execution}] = usePluginState<AiInsightsTabProps>('testExecutionTabs');
   return (
-    <div>
+    <AiInsightContainer>
       This is a cloud only feature. Please log in to cloud in order to use this feature for id
       {execution.id}
-    </div>
+    </AiInsightContainer>
   );
 };
 
