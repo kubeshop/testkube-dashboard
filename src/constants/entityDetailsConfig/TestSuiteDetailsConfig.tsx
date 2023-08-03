@@ -9,9 +9,7 @@ import {
   useAbortAllTestSuiteExecutionsMutation,
   useAbortTestSuiteExecutionMutation,
   useDeleteTestSuiteMutation,
-  useGetTestSuiteDefinitionQuery,
   useGetTestSuiteDetailsQuery,
-  useUpdateTestSuiteDefinitionMutation,
   useUpdateTestSuiteMutation,
 } from '@services/testSuites';
 
@@ -24,8 +22,6 @@ const TestSuiteExecutionsConfig: EntityDetailsBlueprint = {
   useGetExecutionDetails: useGetTestSuiteExecutionByIdQuery,
   useUpdateEntity: useUpdateTestSuiteMutation,
   useDeleteEntity: useDeleteTestSuiteMutation,
-  useGetDefinition: useGetTestSuiteDefinitionQuery,
-  useUpdateDefinition: useUpdateTestSuiteDefinitionMutation,
   defaultStackRoute: '/test-suites',
   label: 'test suite',
   variablesDescription:

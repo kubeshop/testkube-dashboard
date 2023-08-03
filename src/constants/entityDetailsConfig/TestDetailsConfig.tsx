@@ -4,12 +4,10 @@ import {
   useAbortAllTestExecutionsMutation,
   useAbortTestExecutionMutation,
   useDeleteTestMutation,
-  useGetTestDefinitionQuery,
   useGetTestExecutionByIdQuery,
   useGetTestExecutionMetricsQuery,
   useGetTestExecutionsByIdQuery,
   useGetTestQuery,
-  useUpdateTestDefinitionMutation,
   useUpdateTestMutation,
 } from '@services/tests';
 
@@ -22,8 +20,6 @@ const TestExecutionsConfig: EntityDetailsBlueprint = {
   useGetExecutionDetails: useGetTestExecutionByIdQuery,
   useUpdateEntity: useUpdateTestMutation,
   useDeleteEntity: useDeleteTestMutation,
-  useGetDefinition: useGetTestDefinitionQuery,
-  useUpdateDefinition: useUpdateTestDefinitionMutation,
   defaultStackRoute: '/tests',
   label: 'test',
   variablesDescription: 'Define environment variables which will be shared across your test.',

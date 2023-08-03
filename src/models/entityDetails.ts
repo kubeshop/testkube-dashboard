@@ -1,8 +1,6 @@
 import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {YamlEditBody} from '@models/fetch';
-
 export type EntityDetailsBlueprint = {
   useGetExecutions: UseQuery<QueryDefinition<any, any, any, any, any>>;
   useGetEntityDetails: UseQuery<QueryDefinition<any, any, any, any, any>>;
@@ -12,8 +10,6 @@ export type EntityDetailsBlueprint = {
   useGetExecutionDetails: UseQuery<QueryDefinition<string, any, any, any, any>>;
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
   useDeleteEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
-  useGetDefinition: UseQuery<QueryDefinition<string, any, any, string>>;
-  useUpdateDefinition: UseMutation<MutationDefinition<YamlEditBody, any, any, any, any>>;
   defaultStackRoute: string;
   label: string;
   variablesDescription: string;

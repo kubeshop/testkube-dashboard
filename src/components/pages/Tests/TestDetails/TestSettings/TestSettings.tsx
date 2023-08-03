@@ -3,9 +3,9 @@ import React, {FC} from 'react';
 import {SettingsLayout} from '@molecules';
 import {SettingsLayoutProps} from '@molecules/SettingsLayout/SettingsLayout';
 
-import SettingsDefinition from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsDefinition/SettingsDefinition';
 import SettingsScheduling from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsScheduling';
 
+import SettingsDefinition from './SettingsDefinition';
 import SettingsExecution from './SettingsExecution';
 import SettingsGeneral from './SettingsGeneral';
 import SettingsTest from './SettingsTest';
