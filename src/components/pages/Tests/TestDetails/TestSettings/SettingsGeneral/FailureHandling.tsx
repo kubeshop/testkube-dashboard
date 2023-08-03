@@ -12,7 +12,7 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {StyledPopoverContainer, StyledQuestionCircleOutlined} from '../Settings.styled';
+import {StyledPopoverContainer, StyledQuestionCircleOutlined} from '@organisms/EntityDetails/EntityDetailsContent/Settings/Settings.styled';
 
 const popoverContent = (
   <StyledPopoverContainer>
