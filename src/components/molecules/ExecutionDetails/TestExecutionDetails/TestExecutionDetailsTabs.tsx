@@ -102,26 +102,24 @@ const TestExecutionDetailsTabs: React.FC = () => {
         order: Infinity,
       },
     },
-    // TODO: refactor using visibility metadata
-    whetherToShowArtifactsTab
-      ? {
-          value: {
-            key: 'ArtifactsPane',
-            label: 'Artifacts',
-            children: (
-              <TestExecutionDetailsArtifacts
-                id={id}
-                testName={testName}
-                testSuiteName={testSuiteName}
-                startTime={startTime.toString()}
-              />
-            ),
-          },
-          metadata: {
-            order: 3,
-          },
-        }
-      : null,
+    {
+      value: {
+        key: 'ArtifactsPane',
+        label: 'Artifacts',
+        children: (
+          <TestExecutionDetailsArtifacts
+            id={id}
+            testName={testName}
+            testSuiteName={testSuiteName}
+            startTime={startTime.toString()}
+          />
+        ),
+      },
+      metadata: {
+        order: 3,
+        visible: () => whetherToShowArtifactsTab,
+      },
+    },
     {
       value: {
         key: 'CLICommands',
@@ -132,18 +130,17 @@ const TestExecutionDetailsTabs: React.FC = () => {
         order: 2,
       },
     },
-    decomposedVars.length
-      ? {
-          value: {
-            key: 'Variables',
-            label: 'Variables',
-            children: <ExecutionsVariablesList variables={decomposedVars} />,
-          },
-          metadata: {
-            order: 1,
-          },
-        }
-      : null,
+    {
+      value: {
+        key: 'Variables',
+        label: 'Variables',
+        children: <ExecutionsVariablesList variables={decomposedVars} />,
+      },
+      metadata: {
+        order: 1,
+        visible: () => decomposedVars.length,
+      },
+    },
   ].filter(Boolean);
 
   const items = usePluginSlotList('testExecutionTabs', defaultExecutionDetailsTabs);

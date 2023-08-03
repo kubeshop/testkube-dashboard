@@ -15,19 +15,11 @@ export const usePluginSlot = (name: string) => usePluginSlotList(name)[0];
 export const usePluginSlotList = (name: string, defaults: any[] = []) => {
   const {scope} = useContext(PluginsContext);
 
-  const elements = useMemo(() => {
-    const slotElement: any[] = scope.getSlot(name);
-    slotElement.forEach((e: any) => {
-      // by default, all elements are visible,
-      // unless visibility is configured explicitly in the metadata
-      if (!e.metadata?.visibile) {
-        defaults.push(e);
-      } else if (e.metadata.visibile(scope.getState(name))) {
-        // if visibility is configured, check if the element is visible
-        defaults.push(e);
-      }
-    });
-    return orderArray(defaults);
-  }, [defaults, scope.getSlot(name)]);
+  // by default, all elements are visible,
+  // unless visibility is configured explicitly in the metadata
+  const elements = useMemo(
+    () => orderArray([...defaults, ...scope.getSlot(name)].filter(x => !x.metadata?.visible || x.metadata.visible())),
+    [defaults, scope.getSlot(name)]
+  );
   return elements;
 };

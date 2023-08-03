@@ -15,7 +15,7 @@ import {
 interface ButtonConfig {
   type: ICustomButtonProps['$customType'];
   text: string;
-  onClick?: () => void;
+  href?: string;
 }
 
 interface ButtonWithLinkConfig extends ButtonConfig {
@@ -78,7 +78,7 @@ const MessagePanel: React.FC<MessagePanelProps> = props => {
               }
 
               return (
-                <Button $customType={button.type} key={button.type} onClick={button.onClick}>
+                <Button $customType={button.type} key={button.type}>
                   {button.text}
                 </Button>
               );
