@@ -44,7 +44,7 @@ const Timeout: React.FC = () => {
         },
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', 'Test Timeout was successfully updated.'));
   };
 

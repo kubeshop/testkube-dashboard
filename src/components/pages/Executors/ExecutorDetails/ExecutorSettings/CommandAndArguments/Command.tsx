@@ -45,7 +45,7 @@ const Command: React.FC = () => {
         command: values.command.split(' '),
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', 'Command was successfully updated.');
         dispatch(updateCurrentExecutorData({command: values.command!.split(' ')}));

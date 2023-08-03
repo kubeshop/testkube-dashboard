@@ -60,7 +60,7 @@ const AddSourceModal: React.FC = () => {
     };
 
     createSource(body)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
         if (res && 'data' in res) {
           navigate(`/sources/${res.data.metadata.name}`);

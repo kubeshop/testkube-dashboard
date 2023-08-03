@@ -56,7 +56,7 @@ const FailureHandling: React.FC = () => {
         },
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', `Test was successfully updated.`));
   };
 

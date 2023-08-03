@@ -51,7 +51,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
       ...values,
       labels: decomposeLabels(localLabels),
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
         if (res && 'data' in res) {
           telemetry.event('createTestSuite');

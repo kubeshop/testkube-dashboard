@@ -47,7 +47,7 @@ const Condition: React.FC = () => {
     };
 
     return updateTrigger(body)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
         if (res && 'data' in res) {
           notificationCall('passed', 'Trigger was successfully updated.');

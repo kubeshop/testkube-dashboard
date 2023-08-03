@@ -52,7 +52,7 @@ const NameNDescription: React.FC = () => {
         },
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', `${capitalize(label)} was successfully updated.`));
   };
 

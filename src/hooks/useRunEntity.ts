@@ -47,7 +47,7 @@ const useRunEntity = (
         },
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         if (entity === 'tests') {
           telemetry.event('runTest', {type: details!.type});
