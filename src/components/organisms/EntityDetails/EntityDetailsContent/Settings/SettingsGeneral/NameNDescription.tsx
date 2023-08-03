@@ -51,7 +51,7 @@ const NameNDescription: React.FC = () => {
         },
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', `${capitalize(namingMap[entity])} was successfully updated.`));
   };
 

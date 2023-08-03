@@ -85,11 +85,9 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
     return update({name, value})
       .then(displayDefaultNotificationFlow)
       .then(res => {
-        if (res && 'data' in res) {
-          notificationCall('passed', `${capitalize(label)} was successfully updated.`);
-          onUpdate?.(res.data);
-          refetch();
-        }
+        notificationCall('passed', `${capitalize(label)} was successfully updated.`);
+        onUpdate?.(res.data);
+        refetch();
       });
   };
 

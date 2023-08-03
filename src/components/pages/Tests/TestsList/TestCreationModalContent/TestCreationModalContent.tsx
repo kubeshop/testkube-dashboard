@@ -69,14 +69,14 @@ const TestCreationModalContent: React.FC = () => {
   }, [testType]);
 
   const onSuccess = (res: RTKResponse<MetadataResponse<Test>>) => {
-    return displayDefaultNotificationFlow(res).then(() => {
-      if ('data' in res) {
-        telemetry.event('createTest', {type: res.data.spec?.type});
+    return Promise.resolve(res)
+      .then(displayDefaultNotificationFlow)
+      .then(({data}) => {
+        telemetry.event('createTest', {type: data.spec?.type});
 
-        navigate(`/tests/executions/${res.data.metadata.name}`);
+        navigate(`/tests/executions/${data.metadata.name}`);
         closeModal();
-      }
-    });
+      });
   };
 
   return (

@@ -32,7 +32,7 @@ const Name: React.FC = () => {
     };
 
     return updateTrigger(body)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', 'Trigger was successfully updated.');
         setCurrentTrigger(body);

@@ -54,16 +54,14 @@ const TestSuiteCreationModalContent: React.FC = () => {
       ...values,
       labels: decomposeLabels(localLabels),
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
-        if (res && 'data' in res) {
-          telemetry.event('createTestSuite');
+        telemetry.event('createTestSuite');
 
-          dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
+        dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
 
-          navigate(`/test-suites/executions/${res.data.metadata.name}`);
-          closeModal();
-        }
+        navigate(`/test-suites/executions/${res.data.metadata.name}`);
+        closeModal();
       })
       .catch(err => {
         setError(err);

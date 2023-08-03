@@ -105,7 +105,7 @@ const EntityDetailsContent: React.FC = () => {
         },
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         if (entity === 'tests') {
           telemetry.event('runTest', {type});

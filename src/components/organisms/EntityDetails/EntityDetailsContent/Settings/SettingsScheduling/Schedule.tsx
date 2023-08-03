@@ -46,7 +46,7 @@ const Schedule: React.FC = () => {
         schedule: cronString,
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
         setWasTouched(false);
         notificationCall('passed', `${capitalize(namingMap[entity])} schedule was successfully updated.`);

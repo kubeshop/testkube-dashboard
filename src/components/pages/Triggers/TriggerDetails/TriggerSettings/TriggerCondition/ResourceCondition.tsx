@@ -39,16 +39,14 @@ const ResourceCondition: React.FC = () => {
     };
 
     return updateTrigger(body)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
-        if (res && 'data' in res) {
-          notificationCall('passed', 'Trigger was successfully updated.');
-          setCurrentTrigger(res.data);
-          form.setFieldsValue({
-            timeout: res.data.conditionSpec?.timeout,
-            conditions: res.data.conditionSpec?.conditions || [],
-          });
-        }
+        notificationCall('passed', 'Trigger was successfully updated.');
+        setCurrentTrigger(res.data);
+        form.setFieldsValue({
+          timeout: res.data.conditionSpec?.timeout,
+          conditions: res.data.conditionSpec?.conditions || [],
+        });
       });
   };
 

@@ -54,12 +54,8 @@ const AddExecutorsModal: React.FC = () => {
     delete body.type;
 
     createExecutor(body)
-      .then(res => displayDefaultNotificationFlow(res))
-      .then(res => {
-        if (res && 'data' in res) {
-          navigate(`/executors/${res.data.metadata.name}`);
-        }
-      })
+      .then(displayDefaultNotificationFlow)
+      .then(res => navigate(`/executors/${res.data.metadata.name}`))
       .catch(err => {
         setError(err);
 
