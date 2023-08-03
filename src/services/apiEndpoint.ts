@@ -122,7 +122,7 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
     throw new Error('Received invalid data from the provided API endpoint');
   }
 
-  return {url, namespace: data.namespace || 'testkube'};
+  return {url, ...data, namespace: data.namespace || 'testkube'};
 }
 
 export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean> {

@@ -101,16 +101,18 @@ const App: React.FC<AppProps> = ({plugins}) => {
       return;
     }
 
-    getApiDetails(apiEndpoint).catch(() => {
-      // Handle race condition
-      if (getApiEndpoint() !== apiEndpoint) {
-        return;
-      }
+    getApiDetails(apiEndpoint)
+      .then(result => console.log(result))
+      .catch(() => {
+        // Handle race condition
+        if (getApiEndpoint() !== apiEndpoint) {
+          return;
+        }
 
-      // Display popup
-      notificationCall('failed', 'Could not receive data from the specified API endpoint');
-      setEndpointModalState(true);
-    });
+        // Display popup
+        notificationCall('failed', 'Could not receive data from the specified API endpoint');
+        setEndpointModalState(true);
+      });
   }, [apiEndpoint]);
 
   const scope = useMemo(() => {
