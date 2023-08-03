@@ -10,6 +10,7 @@ export enum externalLinks {
   sourcesApi = 'https://docs.testkube.io/openapi/#tag/test-sources',
   sourcesDocumentation = 'https://docs.testkube.io/articles/creating-tests/#test-source',
   testSources = 'https://docs.testkube.io/articles/test-sources',
+  testkubeCloud = 'https://cloud.testkube.io',
   OSStoCloudMigration = 'https://cloud.testkube.io/system-init?cloudMigrate=true',
   apiEndpoint = 'https://docs.testkube.io/articles/testkube-dashboard-api-endpoint',
   createTestSuite = 'https://docs.testkube.io/articles/creating-test-suites',
