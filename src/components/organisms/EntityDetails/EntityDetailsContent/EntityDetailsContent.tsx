@@ -187,7 +187,7 @@ const EntityDetailsContent: React.FC = () => {
           ) : null}
         </Space>
       </PageHeader>
-      {!isMetricsEmpty ? <SummaryGrid metrics={metrics} /> : null}
+      <SummaryGrid metrics={metrics} />
       <Tabs
         activeKey={activeTabKey}
         onChange={setActiveTabKey}
