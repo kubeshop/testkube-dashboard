@@ -9,3 +9,11 @@ export const AiInsightContainer = styled.div`
   border-radius: 4px;
   background-color: ${Colors.slate900};
 `;
+
+export const AiInsightContent = styled.div`
+  padding: 40px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+`;

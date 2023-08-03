@@ -1,8 +1,12 @@
+import {ReactComponent as LockedIcon} from '@assets/lockedIcon.svg';
+
+import {Button, Text} from '@custom-antd';
+
 import {Execution} from '@models/execution';
 
-import {usePluginState} from '@plugins/pluginHooks';
+import Colors from '@styles/Colors';
 
-import {AiInsightContainer} from './AiInsightsTab.styled';
+import {AiInsightContainer, AiInsightContent} from './AiInsightsTab.styled';
 
 interface AiInsightsTabProps {
   execution: Execution;
@@ -10,11 +14,17 @@ interface AiInsightsTabProps {
 }
 
 const AiInsightsTab = () => {
-  const [{execution}] = usePluginState<AiInsightsTabProps>('testExecutionTabs');
   return (
     <AiInsightContainer>
-      This is a cloud only feature. Please log in to cloud in order to use this feature for id
-      {execution.id}
+      <AiInsightContent>
+        <LockedIcon />
+        <Text color={Colors.slate400}>
+          Please enable AI Hints for your organization in order to access this feature. Learn more
+        </Text>
+        <Button type="primary" onClick={() => {}}>
+          Enable AI Hints
+        </Button>
+      </AiInsightContent>
     </AiInsightContainer>
   );
 };
