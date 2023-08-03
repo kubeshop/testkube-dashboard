@@ -55,8 +55,10 @@ const EntityDetailsContainer: React.FC<EntityDetailsContainerProps> = props => {
     },
     [execId]
   );
-  const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField, pick: useEntityDetailsPick}] =
-    initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
+  const [
+    EntityStoreProvider,
+    {sync: useEntityDetailsSync, useField: useEntityDetailsField, pick: useEntityDetailsPick},
+  ] = initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
