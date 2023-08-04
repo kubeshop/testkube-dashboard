@@ -94,16 +94,16 @@ const App: React.FC<AppProps> = ({plugins}) => {
   useEffect(() => {
     // Do not fire the effect if new endpoint is just being set up,
     // or it can't be changed.
-    if (location.pathname === '/apiEndpoint' || isApiEndpointLocked()) {
+    if (location.pathname === '/apiEndpoint') {
       return;
     }
 
-    if (!apiEndpoint) {
+    if (!apiEndpoint && !isApiEndpointLocked()) {
       setEndpointModalState(true);
       return;
     }
 
-    getApiDetails(apiEndpoint)
+    getApiDetails(apiEndpoint!)
       .then(setClusterDetails)
       .catch(() => {
         // Handle race condition
@@ -113,7 +113,9 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
         // Display popup
         notificationCall('failed', 'Could not receive data from the specified API endpoint');
-        setEndpointModalState(true);
+        if (isApiEndpointLocked()) {
+          setEndpointModalState(true);
+        }
       });
   }, [apiEndpoint]);
 
