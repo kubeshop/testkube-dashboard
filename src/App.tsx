@@ -3,9 +3,6 @@ import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 import {useUpdate} from 'react-use';
 
-import PluginsContext from '@plugins/PluginsContext';
-import {Plugin} from '@plugins/types';
-
 import {config} from '@constants/config';
 
 import {DashboardContext, MainContext} from '@contexts';
@@ -16,6 +13,9 @@ import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 
 import {EndpointProcessing, Loading, NotFound} from '@pages';
 
+import PluginsContext from '@plugins/PluginsContext';
+import {Plugin} from '@plugins/types';
+
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
 import {setExecutors} from '@redux/reducers/executorsSlice';
@@ -25,7 +25,7 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {useApiDetailsField} from '@store/apiDetails';
+import {useClusterDetailsPick} from '@store/clusterDetails';
 import {initializeTriggersStore} from '@store/triggers';
 
 import {composeProviders} from '@utils/composeProviders';
@@ -48,13 +48,13 @@ export interface AppProps {
 
 const App: React.FC<AppProps> = ({plugins}) => {
   const [TriggersProvider] = initializeTriggersStore();
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const dispatch = useAppDispatch();
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
-  const [apiDetailsData, setApiDetailsData] = useApiDetailsField('data');
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
   const logRef = useRef<HTMLDivElement>(null);
@@ -104,7 +104,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     }
 
     getApiDetails(apiEndpoint)
-      .then(setApiDetailsData)
+      .then(setClusterDetails)
       .catch(() => {
         // Handle race condition
         if (getApiEndpoint() !== apiEndpoint) {

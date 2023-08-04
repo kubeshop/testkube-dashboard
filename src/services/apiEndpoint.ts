@@ -9,7 +9,7 @@ import {MainContext} from '@contexts';
 
 import {setNamespace} from '@redux/reducers/configSlice';
 
-import {useApiDetailsField} from '@src/store/apiDetails';
+import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {hasProtocol} from '@utils/strings';
 
@@ -18,8 +18,12 @@ import env from '../env';
 export type ApiEndpointListener = (apiEndpoint: string | null) => void;
 
 export interface ApiDetails {
-  url: string;
+  commit: string;
+  context: string;
+  helmchartVersion: string;
   namespace: string;
+  version: string;
+  url: string;
 }
 
 interface ApiEndpointConfig {
@@ -129,11 +133,13 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
 
 export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean> {
   const {dispatch} = useContext(MainContext);
-  const [apiDetailsData, setApiDetailsData] = useApiDetailsField('data');
+  const {reset: resetClusterDetailsState, setClusterDetails} = useClusterDetailsPick('reset', 'setClusterDetails');
 
   return useMemo(
     () => async (apiEndpoint: string) => {
       const prevApiEndpoint = getApiEndpoint();
+      resetClusterDetailsState();
+
       try {
         const data = await getApiDetails(apiEndpoint);
 
@@ -144,7 +150,7 @@ export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean
 
         saveApiEndpoint(data.url);
         dispatch(setNamespace(data.namespace));
-        setApiDetailsData(data);
+        setClusterDetails(data);
 
         return true;
       } catch (error) {
