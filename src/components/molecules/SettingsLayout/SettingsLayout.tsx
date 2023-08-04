@@ -10,7 +10,7 @@ export interface SettingsLayoutTab {
   children: FC<{setId(id: string): void}> | ReactElement<any, any> | null;
 }
 
-interface SettingsLayoutProps {
+export interface SettingsLayoutProps {
   tabs: SettingsLayoutTab[];
   active?: string;
   onChange?: (id: string) => void;

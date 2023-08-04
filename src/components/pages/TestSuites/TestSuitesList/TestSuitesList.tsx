@@ -53,7 +53,7 @@ const TestSuitesList: FC = () => {
   }, [data]);
 
   const [abortAll] = useAbortAllTestSuiteExecutionsMutation();
-  const onItemClick = useCallback((item: TestSuite) => navigate(`/test-suites/executions/${item.name}`), []);
+  const onItemClick = useCallback((item: TestSuite) => navigate(`/test-suites/${item.name}`), []);
   const onItemAbort = useCallback((item: TestSuite) => {
     abortAll({id: item.name})
       .unwrap()

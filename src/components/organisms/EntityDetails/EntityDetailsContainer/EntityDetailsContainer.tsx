@@ -30,11 +30,16 @@ import ExecutionDetailsDrawer from '../ExecutionDetailsDrawer';
 
 import {EntityDetailsWrapper} from './EntityDetailsContainer.styled';
 
-const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
-  const {entity} = props;
+export interface EntityDetailsContainerProps {
+  entity: Entity;
+  tab?: string;
+}
+
+const EntityDetailsContainer: React.FC<EntityDetailsContainerProps> = props => {
+  const {entity, tab} = props;
   const {useGetEntityDetails, useGetMetrics, useGetExecutions} = useEntityDetailsConfig(entity);
 
-  const {id, execId} = useParams();
+  const {id, execId, settingsTab} = useParams();
 
   const {navigate} = useContext(DashboardContext);
 
@@ -42,16 +47,18 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
     {
       id: execId,
       open: useLastCallback((targetId: string) => {
-        navigate(`/${entity}/executions/${id}/execution/${targetId}`);
+        navigate(`/${entity}/${id}/executions/${targetId}`);
       }),
       close: useLastCallback(() => {
-        navigate(`/${entity}/executions/${id}`);
+        navigate(`/${entity}/${id}`);
       }),
     },
     [execId]
   );
-  const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] =
-    initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
+  const [
+    EntityStoreProvider,
+    {sync: useEntityDetailsSync, useField: useEntityDetailsField, pick: useEntityDetailsPick},
+  ] = initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
@@ -226,15 +233,30 @@ const EntityDetailsContainer: React.FC<{entity: Entity}> = props => {
     error,
   });
 
+  const {details: currentDetails} = useEntityDetailsPick('details');
+
   const errorPage = error && <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
-  const loadingPage = !rawDetails && <Loading />;
+  const loadingPage = (!rawDetails || !currentDetails) && <Loading />;
+
+  const setTab = useLastCallback((nextTab: string) => {
+    navigate(`/${entity}/${id}/${nextTab}`);
+  });
+
+  const setSettingsTab = useLastCallback((nextTab: string) => {
+    navigate(`/${entity}/${id}/settings/${nextTab}`);
+  });
 
   return (
     <EntityStoreProvider>
       <ExecutionStoreProvider>
         {errorPage || loadingPage || (
           <EntityDetailsWrapper>
-            <EntityDetailsContent />
+            <EntityDetailsContent
+              tab={tab || 'executions'}
+              settingsTab={settingsTab || 'general'}
+              onTabChange={setTab}
+              onSettingsTabChange={setSettingsTab}
+            />
             <ExecutionDetailsDrawer />
           </EntityDetailsWrapper>
         )}

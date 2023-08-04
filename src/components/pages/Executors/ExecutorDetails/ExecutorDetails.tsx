@@ -1,9 +1,11 @@
-import {useCallback, useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
 import {DashboardContext, MainContext} from '@contexts';
+
+import {useLastCallback} from '@hooks/useLastCallback';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
@@ -22,11 +24,9 @@ import ExecutorSettings from './ExecutorSettings';
 const ExecutorDetails: React.FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
   const {navigate} = useContext(DashboardContext);
-  const {id: name} = useParams() as {id: string};
+  const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
-
-  const [activeTabKey, setActiveTabKey] = useState('Settings');
 
   const {data: executor, error, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
   const reload = useCallback(() => safeRefetch(refetch), [refetch]);
@@ -42,6 +42,10 @@ const ExecutorDetails: React.FC = () => {
     }
   }, [executor]);
 
+  const setSettingsTab = useLastCallback((nextTab: string) => {
+    navigate(`/executors/${name}/settings/${nextTab}`);
+  });
+
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
@@ -55,14 +59,14 @@ const ExecutorDetails: React.FC = () => {
 
       <PageHeader onBack={() => navigate('/executors')} title={name} />
       <Tabs
-        activeKey={activeTabKey}
-        onChange={setActiveTabKey}
         destroyInactiveTabPane
         items={[
           {
-            key: 'Settings',
+            key: 'settings',
             label: 'Settings',
-            children: <ExecutorSettings reload={reload} />,
+            children: currentExecutorDetails ? (
+              <ExecutorSettings tab={settingsTab} onTabChange={setSettingsTab} reload={reload} />
+            ) : null,
           },
         ]}
       />

@@ -1,10 +1,11 @@
-import {useCallback, useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import useLocation from '@hooks/useLocation';
+import {useLastCallback} from '@hooks/useLastCallback';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
@@ -26,14 +27,10 @@ const SourceDetails = () => {
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);
 
-  const name = useLocation().lastPathSegment;
-
-  const [activeTabKey, setActiveTabKey] = useState('Settings');
+  const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
   const {data: sourceDetails, error, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
   const reload = useCallback(() => safeRefetch(refetch), [refetch]);
-
-  const isPageDisabled = !name;
 
   useEffect(() => {
     dispatch(setCurrentSource(sourceDetails));
@@ -42,6 +39,10 @@ const SourceDetails = () => {
   useEffect(() => {
     reload();
   }, [location]);
+
+  const setSettingsTab = useLastCallback((nextTab: string) => {
+    navigate(`/sources/${name}/settings/${nextTab}`);
+  });
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
@@ -56,14 +57,12 @@ const SourceDetails = () => {
 
       <PageHeader onBack={() => navigate('/sources')} title={name} />
       <Tabs
-        activeKey={activeTabKey}
-        onChange={setActiveTabKey}
         destroyInactiveTabPane
         items={[
           {
-            key: 'Settings',
+            key: 'settings',
             label: 'Settings',
-            children: <SourceSettings reload={reload} />,
+            children: <SourceSettings reload={reload} tab={settingsTab} onTabChange={setSettingsTab} />,
           },
         ]}
       />

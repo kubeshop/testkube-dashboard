@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext} from 'react';
 
 import {Select, Space, Tabs} from 'antd';
 
@@ -28,9 +28,6 @@ import PageMetadata from '@pages/PageMetadata';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectSettingsTabConfig} from '@redux/reducers/configSlice';
-
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
 
@@ -55,7 +52,19 @@ const filterOptions: OptionType[] = [
   {value: 0, label: 'See all executions', key: 'allDays'},
 ];
 
-const EntityDetailsContent: React.FC = () => {
+interface EntityDetailsContentProps {
+  tab: string;
+  settingsTab: string;
+  onTabChange: (tab: string) => void;
+  onSettingsTabChange: (tab: string) => void;
+}
+
+const EntityDetailsContent: React.FC<EntityDetailsContentProps> = ({
+  tab,
+  settingsTab,
+  onTabChange,
+  onSettingsTabChange,
+}) => {
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
   const {entity, details, metrics} = useEntityDetailsPick('entity', 'details', 'metrics');
   const {defaultStackRoute, useAbortAllExecutions} = useEntityDetailsConfig(entity);
@@ -63,8 +72,6 @@ const EntityDetailsContent: React.FC = () => {
   const mayRun = usePermission(Permissions.runEntity);
   const {isLoading, handleLoading} = useLoadingIndicator(2000);
   const telemetry = useTelemetry();
-
-  const settingsTabConfig = useAppSelector(selectSettingsTabConfig);
 
   const [runTest] = useRunTestMutation();
   const [runTestSuite] = useRunTestSuiteMutation();
@@ -74,16 +81,8 @@ const EntityDetailsContent: React.FC = () => {
     tests: runTest,
   };
 
-  const [activeTabKey, setActiveTabKey] = useState('Executions');
-
-  useEffect(() => {
-    if (settingsTabConfig) {
-      setActiveTabKey('Settings');
-    }
-  }, [settingsTabConfig]);
-
-  useTrackTimeAnalytics(`${entity}-details`, activeTabKey !== 'Settings');
-  useTrackTimeAnalytics(`${entity}-settings`, activeTabKey === 'Settings');
+  useTrackTimeAnalytics(`${entity}-details`, tab !== 'settings');
+  useTrackTimeAnalytics(`${entity}-settings`, tab === 'settings');
 
   const name = details?.name;
   const namespace = details?.namespace;
@@ -176,12 +175,12 @@ const EntityDetailsContent: React.FC = () => {
       </PageHeader>
       <SummaryGrid metrics={metrics} />
       <Tabs
-        activeKey={activeTabKey}
-        onChange={setActiveTabKey}
+        activeKey={tab}
+        onChange={onTabChange}
         destroyInactiveTabPane
         items={[
           {
-            key: 'Executions',
+            key: 'executions',
             label: 'Recent executions',
             children: (
               <>
@@ -196,14 +195,14 @@ const EntityDetailsContent: React.FC = () => {
             ),
           },
           {
-            key: 'CLICommands',
+            key: 'commands',
             label: 'CLI Commands',
             children: <CLICommands name={name} bg={Colors.slate800} />,
           },
           {
-            key: 'Settings',
+            key: 'settings',
             label: 'Settings',
-            children: <Settings />,
+            children: <Settings tab={settingsTab} onTabChange={onSettingsTabChange} />,
           },
         ]}
       />

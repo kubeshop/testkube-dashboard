@@ -61,8 +61,8 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
               url:
                 status !== 'queued' && status !== 'aborted'
                   ? execution?.id
-                    ? `/tests/executions/${result.test}/execution/${execution.id}`
-                    : `/tests/executions/${result.test}`
+                    ? `/tests/${result.test}/executions/${execution.id}`
+                    : `/tests/${result.test}`
                   : null,
             };
           })
