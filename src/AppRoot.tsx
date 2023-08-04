@@ -6,6 +6,8 @@ import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
+import {Plugin} from '@plugins/types';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
@@ -19,26 +21,26 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
-import {Plugin} from '@plugins/types';
-
 import {useAppDispatch} from '@redux/hooks';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import {initializeApiDetailsStore} from '@store/apiDetails';
+
 import {useTelemetry, useTelemetryValue} from '@telemetry';
 
 import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
+import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
+  const [ApiDetailsProvider] = initializeApiDetailsStore();
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -116,6 +118,7 @@ const AppRoot: React.FC = () => {
     .append(MainContext.Provider, {value: mainContextValue})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})
+    .append(ApiDetailsProvider, {})
     .render(
       <>
         <Layout>
