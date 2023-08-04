@@ -9,6 +9,8 @@ import {MainContext} from '@contexts';
 
 import {setNamespace} from '@redux/reducers/configSlice';
 
+import {useApiDetailsField} from '@src/store/apiDetails';
+
 import {hasProtocol} from '@utils/strings';
 
 import env from '../env';
@@ -127,20 +129,22 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
 
 export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean> {
   const {dispatch} = useContext(MainContext);
+  const [apiDetailsData, setApiDetailsData] = useApiDetailsField('data');
 
   return useMemo(
     () => async (apiEndpoint: string) => {
       const prevApiEndpoint = getApiEndpoint();
       try {
-        const {url, namespace} = await getApiDetails(apiEndpoint);
+        const data = await getApiDetails(apiEndpoint);
 
         // Handle race condition, when endpoint has been changed already.
         if (getApiEndpoint() !== prevApiEndpoint) {
           return false;
         }
 
-        saveApiEndpoint(url);
-        dispatch(setNamespace(namespace));
+        saveApiEndpoint(data.url);
+        dispatch(setNamespace(data.namespace));
+        setApiDetailsData(data);
 
         return true;
       } catch (error) {
