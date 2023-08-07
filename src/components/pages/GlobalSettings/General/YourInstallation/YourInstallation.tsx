@@ -4,9 +4,9 @@ import {FullWidthSpace} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
-import {useClusterDetailsPick} from '@store/clusterDetails';
+import env from '@src/env';
 
-import env from '../../../../../env';
+import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {YourInstallationContainer} from './YourInstallation.styled';
 import YourInstallationItem from './YourInstallationItem';

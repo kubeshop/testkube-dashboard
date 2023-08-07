@@ -113,7 +113,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
         // Display popup
         notificationCall('failed', 'Could not receive data from the specified API endpoint');
-        if (isApiEndpointLocked()) {
+        if (!isApiEndpointLocked()) {
           setEndpointModalState(true);
         }
       });
