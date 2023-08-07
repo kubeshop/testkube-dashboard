@@ -55,7 +55,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
 
-  const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore();
+  const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore({}, [apiEndpoint]);
   const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);

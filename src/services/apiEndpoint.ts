@@ -133,12 +133,11 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
 
 export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean> {
   const {dispatch} = useContext(MainContext);
-  const {reset: resetClusterDetailsState, setClusterDetails} = useClusterDetailsPick('reset', 'setClusterDetails');
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   return useMemo(
     () => async (apiEndpoint: string) => {
       const prevApiEndpoint = getApiEndpoint();
-      resetClusterDetailsState();
 
       try {
         const data = await getApiDetails(apiEndpoint);

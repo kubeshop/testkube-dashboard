@@ -5,14 +5,16 @@ import {ApiDetails} from '@services/apiEndpoint';
 import {connectStore, createStoreFactory} from '@store/utils';
 
 export interface ClusterDetailsSlice extends ApiDetails {
-  reset: () => void;
   setClusterDetails: (state: ApiDetails) => void;
 }
-const initialState = {commit: '', context: '', helmchartVersion: '', namespace: '', version: '', url: ''};
 
 const createClusterDetailsSlice: StateCreator<ClusterDetailsSlice> = set => ({
-  ...initialState,
-  reset: () => set(initialState),
+  commit: '',
+  context: '',
+  helmchartVersion: '',
+  namespace: '',
+  version: '',
+  url: '',
   setClusterDetails: (state: ApiDetails) => set(state),
 });
 
