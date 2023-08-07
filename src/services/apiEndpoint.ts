@@ -9,6 +9,8 @@ import {MainContext} from '@contexts';
 
 import {setNamespace} from '@redux/reducers/configSlice';
 
+import {useClusterDetailsPick} from '@store/clusterDetails';
+
 import {hasProtocol} from '@utils/strings';
 
 import env from '../env';
@@ -16,8 +18,12 @@ import env from '../env';
 export type ApiEndpointListener = (apiEndpoint: string | null) => void;
 
 export interface ApiDetails {
-  url: string;
+  commit: string;
+  context: string;
+  helmchartVersion: string;
   namespace: string;
+  version: string;
+  url: string;
 }
 
 interface ApiEndpointConfig {
@@ -122,25 +128,28 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
     throw new Error('Received invalid data from the provided API endpoint');
   }
 
-  return {url, namespace: data.namespace || 'testkube'};
+  return {url, ...data, namespace: data.namespace || 'testkube'};
 }
 
 export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean> {
   const {dispatch} = useContext(MainContext);
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   return useMemo(
     () => async (apiEndpoint: string) => {
       const prevApiEndpoint = getApiEndpoint();
+
       try {
-        const {url, namespace} = await getApiDetails(apiEndpoint);
+        const data = await getApiDetails(apiEndpoint);
 
         // Handle race condition, when endpoint has been changed already.
         if (getApiEndpoint() !== prevApiEndpoint) {
           return false;
         }
 
-        saveApiEndpoint(url);
-        dispatch(setNamespace(namespace));
+        saveApiEndpoint(data.url);
+        dispatch(setNamespace(data.namespace));
+        setClusterDetails(data);
 
         return true;
       } catch (error) {

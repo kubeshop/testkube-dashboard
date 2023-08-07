@@ -25,6 +25,7 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
+import {initializeClusterDetailsStore} from '@store/clusterDetails';
 import {initializeTriggersStore} from '@store/triggers';
 
 import {composeProviders} from '@utils/composeProviders';
@@ -53,6 +54,9 @@ const App: React.FC<AppProps> = ({plugins}) => {
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
+
+  const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore({}, [apiEndpoint]);
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
   const logRef = useRef<HTMLDivElement>(null);
@@ -92,25 +96,29 @@ const App: React.FC<AppProps> = ({plugins}) => {
   useEffect(() => {
     // Do not fire the effect if new endpoint is just being set up,
     // or it can't be changed.
-    if (location.pathname === '/apiEndpoint' || isApiEndpointLocked()) {
+    if (location.pathname === '/apiEndpoint') {
       return;
     }
 
-    if (!apiEndpoint) {
+    if (!apiEndpoint && !isApiEndpointLocked()) {
       setEndpointModalState(true);
       return;
     }
 
-    getApiDetails(apiEndpoint).catch(() => {
-      // Handle race condition
-      if (getApiEndpoint() !== apiEndpoint) {
-        return;
-      }
+    getApiDetails(apiEndpoint!)
+      .then(setClusterDetails)
+      .catch(() => {
+        // Handle race condition
+        if (getApiEndpoint() !== apiEndpoint) {
+          return;
+        }
 
-      // Display popup
-      notificationCall('failed', 'Could not receive data from the specified API endpoint');
-      setEndpointModalState(true);
-    });
+        // Display popup
+        notificationCall('failed', 'Could not receive data from the specified API endpoint');
+        if (!isApiEndpointLocked()) {
+          setEndpointModalState(true);
+        }
+      });
   }, [apiEndpoint]);
 
   const scope = useMemo(() => {
@@ -121,6 +129,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
+    .append(ClusterDetailsProvider, {})
     .append(TriggersProvider, {})
     .append(PluginsContext.Provider, {
       value: {

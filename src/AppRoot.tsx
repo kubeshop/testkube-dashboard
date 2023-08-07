@@ -33,11 +33,11 @@ import {useTelemetry, useTelemetryValue} from '@telemetry';
 
 import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
+import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
