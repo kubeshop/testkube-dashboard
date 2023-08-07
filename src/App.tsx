@@ -25,7 +25,7 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {useClusterDetailsPick} from '@store/clusterDetails';
+import {initializeClusterDetailsStore} from '@store/clusterDetails';
 import {initializeTriggersStore} from '@store/triggers';
 
 import {composeProviders} from '@utils/composeProviders';
@@ -48,13 +48,15 @@ export interface AppProps {
 
 const App: React.FC<AppProps> = ({plugins}) => {
   const [TriggersProvider] = initializeTriggersStore();
-  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const dispatch = useAppDispatch();
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
+
+  const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore();
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
   const logRef = useRef<HTMLDivElement>(null);
@@ -127,6 +129,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
+    .append(ClusterDetailsProvider, {})
     .append(TriggersProvider, {})
     .append(PluginsContext.Provider, {
       value: {

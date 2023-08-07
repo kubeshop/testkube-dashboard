@@ -27,8 +27,6 @@ import {useAppDispatch} from '@redux/hooks';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
-import {initializeClusterDetailsStore} from '@store/clusterDetails';
-
 import {useTelemetry, useTelemetryValue} from '@telemetry';
 
 import anonymizeQueryString from '@utils/anonymizeQueryString';
@@ -41,7 +39,6 @@ import {StyledLayoutContentWrapper} from './App.styled';
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
-  const [ClusterDetailsProvider] = initializeClusterDetailsStore();
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -119,7 +116,6 @@ const AppRoot: React.FC = () => {
     .append(MainContext.Provider, {value: mainContextValue})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})
-    .append(ClusterDetailsProvider, {})
     .render(
       <>
         <Layout>
