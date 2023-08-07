@@ -10,6 +10,8 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
+import {FeatureFlagsProvider} from '@feature-flags';
+
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 import {useLastCallback} from '@hooks/useLastCallback';
 
@@ -110,6 +112,7 @@ const AppRoot: React.FC = () => {
   const plugins: Plugin[] = useMemo(() => [createAiInsightsPlugin()], []);
 
   return composeProviders()
+    .append(FeatureFlagsProvider, {})
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
