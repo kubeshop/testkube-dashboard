@@ -22,7 +22,6 @@ const TestExecutionsConfig: EntityDetailsBlueprint = {
   useDeleteEntity: useDeleteTestMutation,
   defaultStackRoute: '/tests',
   label: 'test',
-  variablesDescription: 'Define environment variables which will be shared across your test.',
 };
 
 export default TestExecutionsConfig;

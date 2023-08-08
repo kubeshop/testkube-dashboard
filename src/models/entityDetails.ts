@@ -12,5 +12,4 @@ export type EntityDetailsBlueprint = {
   useDeleteEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
   defaultStackRoute: string;
   label: string;
-  variablesDescription: string;
 };

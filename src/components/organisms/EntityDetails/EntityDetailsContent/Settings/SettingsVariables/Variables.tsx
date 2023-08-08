@@ -22,9 +22,13 @@ type VariablesFormValues = {
   'variables-list': VariableInForm[];
 };
 
-const Variables: React.FC = () => {
+interface VariablesProps {
+  description: string;
+}
+
+const Variables: React.FC<VariablesProps> = ({description}) => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {useUpdateEntity, variablesDescription} = useEntityDetailsConfig(entity);
+  const {useUpdateEntity} = useEntityDetailsConfig(entity);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = useUpdateEntity();
@@ -95,7 +99,7 @@ const Variables: React.FC = () => {
     >
       <ConfigurationCard
         title="Variables & Secrets"
-        description={variablesDescription}
+        description={description}
         footerText={
           <>
             Learn more about <ExternalLink href={externalLinks.variables}>Environment variables</ExternalLink>
