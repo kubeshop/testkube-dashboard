@@ -22,7 +22,6 @@ import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {ArgumentsWrapper} from './Arguments.styled';
-
 import {dash, doubleDash, space, stringSpace} from './utils';
 
 type ArgumentsFormValues = {
