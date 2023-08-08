@@ -10,8 +10,6 @@ import {Test} from '@models/test';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
-import {dash, doubleDash, space, stringSpace} from '@organisms/EntityDetails/Settings/SettingsVariables/utils';
-
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
@@ -24,6 +22,8 @@ import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {ArgumentsWrapper} from './Arguments.styled';
+
+import {dash, doubleDash, space, stringSpace} from './utils';
 
 type ArgumentsFormValues = {
   args: string;
