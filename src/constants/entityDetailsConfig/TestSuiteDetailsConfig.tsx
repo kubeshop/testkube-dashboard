@@ -8,7 +8,6 @@ import {
 import {
   useAbortAllTestSuiteExecutionsMutation,
   useAbortTestSuiteExecutionMutation,
-  useDeleteTestSuiteMutation,
   useGetTestSuiteDetailsQuery,
   useUpdateTestSuiteMutation,
 } from '@services/testSuites';
@@ -21,7 +20,6 @@ const TestSuiteExecutionsConfig: EntityDetailsBlueprint = {
   useAbortAllExecutions: useAbortAllTestSuiteExecutionsMutation,
   useGetExecutionDetails: useGetTestSuiteExecutionByIdQuery,
   useUpdateEntity: useUpdateTestSuiteMutation,
-  useDeleteEntity: useDeleteTestSuiteMutation,
   defaultStackRoute: '/test-suites',
   label: 'test suite',
 };

@@ -3,7 +3,6 @@ import {EntityDetailsBlueprint} from '@models/entityDetails';
 import {
   useAbortAllTestExecutionsMutation,
   useAbortTestExecutionMutation,
-  useDeleteTestMutation,
   useGetTestExecutionByIdQuery,
   useGetTestExecutionMetricsQuery,
   useGetTestExecutionsByIdQuery,
@@ -19,7 +18,6 @@ const TestExecutionsConfig: EntityDetailsBlueprint = {
   useAbortAllExecutions: useAbortAllTestExecutionsMutation,
   useGetExecutionDetails: useGetTestExecutionByIdQuery,
   useUpdateEntity: useUpdateTestMutation,
-  useDeleteEntity: useDeleteTestMutation,
   defaultStackRoute: '/tests',
   label: 'test',
 };

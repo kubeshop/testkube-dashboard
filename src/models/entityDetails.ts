@@ -9,7 +9,6 @@ export type EntityDetailsBlueprint = {
   useAbortAllExecutions: UseMutation<MutationDefinition<any, any, any, any, any>>;
   useGetExecutionDetails: UseQuery<QueryDefinition<string, any, any, any, any>>;
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
-  useDeleteEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
   defaultStackRoute: string;
   label: string;
 };
