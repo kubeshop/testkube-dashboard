@@ -5,11 +5,12 @@ import {DashboardContext} from '@contexts';
 import {useLastCallback} from '@hooks/useLastCallback';
 import useRunEntity from '@hooks/useRunEntity';
 
+import {SummaryGrid} from '@molecules';
+
 import {PageWrapper} from '@organisms';
 import {EntityDetailsWrapper} from '@organisms/EntityDetails/EntityDetailsContainer/EntityDetailsContainer.styled';
 import EntityDetailsContentHeader from '@organisms/EntityDetails/EntityDetailsContent/EntityDetailsContentHeader';
 import EntityDetailsContentTabs from '@organisms/EntityDetails/EntityDetailsContent/EntityDetailsContentTabs';
-import SummaryGrid from '@organisms/EntityDetails/EntityDetailsContent/SummaryGrid';
 
 import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
