@@ -4,9 +4,6 @@ import {Checkbox, FormItem, Text} from '@custom-antd';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
-// TODO: Create separate component instead
-import {StyledPopoverContainer, StyledQuestionCircleOutlined} from '@organisms/EntityDetails/Settings/Settings.styled';
-
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
@@ -14,6 +11,8 @@ import {useUpdateTestMutation} from '@services/tests';
 import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
+
+import {StyledPopoverContainer, StyledQuestionCircleOutlined} from './FailureHandling.styled';
 
 const popoverContent = (
   <StyledPopoverContainer>
