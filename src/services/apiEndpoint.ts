@@ -11,6 +11,7 @@ import {setNamespace} from '@redux/reducers/configSlice';
 
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
+import {getRtkBaseUrl, getRtkIdToken} from '@utils/fetchUtils';
 import {hasProtocol} from '@utils/strings';
 
 import env from '../env';
@@ -121,9 +122,12 @@ export function useWsEndpoint(): string | null {
 }
 
 export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
-  const url = sanitizeApiEndpoint(apiEndpoint);
+  const url = `${sanitizeApiEndpoint(apiEndpoint)}${getRtkBaseUrl(undefined)}`;
+  const idToken = await getRtkIdToken();
 
-  const data = await fetch(`${url}/info`).then(res => res.json());
+  const data = await fetch(`${url}/info`, {
+    headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
+  }).then(res => res.json());
   if (!data?.version || !data?.commit) {
     throw new Error('Received invalid data from the provided API endpoint');
   }
