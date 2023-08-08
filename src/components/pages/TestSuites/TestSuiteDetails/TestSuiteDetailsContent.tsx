@@ -8,7 +8,7 @@ import useRunEntity from '@hooks/useRunEntity';
 import {SummaryGrid} from '@molecules';
 
 import {PageWrapper} from '@organisms';
-import {EntityDetailsWrapper, EntityDetailsHeader, EntityDetailsTabs} from '@organisms/EntityDetails';
+import {EntityDetailsHeader, EntityDetailsTabs, EntityDetailsWrapper} from '@organisms/EntityDetails';
 
 import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';

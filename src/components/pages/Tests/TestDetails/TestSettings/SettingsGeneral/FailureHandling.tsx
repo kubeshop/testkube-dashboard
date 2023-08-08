@@ -5,10 +5,7 @@ import {Checkbox, FormItem, Text} from '@custom-antd';
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 // TODO: Create separate component instead
-import {
-  StyledPopoverContainer,
-  StyledQuestionCircleOutlined,
-} from '@organisms/EntityDetails/Settings/Settings.styled';
+import {StyledPopoverContainer, StyledQuestionCircleOutlined} from '@organisms/EntityDetails/Settings/Settings.styled';
 
 import {Permissions, usePermission} from '@permissions/base';
 

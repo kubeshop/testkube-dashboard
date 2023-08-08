@@ -10,12 +10,7 @@ import {Test} from '@models/test';
 
 import {ConfigurationCard, CopyCommand, notificationCall} from '@molecules';
 
-import {
-  dash,
-  doubleDash,
-  space,
-  stringSpace,
-} from '@organisms/EntityDetails/Settings/SettingsVariables/utils';
+import {dash, doubleDash, space, stringSpace} from '@organisms/EntityDetails/Settings/SettingsVariables/utils';
 
 import {Permissions, usePermission} from '@permissions/base';
 
