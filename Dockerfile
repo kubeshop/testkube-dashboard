@@ -9,7 +9,7 @@ ARG REACT_APP_VERSION
 ENV REACT_APP_VERSION=$REACT_APP_VERSION
 
 ENV PATH /app/node_modules/.bin:$PATH
-COPY ./package.json /app/
+COPY ./package*.json /app/
 # install  dependencies
 RUN npm install --legacy-peer-deps
 # copy everything to /app directory

@@ -2,9 +2,10 @@ import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, 
 import {useLatest} from 'react-use';
 
 import {capitalize, pick} from 'lodash';
-import {StateCreator, StoreApi, createStore as create, useStore as useSelector} from 'zustand';
+import {StateCreator, StoreApi, createStore as create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
+import {useStoreWithEqualityFn as useSelector} from 'zustand/traditional';
 
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
