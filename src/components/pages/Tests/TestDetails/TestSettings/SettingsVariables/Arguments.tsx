@@ -22,7 +22,6 @@ import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {ArgumentsWrapper} from './Arguments.styled';
-import {dash, doubleDash, space, stringSpace} from './utils';
 
 type ArgumentsFormValues = {
   args: string;
@@ -68,58 +67,18 @@ const Arguments: React.FC = () => {
     if (isPrettified) {
       setPrettifiedState(false);
     }
-
-    const formArgs: string = form.getFieldValue('args');
-
-    const targetArgs = formArgs
-      .split(' ')
-      .filter(item => {
-        return item;
-      })
-      .join('\n')
-      .split('\n')
-      .filter(item => {
-        return item;
-      })
-      .join(' ');
-
-    setArgsValue(targetArgs);
+    const args = (form.getFieldValue('args') as string).replace(/\s+/g, ' ').trim();
+    setArgsValue(args);
     setIsButtonsDisabled(false);
   };
 
   const prettifyArgs = () => {
-    const args = form.getFieldValue('args');
-
-    const newArgs = args.replaceAll('--', doubleDash).replaceAll('-', dash);
-    let stringArray = [];
-    let isQuoteOpen = false;
-
-    for (let i = 0; i < newArgs.length; i += 1) {
-      if (newArgs[i] === '"') {
-        isQuoteOpen = !isQuoteOpen;
-
-        stringArray.push(newArgs[i]);
-      } else if (newArgs[i] === ' ') {
-        if (!isQuoteOpen) {
-          stringArray.push(space);
-        } else {
-          stringArray.push(stringSpace);
-        }
-      } else {
-        stringArray.push(newArgs[i]);
-      }
-    }
-
-    form.setFieldValue(
-      'args',
-      stringArray
-        .join('')
-        .replaceAll(doubleDash, '--')
-        .replaceAll(dash, '-')
-        .replaceAll(stringSpace, ' ')
-        .replaceAll(space, '\n')
-    );
-
+    const args = form
+      .getFieldValue('args')
+      .replace(/("(\\"|[^"])+")|('(\\'|[^'])+')|\s/g, (_: string, str1: string, str2: string) => str1 || str2 || '\n')
+      .replace(/\n{2,}/g, '\n')
+      .trim();
+    form.setFieldValue('args', args);
     setPrettifiedState(true);
   };
 
