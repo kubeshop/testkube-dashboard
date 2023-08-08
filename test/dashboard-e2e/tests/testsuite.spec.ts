@@ -30,7 +30,7 @@ test(`Creating Test Suite`, async ({page}) => {
 
   const createTestSuitePage = new CreateTestSuitePage(page);
   await createTestSuitePage.createTestSuite(testSuiteData);
-  await page.waitForURL(`**/test-suites/${realTestSuiteName}**`);
+  await page.waitForURL(`**/test-suites/${realTestSuiteName}/settings/tests`);
 
   const createdTestSuiteData = await api.getTestSuiteData(realTestSuiteName);
   await validateTestSuite(testSuiteData, createdTestSuiteData);
