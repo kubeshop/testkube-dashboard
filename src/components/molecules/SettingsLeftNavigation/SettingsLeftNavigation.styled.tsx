@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
-import {maxDevice, minDevice} from '@styles/MediaQueries';
 
 export const StyledNavigationOptionContainer = styled.div`
   cursor: pointer;
