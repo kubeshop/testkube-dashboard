@@ -1,6 +1,14 @@
+import {ReactComponent as LockedIcon} from '@assets/lockedIcon.svg';
+
+import {Button, Text} from '@custom-antd';
+
 import {Execution} from '@models/execution';
 
-import {usePluginState} from '@plugins/pluginHooks';
+import Colors from '@styles/Colors';
+
+import {externalLinks} from '@utils/externalLinks';
+
+import {AiInsightContainer, AiInsightContent} from './AiInsightsTab.styled';
 
 interface AiInsightsTabProps {
   execution: Execution;
@@ -8,12 +16,28 @@ interface AiInsightsTabProps {
 }
 
 const AiInsightsTab = () => {
-  const [{execution}] = usePluginState<AiInsightsTabProps>('testExecutionTabs');
   return (
-    <div>
-      This is a cloud only feature. Please log in to cloud in order to use this feature for id
-      {execution.id}
-    </div>
+    <AiInsightContainer>
+      <AiInsightContent>
+        <LockedIcon />
+        <Text className="big bold"> This feature is available only in Testkube Cloud.</Text>
+        <Text color={Colors.slate400}>
+          Start using Testkube Cloud to get AI insights for your test executions, as well as other exclusive features.
+          <a href={externalLinks.testkubeCloud} target="_blank">
+            {' '}
+            Learn more
+          </a>
+        </Text>
+        <Button
+          type="primary"
+          onClick={() => {
+            window.open(externalLinks.testkubeCloud, '_blank');
+          }}
+        >
+          Go to Testkube Cloud
+        </Button>
+      </AiInsightContent>
+    </AiInsightContainer>
   );
 };
 

@@ -1,12 +1,15 @@
-import {useCallback, useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
 import {DashboardContext, MainContext} from '@contexts';
 
+import {useLastCallback} from '@hooks/useLastCallback';
+
 import {PageHeader, PageWrapper} from '@organisms';
 
+import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
 import {useGetTriggerByIdQuery, useGetTriggersKeyMapQuery} from '@services/triggers';
@@ -19,17 +22,13 @@ import TriggerSettings from './TriggerSettings';
 
 const TriggerDetails = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {navigate} = useContext(DashboardContext);
 
-  const name = useParams().id!;
+  const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
-  const [activeTabKey, setActiveTabKey] = useState('Settings');
-
-  const {data: triggerDetails, refetch} = useGetTriggerByIdQuery(name, {skip: !isClusterAvailable});
+  const {data: triggerDetails, error, refetch} = useGetTriggerByIdQuery(name, {skip: !isClusterAvailable});
   const {data: triggersKeyMap, refetch: refetchKeyMap} = useGetTriggersKeyMapQuery(null, {skip: !isClusterAvailable});
   const reload = useCallback(() => safeRefetch(refetch), [refetch]);
-
-  const isPageDisabled = !name;
 
   const currentState = useTriggersPick('keyMap', 'current');
   useTriggersSync({
@@ -41,16 +40,32 @@ const TriggerDetails = () => {
     reload();
   }, [name]);
 
+  const setSettingsTab = useLastCallback((nextTab: string) => {
+    navigate(`/triggers/${name}/settings/${nextTab}`);
+  });
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+  if (!triggerDetails || !currentState.current) {
+    return <Loading />;
+  }
+
   return (
     <PageWrapper>
       <PageMetadata title={`${name} | Triggers`} />
 
       <PageHeader onBack={() => navigate('/triggers')} title={name} />
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {triggerDetails ? <TriggerSettings reload={reload} /> : null}
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs
+        destroyInactiveTabPane
+        items={[
+          {
+            key: 'settings',
+            label: 'Settings',
+            children: <TriggerSettings reload={reload} tab={settingsTab} onTabChange={setSettingsTab} />,
+          },
+        ]}
+      />
     </PageWrapper>
   );
 };

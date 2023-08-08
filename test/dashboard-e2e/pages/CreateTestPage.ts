@@ -2,6 +2,8 @@ import type {Page} from '@playwright/test';
 
 import type {TestData} from '../types';
 
+const path = require('path');
+
 export class CreateTestPage {
   public readonly page: Page;
 
@@ -25,7 +27,9 @@ export class CreateTestPage {
   }
 
   public async selectTestSource(contentData: any): Promise<any> {
-    if (contentData.type === 'git') {
+    const {type} = contentData;
+
+    if (type === 'git') {
       const repositoryData = contentData.repository as Record<string, string | number>;
       await this.setSelectionSearch('Git', 'testSource');
       // eslint-disable-next-line no-restricted-syntax
@@ -35,13 +39,20 @@ export class CreateTestPage {
           await this.setBasicInput(value, key);
         }
       }
-    } else {
-      throw Error('Type not supported by selectTestSource - extend CreateTestPage');
+    } else if (type === 'string') {
+      await this.setSelectionSearch('String', 'testSource');
+      await this.setBasicInput(contentData.data, 'string');
+    } else if (type === 'file') {
+      await this.setSelectionSearch('File', 'testSource');
+      await this.page.setInputFiles(
+        'xpath=//span[@class="ant-upload"]//input[@type="file"]',
+        CreateTestPage.getAbsoluteFixtureFilePath(contentData.fixture_file_path)
+      );
     }
   }
 
   public async setBasicInput(value: string | number, inputName: string): Promise<void> {
-    await this.page.locator(`input[id="test-creation_${inputName}"]`).fill(`${value}`);
+    await this.page.locator(`[id="test-creation_${inputName}"]`).fill(`${value}`);
   }
 
   public async setSelectionSearch(value: string | number, inputName: string): Promise<void> {
@@ -64,5 +75,9 @@ export class CreateTestPage {
 
   private async clickCreateTestButton(): Promise<void> {
     await this.page.click('button[data-test="add-a-new-test-create-button"]');
+  }
+
+  private static getAbsoluteFixtureFilePath(fixtureFileName: string) {
+    return path.resolve(__dirname, `../fixtures/files/${fixtureFileName}`);
   }
 }

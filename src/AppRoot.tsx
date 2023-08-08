@@ -7,17 +7,13 @@ import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
-import {ReactComponent as NewIcon} from '@assets/newIcon.svg';
-
-import {IconLabel} from '@atoms';
-
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
+import {FeatureFlagsProvider} from '@feature-flags';
+
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 import {useLastCallback} from '@hooks/useLastCallback';
-
-import {AiInsightsTab} from '@molecules';
 
 import {Sider} from '@organisms';
 
@@ -25,7 +21,7 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import PluginScope from '@plugins/PluginScope';
+import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
 import {Plugin} from '@plugins/types';
 
 import {useAppDispatch} from '@redux/hooks';
@@ -37,11 +33,11 @@ import {useTelemetry, useTelemetryValue} from '@telemetry';
 
 import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
+import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
@@ -113,29 +109,10 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
-  const plugins: Plugin[] = useMemo(
-    () => [
-      {
-        name: 'ai-insights',
-        setup: (scope: PluginScope) => {
-          scope.appendSlot(
-            'testExecutionTabs',
-            {
-              key: 'ai-insights-tab',
-              label: <IconLabel title="AI Insights" icon={<NewIcon />} />,
-              children: <AiInsightsTab />,
-            },
-            {
-              order: 4,
-            }
-          );
-        },
-      },
-    ],
-    []
-  );
+  const plugins: Plugin[] = useMemo(() => [createAiInsightsPlugin()], []);
 
   return composeProviders()
+    .append(FeatureFlagsProvider, {})
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})

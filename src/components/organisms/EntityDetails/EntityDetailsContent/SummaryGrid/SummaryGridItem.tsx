@@ -1,4 +1,4 @@
-import React, {ReactNode, memo} from 'react';
+import React, {FC, ReactNode, memo} from 'react';
 
 import {Title} from '@custom-antd';
 
@@ -11,7 +11,7 @@ type SummaryGridProps = {
   value?: ReactNode;
 };
 
-const SummaryGridItem: React.FC<SummaryGridProps> = memo(({title, value}) => (
+const SummaryGridItem: FC<SummaryGridProps> = memo(({title, value}) => (
   <ItemContainer>
     <CustomText title={title} className="uppercase middle" $color={Colors.slate500}>
       {title}

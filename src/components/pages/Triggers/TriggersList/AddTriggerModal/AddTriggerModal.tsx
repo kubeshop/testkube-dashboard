@@ -80,11 +80,7 @@ const AddTriggerModal: React.FC = () => {
     };
     createTrigger(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => {
-        if (res && 'data' in res) {
-          navigate(`/triggers/${res.data.name}`);
-        }
-      })
+      .then(res => navigate(`/triggers/${res.data.name}`))
       .catch(err => {
         setError(err);
 

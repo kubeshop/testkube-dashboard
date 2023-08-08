@@ -11,13 +11,25 @@ export const StyledContainer = styled.div<{isWarning?: boolean}>`
   border-radius: 4px;
 `;
 
+export const StyledHeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  padding: 20px;
+  border-bottom: 1px solid ${Colors.slate800};
+`;
+
 export const StyledHeader = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
+`;
 
-  padding: 20px;
-  border-bottom: 1px solid ${Colors.slate800};
+export const HeaderAction = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
 `;
 
 export const StyledChildren = styled.div<{$isActionsVisible: boolean}>`

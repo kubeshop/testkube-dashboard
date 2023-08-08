@@ -1,5 +1,6 @@
 import {expect} from '@playwright/test';
 
+import {TestDataHandler} from '../helpers/test-data-handler';
 import type {ExecutorData, TestData, TestSourceData, TestSuiteData} from '../types';
 
 export function validateLabels(labels: Record<string, string>, createdLabels: Record<string, string>): void {
@@ -12,13 +13,19 @@ export function validateTest(testData: Partial<TestData>, createdTestData: TestD
   expect(testData.name).toEqual(createdTestData.name);
   validateLabels(testData.labels, createdTestData.labels);
   expect(testData.type).toEqual(createdTestData.type);
-  expect(testData.content.type).toEqual(createdTestData.content.type);
 
   // testSources
   if (testData.content.type === 'git') {
-    Object.keys(testData.content.repository).forEach(key => {
-      expect(testData.content.repository[key]).toEqual(createdTestData.content.repository[key]);
-    });
+    expect(testData.content.type).toEqual(createdTestData.content.type);
+    expect(testData.content.repository).toEqual(createdTestData.content.repository);
+  } else if (testData.content.type === 'string') {
+    expect(testData.content.type).toEqual(createdTestData.content.type);
+    expect(createdTestData.content).toMatchObject(testData.content);
+  } else if (testData.content.type === 'file') {
+    expect(createdTestData.content.type).toEqual('string');
+    expect(createdTestData.content.data).toEqual(
+      TestDataHandler.getFixtureFileContents(testData.content.fixture_file_path)
+    );
   }
 }
 

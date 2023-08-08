@@ -61,11 +61,7 @@ const AddSourceModal: React.FC = () => {
 
     createSource(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => {
-        if (res && 'data' in res) {
-          navigate(`/sources/${res.data.metadata.name}`);
-        }
-      })
+      .then(res => navigate(`/sources/${res.data.metadata.name}`))
       .catch(err => {
         setError(err);
 

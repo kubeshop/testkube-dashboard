@@ -11,12 +11,17 @@ export class MainPage {
   }
 
   public async visitMainPage(): Promise<void> {
+    await this.page.addInitScript(() => {
+      window.sessionStorage.setItem('vercel-live-feedback-optout', '1');
+    });
+
     if (config.cloudContext) {
       await this.page.addInitScript(userToken => {
         window.localStorage.setItem('isLoggedIn', '1');
         window.localStorage.setItem('idToken', userToken);
       }, config.bearerToken);
     }
+
     await this.page.goto(`/?~api_server_endpoint=${escape(config.dashboardApiUrl)}&disable_telemetry=true`);
   }
 

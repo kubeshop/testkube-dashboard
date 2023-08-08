@@ -1,13 +1,15 @@
-import {useCallback, useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import useLocation from '@hooks/useLocation';
+import {useLastCallback} from '@hooks/useLastCallback';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
+import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
 import {useAppSelector} from '@redux/hooks';
@@ -25,35 +27,45 @@ const SourceDetails = () => {
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);
 
-  const name = useLocation().lastPathSegment;
+  const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
-  const [activeTabKey, setActiveTabKey] = useState('Settings');
-
-  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
+  const {data: sourceDetails, error, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
   const reload = useCallback(() => safeRefetch(refetch), [refetch]);
 
-  const isPageDisabled = !name;
-
   useEffect(() => {
-    if (sourceDetails) {
-      dispatch(setCurrentSource(sourceDetails));
-    }
+    dispatch(setCurrentSource(sourceDetails));
   }, [sourceDetails]);
 
   useEffect(() => {
     reload();
   }, [location]);
 
+  const setSettingsTab = useLastCallback((nextTab: string) => {
+    navigate(`/sources/${name}/settings/${nextTab}`);
+  });
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+  if (!sourceDetails || !currentSourceDetails) {
+    return <Loading />;
+  }
+
   return (
     <PageWrapper>
       <PageMetadata title={`${name} | Sources`} />
 
       <PageHeader onBack={() => navigate('/sources')} title={name} />
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {currentSourceDetails ? <SourceSettings reload={reload} /> : null}
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs
+        destroyInactiveTabPane
+        items={[
+          {
+            key: 'settings',
+            label: 'Settings',
+            children: <SourceSettings reload={reload} tab={settingsTab} onTabChange={setSettingsTab} />,
+          },
+        ]}
+      />
     </PageWrapper>
   );
 };

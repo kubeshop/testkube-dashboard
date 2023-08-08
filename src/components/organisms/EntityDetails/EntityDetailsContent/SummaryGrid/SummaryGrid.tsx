@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {FC, memo} from 'react';
 
 import {LoadingOutlined} from '@ant-design/icons';
 
@@ -13,9 +13,7 @@ type SummaryGridProps = {
   metrics?: Metrics;
 };
 
-const SummaryGrid: React.FC<SummaryGridProps> = memo(props => {
-  const {metrics} = props;
-
+const SummaryGrid: FC<SummaryGridProps> = memo(({metrics}) => {
   if (!metrics) {
     return (
       <SummaryGridWrapper>

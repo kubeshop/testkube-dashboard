@@ -8,18 +8,17 @@ import DashboardRewrite from '@src/DashboardRewrite';
 import TestDetails from './TestDetails';
 import TestsList from './TestsList';
 
-const Tests: FC = () => {
-  return (
-    <>
-      <Routes>
-        {/* Backwards compatibility */}
-        <Route path="executions/:id" element={<DashboardRewrite pattern="/tests/:id" />} />
-        <Route
-          path="executions/:id/execution/:execId"
-          element={<DashboardRewrite pattern="/tests/:id/executions/:execId" />}
-        />
+const Tests: FC = () => (
+  <>
+    <Routes>
+      {/* Backwards compatibility */}
+      <Route path="executions/:id" element={<DashboardRewrite pattern="/tests/:id" />} />
+      <Route
+        path="executions/:id/execution/:execId"
+        element={<DashboardRewrite pattern="/tests/:id/executions/:execId" />}
+      />
 
-        <Route index element={<TestsList />} />
+      <Route index element={<TestsList />} />
         <Route path=":id">
           <Route index element={<TestDetails />} />
           <Route path="commands" element={<TestDetails tab="commands" />} />
@@ -32,11 +31,10 @@ const Tests: FC = () => {
             <Route path=":settingsTab" element={null} />
           </Route>
         </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Outlet />
-    </>
-  );
-};
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+    <Outlet />
+  </>
+);
 
 export default Tests;

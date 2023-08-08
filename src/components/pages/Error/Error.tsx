@@ -39,7 +39,7 @@ const Error: FC<ErrorProps> = ({title, description, buttonUrl, buttonLabel}) => 
       </Title>
       <StyledErrorDescription>{description || 'Sorry, something went wrong.'}</StyledErrorDescription>
       <Button type="primary" onClick={onButtonClick}>
-        {buttonLabel || 'Back to the Dashboard'}
+        {buttonLabel || 'Back to the previous page'}
       </Button>
     </StyledErrorContainer>
   );

@@ -53,11 +53,9 @@ const TestSuiteCreationModalContent: React.FC = () => {
     })
       .then(displayDefaultNotificationFlow)
       .then(res => {
-        if (res && 'data' in res) {
-          telemetry.event('createTestSuite');
-          navigate(`/test-suites/${res.data.metadata.name}/settings/tests`);
-          closeModal();
-        }
+        telemetry.event('createTestSuite');
+        navigate(`/test-suites/${res.data.metadata.name}/settings/tests`);
+        closeModal();
       })
       .catch(err => {
         setError(err);

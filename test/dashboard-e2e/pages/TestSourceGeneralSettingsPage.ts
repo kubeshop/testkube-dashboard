@@ -7,6 +7,11 @@ export class TestSourceGeneralSettingsPage {
     this.page = page;
   }
 
+  private async clickSubmitAndWaitForSubmission(xpath: string): Promise<void> {
+    await this.page.click(`${xpath}[not(@disabled)]`);
+    await this.page.locator(`${xpath}[@disabled]`).waitFor({timeout: 3000});
+  }
+
   public async deleteTestSource(testSourceName: string): Promise<void> {
     await this.page.click('//button/span[text()="Delete"]'); // TODO: data-test
     await this.page.locator(`xpath=//div[@role="dialog"]//input`).fill(testSourceName); // TODO: data-test
@@ -15,6 +20,6 @@ export class TestSourceGeneralSettingsPage {
 
   public async updateRepoUri(uri: string): Promise<void> {
     await this.page.locator(`//input[@id="general-settings-name-url_uri"]`).fill(uri);
-    await this.page.click('xpath=//form[@id="general-settings-name-url"]//button[@type="submit" and not(@disabled)]');
+    await this.clickSubmitAndWaitForSubmission('xpath=//form[@id="general-settings-name-url"]//button[@type="submit"]');
   }
 }

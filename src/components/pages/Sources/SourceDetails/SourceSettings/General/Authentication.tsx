@@ -72,10 +72,8 @@ const Authentication: React.FC = () => {
     return updateSource(body)
       .then(displayDefaultNotificationFlow)
       .then(res => {
-        if (res && 'data' in res) {
-          notificationCall('passed', 'Source was successfully updated.');
-          dispatch(setCurrentSource({...body, ...res.data.spec}));
-        }
+        notificationCall('passed', 'Source was successfully updated.');
+        dispatch(setCurrentSource({...body, ...res.data.spec}));
       });
   };
 

@@ -66,7 +66,7 @@ const RunningContext: React.FC<RunningContextProps> = props => {
       'Scheduler'
     ),
     testsuite: context ? (
-      // TODO: Point to actual execution?
+      // TODO: It would be good to point to execution, but we don't have ID
       <Link to={`/test-suites/${context.replace(/^ts-/, '').replace(/-[0-9]+$/, '')}`}>{context}</Link>
     ) : (
       'Test Suite'
