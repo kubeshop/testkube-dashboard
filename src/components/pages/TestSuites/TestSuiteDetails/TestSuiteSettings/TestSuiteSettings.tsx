@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 import {SettingsLayout} from '@molecules';
 import {SettingsLayoutProps} from '@molecules/SettingsLayout/SettingsLayout';
 
-import SettingsScheduling from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsScheduling';
+import {SettingsScheduling} from '@organisms/EntityDetails';
 
 import SettingsDefinition from './SettingsDefinition';
 import SettingsGeneral from './SettingsGeneral';

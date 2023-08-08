@@ -15,7 +15,7 @@ import {
   doubleDash,
   space,
   stringSpace,
-} from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsVariables/utils';
+} from '@organisms/EntityDetails/Settings/SettingsVariables/utils';
 
 import {Permissions, usePermission} from '@permissions/base';
 

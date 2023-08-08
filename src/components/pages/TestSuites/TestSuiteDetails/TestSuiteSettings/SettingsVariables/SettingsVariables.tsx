@@ -2,7 +2,7 @@ import {FC} from 'react';
 
 import {Space} from 'antd';
 
-import Variables from '@organisms/EntityDetails/EntityDetailsContent/Settings/SettingsVariables/Variables';
+import {Variables} from '@organisms/EntityDetails';
 
 const SettingsVariables: FC = () => (
   <Space size={30} direction="vertical">

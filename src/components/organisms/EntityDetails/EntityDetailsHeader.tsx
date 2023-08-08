@@ -17,13 +17,14 @@ import {Option as OptionType} from '@models/form';
 import {DotsDropdown, LabelsList, notificationCall} from '@molecules';
 
 import {PageHeader} from '@organisms';
-import {EntityDetailsHeaderIcon} from '@organisms/EntityDetails/EntityDetailsContent/EntityDetailsContent.styled';
 
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
+
+import {EntityDetailsHeaderIcon} from './EntityDetails.styled';
 
 const filterOptions: OptionType[] = [
   {value: 7, label: 'Timeframe: last 7 days', key: 'last7Days'},
@@ -33,12 +34,12 @@ const filterOptions: OptionType[] = [
   {value: 0, label: 'See all executions', key: 'allDays'},
 ];
 
-interface EntityDetailsContentHeaderProps {
+interface EntityDetailsHeaderProps {
   onRun: () => void;
   isRunning?: boolean;
 }
 
-const EntityDetailsContentHeader: FC<EntityDetailsContentHeaderProps> = ({onRun, isRunning}) => {
+const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({onRun, isRunning}) => {
   const {navigate} = useContext(DashboardContext);
   const mayRun = usePermission(Permissions.runEntity);
   const {entity, details} = useEntityDetailsPick('entity', 'details');
@@ -107,4 +108,4 @@ const EntityDetailsContentHeader: FC<EntityDetailsContentHeaderProps> = ({onRun,
   );
 };
 
-export default EntityDetailsContentHeader;
+export default EntityDetailsHeader;

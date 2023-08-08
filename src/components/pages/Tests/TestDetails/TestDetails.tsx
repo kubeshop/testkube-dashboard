@@ -1,8 +1,7 @@
 import React, {FC} from 'react';
 import {useParams} from 'react-router-dom';
 
-import EntityDetailsLayer from '@organisms/EntityDetails/EntityDetailsLayer';
-import ExecutionDetailsLayer from '@organisms/EntityDetails/ExecutionDetailsLayer';
+import {EntityDetailsLayer, ExecutionDetailsLayer} from '@organisms/EntityDetails';
 
 import TestDetailsContent from './TestDetailsContent';
 

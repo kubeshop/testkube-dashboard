@@ -12,14 +12,14 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
-interface EntityDetailsContentTabsProps {
+interface EntityDetailsTabsProps {
   settings: ReactNode;
   tab?: string;
   onTabChange: (tab: string) => void;
   onRun: () => void;
 }
 
-const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({settings, tab, onTabChange, onRun}) => {
+const EntityDetailsTabs: FC<EntityDetailsTabsProps> = ({settings, tab, onTabChange, onRun}) => {
   const {entity, metrics, details} = useEntityDetailsPick('entity', 'metrics', 'details');
 
   useTrackTimeAnalytics(`${entity}-details`, tab !== 'settings');
@@ -61,4 +61,4 @@ const EntityDetailsContentTabs: FC<EntityDetailsContentTabsProps> = ({settings, 
   );
 };
 
-export default EntityDetailsContentTabs;
+export default EntityDetailsTabs;

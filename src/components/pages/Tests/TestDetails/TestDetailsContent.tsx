@@ -8,9 +8,7 @@ import useRunEntity from '@hooks/useRunEntity';
 import {SummaryGrid} from '@molecules';
 
 import {PageWrapper} from '@organisms';
-import {EntityDetailsWrapper} from '@organisms/EntityDetails/EntityDetailsContainer/EntityDetailsContainer.styled';
-import EntityDetailsContentHeader from '@organisms/EntityDetails/EntityDetailsContent/EntityDetailsContentHeader';
-import EntityDetailsContentTabs from '@organisms/EntityDetails/EntityDetailsContent/EntityDetailsContentTabs';
+import {EntityDetailsWrapper, EntityDetailsHeader, EntityDetailsTabs} from '@organisms/EntityDetails';
 
 import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
@@ -49,9 +47,9 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
       <PageWrapper>
         <PageMetadata title={details?.name} description={details?.description} />
 
-        <EntityDetailsContentHeader onRun={run} isRunning={isRunning} />
+        <EntityDetailsHeader onRun={run} isRunning={isRunning} />
         <SummaryGrid metrics={metrics} />
-        <EntityDetailsContentTabs
+        <EntityDetailsTabs
           tab={tab}
           onTabChange={setTab}
           onRun={run}
