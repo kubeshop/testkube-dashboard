@@ -1,5 +1,3 @@
-import {Space} from 'antd';
-
 import {Delete} from '@molecules/CommonSettings';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -15,7 +13,7 @@ const General: React.FC = () => {
   const {current} = useTriggersPick('current');
 
   return (
-    <Space size={30} direction="vertical">
+    <>
       <Name />
       {mayDelete ? (
         <Delete
@@ -26,7 +24,7 @@ const General: React.FC = () => {
           useDeleteMutation={useDeleteTriggerMutation}
         />
       ) : null}
-    </Space>
+    </>
   );
 };
 

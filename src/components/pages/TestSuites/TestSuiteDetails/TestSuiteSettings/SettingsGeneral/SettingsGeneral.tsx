@@ -1,7 +1,5 @@
 import {FC} from 'react';
 
-import {Space} from 'antd';
-
 import {Delete} from '@molecules/CommonSettings';
 
 import {Labels, NameNDescription} from '@organisms/EntityDetails';
@@ -17,7 +15,7 @@ const SettingsGeneral: FC = () => {
   const {details} = useEntityDetailsPick('details');
 
   return (
-    <Space size={30} direction="vertical">
+    <>
       <NameNDescription />
       <Labels />
       {mayDelete ? (
@@ -29,7 +27,7 @@ const SettingsGeneral: FC = () => {
           useDeleteMutation={useDeleteTestSuiteMutation}
         />
       ) : null}
-    </Space>
+    </>
   );
 };
 

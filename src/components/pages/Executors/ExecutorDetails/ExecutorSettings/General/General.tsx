@@ -1,5 +1,3 @@
-import {Space} from 'antd';
-
 import {Delete} from '@molecules/CommonSettings';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -16,7 +14,7 @@ const General: React.FC = () => {
   const executor = useAppSelector(selectCurrentExecutor);
 
   return (
-    <Space size={30} direction="vertical">
+    <>
       <NameNType />
       {mayDelete ? (
         <Delete
@@ -27,7 +25,7 @@ const General: React.FC = () => {
           useDeleteMutation={useDeleteExecutorMutation}
         />
       ) : null}
-    </Space>
+    </>
   );
 };
 

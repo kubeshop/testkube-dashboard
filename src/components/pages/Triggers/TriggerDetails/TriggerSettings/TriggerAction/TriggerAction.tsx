@@ -1,13 +1,5 @@
-import {Space} from 'antd';
-
 import Action from './Action';
 
-const TriggerAction: React.FC = () => {
-  return (
-    <Space size={30} direction="vertical">
-      <Action />
-    </Space>
-  );
-};
+const TriggerAction: React.FC = () => <Action />;
 
 export default TriggerAction;

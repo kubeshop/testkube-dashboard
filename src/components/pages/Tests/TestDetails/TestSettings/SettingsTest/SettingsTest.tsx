@@ -1,5 +1,3 @@
-import {Space} from 'antd';
-
 import {notificationCall} from '@molecules';
 
 import {useUpdateTestMutation} from '@services/tests';
@@ -31,10 +29,10 @@ const SettingsTest: React.FC = () => {
   };
 
   return (
-    <Space size={30} direction="vertical">
+    <>
       <TestType type={details.type} updateTest={updateTest} />
       <Source details={details} updateTest={updateTest} />
-    </Space>
+    </>
   );
 };
 

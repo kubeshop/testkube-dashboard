@@ -7,6 +7,7 @@ export const StyledTabContentContainer = styled.div`
   flex-direction: column;
 
   flex: 1;
+  gap: 30px;
 `;
 
 export const StyledSettingsContainer = styled.div`
