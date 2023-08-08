@@ -4,3 +4,4 @@ export {default as PageBlueprint, PageHeader, PageWrapper, PageToolbar} from './
 export {ConditionFormItems} from './TriggersFormItems';
 export {ActionFormItems} from './TriggersFormItems';
 export {default as ExecutionDrawer, ExecutionDrawerHeader} from './ExecutionDrawer';
+export {default as ExecutionsTable} from './ExecutionsTable';

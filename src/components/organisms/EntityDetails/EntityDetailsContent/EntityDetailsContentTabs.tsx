@@ -6,7 +6,7 @@ import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {CLICommands, MetricsBarChart} from '@molecules';
 
-import ExecutionsTable from '@organisms/EntityDetails/ExecutionsTable';
+import {ExecutionsTable} from '@organisms';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
