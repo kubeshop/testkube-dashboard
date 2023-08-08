@@ -39,14 +39,14 @@ export const StyledSider = styled(Layout.Sider)<{$isFullScreenLogOutput?: boolea
   }
 `;
 
-export const StyledSiderChildContainer = styled.div`
+export const StyledSiderChildContainer = styled.div<{$width: number}>`
   position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
   padding-top: 30px;
-  width: 100px;
+  width: ${props => props.$width}px;
   min-height: 100%;
   overflow: auto;
   top: 0;

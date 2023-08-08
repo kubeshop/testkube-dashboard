@@ -14,7 +14,9 @@ export const PageWrapper = styled.div`
 
 export const ToolbarContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 20px;
 `;
 
 export const ToolbarContent = styled.div``;

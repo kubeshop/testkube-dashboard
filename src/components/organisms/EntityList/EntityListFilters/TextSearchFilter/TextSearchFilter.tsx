@@ -13,7 +13,7 @@ import {initialPageSize} from '@redux/initialState';
 import Colors from '@styles/Colors';
 
 const TextSearchFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters, isFiltersDisabled} = props;
+  const {filters, setFilters, isFiltersDisabled, width} = props;
 
   const {dispatch} = useContext(MainContext);
 
@@ -44,7 +44,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
       value={inputValue}
       data-cy="search-filter"
       disabled={isFiltersDisabled}
-      style={{width: '296px'}}
+      style={{width}}
     />
   );
 };

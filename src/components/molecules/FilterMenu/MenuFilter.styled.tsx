@@ -61,13 +61,13 @@ export const AppliedFiltersNotification = styled.div`
   background-color: ${Colors.purple};
 `;
 
-export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean}>`
+export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean; $width?: string}>`
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  width: 296px;
+  width: ${props => props.$width || '296px'};
   border: 1px solid ${Colors.slate800};
   border-radius: 4px;
   padding: 11px;

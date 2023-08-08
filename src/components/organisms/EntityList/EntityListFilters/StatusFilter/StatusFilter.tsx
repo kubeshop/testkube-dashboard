@@ -24,7 +24,7 @@ import Colors from '@styles/Colors';
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters, isFiltersDisabled} = props;
+  const {filters, setFilters, isFiltersDisabled, width} = props;
 
   const {dispatch} = useContext(MainContext);
 
@@ -95,6 +95,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
         onClick={e => e.preventDefault()}
         data-cy="status-filter-button"
         isFiltersDisabled={isFiltersDisabled}
+        $width={width}
       >
         Status <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
       </StyledFilterLabel>
