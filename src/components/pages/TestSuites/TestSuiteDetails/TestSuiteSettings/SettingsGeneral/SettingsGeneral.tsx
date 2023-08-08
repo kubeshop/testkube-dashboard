@@ -6,7 +6,7 @@ import {Labels, NameNDescription} from '@organisms/EntityDetails';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useDeleteTestSuiteMutation} from '@services/testSuites';
+import {useDeleteTestSuiteMutation, useUpdateTestSuiteMutation} from '@services/testSuites';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
@@ -16,8 +16,8 @@ const SettingsGeneral: FC = () => {
 
   return (
     <>
-      <NameNDescription />
-      <Labels />
+      <NameNDescription label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} />
+      <Labels label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} />
       {mayDelete ? (
         <Delete
           name={details?.name!}

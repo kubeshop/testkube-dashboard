@@ -3,10 +3,11 @@ import {useMemo, useState} from 'react';
 import {WarningOutlined} from '@ant-design/icons';
 import {Form, Select, Tooltip} from 'antd';
 
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {MutationDefinition} from '@reduxjs/toolkit/query';
+
 import parser from 'cron-parser';
 import {capitalize} from 'lodash';
-
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
 import {FullWidthSpace, Text} from '@custom-antd';
 
@@ -26,9 +27,13 @@ import NextExecution from './NextExecution';
 import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
 import {custom, quickOptions} from './utils';
 
-const Schedule: React.FC = () => {
-  const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {label, useUpdateEntity} = useEntityDetailsConfig(entity);
+interface ScheduleProps {
+  label: string;
+  useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
+}
+
+const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
+  const {details} = useEntityDetailsPick('details');
   const enabled = usePermission(Permissions.editEntity);
 
   const [updateEntity] = useUpdateEntity();

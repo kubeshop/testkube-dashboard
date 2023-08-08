@@ -2,6 +2,9 @@ import {FC, ReactNode} from 'react';
 
 import {Tabs} from 'antd';
 
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {MutationDefinition} from '@reduxjs/toolkit/query';
+
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {CLICommands, MetricsBarChart} from '@molecules';
@@ -17,9 +20,10 @@ interface EntityDetailsTabsProps {
   tab?: string;
   onTabChange: (tab: string) => void;
   onRun: () => void;
+  useAbortExecution: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const EntityDetailsTabs: FC<EntityDetailsTabsProps> = ({settings, tab, onTabChange, onRun}) => {
+const EntityDetailsTabs: FC<EntityDetailsTabsProps> = ({settings, tab, onTabChange, onRun, useAbortExecution}) => {
   const {entity, metrics, details} = useEntityDetailsPick('entity', 'metrics', 'details');
 
   useTrackTimeAnalytics(`${entity}-details`, tab !== 'settings');
@@ -42,7 +46,7 @@ const EntityDetailsTabs: FC<EntityDetailsTabsProps> = ({settings, tab, onTabChan
                 executionDurationP50ms={metrics?.executionDurationP50ms}
                 executionDurationP95ms={metrics?.executionDurationP95ms}
               />
-              <ExecutionsTable onRun={onRun} />
+              <ExecutionsTable onRun={onRun} useAbortExecution={useAbortExecution} />
             </>
           ),
         },

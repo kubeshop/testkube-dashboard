@@ -3,7 +3,8 @@ import React, {useCallback} from 'react';
 import {Table} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {MutationDefinition} from '@reduxjs/toolkit/query';
 
 import {Skeleton} from '@custom-antd';
 
@@ -13,20 +14,14 @@ import {useExecutionDetailsPick} from '@store/executionDetails';
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
 import TableRow from './TableRow';
 
-type ExecutionsTableProps = {
+interface ExecutionsTableProps {
   onRun: () => void;
-};
+  useAbortExecution: UseMutation<MutationDefinition<any, any, any, any, any>>;
+}
 
-const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
-  const {onRun} = props;
-
+const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecution}) => {
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
-  const {entity, executions, id, isFirstTimeLoading} = useEntityDetailsPick(
-    'entity',
-    'executions',
-    'id',
-    'isFirstTimeLoading'
-  );
+  const {executions, id, isFirstTimeLoading} = useEntityDetailsPick('executions', 'id', 'isFirstTimeLoading');
   const {id: execId, open} = useExecutionDetailsPick('id', 'open');
 
   const rowSelection: TableRowSelection<any> = {
@@ -37,7 +32,6 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = props => {
 
   const isEmptyExecutions = !executions?.results || !executions?.results.length;
 
-  const {useAbortExecution} = useEntityDetailsConfig(entity);
   const [abortExecution] = useAbortExecution();
   const onAbortExecution = useCallback(
     (executionId: string) => {

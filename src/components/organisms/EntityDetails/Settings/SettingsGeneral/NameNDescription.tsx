@@ -1,8 +1,9 @@
 import {Form, Input} from 'antd';
 
-import {capitalize} from 'lodash';
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+import {capitalize} from 'lodash';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
@@ -22,16 +23,20 @@ type NameNDescriptionFormValues = {
   description: string;
 };
 
-const NameNDescription: React.FC = () => {
-  const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {label, useUpdateEntity} = useEntityDetailsConfig(entity);
+interface NameNDescriptionProps {
+  label: string;
+  useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
+}
+
+const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEntity}) => {
+  const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<NameNDescriptionFormValues>();
 
   const [updateEntity] = useUpdateEntity();
 
-  if (!entity || !details) {
+  if (!details) {
     return null;
   }
 

@@ -1,6 +1,7 @@
 import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
 
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {QueryDefinition} from '@reduxjs/toolkit/query';
 
 import {DashboardContext, MainContext} from '@contexts';
 
@@ -20,11 +21,16 @@ export interface ExecutionDetailsLayerProps {
   entity: Entity;
   id: string;
   execId?: string;
+  useGetExecutionDetails: UseQuery<QueryDefinition<any, any, any, any, any>>;
 }
 
-const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> = ({entity, id, execId, children}) => {
-  const {useGetExecutionDetails} = useEntityDetailsConfig(entity);
-
+const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> = ({
+  entity,
+  id,
+  execId,
+  useGetExecutionDetails,
+  children,
+}) => {
   const {navigate} = useContext(DashboardContext);
 
   const [ExecutionStoreProvider, {pick, sync}] = initializeExecutionDetailsStore(
@@ -37,7 +43,7 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
         navigate(`/${entity}/${id}`);
       }),
     },
-    [execId]
+    [execId, useGetExecutionDetails]
   );
 
   const {isClusterAvailable} = useContext(MainContext);

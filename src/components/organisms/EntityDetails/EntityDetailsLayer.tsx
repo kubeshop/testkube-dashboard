@@ -2,7 +2,8 @@ import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'reac
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {QueryDefinition} from '@reduxjs/toolkit/query';
 
 import {DashboardContext, MainContext} from '@contexts';
 
@@ -24,15 +25,24 @@ interface EntityDetailsLayerProps {
   entity: Entity;
   id: string;
   execId?: string;
+  useGetEntityDetails: UseQuery<QueryDefinition<any, any, any, any, any>>;
+  useGetMetrics: UseQuery<QueryDefinition<any, any, any, any, any>>;
+  useGetExecutions: UseQuery<QueryDefinition<any, any, any, any, any>>;
 }
 
-const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({entity, id, execId, children}) => {
-  const {useGetEntityDetails, useGetMetrics, useGetExecutions} = useEntityDetailsConfig(entity);
-
+const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
+  entity,
+  id,
+  execId,
+  useGetEntityDetails,
+  useGetMetrics,
+  useGetExecutions,
+  children,
+}) => {
   const {navigate} = useContext(DashboardContext);
 
   const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] =
-    initializeEntityDetailsStore({entity, id}, [entity, id, navigate]);
+    initializeEntityDetailsStore({entity, id}, [entity, id, navigate, useGetEntityDetails]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');

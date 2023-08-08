@@ -2,9 +2,10 @@ import {FC, useMemo} from 'react';
 
 import {CloseOutlined} from '@ant-design/icons';
 
-import {StatusIcon} from '@atoms';
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+import {StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
@@ -24,10 +25,13 @@ import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
 import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from './ExecutionDrawer.styled';
 
-const ExecutionDrawerHeader: FC = () => {
+interface ExecutionDrawerHeaderProps {
+  useAbortExecution: UseMutation<MutationDefinition<any, any, any, any, any>>;
+}
+
+const ExecutionDrawerHeader: FC<ExecutionDrawerHeaderProps> = ({useAbortExecution}) => {
   const {entity, id} = useEntityDetailsPick('entity', 'id');
   const {close, data, id: execId} = useExecutionDetailsPick('close', 'data', 'id');
-  const {useAbortExecution} = useEntityDetailsConfig(entity);
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
 
   const status = (data as Execution)?.executionResult?.status || (data as TestSuiteExecution)?.status;

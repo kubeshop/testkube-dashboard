@@ -1,12 +1,11 @@
-import {FC, useContext} from 'react';
+import {FC} from 'react';
 
 import {Select, Space} from 'antd';
 
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {MutationDefinition} from '@reduxjs/toolkit/query';
+
 import {ExecutorIcon} from '@atoms';
-
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
-
-import {DashboardContext} from '@contexts';
 
 import {Button, Text} from '@custom-antd';
 
@@ -35,15 +34,15 @@ const filterOptions: OptionType[] = [
 ];
 
 interface EntityDetailsHeaderProps {
-  onRun: () => void;
   isRunning?: boolean;
+  onRun: () => void;
+  onBack: () => void;
+  useAbortAllExecutions: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({onRun, isRunning}) => {
-  const {navigate} = useContext(DashboardContext);
+const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({isRunning, onRun, onBack, useAbortAllExecutions}) => {
   const mayRun = usePermission(Permissions.runEntity);
   const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {defaultStackRoute, useAbortAllExecutions} = useEntityDetailsConfig(entity);
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
   const testIcon = useExecutorIcon(details);
 
@@ -56,7 +55,7 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({onRun, isRunning}) =
 
   return (
     <PageHeader
-      onBack={() => navigate(defaultStackRoute)}
+      onBack={onBack}
       title={details!.name}
       extra={[
         <Select

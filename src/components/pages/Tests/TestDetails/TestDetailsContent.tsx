@@ -13,6 +13,8 @@ import {EntityDetailsHeader, EntityDetailsTabs, EntityDetailsWrapper} from '@org
 import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
+import {useAbortAllTestExecutionsMutation, useAbortTestExecutionMutation} from '@services/tests';
+
 import {useEntityDetailsPick} from '@store/entityDetails';
 
 import TestExecutionDrawer from './TestExecution/TestExecutionDrawer';
@@ -47,13 +49,19 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
       <PageWrapper>
         <PageMetadata title={details?.name} description={details?.description} />
 
-        <EntityDetailsHeader onRun={run} isRunning={isRunning} />
+        <EntityDetailsHeader
+          isRunning={isRunning}
+          onRun={run}
+          onBack={() => navigate('/tests')}
+          useAbortAllExecutions={useAbortAllTestExecutionsMutation}
+        />
         <SummaryGrid metrics={metrics} />
         <EntityDetailsTabs
           tab={tab}
           onTabChange={setTab}
           onRun={run}
           settings={<TestSettings active={settingsTab} onChange={setSettingsTab} />}
+          useAbortExecution={useAbortTestExecutionMutation}
         />
       </PageWrapper>
       <TestExecutionDrawer />

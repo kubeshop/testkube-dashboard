@@ -4,7 +4,7 @@ import {Labels, NameNDescription} from '@organisms/EntityDetails';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useDeleteTestMutation} from '@services/tests';
+import {useDeleteTestMutation, useUpdateTestMutation} from '@services/tests';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
@@ -17,8 +17,8 @@ const SettingsGeneral: React.FC = () => {
 
   return (
     <>
-      <NameNDescription />
-      <Labels />
+      <NameNDescription label="test" useUpdateEntity={useUpdateTestMutation} />
+      <Labels label="test" useUpdateEntity={useUpdateTestMutation} />
       <Timeout />
       <FailureHandling />
       {mayDelete ? (

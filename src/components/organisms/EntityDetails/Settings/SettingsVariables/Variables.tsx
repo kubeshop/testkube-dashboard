@@ -2,9 +2,10 @@ import React, {useEffect, useMemo} from 'react';
 
 import {Form} from 'antd';
 
-import {ExternalLink} from '@atoms';
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
+import {ExternalLink} from '@atoms';
 
 import {VariableInForm} from '@models/variable';
 
@@ -24,11 +25,11 @@ type VariablesFormValues = {
 
 interface VariablesProps {
   description: string;
+  useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const Variables: React.FC<VariablesProps> = ({description}) => {
-  const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {useUpdateEntity} = useEntityDetailsConfig(entity);
+const Variables: React.FC<VariablesProps> = ({description, useUpdateEntity}) => {
+  const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = useUpdateEntity();

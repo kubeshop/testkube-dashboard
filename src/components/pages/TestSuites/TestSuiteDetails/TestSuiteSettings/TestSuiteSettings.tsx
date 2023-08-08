@@ -5,6 +5,8 @@ import {SettingsLayoutProps} from '@molecules/SettingsLayout/SettingsLayout';
 
 import {SettingsScheduling} from '@organisms/EntityDetails';
 
+import {useUpdateTestSuiteMutation} from '@services/testSuites';
+
 import SettingsDefinition from './SettingsDefinition';
 import SettingsGeneral from './SettingsGeneral';
 import SettingsTests from './SettingsTests';
@@ -14,7 +16,11 @@ const tabs = [
   {id: 'general', label: 'General', children: <SettingsGeneral />},
   {id: 'tests', label: 'Tests', children: <SettingsTests />},
   {id: 'variables', label: 'Variables & Secrets', children: <SettingsVariables />},
-  {id: 'scheduling', label: 'Scheduling', children: <SettingsScheduling />},
+  {
+    id: 'scheduling',
+    label: 'Scheduling',
+    children: <SettingsScheduling label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} />,
+  },
   {id: 'definition', label: 'Definition', children: <SettingsDefinition />},
 ];
 

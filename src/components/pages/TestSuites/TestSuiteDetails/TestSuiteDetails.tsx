@@ -3,6 +3,13 @@ import {useParams} from 'react-router-dom';
 
 import {EntityDetailsLayer, ExecutionDetailsLayer} from '@organisms/EntityDetails';
 
+import {
+  useGetTestSuiteExecutionByIdQuery,
+  useGetTestSuiteExecutionMetricsQuery,
+  useGetTestSuiteExecutionsByTestIdQuery,
+} from '@services/testSuiteExecutions';
+import {useGetTestSuiteDetailsQuery} from '@services/testSuites';
+
 import TestSuiteDetailsContent from './TestSuiteDetailsContent';
 
 interface TestSuiteDetailsProps {
@@ -12,8 +19,20 @@ interface TestSuiteDetailsProps {
 const TestSuiteDetails: FC<TestSuiteDetailsProps> = ({tab}) => {
   const {id, execId, settingsTab} = useParams();
   return (
-    <EntityDetailsLayer entity="test-suites" id={id!} execId={execId}>
-      <ExecutionDetailsLayer entity="test-suites" id={id!} execId={execId}>
+    <EntityDetailsLayer
+      entity="test-suites"
+      id={id!}
+      execId={execId}
+      useGetEntityDetails={useGetTestSuiteDetailsQuery}
+      useGetMetrics={useGetTestSuiteExecutionMetricsQuery}
+      useGetExecutions={useGetTestSuiteExecutionsByTestIdQuery}
+    >
+      <ExecutionDetailsLayer
+        entity="test-suites"
+        id={id!}
+        execId={execId}
+        useGetExecutionDetails={useGetTestSuiteExecutionByIdQuery}
+      >
         <TestSuiteDetailsContent tab={tab} settingsTab={settingsTab} />
       </ExecutionDetailsLayer>
     </EntityDetailsLayer>

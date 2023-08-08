@@ -3,10 +3,10 @@ import {useState} from 'react';
 import {Form} from 'antd';
 
 import {nanoid} from '@reduxjs/toolkit';
+import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
+import {MutationDefinition} from '@reduxjs/toolkit/query';
 
 import {capitalize} from 'lodash';
-
-import {useEntityDetailsConfig} from '@constants/entityDetailsConfig/useEntityDetailsConfig';
 
 import {Option} from '@models/form';
 
@@ -19,9 +19,13 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-const Labels: React.FC = () => {
-  const {entity, details} = useEntityDetailsPick('entity', 'details');
-  const {label, useUpdateEntity} = useEntityDetailsConfig(entity);
+interface LabelsProps {
+  label: string;
+  useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
+}
+
+const Labels: React.FC<LabelsProps> = ({label, useUpdateEntity}) => {
+  const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = useUpdateEntity();
@@ -30,7 +34,7 @@ const Labels: React.FC = () => {
   const [wasTouched, setWasTouched] = useState(false);
   const [labelsKey, setLabelsKey] = useState(nanoid());
 
-  if (!entity || !details) {
+  if (!details) {
     return null;
   }
 
