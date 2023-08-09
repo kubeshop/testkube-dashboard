@@ -1,12 +1,17 @@
 import {MouseEvent, memo, useCallback, useEffect, useRef, useState} from 'react';
-import {useAsync} from 'react-use';
+import {useAsync, useUpdate} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
 import Ansi from 'ansi-to-react';
 
+import {config} from '@constants/config';
+
 import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 
 import {LogAction} from '@models/log';
+
+import {usePluginSlot, usePluginState} from '@plugins/pluginHooks';
+import {AiBannerInterface} from '@plugins/types';
 
 import {useAppDispatch, useAppSelector} from '@redux/hooks';
 import {selectFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} from '@redux/reducers/configSlice';
@@ -15,7 +20,12 @@ import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {getRtkIdToken} from '@utils/fetchUtils';
 
-import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
+import {
+  DrawerBannerContainer,
+  StyledLogOutputContainer,
+  StyledLogTextContainer,
+  StyledPreLogText,
+} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
 import {useCountLines, useLastLines} from './utils';
 
@@ -26,10 +36,13 @@ export type LogOutputProps = {
   isRunning?: boolean;
   title?: string;
   initialLines?: number;
+  onChangeTab: (tab: string) => void;
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
   const dispatch = useAppDispatch();
+  const [, setAiBannerData] = usePluginState<AiBannerInterface>('aiExecutionBanner');
+  const update = useUpdate();
 
   const {
     logOutput = 'No logs',
@@ -38,6 +51,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     isRunning,
     title,
     initialLines = 300,
+    onChangeTab,
   } = props;
 
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -54,6 +68,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const [expanded, setExpanded] = useState(false);
   const lines = useCountLines(logs);
   const visibleLogs = useLastLines(logs, expanded || isRunning ? Infinity : initialLines);
+  const drawerBanner = usePluginSlot('executionDrawerBanner');
 
   const onExpand = useCallback((event: MouseEvent) => {
     event.preventDefault();
@@ -145,10 +160,25 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     }
   }, [isFullScreenLogOutput]);
 
+  useEffect(() => {
+    setAiBannerData({
+      onClose: () => {
+        localStorage.setItem(config.isAiBannerVisible, 'false');
+        update();
+      },
+      onAccept: () => {
+        localStorage.setItem(config.isAiBannerVisible, 'false');
+        onChangeTab('ai-insights');
+      },
+    });
+  }, []);
+
   return (
     <StyledLogOutputContainer ref={containerRef}>
+      {drawerBanner ? <DrawerBannerContainer>{drawerBanner}</DrawerBannerContainer> : null}
       <LogOutputHeader logOutput={logs} actions={actions} title={title} />
-      <StyledLogTextContainer>
+
+      <StyledLogTextContainer bannerVisible={Boolean(drawerBanner)}>
         {visibleLogs ? (
           <StyledPreLogText data-test="log-output">
             {!expanded && lines >= initialLines ? (

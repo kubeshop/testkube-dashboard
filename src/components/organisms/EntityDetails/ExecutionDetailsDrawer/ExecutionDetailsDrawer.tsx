@@ -13,6 +13,8 @@ import {Entity} from '@models/entity';
 
 import {TestExecutionDetailsTabs, TestSuiteExecutionDetailsTabs, notificationCall} from '@molecules';
 
+import {usePluginSlot} from '@plugins/pluginHooks';
+
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick, useExecutionDetailsSync} from '@store/executionDetails';
 
@@ -46,6 +48,8 @@ const ExecutionDetailsDrawer: React.FC = () => {
     skip: !isClusterAvailable || !id || isExecutionFinished(data),
   });
   useExecutionDetailsSync({data: fetchedData?.id === id ? fetchedData : null, error});
+
+  const drawerBanner = usePluginSlot('executionDrawerBanner');
 
   const isMobile = useIsMobile();
 
@@ -95,7 +99,12 @@ const ExecutionDetailsDrawer: React.FC = () => {
       open
       onClose={close}
     >
-      <ExecutionDetailsDrawerWrapper transition={{type: 'just'}} drawerWidth={drawerWidth} $isRowSelected>
+      <ExecutionDetailsDrawerWrapper
+        transition={{type: 'just'}}
+        drawerWidth={drawerWidth}
+        $isRowSelected
+        bannerVisible={Boolean(drawerBanner)}
+      >
         {components[entity]}
       </ExecutionDetailsDrawerWrapper>
     </Drawer>

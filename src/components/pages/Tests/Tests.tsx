@@ -23,7 +23,9 @@ const Tests: React.FC = () => {
           <Route path="commands" element={<EntityDetailsBlueprintRenderer entity="tests" tab="commands" />} />
           <Route path="executions" element={<EntityDetailsBlueprintRenderer entity="tests" tab="executions" />}>
             <Route index element={null} />
-            <Route path=":execId" element={null} />
+            <Route path=":execId" element={null}>
+              <Route path=":execDetailsTab" element={null} />
+            </Route>
           </Route>
           <Route path="settings" element={<EntityDetailsBlueprintRenderer entity="tests" tab="settings" />}>
             <Route index element={null} />

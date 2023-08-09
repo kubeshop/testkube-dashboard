@@ -6,7 +6,7 @@ import {Button, Modal} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
 
-import {notificationCall} from '@src/components/molecules';
+import {notificationCall} from '@molecules';
 
 import {StyledDelayModalContent} from '../SettingsTests.styled';
 
