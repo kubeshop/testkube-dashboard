@@ -176,7 +176,6 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         onClick={e => e.preventDefault()}
         data-cy="labels-filter-button"
         isFiltersDisabled={isFiltersDisabled}
-        $width={width}
       >
         Labels <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
       </StyledFilterLabel>

@@ -83,6 +83,12 @@ export const ItemColumn = styled.div<{$isStretch?: boolean}>`
   align-items: center;
 `;
 
+export const ExecutionTimeItemColumn = styled(ItemColumn)`
+  @media ${maxDevice.mobileL} {
+    display: none;
+  }
+`;
+
 export const StyledMetricItem = styled.div`
   display: flex;
   flex-direction: column;

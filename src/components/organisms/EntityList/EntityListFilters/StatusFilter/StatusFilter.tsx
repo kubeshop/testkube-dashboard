@@ -95,7 +95,6 @@ const StatusFilter: React.FC<FilterProps> = props => {
         onClick={e => e.preventDefault()}
         data-cy="status-filter-button"
         isFiltersDisabled={isFiltersDisabled}
-        $width={width}
       >
         Status <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
       </StyledFilterLabel>

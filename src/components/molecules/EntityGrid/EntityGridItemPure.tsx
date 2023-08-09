@@ -1,5 +1,4 @@
 import React, {FC, forwardRef, memo, useCallback} from 'react';
-import {useWindowSize} from 'react-use';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
@@ -14,11 +13,18 @@ import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {DotsDropdown, LabelsList, MetricsBarChart} from '@molecules';
 
 import Colors from '@styles/Colors';
-import {size} from '@styles/MediaQueries';
 
 import {formatDuration} from '@utils/formatDate';
 
-import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
+import {
+  DetailsWrapper,
+  ExecutionTimeItemColumn,
+  ItemColumn,
+  ItemRow,
+  ItemWrapper,
+  RowsWrapper,
+  StyledMetricItem,
+} from './EntityGrid.styled';
 import EntityGridItemExecutionTime from './EntityGridItemExecutionTime';
 
 export interface Item {
@@ -72,9 +78,6 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
     [onAbort, item]
   );
 
-  const {width} = useWindowSize();
-  const isDisplayExecutionTime = width > size.mobileL;
-
   return (
     <ItemWrapper onClick={click} ref={ref} data-test={dataTest}>
       <DetailsWrapper>
@@ -88,17 +91,15 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
               </Text>
             </div>
           </ItemColumn>
-          {isDisplayExecutionTime ? (
-            <ItemColumn>
-              <EntityGridItemExecutionTime time={latestExecution?.startTime} />
-              {isRunning ? (
-                <DotsDropdown
-                  placement="bottomRight"
-                  items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]}
-                />
-              ) : null}
-            </ItemColumn>
-          ) : null}
+          <ExecutionTimeItemColumn>
+            <EntityGridItemExecutionTime time={latestExecution?.startTime} />
+            {isRunning ? (
+              <DotsDropdown
+                placement="bottomRight"
+                items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]}
+              />
+            ) : null}
+          </ExecutionTimeItemColumn>
         </ItemRow>
         <RowsWrapper>
           <ItemRow $flex={1}>

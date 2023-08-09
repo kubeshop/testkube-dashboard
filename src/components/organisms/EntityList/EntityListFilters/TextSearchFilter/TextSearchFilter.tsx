@@ -44,7 +44,6 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
       value={inputValue}
       data-cy="search-filter"
       disabled={isFiltersDisabled}
-      style={{width}}
     />
   );
 };
