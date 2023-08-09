@@ -5,8 +5,6 @@ import {Tabs} from 'antd';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
-
 import {CLICommands, MetricsBarChart} from '@molecules';
 
 import {ExecutionsTable} from '@organisms';
@@ -24,14 +22,10 @@ interface EntityDetailsTabsProps {
 }
 
 const EntityDetailsTabs: FC<EntityDetailsTabsProps> = ({settings, tab, onTabChange, onRun, useAbortExecution}) => {
-  const {entity, metrics, details} = useEntityDetailsPick('entity', 'metrics', 'details');
-
-  useTrackTimeAnalytics(`${entity}-details`, tab !== 'settings');
-  useTrackTimeAnalytics(`${entity}-settings`, tab === 'settings');
-
+  const {metrics, details} = useEntityDetailsPick('metrics', 'details');
   return (
     <Tabs
-      activeKey={tab || 'executions'}
+      activeKey={tab}
       onChange={onTabChange}
       destroyInactiveTabPane
       items={[

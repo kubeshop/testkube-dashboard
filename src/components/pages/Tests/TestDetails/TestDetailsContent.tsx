@@ -4,6 +4,7 @@ import {DashboardContext} from '@contexts';
 
 import {useLastCallback} from '@hooks/useLastCallback';
 import useRunEntity from '@hooks/useRunEntity';
+import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {SummaryGrid} from '@molecules';
 
@@ -36,6 +37,9 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
   const setSettingsTab = useLastCallback((nextTab: string) => {
     navigate(`/tests/${id}/settings/${nextTab}`);
   });
+
+  useTrackTimeAnalytics('tests-details', tab !== 'settings');
+  useTrackTimeAnalytics('tests-settings', tab === 'settings');
 
   if (error) {
     return <Error title={error?.data?.title || 'Error'} description={error?.data?.detail || ''} />;
