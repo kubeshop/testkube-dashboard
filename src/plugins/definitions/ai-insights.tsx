@@ -1,8 +1,10 @@
 import {IconLabel, Tag} from '@atoms';
 
-import {AiInsightsTab} from '@molecules';
+import {config} from '@constants/config';
 
-import {Plugin, TestExecutionTabsInterface} from '@plugins/types';
+import {AiInsightsTab, MessagePanel} from '@molecules';
+
+import {AiBannerInterface, Plugin, TestExecutionTabsInterface} from '@plugins/types';
 
 const createAiInsightsPlugin = (): Plugin => ({
   name: 'ai-insights',
@@ -22,6 +24,39 @@ const createAiInsightsPlugin = (): Plugin => ({
             'failed'
           );
         },
+      }
+    );
+    scope.appendSlot(
+      'executionDrawerBanner',
+      <MessagePanel
+        buttons={[
+          {
+            type: 'secondary',
+            text: 'Learn more',
+            isLink: true,
+            linkConfig: {
+              href: 'https://testkube.io/get-started',
+              target: '_blank',
+            },
+          },
+          {
+            type: 'primary',
+            text: 'Get AI Hints for this test',
+            onClick: () => {
+              scope.getState<AiBannerInterface>('aiExecutionBanner')?.onAccept();
+            },
+          },
+        ]}
+        onClose={() => {
+          scope.getState<AiBannerInterface>('aiExecutionBanner')?.onClose();
+        }}
+        isClosable
+        type="default"
+        title="🎉 Get AI support on failing tests! 🎉"
+        description="Try our AI Hints to improve your tests and get support to debug them more efficiently."
+      />,
+      {
+        visible: () => localStorage.getItem(config.isAiBannerVisible) === 'true',
       }
     );
   },
