@@ -24,7 +24,7 @@ for (const testName of testNames) {
 
     const createTestPage = new CreateTestPage(page);
     await createTestPage.createTest(testData);
-    await page.waitForURL(`**/tests/executions/${realTestName}`);
+    await page.waitForURL(`**/tests/${realTestName}`);
 
     const createdTestData = await api.getTestData(realTestName);
     await validateTest(testData, createdTestData);
