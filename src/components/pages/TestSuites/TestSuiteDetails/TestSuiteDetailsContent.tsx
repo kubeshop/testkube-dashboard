@@ -63,7 +63,6 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
           onChange={setTab}
           destroyInactiveTabPane
           items={[
-            // TODO: Consider passing useRun instead of useRunEntity result
             {
               key: 'executions',
               label: 'Recent executions',
