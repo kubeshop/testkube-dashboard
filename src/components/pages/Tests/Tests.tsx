@@ -20,7 +20,7 @@ const Tests: FC = () => (
 
       <Route index element={<TestsList />} />
       <Route path=":id">
-        <Route index element={<TestDetails />} />
+        <Route index element={<TestDetails tab="executions" />} />
         <Route path="commands" element={<TestDetails tab="commands" />} />
         <Route path="executions" element={<TestDetails tab="executions" />}>
           <Route index element={null} />
