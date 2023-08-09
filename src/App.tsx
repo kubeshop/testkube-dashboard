@@ -34,12 +34,14 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
 import createPluginManager from './plugins/PluginManager';
+import {initializeWebhooksStore} from './store/webhooks';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
 const Executors = lazy(() => import('@pages').then(module => ({default: module.Executors})));
 const Sources = lazy(() => import('@pages').then(module => ({default: module.Sources})));
 const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
+const Webhooks = lazy(() => import('@pages').then(module => ({default: module.Webhooks})));
 const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
 export interface AppProps {
@@ -48,6 +50,7 @@ export interface AppProps {
 
 const App: React.FC<AppProps> = ({plugins}) => {
   const [TriggersProvider] = initializeTriggersStore();
+  const [WebhooksProvider] = initializeWebhooksStore();
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -131,6 +134,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     .append(Suspense, {fallback: <Loading />})
     .append(ClusterDetailsProvider, {})
     .append(TriggersProvider, {})
+    .append(WebhooksProvider, {})
     .append(PluginsContext.Provider, {
       value: {
         scope,
@@ -179,6 +183,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
           <Route path="executors/*" element={<Executors />} />
           <Route path="sources/*" element={<Sources />} />
           <Route path="triggers/*" element={<Triggers />} />
+          <Route path="webhooks/*" element={<Webhooks />} />
           <Route path="settings" element={<GlobalSettings />} />
           <Route
             path="/apiEndpoint"
