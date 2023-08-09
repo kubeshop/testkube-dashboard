@@ -1,13 +1,15 @@
 import React, {FC} from 'react';
 
+import {Tabs} from 'antd';
+
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useRunEntity from '@hooks/useRunEntity';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {SummaryGrid} from '@molecules';
+import {CLICommands, SummaryGrid} from '@molecules';
 
 import {PageWrapper} from '@organisms';
-import {EntityDetailsHeader, EntityDetailsTabs, EntityDetailsWrapper} from '@organisms/EntityDetails';
+import {EntityDetailsHeader, EntityDetailsWrapper, RecentExecutionsTab} from '@organisms/EntityDetails';
 
 import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
@@ -15,6 +17,8 @@ import PageMetadata from '@pages/PageMetadata';
 import {useAbortAllTestExecutionsMutation, useAbortTestExecutionMutation} from '@services/tests';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
+
+import Colors from '@styles/Colors';
 
 import TestExecutionDrawer from './TestExecution/TestExecutionDrawer';
 import TestSettings from './TestSettings';
@@ -54,12 +58,28 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
           useAbortAllExecutions={useAbortAllTestExecutionsMutation}
         />
         <SummaryGrid metrics={metrics} />
-        <EntityDetailsTabs
-          tab={tab}
-          onTabChange={setTab}
-          onRun={run}
-          settings={<TestSettings active={settingsTab} onChange={setSettingsTab} />}
-          useAbortExecution={useAbortTestExecutionMutation}
+        <Tabs
+          activeKey={tab}
+          onChange={setTab}
+          destroyInactiveTabPane
+          items={[
+            // TODO: Consider passing useRun instead of useRunEntity result
+            {
+              key: 'executions',
+              label: 'Recent executions',
+              children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestExecutionMutation} />,
+            },
+            {
+              key: 'commands',
+              label: 'CLI Commands',
+              children: <CLICommands name={details!.name} bg={Colors.slate800} />,
+            },
+            {
+              key: 'settings',
+              label: 'Settings',
+              children: <TestSettings active={settingsTab} onChange={setSettingsTab} />,
+            },
+          ]}
         />
       </PageWrapper>
       <TestExecutionDrawer />

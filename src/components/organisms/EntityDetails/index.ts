@@ -5,5 +5,5 @@ export {default as Variables} from './Settings/SettingsVariables/Variables';
 export {default as EntityDetailsLayer} from './EntityDetailsLayer';
 export {default as ExecutionDetailsLayer} from './ExecutionDetailsLayer';
 export {default as EntityDetailsHeader} from './EntityDetailsHeader';
-export {default as EntityDetailsTabs} from './EntityDetailsTabs';
+export {default as RecentExecutionsTab} from './RecentExecutionsTab';
 export {EntityDetailsWrapper} from './EntityDetails.styled';

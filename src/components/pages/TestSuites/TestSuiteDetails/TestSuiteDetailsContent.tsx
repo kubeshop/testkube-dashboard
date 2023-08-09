@@ -1,21 +1,24 @@
 import React, {FC} from 'react';
 
+import {Tabs} from 'antd';
+
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useRunEntity from '@hooks/useRunEntity';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {SummaryGrid} from '@molecules';
+import {CLICommands, SummaryGrid} from '@molecules';
 
 import {PageWrapper} from '@organisms';
-import {EntityDetailsHeader, EntityDetailsTabs, EntityDetailsWrapper} from '@organisms/EntityDetails';
+import {EntityDetailsHeader, EntityDetailsWrapper, RecentExecutionsTab} from '@organisms/EntityDetails';
 
 import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
-import {useAbortAllTestSuiteExecutionsMutation} from '@services/testSuites';
-import {useAbortTestExecutionMutation} from '@services/tests';
+import {useAbortAllTestSuiteExecutionsMutation, useAbortTestSuiteExecutionMutation} from '@services/testSuites';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
+
+import Colors from '@styles/Colors';
 
 import TestSuiteExecutionDrawer from './TestSuiteExecution/TestSuiteExecutionDrawer';
 import TestSuiteSettings from './TestSuiteSettings';
@@ -55,12 +58,28 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
           useAbortAllExecutions={useAbortAllTestSuiteExecutionsMutation}
         />
         <SummaryGrid metrics={metrics} />
-        <EntityDetailsTabs
-          tab={tab}
-          onTabChange={setTab}
-          onRun={run}
-          settings={<TestSuiteSettings active={settingsTab} onChange={setSettingsTab} />}
-          useAbortExecution={useAbortTestExecutionMutation}
+        <Tabs
+          activeKey={tab}
+          onChange={setTab}
+          destroyInactiveTabPane
+          items={[
+            // TODO: Consider passing useRun instead of useRunEntity result
+            {
+              key: 'executions',
+              label: 'Recent executions',
+              children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestSuiteExecutionMutation} />,
+            },
+            {
+              key: 'commands',
+              label: 'CLI Commands',
+              children: <CLICommands name={details!.name} bg={Colors.slate800} />,
+            },
+            {
+              key: 'settings',
+              label: 'Settings',
+              children: <TestSuiteSettings active={settingsTab} onChange={setSettingsTab} />,
+            },
+          ]}
         />
       </PageWrapper>
       <TestSuiteExecutionDrawer />
