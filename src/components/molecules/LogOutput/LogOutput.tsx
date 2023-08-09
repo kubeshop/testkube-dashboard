@@ -20,7 +20,12 @@ import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {getRtkIdToken} from '@utils/fetchUtils';
 
-import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
+import {
+  DrawerBannerContainer,
+  StyledLogOutputContainer,
+  StyledLogTextContainer,
+  StyledPreLogText,
+} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
 import {useCountLines, useLastLines} from './utils';
 
@@ -170,7 +175,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   return (
     <StyledLogOutputContainer ref={containerRef}>
-      {drawerBanner ? <div style={{marginBottom: '30px'}}>{drawerBanner}</div> : null}
+      {drawerBanner ? <DrawerBannerContainer>{drawerBanner}</DrawerBannerContainer> : null}
       <LogOutputHeader logOutput={logs} actions={actions} title={title} />
 
       <StyledLogTextContainer bannerVisible={Boolean(drawerBanner)}>

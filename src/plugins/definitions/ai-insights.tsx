@@ -6,6 +6,14 @@ import {AiInsightsTab, MessagePanel} from '@molecules';
 
 import {AiBannerInterface, Plugin, TestExecutionTabsInterface} from '@plugins/types';
 
+import PluginScope from '../PluginScope';
+
+const isTestExecutionFailed = (scope: PluginScope) => {
+  return (
+    scope.getState<TestExecutionTabsInterface>('testExecutionTabs')?.execution?.executionResult?.status === 'failed'
+  );
+};
+
 const createAiInsightsPlugin = (): Plugin => ({
   name: 'ai-insights',
   setup: scope => {
@@ -19,10 +27,7 @@ const createAiInsightsPlugin = (): Plugin => ({
       {
         order: 4,
         visible: () => {
-          return (
-            scope.getState<TestExecutionTabsInterface>('testExecutionTabs')?.execution?.executionResult?.status ===
-            'failed'
-          );
+          return isTestExecutionFailed(scope);
         },
       }
     );
@@ -56,10 +61,7 @@ const createAiInsightsPlugin = (): Plugin => ({
         description="Try our AI Hints to improve your tests and get support to debug them more efficiently."
       />,
       {
-        visible: () =>
-          localStorage.getItem(config.isAiBannerVisible) === 'true' &&
-          scope.getState<TestExecutionTabsInterface>('testExecutionTabs')?.execution?.executionResult?.status ===
-            'failed',
+        visible: () => localStorage.getItem(config.isAiBannerVisible) === 'true' && isTestExecutionFailed(scope),
       }
     );
   },

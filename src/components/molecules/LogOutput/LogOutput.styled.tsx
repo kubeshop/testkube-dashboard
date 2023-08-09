@@ -112,3 +112,7 @@ export const StyledExpandAltOutlined = styled(ExpandAltOutlined)`
     border-color: ${Colors.indigo400};
   }
 `;
+
+export const DrawerBannerContainer = styled.div`
+  margin-bottom: 30px;
+`;

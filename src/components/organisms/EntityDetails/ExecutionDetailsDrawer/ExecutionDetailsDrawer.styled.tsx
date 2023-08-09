@@ -11,7 +11,7 @@ export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{
   display: flex;
   flex-direction: column;
 
-  height: ${({bannerVisible}) => (bannerVisible ? 'calc(100% - 140px)' : '100%')};
+  height: ${({bannerVisible}) => (bannerVisible ? '85%' : '100%')};
   width: ${props => (props.drawerWidth ? `${props.drawerWidth}` : '85vw')};
 
   margin: 0;
