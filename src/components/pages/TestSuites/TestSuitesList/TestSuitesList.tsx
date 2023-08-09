@@ -1,7 +1,9 @@
 import {FC, useCallback, useContext, useEffect} from 'react';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 import {ModalConfig} from '@contexts/ModalContext';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {TestSuite} from '@models/testSuite';
 
@@ -40,7 +42,6 @@ const createModal: ModalConfig = {
 
 const TestSuitesList: FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
   const queryFilters = useAppSelector(selectTestSuitesFilters);
 
   const {data, isLoading, isFetching} = useGetTestSuitesQuery(queryFilters || null, {
@@ -53,7 +54,7 @@ const TestSuitesList: FC = () => {
   }, [data]);
 
   const [abortAll] = useAbortAllTestSuiteExecutionsMutation();
-  const onItemClick = useCallback((item: TestSuite) => navigate(`/test-suites/${item.name}`), []);
+  const onItemClick = useDashboardNavigate((item: TestSuite) => `/test-suites/${item.name}`);
   const onItemAbort = useCallback((item: TestSuite) => {
     abortAll({id: item.name})
       .unwrap()

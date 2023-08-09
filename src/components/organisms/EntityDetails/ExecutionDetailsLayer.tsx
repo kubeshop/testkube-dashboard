@@ -3,9 +3,9 @@ import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'reac
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
-import {useLastCallback} from '@hooks/useLastCallback';
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {Entity} from '@models/entity';
 
@@ -31,17 +31,11 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
   useGetExecutionDetails,
   children,
 }) => {
-  const {navigate} = useContext(DashboardContext);
-
   const [ExecutionStoreProvider, {pick, sync}] = initializeExecutionDetailsStore(
     {
       id: execId,
-      open: useLastCallback((targetId: string) => {
-        navigate(`/${entity}/${id}/executions/${targetId}`);
-      }),
-      close: useLastCallback(() => {
-        navigate(`/${entity}/${id}`);
-      }),
+      open: useDashboardNavigate((targetId: string) => `/${entity}/${id}/executions/${targetId}`),
+      close: useDashboardNavigate(`/${entity}/${id}`),
     },
     [execId, useGetExecutionDetails]
   );

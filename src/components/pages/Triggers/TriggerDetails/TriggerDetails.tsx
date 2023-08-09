@@ -3,9 +3,9 @@ import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
-import {useLastCallback} from '@hooks/useLastCallback';
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
@@ -22,7 +22,6 @@ import TriggerSettings from './TriggerSettings';
 
 const TriggerDetails = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
 
   const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
@@ -40,9 +39,8 @@ const TriggerDetails = () => {
     reload();
   }, [name]);
 
-  const setSettingsTab = useLastCallback((nextTab: string) => {
-    navigate(`/triggers/${name}/settings/${nextTab}`);
-  });
+  const setSettingsTab = useDashboardNavigate((next: string) => `/triggers/${name}/settings/${next}`);
+  const back = useDashboardNavigate('/triggers');
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
@@ -55,7 +53,7 @@ const TriggerDetails = () => {
     <PageWrapper>
       <PageMetadata title={`${name} | Triggers`} />
 
-      <PageHeader onBack={() => navigate('/triggers')} title={name} />
+      <PageHeader onBack={back} title={name} />
       <Tabs
         destroyInactiveTabPane
         items={[

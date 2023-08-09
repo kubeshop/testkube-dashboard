@@ -7,10 +7,11 @@ import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {capitalize} from 'lodash';
 
-import {DashboardContext, ModalContext} from '@contexts';
+import {ModalContext} from '@contexts';
 
 import {Button, FullWidthSpace, Text} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import usePressEnter from '@hooks/usePressEnter';
 
 import {notificationCall} from '@molecules';
@@ -36,7 +37,7 @@ const DeleteEntityModal: React.FC<{
   const {onCancel, useDeleteMutation, name, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
   const {setModalOpen} = useContext(ModalContext);
-  const {navigate} = useContext(DashboardContext);
+  const back = useDashboardNavigate(defaultStackRoute);
 
   const onEvent = usePressEnter();
 
@@ -55,7 +56,7 @@ const DeleteEntityModal: React.FC<{
         if (onConfirm) {
           onConfirm();
         } else {
-          navigate(defaultStackRoute);
+          back();
         }
       })
       .catch(error => {

@@ -3,7 +3,7 @@ import {useSearchParams} from 'react-router-dom';
 
 import {isEqual, merge} from 'lodash';
 
-import {DashboardContext, MainContext, ModalContext} from '@contexts';
+import {MainContext, ModalContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
@@ -54,7 +54,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);

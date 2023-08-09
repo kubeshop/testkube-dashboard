@@ -5,7 +5,7 @@ import {Tabs} from 'antd';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import {useLastCallback} from '@hooks/useLastCallback';
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
@@ -23,7 +23,7 @@ import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {location} = useContext(DashboardContext);
 
   const currentSourceDetails = useAppSelector(selectCurrentSource);
 
@@ -40,9 +40,8 @@ const SourceDetails = () => {
     reload();
   }, [location]);
 
-  const setSettingsTab = useLastCallback((nextTab: string) => {
-    navigate(`/sources/${name}/settings/${nextTab}`);
-  });
+  const setSettingsTab = useDashboardNavigate((next: string) => `/sources/${name}/settings/${next}`);
+  const back = useDashboardNavigate('/sources');
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
@@ -55,7 +54,7 @@ const SourceDetails = () => {
     <PageWrapper>
       <PageMetadata title={`${name} | Sources`} />
 
-      <PageHeader onBack={() => navigate('/sources')} title={name} />
+      <PageHeader onBack={back} title={name} />
       <Tabs
         destroyInactiveTabPane
         items={[

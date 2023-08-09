@@ -6,6 +6,8 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
 import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
@@ -23,7 +25,8 @@ import TriggerCard from './TriggerCard';
 
 const TriggersList: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {location} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate(({name}: {name: string}) => `/triggers/${name}`);
 
   const {data: triggersList = [], refetch, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
 
@@ -59,7 +62,7 @@ const TriggersList: React.FC = () => {
         maxColumns={3}
         data={triggersList}
         Component={TriggerCard}
-        componentProps={{onClick: trigger => navigate(`/triggers/${trigger.name}`)}}
+        componentProps={{onClick: openDetails}}
         empty={<EmptyTriggers onButtonClick={() => setAddTriggerModalVisibility(true)} />}
         itemHeight={66}
         loadingInitially={isLoading}

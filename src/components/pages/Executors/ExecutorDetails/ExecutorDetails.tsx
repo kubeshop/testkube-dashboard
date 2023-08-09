@@ -3,9 +3,9 @@ import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
-import {useLastCallback} from '@hooks/useLastCallback';
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
@@ -23,7 +23,6 @@ import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails: React.FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
   const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
   const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
@@ -42,9 +41,8 @@ const ExecutorDetails: React.FC = () => {
     }
   }, [executor]);
 
-  const setSettingsTab = useLastCallback((nextTab: string) => {
-    navigate(`/executors/${name}/settings/${nextTab}`);
-  });
+  const setSettingsTab = useDashboardNavigate((next: string) => `/executors/${name}/settings/${next}`);
+  const back = useDashboardNavigate('/executors');
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
@@ -57,7 +55,7 @@ const ExecutorDetails: React.FC = () => {
     <PageWrapper>
       <PageMetadata title={`${name} | Executors`} />
 
-      <PageHeader onBack={() => navigate('/executors')} title={name} />
+      <PageHeader onBack={back} title={name} />
       <Tabs
         destroyInactiveTabPane
         items={[

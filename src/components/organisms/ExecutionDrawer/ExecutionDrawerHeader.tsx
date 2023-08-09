@@ -75,7 +75,6 @@ const ExecutionDrawerHeader: FC<ExecutionDrawerHeaderProps> = ({useAbortExecutio
                 id={id!}
                 type={data?.runningContext?.type}
                 context={data?.runningContext?.context}
-                onClose={close}
                 entity={entity}
               />
             </Text>

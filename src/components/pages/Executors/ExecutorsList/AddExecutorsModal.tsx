@@ -1,11 +1,10 @@
-import {useContext, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {DashboardContext} from '@contexts';
-
 import {Button, Input} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
 import {ErrorNotificationConfig} from '@models/notifications';
@@ -30,7 +29,7 @@ type AddExecutorsFormValues = {
 };
 
 const AddExecutorsModal: React.FC = () => {
-  const {navigate} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate((name: string) => `/executors/${name}`);
 
   const [form] = Form.useForm<AddExecutorsFormValues>();
 
@@ -55,7 +54,7 @@ const AddExecutorsModal: React.FC = () => {
 
     createExecutor(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => navigate(`/executors/${res.data.metadata.name}`))
+      .then(res => openDetails(res.data.metadata.name))
       .catch(err => {
         setError(err);
 

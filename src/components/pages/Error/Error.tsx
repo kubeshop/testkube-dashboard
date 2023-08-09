@@ -1,13 +1,13 @@
-import {FC, ReactNode, useCallback, useContext} from 'react';
+import {FC, ReactNode} from 'react';
 import {To} from 'react-router';
 
 import {Image} from 'antd';
 
 import notFoundImage from '@assets/not-found-image.svg';
 
-import {DashboardContext} from '@contexts';
-
 import {Button, Title} from '@custom-antd';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import Colors from '@styles/Colors';
 
@@ -21,16 +21,7 @@ interface ErrorProps {
 }
 
 const Error: FC<ErrorProps> = ({title, description, buttonUrl, buttonLabel}) => {
-  const {navigate} = useContext(DashboardContext);
-
-  const onButtonClick = useCallback(() => {
-    if (buttonUrl == null) {
-      navigate(-1);
-    } else {
-      navigate(buttonUrl);
-    }
-  }, [buttonUrl]);
-
+  const back = useDashboardNavigate(buttonUrl ?? -1);
   return (
     <StyledErrorContainer size={32}>
       <Image src={notFoundImage} preview={false} />
@@ -38,7 +29,7 @@ const Error: FC<ErrorProps> = ({title, description, buttonUrl, buttonLabel}) => 
         {title || 'Error'}
       </Title>
       <StyledErrorDescription>{description || 'Sorry, something went wrong.'}</StyledErrorDescription>
-      <Button type="primary" onClick={onButtonClick}>
+      <Button type="primary" onClick={back}>
         {buttonLabel || 'Back to the previous page'}
       </Button>
     </StyledErrorContainer>

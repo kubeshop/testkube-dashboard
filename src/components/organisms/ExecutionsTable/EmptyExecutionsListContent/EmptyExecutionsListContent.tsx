@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
+import React from 'react';
 
-import {DashboardContext} from '@contexts';
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {EmptyListContent, HelpCard} from '@molecules';
 
@@ -18,7 +18,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
   const {onRun} = props;
 
   const {id, entity, details} = useEntityDetailsPick('id', 'entity', 'details');
-  const {navigate} = useContext(DashboardContext);
+  const onAddSteps = useDashboardNavigate(`/${entity}/${id}/settings/tests`);
   const mayRun = usePermission(Permissions.runEntity);
 
   if (!details) {
@@ -60,7 +60,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         title="Congrats, now add your tests to this suite"
         description="In order to be able to run your test suite you need to define the tests you want to add."
         buttonText="Add your tests to this suite"
-        onButtonClick={() => navigate(`/${entity}/${id}/settings/tests`)}
+        onButtonClick={onAddSteps}
         actionType="create"
       >
         <HelpCard isLink link={externalLinks.createTestSuite}>

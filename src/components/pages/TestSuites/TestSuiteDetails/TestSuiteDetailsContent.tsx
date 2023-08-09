@@ -1,8 +1,6 @@
-import React, {FC, useContext} from 'react';
+import React, {FC} from 'react';
 
-import {DashboardContext} from '@contexts';
-
-import {useLastCallback} from '@hooks/useLastCallback';
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useRunEntity from '@hooks/useRunEntity';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
@@ -31,13 +29,9 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
   const {id, details, error, metrics} = useEntityDetailsPick('id', 'details', 'error', 'metrics');
   const [isRunning, run] = useRunEntity('test-suites', details);
 
-  const {navigate} = useContext(DashboardContext);
-  const setTab = useLastCallback((nextTab: string) => {
-    navigate(`/test-suites/${id}/${nextTab}`);
-  });
-  const setSettingsTab = useLastCallback((nextTab: string) => {
-    navigate(`/test-suites/${id}/settings/${nextTab}`);
-  });
+  const setTab = useDashboardNavigate((next: string) => `/test-suites/${id}/${next}`);
+  const setSettingsTab = useDashboardNavigate((next: string) => `/test-suites/${id}/settings/${next}`);
+  const back = useDashboardNavigate('/test-suites');
 
   useTrackTimeAnalytics('test-suites-details', tab !== 'settings');
   useTrackTimeAnalytics('test-suites-settings', tab === 'settings');
@@ -57,7 +51,7 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
         <EntityDetailsHeader
           isRunning={isRunning}
           onRun={run}
-          onBack={() => navigate('/test-suites')}
+          onBack={back}
           useAbortAllExecutions={useAbortAllTestSuiteExecutionsMutation}
         />
         <SummaryGrid metrics={metrics} />

@@ -2,8 +2,10 @@ import {FC, useCallback, useContext, useEffect} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 import {ModalConfig} from '@contexts/ModalContext';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {Test} from '@models/test';
 
@@ -41,7 +43,6 @@ export const createModal: ModalConfig = {
 
 const TestsList: FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
   const queryFilters = useAppSelector(selectTestsFilters);
 
   const {data, isLoading, isFetching} = useGetTestsQuery(queryFilters || null, {
@@ -54,7 +55,7 @@ const TestsList: FC = () => {
   }, [data]);
 
   const [abortAll] = useAbortAllTestExecutionsMutation();
-  const onItemClick = useCallback((item: Test) => navigate(`/tests/${item.name}`), []);
+  const onItemClick = useDashboardNavigate((item: Test) => `/tests/${item.name}`);
   const onItemAbort = useCallback((item: Test) => {
     abortAll({id: item.name})
       .unwrap()
