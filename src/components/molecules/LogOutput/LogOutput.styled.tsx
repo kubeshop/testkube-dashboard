@@ -17,18 +17,17 @@ export const BaseLogOutputStyles = `
 `;
 
 export const StyledLogOutputContainer = styled.div`
-  ${BaseLogOutputStyles}
   height: 70vh;
 
   border-radius: 4px;
 `;
 
-export const StyledLogTextContainer = styled.div`
+export const StyledLogTextContainer = styled.div<{bannerVisible?: boolean}>`
   flex: 1;
-
+  height: ${({bannerVisible}) => (bannerVisible ? '55vh' : '70vh')};
   background-color: ${Colors.slate900};
 
-  ${invisibleScroll};
+  ${BaseLogOutputStyles}
 `;
 
 export const StyledPreLogText = styled.pre`
@@ -82,7 +81,6 @@ export const StyledLogOutputHeaderTitle = styled.span`
 
 const FullscreenIconBaseStyles = `
   position: absolute;
-  top: 0px;
   right: 35px;
 
   border-radius: 2px;

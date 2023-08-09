@@ -3,7 +3,7 @@ import ReactFlow, {Controls, Edge, Node} from 'reactflow';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {LocalStep} from '@src/models/testSuite';
+import {LocalStep} from '@models/testSuite';
 
 import AddNode from './Nodes/AddNode';
 import IntersectionNode from './Nodes/IntersectionNode';

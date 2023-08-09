@@ -1,17 +1,21 @@
 import {motion} from 'framer-motion';
 import styled from 'styled-components';
 
-export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{$isRowSelected: boolean; drawerWidth: string}>`
+export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{
+  $isRowSelected: boolean;
+  drawerWidth: string;
+  bannerVisible: boolean;
+}>`
   position: relative;
 
   display: flex;
   flex-direction: column;
 
-  height: 100%;
+  height: ${({bannerVisible}) => (bannerVisible ? 'calc(100% - 140px)' : '100%')};
   width: ${props => (props.drawerWidth ? `${props.drawerWidth}` : '85vw')};
 
   margin: 0;
-  padding: ${({$isRowSelected}) => ($isRowSelected ? '45px 30px' : '0')};
+  padding: ${({$isRowSelected}) => ($isRowSelected ? '30px' : '0')};
 `;
 
 export const DrawerHeader = styled.div`

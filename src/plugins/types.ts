@@ -17,3 +17,8 @@ export interface TestExecutionTabsInterface {
   execution: Execution;
   test: any;
 }
+
+export interface AiBannerInterface {
+  onClose: () => void;
+  onAccept: () => void;
+}

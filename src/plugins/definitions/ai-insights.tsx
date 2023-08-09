@@ -10,7 +10,7 @@ const createAiInsightsPlugin = (): Plugin => ({
     scope.appendSlot(
       'testExecutionTabs',
       {
-        key: 'ai-insights-tab',
+        key: 'ai-insights',
         label: <IconLabel title="AI Insights" icon={<Tag title="NEW" type="info" />} />,
         children: <AiInsightsTab />,
       },

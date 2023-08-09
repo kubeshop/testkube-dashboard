@@ -1,8 +1,12 @@
-import {useEffect} from 'react';
+import {useContext, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
+import {DashboardContext} from '@contexts';
+
 import useIsRunning from '@hooks/useIsRunning';
+import {useLastCallback} from '@hooks/useLastCallback';
 
 import {Execution} from '@models/execution';
 
@@ -25,7 +29,9 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const {data} = useExecutionDetailsPick('data');
   const {details} = useEntityDetailsPick('details');
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
-
+  const {entity} = useEntityDetailsPick('entity');
+  const {id: entityId, execDetailsTab} = useParams();
+  const {navigate} = useContext(DashboardContext);
   const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
 
   const execution = data as Execution;
@@ -46,6 +52,10 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   const whetherToShowArtifactsTab = executorsFeaturesMap[testType]?.includes('artifacts');
 
+  const setExecutionTab = useLastCallback((nextTab: string) => {
+    navigate(`/${entity}/${entityId}/executions/${id}/${nextTab}`);
+  });
+
   useEffect(() => {
     setTestExecutionTabsData({execution, test: details});
   }, [execution, details]);
@@ -53,9 +63,18 @@ const TestExecutionDetailsTabs: React.FC = () => {
   const defaultExecutionDetailsTabs = [
     {
       value: {
-        key: 'LogOutputPane',
+        key: 'log-output',
         label: 'Log Output',
-        children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} />,
+        children: (
+          <LogOutput
+            logOutput={output}
+            executionId={id}
+            isRunning={isRunning}
+            onChangeTab={(tab: string) => {
+              setExecutionTab(tab);
+            }}
+          />
+        ),
       },
       metadata: {
         order: Infinity,
@@ -63,7 +82,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     },
     {
       value: {
-        key: 'ArtifactsPane',
+        key: 'artifacts',
         label: 'Artifacts',
         children: (
           <TestExecutionDetailsArtifacts
@@ -81,7 +100,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     },
     {
       value: {
-        key: 'CLICommands',
+        key: 'cli-commands',
         label: 'CLI Commands',
         children: <CLICommands isExecutions type={testType} id={id} modifyMap={{status}} />,
       },
@@ -91,7 +110,7 @@ const TestExecutionDetailsTabs: React.FC = () => {
     },
     {
       value: {
-        key: 'Variables',
+        key: 'variables',
         label: 'Variables',
         children: <ExecutionsVariablesList variables={decomposedVars} />,
       },
@@ -104,7 +123,16 @@ const TestExecutionDetailsTabs: React.FC = () => {
 
   const items = usePluginSlotList('testExecutionTabs', defaultExecutionDetailsTabs);
 
-  return <Tabs items={items} />;
+  return (
+    <Tabs
+      defaultActiveKey="log-output"
+      activeKey={execDetailsTab}
+      onChange={activeKey => {
+        setExecutionTab(activeKey);
+      }}
+      items={items}
+    />
+  );
 };
 
 export default TestExecutionDetailsTabs;

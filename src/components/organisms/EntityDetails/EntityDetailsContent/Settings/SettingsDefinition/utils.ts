@@ -3,11 +3,10 @@ import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHook
 import {QueryDefinition} from '@reduxjs/toolkit/src/query/endpointDefinitions';
 
 import {Entity} from '@models/entity';
+import {YamlEditBody} from '@models/fetch';
 
 import {useGetTestSuiteDefinitionQuery, useUpdateTestSuiteDefinitionMutation} from '@services/testSuites';
 import {useGetTestDefinitionQuery, useUpdateTestDefinitionMutation} from '@services/tests';
-
-import {YamlEditBody} from '@src/models/fetch';
 
 import {externalLinks} from '@utils/externalLinks';
 
