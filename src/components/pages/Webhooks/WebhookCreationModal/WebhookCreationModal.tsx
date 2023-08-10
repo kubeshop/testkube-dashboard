@@ -6,6 +6,11 @@ import {DashboardContext} from '@contexts';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
+import {Option} from '@models/form';
+import {Webhook, WebhookEvent} from '@models/webhook';
+
+import {decomposeLabels} from '@molecules/LabelsSelect/utils';
+
 import {initializeWebhooksStore} from '@store/webhooks';
 
 import {requiredNoText} from '@utils/form';
@@ -16,6 +21,9 @@ import {SecondStep} from './SecondStep';
 type WebhookCreationModalFormValues = {
   name: string;
   type: string;
+  labels: Option[];
+  events: Option[];
+  uri: string;
 };
 
 enum WebhookCreationModalSteps {
@@ -45,9 +53,28 @@ const WebhookCreationModal: FC = () => {
   };
 
   const onFinish = async () => {
-    const values = form.getFieldsValue(true);
+    const values: WebhookCreationModalFormValues = form.getFieldsValue(true);
 
-    createWebhook('/webhooks', values, navigate);
+    const webhook: Webhook = {
+      //   {
+      //     "type": "Webhook",
+      //     "resource": "test",
+      //     "name": "nameqweqwe",
+      //     "labels": {
+      //         "asdf": "asdf"
+      //     },
+      //     "events": [
+      //         "start-test"
+      //     ],
+      //     "uri": "https://asdasd.co"
+      // }
+
+      ...values,
+      labels: decomposeLabels(values.labels),
+      events: values.events.map(item => item.value) as WebhookEvent[],
+    };
+
+    createWebhook('/webhooks', webhook, navigate);
   };
 
   const stepToComponent: Record<WebhookCreationModalSteps, any> = {
@@ -60,7 +87,7 @@ const WebhookCreationModal: FC = () => {
       form={form}
       name="webhook-creation-modal"
       layout="vertical"
-      initialValues={{type: 'Webhook'}}
+      initialValues={{type: 'Webhook', resource: 'test'}}
       onFinish={onFinish}
     >
       <FullWidthSpace direction="vertical" size={20}>

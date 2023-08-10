@@ -2,7 +2,7 @@ import {FC} from 'react';
 
 import {Button, FormItem, FullWidthSpace, Input} from '@custom-antd';
 
-import {requiredNoText} from '@utils/form';
+import {requiredNoText, url} from '@utils/form';
 
 interface SecondStepProps {
   onStepChange: (number: number) => void;
@@ -11,8 +11,8 @@ interface SecondStepProps {
 export const SecondStep: FC<SecondStepProps> = ({onStepChange}) => {
   return (
     <FullWidthSpace size={20} direction="vertical">
-      <FormItem label="URL" name="url" required rules={[requiredNoText]}>
-        <Input placeholder="Webhook URL" />
+      <FormItem label="URI" name="uri" required rules={[requiredNoText, url]}>
+        <Input placeholder="Webhook URI" />
       </FormItem>
       <FullWidthSpace size={15} justify="flex-end">
         <Button
