@@ -124,6 +124,10 @@ const EntityDetailsContent: React.FC<EntityDetailsContentProps> = ({
     });
   };
 
+  const onEditTest = () => {
+    onSettingsTabChange('test');
+  };
+
   const avatar = type
     ? {
         avatar: {
@@ -154,7 +158,10 @@ const EntityDetailsContent: React.FC<EntityDetailsContentProps> = ({
           />,
           <DotsDropdown
             key="entity-options"
-            items={[{key: 1, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>}]}
+            items={[
+              {key: 1, label: <span onClick={onEditTest}>Edit Test</span>},
+              {key: 2, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>},
+            ]}
             wrapperStyle={{backgroundColor: Colors.slate800}}
           />,
           <Button key="run-now-button" type="primary" onClick={onRunButtonClick} hidden={!mayRun} loading={isLoading}>
