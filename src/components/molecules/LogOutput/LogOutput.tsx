@@ -163,11 +163,11 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   useEffect(() => {
     setAiBannerData({
       onClose: () => {
-        localStorage.setItem(config.isAiBannerVisible, 'false');
+        localStorage.setItem(config.isAiBannerHidden, 'true');
         update();
       },
       onAccept: () => {
-        localStorage.setItem(config.isAiBannerVisible, 'false');
+        localStorage.setItem(config.isAiBannerHidden, 'true');
         onChangeTab('ai-insights');
       },
     });
