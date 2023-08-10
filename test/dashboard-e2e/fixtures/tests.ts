@@ -1,10 +1,9 @@
-/**
- * Fixtures should be TS files, as JSONs are not working in composite projects.
- * @see {@link https://github.com/TypeStrong/ts-loader/issues/905}
- */
+import config from '../config';
+
 export default {
   'cypress-git': {
     name: 'temp-e2e-cypress-git',
+    namespace: config.namespace,
     type: 'cypress/project',
     content: {
       type: 'git',
@@ -21,6 +20,7 @@ export default {
   },
   'cypress-git-created': {
     name: 'temp-e2e-cypress-git-created',
+    namespace: config.namespace,
     type: 'cypress/project',
     content: {
       type: 'git',
@@ -37,6 +37,7 @@ export default {
   },
   'k6-git': {
     name: 'temp-e2e-k6-git',
+    namespace: config.namespace,
     type: 'k6/script',
     content: {
       type: 'git',
@@ -53,6 +54,7 @@ export default {
   },
   'k6-git-created': {
     name: 'temp-e2e-k6-git-created',
+    namespace: config.namespace,
     type: 'k6/script',
     content: {
       type: 'git',
@@ -69,6 +71,7 @@ export default {
   },
   'postman-git': {
     name: 'temp-e2e-postman-git',
+    namespace: config.namespace,
     type: 'postman/collection',
     content: {
       type: 'git',
@@ -85,6 +88,7 @@ export default {
   },
   'postman-git-created': {
     name: 'temp-e2e-postman-git-created',
+    namespace: config.namespace,
     type: 'postman/collection',
     content: {
       type: 'git',
@@ -101,6 +105,7 @@ export default {
   },
   'postman-negative-test': {
     name: 'temp-e2e-postman-git-ran-neg-test',
+    namespace: config.namespace,
     type: 'postman/collection',
     content: {
       type: 'git',
@@ -117,6 +122,7 @@ export default {
   },
   'postman-negative-init': {
     name: 'temp-e2e-postman-git-ran-neg-init',
+    namespace: config.namespace,
     type: 'postman/collection',
     content: {
       type: 'git',
