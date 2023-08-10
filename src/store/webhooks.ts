@@ -19,7 +19,7 @@ const createWebhooksSlice: StateCreator<WebhooksSlice> = set => ({
     try {
       const apiEndpoint = getApiEndpoint();
 
-      const res = await axios.get<Webhook[]>(`${apiEndpoint}/organization/tkcorg_937944f6fc577dbf/environment/tkcenv_c4581caf23016b9b/dashboard/${url}`);
+      const res = await axios.get<Webhook[]>(`${apiEndpoint}${url}`);
 
       set({webhooks: res.data});
 
@@ -32,10 +32,7 @@ const createWebhooksSlice: StateCreator<WebhooksSlice> = set => ({
     try {
       const apiEndpoint = getApiEndpoint();
 
-      const res = await axios.post<Webhook>(
-        `${apiEndpoint}/organization/tkcorg_937944f6fc577dbf/environment/tkcenv_c4581caf23016b9b/dashboard/${url}`,
-        webhook
-      );
+      const res = await axios.post<Webhook>(`${apiEndpoint}${url}`, webhook);
 
       set(state => ({webhooks: [...state.webhooks, res.data]}));
       navigate('/webhooks/{webhook.id}');
