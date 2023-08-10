@@ -138,10 +138,6 @@ export const GlobalStyle = createGlobalStyle`
       }
     }
   }
-  
-  .ant-tabs-content-holder {
-    overflow: auto;
-  }
 
   /* Select */
 

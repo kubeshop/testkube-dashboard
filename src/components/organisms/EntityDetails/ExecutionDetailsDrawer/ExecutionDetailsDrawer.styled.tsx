@@ -16,6 +16,10 @@ export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{
 
   margin: 0;
   padding: ${({$isRowSelected}) => ($isRowSelected ? '30px' : '0')};
+
+  .ant-tabs-content-holder {
+    overflow: auto;
+  }
 `;
 
 export const DrawerHeader = styled.div`
