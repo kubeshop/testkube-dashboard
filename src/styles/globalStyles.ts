@@ -83,6 +83,14 @@ export const GlobalStyle = createGlobalStyle`
     flex-direction: column;
   }
 
+  .ant-layout-sider {
+    zoom: 0.6;
+  }
+
+  .ant-layout-sider-children > div > div {
+    zoom: 1.35;
+  }
+
   .running-icon {
     animation-name: spin;
     animation-duration: 500ms;
@@ -117,6 +125,7 @@ export const GlobalStyle = createGlobalStyle`
   /* Tabs */
 
   .ant-tabs {
+    height: 100%;
     color: ${Colors.slate400};
 
     font-weight: 500;
@@ -128,6 +137,10 @@ export const GlobalStyle = createGlobalStyle`
         border-bottom: unset !important;
       }
     }
+  }
+  
+  .ant-tabs-content-holder {
+    overflow: auto;
   }
 
   /* Select */

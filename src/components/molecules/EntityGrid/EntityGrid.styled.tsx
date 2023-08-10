@@ -34,6 +34,8 @@ export const ItemWrapper = styled.div`
 
     background: ${Colors.slate850};
   }
+
+  min-width: 100px;
 `;
 
 export const DetailsWrapper = styled.div`
@@ -63,14 +65,6 @@ export const ItemRow = styled.div<{$flex: number}>`
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 5px;
-
-  @media ${maxDevice.tablet} {
-    max-width: 75vw;
-  }
-
-  @media ${maxDevice.mobileL} {
-    max-width: 60vw;
-  }
 `;
 
 export const ItemColumn = styled.div<{$isStretch?: boolean}>`

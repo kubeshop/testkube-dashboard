@@ -46,7 +46,7 @@ export const StyledSiderChildContainer = styled.div<{$width: number}>`
   justify-content: space-between;
 
   padding-top: 30px;
-  width: ${props => props.$width}px;
+  width: 100px;
   min-height: 100%;
   overflow: auto;
   top: 0;

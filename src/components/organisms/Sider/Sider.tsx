@@ -206,7 +206,7 @@ const Sider: React.FC = () => {
   const siderWidth = isMobile ? 60 : 100;
 
   return (
-    <StyledSider width={siderWidth} data-cy="navigation-sider" $isFullScreenLogOutput={isFullScreenLogOutput}>
+    <StyledSider width={100} data-cy="navigation-sider" $isFullScreenLogOutput={isFullScreenLogOutput}>
       <StyledSiderChildContainer $width={siderWidth}>
         <StyledNavigationMenu>
           <FullWidthSpace size={30} direction="vertical">
