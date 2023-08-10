@@ -24,7 +24,9 @@ const Tests: FC = () => (
         <Route path="commands" element={<TestDetails tab="commands" />} />
         <Route path="executions" element={<TestDetails tab="executions" />}>
           <Route index element={null} />
-          <Route path=":execId" element={null} />
+          <Route path=":execId" element={null}>
+            <Route path=":execDetailsTab" element={null} />
+          </Route>
         </Route>
         <Route path="settings" element={<TestDetails tab="settings" />}>
           <Route index element={null} />

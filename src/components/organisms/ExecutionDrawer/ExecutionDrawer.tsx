@@ -19,10 +19,18 @@ interface ExecutionDrawerProps {
   header: ReactElement;
   open: boolean;
   loading?: boolean;
+  bannerVisible?: boolean;
   onClose: () => void;
 }
 
-const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({header, open, loading, onClose, children}) => {
+const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({
+  header,
+  open,
+  loading,
+  onClose,
+  children,
+  bannerVisible,
+}) => {
   const isMobile = useIsMobile();
 
   const drawerWidth = isMobile ? '100vw' : window.innerWidth * 0.85 < 1200 ? '85vw' : '1200px';
@@ -58,7 +66,12 @@ const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({header, o
       open
       onClose={onClose}
     >
-      <ExecutionDrawerWrapper transition={{type: 'just'}} drawerWidth={drawerWidth} $isRowSelected>
+      <ExecutionDrawerWrapper
+        transition={{type: 'just'}}
+        drawerWidth={drawerWidth}
+        bannerVisible={Boolean(bannerVisible)}
+        $isRowSelected
+      >
         {children}
       </ExecutionDrawerWrapper>
     </Drawer>

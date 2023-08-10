@@ -12,10 +12,9 @@ import {
   MessagePanelWrapper,
 } from './MessagePanel.styled';
 
-interface ButtonConfig {
+interface ButtonConfig extends Omit<ICustomButtonProps, 'type'> {
   type: ICustomButtonProps['$customType'];
   text: string;
-  href?: string;
 }
 
 interface ButtonWithLinkConfig extends ButtonConfig {
@@ -78,7 +77,7 @@ const MessagePanel: React.FC<MessagePanelProps> = props => {
               }
 
               return (
-                <Button $customType={button.type} key={button.type}>
+                <Button $customType={button.type} key={button.type} onClick={button.onClick}>
                   {button.text}
                 </Button>
               );

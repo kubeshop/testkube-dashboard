@@ -1,10 +1,9 @@
-/**
- * Fixtures should be TS files, as JSONs are not working in composite projects.
- * @see {@link https://github.com/TypeStrong/ts-loader/issues/905}
- */
+import config from '../config';
+
 export default {
   'testsuite-empty': {
     name: 'temp-ts-1',
+    namespace: config.namespace,
     description: 'testsuite-description-1',
     labels: {
       testsuite: 'label1',
