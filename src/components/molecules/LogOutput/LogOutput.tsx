@@ -140,16 +140,6 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   }, [logs]);
 
   useEffect(() => {
-    if (scrollableRef.current) {
-      setTimeout(() => {
-        if (scrollableRef.current) {
-          scrollableRef.current.scrollTop = scrollableRef.current.scrollHeight;
-        }
-      }, 100);
-    }
-  }, [executionId]);
-
-  useEffect(() => {
     const rect = scrollableRef?.current?.getBoundingClientRect();
     if (rect) {
       dispatch(
