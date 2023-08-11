@@ -29,12 +29,15 @@ export const StyledPageHeader = styled(AntdPageHeader)`
   &.ant-page-header {
     margin-bottom: 12px;
     padding: 0;
+
     .ant-page-header-heading {
       gap: 20px;
     }
+
     .ant-page-header-heading-left,
     .ant-page-header-heading-extra {
       margin: 0;
+
       div {
         flex-wrap: wrap;
       }
