@@ -63,7 +63,7 @@ const MessagePanel: React.FC<MessagePanelProps> = props => {
           {description}
         </MessageDescriptionText>
       </MessageDescription>
-      <FullWidthSpace style={{flex: 0}}>
+      <FullWidthSpace style={{flexWrap: 'wrap', justifyContent: 'flex-end'}}>
         {buttons
           ? buttons.map(button => {
               if ('isLink' in button) {
