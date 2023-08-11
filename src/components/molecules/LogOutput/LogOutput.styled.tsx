@@ -73,7 +73,10 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolea
 
   color: ${Colors.slate400};
   `
-      : 'position: relative;float: right;'}
+      : `
+  position: relative;
+  float: right;
+  `}
 
   display: flex;
   justify-content: space-between;
