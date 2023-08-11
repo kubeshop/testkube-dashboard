@@ -9,7 +9,7 @@ import {MainContext} from '@contexts';
 
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
-import {getRtkBaseUrl, getRtkIdToken} from '@utils/fetchUtils';
+import {getRtkBaseUrl, getRtkIdToken} from '@utils/rtk';
 import {hasProtocol} from '@utils/strings';
 
 import env from '../env';

@@ -6,10 +6,16 @@ import {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 
 import {formatDuration} from '@utils/formatDate';
 
-import type {BarChartConfig} from '../MetricsBarChart';
 import {BarWrapper as Bar, SvgWrapper} from '../MetricsBarChart.styled';
 
 import BarWithTooltip from './BarWithTooltip';
+
+export type BarChartConfig = {
+  barWidth: number;
+  barMargin: number;
+  chartHeight: number;
+  chartData: any[];
+};
 
 type ChartProps = {
   chartConfig: BarChartConfig;
