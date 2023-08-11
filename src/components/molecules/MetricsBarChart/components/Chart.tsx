@@ -6,7 +6,7 @@ import {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 
 import {formatDuration} from '@utils/formatDate';
 
-import {BarChartConfig} from '../MetricsBarChart';
+import type {BarChartConfig} from '../MetricsBarChart';
 import {BarWrapper as Bar, SvgWrapper} from '../MetricsBarChart.styled';
 
 import BarWithTooltip from './BarWithTooltip';

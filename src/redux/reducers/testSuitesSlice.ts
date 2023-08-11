@@ -1,10 +1,10 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {TestSuiteWithExecution, TestSuitesState} from '@models/testSuite';
+import type {TestSuiteWithExecution, TestSuitesState} from '@models/testSuite';
 
 import initialState from '@redux/initialState';
 
-import {RootState} from '../store';
+import type {RootState} from '../store';
 
 export const testSuitesSlice = createSlice({
   name: 'testSuitesSlice',

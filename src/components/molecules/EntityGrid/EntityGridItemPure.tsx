@@ -6,9 +6,9 @@ import {Text} from '@custom-antd';
 
 import useExecutorIcon from '@hooks/useExecutorIcon';
 
-import {Execution} from '@models/execution';
-import {ExecutionMetrics} from '@models/metrics';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {Execution} from '@models/execution';
+import type {ExecutionMetrics} from '@models/metrics';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {DotsDropdown, LabelsList, MetricsBarChart} from '@molecules';
 

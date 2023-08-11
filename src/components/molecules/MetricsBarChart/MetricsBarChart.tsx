@@ -2,7 +2,7 @@ import {memo, useCallback, useEffect, useRef} from 'react';
 
 import debounce from 'lodash.debounce';
 
-import {ExecutionMetrics} from '@models/metrics';
+import type {ExecutionMetrics} from '@models/metrics';
 
 import {BarsWrapper, ChartWrapper, MetricsBarChartWrapper} from './MetricsBarChart.styled';
 import Chart from './components/Chart';

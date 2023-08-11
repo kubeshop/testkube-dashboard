@@ -1,6 +1,6 @@
-import {Execution} from '@models/execution';
+import type {Execution} from '@models/execution';
 
-import PluginScope from './PluginScope';
+import type PluginScope from './PluginScope';
 
 export interface Plugin {
   name: string;
@@ -8,7 +8,7 @@ export interface Plugin {
   order?: number;
 }
 
-export interface SlotMetaData {
+export interface SlotMetadata {
   order?: number;
   visible?: () => boolean;
 }

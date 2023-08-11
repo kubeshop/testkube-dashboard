@@ -1,8 +1,8 @@
-import {EntityMap} from '@models/entityMap';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {EntityMap} from '@models/entityMap';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
-import {Execution} from './execution';
-import {Variables} from './variable';
+import type {Execution} from './execution';
+import type {Variables} from './variable';
 
 export interface TestSuiteStep {
   delay?: string;

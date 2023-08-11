@@ -1,10 +1,10 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {SourceWithRepository, SourcesState} from '@models/sources';
+import type {SourceWithRepository, SourcesState} from '@models/sources';
 
 import initialState from '@redux/initialState';
 
-import {RootState} from '../store';
+import type {RootState} from '../store';
 
 export const sourcesSlice = createSlice({
   name: 'sourcesSlice',

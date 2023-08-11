@@ -1,6 +1,6 @@
 import {StateCreator} from 'zustand';
 
-import {ApiDetails} from '@services/apiEndpoint';
+import type {ApiDetails} from '@services/apiEndpoint';
 
 import {connectStore, createStoreFactory} from '@store/utils';
 
