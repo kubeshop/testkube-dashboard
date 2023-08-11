@@ -24,7 +24,7 @@ import Colors from '@styles/Colors';
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters, isFiltersDisabled, width} = props;
+  const {filters, setFilters, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
 

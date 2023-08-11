@@ -1,7 +1,6 @@
 import {createGlobalStyle} from 'styled-components';
 
 import Colors, {BackgroundColors} from '@styles/Colors';
-import {maxDevice} from '@styles/MediaQueries';
 
 export const invisibleScroll = `
   &::-webkit-scrollbar {
@@ -478,16 +477,6 @@ export const GlobalStyle = createGlobalStyle`
 
     svg {
       fill: ${Colors.whitePure};
-    }
-  }
-
-  @media ${maxDevice.tablet} {
-    .ant-layout-sider {
-      zoom: 0.6;
-    }
-
-    .ant-layout-sider-children > div > div {
-      zoom: 1.35;
     }
   }
 `;

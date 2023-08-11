@@ -16,8 +16,6 @@ import {DashboardContext} from '@contexts';
 
 import {FullWidthSpace, Text} from '@custom-antd';
 
-import useIsMobile from '@hooks/useIsMobile';
-
 import {ReactComponent as SettingIcon} from '@icons/setting.svg';
 
 import {useAppSelector} from '@redux/hooks';
@@ -104,8 +102,6 @@ const Sider: React.FC = () => {
   const {navigate, showLogoInSider, showSocialLinksInSider} = useContext(DashboardContext);
 
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
-
-  const isMobile = useIsMobile();
 
   const otherMenuItems = [
     {
@@ -203,11 +199,9 @@ const Sider: React.FC = () => {
     });
   }, []);
 
-  const siderWidth = isMobile ? 60 : 100;
-
   return (
     <StyledSider width={100} data-cy="navigation-sider" $isFullScreenLogOutput={isFullScreenLogOutput}>
-      <StyledSiderChildContainer $width={siderWidth}>
+      <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <FullWidthSpace size={30} direction="vertical">
             {showLogoInSider ? (

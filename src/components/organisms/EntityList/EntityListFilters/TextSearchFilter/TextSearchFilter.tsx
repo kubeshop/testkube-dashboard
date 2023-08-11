@@ -13,7 +13,7 @@ import {initialPageSize} from '@redux/initialState';
 import Colors from '@styles/Colors';
 
 const TextSearchFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters, isFiltersDisabled, width} = props;
+  const {filters, setFilters, isFiltersDisabled} = props;
 
   const {dispatch} = useContext(MainContext);
 
