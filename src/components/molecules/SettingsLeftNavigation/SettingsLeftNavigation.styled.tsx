@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const StyledNavigationOptionContainer = styled.div`
   cursor: pointer;
@@ -22,4 +23,8 @@ export const StyledNavigationContainer = styled.div`
   gap: 16px;
 
   min-width: 200px;
+
+  @media ${maxDevice.tablet} {
+    position: static;
+  }
 `;

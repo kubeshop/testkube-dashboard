@@ -1,4 +1,4 @@
-import {MouseEvent, forwardRef, useCallback, useEffect, useRef, useState} from 'react';
+import React, {MouseEvent, forwardRef, useCallback, useEffect, useRef, useState} from 'react';
 
 import Ansi from 'ansi-to-react';
 import {debounce} from 'lodash';
@@ -8,6 +8,7 @@ import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
 
 import {LogOutputProps} from '../LogOutput';
 import {StyledLogTextContainer, StyledPreLogText} from '../LogOutput.styled';
+import LogOutputHeader from '../LogOutputHeader';
 import {useCountLines, useLastLines} from '../utils';
 
 import {StyledFullscreenLogOutputContainer} from './FullscreenLogOutput.styled';
@@ -43,6 +44,7 @@ const FullScreenLogOutput = forwardRef<HTMLDivElement, Pick<LogOutputProps, 'act
         logOutputDOMRect={logOutputDOMRect}
         onTransitionEnd={scrollToBottom}
       >
+        <LogOutputHeader logOutput={logOutput} isFullScreen />
         <StyledLogTextContainer>
           {visibleLogs ? (
             <StyledPreLogText>
