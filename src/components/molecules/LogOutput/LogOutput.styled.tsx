@@ -42,6 +42,8 @@ export const StyledPreLogText = styled.pre`
 `;
 
 export const StyledLogOutputActionsContainer = styled.ul`
+  position: absolute;
+  right: 0;
   display: flex;
   justify-content: flex-end;
   flex: 1;
@@ -63,7 +65,7 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolea
 
   color: ${Colors.slate400};
   `
-      : ''}
+      : 'position: relative'}
 
   display: flex;
   justify-content: space-between;

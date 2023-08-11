@@ -1,6 +1,7 @@
 import {createGlobalStyle} from 'styled-components';
 
 import Colors, {BackgroundColors} from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const invisibleScroll = `
   &::-webkit-scrollbar {
@@ -81,14 +82,6 @@ export const GlobalStyle = createGlobalStyle`
   .ant-layout-content {
     display: flex;
     flex-direction: column;
-  }
-
-  .ant-layout-sider {
-    zoom: 0.6;
-  }
-
-  .ant-layout-sider-children > div > div {
-    zoom: 1.35;
   }
 
   .running-icon {
@@ -488,29 +481,14 @@ export const GlobalStyle = createGlobalStyle`
       fill: ${Colors.whitePure};
     }
   }
+
+  @media ${maxDevice.mobileL} {
+    .ant-layout-sider {
+      zoom: 0.6;
+    }
+
+    .ant-layout-sider-children > div > div {
+      zoom: 1.35;
+    }
+  }
 `;
-
-/* Media Sizes */
-
-const size = {
-  mobileS: '320px',
-  mobileM: '375px',
-  mobileL: '425px',
-  tablet: '768px',
-  laptop: '1024px',
-  laptopL: '1440px',
-  desktop: '2560px',
-};
-
-/* Devices */
-
-export const device = {
-  mobileS: `(min-width: ${size.mobileS})`,
-  mobileM: `(min-width: ${size.mobileM})`,
-  mobileL: `(min-width: ${size.mobileL})`,
-  tablet: `(min-width: ${size.tablet})`,
-  laptop: `(min-width: ${size.laptop})`,
-  laptopL: `(min-width: ${size.laptopL})`,
-  desktop: `(min-width: ${size.desktop})`,
-  desktopL: `(min-width: ${size.desktop})`,
-};

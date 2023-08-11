@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Coordinates} from '@models/config';
 
 import Colors from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 import {BaseLogOutputStyles} from '../LogOutput.styled';
 
@@ -14,7 +15,7 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
   ${({logOutputDOMRect}) =>
     logOutputDOMRect
       ? `
-  position: absolute;
+  position: fixed;
   z-index: 1001;
 
   color: ${Colors.slate400};
@@ -26,7 +27,7 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
     width: ${logOutputDOMRect?.width}px;
     height: ${logOutputDOMRect?.height}px;
   }
-  
+
   &.full-screen-log-output-enter-active {
     top: 0;
     left: 100px;
@@ -34,10 +35,10 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
     width: calc(100% - 70px);
     height: 100vh;
 
-    transition: 
-      top 0.4s ease-in-out, 
-      left 0.3s ease-in-out 0.4s, 
-      height 0.4s ease-in-out, 
+    transition:
+      top 0.4s ease-in-out,
+      left 0.3s ease-in-out 0.4s,
+      height 0.4s ease-in-out,
       width 0.3s ease-in-out 0.4s
     ;
   }
@@ -65,10 +66,10 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
     width: ${logOutputDOMRect?.width}px;
     height: ${logOutputDOMRect?.height}px;
 
-    transition: 
-      top 0.2s ease-in-out 0.2s, 
-      left 0.2s ease-in-out, 
-      height 0.2s ease-in-out 0.2s, 
+    transition:
+      top 0.2s ease-in-out 0.2s,
+      left 0.2s ease-in-out,
+      height 0.2s ease-in-out 0.2s,
       width 0.2s ease-in-out
     ;
   }
@@ -79,6 +80,18 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
 
     width: ${logOutputDOMRect?.width}px;
     height: ${logOutputDOMRect?.height}px;
+  }
+
+  @media ${maxDevice.mobileL} {
+    &.full-screen-log-output-enter-active {
+      left: 60px;
+      width: calc(100% - 30px);
+    }
+
+    &.full-screen-log-output-enter-done {
+      left: 60px;
+      width: calc(100% - 60px);
+    }
   }
   `
       : ''};
