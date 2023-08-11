@@ -16,15 +16,24 @@ export const BaseLogOutputStyles = `
   ${invisibleScroll}
 `;
 
-export const StyledLogOutputContainer = styled.div`
-  height: 70vh;
+export const LogOutputWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 
+export const StyledLogOutputContainer = styled.div`
+  position: relative;
+  max-height: 100%;
+  flex: 1;
   border-radius: 4px;
+  overflow: auto;
+  ${invisibleScroll}
 `;
 
 export const StyledLogTextContainer = styled.div<{bannerVisible?: boolean}>`
+  height: 100%;
   flex: 1;
-  height: ${({bannerVisible}) => (bannerVisible ? '55vh' : '70vh')};
   background-color: ${Colors.slate900};
 
   ${BaseLogOutputStyles}
@@ -33,17 +42,16 @@ export const StyledLogTextContainer = styled.div<{bannerVisible?: boolean}>`
 export const StyledPreLogText = styled.pre`
   display: flex;
   flex-direction: column;
+  overflow: initial;
 
   padding: 10px;
   font-size: 12px;
 
-  ${invisibleScroll}
   ${AnsiClassesMapping}
 `;
 
 export const StyledLogOutputActionsContainer = styled.ul`
-  position: absolute;
-  right: 0;
+  position: sticky;
   display: flex;
   justify-content: flex-end;
   flex: 1;
@@ -65,7 +73,7 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolea
 
   color: ${Colors.slate400};
   `
-      : 'position: relative'}
+      : 'position: relative;float: right;'}
 
   display: flex;
   justify-content: space-between;
@@ -73,12 +81,6 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolea
   border-radius: inherit;
 
   background: transparent;
-`;
-
-export const StyledLogOutputHeaderTitle = styled.span`
-  font-size: 14px;
-  font-style: italic;
-  font-weight: 600;
 `;
 
 const FullscreenIconBaseStyles = `

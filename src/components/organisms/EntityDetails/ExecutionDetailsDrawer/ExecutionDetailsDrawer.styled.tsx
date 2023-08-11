@@ -11,13 +11,19 @@ export const ExecutionDetailsDrawerWrapper = styled(motion.div)<{
   display: flex;
   flex-direction: column;
 
-  height: ${({bannerVisible}) => (bannerVisible ? '85%' : '100%')};
+  height: 100%;
   width: ${props => (props.drawerWidth ? `${props.drawerWidth}` : '85vw')};
 
   margin: 0;
   padding: ${({$isRowSelected}) => ($isRowSelected ? '30px' : '0')};
 
+  .ant-tabs,
+  .ant-tabs-tabpane {
+    height: 100%;
+  }
+
   .ant-tabs-content-holder {
+    height: 100%;
     overflow: auto;
   }
 `;

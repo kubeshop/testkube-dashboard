@@ -82,7 +82,7 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
     height: ${logOutputDOMRect?.height}px;
   }
 
-  @media ${maxDevice.mobileL} {
+  @media ${maxDevice.tablet} {
     &.full-screen-log-output-enter-active {
       left: 60px;
       width: calc(100% - 30px);

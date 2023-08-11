@@ -118,7 +118,6 @@ export const GlobalStyle = createGlobalStyle`
   /* Tabs */
 
   .ant-tabs {
-    height: 100%;
     color: ${Colors.slate400};
 
     font-weight: 500;
@@ -482,7 +481,7 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  @media ${maxDevice.mobileL} {
+  @media ${maxDevice.tablet} {
     .ant-layout-sider {
       zoom: 0.6;
     }
