@@ -17,7 +17,7 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
-import {useTelemetry} from '@telemetry';
+import {useTelemetry} from '@telemetry/hooks';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';

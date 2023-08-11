@@ -13,7 +13,7 @@ import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
-import {useTelemetry} from '@telemetry';
+import {useTelemetry} from '@telemetry/hooks';
 
 import CopyCommand from './CopyCommand';
 

@@ -2,7 +2,7 @@ import {FC} from 'react';
 
 import {act, fireEvent, render} from '@testing-library/react';
 
-import {TelemetryContext} from '@telemetry/TelemetryContext';
+import {TelemetryContext} from '@telemetry/context';
 
 import useTrackTimeAnalytics from './useTrackTimeAnalytics';
 

@@ -9,7 +9,7 @@ import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
 
-import {usePluginSlot, usePluginSlotList, usePluginState} from '@plugins/pluginHooks';
+import {usePluginSlot, usePluginSlotList, usePluginState} from '@plugins/hooks';
 import {LogOutputBannerInterface, TestExecutionTabsInterface} from '@plugins/types';
 
 import {useAppSelector} from '@redux/hooks';

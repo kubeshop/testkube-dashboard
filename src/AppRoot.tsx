@@ -28,7 +28,7 @@ import {useAppDispatch} from '@redux/hooks';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
-import {useTelemetry, useTelemetryValue} from '@telemetry';
+import {useTelemetry, useTelemetryValue} from '@telemetry/hooks';
 
 import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';

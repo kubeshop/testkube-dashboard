@@ -11,7 +11,7 @@ import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
-import {usePluginSlot} from '@plugins/pluginHooks';
+import {usePluginSlot} from '@plugins/hooks';
 
 import {useAppSelector} from '@redux/hooks';
 import {initialTestSuitesFiltersState} from '@redux/initialState';

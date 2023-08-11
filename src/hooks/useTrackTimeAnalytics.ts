@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {useEvent, useInterval} from 'react-use';
 
-import {useTelemetry} from '@telemetry';
+import {useTelemetry} from '@telemetry/hooks';
 
 const useTrackTimeAnalytics = (page: string, condition = true) => {
   const [hidden, setHidden] = useState(document.hidden);
