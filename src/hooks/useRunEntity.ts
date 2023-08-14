@@ -12,7 +12,7 @@ import {RunningContextType, notificationCall} from '@molecules';
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
 
-import {useTelemetry} from '@telemetry';
+import {useTelemetry} from '@telemetry/hooks';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
