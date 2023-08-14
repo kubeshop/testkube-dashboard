@@ -9,7 +9,6 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
-import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 
 import {
   EndpointProcessing,
@@ -190,7 +189,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
           <Route path="/" element={<Navigate to="/tests" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
         <CSSTransition
           nodeRef={logRef}
           in={isFullScreenLogOutput}

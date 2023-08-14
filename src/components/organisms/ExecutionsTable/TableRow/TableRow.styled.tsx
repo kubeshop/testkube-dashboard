@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const ItemWrapper = styled.div`
   display: flex;
@@ -21,11 +22,17 @@ export const ItemRow = styled.div<{$flex: number}>`
   align-items: center;
   flex: ${({$flex}) => $flex};
   justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 export const ItemColumn = styled.div`
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
+
+  @media ${maxDevice.mobileL} {
+    gap: 5px;
+  }
 `;
 
 export const StatusText = styled(Text)<{$isRunning?: boolean}>`

@@ -22,6 +22,7 @@ import {getRtkIdToken} from '@utils/fetchUtils';
 
 import {
   DrawerBannerContainer,
+  LogOutputWrapper,
   StyledLogOutputContainer,
   StyledLogTextContainer,
   StyledPreLogText,
@@ -34,7 +35,6 @@ export type LogOutputProps = {
   executionId?: string;
   actions?: LogAction[];
   isRunning?: boolean;
-  title?: string;
   initialLines?: number;
   onChangeTab: (tab: string) => void;
 };
@@ -49,14 +49,13 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     executionId,
     actions = ['copy', 'fullscreen'],
     isRunning,
-    title,
     initialLines = 300,
     onChangeTab,
   } = props;
 
-  const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isScrolledToBottom = useScrolledToBottom(containerRef.current);
+  const scrollableRef = useRef<HTMLDivElement>(null);
+  const isScrolledToBottom = useScrolledToBottom(scrollableRef.current);
 
   const wsRoot = useWsEndpoint();
 
@@ -135,19 +134,13 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   }, [logs, isFullScreenLogOutput]);
 
   useEffect(() => {
-    if (containerRef.current && isScrolledToBottom) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight - containerRef.current.clientHeight;
+    if (scrollableRef.current && isScrolledToBottom) {
+      scrollableRef.current.scrollTop = scrollableRef.current.scrollHeight;
     }
   }, [logs]);
 
   useEffect(() => {
-    setTimeout(() => {
-      bottomRef?.current?.scrollIntoView({behavior: 'auto', block: 'end'});
-    }, 100);
-  }, [executionId]);
-
-  useEffect(() => {
-    const rect = containerRef?.current?.getBoundingClientRect();
+    const rect = scrollableRef?.current?.getBoundingClientRect();
     if (rect) {
       dispatch(
         setLogOutputDOMRect({
@@ -174,27 +167,28 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   }, []);
 
   return (
-    <StyledLogOutputContainer ref={containerRef}>
+    <LogOutputWrapper>
       {drawerBanner ? <DrawerBannerContainer>{drawerBanner}</DrawerBannerContainer> : null}
-      <LogOutputHeader logOutput={logs} actions={actions} title={title} />
+      <StyledLogOutputContainer ref={containerRef}>
+        <LogOutputHeader logOutput={logs} actions={actions} />
 
-      <StyledLogTextContainer bannerVisible={Boolean(drawerBanner)}>
-        {visibleLogs ? (
-          <StyledPreLogText data-test="log-output">
-            {!expanded && lines >= initialLines ? (
-              <>
-                <a href="#" onClick={onExpand}>
-                  Click to show all {lines} lines...
-                </a>
-                <br />
-              </>
-            ) : null}
-            <Ansi useClasses>{visibleLogs}</Ansi>
-          </StyledPreLogText>
-        ) : null}
-        <div ref={bottomRef} />
-      </StyledLogTextContainer>
-    </StyledLogOutputContainer>
+        <StyledLogTextContainer ref={scrollableRef} bannerVisible={Boolean(drawerBanner)}>
+          {visibleLogs ? (
+            <StyledPreLogText data-test="log-output">
+              {!expanded && lines >= initialLines ? (
+                <>
+                  <a href="#" onClick={onExpand}>
+                    Click to show all {lines} lines...
+                  </a>
+                  <br />
+                </>
+              ) : null}
+              <Ansi useClasses>{visibleLogs}</Ansi>
+            </StyledPreLogText>
+          ) : null}
+        </StyledLogTextContainer>
+      </StyledLogOutputContainer>
+    </LogOutputWrapper>
   );
 };
 

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const StyledWizardHintContainer = styled.div`
   display: flex;
@@ -16,6 +17,10 @@ export const StyledWizardHintContainer = styled.div`
   border-bottom-right-radius: 4px;
 
   text-align: center;
+
+  @media ${maxDevice.tablet} {
+    display: none;
+  }
 `;
 
 export const StyledImageContainer = styled.div`

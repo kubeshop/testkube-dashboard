@@ -19,6 +19,7 @@ export const minDevice = {
   desktopL: `(min-width: ${size.desktop}px)`,
 };
 
+// FIXME: These should be shifted by one, and -1px
 export const maxDevice = {
   mobileS: `(max-width: ${size.mobileS}px)`,
   mobileM: `(max-width: ${size.mobileM}px)`,
