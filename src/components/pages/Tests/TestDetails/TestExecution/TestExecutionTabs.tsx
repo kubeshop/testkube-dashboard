@@ -32,7 +32,7 @@ const TestExecutionTabs: React.FC = () => {
 
   const {
     testType,
-    executionResult: {status, output},
+    executionResult: {status, output, errorMessage},
     variables,
     id,
     testName,
@@ -64,7 +64,9 @@ const TestExecutionTabs: React.FC = () => {
       value: {
         key: 'log-output',
         label: 'Log Output',
-        children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} banner={logBanner} />,
+        children: (
+          <LogOutput logOutput={output || errorMessage} executionId={id} isRunning={isRunning} banner={logBanner} />
+        ),
       },
       metadata: {
         order: Infinity,
