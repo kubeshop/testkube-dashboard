@@ -4,7 +4,6 @@ import styled from 'styled-components';
 export const ExecutionDrawerWrapper = styled(motion.div)<{
   $isRowSelected: boolean;
   drawerWidth: string;
-  bannerVisible: boolean;
 }>`
   position: relative;
 

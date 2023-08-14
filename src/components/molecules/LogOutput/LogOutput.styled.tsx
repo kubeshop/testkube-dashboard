@@ -31,7 +31,7 @@ export const StyledLogOutputContainer = styled.div`
   ${invisibleScroll}
 `;
 
-export const StyledLogTextContainer = styled.div<{bannerVisible?: boolean}>`
+export const StyledLogTextContainer = styled.div`
   height: 100%;
   flex: 1;
   background-color: ${Colors.slate900};

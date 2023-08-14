@@ -9,8 +9,8 @@ import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
 
-import {usePluginSlotList, usePluginState} from '@plugins/pluginHooks';
-import {TestExecutionTabsInterface} from '@plugins/types';
+import {usePluginSlot, usePluginSlotList, usePluginState} from '@plugins/pluginHooks';
+import {LogOutputBannerInterface, TestExecutionTabsInterface} from '@plugins/types';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
@@ -52,12 +52,18 @@ const TestExecutionTabs: React.FC = () => {
     setTestExecutionTabsData({execution, test: details});
   }, [execution, details]);
 
+  const [, setLogOutputBannerData] = usePluginState<LogOutputBannerInterface>('testExecutionLogOutputBanner');
+  const logBanner = usePluginSlot('testExecutionLogOutputBanner');
+  useEffect(() => {
+    setLogOutputBannerData({setExecutionTab});
+  }, []);
+
   const defaultExecutionTabs = [
     {
       value: {
         key: 'log-output',
         label: 'Log Output',
-        children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} onChangeTab={setExecutionTab} />,
+        children: <LogOutput logOutput={output} executionId={id} isRunning={isRunning} banner={logBanner} />,
       },
       metadata: {
         order: Infinity,
