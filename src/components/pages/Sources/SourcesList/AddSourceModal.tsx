@@ -1,12 +1,11 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 import {Input as AntdInput, Form} from 'antd';
 
-import {DashboardContext} from '@contexts';
-
 import {Button, Input} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
 import {ErrorNotificationConfig} from '@models/notifications';
@@ -34,7 +33,7 @@ type AddSourceFormValues = {
 
 const AddSourceModal: React.FC = () => {
   const [form] = Form.useForm<AddSourceFormValues>();
-  const {navigate} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate((name: string) => `/sources/${name}`);
 
   const [createSource, {isLoading}] = useCreateSourceMutation();
 
@@ -61,7 +60,7 @@ const AddSourceModal: React.FC = () => {
 
     createSource(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => navigate(`/sources/${res.data.metadata.name}`))
+      .then(res => openDetails(res.data.metadata.name))
       .catch(err => {
         setError(err);
 

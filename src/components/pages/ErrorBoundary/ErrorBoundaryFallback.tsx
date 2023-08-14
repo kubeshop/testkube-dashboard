@@ -1,24 +1,22 @@
-import {useCallback, useContext} from 'react';
+import {useContext} from 'react';
 
 import notFoundImage from '@assets/not-found-image.svg';
 
 import {ExternalLink} from '@atoms';
 
-import {ConfigContext, DashboardContext} from '@contexts';
+import {ConfigContext} from '@contexts';
 
 import {Button, Title} from '@custom-antd';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import Colors from '@styles/Colors';
 
 import {StyledErrorContainer, StyledErrorDescription, StyledErrorImage} from './ErrorBoundary.styled';
 
 const ErrorBoundaryFallback: React.FC = () => {
-  const {navigate} = useContext(DashboardContext);
   const {discordUrl} = useContext(ConfigContext);
-
-  const onButtonClick = useCallback(() => {
-    navigate('/tests');
-  }, []);
+  const back = useDashboardNavigate('/');
 
   return (
     <StyledErrorContainer size={32}>
@@ -34,7 +32,7 @@ const ErrorBoundaryFallback: React.FC = () => {
         Feel free to reach out to us on <ExternalLink href={discordUrl}>Discord</ExternalLink> if the error continuous
         to exist.
       </StyledErrorDescription>
-      <Button type="primary" onClick={onButtonClick}>
+      <Button type="primary" onClick={back}>
         Back to the Dashboard
       </Button>
     </StyledErrorContainer>

@@ -4,9 +4,11 @@ import {Tabs} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {EntityGrid} from '@molecules';
 
@@ -29,7 +31,7 @@ import ExecutorCard from './ExecutorCard';
 
 const Executors: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate(({name}: {name: string}) => `/executors/${name}`);
   const mayCreate = usePermission(Permissions.createEntity);
   const apiEndpoint = useApiEndpoint();
 
@@ -79,7 +81,7 @@ const Executors: React.FC = () => {
                 maxColumns={3}
                 data={customExecutors}
                 Component={CustomExecutorCard}
-                componentProps={{onClick: executor => navigate(`/executors/${executor.name}`)}}
+                componentProps={{onClick: openDetails}}
                 empty={<EmptyCustomExecutors onButtonClick={() => setAddExecutorModalVisibility(true)} />}
                 itemHeight={66}
                 loadingInitially={isLoading}

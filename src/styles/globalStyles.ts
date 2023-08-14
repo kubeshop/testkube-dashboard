@@ -1,6 +1,7 @@
 import {createGlobalStyle} from 'styled-components';
 
 import Colors, {BackgroundColors} from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const invisibleScroll = `
   &::-webkit-scrollbar {
@@ -126,6 +127,10 @@ export const GlobalStyle = createGlobalStyle`
 
       &::before {
         border-bottom: unset !important;
+      }
+
+      @media ${maxDevice.tablet} {
+        margin-bottom: 25px;
       }
     }
   }

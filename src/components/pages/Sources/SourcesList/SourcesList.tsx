@@ -6,6 +6,8 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
 import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
@@ -28,7 +30,8 @@ const Sources: React.FC = () => {
   const sourcesList = useAppSelector(selectSources);
 
   const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {location} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate(({name}: {name: string}) => `/sources/${name}`);
 
   const {data: sources, refetch, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
 
@@ -70,7 +73,7 @@ const Sources: React.FC = () => {
         maxColumns={2}
         data={sourcesList}
         Component={SourceCard}
-        componentProps={{onClick: source => navigate(`/sources/${source.name}`)}}
+        componentProps={{onClick: openDetails}}
         empty={<EmptySources onButtonClick={() => setAddSourceModalVisibility(true)} />}
         itemHeight={66}
         loadingInitially={isLoading}

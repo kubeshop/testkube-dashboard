@@ -6,7 +6,7 @@ export type ExecutionMetrics = {
   durationMs?: number;
   status: ExecutionStatusEnum;
   name: string;
-  startTime: Date;
+  startTime: string; // ISO Date
 };
 
 export type Metrics = {
