@@ -12,7 +12,7 @@ import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {useLogOutputPick} from '@store/logOutput';
 
-import {getRtkIdToken} from '@utils/fetchUtils';
+import {getRtkIdToken} from '@utils/rtk';
 
 import FullScreenLogOutput from './FullscreenLogOutput';
 import {DrawerBannerContainer, LogOutputWrapper} from './LogOutput.styled';
