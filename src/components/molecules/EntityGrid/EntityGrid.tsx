@@ -30,7 +30,7 @@ type EntityGridProps<T extends {item: any}> = {} extends Omit<T, 'item' | 'key'>
   ? OptionalProp<BaseEntityGridProps<T>, 'componentProps'>
   : BaseEntityGridProps<T>;
 
-function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElement<any, any> {
+function EntityGridBase<T extends {item: any}>(props: EntityGridProps<T>): ReactElement<any, any> {
   const {
     data,
     Component,
@@ -80,4 +80,4 @@ function EntityGrid<T extends {item: any}>(props: EntityGridProps<T>): ReactElem
 }
 
 // Must be cast back, so generics will work
-export default memo(EntityGrid) as typeof EntityGrid;
+export default memo(EntityGridBase) as typeof EntityGridBase;
