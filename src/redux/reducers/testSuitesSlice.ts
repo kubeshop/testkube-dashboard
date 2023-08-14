@@ -27,5 +27,3 @@ export const selectTestSuites = (state: RootState) => state.testSuites.dataList;
 export const selectTestSuitesFilters = (state: RootState) => state.testSuites.filters;
 
 export const {setTestSuites, setTestSuitesFilters} = testSuitesSlice.actions;
-
-export default testSuitesSlice.reducer;

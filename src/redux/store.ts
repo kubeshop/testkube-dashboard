@@ -30,10 +30,10 @@ export const middlewares: Middleware[] = [
 ];
 
 export const reducers = {
-  testSuites: testSuitesSlice,
-  tests: testsSlice,
-  executors: executorsSlice,
-  sources: sourcesSlice,
+  testSuites: testSuitesSlice.reducer,
+  tests: testsSlice.reducer,
+  executors: executorsSlice.reducer,
+  sources: sourcesSlice.reducer,
 
   [testSuitesApi.reducerPath]: testSuitesApi.reducer,
   [testsApi.reducerPath]: testsApi.reducer,

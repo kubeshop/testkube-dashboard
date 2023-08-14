@@ -26,5 +26,3 @@ export const testsSlice = createSlice({
 export const selectTests = (state: RootState) => state.tests.dataList;
 export const selectTestsFilters = (state: RootState) => state.tests.filters;
 export const {setTests, setTestsFilters} = testsSlice.actions;
-
-export default testsSlice.reducer;

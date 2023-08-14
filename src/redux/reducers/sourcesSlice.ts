@@ -23,5 +23,3 @@ export const selectSources = (state: RootState) => state.sources.sourcesList;
 export const selectCurrentSource = (state: RootState) => state.sources.currentSource;
 
 export const {setSources, setCurrentSource} = sourcesSlice.actions;
-
-export default sourcesSlice.reducer;

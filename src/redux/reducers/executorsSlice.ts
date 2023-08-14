@@ -77,5 +77,3 @@ export const selectCurrentExecutor = (state: RootState) =>
   state.executors.executorsList.find(executor => executor.name === state.executors.currentExecutor) as Executor;
 
 export const {setExecutors, setCurrentExecutor, setExecutorData, updateCurrentExecutorData} = executorsSlice.actions;
-
-export default executorsSlice.reducer;
