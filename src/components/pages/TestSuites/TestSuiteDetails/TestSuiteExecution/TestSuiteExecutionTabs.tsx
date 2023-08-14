@@ -15,7 +15,7 @@ const TestSuiteExecutionTabs: React.FC = () => {
     <Tabs
       items={[
         {
-          key: 'AllStepsPane',
+          key: 'steps',
           label: 'All Steps',
           children: <ExecutionStepsList executionSteps={executeStepResults} />,
         },

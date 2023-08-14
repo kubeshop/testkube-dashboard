@@ -24,7 +24,7 @@ import TestExecutionArtifacts from './TestExecutionArtifacts';
 
 const TestExecutionTabs: React.FC = () => {
   const {data: execution} = useExecutionDetailsPick('data') as {data: Execution};
-  const {entity, details} = useEntityDetailsPick('entity', 'details');
+  const {details} = useEntityDetailsPick('details');
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
   const {id: entityId, execDetailsTab} = useParams();
 
@@ -46,12 +46,13 @@ const TestExecutionTabs: React.FC = () => {
 
   const whetherToShowArtifactsTab = executorsFeaturesMap[testType]?.includes('artifacts');
 
-  const setExecutionTab = useDashboardNavigate((next: string) => `/${entity}/${entityId}/executions/${id}/${next}`);
+  const setExecutionTab = useDashboardNavigate((next: string) => `/tests/${entityId}/executions/${id}/${next}`);
 
   useEffect(() => {
     setTestExecutionTabsData({execution, test: details});
   }, [execution, details]);
 
+  // TODO: Add 'render' option for plugins, and use `navigate` + testExecutionTabs instead
   const [, setLogOutputBannerData] = usePluginState<LogOutputBannerInterface>('testExecutionLogOutputBanner');
   const logBanner = usePluginSlot('testExecutionLogOutputBanner');
   useEffect(() => {
