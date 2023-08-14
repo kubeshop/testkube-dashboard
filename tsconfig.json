@@ -24,7 +24,6 @@
       "@styles/*": ["src/styles/*"],
       "@env": ["src/env"],
       "@src/*": ["src/*"],
-      "@src": ["src/"],
       "@atoms": ["src/components/atoms/"],
       "@atoms/*": ["src/components/atoms/*"],
       "@custom-antd": ["src/components/custom-antd"],
