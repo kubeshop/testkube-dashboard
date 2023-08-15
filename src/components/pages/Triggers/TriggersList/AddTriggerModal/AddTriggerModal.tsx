@@ -6,6 +6,7 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {Input, Text} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
 import {Option} from '@models/form';
@@ -36,7 +37,8 @@ export enum StepsEnum {
 
 const AddTriggerModal: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {location} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate((name: string) => `/triggers/${name}`);
 
   const [createTrigger, {isLoading}] = useCreateTriggerMutation();
 
@@ -80,7 +82,7 @@ const AddTriggerModal: React.FC = () => {
     };
     createTrigger(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => navigate(`/triggers/${res.data.name}`))
+      .then(res => openDetails(res.data.name))
       .catch(err => {
         setError(err);
 

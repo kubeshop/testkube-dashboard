@@ -1,4 +1,4 @@
-import React, {Suspense, lazy, useContext, useEffect, useMemo, useRef, useState} from 'react';
+import React, {Suspense, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
 import {useUpdate} from 'react-use';
@@ -9,9 +9,19 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
-import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 
-import {EndpointProcessing, Loading, NotFound} from '@pages';
+import {
+  EndpointProcessing,
+  Executors,
+  GlobalSettings,
+  Loading,
+  NotFound,
+  Sources,
+  TestSuites,
+  Tests,
+  Triggers,
+  Webhooks,
+} from '@pages';
 
 import PluginsContext from '@plugins/PluginsContext';
 import {Plugin} from '@plugins/types';
@@ -34,14 +44,6 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
 import createPluginManager from './plugins/PluginManager';
-
-const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
-const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
-const Executors = lazy(() => import('@pages').then(module => ({default: module.Executors})));
-const Sources = lazy(() => import('@pages').then(module => ({default: module.Sources})));
-const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
-const Webhooks = lazy(() => import('@pages').then(module => ({default: module.Webhooks})));
-const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
 
 export interface AppProps {
   plugins: Plugin[];
@@ -189,7 +191,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
           <Route path="/" element={<Navigate to="/tests" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
         <CSSTransition
           nodeRef={logRef}
           in={isFullScreenLogOutput}

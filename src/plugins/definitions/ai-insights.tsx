@@ -4,7 +4,7 @@ import {config} from '@constants/config';
 
 import {AiInsightsTab, MessagePanel} from '@molecules';
 
-import {AiBannerInterface, Plugin, TestExecutionTabsInterface} from '@plugins/types';
+import {LogOutputBannerInterface, Plugin, TestExecutionTabsInterface} from '@plugins/types';
 
 import PluginScope from '../PluginScope';
 
@@ -32,7 +32,7 @@ const createAiInsightsPlugin = (): Plugin => ({
       }
     );
     scope.appendSlot(
-      'executionDrawerBanner',
+      'testExecutionLogOutputBanner',
       <MessagePanel
         buttons={[
           {
@@ -48,12 +48,13 @@ const createAiInsightsPlugin = (): Plugin => ({
             type: 'primary',
             text: 'Get AI Hints for this test',
             onClick: () => {
-              scope.getState<AiBannerInterface>('aiExecutionBanner')?.onAccept();
+              localStorage.setItem(config.isAiBannerHidden, 'true');
+              scope.getState<LogOutputBannerInterface>('testExecutionLogOutputBanner')?.setExecutionTab('ai-insights');
             },
           },
         ]}
         onClose={() => {
-          scope.getState<AiBannerInterface>('aiExecutionBanner')?.onClose();
+          localStorage.setItem(config.isAiBannerHidden, 'true');
         }}
         isClosable
         type="default"
@@ -61,7 +62,7 @@ const createAiInsightsPlugin = (): Plugin => ({
         description="Try our AI Hints to improve your tests and get support to debug them more efficiently."
       />,
       {
-        visible: () => localStorage.getItem(config.isAiBannerVisible) === 'true' && isTestExecutionFailed(scope),
+        visible: () => localStorage.getItem(config.isAiBannerHidden) !== 'true' && isTestExecutionFailed(scope),
       }
     );
   },

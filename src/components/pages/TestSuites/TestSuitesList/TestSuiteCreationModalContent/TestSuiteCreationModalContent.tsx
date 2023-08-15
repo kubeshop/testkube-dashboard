@@ -2,10 +2,11 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {DashboardContext, ModalContext} from '@contexts';
+import {ModalContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
 import {Option} from '@models/form';
@@ -34,9 +35,9 @@ type TestSuiteCreationModalFormValues = {
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm<TestSuiteCreationModalFormValues>();
 
-  const {navigate} = useContext(DashboardContext);
   const {closeModal} = useContext(ModalContext);
   const telemetry = useTelemetry();
+  const openSettings = useDashboardNavigate((name: string) => `/test-suites/${name}/settings/tests`);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
@@ -54,7 +55,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
       .then(displayDefaultNotificationFlow)
       .then(res => {
         telemetry.event('createTestSuite');
-        navigate(`/test-suites/${res.data.metadata.name}/settings/tests`);
+        openSettings(res.data.metadata.name);
         closeModal();
       })
       .catch(err => {

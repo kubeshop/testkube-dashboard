@@ -18,7 +18,6 @@ export interface TestExecutionTabsInterface {
   test: any;
 }
 
-export interface AiBannerInterface {
-  onClose: () => void;
-  onAccept: () => void;
+export interface LogOutputBannerInterface {
+  setExecutionTab: (tab: string) => void;
 }

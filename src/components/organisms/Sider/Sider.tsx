@@ -17,6 +17,8 @@ import {DashboardContext} from '@contexts';
 
 import {FullWidthSpace, Text} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
 import {ReactComponent as SettingIcon} from '@icons/setting.svg';
 
 import {useAppSelector} from '@redux/hooks';
@@ -108,14 +110,14 @@ const getRoutes = (showSocialLinksInSider: boolean) => [
 ];
 
 const Sider: React.FC = () => {
-  const {navigate, showLogoInSider, showSocialLinksInSider} = useContext(DashboardContext);
-
+  const {showLogoInSider, showSocialLinksInSider} = useContext(DashboardContext);
+  const openSettings = useDashboardNavigate('/settings');
   const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const otherMenuItems = [
     {
       icon: 'cog',
-      onClick: () => navigate('/settings'),
+      onClick: openSettings,
       title: 'Settings',
     },
     {

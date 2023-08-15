@@ -1,13 +1,13 @@
-import React, {memo, useContext} from 'react';
+import React, {memo} from 'react';
 import {Link} from 'react-router-dom';
 
 import {Tooltip} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {DashboardContext} from '@contexts';
-
 import {Text} from '@custom-antd';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {Entity} from '@models/entity';
 
@@ -28,14 +28,12 @@ type RunningContextProps = {
   id: string;
   type?: RunningContextType;
   context?: string;
-  onClose: () => void;
   entity: Entity;
 };
 
 const RunningContext: React.FC<RunningContextProps> = props => {
-  const {id, type = RunningContextType.default, context = '', onClose, entity} = props;
-
-  const {navigate} = useContext(DashboardContext);
+  const {id, type = RunningContextType.default, context = '', entity} = props;
+  const onOpenSchedule = useDashboardNavigate(`/${entity}/${id}/settings/scheduling`);
 
   const runContextMap = {
     'user-ui': 'Manual UI',
@@ -52,15 +50,7 @@ const RunningContext: React.FC<RunningContextProps> = props => {
     ),
     scheduler: context ? (
       <>
-        Scheduler{' '}
-        <ExternalLink
-          onClick={() => {
-            onClose();
-            navigate(`/${entity}/${id}/settings/scheduling`);
-          }}
-        >
-          {context}
-        </ExternalLink>
+        Scheduler <ExternalLink onClick={onOpenSchedule}>{context}</ExternalLink>
       </>
     ) : (
       'Scheduler'

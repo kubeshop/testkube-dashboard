@@ -34,6 +34,8 @@ export const ItemWrapper = styled.div`
 
     background: ${Colors.slate850};
   }
+
+  min-width: 100px;
 `;
 
 export const DetailsWrapper = styled.div`
@@ -73,6 +75,12 @@ export const ItemColumn = styled.div<{$isStretch?: boolean}>`
   gap: 10px;
 
   align-items: center;
+`;
+
+export const ExecutionTimeItemColumn = styled(ItemColumn)`
+  @media ${maxDevice.mobileL} {
+    display: none;
+  }
 `;
 
 export const StyledMetricItem = styled.div`

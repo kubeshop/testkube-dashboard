@@ -36,13 +36,14 @@ export type Execution = {
   params: EntityMap;
   paramsFile: string;
   content: TestContent;
-  startTime: Date;
-  endTime: Date;
+  startTime: string; // ISO Date
+  endTime: string; // ISO Date
   duration: string;
   executionResult: ExecutionResult;
   labels: EntityMap;
   number: number;
   variables?: Variables;
+  runningContext: any;
 };
 
 export type ExecutionRequest = {

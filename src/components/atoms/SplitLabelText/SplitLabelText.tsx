@@ -29,7 +29,7 @@ const SplitLabelText: React.FC<SplitLabelProps> = props => {
       <Text color={Colors.slate400} className={textClassName}>
         {key}:{' '}
       </Text>
-      <Text color={Colors.slate200} className={textClassName}>
+      <Text color={Colors.slate200} className={textClassName} ellipsis>
         {rest.join(':')}
       </Text>
     </>

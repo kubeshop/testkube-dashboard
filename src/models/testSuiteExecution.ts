@@ -13,11 +13,13 @@ export type TestSuiteExecution = {
   secretUUID?: string;
   secret?: string;
   params?: EntityMap;
-  startTime: Date;
-  endTime: Date;
+  startTime: string; // ISO Date
+  endTime: string; // ISO Date
   duration?: string;
   labels?: EntityMap;
   executeStepResults: TestSuiteStepExecutionResult[];
+  runningContext: any;
+  number: number;
 };
 interface TestSuiteExecutionsState {
   isLoading?: boolean;
