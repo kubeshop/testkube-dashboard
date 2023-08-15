@@ -1,4 +1,4 @@
-import {FC, useContext, useEffect} from 'react';
+import {FC, useContext} from 'react';
 
 import {DashboardContext, MainContext, ModalContext} from '@contexts';
 

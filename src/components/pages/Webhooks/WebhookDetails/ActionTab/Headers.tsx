@@ -1,14 +1,10 @@
 import {FC, useContext, useEffect} from 'react';
 
-import {Form, Input} from 'antd';
-
-import {FormItem} from '@custom-antd';
+import {Form} from 'antd';
 
 import {Webhook} from '@models/webhook';
 
 import {ConfigurationCard} from '@molecules';
-
-import {requiredNoText, url} from '@utils/form';
 
 import WebhookDetailsContext from '../WebhookDetailsContext';
 
