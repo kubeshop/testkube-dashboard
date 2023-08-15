@@ -22,7 +22,7 @@ const WebhooksList: FC = () => {
   const {navigate} = useContext(DashboardContext);
   const {setModalOpen, setModalConfig} = useContext(ModalContext);
 
-  const {data} = useGetWebhooksQuery({});
+  const {data, isLoading} = useGetWebhooksQuery(null);
 
   const mayCreate = usePermission(Permissions.createEntity);
 
@@ -58,6 +58,7 @@ const WebhooksList: FC = () => {
         componentProps={{onClick: webhook => navigate(`/webhooks/${webhook.name}/settings`)}}
         empty={<EmptyWebhooks onButtonClick={openModal} />}
         itemHeight={125}
+        loadingInitially={isLoading}
       />
     </PageBlueprint>
   );
