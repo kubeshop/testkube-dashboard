@@ -34,7 +34,6 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
 import createPluginManager from './plugins/PluginManager';
-import {initializeWebhooksStore} from './store/webhooks';
 
 const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
 const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
@@ -50,7 +49,6 @@ export interface AppProps {
 
 const App: React.FC<AppProps> = ({plugins}) => {
   const [TriggersProvider] = initializeTriggersStore();
-  const [WebhooksProvider] = initializeWebhooksStore();
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -134,7 +132,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
     .append(Suspense, {fallback: <Loading />})
     .append(ClusterDetailsProvider, {})
     .append(TriggersProvider, {})
-    .append(WebhooksProvider, {})
     .append(PluginsContext.Provider, {
       value: {
         scope,

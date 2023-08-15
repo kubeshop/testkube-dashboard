@@ -2,7 +2,7 @@ import {FC, useContext, useState} from 'react';
 
 import {Form, Input, Steps} from 'antd';
 
-import {DashboardContext} from '@contexts';
+import {DashboardContext, ModalContext} from '@contexts';
 
 import {FormItem, FullWidthSpace} from '@custom-antd';
 
@@ -11,7 +11,7 @@ import {Webhook, WebhookEvent} from '@models/webhook';
 
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import {initializeWebhooksStore} from '@store/webhooks';
+import {useCreateWebhookMutation} from '@services/webhooks';
 
 import {requiredNoText} from '@utils/form';
 
@@ -32,13 +32,13 @@ enum WebhookCreationModalSteps {
 }
 
 const WebhookCreationModal: FC = () => {
-  const {location, navigate} = useContext(DashboardContext);
+  const {navigate} = useContext(DashboardContext);
+
+  const [createWebhook, {isLoading}] = useCreateWebhookMutation();
+  const {closeModal} = useContext(ModalContext);
 
   const [step, setStep] = useState<WebhookCreationModalSteps>(WebhookCreationModalSteps.Condition);
   const [form] = Form.useForm<WebhookCreationModalFormValues>();
-
-  const [, {pick: useWebhooksPick}] = initializeWebhooksStore();
-  const {createWebhook} = useWebhooksPick('createWebhook');
 
   const onStepChange = (nextStep: number) => {
     if (step > nextStep) {
@@ -52,29 +52,21 @@ const WebhookCreationModal: FC = () => {
     });
   };
 
-  const onFinish = async () => {
+  const onFinish = () => {
     const values: WebhookCreationModalFormValues = form.getFieldsValue(true);
 
     const webhook: Webhook = {
-      //   {
-      //     "type": "Webhook",
-      //     "resource": "test",
-      //     "name": "nameqweqwe",
-      //     "labels": {
-      //         "asdf": "asdf"
-      //     },
-      //     "events": [
-      //         "start-test"
-      //     ],
-      //     "uri": "https://asdasd.co"
-      // }
-
       ...values,
       labels: decomposeLabels(values.labels),
       events: values.events.map(item => item.value) as WebhookEvent[],
     };
 
-    createWebhook('/webhooks', webhook, navigate);
+    createWebhook(webhook).then(res => {
+      if ('data' in res) {
+        closeModal();
+        navigate(`/webhooks/${res.data.metadata.name}/settings/general`);
+      }
+    });
   };
 
   const stepToComponent: Record<WebhookCreationModalSteps, any> = {
@@ -89,6 +81,7 @@ const WebhookCreationModal: FC = () => {
       layout="vertical"
       initialValues={{type: 'Webhook', resource: 'test'}}
       onFinish={onFinish}
+      disabled={isLoading}
     >
       <FullWidthSpace direction="vertical" size={20}>
         <FormItem name="name" label="Name" rules={[requiredNoText]} required>

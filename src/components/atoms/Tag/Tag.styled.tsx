@@ -14,6 +14,11 @@ export const TagContainer = styled.div`
   background: ${Colors.slate800};
   border: 1px solid transparent;
 
+  svg {
+    height: 12px;
+    width: 12px;
+  }
+
   .ant-typography {
     color: ${Colors.slate400};
   }
@@ -48,6 +53,10 @@ export const TagContainer = styled.div`
   &.info {
     background: ${Colors.sky900};
     border: 1px solid ${Colors.sky600};
+
+    svg {
+      fill: ${Colors.sky300};
+    }
 
     .ant-typography {
       color: ${Colors.sky300};

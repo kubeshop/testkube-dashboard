@@ -5,6 +5,7 @@ import executorsSlice from '@redux/reducers/executorsSlice';
 import sourcesSlice from '@redux/reducers/sourcesSlice';
 import testSuitesSlice from '@redux/reducers/testSuitesSlice';
 import testsSlice from '@redux/reducers/testsSlice';
+import webhooksSlice from '@redux/reducers/webhooksSlice';
 
 import {configApi} from '@services/config';
 import {executionsApi} from '@services/executions';
@@ -16,6 +17,7 @@ import {testSuiteExecutionsApi} from '@services/testSuiteExecutions';
 import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
 import {triggersApi} from '@services/triggers';
+import {webhooksApi} from '@services/webhooks';
 
 export const middlewares: Middleware[] = [
   executionsApi.middleware,
@@ -28,6 +30,7 @@ export const middlewares: Middleware[] = [
   triggersApi.middleware,
   configApi.middleware,
   repositoryApi.middleware,
+  webhooksApi.middleware,
 ];
 
 export const reducers = {
@@ -36,6 +39,7 @@ export const reducers = {
   config: configSlice,
   executors: executorsSlice,
   sources: sourcesSlice,
+  webhooks: webhooksSlice,
 
   [testSuitesApi.reducerPath]: testSuitesApi.reducer,
   [testsApi.reducerPath]: testsApi.reducer,
@@ -47,6 +51,7 @@ export const reducers = {
   [triggersApi.reducerPath]: triggersApi.reducer,
   [configApi.reducerPath]: configApi.reducer,
   [repositoryApi.reducerPath]: repositoryApi.reducer,
+  [webhooksApi.reducerPath]: webhooksApi.reducer,
 };
 
 export const store = configureStore({

@@ -4,22 +4,25 @@ import {DashboardContext, MainContext, ModalContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
+import {EntityGrid} from '@molecules';
+
 import {PageBlueprint} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {initializeWebhooksStore} from '@store/webhooks';
+import {useGetWebhooksQuery} from '@services/webhooks';
 
 import WebhookCreationModal from '../WebhookCreationModal';
 
+import EmptyWebhooks from './EmptyWebhooks';
+import WebhookCard from './WebhookCard';
+
 const WebhooksList: FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {navigate} = useContext(DashboardContext);
   const {setModalOpen, setModalConfig} = useContext(ModalContext);
 
-  const [, {pick: useWebhooksPick}] = initializeWebhooksStore();
-  const {getWebhooks} = useWebhooksPick('getWebhooks');
-  const {webhooks} = useWebhooksPick('webhooks');
+  const {data} = useGetWebhooksQuery({});
 
   const mayCreate = usePermission(Permissions.createEntity);
 
@@ -32,14 +35,12 @@ const WebhooksList: FC = () => {
     });
   };
 
-  useEffect(() => {
-    getWebhooks('/webhooks');
-  }, [location]);
-
   return (
     <PageBlueprint
-      title="Webhooks"
-      description="Send out custom webhooks and notifications when specific events happen. Learn more about Webhooks."
+      title="Notifications"
+      description={
+        <>Send out custom webhooks and notifications when specific events happen. Learn more about Webhooks.</>
+      }
       {...(mayCreate
         ? {
             headerButton: (
@@ -50,7 +51,14 @@ const WebhooksList: FC = () => {
           }
         : null)}
     >
-      {/* {} */}
+      <EntityGrid
+        maxColumns={2}
+        data={data}
+        Component={WebhookCard}
+        componentProps={{onClick: webhook => navigate(`/webhooks/${webhook.name}/settings`)}}
+        empty={<EmptyWebhooks onButtonClick={openModal} />}
+        itemHeight={125}
+      />
     </PageBlueprint>
   );
 };

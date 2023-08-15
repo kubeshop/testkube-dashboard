@@ -35,7 +35,7 @@ const DeleteEntityModal: React.FC<{
 }> = props => {
   const {onCancel, useDeleteMutation, name, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
-  const {setModalOpen} = useContext(ModalContext);
+  const {closeModal} = useContext(ModalContext);
   const {navigate} = useContext(DashboardContext);
 
   const onEvent = usePressEnter();
@@ -49,8 +49,7 @@ const DeleteEntityModal: React.FC<{
       .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', `${capitalize(entityLabel)} was successfully deleted.`);
-
-        setModalOpen(false);
+        closeModal();
 
         if (onConfirm) {
           onConfirm();

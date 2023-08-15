@@ -7,10 +7,6 @@ import {devtools} from 'zustand/middleware';
 import {shallow} from 'zustand/shallow';
 import {useStoreWithEqualityFn as useSelector} from 'zustand/traditional';
 
-export enum ZustandSlices {
-  Webhooks = 'webhooks',
-}
-
 type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T extends Exclude<keyof T, K>
   ? False
   : True;

@@ -45,7 +45,7 @@ export const FirstStep: FC<FirstStepProps> = ({onStepChange}) => {
 
           return (
             <FormItem name="labels" required rules={[requiredNoText]} label="Resource identifier">
-              <LabelsSelect validation={isValid} defaultLabels={getFieldValue('labels')} />
+              <LabelsSelect validation={isValid} defaultLabels={getFieldValue('events')} />
             </FormItem>
           );
         }}

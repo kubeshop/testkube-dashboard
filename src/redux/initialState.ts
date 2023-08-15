@@ -64,6 +64,8 @@ const initialTestsState: TestsState = {
   },
 };
 
+const initialWebhooksState: any = {};
+
 const initialExecutorsState: ExecutorsState = {
   executorsList: [],
   executorsFeaturesMap: {},
@@ -90,6 +92,7 @@ const initialReduxState = {
   config: initialConfigState,
   executors: initialExecutorsState,
   sources: initialSourcesState,
+  webhooks: initialWebhooksState,
 };
 
 export default initialReduxState;
