@@ -1,6 +1,5 @@
-import React, {Suspense, useContext, useEffect, useMemo, useRef, useState} from 'react';
+import React, {Suspense, useContext, useEffect, useMemo, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
-import {CSSTransition} from 'react-transition-group';
 import {useUpdate} from 'react-use';
 
 import {config} from '@constants/config';
@@ -8,7 +7,6 @@ import {config} from '@constants/config';
 import {DashboardContext, MainContext} from '@contexts';
 
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
-import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
 
 import {
   EndpointProcessing,
@@ -64,8 +62,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     undefined,
     [location.pathname]
   );
-  const {isFullscreen: isFullscreenLogOutput, output: logOutput} = useLogOutputPick('isFullscreen', 'output');
-  const logRef = useRef<HTMLDivElement>(null);
+  const {isFullscreen: isFullscreenLogOutput} = useLogOutputPick('isFullscreen');
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
     pollingInterval: PollingIntervals.long,
@@ -190,15 +187,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
           <Route path="/" element={<Navigate to="/tests" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <CSSTransition
-          nodeRef={logRef}
-          in={isFullscreenLogOutput}
-          timeout={1000}
-          classNames="full-screen-log-output"
-          unmountOnExit
-        >
-          <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
-        </CSSTransition>
       </Suspense>
     );
 };

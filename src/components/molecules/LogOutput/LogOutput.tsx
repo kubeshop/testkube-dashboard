@@ -1,4 +1,6 @@
-import {MouseEvent, ReactNode, memo, useCallback, useEffect, useRef, useState} from 'react';
+import React, {MouseEvent, ReactNode, memo, useCallback, useEffect, useRef, useState} from 'react';
+import {createPortal} from 'react-dom';
+import {CSSTransition} from 'react-transition-group';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
@@ -6,14 +8,16 @@ import Ansi from 'ansi-to-react';
 
 import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 
+import {Coordinates} from '@models/config';
 import {LogAction} from '@models/log';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
-import {useLogOutputField, useLogOutputPick} from '@store/logOutput';
+import {useLogOutputPick} from '@store/logOutput';
 
 import {getRtkIdToken} from '@utils/fetchUtils';
 
+import FullScreenLogOutput from './FullscreenLogOutput';
 import {
   DrawerBannerContainer,
   LogOutputWrapper,
@@ -50,9 +54,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const wsRoot = useWsEndpoint();
 
   const {isFullscreen} = useLogOutputPick('isFullscreen');
-  const [, setLogOutput] = useLogOutputField('output');
-  const [, setRect] = useLogOutputField('rect');
 
+  const [rect, setRect] = useState<Coordinates | undefined>();
   const [logs, setLogs] = useState('');
   const [shouldConnect, setShouldConnect] = useState(false);
 
@@ -117,50 +120,62 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   }, [isRunning]);
 
   useEffect(() => {
-    setLogOutput(isFullscreen ? logs : '');
-  }, [logs, isFullscreen]);
-
-  useEffect(() => {
     if (scrollableRef.current && isScrolledToBottom) {
       scrollableRef.current.scrollTop = scrollableRef.current.scrollHeight;
     }
   }, [logs]);
 
   useInterval(() => {
-    const rect = scrollableRef?.current?.getBoundingClientRect();
-    if (rect) {
+    const clientRect = scrollableRef?.current?.getBoundingClientRect();
+    if (clientRect) {
       setRect({
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height,
+        top: clientRect.top,
+        left: clientRect.left,
+        width: clientRect.width,
+        height: clientRect.height,
       });
     }
   }, 200);
 
-  return (
-    <LogOutputWrapper>
-      {banner ? <DrawerBannerContainer>{banner}</DrawerBannerContainer> : null}
-      <StyledLogOutputContainer ref={containerRef}>
-        <LogOutputHeader logOutput={logs} actions={actions} />
+  const fullscreenLogRef = useRef<HTMLDivElement>(null);
+  const fullscreenLog = (
+    <CSSTransition
+      nodeRef={fullscreenLogRef}
+      in={isFullscreen}
+      timeout={500}
+      classNames="full-screen-log-output"
+      unmountOnExit
+    >
+      <FullScreenLogOutput ref={fullscreenLogRef} logOutput={logs} initialLines={initialLines} rect={rect} />
+    </CSSTransition>
+  );
 
-        <StyledLogTextContainer ref={scrollableRef}>
-          {visibleLogs ? (
-            <StyledPreLogText data-test="log-output">
-              {!expanded && lines >= initialLines ? (
-                <>
-                  <a href="#" onClick={onExpand}>
-                    Click to show all {lines} lines...
-                  </a>
-                  <br />
-                </>
-              ) : null}
-              <Ansi useClasses>{visibleLogs}</Ansi>
-            </StyledPreLogText>
-          ) : null}
-        </StyledLogTextContainer>
-      </StyledLogOutputContainer>
-    </LogOutputWrapper>
+  return (
+    <>
+      <LogOutputWrapper>
+        {banner ? <DrawerBannerContainer>{banner}</DrawerBannerContainer> : null}
+        <StyledLogOutputContainer ref={containerRef}>
+          <LogOutputHeader logOutput={logs} actions={actions} />
+
+          <StyledLogTextContainer ref={scrollableRef}>
+            {visibleLogs ? (
+              <StyledPreLogText data-test="log-output">
+                {!expanded && lines >= initialLines ? (
+                  <>
+                    <a href="#" onClick={onExpand}>
+                      Click to show all {lines} lines...
+                    </a>
+                    <br />
+                  </>
+                ) : null}
+                <Ansi useClasses>{visibleLogs}</Ansi>
+              </StyledPreLogText>
+            ) : null}
+          </StyledLogTextContainer>
+        </StyledLogOutputContainer>
+      </LogOutputWrapper>
+      {createPortal(fullscreenLog, document.body)}
+    </>
   );
 };
 

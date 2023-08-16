@@ -3,61 +3,64 @@ import React, {MouseEvent, forwardRef, useCallback, useEffect, useRef, useState}
 import Ansi from 'ansi-to-react';
 import {debounce} from 'lodash';
 
-import {useLogOutputPick} from '@store/logOutput';
+import {Coordinates} from '@models/config';
 
-import {LogOutputProps} from '../LogOutput';
+import type {LogOutputProps} from '../LogOutput';
 import {StyledLogTextContainer, StyledPreLogText} from '../LogOutput.styled';
 import LogOutputHeader from '../LogOutputHeader';
 import {useCountLines, useLastLines} from '../utils';
 
 import {StyledFullscreenLogOutputContainer} from './FullscreenLogOutput.styled';
 
-const FullScreenLogOutput = forwardRef<HTMLDivElement, Pick<LogOutputProps, 'actions' | 'logOutput' | 'initialLines'>>(
-  (props, ref: any) => {
-    const {rect} = useLogOutputPick('rect');
-    const {logOutput = '', initialLines = 300} = props;
+interface FullScreenLogOutputProps {
+  rect?: Coordinates;
+  logOutput: LogOutputProps['logOutput'];
+  initialLines: LogOutputProps['initialLines'];
+}
 
-    const [expanded, setExpanded] = useState(false);
-    const lines = useCountLines(logOutput);
-    const visibleLogs = useLastLines(logOutput, expanded ? Infinity : initialLines);
+const FullScreenLogOutput = forwardRef<HTMLDivElement, FullScreenLogOutputProps>((props, ref: any) => {
+  const {logOutput = '', initialLines = 300, rect} = props;
 
-    const onExpand = useCallback((event: MouseEvent) => {
-      event.preventDefault();
-      setExpanded(true);
-    }, []);
+  const [expanded, setExpanded] = useState(false);
+  const lines = useCountLines(logOutput);
+  const visibleLogs = useLastLines(logOutput, expanded ? Infinity : initialLines);
 
-    const bottomRef = useRef<HTMLDivElement>(null);
+  const onExpand = useCallback((event: MouseEvent) => {
+    event.preventDefault();
+    setExpanded(true);
+  }, []);
 
-    const scrollToBottom = debounce(() => {
-      if (ref.current) {
-        ref.current.scrollTo(0, ref.current.scrollHeight);
-      }
-    }, 300);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-    useEffect(scrollToBottom, [ref.current]);
+  const scrollToBottom = debounce(() => {
+    if (ref.current) {
+      ref.current.scrollTo(0, ref.current.scrollHeight);
+    }
+  }, 300);
 
-    return (
-      <StyledFullscreenLogOutputContainer ref={ref} logOutputDOMRect={rect} onTransitionEnd={scrollToBottom}>
-        <LogOutputHeader logOutput={logOutput} isFullScreen />
-        <StyledLogTextContainer>
-          {visibleLogs ? (
-            <StyledPreLogText>
-              {!expanded && lines >= initialLines ? (
-                <>
-                  <a href="#" onClick={onExpand}>
-                    Click to show all {lines} lines...
-                  </a>
-                  <br />
-                </>
-              ) : null}
-              <Ansi useClasses>{visibleLogs}</Ansi>
-            </StyledPreLogText>
-          ) : null}
-          <div ref={bottomRef} />
-        </StyledLogTextContainer>
-      </StyledFullscreenLogOutputContainer>
-    );
-  }
-);
+  useEffect(scrollToBottom, [ref.current]);
+
+  return (
+    <StyledFullscreenLogOutputContainer ref={ref} logOutputDOMRect={rect} onTransitionEnd={scrollToBottom}>
+      <LogOutputHeader logOutput={logOutput} isFullScreen />
+      <StyledLogTextContainer>
+        {visibleLogs ? (
+          <StyledPreLogText>
+            {!expanded && lines >= initialLines ? (
+              <>
+                <a href="#" onClick={onExpand}>
+                  Click to show all {lines} lines...
+                </a>
+                <br />
+              </>
+            ) : null}
+            <Ansi useClasses>{visibleLogs}</Ansi>
+          </StyledPreLogText>
+        ) : null}
+        <div ref={bottomRef} />
+      </StyledLogTextContainer>
+    </StyledFullscreenLogOutputContainer>
+  );
+});
 
 export default FullScreenLogOutput;
