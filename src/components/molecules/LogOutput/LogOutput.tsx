@@ -4,6 +4,8 @@ import {CSSTransition} from 'react-transition-group';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
+import {isEqual} from 'lodash';
+
 import {Coordinates} from '@models/config';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
@@ -86,7 +88,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   useInterval(() => {
     const clientRect = containerRef?.current?.getBoundingClientRect();
-    if (clientRect) {
+    if (clientRect && !isEqual(clientRect, rect)) {
       setRect({
         top: clientRect.top,
         left: clientRect.left,
