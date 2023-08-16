@@ -11,7 +11,7 @@ import {useDeleteWebhookMutation} from '@services/webhooks';
 import WebhookDetailsContext from '../WebhookDetailsContext';
 
 const Delete: FC = () => {
-  const {webhooksDetails} = useContext(WebhookDetailsContext);
+  const {webhookDetails} = useContext(WebhookDetailsContext);
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
   const onConfirm = async () => {
@@ -21,8 +21,8 @@ const Delete: FC = () => {
       title: 'Delete?',
       content: (
         <DeleteEntityModal
-          name={webhooksDetails?.name ?? ''}
-          idToDelete={webhooksDetails?.name}
+          name={webhookDetails?.name ?? ''}
+          idToDelete={webhookDetails?.name}
           defaultStackRoute="/webhooks"
           useDeleteMutation={useDeleteWebhookMutation}
           entityLabel="webhook"

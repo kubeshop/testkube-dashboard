@@ -1,4 +1,4 @@
-import {FC, useContext} from 'react';
+import {FC, useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
@@ -30,7 +30,8 @@ const WebhookDetails: FC = () => {
 
   const {navigate} = useContext(DashboardContext);
 
-  const {data: webhooksDetails} = useGetWebhookDetailsQuery(id);
+  const {data} = useGetWebhookDetailsQuery(id);
+  const [webhookDetails, setWebhookDetails] = useState(data);
 
   const setTab = useLastCallback((nextTab: string) => {
     navigate(`/webhooks/${id}/${nextTab}`);
@@ -40,14 +41,18 @@ const WebhookDetails: FC = () => {
     navigate(`/webhooks/${id}/settings/${nextTab}`);
   });
 
+  useEffect(() => {
+    setWebhookDetails(data);
+  }, [data]);
+
   return (
-    <WebhookDetailsContext.Provider value={{webhooksDetails}}>
+    <WebhookDetailsContext.Provider value={{webhookDetails, setWebhookDetails}}>
       <PageWrapper>
         <PageHeader
           onBack={() => navigate('/webhooks')}
           title={
             <>
-              <Text className="bold biggest">{webhooksDetails?.name || 'Loading...'}</Text>
+              <Text className="bold biggest">{webhookDetails?.name || 'Loading...'}</Text>
               <Tag title="Webhook" type="info" Icon={TestSuitesIcon} />
             </>
           }

@@ -13,20 +13,20 @@ type HeadersFormValues = {
 };
 
 const Headers: FC = () => {
-  const {webhooksDetails} = useContext(WebhookDetailsContext);
+  const {webhookDetails} = useContext(WebhookDetailsContext);
 
   const [form] = Form.useForm<HeadersFormValues>();
 
   useEffect(() => {
-    form.setFieldValue('headers', webhooksDetails?.headers);
-  }, [webhooksDetails]);
+    form.setFieldValue('headers', webhookDetails?.headers);
+  }, [webhookDetails]);
 
   return (
     <Form
       layout="vertical"
       form={form}
       initialValues={{
-        headers: webhooksDetails?.headers ?? {},
+        headers: webhookDetails?.headers ?? {},
       }}
     >
       <ConfigurationCard title="Headers" description="Customize the headers we will send with each request.">

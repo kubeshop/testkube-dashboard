@@ -22,7 +22,7 @@ type ConditionFormValues = {
 };
 
 const Condition: FC = () => {
-  const {webhooksDetails} = useContext(WebhookDetailsContext);
+  const {webhookDetails} = useContext(WebhookDetailsContext);
 
   const [form] = Form.useForm<ConditionFormValues>();
 
@@ -38,11 +38,11 @@ const Condition: FC = () => {
   useEffect(() => {
     form.setFieldsValue({
       resource: 'test',
-      events: webhooksDetails?.events.map(item => ({label: item, value: item})) || [],
+      events: webhookDetails?.events.map(item => ({label: item, value: item})) || [],
       // @ts-ignore
-      labels: composeLabels((webhooksDetails?.labels as unknown as Record<string, Option>) || []) || {},
+      labels: composeLabels((webhookDetails?.labels as unknown as Record<string, Option>) || []) || {},
     });
-  }, [webhooksDetails]);
+  }, [webhookDetails]);
 
   return (
     <Form layout="vertical" form={form}>

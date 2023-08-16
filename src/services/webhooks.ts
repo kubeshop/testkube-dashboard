@@ -1,8 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {MetadataResponse} from '@models/fetch';
 import {Webhook} from '@models/webhook';
-
-import {MetadataResponse} from '@src/models/fetch';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
@@ -37,15 +36,15 @@ export const webhooksApi = createApi({
     updateWebhook: builder.mutation<MetadataResponse<Webhook>, Webhook>({
       query: webhook => ({
         url: `/webhooks/${webhook.name}`,
-        method: 'PUT',
+        method: 'PATCH',
         body: webhook,
       }),
     }),
-    updateWebhookDefinition: builder.mutation<MetadataResponse<Webhook>, {name: string; definition: string}>({
-      query: ({name, definition}) => ({
+    updateWebhookDefinition: builder.mutation<MetadataResponse<Webhook>, {name: string; value: string}>({
+      query: ({name, value}) => ({
         url: `/webhooks/${name}`,
-        method: 'PUT',
-        body: definition,
+        method: 'PATCH',
+        body: value,
         headers: {accept: 'text/yaml'},
       }),
     }),
@@ -65,6 +64,7 @@ export const {
   useCreateWebhookMutation,
   useGetWebhookDetailsQuery,
   useGetWebhookDefinitionQuery,
+  useUpdateWebhookMutation,
   useUpdateWebhookDefinitionMutation,
   useDeleteWebhookMutation,
 } = webhooksApi;

@@ -15,20 +15,20 @@ type URIFormValues = {
 };
 
 const URI: FC = () => {
-  const {webhooksDetails} = useContext(WebhookDetailsContext);
+  const {webhookDetails} = useContext(WebhookDetailsContext);
 
   const [form] = Form.useForm<URIFormValues>();
 
   useEffect(() => {
-    form.setFieldValue('uri', webhooksDetails?.uri);
-  }, [webhooksDetails]);
+    form.setFieldValue('uri', webhookDetails?.uri);
+  }, [webhookDetails]);
 
   return (
     <Form
       layout="vertical"
       form={form}
       initialValues={{
-        uri: webhooksDetails?.uri ?? '',
+        uri: webhookDetails?.uri ?? '',
       }}
     >
       <ConfigurationCard

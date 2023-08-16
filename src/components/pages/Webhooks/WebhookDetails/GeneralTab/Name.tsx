@@ -8,6 +8,8 @@ import {FormItem} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
+import {useUpdateWebhookMutation} from '@services/webhooks';
+
 import {externalLinks} from '@utils/externalLinks';
 import {requiredNoText} from '@utils/form';
 
@@ -20,18 +22,34 @@ type NameFormValues = {
 const Name: FC = () => {
   const [form] = Form.useForm<NameFormValues>();
 
-  const {webhooksDetails} = useContext(WebhookDetailsContext);
+  const {webhookDetails, setWebhookDetails} = useContext(WebhookDetailsContext);
+
+  const [updateWebhook] = useUpdateWebhookMutation();
+
+  const onFinish = () => {
+    const values: NameFormValues = form.getFieldsValue();
+
+    const newWebhook = {
+      ...webhookDetails!,
+      ...values,
+    };
+
+    updateWebhook(newWebhook).then(() => {
+      setWebhookDetails(newWebhook);
+      form.resetFields();
+    });
+  };
 
   useEffect(() => {
-    form.setFieldValue('name', webhooksDetails?.name);
-  }, [webhooksDetails]);
+    form.setFieldValue('name', webhookDetails?.name);
+  }, [webhookDetails]);
 
   return (
     <Form
       layout="vertical"
       form={form}
       initialValues={{
-        name: webhooksDetails?.name ?? '',
+        name: webhookDetails?.name ?? '',
       }}
     >
       <ConfigurationCard
@@ -43,6 +61,8 @@ const Name: FC = () => {
             <ExternalLink href={externalLinks.notificationsAndWebhooks}>notifications and webhooks</ExternalLink>
           </>
         }
+        onConfirm={onFinish}
+        onCancel={() => form.resetFields()}
       >
         <FormItem name="name" label="Name" required rules={[requiredNoText]}>
           <Input placeholder="Notification name" />

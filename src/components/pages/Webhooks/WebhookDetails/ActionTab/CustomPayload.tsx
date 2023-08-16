@@ -14,13 +14,13 @@ type CustomPayloadFormValues = {
 const CustomPayload: FC = () => {
   const [form] = Form.useForm<CustomPayloadFormValues>();
 
-  const {webhooksDetails} = useContext(WebhookDetailsContext);
+  const {webhookDetails} = useContext(WebhookDetailsContext);
 
-  const [value, setValue] = useState(webhooksDetails?.payloadTemplate || '');
+  const [value, setValue] = useState(webhookDetails?.payloadTemplate || '');
 
   useEffect(() => {
-    setValue(webhooksDetails?.payloadTemplate || '');
-  }, [webhooksDetails]);
+    setValue(webhookDetails?.payloadTemplate || '');
+  }, [webhookDetails]);
 
   return (
     <Form name="webhook-payload-template-form" form={form}>
