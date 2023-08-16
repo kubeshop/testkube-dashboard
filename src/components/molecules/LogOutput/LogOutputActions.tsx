@@ -7,7 +7,7 @@ import {CopyButton, DownloadButton} from '@atoms';
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
-import FullScreenAction from './FullscreenLogOutput/FullScreenAction';
+import FullScreenAction from './FullScreenAction';
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
 
 type LogOutputActionsProps = {

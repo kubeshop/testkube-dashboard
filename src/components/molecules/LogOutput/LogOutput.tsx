@@ -1,12 +1,8 @@
-import React, {MouseEvent, ReactNode, memo, useCallback, useEffect, useRef, useState} from 'react';
+import React, {ReactNode, memo, useCallback, useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {CSSTransition} from 'react-transition-group';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
-
-import Ansi from 'ansi-to-react';
-
-import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 
 import {Coordinates} from '@models/config';
 
@@ -17,14 +13,8 @@ import {useLogOutputPick} from '@store/logOutput';
 import {getRtkIdToken} from '@utils/fetchUtils';
 
 import FullScreenLogOutput from './FullscreenLogOutput';
-import {
-  DrawerBannerContainer,
-  LogOutputWrapper,
-  StyledLogOutputContainer,
-  StyledLogTextContainer,
-  StyledPreLogText,
-} from './LogOutput.styled';
-import LogOutputHeader from './LogOutputHeader';
+import {DrawerBannerContainer, LogOutputWrapper} from './LogOutput.styled';
+import LogOutputPure from './LogOutputPure';
 import {useCountLines, useLastLines} from './utils';
 
 export type LogOutputProps = {
@@ -36,11 +26,9 @@ export type LogOutputProps = {
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = 'No logs', executionId, isRunning, initialLines = 300, banner} = props;
+  const {logOutput = 'No logs', executionId, isRunning = false, initialLines = 300, banner} = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollableRef = useRef<HTMLDivElement>(null);
-  const isScrolledToBottom = useScrolledToBottom(scrollableRef.current);
 
   const wsRoot = useWsEndpoint();
 
@@ -54,10 +42,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const lines = useCountLines(logs);
   const visibleLogs = useLastLines(logs, expanded || isRunning ? Infinity : initialLines);
 
-  const onExpand = useCallback((event: MouseEvent) => {
-    event.preventDefault();
-    setExpanded(true);
-  }, []);
+  const onExpand = useCallback(() => setExpanded(true), []);
 
   // TODO: Consider getting token different way than using the one from RTK
   const {value: token, loading: tokenLoading} = useAsync(getRtkIdToken);
@@ -95,29 +80,12 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   );
 
   useEffect(() => {
-    if (!isRunning) {
-      setLogs(logOutput);
-    } else {
-      setLogs('');
-    }
-
-    return () => {
-      setLogs('');
-    };
+    setLogs(isRunning ? '' : logOutput);
+    setShouldConnect(isRunning);
   }, [isRunning, executionId]);
 
-  useEffect(() => {
-    setShouldConnect(isRunning || false);
-  }, [isRunning]);
-
-  useEffect(() => {
-    if (scrollableRef.current && isScrolledToBottom) {
-      scrollableRef.current.scrollTop = scrollableRef.current.scrollHeight;
-    }
-  }, [logs]);
-
   useInterval(() => {
-    const clientRect = scrollableRef?.current?.getBoundingClientRect();
+    const clientRect = containerRef?.current?.getBoundingClientRect();
     if (clientRect) {
       setRect({
         top: clientRect.top,
@@ -137,7 +105,16 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       classNames="full-screen-log-output"
       unmountOnExit
     >
-      <FullScreenLogOutput ref={fullscreenLogRef} logOutput={logs} initialLines={initialLines} rect={rect} />
+      <FullScreenLogOutput
+        ref={fullscreenLogRef}
+        $rect={rect}
+        logs={logs}
+        visibleLogs={visibleLogs}
+        expanded={expanded}
+        lines={lines}
+        initialLines={initialLines}
+        onExpand={onExpand}
+      />
     </CSSTransition>
   );
 
@@ -145,25 +122,15 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     <>
       <LogOutputWrapper>
         {banner ? <DrawerBannerContainer>{banner}</DrawerBannerContainer> : null}
-        <StyledLogOutputContainer ref={containerRef}>
-          <LogOutputHeader logOutput={logs} />
-
-          <StyledLogTextContainer ref={scrollableRef}>
-            {visibleLogs ? (
-              <StyledPreLogText data-test="log-output">
-                {!expanded && lines >= initialLines ? (
-                  <>
-                    <a href="#" onClick={onExpand}>
-                      Click to show all {lines} lines...
-                    </a>
-                    <br />
-                  </>
-                ) : null}
-                <Ansi useClasses>{visibleLogs}</Ansi>
-              </StyledPreLogText>
-            ) : null}
-          </StyledLogTextContainer>
-        </StyledLogOutputContainer>
+        <LogOutputPure
+          ref={containerRef}
+          logs={logs}
+          visibleLogs={visibleLogs}
+          expanded={expanded}
+          lines={lines}
+          initialLines={initialLines}
+          onExpand={onExpand}
+        />
       </LogOutputWrapper>
       {createPortal(fullscreenLog, document.body)}
     </>

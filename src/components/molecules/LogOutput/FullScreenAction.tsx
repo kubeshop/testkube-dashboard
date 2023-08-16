@@ -4,7 +4,7 @@ import {Tooltip} from 'antd';
 
 import {useLogOutputField} from '@store/logOutput';
 
-import {StyledExpandAltOutlined, StyledFullscreenExitOutlined} from '../LogOutput.styled';
+import {StyledExpandAltOutlined, StyledFullscreenExitOutlined} from './LogOutput.styled';
 
 const FullScreenAction: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useLogOutputField('isFullscreen');
