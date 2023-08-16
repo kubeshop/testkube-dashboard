@@ -9,7 +9,6 @@ import Ansi from 'ansi-to-react';
 import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 
 import {Coordinates} from '@models/config';
-import {LogAction} from '@models/log';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
@@ -32,20 +31,12 @@ export type LogOutputProps = {
   banner?: ReactNode;
   logOutput?: string;
   executionId?: string;
-  actions?: LogAction[];
   isRunning?: boolean;
   initialLines?: number;
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {
-    logOutput = 'No logs',
-    executionId,
-    actions = ['copy', 'fullscreen'],
-    isRunning,
-    initialLines = 300,
-    banner,
-  } = props;
+  const {logOutput = 'No logs', executionId, isRunning, initialLines = 300, banner} = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollableRef = useRef<HTMLDivElement>(null);
@@ -155,7 +146,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       <LogOutputWrapper>
         {banner ? <DrawerBannerContainer>{banner}</DrawerBannerContainer> : null}
         <StyledLogOutputContainer ref={containerRef}>
-          <LogOutputHeader logOutput={logs} actions={actions} />
+          <LogOutputHeader logOutput={logs} />
 
           <StyledLogTextContainer ref={scrollableRef}>
             {visibleLogs ? (
