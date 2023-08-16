@@ -6,11 +6,9 @@ import {ActionFormItems} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
+import {useClusterDetailsPick} from '@store/clusterDetails';
 import {useTriggersField} from '@store/triggers';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -18,9 +16,8 @@ import {displayDefaultNotificationFlow} from '@utils/notification';
 import {getActionFormValues, getResourceIdentifierSelector} from '../../../utils';
 
 const TriggerAction: React.FC = () => {
+  const {namespace} = useClusterDetailsPick('namespace');
   const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
-
-  const appNamespace = useAppSelector(selectNamespace);
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -33,10 +30,7 @@ const TriggerAction: React.FC = () => {
   const onFinish = () => {
     const values = form.getFieldsValue();
 
-    const testSelector = getResourceIdentifierSelector(
-      values.testLabelSelector || values.testNameSelector,
-      appNamespace
-    );
+    const testSelector = getResourceIdentifierSelector(values.testLabelSelector || values.testNameSelector, namespace);
     const [action, execution] = values.action.split(' ');
 
     const body = {

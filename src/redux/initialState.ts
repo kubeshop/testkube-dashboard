@@ -71,7 +71,6 @@ const initialExecutorsState: ExecutorsState = {
 };
 
 const initialConfigState: ConfigState = {
-  namespace: 'testkube',
   fullScreenLogOutput: {
     isFullScreenLogOutput: false,
     logOutput: '',

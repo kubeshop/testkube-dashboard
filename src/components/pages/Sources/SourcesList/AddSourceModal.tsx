@@ -13,10 +13,9 @@ import {SourceWithRepository} from '@models/sources';
 
 import {Hint, NotificationContent} from '@molecules';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-
 import {useCreateSourceMutation} from '@services/sources';
+
+import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -32,12 +31,11 @@ type AddSourceFormValues = {
 };
 
 const AddSourceModal: React.FC = () => {
+  const {namespace} = useClusterDetailsPick('namespace');
   const [form] = Form.useForm<AddSourceFormValues>();
   const openDetails = useDashboardNavigate((name: string) => `/sources/${name}`);
 
   const [createSource, {isLoading}] = useCreateSourceMutation();
-
-  const namespace = useAppSelector(selectNamespace);
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 

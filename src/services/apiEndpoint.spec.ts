@@ -283,7 +283,6 @@ describe('services', () => {
 
         expect(await update('new')).toBe(true);
         expect(getApiEndpoint()).toBe('http://new/v1');
-        expect(dispatch).toBeCalledWith({payload: namespace, type: 'configSlice/setNamespace'});
       });
 
       it('should ignore server error when race condition occurs', async () => {

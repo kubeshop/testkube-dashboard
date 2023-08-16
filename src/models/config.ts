@@ -1,5 +1,4 @@
 interface ConfigState {
-  namespace: string;
   fullScreenLogOutput: {
     isFullScreenLogOutput: boolean;
     logOutput: string;

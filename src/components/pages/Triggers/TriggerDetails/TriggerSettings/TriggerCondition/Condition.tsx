@@ -6,11 +6,9 @@ import {ConditionFormItems} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
+import {useClusterDetailsPick} from '@store/clusterDetails';
 import {useTriggersField} from '@store/triggers';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -18,8 +16,8 @@ import {displayDefaultNotificationFlow} from '@utils/notification';
 import {getConditionFormValues, getResourceIdentifierSelector} from '../../../utils';
 
 const Condition: React.FC = () => {
+  const {namespace} = useClusterDetailsPick('namespace');
   const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
-  const appNamespace = useAppSelector(selectNamespace);
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -34,7 +32,7 @@ const Condition: React.FC = () => {
 
     const resourceSelector = getResourceIdentifierSelector(
       values.resourceLabelSelector || values.resourceNameSelector,
-      appNamespace
+      namespace
     );
 
     const body = {

@@ -10,9 +10,6 @@ export const configSlice = createSlice({
   name: 'configSlice',
   initialState: initialState.config,
   reducers: {
-    setNamespace: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
-      state.namespace = action.payload;
-    },
     setLogOutput: (state: Draft<ConfigState>, action: PayloadAction<string>) => {
       state.fullScreenLogOutput.logOutput += action.payload;
     },
@@ -29,10 +26,9 @@ export const configSlice = createSlice({
   },
 });
 
-export const selectNamespace = (state: RootState) => state.config.namespace;
 export const selectFullScreenLogOutput = (state: RootState) => state.config.fullScreenLogOutput;
 
-export const {setIsFullScreenLogOutput, closeFullScreenLogOutput, setLogOutput, setNamespace, setLogOutputDOMRect} =
+export const {setIsFullScreenLogOutput, closeFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} =
   configSlice.actions;
 
 export default configSlice.reducer;
