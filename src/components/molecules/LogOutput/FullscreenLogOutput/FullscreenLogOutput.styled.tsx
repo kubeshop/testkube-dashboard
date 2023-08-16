@@ -28,12 +28,13 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
     height: ${logOutputDOMRect?.height}px;
   }
 
-  &.full-screen-log-output-enter-active {
+  &.full-screen-log-output-enter-active,
+  &.full-screen-log-output-enter-done {
     top: 0;
     left: 100px;
 
-    width: calc(100% - 70px);
-    height: 100vh;
+    width: calc(100% - 100px);
+    height: 100%;
 
     transition:
       top 0.4s ease-in-out,
@@ -41,14 +42,6 @@ export const StyledFullscreenLogOutputContainer = styled.div<{
       height 0.4s ease-in-out,
       width 0.3s ease-in-out 0.4s
     ;
-  }
-
-  &.full-screen-log-output-enter-done {
-    top: 0;
-    left: 100px;
-
-    width: calc(100% - 100px);
-    height: 100%;
   }
 
   &.full-screen-log-output-exit {

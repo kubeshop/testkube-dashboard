@@ -1,11 +1,12 @@
 import {FC, PropsWithChildren, ReactElement} from 'react';
 
 import {LoadingOutlined} from '@ant-design/icons';
-import {Drawer} from 'antd';
 
 import useIsMobile from '@hooks/useIsMobile';
 
-import {ExecutionDrawerWrapper} from './ExecutionDrawer.styled';
+import {useLogOutputPick} from '@store/logOutput';
+
+import {ExecutionDrawerWrapper, StyledDrawer} from './ExecutionDrawer.styled';
 
 const headerStyle = {borderBottom: 0, padding: '40px 30px 0'};
 const loaderBodyStyle = {
@@ -23,17 +24,27 @@ interface ExecutionDrawerProps {
 }
 
 const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({header, open, loading, onClose, children}) => {
+  const {isFullscreen: isFullscreenLogOutput} = useLogOutputPick('isFullscreen');
   const isMobile = useIsMobile();
 
   const drawerWidth = isMobile ? '100vw' : window.innerWidth * 0.85 < 1200 ? '85vw' : '1200px';
 
   if (!open) {
-    return <Drawer bodyStyle={loaderBodyStyle} headerStyle={headerStyle} closable={false} width={drawerWidth} />;
+    return (
+      <StyledDrawer
+        $down={isFullscreenLogOutput}
+        bodyStyle={loaderBodyStyle}
+        headerStyle={headerStyle}
+        closable={false}
+        width={drawerWidth}
+      />
+    );
   }
 
   if (loading) {
     return (
-      <Drawer
+      <StyledDrawer
+        $down={isFullscreenLogOutput}
         bodyStyle={loaderBodyStyle}
         headerStyle={headerStyle}
         closable={false}
@@ -42,12 +53,13 @@ const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({header, o
         open
       >
         <LoadingOutlined />
-      </Drawer>
+      </StyledDrawer>
     );
   }
 
   return (
-    <Drawer
+    <StyledDrawer
+      $down={isFullscreenLogOutput}
       title={header}
       headerStyle={headerStyle}
       closable={false}
@@ -61,7 +73,7 @@ const ExecutionDrawer: FC<PropsWithChildren<ExecutionDrawerProps>> = ({header, o
       <ExecutionDrawerWrapper transition={{type: 'just'}} drawerWidth={drawerWidth} $isRowSelected>
         {children}
       </ExecutionDrawerWrapper>
-    </Drawer>
+    </StyledDrawer>
   );
 };
 

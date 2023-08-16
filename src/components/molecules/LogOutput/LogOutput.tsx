@@ -1,5 +1,5 @@
 import {MouseEvent, ReactNode, memo, useCallback, useEffect, useRef, useState} from 'react';
-import {useAsync} from 'react-use';
+import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
 import Ansi from 'ansi-to-react';
@@ -8,10 +8,9 @@ import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 
 import {LogAction} from '@models/log';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} from '@redux/reducers/configSlice';
-
 import {useWsEndpoint} from '@services/apiEndpoint';
+
+import {useLogOutputField, useLogOutputPick} from '@store/logOutput';
 
 import {getRtkIdToken} from '@utils/fetchUtils';
 
@@ -35,8 +34,6 @@ export type LogOutputProps = {
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const dispatch = useAppDispatch();
-
   const {
     logOutput = 'No logs',
     executionId,
@@ -52,7 +49,9 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   const wsRoot = useWsEndpoint();
 
-  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
+  const {isFullscreen} = useLogOutputPick('isFullscreen');
+  const [, setLogOutput] = useLogOutputField('output');
+  const [, setRect] = useLogOutputField('rect');
 
   const [logs, setLogs] = useState('');
   const [shouldConnect, setShouldConnect] = useState(false);
@@ -118,12 +117,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   }, [isRunning]);
 
   useEffect(() => {
-    if (isFullScreenLogOutput) {
-      dispatch(setLogOutput(logs));
-    } else {
-      dispatch(setLogOutput(''));
-    }
-  }, [logs, isFullScreenLogOutput]);
+    setLogOutput(isFullscreen ? logs : '');
+  }, [logs, isFullscreen]);
 
   useEffect(() => {
     if (scrollableRef.current && isScrolledToBottom) {
@@ -131,19 +126,17 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     }
   }, [logs]);
 
-  useEffect(() => {
+  useInterval(() => {
     const rect = scrollableRef?.current?.getBoundingClientRect();
     if (rect) {
-      dispatch(
-        setLogOutputDOMRect({
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height,
-        })
-      );
+      setRect({
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+      });
     }
-  }, [isFullScreenLogOutput]);
+  }, 200);
 
   return (
     <LogOutputWrapper>

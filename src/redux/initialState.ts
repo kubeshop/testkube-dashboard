@@ -1,4 +1,3 @@
-import {ConfigState} from '@models/config';
 import {ExecutorsState} from '@models/executors';
 import {SourcesState} from '@models/sources';
 import {TestFilters, TestsState} from '@models/test';
@@ -70,14 +69,6 @@ const initialExecutorsState: ExecutorsState = {
   currentExecutor: undefined,
 };
 
-const initialConfigState: ConfigState = {
-  fullScreenLogOutput: {
-    isFullScreenLogOutput: false,
-    logOutput: '',
-    logOutputDOMRect: undefined,
-  },
-};
-
 const initialSourcesState: SourcesState = {
   sourcesList: [],
   currentSource: undefined,
@@ -86,7 +77,6 @@ const initialSourcesState: SourcesState = {
 const initialReduxState = {
   testSuites: initialTestSuitesState,
   tests: initialTestsState,
-  config: initialConfigState,
   executors: initialExecutorsState,
   sources: initialSourcesState,
 };

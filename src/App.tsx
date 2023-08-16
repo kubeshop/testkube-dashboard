@@ -25,8 +25,7 @@ import {
 import PluginsContext from '@plugins/PluginsContext';
 import {Plugin} from '@plugins/types';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
+import {useAppDispatch} from '@redux/hooks';
 import {setExecutors} from '@redux/reducers/executorsSlice';
 import {setSources} from '@redux/reducers/sourcesSlice';
 
@@ -35,6 +34,7 @@ import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
 import {initializeClusterDetailsStore} from '@store/clusterDetails';
+import {initializeLogOutputStore} from '@store/logOutput';
 import {initializeTriggersStore} from '@store/triggers';
 
 import {composeProviders} from '@utils/composeProviders';
@@ -60,7 +60,11 @@ const App: React.FC<AppProps> = ({plugins}) => {
   const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore({}, [apiEndpoint]);
   const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
-  const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
+  const [LogOutputProvider, {pick: useLogOutputPick, useField: useLogOutputField}] = initializeLogOutputStore(
+    undefined,
+    [location.pathname]
+  );
+  const {isFullscreen: isFullscreenLogOutput, output: logOutput} = useLogOutputPick('isFullscreen', 'output');
   const logRef = useRef<HTMLDivElement>(null);
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
@@ -77,10 +81,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
   const update = useUpdate();
 
   const isTestkubeCloudLaunchBannerHidden = localStorage.getItem(config.isTestkubeCloudLaunchBannerHidden);
-
-  useEffect(() => {
-    dispatch(setIsFullScreenLogOutput(false));
-  }, [location.pathname]);
 
   useEffect(() => {
     dispatch(setExecutors(executors || []));
@@ -133,6 +133,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     .append(Suspense, {fallback: <Loading />})
     .append(ClusterDetailsProvider, {})
     .append(TriggersProvider, {})
+    .append(LogOutputProvider, {})
     .append(PluginsContext.Provider, {
       value: {
         scope,
@@ -191,7 +192,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
         </Routes>
         <CSSTransition
           nodeRef={logRef}
-          in={isFullScreenLogOutput}
+          in={isFullscreenLogOutput}
           timeout={1000}
           classNames="full-screen-log-output"
           unmountOnExit
