@@ -12,10 +12,9 @@ import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
-import {Permissions, usePermission} from '@permissions/base';
+import Loading from '@pages/Loading';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectSources, setSources} from '@redux/reducers/sourcesSlice';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetSourcesQuery} from '@services/sources';
 
@@ -27,9 +26,7 @@ import EmptySources from './EmptySources';
 import SourceCard from './SourceCard';
 
 const Sources: React.FC = () => {
-  const sourcesList = useAppSelector(selectSources);
-
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {isClusterAvailable} = useContext(MainContext);
   const {location} = useContext(DashboardContext);
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/sources/${name}`);
 
@@ -39,14 +36,12 @@ const Sources: React.FC = () => {
   const mayCreate = usePermission(Permissions.createEntity);
 
   useEffect(() => {
-    if (sources) {
-      dispatch(setSources(sources));
-    }
-  }, [sources]);
-
-  useEffect(() => {
     safeRefetch(refetch);
   }, [location]);
+
+  if (!sources) {
+    return <Loading />;
+  }
 
   return (
     <PageBlueprint
@@ -71,7 +66,7 @@ const Sources: React.FC = () => {
     >
       <EntityGrid
         maxColumns={2}
-        data={sourcesList}
+        data={sources!}
         Component={SourceCard}
         componentProps={{onClick: openDetails}}
         empty={<EmptySources onButtonClick={() => setAddSourceModalVisibility(true)} />}

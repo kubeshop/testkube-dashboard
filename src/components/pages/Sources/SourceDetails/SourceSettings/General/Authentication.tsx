@@ -1,8 +1,6 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {Form} from 'antd';
-
-import {MainContext} from '@contexts';
 
 import {FullWidthSpace} from '@custom-antd';
 
@@ -12,10 +10,9 @@ import {ConfigurationCard, SecretFormItem, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
-
 import {useUpdateSourceMutation} from '@services/sources';
+
+import {useSourcesPick} from '@store/sources';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {dummySecret} from '@utils/sources';
@@ -26,16 +23,15 @@ type AuthenticationFormValues = {
 };
 
 const Authentication: React.FC = () => {
-  const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<AuthenticationFormValues>();
 
-  const source = useAppSelector(selectCurrentSource);
+  const {current} = useSourcesPick('current');
 
   const [updateSource] = useUpdateSourceMutation();
 
-  const repository = source?.repository;
+  const repository = current!.repository;
   const {tokenSecret, usernameSecret} = repository || {};
   const defaults = {
     token: tokenSecret ? dummySecret : '',
@@ -55,15 +51,15 @@ const Authentication: React.FC = () => {
   const onFinish = () => {
     const values = form.getFieldsValue();
 
-    if (!source) {
+    if (!current) {
       return new Promise<ErrorNotificationConfig>(() => ({title: 'Something went wrong'}));
     }
     const token = values.token || '';
     const username = values.username || '';
     const body = {
-      ...source,
+      ...current,
       repository: {
-        ...source.repository,
+        ...current.repository,
         ...(!tokenSecret || isClearedToken ? {token, tokenSecret: undefined} : {}),
         ...(!usernameSecret || isClearedUsername ? {username, usernameSecret: undefined} : {}),
       },
@@ -71,10 +67,7 @@ const Authentication: React.FC = () => {
 
     return updateSource(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => {
-        notificationCall('passed', 'Source was successfully updated.');
-        dispatch(setCurrentSource({...body, ...res.data.spec}));
-      });
+      .then(() => notificationCall('passed', 'Source was successfully updated.'));
   };
 
   return (

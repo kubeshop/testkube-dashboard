@@ -1,8 +1,6 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {Form} from 'antd';
-
-import {MainContext} from '@contexts';
 
 import {Input} from '@custom-antd';
 
@@ -10,10 +8,9 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
-
 import {useUpdateSourceMutation} from '@services/sources';
+
+import {useSourcesPick} from '@store/sources';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -24,9 +21,7 @@ type NameNUrlFormValues = {
 };
 
 const NameNUrl: React.FC = () => {
-  const source = useAppSelector(selectCurrentSource);
-
-  const {dispatch} = useContext(MainContext);
+  const {current} = useSourcesPick('current');
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -34,8 +29,8 @@ const NameNUrl: React.FC = () => {
 
   const [updateSource] = useUpdateSourceMutation();
 
-  const name = source?.name;
-  const uri = source?.repository?.uri;
+  const name = current!.name;
+  const uri = current!.repository?.uri;
   const defaults = {name, uri};
 
   useEffect(() => {
@@ -46,26 +41,23 @@ const NameNUrl: React.FC = () => {
   const onFinish = () => {
     const values = form.getFieldsValue();
 
-    if (!source) {
+    if (!current) {
       notificationCall('failed', 'Something went wrong.');
       return;
     }
 
     const body = {
-      ...source,
+      ...current,
       name: values.name,
       repository: {
-        ...source.repository,
+        ...current.repository,
         uri: values.uri,
       },
     };
 
     return updateSource(body)
       .then(displayDefaultNotificationFlow)
-      .then(() => {
-        notificationCall('passed', 'Source was successfully updated.');
-        dispatch(setCurrentSource(body));
-      });
+      .then(() => notificationCall('passed', 'Source was successfully updated.'));
   };
 
   return (

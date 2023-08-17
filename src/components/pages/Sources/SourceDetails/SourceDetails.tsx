@@ -1,9 +1,9 @@
-import {useCallback, useContext, useEffect} from 'react';
+import {useContext} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
@@ -12,33 +12,23 @@ import {PageHeader, PageWrapper} from '@organisms';
 import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
-
 import {useGetSourceDetailsQuery} from '@services/sources';
 
-import {safeRefetch} from '@utils/fetchUtils';
+import {useSourcesPick, useSourcesSync} from '@store/sources';
 
 import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {location} = useContext(DashboardContext);
-
-  const currentSourceDetails = useAppSelector(selectCurrentSource);
+  const {isClusterAvailable} = useContext(MainContext);
 
   const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
-  const {data: sourceDetails, error, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
-  const reload = useCallback(() => safeRefetch(refetch), [refetch]);
+  const {data: source, error, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
 
-  useEffect(() => {
-    dispatch(setCurrentSource(sourceDetails));
-  }, [sourceDetails]);
-
-  useEffect(() => {
-    reload();
-  }, [location]);
+  const {current: currentSourceDetails} = useSourcesPick('current');
+  useSourcesSync({
+    current: source?.name === name ? source : undefined,
+  });
 
   const setSettingsTab = useDashboardNavigate((next: string) => `/sources/${name}/settings/${next}`);
   const back = useDashboardNavigate('/sources');
@@ -46,7 +36,7 @@ const SourceDetails = () => {
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
-  if (!sourceDetails || !currentSourceDetails) {
+  if (!source || !currentSourceDetails) {
     return <Loading />;
   }
 
@@ -61,7 +51,7 @@ const SourceDetails = () => {
           {
             key: 'settings',
             label: 'Settings',
-            children: <SourceSettings reload={reload} tab={settingsTab} onTabChange={setSettingsTab} />,
+            children: <SourceSettings tab={settingsTab} onTabChange={setSettingsTab} />,
           },
         ]}
       />
