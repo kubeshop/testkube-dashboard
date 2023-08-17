@@ -1,7 +1,7 @@
 import {Args} from '@models/args';
 import {EntityMap} from '@models/entityMap';
 
-type Executor = {
+export interface Executor {
   name: string;
   displayName?: string;
   executor: {
@@ -19,21 +19,15 @@ type Executor = {
     meta: ExecutorMeta;
     contentTypes: string[];
   };
-};
-
-export type ImagePullSecret = {name: string};
-
-type ExecutorFeature = 'artifacts' | 'junit-report';
-
-export type ExecutorMeta = {
-  docsURI: string;
-  iconURI: string;
-};
-
-interface ExecutorsState {
-  executorsList: Executor[];
-  executorsFeaturesMap: EntityMap<ExecutorFeature[]>;
-  currentExecutor?: string;
 }
 
-export type {ExecutorsState, Executor, ExecutorFeature};
+export interface ImagePullSecret {
+  name: string;
+}
+
+export type ExecutorFeature = 'artifacts' | 'junit-report';
+
+export interface ExecutorMeta {
+  docsURI: string;
+  iconURI: string;
+}
