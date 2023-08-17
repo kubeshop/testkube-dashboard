@@ -19,6 +19,10 @@ type ExecutionsVariablesListProps = {
   variables: VariableInForm[];
 };
 
+const arePropsEqual = (prevProps: ExecutionsVariablesListProps, nextProps: ExecutionsVariablesListProps) => {
+  return JSON.stringify(prevProps.variables) === JSON.stringify(nextProps.variables);
+};
+
 const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props => {
   const {variables} = props;
 
@@ -75,10 +79,6 @@ const ExecutionsVariablesList: React.FC<ExecutionsVariablesListProps> = props =>
       })}
     </VariablesList>
   );
-};
-
-const arePropsEqual = (prevProps: ExecutionsVariablesListProps, nextProps: ExecutionsVariablesListProps) => {
-  return JSON.stringify(prevProps.variables) === JSON.stringify(nextProps.variables);
 };
 
 export default memo(ExecutionsVariablesList, arePropsEqual);
