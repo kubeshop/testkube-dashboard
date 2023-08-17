@@ -13,6 +13,7 @@ import {ReactComponent as PlaywrightIcon} from '@assets/playwrightIcon.svg';
 import {ReactComponent as PostmanIcon} from '@assets/postmanIcon.svg';
 import {ReactComponent as SoapUIIcon} from '@assets/soapIcon.svg';
 import {ReactComponent as DefaultIcon} from '@assets/tests-icon.svg';
+import {ReactComponent as TracetestIcon} from '@assets/tracetestIcon.svg';
 
 import {StyledExecutorIcon} from './ExecutorIcon.styled';
 
@@ -34,6 +35,7 @@ export const executorIcons: Record<string, JSX.Element> = {
   ginkgo: <GinkgoIcon />,
   jmeter: <JMeterIcon />,
   playwright: <PlaywrightIcon />,
+  tracetest: <TracetestIcon />,
 };
 
 const ExecutorIcon: React.FC<ExecutorIconProps> = props => {
