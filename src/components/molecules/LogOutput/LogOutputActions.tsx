@@ -7,7 +7,7 @@ import {CopyButton, DownloadButton} from '@atoms';
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
-import FullScreenAction from './FullScreenAction';
+import FullscreenAction from './FullscreenAction';
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
 
 type LogOutputActionsProps = {
@@ -27,7 +27,7 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
       ) : (
         <DownloadButton filename={filename} extension="log" content={strippedLogOutput} />
       )}
-      <FullScreenAction key="fullscreen-log-action" />
+      <FullscreenAction key="fullscreen-log-action" />
     </StyledLogOutputActionsContainer>
   );
 };

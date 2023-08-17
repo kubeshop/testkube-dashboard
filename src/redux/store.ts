@@ -1,9 +1,9 @@
 import {Action, Middleware, ThunkAction, configureStore} from '@reduxjs/toolkit';
 
-import executorsSlice from '@redux/reducers/executorsSlice';
-import sourcesSlice from '@redux/reducers/sourcesSlice';
-import testSuitesSlice from '@redux/reducers/testSuitesSlice';
-import testsSlice from '@redux/reducers/testsSlice';
+import {executorsSlice} from '@redux/reducers/executorsSlice';
+import {sourcesSlice} from '@redux/reducers/sourcesSlice';
+import {testSuitesSlice} from '@redux/reducers/testSuitesSlice';
+import {testsSlice} from '@redux/reducers/testsSlice';
 
 import {configApi} from '@services/config';
 import {executionsApi} from '@services/executions';

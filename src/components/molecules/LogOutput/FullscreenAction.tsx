@@ -6,7 +6,7 @@ import {useLogOutputField} from '@store/logOutput';
 
 import {StyledExpandAltOutlined, StyledFullscreenExitOutlined} from './LogOutput.styled';
 
-const FullScreenAction: React.FC = () => {
+const FullscreenAction: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useLogOutputField('isFullscreen');
 
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -29,4 +29,4 @@ const FullScreenAction: React.FC = () => {
   );
 };
 
-export default FullScreenAction;
+export default FullscreenAction;
