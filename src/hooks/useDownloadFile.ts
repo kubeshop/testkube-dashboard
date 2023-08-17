@@ -6,7 +6,7 @@ type DownloadOptions = {
   filename?: string;
 };
 
-export const useDownloadFile = (textToCopy: string, options: DownloadOptions) => {
+export const useDownloadFile = (textToCopy: string | (() => string), options: DownloadOptions) => {
   const [isProcessed, setProcessed] = useState(false);
 
   const downloadFile = (content: string, filename: string = 'output.sh') => {
@@ -22,7 +22,7 @@ export const useDownloadFile = (textToCopy: string, options: DownloadOptions) =>
     let timeout: NodeJS.Timeout;
 
     if (isProcessed) {
-      timeout = downloadFile(textToCopy, options.filename);
+      timeout = downloadFile(typeof textToCopy === 'function' ? textToCopy() : textToCopy, options.filename);
     }
 
     return () => {

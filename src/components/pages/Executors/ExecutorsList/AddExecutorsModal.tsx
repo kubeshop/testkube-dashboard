@@ -11,10 +11,9 @@ import {ErrorNotificationConfig} from '@models/notifications';
 
 import {Hint, NotificationContent} from '@molecules';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-
 import {useCreateExecutorMutation} from '@services/executors';
+
+import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -29,13 +28,12 @@ type AddExecutorsFormValues = {
 };
 
 const AddExecutorsModal: React.FC = () => {
+  const {namespace} = useClusterDetailsPick('namespace');
   const openDetails = useDashboardNavigate((name: string) => `/executors/${name}`);
 
   const [form] = Form.useForm<AddExecutorsFormValues>();
 
   const [createExecutor, {isLoading}] = useCreateExecutorMutation();
-
-  const namespace = useAppSelector(selectNamespace);
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 

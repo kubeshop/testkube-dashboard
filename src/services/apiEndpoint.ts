@@ -7,8 +7,6 @@ import {config} from '@constants/config';
 
 import {MainContext} from '@contexts';
 
-import {setNamespace} from '@redux/reducers/configSlice';
-
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {getRtkBaseUrl, getRtkIdToken} from '@utils/fetchUtils';
@@ -152,7 +150,6 @@ export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean
         }
 
         saveApiEndpoint(data.url);
-        dispatch(setNamespace(data.namespace));
         setClusterDetails(data);
 
         return true;

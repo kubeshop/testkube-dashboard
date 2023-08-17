@@ -5,7 +5,7 @@ type CopyToClipboardOptions = {
   timeoutInMs?: number;
 };
 
-export const useCopyToClipboard = (textToCopy: string, options?: CopyToClipboardOptions) => {
+export const useCopyToClipboard = (textToCopy: string | (() => string), options?: CopyToClipboardOptions) => {
   const [{value}, copyToClipboard] = _useCopyToClipboard();
   const [isProcessed, setProcessed] = useState(false);
   const timeoutInMs = options?.timeoutInMs ?? 2000;
@@ -14,7 +14,7 @@ export const useCopyToClipboard = (textToCopy: string, options?: CopyToClipboard
     let timeout: NodeJS.Timeout;
 
     if (isProcessed) {
-      copyToClipboard(textToCopy);
+      copyToClipboard(typeof textToCopy === 'function' ? textToCopy() : textToCopy);
       timeout = setTimeout(() => setProcessed(false), timeoutInMs);
     }
 

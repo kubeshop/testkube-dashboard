@@ -1,5 +1,11 @@
+import {Drawer} from 'antd';
+
 import {motion} from 'framer-motion';
 import styled from 'styled-components';
+
+export const StyledDrawer = styled(Drawer)<{$down?: boolean}>`
+  ${({$down}) => ($down ? 'z-index: 998' : '')}
+`;
 
 export const ExecutionDrawerWrapper = styled(motion.div)<{
   $isRowSelected: boolean;
