@@ -25,13 +25,13 @@ import createPluginManager from '@plugins/manager';
 import {Plugin} from '@plugins/types';
 
 import {useAppDispatch} from '@redux/hooks';
-import {setExecutors} from '@redux/reducers/executorsSlice';
 
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
 import {initializeClusterDetailsStore} from '@store/clusterDetails';
+import {initializeExecutorsStore} from '@store/executors';
 import {initializeLogOutputStore} from '@store/logOutput';
 import {useSourcesSync} from '@store/sources';
 import {initializeTriggersStore} from '@store/triggers';
@@ -55,19 +55,19 @@ const App: React.FC<AppProps> = ({plugins}) => {
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
 
+  const [ExecutorsProvider, {sync: useExecutorsSync}] = initializeExecutorsStore();
+
   const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore({}, [apiEndpoint]);
   const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
-  const [LogOutputProvider, {pick: useLogOutputPick, useField: useLogOutputField}] = initializeLogOutputStore(
-    undefined,
-    [location.pathname]
-  );
-  const {isFullscreen: isFullscreenLogOutput} = useLogOutputPick('isFullscreen');
+  const [LogOutputProvider] = initializeLogOutputStore(undefined, [location.pathname]);
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
     pollingInterval: PollingIntervals.long,
     skip: !isClusterAvailable,
   });
+  useExecutorsSync({executors});
+
   const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
     pollingInterval: PollingIntervals.long,
     skip: !isClusterAvailable,
@@ -79,10 +79,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
   const update = useUpdate();
 
   const isTestkubeCloudLaunchBannerHidden = localStorage.getItem(config.isTestkubeCloudLaunchBannerHidden);
-
-  useEffect(() => {
-    dispatch(setExecutors(executors || []));
-  }, [executors]);
 
   useEffect(() => {
     safeRefetch(refetchExecutors);
@@ -127,6 +123,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     .append(Suspense, {fallback: <Loading />})
     .append(ClusterDetailsProvider, {})
     .append(TriggersProvider, {})
+    .append(ExecutorsProvider, {})
     .append(LogOutputProvider, {})
     .append(PluginsContext.Provider, {
       value: {

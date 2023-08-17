@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import {memo, useMemo} from 'react';
 
 import {Form, Select} from 'antd';
 
@@ -10,8 +10,7 @@ import {ConfigurationCard} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
+import {useExecutorsPick} from '@store/executors';
 
 import {remapExecutors} from '@utils/executors';
 import {externalLinks} from '@utils/externalLinks';
@@ -32,13 +31,11 @@ const TestType: React.FC<TestTypeProps> = props => {
   const [form] = Form.useForm<TestTypeFormValues>();
 
   const mayEdit = usePermission(Permissions.editEntity);
-  const executors = useAppSelector(selectExecutors);
-  const remappedExecutors = remapExecutors(executors);
+  const {executors = []} = useExecutorsPick('executors');
+  const remappedExecutors = useMemo(() => remapExecutors(executors), [executors]);
 
   const onSave = () => {
-    const values = form.getFieldsValue();
-
-    return updateTest({type: values.type});
+    return updateTest({type: form.getFieldValue('type')});
   };
 
   return (

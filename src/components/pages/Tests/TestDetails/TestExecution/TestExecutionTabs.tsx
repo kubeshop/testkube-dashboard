@@ -12,11 +12,9 @@ import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
 import {usePluginSlot, usePluginSlotList, usePluginState} from '@plugins/hooks';
 import {LogOutputBannerInterface, TestExecutionTabsInterface} from '@plugins/types';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
-
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick} from '@store/executionDetails';
+import {useExecutorsPick} from '@store/executors';
 
 import {decomposeVariables} from '@utils/variables';
 
@@ -28,7 +26,7 @@ const TestExecutionTabs: React.FC = () => {
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
   const {id: entityId, execDetailsTab} = useParams();
 
-  const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
+  const {featuresMap} = useExecutorsPick('featuresMap');
 
   const {
     testType,
@@ -44,7 +42,7 @@ const TestExecutionTabs: React.FC = () => {
 
   const decomposedVars = decomposeVariables(variables || {});
 
-  const whetherToShowArtifactsTab = executorsFeaturesMap[testType]?.includes('artifacts');
+  const whetherToShowArtifactsTab = featuresMap[testType]?.includes('artifacts');
 
   const setExecutionTab = useDashboardNavigate((next: string) => `/tests/${entityId}/executions/${id}/${next}`);
 

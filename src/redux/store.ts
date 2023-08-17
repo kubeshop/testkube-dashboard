@@ -1,7 +1,5 @@
 import {Action, Middleware, ThunkAction, configureStore} from '@reduxjs/toolkit';
 
-import {executorsSlice} from '@redux/reducers/executorsSlice';
-
 import {configApi} from '@services/config';
 import {executionsApi} from '@services/executions';
 import {executorsApi} from '@services/executors';
@@ -27,8 +25,6 @@ export const middlewares: Middleware[] = [
 ];
 
 export const reducers = {
-  executors: executorsSlice.reducer,
-
   [testSuitesApi.reducerPath]: testSuitesApi.reducer,
   [testsApi.reducerPath]: testsApi.reducer,
   [executionsApi.reducerPath]: executionsApi.reducer,

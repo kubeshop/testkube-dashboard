@@ -6,8 +6,7 @@ import {Input} from '@custom-antd';
 
 import {ConfigurationCard} from '@molecules';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor} from '@redux/reducers/executorsSlice';
+import {useExecutorsPick} from '@store/executors';
 
 type NameNTypeFormValues = {
   name: string;
@@ -16,15 +15,12 @@ type NameNTypeFormValues = {
 
 const NameNType: React.FC = () => {
   const [form] = Form.useForm<NameNTypeFormValues>();
-
-  const {name, executor} = useAppSelector(selectCurrentExecutor);
-  const type = executor?.types?.[0] ?? '';
+  const {current} = useExecutorsPick('current');
+  const {name} = current!;
+  const type = current!.executor.types?.[0] ?? '';
 
   useEffect(() => {
-    form.setFieldsValue({
-      name,
-      type,
-    });
+    form.setFieldsValue({name, type});
   }, [name, type]);
 
   return (

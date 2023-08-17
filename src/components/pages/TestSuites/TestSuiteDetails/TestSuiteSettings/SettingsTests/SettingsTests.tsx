@@ -21,13 +21,12 @@ import {ConfigurationCard, InlineNotification, notificationCall} from '@molecule
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
+import {useExecutorsPick} from '@store/executors';
 
 import {externalLinks} from '@utils/externalLinks';
 import {formatMilliseconds} from '@utils/formatMilliseconds';
@@ -44,7 +43,7 @@ const SettingsTests = () => {
 
   const isV2 = useClusterVersionMatch('<1.13.0', rawIsV2);
 
-  const executors = useAppSelector(selectExecutors);
+  const {executors} = useExecutorsPick('executors');
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -57,7 +56,7 @@ const SettingsTests = () => {
     return (testsList || []).map(item => ({
       name: item.name,
       namespace: item.namespace,
-      type: getTestExecutorIcon(executors, item.type),
+      type: getTestExecutorIcon(executors || [], item.type),
     }));
   }, [testsList]);
 
