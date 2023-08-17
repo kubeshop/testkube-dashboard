@@ -12,9 +12,9 @@ import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {useLogOutputPick} from '@store/logOutput';
 
-import {getRtkIdToken} from '@utils/fetchUtils';
+import {getRtkIdToken} from '@utils/rtk';
 
-import FullScreenLogOutput from './FullscreenLogOutput';
+import FullscreenLogOutput from './FullscreenLogOutput';
 import {DrawerBannerContainer, LogOutputWrapper} from './LogOutput.styled';
 import LogOutputPure from './LogOutputPure';
 import {useCountLines, useLastLines} from './utils';
@@ -107,7 +107,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       classNames="full-screen-log-output"
       unmountOnExit
     >
-      <FullScreenLogOutput
+      <FullscreenLogOutput
         ref={fullscreenLogRef}
         $rect={rect}
         logs={logs}

@@ -17,8 +17,9 @@ import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {initializeEntityDetailsStore} from '@store/entityDetails';
 
-import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
+import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
+import {getRtkIdToken} from '@utils/rtk';
 import {convertTestSuiteV2ExecutionToV3, isTestSuiteV2} from '@utils/testSuites';
 
 interface EntityDetailsLayerProps {

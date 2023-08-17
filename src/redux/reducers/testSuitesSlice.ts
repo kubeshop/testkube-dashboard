@@ -1,10 +1,10 @@
 import {Draft, PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {TestSuiteWithExecution, TestSuitesState} from '@models/testSuite';
+import type {TestSuiteWithExecution, TestSuitesState} from '@models/testSuite';
 
 import initialState from '@redux/initialState';
 
-import {RootState} from '../store';
+import type {RootState} from '../store';
 
 export const testSuitesSlice = createSlice({
   name: 'testSuitesSlice',
@@ -27,5 +27,3 @@ export const selectTestSuites = (state: RootState) => state.testSuites.dataList;
 export const selectTestSuitesFilters = (state: RootState) => state.testSuites.filters;
 
 export const {setTestSuites, setTestSuitesFilters} = testSuitesSlice.actions;
-
-export default testSuitesSlice.reducer;

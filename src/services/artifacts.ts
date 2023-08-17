@@ -1,6 +1,6 @@
 import {getApiEndpoint} from '@services/apiEndpoint';
 
-import {getRtkBaseUrl, getRtkIdToken} from '@utils/fetchUtils';
+import {getRtkBaseUrl, getRtkIdToken} from '@utils/rtk';
 
 export const downloadArtifact = async (
   fileName: string,

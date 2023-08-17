@@ -27,11 +27,7 @@ import {getResourceIdentifierSelector} from '../../utils';
 import {StyledNotificationContainer} from './AddTriggerModal.styled';
 import ModalFirstStep from './ModalFirstStep';
 import ModalSecondStep from './ModalSecondStep';
-
-export enum StepsEnum {
-  condition = 0,
-  action = 1,
-}
+import {StepsEnum} from './types';
 
 const AddTriggerModal: React.FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');

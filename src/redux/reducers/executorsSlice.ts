@@ -9,7 +9,7 @@ import initialState from '@redux/initialState';
 
 import {isURL} from '@utils/strings';
 
-import {RootState} from '../store';
+import type {RootState} from '../store';
 
 export const executorsSlice = createSlice({
   name: 'executorsSlice',
@@ -77,5 +77,3 @@ export const selectCurrentExecutor = (state: RootState) =>
   state.executors.executorsList.find(executor => executor.name === state.executors.currentExecutor) as Executor;
 
 export const {setExecutors, setCurrentExecutor, setExecutorData, updateCurrentExecutorData} = executorsSlice.actions;
-
-export default executorsSlice.reducer;

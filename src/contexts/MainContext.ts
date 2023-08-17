@@ -1,8 +1,8 @@
 import {createContext} from 'react';
 
-import {ClusterConfig} from '@models/config';
+import type {ClusterConfig} from '@models/config';
 
-import {useAppDispatch} from '@redux/hooks';
+import type {useAppDispatch} from '@redux/hooks';
 
 export type MainContextProps = {
   dispatch: ReturnType<typeof useAppDispatch>;

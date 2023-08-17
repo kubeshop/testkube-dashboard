@@ -2,9 +2,9 @@ import {memo} from 'react';
 
 import {FullWidthSpace} from '@custom-antd';
 
-import {ConfigurationCard} from '@molecules';
+import env from '@env';
 
-import env from '@src/env';
+import {ConfigurationCard} from '@molecules';
 
 import {useClusterDetailsPick} from '@store/clusterDetails';
 

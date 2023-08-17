@@ -1,7 +1,20 @@
-import {useEffect, useRef} from 'react';
+import {useContext, useEffect, useRef} from 'react';
 
-import {DataLayerValue} from './TelemetryService';
-import {useTelemetry} from './useTelemetry';
+import {DataLayerValue, TelemetryService} from './TelemetryService';
+import {TelemetryContext} from './context';
+
+const dummy = new TelemetryService({
+  app: {name: 'dummy', version: 'dummy'},
+});
+
+export const useTelemetry = (): TelemetryService => {
+  const {telemetry} = useContext(TelemetryContext);
+  if (process.env.NODE_ENV === 'development' && !telemetry) {
+    // eslint-disable-next-line no-console
+    console.trace('useTelemetry used without the TelemetryProvider.');
+  }
+  return telemetry || dummy;
+};
 
 export const useTelemetryValue = (key: string, value: DataLayerValue, ignoreEmpty = false): void => {
   const telemetry = useTelemetry();

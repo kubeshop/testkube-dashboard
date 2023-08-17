@@ -6,7 +6,7 @@ import {config} from '@constants/config';
 
 import MainContext from '@contexts/MainContext';
 
-import {initializeClusterDetailsStore} from '@src/store/clusterDetails';
+import {initializeClusterDetailsStore} from '@store/clusterDetails';
 
 import {composeProviders} from '@utils/composeProviders';
 

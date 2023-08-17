@@ -20,7 +20,8 @@ import {
   Triggers,
 } from '@pages';
 
-import PluginsContext from '@plugins/PluginsContext';
+import PluginsContext from '@plugins/context';
+import createPluginManager from '@plugins/manager';
 import {Plugin} from '@plugins/types';
 
 import {useAppDispatch} from '@redux/hooks';
@@ -40,7 +41,6 @@ import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
-import createPluginManager from './plugins/PluginManager';
 
 export interface AppProps {
   plugins: Plugin[];

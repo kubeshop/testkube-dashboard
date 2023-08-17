@@ -11,7 +11,6 @@ export {default as SplitLabelText} from './SplitLabelText';
 export {default as CopyButton} from './CopyButton';
 export {default as ScrollTrigger} from './ScrollTrigger';
 export {default as AnsiClassesMapping} from './TestkubeTheme/AnsiClassesMapping';
-export {default as TestkubeCodeTheme} from './TestkubeTheme/CodeTheme';
 export {default as ExternalLink} from './ExternalLink';
 export {default as DownloadButton} from './DownloadButton';
 export {default as Asterisk} from './Asterisk';
