@@ -31,7 +31,7 @@ import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
 import {initializeClusterDetailsStore} from '@store/clusterDetails';
-import {initializeExecutorsStore} from '@store/executors';
+import {useExecutorsSync} from '@store/executors';
 import {initializeLogOutputStore} from '@store/logOutput';
 import {useSourcesSync} from '@store/sources';
 import {initializeTriggersStore} from '@store/triggers';
@@ -54,8 +54,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
-
-  const [ExecutorsProvider, {sync: useExecutorsSync}] = initializeExecutorsStore();
 
   const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore({}, [apiEndpoint]);
   const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
@@ -123,7 +121,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
     .append(Suspense, {fallback: <Loading />})
     .append(ClusterDetailsProvider, {})
     .append(TriggersProvider, {})
-    .append(ExecutorsProvider, {})
     .append(LogOutputProvider, {})
     .append(PluginsContext.Provider, {
       value: {
