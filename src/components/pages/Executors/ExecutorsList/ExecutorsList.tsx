@@ -14,6 +14,8 @@ import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
+import Loading from '@pages/Loading';
+
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
@@ -45,6 +47,10 @@ const Executors: React.FC = () => {
   useEffect(() => {
     safeRefetch(refetch);
   }, [apiEndpoint]);
+
+  if (!executors) {
+    return <Loading />;
+  }
 
   return (
     <PageBlueprint
