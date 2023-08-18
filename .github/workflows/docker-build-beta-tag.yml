@@ -49,6 +49,7 @@ jobs:
             TARGET=${{ matrix.path }}
             REACT_APP_VERSION=${{ steps.tag.outputs.tag }}
             REACT_APP_GTM_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
+            REACT_APP_SENTRY_DSN=${{ secrets.REACT_APP_SENTRY_DSN }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
           cache-from: type=gha,scope=${{ matrix.name }}

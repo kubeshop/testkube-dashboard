@@ -35,6 +35,10 @@ module.exports = {
       ],
     },
     configure: webpackConfig => {
+      webpackConfig.entry = [
+        path.join(__dirname, 'src', 'sentry.ts'),
+        path.join(__dirname, 'src', 'index.tsx'),
+      ];
       webpackConfig.resolve.plugins.push(new TsconfigPathsPlugin({
         extensions: webpackConfig.resolve.extensions,
       }));

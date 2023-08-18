@@ -9,6 +9,7 @@ export const provided = (window as any)._env_;
 
 // Build-time variables
 export const build: BuildTimeEnvironment = {
+  sentryKey: getValue('REACT_APP_SENTRY_DSN', process.env.REACT_APP_SENTRY_DSN),
   gtmKey: getValue('REACT_APP_GTM_ID', process.env.REACT_APP_GTM_ID),
   version: getValue('REACT_APP_VERSION', process.env.REACT_APP_VERSION) || 'dev',
 };
@@ -25,6 +26,7 @@ export const dynamic: DynamicEnvironment = {
 };
 
 export interface BuildTimeEnvironment {
+  sentryKey?: string;
   gtmKey?: string;
   version: string;
 }
