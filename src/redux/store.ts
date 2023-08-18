@@ -4,7 +4,6 @@ import {executorsSlice} from '@redux/reducers/executorsSlice';
 import {sourcesSlice} from '@redux/reducers/sourcesSlice';
 
 import {configApi} from '@services/config';
-import {executionsApi} from '@services/executions';
 import {executorsApi} from '@services/executors';
 import {labelsApi} from '@services/labels';
 import {repositoryApi} from '@services/repository';
@@ -15,7 +14,6 @@ import {testsApi} from '@services/tests';
 import {triggersApi} from '@services/triggers';
 
 export const middlewares: Middleware[] = [
-  executionsApi.middleware,
   testsApi.middleware,
   testSuitesApi.middleware,
   labelsApi.middleware,
@@ -33,7 +31,6 @@ export const reducers = {
 
   [testSuitesApi.reducerPath]: testSuitesApi.reducer,
   [testsApi.reducerPath]: testsApi.reducer,
-  [executionsApi.reducerPath]: executionsApi.reducer,
   [labelsApi.reducerPath]: labelsApi.reducer,
   [testSuiteExecutionsApi.reducerPath]: testSuiteExecutionsApi.reducer,
   [executorsApi.reducerPath]: executorsApi.reducer,
