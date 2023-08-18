@@ -26,7 +26,6 @@ import {Plugin} from '@plugins/types';
 
 import {useAppDispatch} from '@redux/hooks';
 import {setExecutors} from '@redux/reducers/executorsSlice';
-import {setSources} from '@redux/reducers/sourcesSlice';
 
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
@@ -34,6 +33,7 @@ import {useGetSourcesQuery} from '@services/sources';
 
 import {initializeClusterDetailsStore} from '@store/clusterDetails';
 import {initializeLogOutputStore} from '@store/logOutput';
+import {useSourcesSync} from '@store/sources';
 import {initializeTriggersStore} from '@store/triggers';
 
 import {composeProviders} from '@utils/composeProviders';
@@ -72,6 +72,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     pollingInterval: PollingIntervals.long,
     skip: !isClusterAvailable,
   });
+  useSourcesSync({sources});
 
   const [isEndpointModalVisible, setEndpointModalState] = useState(false);
 
@@ -82,10 +83,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
   useEffect(() => {
     dispatch(setExecutors(executors || []));
   }, [executors]);
-
-  useEffect(() => {
-    dispatch(setSources(sources || []));
-  }, [sources]);
 
   useEffect(() => {
     safeRefetch(refetchExecutors);

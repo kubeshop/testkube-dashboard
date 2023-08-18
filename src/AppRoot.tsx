@@ -28,6 +28,7 @@ import {useAppDispatch} from '@redux/hooks';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import {initializeSourcesStore} from '@store/sources';
 import {initializeTestSuitesStore} from '@store/testSuites';
 import {initializeTestsStore} from '@store/tests';
 
@@ -50,6 +51,7 @@ const AppRoot: React.FC = () => {
   const telemetry = useTelemetry();
   const apiEndpoint = useApiEndpoint();
 
+  const [SourcesProvider] = initializeSourcesStore();
   const [TestsProvider] = initializeTestsStore();
   const [TestSuitesProvider] = initializeTestSuitesStore();
 
@@ -122,6 +124,7 @@ const AppRoot: React.FC = () => {
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(MainContext.Provider, {value: mainContextValue})
+    .append(SourcesProvider, {})
     .append(TestsProvider, {})
     .append(TestSuitesProvider, {})
     .append(ModalHandler, {})

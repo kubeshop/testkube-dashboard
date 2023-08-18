@@ -22,7 +22,8 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useAppSelector} from '@redux/hooks';
 import {selectExecutors} from '@redux/reducers/executorsSlice';
-import {selectSources} from '@redux/reducers/sourcesSlice';
+
+import {useSourcesPick} from '@store/sources';
 
 import {externalLinks} from '@utils/externalLinks';
 import {required} from '@utils/form';
@@ -57,16 +58,16 @@ const Source: React.FC<SourceProps> = props => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const executors = useAppSelector(selectExecutors);
-  const testSources = useAppSelector(selectSources);
+  const {sources} = useSourcesPick('sources');
 
-  const remappedCustomTestSources = remapTestSources(testSources);
+  const remappedCustomTestSources = useMemo(() => remapTestSources(sources || []), [sources]);
 
   const selectedExecutor = useMemo(
     () => executors.find(executor => executor.executor.types?.includes(type)),
     [executors, type]
   );
 
-  const {source, ...additionalFormValues} = getSourceFormValues(details, testSources);
+  const {source, ...additionalFormValues} = getSourceFormValues(details, sources || []);
 
   const [form] = Form.useForm<SourceFormValues>();
 
@@ -87,7 +88,7 @@ const Source: React.FC<SourceProps> = props => {
     const {testSource: newTestSource} = values;
 
     return updateTest({
-      content: getSourcePayload(values, testSources),
+      content: getSourcePayload(values, sources || []),
       ...getCustomSourceField(newTestSource),
     });
   };
