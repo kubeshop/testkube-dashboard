@@ -2,7 +2,6 @@ import {Action, Middleware, ThunkAction, configureStore} from '@reduxjs/toolkit'
 
 import {executorsSlice} from '@redux/reducers/executorsSlice';
 import {sourcesSlice} from '@redux/reducers/sourcesSlice';
-import {testSuitesSlice} from '@redux/reducers/testSuitesSlice';
 
 import {configApi} from '@services/config';
 import {executionsApi} from '@services/executions';
@@ -29,7 +28,6 @@ export const middlewares: Middleware[] = [
 ];
 
 export const reducers = {
-  testSuites: testSuitesSlice.reducer,
   executors: executorsSlice.reducer,
   sources: sourcesSlice.reducer,
 

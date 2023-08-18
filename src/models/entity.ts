@@ -3,7 +3,7 @@ import {FC, ReactNode} from 'react';
 import {ModalConfig} from '@contexts/ModalContext';
 
 import {TestWithExecution} from '@models/test';
-import {TestSuiteWithExecutionRedux} from '@models/testSuite';
+import {TestSuiteWithExecution} from '@models/testSuite';
 
 import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
@@ -44,7 +44,7 @@ export type EntityListBlueprint = {
   dataTest?: string;
 
   queryFilters: any;
-  data?: TestSuiteWithExecutionRedux[] | TestWithExecution[];
+  data?: TestSuiteWithExecution[] | TestWithExecution[];
 
   createModalConfig: ModalConfig;
 

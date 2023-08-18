@@ -47,11 +47,6 @@ export type TestSuiteWithExecution = {
   latestExecution?: TestSuiteExecution;
 };
 
-export type TestSuiteWithExecutionRedux = {
-  dataItem: TestSuite;
-  latestExecution?: TestSuiteExecution;
-};
-
 export type TestSuiteFilters = {
   textSearch: string;
   pageSize: number;
@@ -61,14 +56,3 @@ export type TestSuiteFilters = {
   endDate: null;
   status: Array<string>;
 };
-
-interface TestSuitesState {
-  isLoading?: boolean;
-  dataList: TestSuiteWithExecutionRedux[];
-  latestExecution?: Execution;
-  filters: TestSuiteFilters;
-  totals: {};
-  filtered: {};
-}
-
-export type {TestSuitesState};
