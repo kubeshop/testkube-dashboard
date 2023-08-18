@@ -4,11 +4,11 @@ import {useParams} from 'react-router-dom';
 import {EntityDetailsLayer, ExecutionDetailsLayer} from '@organisms/EntityDetails';
 
 import {
+  useGetTestSuiteDetailsQuery,
   useGetTestSuiteExecutionByIdQuery,
   useGetTestSuiteExecutionMetricsQuery,
   useGetTestSuiteExecutionsByTestIdQuery,
-} from '@services/testSuiteExecutions';
-import {useGetTestSuiteDetailsQuery} from '@services/testSuites';
+} from '@services/testSuites';
 
 import TestSuiteDetailsContent from './TestSuiteDetailsContent';
 
