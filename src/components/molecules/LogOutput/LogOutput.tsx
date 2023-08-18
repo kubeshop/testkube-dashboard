@@ -134,7 +134,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
           onExpand={onExpand}
         />
       </LogOutputWrapper>
-      {createPortal(fullscreenLog, document.body)}
+      {createPortal(fullscreenLog, document.querySelector('#log-output-container')!)}
     </>
   );
 };
