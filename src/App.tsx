@@ -175,6 +175,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
           <Route path="/" element={<Navigate to="/tests" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <div id="log-output-container" />
       </Suspense>
     );
 };
