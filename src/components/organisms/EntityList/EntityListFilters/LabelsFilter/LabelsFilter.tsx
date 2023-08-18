@@ -1,8 +1,6 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {FilterFilled} from '@ant-design/icons';
-
-import {MainContext} from '@contexts';
 
 import {Button, Input, Title} from '@custom-antd';
 
@@ -27,8 +25,6 @@ const defaultKeyValuePair: Entity = {
 
 const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters, isFiltersDisabled, width} = props;
-
-  const {dispatch} = useContext(MainContext);
 
   const [isVisible, setVisibilityState] = useState(false);
   const [labelsMapping, setLabelsMapping] = useState<EntityArray>([]);
@@ -133,14 +129,14 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       return;
     }
 
-    dispatch(setFilters({...filters, selector: resultedFilters, pageSize: initialPageSize}));
+    setFilters({...filters, selector: resultedFilters, pageSize: initialPageSize});
     onOpenChange(false);
   };
 
   const resetFilters = () => {
     setLabelsMapping([defaultKeyValuePair]);
     onOpenChange(false);
-    dispatch(setFilters({...filters, selector: [], pageSize: initialPageSize}));
+    setFilters({...filters, selector: [], pageSize: initialPageSize});
   };
 
   const menu = (

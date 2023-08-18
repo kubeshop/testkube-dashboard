@@ -30,6 +30,7 @@ import {StyledFiltersSection} from './EntityListContent.styled';
 
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {
+    itemKey,
     pageTitle,
     pageTitleAddon,
     pageDescription: PageDescription,
@@ -53,7 +54,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
+  const {isClusterAvailable} = useContext(MainContext);
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
@@ -67,7 +68,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       selector: searchParams.get('selector')?.split(',').filter(Boolean) ?? undefined,
     });
     if (!isEqual(filters, queryFilters)) {
-      dispatch(setQueryFilters(filters));
+      setQueryFilters(filters);
     }
   }, []);
 
@@ -92,12 +93,12 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   }, [queryFilters]);
 
   const resetFilters = () => {
-    dispatch(setQueryFilters(initialFiltersState));
+    setQueryFilters(initialFiltersState);
   };
 
   const onScrollBottom = () => {
     setIsLoadingNext(true);
-    dispatch(setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize}));
+    setQueryFilters({...queryFilters, pageSize: queryFilters.pageSize + initialPageSize});
   };
 
   useEffect(() => {
@@ -159,7 +160,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
       </PageHeader>
 
       <EntityGrid
-        itemKey="dataItem.name"
+        itemKey={itemKey}
         maxColumns={2}
         data={data}
         Component={CardComponent}

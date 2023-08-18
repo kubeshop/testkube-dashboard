@@ -43,11 +43,6 @@ export type TestWithExecution = {
   latestExecution?: Execution;
 };
 
-export type TestWithExecutionRedux = {
-  dataItem: Test;
-  latestExecution?: Execution;
-};
-
 export type TestFilters = {
   textSearch: string;
   type: string;
@@ -69,14 +64,3 @@ export type TestSuiteStepTest = {
   namespace: Test['namespace'];
   type?: Test['type'];
 };
-
-interface TestsState {
-  isLoading?: boolean;
-  dataList: TestWithExecutionRedux[];
-  latestExecution?: Execution;
-  filters: TestFilters;
-  totals: {};
-  filtered: {};
-}
-
-export type {TestsState};
