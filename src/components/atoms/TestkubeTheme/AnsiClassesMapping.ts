@@ -14,7 +14,7 @@ const foregrounds = {
 };
 
 const backgrounds = {
-  black: [Colors.slate200, Colors.slate100],
+  black: [Colors.slate900, Colors.slate800],
   white: [Colors.slate200, Colors.slate100],
   red: [Colors.rose900, Colors.rose700],
   green: [Colors.lime900, Colors.lime700],
