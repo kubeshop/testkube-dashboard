@@ -24,8 +24,6 @@ import PluginsContext from '@plugins/context';
 import createPluginManager from '@plugins/manager';
 import {Plugin} from '@plugins/types';
 
-import {useAppDispatch} from '@redux/hooks';
-
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
@@ -49,7 +47,6 @@ export interface AppProps {
 const App: React.FC<AppProps> = ({plugins}) => {
   const [TriggersProvider] = initializeTriggersStore();
 
-  const dispatch = useAppDispatch();
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);

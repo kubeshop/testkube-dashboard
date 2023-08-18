@@ -23,8 +23,6 @@ import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
 import {Plugin} from '@plugins/types';
 
-import {useAppDispatch} from '@redux/hooks';
-
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
@@ -46,7 +44,6 @@ import {StyledLayoutContentWrapper} from './App.styled';
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
-  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useLastCallback(useNavigate());
   const telemetry = useTelemetry();
@@ -72,11 +69,10 @@ const AppRoot: React.FC = () => {
 
   const mainContextValue = useMemo(
     () => ({
-      dispatch,
       clusterConfig,
       isClusterAvailable: true,
     }),
-    [dispatch, clusterConfig]
+    [clusterConfig]
   );
 
   const {value: visitorId} = useAsync(async () => {

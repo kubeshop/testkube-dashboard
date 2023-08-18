@@ -20,8 +20,6 @@ import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@or
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-
 import {useExecutorsPick} from '@store/executors';
 import {useSourcesPick} from '@store/sources';
 
