@@ -1,10 +1,8 @@
-import {useCallback, useContext, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 
 import {FilterFilled} from '@ant-design/icons';
 
 import {capitalize} from 'lodash';
-
-import {MainContext} from '@contexts';
 
 import {FilterProps} from '@models/filters';
 
@@ -26,8 +24,6 @@ const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 const StatusFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, isFiltersDisabled} = props;
 
-  const {dispatch} = useContext(MainContext);
-
   const [isVisible, setVisibilityState] = useState(false);
 
   const onOpenChange = (flag: boolean) => {
@@ -37,19 +33,17 @@ const StatusFilter: React.FC<FilterProps> = props => {
   const handleClick = useCallback(
     (status: string) => {
       if (filters.status.includes(status)) {
-        dispatch(
-          setFilters({
-            ...filters,
-            status: filters.status.filter((currentStatus: string) => {
-              return status !== currentStatus;
-            }),
-          })
-        );
+        setFilters({
+          ...filters,
+          status: filters.status.filter((currentStatus: string) => {
+            return status !== currentStatus;
+          }),
+        });
       } else {
-        dispatch(setFilters({...filters, status: [...filters.status, status], pageSize: initialPageSize}));
+        setFilters({...filters, status: [...filters.status, status], pageSize: initialPageSize});
       }
     },
-    [dispatch, setFilters, filters]
+    [setFilters, filters]
   );
 
   const renderedStatuses = useMemo(() => {
@@ -69,7 +63,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
   }, [filters.status, handleClick]);
 
   const resetFilter = () => {
-    dispatch(setFilters({...filters, status: [], pageSize: initialPageSize}));
+    setFilters({...filters, status: [], pageSize: initialPageSize});
     onOpenChange(false);
   };
 

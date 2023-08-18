@@ -28,6 +28,8 @@ import {useAppDispatch} from '@redux/hooks';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import {initializeTestsStore} from '@store/tests';
+
 import {useTelemetry, useTelemetryValue} from '@telemetry/hooks';
 
 import anonymizeQueryString from '@utils/anonymizeQueryString';
@@ -46,6 +48,8 @@ const AppRoot: React.FC = () => {
   const navigate = useLastCallback(useNavigate());
   const telemetry = useTelemetry();
   const apiEndpoint = useApiEndpoint();
+
+  const [TestsProvider] = initializeTestsStore();
 
   const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
 
@@ -116,6 +120,7 @@ const AppRoot: React.FC = () => {
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(MainContext.Provider, {value: mainContextValue})
+    .append(TestsProvider, {})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})
     .render(

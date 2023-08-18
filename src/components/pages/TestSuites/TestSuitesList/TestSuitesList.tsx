@@ -4,8 +4,9 @@ import {MainContext} from '@contexts';
 import {ModalConfig} from '@contexts/ModalContext';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {useLastCallback} from '@hooks/useLastCallback';
 
-import {TestSuite} from '@models/testSuite';
+import {TestSuite, TestSuiteFilters} from '@models/testSuite';
 
 import {notificationCall} from '@molecules';
 
@@ -43,6 +44,7 @@ const createModal: ModalConfig = {
 const TestSuitesList: FC = () => {
   const {dispatch, isClusterAvailable} = useContext(MainContext);
   const queryFilters = useAppSelector(selectTestSuitesFilters);
+  const setQueryFilters = useLastCallback((filters: TestSuiteFilters) => dispatch(setTestSuitesFilters(filters)));
 
   const {data, isLoading, isFetching} = useGetTestSuitesQuery(queryFilters || null, {
     pollingInterval: PollingIntervals.everySecond,
@@ -65,6 +67,7 @@ const TestSuitesList: FC = () => {
 
   return (
     <EntityListContent
+      itemKey="dataItem.name"
       CardComponent={TestSuiteCard}
       onItemClick={onItemClick}
       onItemAbort={onItemAbort}
@@ -77,7 +80,7 @@ const TestSuitesList: FC = () => {
       initialFiltersState={initialTestSuitesFiltersState}
       dataTest="add-a-new-test-suite-btn"
       queryFilters={queryFilters}
-      setQueryFilters={setTestSuitesFilters}
+      setQueryFilters={setQueryFilters}
       data={useAppSelector(selectTestSuites)}
       isLoading={isLoading}
       isFetching={isFetching}

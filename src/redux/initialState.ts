@@ -1,6 +1,5 @@
 import {ExecutorsState} from '@models/executors';
 import {SourcesState} from '@models/sources';
-import {TestFilters, TestsState} from '@models/test';
 import {TestSuiteFilters, TestSuitesState} from '@models/testSuite';
 
 export const initialPageSize = 20;
@@ -34,35 +33,6 @@ export const initialTestSuitesState: TestSuitesState = {
   },
 };
 
-export const initialTestsFiltersState: TestFilters = {
-  textSearch: '',
-  type: '',
-  pageSize: initialPageSize,
-  page: 0,
-  selector: [],
-  createdAt: null,
-  status: [],
-};
-
-const initialTestsState: TestsState = {
-  isLoading: false,
-  dataList: [],
-  latestExecution: undefined,
-  filters: initialTestsFiltersState,
-  totals: {
-    results: 0,
-    passed: 0,
-    failed: 0,
-    pending: 0,
-  },
-  filtered: {
-    results: 0,
-    passed: 0,
-    failed: 0,
-    pending: 0,
-  },
-};
-
 const initialExecutorsState: ExecutorsState = {
   executorsList: [],
   executorsFeaturesMap: {},
@@ -76,7 +46,6 @@ const initialSourcesState: SourcesState = {
 
 const initialReduxState = {
   testSuites: initialTestSuitesState,
-  tests: initialTestsState,
   executors: initialExecutorsState,
   sources: initialSourcesState,
 };
