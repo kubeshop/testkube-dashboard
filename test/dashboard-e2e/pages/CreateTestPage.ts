@@ -1,4 +1,5 @@
 import type {Page} from '@playwright/test';
+import {setTimeout as timeout} from 'node:timers/promises';
 
 import type {TestData} from '../types';
 
@@ -55,10 +56,28 @@ export class CreateTestPage {
     await this.page.locator(`[id="test-creation_${inputName}"]`).fill(`${value}`);
   }
 
+  public async scrollSelectionTo(value: string | number, inputName: string): Promise<void> {
+    const scrollSelector = `#test-creation_${inputName}_list ~ .rc-virtual-list .rc-virtual-list-holder`;
+    await timeout(100);
+    await this.page.evaluate(`
+      const container = document.querySelector(${JSON.stringify(scrollSelector)});
+      const scroll = (to) => {
+        if (to > container.scrollHeight || container.querySelector('.rc-virtual-list-holder-inner div[title="${value}"]')) {
+          return;
+        }
+        container.scrollTop = to;
+        to += container.clientHeight;
+        setTimeout(() => scroll(to), 50);
+      };
+      scroll(0);
+    `);
+  }
+
   public async setSelectionSearch(value: string | number, inputName: string): Promise<void> {
     const firstWord = `${value}`.split(' ')[0]; // workaround - otherwise search won't find it
     await this.page.locator(`input[id="test-creation_${inputName}"]`).fill(firstWord);
-    await this.page.click(`div[class*="list-holder"] div[title="${value}"]`);
+    await this.scrollSelectionTo(value, inputName);
+    await this.page.click(`#test-creation_${inputName}_list ~ .rc-virtual-list div[title="${value}"]`);
   }
 
   private async fillInTestDetails(testData: Partial<TestData>): Promise<void> {
