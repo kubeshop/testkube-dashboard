@@ -1,5 +1,6 @@
-import React, {useContext, useEffect, useRef} from 'react';
 import * as Sentry from '@sentry/react';
+
+import React, {useContext, useEffect, useRef} from 'react';
 
 import {DashboardContext} from '@contexts';
 
@@ -14,10 +15,12 @@ export default function ErrorBoundary({children}: {children: React.ReactNode}) {
   }, [location.key]);
 
   return (
-    <Sentry.ErrorBoundary fallback={({resetError}) => {
-      resetErrorRef.current = resetError;
-      return <ErrorBoundaryFallback />;
-    }}>
+    <Sentry.ErrorBoundary
+      fallback={({resetError}) => {
+        resetErrorRef.current = resetError;
+        return <ErrorBoundaryFallback />;
+      }}
+    >
       {children}
     </Sentry.ErrorBoundary>
   );
