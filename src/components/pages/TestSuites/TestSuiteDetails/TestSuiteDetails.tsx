@@ -7,7 +7,7 @@ import {
   useGetTestSuiteDetailsQuery,
   useGetTestSuiteExecutionByIdQuery,
   useGetTestSuiteExecutionMetricsQuery,
-  useGetTestSuiteExecutionsByTestIdQuery,
+  useGetTestSuiteExecutionsByTestSuiteIdQuery,
 } from '@services/testSuites';
 
 import TestSuiteDetailsContent from './TestSuiteDetailsContent';
@@ -25,7 +25,7 @@ const TestSuiteDetails: FC<TestSuiteDetailsProps> = ({tab}) => {
       execId={execId}
       useGetEntityDetails={useGetTestSuiteDetailsQuery}
       useGetMetrics={useGetTestSuiteExecutionMetricsQuery}
-      useGetExecutions={useGetTestSuiteExecutionsByTestIdQuery}
+      useGetExecutions={useGetTestSuiteExecutionsByTestSuiteIdQuery}
     >
       <ExecutionDetailsLayer
         entity="test-suites"

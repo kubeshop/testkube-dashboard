@@ -14,7 +14,7 @@ interface DeleteProps {
   description: string;
   label: string;
   redirectUrl: string;
-  useDeleteMutation: UseMutation<MutationDefinition<string, any, never, void>>;
+  useDeleteMutation: UseMutation<MutationDefinition<string, any, any, void>>;
 }
 
 const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDeleteMutation}) => {
