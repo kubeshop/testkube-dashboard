@@ -37,6 +37,7 @@ jobs:
           build-args: |
             REACT_APP_VERSION=${{ steps.github_sha.outputs.sha_short }}
             REACT_APP_GTM_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
           tags: ${{ github.repository }}:${{ steps.github_sha.outputs.sha_short }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
