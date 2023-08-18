@@ -63,7 +63,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
     {skip: !isClusterAvailable}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
-    pollingInterval: PollingIntervals.everyTwoSeconds,
+    pollingInterval: PollingIntervals.long,
     skip: !isClusterAvailable,
   });
   const isV2 = isTestSuiteV2(rawDetails);
