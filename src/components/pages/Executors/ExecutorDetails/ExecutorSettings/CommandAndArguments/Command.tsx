@@ -1,21 +1,16 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
 
-import {MainContext} from '@contexts';
-
-import {Executor} from '@models/executors';
-
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
-
 import {useUpdateCustomExecutorMutation} from '@services/executors';
+
+import {useExecutorsPick} from '@store/executors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -24,11 +19,9 @@ type CommandFormFields = {
 };
 
 const Command: React.FC = () => {
-  const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const {executor, name} = useAppSelector(selectCurrentExecutor) as Executor;
-  const {command} = executor;
+  const {current} = useExecutorsPick('current');
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
 
@@ -38,31 +31,28 @@ const Command: React.FC = () => {
     const values = form.getFieldsValue();
 
     return updateCustomExecutor({
-      executorId: name,
+      executorId: current!.name,
       body: {
-        name,
-        ...executor,
+        name: current!.name,
+        ...current!.executor,
         command: values.command.split(' '),
       },
     })
       .then(displayDefaultNotificationFlow)
-      .then(() => {
-        notificationCall('passed', 'Command was successfully updated.');
-        dispatch(updateCurrentExecutorData({command: values.command!.split(' ')}));
-      });
+      .then(() => notificationCall('passed', 'Command was successfully updated.'));
   };
 
   useEffect(() => {
     form.setFieldsValue({
-      command: command?.join(' '),
+      command: current!.executor.command?.join(' '),
     });
-  }, [command]);
+  }, [current!.executor.command]);
 
   return (
     <Form
       form={form}
       name="general-settings-name-type"
-      initialValues={{command: command?.join(' ')}}
+      initialValues={{command: current!.executor.command?.join(' ')}}
       layout="vertical"
       disabled={!mayEdit}
     >

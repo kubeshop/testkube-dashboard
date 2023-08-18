@@ -10,12 +10,12 @@ import {MainContext} from '@contexts';
 
 import {Text} from '@custom-antd';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetAllTestSuitesQuery} from '@services/testSuites';
 import {useGetAllTestsQuery} from '@services/tests';
+
+import {useExecutorsPick} from '@store/executors';
 
 import Colors from '@styles/Colors';
 
@@ -32,7 +32,7 @@ interface ResourceTriggerSelectProps {
 const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
   const {isClusterAvailable} = useContext(MainContext);
 
-  const executors = useAppSelector(selectExecutors);
+  const {executors = []} = useExecutorsPick('executors');
 
   const {data: tests = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
   const {data: testSuites = []} = useGetAllTestSuitesQuery(null, {

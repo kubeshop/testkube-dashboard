@@ -1,11 +1,9 @@
-import {useContext, useMemo} from 'react';
+import {useMemo} from 'react';
 import {useUnmount, useUpdate} from 'react-use';
 
 import axios from 'axios';
 
 import {config} from '@constants/config';
-
-import {MainContext} from '@contexts';
 
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
@@ -134,7 +132,6 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
 }
 
 export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean> {
-  const {dispatch} = useContext(MainContext);
   const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   return useMemo(
@@ -162,6 +159,6 @@ export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean
         throw error;
       }
     },
-    [dispatch]
+    []
   );
 }

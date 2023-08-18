@@ -10,11 +10,11 @@ import usePressEnter from '@hooks/usePressEnter';
 
 import {TestSuiteStepTest} from '@models/test';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetAllTestsQuery} from '@services/tests';
+
+import {useExecutorsPick} from '@store/executors';
 
 import {StyledDelayModalContent, StyledOptionWrapper} from '../SettingsTests.styled';
 
@@ -30,7 +30,7 @@ const TestModal: React.FC<TestModalProps> = props => {
 
   const {data: allTestsList} = useGetAllTestsQuery();
 
-  const executors = useAppSelector(selectExecutors);
+  const {executors = []} = useExecutorsPick('executors');
 
   const [testValue, setTestValue] = useState<string | null>(null);
 

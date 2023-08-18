@@ -23,11 +23,10 @@ import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
 import {Plugin} from '@plugins/types';
 
-import {useAppDispatch} from '@redux/hooks';
-
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import {initializeExecutorsStore} from '@store/executors';
 import {initializeSourcesStore} from '@store/sources';
 import {initializeTestSuitesStore} from '@store/testSuites';
 import {initializeTestsStore} from '@store/tests';
@@ -45,12 +44,14 @@ import {StyledLayoutContentWrapper} from './App.styled';
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
-  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useLastCallback(useNavigate());
   const telemetry = useTelemetry();
   const apiEndpoint = useApiEndpoint();
 
+  // TODO: Unify all store providers and move them there?
+  //       Otherwise, these are not available from modals.
+  const [ExecutorsProvider] = initializeExecutorsStore();
   const [SourcesProvider] = initializeSourcesStore();
   const [TestsProvider] = initializeTestsStore();
   const [TestSuitesProvider] = initializeTestSuitesStore();
@@ -68,11 +69,10 @@ const AppRoot: React.FC = () => {
 
   const mainContextValue = useMemo(
     () => ({
-      dispatch,
       clusterConfig,
       isClusterAvailable: true,
     }),
-    [dispatch, clusterConfig]
+    [clusterConfig]
   );
 
   const {value: visitorId} = useAsync(async () => {
@@ -124,6 +124,7 @@ const AppRoot: React.FC = () => {
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(MainContext.Provider, {value: mainContextValue})
+    .append(ExecutorsProvider, {})
     .append(SourcesProvider, {})
     .append(TestsProvider, {})
     .append(TestSuitesProvider, {})

@@ -1,9 +1,7 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input} from 'antd';
-
-import {MainContext} from '@contexts';
 
 import {Button, FormIconWrapper, FormItem, FormRow, FullWidthSpace} from '@custom-antd';
 
@@ -11,10 +9,9 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
-
 import {useUpdateCustomExecutorMutation} from '@services/executors';
+
+import {useExecutorsPick} from '@store/executors';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -26,10 +23,8 @@ type ArgumentsFormFields = {
 };
 
 const Arguments: React.FC = () => {
-  const {executor, name: executorName} = useAppSelector(selectCurrentExecutor);
-  const {args} = executor;
+  const {current} = useExecutorsPick('current');
 
-  const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
@@ -40,31 +35,28 @@ const Arguments: React.FC = () => {
     const values = form.getFieldsValue();
 
     return updateCustomExecutor({
-      executorId: executorName,
+      executorId: current!.name,
       body: {
-        ...executor,
-        name: executorName,
+        ...current!.executor,
+        name: current!.name,
         args: values.arguments,
       },
     })
       .then(displayDefaultNotificationFlow)
-      .then(() => {
-        notificationCall('passed', 'Arguments were successfully updated.');
-        dispatch(updateCurrentExecutorData({args: values.arguments}));
-      });
+      .then(() => notificationCall('passed', 'Arguments were successfully updated.'));
   };
 
   useEffect(() => {
     form.setFieldsValue({
-      arguments: args,
+      arguments: current!.executor.args,
     });
-  }, [args]);
+  }, [current!.executor.args]);
 
   return (
     <Form
       form={form}
       name="executor-settings-arguments-list"
-      initialValues={{arguments: args}}
+      initialValues={{arguments: current!.executor.args}}
       layout="vertical"
       disabled={!mayEdit}
     >

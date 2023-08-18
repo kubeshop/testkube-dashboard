@@ -12,9 +12,7 @@ import {Test} from '@models/test';
 import {Hint} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-
+import {useExecutorsPick} from '@store/executors';
 import {useSourcesPick} from '@store/sources';
 
 import {useTelemetry} from '@telemetry/hooks';
@@ -39,7 +37,7 @@ const TestCreationModalContent: React.FC = () => {
   const telemetry = useTelemetry();
   const openDetails = useDashboardNavigate((name: string) => `/tests/${name}`);
 
-  const executors = useAppSelector(selectExecutors);
+  const {executors = []} = useExecutorsPick('executors');
   const {sources} = useSourcesPick('sources');
 
   const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);

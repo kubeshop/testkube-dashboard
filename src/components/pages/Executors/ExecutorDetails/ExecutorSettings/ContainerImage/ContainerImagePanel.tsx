@@ -1,8 +1,6 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {Form, Input} from 'antd';
-
-import {MainContext} from '@contexts';
 
 import {Executor} from '@models/executors';
 
@@ -10,10 +8,9 @@ import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
-
 import {useUpdateCustomExecutorMutation} from '@services/executors';
+
+import {useExecutorsPick} from '@store/executors';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -23,10 +20,9 @@ export type ContainerImageFormFields = {
 };
 
 const ContainerImagePanel: React.FC = () => {
-  const {executor, name} = useAppSelector(selectCurrentExecutor);
-  const image = executor?.image;
+  const {current} = useExecutorsPick('current');
+  const image = current!.executor.image;
 
-  const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
@@ -37,24 +33,19 @@ const ContainerImagePanel: React.FC = () => {
     const values = form.getFieldsValue();
 
     return updateCustomExecutor({
-      executorId: name,
+      executorId: current!.name,
       body: {
-        name,
-        ...executor,
+        name: current!.name,
+        ...current!.executor,
         ...values,
       },
     })
       .then(displayDefaultNotificationFlow)
-      .then(() => {
-        notificationCall('passed', 'Container image was successfully updated.');
-        dispatch(updateCurrentExecutorData({image: values.image}));
-      });
+      .then(() => notificationCall('passed', 'Container image was successfully updated.'));
   };
 
   useEffect(() => {
-    form.setFieldsValue({
-      image,
-    });
+    form.setFieldsValue({image});
   }, [image]);
 
   return (

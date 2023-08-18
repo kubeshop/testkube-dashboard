@@ -1,17 +1,14 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {Form, Input} from 'antd';
-
-import {MainContext} from '@contexts';
 
 import {ConfigurationCard, notificationCall} from '@molecules';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
-
 import {useUpdateCustomExecutorMutation} from '@services/executors';
+
+import {useExecutorsPick} from '@store/executors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -20,10 +17,9 @@ export type PrivateRegistryFormFields = {
 };
 
 const PrivateRegistry: React.FC = () => {
-  const {executor, name} = useAppSelector(selectCurrentExecutor);
-  const {imagePullSecrets} = executor;
+  const {current} = useExecutorsPick('current');
+  const imagePullSecrets = current!.executor.imagePullSecrets;
 
-  const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
@@ -37,24 +33,19 @@ const PrivateRegistry: React.FC = () => {
     const newImagePullSecrets = values.privateRegistry ? [{name: values.privateRegistry}] : [];
 
     return updateCustomExecutor({
-      executorId: name,
+      executorId: current!.name,
       body: {
-        name,
-        ...executor,
+        name: current!.name,
+        ...current!.executor,
         imagePullSecrets: newImagePullSecrets,
       },
     })
       .then(displayDefaultNotificationFlow)
-      .then(() => {
-        dispatch(updateCurrentExecutorData({imagePullSecrets: newImagePullSecrets}));
-        notificationCall('passed', 'Private registry was successfully updated.');
-      });
+      .then(() => notificationCall('passed', 'Private registry was successfully updated.'));
   };
 
   useEffect(() => {
-    form.setFieldsValue({
-      privateRegistry,
-    });
+    form.setFieldsValue({privateRegistry});
   }, [privateRegistry]);
 
   return (

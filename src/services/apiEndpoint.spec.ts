@@ -4,8 +4,6 @@ import pick from 'lodash/pick';
 
 import {config} from '@constants/config';
 
-import MainContext from '@contexts/MainContext';
-
 import {initializeClusterDetailsStore} from '@store/clusterDetails';
 
 import {composeProviders} from '@utils/composeProviders';
@@ -246,16 +244,12 @@ describe('services', () => {
 
     describe('useUpdateApiEndpoint', () => {
       const fetchMock = mockFetchEach();
-      const dispatch = createAutoResetSpy();
       const {result} = renderHook(() => initializeClusterDetailsStore());
       const [ClusterDetailsProvider] = result.current;
       const initialEndpoint = 'http://initial/v1';
 
       const wrapper = ({children}: {children: any}) =>
-        composeProviders()
-          .append(MainContext.Provider, {value: {dispatch}} as any)
-          .append(ClusterDetailsProvider, {})
-          .render(children);
+        composeProviders().append(ClusterDetailsProvider, {}).render(children);
 
       const {
         result: {current: update},
@@ -273,7 +267,6 @@ describe('services', () => {
 
         expect(spy).toBeCalledWith(new Error('Server connection problem!'));
         expect(getApiEndpoint()).toBe(initialEndpoint);
-        expect(dispatch).not.toBeCalled();
       });
 
       it('should save namespace & endpoint when the server is fine', async () => {
@@ -293,7 +286,6 @@ describe('services', () => {
 
         expect(await promise).toBe(false);
         expect(getApiEndpoint()).toBe('http://race/v1');
-        expect(dispatch).not.toBeCalled();
       });
 
       it('should ignore server success when race condition occurs', async () => {
@@ -306,7 +298,6 @@ describe('services', () => {
 
         expect(await promise).toBe(false);
         expect(getApiEndpoint()).toBe('http://race/v1');
-        expect(dispatch).not.toBeCalled();
       });
     });
   });

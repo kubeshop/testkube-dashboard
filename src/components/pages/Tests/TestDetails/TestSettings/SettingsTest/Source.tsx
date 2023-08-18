@@ -20,9 +20,7 @@ import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@or
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-
+import {useExecutorsPick} from '@store/executors';
 import {useSourcesPick} from '@store/sources';
 
 import {externalLinks} from '@utils/externalLinks';
@@ -57,7 +55,7 @@ const Source: React.FC<SourceProps> = props => {
 
   const mayEdit = usePermission(Permissions.editEntity);
 
-  const executors = useAppSelector(selectExecutors);
+  const {executors = []} = useExecutorsPick('executors');
   const {sources} = useSourcesPick('sources');
 
   const remappedCustomTestSources = useMemo(() => remapTestSources(sources || []), [sources]);

@@ -12,9 +12,9 @@ import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
 import {ExecutionName} from '@molecules';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
+
+import {useExecutorsPick} from '@store/executors';
 
 import {
   ExecutionStepsListContainer,
@@ -33,7 +33,7 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
 
   const {navigate} = useContext(DashboardContext);
 
-  const executors = useAppSelector(selectExecutors);
+  const {executors = []} = useExecutorsPick('executors');
 
   const elements = useMemo(() => {
     return executionSteps
