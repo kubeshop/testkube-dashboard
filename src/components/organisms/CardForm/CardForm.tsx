@@ -2,6 +2,7 @@ import {Children, FC, PropsWithChildren, ReactNode, useEffect, useState} from 'r
 import {useDeepCompareEffect} from 'react-use';
 
 import {Form, FormInstance} from 'antd';
+import {FormLayout} from 'antd/lib/form/Form';
 import {FormLabelAlign} from 'antd/lib/form/interface';
 
 import {FullWidthSpace} from '@custom-antd';
@@ -21,6 +22,7 @@ interface CardFormProps {
   isWarning?: boolean;
   form?: FormInstance;
   labelAlign?: FormLabelAlign;
+  layout?: FormLayout;
   initialValues?: any;
   confirmLabel?: string;
   onFieldsChange?: (...args: any) => void;
@@ -36,6 +38,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   description,
   footer,
   labelAlign,
+  layout = 'vertical',
   form,
   initialValues,
   disabled,
@@ -63,6 +66,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
 
   return (
     <Form
+      layout={layout}
       initialValues={currentInitialValues}
       form={form}
       labelAlign={labelAlign}
