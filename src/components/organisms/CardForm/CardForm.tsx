@@ -8,6 +8,7 @@ import {FullWidthSpace} from '@custom-antd';
 import {useLastCallback} from '@hooks/useLastCallback';
 
 import {ConfigurationCard} from '@molecules';
+import {useDeepCompareEffect} from 'react-use';
 
 interface CardFormProps {
   name: string;
@@ -48,9 +49,13 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   onCancel,
 }) => {
   const cancel = useLastCallback(onCancel ?? (() => form?.resetFields()));
+
+  useDeepCompareEffect(() => {
+    form?.setFieldsValue(initialValues);
+    form?.resetFields();
+  }, [initialValues]);
   return (
     <Form
-      layout="vertical" // FIXME: Is it needed?
       initialValues={initialValues}
       form={form}
       labelAlign={labelAlign}
