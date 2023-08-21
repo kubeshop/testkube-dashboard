@@ -7,6 +7,7 @@ export interface FullWidthSpaceProps extends SpaceProps {
 }
 
 export const StyledSpace = styled(AntdSpace)<{$justify: FullWidthSpaceProps['justify']}>`
+  display: flex;
   justify-content: ${({$justify}) => $justify};
 
   width: 100%;
