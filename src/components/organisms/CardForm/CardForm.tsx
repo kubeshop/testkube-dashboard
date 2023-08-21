@@ -1,9 +1,10 @@
 import {Children, FC, PropsWithChildren, ReactNode, useEffect, useState} from 'react';
-import {useDeepCompareEffect} from 'react-use';
 
 import {Form, FormInstance} from 'antd';
 import {FormLayout} from 'antd/lib/form/Form';
 import {FormLabelAlign} from 'antd/lib/form/interface';
+
+import {isEqual} from 'lodash';
 
 import {FullWidthSpace} from '@custom-antd';
 
@@ -57,9 +58,11 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
 
   const [currentInitialValues, setCurrentInitialValues] = useState(initialValues);
 
-  useDeepCompareEffect(() => {
-    form?.setFieldsValue(initialValues);
-    setCurrentInitialValues(initialValues);
+  useEffect(() => {
+    if (form && !isEqual(initialValues, currentInitialValues)) {
+      form?.setFieldsValue(initialValues);
+      setCurrentInitialValues(initialValues);
+    }
   }, [initialValues]);
 
   useEffect(() => {
