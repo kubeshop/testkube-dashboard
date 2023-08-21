@@ -2,7 +2,9 @@ import {Form, Popover} from 'antd';
 
 import {Checkbox, FormItem, Text} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -58,26 +60,24 @@ const FailureHandling: React.FC = () => {
   };
 
   return (
-    <Form form={form} initialValues={{negativeTest}} name="general-settings-failure-handling" disabled={!mayEdit}>
-      <ConfigurationCard
-        title="Failure handling"
-        description="Define how Testkube should treat occurring errors."
-        onConfirm={onSave}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <FormItem name="negativeTest" valuePropName="checked">
-          <Checkbox>
-            Invert test result
-            <Popover content={popoverContent}>
-              <StyledQuestionCircleOutlined />
-            </Popover>
-          </Checkbox>
-        </FormItem>
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="general-settings-failure-handling"
+      title="Failure handling"
+      description="Define how Testkube should treat occurring errors."
+      form={form}
+      initialValues={{negativeTest}}
+      disabled={!mayEdit}
+      onConfirm={onSave}
+    >
+      <FormItem name="negativeTest" valuePropName="checked">
+        <Checkbox>
+          Invert test result
+          <Popover content={popoverContent}>
+            <StyledQuestionCircleOutlined />
+          </Popover>
+        </Checkbox>
+      </FormItem>
+    </CardForm>
   );
 };
 

@@ -2,9 +2,11 @@ import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
 
-import {FormItem, FullWidthSpace} from '@custom-antd';
+import {FormItem} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -50,28 +52,19 @@ const PostRun: React.FC = () => {
   };
 
   return (
-    <Form
-      form={form}
+    <CardForm
       name="execution-settings-post-run"
+      title="Post-Run phase"
+      description="You can run a command or a script (relative to your source root) which will be executed after the test itself has ended."
+      form={form}
       initialValues={{command}}
       disabled={!isPostRunAvailable}
-      layout="vertical"
+      onConfirm={onSave}
     >
-      <ConfigurationCard
-        title="Post-Run phase"
-        description="You can run a command or a script (relative to your source root) which will be executed after the test itself has ended."
-        onConfirm={onSave}
-        onCancel={() => {
-          form.resetFields();
-        }}
-      >
-        <FullWidthSpace size={32} direction="vertical">
-          <FormItem name="command" label="Command">
-            <CommandInput />
-          </FormItem>
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+      <FormItem name="command" label="Command">
+        <CommandInput />
+      </FormItem>
+    </CardForm>
   );
 };
 

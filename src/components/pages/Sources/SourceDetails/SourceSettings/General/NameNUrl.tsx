@@ -4,7 +4,9 @@ import {Form} from 'antd';
 
 import {Input} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -61,24 +63,22 @@ const NameNUrl: React.FC = () => {
   };
 
   return (
-    <Form form={form} name="general-settings-name-url" initialValues={defaults} layout="vertical" disabled={!mayEdit}>
-      <ConfigurationCard
-        title="Source name & repository URL"
-        description="Define the name and repository URL of the source which will be later available in your tests."
-        onConfirm={onFinish}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <Form.Item label="Name" required name="name" rules={[required]}>
-          <Input placeholder="e.g.: my-git-test-repository" disabled />
-        </Form.Item>
-        <Form.Item label="Git repository URL" required name="uri" rules={[required]} style={{flex: 1, marginBottom: 0}}>
-          <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
-        </Form.Item>
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="general-settings-name-url"
+      title="Source name & repository URL"
+      description="Define the name and repository URL of the source which will be later available in your tests."
+      form={form}
+      initialValues={defaults}
+      disabled={!mayEdit}
+      onConfirm={onFinish}
+    >
+      <Form.Item label="Name" required name="name" rules={[required]}>
+        <Input placeholder="e.g.: my-git-test-repository" disabled />
+      </Form.Item>
+      <Form.Item label="Git repository URL" required name="uri" rules={[required]} style={{flex: 1, marginBottom: 0}}>
+        <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
+      </Form.Item>
+    </CardForm>
   );
 };
 

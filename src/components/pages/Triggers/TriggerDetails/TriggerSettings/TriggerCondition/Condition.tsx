@@ -1,8 +1,8 @@
 import {Form} from 'antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
 
-import {ConditionFormItems} from '@organisms';
+import {CardForm, ConditionFormItems} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -52,19 +52,17 @@ const Condition: React.FC = () => {
   };
 
   return (
-    <Form form={form} name="trigger-condition" initialValues={initialValues} layout="vertical" disabled={!mayEdit}>
-      <ConfigurationCard
-        title="Trigger condition"
-        description="Define the conditions to be met for the trigger to be called."
-        onConfirm={onFinish}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <ConditionFormItems />
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="trigger-condition"
+      title="Trigger condition"
+      description="Define the conditions to be met for the trigger to be called."
+      form={form}
+      initialValues={initialValues}
+      disabled={!mayEdit}
+      onConfirm={onFinish}
+    >
+      <ConditionFormItems />
+    </CardForm>
   );
 };
 

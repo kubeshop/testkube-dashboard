@@ -2,11 +2,11 @@ import {useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {FullWidthSpace} from '@custom-antd';
-
 import {ErrorNotificationConfig} from '@models/notifications';
 
-import {ConfigurationCard, SecretFormItem, notificationCall} from '@molecules';
+import {SecretFormItem, notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -71,39 +71,29 @@ const Authentication: React.FC = () => {
   };
 
   return (
-    <Form
+    <CardForm
+      name="general-settings-authentication"
+      title="Authentication"
+      description="Add authentication related information required by your git repository"
       form={form}
       initialValues={defaults}
-      name="general-settings-authentication"
-      layout="vertical"
       disabled={!mayEdit}
+      wasTouched={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
+      onConfirm={onFinish}
     >
-      <ConfigurationCard
-        title="Authentication"
-        description="Add authentication related information required by your git repository"
-        onConfirm={onFinish}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-        forceEnableButtons={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
-      >
-        <FullWidthSpace size={24} direction="vertical">
-          <SecretFormItem
-            name="username"
-            label="Git username"
-            isClearedValue={isClearedUsername}
-            setIsClearedValue={setIsClearedUsername}
-          />
-          <SecretFormItem
-            name="token"
-            label="Git token"
-            isClearedValue={isClearedToken}
-            setIsClearedValue={setIsClearedToken}
-          />
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+      <SecretFormItem
+        name="username"
+        label="Git username"
+        isClearedValue={isClearedUsername}
+        setIsClearedValue={setIsClearedUsername}
+      />
+      <SecretFormItem
+        name="token"
+        label="Git token"
+        isClearedValue={isClearedToken}
+        setIsClearedValue={setIsClearedToken}
+      />
+    </CardForm>
   );
 };
 

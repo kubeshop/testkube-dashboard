@@ -4,7 +4,7 @@ import {Form} from 'antd';
 
 import {Input} from '@custom-antd';
 
-import {ConfigurationCard} from '@molecules';
+import {CardForm} from '@organisms';
 
 import {useExecutorsPick} from '@store/executors';
 
@@ -24,28 +24,21 @@ const NameNType: React.FC = () => {
   }, [name, type]);
 
   return (
-    <Form form={form} name="general-settings-name-type" initialValues={{name, type}} layout="vertical" disabled>
-      <ConfigurationCard
-        title="Executor name & type"
-        description="Define the name and type of the executor which will be displayed across the Dashboard and CLI"
-        onConfirm={() => {
-          form.submit();
-        }}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        isButtonsDisabled
-        enabled={false}
-        isEditable={false}
-      >
-        <Form.Item label="Name" name="name">
-          <Input placeholder="e.g.: my-container-executor" disabled />
-        </Form.Item>
-        <Form.Item label="Type" name="type" style={{flex: 1, marginBottom: '0'}}>
-          <Input placeholder="e.g.: my-executor/type" disabled />
-        </Form.Item>
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="general-settings-name-type"
+      title="Executor name & type"
+      description="Define the name and type of the executor which will be displayed across the Dashboard and CLI"
+      form={form}
+      initialValues={{name, type}}
+      readOnly
+    >
+      <Form.Item label="Name" name="name">
+        <Input placeholder="e.g.: my-container-executor" disabled />
+      </Form.Item>
+      <Form.Item label="Type" name="type" style={{flex: 1, marginBottom: '0'}}>
+        <Input placeholder="e.g.: my-executor/type" disabled />
+      </Form.Item>
+    </CardForm>
   );
 };
 

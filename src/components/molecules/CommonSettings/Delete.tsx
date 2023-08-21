@@ -1,13 +1,13 @@
 import {FC, useContext} from 'react';
 
-import {Form} from 'antd';
-
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
 import {ModalContext} from '@contexts';
 
-import {ConfigurationCard, DeleteEntityModal} from '@molecules';
+import {DeleteEntityModal} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 interface DeleteProps {
   name: string;
@@ -37,16 +37,15 @@ const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDele
   };
 
   return (
-    <Form name="delete-entity-form">
-      <ConfigurationCard
-        title={`Delete this ${label}`}
-        description={description}
-        onConfirm={onConfirm}
-        isWarning
-        confirmButtonText="Delete"
-        forceEnableButtons
-      />
-    </Form>
+    <CardForm
+      name="delete-entity-form"
+      title={`Delete this ${label}`}
+      description={description}
+      confirmLabel="Delete"
+      isWarning
+      wasTouched
+      onConfirm={onConfirm}
+    />
   );
 };
 
