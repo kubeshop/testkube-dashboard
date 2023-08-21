@@ -13,7 +13,6 @@ import Colors from '@styles/Colors';
 import {NotificationContent} from '../Notification';
 
 import {
-  HeaderAction,
   StyledChildren,
   StyledContainer,
   StyledErrorsContainer,
@@ -28,7 +27,6 @@ import {
 type ConfigurationCardProps = {
   title: ReactNode;
   description: ReactNode;
-  headerAction?: ReactNode;
   isWarning?: boolean;
   footerText?: ReactNode;
   onConfirm?: () => Promise<ErrorNotification | void> | void;
@@ -45,7 +43,6 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
   const {
     title,
     description,
-    headerAction,
     isWarning = false,
     onConfirm,
     onCancel,
@@ -73,7 +70,6 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
             {description}
           </Text>
         </StyledHeader>
-        {headerAction && <HeaderAction>{headerAction}</HeaderAction>}
       </StyledHeaderContainer>
       {children ? (
         <>
