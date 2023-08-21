@@ -56,6 +56,7 @@ const NameNUrl: React.FC = () => {
       name="general-settings-name-url"
       title="Source name & repository URL"
       description="Define the name and repository URL of the source which will be later available in your tests."
+      spacing={24}
       form={form}
       initialValues={{name: current!.name, uri: current!.repository?.uri}}
       disabled={!mayEdit}
