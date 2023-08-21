@@ -25,8 +25,6 @@ const Condition: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const initialValues = getConditionFormValues(currentTrigger!);
-
   const onFinish = () => {
     const values = form.getFieldsValue();
 
@@ -57,7 +55,7 @@ const Condition: React.FC = () => {
       title="Trigger condition"
       description="Define the conditions to be met for the trigger to be called."
       form={form}
-      initialValues={initialValues}
+      initialValues={getConditionFormValues(currentTrigger!)}
       disabled={!mayEdit}
       onConfirm={onFinish}
     >

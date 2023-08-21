@@ -29,10 +29,6 @@ const NameNUrl: React.FC = () => {
 
   const [updateSource] = useUpdateSourceMutation();
 
-  const name = current!.name;
-  const uri = current!.repository?.uri;
-  const defaults = {name, uri};
-
   const onFinish = () => {
     const values = form.getFieldsValue();
 
@@ -61,7 +57,7 @@ const NameNUrl: React.FC = () => {
       title="Source name & repository URL"
       description="Define the name and repository URL of the source which will be later available in your tests."
       form={form}
-      initialValues={defaults}
+      initialValues={{name: current!.name, uri: current!.repository?.uri}}
       disabled={!mayEdit}
       onConfirm={onFinish}
     >

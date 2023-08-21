@@ -25,8 +25,6 @@ const TriggerAction: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const initialValues = getActionFormValues(currentTrigger!);
-
   const onFinish = () => {
     const values = form.getFieldsValue();
 
@@ -55,7 +53,7 @@ const TriggerAction: React.FC = () => {
       title="Action"
       description="Define the action to be performed on testkube once the conditions are met."
       form={form}
-      initialValues={initialValues}
+      initialValues={getActionFormValues(currentTrigger!)}
       disabled={!mayEdit}
       onConfirm={onFinish}
     >
