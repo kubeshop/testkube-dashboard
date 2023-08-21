@@ -68,6 +68,7 @@ const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEnti
       name="general-settings-name-description"
       title={`${capitalize(label)} name & description`}
       description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
+      spacing={32}
       form={form}
       initialValues={{name, description}}
       disabled={!mayEdit}

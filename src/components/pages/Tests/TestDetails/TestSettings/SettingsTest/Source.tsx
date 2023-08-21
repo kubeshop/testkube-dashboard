@@ -109,6 +109,7 @@ const Source: React.FC<SourceProps> = props => {
       description="Define the source for your test"
       footer={footer}
       labelAlign="right"
+      spacing={24}
       form={form}
       initialValues={{testSource: source, ...additionalFormValues}}
       disabled={!mayEdit}

@@ -101,6 +101,7 @@ const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
       name="schedule-form"
       title="Schedule"
       description={`You can add a cronjob like schedule for your ${label} which will then be executed automatically.`}
+      spacing={32}
       wasTouched={wasTouched}
       disabled={!mayEdit}
       onConfirm={onSave}

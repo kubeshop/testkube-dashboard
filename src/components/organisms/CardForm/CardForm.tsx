@@ -26,6 +26,7 @@ interface CardFormProps {
   initialValues?: any;
   confirmLabel?: string;
   onFieldsChange?: (...args: any) => void;
+  spacing?: number;
   onConfirm?: () => void;
   onCancel?: () => void;
 }
@@ -46,6 +47,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   wasTouched,
   isWarning,
   confirmLabel,
+  spacing,
   children,
   onFieldsChange,
   onConfirm,
@@ -87,7 +89,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
         onCancel={form || onCancel ? cancel : undefined}
       >
         {Children.count(children) ? (
-          <FullWidthSpace size={32} direction="vertical">
+          <FullWidthSpace size={spacing} direction="vertical">
             {children}
           </FullWidthSpace>
         ) : null}

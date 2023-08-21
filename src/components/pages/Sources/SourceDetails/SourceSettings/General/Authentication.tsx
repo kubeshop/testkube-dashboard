@@ -74,6 +74,7 @@ const Authentication: React.FC = () => {
       name="general-settings-authentication"
       title="Authentication"
       description="Add authentication related information required by your git repository"
+      spacing={24}
       form={form}
       initialValues={defaults}
       disabled={!mayEdit}
