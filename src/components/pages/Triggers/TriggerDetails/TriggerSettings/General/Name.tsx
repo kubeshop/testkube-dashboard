@@ -11,15 +11,13 @@ const Name: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const name = current?.name;
-
   return (
     <CardForm
       name="general-settings-name"
       title="Trigger name"
       description="Define the name of your trigger"
       form={form}
-      initialValues={{name}}
+      initialValues={{name: current?.name}}
       readOnly
     >
       <Form.Item label="Name" name="name">

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 
 import {Form} from 'antd';
 
@@ -18,10 +18,6 @@ const NameNType: React.FC = () => {
   const {current} = useExecutorsPick('current');
   const {name} = current!;
   const type = current!.executor.types?.[0] ?? '';
-
-  useEffect(() => {
-    form.setFieldsValue({name, type});
-  }, [name, type]);
 
   return (
     <CardForm

@@ -1,4 +1,5 @@
-import {Children, FC, PropsWithChildren, ReactNode} from 'react';
+import {Children, FC, PropsWithChildren, ReactNode, useEffect, useState} from 'react';
+import {useDeepCompareEffect} from 'react-use';
 
 import {Form, FormInstance} from 'antd';
 import {FormLabelAlign} from 'antd/lib/form/interface';
@@ -8,7 +9,6 @@ import {FullWidthSpace} from '@custom-antd';
 import {useLastCallback} from '@hooks/useLastCallback';
 
 import {ConfigurationCard} from '@molecules';
-import {useDeepCompareEffect} from 'react-use';
 
 interface CardFormProps {
   name: string;
@@ -50,13 +50,20 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
 }) => {
   const cancel = useLastCallback(onCancel ?? (() => form?.resetFields()));
 
+  const [currentInitialValues, setCurrentInitialValues] = useState(initialValues);
+
   useDeepCompareEffect(() => {
     form?.setFieldsValue(initialValues);
-    form?.resetFields();
+    setCurrentInitialValues(initialValues);
   }, [initialValues]);
+
+  useEffect(() => {
+    cancel();
+  }, [currentInitialValues]);
+
   return (
     <Form
-      initialValues={initialValues}
+      initialValues={currentInitialValues}
       form={form}
       labelAlign={labelAlign}
       name={name}

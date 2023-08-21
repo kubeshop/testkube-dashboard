@@ -1,5 +1,3 @@
-import {useEffect} from 'react';
-
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input} from 'antd';
 
@@ -47,12 +45,6 @@ const Arguments: React.FC = () => {
       .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', 'Arguments were successfully updated.'));
   };
-
-  useEffect(() => {
-    form.setFieldsValue({
-      arguments: current!.executor.args,
-    });
-  }, [current!.executor.args]);
 
   return (
     <CardForm

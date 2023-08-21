@@ -1,5 +1,3 @@
-import {useEffect} from 'react';
-
 import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
@@ -43,12 +41,6 @@ const Command: React.FC = () => {
       .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', 'Command was successfully updated.'));
   };
-
-  useEffect(() => {
-    form.setFieldsValue({
-      command: current!.executor.command?.join(' '),
-    });
-  }, [current!.executor.command]);
 
   return (
     <CardForm

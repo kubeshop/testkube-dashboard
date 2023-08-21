@@ -1,5 +1,3 @@
-import {useEffect} from 'react';
-
 import {Form, Input} from 'antd';
 
 import {Executor} from '@models/executors';
@@ -45,10 +43,6 @@ const ContainerImagePanel: React.FC = () => {
       .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', 'Container image was successfully updated.'));
   };
-
-  useEffect(() => {
-    form.setFieldsValue({image});
-  }, [image]);
 
   return (
     <CardForm

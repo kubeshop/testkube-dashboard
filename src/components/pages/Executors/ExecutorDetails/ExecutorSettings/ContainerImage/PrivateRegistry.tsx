@@ -1,5 +1,3 @@
-import {useEffect} from 'react';
-
 import {Form, Input} from 'antd';
 
 import {notificationCall} from '@molecules';
@@ -45,10 +43,6 @@ const PrivateRegistry: React.FC = () => {
       .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', 'Private registry was successfully updated.'));
   };
-
-  useEffect(() => {
-    form.setFieldsValue({privateRegistry});
-  }, [privateRegistry]);
 
   return (
     <CardForm

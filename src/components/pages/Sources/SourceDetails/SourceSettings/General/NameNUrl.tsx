@@ -1,5 +1,3 @@
-import {useEffect} from 'react';
-
 import {Form} from 'antd';
 
 import {Input} from '@custom-antd';
@@ -34,11 +32,6 @@ const NameNUrl: React.FC = () => {
   const name = current!.name;
   const uri = current!.repository?.uri;
   const defaults = {name, uri};
-
-  useEffect(() => {
-    form.setFieldsValue(defaults);
-    form.resetFields();
-  }, [name, uri]);
 
   const onFinish = () => {
     const values = form.getFieldsValue();

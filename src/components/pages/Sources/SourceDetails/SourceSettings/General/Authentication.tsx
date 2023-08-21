@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 
 import {Form} from 'antd';
 
@@ -41,12 +41,11 @@ const Authentication: React.FC = () => {
   const [isClearedToken, setIsClearedToken] = useState(!tokenSecret);
   const [isClearedUsername, setIsClearedUsername] = useState(!usernameSecret);
 
-  useEffect(() => {
-    form.setFieldsValue(defaults);
+  const onCancel = () => {
     form.resetFields();
     setIsClearedToken(!tokenSecret);
     setIsClearedUsername(!usernameSecret);
-  }, [repository]);
+  };
 
   const onFinish = () => {
     const values = form.getFieldsValue();
@@ -80,6 +79,7 @@ const Authentication: React.FC = () => {
       disabled={!mayEdit}
       wasTouched={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
       onConfirm={onFinish}
+      onCancel={onCancel}
     >
       <SecretFormItem
         name="username"
