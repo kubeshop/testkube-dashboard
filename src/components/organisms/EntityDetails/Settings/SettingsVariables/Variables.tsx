@@ -108,6 +108,7 @@ const Variables: React.FC<VariablesProps> = ({description, useUpdateEntity}) => 
       title="Variables & Secrets"
       description={description}
       footer={footer}
+      form={form}
       disabled={!mayEdit}
       onFieldsChange={onFieldsChange}
       onConfirm={onSaveForm}
