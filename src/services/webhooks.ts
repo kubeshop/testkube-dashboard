@@ -45,7 +45,7 @@ export const webhooksApi = createApi({
         url: `/webhooks/${name}`,
         method: 'PATCH',
         body: value,
-        headers: {accept: 'text/yaml'},
+        headers: {'Content-Type': 'text/yaml'},
       }),
     }),
     deleteWebhook: builder.mutation<void, string>({

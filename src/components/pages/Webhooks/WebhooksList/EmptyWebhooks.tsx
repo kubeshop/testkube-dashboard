@@ -15,7 +15,7 @@ const EmptyWebhooks: React.FC<EmptyWebhooksProps> = props => {
     <EmptyListContent
       title="Create your first webhook"
       description="Testkube can listen to cluster events and trigger specific actions."
-      buttonText="Create a new notification"
+      buttonText="Create a new webhook"
       emptyListReadonlyTitle="No webhooks found"
       emptyListReadonlyDescription="We could not find any webhooks in this environment."
       onButtonClick={onButtonClick}

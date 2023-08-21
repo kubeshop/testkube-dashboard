@@ -35,7 +35,7 @@ const Delete: FC = () => {
     <Form name="webhook-delete-form">
       <ConfigurationCard
         title="Delete this webhook"
-        description="This notification will be permanently deleted. All your automation linked to this notification will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
+        description="This webhook will be permanently deleted. All your automation linked to this webhook will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
         onConfirm={onConfirm}
         isWarning
         confirmButtonText="Delete"

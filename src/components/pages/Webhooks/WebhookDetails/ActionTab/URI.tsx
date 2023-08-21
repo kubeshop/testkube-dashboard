@@ -4,7 +4,9 @@ import {Form, Input} from 'antd';
 
 import {FormItem} from '@custom-antd';
 
-import {ConfigurationCard} from '@molecules';
+import {ConfigurationCard, notificationCall} from '@molecules';
+
+import {useUpdateWebhookMutation} from '@services/webhooks';
 
 import {requiredNoText, url} from '@utils/form';
 
@@ -15,9 +17,26 @@ type URIFormValues = {
 };
 
 const URI: FC = () => {
-  const {webhookDetails} = useContext(WebhookDetailsContext);
-
   const [form] = Form.useForm<URIFormValues>();
+
+  const {webhookDetails, setWebhookDetails} = useContext(WebhookDetailsContext);
+
+  const [updateWebhook] = useUpdateWebhookMutation();
+
+  const onFinish = () => {
+    const values: URIFormValues = form.getFieldsValue();
+
+    const newWebhook = {
+      ...webhookDetails!,
+      ...values,
+    };
+
+    updateWebhook(newWebhook).then(() => {
+      notificationCall('passed', 'The URI was successfully updated.');
+      setWebhookDetails(newWebhook);
+      form.resetFields();
+    });
+  };
 
   useEffect(() => {
     form.setFieldValue('uri', webhookDetails?.uri);
@@ -34,6 +53,8 @@ const URI: FC = () => {
       <ConfigurationCard
         title="Endpoint URI"
         description="Define the target URI which we will call with this notification."
+        onConfirm={onFinish}
+        onCancel={form.resetFields}
       >
         <FormItem name="uri" label="URI" required rules={[requiredNoText, url]}>
           <Input placeholder="URI" />

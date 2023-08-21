@@ -1,7 +1,5 @@
 import {FC} from 'react';
 
-import {Select} from 'antd';
-
 import {CreatableMultiSelect} from '@atoms';
 
 import {Button, FormItem, FullWidthSpace, Text} from '@custom-antd';
@@ -33,12 +31,6 @@ export const FirstStep: FC<FirstStepProps> = ({onStepChange}) => {
       <Text color={Colors.slate400} className="regular middle">
         Define the conditions to be met for the trigger to be called.
       </Text>
-      <FormItem name="resource" required rules={[requiredNoText]} label="Resource">
-        <Select placeholder="Select Testkube resource">
-          <Select.Option value="test">Test</Select.Option>
-          <Select.Option value="test-source">Test Source</Select.Option>
-        </Select>
-      </FormItem>
       <FormItem noStyle shouldUpdate>
         {({getFieldError, getFieldValue}) => {
           const isValid = !(getFieldError('events').length > 0);

@@ -1,5 +1,7 @@
 import {FC, useContext} from 'react';
 
+import {ExternalLink} from '@atoms';
+
 import {DashboardContext, MainContext, ModalContext} from '@contexts';
 
 import {Button} from '@custom-antd';
@@ -12,6 +14,9 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetWebhooksQuery} from '@services/webhooks';
 
+import {externalLinks} from '@utils/externalLinks';
+import {PollingIntervals} from '@utils/numbers';
+
 import WebhookCreationModal from '../WebhookCreationModal';
 
 import EmptyWebhooks from './EmptyWebhooks';
@@ -22,7 +27,7 @@ const WebhooksList: FC = () => {
   const {navigate} = useContext(DashboardContext);
   const {setModalOpen, setModalConfig} = useContext(ModalContext);
 
-  const {data, isLoading} = useGetWebhooksQuery(null);
+  const {data, isLoading} = useGetWebhooksQuery(null, {pollingInterval: PollingIntervals.everyTwoSeconds});
 
   const mayCreate = usePermission(Permissions.createEntity);
 
@@ -30,22 +35,25 @@ const WebhooksList: FC = () => {
     setModalOpen(true);
     setModalConfig({
       width: 530,
-      title: 'Create a notification',
+      title: 'Create a webhook',
       content: <WebhookCreationModal />,
     });
   };
 
   return (
     <PageBlueprint
-      title="Notifications"
+      title="Webhooks"
       description={
-        <>Send out custom webhooks and notifications when specific events happen. Learn more about Webhooks.</>
+        <>
+          Send out custom webhooks when specific events happen.{' '}
+          <ExternalLink href={externalLinks.notificationsAndWebhooks}>Learn more about Webhooks.</ExternalLink>
+        </>
       }
       {...(mayCreate
         ? {
             headerButton: (
               <Button $customType="primary" onClick={openModal} disabled={!isClusterAvailable}>
-                Create a new notification
+                Create a new webhook
               </Button>
             ),
           }
