@@ -1,4 +1,4 @@
-import React, {ReactElement, useRef, useState} from 'react';
+import React, {ReactNode, useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
@@ -26,17 +26,17 @@ import {
 } from './ConfigurationCard.styled';
 
 type ConfigurationCardProps = {
-  title: string;
-  description: string | ReactElement;
-  headerAction?: ReactElement;
+  title: ReactNode;
+  description: ReactNode;
+  headerAction?: ReactNode;
   isWarning?: boolean;
-  footerText?: React.ReactNode;
+  footerText?: ReactNode;
   onConfirm?: () => Promise<ErrorNotification | void> | void;
   confirmButtonText?: string;
   onCancel?: () => void;
   isButtonsDisabled?: boolean;
   forceEnableButtons?: boolean;
-  children?: React.ReactNode;
+  children?: ReactNode;
   isEditable?: boolean;
   enabled?: boolean;
 };
