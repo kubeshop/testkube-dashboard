@@ -38,6 +38,7 @@ const createModal: ModalConfig = {
 const TestSuitesList: FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const [filters, setFilters] = useTestSuitesField('filters');
+  const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
 
   const {
     data: testSuites,
@@ -72,7 +73,7 @@ const TestSuitesList: FC = () => {
       onItemAbort={onItemAbort}
       entity="test-suites"
       pageTitle="Test Suites"
-      pageTitleAddon={usePluginSlot('testSuitesListTitleAddon')}
+      pageTitleAddon={pageTitleAddon}
       addEntityButtonText="Add a new test suite"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTestSuites}
