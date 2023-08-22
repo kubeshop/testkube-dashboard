@@ -14,7 +14,7 @@ const Delete: FC = () => {
   const {webhookDetails} = useContext(WebhookDetailsContext);
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
-  const onConfirm = async () => {
+  const onFinish = async () => {
     setModalOpen(true);
     setModalConfig({
       width: 550,
@@ -32,14 +32,13 @@ const Delete: FC = () => {
   };
 
   return (
-    <Form name="webhook-delete-form">
+    <Form name="webhook-delete-form" onFinish={onFinish}>
       <ConfigurationCard
         title="Delete this webhook"
         description="This webhook will be permanently deleted. All your automation linked to this webhook will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
-        onConfirm={onConfirm}
         isWarning
-        confirmButtonText="Delete"
-        forceEnableButtons
+        confirmLabel="Delete"
+        wasTouched
       />
     </Form>
   );

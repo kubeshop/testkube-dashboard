@@ -39,9 +39,7 @@ const Condition: FC = () => {
     };
   });
 
-  const onFinish = () => {
-    const values: ConditionFormValues = form.getFieldsValue();
-
+  const onFinish = (values: ConditionFormValues) => {
     const newWebhook = {
       ...webhookDetails!,
       ...values,
@@ -78,12 +76,12 @@ const Condition: FC = () => {
         events: webhookDetails?.events.map(item => ({label: item, value: item})) || [],
         labels: composeLabels((webhookDetails?.labels as unknown as Record<string, Option>) || []) || {},
       }}
+      onFinish={onFinish}
     >
       <ConfigurationCard
         title="Webhook condition"
         description="Define the conditions to be met for the webhook to be called."
         onCancel={form.resetFields}
-        onConfirm={onFinish}
       >
         <FullWidthSpace size={20} direction="vertical">
           <FormItem name="resource" label="Resource" required rules={[requiredNoText]}>

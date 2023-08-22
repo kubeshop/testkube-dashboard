@@ -51,12 +51,12 @@ const CustomPayload: FC = () => {
       initialValues={{
         payloadTemplate: webhookDetails?.payloadTemplate,
       }}
+      onFinish={onFinish}
     >
       <ConfigurationCard
         title="Custom payload"
         description="Customize the payload we will send with each request."
         onCancel={form.resetFields}
-        onConfirm={onFinish}
       >
         <FormItem name="payloadTemplate">
           <KubernetesResourceEditor value={value} onChange={setValue} />

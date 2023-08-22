@@ -27,9 +27,7 @@ const Headers: FC = () => {
 
   const [updateWebhook] = useUpdateWebhookMutation();
 
-  const onFinish = () => {
-    const values: HeadersFormValues = form.getFieldsValue();
-
+  const onFinish = (values: HeadersFormValues) => {
     const newWebhook = {
       ...webhookDetails!,
       headers: composeHeaders(values.headers),
@@ -53,12 +51,12 @@ const Headers: FC = () => {
       initialValues={{
         headers: decomposeHeaders(webhookDetails?.headers ?? {}),
       }}
+      onFinish={onFinish}
     >
       <ConfigurationCard
         title="Headers"
         description="Customize the headers we will send with each request."
         onCancel={form.resetFields}
-        onConfirm={onFinish}
       >
         <Form.List name="headers">
           {(fields, {add, remove}) => (

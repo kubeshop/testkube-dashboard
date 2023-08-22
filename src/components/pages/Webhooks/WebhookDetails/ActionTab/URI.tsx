@@ -23,9 +23,7 @@ const URI: FC = () => {
 
   const [updateWebhook] = useUpdateWebhookMutation();
 
-  const onFinish = () => {
-    const values: URIFormValues = form.getFieldsValue();
-
+  const onFinish = (values: URIFormValues) => {
     const newWebhook = {
       ...webhookDetails!,
       ...values,
@@ -49,11 +47,11 @@ const URI: FC = () => {
       initialValues={{
         uri: webhookDetails?.uri ?? '',
       }}
+      onFinish={onFinish}
     >
       <ConfigurationCard
         title="Endpoint URI"
         description="Define the target URI which we will call with this notification."
-        onConfirm={onFinish}
         onCancel={form.resetFields}
       >
         <FormItem name="uri" label="URI" required rules={[requiredNoText, url]}>

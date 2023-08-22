@@ -38,7 +38,7 @@ const Name: FC = () => {
       <ConfigurationCard
         title="Notification name"
         description="Define the name of your webhook"
-        footerText={
+        footer={
           <>
             Learn more about <ExternalLink href={externalLinks.notificationsAndWebhooks}>webhooks</ExternalLink>
           </>
