@@ -1,4 +1,4 @@
-import {Children, FC, PropsWithChildren, ReactNode, useEffect, useRef, useState} from 'react';
+import {Children, FC, PropsWithChildren, ReactNode, useEffect, useState} from 'react';
 
 import {Form, FormInstance} from 'antd';
 import {FormLayout} from 'antd/lib/form/Form';
@@ -54,10 +54,10 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   onConfirm,
   onCancel,
 }) => {
+  const [currentForm] = Form.useForm(form);
   const [currentInitialValues, setCurrentInitialValues] = useState(initialValues);
   const [errors, setErrors] = useState<ErrorNotificationConfig[]>();
   const [loading, setLoading] = useState<boolean>();
-  const validateFieldsRef = useRef<() => Promise<any>>();
 
   const cancel = useLastCallback(() => {
     setErrors(undefined);
@@ -76,7 +76,8 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
     }
     setErrors(undefined);
     setLoading(true);
-    Promise.resolve(validateFieldsRef.current?.())
+    Promise.resolve()
+      .then(() => currentForm.validateFields())
       .then(onConfirm)
       .catch((err: ErrorNotification) => {
         if ('errors' in err) {
@@ -103,7 +104,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
     <Form
       layout={layout}
       initialValues={currentInitialValues}
-      form={form}
+      form={currentForm}
       labelAlign={labelAlign}
       name={name}
       disabled={disabled || loading}
@@ -111,29 +112,24 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
       onFinish={confirm}
     >
       <Form.Item noStyle shouldUpdate>
-        {({validateFields}) => {
-          validateFieldsRef.current = validateFields;
-          return (
-            <ConfigurationCard
-              title={title}
-              description={description}
-              footer={footer}
-              confirmLabel={confirmLabel}
-              wasTouched={wasTouched}
-              readOnly={readOnly}
-              loading={loading}
-              isWarning={isWarning}
-              errors={errors}
-              onCancel={form || onCancel ? cancel : undefined}
-            >
-              {Children.count(children) ? (
-                <FullWidthSpace size={spacing} direction="vertical">
-                  {children}
-                </FullWidthSpace>
-              ) : null}
-            </ConfigurationCard>
-          );
-        }}
+        <ConfigurationCard
+          title={title}
+          description={description}
+          footer={footer}
+          confirmLabel={confirmLabel}
+          wasTouched={wasTouched}
+          readOnly={readOnly}
+          loading={loading}
+          isWarning={isWarning}
+          errors={errors}
+          onCancel={form || onCancel ? cancel : undefined}
+        >
+          {Children.count(children) ? (
+            <FullWidthSpace size={spacing} direction="vertical">
+              {children}
+            </FullWidthSpace>
+          ) : null}
+        </ConfigurationCard>
       </Form.Item>
     </Form>
   );
