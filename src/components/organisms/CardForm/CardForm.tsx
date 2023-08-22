@@ -58,10 +58,14 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
 }) => {
   const [currentInitialValues, setCurrentInitialValues] = useState(initialValues);
   const [errors, setErrors] = useState<ErrorNotificationConfig[]>();
+  const [loading, setLoading] = useState<boolean>();
   const validateFieldsRef = useRef<() => Promise<any>>();
 
   const cancel = useLastCallback(() => {
     setErrors(undefined);
+    if (loading) {
+      return;
+    }
     if (onCancel) {
       onCancel();
     } else {
@@ -69,7 +73,11 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
     }
   });
   const confirm = useLastCallback(() => {
+    if (loading) {
+      return;
+    }
     setErrors(undefined);
+    setLoading(true);
     Promise.resolve(validateFieldsRef.current?.())
       .then(onConfirm)
       .catch((err: ErrorNotification) => {
@@ -78,6 +86,9 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
         } else if (err.title || err.message) {
           setErrors([err]);
         }
+      })
+      .then(() => {
+        setLoading(false);
       });
   });
 
@@ -97,7 +108,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
       form={form}
       labelAlign={labelAlign}
       name={name}
-      disabled={disabled}
+      disabled={disabled || loading}
       onFieldsChange={onFieldsChange}
       onFinish={confirm}
     >
@@ -112,6 +123,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
               confirmButtonText={confirmLabel}
               forceEnableButtons={wasTouched}
               enabled={!readOnly}
+              loading={loading}
               isWarning={isWarning}
               errors={errors}
               onConfirm={noop}

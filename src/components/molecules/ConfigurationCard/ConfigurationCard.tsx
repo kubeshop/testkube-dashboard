@@ -37,6 +37,7 @@ type ConfigurationCardProps = {
   children?: ReactNode;
   isEditable?: boolean;
   enabled?: boolean;
+  loading?: boolean;
   errors?: ErrorNotificationConfig[];
 };
 
@@ -55,6 +56,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     forceEnableButtons,
     isEditable = true,
     enabled = true,
+    loading = false,
   } = props;
   const topRef = useRef<HTMLDivElement>(null);
   const inTopInViewport = useInViewport(topRef);
@@ -107,13 +109,14 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
 
                 return (
                   <StyledFooterButtonsContainer>
-                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || disabled}>
+                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || disabled || loading}>
                       Cancel
                     </Button>
                     <Button
                       onClick={onConfirm}
                       $customType={isWarning ? 'warning' : 'primary'}
-                      disabled={disabled}
+                      disabled={disabled || loading}
+                      loading={loading}
                       hidden={!onConfirm}
                       htmlType="submit"
                     >

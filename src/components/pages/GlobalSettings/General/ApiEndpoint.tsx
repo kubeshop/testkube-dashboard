@@ -1,5 +1,3 @@
-import {useState} from 'react';
-
 import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
@@ -23,8 +21,6 @@ type ApiEndpointFormValues = {
 const ApiEndpoint: React.FC = () => {
   const [form] = Form.useForm<ApiEndpointFormValues>();
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const apiEndpoint = useApiEndpoint();
   const updateApiEndpoint = useUpdateApiEndpoint();
   const disabled = isApiEndpointLocked();
@@ -39,15 +35,10 @@ const ApiEndpoint: React.FC = () => {
       }
     } catch (error) {
       notificationCall('failed', 'Could not receive data from the specified API endpoint');
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const onSave = () => {
-    setIsLoading(true);
-    checkApiEndpoint(form.getFieldValue('endpoint'));
-  };
+  const onSave = () => checkApiEndpoint(form.getFieldValue('endpoint'));
 
   const footer = (
     <Text className="regular middle" color={`${Colors.slate400}`}>
@@ -63,7 +54,6 @@ const ApiEndpoint: React.FC = () => {
       form={form}
       initialValues={{endpoint: apiEndpoint}}
       footer={footer}
-      confirmLabel={isLoading ? 'Loading...' : 'Save'} // FIXME: Abstract?
       disabled={disabled}
       onConfirm={onSave}
     >
