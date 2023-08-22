@@ -38,9 +38,16 @@ interface EntityDetailsHeaderProps {
   onRun: () => void;
   onBack: () => void;
   useAbortAllExecutions: UseMutation<MutationDefinition<any, any, any, any, any>>;
+  onEditTest: () => void;
 }
 
-const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({isRunning, onRun, onBack, useAbortAllExecutions}) => {
+const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
+  isRunning,
+  onRun,
+  onBack,
+  useAbortAllExecutions,
+  onEditTest,
+}) => {
   const mayRun = usePermission(Permissions.runEntity);
   const {entity, details} = useEntityDetailsPick('entity', 'details');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
@@ -68,7 +75,10 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({isRunning, onRun, on
         />,
         <DotsDropdown
           key="entity-options"
-          items={[{key: 1, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>}]}
+          items={[
+            {key: 1, label: <span onClick={onEditTest}>Edit Test</span>},
+            {key: 2, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>},
+          ]}
           wrapperStyle={{backgroundColor: Colors.slate800}}
         />,
         <Button
