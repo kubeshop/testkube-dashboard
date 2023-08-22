@@ -81,9 +81,8 @@ const App: React.FC<AppProps> = ({plugins}) => {
   }, [apiEndpoint]);
 
   useEffect(() => {
-    // Do not fire the effect if new endpoint is just being set up,
-    // or it can't be changed.
-    if (location.pathname === '/apiEndpoint') {
+    // Do not fire the effect if new endpoint is just being set up.
+    if (!isClusterAvailable || location.pathname === '/apiEndpoint') {
       return;
     }
 
@@ -106,7 +105,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
           setEndpointModalState(true);
         }
       });
-  }, [apiEndpoint]);
+  }, [apiEndpoint, isClusterAvailable]);
 
   const scope = useMemo(() => {
     const pluginManager = createPluginManager();
