@@ -1,4 +1,4 @@
-import React, {ReactNode, useRef, useState} from 'react';
+import React, {ReactNode, useRef} from 'react';
 
 import {Form} from 'antd';
 
@@ -6,7 +6,7 @@ import {Button, Text} from '@custom-antd';
 
 import useInViewport from '@hooks/useInViewport';
 
-import {ErrorNotification, ErrorNotificationConfig} from '@models/notifications';
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import Colors from '@styles/Colors';
 
@@ -29,7 +29,7 @@ type ConfigurationCardProps = {
   description: ReactNode;
   isWarning?: boolean;
   footerText?: ReactNode;
-  onConfirm?: () => Promise<ErrorNotification | void> | void;
+  onConfirm?: () => Promise<void> | void;
   confirmButtonText?: string;
   onCancel?: () => void;
   isButtonsDisabled?: boolean;
@@ -37,10 +37,12 @@ type ConfigurationCardProps = {
   children?: ReactNode;
   isEditable?: boolean;
   enabled?: boolean;
+  errors?: ErrorNotificationConfig[];
 };
 
 const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
   const {
+    errors,
     title,
     description,
     isWarning = false,
@@ -54,10 +56,12 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     isEditable = true,
     enabled = true,
   } = props;
-  const [errors, setErrors] = useState<ErrorNotificationConfig[] | null>(null);
-
   const topRef = useRef<HTMLDivElement>(null);
   const inTopInViewport = useInViewport(topRef);
+
+  if (errors && !inTopInViewport && topRef?.current) {
+    topRef.current.scrollIntoView();
+  }
 
   return (
     <StyledContainer isWarning={isWarning}>
@@ -103,33 +107,11 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
 
                 return (
                   <StyledFooterButtonsContainer>
-                    <Button
-                      onClick={() => {
-                        onCancel?.();
-                        setErrors(null);
-                      }}
-                      $customType="secondary"
-                      hidden={!onCancel || disabled}
-                    >
+                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || disabled}>
                       Cancel
                     </Button>
                     <Button
-                      onClick={() => {
-                        setErrors(null);
-                        Promise.resolve(validateFields?.())
-                          .then(() => onConfirm?.())
-                          .catch((err: ErrorNotification) => {
-                            if ('errors' in err) {
-                              setErrors(err.errors);
-                            } else if (err.title || err.message) {
-                              setErrors([err]);
-                            }
-
-                            if (!inTopInViewport && topRef && topRef.current) {
-                              topRef.current.scrollIntoView();
-                            }
-                          });
-                      }}
+                      onClick={onConfirm}
                       $customType={isWarning ? 'warning' : 'primary'}
                       disabled={disabled}
                       hidden={!onConfirm}
