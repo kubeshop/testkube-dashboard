@@ -13,6 +13,8 @@ import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
+import {Error} from '@pages';
+
 import {useAbortAllTestExecutionsMutation, useGetTestsQuery} from '@services/tests';
 
 import {initialFilters, useTestsField, useTestsSync} from '@store/tests';
@@ -47,6 +49,7 @@ const TestsList: FC = () => {
     data: tests,
     isLoading,
     isFetching,
+    error,
   } = useGetTestsQuery(filters, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable,
@@ -62,6 +65,10 @@ const TestsList: FC = () => {
         notificationCall('failed', 'Something went wrong during test execution abortion');
       });
   }, []);
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
 
   return (
     <EntityListContent
