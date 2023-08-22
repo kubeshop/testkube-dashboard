@@ -9,7 +9,9 @@ import {ExternalLink} from '@atoms';
 
 import {VariableInForm} from '@models/variable';
 
-import {ConfigurationCard, TestsVariablesList, notificationCall} from '@molecules';
+import {TestsVariablesList, notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -66,55 +68,53 @@ const Variables: React.FC<VariablesProps> = ({description, useUpdateEntity}) => 
       });
   };
 
-  return (
-    <Form
-      form={form}
-      onFieldsChange={(_: any) => {
-        if (_[0]) {
-          const action = _[0];
+  const onFieldsChange = (_: any) => {
+    if (_[0]) {
+      const action = _[0];
 
-          const actionValue = action.value;
+      const actionValue = action.value;
 
-          if (!Array.isArray(actionValue)) {
-            const actionFieldIndex = action.name[1];
-            const isTypeChanged = action.name[2] === 'type';
-            const neededFieldValue = form.getFieldValue('variables-list')[actionFieldIndex];
+      if (!Array.isArray(actionValue)) {
+        const actionFieldIndex = action.name[1];
+        const isTypeChanged = action.name[2] === 'type';
+        const neededFieldValue = form.getFieldValue('variables-list')[actionFieldIndex];
 
-            if (isTypeChanged) {
-              try {
-                if (actionValue === 'secretRef') {
-                  delete neededFieldValue.value;
-                } else {
-                  delete neededFieldValue.secretRefName;
-                  delete neededFieldValue.secretRefKey;
-                }
-              } catch (err) {
-                // eslint-disable-next-line no-console
-                console.log('err: ', err);
-              }
+        if (isTypeChanged) {
+          try {
+            if (actionValue === 'secretRef') {
+              delete neededFieldValue.value;
+            } else {
+              delete neededFieldValue.secretRefName;
+              delete neededFieldValue.secretRefKey;
             }
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.log('err: ', err);
           }
         }
-      }}
+      }
+    }
+  };
+
+  const footer = (
+    <>
+      Learn more about <ExternalLink href={externalLinks.variables}>Environment variables</ExternalLink>
+    </>
+  );
+
+  return (
+    <CardForm
+      name="variables-form"
+      title="Variables & Secrets"
+      description={description}
+      footer={footer}
+      form={form}
       disabled={!mayEdit}
+      onFieldsChange={onFieldsChange}
+      onConfirm={onSaveForm}
     >
-      <ConfigurationCard
-        title="Variables & Secrets"
-        description={description}
-        footerText={
-          <>
-            Learn more about <ExternalLink href={externalLinks.variables}>Environment variables</ExternalLink>
-          </>
-        }
-        onConfirm={onSaveForm}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <TestsVariablesList data={variables} form={form} />
-      </ConfigurationCard>
-    </Form>
+      <TestsVariablesList data={variables} form={form} />
+    </CardForm>
   );
 };
 

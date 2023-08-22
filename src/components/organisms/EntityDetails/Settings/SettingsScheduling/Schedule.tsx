@@ -1,7 +1,7 @@
 import {useMemo, useState} from 'react';
 
 import {WarningOutlined} from '@ant-design/icons';
-import {Form, Select, Tooltip} from 'antd';
+import {Select, Tooltip} from 'antd';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
@@ -9,9 +9,11 @@ import {MutationDefinition} from '@reduxjs/toolkit/query';
 import parser from 'cron-parser';
 import {capitalize} from 'lodash';
 
-import {FullWidthSpace, Text} from '@custom-antd';
+import {Text} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -34,7 +36,7 @@ interface ScheduleProps {
 
 const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
   const {details} = useEntityDetailsPick('details');
-  const enabled = usePermission(Permissions.editEntity);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = useUpdateEntity();
 
@@ -95,84 +97,71 @@ const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
   const [minute, hour, day, month, dayOfWeek] = cronString.split(' ');
 
   return (
-    <Form name="schedule-form">
-      <ConfigurationCard
-        title="Schedule"
-        description={`You can add a cronjob like schedule for your ${label} which will then be executed automatically.`}
-        onConfirm={onSave}
-        onCancel={onCancel}
-        isButtonsDisabled={!wasTouched}
-        enabled={enabled}
-        forceEnableButtons={wasTouched}
-      >
-        <FullWidthSpace direction="vertical" size={32}>
+    <CardForm
+      name="schedule-form"
+      title="Schedule"
+      description={`You can add a cronjob like schedule for your ${label} which will then be executed automatically.`}
+      spacing={32}
+      wasTouched={wasTouched}
+      disabled={!mayEdit}
+      onConfirm={onSave}
+      onCancel={onCancel}
+    >
+      <StyledColumn>
+        <Text className="middle regular">Schedule template</Text>
+        <Select
+          disabled={!mayEdit}
+          placeholder="Quick select a schedule template"
+          style={{width: '100%'}}
+          options={quickOptions}
+          onSelect={(value: string) => {
+            setCronString(value);
+            setWasTouched(true);
+          }}
+          value={templateValue}
+        />
+      </StyledColumn>
+      {templateValue ? (
+        <>
           <StyledColumn>
-            <Text className="middle regular">Schedule template</Text>
-            <Select
-              disabled={!enabled}
-              placeholder="Quick select a schedule template"
-              style={{width: '100%'}}
-              options={quickOptions}
-              onSelect={(value: string) => {
-                setCronString(value);
-                setWasTouched(true);
-              }}
-              value={templateValue}
-            />
+            <Text className="middle regular">Cron Format</Text>
+            <StyledCronFormat>
+              <CronInput title="Minute" disabled={!mayEdit} value={minute} onChange={value => onCronInput(value, 0)} />
+              <CronInput title="Hour" disabled={!mayEdit} value={hour} onChange={value => onCronInput(value, 1)} />
+              <CronInput title="Day" disabled={!mayEdit} value={day} onChange={value => onCronInput(value, 2)} />
+              <CronInput title="Month" disabled={!mayEdit} value={month} onChange={value => onCronInput(value, 3)} />
+              <CronInput
+                title="Day / Week"
+                disabled={!mayEdit}
+                value={dayOfWeek}
+                onChange={value => onCronInput(value, 4)}
+              />
+            </StyledCronFormat>
           </StyledColumn>
-          {templateValue ? (
-            <>
-              <StyledColumn>
-                <Text className="middle regular">Cron Format</Text>
-                <StyledCronFormat>
-                  <CronInput
-                    title="Minute"
-                    disabled={!enabled}
-                    value={minute}
-                    onChange={value => onCronInput(value, 0)}
-                  />
-                  <CronInput title="Hour" disabled={!enabled} value={hour} onChange={value => onCronInput(value, 1)} />
-                  <CronInput title="Day" disabled={!enabled} value={day} onChange={value => onCronInput(value, 2)} />
-                  <CronInput
-                    title="Month"
-                    disabled={!enabled}
-                    value={month}
-                    onChange={value => onCronInput(value, 3)}
-                  />
-                  <CronInput
-                    title="Day / Week"
-                    disabled={!enabled}
-                    value={dayOfWeek}
-                    onChange={value => onCronInput(value, 4)}
-                  />
-                </StyledCronFormat>
-              </StyledColumn>
-              <StyledRow>
-                <StyledColumn>
-                  <Text className="middle regular" style={{color: isValidFormat ? Colors.slate200 : Colors.amber400}}>
-                    Cron Preview{' '}
-                    {!isValidFormat ? (
-                      <Tooltip title="Cron input is invalid">
-                        <WarningOutlined />
-                      </Tooltip>
-                    ) : null}
-                  </Text>
-                  <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
-                    {cronString}
-                  </Text>
-                </StyledColumn>
-                <StyledColumn>
-                  <Text className="middle regular">Next Execution</Text>
-                  <Text style={{color: Colors.slate400}} className="middle regular">
-                    <NextExecution value={nextExecution} />
-                  </Text>
-                </StyledColumn>
-              </StyledRow>
-            </>
-          ) : null}
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+          <StyledRow>
+            <StyledColumn>
+              <Text className="middle regular" style={{color: isValidFormat ? Colors.slate200 : Colors.amber400}}>
+                Cron Preview{' '}
+                {!isValidFormat ? (
+                  <Tooltip title="Cron input is invalid">
+                    <WarningOutlined />
+                  </Tooltip>
+                ) : null}
+              </Text>
+              <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
+                {cronString}
+              </Text>
+            </StyledColumn>
+            <StyledColumn>
+              <Text className="middle regular">Next Execution</Text>
+              <Text style={{color: Colors.slate400}} className="middle regular">
+                <NextExecution value={nextExecution} />
+              </Text>
+            </StyledColumn>
+          </StyledRow>
+        </>
+      ) : null}
+    </CardForm>
   );
 };
 

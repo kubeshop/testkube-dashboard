@@ -27,7 +27,7 @@ const DeleteEntityModal: React.FC<{
   // onCancel is passed from parent component <Modal />.
   // Do not pass it directly
   onCancel?: any;
-  useDeleteMutation: UseMutation<MutationDefinition<string, any, never, void>>;
+  useDeleteMutation: UseMutation<MutationDefinition<string, any, any, void>>;
   name: string;
   entityLabel: string;
   defaultStackRoute: string;

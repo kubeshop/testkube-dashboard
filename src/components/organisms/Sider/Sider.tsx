@@ -21,9 +21,6 @@ import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {ReactComponent as SettingIcon} from '@icons/setting.svg';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput} from '@redux/reducers/configSlice';
-
 import Colors from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
@@ -112,7 +109,6 @@ const getRoutes = (showSocialLinksInSider: boolean) => [
 const Sider: React.FC = () => {
   const {showLogoInSider, showSocialLinksInSider} = useContext(DashboardContext);
   const openSettings = useDashboardNavigate('/settings');
-  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
 
   const otherMenuItems = [
     {
@@ -211,7 +207,7 @@ const Sider: React.FC = () => {
   }, []);
 
   return (
-    <StyledSider width={100} data-cy="navigation-sider" $isFullScreenLogOutput={isFullScreenLogOutput}>
+    <StyledSider width={100} data-cy="navigation-sider">
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <FullWidthSpace size={30} direction="vertical">

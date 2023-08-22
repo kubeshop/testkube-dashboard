@@ -62,9 +62,9 @@ export const StyledLogOutputActionsContainer = styled.ul`
   list-style-type: none;
 `;
 
-export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolean}>`
-  ${({$isFullScreen}) =>
-    $isFullScreen
+export const StyledLogOutputHeaderContainer = styled.div<{$isFullscreen?: boolean}>`
+  ${({$isFullscreen}) =>
+    $isFullscreen
       ? `
   position: absolute;
   right: 0;

@@ -1,4 +1,4 @@
-import {FC, useCallback, useContext, useEffect} from 'react';
+import {FC, useCallback, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
@@ -13,11 +13,9 @@ import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
-import {useAppSelector} from '@redux/hooks';
-import {initialTestsFiltersState} from '@redux/initialState';
-import {selectTests, selectTestsFilters, setTests, setTestsFilters} from '@redux/reducers/testsSlice';
-
 import {useAbortAllTestExecutionsMutation, useGetTestsQuery} from '@services/tests';
+
+import {initialFilters, useTestsField, useTestsSync} from '@store/tests';
 
 import {externalLinks} from '@utils/externalLinks';
 import {PollingIntervals} from '@utils/numbers';
@@ -42,17 +40,18 @@ export const createModal: ModalConfig = {
 };
 
 const TestsList: FC = () => {
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const queryFilters = useAppSelector(selectTestsFilters);
+  const {isClusterAvailable} = useContext(MainContext);
+  const [filters, setFilters] = useTestsField('filters');
 
-  const {data, isLoading, isFetching} = useGetTestsQuery(queryFilters || null, {
+  const {
+    data: tests,
+    isLoading,
+    isFetching,
+  } = useGetTestsQuery(filters, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable,
   });
-
-  useEffect(() => {
-    dispatch(setTests(data || []));
-  }, [data]);
+  useTestsSync({tests});
 
   const [abortAll] = useAbortAllTestExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: Test) => `/tests/${item.name}`);
@@ -66,6 +65,7 @@ const TestsList: FC = () => {
 
   return (
     <EntityListContent
+      itemKey="test.name"
       CardComponent={TestCard}
       onItemClick={onItemClick}
       onItemAbort={onItemAbort}
@@ -74,11 +74,11 @@ const TestsList: FC = () => {
       addEntityButtonText="Add a new test"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTests}
-      initialFiltersState={initialTestsFiltersState}
+      initialFiltersState={initialFilters}
       dataTest="add-a-new-test-btn"
-      queryFilters={queryFilters}
-      setQueryFilters={setTestsFilters}
-      data={useAppSelector(selectTests)}
+      queryFilters={filters}
+      setQueryFilters={setFilters}
+      data={tests}
       isLoading={isLoading}
       isFetching={isFetching}
       createModalConfig={createModal}

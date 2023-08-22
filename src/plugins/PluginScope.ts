@@ -1,4 +1,4 @@
-import {SlotMetaData} from './types';
+import type {SlotMetadata} from './types';
 
 class PluginScope {
   private state: Record<string, any>;
@@ -21,7 +21,7 @@ class PluginScope {
     return this.slots[name] || [];
   }
 
-  public appendSlot(name: string, value: any, metadata: SlotMetaData = {}) {
+  public appendSlot(name: string, value: any, metadata: SlotMetadata = {}) {
     this.slots[name] = this.slots[name] || [];
     this.slots[name].push({value, metadata});
   }

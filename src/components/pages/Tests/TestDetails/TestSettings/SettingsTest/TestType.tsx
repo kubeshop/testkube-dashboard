@@ -1,17 +1,16 @@
-import {memo} from 'react';
+import {memo, useMemo} from 'react';
 
 import {Form, Select} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {FormItem, FullWidthSpace} from '@custom-antd';
+import {FormItem} from '@custom-antd';
 
-import {ConfigurationCard} from '@molecules';
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
+import {useExecutorsPick} from '@store/executors';
 
 import {remapExecutors} from '@utils/executors';
 import {externalLinks} from '@utils/externalLinks';
@@ -32,38 +31,34 @@ const TestType: React.FC<TestTypeProps> = props => {
   const [form] = Form.useForm<TestTypeFormValues>();
 
   const mayEdit = usePermission(Permissions.editEntity);
-  const executors = useAppSelector(selectExecutors);
-  const remappedExecutors = remapExecutors(executors);
+  const {executors = []} = useExecutorsPick('executors');
+  const remappedExecutors = useMemo(() => remapExecutors(executors), [executors]);
 
   const onSave = () => {
-    const values = form.getFieldsValue();
-
-    return updateTest({type: values.type});
+    return updateTest({type: form.getFieldValue('type')});
   };
 
+  const footer = (
+    <>
+      Learn more about <ExternalLink href={externalLinks.testTypes}>test types and executors</ExternalLink>
+    </>
+  );
+
   return (
-    <Form form={form} onFinish={onSave} name="test-settings-test-type" initialValues={{type}} disabled={!mayEdit}>
-      <ConfigurationCard
-        title="Test type"
-        description="Define the test type for this test."
-        onConfirm={onSave}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        footerText={
-          <>
-            Learn more about <ExternalLink href={externalLinks.testTypes}>test types and executors</ExternalLink>
-          </>
-        }
-        enabled={mayEdit}
-      >
-        <FullWidthSpace size={32} direction="vertical">
-          <FormItem name="type" rules={[required]}>
-            <Select showSearch options={remappedExecutors} />
-          </FormItem>
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="test-settings-test-type"
+      title="Test type"
+      description="Define the test type for this test."
+      footer={footer}
+      form={form}
+      initialValues={{type}}
+      disabled={!mayEdit}
+      onConfirm={onSave}
+    >
+      <FormItem name="type" rules={[required]}>
+        <Select showSearch options={remappedExecutors} />
+      </FormItem>
+    </CardForm>
   );
 };
 

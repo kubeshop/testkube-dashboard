@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
@@ -17,7 +17,7 @@ import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
-import {useTelemetry} from '@telemetry';
+import {useTelemetry} from '@telemetry/hooks';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -66,12 +66,6 @@ const TestSuiteCreationModalContent: React.FC = () => {
         }
       });
   };
-
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
-  }, []);
 
   return (
     <Form

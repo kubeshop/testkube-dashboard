@@ -10,12 +10,7 @@ export interface SourceWithRepository extends Source {
   repository: Repository;
 }
 
-type SourcesState = {
-  sourcesList: SourceWithRepository[];
-  currentSource?: SourceWithRepository;
-};
-
-export type CreateSourceResult = {
+export interface CreateSourceResult {
   metadata: {
     name: string;
     namespace: string;
@@ -27,6 +22,4 @@ export type CreateSourceResult = {
   spec: {
     repository: Repository;
   };
-};
-
-export type {SourcesState};
+}

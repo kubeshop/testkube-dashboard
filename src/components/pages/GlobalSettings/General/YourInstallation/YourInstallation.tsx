@@ -2,9 +2,9 @@ import {memo} from 'react';
 
 import {FullWidthSpace} from '@custom-antd';
 
-import {ConfigurationCard} from '@molecules';
+import env from '@env';
 
-import env from '@src/env';
+import {ConfigurationCard} from '@molecules';
 
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
@@ -21,7 +21,11 @@ const YourInstallation: React.FC = () => {
   const helmChartVersion = `${versionRegex.test(helmchartVersion) ? 'v' : ''}${helmchartVersion}`;
 
   return (
-    <ConfigurationCard title="Your installation" description="Details about your current Testkube installation">
+    <ConfigurationCard
+      title="Your installation"
+      description="Details about your current Testkube installation"
+      readOnly
+    >
       <FullWidthSpace size={32} direction="vertical">
         <YourInstallationContainer>
           <YourInstallationItem label="Namespace" value={namespace} />

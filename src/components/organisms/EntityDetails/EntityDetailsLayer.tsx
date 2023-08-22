@@ -17,8 +17,9 @@ import {useWsEndpoint} from '@services/apiEndpoint';
 
 import {initializeEntityDetailsStore} from '@store/entityDetails';
 
-import {getRtkIdToken, safeRefetch} from '@utils/fetchUtils';
+import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
+import {getRtkIdToken} from '@utils/rtk';
 import {convertTestSuiteV2ExecutionToV3, isTestSuiteV2} from '@utils/testSuites';
 
 interface EntityDetailsLayerProps {
@@ -62,7 +63,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
     {skip: !isClusterAvailable}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
-    pollingInterval: PollingIntervals.everyTwoSeconds,
+    pollingInterval: PollingIntervals.long,
     skip: !isClusterAvailable,
   });
   const isV2 = isTestSuiteV2(rawDetails);

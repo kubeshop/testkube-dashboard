@@ -8,7 +8,7 @@ import {store} from '@redux/store';
 
 import {GlobalStyle} from '@styles/globalStyles';
 
-import {TelemetryProvider} from '@telemetry';
+import {TelemetryProvider} from '@telemetry/provider';
 
 import AppRoot from './AppRoot';
 import './antd-theme/antd-customized.css';

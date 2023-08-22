@@ -1,7 +1,7 @@
 import {StateCreator} from 'zustand';
 
-import {Entity} from '@models/entity';
-import {Metrics} from '@models/metrics';
+import type {Entity} from '@models/entity';
+import type {Metrics} from '@models/metrics';
 
 import {connectStore, createStoreFactory} from '@store/utils';
 

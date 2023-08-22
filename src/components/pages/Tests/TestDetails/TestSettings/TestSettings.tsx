@@ -5,7 +5,7 @@ import {SettingsLayoutProps} from '@molecules/SettingsLayout/SettingsLayout';
 
 import {SettingsScheduling} from '@organisms/EntityDetails';
 
-import {useUpdateTestSuiteMutation} from '@services/testSuites';
+import {useUpdateTestMutation} from '@services/tests';
 
 import SettingsDefinition from './SettingsDefinition';
 import SettingsExecution from './SettingsExecution';
@@ -21,7 +21,7 @@ const tabs = [
   {
     id: 'scheduling',
     label: 'Scheduling',
-    children: <SettingsScheduling label="test" useUpdateEntity={useUpdateTestSuiteMutation} />,
+    children: <SettingsScheduling label="test" useUpdateEntity={useUpdateTestMutation} />,
   },
   {id: 'definition', label: 'Definition', children: <SettingsDefinition />},
 ];

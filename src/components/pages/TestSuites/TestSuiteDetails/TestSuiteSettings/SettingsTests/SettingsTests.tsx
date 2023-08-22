@@ -1,7 +1,5 @@
 import {memo, useContext, useEffect, useMemo, useState} from 'react';
 
-import {Form} from 'antd';
-
 import {nanoid} from '@reduxjs/toolkit';
 
 import pick from 'lodash/pick';
@@ -17,17 +15,18 @@ import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
 import {TestSuiteStepTest} from '@models/test';
 import {LocalStep, TestSuite} from '@models/testSuite';
 
-import {ConfigurationCard, InlineNotification, notificationCall} from '@molecules';
+import {InlineNotification, notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetTestsListForTestSuiteQuery, useUpdateTestSuiteMutation} from '@services/testSuites';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
+import {useExecutorsPick} from '@store/executors';
 
 import {externalLinks} from '@utils/externalLinks';
 import {formatMilliseconds} from '@utils/formatMilliseconds';
@@ -44,7 +43,7 @@ const SettingsTests = () => {
 
   const isV2 = useClusterVersionMatch('<1.13.0', rawIsV2);
 
-  const executors = useAppSelector(selectExecutors);
+  const {executors} = useExecutorsPick('executors');
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -57,7 +56,7 @@ const SettingsTests = () => {
     return (testsList || []).map(item => ({
       name: item.name,
       namespace: item.namespace,
-      type: getTestExecutorIcon(executors, item.type),
+      type: getTestExecutorIcon(executors || [], item.type),
     }));
   }, [testsList]);
 
@@ -152,59 +151,63 @@ const SettingsTests = () => {
       });
   };
 
-  return (
-    <FullWidthSpace size={16} direction="vertical">
-      {!isV2 ? null : (
-        <InlineNotification
-          type="error"
-          title="Your agent needs to be updated"
-          description={
-            <>
-              You are running an older agent on this environment. Updating your Testkube will enable parallel tests and
-              other new features.
-            </>
-          }
+  const v2Notification = !isV2 ? null : (
+    <InlineNotification
+      type="error"
+      title="Your agent needs to be updated"
+      description={
+        <>
+          You are running an older agent on this environment. Updating your Testkube will enable parallel tests and
+          other new features.
+        </>
+      }
+    />
+  );
+
+  const footer = (
+    <>
+      Learn more about <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
+    </>
+  );
+
+  const form = (
+    <CardForm
+      name="define-tests-form"
+      title="Tests"
+      description="Define the tests and their order of execution for this test suite"
+      footer={footer}
+      disabled={!mayEdit}
+      wasTouched={wasTouched}
+      onConfirm={onSave}
+      onCancel={() => setSteps(initialSteps)}
+    >
+      {!steps?.length ? (
+        <EmptyTestsContainer>
+          <Title level={2} className="text-center">
+            This test suite doesn&#39;t have any tests yet
+          </Title>
+          <Button $customType="primary" onClick={() => showTestModal(-0.5)}>
+            Add your first test
+          </Button>
+        </EmptyTestsContainer>
+      ) : (
+        <TestSuiteStepsFlow
+          steps={steps}
+          setSteps={setSteps}
+          showTestModal={showTestModal}
+          showDelayModal={showDelayModal}
+          isV2={isV2}
         />
       )}
-      <Form name="define-tests-form">
-        <ConfigurationCard
-          title="Tests"
-          description="Define the tests and their order of execution for this test suite"
-          footerText={
-            <>
-              Learn more about{' '}
-              <ExternalLink href={externalLinks.testSuitesCreating}>Tests in a test suite</ExternalLink>
-            </>
-          }
-          onConfirm={onSave}
-          onCancel={() => setSteps(initialSteps)}
-          isButtonsDisabled={!wasTouched}
-          isEditable={mayEdit}
-          enabled={mayEdit}
-          forceEnableButtons={wasTouched}
-        >
-          {!steps?.length ? (
-            <EmptyTestsContainer>
-              <Title level={2} className="text-center">
-                This test suite doesn&#39;t have any tests yet
-              </Title>
-              <Button $customType="primary" onClick={() => showTestModal(-0.5)}>
-                Add your first test
-              </Button>
-            </EmptyTestsContainer>
-          ) : (
-            <TestSuiteStepsFlow
-              steps={steps}
-              setSteps={setSteps}
-              showTestModal={showTestModal}
-              showDelayModal={showDelayModal}
-              isV2={isV2}
-            />
-          )}
-          <DelayModal visible={isDelayModalVisible} onClose={() => setIsDelayModalVisible(false)} onSubmit={addDelay} />
-          <TestModal visible={isTestModalVisible} onClose={() => setIsTestModalVisible(false)} onSubmit={addTest} />
-        </ConfigurationCard>
-      </Form>
+      <DelayModal visible={isDelayModalVisible} onClose={() => setIsDelayModalVisible(false)} onSubmit={addDelay} />
+      <TestModal visible={isTestModalVisible} onClose={() => setIsTestModalVisible(false)} onSubmit={addTest} />
+    </CardForm>
+  );
+
+  return (
+    <FullWidthSpace size={16} direction="vertical">
+      {v2Notification}
+      {form}
     </FullWidthSpace>
   );
 };

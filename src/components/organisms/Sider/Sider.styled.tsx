@@ -33,8 +33,8 @@ export const StyledOther = styled(Space)`
   }
 `;
 
-export const StyledSider = styled(Layout.Sider)<{$isFullScreenLogOutput?: boolean}>`
-  z-index: ${({$isFullScreenLogOutput}) => ($isFullScreenLogOutput ? '1002' : '1')};
+export const StyledSider = styled(Layout.Sider)`
+  z-index: 999;
 
   .ant-layout-sider-children {
     display: flex;

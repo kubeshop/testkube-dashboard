@@ -1,8 +1,5 @@
 import {useState} from 'react';
 
-import {Form} from 'antd';
-
-import {nanoid} from '@reduxjs/toolkit';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
@@ -10,8 +7,10 @@ import {capitalize} from 'lodash';
 
 import {Option} from '@models/form';
 
-import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
+import {LabelsSelect, notificationCall} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -32,7 +31,6 @@ const Labels: React.FC<LabelsProps> = ({label, useUpdateEntity}) => {
 
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [wasTouched, setWasTouched] = useState(false);
-  const [labelsKey, setLabelsKey] = useState(nanoid());
 
   if (!details) {
     return null;
@@ -56,7 +54,6 @@ const Labels: React.FC<LabelsProps> = ({label, useUpdateEntity}) => {
   };
 
   const onCancel = () => {
-    setLabelsKey(nanoid());
     setLocalLabels(entityLabels);
     setWasTouched(false);
   };
@@ -67,19 +64,17 @@ const Labels: React.FC<LabelsProps> = ({label, useUpdateEntity}) => {
   };
 
   return (
-    <Form name="labels-form">
-      <ConfigurationCard
-        title="Labels"
-        description={`Define the labels you want to add for this ${label}`}
-        isButtonsDisabled={!wasTouched}
-        onConfirm={onSave}
-        onCancel={onCancel}
-        enabled={mayEdit}
-        forceEnableButtons={wasTouched}
-      >
-        <LabelsSelect key={`labels_${labelsKey}`} onChange={onChange} defaultLabels={entityLabels} />
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="labels-form"
+      title="Labels"
+      description={`Define the labels you want to add for this ${label}`}
+      disabled={!mayEdit}
+      wasTouched={wasTouched}
+      onConfirm={onSave}
+      onCancel={onCancel}
+    >
+      <LabelsSelect onChange={onChange} defaultLabels={entityLabels} />
+    </CardForm>
   );
 };
 

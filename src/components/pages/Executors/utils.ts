@@ -29,6 +29,12 @@ export const executorsList: ExecutorGridItem[] = [
     docLink: 'https://docs.testkube.io/test-types/executor-custom/',
   },
   {
+    type: 'tracetest/test',
+    title: 'Tracetest',
+    description: 'Use Observability-Driven Development to build end-to-end tests.',
+    docLink: 'https://docs.testkube.io/test-types/executor-tracetest/',
+  },
+  {
     type: 'k6/script',
     title: 'K6',
     description:
