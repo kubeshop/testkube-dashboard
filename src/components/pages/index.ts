@@ -9,3 +9,4 @@ export {default as ErrorBoundary} from './ErrorBoundary';
 export {default as GlobalSettings} from './GlobalSettings';
 export {default as Loading} from './Loading';
 export {default as Error} from './Error';
+export {default as ClusterRequired} from './ClusterRequired';

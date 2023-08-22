@@ -28,7 +28,7 @@ const TriggersList: React.FC = () => {
   const {location} = useContext(DashboardContext);
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/triggers/${name}`);
 
-  const {data: triggersList = [], refetch, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
+  const {data: triggers, refetch, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
 
   const [isAddTriggerModalVisible, setAddTriggerModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
@@ -60,7 +60,7 @@ const TriggersList: React.FC = () => {
     >
       <EntityGrid
         maxColumns={3}
-        data={triggersList}
+        data={triggers}
         Component={TriggerCard}
         componentProps={{onClick: openDetails}}
         empty={<EmptyTriggers onButtonClick={() => setAddTriggerModalVisibility(true)} />}

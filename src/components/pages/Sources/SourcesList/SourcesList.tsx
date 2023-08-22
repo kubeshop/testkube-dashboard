@@ -12,8 +12,6 @@ import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
-import Loading from '@pages/Loading';
-
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetSourcesQuery} from '@services/sources';
@@ -38,10 +36,6 @@ const Sources: React.FC = () => {
   useEffect(() => {
     safeRefetch(refetch);
   }, [location]);
-
-  if (!sources) {
-    return <Loading />;
-  }
 
   return (
     <PageBlueprint
