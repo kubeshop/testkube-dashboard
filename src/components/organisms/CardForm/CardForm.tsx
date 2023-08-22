@@ -34,8 +34,6 @@ interface CardFormProps {
   onCancel?: () => void;
 }
 
-const noop = () => {};
-
 const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   name,
   title,
@@ -119,14 +117,13 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
             <ConfigurationCard
               title={title}
               description={description}
-              footerText={footer}
-              confirmButtonText={confirmLabel}
-              forceEnableButtons={wasTouched}
-              enabled={!readOnly}
+              footer={footer}
+              confirmLabel={confirmLabel}
+              wasTouched={wasTouched}
+              readOnly={readOnly}
               loading={loading}
               isWarning={isWarning}
               errors={errors}
-              onConfirm={noop}
               onCancel={form || onCancel ? cancel : undefined}
             >
               {Children.count(children) ? (

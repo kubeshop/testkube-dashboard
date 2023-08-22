@@ -28,17 +28,14 @@ type ConfigurationCardProps = {
   title: ReactNode;
   description: ReactNode;
   isWarning?: boolean;
-  footerText?: ReactNode;
-  onConfirm?: () => Promise<void> | void;
-  confirmButtonText?: string;
-  onCancel?: () => void;
-  isButtonsDisabled?: boolean;
-  forceEnableButtons?: boolean;
+  footer?: ReactNode;
+  confirmLabel?: string;
+  wasTouched?: boolean;
   children?: ReactNode;
-  isEditable?: boolean;
-  enabled?: boolean;
+  readOnly?: boolean;
   loading?: boolean;
   errors?: ErrorNotificationConfig[];
+  onCancel?: () => void;
 };
 
 const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
@@ -46,16 +43,13 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     errors,
     title,
     description,
-    isWarning = false,
-    onConfirm,
     onCancel,
-    footerText,
+    footer,
     children,
-    confirmButtonText = 'Save',
-    isButtonsDisabled,
-    forceEnableButtons,
-    isEditable = true,
-    enabled = true,
+    confirmLabel = 'Save',
+    wasTouched,
+    isWarning = false,
+    readOnly = false,
     loading = false,
   } = props;
   const topRef = useRef<HTMLDivElement>(null);
@@ -77,56 +71,48 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
           </Text>
         </StyledHeader>
       </StyledHeaderContainer>
-      {children ? (
-        <>
-          <StyledErrorsContainer>
-            {errors?.map(x => (
-              <StyledNotificationContainer key={x.title}>
-                <NotificationContent status="failed" message={x.message} title={x.title} />
-              </StyledNotificationContainer>
-            )) || null}
-          </StyledErrorsContainer>
-          <StyledChildren $isActionsVisible={enabled || !isEditable}>{children}</StyledChildren>
-        </>
+      {children && errors?.length ? (
+        <StyledErrorsContainer>
+          {errors?.map(x => (
+            <StyledNotificationContainer key={x.title}>
+              <NotificationContent status="failed" message={x.message} title={x.title} />
+            </StyledNotificationContainer>
+          )) || null}
+        </StyledErrorsContainer>
       ) : null}
-      {(enabled && onConfirm) || footerText ? (
+      {children ? <StyledChildren>{children}</StyledChildren> : null}
+      {!readOnly || footer ? (
         <StyledFooter>
-          {footerText && (
+          {footer ? (
             <StyledFooterText>
               <Text className="regular middle" color={Colors.slate400}>
-                {footerText}
+                {footer}
               </Text>
             </StyledFooterText>
-          )}
-          {enabled ? (
+          ) : null}
+          {readOnly ? null : (
             <Form.Item noStyle shouldUpdate>
-              {({isFieldsTouched, getFieldsValue, validateFields}) => {
-                let disabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
-
-                if (forceEnableButtons) {
-                  disabled = false;
-                }
+              {({isFieldsTouched, getFieldsValue}) => {
+                const buttonsDisabled = loading || (wasTouched ? false : getFieldsValue() && !isFieldsTouched());
 
                 return (
                   <StyledFooterButtonsContainer>
-                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || disabled || loading}>
+                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || buttonsDisabled}>
                       Cancel
                     </Button>
                     <Button
-                      onClick={onConfirm}
                       $customType={isWarning ? 'warning' : 'primary'}
-                      disabled={disabled || loading}
+                      disabled={buttonsDisabled}
                       loading={loading}
-                      hidden={!onConfirm}
                       htmlType="submit"
                     >
-                      {confirmButtonText}
+                      {confirmLabel}
                     </Button>
                   </StyledFooterButtonsContainer>
                 );
               }}
             </Form.Item>
-          ) : null}
+          )}
         </StyledFooter>
       ) : null}
     </StyledContainer>
