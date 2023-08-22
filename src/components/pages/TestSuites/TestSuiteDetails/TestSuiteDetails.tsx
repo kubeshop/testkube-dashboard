@@ -4,11 +4,11 @@ import {useParams} from 'react-router-dom';
 import {EntityDetailsLayer, ExecutionDetailsLayer} from '@organisms/EntityDetails';
 
 import {
+  useGetTestSuiteDetailsQuery,
   useGetTestSuiteExecutionByIdQuery,
   useGetTestSuiteExecutionMetricsQuery,
-  useGetTestSuiteExecutionsByTestIdQuery,
-} from '@services/testSuiteExecutions';
-import {useGetTestSuiteDetailsQuery} from '@services/testSuites';
+  useGetTestSuiteExecutionsByTestSuiteIdQuery,
+} from '@services/testSuites';
 
 import TestSuiteDetailsContent from './TestSuiteDetailsContent';
 
@@ -25,7 +25,7 @@ const TestSuiteDetails: FC<TestSuiteDetailsProps> = ({tab}) => {
       execId={execId}
       useGetEntityDetails={useGetTestSuiteDetailsQuery}
       useGetMetrics={useGetTestSuiteExecutionMetricsQuery}
-      useGetExecutions={useGetTestSuiteExecutionsByTestIdQuery}
+      useGetExecutions={useGetTestSuiteExecutionsByTestSuiteIdQuery}
     >
       <ExecutionDetailsLayer
         entity="test-suites"

@@ -8,7 +8,7 @@ import {TestSuiteWithExecution} from '@models/testSuite';
 
 import EntityGridItemPure, {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
-import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuiteExecutions';
+import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuites';
 
 import {PollingIntervals} from '@utils/numbers';
 
