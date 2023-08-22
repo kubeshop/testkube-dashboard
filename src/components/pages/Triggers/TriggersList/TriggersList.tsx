@@ -12,6 +12,8 @@ import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
+import {Error} from '@pages';
+
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetTriggersListQuery} from '@services/triggers';
@@ -28,7 +30,7 @@ const TriggersList: React.FC = () => {
   const {location} = useContext(DashboardContext);
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/triggers/${name}`);
 
-  const {data: triggers, refetch, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
+  const {data: triggers, refetch, error, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
 
   const [isAddTriggerModalVisible, setAddTriggerModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
@@ -36,6 +38,10 @@ const TriggersList: React.FC = () => {
   useEffect(() => {
     safeRefetch(refetch);
   }, [location]);
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
 
   return (
     <PageBlueprint

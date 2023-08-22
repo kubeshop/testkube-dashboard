@@ -12,6 +12,8 @@ import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
+import {Error} from '@pages';
+
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetSourcesQuery} from '@services/sources';
@@ -28,7 +30,7 @@ const Sources: React.FC = () => {
   const {location} = useContext(DashboardContext);
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/sources/${name}`);
 
-  const {data: sources, refetch, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
+  const {data: sources, refetch, error, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
 
   const [isAddSourceModalVisible, setAddSourceModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
@@ -36,6 +38,10 @@ const Sources: React.FC = () => {
   useEffect(() => {
     safeRefetch(refetch);
   }, [location]);
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
 
   return (
     <PageBlueprint

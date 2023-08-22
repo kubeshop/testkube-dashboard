@@ -11,6 +11,8 @@ import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
+import {Error} from '@pages';
+
 import {usePluginSlot} from '@plugins/hooks';
 
 import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
@@ -39,6 +41,7 @@ const TestSuitesList: FC = () => {
 
   const {
     data: testSuites,
+    error,
     isLoading,
     isFetching,
   } = useGetTestSuitesQuery(filters || null, {
@@ -56,6 +59,10 @@ const TestSuitesList: FC = () => {
         notificationCall('failed', 'Something went wrong during test suite execution abortion');
       });
   }, []);
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
 
   return (
     <EntityListContent
