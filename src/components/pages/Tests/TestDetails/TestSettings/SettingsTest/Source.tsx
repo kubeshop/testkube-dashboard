@@ -4,12 +4,11 @@ import {Form, Select} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {FormItem, FullWidthSpace} from '@custom-antd';
+import {FormItem} from '@custom-antd';
 
 import {Test} from '@models/test';
 
-import {ConfigurationCard} from '@molecules';
-
+import {CardForm} from '@organisms';
 import {
   CustomSourceEditFormFields,
   FileContentFields,
@@ -91,71 +90,69 @@ const Source: React.FC<SourceProps> = props => {
     });
   };
 
+  const onCancel = () => {
+    form.resetFields();
+    setIsClearedUsername(!additionalFormValues.username);
+    setIsClearedToken(!additionalFormValues.token);
+  };
+
+  const footer = (
+    <>
+      Learn more about <ExternalLink href={externalLinks.sourcesDocumentation}>test sources</ExternalLink>
+    </>
+  );
+
   return (
-    <Form
-      form={form}
+    <CardForm
       name="test-settings-source"
-      initialValues={{testSource: source, ...additionalFormValues}}
-      layout="vertical"
+      title="Source"
+      description="Define the source for your test"
+      footer={footer}
       labelAlign="right"
+      spacing={24}
+      form={form}
+      initialValues={{testSource: source, ...additionalFormValues}}
       disabled={!mayEdit}
+      wasTouched={Boolean(
+        (isClearedToken && additionalFormValues.token) || (isClearedUsername && additionalFormValues.username)
+      )}
+      onConfirm={onSave}
+      onCancel={onCancel}
     >
-      <ConfigurationCard
-        title="Source"
-        description="Define the source for your test"
-        onConfirm={onSave}
-        onCancel={() => {
-          form.resetFields();
-          setIsClearedUsername(!additionalFormValues.username);
-          setIsClearedToken(!additionalFormValues.token);
-        }}
-        footerText={
-          <>
-            Learn more about <ExternalLink href={externalLinks.sourcesDocumentation}>test sources</ExternalLink>
-          </>
-        }
-        forceEnableButtons={Boolean(
-          (isClearedToken && additionalFormValues.token) || (isClearedUsername && additionalFormValues.username)
-        )}
-        enabled={mayEdit}
+      <FormItem name="testSource" rules={[required]}>
+        <Select showSearch options={sourcesOptions} />
+      </FormItem>
+      <Form.Item
+        noStyle
+        shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
       >
-        <FullWidthSpace size={24} direction="vertical">
-          <FormItem name="testSource" rules={[required]}>
-            <Select showSearch options={sourcesOptions} />
-          </FormItem>
-          <Form.Item
-            noStyle
-            shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}
-          >
-            {({getFieldValue}) => {
-              const testSource = getSourceFieldValue(getFieldValue);
+        {({getFieldValue}) => {
+          const testSource = getSourceFieldValue(getFieldValue);
 
-              if (!testSource) {
-                return null;
-              }
+          if (!testSource) {
+            return null;
+          }
 
-              const executorType = selectedExecutor?.executor.meta?.iconURI || 'unknown';
+          const executorType = selectedExecutor?.executor.meta?.iconURI || 'unknown';
 
-              const childrenProps: Record<SourceType, Partial<Props>> = {
-                git: {
-                  executorType,
-                  isClearedToken,
-                  isClearedUsername,
-                  setIsClearedToken,
-                  setIsClearedUsername,
-                  getFieldValue,
-                },
-                custom: {executorType},
-                string: {},
-                'file-uri': {},
-              };
+          const childrenProps: Record<SourceType, Partial<Props>> = {
+            git: {
+              executorType,
+              isClearedToken,
+              isClearedUsername,
+              setIsClearedToken,
+              setIsClearedUsername,
+              getFieldValue,
+            },
+            custom: {executorType},
+            string: {},
+            'file-uri': {},
+          };
 
-              return getAdditionalFieldsComponent(testSource, additionalFields, childrenProps[testSource]);
-            }}
-          </Form.Item>
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+          return getAdditionalFieldsComponent(testSource, additionalFields, childrenProps[testSource]);
+        }}
+      </Form.Item>
+    </CardForm>
   );
 };
 

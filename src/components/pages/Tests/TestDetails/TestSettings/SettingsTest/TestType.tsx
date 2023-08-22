@@ -4,9 +4,9 @@ import {Form, Select} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {FormItem, FullWidthSpace} from '@custom-antd';
+import {FormItem} from '@custom-antd';
 
-import {ConfigurationCard} from '@molecules';
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -38,29 +38,27 @@ const TestType: React.FC<TestTypeProps> = props => {
     return updateTest({type: form.getFieldValue('type')});
   };
 
+  const footer = (
+    <>
+      Learn more about <ExternalLink href={externalLinks.testTypes}>test types and executors</ExternalLink>
+    </>
+  );
+
   return (
-    <Form form={form} onFinish={onSave} name="test-settings-test-type" initialValues={{type}} disabled={!mayEdit}>
-      <ConfigurationCard
-        title="Test type"
-        description="Define the test type for this test."
-        onConfirm={onSave}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        footerText={
-          <>
-            Learn more about <ExternalLink href={externalLinks.testTypes}>test types and executors</ExternalLink>
-          </>
-        }
-        enabled={mayEdit}
-      >
-        <FullWidthSpace size={32} direction="vertical">
-          <FormItem name="type" rules={[required]}>
-            <Select showSearch options={remappedExecutors} />
-          </FormItem>
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="test-settings-test-type"
+      title="Test type"
+      description="Define the test type for this test."
+      footer={footer}
+      form={form}
+      initialValues={{type}}
+      disabled={!mayEdit}
+      onConfirm={onSave}
+    >
+      <FormItem name="type" rules={[required]}>
+        <Select showSearch options={remappedExecutors} />
+      </FormItem>
+    </CardForm>
   );
 };
 

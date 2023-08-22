@@ -5,9 +5,11 @@ import {MutationDefinition} from '@reduxjs/toolkit/query';
 
 import {capitalize} from 'lodash';
 
-import {FormItem, FullWidthSpace} from '@custom-antd';
+import {FormItem} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -62,26 +64,23 @@ const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEnti
   };
 
   return (
-    <Form form={form} name="general-settings-name-description" initialValues={{name, description}} disabled={!mayEdit}>
-      <ConfigurationCard
-        title={`${capitalize(label)} name & description`}
-        description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
-        onConfirm={onSave}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <FullWidthSpace size={32} direction="vertical">
-          <FormItem name="name" rules={[required]}>
-            <Input placeholder="Name" disabled />
-          </FormItem>
-          <FormItem name="description">
-            <TextArea placeholder="Description" autoSize={{minRows: 2, maxRows: 3}} />
-          </FormItem>
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="general-settings-name-description"
+      title={`${capitalize(label)} name & description`}
+      description="Define the name and description of the project which will be displayed across the Dashboard and CLI"
+      spacing={32}
+      form={form}
+      initialValues={{name, description}}
+      disabled={!mayEdit}
+      onConfirm={onSave}
+    >
+      <FormItem name="name" rules={[required]}>
+        <Input placeholder="Name" disabled />
+      </FormItem>
+      <FormItem name="description">
+        <TextArea placeholder="Description" autoSize={{minRows: 2, maxRows: 3}} />
+      </FormItem>
+    </CardForm>
   );
 };
 

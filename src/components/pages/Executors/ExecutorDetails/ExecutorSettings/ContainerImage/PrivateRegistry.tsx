@@ -1,8 +1,8 @@
-import {useEffect} from 'react';
-
 import {Form, Input} from 'antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -44,32 +44,20 @@ const PrivateRegistry: React.FC = () => {
       .then(() => notificationCall('passed', 'Private registry was successfully updated.'));
   };
 
-  useEffect(() => {
-    form.setFieldsValue({privateRegistry});
-  }, [privateRegistry]);
-
   return (
-    <Form
-      form={form}
+    <CardForm
       name="general-settings-name-type"
+      title="Private registry"
+      description="In case your image is on a private registry please add the name of your credential secret."
+      form={form}
       initialValues={{privateRegistry}}
-      layout="vertical"
       disabled={!mayEdit}
+      onConfirm={onSubmit}
     >
-      <ConfigurationCard
-        title="Private registry"
-        description="In case your image is on a private registry please add the name of your credential secret."
-        onConfirm={onSubmit}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <Form.Item label="Secret ref name" name="privateRegistry" style={{flex: 1, marginBottom: '0'}}>
-          <Input placeholder="Secret ref name" />
-        </Form.Item>
-      </ConfigurationCard>
-    </Form>
+      <Form.Item label="Secret ref name" name="privateRegistry" style={{flex: 1, marginBottom: '0'}}>
+        <Input placeholder="Secret ref name" />
+      </Form.Item>
+    </CardForm>
   );
 };
 

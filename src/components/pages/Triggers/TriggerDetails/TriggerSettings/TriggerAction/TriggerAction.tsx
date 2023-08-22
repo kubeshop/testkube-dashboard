@@ -1,8 +1,8 @@
 import {Form} from 'antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
 
-import {ActionFormItems} from '@organisms';
+import {ActionFormItems, CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -24,8 +24,6 @@ const TriggerAction: React.FC = () => {
   const [updateTrigger] = useUpdateTriggerByIdMutation();
 
   const [form] = Form.useForm();
-
-  const initialValues = getActionFormValues(currentTrigger!);
 
   const onFinish = () => {
     const values = form.getFieldsValue();
@@ -50,19 +48,17 @@ const TriggerAction: React.FC = () => {
   };
 
   return (
-    <Form form={form} name="trigger-action" initialValues={initialValues} layout="vertical" disabled={!mayEdit}>
-      <ConfigurationCard
-        title="Action"
-        description="Define the action to be performed on testkube once the conditions are met."
-        onConfirm={onFinish}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <ActionFormItems />
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="trigger-action"
+      title="Action"
+      description="Define the action to be performed on testkube once the conditions are met."
+      form={form}
+      initialValues={getActionFormValues(currentTrigger!)}
+      disabled={!mayEdit}
+      onConfirm={onFinish}
+    >
+      <ActionFormItems />
+    </CardForm>
   );
 };
 

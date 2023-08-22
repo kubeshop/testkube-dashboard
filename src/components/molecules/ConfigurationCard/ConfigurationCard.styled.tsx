@@ -26,16 +26,8 @@ export const StyledHeader = styled.div`
   flex: 1;
 `;
 
-export const HeaderAction = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 8px;
-`;
-
-export const StyledChildren = styled.div<{$isActionsVisible: boolean}>`
+export const StyledChildren = styled.div`
   padding: 20px;
-
-  ${({$isActionsVisible}) => (!$isActionsVisible ? 'cursor: not-allowed' : '')}
 `;
 
 export const StyledFooter = styled.div`

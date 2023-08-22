@@ -1,7 +1,5 @@
 import React, {PropsWithChildren, Suspense, useContext, useEffect, useState} from 'react';
 
-import {Form} from 'antd';
-
 import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
@@ -16,7 +14,9 @@ import {FullWidthSpace} from '@custom-antd';
 
 import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
 
-import {ConfigurationCard, InlineNotification, notificationCall} from '@molecules';
+import {InlineNotification, notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
@@ -105,39 +105,37 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
           }
         />
       )}
-      <Form name="definition-form">
-        <ConfigurationCard
-          title="Definition"
-          description={`Validate and update your ${label} configuration`}
-          onConfirm={onSave}
-          onCancel={() => {
-            setValue(definition);
-            setWasTouched(false);
-          }}
-          isButtonsDisabled={!isSupported || !wasTouched}
-          forceEnableButtons={isSupported && wasTouched}
-          enabled={isSupported}
-        >
-          {isDefinitionLoading ? (
-            <DefinitionSkeleton />
-          ) : definition ? (
-            <Suspense fallback={<DefinitionSkeleton />}>
-              <KubernetesResourceEditor
-                value={value}
-                disabled={!isSupported}
-                onChange={newValue => {
-                  setValue(newValue);
-                  setWasTouched(true);
-                }}
-                crdUrl={crdUrl}
-                overrideSchema={overrideSchema}
-              />
-            </Suspense>
-          ) : (
-            <Pre> No definition data</Pre>
-          )}
-        </ConfigurationCard>
-      </Form>
+      <CardForm
+        name="definition-form"
+        title="Definition"
+        description={`Validate and update your ${label} configuration`}
+        onConfirm={onSave}
+        onCancel={() => {
+          setValue(definition);
+          setWasTouched(false);
+        }}
+        readOnly={!isSupported}
+        wasTouched={wasTouched}
+      >
+        {isDefinitionLoading ? (
+          <DefinitionSkeleton />
+        ) : definition ? (
+          <Suspense fallback={<DefinitionSkeleton />}>
+            <KubernetesResourceEditor
+              value={value}
+              disabled={!isSupported}
+              onChange={newValue => {
+                setValue(newValue);
+                setWasTouched(true);
+              }}
+              crdUrl={crdUrl}
+              overrideSchema={overrideSchema}
+            />
+          </Suspense>
+        ) : (
+          <Pre> No definition data</Pre>
+        )}
+      </CardForm>
     </FullWidthSpace>
   );
 };

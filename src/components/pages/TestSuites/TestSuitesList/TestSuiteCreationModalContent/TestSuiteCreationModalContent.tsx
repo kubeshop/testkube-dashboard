@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
@@ -66,12 +66,6 @@ const TestSuiteCreationModalContent: React.FC = () => {
         }
       });
   };
-
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
-  }, []);
 
   return (
     <Form

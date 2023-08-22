@@ -1,10 +1,10 @@
-import {useEffect} from 'react';
-
 import {Form} from 'antd';
 
 import {CommandInput} from '@atoms';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -42,34 +42,20 @@ const Command: React.FC = () => {
       .then(() => notificationCall('passed', 'Command was successfully updated.'));
   };
 
-  useEffect(() => {
-    form.setFieldsValue({
-      command: current!.executor.command?.join(' '),
-    });
-  }, [current!.executor.command]);
-
   return (
-    <Form
-      form={form}
+    <CardForm
       name="general-settings-name-type"
+      title="Command"
+      description="Define the command your image needs to run"
+      form={form}
       initialValues={{command: current!.executor.command?.join(' ')}}
-      layout="vertical"
       disabled={!mayEdit}
+      onConfirm={onSubmit}
     >
-      <ConfigurationCard
-        title="Command"
-        description="Define the command your image needs to run"
-        onConfirm={onSubmit}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <Form.Item label="Command" name="command" style={{flex: 1, marginBottom: '0'}}>
-          <CommandInput />
-        </Form.Item>
-      </ConfigurationCard>
-    </Form>
+      <Form.Item label="Command" name="command" style={{flex: 1, marginBottom: '0'}}>
+        <CommandInput />
+      </Form.Item>
+    </CardForm>
   );
 };
 

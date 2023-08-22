@@ -1,10 +1,10 @@
-import {useEffect} from 'react';
-
 import {Form, Input} from 'antd';
 
 import {Executor} from '@models/executors';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -44,32 +44,20 @@ const ContainerImagePanel: React.FC = () => {
       .then(() => notificationCall('passed', 'Container image was successfully updated.'));
   };
 
-  useEffect(() => {
-    form.setFieldsValue({image});
-  }, [image]);
-
   return (
-    <Form form={form} name="general-settings-name-type" initialValues={{image}} layout="vertical" disabled={!mayEdit}>
-      <ConfigurationCard
-        title="Container image"
-        description="Define the image you want to use for this executor. We defer by default to Dockerhub - but you can also insert a URL to your very own image"
-        onConfirm={onSubmit}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <Form.Item
-          label="Container image"
-          required
-          name="image"
-          rules={[required]}
-          style={{flex: 1, marginBottom: '0'}}
-        >
-          <Input placeholder="Container image" />
-        </Form.Item>
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="general-settings-name-type"
+      title="Container image"
+      description="Define the image you want to use for this executor. We defer by default to Dockerhub - but you can also insert a URL to your very own image"
+      form={form}
+      initialValues={{image}}
+      disabled={!mayEdit}
+      onConfirm={onSubmit}
+    >
+      <Form.Item label="Container image" required name="image" rules={[required]} style={{flex: 1, marginBottom: '0'}}>
+        <Input placeholder="Container image" />
+      </Form.Item>
+    </CardForm>
   );
 };
 

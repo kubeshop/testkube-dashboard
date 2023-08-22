@@ -15,12 +15,13 @@ const ConnectCloud: React.FC = () => {
     <ConfigurationCard
       title="Connect to Testkube Cloud"
       description="Connect your current Testkube instance to Testkube Cloud. You can always safely disconnect."
-      footerText={
+      footer={
         <Text className="regular middle" color={Colors.slate400}>
           Learn more about{' '}
           <ExternalLink href={externalLinks.transitionFromOSS}>connecting to Testkube Cloud</ExternalLink>
         </Text>
       }
+      readOnly
     >
       <FullWidthSpace size={32} direction="vertical" style={{textAlign: 'center'}}>
         <FullWidthSpace size={20} direction="vertical">
