@@ -32,6 +32,7 @@ module.exports = {
           release: {name: process.env.REACT_APP_VERSION},
           authToken: process.env.SENTRY_AUTH_TOKEN,
           disabled: !process.env.SENTRY_AUTH_TOKEN || !process.env.REACT_APP_VERSION,
+          telemetry: false,
         }),
       ],
     },
