@@ -9,7 +9,6 @@ import {DashboardContext, MainContext} from '@contexts';
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 
 import {
-  ClusterRequired,
   EndpointProcessing,
   Executors,
   GlobalSettings,
@@ -84,12 +83,17 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
   useEffect(() => {
     // Do not fire the effect if new endpoint is just being set up.
-    if (!isClusterAvailable || location.pathname === '/apiEndpoint') {
+    if (location.pathname === '/apiEndpoint') {
       return;
     }
 
     if (!apiEndpoint && !isApiEndpointLocked()) {
       setEndpointModalState(true);
+      return;
+    }
+
+    // Avoid loading API details when we know the cluster is not available.
+    if (!isClusterAvailable) {
       return;
     }
 
@@ -163,14 +167,12 @@ const App: React.FC<AppProps> = ({plugins}) => {
         ) : null}
         <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
         <Routes>
-          <Route element={<ClusterRequired />}>
-            <Route path="tests/*" element={<Tests />} />
-            <Route path="test-suites/*" element={<TestSuites />} />
-            <Route path="executors/*" element={<Executors />} />
-            <Route path="sources/*" element={<Sources />} />
-            <Route path="triggers/*" element={<Triggers />} />
-            <Route path="webhooks/*" element={<Webhooks />} />
-          </Route>
+          <Route path="tests/*" element={<Tests />} />
+          <Route path="test-suites/*" element={<TestSuites />} />
+          <Route path="executors/*" element={<Executors />} />
+          <Route path="sources/*" element={<Sources />} />
+          <Route path="triggers/*" element={<Triggers />} />
+          <Route path="webhooks/*" element={<Webhooks />} />
           <Route path="settings" element={<GlobalSettings />} />
           <Route
             path="/apiEndpoint"

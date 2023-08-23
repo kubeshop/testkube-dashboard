@@ -71,7 +71,7 @@ const Sources: React.FC = () => {
         componentProps={{onClick: openDetails}}
         empty={<EmptySources onButtonClick={() => setAddSourceModalVisibility(true)} />}
         itemHeight={66}
-        loadingInitially={isLoading}
+        loadingInitially={isLoading || !isClusterAvailable}
       />
       {isAddSourceModalVisible ? (
         <Modal
