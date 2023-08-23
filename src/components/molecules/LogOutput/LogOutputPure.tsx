@@ -7,8 +7,7 @@ import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
 
-/* eslint-disable react/no-unused-prop-types */
-interface LogOutputPureProps {
+export interface LogOutputPureProps {
   className?: string;
   logs: string;
   visibleLogs: string;
