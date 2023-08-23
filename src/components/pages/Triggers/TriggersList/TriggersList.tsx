@@ -71,7 +71,7 @@ const TriggersList: React.FC = () => {
         componentProps={{onClick: openDetails}}
         empty={<EmptyTriggers onButtonClick={() => setAddTriggerModalVisibility(true)} />}
         itemHeight={66}
-        loadingInitially={isLoading}
+        loadingInitially={isLoading || !isClusterAvailable}
       />
       {isAddTriggerModalVisible ? (
         <Modal

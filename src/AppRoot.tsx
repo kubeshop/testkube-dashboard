@@ -56,7 +56,9 @@ const AppRoot: React.FC = () => {
   const [TestsProvider] = initializeTestsStore();
   const [TestSuitesProvider] = initializeTestSuitesStore();
 
-  const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
+  const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
+    skip: !apiEndpoint,
+  });
 
   // Pause/resume telemetry based on the cluster settings
   useEffect(() => {
@@ -70,7 +72,7 @@ const AppRoot: React.FC = () => {
   const mainContextValue = useMemo(
     () => ({
       clusterConfig,
-      isClusterAvailable: true,
+      isClusterAvailable: Boolean(clusterConfig),
     }),
     [clusterConfig]
   );
