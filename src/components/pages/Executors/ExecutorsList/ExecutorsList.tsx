@@ -90,7 +90,7 @@ const Executors: React.FC = () => {
                 componentProps={{onClick: openDetails}}
                 empty={<EmptyCustomExecutors onButtonClick={() => setAddExecutorModalVisibility(true)} />}
                 itemHeight={66}
-                loadingInitially={isLoading}
+                loadingInitially={isLoading || !isClusterAvailable}
               />
             ),
           },

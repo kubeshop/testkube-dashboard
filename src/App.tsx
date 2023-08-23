@@ -9,7 +9,6 @@ import {DashboardContext, MainContext} from '@contexts';
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 
 import {
-  ClusterRequired,
   EndpointProcessing,
   Executors,
   GlobalSettings,
@@ -162,13 +161,11 @@ const App: React.FC<AppProps> = ({plugins}) => {
         ) : null}
         <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
         <Routes>
-          <Route element={<ClusterRequired />}>
-            <Route path="tests/*" element={<Tests />} />
-            <Route path="test-suites/*" element={<TestSuites />} />
-            <Route path="executors/*" element={<Executors />} />
-            <Route path="sources/*" element={<Sources />} />
-            <Route path="triggers/*" element={<Triggers />} />
-          </Route>
+          <Route path="tests/*" element={<Tests />} />
+          <Route path="test-suites/*" element={<TestSuites />} />
+          <Route path="executors/*" element={<Executors />} />
+          <Route path="sources/*" element={<Sources />} />
+          <Route path="triggers/*" element={<Triggers />} />
           <Route path="settings" element={<GlobalSettings />} />
           <Route
             path="/apiEndpoint"
