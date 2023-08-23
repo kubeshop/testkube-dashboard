@@ -3,6 +3,7 @@ import React, {FC} from 'react';
 import {Tabs} from 'antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {useLastCallback} from '@hooks/useLastCallback';
 import useRunEntity from '@hooks/useRunEntity';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
@@ -39,6 +40,10 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
   useTrackTimeAnalytics('test-suites-details', tab !== 'settings');
   useTrackTimeAnalytics('test-suites-settings', tab === 'settings');
 
+  const onEditTest = useLastCallback(() => {
+    setSettingsTab('tests');
+  });
+
   if (error) {
     return <Error title={error?.data?.title || 'Error'} description={error?.data?.detail || ''} />;
   }
@@ -56,6 +61,7 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
           onRun={run}
           onBack={back}
           useAbortAllExecutions={useAbortAllTestSuiteExecutionsMutation}
+          onEditTest={onEditTest}
         />
         <SummaryGrid metrics={metrics} />
         <Tabs

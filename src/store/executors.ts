@@ -20,14 +20,14 @@ const createExecutorsSlice: StateCreator<ExecutorsSlice> = set => ({
   featuresMap: {},
 
   setExecutors(rawExecutors): void {
-    const executors = rawExecutors.map(executor => {
+    const executors = rawExecutors?.map(executor => {
       const iconURI = executor.executor?.meta?.iconURI;
       if (!iconURI || isURL(iconURI)) {
         return {...executor, displayName: capitalize(iconURI)};
       }
       return {...executor, displayName: executor.name};
     });
-    const featuresMap: Record<string, ExecutorFeature[]> = executors.reduce(
+    const featuresMap: Record<string, ExecutorFeature[]> = (executors || []).reduce(
       (acc, {executor: {features, types}}) => types.reduce((acc2, type) => ({...acc2, [type]: features || []}), acc),
       {}
     );

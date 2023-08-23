@@ -14,7 +14,7 @@ import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
-import Loading from '@pages/Loading';
+import {Error} from '@pages';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -40,7 +40,7 @@ const Executors: React.FC = () => {
   const [activeTabKey, setActiveTabKey] = useState('custom');
   const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
 
-  const {data: executors, isLoading, refetch} = useGetExecutorsQuery(null, {skip: !isClusterAvailable});
+  const {data: executors, isLoading, error, refetch} = useGetExecutorsQuery(null, {skip: !isClusterAvailable});
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
@@ -48,8 +48,8 @@ const Executors: React.FC = () => {
     safeRefetch(refetch);
   }, [apiEndpoint]);
 
-  if (!executors) {
-    return <Loading />;
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
 
   return (

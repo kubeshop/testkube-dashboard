@@ -11,6 +11,8 @@ import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
+import {Error} from '@pages';
+
 import {usePluginSlot} from '@plugins/hooks';
 
 import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
@@ -36,9 +38,11 @@ const createModal: ModalConfig = {
 const TestSuitesList: FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const [filters, setFilters] = useTestSuitesField('filters');
+  const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
 
   const {
     data: testSuites,
+    error,
     isLoading,
     isFetching,
   } = useGetTestSuitesQuery(filters || null, {
@@ -57,6 +61,10 @@ const TestSuitesList: FC = () => {
       });
   }, []);
 
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+
   return (
     <EntityListContent
       itemKey="testSuite.name"
@@ -65,7 +73,7 @@ const TestSuitesList: FC = () => {
       onItemAbort={onItemAbort}
       entity="test-suites"
       pageTitle="Test Suites"
-      pageTitleAddon={usePluginSlot('testSuitesListTitleAddon')}
+      pageTitleAddon={pageTitleAddon}
       addEntityButtonText="Add a new test suite"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTestSuites}
