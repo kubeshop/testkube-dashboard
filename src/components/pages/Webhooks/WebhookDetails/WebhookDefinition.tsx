@@ -1,21 +1,21 @@
 import {FC} from 'react';
-import {useParams} from 'react-router-dom';
 
 import {Definition} from '@molecules';
 
 import {useGetWebhookDefinitionQuery, useUpdateWebhookDefinitionMutation} from '@services/webhooks';
 
+import {useWebhooksPick} from '@store/webhooks';
+
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
 const WebhookDefinition: FC = () => {
-  const {id = ''} = useParams();
-
+  const {current} = useWebhooksPick('current');
   return (
     <Definition
       useGetDefinitionQuery={useGetWebhookDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateWebhookDefinitionMutation}
-      name={id}
+      name={current!.name}
       label="webhook"
       crdUrl={testkubeCRDBases.webhooks}
       overrideSchema={createSchemaOverride($ => {

@@ -2,13 +2,18 @@ import {FC, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {DashboardContext, MainContext, ModalContext} from '@contexts';
+import {MainContext, ModalContext} from '@contexts';
 
 import {Button} from '@custom-antd';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {useLastCallback} from '@hooks/useLastCallback';
 
 import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
+
+import {Error} from '@pages';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -24,21 +29,30 @@ import WebhookCard from './WebhookCard';
 
 const WebhooksList: FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
   const {setModalOpen, setModalConfig} = useContext(ModalContext);
 
-  const {data, isLoading} = useGetWebhooksQuery(null, {pollingInterval: PollingIntervals.everyTwoSeconds});
+  const openDetails = useDashboardNavigate(({name}: {name: string}) => `/webhooks/${name}/settings`);
+
+  const {
+    data: webhooks,
+    error,
+    isLoading,
+  } = useGetWebhooksQuery(null, {pollingInterval: PollingIntervals.everyTwoSeconds});
 
   const mayCreate = usePermission(Permissions.createEntity);
 
-  const openModal = () => {
+  const openModal = useLastCallback(() => {
     setModalOpen(true);
     setModalConfig({
       width: 530,
       title: 'Create a webhook',
       content: <WebhookCreationModal />,
     });
-  };
+  });
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
 
   return (
     <PageBlueprint
@@ -49,24 +63,22 @@ const WebhooksList: FC = () => {
           <ExternalLink href={externalLinks.notificationsAndWebhooks}>Learn more about Webhooks.</ExternalLink>
         </>
       }
-      {...(mayCreate
-        ? {
-            headerButton: (
-              <Button $customType="primary" onClick={openModal} disabled={!isClusterAvailable}>
-                Create a new webhook
-              </Button>
-            ),
-          }
-        : null)}
+      headerButton={
+        mayCreate ? (
+          <Button $customType="primary" onClick={openModal} disabled={!isClusterAvailable}>
+            Create a new webhook
+          </Button>
+        ) : null
+      }
     >
       <EntityGrid
         maxColumns={2}
-        data={data}
+        data={webhooks}
         Component={WebhookCard}
-        componentProps={{onClick: webhook => navigate(`/webhooks/${webhook.name}/settings`)}}
+        componentProps={{onClick: openDetails}}
         empty={<EmptyWebhooks onButtonClick={openModal} />}
         itemHeight={125}
-        loadingInitially={isLoading}
+        loadingInitially={isLoading || !isClusterAvailable}
       />
     </PageBlueprint>
   );

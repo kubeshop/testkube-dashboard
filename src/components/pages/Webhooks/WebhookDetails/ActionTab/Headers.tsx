@@ -1,17 +1,22 @@
-import {FC, useContext, useEffect} from 'react';
+import {FC} from 'react';
 
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input} from 'antd';
 
 import {Button, FormIconWrapper, FormItem, FormRow, FullWidthSpace} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateWebhookMutation} from '@services/webhooks';
 
-import {requiredNoText} from '@utils/form';
+import {useWebhooksPick} from '@store/webhooks';
 
-import WebhookDetailsContext from '../WebhookDetailsContext';
+import {requiredNoText} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {StyledButtonsContainer} from './Headers.styled';
 import {composeHeaders, decomposeHeaders} from './utils';
@@ -21,73 +26,58 @@ type HeadersFormValues = {
 };
 
 const Headers: FC = () => {
+  const {current} = useWebhooksPick('current');
+  const mayEdit = usePermission(Permissions.editEntity);
   const [form] = Form.useForm<HeadersFormValues>();
-
-  const {webhookDetails, setWebhookDetails} = useContext(WebhookDetailsContext);
 
   const [updateWebhook] = useUpdateWebhookMutation();
 
-  const onFinish = (values: HeadersFormValues) => {
-    const newWebhook = {
-      ...webhookDetails!,
-      headers: composeHeaders(values.headers),
-    };
-
-    updateWebhook(newWebhook).then(() => {
-      notificationCall('passed', 'The URI was successfully updated.');
-      setWebhookDetails(newWebhook);
-      form.resetFields();
-    });
+  const onFinish = () => {
+    const values = form.getFieldsValue();
+    return updateWebhook({...current!, headers: composeHeaders(values.headers)})
+      .then(displayDefaultNotificationFlow)
+      .then(() => notificationCall('passed', 'The URI was successfully updated.'));
   };
 
-  useEffect(() => {
-    form.setFieldValue('headers', decomposeHeaders(webhookDetails?.headers || {}));
-  }, [webhookDetails]);
-
   return (
-    <Form
-      layout="vertical"
+    <CardForm
+      name="webhook-headers"
+      title="Headers"
+      description="Customize the headers we will send with each request."
       form={form}
-      initialValues={{
-        headers: decomposeHeaders(webhookDetails?.headers ?? {}),
-      }}
-      onFinish={onFinish}
+      initialValues={{headers: decomposeHeaders(current!.headers ?? {})}}
+      disabled={!mayEdit}
+      onConfirm={onFinish}
     >
-      <ConfigurationCard
-        title="Headers"
-        description="Customize the headers we will send with each request."
-        onCancel={form.resetFields}
-      >
-        <Form.List name="headers">
-          {(fields, {add, remove}) => (
-            <FullWidthSpace size={20} direction="vertical">
-              {fields && fields.length
-                ? fields.map(({key, name, ...restField}) => {
-                    return (
-                      <FormRow key={key}>
-                        <FormItem {...restField} name={[name, 'key']} rules={[requiredNoText]}>
-                          <Input placeholder="Key" />
-                        </FormItem>
-                        <FormItem {...restField} name={[name, 'value']} rules={[requiredNoText]}>
-                          <Input placeholder="Value" />
-                        </FormItem>
-                        <FormIconWrapper>
-                          <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
-                        </FormIconWrapper>
-                      </FormRow>
-                    );
-                  })
-                : null}
-              <StyledButtonsContainer>
-                <Button $customType="secondary" onClick={() => add({})}>
-                  Add a new variable
-                </Button>
-              </StyledButtonsContainer>
-            </FullWidthSpace>
-          )}
-        </Form.List>
-      </ConfigurationCard>
-    </Form>
+      <Form.List name="headers">
+        {(fields, {add, remove}) => (
+          <FullWidthSpace size={20} direction="vertical">
+            {fields && fields.length
+              ? fields.map(({key, name, ...restField}) => {
+                  return (
+                    <FormRow key={key}>
+                      <FormItem {...restField} name={[name, 'key']} rules={[requiredNoText]}>
+                        <Input placeholder="Key" />
+                      </FormItem>
+                      <FormItem {...restField} name={[name, 'value']} rules={[requiredNoText]}>
+                        <Input placeholder="Value" />
+                      </FormItem>
+                      <FormIconWrapper>
+                        <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
+                      </FormIconWrapper>
+                    </FormRow>
+                  );
+                })
+              : null}
+            <StyledButtonsContainer>
+              <Button $customType="secondary" onClick={() => add({})}>
+                Add a new variable
+              </Button>
+            </StyledButtonsContainer>
+          </FullWidthSpace>
+        )}
+      </Form.List>
+    </CardForm>
   );
 };
 

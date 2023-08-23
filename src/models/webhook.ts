@@ -17,7 +17,7 @@ export enum WebhookEvent {
 }
 
 export type Webhook = {
-  name?: string;
+  name: string;
   namespace?: string;
   uri: string;
   events: WebhookEvent[];

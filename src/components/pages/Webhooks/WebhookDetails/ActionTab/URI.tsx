@@ -1,64 +1,56 @@
-import {FC, useContext, useEffect} from 'react';
+import {FC} from 'react';
 
 import {Form, Input} from 'antd';
 
 import {FormItem} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateWebhookMutation} from '@services/webhooks';
 
-import {requiredNoText, url} from '@utils/form';
+import {useWebhooksPick} from '@store/webhooks';
 
-import WebhookDetailsContext from '../WebhookDetailsContext';
+import {requiredNoText, url} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type URIFormValues = {
   name: string;
 };
 
 const URI: FC = () => {
-  const [form] = Form.useForm<URIFormValues>();
+  const {current} = useWebhooksPick('current');
+  const mayEdit = usePermission(Permissions.editEntity);
 
-  const {webhookDetails, setWebhookDetails} = useContext(WebhookDetailsContext);
+  const [form] = Form.useForm<URIFormValues>();
 
   const [updateWebhook] = useUpdateWebhookMutation();
 
-  const onFinish = (values: URIFormValues) => {
-    const newWebhook = {
-      ...webhookDetails!,
-      ...values,
-    };
+  const onFinish = () => {
+    const values = form.getFieldsValue();
 
-    updateWebhook(newWebhook).then(() => {
-      notificationCall('passed', 'The URI was successfully updated.');
-      setWebhookDetails(newWebhook);
-      form.resetFields();
-    });
+    return updateWebhook({...current!, ...values})
+      .then(displayDefaultNotificationFlow)
+      .then(() => notificationCall('passed', 'The URI was successfully updated.'));
   };
 
-  useEffect(() => {
-    form.setFieldValue('uri', webhookDetails?.uri);
-  }, [webhookDetails]);
-
   return (
-    <Form
-      layout="vertical"
+    <CardForm
+      name="webhook-uri"
+      title="Endpoint URI"
+      description="Define the target URI which we will call with this notification."
       form={form}
-      initialValues={{
-        uri: webhookDetails?.uri ?? '',
-      }}
-      onFinish={onFinish}
+      initialValues={{uri: current!.uri || ''}}
+      disabled={!mayEdit}
+      onConfirm={onFinish}
     >
-      <ConfigurationCard
-        title="Endpoint URI"
-        description="Define the target URI which we will call with this notification."
-        onCancel={form.resetFields}
-      >
-        <FormItem name="uri" label="URI" required rules={[requiredNoText, url]}>
-          <Input placeholder="URI" />
-        </FormItem>
-      </ConfigurationCard>
-    </Form>
+      <FormItem name="uri" label="URI" required rules={[requiredNoText, url]}>
+        <Input placeholder="URI" />
+      </FormItem>
+    </CardForm>
   );
 };
 

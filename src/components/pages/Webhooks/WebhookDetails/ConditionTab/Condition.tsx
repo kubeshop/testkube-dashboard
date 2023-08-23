@@ -1,133 +1,113 @@
-import {FC, useContext, useEffect} from 'react';
+import {FC} from 'react';
 
 import {Form, Select} from 'antd';
 
 import {CreatableMultiSelect} from '@atoms';
 
-import {FormItem, FullWidthSpace} from '@custom-antd';
+import {FormItem} from '@custom-antd';
 
 import {Option} from '@models/form';
 import {WebhookEvent} from '@models/webhook';
 
-import {ConfigurationCard, LabelsSelect, notificationCall} from '@molecules';
+import {LabelsSelect, notificationCall} from '@molecules';
 import {composeLabels} from '@molecules/LabelsSelect/utils';
+
+import {CardForm} from '@organisms';
+
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateWebhookMutation} from '@services/webhooks';
 
-import {requiredNoText} from '@utils/form';
+import {useWebhooksPick} from '@store/webhooks';
 
-import WebhookDetailsContext from '../WebhookDetailsContext';
+import {requiredNoText} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 type ConditionFormValues = {
   events: {label: WebhookEvent; value: WebhookEvent}[];
   labels: Record<string, Option>;
 };
 
+const webhookEvents = Object.keys(WebhookEvent).map(item => {
+  const value = WebhookEvent[item as keyof typeof WebhookEvent];
+  return {label: value, value};
+});
+
 const Condition: FC = () => {
-  const {webhookDetails, setWebhookDetails} = useContext(WebhookDetailsContext);
+  const {current} = useWebhooksPick('current');
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<ConditionFormValues>();
 
   const [updateWebhook] = useUpdateWebhookMutation();
 
-  const webhookEvents = Object.keys(WebhookEvent).map(item => {
-    const value = WebhookEvent[item as keyof typeof WebhookEvent];
-
-    return {
-      label: value,
-      value,
-    };
-  });
-
-  const onFinish = (values: ConditionFormValues) => {
-    const newWebhook = {
-      ...webhookDetails!,
-      ...values,
-    };
+  const onFinish = () => {
+    const values = form.getFieldsValue();
 
     // @ts-ignore
-    updateWebhook(newWebhook).then(() => {
-      notificationCall('passed', 'The conditions were successfully updated.');
-      // @ts-ignore
-      setWebhookDetails(newWebhook);
-      form.resetFields();
-    });
+    return updateWebhook({...current!, ...values})
+      .then(displayDefaultNotificationFlow)
+      .then(() => notificationCall('passed', 'The conditions were successfully updated.'));
   };
 
-  useEffect(() => {
-    setTimeout(
-      () =>
-        form.setFieldsValue({
-          resource: 'test',
-          events: webhookDetails?.events.map(item => ({label: item, value: item})) || [],
-          // @ts-ignore
-          labels: composeLabels((webhookDetails?.labels as unknown as Record<string, Option>) || []) || {},
-        }),
-      2000
-    );
-  }, [webhookDetails]);
-
   return (
-    <Form
-      layout="vertical"
+    <CardForm
+      name="webhook-condition"
+      title="Webhook condition"
+      description="Define the conditions to be met for the webhook to be called."
+      spacing={20}
       form={form}
       initialValues={{
         resource: 'test',
-        events: webhookDetails?.events.map(item => ({label: item, value: item})) || [],
-        labels: composeLabels((webhookDetails?.labels as unknown as Record<string, Option>) || []) || {},
+        events: current!.events.map(item => ({label: item, value: item})) || [],
+        labels: composeLabels((current!.labels as unknown as Record<string, Option>) || []) || {},
       }}
-      onFinish={onFinish}
+      disabled={!mayEdit}
+      onConfirm={onFinish}
     >
-      <ConfigurationCard
-        title="Webhook condition"
-        description="Define the conditions to be met for the webhook to be called."
-        onCancel={form.resetFields}
-      >
-        <FullWidthSpace size={20} direction="vertical">
-          <FormItem name="resource" label="Resource" required rules={[requiredNoText]}>
-            <Select disabled>
-              <Select.Option value="test">Test</Select.Option>
-              <Select.Option value="test-suite">Test Suite</Select.Option>
-            </Select>
-          </FormItem>
-          <FormItem noStyle shouldUpdate>
-            {({getFieldError}) => {
-              const isValid = !(getFieldError('labels').length > 0);
-              const value = form.getFieldValue('labels');
+      <FormItem name="resource" label="Resource" required rules={[requiredNoText]}>
+        {/* FIXME: We don't allow selecting resource type */}
+        <Select disabled>
+          <Select.Option value="test">Test</Select.Option>
+          <Select.Option value="test-suite">Test Suite</Select.Option>
+        </Select>
+      </FormItem>
+      <FormItem noStyle shouldUpdate>
+        {({getFieldError}) => {
+          const isValid = !(getFieldError('labels').length > 0);
+          const value = form.getFieldValue('labels');
 
-              return (
-                <FormItem name="labels" required rules={[requiredNoText]} label="Resource identifier">
-                  <LabelsSelect
-                    validation={isValid}
-                    // @ts-ignore
-                    defaultLabels={value}
-                  />
-                </FormItem>
-              );
-            }}
-          </FormItem>
-          <FormItem noStyle shouldUpdate>
-            {({getFieldError}) => {
-              const isValid = !(getFieldError('events').length > 0);
-              const value = form.getFieldValue('events');
+          return (
+            <FormItem name="labels" required rules={[requiredNoText]} label="Resource identifier">
+              <LabelsSelect
+                validation={isValid}
+                // @ts-ignore
+                defaultLabels={value}
+              />
+            </FormItem>
+          );
+        }}
+      </FormItem>
+      <FormItem noStyle shouldUpdate>
+        {({getFieldError}) => {
+          const isValid = !(getFieldError('events').length > 0);
+          const value = form.getFieldValue('events');
 
-              return (
-                <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
-                  <CreatableMultiSelect
-                    placeholder="Select Testkube resource"
-                    options={webhookEvents}
-                    menuPlacement="top"
-                    formatCreateLabel={val => val}
-                    validation={isValid}
-                    defaultValue={value}
-                  />
-                </FormItem>
-              );
-            }}
-          </FormItem>
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+          return (
+            <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
+              <CreatableMultiSelect
+                placeholder="Select Testkube resource"
+                options={webhookEvents}
+                menuPlacement="top"
+                formatCreateLabel={val => val}
+                validation={isValid}
+                defaultValue={value}
+              />
+            </FormItem>
+          );
+        }}
+      </FormItem>
+    </CardForm>
   );
 };
 

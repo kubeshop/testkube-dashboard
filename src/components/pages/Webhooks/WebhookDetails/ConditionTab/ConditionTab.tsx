@@ -1,15 +1,7 @@
 import {FC} from 'react';
 
-import {FullWidthSpace} from '@custom-antd';
-
 import Condition from './Condition';
 
-const ConditionTab: FC = () => {
-  return (
-    <FullWidthSpace size={32} direction="vertical">
-      <Condition />
-    </FullWidthSpace>
-  );
-};
+const ConditionTab: FC = () => <Condition />;
 
 export default ConditionTab;
