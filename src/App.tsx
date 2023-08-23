@@ -82,12 +82,17 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
   useEffect(() => {
     // Do not fire the effect if new endpoint is just being set up.
-    if (!isClusterAvailable || location.pathname === '/apiEndpoint') {
+    if (location.pathname === '/apiEndpoint') {
       return;
     }
 
     if (!apiEndpoint && !isApiEndpointLocked()) {
       setEndpointModalState(true);
+      return;
+    }
+
+    // Avoid loading API details when we know the cluster is not available.
+    if (!isClusterAvailable) {
       return;
     }
 
