@@ -19,6 +19,7 @@ interface CardFormProps {
   title: ReactNode;
   description: ReactNode;
   footer?: ReactNode;
+  headerAction?: ReactNode;
   disabled?: boolean;
   readOnly?: boolean;
   wasTouched?: boolean;
@@ -29,6 +30,7 @@ interface CardFormProps {
   initialValues?: any;
   confirmLabel?: string;
   onFieldsChange?: (...args: any) => void;
+  onValuesChange?: (...args: any) => void;
   spacing?: number;
   onConfirm?: () => void;
   onCancel?: () => void;
@@ -39,6 +41,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   title,
   description,
   footer,
+  headerAction,
   labelAlign,
   layout = 'vertical',
   form,
@@ -51,6 +54,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   spacing,
   children,
   onFieldsChange,
+  onValuesChange,
   onConfirm,
   onCancel,
 }) => {
@@ -109,6 +113,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
       name={name}
       disabled={disabled || loading}
       onFieldsChange={onFieldsChange}
+      onValuesChange={onValuesChange}
       onFinish={confirm}
     >
       <Form.Item noStyle shouldUpdate>
@@ -116,6 +121,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
           title={title}
           description={description}
           footer={footer}
+          headerAction={headerAction}
           confirmLabel={confirmLabel}
           wasTouched={wasTouched}
           readOnly={readOnly}
