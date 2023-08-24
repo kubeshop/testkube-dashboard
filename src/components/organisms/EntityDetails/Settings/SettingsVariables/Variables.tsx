@@ -1,17 +1,18 @@
-import React, {useEffect, useMemo} from 'react';
+import {FC, useEffect, useMemo} from 'react';
 
 import {Form} from 'antd';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms/ExternalLink';
 
-import {VariableInForm} from '@models/variable';
+import type {VariableInForm} from '@models/variable';
 
-import {TestsVariablesList, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
+import {VariablesList as TestsVariablesList} from '@molecules/Variables/TestsVariablesList';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -30,7 +31,7 @@ interface VariablesProps {
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const Variables: React.FC<VariablesProps> = ({description, useUpdateEntity}) => {
+export const Variables: FC<VariablesProps> = ({description, useUpdateEntity}) => {
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -117,5 +118,3 @@ const Variables: React.FC<VariablesProps> = ({description, useUpdateEntity}) => 
     </CardForm>
   );
 };
-
-export default Variables;

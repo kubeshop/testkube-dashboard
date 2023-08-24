@@ -1,16 +1,17 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
 import {capitalize} from 'lodash';
 
-import {Option} from '@models/form';
+import type {Option} from '@models/form';
 
-import {LabelsSelect, notificationCall} from '@molecules';
+import {LabelsSelect} from '@molecules/LabelsSelect';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -23,7 +24,7 @@ interface LabelsProps {
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const Labels: React.FC<LabelsProps> = ({label, useUpdateEntity}) => {
+export const Labels: FC<LabelsProps> = ({label, useUpdateEntity}) => {
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -77,5 +78,3 @@ const Labels: React.FC<LabelsProps> = ({label, useUpdateEntity}) => {
     </CardForm>
   );
 };
-
-export default Labels;

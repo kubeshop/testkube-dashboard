@@ -1,20 +1,18 @@
-import {memo, useMemo, useState} from 'react';
+import {FC, memo, useMemo, useState} from 'react';
 
 import {Form, Select} from 'antd';
 
-import {ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms/ExternalLink';
 
-import {FormItem} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
 
-import {Test} from '@models/test';
+import type {Test} from '@models/test';
 
-import {CardForm} from '@organisms';
-import {
-  CustomSourceEditFormFields,
-  FileContentFields,
-  SourceEditFormFields,
-  StringContentFields,
-} from '@organisms/TestConfigurationForm';
+import {CardForm} from '@organisms/CardForm';
+import {CustomFormFields as CustomSourceEditFormFields} from '@organisms/TestConfigurationForm/Custom/SourceEditFormFields';
+import {FileContentFields} from '@organisms/TestConfigurationForm/FileContentFields';
+import {SourceEdit as SourceEditFormFields} from '@organisms/TestConfigurationForm/Git/SourceEditFormFields';
+import {StringContentFields} from '@organisms/TestConfigurationForm/StringContentFields';
 import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
 import {Permissions, usePermission} from '@permissions/base';
@@ -48,7 +46,7 @@ type SourceProps = {
 
 type SourceFormValues = GetSourceFormValues & {testSource: string};
 
-const Source: React.FC<SourceProps> = props => {
+export const Source: FC<SourceProps> = memo(props => {
   const {details, updateTest} = props;
   const {type} = details;
 
@@ -154,6 +152,4 @@ const Source: React.FC<SourceProps> = props => {
       </Form.Item>
     </CardForm>
   );
-};
-
-export default memo(Source);
+});

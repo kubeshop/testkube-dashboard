@@ -1,6 +1,7 @@
-import React from 'react';
+import {FC} from 'react';
 
-import {EmptyListContent, HelpCard} from '@molecules';
+import {EmptyListContent} from '@molecules/EmptyListContent';
+import {HelpCard} from '@molecules/HelpCard';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -8,7 +9,7 @@ interface EmptySourcesProps {
   onButtonClick: () => void;
 }
 
-const EmptySources: React.FC<EmptySourcesProps> = props => {
+export const EmptySources: FC<EmptySourcesProps> = props => {
   const {onButtonClick} = props;
 
   return (
@@ -30,5 +31,3 @@ const EmptySources: React.FC<EmptySourcesProps> = props => {
     </EmptyListContent>
   );
 };
-
-export default EmptySources;

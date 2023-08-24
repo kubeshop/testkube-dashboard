@@ -1,14 +1,10 @@
-import {memo, useCallback, useMemo} from 'react';
+import {FC, memo, useCallback, useMemo} from 'react';
 
 import {Popover} from 'antd';
 
-import {StatusIcon} from '@atoms';
+import {StatusIcon} from '@atoms/StatusIcon';
 
-import {Text} from '@custom-antd';
-
-import Colors from '@styles/Colors';
-
-import {formatExecutionDate} from '@utils/formatDate';
+import {Text} from '@custom-antd/Typography/Text';
 
 import {
   BarDate,
@@ -17,7 +13,11 @@ import {
   StyledPopoverContainer,
   StyledPopoverContent,
   StyledPopoverHeader,
-} from '../MetricsBarChart.styled';
+} from '@molecules/MetricsBarChart.styled';
+
+import {Colors} from '@styles/Colors';
+
+import {formatExecutionDate} from '@utils/formatDate';
 
 import type {BarConfig} from './BarWithTooltip';
 
@@ -28,7 +28,7 @@ type BarConfigPure = BarConfig & {
   onSelect: (id: string) => void;
 };
 
-const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
+export const BarWithTooltipPure: FC<BarConfigPure> = memo(props => {
   const {width, height, color, tooltipData, hoverColor, date, chartHeight, executions, onSelect} = props;
   const {status, duration, name, startTime} = tooltipData;
 
@@ -75,5 +75,3 @@ const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
     </Popover>
   );
 });
-
-export default BarWithTooltipPure;

@@ -2,15 +2,15 @@ import {useEffect, useState} from 'react';
 
 import {Form, Input, Select, Space} from 'antd';
 
-import {LabelsSelect} from '@molecules';
+import {LabelsSelect} from '@molecules/LabelsSelect';
 
 import {useTriggersPick} from '@store/triggers';
 
 import {required} from '@utils/form';
 
-import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
+import {TriggerSelectorSwitcher} from './TriggerSelectorSwitcher';
 
-const ConditionFormItems = () => {
+export const ConditionFormItems = () => {
   const {keyMap} = useTriggersPick('keyMap');
 
   const [switcherValue, setSwitcherValue] = useState('label');
@@ -69,5 +69,3 @@ const ConditionFormItems = () => {
     </>
   );
 };
-
-export default ConditionFormItems;

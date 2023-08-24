@@ -1,3 +1,5 @@
+import {FC} from 'react';
+
 import {Form, Input} from 'antd';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
@@ -5,11 +7,11 @@ import {MutationDefinition} from '@reduxjs/toolkit/query';
 
 import {capitalize} from 'lodash';
 
-import {FormItem} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -30,7 +32,7 @@ interface NameNDescriptionProps {
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEntity}) => {
+export const NameNDescription: FC<NameNDescriptionProps> = ({label, useUpdateEntity}) => {
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -83,5 +85,3 @@ const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEnti
     </CardForm>
   );
 };
-
-export default NameNDescription;

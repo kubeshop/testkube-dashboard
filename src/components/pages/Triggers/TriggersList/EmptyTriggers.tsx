@@ -1,6 +1,7 @@
-import React from 'react';
+import {FC} from 'react';
 
-import {EmptyListContent, HelpCard} from '@molecules';
+import {EmptyListContent} from '@molecules/EmptyListContent';
+import {HelpCard} from '@molecules/HelpCard';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -8,7 +9,7 @@ interface EmptyTriggersProps {
   onButtonClick: () => void;
 }
 
-const EmptyTriggers: React.FC<EmptyTriggersProps> = props => {
+export const EmptyTriggers: FC<EmptyTriggersProps> = props => {
   const {onButtonClick} = props;
 
   return (
@@ -30,5 +31,3 @@ const EmptyTriggers: React.FC<EmptyTriggersProps> = props => {
     </EmptyListContent>
   );
 };
-
-export default EmptyTriggers;

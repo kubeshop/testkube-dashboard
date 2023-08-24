@@ -1,8 +1,10 @@
+import {FC} from 'react';
+
 import {Form, Input} from 'antd';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -16,7 +18,7 @@ export type PrivateRegistryFormFields = {
   privateRegistry: string;
 };
 
-const PrivateRegistry: React.FC = () => {
+export const PrivateRegistry: FC = () => {
   const {current} = useExecutorsPick('current');
   const imagePullSecrets = current!.executor.imagePullSecrets;
 
@@ -60,5 +62,3 @@ const PrivateRegistry: React.FC = () => {
     </CardForm>
   );
 };
-
-export default PrivateRegistry;

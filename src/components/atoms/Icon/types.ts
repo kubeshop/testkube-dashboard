@@ -1,3 +1,5 @@
+import {CSSProperties} from 'react';
+
 import {IconComponentProps} from '@ant-design/icons/lib/components/Icon';
 
 export type IconProps = {
@@ -20,5 +22,5 @@ export type IconProps = {
     | 'success'
     | 'cloudMigrate';
   component?: IconComponentProps['component'];
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 };

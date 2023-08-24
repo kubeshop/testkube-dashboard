@@ -11,6 +11,4 @@ interface DashboardContextData {
   showTestkubeCloudBanner: boolean;
 }
 
-const DashboardContext = createContext<DashboardContextData>(undefined!);
-
-export default DashboardContext;
+export const DashboardContext = createContext<DashboardContextData>(undefined!);

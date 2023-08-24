@@ -1,20 +1,22 @@
-import {useCallback} from 'react';
+import {FC, useCallback} from 'react';
 
 import stripAnsi from 'strip-ansi';
 
-import {CopyButton, DownloadButton} from '@atoms';
+import {CopyButton} from '@atoms/CopyButton';
+import {DownloadButton} from '@atoms/DownloadButton';
 
-import useLocation from '@hooks/useLocation';
-import useSecureContext from '@hooks/useSecureContext';
+import {useLocation} from '@hooks/useLocation';
+import {useSecureContext} from '@hooks/useSecureContext';
 
-import FullscreenAction from './FullscreenAction';
-import {StyledLogOutputActionsContainer} from './LogOutput.styled';
+import {StyledLogOutputActionsContainer} from '@molecules/LogOutput.styled';
+
+import {FullscreenAction} from './FullscreenAction';
 
 type LogOutputActionsProps = {
   logOutput: string;
 };
 
-const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
+export const LogOutputActions: FC<LogOutputActionsProps> = props => {
   const {logOutput} = props;
   const strippedLogOutput = useCallback(() => stripAnsi(logOutput), [logOutput]);
   const isSecureContext = useSecureContext();
@@ -31,5 +33,3 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
     </StyledLogOutputActionsContainer>
   );
 };
-
-export default LogOutputActions;

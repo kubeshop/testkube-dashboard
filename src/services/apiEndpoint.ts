@@ -5,12 +5,12 @@ import axios from 'axios';
 
 import {config} from '@constants/config';
 
+import {env} from '@env';
+
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {getRtkBaseUrl, getRtkIdToken} from '@utils/rtk';
 import {hasProtocol} from '@utils/strings';
-
-import env from '../env';
 
 export type ApiEndpointListener = (apiEndpoint: string | null) => void;
 

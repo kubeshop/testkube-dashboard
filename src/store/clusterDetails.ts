@@ -2,7 +2,7 @@ import {StateCreator} from 'zustand';
 
 import type {ApiDetails} from '@services/apiEndpoint';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 export interface ClusterDetailsSlice extends ApiDetails {
   setClusterDetails: (state: ApiDetails) => void;

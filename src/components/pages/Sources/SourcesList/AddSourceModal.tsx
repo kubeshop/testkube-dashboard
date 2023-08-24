@@ -1,17 +1,21 @@
-import React, {useRef, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 import {Input as AntdInput, Form} from 'antd';
 
-import {Button, Input} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {Input} from '@custom-antd/Input';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
-import useInViewport from '@hooks/useInViewport';
+import {useInViewport} from '@hooks/useInViewport';
 
-import {ErrorNotificationConfig} from '@models/notifications';
-import {SourceWithRepository} from '@models/sources';
+import type {ErrorNotificationConfig} from '@models/notifications';
+import type {SourceWithRepository} from '@models/sources';
 
-import {Hint, NotificationContent} from '@molecules';
+import {Hint} from '@molecules/Hint';
+import {NotificationContent} from '@molecules/Notification/NotificationContent';
+
+import {AddSourceModalContainer} from '@pages/Sources/SourcesList.styled';
 
 import {useCreateSourceMutation} from '@services/sources';
 
@@ -21,8 +25,6 @@ import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {AddSourceModalContainer} from './SourcesList.styled';
-
 type AddSourceFormValues = {
   name: string;
   uri: string;
@@ -30,7 +32,7 @@ type AddSourceFormValues = {
   username?: string;
 };
 
-const AddSourceModal: React.FC = () => {
+export const AddSourceModal: FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const [form] = Form.useForm<AddSourceFormValues>();
   const openDetails = useDashboardNavigate((name: string) => `/sources/${name}`);
@@ -119,5 +121,3 @@ const AddSourceModal: React.FC = () => {
     </AddSourceModalContainer>
   );
 };
-
-export default AddSourceModal;

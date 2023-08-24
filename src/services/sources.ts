@@ -1,8 +1,8 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {YamlEditBody} from '@models/fetch';
-import {Repository} from '@models/repository';
-import {CreateSourceResult, SourceWithRepository} from '@models/sources';
+import type {YamlEditBody} from '@models/fetch';
+import type {Repository} from '@models/repository';
+import type {CreateSourceResult, SourceWithRepository} from '@models/sources';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 

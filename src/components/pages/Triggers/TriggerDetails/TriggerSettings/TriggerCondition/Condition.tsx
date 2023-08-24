@@ -1,8 +1,13 @@
+import {FC} from 'react';
+
 import {Form} from 'antd';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm, ConditionFormItems} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
+import {ConditionFormItems} from '@organisms/TriggersFormItems/ConditionFormItems';
+
+import {getConditionFormValues, getResourceIdentifierSelector} from '@pages/Triggers/utils';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -13,9 +18,7 @@ import {useTriggersField} from '@store/triggers';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {getConditionFormValues, getResourceIdentifierSelector} from '../../../utils';
-
-const Condition: React.FC = () => {
+export const Condition: FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
 
@@ -63,5 +66,3 @@ const Condition: React.FC = () => {
     </CardForm>
   );
 };
-
-export default Condition;

@@ -1,10 +1,12 @@
+import {FC} from 'react';
+
 import {Form, Input} from 'antd';
 
-import {Executor} from '@models/executors';
+import type {Executor} from '@models/executors';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -19,7 +21,7 @@ export type ContainerImageFormFields = {
   image: Executor['executor']['image'];
 };
 
-const ContainerImagePanel: React.FC = () => {
+export const ContainerImagePanel: FC = () => {
   const {current} = useExecutorsPick('current');
   const image = current!.executor.image;
 
@@ -60,5 +62,3 @@ const ContainerImagePanel: React.FC = () => {
     </CardForm>
   );
 };
-
-export default ContainerImagePanel;

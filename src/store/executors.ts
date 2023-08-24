@@ -1,11 +1,11 @@
 import {capitalize} from 'lodash';
 import {StateCreator} from 'zustand';
 
-import {Executor, ExecutorFeature} from '@models/executors';
-
-import {connectStore, createStoreFactory} from '@store/utils';
+import type {Executor, ExecutorFeature} from '@models/executors';
 
 import {isURL} from '@utils/strings';
+
+import {connectStore, createStoreFactory} from './utils';
 
 interface ExecutorsSlice {
   executors?: Executor[];

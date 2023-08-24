@@ -3,7 +3,7 @@ import {useEvent, useInterval} from 'react-use';
 
 import {useTelemetry} from '@telemetry/hooks';
 
-const useTrackTimeAnalytics = (page: string, condition = true) => {
+export const useTrackTimeAnalytics = (page: string, condition = true) => {
   const [hidden, setHidden] = useState(document.hidden);
   const durationRef = useRef(0);
   const telemetry = useTelemetry();
@@ -30,5 +30,3 @@ const useTrackTimeAnalytics = (page: string, condition = true) => {
     }
   }, [hidden, condition]);
 };
-
-export default useTrackTimeAnalytics;

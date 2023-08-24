@@ -1,16 +1,18 @@
+import {Dispatch, FC, SetStateAction} from 'react';
+
 import {NamePath} from 'antd/lib/form/interface';
 
 export type SourceType = 'git' | 'custom' | 'file-uri' | 'string';
 
-export type SourceFields = Record<SourceType, React.FC<Partial<Props>>>;
+export type SourceFields = Record<SourceType, FC<Partial<Props>>>;
 
 export type Props = {
   executorType: string;
   getFieldValue: (name: NamePath) => string;
   isClearedToken: boolean;
   isClearedUsername: boolean;
-  setIsClearedToken: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsClearedUsername: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsClearedToken: Dispatch<SetStateAction<boolean>>;
+  setIsClearedUsername: Dispatch<SetStateAction<boolean>>;
 };
 
 export const getAdditionalFieldsComponent: (

@@ -1,4 +1,4 @@
-import {Executor} from '@models/executors';
+import type {Executor} from '@models/executors';
 
 import {remapExecutors} from './executors';
 

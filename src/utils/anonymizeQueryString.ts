@@ -12,7 +12,7 @@ const getDataType = (value: unknown): DataType | null => {
   return null;
 };
 
-const anonymizeQueryString = (qs: string): string => {
+export const anonymizeQueryString = (qs: string): string => {
   const params = new URLSearchParams(qs);
   Array.from(params.entries()).forEach(([key, value]) => {
     const type = getDataType(value);
@@ -23,5 +23,3 @@ const anonymizeQueryString = (qs: string): string => {
   const result = params.toString();
   return /^\?*$/.test(result) ? '' : result.replace(/^\?*/, '?');
 };
-
-export default anonymizeQueryString;

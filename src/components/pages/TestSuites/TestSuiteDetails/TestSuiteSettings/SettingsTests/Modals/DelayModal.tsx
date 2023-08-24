@@ -1,14 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {FC, useEffect, useRef, useState} from 'react';
 
 import {Input} from 'antd';
 
-import {Button, Modal} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {CustomModal as Modal} from '@custom-antd/Modal';
 
-import usePressEnter from '@hooks/usePressEnter';
+import {usePressEnter} from '@hooks/usePressEnter';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {StyledDelayModalContent} from '../SettingsTests.styled';
+import {StyledDelayModalContent} from '@pages/TestSuites/TestSuiteDetails/TestSuiteSettings/SettingsTests.styled';
 
 type DelayModalProps = {
   visible: boolean;
@@ -16,7 +17,7 @@ type DelayModalProps = {
   onSubmit: (delay: string) => void;
 };
 
-const DelayModal: React.FC<DelayModalProps> = props => {
+export const DelayModal: FC<DelayModalProps> = props => {
   const {visible, onClose, onSubmit} = props;
 
   const [delayValue, setDelayValue] = useState<string>('');
@@ -84,5 +85,3 @@ const DelayModal: React.FC<DelayModalProps> = props => {
     />
   );
 };
-
-export default DelayModal;

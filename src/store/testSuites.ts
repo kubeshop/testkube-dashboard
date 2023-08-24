@@ -1,10 +1,10 @@
 import {StateCreator} from 'zustand';
 
-import {TestSuiteFilters, TestSuiteWithExecution} from '@models/testSuite';
+import type {TestSuiteFilters, TestSuiteWithExecution} from '@models/testSuite';
 
 import {initialPageSize} from '@redux/initialState';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 interface TestSuitesSlice {
   testSuites?: TestSuiteWithExecution[];

@@ -1,5 +1,5 @@
-import {Execution} from '@models/execution';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {Execution} from './execution';
+import type {TestSuiteExecution} from './testSuiteExecution';
 
 export enum WSEventType {
   START_TEST = 'start-test',

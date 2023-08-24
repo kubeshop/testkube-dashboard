@@ -4,7 +4,7 @@ import {act, fireEvent, render} from '@testing-library/react';
 
 import {TelemetryContext} from '@telemetry/context';
 
-import useTrackTimeAnalytics from './useTrackTimeAnalytics';
+import {useTrackTimeAnalytics} from './useTrackTimeAnalytics';
 
 const setDocumentVisibility = (value: boolean) => {
   const hidden = !value;

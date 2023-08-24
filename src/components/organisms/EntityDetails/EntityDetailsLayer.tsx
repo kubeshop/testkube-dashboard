@@ -5,12 +5,13 @@ import useWebSocket from 'react-use-websocket';
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts/DashboardContext';
+import {MainContext} from '@contexts/MainContext';
 
-import {Entity} from '@models/entity';
-import {ExecutionMetrics} from '@models/metrics';
-import {Test} from '@models/test';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {Entity} from '@models/entity';
+import type {ExecutionMetrics} from '@models/metrics';
+import type {Test} from '@models/test';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from '@models/websocket';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
@@ -31,7 +32,7 @@ interface EntityDetailsLayerProps {
   useGetExecutions: UseQuery<QueryDefinition<any, any, any, any, any>>;
 }
 
-const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
+export const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   entity,
   id,
   execId,
@@ -221,5 +222,3 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
 
   return <EntityStoreProvider>{children}</EntityStoreProvider>;
 };
-
-export default EntityDetailsLayer;

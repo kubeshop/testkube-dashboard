@@ -1,4 +1,4 @@
-import {Repository} from '@models/repository';
+import type {Repository} from './repository';
 
 interface Source {
   name: string;

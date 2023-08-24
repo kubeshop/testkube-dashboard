@@ -1,7 +1,7 @@
 import {createGlobalStyle} from 'styled-components';
 
-import Colors, {BackgroundColors} from '@styles/Colors';
-import {maxDevice} from '@styles/MediaQueries';
+import {BackgroundColors, Colors} from './Colors';
+import {maxDevice} from './MediaQueries';
 
 export const invisibleScroll = `
   &::-webkit-scrollbar {

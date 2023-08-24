@@ -4,8 +4,9 @@ import Ansi from 'ansi-to-react';
 
 import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 
-import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
-import LogOutputHeader from './LogOutputHeader';
+import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from '@molecules/LogOutput.styled';
+
+import {LogOutputHeader} from './LogOutputHeader';
 
 export interface LogOutputPureProps {
   className?: string;
@@ -17,7 +18,7 @@ export interface LogOutputPureProps {
   onExpand: () => void;
 }
 
-const LogOutputPure = memo(
+export const LogOutputPure = memo(
   forwardRef<HTMLDivElement, LogOutputPureProps>(
     ({className, logs, visibleLogs, expanded, lines, initialLines, onExpand}, ref) => {
       const scrollableRef = useRef<HTMLDivElement | null>(null);
@@ -61,5 +62,3 @@ const LogOutputPure = memo(
     }
   )
 );
-
-export default LogOutputPure;

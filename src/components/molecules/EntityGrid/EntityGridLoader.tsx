@@ -1,13 +1,11 @@
-import React, {memo} from 'react';
+import {FC, memo} from 'react';
 
 import {LoadingOutlined} from '@ant-design/icons';
 
-import {StyledEntityGridLoaderContainer} from './EntityGrid.styled';
+import {StyledEntityGridLoaderContainer} from '@molecules/EntityGrid.styled';
 
-const EntityGridLoader: React.FC = () => (
+export const EntityGridLoader: FC = memo(() => (
   <StyledEntityGridLoaderContainer>
     <LoadingOutlined />
   </StyledEntityGridLoaderContainer>
-);
-
-export default memo(EntityGridLoader);
+));

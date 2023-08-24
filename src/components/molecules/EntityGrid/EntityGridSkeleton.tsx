@@ -1,12 +1,14 @@
-import {Skeleton} from '@custom-antd';
+import {FC} from 'react';
 
-import {StyledEntityGridSkeletonWrapper} from './EntityGrid.styled';
+import {Skeleton} from '@custom-antd/Skeleton';
+
+import {StyledEntityGridSkeletonWrapper} from '@molecules/EntityGrid.styled';
 
 interface EntityGridSkeletonProps {
   height?: number;
 }
 
-const EntityGridSkeleton: React.FC<EntityGridSkeletonProps> = ({height = 120}) => {
+export const EntityGridSkeleton: FC<EntityGridSkeletonProps> = ({height = 120}) => {
   const skeletonConfig = {
     additionalStyles: {
       lineHeight: height,
@@ -23,5 +25,3 @@ const EntityGridSkeleton: React.FC<EntityGridSkeletonProps> = ({height = 120}) =
     </StyledEntityGridSkeletonWrapper>
   );
 };
-
-export default EntityGridSkeleton;

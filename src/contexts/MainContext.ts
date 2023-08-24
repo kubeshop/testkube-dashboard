@@ -11,6 +11,4 @@ export type MainContextProps = {
 };
 
 // @ts-ignore
-const MainContext = createContext<MainContextProps>();
-
-export default MainContext;
+export const MainContext = createContext<MainContextProps>();

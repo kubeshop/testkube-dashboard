@@ -1,5 +1,5 @@
-import {Option} from '@models/form';
-import {TestTrigger, TestTriggerSelector} from '@models/triggers';
+import type {Option} from '@models/form';
+import type {TestTrigger, TestTriggerSelector} from '@models/triggers';
 
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 

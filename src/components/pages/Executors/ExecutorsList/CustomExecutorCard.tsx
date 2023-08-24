@@ -1,24 +1,22 @@
 import {FC, memo} from 'react';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {Executor} from '@models/executors';
+import type {Executor} from '@models/executors';
 
-import Colors from '@styles/Colors';
+import {CustomExecutorContainer} from '@pages/Executors/ExecutorsList.styled';
 
-import {CustomExecutorContainer} from './ExecutorsList.styled';
+import {Colors} from '@styles/Colors';
 
 interface CustomExecutorCardProps {
   item: Executor;
   onClick: (item: Executor) => void;
 }
 
-const CustomExecutorCard: FC<CustomExecutorCardProps> = ({item, onClick}) => (
+export const CustomExecutorCard: FC<CustomExecutorCardProps> = memo(({item, onClick}) => (
   <CustomExecutorContainer onClick={() => onClick(item)} key={item.name}>
     <Text className="regular big">{item.name}</Text>
     <Text color={Colors.slate500}>{item.executor.executorType}</Text>
     <Text color={Colors.slate500}>{item.executor.image}</Text>
   </CustomExecutorContainer>
-);
-
-export default memo(CustomExecutorCard);
+));

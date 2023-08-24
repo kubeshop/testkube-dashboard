@@ -1,10 +1,11 @@
 import {FC} from 'react';
 
-import {EmptyListContent, HelpCard} from '@molecules';
+import {EmptyListContent} from '@molecules/EmptyListContent';
+import {HelpCard} from '@molecules/HelpCard';
 
 import {externalLinks} from '@utils/externalLinks';
 
-const EmptyTestSuites: FC<{action: () => void}> = props => {
+export const EmptyTestSuites: FC<{action: () => void}> = props => {
   const {action} = props;
 
   return (
@@ -23,5 +24,3 @@ const EmptyTestSuites: FC<{action: () => void}> = props => {
     </EmptyListContent>
   );
 };
-
-export default EmptyTestSuites;

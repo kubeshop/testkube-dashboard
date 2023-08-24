@@ -1,6 +1,9 @@
+import {FC} from 'react';
+
 import {Input} from 'antd';
 
-import {FormItem, FormItemLabel} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {FormItemLabel} from '@custom-antd/Form/FormItem/FormItemLabel';
 
 import {required} from '@utils/form';
 
@@ -11,7 +14,7 @@ type CommitProps = {
   message?: string;
 };
 
-const Commit: React.FC<CommitProps> = props => {
+export const Commit: FC<CommitProps> = props => {
   const {status = TooltipStatus.None, message} = props;
 
   return (
@@ -28,5 +31,3 @@ const Commit: React.FC<CommitProps> = props => {
     </FormItem>
   );
 };
-
-export default Commit;

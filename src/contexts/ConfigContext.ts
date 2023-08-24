@@ -5,6 +5,4 @@ interface ConfigContextData {
   discordUrl: string;
 }
 
-const ConfigContext = createContext<ConfigContextData>(undefined!);
-
-export default ConfigContext;
+export const ConfigContext = createContext<ConfigContextData>(undefined!);

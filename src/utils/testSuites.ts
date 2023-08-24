@@ -1,5 +1,5 @@
-import {TestSuite, TestSuiteStep} from '@models/testSuite';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {TestSuite, TestSuiteStep} from '@models/testSuite';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
 type TestSuiteExecutionMaybeV2 = TestSuiteExecution & {stepResults?: any};
 

@@ -1,11 +1,17 @@
+import {FC} from 'react';
+
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input} from 'antd';
 
-import {Button, FormIconWrapper, FormItem, FormRow, FullWidthSpace} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {FormIconWrapper} from '@custom-antd/Form.styled';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {FormRow} from '@custom-antd/Form/FormRow';
+import {FullWidthSpace} from '@custom-antd/FullWidthSpace';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -22,7 +28,7 @@ type ArgumentsFormFields = {
   arguments: string[];
 };
 
-const Arguments: React.FC = () => {
+export const Arguments: FC = () => {
   const {current} = useExecutorsPick('current');
 
   const mayEdit = usePermission(Permissions.editEntity);
@@ -82,5 +88,3 @@ const Arguments: React.FC = () => {
     </CardForm>
   );
 };
-
-export default Arguments;

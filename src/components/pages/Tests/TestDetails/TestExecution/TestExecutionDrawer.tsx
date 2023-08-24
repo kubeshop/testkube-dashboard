@@ -1,14 +1,15 @@
 import {FC} from 'react';
 
-import {ExecutionDrawer, ExecutionDrawerHeader} from '@organisms';
+import {ExecutionDrawer} from '@organisms/ExecutionDrawer';
+import {ExecutionDrawerHeader} from '@organisms/ExecutionDrawer/ExecutionDrawerHeader';
 
 import {useAbortTestExecutionMutation} from '@services/tests';
 
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
-import TestExecutionTabs from './TestExecutionTabs';
+import {TestExecutionTabs} from './TestExecutionTabs';
 
-const TestExecutionDrawer: FC = () => {
+export const TestExecutionDrawer: FC = () => {
   const {close, id, data} = useExecutionDetailsPick('close', 'id', 'data');
   return (
     <ExecutionDrawer
@@ -21,5 +22,3 @@ const TestExecutionDrawer: FC = () => {
     </ExecutionDrawer>
   );
 };
-
-export default TestExecutionDrawer;

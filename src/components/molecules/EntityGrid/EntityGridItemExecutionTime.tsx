@@ -3,9 +3,9 @@ import {useInterval, useUpdate} from 'react-use';
 
 import {Tooltip} from 'antd';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatExecutionDate} from '@utils/formatDate';
@@ -23,7 +23,7 @@ const TimeAgo: FC<{time: Date | number | string}> = ({time}) => {
   return <>{displayTimeBetweenDates(now, then).long}</>;
 };
 
-const EntityGridItemExecutionTime: FC<{time?: Date | number | string}> = ({time}) => (
+export const EntityGridItemExecutionTime: FC<{time?: Date | number | string}> = memo(({time}) => (
   <Tooltip
     title={time ? formatExecutionDate(new Date(time)) : null}
     placement="bottomRight"
@@ -34,6 +34,4 @@ const EntityGridItemExecutionTime: FC<{time?: Date | number | string}> = ({time}
       {time ? <TimeAgo time={time} /> : null}
     </Text>
   </Tooltip>
-);
-
-export default memo(EntityGridItemExecutionTime);
+));

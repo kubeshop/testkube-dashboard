@@ -1,16 +1,20 @@
+import {FC} from 'react';
+
 import {CloudUploadOutlined} from '@ant-design/icons';
 
-import {ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms/ExternalLink';
 
-import {Button, FullWidthSpace, Text} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {FullWidthSpace} from '@custom-antd/FullWidthSpace';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {ConfigurationCard} from '@molecules';
+import {ConfigurationCard} from '@molecules/ConfigurationCard';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
 
-const ConnectCloud: React.FC = () => {
+export const ConnectCloud: FC = () => {
   return (
     <ConfigurationCard
       title="Connect to Testkube Cloud"
@@ -41,5 +45,3 @@ const ConnectCloud: React.FC = () => {
     </ConfigurationCard>
   );
 };
-
-export default ConnectCloud;

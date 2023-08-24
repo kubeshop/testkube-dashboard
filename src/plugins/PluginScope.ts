@@ -1,6 +1,6 @@
 import type {SlotMetadata} from './types';
 
-class PluginScope {
+export class PluginScope {
   private state: Record<string, any>;
   private slots: Record<string, any>;
 
@@ -26,5 +26,3 @@ class PluginScope {
     this.slots[name].push({value, metadata});
   }
 }
-
-export default PluginScope;

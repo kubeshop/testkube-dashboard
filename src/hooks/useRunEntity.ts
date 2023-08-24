@@ -3,11 +3,10 @@ import {useCallback} from 'react';
 import {MutationTrigger} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import useLoadingIndicator from '@hooks/useLoadingIndicator';
+import type {Entity} from '@models/entity';
 
-import {Entity} from '@models/entity';
-
-import {RunningContextType, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
+import {RunningContextType} from '@molecules/RunningContext';
 
 import {useRunTestSuiteMutation} from '@services/testSuites';
 import {useRunTestMutation} from '@services/tests';
@@ -16,7 +15,9 @@ import {useTelemetry} from '@telemetry/hooks';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-const useRunEntity = (
+import {useLoadingIndicator} from './useLoadingIndicator';
+
+export const useRunEntity = (
   entity: Entity,
   details?: {name: string; type?: string; namespace?: string}
 ): [boolean, () => Promise<any>] => {
@@ -62,5 +63,3 @@ const useRunEntity = (
 
   return [isLoading, trigger];
 };
-
-export default useRunEntity;

@@ -1,17 +1,21 @@
+import {FC} from 'react';
 import {Handle, Position} from 'reactflow';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
 import {Tooltip} from 'antd';
 
-import {ExecutorIcon} from '@atoms';
+import {ExecutorIcon} from '@atoms/ExecutorIcon';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {LocalStep} from '@models/testSuite';
+import type {LocalStep} from '@models/testSuite';
 
-import {DotsDropdown} from '@molecules';
+import {DotsDropdown} from '@molecules/DotsDropdown';
 
-import {TestNodeContainer, TestNodeNameContainer} from '../SettingsTests.styled';
+import {
+  TestNodeContainer,
+  TestNodeNameContainer,
+} from '@pages/TestSuites/TestSuiteDetails/TestSuiteSettings/SettingsTests.styled';
 
 type StepNodeProps = {
   data: {
@@ -22,7 +26,7 @@ type StepNodeProps = {
   id: string;
 };
 
-const StepNode: React.FC<StepNodeProps> = props => {
+export const StepNode: FC<StepNodeProps> = props => {
   const {data, id} = props;
   const {type, test, delay} = data.item;
 
@@ -45,5 +49,3 @@ const StepNode: React.FC<StepNodeProps> = props => {
     </>
   );
 };
-
-export default StepNode;

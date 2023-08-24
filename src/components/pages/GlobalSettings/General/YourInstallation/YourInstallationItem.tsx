@@ -1,15 +1,17 @@
-import {Text} from '@custom-antd';
+import {FC} from 'react';
 
-import Colors from '@styles/Colors';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {YourInstallationItemContainer} from './YourInstallation.styled';
+import {YourInstallationItemContainer} from '@pages/GlobalSettings/General/YourInstallation.styled';
+
+import {Colors} from '@styles/Colors';
 
 type YourInstallationItemProps = {
   label: string;
   value?: string;
 };
 
-const YourInstallationItem: React.FC<YourInstallationItemProps> = props => {
+export const YourInstallationItem: FC<YourInstallationItemProps> = props => {
   const {label, value} = props;
   return (
     <YourInstallationItemContainer>
@@ -20,5 +22,3 @@ const YourInstallationItem: React.FC<YourInstallationItemProps> = props => {
     </YourInstallationItemContainer>
   );
 };
-
-export default YourInstallationItem;

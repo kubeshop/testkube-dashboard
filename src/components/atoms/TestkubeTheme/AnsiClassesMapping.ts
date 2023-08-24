@@ -1,6 +1,6 @@
 import {range} from 'lodash';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 const foregrounds = {
   black: [Colors.slate600, Colors.slate400],
@@ -59,7 +59,7 @@ const ansiGrayscaleCss = range(232, 256)
   })
   .join('\n');
 
-export default `
+export const AnsiClassesMapping = `
   ${baseBackgroundCss}
   ${baseTextCss}
   ${ansiCss}

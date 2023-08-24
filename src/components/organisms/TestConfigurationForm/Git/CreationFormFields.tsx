@@ -1,15 +1,18 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 
-import useValidateRepository from '@hooks/useValidateRepository';
+import {useValidateRepository} from '@hooks/useValidateRepository';
 
-import {Branch, Path, Repository, SecretFormItem} from '@molecules';
+import {Branch} from '@molecules/GitFormItems/Branch';
+import {Path} from '@molecules/GitFormItems/Path';
+import {Repository} from '@molecules/GitFormItems/Repository';
+import {SecretFormItem} from '@molecules/GitFormItems/SecretFormItem';
+
+import {StyledFormSpace} from '@organisms/TestConfigurationForm.styled';
+import type {Props} from '@organisms/TestConfigurationForm/utils';
 
 import {useValidateRepositoryMutation} from '@services/repository';
 
-import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import {Props} from '../utils';
-
-const GitFormFields: React.FC<Partial<Props>> = props => {
+export const GitFormFields: FC<Partial<Props>> = props => {
   const {executorType, getFieldValue} = props as Pick<Props, 'executorType' | 'getFieldValue'>;
 
   const [validationState, setValidationState] = useState<any>({message: ''});
@@ -33,5 +36,3 @@ const GitFormFields: React.FC<Partial<Props>> = props => {
     </StyledFormSpace>
   );
 };
-
-export default GitFormFields;

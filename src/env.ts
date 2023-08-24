@@ -39,7 +39,7 @@ export interface DynamicEnvironment {
   debugTelemetry: boolean;
 }
 
-export default {
+export const env = {
   ...dynamic,
   ...build,
 };

@@ -1,9 +1,12 @@
-import {Branch, Path} from '@molecules';
+import {FC} from 'react';
 
-import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import {Props} from '../utils';
+import {Branch} from '@molecules/GitFormItems/Branch';
+import {Path} from '@molecules/GitFormItems/Path';
 
-const CustomFormFields: React.FC<Partial<Props>> = props => {
+import {StyledFormSpace} from '@organisms/TestConfigurationForm.styled';
+import type {Props} from '@organisms/TestConfigurationForm/utils';
+
+export const CustomFormFields: FC<Partial<Props>> = props => {
   const {executorType} = props as Pick<Props, 'executorType'>;
 
   return (
@@ -13,5 +16,3 @@ const CustomFormFields: React.FC<Partial<Props>> = props => {
     </StyledFormSpace>
   );
 };
-
-export default CustomFormFields;

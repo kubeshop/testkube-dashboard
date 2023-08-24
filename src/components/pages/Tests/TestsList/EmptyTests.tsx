@@ -1,10 +1,11 @@
 import {FC} from 'react';
 
-import {EmptyListContent, HelpCard} from '@molecules';
+import {EmptyListContent} from '@molecules/EmptyListContent';
+import {HelpCard} from '@molecules/HelpCard';
 
 import {externalLinks} from '@utils/externalLinks';
 
-const EmptyTests: FC<{action: () => void}> = ({action}) => {
+export const EmptyTests: FC<{action: () => void}> = ({action}) => {
   return (
     <EmptyListContent
       title="Create your first test in a few easy steps."
@@ -24,5 +25,3 @@ const EmptyTests: FC<{action: () => void}> = ({action}) => {
     </EmptyListContent>
   );
 };
-
-export default EmptyTests;

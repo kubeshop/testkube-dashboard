@@ -5,31 +5,32 @@ import {CloseOutlined} from '@ant-design/icons';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {StatusIcon} from '@atoms';
+import {StatusIcon} from '@atoms/StatusIcon';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {Execution} from '@models/execution';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {Execution} from '@models/execution';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
-import {DotsDropdown, RunningContext} from '@molecules';
+import {DotsDropdown} from '@molecules/DotsDropdown';
+import {RunningContext} from '@molecules/RunningContext';
+
+import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from '@organisms/ExecutionDrawer.styled';
 
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
-
-import {DrawerHeader, HeaderContent, ItemColumn, ItemRow} from './ExecutionDrawer.styled';
 
 interface ExecutionDrawerHeaderProps {
   useAbortExecution: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const ExecutionDrawerHeader: FC<ExecutionDrawerHeaderProps> = ({useAbortExecution}) => {
+export const ExecutionDrawerHeader: FC<ExecutionDrawerHeaderProps> = ({useAbortExecution}) => {
   const {entity, id} = useEntityDetailsPick('entity', 'id');
   const {close, data, id: execId} = useExecutionDetailsPick('close', 'data', 'id');
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
@@ -104,5 +105,3 @@ const ExecutionDrawerHeader: FC<ExecutionDrawerHeaderProps> = ({useAbortExecutio
     </DrawerHeader>
   );
 };
-
-export default ExecutionDrawerHeader;

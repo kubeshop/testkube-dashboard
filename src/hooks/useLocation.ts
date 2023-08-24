@@ -6,7 +6,7 @@ type Query = {
   lastPathSegment: string;
 };
 
-const useLocation = (): Query => {
+export const useLocation = (): Query => {
   const [query, setQuery] = useState<Query>({
     path: '',
     lastPathSegment: '',
@@ -20,5 +20,3 @@ const useLocation = (): Query => {
   }, [window.location]);
   return query;
 };
-
-export default useLocation;

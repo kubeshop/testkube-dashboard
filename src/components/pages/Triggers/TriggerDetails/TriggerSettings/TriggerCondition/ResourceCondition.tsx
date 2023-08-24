@@ -1,13 +1,20 @@
+import {FC} from 'react';
+
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input, InputNumber, Select} from 'antd';
 
-import {Button, FormIconWrapper, FormItem, FormItemLabel, FormRow, FullWidthSpace} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {FormIconWrapper} from '@custom-antd/Form.styled';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {FormItemLabel} from '@custom-antd/Form/FormItem/FormItemLabel';
+import {FormRow} from '@custom-antd/Form/FormRow';
+import {FullWidthSpace} from '@custom-antd/FullWidthSpace';
 
 import {TestTrigger, TriggerConditionStatus} from '@models/triggers';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -18,7 +25,7 @@ import {useTriggersField, useTriggersPick} from '@store/triggers';
 import {requiredNoText} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-const ResourceCondition: React.FC = () => {
+export const ResourceCondition: FC = () => {
   const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
   const {keyMap} = useTriggersPick('keyMap');
 
@@ -143,5 +150,3 @@ const ResourceCondition: React.FC = () => {
     </CardForm>
   );
 };
-
-export default ResourceCondition;

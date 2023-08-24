@@ -1,20 +1,21 @@
-import {useContext} from 'react';
+import {FC, useContext} from 'react';
 
 import notFoundImage from '@assets/not-found-image.svg';
 
-import {ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms/ExternalLink';
 
-import {ConfigContext} from '@contexts';
+import {ConfigContext} from '@contexts/ConfigContext';
 
-import {Button, Title} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {Title} from '@custom-antd/Typography/Title';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
-import Colors from '@styles/Colors';
+import {StyledErrorContainer, StyledErrorDescription, StyledErrorImage} from '@pages/ErrorBoundary.styled';
 
-import {StyledErrorContainer, StyledErrorDescription, StyledErrorImage} from './ErrorBoundary.styled';
+import {Colors} from '@styles/Colors';
 
-const ErrorBoundaryFallback: React.FC = () => {
+export const ErrorBoundaryFallback: FC = () => {
   const {discordUrl} = useContext(ConfigContext);
   const back = useDashboardNavigate('/');
 
@@ -38,5 +39,3 @@ const ErrorBoundaryFallback: React.FC = () => {
     </StyledErrorContainer>
   );
 };
-
-export default ErrorBoundaryFallback;

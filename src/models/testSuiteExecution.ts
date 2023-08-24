@@ -1,7 +1,6 @@
-import type {EntityMap} from '@models/entityMap';
-import type {ExecutionStatusEnum} from '@models/execution';
-import type {ObjectRef} from '@models/objectRef';
-
+import type {EntityMap} from './entityMap';
+import type {ExecutionStatusEnum} from './execution';
+import type {ObjectRef} from './objectRef';
 import type {TestSuiteStepExecutionResult} from './testSuite';
 
 export type TestSuiteExecution = {

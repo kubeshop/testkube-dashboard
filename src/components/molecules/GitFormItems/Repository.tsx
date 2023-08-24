@@ -1,6 +1,9 @@
+import {FC} from 'react';
+
 import {Input} from 'antd';
 
-import {FormItem, FormItemLabel} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {FormItemLabel} from '@custom-antd/Form/FormItem/FormItemLabel';
 
 import {required, url} from '@utils/form';
 
@@ -11,7 +14,7 @@ type RepositoryProps = {
   message?: string;
 };
 
-const Repository: React.FC<RepositoryProps> = props => {
+export const Repository: FC<RepositoryProps> = props => {
   const {status = TooltipStatus.None, message} = props;
 
   return (
@@ -35,5 +38,3 @@ const Repository: React.FC<RepositoryProps> = props => {
     </FormItem>
   );
 };
-
-export default Repository;

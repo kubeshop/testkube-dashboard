@@ -1,15 +1,15 @@
-import {AnchorHTMLAttributes, MouseEvent, useCallback, useContext} from 'react';
+import {AnchorHTMLAttributes, FC, MouseEvent, useCallback, useContext} from 'react';
 
 import classNames from 'classnames';
 
-import {DashboardContext} from '@contexts';
+import {DashboardContext} from '@contexts/DashboardContext';
 
 export interface SiderLinkProps {
   href: string;
   active?: RegExp;
 }
 
-const SiderLink: React.FC<SiderLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>> = ({
+export const SiderLink: FC<SiderLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>> = ({
   href,
   active,
   className,
@@ -38,5 +38,3 @@ const SiderLink: React.FC<SiderLinkProps & AnchorHTMLAttributes<HTMLAnchorElemen
     </a>
   );
 };
-
-export default SiderLink;

@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from 'react';
 import {parse} from 'yaml';
 
 const crdCache: Record<string, Promise<any>> = {};
-const useCRD = (url = '') => {
+export const useCRD = (url = '') => {
   const prevUrl = useRef('');
   const [loading, setLoading] = useState(true);
   const [raw, setRaw] = useState('');
@@ -48,5 +48,3 @@ const useCRD = (url = '') => {
 
   return {loading, crd, raw};
 };
-
-export default useCRD;

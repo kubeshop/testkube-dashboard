@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {FC, useMemo, useState} from 'react';
 
 import {WarningOutlined} from '@ant-design/icons';
 import {Select, Tooltip} from 'antd';
@@ -9,23 +9,23 @@ import {MutationDefinition} from '@reduxjs/toolkit/query';
 import parser from 'cron-parser';
 import {capitalize} from 'lodash';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
-import Colors from '@styles/Colors';
-import Fonts from '@styles/Fonts';
+import {Colors} from '@styles/Colors';
+import {Fonts} from '@styles/Fonts';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import CronInput from './CronInput';
-import NextExecution from './NextExecution';
+import {CronInput} from './CronInput';
+import {NextExecution} from './NextExecution';
 import {StyledColumn, StyledCronFormat, StyledRow} from './Schedule.styled';
 import {custom, quickOptions} from './utils';
 
@@ -34,7 +34,7 @@ interface ScheduleProps {
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
+export const Schedule: FC<ScheduleProps> = ({label, useUpdateEntity}) => {
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -164,5 +164,3 @@ const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
     </CardForm>
   );
 };
-
-export default Schedule;

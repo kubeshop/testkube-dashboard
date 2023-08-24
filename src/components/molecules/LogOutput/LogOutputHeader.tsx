@@ -1,7 +1,10 @@
-import {StyledLogOutputHeaderContainer} from './LogOutput.styled';
-import LogOutputActions from './LogOutputActions';
+import {FC} from 'react';
 
-const LogOutputHeader: React.FC<any> = props => {
+import {StyledLogOutputHeaderContainer} from '@molecules/LogOutput.styled';
+
+import {LogOutputActions} from './LogOutputActions';
+
+export const LogOutputHeader: FC<any> = props => {
   const {logOutput, isFullscreen = false} = props;
 
   return (
@@ -10,5 +13,3 @@ const LogOutputHeader: React.FC<any> = props => {
     </StyledLogOutputHeaderContainer>
   );
 };
-
-export default LogOutputHeader;

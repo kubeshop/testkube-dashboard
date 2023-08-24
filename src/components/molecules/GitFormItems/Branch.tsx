@@ -1,6 +1,9 @@
+import {FC} from 'react';
+
 import {Input} from 'antd';
 
-import {FormItem, FormItemLabel} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {FormItemLabel} from '@custom-antd/Form/FormItem/FormItemLabel';
 
 import {required} from '@utils/form';
 
@@ -11,7 +14,7 @@ type BranchProps = {
   message?: string;
 };
 
-const Branch: React.FC<BranchProps> = props => {
+export const Branch: FC<BranchProps> = props => {
   const {status = TooltipStatus.None, message} = props;
 
   return (
@@ -28,5 +31,3 @@ const Branch: React.FC<BranchProps> = props => {
     </FormItem>
   );
 };
-
-export default Branch;

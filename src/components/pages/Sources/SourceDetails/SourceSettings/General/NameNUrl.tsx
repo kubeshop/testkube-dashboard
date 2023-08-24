@@ -1,10 +1,12 @@
+import {FC} from 'react';
+
 import {Form} from 'antd';
 
-import {Input} from '@custom-antd';
+import {Input} from '@custom-antd/Input';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -20,7 +22,7 @@ type NameNUrlFormValues = {
   uri: string;
 };
 
-const NameNUrl: React.FC = () => {
+export const NameNUrl: FC = () => {
   const {current} = useSourcesPick('current');
 
   const mayEdit = usePermission(Permissions.editEntity);
@@ -71,5 +73,3 @@ const NameNUrl: React.FC = () => {
     </CardForm>
   );
 };
-
-export default NameNUrl;

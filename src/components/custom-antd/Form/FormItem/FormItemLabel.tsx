@@ -1,11 +1,13 @@
+import {FC} from 'react';
+
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {Tooltip} from 'antd';
 
-import {Asterisk} from '@atoms';
+import {Asterisk} from '@atoms/Asterisk';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 type FormItemLabelProps = {
   status?: string;
@@ -14,7 +16,7 @@ type FormItemLabelProps = {
   required?: boolean;
 };
 
-const FormItemLabel: React.FC<FormItemLabelProps> = props => {
+export const FormItemLabel: FC<FormItemLabelProps> = props => {
   const {status, text, tooltipMessage, required} = props;
 
   return (
@@ -31,5 +33,3 @@ const FormItemLabel: React.FC<FormItemLabelProps> = props => {
     </>
   );
 };
-
-export default FormItemLabel;

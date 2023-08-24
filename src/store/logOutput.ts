@@ -1,6 +1,6 @@
 import {StateCreator} from 'zustand';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 export interface LogOutputSlice {
   isFullscreen: boolean;

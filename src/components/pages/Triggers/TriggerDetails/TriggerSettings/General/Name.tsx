@@ -1,12 +1,14 @@
+import {FC} from 'react';
+
 import {Form} from 'antd';
 
-import {Input} from '@custom-antd';
+import {Input} from '@custom-antd/Input';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {useTriggersPick} from '@store/triggers';
 
-const Name: React.FC = () => {
+export const Name: FC = () => {
   const {current} = useTriggersPick('current');
 
   const [form] = Form.useForm();
@@ -26,5 +28,3 @@ const Name: React.FC = () => {
     </CardForm>
   );
 };
-
-export default Name;

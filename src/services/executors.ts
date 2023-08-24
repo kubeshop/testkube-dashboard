@@ -1,7 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {Executor} from '@models/executors';
-import {MetadataResponse, YamlEditBody} from '@models/fetch';
+import type {Executor} from '@models/executors';
+import type {MetadataResponse, YamlEditBody} from '@models/fetch';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 
