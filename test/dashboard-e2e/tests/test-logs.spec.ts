@@ -1,20 +1,20 @@
-/* eslint-disable no-restricted-syntax */
 import {test} from '@playwright/test';
 
-import {ApiHelpers} from '../api/api-helpers';
-import {TestDataHandler} from '../data-handlers/test-data-handlers';
+import config from '../config';
+import {ApiHelpers} from '../helpers/api-helpers';
+import {TestDataHandler} from '../helpers/test-data-handler';
 import {MainPage} from '../pages/MainPage';
 import {TestExecutionsPage} from '../pages/TestExecutionsPage';
 
-const apiHelpers = new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
-const testDataHandler = new TestDataHandler(process.env.RUN_ID);
+const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
+const testDataHandler = new TestDataHandler(config.runId);
 
 test(`Run test logs`, async ({page}) => {
   const testData = testDataHandler.getTest('k6-git-created');
   const realTestName = testData.name;
 
-  await apiHelpers.assureTestCreated(testData, false);
-  const lastExecutionNumber = await apiHelpers.getLastExecutionNumber(realTestName);
+  await api.assureTestCreated(testData, false);
+  const lastExecutionNumber = await api.getLastExecutionNumber(realTestName);
 
   const mainPage = new MainPage(page);
   await mainPage.visitMainPage();
@@ -31,5 +31,5 @@ test(`Run test logs`, async ({page}) => {
   await page.waitForTimeout(5000);
   await testExecutionsPage.validateExecutionLogContents('Environment variables read successfully');
 
-  await apiHelpers.abortTest(realTestName, executionName); // abort test not to waste compute resources
+  await api.abortTest(realTestName, executionName); // abort test not to waste compute resources
 });
