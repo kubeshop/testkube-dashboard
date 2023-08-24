@@ -1,6 +1,6 @@
 import {FC} from 'react';
 
-import {Form, Select} from 'antd';
+import {Form} from 'antd';
 
 import {CreatableMultiSelect} from '@atoms';
 
@@ -58,20 +58,12 @@ const Condition: FC = () => {
       spacing={20}
       form={form}
       initialValues={{
-        resource: 'test',
         events: current!.events.map(item => ({label: item, value: item})) || [],
         labels: composeLabels((current!.labels as unknown as Record<string, Option>) || []) || {},
       }}
       disabled={!mayEdit}
       onConfirm={onFinish}
     >
-      <FormItem name="resource" label="Resource" required rules={[requiredNoText]}>
-        {/* FIXME: We don't allow selecting resource type */}
-        <Select disabled>
-          <Select.Option value="test">Test</Select.Option>
-          <Select.Option value="test-suite">Test Suite</Select.Option>
-        </Select>
-      </FormItem>
       <FormItem noStyle shouldUpdate>
         {({getFieldError}) => {
           const isValid = !(getFieldError('labels').length > 0);
