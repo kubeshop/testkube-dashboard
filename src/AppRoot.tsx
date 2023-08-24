@@ -21,6 +21,7 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
+import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
 import {Plugin} from '@plugins/types';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
@@ -118,7 +119,7 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
-  const plugins: Plugin[] = useMemo(() => [], []);
+  const plugins: Plugin[] = useMemo(() => [createAiInsightsPlugin()], []);
 
   return composeProviders()
     .append(FeatureFlagsProvider, {})

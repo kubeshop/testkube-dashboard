@@ -26,9 +26,7 @@ const createAiInsightsPlugin = (): Plugin => ({
       },
       {
         order: 4,
-        visible: () => {
-          return isTestExecutionFailed(scope);
-        },
+        visible: () => isTestExecutionFailed(scope),
       }
     );
     scope.appendSlot(
