@@ -1,10 +1,8 @@
-import React, {FC, Suspense, useEffect, useState} from 'react';
+import React, {FC, Suspense} from 'react';
 
 import {Form} from 'antd';
 
 import {MonacoEditor} from '@atoms';
-
-import {useLastCallback} from '@hooks/useLastCallback';
 
 import {notificationCall} from '@molecules';
 import DefinitionSkeleton from '@molecules/Definition/DefinitionSkeleton';
@@ -28,9 +26,6 @@ const CustomPayload: FC = () => {
   const mayEdit = usePermission(Permissions.editEntity);
   const [form] = Form.useForm<CustomPayloadFormValues>();
 
-  const initialValue = current!.payloadTemplate || '';
-  const [value, setValue] = useState(initialValue);
-
   const [updateWebhook] = useUpdateWebhookMutation();
 
   const onFinish = () => {
@@ -40,22 +35,20 @@ const CustomPayload: FC = () => {
       .then(() => notificationCall('passed', 'The custom payload was successfully updated.'));
   };
 
-  useEffect(() => {
-    setValue(initialValue);
-  }, [current]);
-
   return (
     <CardForm
       name="webhook-payload-template-form"
       title="Custom payload"
       description="Customize the payload we will send with each request."
+      form={form}
+      initialValues={{payloadTemplate: current!.payloadTemplate || ''}}
       disabled={!mayEdit}
-      wasTouched={initialValue !== value}
       onConfirm={onFinish}
-      onCancel={useLastCallback(() => setValue(initialValue))}
     >
       <Suspense fallback={<DefinitionSkeleton />}>
-        <MonacoEditor language="none" value={value} onChange={setValue} />
+        <Form.Item name="payloadTemplate">
+          <MonacoEditor language="none" />
+        </Form.Item>
       </Suspense>
     </CardForm>
   );
