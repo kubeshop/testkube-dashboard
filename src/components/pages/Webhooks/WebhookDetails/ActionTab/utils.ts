@@ -10,7 +10,7 @@ export const composeHeaders = (headers: {key: string; value: string}[]): Record<
   }, {} as Record<string, string>);
 };
 
-export const decomposeHeaders = (headers: Record<string, string>): {key: string, value: string}[] => {
+export const decomposeHeaders = (headers: Record<string, string>): {key: string; value: string}[] => {
   return Object.entries(headers).map(([key, value]) => {
     return {key, value};
   });

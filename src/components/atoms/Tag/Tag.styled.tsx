@@ -18,11 +18,11 @@ export const TagContainer = styled.div`
   svg {
     height: 12px;
     width: 12px;
-    fill: currentColor;
+    fill: currentcolor;
   }
 
   .ant-typography {
-    color: currentColor;
+    color: currentcolor;
   }
 
   &.success {
