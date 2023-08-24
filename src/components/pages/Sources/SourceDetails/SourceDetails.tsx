@@ -1,59 +1,60 @@
-import {useCallback, useContext, useEffect, useState} from 'react';
+import {useContext} from 'react';
+import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
-import useLocation from '@hooks/useLocation';
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
+import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
 
 import {useGetSourceDetailsQuery} from '@services/sources';
 
-import {safeRefetch} from '@utils/fetchUtils';
+import {useSourcesPick, useSourcesSync} from '@store/sources';
 
 import SourceSettings from './SourceSettings';
 
 const SourceDetails = () => {
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {isClusterAvailable} = useContext(MainContext);
 
-  const currentSourceDetails = useAppSelector(selectCurrentSource);
+  const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
-  const name = useLocation().lastPathSegment;
+  const {data: source, error, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
 
-  const [activeTabKey, setActiveTabKey] = useState('Settings');
+  const {current: currentSourceDetails} = useSourcesPick('current');
+  useSourcesSync({
+    current: source?.name === name ? source : undefined,
+  });
 
-  const {data: sourceDetails, refetch} = useGetSourceDetailsQuery(name, {skip: !isClusterAvailable});
-  const reload = useCallback(() => safeRefetch(refetch), [refetch]);
+  const setSettingsTab = useDashboardNavigate((next: string) => `/sources/${name}/settings/${next}`);
+  const back = useDashboardNavigate('/sources');
 
-  const isPageDisabled = !name;
-
-  useEffect(() => {
-    if (sourceDetails) {
-      dispatch(setCurrentSource(sourceDetails));
-    }
-  }, [sourceDetails]);
-
-  useEffect(() => {
-    reload();
-  }, [location]);
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+  if (!source || !currentSourceDetails) {
+    return <Loading />;
+  }
 
   return (
     <PageWrapper>
       <PageMetadata title={`${name} | Sources`} />
 
-      <PageHeader onBack={() => navigate('/sources')} title={name} />
-      <Tabs activeKey={activeTabKey} onChange={setActiveTabKey} destroyInactiveTabPane>
-        <Tabs.TabPane tab="Settings" key="Settings" disabled={isPageDisabled}>
-          {currentSourceDetails ? <SourceSettings reload={reload} /> : null}
-        </Tabs.TabPane>
-      </Tabs>
+      <PageHeader onBack={back} title={name} />
+      <Tabs
+        destroyInactiveTabPane
+        items={[
+          {
+            key: 'settings',
+            label: 'Settings',
+            children: <SourceSettings tab={settingsTab} onTabChange={setSettingsTab} />,
+          },
+        ]}
+      />
     </PageWrapper>
   );
 };

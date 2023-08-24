@@ -1,9 +1,8 @@
-import {useContext, useEffect} from 'react';
-
-import {DashboardContext} from '@contexts';
+import {useEffect} from 'react';
 
 import {Title} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useURLSearchParams from '@hooks/useURLSearchParams';
 
 import {saveApiEndpoint} from '@services/apiEndpoint';
@@ -11,16 +10,14 @@ import {saveApiEndpoint} from '@services/apiEndpoint';
 import {EndpointProcessingContainer} from './EndpointProcessing.styled';
 
 const EndpointProcessing: React.FC = () => {
-  const {navigate} = useContext(DashboardContext);
-
   const searchParams = useURLSearchParams();
+  const openMainPage = useDashboardNavigate('/');
 
   useEffect(() => {
     if (searchParams.apiEndpoint) {
       saveApiEndpoint(searchParams.apiEndpoint.toString());
     }
-
-    navigate('/');
+    openMainPage();
   }, [searchParams]);
 
   return (

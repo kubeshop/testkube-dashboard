@@ -6,7 +6,7 @@ import {useCopyToClipboard} from '@hooks/useCopyToClipboard';
 
 import {StyledCheckOutlined, StyledCopyOutlined} from './CopyButton.styled';
 
-const CopyButton: React.FC<{content: string; onClick?: () => void}> = props => {
+const CopyButton: React.FC<{content: string | (() => string); onClick?: () => void}> = props => {
   const {content, onClick} = props;
   const {isCopied, setCopyToClipboardState} = useCopyToClipboard(content);
 

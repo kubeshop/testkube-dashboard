@@ -1,7 +1,9 @@
-import {FC, useCallback, useContext, useEffect} from 'react';
+import {FC, useCallback, useContext} from 'react';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 import {ModalConfig} from '@contexts/ModalContext';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {TestSuite} from '@models/testSuite';
 
@@ -9,16 +11,13 @@ import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
-import {useAppSelector} from '@redux/hooks';
-import {initialTestSuitesFiltersState} from '@redux/initialState';
-import {
-  selectTestSuites,
-  selectTestSuitesFilters,
-  setTestSuites,
-  setTestSuitesFilters,
-} from '@redux/reducers/testSuitesSlice';
+import {Error} from '@pages';
+
+import {usePluginSlot} from '@plugins/hooks';
 
 import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
+
+import {initialFilters, useTestSuitesField, useTestSuitesSync} from '@store/testSuites';
 
 import {PollingIntervals} from '@utils/numbers';
 
@@ -37,21 +36,23 @@ const createModal: ModalConfig = {
 };
 
 const TestSuitesList: FC = () => {
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
-  const queryFilters = useAppSelector(selectTestSuitesFilters);
+  const {isClusterAvailable} = useContext(MainContext);
+  const [filters, setFilters] = useTestSuitesField('filters');
+  const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
 
-  const {data, isLoading, isFetching} = useGetTestSuitesQuery(queryFilters || null, {
+  const {
+    data: testSuites,
+    error,
+    isLoading,
+    isFetching,
+  } = useGetTestSuitesQuery(filters || null, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable,
   });
-
-  useEffect(() => {
-    dispatch(setTestSuites(data || []));
-  }, [data]);
+  useTestSuitesSync({testSuites});
 
   const [abortAll] = useAbortAllTestSuiteExecutionsMutation();
-  const onItemClick = useCallback((item: TestSuite) => navigate(`/test-suites/executions/${item.name}`), []);
+  const onItemClick = useDashboardNavigate((item: TestSuite) => `/test-suites/${item.name}`);
   const onItemAbort = useCallback((item: TestSuite) => {
     abortAll({id: item.name})
       .unwrap()
@@ -60,21 +61,27 @@ const TestSuitesList: FC = () => {
       });
   }, []);
 
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+
   return (
     <EntityListContent
+      itemKey="testSuite.name"
       CardComponent={TestSuiteCard}
       onItemClick={onItemClick}
       onItemAbort={onItemAbort}
       entity="test-suites"
       pageTitle="Test Suites"
+      pageTitleAddon={pageTitleAddon}
       addEntityButtonText="Add a new test suite"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTestSuites}
-      initialFiltersState={initialTestSuitesFiltersState}
+      initialFiltersState={initialFilters}
       dataTest="add-a-new-test-suite-btn"
-      queryFilters={queryFilters}
-      setQueryFilters={setTestSuitesFilters}
-      data={useAppSelector(selectTestSuites)}
+      queryFilters={filters}
+      setQueryFilters={setFilters}
+      data={testSuites}
       isLoading={isLoading}
       isFetching={isFetching}
       createModalConfig={createModal}

@@ -1,10 +1,8 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useDebounce} from 'react-use';
 
 import {SearchOutlined} from '@ant-design/icons';
 import {Input} from 'antd';
-
-import {MainContext} from '@contexts';
 
 import {FilterProps} from '@models/filters';
 
@@ -15,8 +13,6 @@ import Colors from '@styles/Colors';
 const TextSearchFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, isFiltersDisabled} = props;
 
-  const {dispatch} = useContext(MainContext);
-
   const [inputValue, setInputValue] = useState(filters.textSearch);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +21,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
 
   const [, cancel] = useDebounce(
     () => {
-      dispatch(setFilters({...filters, textSearch: inputValue, pageSize: initialPageSize}));
+      setFilters({...filters, textSearch: inputValue, pageSize: initialPageSize});
     },
     300,
     [inputValue]
@@ -44,7 +40,6 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
       value={inputValue}
       data-cy="search-filter"
       disabled={isFiltersDisabled}
-      style={{width: '296px'}}
     />
   );
 };

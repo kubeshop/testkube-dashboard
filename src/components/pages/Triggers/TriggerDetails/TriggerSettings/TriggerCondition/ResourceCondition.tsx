@@ -5,23 +5,22 @@ import {Button, FormIconWrapper, FormItem, FormItemLabel, FormRow, FullWidthSpac
 
 import {TestTrigger, TriggerConditionStatus} from '@models/triggers';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTriggerByIdMutation} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useTriggersField, useTriggersPick} from '@store/triggers';
 
 import {requiredNoText} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 const ResourceCondition: React.FC = () => {
-  const {currentTrigger, setCurrentTrigger, triggersKeyMap} = useStore(state => ({
-    currentTrigger: state.currentTrigger!,
-    setCurrentTrigger: state.setCurrentTrigger,
-    triggersKeyMap: state.triggersKeyMap!,
-  }));
+  const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
+  const {keyMap} = useTriggersPick('keyMap');
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -34,7 +33,7 @@ const ResourceCondition: React.FC = () => {
     const {timeout, conditions} = form.getFieldsValue();
 
     const body = {
-      ...currentTrigger,
+      ...currentTrigger!,
       conditionSpec: {
         conditions,
         ...(timeout && {timeout}),
@@ -42,16 +41,14 @@ const ResourceCondition: React.FC = () => {
     };
 
     return updateTrigger(body)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
-        if (res && 'data' in res) {
-          notificationCall('passed', 'Trigger was successfully updated.');
-          setCurrentTrigger(res.data);
-          form.setFieldsValue({
-            timeout: res.data.conditionSpec?.timeout,
-            conditions: res.data.conditionSpec?.conditions || [],
-          });
-        }
+        notificationCall('passed', 'Trigger was successfully updated.');
+        setCurrentTrigger(res.data);
+        form.setFieldsValue({
+          timeout: res.data.conditionSpec?.timeout,
+          conditions: res.data.conditionSpec?.conditions || [],
+        });
       });
   };
 
@@ -64,96 +61,86 @@ const ResourceCondition: React.FC = () => {
   ];
 
   return (
-    <Form
-      form={form}
+    <CardForm
       name="trigger-resource-conditions"
+      title="Trigger resource condition"
+      description="Fine grain the status conditions for your selected resource."
+      form={form}
       initialValues={{
         timeout: currentTrigger?.conditionSpec?.timeout,
         conditions: currentTrigger?.conditionSpec?.conditions || [],
       }}
-      layout="vertical"
       disabled={!mayEdit}
+      onConfirm={onFinish}
     >
-      <ConfigurationCard
-        title="Trigger resource condition"
-        description="Fine grain the status conditions for your selected resource."
-        onConfirm={onFinish}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <FullWidthSpace size={32} direction="vertical">
-          {isResourceConditionsListEmpty ? null : (
-            <FormItem
-              name="timeout"
-              label={
-                <FormItemLabel
-                  text="Delay in ms"
-                  tooltipMessage="Add the delay in ms the test trigger waits for conditions"
-                />
-              }
-            >
-              <InputNumber
-                controls={false}
-                placeholder="Delay"
-                max={2 ** 31 - 1} // Int32 max value
-                style={{width: '100%'}}
-              />
-            </FormItem>
-          )}
-          <Form.List name="conditions" initialValue={[]}>
-            {(fields, {add, remove}) => (
-              <FullWidthSpace size={16} direction="vertical">
-                {!isResourceConditionsListEmpty ? (
-                  <FullWidthSpace direction="vertical" size={16}>
-                    {fields.length &&
-                      fields?.map(({key, name, ...restField}) => {
-                        return (
-                          <FormRow key={key}>
-                            <FormItem {...restField} name={[name, 'type']} rules={[requiredNoText]} flex={2}>
-                              <Select
-                                options={triggersKeyMap.conditions?.map(condition => ({
-                                  label: condition,
-                                  value: condition,
-                                }))}
-                                placeholder="Type"
-                              />
-                            </FormItem>
-                            <FormItem {...restField} name={[name, 'status']} rules={[requiredNoText]} flex={2}>
-                              <Select options={selectOptions} placeholder="Status" />
-                            </FormItem>
-                            <FormItem {...restField} name={[name, 'reason']} flex={4}>
-                              <Input placeholder="Reason" />
-                            </FormItem>
-                            <FormIconWrapper>
-                              <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
-                            </FormIconWrapper>
-                          </FormRow>
-                        );
-                      })}
-                  </FullWidthSpace>
-                ) : null}
-                <FormRow justify="center">
-                  <Button
-                    $customType="secondary"
-                    onClick={() =>
-                      add({
-                        type: null,
-                        status: null,
-                        reason: null,
-                      })
-                    }
-                  >
-                    Add a new condition
-                  </Button>
-                </FormRow>
+      {isResourceConditionsListEmpty ? null : (
+        <FormItem
+          name="timeout"
+          label={
+            <FormItemLabel
+              text="Delay in ms"
+              tooltipMessage="Add the delay in ms the test trigger waits for conditions"
+            />
+          }
+        >
+          <InputNumber
+            controls={false}
+            placeholder="Delay"
+            max={2 ** 31 - 1} // Int32 max value
+            style={{width: '100%'}}
+          />
+        </FormItem>
+      )}
+      <Form.List name="conditions" initialValue={[]}>
+        {(fields, {add, remove}) => (
+          <FullWidthSpace size={16} direction="vertical">
+            {!isResourceConditionsListEmpty ? (
+              <FullWidthSpace direction="vertical" size={16}>
+                {fields.length &&
+                  fields?.map(({key, name, ...restField}) => {
+                    return (
+                      <FormRow key={key}>
+                        <FormItem {...restField} name={[name, 'type']} rules={[requiredNoText]} flex={2}>
+                          <Select
+                            options={keyMap?.conditions?.map(condition => ({
+                              label: condition,
+                              value: condition,
+                            }))}
+                            placeholder="Type"
+                          />
+                        </FormItem>
+                        <FormItem {...restField} name={[name, 'status']} rules={[requiredNoText]} flex={2}>
+                          <Select options={selectOptions} placeholder="Status" />
+                        </FormItem>
+                        <FormItem {...restField} name={[name, 'reason']} flex={4}>
+                          <Input placeholder="Reason" />
+                        </FormItem>
+                        <FormIconWrapper>
+                          <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
+                        </FormIconWrapper>
+                      </FormRow>
+                    );
+                  })}
               </FullWidthSpace>
-            )}
-          </Form.List>
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+            ) : null}
+            <FormRow justify="center">
+              <Button
+                $customType="secondary"
+                onClick={() =>
+                  add({
+                    type: null,
+                    status: null,
+                    reason: null,
+                  })
+                }
+              >
+                Add a new condition
+              </Button>
+            </FormRow>
+          </FullWidthSpace>
+        )}
+      </Form.List>
+    </CardForm>
   );
 };
 

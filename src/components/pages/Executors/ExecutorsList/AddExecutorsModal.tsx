@@ -1,21 +1,19 @@
-import {useContext, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {DashboardContext} from '@contexts';
-
 import {Button, Input} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {Hint, NotificationContent} from '@molecules';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-
 import {useCreateExecutorMutation} from '@services/executors';
+
+import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -30,13 +28,12 @@ type AddExecutorsFormValues = {
 };
 
 const AddExecutorsModal: React.FC = () => {
-  const {navigate} = useContext(DashboardContext);
+  const {namespace} = useClusterDetailsPick('namespace');
+  const openDetails = useDashboardNavigate((name: string) => `/executors/${name}`);
 
   const [form] = Form.useForm<AddExecutorsFormValues>();
 
   const [createExecutor, {isLoading}] = useCreateExecutorMutation();
-
-  const namespace = useAppSelector(selectNamespace);
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
@@ -54,12 +51,8 @@ const AddExecutorsModal: React.FC = () => {
     delete body.type;
 
     createExecutor(body)
-      .then(res => displayDefaultNotificationFlow(res))
-      .then(res => {
-        if (res && 'data' in res) {
-          navigate(`/executors/${res.data.metadata.name}`);
-        }
-      })
+      .then(displayDefaultNotificationFlow)
+      .then(res => openDetails(res.data.metadata.name))
       .catch(err => {
         setError(err);
 

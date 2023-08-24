@@ -1,9 +1,9 @@
-import {Args} from '@models/args';
-import {AssertionResult} from '@models/assertionResult';
-import {EntityMap} from '@models/entityMap';
-import {TestContent} from '@models/test';
-import {TestExecutor} from '@models/testExecutors';
-import {Variables} from '@models/variable';
+import type {Args} from '@models/args';
+import type {AssertionResult} from '@models/assertionResult';
+import type {EntityMap} from '@models/entityMap';
+import type {TestContent} from '@models/test';
+import type {TestExecutor} from '@models/testExecutors';
+import type {Variables} from '@models/variable';
 
 export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued' | 'cancelled' | 'aborted';
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
@@ -36,13 +36,14 @@ export type Execution = {
   params: EntityMap;
   paramsFile: string;
   content: TestContent;
-  startTime: Date;
-  endTime: Date;
+  startTime: string; // ISO Date
+  endTime: string; // ISO Date
   duration: string;
   executionResult: ExecutionResult;
   labels: EntityMap;
   number: number;
   variables?: Variables;
+  runningContext: any;
 };
 
 export type ExecutionRequest = {

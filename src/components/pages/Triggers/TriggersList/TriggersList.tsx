@@ -6,9 +6,13 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
 import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
+
+import {Error} from '@pages';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -23,9 +27,10 @@ import TriggerCard from './TriggerCard';
 
 const TriggersList: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
+  const {location} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate(({name}: {name: string}) => `/triggers/${name}`);
 
-  const {data: triggersList = [], refetch, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
+  const {data: triggers, refetch, error, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
 
   const [isAddTriggerModalVisible, setAddTriggerModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
@@ -33,6 +38,10 @@ const TriggersList: React.FC = () => {
   useEffect(() => {
     safeRefetch(refetch);
   }, [location]);
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
 
   return (
     <PageBlueprint
@@ -57,12 +66,12 @@ const TriggersList: React.FC = () => {
     >
       <EntityGrid
         maxColumns={3}
-        data={triggersList}
+        data={triggers}
         Component={TriggerCard}
-        componentProps={{onClick: trigger => navigate(`/triggers/${trigger.name}`)}}
+        componentProps={{onClick: openDetails}}
         empty={<EmptyTriggers onButtonClick={() => setAddTriggerModalVisibility(true)} />}
         itemHeight={66}
-        loadingInitially={isLoading}
+        loadingInitially={isLoading || !isClusterAvailable}
       />
       {isAddTriggerModalVisible ? (
         <Modal

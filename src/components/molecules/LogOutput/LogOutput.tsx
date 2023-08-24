@@ -1,77 +1,50 @@
-import {MouseEvent, memo, useCallback, useEffect, useRef, useState} from 'react';
-import {useAsync} from 'react-use';
+import React, {ReactNode, memo, useCallback, useEffect, useRef, useState} from 'react';
+import {createPortal} from 'react-dom';
+import {CSSTransition} from 'react-transition-group';
+import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
-import Ansi from 'ansi-to-react';
+import {isEqual} from 'lodash';
 
-import {LogAction} from '@models/log';
-
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput, setLogOutput, setLogOutputDOMRect} from '@redux/reducers/configSlice';
+import {Coordinates} from '@models/config';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
-import {getRtkIdToken} from '@utils/fetchUtils';
+import {useLogOutputPick} from '@store/logOutput';
 
-import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
-import LogOutputHeader from './LogOutputHeader';
+import {getRtkIdToken} from '@utils/rtk';
+
+import FullscreenLogOutput from './FullscreenLogOutput';
+import {DrawerBannerContainer, LogOutputWrapper} from './LogOutput.styled';
+import LogOutputPure from './LogOutputPure';
 import {useCountLines, useLastLines} from './utils';
 
 export type LogOutputProps = {
+  banner?: ReactNode;
   logOutput?: string;
   executionId?: string;
-  actions?: LogAction[];
   isRunning?: boolean;
-  title?: string;
-  isAutoScrolled?: boolean;
   initialLines?: number;
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const dispatch = useAppDispatch();
+  const {logOutput = 'No logs', executionId, isRunning = false, initialLines = 300, banner} = props;
 
-  const {
-    logOutput = 'No logs',
-    executionId,
-    actions = ['copy', 'fullscreen'],
-    isRunning,
-    title,
-    isAutoScrolled,
-    initialLines = 300,
-  } = props;
-
-  const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const wsRoot = useWsEndpoint();
 
-  const {isFullScreenLogOutput} = useAppSelector(selectFullScreenLogOutput);
+  const {isFullscreen} = useLogOutputPick('isFullscreen');
 
+  const [rect, setRect] = useState<Coordinates | undefined>();
   const [logs, setLogs] = useState('');
   const [shouldConnect, setShouldConnect] = useState(false);
 
   const [expanded, setExpanded] = useState(false);
   const lines = useCountLines(logs);
-  const visibleLogs = useLastLines(logs, expanded ? Infinity : initialLines);
+  const visibleLogs = useLastLines(logs, expanded || isRunning ? Infinity : initialLines);
 
-  const scrollToBottom: (behavior?: ScrollBehavior) => void = (behavior = 'smooth') => {
-    if (bottomRef && bottomRef.current) {
-      bottomRef.current.scrollIntoView({behavior, block: 'end'});
-    }
-  };
-
-  const onExpand = useCallback((event: MouseEvent) => {
-    event.preventDefault();
-    setExpanded(true);
-  }, []);
-
-  const smoothScrollIfAutoscroll = useCallback(() => {
-    if (!isAutoScrolled) {
-      return;
-    }
-
-    scrollToBottom();
-  }, [isAutoScrolled]);
+  const onExpand = useCallback(() => setExpanded(true), []);
 
   // TODO: Consider getting token different way than using the one from RTK
   const {value: token, loading: tokenLoading} = useAsync(getRtkIdToken);
@@ -109,73 +82,60 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   );
 
   useEffect(() => {
-    if (!isRunning) {
-      setLogs(logOutput);
-    } else {
-      setLogs('');
-    }
-
-    return () => {
-      setLogs('');
-    };
+    setLogs(isRunning ? '' : logOutput);
+    setShouldConnect(isRunning);
   }, [isRunning, executionId]);
 
-  useEffect(() => {
-    setShouldConnect(isRunning || false);
-  }, [isRunning]);
-
-  useEffect(() => {
-    if (isFullScreenLogOutput) {
-      dispatch(setLogOutput(logs));
-    } else {
-      dispatch(setLogOutput(''));
+  useInterval(() => {
+    const clientRect = containerRef?.current?.getBoundingClientRect();
+    if (clientRect && !isEqual(clientRect, rect)) {
+      setRect({
+        top: clientRect.top,
+        left: clientRect.left,
+        width: clientRect.width,
+        height: clientRect.height,
+      });
     }
-  }, [logs, isFullScreenLogOutput]);
+  }, 200);
 
-  useEffect(() => {
-    smoothScrollIfAutoscroll();
-  }, [logs]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      scrollToBottom('auto');
-    }, 100);
-  }, [executionId]);
-
-  useEffect(() => {
-    const rect = containerRef?.current?.getBoundingClientRect();
-    if (rect) {
-      dispatch(
-        setLogOutputDOMRect({
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height,
-        })
-      );
-    }
-  }, [isFullScreenLogOutput]);
+  const fullscreenLogRef = useRef<HTMLDivElement>(null);
+  const fullscreenLog = (
+    <CSSTransition
+      nodeRef={fullscreenLogRef}
+      in={isFullscreen}
+      timeout={500}
+      classNames="full-screen-log-output"
+      unmountOnExit
+    >
+      <FullscreenLogOutput
+        ref={fullscreenLogRef}
+        $rect={rect}
+        logs={logs}
+        visibleLogs={visibleLogs}
+        expanded={expanded}
+        lines={lines}
+        initialLines={initialLines}
+        onExpand={onExpand}
+      />
+    </CSSTransition>
+  );
 
   return (
-    <StyledLogOutputContainer ref={containerRef}>
-      <LogOutputHeader logOutput={logs} actions={actions} title={title} />
-      <StyledLogTextContainer>
-        {visibleLogs ? (
-          <StyledPreLogText data-test="log-output">
-            {!expanded && lines >= initialLines ? (
-              <>
-                <a href="#" onClick={onExpand}>
-                  Click to show all {lines} lines...
-                </a>
-                <br />
-              </>
-            ) : null}
-            <Ansi useClasses>{visibleLogs}</Ansi>
-          </StyledPreLogText>
-        ) : null}
-        <div ref={bottomRef} />
-      </StyledLogTextContainer>
-    </StyledLogOutputContainer>
+    <>
+      <LogOutputWrapper>
+        {banner ? <DrawerBannerContainer>{banner}</DrawerBannerContainer> : null}
+        <LogOutputPure
+          ref={containerRef}
+          logs={logs}
+          visibleLogs={visibleLogs}
+          expanded={expanded}
+          lines={lines}
+          initialLines={initialLines}
+          onExpand={onExpand}
+        />
+      </LogOutputWrapper>
+      {createPortal(fullscreenLog, document.querySelector('#log-output-container')!)}
+    </>
   );
 };
 

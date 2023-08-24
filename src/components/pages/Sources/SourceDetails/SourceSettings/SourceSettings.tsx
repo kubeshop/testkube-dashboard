@@ -6,14 +6,17 @@ import SourceSettingsDefinition from './Definition';
 import General from './General';
 
 interface SourceSettingsProps {
-  reload: () => void;
+  tab: string;
+  onTabChange: (tab: string) => void;
 }
 
-const SourceSettings: FC<SourceSettingsProps> = ({reload}) => (
+const SourceSettings: FC<SourceSettingsProps> = ({tab, onTabChange}) => (
   <SettingsLayout
+    active={tab}
+    onChange={onTabChange}
     tabs={[
       {id: 'general', label: 'General', children: <General />},
-      {id: 'definition', label: 'Definition', children: <SourceSettingsDefinition reload={reload} />},
+      {id: 'definition', label: 'Definition', children: <SourceSettingsDefinition />},
     ]}
   />
 );

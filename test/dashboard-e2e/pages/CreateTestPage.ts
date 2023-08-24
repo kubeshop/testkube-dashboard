@@ -1,6 +1,9 @@
 import type {Page} from '@playwright/test';
+import {setTimeout as timeout} from 'node:timers/promises';
 
 import type {TestData} from '../types';
+
+const path = require('path');
 
 export class CreateTestPage {
   public readonly page: Page;
@@ -25,7 +28,9 @@ export class CreateTestPage {
   }
 
   public async selectTestSource(contentData: any): Promise<any> {
-    if (contentData.type === 'git') {
+    const {type} = contentData;
+
+    if (type === 'git') {
       const repositoryData = contentData.repository as Record<string, string | number>;
       await this.setSelectionSearch('Git', 'testSource');
       // eslint-disable-next-line no-restricted-syntax
@@ -35,19 +40,44 @@ export class CreateTestPage {
           await this.setBasicInput(value, key);
         }
       }
-    } else {
-      throw Error('Type not supported by selectTestSource - extend CreateTestPage');
+    } else if (type === 'string') {
+      await this.setSelectionSearch('String', 'testSource');
+      await this.setBasicInput(contentData.data, 'string');
+    } else if (type === 'file') {
+      await this.setSelectionSearch('File', 'testSource');
+      await this.page.setInputFiles(
+        'xpath=//span[@class="ant-upload"]//input[@type="file"]',
+        CreateTestPage.getAbsoluteFixtureFilePath(contentData.fixture_file_path)
+      );
     }
   }
 
   public async setBasicInput(value: string | number, inputName: string): Promise<void> {
-    await this.page.locator(`input[id="test-creation_${inputName}"]`).fill(`${value}`);
+    await this.page.locator(`[id="test-creation_${inputName}"]`).fill(`${value}`);
+  }
+
+  public async scrollSelectionTo(value: string | number, inputName: string): Promise<void> {
+    const scrollSelector = `#test-creation_${inputName}_list ~ .rc-virtual-list .rc-virtual-list-holder`;
+    await timeout(100);
+    await this.page.evaluate(`
+      const container = document.querySelector(${JSON.stringify(scrollSelector)});
+      const scroll = (to) => {
+        if (to > container.scrollHeight || container.querySelector('.rc-virtual-list-holder-inner div[title="${value}"]')) {
+          return;
+        }
+        container.scrollTop = to;
+        to += container.clientHeight;
+        setTimeout(() => scroll(to), 50);
+      };
+      scroll(0);
+    `);
   }
 
   public async setSelectionSearch(value: string | number, inputName: string): Promise<void> {
     const firstWord = `${value}`.split(' ')[0]; // workaround - otherwise search won't find it
     await this.page.locator(`input[id="test-creation_${inputName}"]`).fill(firstWord);
-    await this.page.click(`div[class*="list-holder"] div[title="${value}"]`);
+    await this.scrollSelectionTo(value, inputName);
+    await this.page.click(`#test-creation_${inputName}_list ~ .rc-virtual-list div[title="${value}"]`);
   }
 
   private async fillInTestDetails(testData: Partial<TestData>): Promise<void> {
@@ -64,5 +94,9 @@ export class CreateTestPage {
 
   private async clickCreateTestButton(): Promise<void> {
     await this.page.click('button[data-test="add-a-new-test-create-button"]');
+  }
+
+  private static getAbsoluteFixtureFilePath(fixtureFileName: string) {
+    return path.resolve(__dirname, `../fixtures/files/${fixtureFileName}`);
   }
 }

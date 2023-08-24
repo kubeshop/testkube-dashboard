@@ -1,6 +1,7 @@
 import {createGlobalStyle} from 'styled-components';
 
 import Colors, {BackgroundColors} from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const invisibleScroll = `
   &::-webkit-scrollbar {
@@ -126,6 +127,10 @@ export const GlobalStyle = createGlobalStyle`
 
       &::before {
         border-bottom: unset !important;
+      }
+
+      @media ${maxDevice.tablet} {
+        margin-bottom: 25px;
       }
     }
   }
@@ -373,6 +378,13 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 
+  /* Drawer */
+
+  .ant-drawer:not(.ant-drawer-open) .ant-drawer-mask,
+  .ant-drawer:not(.ant-drawer-open) .ant-drawer-content-wrapper {
+    pointer-events: none;
+  }
+
   /* Segmented */
 
   .ant-segmented {
@@ -391,12 +403,12 @@ export const GlobalStyle = createGlobalStyle`
     .ant-steps-item-container {
       .ant-steps-item-content {
         .ant-steps-item-title {
-          color: ${Colors.indigo400}; 
+          color: ${Colors.indigo400};
         }
       }
     }
   }
-  
+
   .ant-steps-item-wait {
     .ant-steps-item-container {
       .ant-steps-item-icon {
@@ -416,12 +428,12 @@ export const GlobalStyle = createGlobalStyle`
       }
     }
   }
-  
+
   .ant-steps-item-finish {
     .ant-steps-item-container {
       .ant-steps-item-content {
         .ant-steps-item-title {
-          color: ${Colors.indigo400}; 
+          color: ${Colors.indigo400};
         }
       }
     }
@@ -444,7 +456,7 @@ export const GlobalStyle = createGlobalStyle`
     width: 10px;
     height: 10px;
   }
-  
+
   /* stylelint-disable-next-line selector-class-pattern */
   .react-flow__attribution {
     display: none;
@@ -473,28 +485,3 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 `;
-
-/* Media Sizes */
-
-const size = {
-  mobileS: '320px',
-  mobileM: '375px',
-  mobileL: '425px',
-  tablet: '768px',
-  laptop: '1024px',
-  laptopL: '1440px',
-  desktop: '2560px',
-};
-
-/* Devices */
-
-export const device = {
-  mobileS: `(min-width: ${size.mobileS})`,
-  mobileM: `(min-width: ${size.mobileM})`,
-  mobileL: `(min-width: ${size.mobileL})`,
-  tablet: `(min-width: ${size.tablet})`,
-  laptop: `(min-width: ${size.laptop})`,
-  laptopL: `(min-width: ${size.laptopL})`,
-  desktop: `(min-width: ${size.desktop})`,
-  desktopL: `(min-width: ${size.desktop})`,
-};

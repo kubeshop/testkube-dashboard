@@ -10,10 +10,10 @@ import {MainPage} from '../pages/MainPage';
 const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
 const testDataHandler = new TestDataHandler(config.runId);
 
-const testNames = ['cypress-git', 'k6-git', 'postman-git'];
+const testNames = ['cypress-git', 'k6-git', 'postman-git', 'k6-string', 'k6-file'];
 // eslint-disable-next-line no-restricted-syntax
 for (const testName of testNames) {
-  test(`Creating test for ${testName}`, async ({page}) => {
+  test(`Creating test ${testName}`, async ({page}) => {
     const testData = testDataHandler.getTest(testName);
     const realTestName = testData.name;
 
@@ -24,7 +24,7 @@ for (const testName of testNames) {
 
     const createTestPage = new CreateTestPage(page);
     await createTestPage.createTest(testData);
-    await page.waitForURL(`**/tests/executions/${realTestName}`);
+    await page.waitForURL(`**/tests/${realTestName}`);
 
     const createdTestData = await api.getTestData(realTestName);
     await validateTest(testData, createdTestData);
@@ -33,10 +33,6 @@ for (const testName of testNames) {
     await api.removeTest(realTestName);
   });
 }
-
-test.skip(`Create test from File`, async ({page}) => {});
-
-test.skip(`Create test from String`, async ({page}) => {});
 
 test.skip(`Create test from Git source`, async ({page}) => {});
 

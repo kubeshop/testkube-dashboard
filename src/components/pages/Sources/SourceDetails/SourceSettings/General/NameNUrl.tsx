@@ -1,19 +1,16 @@
-import {useContext, useEffect} from 'react';
-
 import {Form} from 'antd';
-
-import {MainContext} from '@contexts';
 
 import {Input} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
-
 import {useUpdateSourceMutation} from '@services/sources';
+
+import {useSourcesPick} from '@store/sources';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -24,9 +21,7 @@ type NameNUrlFormValues = {
 };
 
 const NameNUrl: React.FC = () => {
-  const source = useAppSelector(selectCurrentSource);
-
-  const {dispatch} = useContext(MainContext);
+  const {current} = useSourcesPick('current');
 
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -34,59 +29,46 @@ const NameNUrl: React.FC = () => {
 
   const [updateSource] = useUpdateSourceMutation();
 
-  const name = source?.name;
-  const uri = source?.repository?.uri;
-  const defaults = {name, uri};
-
-  useEffect(() => {
-    form.setFieldsValue(defaults);
-    form.resetFields();
-  }, [name, uri]);
-
   const onFinish = () => {
     const values = form.getFieldsValue();
 
-    if (!source) {
+    if (!current) {
       notificationCall('failed', 'Something went wrong.');
       return;
     }
 
     const body = {
-      ...source,
+      ...current,
       name: values.name,
       repository: {
-        ...source.repository,
+        ...current.repository,
         uri: values.uri,
       },
     };
 
     return updateSource(body)
-      .then(res => displayDefaultNotificationFlow(res))
-      .then(() => {
-        notificationCall('passed', 'Source was successfully updated.');
-        dispatch(setCurrentSource(body));
-      });
+      .then(displayDefaultNotificationFlow)
+      .then(() => notificationCall('passed', 'Source was successfully updated.'));
   };
 
   return (
-    <Form form={form} name="general-settings-name-url" initialValues={defaults} layout="vertical" disabled={!mayEdit}>
-      <ConfigurationCard
-        title="Source name & repository URL"
-        description="Define the name and repository URL of the source which will be later available in your tests."
-        onConfirm={onFinish}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <Form.Item label="Name" required name="name" rules={[required]}>
-          <Input placeholder="e.g.: my-git-test-repository" disabled />
-        </Form.Item>
-        <Form.Item label="Git repository URL" required name="uri" rules={[required]} style={{flex: 1, marginBottom: 0}}>
-          <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
-        </Form.Item>
-      </ConfigurationCard>
-    </Form>
+    <CardForm
+      name="general-settings-name-url"
+      title="Source name & repository URL"
+      description="Define the name and repository URL of the source which will be later available in your tests."
+      spacing={24}
+      form={form}
+      initialValues={{name: current!.name, uri: current!.repository?.uri}}
+      disabled={!mayEdit}
+      onConfirm={onFinish}
+    >
+      <Form.Item label="Name" required name="name" rules={[required]}>
+        <Input placeholder="e.g.: my-git-test-repository" disabled />
+      </Form.Item>
+      <Form.Item label="Git repository URL" required name="uri" rules={[required]} style={{flex: 1, marginBottom: 0}}>
+        <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
+      </Form.Item>
+    </CardForm>
   );
 };
 

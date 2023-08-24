@@ -8,11 +8,13 @@ import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 export const executorsApi = createApi({
   reducerPath: 'executorsApi',
   baseQuery: dynamicBaseQuery,
+  tagTypes: ['Executor'],
   endpoints: builder => ({
     getExecutors: builder.query<Executor[], null | void>({
       query: () => ({
         url: `/executors`,
       }),
+      providesTags: [{type: 'Executor', id: 'LIST'}],
     }),
     createExecutor: builder.mutation<MetadataResponse<{name: string}>, any>({
       query: body => ({
@@ -20,6 +22,7 @@ export const executorsApi = createApi({
         method: 'POST',
         body,
       }),
+      invalidatesTags: [{type: 'Executor', id: 'LIST'}],
     }),
     updateCustomExecutor: builder.mutation<void, any>({
       query: ({body, executorId}) => ({
@@ -27,6 +30,10 @@ export const executorsApi = createApi({
         method: 'PATCH',
         body,
       }),
+      invalidatesTags: (res, err, {executorId: id}) => [
+        {type: 'Executor', id: 'LIST'},
+        {type: 'Executor', id},
+      ],
     }),
     getExecutorDefinition: builder.query<string, string>({
       query: id => ({
@@ -34,17 +41,23 @@ export const executorsApi = createApi({
         responseHandler: 'text',
         headers: {accept: 'text/yaml'},
       }),
+      providesTags: (res, err, id) => [{type: 'Executor', id}],
     }),
     getExecutorDetails: builder.query<any, string>({
       query: id => ({
         url: `/executors/${id}`,
       }),
+      providesTags: (res, err, id) => [{type: 'Executor', id}],
     }),
     deleteExecutor: builder.mutation<void, string>({
       query: id => ({
         url: `/executors/${id}`,
         method: 'DELETE',
       }),
+      invalidatesTags: (res, err, id) => [
+        {type: 'Executor', id: 'LIST'},
+        {type: 'Executor', id},
+      ],
     }),
     updateExecutorDefinition: builder.mutation<any, YamlEditBody>({
       query: body => ({
@@ -53,6 +66,10 @@ export const executorsApi = createApi({
         headers: {'content-type': 'text/yaml'},
         body: body.value,
       }),
+      invalidatesTags: (res, err, {name: id}) => [
+        {type: 'Executor', id: 'LIST'},
+        {type: 'Executor', id},
+      ],
     }),
   }),
 });

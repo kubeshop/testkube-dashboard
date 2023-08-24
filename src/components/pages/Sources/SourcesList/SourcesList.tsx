@@ -6,14 +6,15 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
 import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
 
-import {Permissions, usePermission} from '@permissions/base';
+import {Error} from '@pages';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectSources, setSources} from '@redux/reducers/sourcesSlice';
+import {Permissions, usePermission} from '@permissions/base';
 
 import {useGetSourcesQuery} from '@services/sources';
 
@@ -25,25 +26,22 @@ import EmptySources from './EmptySources';
 import SourceCard from './SourceCard';
 
 const Sources: React.FC = () => {
-  const sourcesList = useAppSelector(selectSources);
+  const {isClusterAvailable} = useContext(MainContext);
+  const {location} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate(({name}: {name: string}) => `/sources/${name}`);
 
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
-
-  const {data: sources, refetch, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
+  const {data: sources, refetch, error, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
 
   const [isAddSourceModalVisible, setAddSourceModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
 
   useEffect(() => {
-    if (sources) {
-      dispatch(setSources(sources));
-    }
-  }, [sources]);
-
-  useEffect(() => {
     safeRefetch(refetch);
   }, [location]);
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
 
   return (
     <PageBlueprint
@@ -68,12 +66,12 @@ const Sources: React.FC = () => {
     >
       <EntityGrid
         maxColumns={2}
-        data={sourcesList}
+        data={sources!}
         Component={SourceCard}
-        componentProps={{onClick: source => navigate(`/sources/${source.name}`)}}
+        componentProps={{onClick: openDetails}}
         empty={<EmptySources onButtonClick={() => setAddSourceModalVisibility(true)} />}
         itemHeight={66}
-        loadingInitially={isLoading}
+        loadingInitially={isLoading || !isClusterAvailable}
       />
       {isAddSourceModalVisible ? (
         <Modal

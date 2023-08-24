@@ -3,13 +3,13 @@ ARG TARGET=nginx:alpine
 FROM node:20 as build
 WORKDIR /app
 
+ARG SENTRY_AUTH_TOKEN
+ARG REACT_APP_SENTRY_DSN
 ARG REACT_APP_GTM_ID
-ENV REACT_APP_GTM_ID=$REACT_APP_GTM_ID
 ARG REACT_APP_VERSION
-ENV REACT_APP_VERSION=$REACT_APP_VERSION
 
 ENV PATH /app/node_modules/.bin:$PATH
-COPY ./package.json /app/
+COPY ./package*.json /app/
 # install  dependencies
 RUN npm install --legacy-peer-deps
 # copy everything to /app directory

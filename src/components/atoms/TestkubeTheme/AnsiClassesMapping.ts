@@ -1,82 +1,67 @@
+import {range} from 'lodash';
+
 import Colors from '@styles/Colors';
 
+const foregrounds = {
+  black: [Colors.slate600, Colors.slate400],
+  white: [Colors.slate400, Colors.slate200],
+  red: [Colors.rose500, Colors.rose300],
+  green: [Colors.lime500, Colors.lime300],
+  yellow: [Colors.yellow500, Colors.yellow300],
+  blue: [Colors.sky500, Colors.sky300],
+  magenta: [Colors.pink500, Colors.pink300],
+  cyan: [Colors.cyan500, Colors.cyan300],
+};
+
+const backgrounds = {
+  black: [Colors.slate900, Colors.slate800],
+  white: [Colors.slate200, Colors.slate100],
+  red: [Colors.rose900, Colors.rose700],
+  green: [Colors.lime900, Colors.lime700],
+  yellow: [Colors.yellow900, Colors.yellow600],
+  blue: [Colors.sky900, Colors.sky700],
+  magenta: [Colors.pink900, Colors.pink700],
+  cyan: [Colors.cyan900, Colors.cyan500],
+};
+
+const baseTextCss = Object.entries(foregrounds)
+  .flatMap(([color, [base, bright]]) => [
+    `.ansi-${color}-fg {color: ${base}}`,
+    `.ansi-bright-${color}-fg {color: ${bright}}`,
+  ])
+  .join('\n');
+
+const baseBackgroundCss = Object.entries(backgrounds)
+  .flatMap(([color, [base, bright]]) => [
+    `.ansi-${color}-bg {background: ${base}}`,
+    `.ansi-bright-${color}-bg {background: ${bright}}`,
+  ])
+  .join('\n');
+
+const ansiSteps = [0, 95, 135, 175, 215, 255];
+const ansiCss = range(16, 232)
+  .flatMap(color => {
+    const index = color - 16;
+    const b = index % 6;
+    const g = Math.floor(index / 6) % 6;
+    const r = Math.floor(index / 36) % 6;
+    const rgb = `rgb(${ansiSteps[r]}, ${ansiSteps[g]}, ${ansiSteps[b]})`;
+    return [`.ansi-palette-${color}-fg {color: ${rgb}}`, `.ansi-palette-${color}-bg {background: ${rgb}}`];
+  })
+  .join('\n');
+
+const ansiGrayscaleCss = range(232, 256)
+  .flatMap(color => {
+    const index = color - 232;
+    const value = 8 + index * 10;
+    const rgb = `rgb(${value}, ${value}, ${value})`;
+    return [`.ansi-palette-${color}-fg {color: ${rgb}}`, `.ansi-palette-${color}-bg {background: ${rgb}}`];
+  })
+  .join('\n');
+
 export default `
-  .ansi-black-fg {
-    color: ${Colors.slate600};
-  }
-  .ansi-bright-black-fg {
-    color: ${Colors.slate400};
-  }
-  .ansi-black-bg {
-    color: ${Colors.slate200};
-  }
-
-  .ansi-white-fg {
-    color: ${Colors.slate400};
-  }
-  .ansi-bright-white-fg {
-    color: ${Colors.slate200};
-  }
-  .ansi-white-bg {
-    color: ${Colors.slate200};
-  }
-
-  .ansi-red-fg {
-    color: ${Colors.rose500};
-  }
-  .ansi-bright-red-fg {
-    color: ${Colors.rose300};
-  }
-  .ansi-red-bg {
-    color: ${Colors.rose900};
-  }
-
-  .ansi-green-fg {
-    color: ${Colors.lime500};
-  }
-  .ansi-bright-green-fg {
-    color: ${Colors.lime300};
-  }
-  .ansi-green-bg {
-    color: ${Colors.lime900};
-  }
-
-  .ansi-yellow-fg {
-    color: ${Colors.yellow500};
-  }
-  .ansi-bright-yellow-fg {
-    color: ${Colors.yellow300};
-  }
-  .ansi-yellow-bg {
-    color: ${Colors.yellow900};
-  }
-
-  .ansi-blue-fg {
-    color: ${Colors.sky500};
-  }
-  .ansi-bright-blue-fg {
-    color: ${Colors.sky300};
-  }
-  .ansi-blue-bg {
-    color: ${Colors.sky900};
-  }
-
-  .ansi-magenta-fg {
-    color: ${Colors.pink500};
-  }
-  .ansi-bright-magenta-fg {
-    color: ${Colors.pink300};
-  }
-  .ansi-magenta-bg {
-    color: ${Colors.pink900};
-  }
-
-  .ansi-cyan-fg {
-    color: ${Colors.cyan500};
-  }
-  .ansi-bright-cyan-fg {
-    color: ${Colors.cyan300};
-  }
-  .ansi-cyan-bg {
-    color: ${Colors.cyan900};
-  }`;
+  ${baseBackgroundCss}
+  ${baseTextCss}
+  ${ansiCss}
+  ${ansiGrayscaleCss}
+`;

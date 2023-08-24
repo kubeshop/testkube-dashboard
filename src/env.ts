@@ -9,8 +9,7 @@ export const provided = (window as any)._env_;
 
 // Build-time variables
 export const build: BuildTimeEnvironment = {
-  posthogKey: getValue('REACT_APP_POSTHOG_KEY', process.env.REACT_APP_POSTHOG_KEY),
-  segmentKey: getValue('REACT_APP_SEGMENT_KEY', process.env.REACT_APP_SEGMENT_KEY),
+  sentryKey: getValue('REACT_APP_SENTRY_DSN', process.env.REACT_APP_SENTRY_DSN),
   gtmKey: getValue('REACT_APP_GTM_ID', process.env.REACT_APP_GTM_ID),
   version: getValue('REACT_APP_VERSION', process.env.REACT_APP_VERSION) || 'dev',
 };
@@ -27,8 +26,7 @@ export const dynamic: DynamicEnvironment = {
 };
 
 export interface BuildTimeEnvironment {
-  posthogKey?: string;
-  segmentKey?: string;
+  sentryKey?: string;
   gtmKey?: string;
   version: string;
 }

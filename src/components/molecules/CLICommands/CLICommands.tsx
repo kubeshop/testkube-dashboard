@@ -1,6 +1,4 @@
-import React, {useContext, useMemo} from 'react';
-
-import {EntityDetailsContext} from '@contexts';
+import React, {useMemo} from 'react';
 
 import {Text} from '@custom-antd';
 
@@ -10,10 +8,10 @@ import {TestExecutor} from '@models/testExecutors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectExecutorsFeaturesMap} from '@redux/reducers/executorsSlice';
+import {useEntityDetailsPick} from '@store/entityDetails';
+import {useExecutorsPick} from '@store/executors';
 
-import {useTelemetry} from '@telemetry';
+import {useTelemetry} from '@telemetry/hooks';
 
 import CopyCommand from './CopyCommand';
 
@@ -115,15 +113,15 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const mayRun = usePermission(Permissions.runEntity);
   const mayDelete = usePermission(Permissions.deleteEntity);
 
-  const {entity} = useContext(EntityDetailsContext);
+  const {entity} = useEntityDetailsPick('entity');
   const telemetry = useTelemetry();
 
-  const executorsFeaturesMap = useAppSelector(selectExecutorsFeaturesMap);
+  const {featuresMap} = useExecutorsPick('featuresMap');
 
   const CLIEntityType = isExecutions ? 'executions' : entity;
 
   const modifyArgsMap: Partial<Record<CLIScriptModifier, boolean | ExecutionStatusEnum>> = {
-    ...(type && executorsFeaturesMap[type] ? {canHaveArtifacts: executorsFeaturesMap[type].includes('artifacts')} : {}),
+    ...(type && featuresMap[type] ? {canHaveArtifacts: featuresMap[type].includes('artifacts')} : {}),
     isFinished: modifyMap?.status,
     isRunPermission: mayRun,
     isDeletePermission: mayDelete,

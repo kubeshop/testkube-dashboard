@@ -2,6 +2,8 @@ export type TestExecutor =
   | 'postman/collection'
   | 'postman/custom'
   //
+  | 'tracetest/test'
+  //
   | 'cypress/project'
   //
   | 'curl/test'

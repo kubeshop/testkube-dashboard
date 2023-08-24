@@ -1,3 +1,4 @@
+import {readFileSync} from 'fs';
 import {v4 as uuidv4} from 'uuid';
 
 import executorData from '../fixtures/executors';
@@ -7,9 +8,9 @@ import testSuitesData from '../fixtures/testsuites';
 
 // TODO: Use functions instead
 export class TestDataHandler {
-  public runId: string;
+  public runId?: string;
 
-  public constructor(runId: string) {
+  public constructor(runId?: string) {
     this.runId = runId;
   }
 
@@ -56,5 +57,9 @@ export class TestDataHandler {
       name: this.getRandomizedName(executor.name),
       types: [this.getRandomizedName(executor.types[0]), ...executor.types.slice(1)],
     };
+  }
+
+  public static getFixtureFileContents(fixtureFileName: string) {
+    return readFileSync(`fixtures/files/${fixtureFileName}`).toString();
   }
 }

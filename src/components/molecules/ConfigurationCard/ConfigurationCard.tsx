@@ -1,4 +1,4 @@
-import React, {ReactElement, useRef, useState} from 'react';
+import React, {ReactNode, useRef} from 'react';
 
 import {Form} from 'antd';
 
@@ -6,13 +6,14 @@ import {Button, Text} from '@custom-antd';
 
 import useInViewport from '@hooks/useInViewport';
 
-import {ErrorNotification, ErrorNotificationConfig} from '@models/notifications';
+import {ErrorNotificationConfig} from '@models/notifications';
 
 import Colors from '@styles/Colors';
 
 import {NotificationContent} from '../Notification';
 
 import {
+  HeaderAction,
   StyledChildren,
   StyledContainer,
   StyledErrorsContainer,
@@ -20,125 +21,102 @@ import {
   StyledFooterButtonsContainer,
   StyledFooterText,
   StyledHeader,
+  StyledHeaderContainer,
   StyledNotificationContainer,
 } from './ConfigurationCard.styled';
 
 type ConfigurationCardProps = {
-  title: string;
-  description: string | ReactElement;
+  title: ReactNode;
+  description: ReactNode;
   isWarning?: boolean;
-  footerText?: React.ReactNode;
-  onConfirm?: () => Promise<ErrorNotification | void> | void;
-  confirmButtonText?: string;
+  footer?: ReactNode;
+  headerAction?: ReactNode;
+  confirmLabel?: string;
+  wasTouched?: boolean;
+  children?: ReactNode;
+  readOnly?: boolean;
+  loading?: boolean;
+  errors?: ErrorNotificationConfig[];
   onCancel?: () => void;
-  isButtonsDisabled?: boolean;
-  forceEnableButtons?: boolean;
-  children?: React.ReactNode;
-  isEditable?: boolean;
-  enabled?: boolean;
 };
 
 const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
   const {
+    errors,
     title,
     description,
-    isWarning = false,
-    onConfirm,
+    headerAction,
     onCancel,
-    footerText,
+    footer,
     children,
-    confirmButtonText = 'Save',
-    isButtonsDisabled,
-    forceEnableButtons,
-    isEditable = true,
-    enabled = true,
+    confirmLabel = 'Save',
+    wasTouched,
+    isWarning = false,
+    readOnly = false,
+    loading = false,
   } = props;
-  const [errors, setErrors] = useState<ErrorNotificationConfig[] | null>(null);
-
   const topRef = useRef<HTMLDivElement>(null);
   const inTopInViewport = useInViewport(topRef);
 
+  if (errors && !inTopInViewport && topRef?.current) {
+    topRef.current.scrollIntoView();
+  }
+
   return (
     <StyledContainer isWarning={isWarning}>
-      <StyledHeader ref={topRef}>
-        <Text className="regular big" color={Colors.slate50}>
-          {title}
-        </Text>
-        <Text className="regular middle" color={Colors.slate400}>
-          {description}
-        </Text>
-      </StyledHeader>
-      {children ? (
-        <>
-          <StyledErrorsContainer>
-            {errors?.map(x => (
-              <StyledNotificationContainer key={x.title}>
-                <NotificationContent status="failed" message={x.message} title={x.title} />
-              </StyledNotificationContainer>
-            )) || null}
-          </StyledErrorsContainer>
-          <StyledChildren $isActionsVisible={enabled || !isEditable}>{children}</StyledChildren>
-        </>
+      <StyledHeaderContainer ref={topRef}>
+        <StyledHeader>
+          <Text className="regular big" color={Colors.slate50}>
+            {title}
+          </Text>
+          <Text className="regular middle" color={Colors.slate400}>
+            {description}
+          </Text>
+        </StyledHeader>
+        {headerAction ? <HeaderAction>{headerAction}</HeaderAction> : null}
+      </StyledHeaderContainer>
+      {children && errors?.length ? (
+        <StyledErrorsContainer>
+          {errors?.map(x => (
+            <StyledNotificationContainer key={x.title}>
+              <NotificationContent status="failed" message={x.message} title={x.title} />
+            </StyledNotificationContainer>
+          )) || null}
+        </StyledErrorsContainer>
       ) : null}
-      {(enabled && onConfirm) || footerText ? (
+      {children ? <StyledChildren>{children}</StyledChildren> : null}
+      {!readOnly || footer ? (
         <StyledFooter>
-          {footerText && (
+          {footer ? (
             <StyledFooterText>
               <Text className="regular middle" color={Colors.slate400}>
-                {footerText}
+                {footer}
               </Text>
             </StyledFooterText>
-          )}
-          {enabled ? (
+          ) : null}
+          {readOnly ? null : (
             <Form.Item noStyle shouldUpdate>
-              {({isFieldsTouched, getFieldsValue, validateFields}) => {
-                let disabled = isButtonsDisabled || (getFieldsValue() && !isFieldsTouched());
-
-                if (forceEnableButtons) {
-                  disabled = false;
-                }
+              {({isFieldsTouched, getFieldsValue}) => {
+                const buttonsDisabled = loading || (wasTouched ? false : getFieldsValue() && !isFieldsTouched());
 
                 return (
                   <StyledFooterButtonsContainer>
-                    <Button
-                      onClick={() => {
-                        onCancel?.();
-                        setErrors(null);
-                      }}
-                      $customType="secondary"
-                      hidden={!onCancel || disabled}
-                    >
+                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || buttonsDisabled}>
                       Cancel
                     </Button>
                     <Button
-                      onClick={() => {
-                        setErrors(null);
-                        Promise.resolve(validateFields?.())
-                          .then(() => onConfirm?.())
-                          .catch((err: ErrorNotification) => {
-                            if ('errors' in err) {
-                              setErrors(err.errors);
-                            } else if (err.title || err.message) {
-                              setErrors([err]);
-                            }
-
-                            if (!inTopInViewport && topRef && topRef.current) {
-                              topRef.current.scrollIntoView();
-                            }
-                          });
-                      }}
                       $customType={isWarning ? 'warning' : 'primary'}
-                      disabled={disabled}
-                      hidden={!onConfirm}
+                      disabled={buttonsDisabled}
+                      loading={loading}
                       htmlType="submit"
                     >
-                      {confirmButtonText}
+                      {confirmLabel}
                     </Button>
                   </StyledFooterButtonsContainer>
                 );
               }}
             </Form.Item>
-          ) : null}
+          )}
         </StyledFooter>
       ) : null}
     </StyledContainer>

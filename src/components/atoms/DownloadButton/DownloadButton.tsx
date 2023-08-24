@@ -7,7 +7,7 @@ import {useDownloadFile} from '@hooks/useDownloadFile';
 import {StyledCheckOutlined, StyledDownloadOutlined} from './DownloadButton.styled';
 
 type SaveOptions = {
-  content: string;
+  content: string | (() => string);
   onClick?: () => void;
   filename?: string;
   extension: string;

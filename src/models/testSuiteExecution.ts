@@ -1,8 +1,8 @@
-import {EntityMap} from '@models/entityMap';
-import {ExecutionStatusEnum} from '@models/execution';
-import {ObjectRef} from '@models/objectRef';
+import type {EntityMap} from '@models/entityMap';
+import type {ExecutionStatusEnum} from '@models/execution';
+import type {ObjectRef} from '@models/objectRef';
 
-import {TestSuiteStepExecutionResult} from './testSuite';
+import type {TestSuiteStepExecutionResult} from './testSuite';
 
 export type TestSuiteExecution = {
   id: string;
@@ -13,11 +13,13 @@ export type TestSuiteExecution = {
   secretUUID?: string;
   secret?: string;
   params?: EntityMap;
-  startTime: Date;
-  endTime: Date;
+  startTime: string; // ISO Date
+  endTime: string; // ISO Date
   duration?: string;
   labels?: EntityMap;
   executeStepResults: TestSuiteStepExecutionResult[];
+  runningContext: any;
+  number: number;
 };
 interface TestSuiteExecutionsState {
   isLoading?: boolean;

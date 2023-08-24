@@ -6,6 +6,7 @@ import {DashboardContext, MainContext} from '@contexts';
 
 import {Input, Text} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
 import {Option} from '@models/form';
@@ -13,12 +14,10 @@ import {ErrorNotificationConfig} from '@models/notifications';
 
 import {NotificationContent} from '@molecules';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-
 import {useCreateTriggerMutation, useGetTriggersKeyMapQuery} from '@services/triggers';
 
-import {useStore} from '@store';
+import {useClusterDetailsPick} from '@store/clusterDetails';
+import {useTriggersPick, useTriggersSync} from '@store/triggers';
 
 import {safeRefetch} from '@utils/fetchUtils';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -28,23 +27,15 @@ import {getResourceIdentifierSelector} from '../../utils';
 import {StyledNotificationContainer} from './AddTriggerModal.styled';
 import ModalFirstStep from './ModalFirstStep';
 import ModalSecondStep from './ModalSecondStep';
-
-export enum StepsEnum {
-  condition = 0,
-  action = 1,
-}
+import {StepsEnum} from './types';
 
 const AddTriggerModal: React.FC = () => {
+  const {namespace} = useClusterDetailsPick('namespace');
   const {isClusterAvailable} = useContext(MainContext);
-  const {location, navigate} = useContext(DashboardContext);
-
-  const {setTriggersKeyMap} = useStore(state => ({
-    setTriggersKeyMap: state.setTriggersKeyMap,
-  }));
+  const {location} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate((name: string) => `/triggers/${name}`);
 
   const [createTrigger, {isLoading}] = useCreateTriggerMutation();
-
-  const appNamespace = useAppSelector(selectNamespace);
 
   const {data: triggersKeyMap, refetch: refetchKeyMap} = useGetTriggersKeyMapQuery(null, {skip: !isClusterAvailable});
 
@@ -63,13 +54,10 @@ const AddTriggerModal: React.FC = () => {
 
     const resourceSelector = getResourceIdentifierSelector(
       firstStepValues.resourceLabelSelector || firstStepValues.resourceNameSelector,
-      appNamespace
+      namespace
     );
 
-    const testSelector = getResourceIdentifierSelector(
-      values.testLabelSelector || values.testNameSelector,
-      appNamespace
-    );
+    const testSelector = getResourceIdentifierSelector(values.testLabelSelector || values.testNameSelector, namespace);
 
     const [action, execution] = values.action.split(' ');
 
@@ -84,11 +72,7 @@ const AddTriggerModal: React.FC = () => {
     };
     createTrigger(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => {
-        if (res && 'data' in res) {
-          navigate(`/triggers/${res.data.name}`);
-        }
-      })
+      .then(res => openDetails(res.data.name))
       .catch(err => {
         setError(err);
 
@@ -98,11 +82,10 @@ const AddTriggerModal: React.FC = () => {
       });
   };
 
-  useEffect(() => {
-    if (triggersKeyMap) {
-      setTriggersKeyMap(triggersKeyMap);
-    }
-  }, [triggersKeyMap]);
+  const currentData = useTriggersPick('keyMap');
+  useTriggersSync({
+    keyMap: triggersKeyMap ?? currentData.keyMap,
+  });
 
   useEffect(() => {
     safeRefetch(refetchKeyMap);

@@ -1,12 +1,11 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 import {Input as AntdInput, Form} from 'antd';
 
-import {DashboardContext} from '@contexts';
-
 import {Button, Input} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
 import {ErrorNotificationConfig} from '@models/notifications';
@@ -14,10 +13,9 @@ import {SourceWithRepository} from '@models/sources';
 
 import {Hint, NotificationContent} from '@molecules';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectNamespace} from '@redux/reducers/configSlice';
-
 import {useCreateSourceMutation} from '@services/sources';
+
+import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
@@ -33,12 +31,11 @@ type AddSourceFormValues = {
 };
 
 const AddSourceModal: React.FC = () => {
+  const {namespace} = useClusterDetailsPick('namespace');
   const [form] = Form.useForm<AddSourceFormValues>();
-  const {navigate} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate((name: string) => `/sources/${name}`);
 
   const [createSource, {isLoading}] = useCreateSourceMutation();
-
-  const namespace = useAppSelector(selectNamespace);
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
@@ -60,12 +57,8 @@ const AddSourceModal: React.FC = () => {
     };
 
     createSource(body)
-      .then(res => displayDefaultNotificationFlow(res))
-      .then(res => {
-        if (res && 'data' in res) {
-          navigate(`/sources/${res.data.metadata.name}`);
-        }
-      })
+      .then(displayDefaultNotificationFlow)
+      .then(res => openDetails(res.data.metadata.name))
       .catch(err => {
         setError(err);
 

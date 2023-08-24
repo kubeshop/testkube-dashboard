@@ -2,19 +2,12 @@ import {memo, useCallback, useEffect, useRef} from 'react';
 
 import debounce from 'lodash.debounce';
 
-import {ExecutionMetrics} from '@models/metrics';
+import type {ExecutionMetrics} from '@models/metrics';
 
 import {BarsWrapper, ChartWrapper, MetricsBarChartWrapper} from './MetricsBarChart.styled';
-import Chart from './components/Chart';
+import Chart, {BarChartConfig} from './components/Chart';
 import PAxisLine from './components/PAxisLine';
 import {getAxisPosition, getMaximumValue, getMinimumValue, metricsLogarithmization, secondInMs} from './utils';
-
-export type BarChartConfig = {
-  barWidth: number;
-  barMargin: number;
-  chartHeight: number;
-  chartData: any[];
-};
 
 type MetricsBarChartProps = {
   data?: ExecutionMetrics[];
@@ -23,7 +16,6 @@ type MetricsBarChartProps = {
   chartHeight?: number;
   barWidth?: number;
   isDetailsView?: boolean;
-  isRowSelected?: boolean;
 };
 
 const visibleDifferenctBetweenAxes = 17;

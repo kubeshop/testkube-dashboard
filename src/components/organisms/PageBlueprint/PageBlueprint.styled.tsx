@@ -14,7 +14,9 @@ export const PageWrapper = styled.div`
 
 export const ToolbarContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 20px;
 `;
 
 export const ToolbarContent = styled.div``;
@@ -28,9 +30,23 @@ export const StyledPageHeader = styled(AntdPageHeader)`
     margin-bottom: 12px;
     padding: 0;
 
+    .ant-page-header-heading {
+      gap: 20px;
+    }
+
     .ant-page-header-heading-left,
     .ant-page-header-heading-extra {
       margin: 0;
+
+      div {
+        flex-wrap: wrap;
+      }
     }
   }
+`;
+
+export const PageTitle = styled.div`
+  display: flex;
+  gap: 16px;
+  align-items: center;
 `;

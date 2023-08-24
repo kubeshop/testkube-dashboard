@@ -1,9 +1,9 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 
 import {ModalConfig} from '@contexts/ModalContext';
 
-import {TestWithExecutionRedux} from '@models/test';
-import {TestSuiteWithExecutionRedux} from '@models/testSuite';
+import {TestWithExecution} from '@models/test';
+import {TestSuiteWithExecution} from '@models/testSuite';
 
 import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
@@ -12,6 +12,8 @@ export type Entity = 'test-suites' | 'tests';
 export type EntityListBlueprint = {
   pageTitle: string;
 
+  pageTitleAddon?: ReactNode;
+
   pageDescription?: any;
 
   entity: Entity;
@@ -19,6 +21,8 @@ export type EntityListBlueprint = {
   emptyDataComponent: any;
 
   initialFiltersState: any;
+
+  itemKey: string;
 
   // TODO: Fix types
   CardComponent: FC<{item: any; onClick: (item: Item) => void; onAbort: (item: Item) => void}>;
@@ -40,7 +44,7 @@ export type EntityListBlueprint = {
   dataTest?: string;
 
   queryFilters: any;
-  data?: TestSuiteWithExecutionRedux[] | TestWithExecutionRedux[];
+  data?: TestSuiteWithExecution[] | TestWithExecution[];
 
   createModalConfig: ModalConfig;
 

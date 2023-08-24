@@ -16,33 +16,42 @@ export const BaseLogOutputStyles = `
   ${invisibleScroll}
 `;
 
-export const StyledLogOutputContainer = styled.div`
-  ${BaseLogOutputStyles}
-  height: 70vh;
+export const LogOutputWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 
+export const StyledLogOutputContainer = styled.div`
+  position: relative;
+  max-height: 100%;
+  flex: 1;
   border-radius: 4px;
+  overflow: auto;
+  ${invisibleScroll}
 `;
 
 export const StyledLogTextContainer = styled.div`
+  height: 100%;
   flex: 1;
-
   background-color: ${Colors.slate900};
 
-  ${invisibleScroll};
+  ${BaseLogOutputStyles}
 `;
 
 export const StyledPreLogText = styled.pre`
   display: flex;
   flex-direction: column;
+  overflow: initial;
 
   padding: 10px;
   font-size: 12px;
 
-  ${invisibleScroll}
   ${AnsiClassesMapping}
 `;
 
 export const StyledLogOutputActionsContainer = styled.ul`
+  position: sticky;
   display: flex;
   justify-content: flex-end;
   flex: 1;
@@ -53,9 +62,9 @@ export const StyledLogOutputActionsContainer = styled.ul`
   list-style-type: none;
 `;
 
-export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolean}>`
-  ${({$isFullScreen}) =>
-    $isFullScreen
+export const StyledLogOutputHeaderContainer = styled.div<{$isFullscreen?: boolean}>`
+  ${({$isFullscreen}) =>
+    $isFullscreen
       ? `
   position: absolute;
   right: 0;
@@ -64,7 +73,10 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolea
 
   color: ${Colors.slate400};
   `
-      : ''}
+      : `
+  position: relative;
+  float: right;
+  `}
 
   display: flex;
   justify-content: space-between;
@@ -74,15 +86,8 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullScreen?: boolea
   background: transparent;
 `;
 
-export const StyledLogOutputHeaderTitle = styled.span`
-  font-size: 14px;
-  font-style: italic;
-  font-weight: 600;
-`;
-
 const FullscreenIconBaseStyles = `
   position: absolute;
-  top: 0px;
   right: 35px;
 
   border-radius: 2px;
@@ -113,4 +118,8 @@ export const StyledExpandAltOutlined = styled(ExpandAltOutlined)`
   &:hover {
     border-color: ${Colors.indigo400};
   }
+`;
+
+export const DrawerBannerContainer = styled.div`
+  margin-bottom: 30px;
 `;

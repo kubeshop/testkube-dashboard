@@ -27,7 +27,7 @@ const ExecutorCard: FC<ExecutorCardProps> = ({item, executors}) => {
 
   return (
     <ExternalLink href={item.docLink} key={item.docLink}>
-      <ExecutorsGridItem className={isExecutor ? 'executor' : 'custom-executor'} direction="vertical" size={20}>
+      <ExecutorsGridItem className={isExecutor ? 'executor' : 'custom-executor'} direction="vertical" size={10}>
         <Title level={3} color={Colors.slate400} className="dashboard-title regular">
           {isExecutor ? <ExecutorIcon type={executorIcon} /> : <ExecutorsIcon />}
           {item.title}

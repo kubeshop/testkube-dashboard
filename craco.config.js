@@ -3,6 +3,7 @@ const {pathsToModuleNameMapper} = require('ts-jest');
 const {loadConfig: loadTsConfig} = require('tsconfig-paths');
 const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const {sentryWebpackPlugin} = require('@sentry/webpack-plugin');
 
 const {paths} = loadTsConfig('.');
 
@@ -24,9 +25,22 @@ module.exports = {
           ],
           features: ['caretOperations', 'clipboard', 'contextmenu', 'hover', 'indentation', 'lineSelection', 'suggest']
         }),
+        sentryWebpackPlugin({
+          org: 'kubeshop',
+          project: 'testkube-oss',
+          include: './build',
+          release: {name: process.env.REACT_APP_VERSION},
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+          disabled: !process.env.SENTRY_AUTH_TOKEN || !process.env.REACT_APP_VERSION,
+          telemetry: false,
+        }),
       ],
     },
     configure: webpackConfig => {
+      webpackConfig.entry = [
+        path.join(__dirname, 'src', 'sentry.ts'),
+        path.join(__dirname, 'src', 'index.tsx'),
+      ];
       webpackConfig.resolve.plugins.push(new TsconfigPathsPlugin({
         extensions: webpackConfig.resolve.extensions,
       }));

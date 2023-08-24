@@ -1,11 +1,12 @@
-import {createElement} from 'react';
-
 import {act, renderHook} from '@testing-library/react';
 import axios from 'axios';
+import pick from 'lodash/pick';
 
 import {config} from '@constants/config';
 
-import MainContext from '@contexts/MainContext';
+import {initializeClusterDetailsStore} from '@store/clusterDetails';
+
+import {composeProviders} from '@utils/composeProviders';
 
 import env from '../env';
 
@@ -209,14 +210,17 @@ describe('services', () => {
         fetchMock.mockImplementationOnce(async () => ({
           json: async () => ({version, commit, namespace}),
         }));
-        expect(await getApiDetails('api')).toEqual({url: 'http://api/v1', namespace});
+        expect(pick(await getApiDetails('api'), ['url', 'namespace'])).toEqual({url: 'http://api/v1', namespace});
       });
 
       it('should fall back namespace to the "testkube"', async () => {
         fetchMock.mockImplementationOnce(async () => ({
           json: async () => ({version, commit}),
         }));
-        expect(await getApiDetails('api')).toEqual({url: 'http://api/v1', namespace: 'testkube'});
+        expect(pick(await getApiDetails('api'), ['url', 'namespace'])).toEqual({
+          url: 'http://api/v1',
+          namespace: 'testkube',
+        });
       });
 
       it('should detect problems with server connection', async () => {
@@ -240,11 +244,13 @@ describe('services', () => {
 
     describe('useUpdateApiEndpoint', () => {
       const fetchMock = mockFetchEach();
-      const dispatch = createAutoResetSpy();
+      const {result} = renderHook(() => initializeClusterDetailsStore());
+      const [ClusterDetailsProvider] = result.current;
       const initialEndpoint = 'http://initial/v1';
 
       const wrapper = ({children}: {children: any}) =>
-        createElement(MainContext.Provider, {value: {dispatch}} as any, children);
+        composeProviders().append(ClusterDetailsProvider, {}).render(children);
+
       const {
         result: {current: update},
       } = renderHook(() => useUpdateApiEndpoint(), {wrapper});
@@ -261,7 +267,6 @@ describe('services', () => {
 
         expect(spy).toBeCalledWith(new Error('Server connection problem!'));
         expect(getApiEndpoint()).toBe(initialEndpoint);
-        expect(dispatch).not.toBeCalled();
       });
 
       it('should save namespace & endpoint when the server is fine', async () => {
@@ -271,7 +276,6 @@ describe('services', () => {
 
         expect(await update('new')).toBe(true);
         expect(getApiEndpoint()).toBe('http://new/v1');
-        expect(dispatch).toBeCalledWith({payload: namespace, type: 'configSlice/setNamespace'});
       });
 
       it('should ignore server error when race condition occurs', async () => {
@@ -282,7 +286,6 @@ describe('services', () => {
 
         expect(await promise).toBe(false);
         expect(getApiEndpoint()).toBe('http://race/v1');
-        expect(dispatch).not.toBeCalled();
       });
 
       it('should ignore server success when race condition occurs', async () => {
@@ -295,7 +298,6 @@ describe('services', () => {
 
         expect(await promise).toBe(false);
         expect(getApiEndpoint()).toBe('http://race/v1');
-        expect(dispatch).not.toBeCalled();
       });
     });
   });
