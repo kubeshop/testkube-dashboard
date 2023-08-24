@@ -87,7 +87,6 @@ export const StyledMetricItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex-basis: 115px;
 
   padding-top: 5px;
 `;
