@@ -6,7 +6,7 @@ import {MainContext} from '@contexts';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
-import {ModalConfig} from '@modal/types';
+import {useModal} from '@modal/hooks';
 
 import {Test} from '@models/test';
 
@@ -34,14 +34,6 @@ const PageDescription: FC = () => (
   </>
 );
 
-export const createModal: ModalConfig = {
-  title: 'Create a test',
-  width: 880,
-  content: <TestCreationModalContent />,
-  dataTestCloseBtn: 'add-a-new-test-modal-close-button',
-  dataTestModalRoot: 'add-a-new-test-modal',
-};
-
 const TestsList: FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const [filters, setFilters] = useTestsField('filters');
@@ -56,6 +48,14 @@ const TestsList: FC = () => {
     skip: !isClusterAvailable,
   });
   useTestsSync({tests});
+
+  const {open: openCreateModal} = useModal({
+    title: 'Create a test',
+    width: 880,
+    content: <TestCreationModalContent />,
+    dataTestCloseBtn: 'add-a-new-test-modal-close-button',
+    dataTestModalRoot: 'add-a-new-test-modal',
+  });
 
   const [abortAll] = useAbortAllTestExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: Test) => `/tests/${item.name}`);
@@ -89,7 +89,7 @@ const TestsList: FC = () => {
       data={tests}
       isLoading={isLoading || !isClusterAvailable}
       isFetching={isFetching}
-      createModalConfig={createModal}
+      onAdd={openCreateModal}
     />
   );
 };

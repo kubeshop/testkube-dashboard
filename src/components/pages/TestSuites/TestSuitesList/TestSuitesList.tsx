@@ -4,7 +4,7 @@ import {MainContext} from '@contexts';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
-import {ModalConfig} from '@modal/types';
+import {useModal} from '@modal/hooks';
 
 import {TestSuite} from '@models/testSuite';
 
@@ -28,14 +28,6 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
-const createModal: ModalConfig = {
-  title: 'Create a test suite',
-  width: 528,
-  content: <TestSuiteCreationModalContent />,
-  dataTestCloseBtn: 'add-a-new-test-suite-modal-close-button',
-  dataTestModalRoot: 'add-a-new-test-suite-modal',
-};
-
 const TestSuitesList: FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const [filters, setFilters] = useTestSuitesField('filters');
@@ -51,6 +43,14 @@ const TestSuitesList: FC = () => {
     skip: !isClusterAvailable,
   });
   useTestSuitesSync({testSuites});
+
+  const {open: openCreateModal} = useModal({
+    title: 'Create a test suite',
+    width: 528,
+    content: <TestSuiteCreationModalContent />,
+    dataTestCloseBtn: 'add-a-new-test-suite-modal-close-button',
+    dataTestModalRoot: 'add-a-new-test-suite-modal',
+  });
 
   const [abortAll] = useAbortAllTestSuiteExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: TestSuite) => `/test-suites/${item.name}`);
@@ -85,7 +85,7 @@ const TestSuitesList: FC = () => {
       data={testSuites}
       isLoading={isLoading}
       isFetching={isFetching}
-      createModalConfig={createModal}
+      onAdd={openCreateModal}
     />
   );
 };

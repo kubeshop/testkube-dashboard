@@ -9,8 +9,6 @@ import {Button} from '@custom-antd';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
-import {useModal} from '@modal/hooks';
-
 import {EntityListBlueprint} from '@models/entity';
 
 import {EntityGrid} from '@molecules';
@@ -47,7 +45,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     queryFilters,
     data,
     setQueryFilters,
-    createModalConfig,
+    onAdd,
     onItemClick,
     onItemAbort,
   } = props;
@@ -59,8 +57,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const {isClusterAvailable} = useContext(MainContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
-
-  const {open: openCreateModal} = useModal(createModalConfig);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -131,7 +127,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   useTrackTimeAnalytics(`${entity}-list`);
 
   const createButton = mayCreate ? (
-    <Button $customType="primary" onClick={openCreateModal} data-test={dataTest} disabled={!isClusterAvailable}>
+    <Button $customType="primary" onClick={onAdd} data-test={dataTest} disabled={!isClusterAvailable}>
       {addEntityButtonText}
     </Button>
   ) : null;
@@ -163,9 +159,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         data={data}
         Component={CardComponent}
         componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
-        empty={
-          isFiltersEmpty ? <EmptyData action={openCreateModal} /> : <EmptyDataWithFilters resetFilters={resetFilters} />
-        }
+        empty={isFiltersEmpty ? <EmptyData action={onAdd} /> : <EmptyDataWithFilters resetFilters={resetFilters} />}
         itemHeight={163.85}
         loadingInitially={isFirstTimeLoading}
         loadingMore={isLoadingNext}
