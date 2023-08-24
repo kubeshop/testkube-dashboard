@@ -5,8 +5,6 @@ import {Tabs} from 'antd';
 
 import {MainContext} from '@contexts';
 
-import {Button} from '@custom-antd';
-
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {SettingsLayout} from '@molecules';
@@ -51,15 +49,8 @@ const WebhookDetails: FC = () => {
     <PageWrapper>
       <PageMetadata title={`${name} | Webhooks`} />
 
-      <PageHeader
-        onBack={back}
-        title={name}
-        extra={[
-          <Button key="run-now-button" $customType="secondary">
-            Test this webhook
-          </Button>,
-        ]}
-      />
+      <PageHeader onBack={back} title={name} />
+
       <Tabs
         activeKey="settings"
         onChange={setTab}
