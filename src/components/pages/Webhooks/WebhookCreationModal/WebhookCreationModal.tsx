@@ -21,7 +21,6 @@ import {SecondStep} from './SecondStep';
 
 type WebhookCreationModalFormValues = {
   name: string;
-  type: string;
   selector: Option[];
   events: Option[];
   uri: string;
@@ -89,9 +88,6 @@ const WebhookCreationModal: FC = () => {
       <FullWidthSpace direction="vertical" size={20}>
         <FormItem name="name" label="Name" rules={[requiredNoText]} required>
           <Input placeholder="e.g.: container-deployment-xyz" />
-        </FormItem>
-        <FormItem name="type" label="Type" rules={[requiredNoText]} required>
-          <Input disabled />
         </FormItem>
         <Steps
           current={step}

@@ -1,8 +1,4 @@
-import {FC, memo} from 'react';
-
-import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
-
-import {Tag} from '@atoms';
+import {FC, memo, useMemo} from 'react';
 
 import {Text} from '@custom-antd';
 
@@ -13,6 +9,8 @@ import {ItemColumn, ItemRow, StyledMetricItem} from '@molecules/EntityGrid/Entit
 
 import Colors from '@styles/Colors';
 
+import {decodeSelector} from '@utils/selectors';
+
 import {WebhookContainer} from './WebhooksList.styled';
 
 interface WebhookCardProps {
@@ -21,29 +19,29 @@ interface WebhookCardProps {
 }
 
 const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
-  const {name, uri, labels = {}} = item;
+  const {name, uri, selector} = item;
+  const labels = useMemo(() => decodeSelector(selector), [selector]);
 
   return (
     <WebhookContainer onClick={() => onClick(item)} key={name}>
       <ItemRow $flex={1}>
         <ItemColumn $isStretch>
           <Text className="regular big">{name}</Text>
-          <Tag title="Webhook" type="info" icon={<TestSuitesIcon />} />
         </ItemColumn>
       </ItemRow>
       <ItemRow $flex={1}>
         <ItemColumn $isStretch>
           <StyledMetricItem>
-            <Text className="small uppercase" color={Colors.slate500}>
-              url
+            <Text className="small" color={Colors.slate500}>
+              URL
             </Text>
             <Text className="regular big" color={Colors.slate400}>
               {uri}
             </Text>
           </StyledMetricItem>
           <StyledMetricItem>
-            <Text className="small uppercase" color={Colors.slate500}>
-              resources
+            <Text className="small" color={Colors.slate500}>
+              RESOURCE
             </Text>
             <LabelsList labels={labels} />
           </StyledMetricItem>

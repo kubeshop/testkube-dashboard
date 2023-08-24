@@ -23,5 +23,4 @@ export type Webhook = {
   payloadObjectField?: string;
   payloadTemplate?: string;
   headers?: Record<string, string>;
-  labels?: Record<string, string>;
 };

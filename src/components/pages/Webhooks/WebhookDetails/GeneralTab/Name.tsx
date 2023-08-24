@@ -18,7 +18,7 @@ const Name: FC = () => {
   return (
     <CardForm
       name="general-settings-name"
-      title="Notification name"
+      title="Webhook name"
       description="Define the name of your webhook"
       footer={
         <>

@@ -41,7 +41,7 @@ const URI: FC = () => {
     <CardForm
       name="webhook-uri"
       title="Endpoint URI"
-      description="Define the target URI which we will call with this notification."
+      description="Define the target URI which we will call with this webhook."
       form={form}
       initialValues={{uri: current!.uri || ''}}
       disabled={!mayEdit}

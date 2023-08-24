@@ -3,13 +3,9 @@ import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
-
-import {Tag} from '@atoms';
-
 import {MainContext} from '@contexts';
 
-import {Button, Text} from '@custom-antd';
+import {Button} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
@@ -57,15 +53,10 @@ const WebhookDetails: FC = () => {
 
       <PageHeader
         onBack={back}
-        title={
-          <>
-            <Text className="bold biggest">{name}</Text>
-            <Tag title="Webhook" type="info" icon={<TestSuitesIcon />} />
-          </>
-        }
+        title={name}
         extra={[
           <Button key="run-now-button" $customType="secondary">
-            Test this notification
+            Test this webhook
           </Button>,
         ]}
       />
