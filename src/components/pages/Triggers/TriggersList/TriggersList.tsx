@@ -1,12 +1,14 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect} from 'react';
 
 import {ExternalLink} from '@atoms';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import {Button, Modal} from '@custom-antd';
+import {Button} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
+import {useModal} from '@modal/hooks';
 
 import {EntityGrid} from '@molecules';
 
@@ -32,8 +34,15 @@ const TriggersList: React.FC = () => {
 
   const {data: triggers, refetch, error, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});
 
-  const [isAddTriggerModalVisible, setAddTriggerModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
+
+  const {open: openCreateModal} = useModal({
+    title: 'Create a new trigger',
+    width: 546,
+    content: <AddTriggerModal />,
+    dataTestCloseBtn: 'add-a-new-trigger-modal-close-button',
+    dataTestModalRoot: 'add-a-new-trigger-modal',
+  });
 
   useEffect(() => {
     safeRefetch(refetch);
@@ -54,11 +63,7 @@ const TriggersList: React.FC = () => {
       }
       headerButton={
         mayCreate ? (
-          <Button
-            $customType="primary"
-            onClick={() => setAddTriggerModalVisibility(true)}
-            disabled={!isClusterAvailable}
-          >
+          <Button $customType="primary" onClick={openCreateModal} disabled={!isClusterAvailable}>
             Create a new trigger
           </Button>
         ) : null
@@ -69,19 +74,10 @@ const TriggersList: React.FC = () => {
         data={triggers}
         Component={TriggerCard}
         componentProps={{onClick: openDetails}}
-        empty={<EmptyTriggers onButtonClick={() => setAddTriggerModalVisibility(true)} />}
+        empty={<EmptyTriggers onButtonClick={openCreateModal} />}
         itemHeight={66}
         loadingInitially={isLoading || !isClusterAvailable}
       />
-      {isAddTriggerModalVisible ? (
-        <Modal
-          title="Create a new trigger"
-          isModalVisible={isAddTriggerModalVisible}
-          setIsModalVisible={setAddTriggerModalVisibility}
-          width={546}
-          content={<AddTriggerModal />}
-        />
-      ) : null}
     </PageBlueprint>
   );
 };
