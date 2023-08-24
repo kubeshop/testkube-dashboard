@@ -1,6 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {ClusterConfig} from '@models/config';
+import type {ClusterConfig} from '@models/config';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 

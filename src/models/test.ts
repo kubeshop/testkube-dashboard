@@ -1,7 +1,7 @@
-import type {EntityMap} from '@models/entityMap';
-import type {Execution, ExecutionRequest, ExecutionStatusEnum} from '@models/execution';
-import type {Repository} from '@models/repository';
-import type {Variables} from '@models/variable';
+import type {EntityMap} from './entityMap';
+import type {Execution, ExecutionRequest, ExecutionStatusEnum} from './execution';
+import type {Repository} from './repository';
+import type {Variables} from './variable';
 
 export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | 'string';
 

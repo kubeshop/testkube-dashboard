@@ -1,7 +1,6 @@
-import type {EntityMap} from '@models/entityMap';
-import type {TestSuiteExecution} from '@models/testSuiteExecution';
-
+import type {EntityMap} from './entityMap';
 import type {Execution} from './execution';
+import type {TestSuiteExecution} from './testSuiteExecution';
 import type {Variables} from './variable';
 
 export interface TestSuiteStep {

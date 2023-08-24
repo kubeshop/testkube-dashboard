@@ -1,7 +1,5 @@
-import {ExecutionStatusEnum} from '@models/execution';
+import type {ExecutionStatusEnum} from '@models/execution';
 
-const useIsRunning = (status: ExecutionStatusEnum) => {
+export const useIsRunning = (status: ExecutionStatusEnum) => {
   return status === 'running';
 };
-
-export default useIsRunning;

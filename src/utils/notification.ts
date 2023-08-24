@@ -1,6 +1,6 @@
-import {RTKResponse} from '@models/fetch';
+import type {RTKResponse} from '@models/fetch';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
 export type DefaultRequestError = {
   title?: string;

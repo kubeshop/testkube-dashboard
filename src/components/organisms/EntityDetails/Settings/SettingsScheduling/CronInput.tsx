@@ -1,3 +1,5 @@
+import {FC} from 'react';
+
 import {Input, Tooltip} from 'antd';
 
 type CronInputProps = {
@@ -7,7 +9,7 @@ type CronInputProps = {
   onChange: (value: string) => void;
 };
 
-const CronInput: React.FC<CronInputProps> = props => {
+export const CronInput: FC<CronInputProps> = props => {
   const {value, title, disabled, onChange} = props;
 
   return (
@@ -27,5 +29,3 @@ const CronInput: React.FC<CronInputProps> = props => {
     </Tooltip>
   );
 };
-
-export default CronInput;

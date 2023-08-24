@@ -1,10 +1,12 @@
+import {FC} from 'react';
+
 import {Form} from 'antd';
 
-import {CommandInput} from '@atoms';
+import {CommandInput} from '@atoms/CommandInput';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -18,7 +20,7 @@ type CommandFormFields = {
   command: string;
 };
 
-const Command: React.FC = () => {
+export const Command: FC = () => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const {current} = useExecutorsPick('current');
@@ -58,5 +60,3 @@ const Command: React.FC = () => {
     </CardForm>
   );
 };
-
-export default Command;

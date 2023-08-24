@@ -1,12 +1,12 @@
-import {useRef} from 'react';
+import {Dispatch, SetStateAction, useRef} from 'react';
 import {useDebounce, useInterval, useLatest, useUpdate} from 'react-use';
 
 import {NamePath} from 'antd/lib/form/interface';
 
 import {isEqual} from 'lodash';
 
-import {RTKResponse} from '@models/fetch';
-import {Repository} from '@models/repository';
+import type {RTKResponse} from '@models/fetch';
+import type {Repository} from '@models/repository';
 
 import {TooltipStatus} from '@molecules/GitFormItems/tooltipUtils';
 
@@ -37,9 +37,9 @@ const getErrorMessage = (rawErrorString: string, searchString: string) => {
   );
 };
 
-const useValidateRepository = (
+export const useValidateRepository = (
   getFieldValue: (name: NamePath) => string,
-  setValidationState: React.Dispatch<React.SetStateAction<ValidationState>>,
+  setValidationState: Dispatch<SetStateAction<ValidationState>>,
   validateRepository: (repository: Repository) => Promise<RTKResponse<void>>
 ) => {
   const getValues = () => ({
@@ -212,5 +212,3 @@ const useValidateRepository = (
     [current.uri, current.token, current.username, current.branch, current.path]
   );
 };
-
-export default useValidateRepository;

@@ -1,15 +1,18 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 
-import useValidateRepository, {ValidationState} from '@hooks/useValidateRepository';
+import {ValidationState, useValidateRepository} from '@hooks/useValidateRepository';
 
-import {Path, Repository, Revision, SecretFormItem} from '@molecules';
+import {Path} from '@molecules/GitFormItems/Path';
+import {Repository} from '@molecules/GitFormItems/Repository';
+import {Revision} from '@molecules/GitFormItems/Revision';
+import {SecretFormItem} from '@molecules/GitFormItems/SecretFormItem';
+
+import {StyledFormSpace} from '@organisms/TestConfigurationForm.styled';
+import type {Props} from '@organisms/TestConfigurationForm/utils';
 
 import {useValidateRepositoryMutation} from '@services/repository';
 
-import {StyledFormSpace} from '../TestConfigurationForm.styled';
-import {Props} from '../utils';
-
-const SourceEdit: React.FC<Partial<Props>> = props => {
+export const SourceEdit: FC<Partial<Props>> = props => {
   const {executorType, isClearedToken, setIsClearedToken, isClearedUsername, setIsClearedUsername, getFieldValue} =
     props as Props;
 
@@ -49,5 +52,3 @@ const SourceEdit: React.FC<Partial<Props>> = props => {
     </StyledFormSpace>
   );
 };
-
-export default SourceEdit;

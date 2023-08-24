@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {FC, useContext} from 'react';
 
 import {Space} from 'antd';
 
@@ -6,13 +6,15 @@ import styled from 'styled-components';
 
 import {ReactComponent as EmptySearch} from '@assets/empty-search.svg';
 
-import {MainContext} from '@contexts';
+import {MainContext} from '@contexts/MainContext';
 
-import {Button, Text, Title} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {Text} from '@custom-antd/Typography/Text';
+import {Title} from '@custom-antd/Typography/Title';
 
-import Colors from '@styles/Colors';
+import {StyledButtonContainer} from '@organisms/EntityList/EntityListContent.styled';
 
-import {StyledButtonContainer} from './EntityListContent.styled';
+import {Colors} from '@styles/Colors';
 
 const StyledEmptyTestsDataContainer = styled(Space)`
   display: flex;
@@ -22,7 +24,7 @@ const StyledEmptyTestsDataContainer = styled(Space)`
   justify-content: center;
 `;
 
-const EmptyDataWithFilters: React.FC<any> = props => {
+export const EmptyDataWithFilters: FC<any> = props => {
   const {resetFilters} = props;
 
   const {isClusterAvailable} = useContext(MainContext);
@@ -42,5 +44,3 @@ const EmptyDataWithFilters: React.FC<any> = props => {
     </StyledEmptyTestsDataContainer>
   );
 };
-
-export default EmptyDataWithFilters;

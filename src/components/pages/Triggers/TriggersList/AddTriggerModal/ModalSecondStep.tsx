@@ -1,10 +1,15 @@
-import {Button, FormItem, Text} from '@custom-antd';
+import {FC} from 'react';
 
-import {ActionFormItems} from '@organisms';
+import {Button} from '@custom-antd/Button';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {Text} from '@custom-antd/Typography/Text';
 
-import Colors from '@styles/Colors';
+import {ActionFormItems} from '@organisms/TriggersFormItems/ActionFormItems';
 
-import {StyledButtonsContainer, StyledStepDescription} from './AddTriggerModal.styled';
+import {StyledButtonsContainer, StyledStepDescription} from '@pages/Triggers/TriggersList/AddTriggerModal.styled';
+
+import {Colors} from '@styles/Colors';
+
 import {StepsEnum} from './types';
 
 type ModalSecondStepProps = {
@@ -12,7 +17,7 @@ type ModalSecondStepProps = {
   isLoading: boolean;
 };
 
-const ModalSecondStep: React.FC<ModalSecondStepProps> = props => {
+export const ModalSecondStep: FC<ModalSecondStepProps> = props => {
   const {isLoading, setCurrentStep} = props;
 
   return (
@@ -48,5 +53,3 @@ const ModalSecondStep: React.FC<ModalSecondStepProps> = props => {
     </>
   );
 };
-
-export default ModalSecondStep;

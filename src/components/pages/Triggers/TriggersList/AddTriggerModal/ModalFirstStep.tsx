@@ -1,12 +1,16 @@
+import {FC} from 'react';
+
 import {Form} from 'antd';
 
-import {Button, Text} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {ConditionFormItems} from '@organisms';
+import {ConditionFormItems} from '@organisms/TriggersFormItems/ConditionFormItems';
 
-import Colors from '@styles/Colors';
+import {StyledStepDescription} from '@pages/Triggers/TriggersList/AddTriggerModal.styled';
 
-import {StyledStepDescription} from './AddTriggerModal.styled';
+import {Colors} from '@styles/Colors';
+
 import {StepsEnum} from './types';
 
 type ModalFirstStepProps = {
@@ -14,7 +18,7 @@ type ModalFirstStepProps = {
   setFirstStepValues: (values: any) => void;
 };
 
-const ModalFirstStep: React.FC<ModalFirstStepProps> = props => {
+export const ModalFirstStep: FC<ModalFirstStepProps> = props => {
   const {setFirstStepValues, setCurrentStep} = props;
 
   return (
@@ -49,5 +53,3 @@ const ModalFirstStep: React.FC<ModalFirstStepProps> = props => {
     </>
   );
 };
-
-export default ModalFirstStep;

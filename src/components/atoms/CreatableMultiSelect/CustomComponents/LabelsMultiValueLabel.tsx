@@ -1,12 +1,11 @@
 import {MultiValueGenericProps} from 'react-select';
 
-import {SplitLabelText} from '@atoms';
+import {StyledMultiLabel} from '@atoms/CreatableMultiSelect.styled';
+import {SplitLabelText} from '@atoms/SplitLabelText';
 
-import {Option} from '@models/form';
+import type {Option} from '@models/form';
 
-import {StyledMultiLabel} from '../CreatableMultiSelect.styled';
-
-const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
+export const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
   const {children} = props;
 
   return (
@@ -15,5 +14,3 @@ const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
     </StyledMultiLabel>
   );
 };
-
-export default LabelsMultiValueLabel;

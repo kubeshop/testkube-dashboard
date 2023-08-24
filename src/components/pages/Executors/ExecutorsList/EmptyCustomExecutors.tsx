@@ -1,6 +1,7 @@
-import React from 'react';
+import {FC} from 'react';
 
-import {EmptyListContent, HelpCard} from '@molecules';
+import {EmptyListContent} from '@molecules/EmptyListContent';
+import {HelpCard} from '@molecules/HelpCard';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -8,7 +9,7 @@ interface EmptyCustomExecutorsProps {
   onButtonClick: () => void;
 }
 
-const EmptyCustomExecutors: React.FC<EmptyCustomExecutorsProps> = props => {
+export const EmptyCustomExecutors: FC<EmptyCustomExecutorsProps> = props => {
   const {onButtonClick} = props;
 
   return (
@@ -33,5 +34,3 @@ const EmptyCustomExecutors: React.FC<EmptyCustomExecutorsProps> = props => {
     </EmptyListContent>
   );
 };
-
-export default EmptyCustomExecutors;

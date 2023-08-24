@@ -1,16 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms/ExternalLink';
 
-import {Button, FullWidthSpace, Text} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {FullWidthSpace} from '@custom-antd/FullWidthSpace';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {Test} from '@models/test';
+import type {Test} from '@models/test';
 
-import {CopyCommand, notificationCall} from '@molecules';
+import {CopyCommand} from '@molecules/CLICommands/CopyCommand';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -18,7 +21,7 @@ import {useUpdateTestMutation} from '@services/tests';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -29,7 +32,7 @@ type ArgumentsFormValues = {
   args: string;
 };
 
-const Arguments: React.FC = () => {
+export const Arguments: FC = () => {
   const [form] = Form.useForm<ArgumentsFormValues>();
 
   const {details} = useEntityDetailsPick('details') as {details: Test};
@@ -137,5 +140,3 @@ value
     </CardForm>
   );
 };
-
-export default Arguments;

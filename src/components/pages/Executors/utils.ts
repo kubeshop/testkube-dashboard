@@ -1,4 +1,4 @@
-import {TestExecutor} from '@models/testExecutors';
+import type {TestExecutor} from '@models/testExecutors';
 
 export type ExecutorGridItem = {
   type: TestExecutor | 'custom';

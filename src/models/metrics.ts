@@ -1,4 +1,4 @@
-import {ExecutionStatusEnum} from './execution';
+import type {ExecutionStatusEnum} from './execution';
 
 export type ExecutionMetrics = {
   executionId?: string;

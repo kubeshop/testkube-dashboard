@@ -1,11 +1,11 @@
 import {FC, ReactNode} from 'react';
 
-import {ModalConfig} from '@contexts/ModalContext';
+import type {ModalConfig} from '@contexts/ModalContext';
 
-import {TestWithExecution} from '@models/test';
-import {TestSuiteWithExecution} from '@models/testSuite';
+import type {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
-import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
+import type {TestWithExecution} from './test';
+import type {TestSuiteWithExecution} from './testSuite';
 
 export type Entity = 'test-suites' | 'tests';
 

@@ -1,23 +1,30 @@
-import React, {memo, useCallback, useMemo} from 'react';
+import {FC, memo, useCallback, useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
-import {StatusIcon} from '@atoms';
+import {StatusIcon} from '@atoms/StatusIcon';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import useIsRunning from '@hooks/useIsRunning';
+import {useIsRunning} from '@hooks/useIsRunning';
 
-import {DotsDropdown} from '@molecules';
+import {DotsDropdown} from '@molecules/DotsDropdown';
 
-import Colors from '@styles/Colors';
+import {
+  DetailsWrapper,
+  DotsWrapper,
+  ItemColumn,
+  ItemRow,
+  ItemWrapper,
+  StatusText,
+} from '@organisms/ExecutionsTable/TableRow.styled';
+
+import {Colors} from '@styles/Colors';
 
 import {displayTimeBetweenDates} from '@utils/displayTimeBetweenDates';
 import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
-import {DetailsWrapper, DotsWrapper, ItemColumn, ItemRow, ItemWrapper, StatusText} from './TableRow.styled';
-
-const TableRowPure: React.FC<{data: any; onAbortExecution: any; mayManageExecution: boolean}> = memo(props => {
+export const TableRowPure: FC<{data: any; onAbortExecution: any; mayManageExecution: boolean}> = memo(props => {
   const {data, onAbortExecution, mayManageExecution} = props;
   const {status, number, startTime, name, id, durationMs} = data;
 
@@ -88,5 +95,3 @@ const TableRowPure: React.FC<{data: any; onAbortExecution: any; mayManageExecuti
     </ItemWrapper>
   );
 });
-
-export default TableRowPure;

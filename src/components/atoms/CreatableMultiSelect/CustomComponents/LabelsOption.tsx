@@ -1,14 +1,13 @@
 import {OptionProps} from 'react-select';
 
-import {SplitLabelText} from '@atoms';
+import {StyledOption} from '@atoms/CreatableMultiSelect.styled';
+import {SplitLabelText} from '@atoms/SplitLabelText';
 
-import {Option} from '@models/form';
+import type {Option} from '@models/form';
 
 import {labelRegex} from '@molecules/LabelsSelect/utils';
 
-import {StyledOption} from '../CreatableMultiSelect.styled';
-
-const LabelsOption = (props: OptionProps<Option>) => {
+export const LabelsOption = (props: OptionProps<Option>) => {
   // @ts-ignore
   const {children, innerRef, innerProps, value} = props;
 
@@ -29,5 +28,3 @@ const LabelsOption = (props: OptionProps<Option>) => {
     <StyledOption ref={innerRef}>{children}</StyledOption>
   );
 };
-
-export default LabelsOption;

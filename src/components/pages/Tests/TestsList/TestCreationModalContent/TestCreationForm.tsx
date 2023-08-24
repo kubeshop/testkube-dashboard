@@ -1,27 +1,28 @@
-import React, {useMemo, useRef, useState} from 'react';
+import {FC, useMemo, useRef, useState} from 'react';
 
 import {Form, FormInstance, Input, Select} from 'antd';
 
-import {Button, FormItem, Text} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {Text} from '@custom-antd/Typography/Text';
 
-import useInViewport from '@hooks/useInViewport';
+import {useInViewport} from '@hooks/useInViewport';
 
-import {Executor} from '@models/executors';
-import {MetadataResponse, RTKResponse} from '@models/fetch';
-import {Option} from '@models/form';
-import {ErrorNotificationConfig} from '@models/notifications';
-import {SourceWithRepository} from '@models/sources';
-import {Test} from '@models/test';
+import type {Executor} from '@models/executors';
+import type {MetadataResponse, RTKResponse} from '@models/fetch';
+import type {Option} from '@models/form';
+import type {ErrorNotificationConfig} from '@models/notifications';
+import type {SourceWithRepository} from '@models/sources';
+import type {Test} from '@models/test';
 
-import {LabelsSelect, NotificationContent} from '@molecules';
+import {LabelsSelect} from '@molecules/LabelsSelect';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
+import {NotificationContent} from '@molecules/Notification/NotificationContent';
 
-import {
-  CustomCreationFormFields,
-  FileContentFields,
-  GitCreationFormFields,
-  StringContentFields,
-} from '@organisms/TestConfigurationForm';
+import {CustomFormFields as CustomCreationFormFields} from '@organisms/TestConfigurationForm/Custom/CreationFormFields';
+import {FileContentFields} from '@organisms/TestConfigurationForm/FileContentFields';
+import {GitFormFields as GitCreationFormFields} from '@organisms/TestConfigurationForm/Git/CreationFormFields';
+import {StringContentFields} from '@organisms/TestConfigurationForm/StringContentFields';
 import {Props, SourceFields, SourceType, getAdditionalFieldsComponent} from '@organisms/TestConfigurationForm/utils';
 
 import {useAddTestMutation} from '@services/tests';
@@ -59,7 +60,7 @@ const additionalFields: SourceFields = {
   string: StringContentFields,
 };
 
-const TestCreationForm: React.FC<TestCreationFormProps> = props => {
+export const TestCreationForm: FC<TestCreationFormProps> = props => {
   const {form, testSources, executors, onSuccess} = props;
 
   const remappedExecutors = remapExecutors(executors);
@@ -202,5 +203,3 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
     </Form>
   );
 };
-
-export default TestCreationForm;

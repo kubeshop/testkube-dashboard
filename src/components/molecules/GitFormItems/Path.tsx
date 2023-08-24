@@ -1,6 +1,9 @@
+import {FC} from 'react';
+
 import {Input} from 'antd';
 
-import {FormItem, FormItemLabel} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {FormItemLabel} from '@custom-antd/Form/FormItem/FormItemLabel';
 
 import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 
@@ -25,7 +28,7 @@ type PathProps = {
   message?: string;
 };
 
-const Path: React.FC<PathProps> = props => {
+export const Path: FC<PathProps> = props => {
   const {testType, status = TooltipStatus.None, message} = props;
 
   return (
@@ -45,5 +48,3 @@ const Path: React.FC<PathProps> = props => {
     </FormItem>
   );
 };
-
-export default Path;

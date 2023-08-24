@@ -1,4 +1,4 @@
-import {Option} from '@models/form';
+import type {Option} from '@models/form';
 
 export const decomposeLabels = (labels: readonly Option[]): Record<string, string> => {
   return labels.reduce((previousValue, currentValue: Option) => {

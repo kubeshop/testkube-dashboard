@@ -1,8 +1,8 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {Artifact} from '@models/artifact';
-import {MetadataResponse, YamlEditBody} from '@models/fetch';
-import {Test, TestFilters, TestWithExecution} from '@models/test';
+import type {Artifact} from '@models/artifact';
+import type {MetadataResponse, YamlEditBody} from '@models/fetch';
+import type {Test, TestFilters, TestWithExecution} from '@models/test';
 
 import {dynamicBaseQuery, memoizeQuery, paramsSerializer} from '@utils/fetchUtils';
 

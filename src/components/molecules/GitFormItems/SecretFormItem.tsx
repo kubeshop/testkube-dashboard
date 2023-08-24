@@ -1,8 +1,12 @@
+import {FC} from 'react';
+
 import {Form, Input} from 'antd';
 
-import {FormItem, FormItemLabel, Text} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {FormItemLabel} from '@custom-antd/Form/FormItem/FormItemLabel';
+import {Text} from '@custom-antd/Typography/Text';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 import {dummySecret} from '@utils/sources';
 import {secretRegex} from '@utils/strings';
@@ -18,7 +22,7 @@ type SecretFormItemProps = {
   message?: string;
 };
 
-const SecretFormItem: React.FC<SecretFormItemProps> = props => {
+export const SecretFormItem: FC<SecretFormItemProps> = props => {
   const {isClearedValue = true, setIsClearedValue, name, label, status = TooltipStatus.None, message} = props;
 
   const rules = isClearedValue ? [{pattern: secretRegex, message: `Invalid ${name} value`}] : [];
@@ -58,5 +62,3 @@ const SecretFormItem: React.FC<SecretFormItemProps> = props => {
     </Form.Item>
   );
 };
-
-export default SecretFormItem;

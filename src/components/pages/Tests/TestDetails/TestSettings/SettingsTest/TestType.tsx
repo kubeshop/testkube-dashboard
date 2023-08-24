@@ -1,12 +1,12 @@
-import {memo, useMemo} from 'react';
+import {FC, memo, useMemo} from 'react';
 
 import {Form, Select} from 'antd';
 
-import {ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms/ExternalLink';
 
-import {FormItem} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -25,7 +25,7 @@ type TestTypeFormValues = {
   type: string;
 };
 
-const TestType: React.FC<TestTypeProps> = props => {
+export const TestType: FC<TestTypeProps> = memo(props => {
   const {type, updateTest} = props;
 
   const [form] = Form.useForm<TestTypeFormValues>();
@@ -60,6 +60,4 @@ const TestType: React.FC<TestTypeProps> = props => {
       </FormItem>
     </CardForm>
   );
-};
-
-export default memo(TestType);
+});

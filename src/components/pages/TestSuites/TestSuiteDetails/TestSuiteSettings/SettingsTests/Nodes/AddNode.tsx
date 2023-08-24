@@ -1,6 +1,8 @@
-import {IntersectionContainer} from '../SettingsTests.styled';
+import {FC} from 'react';
 
-import AddStepDropdown from './AddStepDropdown';
+import {IntersectionContainer} from '@pages/TestSuites/TestSuiteDetails/TestSuiteSettings/SettingsTests.styled';
+
+import {AddStepDropdown} from './AddStepDropdown';
 
 type AddNodeProps = {
   data: {
@@ -10,7 +12,7 @@ type AddNodeProps = {
   };
 };
 
-const AddNode: React.FC<AddNodeProps> = props => {
+export const AddNode: FC<AddNodeProps> = props => {
   const {data} = props;
 
   return (
@@ -21,5 +23,3 @@ const AddNode: React.FC<AddNodeProps> = props => {
     </>
   );
 };
-
-export default AddNode;

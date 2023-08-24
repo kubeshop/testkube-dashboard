@@ -1,16 +1,18 @@
-import {useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
-import {Execution} from '@models/execution';
+import type {Execution} from '@models/execution';
 
-import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
+import {CLICommands} from '@molecules/CLICommands';
+import {LogOutput} from '@molecules/LogOutput';
+import {ExecutionsVariablesList} from '@molecules/Variables/ExecutionsVariablesList';
 
 import {usePluginSlot, usePluginSlotList, usePluginState} from '@plugins/hooks';
-import {LogOutputBannerInterface, TestExecutionTabsInterface} from '@plugins/types';
+import type {LogOutputBannerInterface, TestExecutionTabsInterface} from '@plugins/types';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick} from '@store/executionDetails';
@@ -18,9 +20,9 @@ import {useExecutorsPick} from '@store/executors';
 
 import {decomposeVariables} from '@utils/variables';
 
-import TestExecutionArtifacts from './TestExecutionArtifacts';
+import {TestExecutionArtifacts} from './TestExecutionArtifacts';
 
-const TestExecutionTabs: React.FC = () => {
+export const TestExecutionTabs: FC = () => {
   const {data: execution} = useExecutionDetailsPick('data') as {data: Execution};
   const {details} = useEntityDetailsPick('details');
   const [, setTestExecutionTabsData] = usePluginState<TestExecutionTabsInterface>('testExecutionTabs');
@@ -115,5 +117,3 @@ const TestExecutionTabs: React.FC = () => {
 
   return <Tabs defaultActiveKey="log-output" activeKey={execDetailsTab} onChange={setExecutionTab} items={items} />;
 };
-
-export default TestExecutionTabs;

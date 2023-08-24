@@ -1,5 +1,5 @@
-import PluginScope from './PluginScope';
-import {Plugin} from './types';
+import {PluginScope} from './PluginScope';
+import type {Plugin} from './types';
 
 export class PluginManager {
   private plugins: Plugin[];
@@ -25,6 +25,4 @@ export class PluginManager {
   }
 }
 
-const createPluginManager = () => new PluginManager();
-
-export default createPluginManager;
+export const createPluginManager = () => new PluginManager();

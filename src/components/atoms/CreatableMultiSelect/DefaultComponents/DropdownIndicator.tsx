@@ -1,13 +1,11 @@
 import {DownOutlined} from '@ant-design/icons';
 
-import {DropdownWrapper} from '../CreatableMultiSelect.styled';
+import {DropdownWrapper} from '@atoms/CreatableMultiSelect.styled';
 
-const DropdownIndicator = () => {
+export const DropdownIndicator = () => {
   return (
     <DropdownWrapper>
       <DownOutlined />
     </DropdownWrapper>
   );
 };
-
-export default DropdownIndicator;

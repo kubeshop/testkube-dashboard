@@ -1,14 +1,14 @@
 import React, {FC, useContext} from 'react';
 import {Helmet} from 'react-helmet';
 
-import {ConfigContext} from '@contexts';
+import {ConfigContext} from '@contexts/ConfigContext';
 
 interface HeadProps {
   title?: string;
   description?: string;
 }
 
-const PageMetadata: FC<HeadProps> = ({title, description}) => {
+export const PageMetadata: FC<HeadProps> = ({title, description}) => {
   const {pageTitle: mainPageTitle} = useContext(ConfigContext);
   return (
     <Helmet>
@@ -17,5 +17,3 @@ const PageMetadata: FC<HeadProps> = ({title, description}) => {
     </Helmet>
   );
 };
-
-export default PageMetadata;

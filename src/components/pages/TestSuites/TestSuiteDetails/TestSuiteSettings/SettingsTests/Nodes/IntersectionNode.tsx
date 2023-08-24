@@ -1,8 +1,9 @@
+import {FC} from 'react';
 import {Handle, Position} from 'reactflow';
 
-import {IntersectionContainer} from '../SettingsTests.styled';
+import {IntersectionContainer} from '@pages/TestSuites/TestSuiteDetails/TestSuiteSettings/SettingsTests.styled';
 
-import AddStepDropdown from './AddStepDropdown';
+import {AddStepDropdown} from './AddStepDropdown';
 
 type IntersectionNodeProps = {
   data: {
@@ -12,7 +13,7 @@ type IntersectionNodeProps = {
     last: boolean;
   };
 };
-const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
+export const IntersectionNode: FC<IntersectionNodeProps> = props => {
   const {data} = props;
 
   return (
@@ -25,5 +26,3 @@ const IntersectionNode: React.FC<IntersectionNodeProps> = props => {
     </>
   );
 };
-
-export default IntersectionNode;

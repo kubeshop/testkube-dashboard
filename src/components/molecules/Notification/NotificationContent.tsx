@@ -1,10 +1,16 @@
-import {Text} from '@custom-antd';
+import {FC} from 'react';
 
-import {ErrorNotificationConfig} from '@models/notifications';
+import {Text} from '@custom-antd/Typography/Text';
 
-import Colors from '@styles/Colors';
+import type {ErrorNotificationConfig} from '@models/notifications';
 
-import {StyledNotificationContainer, StyledNotificationHeader, StyledNotificationMessage} from './Notification.styled';
+import {
+  StyledNotificationContainer,
+  StyledNotificationHeader,
+  StyledNotificationMessage,
+} from '@molecules/Notification.styled';
+
+import {Colors} from '@styles/Colors';
 
 type NotificationContentProps = {
   status: string;
@@ -19,7 +25,7 @@ const statusBGColorMap: {[key: string]: string} = {
   info: Colors.sky600,
 };
 
-const NotificationContent: React.FC<NotificationContentProps> = props => {
+export const NotificationContent: FC<NotificationContentProps> = props => {
   const {status, title, message} = props;
   return (
     <StyledNotificationContainer $bg={statusBGColorMap[status]}>
@@ -34,5 +40,3 @@ const NotificationContent: React.FC<NotificationContentProps> = props => {
     </StyledNotificationContainer>
   );
 };
-
-export default NotificationContent;

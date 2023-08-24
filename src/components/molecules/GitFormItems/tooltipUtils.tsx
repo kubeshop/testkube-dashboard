@@ -1,6 +1,6 @@
 import {CheckCircleFilled, LoadingOutlined, WarningFilled} from '@ant-design/icons';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 export enum TooltipStatus {
   Loading = 'loading',

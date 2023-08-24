@@ -1,10 +1,14 @@
+import {FC} from 'react';
+
 import {Form, Popover} from 'antd';
 
-import {Checkbox, FormItem, Text} from '@custom-antd';
+import {Checkbox} from '@custom-antd/Checkbox';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -28,7 +32,7 @@ type FailureHandlingFormValues = {
   negativeTest: boolean;
 };
 
-const FailureHandling: React.FC = () => {
+export const FailureHandling: FC = () => {
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -80,5 +84,3 @@ const FailureHandling: React.FC = () => {
     </CardForm>
   );
 };
-
-export default FailureHandling;

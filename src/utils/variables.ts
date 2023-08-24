@@ -1,4 +1,4 @@
-import {VariableInForm, Variables} from '@models/variable';
+import type {VariableInForm, Variables} from '@models/variable';
 
 export const formatVariables = (list: VariableInForm[]) => {
   const variables: Variables = {};

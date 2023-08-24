@@ -2,11 +2,9 @@ import {useContext} from 'react';
 
 import {satisfies as matchesVersion} from 'semver';
 
-import {MainContext} from '@contexts';
+import {MainContext} from '@contexts/MainContext';
 
-const useClusterVersionMatch = <T>(match: string, defaults?: T): boolean | T => {
+export const useClusterVersionMatch = <T>(match: string, defaults?: T): boolean | T => {
   const {clusterVersion} = useContext(MainContext);
   return clusterVersion == null ? (defaults as T) : matchesVersion(clusterVersion, match);
 };
-
-export default useClusterVersionMatch;

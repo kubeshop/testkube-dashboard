@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from 'react';
+import {FC, useEffect, useMemo} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useAsync} from 'react-use';
 
@@ -7,21 +7,23 @@ import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
-import {ConfigContext, DashboardContext, MainContext} from '@contexts';
+import {ConfigContext} from '@contexts/ConfigContext';
+import {DashboardContext} from '@contexts/DashboardContext';
+import {MainContext} from '@contexts/MainContext';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
-import {FeatureFlagsProvider} from '@feature-flags';
+import {FeatureFlagsProvider} from '@feature-flags/context';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 import {useLastCallback} from '@hooks/useLastCallback';
 
-import {Sider} from '@organisms';
+import {Sider} from '@organisms/Sider';
 
-import {ErrorBoundary} from '@pages';
+import {ErrorBoundary} from '@pages/ErrorBoundary';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import {Plugin} from '@plugins/types';
+import type {Plugin} from '@plugins/types';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
@@ -33,15 +35,15 @@ import {initializeTestsStore} from '@store/tests';
 
 import {useTelemetry, useTelemetryValue} from '@telemetry/hooks';
 
-import anonymizeQueryString from '@utils/anonymizeQueryString';
+import {anonymizeQueryString} from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
 import {externalLinks} from '@utils/externalLinks';
 import {safeRefetch} from '@utils/fetchUtils';
 
-import App from './App';
+import {App} from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
 
-const AppRoot: React.FC = () => {
+export const AppRoot: FC = () => {
   useAxiosInterceptors();
 
   const location = useLocation();
@@ -147,5 +149,3 @@ const AppRoot: React.FC = () => {
       </>
     );
 };
-
-export default AppRoot;

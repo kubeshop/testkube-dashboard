@@ -4,11 +4,11 @@ import pick from 'lodash/pick';
 
 import {config} from '@constants/config';
 
+import {env} from '@env';
+
 import {initializeClusterDetailsStore} from '@store/clusterDetails';
 
 import {composeProviders} from '@utils/composeProviders';
-
-import env from '../env';
 
 import {
   getApiDetails,

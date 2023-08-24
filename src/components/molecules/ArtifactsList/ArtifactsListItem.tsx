@@ -1,14 +1,14 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 
 import {FileOutlined} from '@ant-design/icons';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {Artifact} from '@models/artifact';
+import type {Artifact} from '@models/artifact';
 
 import {downloadArtifact} from '@services/artifacts';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 import {DefaultRequestError, displayDefaultErrorNotification} from '@utils/notification';
 
@@ -21,7 +21,7 @@ interface ArtifactsListItemProps {
   testSuiteName?: string;
 }
 
-const ArtifactsListItem: React.FC<ArtifactsListItemProps> = ({artifact, executionId, testName, testSuiteName}) => {
+export const ArtifactsListItem: FC<ArtifactsListItemProps> = ({artifact, executionId, testName, testSuiteName}) => {
   const {name} = artifact;
 
   const [isDownloading, setIsDownloading] = useState(false);
@@ -49,5 +49,3 @@ const ArtifactsListItem: React.FC<ArtifactsListItemProps> = ({artifact, executio
     </ArtifactsListItemContainer>
   );
 };
-
-export default ArtifactsListItem;

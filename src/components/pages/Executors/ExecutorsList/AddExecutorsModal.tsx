@@ -1,15 +1,19 @@
-import {useRef, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {Button, Input} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {Input} from '@custom-antd/Input';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
-import useInViewport from '@hooks/useInViewport';
+import {useInViewport} from '@hooks/useInViewport';
 
-import {ErrorNotificationConfig} from '@models/notifications';
+import type {ErrorNotificationConfig} from '@models/notifications';
 
-import {Hint, NotificationContent} from '@molecules';
+import {Hint} from '@molecules/Hint';
+import {NotificationContent} from '@molecules/Notification/NotificationContent';
+
+import {AddExecutorsModalContainer} from '@pages/Executors/ExecutorsList.styled';
 
 import {useCreateExecutorMutation} from '@services/executors';
 
@@ -19,15 +23,13 @@ import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
-import {AddExecutorsModalContainer} from './ExecutorsList.styled';
-
 type AddExecutorsFormValues = {
   name: string;
   type?: string;
   image: string;
 };
 
-const AddExecutorsModal: React.FC = () => {
+export const AddExecutorsModal: FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const openDetails = useDashboardNavigate((name: string) => `/executors/${name}`);
 
@@ -107,5 +109,3 @@ const AddExecutorsModal: React.FC = () => {
     </AddExecutorsModalContainer>
   );
 };
-
-export default AddExecutorsModal;

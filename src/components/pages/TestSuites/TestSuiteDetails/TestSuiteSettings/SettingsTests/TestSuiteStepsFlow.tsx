@@ -1,14 +1,20 @@
-import {useEffect, useMemo, useState} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import ReactFlow, {Controls, Edge, Node} from 'reactflow';
 
 import {nanoid} from '@reduxjs/toolkit';
 
-import {LocalStep} from '@models/testSuite';
+import type {LocalStep} from '@models/testSuite';
 
-import AddNode from './Nodes/AddNode';
-import IntersectionNode from './Nodes/IntersectionNode';
-import StepNode from './Nodes/StepNode';
-import {ReactFlowContainer, addHeight, itemHeight, itemWidth} from './SettingsTests.styled';
+import {
+  ReactFlowContainer,
+  addHeight,
+  itemHeight,
+  itemWidth,
+} from '@pages/TestSuites/TestSuiteDetails/TestSuiteSettings/SettingsTests.styled';
+
+import {AddNode} from './Nodes/AddNode';
+import {IntersectionNode} from './Nodes/IntersectionNode';
+import {StepNode} from './Nodes/StepNode';
 
 interface ExtendedNode extends Node {
   group?: number | string;
@@ -41,7 +47,7 @@ const getAddPosition = (group: number, groupLength: number, offsetY: number) => 
 };
 const getHeight = (maxLength: number) => getItemPosition(0, maxLength - 1, 0).y + itemHeight / 2;
 
-const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
+export const TestSuiteStepsFlow: FC<TestSuiteStepsFlowProps> = props => {
   const {steps, setSteps, showDelayModal, showTestModal, isV2} = props;
 
   const [nodes, setNodes] = useState<ExtendedNode[]>([]);
@@ -143,5 +149,3 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
     </ReactFlowContainer>
   );
 };
-
-export default TestSuiteStepsFlow;

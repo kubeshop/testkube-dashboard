@@ -1,14 +1,14 @@
-import {useMemo} from 'react';
+import {FC, MutableRefObject, useMemo} from 'react';
 
 import {format, getDayOfYear} from 'date-fns';
+
+import {BarWrapper as Bar, SvgWrapper} from '@molecules/MetricsBarChart.styled';
 
 import {SecondaryStatusColors, StatusColors} from '@styles/Colors';
 
 import {formatDuration} from '@utils/formatDate';
 
-import {BarWrapper as Bar, SvgWrapper} from '../MetricsBarChart.styled';
-
-import BarWithTooltip from './BarWithTooltip';
+import {BarWithTooltip} from './BarWithTooltip';
 
 export type BarChartConfig = {
   barWidth: number;
@@ -21,10 +21,10 @@ type ChartProps = {
   chartConfig: BarChartConfig;
   maxValue: number;
   isDetailsView?: boolean;
-  scrollRef?: React.MutableRefObject<null>;
+  scrollRef?: MutableRefObject<null>;
 };
 
-const Chart: React.FC<ChartProps> = props => {
+export const Chart: FC<ChartProps> = props => {
   const {chartConfig, maxValue, isDetailsView = false, scrollRef} = props;
 
   const {chartData, barWidth, chartHeight, barMargin} = chartConfig;
@@ -90,5 +90,3 @@ const Chart: React.FC<ChartProps> = props => {
     </SvgWrapper>
   );
 };
-
-export default Chart;

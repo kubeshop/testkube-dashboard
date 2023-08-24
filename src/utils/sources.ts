@@ -1,14 +1,14 @@
 import {NamePath} from 'antd/lib/form/interface';
 
-import {Option} from '@models/form';
-import {Repository} from '@models/repository';
-import {SecretRef} from '@models/secretRef';
-import {SourceWithRepository} from '@models/sources';
-import {Test} from '@models/test';
+import type {Option} from '@models/form';
+import type {Repository} from '@models/repository';
+import type {SecretRef} from '@models/secretRef';
+import type {SourceWithRepository} from '@models/sources';
+import type {Test} from '@models/test';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {SourceType} from '@organisms/TestConfigurationForm/utils';
+import type {SourceType} from '@organisms/TestConfigurationForm/utils';
 
 const customGitSourceString = '$custom-git-';
 

@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-const useLoadingIndicator = (timeoutInterval = 1000) => {
+export const useLoadingIndicator = (timeoutInterval = 1000) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLoading = () => {
@@ -12,5 +12,3 @@ const useLoadingIndicator = (timeoutInterval = 1000) => {
 
   return {isLoading, handleLoading};
 };
-
-export default useLoadingIndicator;

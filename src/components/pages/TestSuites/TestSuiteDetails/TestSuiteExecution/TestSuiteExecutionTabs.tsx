@@ -1,12 +1,14 @@
+import {FC} from 'react';
+
 import {Tabs} from 'antd';
 
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
-import {ExecutionStepsList} from '@molecules';
+import {ExecutionStepsList} from '@molecules/ExecutionStepsList';
 
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
-const TestSuiteExecutionTabs: React.FC = () => {
+export const TestSuiteExecutionTabs: FC = () => {
   const {
     data: {executeStepResults},
   } = useExecutionDetailsPick('data') as {data: TestSuiteExecution};
@@ -23,5 +25,3 @@ const TestSuiteExecutionTabs: React.FC = () => {
     />
   );
 };
-
-export default TestSuiteExecutionTabs;

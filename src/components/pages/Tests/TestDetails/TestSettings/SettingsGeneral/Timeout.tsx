@@ -1,12 +1,15 @@
+import {FC} from 'react';
+
 import {Form, Input} from 'antd';
 
-import {ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms/ExternalLink';
 
-import {FormItem, Text} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -22,7 +25,7 @@ type TimeoutForm = {
   activeDeadlineSeconds?: number;
 };
 
-const Timeout: React.FC = () => {
+export const Timeout: FC = () => {
   const {details} = useEntityDetailsPick('details');
   const {executionRequest, name} = details;
 
@@ -73,5 +76,3 @@ const Timeout: React.FC = () => {
     </CardForm>
   );
 };
-
-export default Timeout;

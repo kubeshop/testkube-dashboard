@@ -1,7 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
-import {YamlEditBody} from '@models/fetch';
-import {TestTrigger, TriggersKeyMap} from '@models/triggers';
+import type {YamlEditBody} from '@models/fetch';
+import type {TestTrigger, TriggersKeyMap} from '@models/triggers';
 
 import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 

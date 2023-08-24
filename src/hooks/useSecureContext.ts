@@ -1,5 +1,3 @@
-const useSecureContext = () => {
+export const useSecureContext = () => {
   return window.isSecureContext;
 };
-
-export default useSecureContext;

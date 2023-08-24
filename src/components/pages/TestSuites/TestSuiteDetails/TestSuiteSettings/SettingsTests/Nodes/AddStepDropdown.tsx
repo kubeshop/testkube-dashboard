@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC, ReactNode} from 'react';
 
 import {Dropdown} from 'antd';
 
@@ -12,7 +12,7 @@ type AddStepDropdownProps = {
   };
 };
 
-const AddStepDropdown: React.FC<AddStepDropdownProps> = props => {
+export const AddStepDropdown: FC<AddStepDropdownProps> = props => {
   const {data, before = false, children} = props;
   const group = data.group + (before ? -0.5 : 0);
 
@@ -31,4 +31,3 @@ const AddStepDropdown: React.FC<AddStepDropdownProps> = props => {
     </Dropdown>
   );
 };
-export default AddStepDropdown;

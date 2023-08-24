@@ -1,4 +1,4 @@
-enum Colors {
+export enum Colors {
   mainBackground = '#111827',
   slate50 = '#F8FAFC',
   slate100 = '#F1F5F9',
@@ -188,5 +188,3 @@ export enum BorderColors {
 const borders = {
   greyBorder: `1px solid ${BorderColors.greyBorder}`,
 };
-
-export default Colors;

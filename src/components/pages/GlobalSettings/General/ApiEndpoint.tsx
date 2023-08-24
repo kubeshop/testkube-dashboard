@@ -1,16 +1,19 @@
+import {FC} from 'react';
+
 import {Form, Input} from 'antd';
 
-import {ExternalLink} from '@atoms';
+import {ExternalLink} from '@atoms/ExternalLink';
 
-import {FormItem, Text} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {isApiEndpointLocked, useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
 
@@ -18,7 +21,7 @@ type ApiEndpointFormValues = {
   endpoint: string;
 };
 
-const ApiEndpoint: React.FC = () => {
+export const ApiEndpoint: FC = () => {
   const [form] = Form.useForm<ApiEndpointFormValues>();
 
   const apiEndpoint = useApiEndpoint();
@@ -63,5 +66,3 @@ const ApiEndpoint: React.FC = () => {
     </CardForm>
   );
 };
-
-export default ApiEndpoint;

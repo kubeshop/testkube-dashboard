@@ -1,10 +1,10 @@
-import React from 'react';
+import {FC} from 'react';
 
 import {Form} from 'antd';
 
-import {Input} from '@custom-antd';
+import {Input} from '@custom-antd/Input';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {useExecutorsPick} from '@store/executors';
 
@@ -13,7 +13,7 @@ type NameNTypeFormValues = {
   type: string;
 };
 
-const NameNType: React.FC = () => {
+export const NameNType: FC = () => {
   const [form] = Form.useForm<NameNTypeFormValues>();
   const {current} = useExecutorsPick('current');
   const {name} = current!;
@@ -37,5 +37,3 @@ const NameNType: React.FC = () => {
     </CardForm>
   );
 };
-
-export default NameNType;

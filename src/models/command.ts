@@ -1,4 +1,4 @@
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 export const literalToColor: Record<string, Colors> = {
   kubectl: Colors.indigo300,

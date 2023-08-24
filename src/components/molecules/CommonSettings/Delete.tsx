@@ -3,11 +3,11 @@ import {FC, useContext} from 'react';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {ModalContext} from '@contexts';
+import {ModalContext} from '@contexts/ModalContext';
 
-import {DeleteEntityModal} from '@molecules';
+import {DeleteEntityModal} from '@molecules/DeleteEntityModal';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 interface DeleteProps {
   name: string;
@@ -17,7 +17,7 @@ interface DeleteProps {
   useDeleteMutation: UseMutation<MutationDefinition<string, any, any, void>>;
 }
 
-const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDeleteMutation}) => {
+export const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDeleteMutation}) => {
   const {setModalConfig, setModalOpen} = useContext(ModalContext);
 
   const onConfirm = () => {
@@ -48,5 +48,3 @@ const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDele
     />
   );
 };
-
-export default Delete;

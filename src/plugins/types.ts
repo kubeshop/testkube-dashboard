@@ -1,6 +1,6 @@
 import type {Execution} from '@models/execution';
 
-import type PluginScope from './PluginScope';
+import type {PluginScope} from './PluginScope';
 
 export interface Plugin {
   name: string;

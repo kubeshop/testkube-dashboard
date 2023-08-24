@@ -1,6 +1,6 @@
 import {useContext, useMemo} from 'react';
 
-import PluginsContext from './context';
+import {PluginsContext} from './context';
 import {orderArray} from './utils';
 
 export const usePluginState = <T>(name: string) => {

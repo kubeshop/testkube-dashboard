@@ -1,6 +1,6 @@
 import {FC} from 'react';
 
-import {Definition} from '@molecules';
+import {Definition} from '@molecules/Definition';
 
 import {useGetSourceDefinitionQuery, useUpdateSourceDefinitionMutation} from '@services/sources';
 
@@ -9,7 +9,7 @@ import {useSourcesPick} from '@store/sources';
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
-const SourceSettingsDefinition: FC = () => {
+export const SourceSettingsDefinition: FC = () => {
   const {current} = useSourcesPick('current');
   return (
     <Definition
@@ -27,5 +27,3 @@ const SourceSettingsDefinition: FC = () => {
     />
   );
 };
-
-export default SourceSettingsDefinition;

@@ -1,4 +1,4 @@
-import env from '../env';
+import {env} from '@env';
 
 export enum externalLinks {
   documentation = 'https://docs.testkube.io/',

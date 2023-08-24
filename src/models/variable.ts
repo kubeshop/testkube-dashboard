@@ -1,4 +1,4 @@
-import {SecretRef} from './secretRef';
+import type {SecretRef} from './secretRef';
 
 export type Variable = {
   type: 0 | 1 | 'secretRef' | 'secret' | 'basic' | null;

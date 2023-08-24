@@ -1,12 +1,12 @@
-import React from 'react';
+import {FC} from 'react';
 
 import {intervalToDuration} from 'date-fns';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import Colors from '@styles/Colors';
+import {AxisLabel, HorizontalAxis} from '@molecules/MetricsBarChart.styled';
 
-import {AxisLabel, HorizontalAxis} from '../MetricsBarChart.styled';
+import {Colors} from '@styles/Colors';
 
 type PAxisLineProps = {
   axisTop: number;
@@ -18,7 +18,7 @@ type PAxisLineProps = {
 
 const margin = 3;
 
-const PAxisLine: React.FC<PAxisLineProps> = props => {
+export const PAxisLine: FC<PAxisLineProps> = props => {
   const {axisTop, durationMs, label, dontApplyMargin, isLabelVisible} = props;
 
   const finalTopValue = dontApplyMargin ? axisTop : axisTop + margin;
@@ -49,5 +49,3 @@ const PAxisLine: React.FC<PAxisLineProps> = props => {
     </>
   );
 };
-
-export default PAxisLine;

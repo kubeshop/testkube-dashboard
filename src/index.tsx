@@ -1,8 +1,10 @@
-import React from 'react';
+import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Provider as ReduxProvider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import 'reactflow/dist/style.css';
+
+import {env} from '@env';
 
 import {store} from '@redux/store';
 
@@ -10,9 +12,8 @@ import {GlobalStyle} from '@styles/globalStyles';
 
 import {TelemetryProvider} from '@telemetry/provider';
 
-import AppRoot from './AppRoot';
+import {AppRoot} from './AppRoot';
 import './antd-theme/antd-customized.css';
-import env from './env';
 
 (async () => {
   const container = document.getElementById('root');
@@ -30,7 +31,7 @@ import env from './env';
   // Big thread here https://github.com/remix-run/react-router/issues/8427
 
   root.render(
-    <React.StrictMode>
+    <StrictMode>
       <TelemetryProvider
         prefix="tk.ui."
         app={app}
@@ -45,6 +46,6 @@ import env from './env';
           </BrowserRouter>
         </ReduxProvider>
       </TelemetryProvider>
-    </React.StrictMode>
+    </StrictMode>
   );
 })();

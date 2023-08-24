@@ -1,12 +1,13 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {ErrorNotificationConfig} from '@models/notifications';
+import type {ErrorNotificationConfig} from '@models/notifications';
 
-import {SecretFormItem, notificationCall} from '@molecules';
+import {SecretFormItem} from '@molecules/GitFormItems/SecretFormItem';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -22,7 +23,7 @@ type AuthenticationFormValues = {
   username: string;
 };
 
-const Authentication: React.FC = () => {
+export const Authentication: FC = () => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<AuthenticationFormValues>();
@@ -97,5 +98,3 @@ const Authentication: React.FC = () => {
     </CardForm>
   );
 };
-
-export default Authentication;

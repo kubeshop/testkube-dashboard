@@ -1,12 +1,14 @@
+import {FC} from 'react';
+
 import {Form} from 'antd';
 
-import {CommandInput} from '@atoms';
+import {CommandInput} from '@atoms/CommandInput';
 
-import {FormItem} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
-import {CardForm} from '@organisms';
+import {CardForm} from '@organisms/CardForm';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -20,7 +22,7 @@ type PreRunFormValues = {
   command: string;
 };
 
-const PreRun: React.FC = () => {
+export const PreRun: FC = () => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
   const isPreRunAvailable = usePermission(Permissions.editEntity);
 
@@ -67,5 +69,3 @@ const PreRun: React.FC = () => {
     </CardForm>
   );
 };
-
-export default PreRun;

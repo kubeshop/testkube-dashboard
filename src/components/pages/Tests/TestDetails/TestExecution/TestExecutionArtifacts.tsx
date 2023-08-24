@@ -1,10 +1,10 @@
-import {useContext, useEffect, useState} from 'react';
+import {FC, useContext, useEffect, useState} from 'react';
 
-import {MainContext} from '@contexts';
+import {MainContext} from '@contexts/MainContext';
 
-import {Artifact} from '@models/artifact';
+import type {Artifact} from '@models/artifact';
 
-import {ArtifactsList} from '@molecules';
+import {ArtifactsList} from '@molecules/ArtifactsList';
 
 import {useGetTestExecutionArtifactsQuery} from '@services/tests';
 
@@ -15,7 +15,7 @@ type TestExecutionArtifactsProps = {
   startTime?: string;
 };
 
-const TestExecutionArtifacts: React.FC<TestExecutionArtifactsProps> = props => {
+export const TestExecutionArtifacts: FC<TestExecutionArtifactsProps> = props => {
   const {id, testName, testSuiteName, startTime} = props;
 
   const {isClusterAvailable} = useContext(MainContext);
@@ -43,5 +43,3 @@ const TestExecutionArtifacts: React.FC<TestExecutionArtifactsProps> = props => {
     />
   );
 };
-
-export default TestExecutionArtifacts;

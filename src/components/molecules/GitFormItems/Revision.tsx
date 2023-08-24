@@ -1,13 +1,14 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 import {useFirstMountState} from 'react-use';
 
-import {FormItem} from '@custom-antd';
+import {FormItem} from '@custom-antd/Form/FormItem';
 
-import {StyledFormSpace} from '../../organisms/TestConfigurationForm/TestConfigurationForm.styled';
+import {StyledFormSpace} from '@organisms/TestConfigurationForm.styled';
 
+import {Branch} from './Branch';
+import {Commit} from './Commit';
+import {RevisionSwitcher} from './RevisionSwitcher';
 import {TooltipStatus} from './tooltipUtils';
-
-import {Branch, Commit, RevisionSwitcher} from '.';
 
 type RevisionProps = {
   message?: string;
@@ -15,7 +16,7 @@ type RevisionProps = {
   commitStatus?: TooltipStatus;
 };
 
-const Revision: React.FC<RevisionProps> = props => {
+export const Revision: FC<RevisionProps> = props => {
   const {message, branchStatus, commitStatus} = props;
   const [switcherValue, setSwitcherValue] = useState<string | number>('branch');
 
@@ -44,5 +45,3 @@ const Revision: React.FC<RevisionProps> = props => {
     </FormItem>
   );
 };
-
-export default Revision;

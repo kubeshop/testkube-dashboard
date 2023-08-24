@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 import {useInterval} from 'react-use';
 
 import {formatDuration, intervalToDuration} from 'date-fns';
@@ -7,7 +7,7 @@ type NextExecutionProps = {
   value: string | Date;
 };
 
-const NextExecution: React.FC<NextExecutionProps> = props => {
+export const NextExecution: FC<NextExecutionProps> = props => {
   const {value} = props;
   const [duration, setDuration] = useState('Not scheduled');
 
@@ -22,5 +22,3 @@ const NextExecution: React.FC<NextExecutionProps> = props => {
 
   return <>{duration}</>;
 };
-
-export default NextExecution;

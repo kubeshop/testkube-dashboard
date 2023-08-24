@@ -1,15 +1,17 @@
-import React, {useCallback, useMemo, useRef} from 'react';
+import {FC, useCallback, useMemo, useRef} from 'react';
 
-import {CopyButton, DownloadButton, Pre} from '@atoms';
+import {CopyButton} from '@atoms/CopyButton';
+import {DownloadButton} from '@atoms/DownloadButton';
+import {Pre} from '@atoms/Pre';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import useLocation from '@hooks/useLocation';
-import useSecureContext from '@hooks/useSecureContext';
+import {useLocation} from '@hooks/useLocation';
+import {useSecureContext} from '@hooks/useSecureContext';
 
 import {getLiteralColor} from '@models/command';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
 import {LabelWrapper, StyledCopyCommandCode, StyledCopyCommandContainer} from './CopyCommand.styled';
 
@@ -26,7 +28,7 @@ type CopyCommandProps = {
 };
 
 // TODO consider refactoring to a more generic component. (i.e. not specific to CLI commands)
-const CopyCommand: React.FC<CopyCommandProps> = props => {
+export const CopyCommand: FC<CopyCommandProps> = props => {
   const {
     command,
     label,
@@ -111,5 +113,3 @@ const CopyCommand: React.FC<CopyCommandProps> = props => {
     </>
   );
 };
-
-export default CopyCommand;

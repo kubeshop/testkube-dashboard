@@ -4,32 +4,36 @@ import {Tabs} from 'antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {useLastCallback} from '@hooks/useLastCallback';
-import useRunEntity from '@hooks/useRunEntity';
-import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
+import {useRunEntity} from '@hooks/useRunEntity';
+import {useTrackTimeAnalytics} from '@hooks/useTrackTimeAnalytics';
 
-import {CLICommands, SummaryGrid} from '@molecules';
+import {CLICommands} from '@molecules/CLICommands';
+import {SummaryGrid} from '@molecules/SummaryGrid';
 
-import {PageWrapper} from '@organisms';
-import {EntityDetailsHeader, EntityDetailsWrapper, RecentExecutionsTab} from '@organisms/EntityDetails';
+import {EntityDetailsWrapper} from '@organisms/EntityDetails.styled';
+import {EntityDetailsHeader} from '@organisms/EntityDetails/EntityDetailsHeader';
+import {RecentExecutionsTab} from '@organisms/EntityDetails/RecentExecutionsTab';
+import {PageWrapper} from '@organisms/PageBlueprint.styled';
 
-import {Error, Loading} from '@pages';
-import PageMetadata from '@pages/PageMetadata';
+import {Error} from '@pages/Error';
+import {Loading} from '@pages/Loading';
+import {PageMetadata} from '@pages/PageMetadata';
 
 import {useAbortAllTestSuiteExecutionsMutation, useAbortTestSuiteExecutionMutation} from '@services/testSuites';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
-import Colors from '@styles/Colors';
+import {Colors} from '@styles/Colors';
 
-import TestSuiteExecutionDrawer from './TestSuiteExecution/TestSuiteExecutionDrawer';
-import TestSuiteSettings from './TestSuiteSettings';
+import {TestSuiteExecutionDrawer} from './TestSuiteExecution/TestSuiteExecutionDrawer';
+import {TestSuiteSettings} from './TestSuiteSettings';
 
 interface TestSuiteDetailsContentProps {
   tab?: string;
   settingsTab?: string;
 }
 
-const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, settingsTab}) => {
+export const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, settingsTab}) => {
   const {id, details, error, metrics} = useEntityDetailsPick('id', 'details', 'error', 'metrics');
   const [isRunning, run] = useRunEntity('test-suites', details);
 
@@ -91,5 +95,3 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
     </EntityDetailsWrapper>
   );
 };
-
-export default TestSuiteDetailsContent;

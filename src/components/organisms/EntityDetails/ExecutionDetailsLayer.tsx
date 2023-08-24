@@ -3,13 +3,13 @@ import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'reac
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
 
-import {MainContext} from '@contexts';
+import {MainContext} from '@contexts/MainContext';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
-import {Entity} from '@models/entity';
+import type {Entity} from '@models/entity';
 
-import {notificationCall} from '@molecules';
+import {notificationCall} from '@molecules/Notification';
 
 import {initializeExecutionDetailsStore} from '@store/executionDetails';
 
@@ -24,7 +24,7 @@ export interface ExecutionDetailsLayerProps {
   useGetExecutionDetails: UseQuery<QueryDefinition<any, any, any, any, any>>;
 }
 
-const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> = ({
+export const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> = ({
   entity,
   id,
   execId,
@@ -67,5 +67,3 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
 
   return <ExecutionStoreProvider>{children}</ExecutionStoreProvider>;
 };
-
-export default ExecutionDetailsLayer;

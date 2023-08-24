@@ -1,8 +1,8 @@
 import {lineHeight} from '@atoms/MonacoEditor';
 
-import {Skeleton} from '@custom-antd';
+import {Skeleton} from '@custom-antd/Skeleton';
 
-const DefinitionSkeleton = () => {
+export const DefinitionSkeleton = () => {
   return (
     <>
       <Skeleton additionalStyles={{lineHeight}} paragraph={{rows: 1, width: 400}} />
@@ -15,5 +15,3 @@ const DefinitionSkeleton = () => {
     </>
   );
 };
-
-export default DefinitionSkeleton;

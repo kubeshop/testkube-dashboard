@@ -1,6 +1,6 @@
 import React, {FC, PropsWithChildren, ReactElement, createContext, useContext, useMemo, useState} from 'react';
 
-import {Modal} from '@custom-antd';
+import {CustomModal as Modal} from '@custom-antd/Modal';
 
 export interface ModalConfig {
   width: number;
@@ -19,7 +19,7 @@ export interface ModalContextInterface {
   closeModal: () => void;
 }
 
-const ModalContext = createContext<ModalContextInterface>(undefined!);
+export const ModalContext = createContext<ModalContextInterface>(undefined!);
 
 const defaultModalConfig = {
   width: 500,
@@ -72,5 +72,3 @@ export const ModalOutletProvider: FC<PropsWithChildren<{}>> = ({children}) => (
     {children}
   </>
 );
-
-export default ModalContext;

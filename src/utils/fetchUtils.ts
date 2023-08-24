@@ -7,7 +7,7 @@ import {isEqual} from 'lodash';
 
 import {getApiEndpoint} from '@services/apiEndpoint';
 
-import {getRtkBaseUrl, getRtkIdToken} from '@utils/rtk';
+import {getRtkBaseUrl, getRtkIdToken} from './rtk';
 
 const prohibitedValues = ['undefined', 'null'];
 

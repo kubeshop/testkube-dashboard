@@ -1,9 +1,9 @@
 import {StateCreator} from 'zustand';
 
-import {Execution} from '@models/execution';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {Execution} from '@models/execution';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 export interface ExecutionDetailsSlice {
   id?: string;

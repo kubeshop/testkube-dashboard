@@ -8,6 +8,4 @@ const onEvent = (e: KeyboardEvent<any>, cb: Callback) => {
   }
 };
 
-const usePressEnter = () => onEvent;
-
-export default usePressEnter;
+export const usePressEnter = () => onEvent;

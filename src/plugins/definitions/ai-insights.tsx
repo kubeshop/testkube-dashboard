@@ -1,12 +1,13 @@
-import {IconLabel, Tag} from '@atoms';
+import {IconLabel} from '@atoms/IconLabel';
+import {Tag} from '@atoms/Tag';
 
 import {config} from '@constants/config';
 
-import {AiInsightsTab, MessagePanel} from '@molecules';
+import {AiInsightsTab} from '@molecules/AiInsightsTab';
+import {MessagePanel} from '@molecules/MessagePanel';
 
-import {LogOutputBannerInterface, Plugin, TestExecutionTabsInterface} from '@plugins/types';
-
-import PluginScope from '../PluginScope';
+import {PluginScope} from '@plugins/PluginScope';
+import type {LogOutputBannerInterface, Plugin, TestExecutionTabsInterface} from '@plugins/types';
 
 const isTestExecutionFailed = (scope: PluginScope) => {
   return (
@@ -14,7 +15,7 @@ const isTestExecutionFailed = (scope: PluginScope) => {
   );
 };
 
-const createAiInsightsPlugin = (): Plugin => ({
+export const createAiInsightsPlugin = (): Plugin => ({
   name: 'ai-insights',
   setup: scope => {
     scope.appendSlot(
@@ -67,5 +68,3 @@ const createAiInsightsPlugin = (): Plugin => ({
     );
   },
 });
-
-export default createAiInsightsPlugin;

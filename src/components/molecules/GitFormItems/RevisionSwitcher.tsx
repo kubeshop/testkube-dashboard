@@ -1,3 +1,5 @@
+import {FC} from 'react';
+
 import {Segmented} from 'antd';
 
 type RevisionSwitcherProps = {
@@ -5,7 +7,7 @@ type RevisionSwitcherProps = {
   onChange: (value: string | number) => void;
 };
 
-const RevisionSwitcher: React.FC<RevisionSwitcherProps> = props => {
+export const RevisionSwitcher: FC<RevisionSwitcherProps> = props => {
   const {value, onChange} = props;
 
   return (
@@ -19,5 +21,3 @@ const RevisionSwitcher: React.FC<RevisionSwitcherProps> = props => {
     />
   );
 };
-
-export default RevisionSwitcher;

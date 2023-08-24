@@ -1,12 +1,12 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 
 import {Tooltip} from 'antd';
 
+import {StyledExpandAltOutlined, StyledFullscreenExitOutlined} from '@molecules/LogOutput.styled';
+
 import {useLogOutputField} from '@store/logOutput';
 
-import {StyledExpandAltOutlined, StyledFullscreenExitOutlined} from './LogOutput.styled';
-
-const FullscreenAction: React.FC = () => {
+export const FullscreenAction: FC = () => {
   const [isFullscreen, setIsFullscreen] = useLogOutputField('isFullscreen');
 
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -28,5 +28,3 @@ const FullscreenAction: React.FC = () => {
     </Tooltip>
   );
 };
-
-export default FullscreenAction;

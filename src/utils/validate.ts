@@ -1,4 +1,4 @@
-import {VariableInForm} from '@models/variable';
+import type {VariableInForm} from '@models/variable';
 
 export const validateDuplicateValueByKey = (value: string, list: VariableInForm[], key: keyof VariableInForm) => {
   let duplicateFlag = false;

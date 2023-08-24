@@ -1,28 +1,29 @@
-import React, {Suspense, useContext, useEffect, useMemo, useState} from 'react';
+import {FC, Suspense, useContext, useEffect, useMemo, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {useUpdate} from 'react-use';
 
 import {config} from '@constants/config';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts/DashboardContext';
+import {MainContext} from '@contexts/MainContext';
 
-import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
+import {EndpointModal} from '@molecules/EndpointModal';
+import {MessagePanel} from '@molecules/MessagePanel';
+import {notificationCall} from '@molecules/Notification';
 
-import {
-  EndpointProcessing,
-  Executors,
-  GlobalSettings,
-  Loading,
-  NotFound,
-  Sources,
-  TestSuites,
-  Tests,
-  Triggers,
-} from '@pages';
+import {EndpointProcessing} from '@pages/EndpointProcessing';
+import {Executors} from '@pages/Executors';
+import {GlobalSettings} from '@pages/GlobalSettings';
+import {Loading} from '@pages/Loading';
+import {NotFound} from '@pages/NotFound';
+import {Sources} from '@pages/Sources';
+import {TestSuites} from '@pages/TestSuites';
+import {Tests} from '@pages/Tests';
+import {Triggers} from '@pages/Triggers';
 
-import PluginsContext from '@plugins/context';
-import createPluginManager from '@plugins/manager';
-import {Plugin} from '@plugins/types';
+import {PluginsContext} from '@plugins/context';
+import {createPluginManager} from '@plugins/manager';
+import type {Plugin} from '@plugins/types';
 
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
@@ -44,7 +45,7 @@ export interface AppProps {
   plugins: Plugin[];
 }
 
-const App: React.FC<AppProps> = ({plugins}) => {
+export const App: FC<AppProps> = ({plugins}) => {
   const [TriggersProvider] = initializeTriggersStore();
 
   const location = useLocation();
@@ -183,5 +184,3 @@ const App: React.FC<AppProps> = ({plugins}) => {
       </Suspense>
     );
 };
-
-export default App;

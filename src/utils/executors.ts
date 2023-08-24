@@ -1,5 +1,5 @@
-import {Executor} from '@models/executors';
-import {Option} from '@models/form';
+import type {Executor} from '@models/executors';
+import type {Option} from '@models/form';
 
 export const remapExecutors = (executors: Executor[]): Option[] => {
   const array: Option[] = [];

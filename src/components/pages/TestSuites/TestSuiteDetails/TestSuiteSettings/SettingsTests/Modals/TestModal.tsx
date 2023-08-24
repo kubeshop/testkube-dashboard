@@ -1,22 +1,27 @@
-import React, {useMemo, useState} from 'react';
+import {FC, useMemo, useState} from 'react';
 
 import {Select} from 'antd';
 
-import {ExecutorIcon} from '@atoms';
+import {ExecutorIcon} from '@atoms/ExecutorIcon';
 
-import {Button, Modal, Text} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {CustomModal as Modal} from '@custom-antd/Modal';
+import {Text} from '@custom-antd/Typography/Text';
 
-import usePressEnter from '@hooks/usePressEnter';
+import {usePressEnter} from '@hooks/usePressEnter';
 
-import {TestSuiteStepTest} from '@models/test';
+import type {TestSuiteStepTest} from '@models/test';
+
+import {
+  StyledDelayModalContent,
+  StyledOptionWrapper,
+} from '@pages/TestSuites/TestSuiteDetails/TestSuiteSettings/SettingsTests.styled';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useGetAllTestsQuery} from '@services/tests';
 
 import {useExecutorsPick} from '@store/executors';
-
-import {StyledDelayModalContent, StyledOptionWrapper} from '../SettingsTests.styled';
 
 type TestModalProps = {
   visible: boolean;
@@ -25,7 +30,7 @@ type TestModalProps = {
 };
 const {Option} = Select;
 
-const TestModal: React.FC<TestModalProps> = props => {
+export const TestModal: FC<TestModalProps> = props => {
   const {visible, onClose, onSubmit} = props;
 
   const {data: allTestsList} = useGetAllTestsQuery();
@@ -97,5 +102,3 @@ const TestModal: React.FC<TestModalProps> = props => {
     />
   );
 };
-
-export default TestModal;

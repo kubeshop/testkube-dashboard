@@ -5,25 +5,27 @@ import {Select, Space} from 'antd';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {ExecutorIcon} from '@atoms';
+import {ExecutorIcon} from '@atoms/ExecutorIcon';
 
-import {Button, Text} from '@custom-antd';
+import {Button} from '@custom-antd/Button';
+import {Text} from '@custom-antd/Typography/Text';
 
-import useExecutorIcon from '@hooks/useExecutorIcon';
+import {useExecutorIcon} from '@hooks/useExecutorIcon';
 
-import {Option as OptionType} from '@models/form';
+import type {Option as OptionType} from '@models/form';
 
-import {DotsDropdown, LabelsList, notificationCall} from '@molecules';
+import {DotsDropdown} from '@molecules/DotsDropdown';
+import {LabelsList} from '@molecules/LabelsList';
+import {notificationCall} from '@molecules/Notification';
 
-import {PageHeader} from '@organisms';
+import {EntityDetailsHeaderIcon} from '@organisms/EntityDetails.styled';
+import {PageHeader} from '@organisms/PageBlueprint/PageHeader';
 
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
 
-import Colors from '@styles/Colors';
-
-import {EntityDetailsHeaderIcon} from './EntityDetails.styled';
+import {Colors} from '@styles/Colors';
 
 const filterOptions: OptionType[] = [
   {value: 7, label: 'Timeframe: last 7 days', key: 'last7Days'},
@@ -41,7 +43,7 @@ interface EntityDetailsHeaderProps {
   onEditTest: () => void;
 }
 
-const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
+export const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   isRunning,
   onRun,
   onBack,
@@ -116,5 +118,3 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
     </PageHeader>
   );
 };
-
-export default EntityDetailsHeader;

@@ -1,23 +1,21 @@
 import {FC, memo} from 'react';
 
-import {Text} from '@custom-antd';
+import {Text} from '@custom-antd/Typography/Text';
 
-import {SourceWithRepository} from '@models/sources';
+import type {SourceWithRepository} from '@models/sources';
 
-import Colors from '@styles/Colors';
+import {SourceContainer} from '@pages/Sources/SourcesList.styled';
 
-import {SourceContainer} from './SourcesList.styled';
+import {Colors} from '@styles/Colors';
 
 interface SourceCardProps {
   item: SourceWithRepository;
   onClick: (item: SourceWithRepository) => void;
 }
 
-const SourceCard: FC<SourceCardProps> = ({item, onClick}) => (
+export const SourceCard: FC<SourceCardProps> = memo(({item, onClick}) => (
   <SourceContainer onClick={() => onClick(item)} key={item.name}>
     <Text className="regular big">{item.name}</Text>
     <Text color={Colors.slate500}>{item.repository?.uri}</Text>
   </SourceContainer>
-);
-
-export default memo(SourceCard);
+));

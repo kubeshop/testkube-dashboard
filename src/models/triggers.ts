@@ -1,4 +1,4 @@
-import {EntityMap} from './entityMap';
+import type {EntityMap} from './entityMap';
 
 export enum TriggerResources {
   'pod' = 'pod',

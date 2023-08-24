@@ -1,4 +1,4 @@
-import {Executor} from '@models/executors';
+import type {Executor} from '@models/executors';
 
 export const getTestExecutorIcon = (executors: Executor[], testType?: string): string | undefined => {
   const currentExecutor = executors.find(executor => executor?.executor?.types?.includes(testType!));

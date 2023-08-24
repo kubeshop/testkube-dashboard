@@ -1,12 +1,12 @@
 import React, {FC, useContext, useRef} from 'react';
 
-import {MainContext} from '@contexts';
+import {MainContext} from '@contexts/MainContext';
 
-import useInViewport from '@hooks/useInViewport';
+import {useInViewport} from '@hooks/useInViewport';
 
-import {TestSuiteWithExecution} from '@models/testSuite';
+import type {TestSuiteWithExecution} from '@models/testSuite';
 
-import EntityGridItemPure, {Item} from '@molecules/EntityGrid/EntityGridItemPure';
+import {EntityGridItemPure, Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
 import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuites';
 
@@ -18,7 +18,7 @@ export interface TestSuiteCardProps {
   onAbort: (item: Item) => void;
 }
 
-const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick, onAbort}) => {
+export const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick, onAbort}) => {
   const {isClusterAvailable} = useContext(MainContext);
 
   const ref = useRef(null);
@@ -41,5 +41,3 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
     />
   );
 };
-
-export default TestSuiteCard;

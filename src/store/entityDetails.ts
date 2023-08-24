@@ -3,7 +3,7 @@ import {StateCreator} from 'zustand';
 import type {Entity} from '@models/entity';
 import type {Metrics} from '@models/metrics';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 export interface EntityDetailsSlice {
   entity: Entity;
