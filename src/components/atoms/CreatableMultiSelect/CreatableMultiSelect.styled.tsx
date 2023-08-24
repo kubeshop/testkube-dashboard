@@ -18,8 +18,6 @@ export const StyledOption = styled.div`
 `;
 
 export const StyledMultiLabel = styled.div`
-  display: flex;
-
   padding: 3px 5px;
 `;
 

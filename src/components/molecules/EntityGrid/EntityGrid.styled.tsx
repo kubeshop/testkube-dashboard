@@ -16,7 +16,7 @@ export const StyledEntityGrid = styled.div<{$columns?: number; $itemWidth: numbe
 
 export const ItemWrapper = styled.div`
   display: flex;
-  align-items: space-between;
+  justify-content: space-between;
   gap: 15px;
 
   padding: 20px;
@@ -87,9 +87,9 @@ export const StyledMetricItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex-basis: auto;
+  flex-basis: 115px;
 
-  // padding-top: 5px;
+  padding-top: 5px;
 `;
 
 export const StyledEntityGridSkeletonWrapper = styled.div`

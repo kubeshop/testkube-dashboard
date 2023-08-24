@@ -1,5 +1,3 @@
-import {Headers} from '@models/fetch';
-
 export enum WebhookEvent {
   StartTest = 'start-test',
   EndTestSuccess = 'end-test-success',
@@ -24,6 +22,6 @@ export type Webhook = {
   selector?: string;
   payloadObjectField?: string;
   payloadTemplate?: string;
-  headers?: Headers;
+  headers?: Record<string, string>;
   labels?: Record<string, string>;
 };
