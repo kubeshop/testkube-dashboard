@@ -6,7 +6,7 @@ export const TagContainer = styled.div`
   display: inline-flex;
   padding: 4px;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   height: 24px;
   cursor: default;
   color: ${Colors.slate400};
