@@ -1,3 +1,5 @@
+import {FC, ReactNode} from 'react';
+
 import {Tooltip} from 'antd';
 
 import {Text} from '@custom-antd';
@@ -8,14 +10,10 @@ export interface TagProps {
   title: string;
   type?: 'success' | 'warning' | 'error' | 'info';
   tooltipMessage?: string;
-  Icon?: React.FunctionComponent<
-    React.SVGProps<SVGSVGElement> & {
-      title?: string | undefined;
-    }
-  >;
+  icon?: ReactNode;
 }
 
-const Tag: React.FC<TagProps> = ({title, type = '', tooltipMessage, Icon}) => {
+const Tag: FC<TagProps> = ({title, type = '', tooltipMessage, icon}) => {
   return (
     <TagContainer className={`${type}`}>
       {tooltipMessage ? (
@@ -24,7 +22,7 @@ const Tag: React.FC<TagProps> = ({title, type = '', tooltipMessage, Icon}) => {
         </Tooltip>
       ) : (
         <>
-          {Icon ? <Icon /> : null}
+          {icon}
           <Text className="regular small">{title}</Text>
         </>
       )}

@@ -60,7 +60,7 @@ const WebhookDetails: FC = () => {
         title={
           <>
             <Text className="bold biggest">{name}</Text>
-            <Tag title="Webhook" type="info" Icon={TestSuitesIcon} />
+            <Tag title="Webhook" type="info" icon={<TestSuitesIcon />} />
           </>
         }
         extra={[

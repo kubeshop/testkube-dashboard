@@ -9,6 +9,7 @@ export const TagContainer = styled.div`
   gap: 8px;
   height: 24px;
   cursor: default;
+  color: ${Colors.slate400};
 
   border-radius: 4px;
   background: ${Colors.slate800};
@@ -17,49 +18,34 @@ export const TagContainer = styled.div`
   svg {
     height: 12px;
     width: 12px;
+    fill: currentColor;
   }
 
   .ant-typography {
-    color: ${Colors.slate400};
+    color: currentColor;
   }
 
   &.success {
     background: ${Colors.lime900};
     border: 1px solid ${Colors.lime600};
-
-    .ant-typography {
-      color: ${Colors.lime300};
-    }
+    color: ${Colors.lime300};
   }
 
   &.warning {
     background: ${Colors.yellow900};
     border: 1px solid ${Colors.yellow600};
-
-    .ant-typography {
-      color: ${Colors.yellow300};
-    }
+    color: ${Colors.yellow300};
   }
 
   &.error {
     background: ${Colors.pink900};
     border: 1px solid ${Colors.pink600};
-
-    .ant-typography {
-      color: ${Colors.pink300};
-    }
+    color: ${Colors.pink300};
   }
 
   &.info {
     background: ${Colors.sky900};
     border: 1px solid ${Colors.sky600};
-
-    svg {
-      fill: ${Colors.sky300};
-    }
-
-    .ant-typography {
-      color: ${Colors.sky300};
-    }
+    color: ${Colors.sky300};
   }
 `;

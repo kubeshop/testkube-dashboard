@@ -28,7 +28,7 @@ const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
       <ItemRow $flex={1}>
         <ItemColumn $isStretch>
           <Text className="regular big">{name}</Text>
-          <Tag title="Webhook" type="info" Icon={TestSuitesIcon} />
+          <Tag title="Webhook" type="info" icon={<TestSuitesIcon />} />
         </ItemColumn>
       </ItemRow>
       <ItemRow $flex={1}>
