@@ -2,11 +2,12 @@ import React, {FC, Suspense, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {MonacoEditor} from '@atoms';
+
 import {useLastCallback} from '@hooks/useLastCallback';
 
 import {notificationCall} from '@molecules';
 import DefinitionSkeleton from '@molecules/Definition/DefinitionSkeleton';
-import KubernetesResourceEditor from '@molecules/KubernetesResourceEditor';
 
 import {CardForm} from '@organisms';
 
@@ -43,8 +44,6 @@ const CustomPayload: FC = () => {
     setValue(initialValue);
   }, [current]);
 
-  // FIXME: Use form instead of value in local state
-  // FIXME: Add JSON support for KubernetesResourceEditor, and force it there
   return (
     <CardForm
       name="webhook-payload-template-form"
@@ -56,7 +55,7 @@ const CustomPayload: FC = () => {
       onCancel={useLastCallback(() => setValue(initialValue))}
     >
       <Suspense fallback={<DefinitionSkeleton />}>
-        <KubernetesResourceEditor value={value} onChange={setValue} />
+        <MonacoEditor language="none" value={value} onChange={setValue} />
       </Suspense>
     </CardForm>
   );
