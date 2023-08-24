@@ -6,8 +6,6 @@ export type MainContextProps = {
   clusterConfig?: ClusterConfig;
   clusterVersion?: string;
   isClusterAvailable: boolean;
-  isDashboardBannerVisible?: boolean;
-  setIsDashboardBannerVisible?: (isVisible: boolean) => void;
 };
 
 // @ts-ignore
