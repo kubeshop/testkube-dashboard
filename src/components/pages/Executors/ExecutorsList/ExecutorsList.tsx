@@ -4,13 +4,17 @@ import {Tabs} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {Button, Modal} from '@custom-antd';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {EntityGrid} from '@molecules';
 
 import {PageBlueprint} from '@organisms';
+
+import {Error} from '@pages';
 
 import {Permissions, usePermission} from '@permissions/base';
 
@@ -29,20 +33,24 @@ import ExecutorCard from './ExecutorCard';
 
 const Executors: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
+  const openDetails = useDashboardNavigate(({name}: {name: string}) => `/executors/${name}`);
   const mayCreate = usePermission(Permissions.createEntity);
   const apiEndpoint = useApiEndpoint();
 
   const [activeTabKey, setActiveTabKey] = useState('custom');
   const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
 
-  const {data: executors, isLoading, refetch} = useGetExecutorsQuery(null, {skip: !isClusterAvailable});
+  const {data: executors, isLoading, error, refetch} = useGetExecutorsQuery(null, {skip: !isClusterAvailable});
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
   useEffect(() => {
     safeRefetch(refetch);
   }, [apiEndpoint]);
+
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
 
   return (
     <PageBlueprint
@@ -79,10 +87,10 @@ const Executors: React.FC = () => {
                 maxColumns={3}
                 data={customExecutors}
                 Component={CustomExecutorCard}
-                componentProps={{onClick: executor => navigate(`/executors/${executor.name}`)}}
+                componentProps={{onClick: openDetails}}
                 empty={<EmptyCustomExecutors onButtonClick={() => setAddExecutorModalVisibility(true)} />}
                 itemHeight={66}
-                loadingInitially={isLoading}
+                loadingInitially={isLoading || !isClusterAvailable}
               />
             ),
           },

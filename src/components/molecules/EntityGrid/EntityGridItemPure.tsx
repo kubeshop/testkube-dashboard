@@ -6,9 +6,9 @@ import {Text} from '@custom-antd';
 
 import useExecutorIcon from '@hooks/useExecutorIcon';
 
-import {Execution} from '@models/execution';
-import {ExecutionMetrics} from '@models/metrics';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {Execution} from '@models/execution';
+import type {ExecutionMetrics} from '@models/metrics';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {DotsDropdown, LabelsList, MetricsBarChart} from '@molecules';
 
@@ -16,7 +16,15 @@ import Colors from '@styles/Colors';
 
 import {formatDuration} from '@utils/formatDate';
 
-import {DetailsWrapper, ItemColumn, ItemRow, ItemWrapper, RowsWrapper, StyledMetricItem} from './EntityGrid.styled';
+import {
+  DetailsWrapper,
+  ExecutionTimeItemColumn,
+  ItemColumn,
+  ItemRow,
+  ItemWrapper,
+  RowsWrapper,
+  StyledMetricItem,
+} from './EntityGrid.styled';
 import EntityGridItemExecutionTime from './EntityGridItemExecutionTime';
 
 export interface Item {
@@ -83,7 +91,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
               </Text>
             </div>
           </ItemColumn>
-          <ItemColumn>
+          <ExecutionTimeItemColumn>
             <EntityGridItemExecutionTime time={latestExecution?.startTime} />
             {isRunning ? (
               <DotsDropdown
@@ -91,7 +99,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
                 items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]}
               />
             ) : null}
-          </ItemColumn>
+          </ExecutionTimeItemColumn>
         </ItemRow>
         <RowsWrapper>
           <ItemRow $flex={1}>

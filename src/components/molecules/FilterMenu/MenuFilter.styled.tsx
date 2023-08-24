@@ -67,7 +67,6 @@ export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean}>`
   justify-content: space-between;
   align-items: center;
 
-  width: 296px;
   border: 1px solid ${Colors.slate800};
   border-radius: 4px;
   padding: 11px;

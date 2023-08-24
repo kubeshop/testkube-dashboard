@@ -1,9 +1,11 @@
-import {FC, useCallback, useContext, useEffect} from 'react';
+import {FC, useCallback, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
 import {ModalConfig} from '@contexts/ModalContext';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {Test} from '@models/test';
 
@@ -11,11 +13,11 @@ import {notificationCall} from '@molecules';
 
 import {EntityListContent} from '@organisms';
 
-import {useAppSelector} from '@redux/hooks';
-import {initialTestsFiltersState} from '@redux/initialState';
-import {selectTests, selectTestsFilters, setTests, setTestsFilters} from '@redux/reducers/testsSlice';
+import {Error} from '@pages';
 
 import {useAbortAllTestExecutionsMutation, useGetTestsQuery} from '@services/tests';
+
+import {initialFilters, useTestsField, useTestsSync} from '@store/tests';
 
 import {externalLinks} from '@utils/externalLinks';
 import {PollingIntervals} from '@utils/numbers';
@@ -40,21 +42,22 @@ export const createModal: ModalConfig = {
 };
 
 const TestsList: FC = () => {
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
-  const queryFilters = useAppSelector(selectTestsFilters);
+  const {isClusterAvailable} = useContext(MainContext);
+  const [filters, setFilters] = useTestsField('filters');
 
-  const {data, isLoading, isFetching} = useGetTestsQuery(queryFilters || null, {
+  const {
+    data: tests,
+    isLoading,
+    isFetching,
+    error,
+  } = useGetTestsQuery(filters, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable,
   });
-
-  useEffect(() => {
-    dispatch(setTests(data || []));
-  }, [data]);
+  useTestsSync({tests});
 
   const [abortAll] = useAbortAllTestExecutionsMutation();
-  const onItemClick = useCallback((item: Test) => navigate(`/tests/executions/${item.name}`), []);
+  const onItemClick = useDashboardNavigate((item: Test) => `/tests/${item.name}`);
   const onItemAbort = useCallback((item: Test) => {
     abortAll({id: item.name})
       .unwrap()
@@ -63,8 +66,13 @@ const TestsList: FC = () => {
       });
   }, []);
 
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+
   return (
     <EntityListContent
+      itemKey="test.name"
       CardComponent={TestCard}
       onItemClick={onItemClick}
       onItemAbort={onItemAbort}
@@ -73,12 +81,12 @@ const TestsList: FC = () => {
       addEntityButtonText="Add a new test"
       pageDescription={PageDescription}
       emptyDataComponent={EmptyTests}
-      initialFiltersState={initialTestsFiltersState}
+      initialFiltersState={initialFilters}
       dataTest="add-a-new-test-btn"
-      queryFilters={queryFilters}
-      setQueryFilters={setTestsFilters}
-      data={useAppSelector(selectTests)}
-      isLoading={isLoading}
+      queryFilters={filters}
+      setQueryFilters={setFilters}
+      data={tests}
+      isLoading={isLoading || !isClusterAvailable}
       isFetching={isFetching}
       createModalConfig={createModal}
     />

@@ -1,58 +1,36 @@
-import {useContext, useEffect} from 'react';
+import {FC} from 'react';
 
-import {Form} from 'antd';
+import {Definition} from '@molecules';
 
-import {CopyButton, DownloadButton, Pre} from '@atoms';
+import {useGetTriggerDefinitionQuery, useUpdateTriggerDefinitionMutation} from '@services/triggers';
 
-import {MainContext} from '@contexts';
+import {useTriggersField} from '@store/triggers';
 
-import useLocation from '@hooks/useLocation';
-import useSecureContext from '@hooks/useSecureContext';
+import {createSchemaOverride} from '@utils/createSchemaOverride';
+import {testkubeCRDBases} from '@utils/externalLinks';
 
-import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
+interface TriggerDefinitionProps {
+  reload: () => void;
+}
 
-import {useGetTriggerDefinitionQuery} from '@services/triggers';
+const TriggerDefinition: FC<TriggerDefinitionProps> = ({reload}) => {
+  const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
 
-import {useStore} from '@store';
-
-const TriggerDefinition = () => {
-  const {isClusterAvailable} = useContext(MainContext);
-
-  const {currentTrigger} = useStore(state => ({
-    currentTrigger: state.currentTrigger!,
-  }));
-
-  const isSecureContext = useSecureContext();
-  const {
-    data: definition = '',
-    isLoading,
-    refetch,
-  } = useGetTriggerDefinitionQuery(currentTrigger.name, {
-    skip: !isClusterAvailable,
-  });
-  const filename = useLocation().lastPathSegment;
-
-  useEffect(() => {
-    if (currentTrigger) {
-      refetch();
-    }
-  }, [currentTrigger]);
   return (
-    <Form name="definition-form">
-      <ConfigurationCard title="Definition" description="Validate and export your trigger configuration">
-        {definition ? (
-          <DefinitionContent content={definition}>
-            {isSecureContext ? (
-              <CopyButton content={definition} />
-            ) : (
-              <DownloadButton filename={filename} extension="yaml" content={definition} />
-            )}
-          </DefinitionContent>
-        ) : (
-          <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
-        )}
-      </ConfigurationCard>
-    </Form>
+    <Definition
+      useGetDefinitionQuery={useGetTriggerDefinitionQuery}
+      useUpdateDefinitionMutation={useUpdateTriggerDefinitionMutation}
+      label="trigger"
+      onUpdate={reload}
+      name={currentTrigger!.name}
+      crdUrl={testkubeCRDBases.triggers}
+      overrideSchema={createSchemaOverride($ => {
+        $.required('spec', 'apiVersion', 'kind');
+        $.property('metadata').required('name');
+        $.property('apiVersion').merge({const: 'tests.testkube.io/v1'});
+        $.property('kind').merge({const: 'TestTrigger'});
+      })}
+    />
   );
 };
 

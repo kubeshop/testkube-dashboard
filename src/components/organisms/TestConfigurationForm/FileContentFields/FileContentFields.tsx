@@ -16,7 +16,7 @@ const FileContentFields: React.FC = () => {
         return (
           <FormItem name="file" label="File" rules={[required]} required>
             <UploadWithInput
-              onFileChange={(file: Nullable<UploadChangeParam>) => onFileChange(file, form as FormInstance)}
+              onFileChange={(file: UploadChangeParam | null) => onFileChange(file, form as FormInstance)}
             />
           </FormItem>
         );

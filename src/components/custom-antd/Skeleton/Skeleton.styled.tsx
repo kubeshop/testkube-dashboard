@@ -4,7 +4,15 @@ import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
 
-import {AdditionalSkeletonStyles} from './Skeleton';
+export type AdditionalSkeletonStyles = {
+  lineHeight?: number;
+  color?: string;
+  contrastColor?: string;
+  container?: {
+    paddingTop?: number;
+    paddingBottom?: number;
+  };
+};
 
 export const StyledSkeleton = styled(Skeleton)<{additionalStyles?: AdditionalSkeletonStyles}>`
   &.testkube-skeleton {

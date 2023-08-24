@@ -1,25 +1,27 @@
-import React, {useContext, useEffect, useState} from 'react';
+import * as Sentry from '@sentry/react';
+
+import React, {useContext, useEffect, useRef} from 'react';
 
 import {DashboardContext} from '@contexts';
 
-import ErrorBoundaryInner from './ErrorBoundaryInner';
+import ErrorBoundaryFallback from './ErrorBoundaryFallback';
 
 export default function ErrorBoundary({children}: {children: React.ReactNode}) {
   const {location} = useContext(DashboardContext);
-  const [hasError, setHasError] = useState(false);
+  const resetErrorRef = useRef<() => void>();
 
   useEffect(() => {
-    if (hasError) {
-      setHasError(false);
-    }
+    resetErrorRef.current?.();
   }, [location.key]);
+
   return (
-    /**
-     * NEW: The class component error boundary is now
-     *      a child of the functional component.
-     */
-    <ErrorBoundaryInner hasError={hasError} setHasError={setHasError}>
+    <Sentry.ErrorBoundary
+      fallback={({resetError}) => {
+        resetErrorRef.current = resetError;
+        return <ErrorBoundaryFallback />;
+      }}
+    >
       {children}
-    </ErrorBoundaryInner>
+    </Sentry.ErrorBoundary>
   );
 }

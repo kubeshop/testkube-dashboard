@@ -1,62 +1,58 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {MainContext} from '@contexts';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
+import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, setCurrentExecutor, setExecutorData} from '@redux/reducers/executorsSlice';
 
 import {useGetExecutorDetailsQuery} from '@services/executors';
 
-import {safeRefetch} from '@utils/fetchUtils';
+import {useExecutorsPick, useExecutorsSync} from '@store/executors';
 
 import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails: React.FC = () => {
-  const {dispatch, isClusterAvailable} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
-  const {id: name} = useParams() as {id: string};
+  const {isClusterAvailable} = useContext(MainContext);
+  const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
-  const currentExecutorDetails = useAppSelector(selectCurrentExecutor);
+  const {data: executor, error} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
 
-  const [activeTabKey, setActiveTabKey] = useState('Settings');
+  const {current: currentExecutorDetails} = useExecutorsPick('current');
+  useExecutorsSync({
+    current: executor?.name === name ? executor : undefined,
+  });
 
-  const {data: executor, refetch} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});
+  const setSettingsTab = useDashboardNavigate((next: string) => `/executors/${name}/settings/${next}`);
+  const back = useDashboardNavigate('/executors');
 
-  const isPageDisabled = !name;
-
-  useEffect(() => {
-    dispatch(setCurrentExecutor(name));
-    safeRefetch(refetch);
-  }, [name]);
-
-  useEffect(() => {
-    if (executor) {
-      dispatch(setExecutorData({name, executor}));
-    }
-  }, [executor]);
+  if (error) {
+    return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+  if (!executor || !currentExecutorDetails) {
+    return <Loading />;
+  }
 
   return (
     <PageWrapper>
       <PageMetadata title={`${name} | Executors`} />
 
-      <PageHeader onBack={() => navigate('/executors')} title={name} />
+      <PageHeader onBack={back} title={name} />
       <Tabs
-        activeKey={activeTabKey}
-        onChange={setActiveTabKey}
         destroyInactiveTabPane
         items={[
           {
-            key: 'Settings',
+            key: 'settings',
             label: 'Settings',
-            disabled: isPageDisabled,
-            children: currentExecutorDetails ? <ExecutorSettings /> : null,
+            children: currentExecutorDetails ? (
+              <ExecutorSettings tab={settingsTab} onTabChange={setSettingsTab} />
+            ) : null,
           },
         ]}
       />

@@ -3,3 +3,6 @@
 build
 .husky
 node_modules
+playwright-report
+test-results
+dashboard-e2e/fixtures/files

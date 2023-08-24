@@ -2,7 +2,7 @@ import {FC} from 'react';
 
 import {act, fireEvent, render} from '@testing-library/react';
 
-import {AnalyticsContext} from '@contexts';
+import {TelemetryContext} from '@telemetry/context';
 
 import useTrackTimeAnalytics from './useTrackTimeAnalytics';
 
@@ -30,9 +30,9 @@ interface TestWrapperProps extends TestInnerComponentProps {
 }
 
 const TestWrapper: FC<TestWrapperProps> = ({name, condition, track}) => (
-  <AnalyticsContext.Provider value={{analyticsTrack: track}}>
+  <TelemetryContext.Provider value={{telemetry: {event: track}} as any}>
     <TestInnerComponent name={name} condition={condition} />
-  </AnalyticsContext.Provider>
+  </TelemetryContext.Provider>
 );
 
 describe('hooks', () => {

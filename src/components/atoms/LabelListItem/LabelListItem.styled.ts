@@ -14,4 +14,7 @@ export const StyledLabelListItem = styled.li<{isSkippedMode: boolean}>`
 
   font-size: 12px;
   font-weight: 400;
+  text-wrap: nowrap;
+
+  max-width: 50vw;
 `;

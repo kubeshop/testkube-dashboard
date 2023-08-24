@@ -6,7 +6,6 @@ import Colors from '@styles/Colors';
 
 const CopyIconBaseStyles = `
   position: absolute;
-  top: 0px;
   right: 0px;
 
   padding: 4px;

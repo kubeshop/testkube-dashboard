@@ -1,44 +1,39 @@
-import { test } from '@playwright/test';
-import { TestDataHandler } from '../data-handlers/test-data-handlers';
-import { ApiHelpers } from '../api/api-helpers';
-import { CommonHelpers } from '../helpers/common-helpers';
-import { MainPage } from '../pages/MainPage';
-import { CreateTestPage } from '../pages/CreateTestPage';
-const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
-const testDataHandler=new TestDataHandler(process.env.RUN_ID);
+import {test} from '@playwright/test';
 
+import config from '../config';
+import {ApiHelpers} from '../helpers/api-helpers';
+import {validateTest} from '../helpers/common';
+import {TestDataHandler} from '../helpers/test-data-handler';
+import {CreateTestPage} from '../pages/CreateTestPage';
+import {MainPage} from '../pages/MainPage';
 
-const testNames = ['cypress-git', 'k6-git', 'postman-git'];
-for (const testName of testNames) { // eslint-disable-line no-restricted-syntax
-  test(`Creating test for ${testName}`, async ({ page }) => {
+const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
+const testDataHandler = new TestDataHandler(config.runId);
+
+const testNames = ['cypress-git', 'k6-git', 'postman-git', 'k6-string', 'k6-file'];
+// eslint-disable-next-line no-restricted-syntax
+for (const testName of testNames) {
+  test(`Creating test ${testName}`, async ({page}) => {
     const testData = testDataHandler.getTest(testName);
     const realTestName = testData.name;
 
-    await apiHelpers.assureTestNotCreated(realTestName);
-    const mainPage=new MainPage(page);
+    await api.assureTestNotCreated(realTestName);
+    const mainPage = new MainPage(page);
     await mainPage.visitMainPage();
     await mainPage.openCreateTestDialog();
 
-    const createTestPage=new CreateTestPage(page);
+    const createTestPage = new CreateTestPage(page);
     await createTestPage.createTest(testData);
-    await page.waitForURL(`**/tests/executions/${realTestName}`);
-  
-    const createdTestData = await apiHelpers.getTestData(realTestName);
-    await CommonHelpers.validateTest(testData, createdTestData);
+    await page.waitForURL(`**/tests/${realTestName}`);
+
+    const createdTestData = await api.getTestData(realTestName);
+    await validateTest(testData, createdTestData);
 
     // cleanup
-    await apiHelpers.removeTest(realTestName)
+    await api.removeTest(realTestName);
   });
 }
 
-test.skip(`Create test from File`, async ({ page }) => {
+test.skip(`Create test from Git source`, async ({page}) => {});
 
-});
-
-test.skip(`Create test from String`, async ({ page }) => {
-
-});
-
-test.skip(`Create test from Git source`, async ({ page }) => {
-
-});
+test.skip(`Create test for Custom Container Executor`, async ({page}) => {});

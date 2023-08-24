@@ -1,9 +1,6 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {FilterFilled} from '@ant-design/icons';
-import {Space} from 'antd';
-
-import {MainContext} from '@contexts';
 
 import {Button, Input, Title} from '@custom-antd';
 
@@ -27,9 +24,7 @@ const defaultKeyValuePair: Entity = {
 };
 
 const LabelsFilter: React.FC<FilterProps> = props => {
-  const {setFilters, filters, isFiltersDisabled} = props;
-
-  const {dispatch} = useContext(MainContext);
+  const {setFilters, filters, isFiltersDisabled, width} = props;
 
   const [isVisible, setVisibilityState] = useState(false);
   const [labelsMapping, setLabelsMapping] = useState<EntityArray>([]);
@@ -134,14 +129,14 @@ const LabelsFilter: React.FC<FilterProps> = props => {
       return;
     }
 
-    dispatch(setFilters({...filters, selector: resultedFilters, pageSize: initialPageSize}));
+    setFilters({...filters, selector: resultedFilters, pageSize: initialPageSize});
     onOpenChange(false);
   };
 
   const resetFilters = () => {
     setLabelsMapping([defaultKeyValuePair]);
     onOpenChange(false);
-    dispatch(setFilters({...filters, selector: [], pageSize: initialPageSize}));
+    setFilters({...filters, selector: [], pageSize: initialPageSize});
   };
 
   const menu = (
@@ -165,24 +160,22 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const isFilterApplied = filters.selector.length > 0;
 
   return (
-    <Space>
-      <StyledFilterDropdown
-        overlay={menu}
-        trigger={['click']}
-        placement="bottom"
-        onOpenChange={onOpenChange}
-        open={isVisible}
-        disabled={isFiltersDisabled}
+    <StyledFilterDropdown
+      overlay={menu}
+      trigger={['click']}
+      placement="bottom"
+      onOpenChange={onOpenChange}
+      open={isVisible}
+      disabled={isFiltersDisabled}
+    >
+      <StyledFilterLabel
+        onClick={e => e.preventDefault()}
+        data-cy="labels-filter-button"
+        isFiltersDisabled={isFiltersDisabled}
       >
-        <StyledFilterLabel
-          onClick={e => e.preventDefault()}
-          data-cy="labels-filter-button"
-          isFiltersDisabled={isFiltersDisabled}
-        >
-          Labels <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
-        </StyledFilterLabel>
-      </StyledFilterDropdown>
-    </Space>
+        Labels <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
+      </StyledFilterLabel>
+    </StyledFilterDropdown>
   );
 };
 

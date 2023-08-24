@@ -1,11 +1,12 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
 
-import {AnalyticsContext, DashboardContext, MainContext, ModalContext} from '@contexts';
+import {ModalContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
 import {Option} from '@models/form';
@@ -14,9 +15,9 @@ import {ErrorNotificationConfig} from '@models/notifications';
 import {LabelsSelect, NotificationContent} from '@molecules';
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
-
 import {useAddTestSuiteMutation} from '@services/testSuites';
+
+import {useTelemetry} from '@telemetry/hooks';
 
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -34,10 +35,9 @@ type TestSuiteCreationModalFormValues = {
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm<TestSuiteCreationModalFormValues>();
 
-  const {dispatch} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
-  const {analyticsTrack} = useContext(AnalyticsContext);
   const {closeModal} = useContext(ModalContext);
+  const telemetry = useTelemetry();
+  const openSettings = useDashboardNavigate((name: string) => `/test-suites/${name}/settings/tests`);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
   const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
@@ -52,18 +52,11 @@ const TestSuiteCreationModalContent: React.FC = () => {
       ...values,
       labels: decomposeLabels(localLabels),
     })
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(res => {
-        if (res && 'data' in res) {
-          analyticsTrack('trackEvents', {
-            uiEvent: 'create-test-suites',
-          });
-
-          dispatch(setSettingsTabConfig({entity: 'test-suites', tab: 'Tests'}));
-
-          navigate(`/test-suites/executions/${res.data.metadata.name}`);
-          closeModal();
-        }
+        telemetry.event('createTestSuite');
+        openSettings(res.data.metadata.name);
+        closeModal();
       })
       .catch(err => {
         setError(err);
@@ -73,12 +66,6 @@ const TestSuiteCreationModalContent: React.FC = () => {
         }
       });
   };
-
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
-  }, []);
 
   return (
     <Form

@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- This <base> tag may be replaced in the Docker container, using ./scripts/inject-base-href.sh -->
+    <base href="/">
+
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="TestKube dashboard" />
+    <meta name="description" content="The Kubernetes Native Test Orchestration and Execution Framework" />
     <meta name="referrer" content="no-referrer" />
     <meta name="app-version" content="%REACT_APP_VERSION%" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,6 +36,7 @@
     <script src="%PUBLIC_URL%/env-config.js"></script>
   </head>
   <body>
+    <script>window.gtm_eval=eval;</script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--

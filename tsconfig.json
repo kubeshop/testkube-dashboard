@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "ESNext",
     "lib": [
       "dom",
@@ -18,15 +19,53 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "strict": true
+    "strict": true,
+    "paths": {
+      "@assets": ["src/assets/images/"],
+      "@assets/*": ["src/assets/images/*"],
+      "@atoms": ["src/components/atoms/"],
+      "@atoms/*": ["src/components/atoms/*"],
+      "@constants": ["src/constants/"],
+      "@constants/*": ["src/constants/*"],
+      "@contexts": ["src/contexts/"],
+      "@contexts/*": ["src/contexts/*"],
+      "@custom-antd": ["src/components/custom-antd"],
+      "@custom-antd/*": ["src/components/custom-antd/*"],
+      "@env": ["src/env"],
+      "@feature-flags": ["src/feature-flags/"],
+      "@feature-flags/*": ["src/feature-flags/*"],
+      "@hooks": ["src/hooks/"],
+      "@hooks/*": ["src/hooks/*"],
+      "@icons": ["src/assets/icons/"],
+      "@icons/*": ["src/assets/icons/*"],
+      "@models": ["src/models/"],
+      "@models/*": ["src/models/*"],
+      "@molecules": ["src/components/molecules/"],
+      "@molecules/*": ["src/components/molecules/*"],
+      "@organisms": ["src/components/organisms/"],
+      "@organisms/*": ["src/components/organisms/*"],
+      "@pages": ["src/components/pages/"],
+      "@pages/*": ["src/components/pages/*"],
+      "@permissions": ["src/permissions/"],
+      "@permissions/*": ["src/permissions/*"],
+      "@plugins": ["src/plugins/"],
+      "@plugins/*": ["src/plugins/*"],
+      "@redux": ["src/redux/"],
+      "@redux/*": ["src/redux/*"],
+      "@services": ["src/services/"],
+      "@services/*": ["src/services/*"],
+      "@store": ["src/store/"],
+      "@store/*": ["src/store/*"],
+      "@src/*": ["src/*"],
+      "@styles/*": ["src/styles/*"],
+      "@telemetry": ["src/telemetry/"],
+      "@telemetry/*": ["src/telemetry/*"],
+      "@utils": ["src/utils/"],
+      "@utils/*": ["src/utils/*"]
+    }
   },
   "include": [
     "src",
-    "cypress"
-  ],
-  "extends": "./paths.json",
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.spec.tsx"
+    "test/dashboard-e2e"
   ]
 }

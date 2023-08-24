@@ -2,7 +2,9 @@ import {useContext, useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {AnalyticsContext, DashboardContext, MainContext, ModalContext} from '@contexts';
+import {ModalContext} from '@contexts';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Test} from '@models/test';
@@ -10,10 +12,10 @@ import {Test} from '@models/test';
 import {Hint} from '@molecules';
 import {HintProps} from '@molecules/Hint/Hint';
 
-import {useAppSelector} from '@redux/hooks';
-import {setRedirectTarget} from '@redux/reducers/configSlice';
-import {selectExecutors} from '@redux/reducers/executorsSlice';
-import {selectSources} from '@redux/reducers/sourcesSlice';
+import {useExecutorsPick} from '@store/executors';
+import {useSourcesPick} from '@store/sources';
+
+import {useTelemetry} from '@telemetry/hooks';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -31,13 +33,12 @@ const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
   const testType = Form.useWatch('testType', form);
 
-  const {dispatch} = useContext(MainContext);
-  const {navigate} = useContext(DashboardContext);
-  const {analyticsTrack} = useContext(AnalyticsContext);
   const {closeModal} = useContext(ModalContext);
+  const telemetry = useTelemetry();
+  const openDetails = useDashboardNavigate((name: string) => `/tests/${name}`);
 
-  const executors = useAppSelector(selectExecutors);
-  const testSources = useAppSelector(selectSources);
+  const {executors = []} = useExecutorsPick('executors');
+  const {sources} = useSourcesPick('sources');
 
   const [hintConfig, setHintConfig] = useState<HintProps>(defaultHintConfig);
 
@@ -69,24 +70,19 @@ const TestCreationModalContent: React.FC = () => {
   }, [testType]);
 
   const onSuccess = (res: RTKResponse<MetadataResponse<Test>>) => {
-    return displayDefaultNotificationFlow(res).then(() => {
-      if ('data' in res) {
-        analyticsTrack('trackEvents', {
-          type: res.data.spec?.type,
-          uiEvent: 'create-tests',
-        });
+    return Promise.resolve(res)
+      .then(displayDefaultNotificationFlow)
+      .then(({data}) => {
+        telemetry.event('createTest', {type: data.spec?.type});
 
-        dispatch(setRedirectTarget({targetTestId: res.data.metadata.name}));
-
-        navigate(`/tests/executions/${res.data.metadata.name}`);
+        openDetails(data.metadata.name);
         closeModal();
-      }
-    });
+      });
   };
 
   return (
     <TestCreationModalWrapper>
-      <TestCreationForm form={form} testSources={testSources} executors={executors} onSuccess={onSuccess} />
+      <TestCreationForm form={form} testSources={sources || []} executors={executors} onSuccess={onSuccess} />
       <Hint {...hintConfig} />
     </TestCreationModalWrapper>
   );

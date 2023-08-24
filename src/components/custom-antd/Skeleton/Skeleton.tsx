@@ -1,16 +1,6 @@
 import {SkeletonProps as AntdSkeletonProps} from 'antd';
 
-import {StyledSkeleton} from './Skeleton.styled';
-
-export type AdditionalSkeletonStyles = {
-  lineHeight?: number;
-  color?: string;
-  contrastColor?: string;
-  container?: {
-    paddingTop?: number;
-    paddingBottom?: number;
-  };
-};
+import {AdditionalSkeletonStyles, StyledSkeleton} from './Skeleton.styled';
 
 type CustomAntdSkeletonProps = {
   additionalStyles?: AdditionalSkeletonStyles;

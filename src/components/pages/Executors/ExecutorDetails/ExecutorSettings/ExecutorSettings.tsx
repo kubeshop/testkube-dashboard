@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import {FC, memo} from 'react';
 
 import {SettingsLayout} from '@molecules';
 
@@ -7,8 +7,15 @@ import ContainerImage from './ContainerImage';
 import ExecutorDefinition from './ExecutorDefinition';
 import General from './General';
 
-const ExecutorSettings = () => (
+interface ExecutorSettingsProps {
+  tab: string;
+  onTabChange: (tab: string) => void;
+}
+
+const ExecutorSettings: FC<ExecutorSettingsProps> = ({tab, onTabChange}) => (
   <SettingsLayout
+    active={tab}
+    onChange={onTabChange}
     tabs={[
       {id: 'general', label: 'General', children: <General />},
       {id: 'image', label: 'Container image', children: <ContainerImage />},

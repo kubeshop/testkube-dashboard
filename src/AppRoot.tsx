@@ -1,18 +1,19 @@
-import {useEffect, useMemo, useState} from 'react';
-import ReactGA from 'react-ga4';
+import {useEffect, useMemo} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
+import {useAsync} from 'react-use';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
-import posthog from 'posthog-js';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
-import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+import {FeatureFlagsProvider} from '@feature-flags';
 
-import {CookiesBanner} from '@molecules';
+import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
+import {useLastCallback} from '@hooks/useLastCallback';
 
 import {Sider} from '@organisms';
 
@@ -20,114 +21,79 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import {useAppDispatch} from '@redux/hooks';
+import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
+import {Plugin} from '@plugins/types';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import {initializeExecutorsStore} from '@store/executors';
+import {initializeSourcesStore} from '@store/sources';
+import {initializeTestSuitesStore} from '@store/testSuites';
+import {initializeTestsStore} from '@store/tests';
+
+import {useTelemetry, useTelemetryValue} from '@telemetry/hooks';
+
 import anonymizeQueryString from '@utils/anonymizeQueryString';
 import {composeProviders} from '@utils/composeProviders';
+import {externalLinks} from '@utils/externalLinks';
+import {safeRefetch} from '@utils/fetchUtils';
 
-import {AnalyticsProvider} from './AnalyticsProvider';
 import App from './App';
 import {StyledLayoutContentWrapper} from './App.styled';
-import env from './env';
-import {externalLinks} from './utils/externalLinks';
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
-  const dispatch = useAppDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
-
+  const navigate = useLastCallback(useNavigate());
+  const telemetry = useTelemetry();
   const apiEndpoint = useApiEndpoint();
 
-  const {data: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery();
+  // TODO: Unify all store providers and move them there?
+  //       Otherwise, these are not available from modals.
+  const [ExecutorsProvider] = initializeExecutorsStore();
+  const [SourcesProvider] = initializeSourcesStore();
+  const [TestsProvider] = initializeTestsStore();
+  const [TestSuitesProvider] = initializeTestSuitesStore();
 
-  const [isCookiesVisible, setCookiesVisibility] = useState(!localStorage.getItem('isGADisabled'));
-  const [featureFlags, setFeatureFlags] = useState<string[]>([]);
-  const isTelemetryAvailable = clusterConfig?.enableTelemetry && !env.disableTelemetry;
-  const isTelemetryEnabled = useMemo(
-    () => !isCookiesVisible && isTelemetryAvailable && localStorage.getItem('isGADisabled') === '0',
-    [isCookiesVisible, clusterConfig]
-  );
+  const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
+    skip: !apiEndpoint,
+  });
 
-  const onAcceptCookies = () => {
-    localStorage.setItem('isGADisabled', '0');
-    setCookiesVisibility(false);
-  };
-
-  const onDeclineCookies = () => {
-    localStorage.setItem('isGADisabled', '1');
-    setCookiesVisibility(false);
-  };
-
+  // Pause/resume telemetry based on the cluster settings
   useEffect(() => {
-    if (!isTelemetryEnabled) {
-      if (posthog.__loaded) {
-        posthog.opt_out_capturing();
-      }
-    } else if (process.env.NODE_ENV !== 'development') {
-      if (env.posthogKey && !posthog.__loaded) {
-        posthog.init(env.posthogKey, {
-          opt_out_capturing_by_default: true,
-          mask_all_text: true,
-          persistence: 'localStorage',
-          property_blacklist: ['$current_url', '$host', '$referrer', '$referring_domain'],
-          ip: false,
-          loaded: instance => {
-            instance.onFeatureFlags(flags => {
-              setFeatureFlags(flags);
-            });
-          },
-        });
-        posthog.register({
-          version: env.version,
-        });
-      }
-      if (posthog.__loaded) {
-        posthog.opt_in_capturing();
-      }
-
-      if (env.ga4Key) {
-        ReactGA.initialize(env.ga4Key, {
-          // To make GTM- keys working properly with react-ga4,
-          // we need to override the script URL.
-          gtagUrl: env.ga4Key.startsWith('GTM-') ? 'https://www.googletagmanager.com/gtm.js' : undefined,
-        });
-        ReactGA.gtag('consent', 'update', {
-          ad_storage: 'granted',
-          analytics_storage: 'granted',
-          functionality_storage: 'granted',
-          personalization_storage: 'granted',
-          security_storage: 'granted',
-        });
-      }
+    if (clusterConfig?.enableTelemetry) {
+      telemetry.resume();
+    } else {
+      telemetry.pause();
     }
-  }, [isTelemetryEnabled]);
+  }, [clusterConfig]);
 
   const mainContextValue = useMemo(
     () => ({
-      dispatch,
       clusterConfig,
-      isClusterAvailable: true,
+      isClusterAvailable: Boolean(clusterConfig),
     }),
-    [dispatch, clusterConfig]
+    [clusterConfig]
   );
 
-  useEffect(() => {
-    posthog.capture('$pageview');
+  const {value: visitorId} = useAsync(async () => {
+    const fp = await FingerprintJS.load();
+    const value = await fp.get();
+    return value.visitorId;
+  });
 
-    ReactGA.send({hitType: 'pageview', page: `${location.pathname}${anonymizeQueryString(location.search)}`});
-  }, [location.pathname]);
+  useTelemetryValue('userID', visitorId, true);
+  useTelemetryValue('browserName', window.navigator.userAgent);
 
   useEffect(() => {
-    ReactGA.event('user_info', {os: window.navigator.userAgent});
-  }, []);
+    telemetry.pageView(`${location.pathname}${anonymizeQueryString(location.search)}`);
+  }, [location.pathname, clusterConfig]);
 
-  useEffect(() => {
-    refetchClusterConfig();
+  // FIXME: Hack - for some reason, useEffect was not called on API endpoint change.
+  useMemo(() => {
+    setTimeout(() => safeRefetch(refetchClusterConfig));
   }, [apiEndpoint]);
 
   const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
@@ -153,17 +119,18 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
+  const plugins: Plugin[] = useMemo(() => [createAiInsightsPlugin()], []);
+
   return composeProviders()
+    .append(FeatureFlagsProvider, {})
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
-    .append(AnalyticsProvider, {
-      disabled: !isTelemetryEnabled,
-      writeKey: env.segmentKey,
-      appVersion: env.version,
-      featureFlags,
-    })
     .append(MainContext.Provider, {value: mainContextValue})
+    .append(ExecutorsProvider, {})
+    .append(SourcesProvider, {})
+    .append(TestsProvider, {})
+    .append(TestSuitesProvider, {})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})
     .render(
@@ -173,14 +140,11 @@ const AppRoot: React.FC = () => {
           <StyledLayoutContentWrapper>
             <Content>
               <ErrorBoundary>
-                <App />
+                <App plugins={plugins} />
               </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>
         </Layout>
-        {isCookiesVisible && isTelemetryAvailable ? (
-          <CookiesBanner onAcceptCookies={onAcceptCookies} onDeclineCookies={onDeclineCookies} />
-        ) : null}
       </>
     );
 };

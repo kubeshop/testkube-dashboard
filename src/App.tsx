@@ -1,6 +1,5 @@
-import React, {Suspense, lazy, useContext, useEffect, useRef, useState} from 'react';
+import React, {Suspense, useContext, useEffect, useMemo, useState} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
-import {CSSTransition} from 'react-transition-group';
 import {useUpdate} from 'react-use';
 
 import {config} from '@constants/config';
@@ -8,21 +7,32 @@ import {config} from '@constants/config';
 import {DashboardContext, MainContext} from '@contexts';
 
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
-import FullScreenLogOutput from '@molecules/LogOutput/FullscreenLogOutput';
-import LogOutputHeader from '@molecules/LogOutput/LogOutputHeader';
 
-import {EndpointProcessing, Loading, NotFound} from '@pages';
+import {
+  EndpointProcessing,
+  Executors,
+  GlobalSettings,
+  Loading,
+  NotFound,
+  Sources,
+  TestSuites,
+  Tests,
+  Triggers,
+} from '@pages';
 
-import {useAppDispatch, useAppSelector} from '@redux/hooks';
-import {selectFullScreenLogOutput, setIsFullScreenLogOutput} from '@redux/reducers/configSlice';
-import {setExecutors} from '@redux/reducers/executorsSlice';
-import {setSources} from '@redux/reducers/sourcesSlice';
+import PluginsContext from '@plugins/context';
+import createPluginManager from '@plugins/manager';
+import {Plugin} from '@plugins/types';
 
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {initializeStore} from '@store';
+import {initializeClusterDetailsStore} from '@store/clusterDetails';
+import {useExecutorsSync} from '@store/executors';
+import {initializeLogOutputStore} from '@store/logOutput';
+import {useSourcesSync} from '@store/sources';
+import {initializeTriggersStore} from '@store/triggers';
 
 import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -30,33 +40,34 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
 
-const Tests = lazy(() => import('@pages').then(module => ({default: module.Tests})));
-const TestSuites = lazy(() => import('@pages').then(module => ({default: module.TestSuites})));
-const Executors = lazy(() => import('@pages').then(module => ({default: module.Executors})));
-const Sources = lazy(() => import('@pages').then(module => ({default: module.Sources})));
-const Triggers = lazy(() => import('@pages').then(module => ({default: module.Triggers})));
-const GlobalSettings = lazy(() => import('@pages').then(module => ({default: module.GlobalSettings})));
+export interface AppProps {
+  plugins: Plugin[];
+}
 
-const App: React.FC = () => {
-  const [StoreProvider] = initializeStore();
+const App: React.FC<AppProps> = ({plugins}) => {
+  const [TriggersProvider] = initializeTriggersStore();
 
-  const dispatch = useAppDispatch();
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
 
-  const {isFullScreenLogOutput, logOutput} = useAppSelector(selectFullScreenLogOutput);
-  const logRef = useRef<HTMLDivElement>(null);
+  const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore({}, [apiEndpoint]);
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
+
+  const [LogOutputProvider] = initializeLogOutputStore(undefined, [location.pathname]);
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
     pollingInterval: PollingIntervals.long,
     skip: !isClusterAvailable,
   });
+  useExecutorsSync({executors});
+
   const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
     pollingInterval: PollingIntervals.long,
     skip: !isClusterAvailable,
   });
+  useSourcesSync({sources});
 
   const [isEndpointModalVisible, setEndpointModalState] = useState(false);
 
@@ -65,49 +76,58 @@ const App: React.FC = () => {
   const isTestkubeCloudLaunchBannerHidden = localStorage.getItem(config.isTestkubeCloudLaunchBannerHidden);
 
   useEffect(() => {
-    dispatch(setIsFullScreenLogOutput(false));
-  }, [location.pathname]);
-
-  useEffect(() => {
-    dispatch(setExecutors(executors || []));
-  }, [executors]);
-
-  useEffect(() => {
-    dispatch(setSources(sources || []));
-  }, [sources]);
-
-  useEffect(() => {
     safeRefetch(refetchExecutors);
     safeRefetch(refetchSources);
   }, [apiEndpoint]);
 
   useEffect(() => {
-    // Do not fire the effect if new endpoint is just being set up,
-    // or it can't be changed.
-    if (location.pathname === '/apiEndpoint' || isApiEndpointLocked()) {
+    // Do not fire the effect if new endpoint is just being set up.
+    if (location.pathname === '/apiEndpoint') {
       return;
     }
 
-    if (!apiEndpoint) {
+    if (!apiEndpoint && !isApiEndpointLocked()) {
       setEndpointModalState(true);
       return;
     }
 
-    getApiDetails(apiEndpoint).catch(() => {
-      // Handle race condition
-      if (getApiEndpoint() !== apiEndpoint) {
-        return;
-      }
+    // Avoid loading API details when we know the cluster is not available.
+    if (!isClusterAvailable) {
+      return;
+    }
 
-      // Display popup
-      notificationCall('failed', 'Could not receive data from the specified API endpoint');
-      setEndpointModalState(true);
-    });
-  }, [apiEndpoint]);
+    getApiDetails(apiEndpoint!)
+      .then(setClusterDetails)
+      .catch(() => {
+        // Handle race condition
+        if (getApiEndpoint() !== apiEndpoint) {
+          return;
+        }
+
+        // Display popup
+        notificationCall('failed', 'Could not receive data from the specified API endpoint');
+        if (!isApiEndpointLocked()) {
+          setEndpointModalState(true);
+        }
+      });
+  }, [apiEndpoint, isClusterAvailable]);
+
+  const scope = useMemo(() => {
+    const pluginManager = createPluginManager();
+    plugins.forEach(plugin => pluginManager.add(plugin));
+    return pluginManager.setup();
+  }, [plugins]);
 
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
-    .append(StoreProvider, {})
+    .append(ClusterDetailsProvider, {})
+    .append(TriggersProvider, {})
+    .append(LogOutputProvider, {})
+    .append(PluginsContext.Provider, {
+      value: {
+        scope,
+      },
+    })
     .render(
       <Suspense fallback={<Loading />}>
         {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
@@ -159,16 +179,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Navigate to="/tests" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        {isFullScreenLogOutput ? <LogOutputHeader logOutput={logOutput} isFullScreen /> : null}
-        <CSSTransition
-          nodeRef={logRef}
-          in={isFullScreenLogOutput}
-          timeout={1000}
-          classNames="full-screen-log-output"
-          unmountOnExit
-        >
-          <FullScreenLogOutput ref={logRef} logOutput={logOutput} />
-        </CSSTransition>
+        <div id="log-output-container" />
       </Suspense>
     );
 };

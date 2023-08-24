@@ -1,17 +1,15 @@
-import React, {memo, useContext} from 'react';
+import React, {memo} from 'react';
 import {Link} from 'react-router-dom';
 
 import {Tooltip} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {MainContext} from '@contexts';
-
 import {Text} from '@custom-antd';
 
-import {Entity} from '@models/entity';
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
-import {setSettingsTabConfig} from '@redux/reducers/configSlice';
+import {Entity} from '@models/entity';
 
 import Colors from '@styles/Colors';
 
@@ -27,16 +25,15 @@ export enum RunningContextType {
 }
 
 type RunningContextProps = {
+  id: string;
   type?: RunningContextType;
   context?: string;
-  unselectRow: () => void;
   entity: Entity;
 };
 
 const RunningContext: React.FC<RunningContextProps> = props => {
-  const {type = RunningContextType.default, context = '', unselectRow, entity} = props;
-
-  const {dispatch} = useContext(MainContext);
+  const {id, type = RunningContextType.default, context = '', entity} = props;
+  const onOpenSchedule = useDashboardNavigate(`/${entity}/${id}/settings/scheduling`);
 
   const runContextMap = {
     'user-ui': 'Manual UI',
@@ -53,21 +50,14 @@ const RunningContext: React.FC<RunningContextProps> = props => {
     ),
     scheduler: context ? (
       <>
-        Scheduler{' '}
-        <ExternalLink
-          onClick={() => {
-            unselectRow();
-            dispatch(setSettingsTabConfig({entity, tab: 'Scheduling'}));
-          }}
-        >
-          {context}
-        </ExternalLink>
+        Scheduler <ExternalLink onClick={onOpenSchedule}>{context}</ExternalLink>
       </>
     ) : (
       'Scheduler'
     ),
     testsuite: context ? (
-      <Link to={`/test-suites/executions/test-suite/execution/${context}`}>{context}</Link>
+      // TODO: It would be good to point to execution, but we don't have ID
+      <Link to={`/test-suites/${context.replace(/^ts-/, '').replace(/-[0-9]+$/, '')}`}>{context}</Link>
     ) : (
       'Test Suite'
     ),

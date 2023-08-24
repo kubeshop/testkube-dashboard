@@ -1,21 +1,18 @@
-import {useContext, useEffect, useState} from 'react';
+import {useState} from 'react';
 
 import {Form} from 'antd';
 
-import {MainContext} from '@contexts';
-
-import {FullWidthSpace} from '@custom-antd';
-
 import {ErrorNotificationConfig} from '@models/notifications';
 
-import {ConfigurationCard, SecretFormItem, notificationCall} from '@molecules';
+import {SecretFormItem, notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource, setCurrentSource} from '@redux/reducers/sourcesSlice';
-
 import {useUpdateSourceMutation} from '@services/sources';
+
+import {useSourcesPick} from '@store/sources';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {dummySecret} from '@utils/sources';
@@ -26,16 +23,15 @@ type AuthenticationFormValues = {
 };
 
 const Authentication: React.FC = () => {
-  const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [form] = Form.useForm<AuthenticationFormValues>();
 
-  const source = useAppSelector(selectCurrentSource);
+  const {current} = useSourcesPick('current');
 
   const [updateSource] = useUpdateSourceMutation();
 
-  const repository = source?.repository;
+  const repository = current!.repository;
   const {tokenSecret, usernameSecret} = repository || {};
   const defaults = {
     token: tokenSecret ? dummySecret : '',
@@ -45,74 +41,60 @@ const Authentication: React.FC = () => {
   const [isClearedToken, setIsClearedToken] = useState(!tokenSecret);
   const [isClearedUsername, setIsClearedUsername] = useState(!usernameSecret);
 
-  useEffect(() => {
-    form.setFieldsValue(defaults);
+  const onCancel = () => {
     form.resetFields();
     setIsClearedToken(!tokenSecret);
     setIsClearedUsername(!usernameSecret);
-  }, [repository]);
+  };
 
   const onFinish = () => {
     const values = form.getFieldsValue();
 
-    if (!source) {
+    if (!current) {
       return new Promise<ErrorNotificationConfig>(() => ({title: 'Something went wrong'}));
     }
     const token = values.token || '';
     const username = values.username || '';
     const body = {
-      ...source,
+      ...current,
       repository: {
-        ...source.repository,
+        ...current.repository,
         ...(!tokenSecret || isClearedToken ? {token, tokenSecret: undefined} : {}),
         ...(!usernameSecret || isClearedUsername ? {username, usernameSecret: undefined} : {}),
       },
     };
 
     return updateSource(body)
-      .then(res => displayDefaultNotificationFlow(res))
-      .then(res => {
-        if (res && 'data' in res) {
-          notificationCall('passed', 'Source was successfully updated.');
-          dispatch(setCurrentSource({...body, ...res.data.spec}));
-        }
-      });
+      .then(displayDefaultNotificationFlow)
+      .then(() => notificationCall('passed', 'Source was successfully updated.'));
   };
 
   return (
-    <Form
+    <CardForm
+      name="general-settings-authentication"
+      title="Authentication"
+      description="Add authentication related information required by your git repository"
+      spacing={24}
       form={form}
       initialValues={defaults}
-      name="general-settings-authentication"
-      layout="vertical"
       disabled={!mayEdit}
+      wasTouched={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
+      onConfirm={onFinish}
+      onCancel={onCancel}
     >
-      <ConfigurationCard
-        title="Authentication"
-        description="Add authentication related information required by your git repository"
-        onConfirm={onFinish}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-        forceEnableButtons={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
-      >
-        <FullWidthSpace size={24} direction="vertical">
-          <SecretFormItem
-            name="username"
-            label="Git username"
-            isClearedValue={isClearedUsername}
-            setIsClearedValue={setIsClearedUsername}
-          />
-          <SecretFormItem
-            name="token"
-            label="Git token"
-            isClearedValue={isClearedToken}
-            setIsClearedValue={setIsClearedToken}
-          />
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+      <SecretFormItem
+        name="username"
+        label="Git username"
+        isClearedValue={isClearedUsername}
+        setIsClearedValue={setIsClearedUsername}
+      />
+      <SecretFormItem
+        name="token"
+        label="Git token"
+        isClearedValue={isClearedToken}
+        setIsClearedValue={setIsClearedToken}
+      />
+    </CardForm>
   );
 };
 

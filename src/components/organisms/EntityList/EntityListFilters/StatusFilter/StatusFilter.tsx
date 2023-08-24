@@ -1,8 +1,8 @@
-import {useCallback, useContext, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 
 import {FilterFilled} from '@ant-design/icons';
 
-import {MainContext} from '@contexts';
+import {capitalize} from 'lodash';
 
 import {FilterProps} from '@models/filters';
 
@@ -19,14 +19,10 @@ import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
 
-import {uppercaseFirstSymbol} from '@utils/strings';
-
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
 const StatusFilter: React.FC<FilterProps> = props => {
   const {filters, setFilters, isFiltersDisabled} = props;
-
-  const {dispatch} = useContext(MainContext);
 
   const [isVisible, setVisibilityState] = useState(false);
 
@@ -37,19 +33,17 @@ const StatusFilter: React.FC<FilterProps> = props => {
   const handleClick = useCallback(
     (status: string) => {
       if (filters.status.includes(status)) {
-        dispatch(
-          setFilters({
-            ...filters,
-            status: filters.status.filter((currentStatus: string) => {
-              return status !== currentStatus;
-            }),
-          })
-        );
+        setFilters({
+          ...filters,
+          status: filters.status.filter((currentStatus: string) => {
+            return status !== currentStatus;
+          }),
+        });
       } else {
-        dispatch(setFilters({...filters, status: [...filters.status, status], pageSize: initialPageSize}));
+        setFilters({...filters, status: [...filters.status, status], pageSize: initialPageSize});
       }
     },
-    [dispatch, setFilters, filters]
+    [setFilters, filters]
   );
 
   const renderedStatuses = useMemo(() => {
@@ -61,7 +55,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
             onChange={() => handleClick(status)}
             data-cy={status}
           >
-            {uppercaseFirstSymbol(status)}
+            {capitalize(status)}
           </StyledFilterCheckbox>
         </StyledFilterMenuItem>
       );
@@ -69,7 +63,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
   }, [filters.status, handleClick]);
 
   const resetFilter = () => {
-    dispatch(setFilters({...filters, status: [], pageSize: initialPageSize}));
+    setFilters({...filters, status: [], pageSize: initialPageSize});
     onOpenChange(false);
   };
 

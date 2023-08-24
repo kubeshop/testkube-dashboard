@@ -5,37 +5,41 @@ applyUrlOverrides();
 renderOverridesIndicator();
 
 // Obtain dynamic variables from server
-const values = (window as any)._env_;
+export const provided = (window as any)._env_;
 
 // Build-time variables
-const build: BuildTimeEnvironment = {
-  posthogKey: getValue('REACT_APP_POSTHOG_KEY', process.env.REACT_APP_POSTHOG_KEY),
-  segmentKey: getValue('REACT_APP_SEGMENT_KEY', process.env.REACT_APP_SEGMENT_KEY),
-  ga4Key: getValue('REACT_APP_GOOGLE_ANALYTICS_ID', process.env.REACT_APP_GOOGLE_ANALYTICS_ID),
+export const build: BuildTimeEnvironment = {
+  sentryKey: getValue('REACT_APP_SENTRY_DSN', process.env.REACT_APP_SENTRY_DSN),
+  gtmKey: getValue('REACT_APP_GTM_ID', process.env.REACT_APP_GTM_ID),
   version: getValue('REACT_APP_VERSION', process.env.REACT_APP_VERSION) || 'dev',
 };
 
 // Dynamic variables
-const env: DynamicEnvironment = {
-  apiUrl: getValue('REACT_APP_API_SERVER_ENDPOINT', values?.REACT_APP_API_SERVER_ENDPOINT),
-  basename: getValue('REACT_APP_ROOT_ROUTE', values?.REACT_APP_ROOT_ROUTE),
-  disableTelemetry: getValue('REACT_APP_DISABLE_TELEMETRY', values?.REACT_APP_DISABLE_TELEMETRY) === 'true',
+export const dynamic: DynamicEnvironment = {
+  apiUrl: getValue('REACT_APP_API_SERVER_ENDPOINT', provided?.REACT_APP_API_SERVER_ENDPOINT),
+  basename: getValue('REACT_APP_ROOT_ROUTE', provided?.REACT_APP_ROOT_ROUTE),
+  disableTelemetry: getValue('REACT_APP_DISABLE_TELEMETRY', provided?.REACT_APP_DISABLE_TELEMETRY) === 'true',
+  crdOperatorRevision: getValue('REACT_APP_CRD_OPERATOR_REVISION', provided?.REACT_APP_CRD_OPERATOR_REVISION) || 'main',
+  debugTelemetry:
+    getValue('REACT_APP_DEBUG_TELEMETRY', provided?.REACT_APP_DEBUG_TELEMETRY) === 'true' ||
+    process.env.NODE_ENV !== 'production',
 };
 
-type BuildTimeEnvironment = {
-  posthogKey?: string;
-  segmentKey?: string;
-  ga4Key?: string;
+export interface BuildTimeEnvironment {
+  sentryKey?: string;
+  gtmKey?: string;
   version: string;
-};
+}
 
-type DynamicEnvironment = {
+export interface DynamicEnvironment {
   apiUrl: string;
   basename: string;
   disableTelemetry: boolean;
-};
+  crdOperatorRevision: string;
+  debugTelemetry: boolean;
+}
 
 export default {
-  ...env,
+  ...dynamic,
   ...build,
 };

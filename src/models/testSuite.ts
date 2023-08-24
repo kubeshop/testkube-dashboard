@@ -1,15 +1,21 @@
-import {EntityMap} from '@models/entityMap';
-import {TestSuiteExecution} from '@models/testSuiteExecution';
+import type {EntityMap} from '@models/entityMap';
+import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
-import {Execution} from './execution';
-import {Variables} from './variable';
+import type {Execution} from './execution';
+import type {Variables} from './variable';
 
 export interface TestSuiteStep {
   delay?: string;
   test?: string;
+  namespace?: string;
+}
+
+export interface LocalStep extends TestSuiteStep {
+  type?: string;
+  id: string;
 }
 export interface TestSuiteBatchStep {
-  stopTestOnFailure: boolean;
+  stopOnFailure: boolean;
   execute: TestSuiteStep[];
 }
 
@@ -41,11 +47,6 @@ export type TestSuiteWithExecution = {
   latestExecution?: TestSuiteExecution;
 };
 
-export type TestSuiteWithExecutionRedux = {
-  dataItem: TestSuite;
-  latestExecution?: TestSuiteExecution;
-};
-
 export type TestSuiteFilters = {
   textSearch: string;
   pageSize: number;
@@ -55,14 +56,3 @@ export type TestSuiteFilters = {
   endDate: null;
   status: Array<string>;
 };
-
-interface TestSuitesState {
-  isLoading?: boolean;
-  dataList: TestSuiteWithExecutionRedux[];
-  latestExecution?: Execution;
-  filters: TestSuiteFilters;
-  totals: {};
-  filtered: {};
-}
-
-export type {TestSuitesState};

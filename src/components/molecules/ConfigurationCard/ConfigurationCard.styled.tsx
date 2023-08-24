@@ -11,19 +11,29 @@ export const StyledContainer = styled.div<{isWarning?: boolean}>`
   border-radius: 4px;
 `;
 
-export const StyledHeader = styled.div`
+export const StyledHeaderContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  justify-content: space-between;
 
   padding: 20px;
   border-bottom: 1px solid ${Colors.slate800};
 `;
 
-export const StyledChildren = styled.div<{$isActionsVisible: boolean}>`
-  padding: 20px;
+export const StyledHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+`;
 
-  ${({$isActionsVisible}) => (!$isActionsVisible ? 'cursor: not-allowed' : '')}
+export const HeaderAction = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+`;
+
+export const StyledChildren = styled.div`
+  padding: 20px;
 `;
 
 export const StyledFooter = styled.div`
@@ -50,4 +60,11 @@ export const StyledFooterText = styled.div`
 
 export const StyledNotificationContainer = styled.div`
   padding: 20px 20px 0;
+`;
+
+// height calculated to contain 3 min height notifications
+export const StyledErrorsContainer = styled.div`
+  max-height: 240px;
+
+  overflow-y: auto;
 `;

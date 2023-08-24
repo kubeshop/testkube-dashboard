@@ -6,8 +6,8 @@ import {ConditionFormItems} from '@organisms';
 
 import Colors from '@styles/Colors';
 
-import {StepsEnum} from './AddTriggerModal';
 import {StyledStepDescription} from './AddTriggerModal.styled';
+import {StepsEnum} from './types';
 
 type ModalFirstStepProps = {
   setCurrentStep: (step: StepsEnum) => void;

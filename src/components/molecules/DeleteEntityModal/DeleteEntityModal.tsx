@@ -5,10 +5,13 @@ import {Input} from 'antd';
 import {MutationDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
-import {DashboardContext, ModalContext} from '@contexts';
+import {capitalize} from 'lodash';
+
+import {ModalContext} from '@contexts';
 
 import {Button, FullWidthSpace, Text} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import usePressEnter from '@hooks/usePressEnter';
 
 import {notificationCall} from '@molecules';
@@ -16,7 +19,6 @@ import {notificationCall} from '@molecules';
 import Colors from '@styles/Colors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {uppercaseFirstSymbol} from '@utils/strings';
 
 import {FooterSpace} from './DeleteEntityModal.styled';
 
@@ -25,7 +27,7 @@ const DeleteEntityModal: React.FC<{
   // onCancel is passed from parent component <Modal />.
   // Do not pass it directly
   onCancel?: any;
-  useDeleteMutation: UseMutation<MutationDefinition<string, any, never, void, string>>;
+  useDeleteMutation: UseMutation<MutationDefinition<string, any, any, void>>;
   name: string;
   entityLabel: string;
   defaultStackRoute: string;
@@ -35,7 +37,7 @@ const DeleteEntityModal: React.FC<{
   const {onCancel, useDeleteMutation, name, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
   const {setModalOpen} = useContext(ModalContext);
-  const {navigate} = useContext(DashboardContext);
+  const back = useDashboardNavigate(defaultStackRoute);
 
   const onEvent = usePressEnter();
 
@@ -45,16 +47,16 @@ const DeleteEntityModal: React.FC<{
 
   const onDelete = () => {
     deleteEntity(idToDelete || name)
-      .then(res => displayDefaultNotificationFlow(res))
+      .then(displayDefaultNotificationFlow)
       .then(() => {
-        notificationCall('passed', `${uppercaseFirstSymbol(entityLabel)} was successfully deleted.`);
+        notificationCall('passed', `${capitalize(entityLabel)} was successfully deleted.`);
 
         setModalOpen(false);
 
         if (onConfirm) {
           onConfirm();
         } else {
-          navigate(defaultStackRoute);
+          back();
         }
       })
       .catch(error => {
@@ -82,7 +84,7 @@ const DeleteEntityModal: React.FC<{
         forever.
       </Text>
       <Input
-        placeholder={`${uppercaseFirstSymbol(entityLabel)} name`}
+        placeholder={`${capitalize(entityLabel)} name`}
         onChange={e => {
           setName(e.target.value);
         }}

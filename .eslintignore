@@ -1,6 +1,8 @@
 node_modules
 build
 cache
+playwright-report
+test-results
 lib
 dist
 .husky
@@ -9,3 +11,4 @@ server.js
 build.js
 init.js
 site
+test/dashboard-e2e/fixtures/files

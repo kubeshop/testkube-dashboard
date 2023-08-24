@@ -1,14 +1,13 @@
-import {useContext, useMemo} from 'react';
+import {useMemo} from 'react';
 import {useUnmount, useUpdate} from 'react-use';
 
 import axios from 'axios';
 
 import {config} from '@constants/config';
 
-import {MainContext} from '@contexts';
+import {useClusterDetailsPick} from '@store/clusterDetails';
 
-import {setNamespace} from '@redux/reducers/configSlice';
-
+import {getRtkBaseUrl, getRtkIdToken} from '@utils/rtk';
 import {hasProtocol} from '@utils/strings';
 
 import env from '../env';
@@ -16,8 +15,12 @@ import env from '../env';
 export type ApiEndpointListener = (apiEndpoint: string | null) => void;
 
 export interface ApiDetails {
-  url: string;
+  commit: string;
+  context: string;
+  helmchartVersion: string;
   namespace: string;
+  version: string;
+  url: string;
 }
 
 interface ApiEndpointConfig {
@@ -115,32 +118,36 @@ export function useWsEndpoint(): string | null {
 }
 
 export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
-  const url = sanitizeApiEndpoint(apiEndpoint);
+  const url = `${sanitizeApiEndpoint(apiEndpoint)}${getRtkBaseUrl(undefined)}`;
+  const idToken = await getRtkIdToken();
 
-  const data = await fetch(`${url}/info`).then(res => res.json());
+  const data = await fetch(`${url}/info`, {
+    headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
+  }).then(res => res.json());
   if (!data?.version || !data?.commit) {
     throw new Error('Received invalid data from the provided API endpoint');
   }
 
-  return {url, namespace: data.namespace || 'testkube'};
+  return {url, ...data, namespace: data.namespace || 'testkube'};
 }
 
 export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean> {
-  const {dispatch} = useContext(MainContext);
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   return useMemo(
     () => async (apiEndpoint: string) => {
       const prevApiEndpoint = getApiEndpoint();
+
       try {
-        const {url, namespace} = await getApiDetails(apiEndpoint);
+        const data = await getApiDetails(apiEndpoint);
 
         // Handle race condition, when endpoint has been changed already.
         if (getApiEndpoint() !== prevApiEndpoint) {
           return false;
         }
 
-        saveApiEndpoint(url);
-        dispatch(setNamespace(namespace));
+        saveApiEndpoint(data.url);
+        setClusterDetails(data);
 
         return true;
       } catch (error) {
@@ -152,6 +159,6 @@ export function useUpdateApiEndpoint(): (apiEndpoint: string) => Promise<boolean
         throw error;
       }
     },
-    [dispatch]
+    []
   );
 }

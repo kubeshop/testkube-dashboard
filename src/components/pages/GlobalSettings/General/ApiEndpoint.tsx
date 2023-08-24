@@ -1,12 +1,12 @@
-import {useState} from 'react';
-
 import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {FormItem, FullWidthSpace, Text} from '@custom-antd';
+import {FormItem, Text} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {isApiEndpointLocked, useApiEndpoint, useUpdateApiEndpoint} from '@services/apiEndpoint';
 
@@ -20,8 +20,6 @@ type ApiEndpointFormValues = {
 
 const ApiEndpoint: React.FC = () => {
   const [form] = Form.useForm<ApiEndpointFormValues>();
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const apiEndpoint = useApiEndpoint();
   const updateApiEndpoint = useUpdateApiEndpoint();
@@ -37,49 +35,32 @@ const ApiEndpoint: React.FC = () => {
       }
     } catch (error) {
       notificationCall('failed', 'Could not receive data from the specified API endpoint');
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const onSave = (values: ApiEndpointFormValues) => {
-    setIsLoading(true);
-    checkApiEndpoint(values.endpoint);
-  };
+  const onSave = () => checkApiEndpoint(form.getFieldValue('endpoint'));
+
+  const footer = (
+    <Text className="regular middle" color={`${Colors.slate400}`}>
+      Learn more about <ExternalLink href={externalLinks.dashboardNotWorking}>Testkube API endpoints</ExternalLink>
+    </Text>
+  );
 
   return (
-    <Form
-      form={form}
-      onFinish={onSave}
+    <CardForm
       name="global-settings-api-endpoint"
+      title="Testkube API endpoint"
+      description="Please provide the TestKube API endpoint for your installation. The endpoint needs to be accessible from your browser"
+      form={form}
       initialValues={{endpoint: apiEndpoint}}
+      footer={footer}
       disabled={disabled}
+      onConfirm={onSave}
     >
-      <ConfigurationCard
-        title="Testkube API endpoint"
-        description="Please provide the TestKube API endpoint for your installation. The endpoint needs to be accessible from your browser"
-        footerText={
-          <Text className="regular middle" color={`${Colors.slate400}`}>
-            Learn more about{' '}
-            <ExternalLink href={externalLinks.dashboardNotWorking}>testkube API endpoints</ExternalLink>
-          </Text>
-        }
-        onConfirm={() => {
-          form.submit();
-        }}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        confirmButtonText={isLoading ? 'Loading...' : 'Save'}
-        enabled={!disabled}
-      >
-        <FullWidthSpace size={32} direction="vertical">
-          <FormItem name="endpoint">
-            <Input placeholder="Endpoint" />
-          </FormItem>
-        </FullWidthSpace>
-      </ConfigurationCard>
-    </Form>
+      <FormItem name="endpoint">
+        <Input placeholder="Endpoint" />
+      </FormItem>
+    </CardForm>
   );
 };
 

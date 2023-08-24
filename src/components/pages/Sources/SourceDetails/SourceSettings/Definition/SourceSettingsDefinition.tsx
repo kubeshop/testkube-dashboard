@@ -1,45 +1,30 @@
-import {useContext} from 'react';
+import {FC} from 'react';
 
-import {Form} from 'antd';
+import {Definition} from '@molecules';
 
-import {CopyButton, DownloadButton, Pre} from '@atoms';
+import {useGetSourceDefinitionQuery, useUpdateSourceDefinitionMutation} from '@services/sources';
 
-import {MainContext} from '@contexts';
+import {useSourcesPick} from '@store/sources';
 
-import useLocation from '@hooks/useLocation';
-import useSecureContext from '@hooks/useSecureContext';
+import {createSchemaOverride} from '@utils/createSchemaOverride';
+import {testkubeCRDBases} from '@utils/externalLinks';
 
-import {ConfigurationCard, Definition as DefinitionContent} from '@molecules';
-
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentSource} from '@redux/reducers/sourcesSlice';
-
-import {useGetSourceDefinitionQuery} from '@services/sources';
-
-const SourceSettingsDefinition = () => {
-  const {isClusterAvailable} = useContext(MainContext);
-
-  const source = useAppSelector(selectCurrentSource)!;
-  const isSecureContext = useSecureContext();
-  const {data: definition = '', isLoading} = useGetSourceDefinitionQuery(source?.name, {skip: !isClusterAvailable});
-  const filename = useLocation().lastPathSegment;
-
+const SourceSettingsDefinition: FC = () => {
+  const {current} = useSourcesPick('current');
   return (
-    <Form name="definition-form">
-      <ConfigurationCard title="Definition" description="Validate and export your source configuration">
-        {definition ? (
-          <DefinitionContent content={definition}>
-            {isSecureContext ? (
-              <CopyButton content={definition} />
-            ) : (
-              <DownloadButton filename={filename} extension="yaml" content={definition} />
-            )}
-          </DefinitionContent>
-        ) : (
-          <Pre>{isLoading ? ' Loading...' : ' No definition data'}</Pre>
-        )}
-      </ConfigurationCard>
-    </Form>
+    <Definition
+      useGetDefinitionQuery={useGetSourceDefinitionQuery}
+      useUpdateDefinitionMutation={useUpdateSourceDefinitionMutation}
+      label="source"
+      name={current!.name}
+      crdUrl={testkubeCRDBases.sources}
+      overrideSchema={createSchemaOverride($ => {
+        $.required('spec', 'apiVersion', 'kind');
+        $.property('metadata').required('name');
+        $.property('apiVersion').merge({const: 'tests.testkube.io/v1'});
+        $.property('kind').merge({const: 'TestSource'});
+      })}
+    />
   );
 };
 

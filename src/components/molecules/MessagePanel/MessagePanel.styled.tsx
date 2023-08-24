@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 export const MessagePanelWrapper = styled.div`
   position: relative;
@@ -11,6 +12,10 @@ export const MessagePanelWrapper = styled.div`
   gap: 5px;
 
   padding: 20px 50px 20px 20px;
+
+  @media ${maxDevice.tablet} {
+    flex-direction: column;
+  }
 
   &.error {
     background: rgb(136 19 55 / 60%);

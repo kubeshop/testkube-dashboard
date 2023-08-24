@@ -1,20 +1,17 @@
-import {useContext, useEffect} from 'react';
-
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input} from 'antd';
 
-import {MainContext} from '@contexts';
-
 import {Button, FormIconWrapper, FormItem, FormRow, FullWidthSpace} from '@custom-antd';
 
-import {ConfigurationCard, notificationCall} from '@molecules';
+import {notificationCall} from '@molecules';
+
+import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useAppSelector} from '@redux/hooks';
-import {selectCurrentExecutor, updateCurrentExecutorData} from '@redux/reducers/executorsSlice';
-
 import {useUpdateCustomExecutorMutation} from '@services/executors';
+
+import {useExecutorsPick} from '@store/executors';
 
 import {required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -26,10 +23,8 @@ type ArgumentsFormFields = {
 };
 
 const Arguments: React.FC = () => {
-  const {executor, name: executorName} = useAppSelector(selectCurrentExecutor);
-  const {args} = executor;
+  const {current} = useExecutorsPick('current');
 
-  const {dispatch} = useContext(MainContext);
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateCustomExecutor] = useUpdateCustomExecutorMutation();
@@ -40,68 +35,51 @@ const Arguments: React.FC = () => {
     const values = form.getFieldsValue();
 
     return updateCustomExecutor({
-      executorId: executorName,
+      executorId: current!.name,
       body: {
-        ...executor,
-        name: executorName,
+        ...current!.executor,
+        name: current!.name,
         args: values.arguments,
       },
     })
-      .then(res => displayDefaultNotificationFlow(res))
-      .then(() => {
-        notificationCall('passed', 'Arguments were successfully updated.');
-        dispatch(updateCurrentExecutorData({args: values.arguments}));
-      });
+      .then(displayDefaultNotificationFlow)
+      .then(() => notificationCall('passed', 'Arguments were successfully updated.'));
   };
 
-  useEffect(() => {
-    form.setFieldsValue({
-      arguments: args,
-    });
-  }, [args]);
-
   return (
-    <Form
+    <CardForm
       form={form}
+      initialValues={{arguments: current!.executor.args}}
       name="executor-settings-arguments-list"
-      initialValues={{arguments: args}}
-      layout="vertical"
+      title="Arguments for your command"
+      description="Define the arguments for your command"
       disabled={!mayEdit}
+      onConfirm={onSubmit}
     >
-      <ConfigurationCard
-        title="Arguments for your command"
-        description="Define the arguments for your command"
-        onConfirm={onSubmit}
-        onCancel={() => {
-          form.resetFields();
-        }}
-        enabled={mayEdit}
-      >
-        <Form.List name="arguments">
-          {(fields, {add, remove}) => (
-            <FullWidthSpace size={20} direction="vertical">
-              {fields.map(({key, name, ...restField}) => {
-                return (
-                  <FormRow key={key}>
-                    <FormItem {...restField} name={[name]} rules={[required]}>
-                      <Input placeholder="Your argument value" />
-                    </FormItem>
-                    <FormIconWrapper>
-                      <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
-                    </FormIconWrapper>
-                  </FormRow>
-                );
-              })}
-              <StyledButtonsContainer>
-                <Button $customType="secondary" onClick={() => add('')}>
-                  Add a new argument
-                </Button>
-              </StyledButtonsContainer>
-            </FullWidthSpace>
-          )}
-        </Form.List>
-      </ConfigurationCard>
-    </Form>
+      <Form.List name="arguments">
+        {(fields, {add, remove}) => (
+          <FullWidthSpace size={20} direction="vertical">
+            {fields.map(({key, name, ...restField}) => {
+              return (
+                <FormRow key={key}>
+                  <FormItem {...restField} name={[name]} rules={[required]}>
+                    <Input placeholder="Your argument value" />
+                  </FormItem>
+                  <FormIconWrapper>
+                    <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
+                  </FormIconWrapper>
+                </FormRow>
+              );
+            })}
+            <StyledButtonsContainer>
+              <Button $customType="secondary" onClick={() => add('')}>
+                Add a new argument
+              </Button>
+            </StyledButtonsContainer>
+          </FullWidthSpace>
+        )}
+      </Form.List>
+    </CardForm>
   );
 };
 

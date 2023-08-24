@@ -3,6 +3,7 @@ import {Layout, Space} from 'antd';
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
+import {maxDevice} from '@styles/MediaQueries';
 
 import SiderLink from './SiderLink';
 
@@ -26,16 +27,24 @@ export const StyledLogo = styled.div`
 
 export const StyledOther = styled(Space)`
   padding-bottom: 40px;
+
+  @media ${maxDevice.tablet} {
+    zoom: 1.35;
+  }
 `;
 
-export const StyledSider = styled(Layout.Sider)<{$isFullScreenLogOutput?: boolean}>`
-  z-index: ${({$isFullScreenLogOutput}) => ($isFullScreenLogOutput ? '1002' : '1')};
+export const StyledSider = styled(Layout.Sider)`
+  z-index: 999;
 
   .ant-layout-sider-children {
     display: flex;
     align-items: stretch;
     flex: 1 auto;
     flex-direction: column;
+  }
+
+  @media ${maxDevice.tablet} {
+    zoom: 0.6;
   }
 `;
 
@@ -56,6 +65,10 @@ export const StyledSiderChildContainer = styled.div`
 export const StyledNavigationMenu = styled.div`
   display: flex;
   flex-direction: column;
+
+  @media ${maxDevice.tablet} {
+    zoom: 1.35;
+  }
 `;
 
 export const StyledSiderLink = styled(SiderLink)`

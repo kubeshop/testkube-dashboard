@@ -1,7 +1,7 @@
 import {FormInstance} from 'antd';
 import {UploadChangeParam} from 'antd/lib/upload';
 
-export const onFileChange = (file: Nullable<UploadChangeParam>, form: FormInstance) => {
+export const onFileChange = (file: UploadChangeParam | null, form: FormInstance) => {
   if (!file) {
     form.setFieldsValue({
       file: null,

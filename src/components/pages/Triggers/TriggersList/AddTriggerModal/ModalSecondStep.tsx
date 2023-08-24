@@ -4,8 +4,8 @@ import {ActionFormItems} from '@organisms';
 
 import Colors from '@styles/Colors';
 
-import {StepsEnum} from './AddTriggerModal';
 import {StyledButtonsContainer, StyledStepDescription} from './AddTriggerModal.styled';
+import {StepsEnum} from './types';
 
 type ModalSecondStepProps = {
   setCurrentStep: (step: StepsEnum) => void;

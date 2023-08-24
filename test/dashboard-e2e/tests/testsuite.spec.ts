@@ -1,45 +1,44 @@
-import { test } from '@playwright/test';
-import { TestDataHandler } from '../data-handlers/test-data-handlers';
-import { ApiHelpers } from '../api/api-helpers';
-import { CommonHelpers } from '../helpers/common-helpers';
-import { MainPage } from '../pages/MainPage';
-import { NavigationSiderPage } from '../pages/NavigationSiderPage';
-import { TestSuitesPage } from '../pages/TestSuitesPage';
-import { CreateTestSuitePage } from '../pages/CreateTestSuitePage';
-const apiHelpers=new ApiHelpers(process.env.API_URL, process.env.CLOUD_CONTEXT, process.env.BEARER_TOKEN);
-const testDataHandler=new TestDataHandler(process.env.RUN_ID);
+import {test} from '@playwright/test';
 
-test(`Creating Test Suite`, async ({ page }) => {
-    const testSuiteName = 'testsuite-empty'
-    const testSuiteData = testDataHandler.getTestSuite(testSuiteName);
-    const realTestSuiteName = testSuiteData.name;
+import config from '../config';
+import {ApiHelpers} from '../helpers/api-helpers';
+import {validateTestSuite} from '../helpers/common';
+import {TestDataHandler} from '../helpers/test-data-handler';
+import {CreateTestSuitePage} from '../pages/CreateTestSuitePage';
+import {MainPage} from '../pages/MainPage';
+import {NavigationSiderPage} from '../pages/NavigationSiderPage';
+import {TestSuitesPage} from '../pages/TestSuitesPage';
 
-    await apiHelpers.assureTestSuiteNotCreated(realTestSuiteName);
+const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
+const testDataHandler = new TestDataHandler(config.runId);
 
-    const mainPage=new MainPage(page);
-    await mainPage.visitMainPage();
+test(`Creating Test Suite`, async ({page}) => {
+  const testSuiteName = 'testsuite-empty';
+  const testSuiteData = testDataHandler.getTestSuite(testSuiteName);
+  const realTestSuiteName = testSuiteData.name;
 
-    const navigationSiderPage=new NavigationSiderPage(page);
-    await navigationSiderPage.openMenuItem('test-suites');
+  await api.assureTestSuiteNotCreated(realTestSuiteName);
 
-    const testSuitesPage=new TestSuitesPage(page);
-    await testSuitesPage.openCreateTestSuiteDialog();
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
 
-    const createTestSuitePage=new CreateTestSuitePage(page);
-    await createTestSuitePage.createTestSuite(testSuiteData);
-    await page.waitForURL(`**/test-suites/executions/${realTestSuiteName}`);
-  
-    const createdTestSuiteData = await apiHelpers.getTestSuiteData(realTestSuiteName);
-    await CommonHelpers.validateTestSuite(testSuiteData, createdTestSuiteData);
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('test-suites');
 
-    // // cleanup
-    await apiHelpers.removeTestSuite(realTestSuiteName)
-  });
+  const testSuitesPage = new TestSuitesPage(page);
+  await testSuitesPage.openCreateTestSuiteDialog();
 
-  test.skip(`Test suite - add tests`, async ({ page }) => {
+  const createTestSuitePage = new CreateTestSuitePage(page);
+  await createTestSuitePage.createTestSuite(testSuiteData);
+  await page.waitForURL(`**/test-suites/${realTestSuiteName}/settings/tests`);
 
-  });
-  
-  test.skip(`Test suite - edit tests`, async ({ page }) => {
+  const createdTestSuiteData = await api.getTestSuiteData(realTestSuiteName);
+  await validateTestSuite(testSuiteData, createdTestSuiteData);
 
-  });
+  // Cleanup
+  await api.removeTestSuite(realTestSuiteName);
+});
+
+test.skip(`Test suite - add tests`, async ({page}) => {});
+
+test.skip(`Test suite - edit tests`, async ({page}) => {});
