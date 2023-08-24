@@ -6,15 +6,16 @@ import {Button, Input, Title} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
 
-import {Entity, EntityArray} from '@models/entityMap';
+import {Entity} from '@models/entityMap';
 import {FilterProps} from '@models/filters';
 
-import {notificationCall} from '@molecules';
 import {FilterMenuFooter, StyledFilterDropdown, StyledFilterLabel, StyledFilterMenu} from '@molecules/FilterMenu';
 
 import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
+
+import {decodeSelectorArray, encodeSelectorArray} from '@utils/selectors';
 
 import {EmptyButton, StyledKeyValueRow, StyledLabelsMenuContainer} from './LabelsFilter.styled';
 
@@ -27,7 +28,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters, isFiltersDisabled, width} = props;
 
   const [isVisible, setVisibilityState] = useState(false);
-  const [labelsMapping, setLabelsMapping] = useState<EntityArray>([]);
+  const [labelsMapping, setLabelsMapping] = useState<Entity[]>([]);
 
   const onEvent = usePressEnter();
 
@@ -60,18 +61,8 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   };
 
   useEffect(() => {
-    setLabelsMapping([]);
-    if (filters.selector.length === 0) {
-      setLabelsMapping([defaultKeyValuePair]);
-    }
-    filters.selector.forEach((item: string) => {
-      if (item.includes('=')) {
-        const [key, value] = item.split('=');
-        setLabelsMapping(currentLabels => [...currentLabels, {key, value}]);
-      } else {
-        setLabelsMapping(currentLabels => [...currentLabels, {key: item, value: ''}]);
-      }
-    });
+    const mapping = decodeSelectorArray(filters.selector);
+    setLabelsMapping(mapping.length === 0 ? [defaultKeyValuePair] : mapping);
   }, [filters.selector]);
 
   const renderKeyValueInputs = labelsMapping.map((item, index) => {
@@ -105,38 +96,15 @@ const LabelsFilter: React.FC<FilterProps> = props => {
   });
 
   const applyFilters = () => {
-    const resultedFilters: string[] = [];
-
-    if (JSON.stringify(labelsMapping) === JSON.stringify([defaultKeyValuePair])) {
-      onOpenChange(false);
-      return;
-    }
-
-    labelsMapping.forEach(item => {
-      if (!item.key) {
-        return;
-      }
-
-      if (!item.value) {
-        resultedFilters.push(item.key);
-      } else {
-        resultedFilters.push(`${item.key}=${item.value}`);
-      }
-    });
-
-    if (resultedFilters.length !== labelsMapping.length) {
-      notificationCall('failed', `Incorrect labels input`);
-      return;
-    }
-
-    setFilters({...filters, selector: resultedFilters, pageSize: initialPageSize});
+    const selector = encodeSelectorArray(labelsMapping);
+    setFilters({...filters, selector, pageSize: initialPageSize});
     onOpenChange(false);
   };
 
   const resetFilters = () => {
     setLabelsMapping([defaultKeyValuePair]);
     onOpenChange(false);
-    setFilters({...filters, selector: [], pageSize: initialPageSize});
+    setFilters({...filters, selector: '', pageSize: initialPageSize});
   };
 
   const menu = (

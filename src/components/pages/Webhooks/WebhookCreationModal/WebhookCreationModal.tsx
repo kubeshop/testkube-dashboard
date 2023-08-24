@@ -9,11 +9,12 @@ import {FormItem, FullWidthSpace} from '@custom-antd';
 import {Option} from '@models/form';
 import {Webhook, WebhookEvent} from '@models/webhook';
 
-import {decomposeLabels} from '@molecules/LabelsSelect/utils';
+import {notificationCall} from '@molecules';
 
 import {useCreateWebhookMutation} from '@services/webhooks';
 
 import {requiredNoText} from '@utils/form';
+import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {FirstStep} from './FirstStep';
 import {SecondStep} from './SecondStep';
@@ -21,7 +22,7 @@ import {SecondStep} from './SecondStep';
 type WebhookCreationModalFormValues = {
   name: string;
   type: string;
-  labels: Option[];
+  selector: Option[];
   events: Option[];
   uri: string;
 };
@@ -54,19 +55,21 @@ const WebhookCreationModal: FC = () => {
 
   const onFinish = () => {
     const values: WebhookCreationModalFormValues = form.getFieldsValue(true);
+    const selector = values.selector.map(x => `${x.value}`.replace(':', '=')).join(',');
 
     const webhook: Webhook = {
       ...values,
-      labels: decomposeLabels(values.labels),
+      selector,
       events: values.events.map(item => item.value) as WebhookEvent[],
     };
 
-    createWebhook(webhook).then(res => {
-      if ('data' in res) {
+    return createWebhook(webhook)
+      .then(displayDefaultNotificationFlow)
+      .then(res => {
         closeModal();
         navigate(`/webhooks/${res.data.metadata.name}/settings/general`);
-      }
-    });
+      })
+      .catch(error => notificationCall('failed', error.title, error.message));
   };
 
   const stepToComponent: Record<WebhookCreationModalSteps, any> = {

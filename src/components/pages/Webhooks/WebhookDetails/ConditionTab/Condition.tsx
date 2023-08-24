@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 
 import {Form} from 'antd';
 
@@ -6,11 +6,9 @@ import {CreatableMultiSelect} from '@atoms';
 
 import {FormItem} from '@custom-antd';
 
-import {Option} from '@models/form';
 import {WebhookEvent} from '@models/webhook';
 
 import {LabelsSelect, notificationCall} from '@molecules';
-import {composeLabels} from '@molecules/LabelsSelect/utils';
 
 import {CardForm} from '@organisms';
 
@@ -22,10 +20,11 @@ import {useWebhooksPick} from '@store/webhooks';
 
 import {requiredNoText} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
+import {decodeSelectorArray} from '@utils/selectors';
 
 type ConditionFormValues = {
   events: {label: WebhookEvent; value: WebhookEvent}[];
-  labels: Record<string, Option>;
+  labels: {label: string; value: string}[];
 };
 
 const webhookEvents = Object.keys(WebhookEvent).map(item => {
@@ -37,15 +36,27 @@ const Condition: FC = () => {
   const {current} = useWebhooksPick('current');
   const mayEdit = usePermission(Permissions.editEntity);
 
+  const initialEvents = current!.events.map(item => ({label: item, value: item}));
+  const initialLabels = useMemo(
+    () =>
+      decodeSelectorArray(current!.selector)
+        .map(({key, value}) => `${key}:${value}`)
+        .map(value => ({label: value, value})),
+    [current!.selector]
+  );
+
   const [form] = Form.useForm<ConditionFormValues>();
 
   const [updateWebhook] = useUpdateWebhookMutation();
 
   const onFinish = () => {
     const values = form.getFieldsValue();
-
-    // @ts-ignore
-    return updateWebhook({...current!, ...values})
+    const selector = values.labels.map(x => x.value.replace(':', '=')).join(',');
+    return updateWebhook({
+      ...current!,
+      events: values.events.map(x => x.value),
+      selector,
+    })
       .then(displayDefaultNotificationFlow)
       .then(() => notificationCall('passed', 'The conditions were successfully updated.'));
   };
@@ -57,47 +68,29 @@ const Condition: FC = () => {
       description="Define the conditions to be met for the webhook to be called."
       spacing={20}
       form={form}
-      initialValues={{
-        events: current!.events.map(item => ({label: item, value: item})) || [],
-        labels: composeLabels((current!.labels as unknown as Record<string, Option>) || []) || {},
-      }}
+      initialValues={{events: initialEvents, labels: initialLabels}}
       disabled={!mayEdit}
       onConfirm={onFinish}
     >
       <FormItem noStyle shouldUpdate>
-        {({getFieldError}) => {
-          const isValid = !(getFieldError('labels').length > 0);
-          const value = form.getFieldValue('labels');
-
-          return (
-            <FormItem name="labels" required rules={[requiredNoText]} label="Resource identifier">
-              <LabelsSelect
-                validation={isValid}
-                // @ts-ignore
-                defaultLabels={value}
-              />
-            </FormItem>
-          );
-        }}
+        {({getFieldError}) => (
+          <FormItem name="labels" required rules={[requiredNoText]} label="Resource identifier">
+            <LabelsSelect validation={getFieldError('labels').length === 0} />
+          </FormItem>
+        )}
       </FormItem>
       <FormItem noStyle shouldUpdate>
-        {({getFieldError}) => {
-          const isValid = !(getFieldError('events').length > 0);
-          const value = form.getFieldValue('events');
-
-          return (
-            <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
-              <CreatableMultiSelect
-                placeholder="Select Testkube resource"
-                options={webhookEvents}
-                menuPlacement="top"
-                formatCreateLabel={val => val}
-                validation={isValid}
-                defaultValue={value}
-              />
-            </FormItem>
-          );
-        }}
+        {({getFieldError}) => (
+          <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
+            <CreatableMultiSelect
+              placeholder="Select Testkube resource"
+              options={webhookEvents}
+              menuPlacement="top"
+              formatCreateLabel={val => val}
+              validation={getFieldError('events').length === 0}
+            />
+          </FormItem>
+        )}
       </FormItem>
     </CardForm>
   );

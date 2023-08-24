@@ -7,5 +7,3 @@ export type Entity = {
 };
 
 export type EntityMap<ValueType = EntityValue> = Record<EntityKey, ValueType>;
-
-export type EntityArray = Entity[];
