@@ -3,11 +3,13 @@ import {useSearchParams} from 'react-router-dom';
 
 import {isEqual, merge} from 'lodash';
 
-import {MainContext, ModalContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
+
+import {useModal} from '@modal/hooks';
 
 import {EntityListBlueprint} from '@models/entity';
 
@@ -55,9 +57,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   const {isClusterAvailable} = useContext(MainContext);
-  const {setModalConfig, setModalOpen} = useContext(ModalContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
+
+  const {open: openCreateModal} = useModal(createModalConfig);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -125,15 +128,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const isFiltersEmpty = isEqual(initialFiltersState, queryFilters);
   const isEmptyData = !data?.length && isFiltersEmpty && !isLoading;
 
-  const addEntityAction = () => {
-    setModalConfig(createModalConfig);
-    setModalOpen(true);
-  };
-
   useTrackTimeAnalytics(`${entity}-list`);
 
   const createButton = mayCreate ? (
-    <Button $customType="primary" onClick={addEntityAction} data-test={dataTest} disabled={!isClusterAvailable}>
+    <Button $customType="primary" onClick={openCreateModal} data-test={dataTest} disabled={!isClusterAvailable}>
       {addEntityButtonText}
     </Button>
   ) : null;
@@ -166,7 +164,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         Component={CardComponent}
         componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
         empty={
-          isFiltersEmpty ? <EmptyData action={addEntityAction} /> : <EmptyDataWithFilters resetFilters={resetFilters} />
+          isFiltersEmpty ? <EmptyData action={openCreateModal} /> : <EmptyDataWithFilters resetFilters={resetFilters} />
         }
         itemHeight={163.85}
         loadingInitially={isFirstTimeLoading}

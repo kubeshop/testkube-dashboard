@@ -8,12 +8,13 @@ import {Content} from 'antd/lib/layout/layout';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
-import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
 import {FeatureFlagsProvider} from '@feature-flags';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 import {useLastCallback} from '@hooks/useLastCallback';
+
+import {ModalHandler, ModalOutletProvider} from '@modal/context';
 
 import {Sider} from '@organisms';
 

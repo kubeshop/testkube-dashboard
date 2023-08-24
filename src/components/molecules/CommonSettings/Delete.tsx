@@ -1,9 +1,9 @@
-import {FC, useContext} from 'react';
+import {FC} from 'react';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {ModalContext} from '@contexts';
+import {useModal} from '@modal/hooks';
 
 import {DeleteEntityModal} from '@molecules';
 
@@ -18,23 +18,18 @@ interface DeleteProps {
 }
 
 const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDeleteMutation}) => {
-  const {setModalConfig, setModalOpen} = useContext(ModalContext);
-
-  const onConfirm = () => {
-    setModalConfig({
-      title: `Delete this ${label}`,
-      width: 600,
-      content: (
-        <DeleteEntityModal
-          defaultStackRoute={redirectUrl}
-          useDeleteMutation={useDeleteMutation}
-          name={name}
-          entityLabel={label}
-        />
-      ),
-    });
-    setModalOpen(true);
-  };
+  const {open} = useModal({
+    title: `Delete this ${label}`,
+    width: 600,
+    content: (
+      <DeleteEntityModal
+        defaultStackRoute={redirectUrl}
+        useDeleteMutation={useDeleteMutation}
+        name={name}
+        entityLabel={label}
+      />
+    ),
+  });
 
   return (
     <CardForm
@@ -44,7 +39,7 @@ const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDele
       confirmLabel="Delete"
       isWarning
       wasTouched
-      onConfirm={onConfirm}
+      onConfirm={open}
     />
   );
 };

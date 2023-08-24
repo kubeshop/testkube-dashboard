@@ -38,6 +38,8 @@
       "@hooks/*": ["src/hooks/*"],
       "@icons": ["src/assets/icons/"],
       "@icons/*": ["src/assets/icons/*"],
+      "@modal": ["src/modal/"],
+      "@modal/*": ["src/modal/*"],
       "@models": ["src/models/"],
       "@models/*": ["src/models/*"],
       "@molecules": ["src/components/molecules/"],

@@ -1,13 +1,13 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
-
-import {ModalContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
+
+import {useModal} from '@modal/hooks';
 
 import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
@@ -35,7 +35,7 @@ type TestSuiteCreationModalFormValues = {
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm<TestSuiteCreationModalFormValues>();
 
-  const {closeModal} = useContext(ModalContext);
+  const {close} = useModal();
   const telemetry = useTelemetry();
   const openSettings = useDashboardNavigate((name: string) => `/test-suites/${name}/settings/tests`);
 
@@ -56,7 +56,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
       .then(res => {
         telemetry.event('createTestSuite');
         openSettings(res.data.metadata.name);
-        closeModal();
+        close();
       })
       .catch(err => {
         setError(err);

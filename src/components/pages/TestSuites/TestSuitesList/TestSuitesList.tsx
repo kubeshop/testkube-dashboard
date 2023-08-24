@@ -1,9 +1,10 @@
 import {FC, useCallback, useContext} from 'react';
 
 import {MainContext} from '@contexts';
-import {ModalConfig} from '@contexts/ModalContext';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
+import {ModalConfig} from '@modal/types';
 
 import {TestSuite} from '@models/testSuite';
 

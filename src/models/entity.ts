@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
 
-import {ModalConfig} from '@contexts/ModalContext';
+import {ModalConfig} from '@modal/types';
 
 import {TestWithExecution} from '@models/test';
 import {TestSuiteWithExecution} from '@models/testSuite';

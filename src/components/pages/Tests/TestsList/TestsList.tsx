@@ -3,9 +3,10 @@ import {FC, useCallback, useContext} from 'react';
 import {ExternalLink} from '@atoms';
 
 import {MainContext} from '@contexts';
-import {ModalConfig} from '@contexts/ModalContext';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
+import {ModalConfig} from '@modal/types';
 
 import {Test} from '@models/test';
 
