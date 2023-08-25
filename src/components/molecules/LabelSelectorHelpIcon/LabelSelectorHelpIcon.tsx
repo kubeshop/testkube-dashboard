@@ -1,8 +1,7 @@
 import {FC} from 'react';
 
-import {Tooltip} from 'antd';
-
 import {QuestionCircleOutlined} from '@ant-design/icons';
+import {Tooltip} from 'antd';
 
 const LabelSelectorHelpIcon: FC = () => (
   <span style={{display: 'inline-block', position: 'relative'}}>
