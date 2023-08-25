@@ -4,7 +4,7 @@ import {Text} from '@custom-antd';
 
 import {Webhook} from '@models/webhook';
 
-import {LabelsList} from '@molecules';
+import {LabelSelectorHelpIcon, LabelsList} from '@molecules';
 import {ItemColumn, ItemRow, StyledMetricItem} from '@molecules/EntityGrid/EntityGrid.styled';
 
 import Colors from '@styles/Colors';
@@ -39,9 +39,9 @@ const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
               {uri}
             </Text>
           </StyledMetricItem>
-          <StyledMetricItem>
+          <StyledMetricItem $right>
             <Text className="small" color={Colors.slate500}>
-              RESOURCE
+              RESOURCE <LabelSelectorHelpIcon />
             </Text>
             <LabelsList labels={labels} />
           </StyledMetricItem>

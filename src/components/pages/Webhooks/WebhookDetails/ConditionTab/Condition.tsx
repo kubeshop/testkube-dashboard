@@ -8,7 +8,7 @@ import {FormItem} from '@custom-antd';
 
 import {WebhookEvent} from '@models/webhook';
 
-import {LabelsSelect, notificationCall} from '@molecules';
+import {LabelSelectorHelpIcon, LabelsSelect, notificationCall} from '@molecules';
 
 import {CardForm} from '@organisms';
 
@@ -74,7 +74,17 @@ const Condition: FC = () => {
     >
       <FormItem noStyle shouldUpdate>
         {({getFieldError}) => (
-          <FormItem name="labels" required rules={[requiredNoText]} label="Resource identifier">
+          <FormItem
+            name="labels"
+            required
+            rules={[requiredNoText]}
+            label={
+              <>
+                Resource identifier
+                <LabelSelectorHelpIcon />
+              </>
+            }
+          >
             <LabelsSelect validation={getFieldError('labels').length === 0} />
           </FormItem>
         )}

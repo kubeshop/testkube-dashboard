@@ -67,11 +67,12 @@ export const ItemRow = styled.div<{$flex: number}>`
   gap: 5px;
 `;
 
-export const ItemColumn = styled.div<{$isStretch?: boolean}>`
+export const ItemColumn = styled.div<{$isStretch?: boolean; $justify?: string}>`
   overflow: hidden;
 
   display: flex;
   ${({$isStretch}) => ($isStretch ? 'flex: 1;' : '')};
+  ${({$justify}) => ($justify ? `justify-content: ${$justify}` : '')};
   gap: 10px;
 
   align-items: center;
@@ -83,10 +84,11 @@ export const ExecutionTimeItemColumn = styled(ItemColumn)`
   }
 `;
 
-export const StyledMetricItem = styled.div`
+export const StyledMetricItem = styled.div<{$right?: boolean}>`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  ${({$right}) => ($right ? 'margin-left: auto; text-align: right;' : '')}
 
   padding-top: 5px;
 `;

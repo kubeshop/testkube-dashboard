@@ -6,7 +6,7 @@ import {Button, FormItem, FullWidthSpace, Text} from '@custom-antd';
 
 import {WebhookEvent} from '@models/webhook';
 
-import {LabelsSelect} from '@molecules';
+import {LabelSelectorHelpIcon, LabelsSelect} from '@molecules';
 
 import Colors from '@styles/Colors';
 
@@ -28,7 +28,17 @@ export const FirstStep: FC<FirstStepProps> = ({onStepChange}) => (
     </Text>
     <FormItem noStyle shouldUpdate>
       {({getFieldError}) => (
-        <FormItem name="selector" required rules={[requiredNoText]} label="Resource identifier">
+        <FormItem
+          name="selector"
+          required
+          rules={[requiredNoText]}
+          label={
+            <>
+              Resource identifier
+              <LabelSelectorHelpIcon />
+            </>
+          }
+        >
           <LabelsSelect validation={getFieldError('selector').length === 0} />
         </FormItem>
       )}
