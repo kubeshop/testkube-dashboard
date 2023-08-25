@@ -39,7 +39,7 @@ const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
               {uri}
             </Text>
           </StyledMetricItem>
-          <StyledMetricItem $right>
+          <StyledMetricItem>
             <Text className="small" color={Colors.slate500}>
               RESOURCE <LabelSelectorHelpIcon />
             </Text>
