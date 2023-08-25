@@ -18,7 +18,8 @@ export type IconProps = {
     | 'error'
     | 'queued'
     | 'success'
-    | 'cloudMigrate';
+    | 'cloudMigrate'
+    | 'statusPage';
   component?: IconComponentProps['component'];
   style?: React.CSSProperties;
 };

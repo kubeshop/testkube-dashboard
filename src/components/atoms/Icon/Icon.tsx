@@ -19,6 +19,7 @@ const {
   DelayIcon,
   AbortingStatusIcon,
   CloudMigrateIcon,
+  StatusPageIcon,
 } = Icons;
 
 const iconsMap: Record<IconProps['name'], IconComponentProps['component']> = {
@@ -40,6 +41,7 @@ const iconsMap: Record<IconProps['name'], IconComponentProps['component']> = {
   aborting: AbortingStatusIcon,
   success: PassedStatusIcon,
   cloudMigrate: CloudMigrateIcon,
+  statusPage: StatusPageIcon,
 };
 
 const Icon: React.FC<IconProps> = props => {

@@ -167,6 +167,11 @@ export enum StatusColors {
   timeout = Colors.pink600,
   aborted = Colors.pink600,
   aborting = Colors.pink600,
+  operational = Colors.lime700,
+  partial_outage = Colors.amber600,
+  major_outage = Colors.pink800,
+  unavailable = Colors.slate700,
+  unknown = Colors.grey700,
 }
 
 export enum SecondaryStatusColors {
@@ -179,6 +184,11 @@ export enum SecondaryStatusColors {
   timeout = Colors.pink800,
   aborted = Colors.pink800,
   aborting = Colors.pink800,
+  operational = Colors.lime700,
+  partial_outage = Colors.amber600,
+  major_outage = Colors.pink800,
+  unavailable = Colors.slate700,
+  unknown = Colors.grey700,
 }
 
 export enum BorderColors {

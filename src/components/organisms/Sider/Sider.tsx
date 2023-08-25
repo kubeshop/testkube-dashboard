@@ -5,6 +5,7 @@ import {Popover, Tooltip} from 'antd';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 import {ReactComponent as SourcesIcon} from '@assets/sources.svg';
+import {ReactComponent as StatusPageIcon} from '@assets/status-page-icon.svg';
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
@@ -104,6 +105,16 @@ const getRoutes = (showSocialLinksInSider: boolean) => [
           active: /environment-management/,
         },
       ]),
+
+  {
+    path: '/status-page',
+    icon: StatusPageIcon,
+    title: 'Status Page',
+    transition: {
+      classNames: 'item',
+    },
+    active: /status-page/,
+  },
 ];
 
 const Sider: React.FC = () => {
