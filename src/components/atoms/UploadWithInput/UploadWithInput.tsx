@@ -1,3 +1,5 @@
+import {FC, useCallback, useRef} from 'react';
+
 import {UploadChangeParam, UploadProps} from 'antd/lib/upload';
 
 import classNames from 'classnames';
@@ -18,8 +20,11 @@ type UploadWithInputProps = {
 
 const defaultBeforeUpload = () => false;
 
-const UploadWithInput: React.FC<UploadWithInputProps> = props => {
+const UploadWithInput: FC<UploadWithInputProps> = props => {
   const {onFileChange, beforeUpload = defaultBeforeUpload, value} = props;
+  const uploadRef = useRef<any>();
+  const onInputClick = useCallback(() => uploadRef.current?.upload.uploader.fileInput.click(), []);
+  const clear = useCallback(() => onFileChange(null), [onFileChange]);
 
   const inputClassNames = classNames({
     'not-empty': value?.fileName,
@@ -33,12 +38,11 @@ const UploadWithInput: React.FC<UploadWithInputProps> = props => {
         className={inputClassNames}
         value={value?.fileName || ''}
         allowClear
-        onChange={() => {
-          onFileChange(null);
-        }}
+        onPointerUpCapture={onInputClick}
+        onChange={clear}
         placeholder="Choose a file"
       />
-      <Upload maxCount={1} onChange={onFileChange} showUploadList={false} beforeUpload={beforeUpload} />
+      <Upload ref={uploadRef} maxCount={1} onChange={onFileChange} showUploadList={false} beforeUpload={beforeUpload} />
     </StyledUploadWithInputContainer>
   );
 };
