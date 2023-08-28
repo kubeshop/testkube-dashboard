@@ -1,4 +1,4 @@
-import {ReactElement} from 'react';
+import {ReactElement, ReactNode} from 'react';
 
 import {Form, FormProps} from 'antd';
 
@@ -16,7 +16,7 @@ export interface ControlledFormProps<T extends Value, U extends Validator<T>>
   Validator: U;
   onChange?: (value: T, prevValue: T) => void;
   onSubmit?: (value: T, errors: ValidationError[]) => void;
-  children?: ReactElement | ReactElement[];
+  children?: ReactNode;
 }
 
 export const ControlledForm = <T extends Value, U extends Validator<T>>({

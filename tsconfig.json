@@ -33,7 +33,7 @@
       "@contexts/*": ["src/contexts/*"],
       "@custom-antd": ["src/components/custom-antd"],
       "@custom-antd/*": ["src/components/custom-antd/*"],
-      "@dto/*": ["src/components/dto/*"],
+      "@dto/*": ["src/dto/*"],
       "@env": ["src/env"],
       "@feature-flags": ["src/feature-flags/"],
       "@feature-flags/*": ["src/feature-flags/*"],

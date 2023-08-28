@@ -9,6 +9,7 @@ const paths = original
   .filter((x, i, a) => a.indexOf(x) === i);
 
 module.exports = {
+  importOrderParserPlugins: ['typescript', 'jsx', 'decorators'],
   importOrder: [
     '^@sentry',
     '^react',
