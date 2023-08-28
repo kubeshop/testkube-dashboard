@@ -10,6 +10,8 @@
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
@@ -31,6 +33,7 @@
       "@contexts/*": ["src/contexts/*"],
       "@custom-antd": ["src/components/custom-antd"],
       "@custom-antd/*": ["src/components/custom-antd/*"],
+      "@dto/*": ["src/components/dto/*"],
       "@env": ["src/env"],
       "@feature-flags": ["src/feature-flags/"],
       "@feature-flags/*": ["src/feature-flags/*"],
@@ -61,7 +64,8 @@
       "@telemetry": ["src/telemetry/"],
       "@telemetry/*": ["src/telemetry/*"],
       "@utils": ["src/utils/"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@validators/*": ["src/validators/*"]
     }
   },
   "include": [

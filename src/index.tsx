@@ -4,6 +4,8 @@ import {Provider as ReduxProvider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import 'reactflow/dist/style.css';
 
+import 'reflect-metadata';
+
 import {store} from '@redux/store';
 
 import {GlobalStyle} from '@styles/globalStyles';
