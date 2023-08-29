@@ -1,13 +1,6 @@
-import React, {memo} from 'react';
-import {Link} from 'react-router-dom';
-
-import {Tooltip} from 'antd';
-
-import {ExternalLink} from '@atoms';
+import {FC, memo} from 'react';
 
 import {Text} from '@custom-antd';
-
-import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {Entity} from '@models/entity';
 
@@ -15,13 +8,17 @@ import Colors from '@styles/Colors';
 
 import {hasProtocol} from '@utils/strings';
 
+import ContextDisplay, {ContextDisplayProps} from './ContextDisplay';
+
 export enum RunningContextType {
   userUI = 'user-ui',
   userCLI = 'user-cli',
   testSuite = 'testsuite',
   testTrigger = 'testtrigger',
+  testExecution = 'testexecution',
+  testSuiteExecution = 'testsuiteexecution',
   scheduler = 'scheduler',
-  default = 'default',
+  githubAction = 'githubaction',
 }
 
 type RunningContextProps = {
@@ -31,44 +28,41 @@ type RunningContextProps = {
   entity: Entity;
 };
 
-const RunningContext: React.FC<RunningContextProps> = props => {
-  const {id, type = RunningContextType.default, context = '', entity} = props;
-  const onOpenSchedule = useDashboardNavigate(`/${entity}/${id}/settings/scheduling`);
+const labels: Partial<Record<RunningContextType, string>> = {
+  [RunningContextType.userUI]: 'Manual UI',
+  [RunningContextType.githubAction]: 'GitHub Action',
+  [RunningContextType.testSuiteExecution]: 'Test Suite Execution',
+  [RunningContextType.testExecution]: 'Test Execution',
+};
 
-  const runContextMap = {
-    'user-ui': 'Manual UI',
-    'user-cli': context ? (
-      hasProtocol(context) ? (
-        <>
-          Manual CLI (<ExternalLink href={context}>Context</ExternalLink>)
-        </>
-      ) : (
-        `Manual CLI (${context})`
-      )
-    ) : (
-      'Manual CLI'
-    ),
-    scheduler: context ? (
-      <>
-        Scheduler <ExternalLink onClick={onOpenSchedule}>{context}</ExternalLink>
-      </>
-    ) : (
-      'Scheduler'
-    ),
-    testsuite: context ? (
-      // TODO: It would be good to point to execution, but we don't have ID
-      <Link to={`/test-suites/${context.replace(/^ts-/, '').replace(/-[0-9]+$/, '')}`}>{context}</Link>
-    ) : (
-      'Test Suite'
-    ),
-    testtrigger: <Link to={`/triggers/${context}`}>{context || 'Test Trigger'}</Link>,
-    default: 'Unknown run context',
+const RunningContext: FC<RunningContextProps> = props => {
+  const {id, type, context = '', entity} = props;
+  const url = hasProtocol(context) ? context : undefined;
+
+  const runContextMap: Partial<Record<RunningContextType, ContextDisplayProps>> = {
+    [RunningContextType.userCLI]: {label: 'Manual CLI', text: url ? 'Context' : context, url, wrap: true},
+    [RunningContextType.scheduler]: {label: 'Scheduler', text: context, url: `/${entity}/${id}/settings/scheduling`},
+    [RunningContextType.testSuite]: {
+      text: context || 'Test Suite',
+      url: `/test-suites/${context.replace(/^ts-/, '').replace(/-[0-9]+$/, '')}`,
+    },
+    [RunningContextType.testTrigger]: {
+      text: context || 'Test Trigger',
+      url: context ? `/triggers/${context}` : undefined,
+    },
+    [RunningContextType.githubAction]: {text: 'GitHub Action', url},
+  };
+
+  const displayProps = runContextMap[type!] || {
+    url,
+    tooltip: url ? undefined : context,
+    text: labels[type!] || type || 'Unknown',
   };
 
   return (
-    <Tooltip title={context}>
-      <Text color={Colors.slate50}>{runContextMap[type]}</Text>
-    </Tooltip>
+    <Text color={Colors.slate50}>
+      <ContextDisplay {...displayProps} />
+    </Text>
   );
 };
 
