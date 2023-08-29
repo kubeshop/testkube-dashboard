@@ -157,7 +157,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
                 localStorage.setItem(config.isTestkubeCloudLaunchBannerHidden, 'true');
                 update();
               }}
-              isClosable
               type="default"
               title="🎉 We have just launched Testkube Cloud! 🎉"
               description="One centralised place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."

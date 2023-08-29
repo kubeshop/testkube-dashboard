@@ -54,7 +54,6 @@ const createAiInsightsPlugin = (): Plugin => ({
         onClose={() => {
           localStorage.setItem(config.isAiBannerHidden, 'true');
         }}
-        isClosable
         type="default"
         title="🎉 Get AI support on failing tests! 🎉"
         description="Try our AI Hints to improve your tests and get support to debug them more efficiently."
