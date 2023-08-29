@@ -2,7 +2,11 @@ import {useRef, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {ControlledForm} from '@atoms/ControlledForm/ControlledForm';
+
 import {Button, Input} from '@custom-antd';
+
+import {CreateExecutorDto} from '@dto/CreateExecutor';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
@@ -16,22 +20,13 @@ import {useCreateExecutorMutation} from '@services/executors';
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {externalLinks} from '@utils/externalLinks';
-import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import {AddExecutorsModalContainer} from './ExecutorsList.styled';
 
-type AddExecutorsFormValues = {
-  name: string;
-  type?: string;
-  image: string;
-};
-
 const AddExecutorsModal: React.FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const openDetails = useDashboardNavigate((name: string) => `/executors/${name}`);
-
-  const [form] = Form.useForm<AddExecutorsFormValues>();
 
   const [createExecutor, {isLoading}] = useCreateExecutorMutation();
 
@@ -40,8 +35,9 @@ const AddExecutorsModal: React.FC = () => {
   const topRef = useRef<HTMLDivElement>(null);
   const inTopInViewport = useInViewport(topRef);
 
-  const onFinish = (values: AddExecutorsFormValues) => {
-    const body = {
+  const [value, setValue] = useState(new CreateExecutorDto());
+  const onFinish = (values: CreateExecutorDto) => {
+    const body: any = {
       ...values,
       namespace,
       types: [values.type],
@@ -50,7 +46,7 @@ const AddExecutorsModal: React.FC = () => {
 
     delete body.type;
 
-    createExecutor(body)
+    return createExecutor(body)
       .then(displayDefaultNotificationFlow)
       .then(res => openDetails(res.data.metadata.name))
       .catch(err => {
@@ -65,24 +61,26 @@ const AddExecutorsModal: React.FC = () => {
   return (
     <AddExecutorsModalContainer>
       <div ref={topRef} />
-      <Form style={{flex: 1}} layout="vertical" onFinish={onFinish} form={form}>
+      <ControlledForm
+        value={value}
+        Validator={CreateExecutorDto}
+        style={{flex: 1}}
+        onSubmit={onFinish}
+        onChange={setValue}
+        layout="vertical"
+      >
         {error ? (
           <div style={{marginBottom: '20px'}}>
             <NotificationContent status="failed" message={error.message} title={error.title} />
           </div>
         ) : null}
-        <Form.Item
-          label="Name"
-          required
-          name="name"
-          rules={[required, k8sResourceNameMaxLength, k8sResourceNamePattern]}
-        >
+        <Form.Item label="Name" required name="name">
           <Input placeholder="e.g.: my-container-executor" />
         </Form.Item>
-        <Form.Item label="Executor type" required name="type" rules={[required]}>
+        <Form.Item label="Executor type" required name="type" hasFeedback>
           <Input placeholder="e.g.: my-executor/type" />
         </Form.Item>
-        <Form.Item label="Container image" required name="image" rules={[required]}>
+        <Form.Item label="Container image" required name="image">
           <Input placeholder="e.g.: curlimages/curl:7.85.0 " />
         </Form.Item>
         <Form.Item
@@ -98,7 +96,7 @@ const AddExecutorsModal: React.FC = () => {
             </Button>
           )}
         </Form.Item>
-      </Form>
+      </ControlledForm>
       <Hint
         title="Need help?"
         description="We’ll guide you to easily create your very specific container based executor."

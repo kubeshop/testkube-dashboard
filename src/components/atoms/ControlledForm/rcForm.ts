@@ -18,9 +18,7 @@ export const useRcFormWatch = <T>(form: FormInstance<T>, fn: (values: T, namePat
   const unsubscribe = useRef<() => void>(() => {});
 
   useEffect(() => {
-    unsubscribe.current = getRcFormInternalHooks(form).registerWatch((values: T, namePath?: NamePath) =>
-      callback(values, namePath)
-    );
+    unsubscribe.current = getRcFormInternalHooks(form).registerWatch(callback);
     return () => unsubscribe.current();
   }, [form]);
 };
@@ -28,7 +26,7 @@ export const useRcFormWatch = <T>(form: FormInstance<T>, fn: (values: T, namePat
 export const useRcFormFields = (form: FormInstance): [FieldData[]] => {
   const [fields, setFields] = useState<FieldData[]>(() => getRcFormFields(form));
 
-  const update = (_?: any, namePath?: NamePath) => {
+  const update = () => {
     const newFields = getRcFormFields(form);
     if (!isEqual(newFields, fields)) {
       setFields(newFields);
@@ -39,4 +37,18 @@ export const useRcFormFields = (form: FormInstance): [FieldData[]] => {
   useRcFormWatch(form, update);
 
   return [fields];
+};
+
+export const setRcFormFields = (form: FormInstance, newFields: FieldData[]): void => {
+  const prevFields = getRcFormFields(form);
+  if (isEqual(prevFields, newFields)) {
+    return;
+  }
+
+  // FIXME: "Warning: There may be circular references" logged.
+  //        The rc-field-form's Field initially has *.errors === *.warnings,
+  //        causing that error.
+  //        _this.errors = EMPTY_ERRORS;
+  //        _this.warnings = EMPTY_ERRORS;
+  form.setFields(newFields);
 };
