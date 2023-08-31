@@ -65,7 +65,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     const filters = merge({}, initialFiltersState, queryFilters, {
       textSearch: searchParams.get('textSearch') ?? undefined,
       status: searchParams.get('status')?.split(',').filter(Boolean) ?? undefined,
-      selector: searchParams.get('selector')?.split(',').filter(Boolean) ?? undefined,
+      selector: searchParams.get('selector') ?? undefined,
     });
     if (!isEqual(filters, queryFilters)) {
       setQueryFilters(filters);
@@ -84,8 +84,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     } else {
       newSearchParams.delete('status');
     }
-    if (queryFilters.selector?.length) {
-      newSearchParams.set('selector', queryFilters.selector.join(','));
+    if (queryFilters.selector) {
+      newSearchParams.set('selector', queryFilters.selector);
     } else {
       newSearchParams.delete('selector');
     }

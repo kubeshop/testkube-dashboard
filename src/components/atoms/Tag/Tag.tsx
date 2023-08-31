@@ -1,3 +1,5 @@
+import {FC, ReactNode} from 'react';
+
 import {Tooltip} from 'antd';
 
 import {Text} from '@custom-antd';
@@ -8,9 +10,10 @@ export interface TagProps {
   title: string;
   type?: 'success' | 'warning' | 'error' | 'info';
   tooltipMessage?: string;
+  icon?: ReactNode;
 }
 
-const Tag: React.FC<TagProps> = ({title, type = '', tooltipMessage}) => {
+const Tag: FC<TagProps> = ({title, type = '', tooltipMessage, icon}) => {
   return (
     <TagContainer className={`${type}`}>
       {tooltipMessage ? (
@@ -18,7 +21,10 @@ const Tag: React.FC<TagProps> = ({title, type = '', tooltipMessage}) => {
           <Text className="regular small">{title}</Text>
         </Tooltip>
       ) : (
-        <Text className="regular small">{title}</Text>
+        <>
+          {icon}
+          <Text className="regular small">{title}</Text>
+        </>
       )}
     </TagContainer>
   );

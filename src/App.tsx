@@ -18,6 +18,7 @@ import {
   TestSuites,
   Tests,
   Triggers,
+  Webhooks,
 } from '@pages';
 
 import PluginsContext from '@plugins/context';
@@ -33,6 +34,7 @@ import {useExecutorsSync} from '@store/executors';
 import {initializeLogOutputStore} from '@store/logOutput';
 import {useSourcesSync} from '@store/sources';
 import {initializeTriggersStore} from '@store/triggers';
+import {initializeWebhooksStore} from '@store/webhooks';
 
 import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -46,6 +48,7 @@ export interface AppProps {
 
 const App: React.FC<AppProps> = ({plugins}) => {
   const [TriggersProvider] = initializeTriggersStore();
+  const [WebhooksProvider] = initializeWebhooksStore();
 
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
@@ -122,6 +125,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     .append(Suspense, {fallback: <Loading />})
     .append(ClusterDetailsProvider, {})
     .append(TriggersProvider, {})
+    .append(WebhooksProvider, {})
     .append(LogOutputProvider, {})
     .append(PluginsContext.Provider, {
       value: {
@@ -170,6 +174,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
           <Route path="executors/*" element={<Executors />} />
           <Route path="sources/*" element={<Sources />} />
           <Route path="triggers/*" element={<Triggers />} />
+          <Route path="webhooks/*" element={<Webhooks />} />
           <Route path="settings" element={<GlobalSettings />} />
           <Route
             path="/apiEndpoint"

@@ -18,6 +18,7 @@ type MultiSelectProps = {
   options?: Option[];
   placeholder: string;
   formatCreateLabel: (inputString: string) => string;
+  value?: Option[];
   defaultValue?: Option[];
   onChange?: (value: readonly Option[]) => void;
   validateCreation?: (inputValue: string) => boolean;
@@ -35,6 +36,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     options,
     placeholder,
     formatCreateLabel,
+    value,
     defaultValue,
     onChange,
     validateCreation,
@@ -65,6 +67,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
   return (
     <CreatableSelect
       ref={ref}
+      value={value}
       defaultValue={defaultValue}
       isMulti
       menuPlacement={menuPlacement}

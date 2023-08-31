@@ -28,6 +28,7 @@ export enum externalLinks {
   contactUs = 'https://calendly.com/bruno-at-kubeshop/15-minute-meeting',
   organizationMembers = 'https://docs.testkube.io/testkube-cloud/articles/organization-management#members',
   environmentMembers = 'https://docs.testkube.io/testkube-cloud/articles/environment-management#managing-environment-member-roles',
+  notificationsAndWebhooks = 'https://docs.testkube.io/articles/webhooks',
 }
 
 const crdCdn = `https://raw.githubusercontent.com/kubeshop/testkube-operator/${encodeURIComponent(

@@ -16,7 +16,7 @@ export const StyledEntityGrid = styled.div<{$columns?: number; $itemWidth: numbe
 
 export const ItemWrapper = styled.div`
   display: flex;
-  align-items: space-between;
+  justify-content: space-between;
   gap: 15px;
 
   padding: 20px;
@@ -83,11 +83,12 @@ export const ExecutionTimeItemColumn = styled(ItemColumn)`
   }
 `;
 
-export const StyledMetricItem = styled.div`
+export const StyledMetricItem = styled.div<{$right?: boolean}>`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex-basis: 115px;
+  flex: 1 0;
+  ${({$right}) => ($right ? 'margin-left: auto; flex: initial;' : '')}
 
   padding-top: 5px;
 `;

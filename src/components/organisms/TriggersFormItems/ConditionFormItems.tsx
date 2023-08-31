@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 
 import {Form, Input, Select, Space} from 'antd';
 
-import {LabelsSelect} from '@molecules';
+import {LabelSelectorHelpIcon, LabelsSelect} from '@molecules';
 
 import {useTriggersPick} from '@store/triggers';
 
@@ -38,7 +38,17 @@ const ConditionFormItems = () => {
             <Space size={16} direction="vertical" style={{width: '100%'}}>
               <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
               {switcherValue === 'label' ? (
-                <Form.Item label="Resource identifier" required name="resourceLabelSelector" rules={[required]}>
+                <Form.Item
+                  label={
+                    <>
+                      Resource identifier
+                      <LabelSelectorHelpIcon />
+                    </>
+                  }
+                  required
+                  name="resourceLabelSelector"
+                  rules={[required]}
+                >
                   <LabelsSelect defaultLabels={label} validation={isValid} />
                 </Form.Item>
               ) : (

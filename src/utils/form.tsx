@@ -11,5 +11,6 @@ export const k8sResourceNamePattern: Rule = {
 Name must must only consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`,
 };
 export const k8sResourceNameMaxLength: Rule = {max: 63, message: 'Max length 63 symbols'};
-export const url: Rule = {type: 'url'};
+export const url: Rule = {type: 'url', message: 'Invalid URL'};
+export const urlNoText: Rule = {...url, message: ''};
 export const duplicateKeyMessage = 'Duplicate key.';

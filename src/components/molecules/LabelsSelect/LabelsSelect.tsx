@@ -16,6 +16,7 @@ import {PollingIntervals} from '@utils/numbers';
 import {composeLabels, labelRegex} from './utils';
 
 type LabelsSelectProps = {
+  value?: Option[];
   onChange?: (value: readonly Option[]) => void;
   defaultLabels?: Record<string, Option>;
   options?: {[key: string]: string[]};
@@ -28,8 +29,17 @@ const isValidLabel = (value?: string) => {
   return value != null && labelRegex.test(value);
 };
 
+// TODO: Refactor it to be actual onChange/value input
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
-  const {onChange, defaultLabels, options, placeholder = 'Add or create new labels', validation, menuPlacement} = props;
+  const {
+    onChange,
+    value,
+    defaultLabels,
+    options,
+    placeholder = 'Add or create new labels',
+    validation,
+    menuPlacement,
+  } = props;
   // TODO: Check if it's actually expected, as it's used in multiple places
   const isSelectDisabled = !usePermission(Permissions.editEntity);
 
@@ -43,8 +53,8 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   const formattedDefaultLabels = composeLabels(defaultLabels);
 
   const formattedOptions: Option[] = Object.entries(options || data || {})
-    .map(([key, value]) => {
-      return value.map(item => {
+    .map(([key, v]) => {
+      return v.map(item => {
         const labelString = `${key}${item ? `:${item}` : ''}`;
 
         return {
@@ -57,6 +67,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
 
   return (
     <CreatableMultiSelect
+      value={value}
       onChange={onChange}
       placeholder={placeholder}
       formatCreateLabel={(inputString: string) => {
