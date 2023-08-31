@@ -1,10 +1,12 @@
-import {FC, useContext, useState} from 'react';
+import {FC, useState} from 'react';
 
 import {Form, Input, Steps} from 'antd';
 
-import {DashboardContext, ModalContext} from '@contexts';
-
 import {FormItem, FullWidthSpace} from '@custom-antd';
+
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
+import {useModal} from '@modal/hooks';
 
 import {Option} from '@models/form';
 import {Webhook, WebhookEvent} from '@models/webhook';
@@ -32,10 +34,9 @@ enum WebhookCreationModalSteps {
 }
 
 const WebhookCreationModal: FC = () => {
-  const {navigate} = useContext(DashboardContext);
-
+  const openDetails = useDashboardNavigate(name => `/webhooks/${name}/settings/general`);
   const [createWebhook, {isLoading}] = useCreateWebhookMutation();
-  const {closeModal} = useContext(ModalContext);
+  const {close} = useModal();
 
   const [step, setStep] = useState<WebhookCreationModalSteps>(WebhookCreationModalSteps.Condition);
   const [form] = Form.useForm<WebhookCreationModalFormValues>();
@@ -65,8 +66,8 @@ const WebhookCreationModal: FC = () => {
     return createWebhook(webhook)
       .then(displayDefaultNotificationFlow)
       .then(res => {
-        closeModal();
-        navigate(`/webhooks/${res.data.metadata.name}/settings/general`);
+        close();
+        openDetails(res.data.metadata.name);
       })
       .catch(error => notificationCall('failed', error.title, error.message));
   };
