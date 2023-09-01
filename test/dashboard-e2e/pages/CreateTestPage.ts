@@ -62,7 +62,7 @@ export class CreateTestPage {
     await this.page.evaluate(`
       const container = document.querySelector(${JSON.stringify(scrollSelector)});
       const scroll = (to) => {
-        if (to > container.scrollHeight || container.querySelector('.rc-virtual-list-holder-inner div[title="${value}"]')) {
+        if (!container || to > container.scrollHeight || container.querySelector('.rc-virtual-list-holder-inner div[title="${value}"]')) {
           return;
         }
         container.scrollTop = to;
