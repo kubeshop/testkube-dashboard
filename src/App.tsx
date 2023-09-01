@@ -1,10 +1,12 @@
-import React, {Suspense, useContext, useEffect, useMemo, useState} from 'react';
+import React, {Suspense, useContext, useEffect, useMemo} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {useUpdate} from 'react-use';
 
 import {config} from '@constants/config';
 
 import {DashboardContext, MainContext} from '@contexts';
+
+import {useModal} from '@modal/hooks';
 
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 
@@ -29,12 +31,10 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {initializeClusterDetailsStore} from '@store/clusterDetails';
+import {useClusterDetailsPick} from '@store/clusterDetails';
 import {useExecutorsSync} from '@store/executors';
 import {initializeLogOutputStore} from '@store/logOutput';
 import {useSourcesSync} from '@store/sources';
-import {initializeTriggersStore} from '@store/triggers';
-import {initializeWebhooksStore} from '@store/webhooks';
 
 import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -47,16 +47,10 @@ export interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({plugins}) => {
-  const [TriggersProvider] = initializeTriggersStore();
-  const [WebhooksProvider] = initializeWebhooksStore();
-
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
-
-  const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore({}, [apiEndpoint]);
-  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const [LogOutputProvider] = initializeLogOutputStore(undefined, [location.pathname]);
 
@@ -72,9 +66,17 @@ const App: React.FC<AppProps> = ({plugins}) => {
   });
   useSourcesSync({sources});
 
-  const [isEndpointModalVisible, setEndpointModalState] = useState(false);
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const update = useUpdate();
+
+  const {open: openEndpointModal, close: closeEndpointModal} = useModal({
+    title: 'Testkube API endpoint',
+    width: 693,
+    content: <EndpointModal />,
+    dataTestCloseBtn: 'endpoint-modal-close-button',
+    dataTestModalRoot: 'endpoint-modal',
+  });
 
   const isTestkubeCloudLaunchBannerHidden = localStorage.getItem(config.isTestkubeCloudLaunchBannerHidden);
 
@@ -90,7 +92,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     }
 
     if (!apiEndpoint && !isApiEndpointLocked()) {
-      setEndpointModalState(true);
+      openEndpointModal();
       return;
     }
 
@@ -110,7 +112,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
         // Display popup
         notificationCall('failed', 'Could not receive data from the specified API endpoint');
         if (!isApiEndpointLocked()) {
-          setEndpointModalState(true);
+          openEndpointModal();
         }
       });
   }, [apiEndpoint, isClusterAvailable]);
@@ -123,9 +125,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
-    .append(ClusterDetailsProvider, {})
-    .append(TriggersProvider, {})
-    .append(WebhooksProvider, {})
     .append(LogOutputProvider, {})
     .append(PluginsContext.Provider, {
       value: {
@@ -167,7 +166,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
             />
           </MessagePanelWrapper>
         ) : null}
-        <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
         <Routes>
           <Route path="tests/*" element={<Tests />} />
           <Route path="test-suites/*" element={<TestSuites />} />

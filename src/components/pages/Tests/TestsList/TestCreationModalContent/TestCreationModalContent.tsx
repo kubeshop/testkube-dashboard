@@ -1,10 +1,10 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
-import {ModalContext} from '@contexts';
-
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
+import {useModal} from '@modal/hooks';
 
 import {MetadataResponse, RTKResponse} from '@models/fetch';
 import {Test} from '@models/test';
@@ -33,7 +33,7 @@ const TestCreationModalContent: React.FC = () => {
   const [form] = Form.useForm();
   const testType = Form.useWatch('testType', form);
 
-  const {closeModal} = useContext(ModalContext);
+  const {close} = useModal();
   const telemetry = useTelemetry();
   const openDetails = useDashboardNavigate((name: string) => `/tests/${name}`);
 
@@ -76,7 +76,7 @@ const TestCreationModalContent: React.FC = () => {
         telemetry.event('createTest', {type: data.spec?.type});
 
         openDetails(data.metadata.name);
-        closeModal();
+        close();
       });
   };
 

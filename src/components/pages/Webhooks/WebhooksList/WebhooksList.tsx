@@ -2,12 +2,13 @@ import {FC, useContext} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {MainContext, ModalContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
-import {useLastCallback} from '@hooks/useLastCallback';
+
+import {useModal} from '@modal/hooks';
 
 import {EntityGrid} from '@molecules';
 
@@ -29,7 +30,6 @@ import WebhookCard from './WebhookCard';
 
 const WebhooksList: FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
-  const {setModalOpen, setModalConfig} = useContext(ModalContext);
 
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/webhooks/${name}/settings`);
 
@@ -41,13 +41,12 @@ const WebhooksList: FC = () => {
 
   const mayCreate = usePermission(Permissions.createEntity);
 
-  const openModal = useLastCallback(() => {
-    setModalOpen(true);
-    setModalConfig({
-      width: 530,
-      title: 'Create a webhook',
-      content: <WebhookCreationModal />,
-    });
+  const {open: openCreateModal} = useModal({
+    title: 'Create a webhook',
+    width: 530,
+    content: <WebhookCreationModal />,
+    dataTestCloseBtn: 'add-a-new-webhook-modal-close-button',
+    dataTestModalRoot: 'add-a-new-webhook-modal',
   });
 
   if (error) {
@@ -65,7 +64,7 @@ const WebhooksList: FC = () => {
       }
       headerButton={
         mayCreate ? (
-          <Button $customType="primary" onClick={openModal} disabled={!isClusterAvailable}>
+          <Button $customType="primary" onClick={openCreateModal} disabled={!isClusterAvailable}>
             Create a new webhook
           </Button>
         ) : null
@@ -76,7 +75,7 @@ const WebhooksList: FC = () => {
         data={webhooks}
         Component={WebhookCard}
         componentProps={{onClick: openDetails}}
-        empty={<EmptyWebhooks onButtonClick={openModal} />}
+        empty={<EmptyWebhooks onButtonClick={openCreateModal} />}
         itemHeight={125}
         loadingInitially={isLoading || !isClusterAvailable}
       />

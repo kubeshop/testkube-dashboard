@@ -15,7 +15,7 @@ export type ModalProps = {
   dataTestCloseBtn?: string;
 };
 
-const CustomModal: React.FC<ModalProps> = props => {
+const Modal: React.FC<ModalProps> = props => {
   const {
     setIsModalVisible,
     isModalVisible,
@@ -49,4 +49,4 @@ const CustomModal: React.FC<ModalProps> = props => {
   );
 };
 
-export default CustomModal;
+export default Modal;

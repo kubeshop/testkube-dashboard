@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 
 import {Input} from 'antd';
 
@@ -7,12 +7,12 @@ import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 import {capitalize} from 'lodash';
 
-import {ModalContext} from '@contexts';
-
 import {Button, FullWidthSpace, Text} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import usePressEnter from '@hooks/usePressEnter';
+
+import {useModal} from '@modal/hooks';
 
 import {notificationCall} from '@molecules';
 
@@ -36,7 +36,7 @@ const DeleteEntityModal: React.FC<{
 }> = props => {
   const {onCancel, useDeleteMutation, name, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
-  const {setModalOpen} = useContext(ModalContext);
+  const {close} = useModal();
   const back = useDashboardNavigate(defaultStackRoute);
 
   const onEvent = usePressEnter();
@@ -50,8 +50,7 @@ const DeleteEntityModal: React.FC<{
       .then(displayDefaultNotificationFlow)
       .then(() => {
         notificationCall('passed', `${capitalize(entityLabel)} was successfully deleted.`);
-
-        setModalOpen(false);
+        close();
 
         if (onConfirm) {
           onConfirm();
