@@ -128,7 +128,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
               </Text>
               <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
             </StyledMetricItem>
-            <StyledMetricItem $right>
+            <StyledMetricItem>
               <MetricsBarChart data={executions} chartHeight={38} barWidth={6} />
             </StyledMetricItem>
           </ItemRow>
