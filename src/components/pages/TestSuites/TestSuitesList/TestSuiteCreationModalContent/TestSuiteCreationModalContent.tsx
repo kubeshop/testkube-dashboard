@@ -13,7 +13,6 @@ import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {LabelsSelect, NotificationContent} from '@molecules';
-import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
@@ -40,7 +39,6 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const openSettings = useDashboardNavigate((name: string) => `/test-suites/${name}/settings/tests`);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
-  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
@@ -48,10 +46,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const inTopInViewport = useInViewport(topRef);
 
   const onFinish = (values: TestSuiteCreationModalFormValues) => {
-    addTestSuite({
-      ...values,
-      labels: decomposeLabels(localLabels),
-    })
+    addTestSuite(values)
       .then(displayDefaultNotificationFlow)
       .then(res => {
         telemetry.event('createTestSuite');
@@ -84,7 +79,9 @@ const TestSuiteCreationModalContent: React.FC = () => {
         <FormItem name="description">
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
         </FormItem>
-        <LabelsSelect onChange={setLocalLabels} />
+        <FormItem name="labels">
+          <LabelsSelect />
+        </FormItem>
         <FormItem shouldUpdate>
           {({isFieldsTouched}) => (
             <Button

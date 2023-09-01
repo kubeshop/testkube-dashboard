@@ -60,7 +60,7 @@ const TriggerDetails = () => {
           {
             key: 'settings',
             label: 'Settings',
-            children: <TriggerSettings reload={reload} tab={settingsTab} onTabChange={setSettingsTab} />,
+            children: <TriggerSettings tab={settingsTab} onTabChange={setSettingsTab} />,
           },
         ]}
       />

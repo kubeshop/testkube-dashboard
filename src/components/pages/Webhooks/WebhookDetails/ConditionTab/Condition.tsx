@@ -38,10 +38,7 @@ const Condition: FC = () => {
 
   const initialEvents = current!.events.map(item => ({label: item, value: item}));
   const initialLabels = useMemo(
-    () =>
-      decodeSelectorArray(current!.selector)
-        .map(({key, value}) => `${key}:${value}`)
-        .map(value => ({label: value, value})),
+    () => decodeSelectorArray(current!.selector).map(({key, value}) => `${key}:${value}`),
     [current!.selector]
   );
 
@@ -72,35 +69,25 @@ const Condition: FC = () => {
       disabled={!mayEdit}
       onConfirm={onFinish}
     >
-      <FormItem noStyle shouldUpdate>
-        {({getFieldError}) => (
-          <FormItem
-            name="labels"
-            required
-            rules={[requiredNoText]}
-            label={
-              <>
-                Resource identifier
-                <LabelSelectorHelpIcon />
-              </>
-            }
-          >
-            <LabelsSelect validation={getFieldError('labels').length === 0} />
-          </FormItem>
-        )}
+      <FormItem
+        name="labels"
+        required
+        rules={[requiredNoText]}
+        label={
+          <>
+            Resource identifier <LabelSelectorHelpIcon />
+          </>
+        }
+      >
+        <LabelsSelect />
       </FormItem>
-      <FormItem noStyle shouldUpdate>
-        {({getFieldError}) => (
-          <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
-            <CreatableMultiSelect
-              placeholder="Select Testkube resource"
-              options={webhookEvents}
-              menuPlacement="top"
-              formatCreateLabel={val => val}
-              validation={getFieldError('events').length === 0}
-            />
-          </FormItem>
-        )}
+      <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
+        <CreatableMultiSelect
+          placeholder="Select Testkube resource"
+          options={webhookEvents}
+          menuPlacement="top"
+          formatCreateLabel={val => val}
+        />
       </FormItem>
     </CardForm>
   );
