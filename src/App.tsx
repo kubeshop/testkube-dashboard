@@ -1,10 +1,12 @@
-import React, {Suspense, useContext, useEffect, useMemo, useState} from 'react';
+import React, {Suspense, useContext, useEffect, useMemo} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {useUpdate} from 'react-use';
 
 import {config} from '@constants/config';
 
 import {DashboardContext, MainContext} from '@contexts';
+
+import {useModal} from '@modal/hooks';
 
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 
@@ -66,9 +68,15 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
   const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
-  const [isEndpointModalVisible, setEndpointModalState] = useState(false);
-
   const update = useUpdate();
+
+  const {open: openEndpointModal, close: closeEndpointModal} = useModal({
+    title: 'Testkube API endpoint',
+    width: 693,
+    content: <EndpointModal />,
+    dataTestCloseBtn: 'endpoint-modal-close-button',
+    dataTestModalRoot: 'endpoint-modal',
+  });
 
   const isTestkubeCloudLaunchBannerHidden = localStorage.getItem(config.isTestkubeCloudLaunchBannerHidden);
 
@@ -84,7 +92,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
     }
 
     if (!apiEndpoint && !isApiEndpointLocked()) {
-      setEndpointModalState(true);
+      openEndpointModal();
       return;
     }
 
@@ -104,7 +112,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
         // Display popup
         notificationCall('failed', 'Could not receive data from the specified API endpoint');
         if (!isApiEndpointLocked()) {
-          setEndpointModalState(true);
+          openEndpointModal();
         }
       });
   }, [apiEndpoint, isClusterAvailable]);
@@ -158,7 +166,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
             />
           </MessagePanelWrapper>
         ) : null}
-        <EndpointModal visible={isEndpointModalVisible} setModalState={setEndpointModalState} />
         <Routes>
           <Route path="tests/*" element={<Tests />} />
           <Route path="test-suites/*" element={<TestSuites />} />
