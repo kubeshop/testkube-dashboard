@@ -29,12 +29,10 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
-import {initializeClusterDetailsStore} from '@store/clusterDetails';
+import {useClusterDetailsPick} from '@store/clusterDetails';
 import {useExecutorsSync} from '@store/executors';
 import {initializeLogOutputStore} from '@store/logOutput';
 import {useSourcesSync} from '@store/sources';
-import {initializeTriggersStore} from '@store/triggers';
-import {initializeWebhooksStore} from '@store/webhooks';
 
 import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
@@ -47,16 +45,10 @@ export interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({plugins}) => {
-  const [TriggersProvider] = initializeTriggersStore();
-  const [WebhooksProvider] = initializeWebhooksStore();
-
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
-
-  const [ClusterDetailsProvider, {pick: useClusterDetailsPick}] = initializeClusterDetailsStore({}, [apiEndpoint]);
-  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const [LogOutputProvider] = initializeLogOutputStore(undefined, [location.pathname]);
 
@@ -71,6 +63,8 @@ const App: React.FC<AppProps> = ({plugins}) => {
     skip: !isClusterAvailable,
   });
   useSourcesSync({sources});
+
+  const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
   const [isEndpointModalVisible, setEndpointModalState] = useState(false);
 
@@ -123,9 +117,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
 
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
-    .append(ClusterDetailsProvider, {})
-    .append(TriggersProvider, {})
-    .append(WebhooksProvider, {})
     .append(LogOutputProvider, {})
     .append(PluginsContext.Provider, {
       value: {
