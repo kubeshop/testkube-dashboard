@@ -25,6 +25,7 @@ export const StyledModal = styled(Modal)`
   .ant-modal-title {
     color: ${Colors.slate50};
     font-size: 28px;
+    line-height: 28px;
   }
 
   .ant-modal-close {
