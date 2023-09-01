@@ -71,15 +71,14 @@ const Condition: FC = () => {
     >
       <FormItem
         name="labels"
-        required
-        rules={[requiredNoText]}
         label={
           <>
             Resource identifier <LabelSelectorHelpIcon />
           </>
         }
+        required
       >
-        <LabelsSelect />
+        <LabelsSelect placeholder="All resources" stylePlaceholderAsValue />
       </FormItem>
       <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
         <CreatableMultiSelect

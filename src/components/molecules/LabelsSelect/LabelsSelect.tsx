@@ -23,6 +23,7 @@ type LabelsSelectProps = {
   validation?: boolean;
   menuPlacement?: 'auto' | 'bottom' | 'top';
   disabled?: boolean;
+  stylePlaceholderAsValue?: boolean;
 };
 
 const isValidLabel = (value?: string) => {
@@ -38,6 +39,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
     validation,
     menuPlacement,
     disabled,
+    stylePlaceholderAsValue,
   } = props;
   const {isClusterAvailable} = useContext(MainContext);
 
@@ -83,6 +85,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
       menuPlacement={menuPlacement}
       dataTest="labels"
       disabled={disabled}
+      stylePlaceholderAsValue={stylePlaceholderAsValue}
     />
   );
 };
