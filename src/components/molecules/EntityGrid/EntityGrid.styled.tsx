@@ -16,7 +16,6 @@ export const StyledEntityGrid = styled.div<{$columns?: number; $itemWidth: numbe
 
 export const ItemWrapper = styled.div`
   display: flex;
-  align-items: space-between;
   gap: 15px;
 
   padding: 20px;
