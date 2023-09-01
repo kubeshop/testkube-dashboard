@@ -43,7 +43,7 @@ const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
             <Text className="small" color={Colors.slate500}>
               RESOURCE <LabelSelectorHelpIcon />
             </Text>
-            <LabelsList labels={labels} />
+            {selector ? <LabelsList labels={labels} /> : <Text className="small">All resources</Text>}
           </StyledMetricItem>
         </ItemColumn>
       </ItemRow>

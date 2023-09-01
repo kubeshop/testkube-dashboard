@@ -23,6 +23,8 @@ type LabelsSelectProps = {
   placeholder?: string;
   validation?: boolean;
   menuPlacement?: 'auto' | 'bottom' | 'top';
+  disabled?: boolean;
+  stylePlaceholderAsValue?: boolean;
 };
 
 const isValidLabel = (value?: string) => {
@@ -39,6 +41,8 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
     placeholder = 'Add or create new labels',
     validation,
     menuPlacement,
+    disabled,
+    stylePlaceholderAsValue,
   } = props;
   // TODO: Check if it's actually expected, as it's used in multiple places
   const isSelectDisabled = !usePermission(Permissions.editEntity);
@@ -90,7 +94,8 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
       validation={validation}
       menuPlacement={menuPlacement}
       dataTest="labels"
-      disabled={isSelectDisabled}
+      disabled={disabled}
+      stylePlaceholderAsValue={stylePlaceholderAsValue}
     />
   );
 };

@@ -72,22 +72,16 @@ const Condition: FC = () => {
       disabled={!mayEdit}
       onConfirm={onFinish}
     >
-      <FormItem noStyle shouldUpdate>
-        {({getFieldError}) => (
-          <FormItem
-            name="labels"
-            required
-            rules={[requiredNoText]}
-            label={
-              <>
-                Resource identifier
-                <LabelSelectorHelpIcon />
-              </>
-            }
-          >
-            <LabelsSelect validation={getFieldError('labels').length === 0} />
-          </FormItem>
-        )}
+      <FormItem
+        name="labels"
+        label={
+          <>
+            Resource identifier <LabelSelectorHelpIcon />
+          </>
+        }
+        required
+      >
+        <LabelsSelect placeholder="All resources" stylePlaceholderAsValue />
       </FormItem>
       <FormItem noStyle shouldUpdate>
         {({getFieldError}) => (
