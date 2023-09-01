@@ -1,74 +1,69 @@
-import React, {useContext} from 'react';
+import React, {useContext, useMemo} from 'react';
 
 import {CreatableMultiSelect} from '@atoms';
 import {LabelsMultiValueLabel, LabelsOption} from '@atoms/CreatableMultiSelect/CustomComponents';
 
 import {MainContext} from '@contexts';
 
-import {Option} from '@models/form';
+import {useLastCallback} from '@hooks/useLastCallback';
 
-import {Permissions, usePermission} from '@permissions/base';
+import {Option} from '@models/form';
 
 import {useGetLabelsQuery} from '@services/labels';
 
 import {PollingIntervals} from '@utils/numbers';
 
-import {composeLabels, labelRegex} from './utils';
+import {labelRegex} from './utils';
 
 type LabelsSelectProps = {
-  value?: Option[];
-  onChange?: (value: readonly Option[]) => void;
-  defaultLabels?: Record<string, Option>;
-  options?: {[key: string]: string[]};
+  value?: string[];
+  onChange?: (value: readonly string[]) => void;
+  options?: string[];
   placeholder?: string;
   validation?: boolean;
   menuPlacement?: 'auto' | 'bottom' | 'top';
+  disabled?: boolean;
+  stylePlaceholderAsValue?: boolean;
 };
 
 const isValidLabel = (value?: string) => {
   return value != null && labelRegex.test(value);
 };
 
-// TODO: Refactor it to be actual onChange/value input
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   const {
     onChange,
     value,
-    defaultLabels,
     options,
     placeholder = 'Add or create new labels',
     validation,
     menuPlacement,
+    disabled,
+    stylePlaceholderAsValue,
   } = props;
-  // TODO: Check if it's actually expected, as it's used in multiple places
-  const isSelectDisabled = !usePermission(Permissions.editEntity);
-
   const {isClusterAvailable} = useContext(MainContext);
 
+  // TODO: Extract it outside?
   const {data, isFetching} = useGetLabelsQuery(null, {
     pollingInterval: PollingIntervals.default,
     skip: Boolean(options) || !isClusterAvailable,
   });
 
-  const formattedDefaultLabels = composeLabels(defaultLabels);
+  const formattedValue = useMemo(() => (value || []).map(label => ({label, value: label})), [value]);
 
-  const formattedOptions: Option[] = Object.entries(options || data || {})
-    .map(([key, v]) => {
-      return v.map(item => {
-        const labelString = `${key}${item ? `:${item}` : ''}`;
+  const formattedOptions: Option[] = useMemo(() => {
+    const finalOptions =
+      options ||
+      Object.entries(data || {}).flatMap(([key, items]) => items.map(item => `${key}${item ? `:${item}` : ''}`));
+    return finalOptions.map(label => ({label, value: label}));
+  }, [options, data]);
 
-        return {
-          label: labelString,
-          value: labelString,
-        };
-      });
-    })
-    .flat();
+  const change = useLastCallback((newValue: readonly Option[]) => onChange?.(newValue.map(x => x.value as string)));
 
   return (
     <CreatableMultiSelect
-      value={value}
-      onChange={onChange}
+      value={formattedValue}
+      onChange={change}
       placeholder={placeholder}
       formatCreateLabel={(inputString: string) => {
         if (typeof inputString === 'string' && inputString.includes(':')) {
@@ -81,7 +76,6 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
 
         return 'Create: You need to add a : separator to create this label';
       }}
-      defaultValue={formattedDefaultLabels}
       options={formattedOptions}
       CustomOptionComponent={LabelsOption}
       CustomMultiValueLabelComponent={LabelsMultiValueLabel}
@@ -90,7 +84,8 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
       validation={validation}
       menuPlacement={menuPlacement}
       dataTest="labels"
-      disabled={isSelectDisabled}
+      disabled={disabled}
+      stylePlaceholderAsValue={stylePlaceholderAsValue}
     />
   );
 };

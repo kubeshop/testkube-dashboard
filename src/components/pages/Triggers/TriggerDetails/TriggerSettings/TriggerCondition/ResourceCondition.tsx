@@ -91,38 +91,33 @@ const ResourceCondition: React.FC = () => {
           />
         </FormItem>
       )}
-      <Form.List name="conditions" initialValue={[]}>
+      <Form.List name="conditions">
         {(fields, {add, remove}) => (
           <FullWidthSpace size={16} direction="vertical">
-            {!isResourceConditionsListEmpty ? (
-              <FullWidthSpace direction="vertical" size={16}>
-                {fields.length &&
-                  fields?.map(({key, name, ...restField}) => {
-                    return (
-                      <FormRow key={key}>
-                        <FormItem {...restField} name={[name, 'type']} rules={[requiredNoText]} flex={2}>
-                          <Select
-                            options={keyMap?.conditions?.map(condition => ({
-                              label: condition,
-                              value: condition,
-                            }))}
-                            placeholder="Type"
-                          />
-                        </FormItem>
-                        <FormItem {...restField} name={[name, 'status']} rules={[requiredNoText]} flex={2}>
-                          <Select options={selectOptions} placeholder="Status" />
-                        </FormItem>
-                        <FormItem {...restField} name={[name, 'reason']} flex={4}>
-                          <Input placeholder="Reason" />
-                        </FormItem>
-                        <FormIconWrapper>
-                          <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
-                        </FormIconWrapper>
-                      </FormRow>
-                    );
-                  })}
-              </FullWidthSpace>
-            ) : null}
+            <FullWidthSpace direction="vertical" size={16}>
+              {fields?.map(({key, name, ...restField}) => (
+                <FormRow key={key}>
+                  <FormItem {...restField} name={[name, 'type']} rules={[requiredNoText]} flex={2}>
+                    <Select
+                      options={keyMap?.conditions?.map(condition => ({
+                        label: condition,
+                        value: condition,
+                      }))}
+                      placeholder="Type"
+                    />
+                  </FormItem>
+                  <FormItem {...restField} name={[name, 'status']} rules={[requiredNoText]} flex={2}>
+                    <Select options={selectOptions} placeholder="Status" />
+                  </FormItem>
+                  <FormItem {...restField} name={[name, 'reason']} flex={4}>
+                    <Input placeholder="Reason" />
+                  </FormItem>
+                  <FormIconWrapper>
+                    <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
+                  </FormIconWrapper>
+                </FormRow>
+              ))}
+            </FullWidthSpace>
             <FormRow justify="center">
               <Button
                 $customType="secondary"

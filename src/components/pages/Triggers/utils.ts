@@ -1,12 +1,19 @@
-import {Option} from '@models/form';
 import {TestTrigger, TestTriggerSelector} from '@models/triggers';
 
-import {decomposeLabels} from '@molecules/LabelsSelect/utils';
+import {composeLabels, decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 export const getResourceIdentifierSelector = (
-  formValue: string | readonly Option[],
+  formValue: string | string[],
   appNamespace: string
 ): TestTriggerSelector => {
+  if (Array.isArray(formValue)) {
+    return {
+      labelSelector: {
+        matchLabels: decomposeLabels(formValue),
+      },
+    };
+  }
+
   if (typeof formValue === 'string') {
     if (formValue.includes('/')) {
       const [namespace, name] = formValue.split('/');
@@ -23,14 +30,6 @@ export const getResourceIdentifierSelector = (
     };
   }
 
-  if (formValue.length) {
-    return {
-      labelSelector: {
-        matchLabels: decomposeLabels(formValue),
-      },
-    };
-  }
-
   // eslint-disable-next-line no-throw-literal
   throw 'Resource validation error';
 };
@@ -42,7 +41,7 @@ export const getConditionFormValues = (trigger: TestTrigger) => {
     event,
   } = trigger;
   const resourceNameSelector = name && namespace ? `${namespace}/${name}` : null;
-  const resourceLabelSelector = currentLabelSelector?.matchLabels;
+  const resourceLabelSelector = composeLabels(currentLabelSelector?.matchLabels);
 
   return {
     resource,
@@ -59,7 +58,7 @@ export const getActionFormValues = (trigger: TestTrigger) => {
     execution,
   } = trigger;
   const testNameSelector = name;
-  const testLabelSelector = currentLabelSelector?.matchLabels;
+  const testLabelSelector = composeLabels(currentLabelSelector?.matchLabels);
 
   return {
     testNameSelector,

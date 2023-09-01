@@ -40,11 +40,7 @@ const TriggerAction: React.FC = () => {
 
     return updateTrigger(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => {
-        notificationCall('passed', 'Trigger was successfully updated.');
-        setCurrentTrigger(res.data);
-        form.setFieldsValue(getActionFormValues(res.data));
-      });
+      .then(() => notificationCall('passed', 'Trigger was successfully updated.'));
   };
 
   return (
