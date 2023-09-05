@@ -29,7 +29,7 @@ interface MessagePanelProps {
   title: string;
   description: React.ReactNode;
   type?: 'warning' | 'error' | 'default';
-  position?: 'inline';
+  position?: 'fullscreen' | 'inline';
   buttons?: (ButtonConfig | ButtonWithLinkConfig)[];
   onClose?: () => void;
 }
@@ -50,10 +50,10 @@ const textColorForType: Record<string, Record<string, Colors>> = {
 };
 
 const MessagePanel: React.FC<MessagePanelProps> = props => {
-  const {type = 'error', title, description, position, buttons, onClose} = props;
+  const {type = 'error', title, description, position = 'inline', buttons, onClose} = props;
 
   return (
-    <MessagePanelWrapper className={`${type} ${position || ''}`}>
+    <MessagePanelWrapper className={`${type} ${position}`}>
       <MessageDescription>
         <Text className="bold middle" color={textColorForType[type].header}>
           {title}

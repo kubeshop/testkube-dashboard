@@ -54,12 +54,14 @@ const createAiInsightsPlugin = (): Plugin => ({
         onClose={() => {
           localStorage.setItem(config.isAiBannerHidden, 'true');
         }}
+        position="fullscreen"
         type="default"
         title="🎉 Get AI support on failing tests! 🎉"
         description="Try our AI Hints to improve your tests and get support to debug them more efficiently."
       />,
       {
-        visible: () => localStorage.getItem(config.isAiBannerHidden) !== 'true' && isTestExecutionFailed(scope),
+        visible: () =>
+          (localStorage.getItem(config.isAiBannerHidden) !== 'true' && isTestExecutionFailed(scope)) || true,
       }
     );
   },
