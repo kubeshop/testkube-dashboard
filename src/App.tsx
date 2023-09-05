@@ -160,9 +160,10 @@ const App: React.FC<AppProps> = ({plugins}) => {
                 localStorage.setItem(config.isTestkubeCloudLaunchBannerHidden, 'true');
                 update();
               }}
+              position="fullscreen"
               type="default"
               title="🎉 We have just launched Testkube Cloud! 🎉"
-              description="One centralised place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
+              description="One centralized place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
             />
           </MessagePanelWrapper>
         ) : null}
