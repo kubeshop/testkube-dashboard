@@ -23,7 +23,7 @@ import {SecondStep} from './SecondStep';
 
 type WebhookCreationModalFormValues = {
   name: string;
-  selector: Option[];
+  selector: string[];
   events: Option[];
   uri: string;
 };
@@ -55,12 +55,12 @@ const WebhookCreationModal: FC = () => {
 
   const onFinish = () => {
     const values: WebhookCreationModalFormValues = form.getFieldsValue(true);
-    const selector = values.selector.map(x => `${x.value}`.replace(':', '=')).join(',');
+    const selector = values.selector?.map(x => x.replace(':', '=')).join(',') || '';
 
     const webhook: Webhook = {
       ...values,
       selector,
-      events: values.events.map(item => item.value) as WebhookEvent[],
+      events: (values.events?.map(item => item.value) as WebhookEvent[]) || [],
     };
 
     return createWebhook(webhook)
