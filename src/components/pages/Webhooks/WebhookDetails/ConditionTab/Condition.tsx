@@ -24,7 +24,7 @@ import {decodeSelectorArray} from '@utils/selectors';
 
 type ConditionFormValues = {
   events: {label: WebhookEvent; value: WebhookEvent}[];
-  labels: {label: string; value: string}[];
+  labels: string[];
 };
 
 const webhookEvents = Object.keys(WebhookEvent).map(item => {
@@ -48,10 +48,10 @@ const Condition: FC = () => {
 
   const onFinish = () => {
     const values = form.getFieldsValue();
-    const selector = values.labels.map(x => x.value.replace(':', '=')).join(',');
+    const selector = values.labels?.map(x => x.replace(':', '=')).join(',') || '';
     return updateWebhook({
       ...current!,
-      events: values.events.map(x => x.value),
+      events: values.events?.map(x => x.value) || [],
       selector,
     })
       .then(displayDefaultNotificationFlow)
@@ -80,13 +80,18 @@ const Condition: FC = () => {
       >
         <LabelsSelect placeholder="All resources" stylePlaceholderAsValue />
       </FormItem>
-      <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
-        <CreatableMultiSelect
-          placeholder="Select Testkube resource"
-          options={webhookEvents}
-          menuPlacement="top"
-          formatCreateLabel={val => val}
-        />
+      <FormItem noStyle shouldUpdate>
+        {({getFieldError}) => (
+          <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
+            <CreatableMultiSelect
+              placeholder="Select Testkube resource"
+              options={webhookEvents}
+              menuPlacement="top"
+              formatCreateLabel={val => val}
+              validation={getFieldError('events').length === 0}
+            />
+          </FormItem>
+        )}
       </FormItem>
     </CardForm>
   );
