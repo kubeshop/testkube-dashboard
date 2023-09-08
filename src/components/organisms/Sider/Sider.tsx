@@ -91,6 +91,15 @@ const getRoutes = (showSocialLinksInSider: boolean) => [
       classNames: 'item',
     },
   },
+  {
+    path: '/status-page',
+    icon: StatusPageIcon,
+    title: 'Status Page',
+    transition: {
+      classNames: 'item',
+    },
+    active: /status-page/,
+  },
   ...(showSocialLinksInSider
     ? []
     : [
@@ -105,16 +114,6 @@ const getRoutes = (showSocialLinksInSider: boolean) => [
           active: /environment-management/,
         },
       ]),
-
-  {
-    path: '/status-page',
-    icon: StatusPageIcon,
-    title: 'Status Page',
-    transition: {
-      classNames: 'item',
-    },
-    active: /status-page/,
-  },
 ];
 
 const Sider: React.FC = () => {

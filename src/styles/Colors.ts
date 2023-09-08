@@ -137,6 +137,8 @@ enum Colors {
   rose700 = '#be123c',
   rose800 = '#9f1239',
   rose900 = '#881337',
+
+  orange400 = '#FFA726',
 }
 
 export enum BackgroundColors {
@@ -172,6 +174,11 @@ export enum StatusColors {
   major_outage = Colors.pink800,
   unavailable = Colors.slate700,
   unknown = Colors.grey700,
+  critical = Colors.rose500,
+  major = Colors.rose500,
+  minor = Colors.orange400,
+  low = Colors.yellow400,
+  info = Colors.slate50,
 }
 
 export enum SecondaryStatusColors {
