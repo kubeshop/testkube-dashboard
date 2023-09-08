@@ -7,8 +7,6 @@ import {MainContext} from '@contexts';
 
 import {Option} from '@models/form';
 
-import {Permissions, usePermission} from '@permissions/base';
-
 import {useGetLabelsQuery} from '@services/labels';
 
 import {PollingIntervals} from '@utils/numbers';
@@ -44,9 +42,6 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
     disabled,
     stylePlaceholderAsValue,
   } = props;
-  // TODO: Check if it's actually expected, as it's used in multiple places
-  const isSelectDisabled = !usePermission(Permissions.editEntity);
-
   const {isClusterAvailable} = useContext(MainContext);
 
   const {data, isFetching} = useGetLabelsQuery(null, {
