@@ -17,7 +17,6 @@ export const encodeSelector = (mapping: SelectorDictionary = {}): string =>
 export const decodeSelector = (selector: string = ''): SelectorDictionary =>
   selector
     .split(',')
-    .filter(Boolean)
     .map(v => v.split('=').map(x => x.trim()))
     .reduce((acc, [key, value]) => ({...acc, [key.trim()]: toString(value)}), {});
 

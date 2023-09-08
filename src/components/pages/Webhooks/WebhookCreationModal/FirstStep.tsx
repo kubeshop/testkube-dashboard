@@ -26,16 +26,22 @@ export const FirstStep: FC<FirstStepProps> = ({onStepChange}) => (
     <Text color={Colors.slate400} className="regular middle">
       Define the conditions to be met for the trigger to be called.
     </Text>
-    <FormItem
-      name="selector"
-      label={
-        <>
-          Resource identifier <LabelSelectorHelpIcon />
-        </>
-      }
-      required
-    >
-      <LabelsSelect placeholder="All resources" stylePlaceholderAsValue />
+    <FormItem noStyle shouldUpdate>
+      {({getFieldError}) => (
+        <FormItem
+          name="selector"
+          required
+          rules={[requiredNoText]}
+          label={
+            <>
+              Resource identifier
+              <LabelSelectorHelpIcon />
+            </>
+          }
+        >
+          <LabelsSelect validation={getFieldError('selector').length === 0} />
+        </FormItem>
+      )}
     </FormItem>
     <FormItem noStyle shouldUpdate>
       {({getFieldError}) => (

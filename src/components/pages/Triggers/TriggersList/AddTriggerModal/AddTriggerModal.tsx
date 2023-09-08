@@ -11,6 +11,7 @@ import useInViewport from '@hooks/useInViewport';
 
 import {useModal} from '@modal/hooks';
 
+import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {NotificationContent} from '@molecules';
@@ -30,13 +31,6 @@ import ModalFirstStep from './ModalFirstStep';
 import ModalSecondStep from './ModalSecondStep';
 import {StepsEnum} from './types';
 
-interface FirstStepValues {
-  resource?: string;
-  event?: string;
-  resourceLabelSelector?: string[];
-  resourceNameSelector?: string;
-}
-
 const AddTriggerModal: React.FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const {isClusterAvailable} = useContext(MainContext);
@@ -51,7 +45,7 @@ const AddTriggerModal: React.FC = () => {
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
   const [currentStep, setCurrentStep] = useState(StepsEnum.condition);
   const [name, setName] = useState('');
-  const [firstStepValues, setFirstStepValues] = useState<FirstStepValues>({});
+  const [firstStepValues, setFirstStepValues] = useState<Record<string, string | Option[]>>({});
 
   const topRef = useRef<HTMLDivElement>(null);
   const inTopInViewport = useInViewport(topRef);
@@ -62,7 +56,7 @@ const AddTriggerModal: React.FC = () => {
     const values = form.getFieldsValue();
 
     const resourceSelector = getResourceIdentifierSelector(
-      firstStepValues.resourceLabelSelector || firstStepValues.resourceNameSelector!,
+      firstStepValues.resourceLabelSelector || firstStepValues.resourceNameSelector,
       namespace
     );
 

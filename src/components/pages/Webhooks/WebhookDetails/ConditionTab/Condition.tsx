@@ -38,7 +38,10 @@ const Condition: FC = () => {
 
   const initialEvents = current!.events.map(item => ({label: item, value: item}));
   const initialLabels = useMemo(
-    () => decodeSelectorArray(current!.selector).map(({key, value}) => `${key}:${value}`),
+    () =>
+      decodeSelectorArray(current!.selector)
+        .map(({key, value}) => `${key}:${value}`)
+        .map(value => ({label: value, value})),
     [current!.selector]
   );
 
@@ -69,16 +72,22 @@ const Condition: FC = () => {
       disabled={!mayEdit}
       onConfirm={onFinish}
     >
-      <FormItem
-        name="labels"
-        label={
-          <>
-            Resource identifier <LabelSelectorHelpIcon />
-          </>
-        }
-        required
-      >
-        <LabelsSelect placeholder="All resources" stylePlaceholderAsValue />
+      <FormItem noStyle shouldUpdate>
+        {({getFieldError}) => (
+          <FormItem
+            name="labels"
+            required
+            rules={[requiredNoText]}
+            label={
+              <>
+                Resource identifier
+                <LabelSelectorHelpIcon />
+              </>
+            }
+          >
+            <LabelsSelect validation={getFieldError('labels').length === 0} />
+          </FormItem>
+        )}
       </FormItem>
       <FormItem noStyle shouldUpdate>
         {({getFieldError}) => (

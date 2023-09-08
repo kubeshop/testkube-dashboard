@@ -8,11 +8,12 @@ import TriggerAction from './TriggerAction';
 import TriggerCondition from './TriggerCondition';
 
 interface TriggerSettingsProps {
+  reload: () => void;
   tab: string;
   onTabChange: (tab: string) => void;
 }
 
-const TriggerSettings: FC<TriggerSettingsProps> = ({tab, onTabChange}) => (
+const TriggerSettings: FC<TriggerSettingsProps> = ({reload, tab, onTabChange}) => (
   <SettingsLayout
     active={tab}
     onChange={onTabChange}
@@ -20,7 +21,7 @@ const TriggerSettings: FC<TriggerSettingsProps> = ({tab, onTabChange}) => (
       {id: 'general', label: 'General', children: <General />},
       {id: 'condition', label: 'Trigger Condition', children: <TriggerCondition />},
       {id: 'action', label: 'Trigger Action', children: <TriggerAction />},
-      {id: 'definition', label: 'Definition', children: <Definition />},
+      {id: 'definition', label: 'Definition', children: <Definition reload={reload} />},
     ]}
   />
 );

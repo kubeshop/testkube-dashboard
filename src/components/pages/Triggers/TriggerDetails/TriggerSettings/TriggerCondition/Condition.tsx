@@ -42,7 +42,11 @@ const Condition: React.FC = () => {
 
     return updateTrigger(body)
       .then(displayDefaultNotificationFlow)
-      .then(() => notificationCall('passed', 'Trigger was successfully updated.'));
+      .then(res => {
+        notificationCall('passed', 'Trigger was successfully updated.');
+        setCurrentTrigger(res.data);
+        form.setFieldsValue(getConditionFormValues(res.data));
+      });
   };
 
   return (

@@ -8,20 +8,17 @@ import {dynamicBaseQuery, memoizeQuery} from '@utils/fetchUtils';
 export const triggersApi = createApi({
   reducerPath: 'triggersApi',
   baseQuery: dynamicBaseQuery,
-  tagTypes: ['Trigger'],
   endpoints: builder => ({
     getTriggersKeyMap: builder.query<TriggersKeyMap, void | null>({
       query: () => ({url: `/keymap/triggers`}),
     }),
     getTriggersList: builder.query<TestTrigger[], void | null>({
       query: () => ({url: `/triggers`}),
-      providesTags: [{type: 'Trigger', id: 'LIST'}],
     }),
     getTriggerById: builder.query<TestTrigger, string>({
       query: id => ({
         url: `/triggers/${id}`,
       }),
-      providesTags: (res, err, id) => [{type: 'Trigger', id}],
     }),
     getTriggerDefinition: builder.query<string, string>({
       query: id => ({
@@ -29,7 +26,6 @@ export const triggersApi = createApi({
         responseHandler: 'text',
         headers: {accept: 'text/yaml'},
       }),
-      providesTags: (res, err, id) => [{type: 'Trigger', id}],
     }),
     createTrigger: builder.mutation<any, any>({
       query: body => ({
@@ -37,7 +33,6 @@ export const triggersApi = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [{type: 'Trigger', id: 'LIST'}],
     }),
     updateTriggerById: builder.mutation<TestTrigger, TestTrigger>({
       query: body => ({
@@ -45,10 +40,6 @@ export const triggersApi = createApi({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (res, err, {name: id}) => [
-        {type: 'Trigger', id: 'LIST'},
-        {type: 'Trigger', id},
-      ],
     }),
     updateTriggerDefinition: builder.mutation<any, YamlEditBody>({
       query: body => ({
@@ -57,20 +48,19 @@ export const triggersApi = createApi({
         headers: {'content-type': 'text/yaml'},
         body: body.value,
       }),
-      invalidatesTags: (res, err, {name: id}) => [
-        {type: 'Trigger', id: 'LIST'},
-        {type: 'Trigger', id},
-      ],
+    }),
+    updateTriggers: builder.mutation<void, any>({
+      query: body => ({
+        url: `/triggers`,
+        method: 'PATCH',
+        body,
+      }),
     }),
     deleteTrigger: builder.mutation<void, string>({
       query: id => ({
         url: `/triggers/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (res, err, id) => [
-        {type: 'Trigger', id: 'LIST'},
-        {type: 'Trigger', id},
-      ],
     }),
   }),
 });
@@ -83,6 +73,7 @@ export const {
   useGetTriggersKeyMapQuery,
   useCreateTriggerMutation,
   useGetTriggersListQuery,
+  useUpdateTriggersMutation,
   useGetTriggerByIdQuery,
   useGetTriggerDefinitionQuery,
   useDeleteTriggerMutation,

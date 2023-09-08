@@ -36,18 +36,27 @@ const ActionFormItems = () => {
       <Form.Item label="Testkube action" required name="action" rules={[required]}>
         <Select options={actionOptions} placeholder="Select a testkube related action" />
       </Form.Item>
-      <Space size={16} direction="vertical" style={{width: '100%'}}>
-        <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
-        {switcherValue === 'label' ? (
-          <Form.Item label="Testkube resource" required name="testLabelSelector" rules={[required]}>
-            <LabelsSelect />
-          </Form.Item>
-        ) : (
-          <Form.Item label="Testkube resource" required name="testNameSelector" rules={[required]}>
-            <ResourceTriggerSelect />
-          </Form.Item>
-        )}
-      </Space>
+      <Form.Item noStyle shouldUpdate>
+        {({getFieldValue, getFieldError}) => {
+          const label = getFieldValue('testLabelSelector');
+          const isValid = !(getFieldError('resourceLabelSelector').length > 0);
+
+          return (
+            <Space size={16} direction="vertical" style={{width: '100%'}}>
+              <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
+              {switcherValue === 'label' ? (
+                <Form.Item label="Testkube resource" required name="testLabelSelector" rules={[required]}>
+                  <LabelsSelect defaultLabels={label} validation={isValid} />
+                </Form.Item>
+              ) : (
+                <Form.Item label="Testkube resource" required name="testNameSelector" rules={[required]}>
+                  <ResourceTriggerSelect />
+                </Form.Item>
+              )}
+            </Space>
+          );
+        }}
+      </Form.Item>
     </>
   );
 };

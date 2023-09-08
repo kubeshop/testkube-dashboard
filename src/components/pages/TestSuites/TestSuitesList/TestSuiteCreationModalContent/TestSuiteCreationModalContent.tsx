@@ -39,6 +39,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const openSettings = useDashboardNavigate((name: string) => `/test-suites/${name}/settings/tests`);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
+  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
@@ -82,9 +83,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
         <FormItem name="description">
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
         </FormItem>
-        <FormItem name="labels">
-          <LabelsSelect />
-        </FormItem>
+        <LabelsSelect onChange={setLocalLabels} />
         <FormItem shouldUpdate>
           {({isFieldsTouched}) => (
             <Button

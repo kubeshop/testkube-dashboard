@@ -9,14 +9,19 @@ import {useTriggersField} from '@store/triggers';
 import {createSchemaOverride} from '@utils/createSchemaOverride';
 import {testkubeCRDBases} from '@utils/externalLinks';
 
-const TriggerDefinition: FC = () => {
-  const [currentTrigger] = useTriggersField('current');
+interface TriggerDefinitionProps {
+  reload: () => void;
+}
+
+const TriggerDefinition: FC<TriggerDefinitionProps> = ({reload}) => {
+  const [currentTrigger, setCurrentTrigger] = useTriggersField('current');
 
   return (
     <Definition
       useGetDefinitionQuery={useGetTriggerDefinitionQuery}
       useUpdateDefinitionMutation={useUpdateTriggerDefinitionMutation}
       label="trigger"
+      onUpdate={reload}
       name={currentTrigger!.name}
       crdUrl={testkubeCRDBases.triggers}
       overrideSchema={createSchemaOverride($ => {
