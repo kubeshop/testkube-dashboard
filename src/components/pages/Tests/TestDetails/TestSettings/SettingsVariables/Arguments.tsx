@@ -38,8 +38,9 @@ const Arguments: React.FC = () => {
   const [updateTest] = useUpdateTestMutation();
 
   const entityArgs = details.executionRequest?.args || [];
+  const initialArgValue = entityArgs.join(' ') || '';
 
-  const [argsValue, setArgsValue] = useState(entityArgs.join(' ') || '');
+  const [argsValue, setArgsValue] = useState(initialArgValue);
   const [isPrettified, setPrettifiedState] = useState(true);
 
   const onSaveForm = () => {
@@ -104,7 +105,7 @@ const Arguments: React.FC = () => {
       description="Define arguments which will be passed to the test executor."
       footer={footer}
       form={form}
-      initialValues={{args: argsValue}}
+      initialValues={{args: initialArgValue}}
       disabled={!mayEdit}
       onFieldsChange={onChange}
       onConfirm={onSaveForm}
