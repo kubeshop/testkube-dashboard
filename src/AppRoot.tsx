@@ -128,6 +128,7 @@ const AppRoot: React.FC = () => {
       showLogoInSider: true,
       showSocialLinksInSider: true,
       showTestkubeCloudBanner: true,
+      isCloudFeatureEnabled: false,
     }),
     [navigate, location]
   );

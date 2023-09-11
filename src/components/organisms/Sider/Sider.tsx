@@ -42,7 +42,7 @@ const DEFAULT_ICON_STYLE = {
   fontSize: 24,
 };
 
-const getRoutes = (showSocialLinksInSider: boolean) => [
+const getRoutes = (showSocialLinksInSider: boolean, isCloudFeatureEnabled: boolean) => [
   {
     path: '/tests',
     icon: TestsIcon,
@@ -91,15 +91,20 @@ const getRoutes = (showSocialLinksInSider: boolean) => [
       classNames: 'item',
     },
   },
-  {
-    path: '/status-page',
-    icon: StatusPageIcon,
-    title: 'Status Page',
-    transition: {
-      classNames: 'item',
-    },
-    active: /status-page/,
-  },
+  ...(isCloudFeatureEnabled
+    ? [
+        {
+          path: '/status-page',
+          icon: StatusPageIcon,
+          title: 'Status Page',
+          transition: {
+            classNames: 'item',
+          },
+          active: /status-page/,
+        },
+      ]
+    : []),
+
   ...(showSocialLinksInSider
     ? []
     : [
@@ -117,7 +122,7 @@ const getRoutes = (showSocialLinksInSider: boolean) => [
 ];
 
 const Sider: React.FC = () => {
-  const {showLogoInSider, showSocialLinksInSider} = useContext(DashboardContext);
+  const {showLogoInSider, showSocialLinksInSider, isCloudFeatureEnabled} = useContext(DashboardContext);
   const openSettings = useDashboardNavigate('/settings');
 
   const otherMenuItems = [
@@ -172,7 +177,7 @@ const Sider: React.FC = () => {
   ];
 
   const renderedMenuItems = useMemo(() => {
-    return getRoutes(showSocialLinksInSider).map(route => {
+    return getRoutes(showSocialLinksInSider, isCloudFeatureEnabled).map(route => {
       const {icon: MenuIcon, path, title, active} = route;
 
       return (
@@ -191,7 +196,7 @@ const Sider: React.FC = () => {
         </StyledSiderLink>
       );
     });
-  }, [showSocialLinksInSider]);
+  }, [showSocialLinksInSider, isCloudFeatureEnabled]);
 
   const renderedOtherMenuItems = useMemo(() => {
     return otherMenuItems.map(otherMenuItem => {

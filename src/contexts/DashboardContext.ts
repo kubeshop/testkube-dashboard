@@ -9,6 +9,7 @@ interface DashboardContextData {
   showLogoInSider: boolean;
   showSocialLinksInSider: boolean;
   showTestkubeCloudBanner: boolean;
+  isCloudFeatureEnabled: boolean;
 }
 
 const DashboardContext = createContext<DashboardContextData>(undefined!);
