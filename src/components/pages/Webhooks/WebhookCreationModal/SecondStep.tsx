@@ -19,6 +19,7 @@ export const SecondStep: FC<SecondStepProps> = ({onStepChange}) => {
           onClick={() => {
             onStepChange(0);
           }}
+          $customType="secondary"
         >
           Back
         </Button>

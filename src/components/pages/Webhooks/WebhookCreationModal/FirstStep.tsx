@@ -37,13 +37,18 @@ export const FirstStep: FC<FirstStepProps> = ({onStepChange}) => (
     >
       <LabelsSelect placeholder="All resources" stylePlaceholderAsValue />
     </FormItem>
-    <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
-      <CreatableMultiSelect
-        placeholder="Select Testkube resource"
-        options={webhookEvents}
-        menuPlacement="top"
-        formatCreateLabel={val => val}
-      />
+    <FormItem noStyle shouldUpdate>
+      {({getFieldError}) => (
+        <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
+          <CreatableMultiSelect
+            placeholder="Select Testkube resource"
+            options={webhookEvents}
+            menuPlacement="top"
+            formatCreateLabel={val => val}
+            validation={getFieldError('events').length === 0}
+          />
+        </FormItem>
+      )}
     </FormItem>
     <FullWidthSpace justify="flex-end">
       <Button
