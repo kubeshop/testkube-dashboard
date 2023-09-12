@@ -9,10 +9,10 @@ import useInViewport from '@hooks/useInViewport';
 
 import {useModal} from '@modal/hooks';
 
-import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {LabelsSelect, NotificationContent} from '@molecules';
+import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {useAddTestSuiteMutation} from '@services/testSuites';
 
@@ -28,7 +28,7 @@ const {TextArea} = Input;
 type TestSuiteCreationModalFormValues = {
   name: string;
   description: string;
-  labels: readonly Option[];
+  labels: string[];
 };
 
 const TestSuiteCreationModalContent: React.FC = () => {
@@ -46,7 +46,10 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const inTopInViewport = useInViewport(topRef);
 
   const onFinish = (values: TestSuiteCreationModalFormValues) => {
-    addTestSuite(values)
+    addTestSuite({
+      ...values,
+      labels: decomposeLabels(values.labels),
+    })
       .then(displayDefaultNotificationFlow)
       .then(res => {
         telemetry.event('createTestSuite');
