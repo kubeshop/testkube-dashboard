@@ -1,7 +1,16 @@
 import {Option} from '@models/form';
-import {TestTrigger, TestTriggerSelector} from '@models/triggers';
+import {MatchLabels, TestTrigger, TestTriggerSelector} from '@models/triggers';
 
 import {decomposeLabels} from '@molecules/LabelsSelect/utils';
+
+const transformLabels = (labels?: MatchLabels) =>
+  Object.entries(labels || {}).map(([key, value]) => {
+    const labelString = `${key}:${value}`;
+    return {
+      value: labelString,
+      label: labelString,
+    };
+  });
 
 export const getResourceIdentifierSelector = (
   formValue: string | readonly Option[],
@@ -42,7 +51,7 @@ export const getConditionFormValues = (trigger: TestTrigger) => {
     event,
   } = trigger;
   const resourceNameSelector = name && namespace ? `${namespace}/${name}` : null;
-  const resourceLabelSelector = currentLabelSelector?.matchLabels;
+  const resourceLabelSelector = transformLabels(currentLabelSelector?.matchLabels);
 
   return {
     resource,
@@ -59,7 +68,7 @@ export const getActionFormValues = (trigger: TestTrigger) => {
     execution,
   } = trigger;
   const testNameSelector = name;
-  const testLabelSelector = currentLabelSelector?.matchLabels;
+  const testLabelSelector = transformLabels(currentLabelSelector?.matchLabels);
 
   return {
     testNameSelector,
