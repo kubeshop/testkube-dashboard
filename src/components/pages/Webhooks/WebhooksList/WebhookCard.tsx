@@ -7,9 +7,9 @@ import {Webhook} from '@models/webhook';
 import {LabelSelectorHelpIcon, LabelsList} from '@molecules';
 import {ItemColumn, ItemRow, StyledMetricItem} from '@molecules/EntityGrid/EntityGrid.styled';
 
-import Colors from '@styles/Colors';
+import {decodeWebhookSelector} from '@src/utils/webhooks';
 
-import {decodeSelector} from '@utils/selectors';
+import Colors from '@styles/Colors';
 
 import {WebhookContainer} from './WebhooksList.styled';
 
@@ -20,7 +20,15 @@ interface WebhookCardProps {
 
 const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
   const {name, uri, selector} = item;
-  const labels = useMemo(() => decodeSelector(selector), [selector]);
+  const labels = useMemo(() => {
+    return decodeWebhookSelector(selector).map(x => {
+      const labelPair = x.split(':');
+      return {
+        label: labelPair[0],
+        value: labelPair[1],
+      };
+    });
+  }, [selector]);
 
   return (
     <WebhookContainer onClick={() => onClick(item)} key={name}>
@@ -43,7 +51,7 @@ const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
             <Text className="small" color={Colors.slate500}>
               RESOURCE <LabelSelectorHelpIcon />
             </Text>
-            {selector ? <LabelsList labels={labels} /> : <Text className="small">All resources</Text>}
+            {selector ? <LabelsList labels={labels} shouldSkipLabels /> : <Text className="small">All resources</Text>}
           </StyledMetricItem>
         </ItemColumn>
       </ItemRow>

@@ -103,7 +103,16 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
         </ItemRow>
         <RowsWrapper>
           <ItemRow $flex={1}>
-            {item.labels ? <LabelsList labels={item.labels} shouldSkipLabels howManyLabelsToShow={2} /> : null}
+            {item.labels ? (
+              <LabelsList
+                labels={Object.entries(item.labels).map(([key, value]) => ({
+                  value,
+                  label: key,
+                }))}
+                shouldSkipLabels
+                howManyLabelsToShow={2}
+              />
+            ) : null}
           </ItemRow>
           <ItemRow $flex={1}>
             <StyledMetricItem>

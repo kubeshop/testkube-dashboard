@@ -13,9 +13,9 @@ import {FilterMenuFooter, StyledFilterDropdown, StyledFilterLabel, StyledFilterM
 
 import {initialPageSize} from '@redux/initialState';
 
-import Colors from '@styles/Colors';
+import {decodeSelectorArray, encodeSelectorArray} from '@src/utils/filters';
 
-import {decodeSelectorArray, encodeSelectorArray} from '@utils/selectors';
+import Colors from '@styles/Colors';
 
 import {EmptyButton, StyledKeyValueRow, StyledLabelsMenuContainer} from './LabelsFilter.styled';
 

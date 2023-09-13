@@ -16,15 +16,16 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateWebhookMutation} from '@services/webhooks';
 
+import {decodeWebhookSelectorArray} from '@src/utils/webhooks';
+
 import {useWebhooksPick} from '@store/webhooks';
 
 import {requiredNoText} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {decodeSelectorArray} from '@utils/selectors';
 
 type ConditionFormValues = {
   events: {label: WebhookEvent; value: WebhookEvent}[];
-  labels: string[];
+  labels: {label: WebhookEvent; value: WebhookEvent}[];
 };
 
 const webhookEvents = Object.keys(WebhookEvent).map(item => {
@@ -37,13 +38,7 @@ const Condition: FC = () => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const initialEvents = current!.events.map(item => ({label: item, value: item}));
-  const initialLabels = useMemo(
-    () =>
-      decodeSelectorArray(current!.selector)
-        .map(({key, value}) => `${key}:${value}`)
-        .map(value => ({label: value, value})),
-    [current!.selector]
-  );
+  const initialLabels = useMemo(() => decodeWebhookSelectorArray(current!.selector), [current!.selector]);
 
   const [form] = Form.useForm<ConditionFormValues>();
 
@@ -51,7 +46,7 @@ const Condition: FC = () => {
 
   const onFinish = () => {
     const values = form.getFieldsValue();
-    const selector = values.labels?.map(x => x.replace(':', '=')).join(',') || '';
+    const selector = values.labels?.map(x => x.value.replace(':', '=')).join(',') || '';
     return updateWebhook({
       ...current!,
       events: values.events?.map(x => x.value) || [],

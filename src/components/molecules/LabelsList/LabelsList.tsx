@@ -4,40 +4,36 @@ import {Popover} from 'antd';
 
 import {LabelListItem} from '@atoms';
 
-import {EntityKey, EntityMap} from '@models/entityMap';
-
 import {LabelsPopover, StyledLabelsList} from './LabelsList.styled';
 
 type LabelsListProps = {
-  labels: EntityMap;
+  labels?: {label: string; value: string}[];
   howManyLabelsToShow?: number;
   shouldSkipLabels?: boolean;
   className?: string;
 };
 
 const LabelsList: React.FC<LabelsListProps> = props => {
-  const {labels, howManyLabelsToShow = 3, shouldSkipLabels = false, className = ''} = props;
+  const {labels = [], howManyLabelsToShow = 3, shouldSkipLabels = false, className = ''} = props;
 
-  const labelKeys: EntityKey[] = Object.keys(labels);
-
-  const renderedLabels = labelKeys
-    .map((labelKey, index) => {
+  const renderedLabels = labels
+    .map((label, index) => {
       if (shouldSkipLabels) {
         if (howManyLabelsToShow < index + 1) {
           return null;
         }
       }
 
-      return <LabelListItem key={labelKey} labelKey={labelKey} labelValue={labels[labelKey]} />;
+      return <LabelListItem key={label.value} labelKey={label.label} labelValue={label.value} />;
     })
     .filter(labelComponent => labelComponent);
 
-  const skippedLabelsNumber = labelKeys.length - renderedLabels.length;
-  const skippedLabelsArray = Object.entries(labels).splice(howManyLabelsToShow, skippedLabelsNumber);
+  const skippedLabelsNumber = labels.length - renderedLabels.length;
+  const skippedLabelsArray = [...labels.slice(howManyLabelsToShow)];
 
   const renderedSkippedLabels = skippedLabelsArray
-    ? skippedLabelsArray.map(([labelKey]) => {
-        return <LabelListItem key={labelKey} labelKey={labelKey} labelValue={labels[labelKey]} />;
+    ? skippedLabelsArray.map(label => {
+        return <LabelListItem key={label.value} labelKey={label.label} labelValue={label.value} />;
       })
     : null;
 

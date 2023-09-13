@@ -106,7 +106,14 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
       }
     >
       <Space size={10} direction="vertical">
-        {details!.labels ? <LabelsList labels={details.labels} /> : null}
+        {details!.labels ? (
+          <LabelsList
+            labels={Object.entries(details.labels).map(([key, value]) => ({
+              value: String(value),
+              label: key,
+            }))}
+          />
+        ) : null}
         {details!.description ? (
           <Text color={Colors.slate400} className="middle">
             {details.description}
