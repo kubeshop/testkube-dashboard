@@ -9,6 +9,8 @@ import {Input, Text} from '@custom-antd';
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
+import {useModal} from '@modal/hooks';
+
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {NotificationContent} from '@molecules';
@@ -40,6 +42,7 @@ const AddTriggerModal: React.FC = () => {
   const {isClusterAvailable} = useContext(MainContext);
   const {location} = useContext(DashboardContext);
   const openDetails = useDashboardNavigate((name: string) => `/triggers/${name}`);
+  const {close} = useModal();
 
   const [createTrigger, {isLoading}] = useCreateTriggerMutation();
 
@@ -85,6 +88,9 @@ const AddTriggerModal: React.FC = () => {
         if (!inTopInViewport && topRef && topRef.current) {
           topRef.current.scrollIntoView();
         }
+      })
+      .finally(() => {
+        close();
       });
   };
 

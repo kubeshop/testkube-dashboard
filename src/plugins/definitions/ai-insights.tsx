@@ -60,8 +60,7 @@ const createAiInsightsPlugin = (): Plugin => ({
         description="Try our AI Hints to improve your tests and get support to debug them more efficiently."
       />,
       {
-        visible: () =>
-          (localStorage.getItem(config.isAiBannerHidden) !== 'true' && isTestExecutionFailed(scope)) || true,
+        visible: () => localStorage.getItem(config.isAiBannerHidden) !== 'true' && isTestExecutionFailed(scope),
       }
     );
   },
