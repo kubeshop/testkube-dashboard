@@ -9,6 +9,7 @@ import useInViewport from '@hooks/useInViewport';
 
 import {useModal} from '@modal/hooks';
 
+import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {LabelsSelect, NotificationContent} from '@molecules';
@@ -28,7 +29,7 @@ const {TextArea} = Input;
 type TestSuiteCreationModalFormValues = {
   name: string;
   description: string;
-  labels: string[];
+  labels: readonly Option[];
 };
 
 const TestSuiteCreationModalContent: React.FC = () => {
@@ -49,7 +50,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const onFinish = (values: TestSuiteCreationModalFormValues) => {
     addTestSuite({
       ...values,
-      labels: decomposeLabels(values.labels),
+      labels: decomposeLabels(localLabels),
     })
       .then(displayDefaultNotificationFlow)
       .then(res => {
