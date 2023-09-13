@@ -8,6 +8,8 @@ import {Button, Input} from '@custom-antd';
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
+import {useModal} from '@modal/hooks';
+
 import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 
@@ -34,6 +36,7 @@ const AddSourceModal: React.FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const [form] = Form.useForm<AddSourceFormValues>();
   const openDetails = useDashboardNavigate((name: string) => `/sources/${name}`);
+  const {close} = useModal();
 
   const [createSource, {isLoading}] = useCreateSourceMutation();
 
@@ -65,6 +68,9 @@ const AddSourceModal: React.FC = () => {
         if (!inTopInViewport && topRef && topRef.current) {
           topRef.current.scrollIntoView();
         }
+      })
+      .finally(() => {
+        close();
       });
   };
 
