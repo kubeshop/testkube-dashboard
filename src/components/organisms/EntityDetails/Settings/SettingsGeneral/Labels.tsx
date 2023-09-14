@@ -1,14 +1,16 @@
-import {useState} from 'react';
+import {FC} from 'react';
+
+import {Form} from 'antd';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
 import {capitalize} from 'lodash';
 
-import {Option} from '@models/form';
+import {FormItem} from '@custom-antd';
 
 import {LabelsSelect, notificationCall} from '@molecules';
-import {decomposeLabels} from '@molecules/LabelsSelect/utils';
+import {composeLabels, decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {CardForm} from '@organisms';
 
@@ -23,44 +25,25 @@ interface LabelsProps {
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const Labels: React.FC<LabelsProps> = ({label, useUpdateEntity}) => {
+const Labels: FC<LabelsProps> = ({label, useUpdateEntity}) => {
+  const [form] = Form.useForm();
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateEntity] = useUpdateEntity();
 
-  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
-  const [wasTouched, setWasTouched] = useState(false);
-
   if (!details) {
     return null;
   }
 
-  const entityLabels = details?.labels || {};
-
   const onSave = () => {
+    const labels = form.getFieldValue('labels');
     return updateEntity({
       id: details.name,
-      data: {
-        ...details,
-        labels: decomposeLabels(localLabels),
-      },
+      data: {...details, labels: decomposeLabels(labels)},
     })
       .then(displayDefaultNotificationFlow)
-      .then(() => {
-        notificationCall('passed', `${capitalize(label)} was successfully updated.`);
-        setWasTouched(false);
-      });
-  };
-
-  const onCancel = () => {
-    setLocalLabels(entityLabels);
-    setWasTouched(false);
-  };
-
-  const onChange = (values: any) => {
-    setLocalLabels(values);
-    setWasTouched(true);
+      .then(() => notificationCall('passed', `${capitalize(label)} was successfully updated.`));
   };
 
   return (
@@ -68,12 +51,14 @@ const Labels: React.FC<LabelsProps> = ({label, useUpdateEntity}) => {
       name="labels-form"
       title="Labels"
       description={`Define the labels you want to add for this ${label}`}
+      form={form}
+      initialValues={{labels: composeLabels(details?.labels || {})}}
       disabled={!mayEdit}
-      wasTouched={wasTouched}
       onConfirm={onSave}
-      onCancel={onCancel}
     >
-      <LabelsSelect onChange={onChange} defaultLabels={entityLabels} />
+      <FormItem name="labels">
+        <LabelsSelect />
+      </FormItem>
     </CardForm>
   );
 };

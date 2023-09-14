@@ -8,7 +8,6 @@ import useInViewport from '@hooks/useInViewport';
 
 import {Executor} from '@models/executors';
 import {MetadataResponse, RTKResponse} from '@models/fetch';
-import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 import {Test} from '@models/test';
@@ -36,13 +35,13 @@ import {
   testSourceBaseOptions,
 } from '@utils/sources';
 
-import {LabelsWrapper, StyledFormSpace} from './CreationModal.styled';
+import {StyledFormSpace} from './CreationModal.styled';
 
 type TestCreationFormValues = {
   name: string;
   testType: string;
   testSource: string;
-  labels: Option[];
+  labels: string[];
 };
 
 type TestCreationFormProps = {
@@ -65,7 +64,6 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
   const remappedExecutors = remapExecutors(executors);
   const remappedCustomTestSources = remapTestSources(testSources);
 
-  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
   const [addTest, {isLoading}] = useAddTestMutation();
@@ -79,7 +77,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
     const requestBody = {
       name: values.name,
       type: testType,
-      labels: decomposeLabels(localLabels),
+      labels: decomposeLabels(values.labels),
       content: getSourcePayload(values, testSources),
       ...getCustomSourceField(testSource),
     };
@@ -179,9 +177,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
             return (
               <FormItem label="Labels" name="labels">
-                <LabelsWrapper>
-                  <LabelsSelect onChange={setLocalLabels} menuPlacement="top" />
-                </LabelsWrapper>
+                <LabelsSelect menuPlacement="top" />
               </FormItem>
             );
           }}

@@ -8,6 +8,7 @@ import {sourcesApi} from '@services/sources';
 import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
 import {triggersApi} from '@services/triggers';
+import {webhooksApi} from '@services/webhooks';
 
 export const middlewares: Middleware[] = [
   testsApi.middleware,
@@ -18,6 +19,7 @@ export const middlewares: Middleware[] = [
   triggersApi.middleware,
   configApi.middleware,
   repositoryApi.middleware,
+  webhooksApi.middleware,
 ];
 
 export const reducers = {
@@ -29,6 +31,7 @@ export const reducers = {
   [triggersApi.reducerPath]: triggersApi.reducer,
   [configApi.reducerPath]: configApi.reducer,
   [repositoryApi.reducerPath]: repositoryApi.reducer,
+  [webhooksApi.reducerPath]: webhooksApi.reducer,
 };
 
 export const store = configureStore({

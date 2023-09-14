@@ -6,9 +6,11 @@ import {ExternalLink} from '@atoms';
 
 import {MainContext} from '@contexts';
 
-import {Button, Modal} from '@custom-antd';
+import {Button} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
+import {useModal} from '@modal/hooks';
 
 import {EntityGrid} from '@molecules';
 
@@ -38,9 +40,16 @@ const Executors: React.FC = () => {
   const apiEndpoint = useApiEndpoint();
 
   const [activeTabKey, setActiveTabKey] = useState('custom');
-  const [isAddExecutorModalVisible, setAddExecutorModalVisibility] = useState(false);
 
   const {data: executors, isLoading, error, refetch} = useGetExecutorsQuery(null, {skip: !isClusterAvailable});
+
+  const {open: openCreateModal} = useModal({
+    title: 'Create an executor',
+    width: 880,
+    content: <AddExecutorsModal />,
+    dataTestCloseBtn: 'add-a-new-executor-modal-close-button',
+    dataTestModalRoot: 'add-a-new-executor-modal',
+  });
 
   const customExecutors = executors?.filter(executorItem => executorItem.executor.executorType === 'container') || [];
 
@@ -63,11 +72,7 @@ const Executors: React.FC = () => {
       }
       headerButton={
         mayCreate ? (
-          <Button
-            $customType="primary"
-            onClick={() => setAddExecutorModalVisibility(true)}
-            disabled={!isClusterAvailable}
-          >
+          <Button $customType="primary" onClick={openCreateModal} disabled={!isClusterAvailable}>
             Create a new executor
           </Button>
         ) : null
@@ -88,7 +93,7 @@ const Executors: React.FC = () => {
                 data={customExecutors}
                 Component={CustomExecutorCard}
                 componentProps={{onClick: openDetails}}
-                empty={<EmptyCustomExecutors onButtonClick={() => setAddExecutorModalVisibility(true)} />}
+                empty={<EmptyCustomExecutors onButtonClick={openCreateModal} />}
                 itemHeight={66}
                 loadingInitially={isLoading || !isClusterAvailable}
               />
@@ -103,15 +108,6 @@ const Executors: React.FC = () => {
           },
         ]}
       />
-      {isAddExecutorModalVisible ? (
-        <Modal
-          title="Create an executor"
-          isModalVisible={isAddExecutorModalVisible}
-          setIsModalVisible={setAddExecutorModalVisibility}
-          width={880}
-          content={<AddExecutorsModal />}
-        />
-      ) : null}
     </PageBlueprint>
   );
 };

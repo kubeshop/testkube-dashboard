@@ -1,11 +1,16 @@
-import {Upload as AntdUpload, UploadProps as AntdUploadProps, Button} from 'antd';
+import {forwardRef} from 'react';
 
-const DefaultBrowseButton = <Button>Browse</Button>;
+import {Upload as AntdUpload, Button, UploadProps} from 'antd';
 
-const Upload: React.FC<AntdUploadProps> = props => {
-  const {children = DefaultBrowseButton, ...rest} = props;
+const defaultBrowseButton = <Button>Browse</Button>;
 
-  return <AntdUpload {...rest}>{children}</AntdUpload>;
-};
+const Upload = forwardRef<any, UploadProps>((props, ref) => {
+  const {children = defaultBrowseButton, ...rest} = props;
+  return (
+    <AntdUpload ref={ref} {...rest}>
+      {children}
+    </AntdUpload>
+  );
+});
 
 export default Upload;

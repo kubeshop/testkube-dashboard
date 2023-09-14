@@ -15,7 +15,7 @@ export const initialFilters: TestSuiteFilters = {
   textSearch: '',
   pageSize: initialPageSize,
   page: 0,
-  selector: [],
+  selector: '',
   startDate: null,
   endDate: null,
   status: [],

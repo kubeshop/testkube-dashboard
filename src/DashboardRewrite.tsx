@@ -1,4 +1,4 @@
-import {FC, useContext, useLayoutEffect} from 'react';
+import {FC, useContext, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {DashboardContext} from '@contexts';
@@ -16,7 +16,7 @@ const DashboardRewrite: FC<DashboardRewriteProps> = ({pattern, keepQuery = false
   const pathname = pattern.replace(/:([^/]+)/g, (_, key) => `${params[key]}`);
   const redirect = useDashboardNavigate(keepQuery ? {...location, pathname} : pathname, {replace: true});
 
-  useLayoutEffect(redirect, [pattern, keepQuery]);
+  useEffect(redirect, [pattern, keepQuery]);
 
   return null;
 };

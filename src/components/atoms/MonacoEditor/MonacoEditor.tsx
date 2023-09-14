@@ -2,6 +2,8 @@ import React, {lazy, useEffect, useMemo, useState} from 'react';
 import type {EditorDidMount, monaco} from 'react-monaco-editor';
 import {useWindowSize} from 'react-use';
 
+import {countLines} from '@molecules/LogOutput/utils';
+
 import Colors from '@styles/Colors';
 
 const MonacoEditor = lazy(() => import('react-monaco-editor'));
@@ -10,9 +12,9 @@ type TkMonacoEditorProps = {
   language: string;
   height?: string;
   minHeight?: number;
-  value: string;
+  value?: string;
   disabled?: boolean;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
 };
 
 export const lineHeight = 22;
@@ -40,8 +42,16 @@ const options = {
 
 const defaultEditorHeight = 300;
 
+const computeAutoHeight = (value: string | null | undefined, minHeight: number, maxHeight: number): number => {
+  if (!value) {
+    return defaultEditorHeight;
+  }
+  const contentHeight = (countLines(value) + 1) * lineHeight;
+  return Math.max(minHeight, Math.min(contentHeight, maxHeight));
+};
+
 const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
-  const {value, onChange, language, disabled = false, height, minHeight = defaultEditorHeight} = props;
+  const {value = '', onChange, language, disabled = false, height, minHeight = defaultEditorHeight} = props;
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
   const editorOptions = useMemo(() => ({...options, readOnly: disabled}), [disabled]);
 
@@ -65,26 +75,15 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
   };
 
   const editorMaxHeight = useWindowSize().height * 0.5;
+  const editorAutoHeight = useMemo(
+    () => computeAutoHeight(value, minHeight, editorMaxHeight),
+    [editor, editorMaxHeight]
+  );
 
   useEffect(() => {
-    // if height is set, don't calculate it dynamically
     if (editor && !height) {
-      const model = editor.getModel();
       const width = editor.getLayoutInfo().width;
-
-      // if default value is empty, display a default height
-      if (!model || !model.getValue()) {
-        editor.layout({width, height: defaultEditorHeight});
-        return;
-      }
-
-      // add 1 line for better view
-      const contentHeight = (model.getLineCount() + 1) * lineHeight;
-
-      editor.layout({
-        width,
-        height: Math.max(minHeight, Math.min(contentHeight, editorMaxHeight)),
-      });
+      editor.layout({width, height: editorAutoHeight});
     }
   }, [editor, height, editorMaxHeight]);
 
@@ -96,7 +95,7 @@ const TkMonacoEditor: React.FC<TkMonacoEditorProps> = props => {
       theme="testkube-theme"
       options={editorOptions}
       editorDidMount={handleEditorDidMount}
-      height={height}
+      height={height ?? `${editorAutoHeight}px`}
     />
   );
 };

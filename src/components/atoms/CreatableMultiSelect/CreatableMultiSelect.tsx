@@ -15,9 +15,11 @@ import {
 } from './DefaultComponents';
 
 type MultiSelectProps = {
+  id?: string;
   options?: Option[];
   placeholder: string;
   formatCreateLabel: (inputString: string) => string;
+  value?: Option[];
   defaultValue?: Option[];
   onChange?: (value: readonly Option[]) => void;
   validateCreation?: (inputValue: string) => boolean;
@@ -28,13 +30,16 @@ type MultiSelectProps = {
   dataTest?: string;
   disabled?: boolean;
   menuPlacement?: 'auto' | 'bottom' | 'top';
+  stylePlaceholderAsValue?: boolean;
 };
 
 const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
   const {
+    id,
     options,
     placeholder,
     formatCreateLabel,
+    value,
     defaultValue,
     onChange,
     validateCreation,
@@ -45,6 +50,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     dataTest,
     disabled = false,
     menuPlacement = 'bottom',
+    stylePlaceholderAsValue = false,
   } = props;
 
   const ref = useRef(null);
@@ -64,7 +70,9 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
 
   return (
     <CreatableSelect
+      id={id}
       ref={ref}
+      value={value}
       defaultValue={defaultValue}
       isMulti
       menuPlacement={menuPlacement}
@@ -80,7 +88,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
       }}
       formatCreateLabel={formatCreateLabel}
       theme={customTheme}
-      styles={customStyles(validation)}
+      styles={customStyles(validation, stylePlaceholderAsValue)}
       components={{
         Option: CustomOptionComponent,
         MultiValueLabel: CustomMultiValueLabelComponent,

@@ -12,10 +12,10 @@ const TestSuites: FC = () => (
   <>
     <Routes>
       {/* Backwards compatibility */}
-      <Route path="executions/:id" element={<DashboardRewrite pattern="/tests/:id" />} />
+      <Route path="executions/:id" element={<DashboardRewrite pattern="/tests/:id" keepQuery />} />
       <Route
         path="executions/:id/execution/:execId"
-        element={<DashboardRewrite pattern="/tests/:id/executions/:execId" />}
+        element={<DashboardRewrite pattern="/tests/:id/executions/:execId" keepQuery />}
       />
 
       <Route index element={<TestSuitesList />} />

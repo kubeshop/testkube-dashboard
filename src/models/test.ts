@@ -48,7 +48,7 @@ export type TestFilters = {
   type: string;
   pageSize: number;
   page: number;
-  selector: string[];
+  selector: string;
   createdAt: null;
   status: Array<string>;
 };

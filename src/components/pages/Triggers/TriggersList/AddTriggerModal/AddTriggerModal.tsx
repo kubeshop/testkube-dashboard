@@ -9,7 +9,8 @@ import {Input, Text} from '@custom-antd';
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
-import {Option} from '@models/form';
+import {useModal} from '@modal/hooks';
+
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {NotificationContent} from '@molecules';
@@ -29,11 +30,19 @@ import ModalFirstStep from './ModalFirstStep';
 import ModalSecondStep from './ModalSecondStep';
 import {StepsEnum} from './types';
 
+interface FirstStepValues {
+  resource?: string;
+  event?: string;
+  resourceLabelSelector?: string[];
+  resourceNameSelector?: string;
+}
+
 const AddTriggerModal: React.FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const {isClusterAvailable} = useContext(MainContext);
   const {location} = useContext(DashboardContext);
   const openDetails = useDashboardNavigate((name: string) => `/triggers/${name}`);
+  const {close} = useModal();
 
   const [createTrigger, {isLoading}] = useCreateTriggerMutation();
 
@@ -42,7 +51,7 @@ const AddTriggerModal: React.FC = () => {
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
   const [currentStep, setCurrentStep] = useState(StepsEnum.condition);
   const [name, setName] = useState('');
-  const [firstStepValues, setFirstStepValues] = useState<Record<string, string | Option[]>>({});
+  const [firstStepValues, setFirstStepValues] = useState<FirstStepValues>({});
 
   const topRef = useRef<HTMLDivElement>(null);
   const inTopInViewport = useInViewport(topRef);
@@ -53,7 +62,7 @@ const AddTriggerModal: React.FC = () => {
     const values = form.getFieldsValue();
 
     const resourceSelector = getResourceIdentifierSelector(
-      firstStepValues.resourceLabelSelector || firstStepValues.resourceNameSelector,
+      firstStepValues.resourceLabelSelector || firstStepValues.resourceNameSelector!,
       namespace
     );
 
@@ -79,6 +88,9 @@ const AddTriggerModal: React.FC = () => {
         if (!inTopInViewport && topRef && topRef.current) {
           topRef.current.scrollIntoView();
         }
+      })
+      .finally(() => {
+        close();
       });
   };
 

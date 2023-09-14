@@ -16,7 +16,7 @@ export const initialFilters: TestFilters = {
   type: '',
   pageSize: initialPageSize,
   page: 0,
-  selector: [],
+  selector: '',
   createdAt: null,
   status: [],
 };

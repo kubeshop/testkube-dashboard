@@ -9,10 +9,6 @@ export const StyledFormSpace = styled(FullWidthSpace)`
   }
 `;
 
-export const LabelsWrapper = styled.div`
-  width: 100%;
-`;
-
 export const TestCreationModalWrapper = styled.div`
   display: flex;
 `;

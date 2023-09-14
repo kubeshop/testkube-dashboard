@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 
 import {Form, Input, Select, Space} from 'antd';
 
-import {LabelsSelect} from '@molecules';
+import {LabelSelectorHelpIcon, LabelsSelect} from '@molecules';
 
 import {useTriggersPick} from '@store/triggers';
 
@@ -29,27 +29,28 @@ const ConditionFormItems = () => {
       <Form.Item label="K8s resource" required name="resource" rules={[required]}>
         <Select options={resourcesOptions} placeholder="Select a K8s resource" />
       </Form.Item>
-      <Form.Item noStyle shouldUpdate>
-        {({getFieldValue, getFieldError}) => {
-          const label = getFieldValue('resourceLabelSelector');
-          const isValid = !(getFieldError('resourceLabelSelector').length > 0);
-
-          return (
-            <Space size={16} direction="vertical" style={{width: '100%'}}>
-              <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
-              {switcherValue === 'label' ? (
-                <Form.Item label="Resource identifier" required name="resourceLabelSelector" rules={[required]}>
-                  <LabelsSelect defaultLabels={label} validation={isValid} />
-                </Form.Item>
-              ) : (
-                <Form.Item label="Resource identifier" required name="resourceNameSelector" rules={[required]}>
-                  <Input placeholder="e.g.: namespace/resource-name" />
-                </Form.Item>
-              )}
-            </Space>
-          );
-        }}
-      </Form.Item>
+      <Space size={16} direction="vertical" style={{width: '100%'}}>
+        <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
+        {switcherValue === 'label' ? (
+          <Form.Item
+            label={
+              <>
+                Resource identifier
+                <LabelSelectorHelpIcon />
+              </>
+            }
+            required
+            name="resourceLabelSelector"
+            rules={[required]}
+          >
+            <LabelsSelect />
+          </Form.Item>
+        ) : (
+          <Form.Item label="Resource identifier" required name="resourceNameSelector" rules={[required]}>
+            <Input placeholder="e.g.: namespace/resource-name" />
+          </Form.Item>
+        )}
+      </Space>
       <Form.Item noStyle shouldUpdate>
         {({getFieldValue}) => {
           const triggerResource = getFieldValue('resource');
@@ -61,7 +62,11 @@ const ConditionFormItems = () => {
 
           return (
             <Form.Item label="Triggered event" name="event" rules={[required]}>
-              <Select options={eventsOptions} disabled={!triggerResource} placeholder="Select cluster event" />
+              <Select
+                options={eventsOptions}
+                disabled={eventsOptions.length === 0 ? true : undefined}
+                placeholder="Select cluster event"
+              />
             </Form.Item>
           );
         }}

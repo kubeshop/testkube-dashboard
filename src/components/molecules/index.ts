@@ -38,3 +38,4 @@ export {default as MessagePanel} from './MessagePanel';
 export {default as InlineNotification} from './InlineNotification';
 export {default as AiInsightsTab} from './AiInsightsTab';
 export {default as SummaryGrid} from './SummaryGrid';
+export {default as LabelSelectorHelpIcon} from './LabelSelectorHelpIcon';

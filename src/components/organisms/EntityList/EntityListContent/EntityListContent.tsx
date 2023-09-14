@@ -3,7 +3,7 @@ import {useSearchParams} from 'react-router-dom';
 
 import {isEqual, merge} from 'lodash';
 
-import {MainContext, ModalContext} from '@contexts';
+import {MainContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
@@ -45,7 +45,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     queryFilters,
     data,
     setQueryFilters,
-    createModalConfig,
+    onAdd,
     onItemClick,
     onItemAbort,
   } = props;
@@ -55,7 +55,6 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   const {isClusterAvailable} = useContext(MainContext);
-  const {setModalConfig, setModalOpen} = useContext(ModalContext);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
 
@@ -65,7 +64,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     const filters = merge({}, initialFiltersState, queryFilters, {
       textSearch: searchParams.get('textSearch') ?? undefined,
       status: searchParams.get('status')?.split(',').filter(Boolean) ?? undefined,
-      selector: searchParams.get('selector')?.split(',').filter(Boolean) ?? undefined,
+      selector: searchParams.get('selector') ?? undefined,
     });
     if (!isEqual(filters, queryFilters)) {
       setQueryFilters(filters);
@@ -84,8 +83,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     } else {
       newSearchParams.delete('status');
     }
-    if (queryFilters.selector?.length) {
-      newSearchParams.set('selector', queryFilters.selector.join(','));
+    if (queryFilters.selector) {
+      newSearchParams.set('selector', queryFilters.selector);
     } else {
       newSearchParams.delete('selector');
     }
@@ -125,15 +124,10 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const isFiltersEmpty = isEqual(initialFiltersState, queryFilters);
   const isEmptyData = !data?.length && isFiltersEmpty && !isLoading;
 
-  const addEntityAction = () => {
-    setModalConfig(createModalConfig);
-    setModalOpen(true);
-  };
-
   useTrackTimeAnalytics(`${entity}-list`);
 
   const createButton = mayCreate ? (
-    <Button $customType="primary" onClick={addEntityAction} data-test={dataTest} disabled={!isClusterAvailable}>
+    <Button $customType="primary" onClick={onAdd} data-test={dataTest} disabled={!isClusterAvailable}>
       {addEntityButtonText}
     </Button>
   ) : null;
@@ -165,9 +159,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         data={data}
         Component={CardComponent}
         componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
-        empty={
-          isFiltersEmpty ? <EmptyData action={addEntityAction} /> : <EmptyDataWithFilters resetFilters={resetFilters} />
-        }
+        empty={isFiltersEmpty ? <EmptyData action={onAdd} /> : <EmptyDataWithFilters resetFilters={resetFilters} />}
         itemHeight={163.85}
         loadingInitially={isFirstTimeLoading}
         loadingMore={isLoadingNext}

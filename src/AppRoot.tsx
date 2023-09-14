@@ -8,12 +8,13 @@ import {Content} from 'antd/lib/layout/layout';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
-import {ModalHandler, ModalOutletProvider} from '@contexts/ModalContext';
 
 import {FeatureFlagsProvider} from '@feature-flags';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 import {useLastCallback} from '@hooks/useLastCallback';
+
+import {ModalHandler, ModalOutletProvider} from '@modal/context';
 
 import {Sider} from '@organisms';
 
@@ -27,10 +28,13 @@ import {Plugin} from '@plugins/types';
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
+import {initializeClusterDetailsStore} from '@store/clusterDetails';
 import {initializeExecutorsStore} from '@store/executors';
 import {initializeSourcesStore} from '@store/sources';
 import {initializeTestSuitesStore} from '@store/testSuites';
 import {initializeTestsStore} from '@store/tests';
+import {initializeTriggersStore} from '@store/triggers';
+import {initializeWebhooksStore} from '@store/webhooks';
 
 import {useTelemetry, useTelemetryValue} from '@telemetry/hooks';
 
@@ -56,6 +60,9 @@ const AppRoot: React.FC = () => {
   const [SourcesProvider] = initializeSourcesStore();
   const [TestsProvider] = initializeTestsStore();
   const [TestSuitesProvider] = initializeTestSuitesStore();
+  const [TriggersProvider] = initializeTriggersStore();
+  const [WebhooksProvider] = initializeWebhooksStore();
+  const [ClusterDetailsProvider] = initializeClusterDetailsStore({}, [apiEndpoint]);
 
   const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
     skip: !apiEndpoint,
@@ -127,10 +134,13 @@ const AppRoot: React.FC = () => {
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(MainContext.Provider, {value: mainContextValue})
+    .append(ClusterDetailsProvider, {})
     .append(ExecutorsProvider, {})
     .append(SourcesProvider, {})
     .append(TestsProvider, {})
     .append(TestSuitesProvider, {})
+    .append(TriggersProvider, {})
+    .append(WebhooksProvider, {})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})
     .render(

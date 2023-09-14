@@ -1,15 +1,14 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 
 import {Form, Input} from 'antd';
-
-import {ModalContext} from '@contexts';
 
 import {Button, FormItem, Text} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
-import {Option} from '@models/form';
+import {useModal} from '@modal/hooks';
+
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {LabelsSelect, NotificationContent} from '@molecules';
@@ -29,18 +28,17 @@ const {TextArea} = Input;
 type TestSuiteCreationModalFormValues = {
   name: string;
   description: string;
-  labels: readonly Option[];
+  labels: string[];
 };
 
 const TestSuiteCreationModalContent: React.FC = () => {
   const [form] = Form.useForm<TestSuiteCreationModalFormValues>();
 
-  const {closeModal} = useContext(ModalContext);
+  const {close} = useModal();
   const telemetry = useTelemetry();
   const openSettings = useDashboardNavigate((name: string) => `/test-suites/${name}/settings/tests`);
 
   const [addTestSuite, {isLoading}] = useAddTestSuiteMutation();
-  const [localLabels, setLocalLabels] = useState<readonly Option[]>([]);
 
   const [error, setError] = useState<ErrorNotificationConfig | undefined>(undefined);
 
@@ -50,13 +48,13 @@ const TestSuiteCreationModalContent: React.FC = () => {
   const onFinish = (values: TestSuiteCreationModalFormValues) => {
     addTestSuite({
       ...values,
-      labels: decomposeLabels(localLabels),
+      labels: decomposeLabels(values.labels),
     })
       .then(displayDefaultNotificationFlow)
       .then(res => {
         telemetry.event('createTestSuite');
         openSettings(res.data.metadata.name);
-        closeModal();
+        close();
       })
       .catch(err => {
         setError(err);
@@ -84,7 +82,9 @@ const TestSuiteCreationModalContent: React.FC = () => {
         <FormItem name="description">
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
         </FormItem>
-        <LabelsSelect onChange={setLocalLabels} />
+        <FormItem name="labels">
+          <LabelsSelect />
+        </FormItem>
         <FormItem shouldUpdate>
           {({isFieldsTouched}) => (
             <Button

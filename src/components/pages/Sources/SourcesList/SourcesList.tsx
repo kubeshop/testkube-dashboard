@@ -1,12 +1,14 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect} from 'react';
 
 import {ExternalLink} from '@atoms';
 
 import {DashboardContext, MainContext} from '@contexts';
 
-import {Button, Modal} from '@custom-antd';
+import {Button} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
+import {useModal} from '@modal/hooks';
 
 import {EntityGrid} from '@molecules';
 
@@ -32,8 +34,15 @@ const Sources: React.FC = () => {
 
   const {data: sources, refetch, error, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});
 
-  const [isAddSourceModalVisible, setAddSourceModalVisibility] = useState(false);
   const mayCreate = usePermission(Permissions.createEntity);
+
+  const {open: openCreateModal} = useModal({
+    title: 'Create a new source',
+    width: 880,
+    content: <AddSourceModal />,
+    dataTestCloseBtn: 'add-a-new-test-source-modal-close-button',
+    dataTestModalRoot: 'add-a-new-test-source-modal',
+  });
 
   useEffect(() => {
     safeRefetch(refetch);
@@ -54,11 +63,7 @@ const Sources: React.FC = () => {
       }
       headerButton={
         mayCreate ? (
-          <Button
-            $customType="primary"
-            onClick={() => setAddSourceModalVisibility(true)}
-            disabled={!isClusterAvailable}
-          >
+          <Button $customType="primary" onClick={openCreateModal} disabled={!isClusterAvailable}>
             Create a new source
           </Button>
         ) : null
@@ -69,19 +74,10 @@ const Sources: React.FC = () => {
         data={sources!}
         Component={SourceCard}
         componentProps={{onClick: openDetails}}
-        empty={<EmptySources onButtonClick={() => setAddSourceModalVisibility(true)} />}
+        empty={<EmptySources onButtonClick={openCreateModal} />}
         itemHeight={66}
         loadingInitially={isLoading || !isClusterAvailable}
       />
-      {isAddSourceModalVisible ? (
-        <Modal
-          title="Create a new source"
-          isModalVisible={isAddSourceModalVisible}
-          setIsModalVisible={setAddSourceModalVisibility}
-          width={880}
-          content={<AddSourceModal />}
-        />
-      ) : null}
     </PageBlueprint>
   );
 };

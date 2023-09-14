@@ -17,33 +17,37 @@ export const MessagePanelWrapper = styled.div`
     flex-direction: column;
   }
 
-  &.error {
-    background: rgb(136 19 55 / 60%);
-    border: 1px solid ${Colors.rose500};
-    border-left: 0;
-    border-right: 0;
-  }
-
-  &.warning {
-    background: rgb(120 53 15 / 50%);
-    border: 1px solid ${Colors.amber400};
-    border-left: 0;
-    border-right: 0;
-  }
-
   &.default {
     background: ${Colors.indigo900};
     border: 1px solid ${Colors.indigo600};
     border-radius: 8px;
   }
 
+  &.fullscreen {
+    &.error {
+      background: rgb(136 19 55 / 60%);
+      border: 1px solid ${Colors.rose500};
+      border-left: 0;
+      border-right: 0;
+    }
+
+    &.warning {
+      background: rgb(120 53 15 / 50%);
+      border: 1px solid ${Colors.amber400};
+      border-left: 0;
+      border-right: 0;
+    }
+  }
+
   &.inline {
     &.error {
+      background: rgb(136 19 55 / 60%);
       border: 1px solid ${Colors.rose500};
       border-radius: 4px;
     }
 
     &.warning {
+      background: rgb(120 53 15 / 50%);
       border: 1px solid ${Colors.amber400};
       border-radius: 4px;
     }

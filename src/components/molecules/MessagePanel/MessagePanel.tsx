@@ -29,9 +29,8 @@ interface MessagePanelProps {
   title: string;
   description: React.ReactNode;
   type?: 'warning' | 'error' | 'default';
-  position?: 'inline';
+  position?: 'fullscreen' | 'inline';
   buttons?: (ButtonConfig | ButtonWithLinkConfig)[];
-  isClosable?: boolean;
   onClose?: () => void;
 }
 
@@ -51,10 +50,10 @@ const textColorForType: Record<string, Record<string, Colors>> = {
 };
 
 const MessagePanel: React.FC<MessagePanelProps> = props => {
-  const {type = 'error', title, description, position, buttons, isClosable, onClose} = props;
+  const {type = 'error', title, description, position = 'inline', buttons, onClose} = props;
 
   return (
-    <MessagePanelWrapper className={`${type} ${position || ''}`}>
+    <MessagePanelWrapper className={`${type} ${position}`}>
       <MessageDescription>
         <Text className="bold middle" color={textColorForType[type].header}>
           {title}
@@ -63,32 +62,32 @@ const MessagePanel: React.FC<MessagePanelProps> = props => {
           {description}
         </MessageDescriptionText>
       </MessageDescription>
-      <FullWidthSpace style={{flexWrap: 'wrap', justifyContent: 'flex-end'}}>
-        {buttons
-          ? buttons.map(button => {
-              if ('isLink' in button) {
-                return (
-                  <a key={button.linkConfig.href} href={button.linkConfig.href} target={button.linkConfig.target}>
-                    <Button $customType={button.type} key={button.type}>
-                      {button.text}
-                    </Button>
-                  </a>
-                );
-              }
-
+      {buttons ? (
+        <FullWidthSpace style={{flexWrap: 'wrap', justifyContent: 'flex-end'}}>
+          {buttons.map(button => {
+            if ('isLink' in button) {
               return (
-                <Button $customType={button.type} key={button.type} onClick={button.onClick}>
-                  {button.text}
-                </Button>
+                <a key={button.linkConfig.href} href={button.linkConfig.href} target={button.linkConfig.target}>
+                  <Button $customType={button.type} key={button.type}>
+                    {button.text}
+                  </Button>
+                </a>
               );
-            })
-          : null}
-        {isClosable ? (
-          <CloseButtonWrapper>
-            <CloseOutlined onClick={onClose} />
-          </CloseButtonWrapper>
-        ) : null}
-      </FullWidthSpace>
+            }
+
+            return (
+              <Button $customType={button.type} key={button.type} onClick={button.onClick}>
+                {button.text}
+              </Button>
+            );
+          })}
+        </FullWidthSpace>
+      ) : null}
+      {onClose ? (
+        <CloseButtonWrapper>
+          <CloseOutlined onClick={onClose} />
+        </CloseButtonWrapper>
+      ) : null}
     </MessagePanelWrapper>
   );
 };

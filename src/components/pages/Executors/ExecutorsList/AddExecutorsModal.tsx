@@ -7,6 +7,8 @@ import {Button, Input} from '@custom-antd';
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
 
+import {useModal} from '@modal/hooks';
+
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {Hint, NotificationContent} from '@molecules';
@@ -30,6 +32,7 @@ type AddExecutorsFormValues = {
 const AddExecutorsModal: React.FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const openDetails = useDashboardNavigate((name: string) => `/executors/${name}`);
+  const {close} = useModal();
 
   const [form] = Form.useForm<AddExecutorsFormValues>();
 
@@ -59,6 +62,9 @@ const AddExecutorsModal: React.FC = () => {
         if (!inTopInViewport && topRef && topRef.current) {
           topRef.current.scrollIntoView();
         }
+      })
+      .finally(() => {
+        close();
       });
   };
 
