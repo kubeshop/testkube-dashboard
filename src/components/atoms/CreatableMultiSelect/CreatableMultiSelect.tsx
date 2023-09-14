@@ -15,6 +15,7 @@ import {
 } from './DefaultComponents';
 
 type MultiSelectProps = {
+  id?: string;
   options?: Option[];
   placeholder: string;
   formatCreateLabel: (inputString: string) => string;
@@ -34,6 +35,7 @@ type MultiSelectProps = {
 
 const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
   const {
+    id,
     options,
     placeholder,
     formatCreateLabel,
@@ -68,6 +70,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
 
   return (
     <CreatableSelect
+      id={id}
       ref={ref}
       value={value}
       defaultValue={defaultValue}

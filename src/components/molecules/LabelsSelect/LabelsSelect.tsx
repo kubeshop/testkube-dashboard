@@ -16,6 +16,7 @@ import {PollingIntervals} from '@utils/numbers';
 import {labelRegex} from './utils';
 
 type LabelsSelectProps = {
+  id?: string;
   value?: string[];
   onChange?: (value: readonly string[]) => void;
   options?: string[];
@@ -32,6 +33,7 @@ const isValidLabel = (value?: string) => {
 
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   const {
+    id,
     onChange,
     value,
     options,
@@ -62,6 +64,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
 
   return (
     <CreatableMultiSelect
+      id={id}
       value={formattedValue}
       onChange={change}
       placeholder={placeholder}
