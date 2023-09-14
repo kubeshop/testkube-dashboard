@@ -8,12 +8,12 @@ import useInViewport from '@hooks/useInViewport';
 
 import {Executor} from '@models/executors';
 import {MetadataResponse, RTKResponse} from '@models/fetch';
-import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 import {Test} from '@models/test';
 
 import {LabelsSelect, NotificationContent} from '@molecules';
+import {decomposeLabels} from '@molecules/LabelsSelect/utils';
 
 import {
   CustomCreationFormFields,
@@ -41,7 +41,7 @@ type TestCreationFormValues = {
   name: string;
   testType: string;
   testSource: string;
-  labels: Option[];
+  labels: string[];
 };
 
 type TestCreationFormProps = {
@@ -77,7 +77,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
     const requestBody = {
       name: values.name,
       type: testType,
-      labels: values.labels,
+      labels: decomposeLabels(values.labels),
       content: getSourcePayload(values, testSources),
       ...getCustomSourceField(testSource),
     };
