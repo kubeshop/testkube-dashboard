@@ -19,7 +19,11 @@ export type IconProps = {
     | 'queued'
     | 'success'
     | 'cloudMigrate'
-    | 'statusPage';
+    | 'statusPage'
+    | 'operational'
+    | 'major_outage'
+    | 'partial_outage'
+    | 'unknown';
   component?: IconComponentProps['component'];
   style?: React.CSSProperties;
 };

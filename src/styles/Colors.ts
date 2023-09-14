@@ -28,6 +28,7 @@ enum Colors {
   pink700 = '#BE185D',
   pink600 = '#DB2777',
   pink500 = '#EC4899',
+  pink400 = '#F472B6',
   pink300 = '#F9A8D4',
 
   lime900 = '#365314',

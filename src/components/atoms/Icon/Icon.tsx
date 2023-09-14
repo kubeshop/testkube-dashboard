@@ -42,6 +42,10 @@ const iconsMap: Record<IconProps['name'], IconComponentProps['component']> = {
   success: PassedStatusIcon,
   cloudMigrate: CloudMigrateIcon,
   statusPage: StatusPageIcon,
+  operational: PassedStatusIcon,
+  major_outage: FailedStatusIcon,
+  partial_outage: FailedStatusIcon,
+  unknown: FailedStatusIcon,
 };
 
 const Icon: React.FC<IconProps> = props => {
