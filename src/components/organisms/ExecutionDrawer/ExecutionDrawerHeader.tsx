@@ -9,6 +9,8 @@ import {StatusIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
+
 import {Execution} from '@models/execution';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 
@@ -33,6 +35,7 @@ const ExecutionDrawerHeader: FC<ExecutionDrawerHeaderProps> = ({useAbortExecutio
   const {entity, id} = useEntityDetailsPick('entity', 'id');
   const {close, data, id: execId} = useExecutionDetailsPick('close', 'data', 'id');
   const mayManageExecution = usePermission(Permissions.manageEntityExecution);
+  const isWritable = useSystemAccess(SystemAccess.agent);
 
   const status = (data as Execution)?.executionResult?.status || (data as TestSuiteExecution)?.status;
   const isRunning = status === 'running';
@@ -62,7 +65,7 @@ const ExecutionDrawerHeader: FC<ExecutionDrawerHeaderProps> = ({useAbortExecutio
             </Text>
           </ItemColumn>
           <ItemColumn className="flex-auto">
-            {isRunning && mayManageExecution ? <DotsDropdown items={actions} /> : null}
+            {isRunning && mayManageExecution ? <DotsDropdown disabled={!isWritable} items={actions} /> : null}
             <CloseOutlined onClick={close} style={{color: Colors.slate400, fontSize: 20}} />
           </ItemColumn>
         </ItemRow>

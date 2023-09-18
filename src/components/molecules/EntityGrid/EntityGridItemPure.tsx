@@ -98,6 +98,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
             {isRunning ? (
               <DotsDropdown
                 placement="bottomRight"
+                disabled={outOfSync}
                 items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]}
               />
             ) : null}
