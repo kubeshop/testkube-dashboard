@@ -83,12 +83,13 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
             {key: 2, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>},
           ]}
           wrapperStyle={{backgroundColor: Colors.slate800}}
+          disabled={outOfSync}
         />,
         <Button
           key="run-now-button"
           type="primary"
           onClick={onRun}
-          disabled={!details}
+          disabled={!details || outOfSync}
           hidden={!mayRun}
           loading={isRunning}
         >

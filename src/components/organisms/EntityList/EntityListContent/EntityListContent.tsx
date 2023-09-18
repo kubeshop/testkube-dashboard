@@ -53,7 +53,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isReadable = useSystemAccess(SystemAccess.system);
+  const isWritable = useSystemAccess(SystemAccess.agent);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
 
@@ -126,7 +127,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   useTrackTimeAnalytics(`${entity}-list`);
 
   const createButton = mayCreate ? (
-    <Button $customType="primary" onClick={onAdd} data-test={dataTest} disabled={!isClusterAvailable}>
+    <Button $customType="primary" onClick={onAdd} data-test={dataTest} disabled={!isWritable}>
       {addEntityButtonText}
     </Button>
   ) : null;
@@ -146,7 +147,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             <Filters
               setFilters={setQueryFilters}
               filters={queryFilters}
-              isFiltersDisabled={isEmptyData || !isClusterAvailable}
+              isFiltersDisabled={isEmptyData || !isReadable}
             />
           </StyledFiltersSection>
         </PageToolbar>
