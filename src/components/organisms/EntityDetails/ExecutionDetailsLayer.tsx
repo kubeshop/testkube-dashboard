@@ -1,11 +1,10 @@
-import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
+import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
 
-import {MainContext} from '@contexts';
-
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Entity} from '@models/entity';
 
@@ -40,7 +39,7 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
     [execId, useGetExecutionDetails]
   );
 
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const {data} = pick('data');
   const {data: rawFetchedData, error} = useGetExecutionDetails(execId!, {

@@ -1,11 +1,9 @@
-import {useContext} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {MainContext} from '@contexts';
-
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
@@ -19,7 +17,7 @@ import {useExecutorsPick, useExecutorsSync} from '@store/executors';
 import ExecutorSettings from './ExecutorSettings';
 
 const ExecutorDetails: React.FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
   const {data: executor, error} = useGetExecutorDetailsQuery(name, {skip: !isClusterAvailable});

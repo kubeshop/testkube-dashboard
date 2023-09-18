@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, Suspense, useContext, useEffect, useState} from 'react';
+import React, {PropsWithChildren, Suspense, useEffect, useState} from 'react';
 
 import {MutationDefinition, QueryDefinition} from '@reduxjs/toolkit/dist/query';
 import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
@@ -8,11 +8,10 @@ import {capitalize} from 'lodash';
 
 import {Pre} from '@atoms';
 
-import {MainContext} from '@contexts';
-
 import {FullWidthSpace} from '@custom-antd';
 
 import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {InlineNotification, notificationCall} from '@molecules';
 
@@ -37,7 +36,7 @@ type DefinitionProps = {
 const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
   const {name, onUpdate, useGetDefinitionQuery, useUpdateDefinitionMutation, crdUrl, label, overrideSchema} = props;
 
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const isSupported = useClusterVersionMatch('>=1.13.0', true);
 
   const [value, setValue] = useState('');

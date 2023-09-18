@@ -1,11 +1,10 @@
-import {useCallback, useContext, useEffect} from 'react';
+import {useCallback, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {MainContext} from '@contexts';
-
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {PageHeader, PageWrapper} from '@organisms';
 
@@ -21,7 +20,7 @@ import {safeRefetch} from '@utils/fetchUtils';
 import TriggerSettings from './TriggerSettings';
 
 const TriggerDetails = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 

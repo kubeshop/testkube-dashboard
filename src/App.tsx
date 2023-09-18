@@ -4,7 +4,9 @@ import {useUpdate} from 'react-use';
 
 import {config} from '@constants/config';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
+
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
@@ -49,8 +51,9 @@ export interface AppProps {
 const App: React.FC<AppProps> = ({plugins}) => {
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
-  const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const [LogOutputProvider] = initializeLogOutputStore(undefined, [location.pathname]);
 
@@ -96,8 +99,8 @@ const App: React.FC<AppProps> = ({plugins}) => {
       return;
     }
 
-    // Avoid loading API details when we know the cluster is not available.
-    if (!isClusterAvailable) {
+    // Avoid loading API details when we know the API is not available.
+    if (!isSystemAvailable) {
       return;
     }
 
@@ -115,7 +118,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
           openEndpointModal();
         }
       });
-  }, [apiEndpoint, isClusterAvailable]);
+  }, [apiEndpoint, isSystemAvailable]);
 
   const scope = useMemo(() => {
     const pluginManager = createPluginManager();

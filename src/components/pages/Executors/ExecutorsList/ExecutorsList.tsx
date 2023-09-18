@@ -1,14 +1,13 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {Tabs} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
-import {MainContext} from '@contexts';
-
 import {Button} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
@@ -34,7 +33,7 @@ import EmptyCustomExecutors from './EmptyCustomExecutors';
 import ExecutorCard from './ExecutorCard';
 
 const Executors: React.FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/executors/${name}`);
   const mayCreate = usePermission(Permissions.createEntity);
   const apiEndpoint = useApiEndpoint();

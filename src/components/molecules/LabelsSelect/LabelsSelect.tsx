@@ -1,11 +1,10 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useMemo} from 'react';
 
 import {CreatableMultiSelect} from '@atoms';
 import {LabelsMultiValueLabel, LabelsOption} from '@atoms/CreatableMultiSelect/CustomComponents';
 
-import {MainContext} from '@contexts';
-
 import {useLastCallback} from '@hooks/useLastCallback';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Option} from '@models/form';
 
@@ -46,7 +45,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
     disabled,
     stylePlaceholderAsValue,
   } = props;
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   // TODO: Extract it outside?
   const {data, isFetching} = useGetLabelsQuery(null, {

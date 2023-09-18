@@ -1,14 +1,12 @@
-import {useContext} from 'react';
-
 import {Space} from 'antd';
 
 import styled from 'styled-components';
 
 import {ReactComponent as EmptySearch} from '@assets/empty-search.svg';
 
-import {MainContext} from '@contexts';
-
 import {Button, Text, Title} from '@custom-antd';
+
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import Colors from '@styles/Colors';
 
@@ -25,7 +23,7 @@ const StyledEmptyTestsDataContainer = styled(Space)`
 const EmptyDataWithFilters: React.FC<any> = props => {
   const {resetFilters} = props;
 
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   return (
     <StyledEmptyTestsDataContainer size={30} direction="vertical">

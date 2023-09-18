@@ -5,7 +5,9 @@ import useWebSocket from 'react-use-websocket';
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
+
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Entity} from '@models/entity';
 import {ExecutionMetrics} from '@models/metrics';
@@ -51,7 +53,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
 
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const wsRoot = useWsEndpoint();
 
   const {data: rawExecutions, refetch} = useGetExecutions(

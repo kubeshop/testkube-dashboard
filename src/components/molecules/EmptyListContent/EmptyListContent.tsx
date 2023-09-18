@@ -4,9 +4,11 @@ import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
 
 import {ExternalLink} from '@atoms';
 
-import {ConfigContext, MainContext} from '@contexts';
+import {ConfigContext} from '@contexts';
 
 import {Button, Text, Title} from '@custom-antd';
+
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {HelpCard} from '@molecules';
 import {StyledHelpCardsContainer, StyledLastHelpCardContainer} from '@molecules/HelpCard/HelpCard.styled';
@@ -45,7 +47,7 @@ const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = pro
   } = props;
 
   const {discordUrl} = useContext(ConfigContext);
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const isActionAvailable = usePermission(actionTypeToPermission[actionType]);
 
   return (

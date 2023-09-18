@@ -2,11 +2,12 @@ import {useContext, useEffect} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
@@ -28,7 +29,7 @@ import EmptyTriggers from './EmptyTriggers';
 import TriggerCard from './TriggerCard';
 
 const TriggersList: React.FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const {location} = useContext(DashboardContext);
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/triggers/${name}`);
 

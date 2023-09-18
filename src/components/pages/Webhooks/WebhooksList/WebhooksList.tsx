@@ -1,12 +1,11 @@
-import {FC, useContext} from 'react';
+import {FC} from 'react';
 
 import {ExternalLink} from '@atoms';
-
-import {MainContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
@@ -29,7 +28,7 @@ import EmptyWebhooks from './EmptyWebhooks';
 import WebhookCard from './WebhookCard';
 
 const WebhooksList: FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/webhooks/${name}/settings`);
 

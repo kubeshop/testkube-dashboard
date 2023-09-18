@@ -81,6 +81,7 @@ const AppRoot: React.FC = () => {
     () => ({
       clusterConfig,
       isClusterAvailable: Boolean(clusterConfig),
+      isSystemAvailable: Boolean(clusterConfig),
     }),
     [clusterConfig]
   );

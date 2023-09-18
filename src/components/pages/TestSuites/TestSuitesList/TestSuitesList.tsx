@@ -1,8 +1,7 @@
-import {FC, useCallback, useContext} from 'react';
-
-import {MainContext} from '@contexts';
+import {FC, useCallback} from 'react';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
@@ -29,7 +28,7 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
 const TestSuitesList: FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
 

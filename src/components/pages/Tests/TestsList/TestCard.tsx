@@ -1,8 +1,7 @@
-import React, {FC, useContext, useRef} from 'react';
-
-import {MainContext} from '@contexts';
+import React, {FC, useRef} from 'react';
 
 import useInViewport from '@hooks/useInViewport';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {TestWithExecution} from '@models/test';
 
@@ -19,7 +18,7 @@ export interface TestCardProps {
 }
 
 const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, onAbort}) => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);

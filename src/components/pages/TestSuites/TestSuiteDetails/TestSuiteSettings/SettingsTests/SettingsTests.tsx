@@ -1,4 +1,4 @@
-import {memo, useContext, useEffect, useMemo, useState} from 'react';
+import {memo, useEffect, useMemo, useState} from 'react';
 
 import {nanoid} from '@reduxjs/toolkit';
 
@@ -6,11 +6,10 @@ import pick from 'lodash/pick';
 
 import {ExternalLink} from '@atoms';
 
-import {MainContext} from '@contexts';
-
 import {Button, FullWidthSpace, Title} from '@custom-antd';
 
 import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {TestSuiteStepTest} from '@models/test';
 import {LocalStep, TestSuite} from '@models/testSuite';
@@ -38,7 +37,7 @@ import {EmptyTestsContainer} from './SettingsTests.styled';
 import TestSuiteStepsFlow from './TestSuiteStepsFlow';
 
 const SettingsTests = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const {details, isV2: rawIsV2} = useEntityDetailsPick('details', 'isV2') as {details: TestSuite; isV2: boolean};
 
   const isV2 = useClusterVersionMatch('<1.13.0', rawIsV2);

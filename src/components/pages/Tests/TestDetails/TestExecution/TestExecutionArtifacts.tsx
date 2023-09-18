@@ -1,6 +1,6 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
-import {MainContext} from '@contexts';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Artifact} from '@models/artifact';
 
@@ -18,7 +18,7 @@ type TestExecutionArtifactsProps = {
 const TestExecutionArtifacts: React.FC<TestExecutionArtifactsProps> = props => {
   const {id, testName, testSuiteName, startTime} = props;
 
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const [artifacts, setArtifacts] = useState<Artifact[]>([]);
 

@@ -1,12 +1,11 @@
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 
 import {isEqual, merge} from 'lodash';
 
-import {MainContext} from '@contexts';
-
 import {Button} from '@custom-antd';
 
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {EntityListBlueprint} from '@models/entity';
@@ -54,7 +53,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
 

@@ -1,4 +1,4 @@
-import {FC, useContext, useMemo} from 'react';
+import {FC, useMemo} from 'react';
 
 import {Select} from 'antd';
 
@@ -6,9 +6,9 @@ import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 
 import {ExecutorIcon} from '@atoms';
 
-import {MainContext} from '@contexts';
-
 import {Text} from '@custom-antd';
+
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
@@ -30,7 +30,7 @@ interface ResourceTriggerSelectProps {
 }
 
 const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const {executors = []} = useExecutorsPick('executors');
 
