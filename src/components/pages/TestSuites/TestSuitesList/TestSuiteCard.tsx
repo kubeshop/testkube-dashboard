@@ -18,14 +18,15 @@ export interface TestSuiteCardProps {
 }
 
 const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick, onAbort}) => {
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isFresh = useSystemAccess(SystemAccess.agent);
+  const isAvailable = useSystemAccess(SystemAccess.system);
 
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
 
   const {data: metrics} = useGetTestSuiteExecutionMetricsQuery(
     {id: testSuite.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isClusterAvailable, pollingInterval: PollingIntervals.halfMin}
+    {skip: !isInViewport || !isAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
   return (
@@ -37,6 +38,7 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       onAbort={onAbort}
       metrics={metrics}
       dataTest="test-suites-list-item"
+      outOfSync={!isFresh}
     />
   );
 };
