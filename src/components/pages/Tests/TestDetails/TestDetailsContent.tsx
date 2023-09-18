@@ -5,6 +5,7 @@ import {Tabs} from 'antd';
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {useLastCallback} from '@hooks/useLastCallback';
 import useRunEntity from '@hooks/useRunEntity';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {CLICommands, SummaryGrid} from '@molecules';
@@ -32,6 +33,7 @@ interface TestDetailsContentProps {
 const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => {
   const {id, details, error, metrics} = useEntityDetailsPick('id', 'details', 'error', 'metrics');
   const [isRunning, run] = useRunEntity('tests', details);
+  const isFresh = useSystemAccess(SystemAccess.agent);
 
   const setTab = useDashboardNavigate((next: string) => `/tests/${id}/${next}`);
   const setSettingsTab = useDashboardNavigate((next: string) => `/tests/${id}/settings/${next}`);
@@ -58,6 +60,7 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
 
         <EntityDetailsHeader
           isRunning={isRunning}
+          outOfSync={!isFresh}
           onRun={run}
           onBack={back}
           useAbortAllExecutions={useAbortAllTestExecutionsMutation}

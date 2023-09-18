@@ -53,7 +53,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
 
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isClusterAvailable = useSystemAccess(SystemAccess.system);
   const wsRoot = useWsEndpoint();
 
   const {data: rawExecutions, refetch} = useGetExecutions(

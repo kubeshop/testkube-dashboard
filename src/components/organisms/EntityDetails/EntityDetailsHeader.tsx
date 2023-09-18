@@ -5,7 +5,7 @@ import {Select, Space} from 'antd';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {ExecutorIcon} from '@atoms';
+import {ExecutorIcon, Tag} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
@@ -39,6 +39,7 @@ interface EntityDetailsHeaderProps {
   onBack: () => void;
   useAbortAllExecutions: UseMutation<MutationDefinition<any, any, any, any, any>>;
   onEditTest: () => void;
+  outOfSync?: boolean;
 }
 
 const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
@@ -47,6 +48,7 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   onBack,
   useAbortAllExecutions,
   onEditTest,
+  outOfSync,
 }) => {
   const mayRun = usePermission(Permissions.runEntity);
   const {entity, details} = useEntityDetailsPick('entity', 'details');
@@ -64,6 +66,7 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
     <PageHeader
       onBack={onBack}
       title={details!.name}
+      pageTitleAddon={outOfSync ? <Tag title="read-only" type="warning" /> : undefined}
       extra={[
         <Select
           placeholder="Last 7/30/90/Year/All days"

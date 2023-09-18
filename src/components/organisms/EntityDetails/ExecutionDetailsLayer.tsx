@@ -39,7 +39,7 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
     [execId, useGetExecutionDetails]
   );
 
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isClusterAvailable = useSystemAccess(SystemAccess.system);
 
   const {data} = pick('data');
   const {data: rawFetchedData, error} = useGetExecutionDetails(execId!, {
