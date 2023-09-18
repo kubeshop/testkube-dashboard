@@ -18,14 +18,15 @@ export interface TestCardProps {
 }
 
 const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, onAbort}) => {
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isFresh = useSystemAccess(SystemAccess.agent);
+  const isAvailable = useSystemAccess(SystemAccess.system);
 
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
 
   const {data: metrics} = useGetTestExecutionMetricsQuery(
     {id: test.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isClusterAvailable, pollingInterval: PollingIntervals.halfMin}
+    {skip: !isInViewport || !isAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
   return (
@@ -37,6 +38,7 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, on
       onAbort={onAbort}
       metrics={metrics}
       dataTest="tests-list-item"
+      outOfSync={!isFresh}
     />
   );
 };

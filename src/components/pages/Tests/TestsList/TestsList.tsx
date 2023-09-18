@@ -34,7 +34,7 @@ const PageDescription: FC = () => (
 );
 
 const TestsList: FC = () => {
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
 
   const {
@@ -44,7 +44,7 @@ const TestsList: FC = () => {
     error,
   } = useGetTestsQuery(filters, {
     pollingInterval: PollingIntervals.everySecond,
-    skip: !isClusterAvailable,
+    skip: !isAvailable,
   });
   useTestsSync({tests});
 
@@ -86,7 +86,7 @@ const TestsList: FC = () => {
       queryFilters={filters}
       setQueryFilters={setFilters}
       data={tests}
-      isLoading={isLoading || !isClusterAvailable}
+      isLoading={isLoading || !isAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
     />
