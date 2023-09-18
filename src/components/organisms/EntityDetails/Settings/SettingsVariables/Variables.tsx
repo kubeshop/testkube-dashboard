@@ -27,10 +27,11 @@ type VariablesFormValues = {
 
 interface VariablesProps {
   description: string;
+  readOnly?: boolean;
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const Variables: React.FC<VariablesProps> = ({description, useUpdateEntity}) => {
+const Variables: React.FC<VariablesProps> = ({description, readOnly, useUpdateEntity}) => {
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -110,6 +111,7 @@ const Variables: React.FC<VariablesProps> = ({description, useUpdateEntity}) => 
       footer={footer}
       form={form}
       disabled={!mayEdit}
+      readOnly={readOnly}
       onFieldsChange={onFieldsChange}
       onConfirm={onSaveForm}
     >

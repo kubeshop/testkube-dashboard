@@ -11,6 +11,8 @@ import {capitalize} from 'lodash';
 
 import {Text} from '@custom-antd';
 
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
+
 import {notificationCall} from '@molecules';
 
 import {CardForm} from '@organisms';
@@ -36,7 +38,9 @@ interface ScheduleProps {
 
 const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
   const {details} = useEntityDetailsPick('details');
-  const mayEdit = usePermission(Permissions.editEntity);
+  const isWritable = useSystemAccess(SystemAccess.agent);
+  const hasEditPermissions = usePermission(Permissions.editEntity);
+  const mayEdit = hasEditPermissions && isWritable;
 
   const [updateEntity] = useUpdateEntity();
 
@@ -104,6 +108,7 @@ const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
       spacing={32}
       wasTouched={wasTouched}
       disabled={!mayEdit}
+      readOnly={!isWritable}
       onConfirm={onSave}
       onCancel={onCancel}
     >

@@ -18,6 +18,7 @@ import {required} from '@utils/form';
 
 type TestTypeProps = {
   type: string;
+  readOnly?: boolean;
   updateTest: (data: {type: string}) => void;
 };
 
@@ -26,7 +27,7 @@ type TestTypeFormValues = {
 };
 
 const TestType: React.FC<TestTypeProps> = props => {
-  const {type, updateTest} = props;
+  const {type, readOnly, updateTest} = props;
 
   const [form] = Form.useForm<TestTypeFormValues>();
 
@@ -53,6 +54,7 @@ const TestType: React.FC<TestTypeProps> = props => {
       form={form}
       initialValues={{type}}
       disabled={!mayEdit}
+      readOnly={readOnly}
       onConfirm={onSave}
     >
       <FormItem name="type" rules={[required]}>

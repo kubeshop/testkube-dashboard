@@ -43,13 +43,14 @@ const additionalFields: SourceFields = {
 
 type SourceProps = {
   details: Test;
+  readOnly?: boolean;
   updateTest: (data: any) => void;
 };
 
 type SourceFormValues = GetSourceFormValues & {testSource: string};
 
 const Source: React.FC<SourceProps> = props => {
-  const {details, updateTest} = props;
+  const {details, readOnly, updateTest} = props;
   const {type} = details;
 
   const mayEdit = usePermission(Permissions.editEntity);
@@ -113,6 +114,7 @@ const Source: React.FC<SourceProps> = props => {
       form={form}
       initialValues={{testSource: source, ...additionalFormValues}}
       disabled={!mayEdit}
+      readOnly={readOnly}
       wasTouched={Boolean(
         (isClearedToken && additionalFormValues.token) || (isClearedUsername && additionalFormValues.username)
       )}
@@ -149,6 +151,7 @@ const Source: React.FC<SourceProps> = props => {
             'file-uri': {},
           };
 
+          // TODO: Disable when it is read-only
           return getAdditionalFieldsComponent(testSource, additionalFields, childrenProps[testSource]);
         }}
       </Form.Item>

@@ -27,10 +27,11 @@ type NameNDescriptionFormValues = {
 
 interface NameNDescriptionProps {
   label: string;
+  readOnly?: boolean;
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEntity}) => {
+const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEntity, readOnly}) => {
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -72,6 +73,7 @@ const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEnti
       form={form}
       initialValues={{name, description}}
       disabled={!mayEdit}
+      readOnly={readOnly}
       onConfirm={onSave}
     >
       <FormItem name="name" rules={[required]}>

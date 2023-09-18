@@ -17,6 +17,7 @@ import {InlineNotification, notificationCall} from '@molecules';
 
 import {CardForm} from '@organisms';
 
+import {safeRefetch} from '@utils/fetchUtils';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 import KubernetesResourceEditor from '../KubernetesResourceEditor';
@@ -31,12 +32,23 @@ type DefinitionProps = {
   label: string;
   crdUrl?: string;
   overrideSchema?: (schema: JSONSchema4) => JSONSchema4;
+  readPermissions?: SystemAccess;
 };
 
 const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
-  const {name, onUpdate, useGetDefinitionQuery, useUpdateDefinitionMutation, crdUrl, label, overrideSchema} = props;
+  const {
+    name,
+    onUpdate,
+    useGetDefinitionQuery,
+    useUpdateDefinitionMutation,
+    crdUrl,
+    label,
+    overrideSchema,
+    readPermissions = SystemAccess.agent,
+  } = props;
 
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isReadable = useSystemAccess(readPermissions);
+  const isWritable = useSystemAccess(SystemAccess.agent);
   const isSupported = useClusterVersionMatch('>=1.13.0', true);
 
   const [value, setValue] = useState('');
@@ -48,11 +60,11 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
     isLoading: isDefinitionLoading,
     refetch,
   } = useGetDefinitionQuery(name, {
-    skip: !isClusterAvailable,
+    skip: !isReadable,
   });
 
   useEffect(() => {
-    refetch();
+    safeRefetch(refetch);
   }, []);
 
   useEffect(() => {
@@ -86,7 +98,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
       .then(res => {
         notificationCall('passed', `${capitalize(label)} was successfully updated.`);
         onUpdate?.(res.data);
-        refetch();
+        safeRefetch(refetch);
       });
   };
 
@@ -113,7 +125,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
           setValue(definition);
           setWasTouched(false);
         }}
-        readOnly={!isSupported}
+        readOnly={!isSupported || !isWritable}
         wasTouched={wasTouched}
       >
         {isDefinitionLoading ? (
@@ -122,7 +134,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
           <Suspense fallback={<DefinitionSkeleton />}>
             <KubernetesResourceEditor
               value={value}
-              disabled={!isSupported}
+              disabled={!isSupported || !isWritable}
               onChange={newValue => {
                 setValue(newValue);
                 setWasTouched(true);

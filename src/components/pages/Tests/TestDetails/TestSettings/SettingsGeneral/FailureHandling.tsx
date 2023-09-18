@@ -28,7 +28,11 @@ type FailureHandlingFormValues = {
   negativeTest: boolean;
 };
 
-const FailureHandling: React.FC = () => {
+interface FailureHandlingProps {
+  readOnly?: boolean;
+}
+
+const FailureHandling: React.FC<FailureHandlingProps> = ({readOnly}) => {
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
 
@@ -67,6 +71,7 @@ const FailureHandling: React.FC = () => {
       form={form}
       initialValues={{negativeTest}}
       disabled={!mayEdit}
+      readOnly={readOnly}
       onConfirm={onSave}
     >
       <FormItem name="negativeTest" valuePropName="checked">
