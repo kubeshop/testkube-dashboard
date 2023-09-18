@@ -47,6 +47,7 @@ const Labels: FC<LabelsProps> = ({label, useUpdateEntity, readOnly}) => {
       .then(() => notificationCall('passed', `${capitalize(label)} was successfully updated.`));
   };
 
+  // TODO: Disable LabelsSelect when it is disabled
   return (
     <CardForm
       name="labels-form"

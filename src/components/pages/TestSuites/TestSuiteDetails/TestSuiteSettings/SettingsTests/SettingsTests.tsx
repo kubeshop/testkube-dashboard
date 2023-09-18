@@ -37,7 +37,7 @@ import {EmptyTestsContainer} from './SettingsTests.styled';
 import TestSuiteStepsFlow from './TestSuiteStepsFlow';
 
 const SettingsTests = () => {
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isWritable = useSystemAccess(SystemAccess.agent);
   const {details, isV2: rawIsV2} = useEntityDetailsPick('details', 'isV2') as {details: TestSuite; isV2: boolean};
 
   const isV2 = useClusterVersionMatch('<1.13.0', rawIsV2);
@@ -47,7 +47,7 @@ const SettingsTests = () => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const {data: testsList} = useGetTestsListForTestSuiteQuery(details.name, {
-    skip: !isClusterAvailable || !details.name,
+    skip: !isWritable || !details.name,
   });
   const [updateTestSuite] = useUpdateTestSuiteMutation();
 
@@ -176,6 +176,7 @@ const SettingsTests = () => {
       description="Define the tests and their order of execution for this test suite"
       footer={footer}
       disabled={!mayEdit}
+      readOnly={!isWritable}
       wasTouched={wasTouched}
       onConfirm={onSave}
       onCancel={() => setSteps(initialSteps)}
@@ -196,6 +197,7 @@ const SettingsTests = () => {
           showTestModal={showTestModal}
           showDelayModal={showDelayModal}
           isV2={isV2}
+          disabled={!isWritable}
         />
       )}
       <DelayModal visible={isDelayModalVisible} onClose={() => setIsDelayModalVisible(false)} onSubmit={addDelay} />

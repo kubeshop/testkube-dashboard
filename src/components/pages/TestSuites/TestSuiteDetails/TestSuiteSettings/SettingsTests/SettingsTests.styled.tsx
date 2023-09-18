@@ -69,6 +69,7 @@ export const TestNodeContainer = styled.div`
 
 export const TestNodeNameContainer = styled.div`
   overflow: hidden;
+  margin-right: auto;
 `;
 
 export const IntersectionContainer = styled.div`

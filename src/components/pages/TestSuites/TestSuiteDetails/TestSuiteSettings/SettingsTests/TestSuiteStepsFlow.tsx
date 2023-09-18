@@ -20,6 +20,7 @@ type TestSuiteStepsFlowProps = {
   showTestModal: (group: number) => void;
   showDelayModal: (group: number) => void;
   isV2: boolean;
+  disabled?: boolean;
 };
 
 // Configure
@@ -42,7 +43,7 @@ const getAddPosition = (group: number, groupLength: number, offsetY: number) => 
 const getHeight = (maxLength: number) => getItemPosition(0, maxLength - 1, 0).y + itemHeight / 2;
 
 const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
-  const {steps, setSteps, showDelayModal, showTestModal, isV2} = props;
+  const {steps, setSteps, showDelayModal, showTestModal, isV2, disabled} = props;
 
   const [nodes, setNodes] = useState<ExtendedNode[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
@@ -70,33 +71,35 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         ...step.map((item, itemIndex) => ({
           type: 'step',
           id: item.id!,
-          data: {deleteNode, item, last: group === steps.length - 1, group},
+          data: {deleteNode, item, last: group === steps.length - 1, group, disabled},
           position: getItemPosition(group, itemIndex, groupOffsetY),
         }))
       );
 
-      if (!isV2) {
+      if (!isV2 && !disabled) {
         newNodes.push({
           type: 'add',
           id: nanoid(),
           position: getAddPosition(group, step.length, groupOffsetY),
-          data: {showDelayModal, showTestModal, group},
+          data: {showDelayModal, showTestModal, group, disabled},
         });
       }
     });
 
-    for (let group = 0; group <= steps.length; group += 1) {
-      newNodes.push({
-        type: 'intersection',
-        id: nanoid(),
-        position: getIntersectionPosition(group, (chartHeight - itemHeight) / 2),
-        data: {
-          showDelayModal,
-          showTestModal,
-          last: group === steps.length,
-          group,
-        },
-      });
+    if (!disabled) {
+      for (let group = 0; group <= steps.length; group += 1) {
+        newNodes.push({
+          type: 'intersection',
+          id: nanoid(),
+          position: getIntersectionPosition(group, (chartHeight - itemHeight) / 2),
+          data: {
+            showDelayModal,
+            showTestModal,
+            last: group === steps.length,
+            group,
+          },
+        });
+      }
     }
 
     setNodes(newNodes);
@@ -118,7 +121,9 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
       }
       if (node.type === 'step') {
         const nextIntersection = nodes.find(x => x.type === 'intersection' && x.data.group === node.data.group + 1)!;
-        return [...result, {id: `${node.id}-${nextIntersection.id}`, source: node.id, target: nextIntersection.id}];
+        const nextNode = nodes.find(x => x.type === 'step' && x.data.group === node.data.group + 1)!;
+        const nextItem = nextIntersection || nextNode;
+        return nextItem ? [...result, {id: `${node.id}-${nextItem.id}`, source: node.id, target: nextItem.id}] : result;
       }
       return result;
     }, [] as Edge[]);
