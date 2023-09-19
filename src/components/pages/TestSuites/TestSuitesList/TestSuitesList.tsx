@@ -28,7 +28,7 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
 const TestSuitesList: FC = () => {
-  const isAvailable = useSystemAccess(SystemAccess.system);
+  const isAvailable = useSystemAccess(SystemAccess.agent);
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
 
