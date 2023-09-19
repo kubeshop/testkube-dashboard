@@ -11,10 +11,11 @@ import {SplitLabelTextContainer} from './SplitLabelText.styled';
 type SplitLabelProps = {
   value: string;
   textClassName?: string;
+  disabled?: boolean;
 };
 
 const SplitLabelText: React.FC<SplitLabelProps> = props => {
-  const {value, textClassName = 'regular'} = props;
+  const {value, textClassName = 'regular', disabled = false} = props;
 
   if (!labelRegex.test(value)) {
     return (
@@ -28,10 +29,10 @@ const SplitLabelText: React.FC<SplitLabelProps> = props => {
 
   return (
     <SplitLabelTextContainer>
-      <Text color={Colors.slate400} className={textClassName}>
+      <Text color={disabled ? Colors.slate500 : Colors.slate400} className={textClassName}>
         {key}:{' '}
       </Text>
-      <Text color={Colors.slate200} className={textClassName} ellipsis>
+      <Text color={disabled ? Colors.slate500 : Colors.slate200} className={textClassName} ellipsis>
         {rest.join(':')}
       </Text>
     </SplitLabelTextContainer>

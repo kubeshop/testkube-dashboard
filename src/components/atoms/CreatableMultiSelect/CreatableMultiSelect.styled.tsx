@@ -6,15 +6,28 @@ import {Option} from '@models/form';
 
 import Colors from '@styles/Colors';
 
-export const StyledOption = styled.div`
+export const StyledOption = styled.div<{$disabled: boolean}>`
   padding: 6px 12px;
 
-  cursor: pointer;
   transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: ${Colors.slate700};
-  }
+  ${({$disabled}) =>
+    $disabled
+      ? `
+    cursor: not-allowed;
+    color: ${Colors.slate500};
+
+    &:hover {
+      background-color: ${Colors.slate850};
+    }
+  `
+      : `
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${Colors.slate700};
+    }
+  `}
 `;
 
 export const StyledMultiLabel = styled.div`
