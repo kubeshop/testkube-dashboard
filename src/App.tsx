@@ -52,7 +52,6 @@ const App: React.FC<AppProps> = ({plugins}) => {
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
-  const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const [LogOutputProvider] = initializeLogOutputStore(undefined, [location.pathname]);
@@ -99,8 +98,8 @@ const App: React.FC<AppProps> = ({plugins}) => {
       return;
     }
 
-    // Avoid loading API details when we know the API is not available.
-    if (!isSystemAvailable) {
+    // Avoid loading API details when we know the cluster is not available.
+    if (!isClusterAvailable) {
       return;
     }
 
@@ -118,7 +117,7 @@ const App: React.FC<AppProps> = ({plugins}) => {
           openEndpointModal();
         }
       });
-  }, [apiEndpoint, isSystemAvailable]);
+  }, [apiEndpoint, isClusterAvailable]);
 
   const scope = useMemo(() => {
     const pluginManager = createPluginManager();
