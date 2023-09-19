@@ -5,6 +5,8 @@ import executorData from '../fixtures/executors';
 import testsData from '../fixtures/tests';
 import testSourcesData from '../fixtures/testsources';
 import testSuitesData from '../fixtures/testsuites';
+import triggersData from '../fixtures/triggers';
+import webhooksData from '../fixtures/webhooks';
 
 // TODO: Use functions instead
 export class TestDataHandler {
@@ -56,6 +58,24 @@ export class TestDataHandler {
       ...executor,
       name: this.getRandomizedName(executor.name),
       types: [this.getRandomizedName(executor.types[0]), ...executor.types.slice(1)],
+    };
+  }
+
+  public getTrigger(triggerName: string): any {
+    let trigger = (triggersData as any)[triggerName];
+
+    return {
+      ...trigger,
+      name: this.getRandomizedName(trigger.name),
+    };
+  }
+
+  public getWebhook(webhookName: string): any {
+    let webhook = (webhooksData as any)[webhookName];
+
+    return {
+      ...webhook,
+      name: this.getRandomizedName(webhook.name),
     };
   }
 

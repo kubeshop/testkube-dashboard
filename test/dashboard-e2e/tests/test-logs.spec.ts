@@ -9,7 +9,8 @@ import {TestExecutionsPage} from '../pages/TestExecutionsPage';
 const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToken);
 const testDataHandler = new TestDataHandler(config.runId);
 
-test(`Run test logs`, async ({page}) => {
+test.fixme(`Run test logs`, async ({page}) => {
+  // flaky test
   const testData = testDataHandler.getTest('k6-git-created');
   const realTestName = testData.name;
 

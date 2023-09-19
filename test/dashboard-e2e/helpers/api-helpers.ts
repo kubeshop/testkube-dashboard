@@ -1,6 +1,14 @@
 import superagent from 'superagent';
 
-import type {ExecutorData, TriggerData, WebhookData, TestData, TestExecutionListResponse, TestSourceData, TestSuiteData} from '../types';
+import type {
+  ExecutorData,
+  TestData,
+  TestExecutionListResponse,
+  TestSourceData,
+  TestSuiteData,
+  TriggerData,
+  WebhookData,
+} from '../types';
 
 export class ApiHelpers {
   public apiUrl: string;
