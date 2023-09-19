@@ -31,6 +31,9 @@ const isValidLabel = (value?: string) => {
   return value != null && labelRegex.test(value);
 };
 
+const getLabelKey = (label: string) => label.match(/^([^:]+:?)/)?.[0];
+const isLabelKey = (label: string, keyWithColon?: string) => Boolean(keyWithColon && label.startsWith(keyWithColon));
+
 const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   const {
     id,
@@ -61,6 +64,32 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   }, [options, data]);
 
   const change = useLastCallback((newValue: readonly Option[]) => onChange?.(newValue.map(x => x.value as string)));
+  const isOptionDisabled = useMemo(
+    () => (option: Option, selected: readonly Option[]) => {
+      const key = getLabelKey(option.label);
+      return Boolean(key) && selected.some(x => isLabelKey(`${x.value}`, key));
+    },
+    []
+  );
+  const formatCreateLabel = useMemo(
+    () => (inputString: string) => {
+      if (typeof inputString === 'string' && inputString.includes(':')) {
+        if (!isValidLabel(inputString)) {
+          return 'Incorrect label value';
+        }
+
+        const key = getLabelKey(inputString)!;
+        if (value?.some(x => x.startsWith(`${key}:`))) {
+          return `The label may have only a single value for specified key (${key}:)`;
+        }
+
+        return `Create ${inputString}`;
+      }
+
+      return 'Create: You need to add a : separator to create this label';
+    },
+    [value]
+  );
 
   return (
     <CreatableMultiSelect
@@ -68,17 +97,8 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
       value={formattedValue}
       onChange={change}
       placeholder={placeholder}
-      formatCreateLabel={(inputString: string) => {
-        if (typeof inputString === 'string' && inputString.includes(':')) {
-          if (!isValidLabel(inputString)) {
-            return 'Incorrect label value';
-          }
-
-          return `Create ${inputString}`;
-        }
-
-        return 'Create: You need to add a : separator to create this label';
-      }}
+      isOptionDisabled={isOptionDisabled}
+      formatCreateLabel={formatCreateLabel}
       options={formattedOptions}
       CustomOptionComponent={LabelsOption}
       CustomMultiValueLabelComponent={LabelsMultiValueLabel}
