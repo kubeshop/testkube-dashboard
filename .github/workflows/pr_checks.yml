@@ -28,13 +28,13 @@ jobs:
       uses: kubeshop/testkube-run-action@v1
       with:
         # Instance
-        url: https://dev.testkube.io/results/v1
+        url: https://demo.testkube.dev/results/v1
         # Options
         test: dashboard-e2e-tests
         ref: ${{ github.head_ref }}
         variables: |
           BASE_URL="${{ needs.wait-for-vercel.outputs.preview-url }}"
           API_URL="testkube-api-server.testkube.svc.cluster.local:8088/v1"
-          DASHBOARD_API_URL="https://dev.testkube.io/results/v1"
+          DASHBOARD_API_URL="https://demo.testkube.dev/results/v1"
           BASIC_AUTH_USER="testkube-admin"
           BASIC_AUTH_PASS="${{ secrets.TESTKUBE_DEVELOP_NGINX_PASS }}"
