@@ -66,7 +66,15 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
     <PageHeader
       onBack={onBack}
       title={details!.name}
-      pageTitleAddon={outOfSync ? <Tag title="read-only" type="warning" /> : undefined}
+      pageTitleAddon={
+        outOfSync ? (
+          <Tag
+            title="read-only"
+            type="warning"
+            tooltipMessage="This test is not in sync with your agent. You are only able to see historical data."
+          />
+        ) : undefined
+      }
       extra={[
         <Select
           placeholder="Last 7/30/90/Year/All days"

@@ -90,7 +90,13 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
               <Text className="regular big" ellipsis title={item.name}>
                 {item.name}
               </Text>
-              {outOfSync ? <Tag title="read-only" type="warning" /> : null}
+              {outOfSync ? (
+                <Tag
+                  title="read-only"
+                  type="warning"
+                  tooltipMessage="This test is not in sync with your agent. You are only able to see historical data."
+                />
+              ) : null}
             </div>
           </ItemColumn>
           <ExecutionTimeItemColumn>
