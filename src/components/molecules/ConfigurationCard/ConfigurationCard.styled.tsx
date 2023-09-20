@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import {maxDevice} from '@src/styles/MediaQueries';
+
 import Colors from '@styles/Colors';
 
 export const StyledContainer = styled.div<{isWarning?: boolean}>`
@@ -43,6 +45,11 @@ export const StyledFooter = styled.div`
 
   padding: 20px;
   border-top: 1px solid ${Colors.slate800};
+
+  @media ${maxDevice.mobileL} {
+    flex-direction: column;
+    gap: 8px;
+  }
 `;
 
 export const StyledFooterButtonsContainer = styled.div`
