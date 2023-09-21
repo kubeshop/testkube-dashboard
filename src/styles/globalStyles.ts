@@ -484,4 +484,9 @@ export const GlobalStyle = createGlobalStyle`
       fill: ${Colors.whitePure};
     }
   }
+
+  /* Calendar */
+  .ant-picker-panel-container {
+    border: 1px solid ${Colors.slate800};
+  }
 `;
