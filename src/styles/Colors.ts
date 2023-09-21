@@ -172,8 +172,8 @@ export enum StatusColors {
   operational = Colors.lime400,
   partial_outage = Colors.amber500,
   major_outage = Colors.pink600,
-  unavailable = Colors.slate800,
-  unknown = Colors.slate800,
+  unavailable = Colors.slate700,
+  unknown = Colors.slate700,
   critical = Colors.rose500,
   major = Colors.rose500,
   minor = Colors.amber400,
@@ -194,8 +194,8 @@ export enum SecondaryStatusColors {
   operational = Colors.lime700,
   partial_outage = Colors.amber800,
   major_outage = Colors.pink800,
-  unavailable = Colors.slate600,
-  unknown = Colors.slate600,
+  unavailable = Colors.slate900,
+  unknown = Colors.slate900,
 }
 
 export enum BorderColors {
