@@ -53,20 +53,21 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
 
-  const isClusterAvailable = useSystemAccess(SystemAccess.system);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const wsRoot = useWsEndpoint();
 
   const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
-    {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable}
+    {pollingInterval: PollingIntervals.long, skip: !isSystemAvailable}
   );
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
-    {skip: !isClusterAvailable}
+    {skip: !isSystemAvailable}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
-    skip: !isClusterAvailable,
+    skip: !isSystemAvailable,
   });
   const isV2 = isTestSuiteV2(rawDetails);
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);
@@ -183,7 +184,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
       retryOnError: true,
       queryParams: token ? {token} : {},
     },
-    !tokenLoading
+    !tokenLoading && isClusterAvailable
   );
 
   useEffect(() => {
