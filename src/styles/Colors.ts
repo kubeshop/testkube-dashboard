@@ -70,6 +70,7 @@ enum Colors {
   amber400 = '#fbbf24',
   amber500 = '#F59E0B',
   amber600 = '#D97706',
+  amber800 = '#92400E',
   amber900 = '#78350F',
   amber90099 = '#78350F99',
 
