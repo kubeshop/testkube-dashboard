@@ -2,6 +2,31 @@ import {getApiEndpoint} from '@services/apiEndpoint';
 
 import {getRtkBaseUrl, getRtkIdToken} from '@utils/rtk';
 
+const downloadFromUrl = (url: string, fileName: string): void => {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
+
+const downloadPotentialFile = async (response: Response, fileName: string): Promise<void> => {
+  if (!response.status || response.status >= 300) {
+    throw new Error('Something went wrong');
+  }
+
+  if (response.headers.get('content-type') === 'application/json') {
+    const data = await response.json();
+    const fileUrl = data.data?.url || data.url;
+    downloadFromUrl(fileUrl, fileName);
+  } else {
+    const fileUrl = window.URL.createObjectURL(await response.blob());
+    downloadFromUrl(fileUrl, fileName);
+    window.URL.revokeObjectURL(fileUrl);
+  }
+};
+
 export const downloadArtifact = async (
   fileName: string,
   executionId: string,
@@ -16,53 +41,28 @@ export const downloadArtifact = async (
     ...(testSuiteName && {testSuiteName}),
   };
   const url = `/executions/${executionId}/artifacts/${doubleEncodedFileName}`;
-  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl(undefined)}${url}`;
+  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl('environment')}${url}`;
   const idToken = await getRtkIdToken();
 
   // Call the API to retrieve file or signed URL
-  let response = await fetch(`${finalUrl}?${new URLSearchParams(queryParams)}`, {
+  const response = await fetch(`${finalUrl}?${new URLSearchParams(queryParams)}`, {
     headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
   });
 
-  // When the signed URL is returned, follow it
-  if (response.headers.get('content-type') === 'application/json') {
-    response = await fetch((await response.json()).data.url);
-  }
-
   // Download the file
-  const blobUrl = window.URL.createObjectURL(await response.blob());
-  const a = document.createElement('a');
-  a.href = blobUrl;
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  window.URL.revokeObjectURL(blobUrl);
+  await downloadPotentialFile(response, fileName);
 };
 
 export const downloadArtifactArchive = async (fileName: string, executionId: string) => {
   const url = `/executions/${executionId}/artifact-archive`;
-  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl(undefined)}${url}`;
+  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl('environment')}${url}`;
   const idToken = await getRtkIdToken();
 
   // Call the API to retrieve file or signed URL
-  let response = await fetch(finalUrl, {
+  const response = await fetch(finalUrl, {
     headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
   });
 
-  // When the signed URL is returned, follow it
-  if (response.headers.get('content-type') === 'application/json') {
-    response = await fetch((await response.json()).data.url);
-  }
-
   // Download the file
-  const blobUrl = window.URL.createObjectURL(await response.blob());
-  const a = document.createElement('a');
-  a.href = blobUrl;
-  // tar.gz format for archive
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  window.URL.revokeObjectURL(blobUrl);
+  await downloadPotentialFile(response, fileName);
 };
