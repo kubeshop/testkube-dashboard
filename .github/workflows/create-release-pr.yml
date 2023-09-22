@@ -1,0 +1,75 @@
+name: Create Release PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'i.e. v1.14.1'
+        required: true
+
+env:
+  git-user: kubeshop-bot
+  git-email: kubeshop-bot@kubeshop.io
+  base-branch: main
+  source-branch: develop
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sanitize version
+        run: |
+          VERSION=${{ github.event.inputs.version }}
+          echo "VERSION=$(echo "$VERSION" | sed "s/^v//")" >> "$GITHUB_ENV"
+
+      - name: Check out GitHub repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.source-branch }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "${{ env.git-user }}"
+          git config user.email "${{ env.git-email }}"
+
+      - name: Create release branch
+        run: git branch release/v${{ env.VERSION }}
+
+      - name: Push release branch
+        run: git push -f origin release/v${{ env.VERSION }}
+
+      - name: Build log
+        run: |
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "CHANGELOG<<$EOF" >> "$GITHUB_ENV"
+          echo "$(git --no-pager log "origin/main..HEAD" --pretty='format:|[**`%h`**](https://github.com/kubeshop/testkube-dashboard/commit/%h) | %s |' 2>&1 | sed 's/ (#\([0-9]*\))[^"]/|([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/g' | sed 's/Merge pull request #\([0-9]*\)\(.*\)/Merge pull request #\1\2 | ([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/')" >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
+
+          echo "FULL_CHANGELOG<<$EOF" >> "$GITHUB_ENV"
+          echo "$(git --no-pager log "origin/main..HEAD" --pretty='format:|[**`%h`**](https://github.com/kubeshop/testkube-dashboard/commit/%h)| %ci | %an | %s |' 2>&1 | sed 's/ (#\([0-9]*\))[^"]/|([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/g' | sed 's/Merge pull request #\([0-9]*\)\(.*\)/Merge pull request #\1\2 | ([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/')" >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
+
+      - name: Checkout base branch
+        run: git checkout ${{ env.base-branch }}
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "> #### Don't forget to avoid 'Squash and Merge' - use with merge commit instead!" > message
+          echo "### Changelog" >> message
+          echo "| Commit | Description | PR |" >> message
+          echo "|-|-|-|" >> message
+          echo "$CHANGELOG" >> message
+          echo "" >> message
+          echo "<details>" >> message
+          echo "  <summary>Details</summary>" >> message
+          echo "" >> message
+          echo "  | Commit | Date | Author | Description | PR |" >> message
+          echo "  |-|-|-|-|-|" >> message
+          echo "  $FULL_CHANGELOG" >> message
+          echo "</details>" >> message
+
+          gh pr create --assignee "${{ github.triggering_actor }}" --title "Release v$VERSION" --base "${{ env.base-branch }}" --head "release/v$VERSION" --body "$(cat message)"
