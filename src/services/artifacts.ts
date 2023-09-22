@@ -55,7 +55,7 @@ export const downloadArtifact = async (
 
 export const downloadArtifactArchive = async (fileName: string, executionId: string) => {
   const url = `/executions/${executionId}/artifact-archive`;
-  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl('environment')}${url}`;
+  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl(undefined)}${url}`;
   const idToken = await getRtkIdToken();
 
   // Call the API to retrieve file or signed URL
