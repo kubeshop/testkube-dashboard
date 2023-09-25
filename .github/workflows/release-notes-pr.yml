@@ -1,4 +1,4 @@
-name: Show changelog
+name: Show changelog in PR
 
 on:
   pull_request:
