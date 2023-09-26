@@ -53,6 +53,7 @@ const SourceEdit: React.FC<Partial<Props>> = props => {
         message={validationState.message}
         branchStatus={validationState.branch}
         commitStatus={validationState.commit}
+        disabled={disabled}
       />
       <Path testType={executorType} message={validationState.message} status={validationState.path} />
     </StyledFormSpace>

@@ -13,10 +13,11 @@ type RevisionProps = {
   message?: string;
   branchStatus?: TooltipStatus;
   commitStatus?: TooltipStatus;
+  disabled?: boolean;
 };
 
 const Revision: React.FC<RevisionProps> = props => {
-  const {message, branchStatus, commitStatus} = props;
+  const {message, branchStatus, commitStatus, disabled} = props;
   const [switcherValue, setSwitcherValue] = useState<string | number>('branch');
 
   const isFirst = useFirstMountState();
@@ -32,11 +33,11 @@ const Revision: React.FC<RevisionProps> = props => {
 
         return (
           <StyledFormSpace size={24} direction="vertical">
-            <RevisionSwitcher value={switcherValue} onChange={setSwitcherValue} />
+            <RevisionSwitcher value={switcherValue} onChange={setSwitcherValue} disabled={disabled} />
             {switcherValue === 'branch' ? (
-              <Branch message={message} status={branchStatus} />
+              <Branch message={message} status={branchStatus} disabled={disabled} />
             ) : (
-              <Commit message={message} status={commitStatus} />
+              <Commit message={message} status={commitStatus} disabled={disabled} />
             )}
           </StyledFormSpace>
         );
