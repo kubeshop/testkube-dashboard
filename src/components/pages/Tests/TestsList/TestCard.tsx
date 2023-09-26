@@ -18,15 +18,14 @@ export interface TestCardProps {
 }
 
 const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, onAbort}) => {
-  const isFresh = useSystemAccess(SystemAccess.agent);
-  const isAvailable = useSystemAccess(SystemAccess.system);
+  const isAgentAvailable = useSystemAccess(SystemAccess.agent);
 
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
 
   const {data: metrics} = useGetTestExecutionMetricsQuery(
     {id: test.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isAvailable, pollingInterval: PollingIntervals.halfMin}
+    {skip: !isInViewport || !isAgentAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
   return (
@@ -38,7 +37,8 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, on
       onAbort={onAbort}
       metrics={metrics}
       dataTest="tests-list-item"
-      outOfSync={!isFresh}
+      outOfSync={test.readOnly}
+      isAgentAvailable={isAgentAvailable}
     />
   );
 };

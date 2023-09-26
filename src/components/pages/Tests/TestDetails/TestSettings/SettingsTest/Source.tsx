@@ -145,10 +145,11 @@ const Source: React.FC<SourceProps> = props => {
               setIsClearedToken,
               setIsClearedUsername,
               getFieldValue,
+              disabled: !mayEdit || readOnly,
             },
-            custom: {executorType},
-            string: {},
-            'file-uri': {},
+            custom: {executorType, disabled: !mayEdit || readOnly},
+            string: {disabled: !mayEdit || readOnly},
+            'file-uri': {disabled: !mayEdit || readOnly},
           };
 
           // TODO: Disable when it is read-only

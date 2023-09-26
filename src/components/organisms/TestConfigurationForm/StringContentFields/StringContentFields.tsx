@@ -31,12 +31,12 @@ export default function () {
 };
 
 const StringContentFields: React.FC<Partial<Props>> = props => {
-  const {executorType} = props;
+  const {executorType, disabled} = props;
 
   const placeholder = stringPlaceholders[executorType!] || 'String...';
   return (
     <FormItem name="string" label="String" rules={[required]} required>
-      <TextArea rows={11} placeholder={placeholder} style={{fontFamily: Fonts.robotoMono}} />
+      <TextArea rows={11} placeholder={placeholder} style={{fontFamily: Fonts.robotoMono}} disabled={disabled} />
     </FormItem>
   );
 };

@@ -60,7 +60,7 @@ const Labels: FC<LabelsProps> = ({label, useUpdateEntity, readOnly}) => {
       onConfirm={onSave}
     >
       <FormItem name="labels">
-        <LabelsSelect />
+        <LabelsSelect disabled={!mayEdit || readOnly} />
       </FormItem>
     </CardForm>
   );

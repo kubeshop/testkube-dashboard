@@ -40,6 +40,7 @@ interface EntityDetailsHeaderProps {
   useAbortAllExecutions: UseMutation<MutationDefinition<any, any, any, any, any>>;
   onEditTest: () => void;
   outOfSync?: boolean;
+  isAgentAvailable?: boolean;
 }
 
 const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
@@ -49,6 +50,7 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   useAbortAllExecutions,
   onEditTest,
   outOfSync,
+  isAgentAvailable,
 }) => {
   const mayRun = usePermission(Permissions.runEntity);
   const {entity, details} = useEntityDetailsPick('entity', 'details');
@@ -71,7 +73,11 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
           <Tag
             title="read-only"
             type="warning"
-            tooltipMessage="This test is not in sync with your agent. You are only able to see historical data."
+            tooltipMessage={
+              isAgentAvailable
+                ? 'This test is not currently present on your agent. You are only able to see historical data.'
+                : 'This test is potentially not in sync with the data on your local cluster. You are only able to see historical data.'
+            }
           />
         ) : undefined
       }

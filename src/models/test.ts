@@ -36,6 +36,7 @@ export type Test = {
     latestExecution?: LatestExecution;
   };
   source: string;
+  readOnly: boolean;
 };
 
 export type TestWithExecution = {
