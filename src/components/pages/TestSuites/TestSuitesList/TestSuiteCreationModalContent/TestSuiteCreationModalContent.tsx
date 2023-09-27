@@ -77,7 +77,7 @@ const TestSuiteCreationModalContent: React.FC = () => {
         <Text className="regular big">Test suite details</Text>
         {error ? <NotificationContent status="failed" message={error.message} title={error.title} /> : null}
         <FormItem name="name" rules={[required, k8sResourceNamePattern, k8sResourceNameMaxLength]}>
-          <Input placeholder="Name" />
+          <Input placeholder="Name" autoComplete="off" />
         </FormItem>
         <FormItem name="description">
           <TextArea placeholder="Description" autoSize={{minRows: 4, maxRows: 6}} />
