@@ -25,6 +25,8 @@ import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
 import {Plugin} from '@plugins/types';
 
+import {resetRtkCache} from '@redux/store';
+
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
 
@@ -67,7 +69,6 @@ const AppRoot: React.FC = () => {
   const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
     skip: !apiEndpoint,
   });
-
   // Pause/resume telemetry based on the cluster settings
   useEffect(() => {
     if (clusterConfig?.enableTelemetry) {
@@ -97,6 +98,11 @@ const AppRoot: React.FC = () => {
   useEffect(() => {
     telemetry.pageView(`${location.pathname}${anonymizeQueryString(location.search)}`);
   }, [location.pathname, clusterConfig]);
+
+  // Reset the in-memory API cache on API endpoint change
+  useEffect(() => {
+    resetRtkCache();
+  }, [apiEndpoint]);
 
   // FIXME: Hack - for some reason, useEffect was not called on API endpoint change.
   useMemo(() => {
