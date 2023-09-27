@@ -10,6 +10,18 @@ import {testsApi} from '@services/tests';
 import {triggersApi} from '@services/triggers';
 import {webhooksApi} from '@services/webhooks';
 
+const rtkModules = [
+  testsApi,
+  testSuitesApi,
+  labelsApi,
+  executorsApi,
+  sourcesApi,
+  triggersApi,
+  configApi,
+  repositoryApi,
+  webhooksApi,
+];
+
 export const middlewares: Middleware[] = [
   testsApi.middleware,
   testSuitesApi.middleware,
@@ -32,6 +44,10 @@ export const reducers = {
   [configApi.reducerPath]: configApi.reducer,
   [repositoryApi.reducerPath]: repositoryApi.reducer,
   [webhooksApi.reducerPath]: webhooksApi.reducer,
+};
+
+export const resetRtkCache = () => {
+  rtkModules.forEach(api => api.util?.resetApiState());
 };
 
 export const store = configureStore({
