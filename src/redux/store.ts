@@ -1,4 +1,4 @@
-import {Middleware, configureStore} from '@reduxjs/toolkit';
+import {Middleware, Store, configureStore} from '@reduxjs/toolkit';
 
 import {configApi} from '@services/config';
 import {executorsApi} from '@services/executors';
@@ -46,8 +46,8 @@ export const reducers = {
   [webhooksApi.reducerPath]: webhooksApi.reducer,
 };
 
-export const resetRtkCache = () => {
-  rtkModules.forEach(api => api.util?.resetApiState());
+export const resetRtkCache = (targetStore: Store) => {
+  rtkModules.forEach(api => targetStore.dispatch(api.util?.resetApiState()));
 };
 
 export const store = configureStore({
