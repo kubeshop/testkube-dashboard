@@ -88,7 +88,7 @@ const WebhookCreationModal: FC = () => {
     >
       <FullWidthSpace direction="vertical" size={20}>
         <FormItem name="name" label="Name" rules={[requiredNoText]} required>
-          <Input placeholder="e.g.: container-deployment-xyz" />
+          <Input placeholder="e.g.: container-deployment-xyz" autoComplete="off" />
         </FormItem>
         <Steps
           current={step}

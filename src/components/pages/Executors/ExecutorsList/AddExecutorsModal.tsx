@@ -83,7 +83,7 @@ const AddExecutorsModal: React.FC = () => {
           name="name"
           rules={[required, k8sResourceNameMaxLength, k8sResourceNamePattern]}
         >
-          <Input placeholder="e.g.: my-container-executor" />
+          <Input placeholder="e.g.: my-container-executor" autoComplete="off" />
         </Form.Item>
         <Form.Item label="Executor type" required name="type" rules={[required]}>
           <Input placeholder="e.g.: my-executor/type" />
