@@ -58,12 +58,12 @@ const AppRoot: React.FC = () => {
 
   // TODO: Unify all store providers and move them there?
   //       Otherwise, these are not available from modals.
-  const [ExecutorsProvider] = initializeExecutorsStore();
-  const [SourcesProvider] = initializeSourcesStore();
-  const [TestsProvider] = initializeTestsStore();
-  const [TestSuitesProvider] = initializeTestSuitesStore();
-  const [TriggersProvider] = initializeTriggersStore();
-  const [WebhooksProvider] = initializeWebhooksStore();
+  const [ExecutorsProvider] = initializeExecutorsStore({}, [apiEndpoint]);
+  const [SourcesProvider] = initializeSourcesStore({}, [apiEndpoint]);
+  const [TestsProvider] = initializeTestsStore({}, [apiEndpoint]);
+  const [TestSuitesProvider] = initializeTestSuitesStore({}, [apiEndpoint]);
+  const [TriggersProvider] = initializeTriggersStore({}, [apiEndpoint]);
+  const [WebhooksProvider] = initializeWebhooksStore({}, [apiEndpoint]);
   const [ClusterDetailsProvider] = initializeClusterDetailsStore({}, [apiEndpoint]);
 
   const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
