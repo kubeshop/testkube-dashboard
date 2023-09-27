@@ -89,7 +89,7 @@ const AddSourceModal: React.FC = () => {
           name="name"
           rules={[required, k8sResourceNameMaxLength, k8sResourceNamePattern]}
         >
-          <Input placeholder="e.g.: my-git-test-repository" />
+          <Input placeholder="e.g.: my-git-test-repository" autoComplete="off" />
         </Form.Item>
         <Form.Item label="Git repository URL" required name="uri" rules={[required]}>
           <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
