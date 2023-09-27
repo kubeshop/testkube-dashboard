@@ -8,6 +8,7 @@ import {TestExecutor} from '@models/testExecutors';
 
 import {Permissions, usePermission} from '@permissions/base';
 
+import {useClusterDetailsPick} from '@store/clusterDetails';
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutorsPick} from '@store/executors';
 
@@ -19,7 +20,7 @@ type CLIScriptModifier = 'isFinished' | 'canHaveArtifacts' | 'isRunPermission' |
 
 type CLIScript = {
   label: string;
-  command: (name: string) => string;
+  command: (name: string, args: string[]) => string;
   modify?: CLIScriptModifier;
 };
 
@@ -40,11 +41,11 @@ const testSuiteScripts: CLIScript[] = [
   {
     label: 'Run test suite',
     modify: 'isRunPermission',
-    command: (name: string) => `kubectl testkube run testsuite ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube run testsuite ${name} ${args.join(' ')}`,
   },
   {
     label: 'Delete test suite',
-    command: (name: string) => `kubectl testkube delete testsuite ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube delete testsuite ${name} ${args.join(' ')}`,
     modify: 'isDeletePermission',
   },
 ];
@@ -52,20 +53,20 @@ const testSuiteScripts: CLIScript[] = [
 const testScripts: CLIScript[] = [
   {
     label: 'Run test',
-    command: (name: string) => `kubectl testkube run test ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube run test ${name} ${args.join(' ')}`,
     modify: 'isRunPermission',
   },
   {
     label: 'Get test',
-    command: (name: string) => `kubectl testkube get test ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube get test ${name} ${args.join(' ')}`,
   },
   {
     label: 'List executions',
-    command: (name: string) => `kubectl testkube get executions --test ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube get executions --test ${name} ${args.join(' ')}`,
   },
   {
     label: 'Delete test',
-    command: (name: string) => `kubectl testkube delete test ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube delete test ${name}  ${args.join(' ')}`,
     modify: 'isDeletePermission',
   },
 ];
@@ -73,16 +74,16 @@ const testScripts: CLIScript[] = [
 const executionsScripts: CLIScript[] = [
   {
     label: 'Get execution',
-    command: (name: string) => `kubectl testkube get execution ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube get execution ${name} ${args.join(' ')}`,
   },
   {
     label: 'Watch execution',
-    command: (name: string) => `kubectl testkube watch execution ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube watch execution ${name} ${args.join(' ')}`,
     modify: 'isFinished',
   },
   {
     label: 'Download artifacts',
-    command: (name: string) => `kubectl testkube download artifacts ${name}`,
+    command: (name: string, args: string[]) => `kubectl testkube download artifacts ${name} ${args.join(' ')}`,
     modify: 'canHaveArtifacts',
   },
 ];
@@ -117,7 +118,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
   const telemetry = useTelemetry();
 
   const {featuresMap} = useExecutorsPick('featuresMap');
-
+  const {namespace} = useClusterDetailsPick('namespace');
   const CLIEntityType = isExecutions ? 'executions' : entity;
 
   const modifyArgsMap: Partial<Record<CLIScriptModifier, boolean | ExecutionStatusEnum>> = {
@@ -145,7 +146,8 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
         }
       }
 
-      const commandString = command(testTarget);
+      const commandArgs = [namespace !== 'testkube' ? `--namespace ${namespace}` : ''];
+      const commandString = command(testTarget, commandArgs);
 
       const onCopy = () => {
         telemetry.event('copyCommand', {command: label});
