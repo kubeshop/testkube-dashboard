@@ -100,7 +100,7 @@ const AppRoot: React.FC = () => {
   }, [location.pathname, clusterConfig]);
 
   // Reset the in-memory API cache on API endpoint change
-  useEffect(() => {
+  useMemo(() => {
     resetRtkCache(store);
   }, [apiEndpoint]);
 
