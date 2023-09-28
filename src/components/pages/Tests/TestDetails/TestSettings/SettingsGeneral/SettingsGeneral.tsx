@@ -27,7 +27,7 @@ const SettingsGeneral: React.FC = () => {
       <Labels label="test" useUpdateEntity={useUpdateTestMutation} readOnly={!isWritable} />
       <Timeout readOnly={!isWritable} />
       <FailureHandling readOnly={!isWritable} />
-      {mayDelete && isWritable ? (
+      {mayDelete ? (
         deleteTestExtension !== undefined ? (
           deleteTestExtension
         ) : (
