@@ -7,6 +7,8 @@ import {ExecutorIcon} from '@atoms';
 
 import {Text} from '@custom-antd';
 
+import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+
 import {LocalStep} from '@models/testSuite';
 
 import {DotsDropdown} from '@molecules';
@@ -25,6 +27,7 @@ type StepNodeProps = {
 const StepNode: React.FC<StepNodeProps> = props => {
   const {data, id} = props;
   const {type, test, delay} = data.item;
+  const dashboardNavigate = useDashboardNavigate((next: string) => `/tests/${test}/settings/${next}`);
 
   const renderText = test ?? (/^[0-9]+$/.test(`${delay}`) ? `${delay}ms` : delay);
   return (
@@ -39,7 +42,12 @@ const StepNode: React.FC<StepNodeProps> = props => {
             </Text>
           </TestNodeNameContainer>
         </Tooltip>
-        <DotsDropdown items={[{key: 1, label: <span onClick={() => data.deleteNode(id, data.group)}>Delete</span>}]} />
+        <DotsDropdown
+          items={[
+            {key: 1, label: <span onClick={() => dashboardNavigate('test')}>Configure</span>},
+            {key: 2, label: <span onClick={() => data.deleteNode(id, data.group)}>Delete</span>},
+          ]}
+        />
       </TestNodeContainer>
       <Handle type="source" position={Position.Right} isConnectable={false} />
     </>
