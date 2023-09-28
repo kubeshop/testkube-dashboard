@@ -27,7 +27,7 @@ type StepNodeProps = {
 const StepNode: React.FC<StepNodeProps> = props => {
   const {data, id} = props;
   const {type, test, delay} = data.item;
-  const dashboardNavigate = useDashboardNavigate((next: string) => `/tests/${test}/settings/${next}`);
+  const redirectToTestSettings = useDashboardNavigate((next: string) => `/tests/${test}/settings/${next}`);
 
   const renderText = test ?? (/^[0-9]+$/.test(`${delay}`) ? `${delay}ms` : delay);
   return (
@@ -44,7 +44,7 @@ const StepNode: React.FC<StepNodeProps> = props => {
         </Tooltip>
         <DotsDropdown
           items={[
-            {key: 1, label: <span onClick={() => dashboardNavigate('test')}>Configure this test</span>},
+            {key: 1, label: <span onClick={() => redirectToTestSettings('test')}>Configure this test</span>},
             {key: 2, label: <span onClick={() => data.deleteNode(id, data.group)}>Remove from this pipeline</span>},
           ]}
         />
