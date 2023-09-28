@@ -44,8 +44,8 @@ const StepNode: React.FC<StepNodeProps> = props => {
         </Tooltip>
         <DotsDropdown
           items={[
-            {key: 1, label: <span onClick={() => dashboardNavigate('test')}>Configure</span>},
-            {key: 2, label: <span onClick={() => data.deleteNode(id, data.group)}>Delete</span>},
+            {key: 1, label: <span onClick={() => dashboardNavigate('test')}>Configure this test</span>},
+            {key: 2, label: <span onClick={() => data.deleteNode(id, data.group)}>Remove from this pipeline</span>},
           ]}
         />
       </TestNodeContainer>
