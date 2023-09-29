@@ -7,5 +7,6 @@ export const StyledAntdIcon = styled(AntdIcon)`
     height: 100%;
     width: 100%;
     fill: currentcolor;
+    color: currentcolor;
   }
 `;
