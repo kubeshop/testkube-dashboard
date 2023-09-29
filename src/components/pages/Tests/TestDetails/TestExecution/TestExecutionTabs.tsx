@@ -96,6 +96,7 @@ const TestExecutionTabs: React.FC = () => {
       },
       metadata: {
         order: 2,
+        visible: () => !details.readOnly,
       },
     },
     {

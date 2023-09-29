@@ -27,6 +27,7 @@ const SettingsDefinition: FC = () => {
         $.property('kind').merge({const: 'Test'});
       })}
       readPermissions={SystemAccess.system}
+      readOnly={details.readOnly}
     />
   );
 };

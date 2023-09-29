@@ -1,14 +1,14 @@
-import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
+import {useEntityDetailsPick} from '@store/entityDetails';
 
 import PostRun from './PostRun';
 import PreRun from './PreRun';
 
 const SettingsExecution: React.FC = () => {
-  const isWritable = useSystemAccess(SystemAccess.agent);
+  const {details} = useEntityDetailsPick('details');
   return (
     <>
-      <PreRun readOnly={!isWritable} />
-      <PostRun readOnly={!isWritable} />
+      <PreRun readOnly={details.readOnly} />
+      <PostRun readOnly={details.readOnly} />
     </>
   );
 };

@@ -1,5 +1,3 @@
-import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
-
 import {Delete} from '@molecules/CommonSettings';
 
 import {Labels, NameNDescription} from '@organisms/EntityDetails';
@@ -16,17 +14,16 @@ import FailureHandling from './FailureHandling';
 import Timeout from './Timeout';
 
 const SettingsGeneral: React.FC = () => {
-  const isWritable = useSystemAccess(SystemAccess.agent);
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
   const deleteTestExtension = usePluginSlot('deleteTestExtension');
 
   return (
     <>
-      <NameNDescription label="test" useUpdateEntity={useUpdateTestMutation} readOnly={!isWritable} />
-      <Labels label="test" useUpdateEntity={useUpdateTestMutation} readOnly={!isWritable} />
-      <Timeout readOnly={!isWritable} />
-      <FailureHandling readOnly={!isWritable} />
+      <NameNDescription label="test" useUpdateEntity={useUpdateTestMutation} readOnly={details.readOnly} />
+      <Labels label="test" useUpdateEntity={useUpdateTestMutation} readOnly={details.readOnly} />
+      <Timeout readOnly={details.readOnly} />
+      <FailureHandling readOnly={details.readOnly} />
       {mayDelete ? (
         deleteTestExtension !== undefined ? (
           deleteTestExtension

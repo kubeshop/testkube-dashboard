@@ -1,5 +1,3 @@
-import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
-
 import {notificationCall} from '@molecules';
 
 import {useUpdateTestMutation} from '@services/tests';
@@ -12,7 +10,6 @@ import Source from './Source';
 import TestType from './TestType';
 
 const SettingsTest: React.FC = () => {
-  const isWritable = useSystemAccess(SystemAccess.agent);
   const {details} = useEntityDetailsPick('details');
 
   const [updateTestMutation] = useUpdateTestMutation();
@@ -33,8 +30,8 @@ const SettingsTest: React.FC = () => {
 
   return (
     <>
-      <TestType type={details.type} updateTest={updateTest} readOnly={!isWritable} />
-      <Source details={details} updateTest={updateTest} readOnly={!isWritable} />
+      <TestType type={details.type} updateTest={updateTest} readOnly={details.readOnly} />
+      <Source details={details} updateTest={updateTest} readOnly={details.readOnly} />
     </>
   );
 };

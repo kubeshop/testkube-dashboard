@@ -33,6 +33,7 @@ type DefinitionProps = {
   crdUrl?: string;
   overrideSchema?: (schema: JSONSchema4) => JSONSchema4;
   readPermissions?: SystemAccess;
+  readOnly?: boolean;
 };
 
 const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
@@ -45,10 +46,10 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
     label,
     overrideSchema,
     readPermissions = SystemAccess.agent,
+    readOnly = false,
   } = props;
 
   const isReadable = useSystemAccess(readPermissions);
-  const isWritable = useSystemAccess(SystemAccess.agent);
   const isSupported = useClusterVersionMatch('>=1.13.0', true);
 
   const [value, setValue] = useState('');
@@ -125,7 +126,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
           setValue(definition);
           setWasTouched(false);
         }}
-        readOnly={!isSupported || !isWritable}
+        readOnly={!isSupported || readOnly}
         wasTouched={wasTouched}
       >
         {isDefinitionLoading ? (
@@ -134,7 +135,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
           <Suspense fallback={<DefinitionSkeleton />}>
             <KubernetesResourceEditor
               value={value}
-              disabled={!isSupported || !isWritable}
+              disabled={!isSupported || readOnly}
               onChange={newValue => {
                 setValue(newValue);
                 setWasTouched(true);

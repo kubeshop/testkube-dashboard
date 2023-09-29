@@ -81,7 +81,7 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
                 label: 'Recent executions',
                 children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestExecutionMutation} />,
               },
-              isAgentAvailable && {
+              !details.readOnly && {
                 key: 'commands',
                 label: 'CLI Commands',
                 children: <CLICommands name={details!.name} bg={Colors.slate800} />,
