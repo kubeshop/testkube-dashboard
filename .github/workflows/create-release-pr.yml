@@ -35,10 +35,10 @@ jobs:
           git config user.email "${{ env.git-email }}"
 
       - name: Create release branch
-        run: git branch release/v${{ env.VERSION }}
+        run: git checkout -B "release/v$VERSION" && git merge origin/${{ env.base-branch }}
 
       - name: Push release branch
-        run: git push -f origin release/v${{ env.VERSION }}
+        run: git push -f origin "release/v$VERSION"
 
       - name: Build log
         run: |
@@ -50,9 +50,6 @@ jobs:
           echo "FULL_CHANGELOG<<$EOF" >> "$GITHUB_ENV"
           echo "$(git --no-pager log "origin/main..HEAD" --pretty='format:|[**`%h`**](https://github.com/kubeshop/testkube-dashboard/commit/%h)| %ci | %an | %s |' 2>&1 | sed 's/ (#\([0-9]*\))[^"]/|([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/g' | sed 's/Merge pull request #\([0-9]*\)\(.*\)/Merge pull request #\1\2 | ([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/')" >> "$GITHUB_ENV"
           echo "$EOF" >> "$GITHUB_ENV"
-
-      - name: Checkout base branch
-        run: git checkout ${{ env.base-branch }}
 
       - name: Create PR
         env:
