@@ -18,11 +18,11 @@ type TestExecutionArtifactsProps = {
 const TestExecutionArtifacts: React.FC<TestExecutionArtifactsProps> = props => {
   const {id, testName, testSuiteName, startTime} = props;
 
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
 
   const [artifacts, setArtifacts] = useState<Artifact[]>([]);
 
-  const {data, isLoading, error} = useGetTestExecutionArtifactsQuery(id, {skip: !isClusterAvailable});
+  const {data, isLoading, error} = useGetTestExecutionArtifactsQuery(id, {skip: !isSystemAvailable});
 
   useEffect(() => {
     if (error) {

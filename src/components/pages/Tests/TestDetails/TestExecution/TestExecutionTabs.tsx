@@ -42,7 +42,7 @@ const TestExecutionTabs: React.FC = () => {
 
   const decomposedVars = decomposeVariables(variables || {});
 
-  const whetherToShowArtifactsTab = featuresMap[testType]?.includes('artifacts');
+  const whetherToShowArtifactsTab = featuresMap[testType]?.includes('artifacts') || details.readOnly;
 
   const setExecutionTab = useDashboardNavigate((next: string) => `/tests/${entityId}/executions/${id}/${next}`);
 
