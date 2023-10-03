@@ -8,7 +8,7 @@ import {TagContainer} from './Tag.styled';
 
 export interface TagProps {
   title: string;
-  type?: 'success' | 'warning' | 'error' | 'info';
+  type?: 'success' | 'warning' | 'error' | 'info' | 'critical' | 'major' | 'minor' | 'low';
   tooltipMessage?: string;
   icon?: ReactNode;
 }

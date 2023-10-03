@@ -22,8 +22,12 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
+import PluginsContext from '@plugins/context';
 import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
+import createPluginManager from '@plugins/manager';
 import {Plugin} from '@plugins/types';
+
+import {resetRtkCache, store} from '@redux/store';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
@@ -67,7 +71,6 @@ const AppRoot: React.FC = () => {
   const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
     skip: !apiEndpoint,
   });
-
   // Pause/resume telemetry based on the cluster settings
   useEffect(() => {
     if (clusterConfig?.enableTelemetry) {
@@ -97,6 +100,11 @@ const AppRoot: React.FC = () => {
   useEffect(() => {
     telemetry.pageView(`${location.pathname}${anonymizeQueryString(location.search)}`);
   }, [location.pathname, clusterConfig]);
+
+  // Reset the in-memory API cache on API endpoint change
+  useMemo(() => {
+    resetRtkCache(store);
+  }, [apiEndpoint]);
 
   // FIXME: Hack - for some reason, useEffect was not called on API endpoint change.
   useMemo(() => {
@@ -128,7 +136,18 @@ const AppRoot: React.FC = () => {
 
   const plugins: Plugin[] = useMemo(() => [createAiInsightsPlugin()], []);
 
+  const scope = useMemo(() => {
+    const pluginManager = createPluginManager();
+    plugins.forEach(plugin => pluginManager.add(plugin));
+    return pluginManager.setup();
+  }, [plugins]);
+
   return composeProviders()
+    .append(PluginsContext.Provider, {
+      value: {
+        scope,
+      },
+    })
     .append(FeatureFlagsProvider, {})
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
@@ -150,7 +169,7 @@ const AppRoot: React.FC = () => {
           <StyledLayoutContentWrapper>
             <Content>
               <ErrorBoundary>
-                <App plugins={plugins} />
+                <App />
               </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>

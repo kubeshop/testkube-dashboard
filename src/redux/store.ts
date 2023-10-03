@@ -1,4 +1,4 @@
-import {Middleware, configureStore} from '@reduxjs/toolkit';
+import {Middleware, Store, configureStore} from '@reduxjs/toolkit';
 
 import {configApi} from '@services/config';
 import {executorsApi} from '@services/executors';
@@ -9,6 +9,18 @@ import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
 import {triggersApi} from '@services/triggers';
 import {webhooksApi} from '@services/webhooks';
+
+const rtkModules = [
+  testsApi,
+  testSuitesApi,
+  labelsApi,
+  executorsApi,
+  sourcesApi,
+  triggersApi,
+  configApi,
+  repositoryApi,
+  webhooksApi,
+];
 
 export const middlewares: Middleware[] = [
   testsApi.middleware,
@@ -32,6 +44,10 @@ export const reducers = {
   [configApi.reducerPath]: configApi.reducer,
   [repositoryApi.reducerPath]: repositoryApi.reducer,
   [webhooksApi.reducerPath]: webhooksApi.reducer,
+};
+
+export const resetRtkCache = (targetStore: Store) => {
+  rtkModules.forEach(api => targetStore.dispatch(api.util?.resetApiState()));
 };
 
 export const store = configureStore({

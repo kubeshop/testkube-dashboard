@@ -76,7 +76,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
 
   return (
     <ArtifactsListContainer>
-      {artifacts.length > 2 ? (
+      {artifacts.length > 1 ? (
         <StyledDownloadAllContainer>
           <Button onClick={handleDownloadAll}>{!isDownloading ? 'Download all' : 'Downloading...'}</Button>
         </StyledDownloadAllContainer>

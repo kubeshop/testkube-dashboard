@@ -1,5 +1,5 @@
-export const decomposeLabels = (labels: readonly string[]): Record<string, string> => {
-  return labels.reduce((previousValue, currentValue: string) => {
+export const decomposeLabels = (labels?: readonly string[]): Record<string, string> => {
+  return (labels || []).reduce((previousValue, currentValue: string) => {
     if (!currentValue.includes(':')) {
       return {...previousValue, [currentValue]: ''};
     }

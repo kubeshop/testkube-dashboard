@@ -22,6 +22,7 @@ type MultiSelectProps = {
   value?: Option[];
   defaultValue?: Option[];
   onChange?: (value: readonly Option[]) => void;
+  isOptionDisabled?: (value: Option, selectValue: readonly Option[]) => boolean;
   validateCreation?: (inputValue: string) => boolean;
   CustomOptionComponent?: (props: OptionProps<Option>) => JSX.Element;
   CustomMultiValueLabelComponent?: (props: MultiValueGenericProps<Option>) => JSX.Element;
@@ -42,6 +43,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
     value,
     defaultValue,
     onChange,
+    isOptionDisabled,
     validateCreation,
     CustomOptionComponent = DefaultOptionComponent,
     CustomMultiValueLabelComponent = DefaultMultiValueLabel,
@@ -80,6 +82,7 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
       onChange={onChange}
       placeholder={placeholder}
       options={options}
+      isOptionDisabled={isOptionDisabled}
       createOptionPosition="first"
       onKeyDown={event => {
         onEvent(event, () => {
