@@ -46,9 +46,9 @@ const StepNode: React.FC<StepNodeProps> = props => {
         {data.disabled ? undefined : (
           <DotsDropdown
             items={[
-               {key: 1, label: <span onClick={() => redirectToTestSettings('test')}>Configure this test</span>},
-               {key: 2, label: <span onClick={() => data.deleteNode(id, data.group)}>Remove from this pipeline</span>},
-              ]}
+              {key: 1, label: <span onClick={() => redirectToTestSettings('test')}>Configure this test</span>},
+              {key: 2, label: <span onClick={() => data.deleteNode(id, data.group)}>Remove from this pipeline</span>},
+            ]}
           />
         )}
       </TestNodeContainer>
