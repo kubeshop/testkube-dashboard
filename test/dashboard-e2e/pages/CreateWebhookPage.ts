@@ -11,15 +11,16 @@ export class CreateWebhookPage {
 
   public async createWebhook(webhookData: WebhookData): Promise<void> {
     await this.setBasicInput(webhookData.name, 'name');
-    await this.selectResourceIdentifier(webhookData.selector)
-    await this.selectTriggeredEvents(webhookData.events)
+    await this.selectResourceIdentifier(webhookData.selector);
+    await this.selectTriggeredEvents(webhookData.events);
 
     await this.clickNextButton();
     await this.setBasicInput(webhookData.uri, 'uri');
     await this.clickCreateWebhookButton();
   }
 
-  public async setBasicInput(value: string | number, inputName: string): Promise<void> { //TODO: move to common helpers
+  public async setBasicInput(value: string | number, inputName: string): Promise<void> {
+    //TODO: move to common helpers
     await this.page.locator(`[id="webhook-creation-modal_${inputName}"]`).fill(`${value}`);
   }
 
@@ -32,40 +33,53 @@ export class CreateWebhookPage {
   }
 
   public async selectResourceIdentifier(resources: Record<string, string>): Promise<void> {
-    const multiSelectElementSelector = 'xpath=//div[@id="webhook-creation-modal_selector"]'
-    const multiSelectInputSelector = 'xpath=//div[@id="webhook-creation-modal_selector"]//input'
+    const multiSelectElementSelector = 'xpath=//div[@id="webhook-creation-modal_selector"]';
+    const multiSelectInputSelector = 'xpath=//div[@id="webhook-creation-modal_selector"]//input';
 
     await this.selectLabels(resources, multiSelectElementSelector, multiSelectInputSelector);
   }
 
-  public async selectTriggeredEvents(events): Promise<void> {
-    console.log('selectTriggeredEvents')
-    const multiSelectElementSelector = 'xpath=//div[@id="webhook-creation-modal_events"]'
-    const multiSelectInputSelector = 'xpath=//div[@id="webhook-creation-modal_events"]//input'
+  public async selectTriggeredEvents(events: string[]): Promise<void> {
+    console.log('selectTriggeredEvents');
+    const multiSelectElementSelector = 'xpath=//div[@id="webhook-creation-modal_events"]';
 
     for (const eventName of events) {
-      console.log('selectTriggeredEvents for - eventName: ')
-      console.log(eventName)
-      await this.selectMultiSelectValue(eventName, multiSelectElementSelector, multiSelectInputSelector); // eslint-disable-line no-await-in-loop
+      console.log('selectTriggeredEvents for - eventName: ');
+      console.log(eventName);
+      await this.selectMultiSelectValue(eventName, multiSelectElementSelector); // eslint-disable-line no-await-in-loop
     }
   }
 
-  // TODO: common label selection
-  public async selectMultiSelectValue(value: string, multiSelectElement: string, multiSelectInput:string): Promise<void> {
-    console.log('selectMultiSelectValue value: ')
-    console.log(value)
-    await this.page.click(multiSelectElement); // TODO: data-test
-    await this.page
-      .locator(multiSelectInput)
-      .fill(value);
-    await this.page.keyboard.press('Enter');
+  public async selectMultiSelectValue(value: string, multiSelectElement: string): Promise<void> {
+    console.log('selectMultiSelectValue value: ');
+    console.log(value);
+    await this.page.click(multiSelectElement);
+    await this.page.locator(`${multiSelectElement}//input`).fill(value);
+
+    await this.page.click(`${multiSelectElement}//div[contains(@class,"option") and text()="${value}"]`);
   }
 
-    // TODO: common label selection
-  public async selectLabels(labels: Record<string, string>, multiSelectElement: string, multiSelectInput: string): Promise<void> {
+  public async selectLabels(
+    labels: Record<string, string>,
+    labelSelectElement: string,
+    labelSelectInputElement: string
+  ): Promise<void> {
     // eslint-disable-next-line no-restricted-syntax
     for (const [name, value] of Object.entries(labels)) {
-      await this.selectMultiSelectValue(`${name}:${value}`, multiSelectElement, multiSelectInput); // eslint-disable-line no-await-in-loop
+      await this.selectCreateLabel(`${name}:${value}`, labelSelectElement, labelSelectInputElement); // eslint-disable-line no-await-in-loop
     }
+  }
+
+  public async selectCreateLabel(
+    value: string,
+    multiSelectElement: string,
+    multiSelectInputSelector: string
+  ): Promise<void> {
+    console.log('selectCreateLabel value: ');
+    console.log(value);
+    await this.page.click(multiSelectElement);
+    await this.page.locator(multiSelectInputSelector).fill(value);
+
+    await this.page.keyboard.press('Enter');
   }
 }

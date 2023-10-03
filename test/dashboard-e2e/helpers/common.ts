@@ -1,7 +1,7 @@
 import {expect} from '@playwright/test';
 
 import {TestDataHandler} from '../helpers/test-data-handler';
-import type {ExecutorData, TestData, TestSourceData, TestSuiteData} from '../types';
+import type {ExecutorData, TestData, TestSourceData, TestSuiteData, WebhookData} from '../types';
 
 export function validateLabels(labels: Record<string, string>, createdLabels: Record<string, string>): void {
   Object.entries(labels).forEach(([name, value]) => {
@@ -49,4 +49,10 @@ export function validateExecutor(executorData: Partial<ExecutorData>, createdExe
   expect(executorData.image).toEqual(createdExecutorData.executor.image);
   expect(executorData.types).toEqual(createdExecutorData.executor.types);
   expect(executorData.executorType).toEqual(createdExecutorData.executor.executorType);
+}
+
+export function validateWebhook(webhookData: Partial<WebhookData>, createdWebhookData: WebhookData): void {
+  const processedWebhookData = TestDataHandler.getProcessedWebhookData(webhookData);
+
+  expect(processedWebhookData).toEqual(createdWebhookData);
 }

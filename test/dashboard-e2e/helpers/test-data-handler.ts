@@ -7,6 +7,7 @@ import testSourcesData from '../fixtures/testsources';
 import testSuitesData from '../fixtures/testsuites';
 import triggersData from '../fixtures/triggers';
 import webhooksData from '../fixtures/webhooks';
+import type {WebhookData} from '../types';
 
 // TODO: Use functions instead
 export class TestDataHandler {
@@ -76,6 +77,17 @@ export class TestDataHandler {
     return {
       ...webhook,
       name: this.getRandomizedName(webhook.name),
+    };
+  }
+
+  public static getProcessedWebhookData(webhookData: Partial<WebhookData>): Partial<WebhookData> {
+    const webhookSelector = Object.entries(webhookData.selector)
+      .map(entry => entry.join('='))
+      .join(',');
+
+    return {
+      ...webhookData,
+      selector: webhookSelector,
     };
   }
 
