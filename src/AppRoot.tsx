@@ -22,7 +22,9 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
+import PluginsContext from '@plugins/context';
 import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
+import createPluginManager from '@plugins/manager';
 import {Plugin} from '@plugins/types';
 
 import {resetRtkCache, store} from '@redux/store';
@@ -101,7 +103,7 @@ const AppRoot: React.FC = () => {
   }, [location.pathname, clusterConfig]);
 
   // Reset the in-memory API cache on API endpoint change
-  useEffect(() => {
+  useMemo(() => {
     resetRtkCache(store);
   }, [apiEndpoint]);
 
@@ -135,7 +137,18 @@ const AppRoot: React.FC = () => {
 
   const plugins: Plugin[] = useMemo(() => [createAiInsightsPlugin()], []);
 
+  const scope = useMemo(() => {
+    const pluginManager = createPluginManager();
+    plugins.forEach(plugin => pluginManager.add(plugin));
+    return pluginManager.setup();
+  }, [plugins]);
+
   return composeProviders()
+    .append(PluginsContext.Provider, {
+      value: {
+        scope,
+      },
+    })
     .append(FeatureFlagsProvider, {})
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
@@ -157,7 +170,7 @@ const AppRoot: React.FC = () => {
           <StyledLayoutContentWrapper>
             <Content>
               <ErrorBoundary>
-                <App plugins={plugins} />
+                <App />
               </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>

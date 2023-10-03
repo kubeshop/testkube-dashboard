@@ -1,4 +1,4 @@
-import React, {Suspense, useContext, useEffect, useMemo} from 'react';
+import React, {Suspense, useContext, useEffect} from 'react';
 import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import {useUpdate} from 'react-use';
 
@@ -25,10 +25,6 @@ import {
   Webhooks,
 } from '@pages';
 
-import PluginsContext from '@plugins/context';
-import createPluginManager from '@plugins/manager';
-import {Plugin} from '@plugins/types';
-
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
@@ -44,11 +40,9 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
 
-export interface AppProps {
-  plugins: Plugin[];
-}
+export interface AppProps {}
 
-const App: React.FC<AppProps> = ({plugins}) => {
+const App: React.FC<AppProps> = () => {
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
@@ -119,20 +113,10 @@ const App: React.FC<AppProps> = ({plugins}) => {
       });
   }, [apiEndpoint, isClusterAvailable]);
 
-  const scope = useMemo(() => {
-    const pluginManager = createPluginManager();
-    plugins.forEach(plugin => pluginManager.add(plugin));
-    return pluginManager.setup();
-  }, [plugins]);
-
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
     .append(LogOutputProvider, {})
-    .append(PluginsContext.Provider, {
-      value: {
-        scope,
-      },
-    })
+
     .render(
       <Suspense fallback={<Loading />}>
         {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (

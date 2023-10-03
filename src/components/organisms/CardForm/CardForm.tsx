@@ -9,6 +9,7 @@ import {isEqual} from 'lodash';
 import {FullWidthSpace} from '@custom-antd';
 
 import {useLastCallback} from '@hooks/useLastCallback';
+import {usePrompt} from '@hooks/usePrompt';
 
 import {ErrorNotification, ErrorNotificationConfig} from '@models/notifications';
 
@@ -29,6 +30,8 @@ interface CardFormProps {
   layout?: FormLayout;
   initialValues?: any;
   confirmLabel?: string;
+  monitLeave?: boolean;
+  monitLeaveMessage?: string;
   onFieldsChange?: (...args: any) => void;
   onValuesChange?: (...args: any) => void;
   spacing?: number;
@@ -52,6 +55,8 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   isWarning,
   confirmLabel,
   spacing,
+  monitLeave,
+  monitLeaveMessage = 'You have unsaved changes. Are you sure you want to leave?',
   children,
   onFieldsChange,
   onValuesChange,
@@ -62,6 +67,8 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   const [currentInitialValues, setCurrentInitialValues] = useState(initialValues);
   const [errors, setErrors] = useState<ErrorNotificationConfig[]>();
   const [loading, setLoading] = useState<boolean>();
+
+  usePrompt(monitLeaveMessage, () => monitLeave && (currentForm.isFieldsTouched() || wasTouched));
 
   const cancel = useLastCallback(() => {
     setErrors(undefined);

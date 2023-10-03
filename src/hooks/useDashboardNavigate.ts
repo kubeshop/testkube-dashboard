@@ -1,6 +1,5 @@
 import {useContext} from 'react';
-import {To} from 'react-router';
-import {NavigateOptions} from 'react-router/lib/hooks';
+import {NavigateOptions, To} from 'react-router';
 
 import {DashboardContext} from '@contexts';
 

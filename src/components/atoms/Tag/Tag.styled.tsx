@@ -48,4 +48,28 @@ export const TagContainer = styled.div`
     border: 1px solid ${Colors.sky600};
     color: ${Colors.sky300};
   }
+
+  &.critical {
+    background: ${Colors.pink900};
+    border: 1px solid ${Colors.pink600};
+    color: ${Colors.pink300};
+  }
+
+  &.major {
+    background: ${Colors.rose900};
+    border: 1px solid ${Colors.rose600};
+    color: ${Colors.rose300};
+  }
+
+  &.minor {
+    background: ${Colors.amber900};
+    border: 1px solid ${Colors.amber600};
+    color: ${Colors.amber300};
+  }
+
+  &.low {
+    background: ${Colors.yellow900};
+    border: 1px solid ${Colors.yellow600};
+    color: ${Colors.yellow300};
+  }
 `;

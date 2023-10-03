@@ -28,6 +28,7 @@ enum Colors {
   pink700 = '#BE185D',
   pink600 = '#DB2777',
   pink500 = '#EC4899',
+  pink400 = '#F472B6',
   pink300 = '#F9A8D4',
 
   lime900 = '#365314',
@@ -69,6 +70,7 @@ enum Colors {
   amber400 = '#fbbf24',
   amber500 = '#F59E0B',
   amber600 = '#D97706',
+  amber800 = '#92400E',
   amber900 = '#78350F',
   amber90099 = '#78350F99',
 
@@ -167,6 +169,16 @@ export enum StatusColors {
   timeout = Colors.pink600,
   aborted = Colors.pink600,
   aborting = Colors.pink600,
+  operational = Colors.lime400,
+  partial_outage = Colors.amber500,
+  major_outage = Colors.pink600,
+  unavailable = Colors.slate700,
+  unknown = Colors.slate700,
+  critical = Colors.rose500,
+  major = Colors.rose500,
+  minor = Colors.amber400,
+  low = Colors.yellow400,
+  info = Colors.slate50,
 }
 
 export enum SecondaryStatusColors {
@@ -179,6 +191,11 @@ export enum SecondaryStatusColors {
   timeout = Colors.pink800,
   aborted = Colors.pink800,
   aborting = Colors.pink800,
+  operational = Colors.lime700,
+  partial_outage = Colors.amber800,
+  major_outage = Colors.pink800,
+  unavailable = Colors.slate900,
+  unknown = Colors.slate900,
 }
 
 export enum BorderColors {

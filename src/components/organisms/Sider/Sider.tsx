@@ -21,6 +21,8 @@ import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
 import {ReactComponent as SettingIcon} from '@icons/setting.svg';
 
+import {usePluginSlotList} from '@plugins/hooks';
+
 import Colors from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
@@ -43,73 +45,112 @@ const DEFAULT_ICON_STYLE = {
 
 const getRoutes = (showSocialLinksInSider: boolean) => [
   {
-    path: '/tests',
-    icon: TestsIcon,
-    title: 'Tests',
-    transition: {
-      classNames: 'item2',
+    value: {
+      path: '/tests',
+      icon: TestsIcon,
+      title: 'Tests',
+      transition: {
+        classNames: 'item2',
+      },
+    },
+    metadata: {
+      order: 7,
+      visible: () => true,
     },
   },
   {
-    path: '/test-suites',
-    icon: TestSuitesIcon,
-    title: 'Test Suites',
-    transition: {
-      classNames: 'item',
+    value: {
+      path: '/test-suites',
+      icon: TestSuitesIcon,
+      title: 'Test Suites',
+      transition: {
+        classNames: 'item',
+      },
+    },
+    metadata: {
+      order: 6,
+      visible: () => true,
     },
   },
   {
-    path: '/executors',
-    icon: ExecutorsIcon,
-    title: 'Executors',
-    transition: {
-      classNames: 'item',
+    value: {
+      path: '/executors',
+      icon: ExecutorsIcon,
+      title: 'Executors',
+      transition: {
+        classNames: 'item',
+      },
+    },
+    metadata: {
+      order: 5,
+      visible: () => true,
     },
   },
   {
-    path: '/triggers',
-    icon: TriggersIcon,
-    title: 'Triggers',
-    transition: {
-      classNames: 'item',
+    value: {
+      path: '/triggers',
+      icon: TriggersIcon,
+      title: 'Triggers',
+      transition: {
+        classNames: 'item',
+      },
+    },
+    metadata: {
+      order: 4,
+      visible: () => true,
     },
   },
   {
-    path: '/webhooks',
-    icon: WebhooksIcon,
-    title: 'Webhooks',
-    transition: {
-      classNames: 'item',
+    value: {
+      path: '/webhooks',
+      icon: WebhooksIcon,
+      title: 'Webhooks',
+      transition: {
+        classNames: 'item',
+      },
+    },
+    metadata: {
+      order: 3,
+      visible: () => true,
     },
   },
   {
-    path: '/sources',
-    icon: SourcesIcon,
-    title: 'Sources',
-    transition: {
-      classNames: 'item',
+    value: {
+      path: '/sources',
+      icon: SourcesIcon,
+      title: 'Sources',
+      transition: {
+        classNames: 'item',
+      },
+    },
+    metadata: {
+      order: 2,
+      visible: () => true,
     },
   },
-  ...(showSocialLinksInSider
-    ? []
-    : [
-        {
-          path: '/settings',
-          icon: SettingIcon,
-          title: 'Settings',
-          transition: {
-            classNames: 'item',
-          },
-          additionalClassName: 'settings-icon',
-          active: /environment-management/,
-        },
-      ]),
+
+  {
+    value: {
+      path: '/settings',
+      icon: SettingIcon,
+      title: 'Settings',
+      transition: {
+        classNames: 'item',
+      },
+      additionalClassName: 'settings-icon',
+      active: /environment-management/,
+    },
+    metadata: {
+      order: -Infinity,
+      visible: () => !showSocialLinksInSider,
+    },
+  },
 ];
 
 const Sider: React.FC = () => {
   const {showLogoInSider, showSocialLinksInSider} = useContext(DashboardContext);
   const openSettings = useDashboardNavigate('/settings');
-
+  const siderMenuList = usePluginSlotList('statusPageSiderMenuItem', getRoutes(showSocialLinksInSider));
   const otherMenuItems = [
     {
       icon: 'cog',
@@ -162,7 +203,7 @@ const Sider: React.FC = () => {
   ];
 
   const renderedMenuItems = useMemo(() => {
-    return getRoutes(showSocialLinksInSider).map(route => {
+    return siderMenuList.map(route => {
       const {icon: MenuIcon, path, title, active} = route;
 
       return (
@@ -181,7 +222,7 @@ const Sider: React.FC = () => {
         </StyledSiderLink>
       );
     });
-  }, [showSocialLinksInSider]);
+  }, [showSocialLinksInSider, siderMenuList]);
 
   const renderedOtherMenuItems = useMemo(() => {
     return otherMenuItems.map(otherMenuItem => {
