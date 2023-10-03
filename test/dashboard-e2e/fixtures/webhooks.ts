@@ -6,10 +6,10 @@ export default {
     namespace: config.namespace,
     type: 'Webhook',
     resource: 'test',
-    events: [
-      'start-test'
-    ],
-    selector: 'asdf=asdf',
-    uri: 'http://webhook-url.example.com'
-  }
+    events: ['start-test'],
+    selector: {
+      asdf: 'asdf', // request: 'asdf=asdf'
+    },
+    uri: 'http://webhook-url.example.com',
+  },
 };

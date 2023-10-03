@@ -13,30 +13,30 @@ const api = new ApiHelpers(config.apiUrl, config.cloudContext, config.bearerToke
 const testDataHandler = new TestDataHandler(config.runId);
 
 test(`Create a webhook`, async ({page}) => {
-    const webhookName = 'temp-wh-on-test-start';
-    const webhookData = testDataHandler.getWebhook(webhookName);
-    const realWebhookName = webhookData.name;
-  
-    await api.assureWebhookNotCreated(realWebhookName);
-  
-    const mainPage = new MainPage(page);
-    await mainPage.visitMainPage();
-  
-    const navigationSiderPage = new NavigationSiderPage(page);
-    await navigationSiderPage.openMenuItem('webhooks');
-  
-    const webhooksPage = new WebhooksPage(page);
-    await webhooksPage.openCreateWebhookDialog();
-  
-    const createWebhookPage = new CreateWebhookPage(page);
-    await createWebhookPage.createWebhook(webhookData);
-    await page.waitForURL(`**/webhooks/${realWebhookName}`);
-  
-    const createdWebhookData = await api.getWebhookData(realWebhookName);
-    await validateWebhook(webhookData, createdWebhookData);
-  
-    // Cleanup
-    await api.removeWebhook(realWebhookName);
+  const webhookName = 'temp-wh-on-test-start';
+  const webhookData = testDataHandler.getWebhook(webhookName);
+  const realWebhookName = webhookData.name;
+
+  await api.assureWebhookNotCreated(realWebhookName);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('webhooks');
+
+  const webhooksPage = new WebhooksPage(page);
+  await webhooksPage.openCreateWebhookDialog();
+
+  const createWebhookPage = new CreateWebhookPage(page);
+  await createWebhookPage.createWebhook(webhookData);
+  await page.waitForURL(`**/webhooks/${realWebhookName}`);
+
+  const createdWebhookData = await api.getWebhookData(realWebhookName);
+  await validateWebhook(webhookData, createdWebhookData);
+
+  // Cleanup
+  await api.removeWebhook(realWebhookName);
 });
 
 test.skip(`Trigger a webhook`, async ({page}) => {});
