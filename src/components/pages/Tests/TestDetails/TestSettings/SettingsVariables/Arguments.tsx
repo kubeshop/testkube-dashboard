@@ -29,7 +29,11 @@ type ArgumentsFormValues = {
   args: string;
 };
 
-const Arguments: React.FC = () => {
+interface ArgumentsProps {
+  readOnly?: boolean;
+}
+
+const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const [form] = Form.useForm<ArgumentsFormValues>();
 
   const {details} = useEntityDetailsPick('details') as {details: Test};
@@ -107,6 +111,7 @@ const Arguments: React.FC = () => {
       form={form}
       initialValues={{args: initialArgValue}}
       disabled={!mayEdit}
+      readOnly={readOnly}
       onFieldsChange={onChange}
       onConfirm={onSaveForm}
       onCancel={onCancel}
@@ -130,7 +135,7 @@ value
 `}
             />
           </Form.Item>
-          <Button onClick={prettifyArgs} $customType="secondary" disabled={isPrettified}>
+          <Button onClick={prettifyArgs} $customType="secondary" disabled={isPrettified || readOnly}>
             Prettify
           </Button>
         </FullWidthSpace>

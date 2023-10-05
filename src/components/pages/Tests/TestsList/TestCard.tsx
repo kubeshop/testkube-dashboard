@@ -1,8 +1,7 @@
-import React, {FC, useContext, useRef} from 'react';
-
-import {MainContext} from '@contexts';
+import React, {FC, useRef} from 'react';
 
 import useInViewport from '@hooks/useInViewport';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {TestWithExecution} from '@models/test';
 
@@ -19,14 +18,15 @@ export interface TestCardProps {
 }
 
 const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, onAbort}) => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isAgentAvailable = useSystemAccess(SystemAccess.agent);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
 
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
 
   const {data: metrics} = useGetTestExecutionMetricsQuery(
     {id: test.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isClusterAvailable, pollingInterval: PollingIntervals.halfMin}
+    {skip: !isInViewport || !isSystemAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
   return (
@@ -38,6 +38,8 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, on
       onAbort={onAbort}
       metrics={metrics}
       dataTest="tests-list-item"
+      outOfSync={test.readOnly}
+      isAgentAvailable={isAgentAvailable}
     />
   );
 };

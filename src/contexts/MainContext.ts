@@ -6,6 +6,7 @@ export type MainContextProps = {
   clusterConfig?: ClusterConfig;
   clusterVersion?: string;
   isClusterAvailable: boolean;
+  isSystemAvailable: boolean;
 };
 
 // @ts-ignore

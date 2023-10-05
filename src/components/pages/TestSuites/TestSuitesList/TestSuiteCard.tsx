@@ -1,8 +1,7 @@
-import React, {FC, useContext, useRef} from 'react';
-
-import {MainContext} from '@contexts';
+import React, {FC, useRef} from 'react';
 
 import useInViewport from '@hooks/useInViewport';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {TestSuiteWithExecution} from '@models/testSuite';
 
@@ -19,14 +18,14 @@ export interface TestSuiteCardProps {
 }
 
 const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick, onAbort}) => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isFresh = useSystemAccess(SystemAccess.agent);
 
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
 
   const {data: metrics} = useGetTestSuiteExecutionMetricsQuery(
     {id: testSuite.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isClusterAvailable, pollingInterval: PollingIntervals.halfMin}
+    {skip: !isInViewport || !isFresh, pollingInterval: PollingIntervals.halfMin}
   );
 
   return (
@@ -38,6 +37,7 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       onAbort={onAbort}
       metrics={metrics}
       dataTest="test-suites-list-item"
+      outOfSync={!isFresh}
     />
   );
 };

@@ -2,12 +2,13 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import {Form, Space, Steps} from 'antd';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
 
 import {Input, Text} from '@custom-antd';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useInViewport from '@hooks/useInViewport';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
@@ -39,7 +40,7 @@ interface FirstStepValues {
 
 const AddTriggerModal: React.FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const {location} = useContext(DashboardContext);
   const openDetails = useDashboardNavigate((name: string) => `/triggers/${name}`);
   const {close} = useModal();

@@ -27,5 +27,9 @@ export const StyledText = styled(Typography.Text)<{$color?: string}>`
       font-size: 12px;
       line-height: 16px;
     }
+
+    &.nowrap {
+      white-space: nowrap;
+    }
   }
 `;

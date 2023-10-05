@@ -22,7 +22,11 @@ type TimeoutForm = {
   activeDeadlineSeconds?: number;
 };
 
-const Timeout: React.FC = () => {
+interface TimeoutProps {
+  readOnly?: boolean;
+}
+
+const Timeout: React.FC<TimeoutProps> = ({readOnly}) => {
   const {details} = useEntityDetailsPick('details');
   const {executionRequest, name} = details;
 
@@ -65,6 +69,7 @@ const Timeout: React.FC = () => {
       form={form}
       initialValues={{activeDeadlineSeconds: executionRequest?.activeDeadlineSeconds}}
       disabled={!mayEdit}
+      readOnly={readOnly}
       onConfirm={onSave}
     >
       <FormItem name="activeDeadlineSeconds" rules={[digits]}>

@@ -16,12 +16,13 @@ type UploadWithInputProps = {
     fileName: string;
   };
   fieldInstance?: boolean;
+  disabled?: boolean;
 } & Pick<UploadProps, 'beforeUpload'>;
 
 const defaultBeforeUpload = () => false;
 
 const UploadWithInput: FC<UploadWithInputProps> = props => {
-  const {onFileChange, beforeUpload = defaultBeforeUpload, value} = props;
+  const {onFileChange, beforeUpload = defaultBeforeUpload, value, disabled} = props;
   const uploadRef = useRef<any>();
   const onInputClick = useCallback(() => uploadRef.current?.upload.uploader.fileInput.click(), []);
   const clear = useCallback(() => onFileChange(null), [onFileChange]);
@@ -42,7 +43,14 @@ const UploadWithInput: FC<UploadWithInputProps> = props => {
         onChange={clear}
         placeholder="Choose a file"
       />
-      <Upload ref={uploadRef} maxCount={1} onChange={onFileChange} showUploadList={false} beforeUpload={beforeUpload} />
+      <Upload
+        ref={uploadRef}
+        maxCount={1}
+        onChange={onFileChange}
+        showUploadList={false}
+        beforeUpload={beforeUpload}
+        disabled={disabled}
+      />
     </StyledUploadWithInputContainer>
   );
 };

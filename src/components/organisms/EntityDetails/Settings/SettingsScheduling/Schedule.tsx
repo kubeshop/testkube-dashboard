@@ -36,7 +36,9 @@ interface ScheduleProps {
 
 const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
   const {details} = useEntityDetailsPick('details');
-  const mayEdit = usePermission(Permissions.editEntity);
+  const readOnly = details.readOnly;
+  const hasEditPermissions = usePermission(Permissions.editEntity);
+  const mayEdit = hasEditPermissions && !readOnly;
 
   const [updateEntity] = useUpdateEntity();
 
@@ -104,6 +106,7 @@ const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
       spacing={32}
       wasTouched={wasTouched}
       disabled={!mayEdit}
+      readOnly={readOnly}
       onConfirm={onSave}
       onCancel={onCancel}
     >

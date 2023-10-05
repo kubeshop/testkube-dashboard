@@ -3,10 +3,11 @@ import {Segmented} from 'antd';
 type RevisionSwitcherProps = {
   value: string | number;
   onChange: (value: string | number) => void;
+  disabled?: boolean;
 };
 
 const RevisionSwitcher: React.FC<RevisionSwitcherProps> = props => {
-  const {value, onChange} = props;
+  const {value, onChange, disabled} = props;
 
   return (
     <Segmented
@@ -16,6 +17,7 @@ const RevisionSwitcher: React.FC<RevisionSwitcherProps> = props => {
       ]}
       value={value}
       onChange={onChange}
+      disabled={disabled}
     />
   );
 };

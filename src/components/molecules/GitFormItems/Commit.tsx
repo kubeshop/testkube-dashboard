@@ -9,10 +9,11 @@ import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 type CommitProps = {
   status?: TooltipStatus;
   message?: string;
+  disabled?: boolean;
 };
 
 const Commit: React.FC<CommitProps> = props => {
-  const {status = TooltipStatus.None, message} = props;
+  const {status = TooltipStatus.None, message, disabled} = props;
 
   return (
     <FormItem
@@ -24,7 +25,7 @@ const Commit: React.FC<CommitProps> = props => {
       tooltip={getValidationTooltip(status, message)}
       key="commit"
     >
-      <Input placeholder="Enter commit id..." />
+      <Input placeholder="Enter commit id..." disabled={disabled} />
     </FormItem>
   );
 };

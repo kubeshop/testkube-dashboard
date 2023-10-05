@@ -17,7 +17,7 @@ import {formatDuration, formatExecutionDate} from '@utils/formatDate';
 
 import {DetailsWrapper, DotsWrapper, ItemColumn, ItemRow, ItemWrapper, StatusText} from './TableRow.styled';
 
-const TableRowPure: React.FC<{data: any; onAbortExecution: any; mayManageExecution: boolean}> = memo(props => {
+const TableRowPure: React.FC<{data: any; onAbortExecution?: any; mayManageExecution: boolean}> = memo(props => {
   const {data, onAbortExecution, mayManageExecution} = props;
   const {status, number, startTime, name, id, durationMs} = data;
 
@@ -32,7 +32,7 @@ const TableRowPure: React.FC<{data: any; onAbortExecution: any; mayManageExecuti
   const renderExecutionActions = () => {
     let actionsArray = [];
 
-    if (isRunning) {
+    if (isRunning && onAbortExecution) {
       actionsArray.push({key: 1, label: <span onClick={abortExecution}>Abort execution</span>});
     }
 

@@ -41,7 +41,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
     if (!artifacts || !artifacts.length) {
       return (
         <Text className="semibold middle" color={Colors.whitePure}>
-          No artifacts
+          This test generated no artifacts.
         </Text>
       );
     }

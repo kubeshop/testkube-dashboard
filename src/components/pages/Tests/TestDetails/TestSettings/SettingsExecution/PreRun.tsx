@@ -20,7 +20,11 @@ type PreRunFormValues = {
   command: string;
 };
 
-const PreRun: React.FC = () => {
+interface PreRunProps {
+  readOnly?: boolean;
+}
+
+const PreRun: React.FC<PreRunProps> = ({readOnly}) => {
   const {entity, details} = useEntityDetailsPick('entity', 'details');
   const isPreRunAvailable = usePermission(Permissions.editEntity);
 
@@ -59,6 +63,7 @@ const PreRun: React.FC = () => {
       form={form}
       initialValues={{command}}
       disabled={!isPreRunAvailable}
+      readOnly={readOnly}
       onConfirm={onSave}
     >
       <FormItem name="command" label="Command">

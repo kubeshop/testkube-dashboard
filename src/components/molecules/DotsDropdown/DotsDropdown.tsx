@@ -23,6 +23,7 @@ interface DotsDropdownProps {
   wrapperStyle?: React.CSSProperties;
   trigger?: ('click' | 'hover' | 'contextMenu')[];
   overlayClassName?: string;
+  disabled?: boolean;
 }
 
 const DotsDropdown: React.FC<DotsDropdownProps> = ({
@@ -32,6 +33,7 @@ const DotsDropdown: React.FC<DotsDropdownProps> = ({
   wrapperStyle = {},
   trigger = ['click'],
   overlayClassName = 'light-dropdown',
+  disabled,
 }) => {
   return (
     <Dropdown
@@ -41,9 +43,10 @@ const DotsDropdown: React.FC<DotsDropdownProps> = ({
         items,
       }}
       placement={placement}
+      disabled={disabled}
     >
       <DotsWrapper style={wrapperStyle} onClick={event => event.stopPropagation()}>
-        <Dots color={Colors.grey450} withPadding={withPadding} />
+        <Dots color={Colors.grey450} withPadding={withPadding} disabled={disabled} />
       </DotsWrapper>
     </Dropdown>
   );

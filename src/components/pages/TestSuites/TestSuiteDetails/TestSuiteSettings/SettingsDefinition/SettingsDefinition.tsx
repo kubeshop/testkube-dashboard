@@ -1,5 +1,7 @@
 import {FC} from 'react';
 
+import {SystemAccess} from '@hooks/useSystemAccess';
+
 import {Definition} from '@molecules';
 
 import {useGetTestSuiteDefinitionQuery, useUpdateTestSuiteDefinitionMutation} from '@services/testSuites';
@@ -24,6 +26,7 @@ const SettingsDefinition: FC = () => {
         $.property('apiVersion').merge({pattern: '^tests\\.testkube\\.io/v[23]$'});
         $.property('kind').merge({const: 'TestSuite'});
       })}
+      readPermissions={SystemAccess.system}
     />
   );
 };

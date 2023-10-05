@@ -1,10 +1,9 @@
-import {FC, useCallback, useContext} from 'react';
+import {FC, useCallback} from 'react';
 
 import {ExternalLink} from '@atoms';
 
-import {MainContext} from '@contexts';
-
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
@@ -35,7 +34,7 @@ const PageDescription: FC = () => (
 );
 
 const TestsList: FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
 
   const {
@@ -45,7 +44,7 @@ const TestsList: FC = () => {
     error,
   } = useGetTestsQuery(filters, {
     pollingInterval: PollingIntervals.everySecond,
-    skip: !isClusterAvailable,
+    skip: !isAvailable,
   });
   useTestsSync({tests});
 
@@ -87,7 +86,7 @@ const TestsList: FC = () => {
       queryFilters={filters}
       setQueryFilters={setFilters}
       data={tests}
-      isLoading={isLoading || !isClusterAvailable}
+      isLoading={isLoading || !isAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
     />

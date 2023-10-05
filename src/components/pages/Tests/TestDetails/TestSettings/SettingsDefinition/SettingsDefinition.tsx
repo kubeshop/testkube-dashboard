@@ -1,5 +1,7 @@
 import {FC} from 'react';
 
+import {SystemAccess} from '@hooks/useSystemAccess';
+
 import {Definition} from '@molecules';
 
 import {useGetTestDefinitionQuery, useUpdateTestDefinitionMutation} from '@services/tests';
@@ -24,6 +26,8 @@ const SettingsDefinition: FC = () => {
         $.property('apiVersion').merge({pattern: '^tests\\.testkube\\.io/v3$'});
         $.property('kind').merge({const: 'Test'});
       })}
+      readPermissions={SystemAccess.system}
+      readOnly={details.readOnly}
     />
   );
 };

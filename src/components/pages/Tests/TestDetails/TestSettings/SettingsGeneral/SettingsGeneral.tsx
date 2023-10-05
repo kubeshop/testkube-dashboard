@@ -20,10 +20,10 @@ const SettingsGeneral: React.FC = () => {
 
   return (
     <>
-      <NameNDescription label="test" useUpdateEntity={useUpdateTestMutation} />
-      <Labels label="test" useUpdateEntity={useUpdateTestMutation} />
-      <Timeout />
-      <FailureHandling />
+      <NameNDescription label="test" useUpdateEntity={useUpdateTestMutation} readOnly={details.readOnly} />
+      <Labels label="test" useUpdateEntity={useUpdateTestMutation} readOnly={details.readOnly} />
+      <Timeout readOnly={details.readOnly} />
+      <FailureHandling readOnly={details.readOnly} />
       {mayDelete ? (
         deleteTestExtension !== undefined ? (
           deleteTestExtension

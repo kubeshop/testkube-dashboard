@@ -18,12 +18,12 @@ const Tag: FC<TagProps> = ({title, type = '', tooltipMessage, icon}) => {
     <TagContainer className={`${type}`}>
       {tooltipMessage ? (
         <Tooltip title={tooltipMessage}>
-          <Text className="regular small">{title}</Text>
+          <Text className="regular small nowrap">{title}</Text>
         </Tooltip>
       ) : (
         <>
           {icon}
-          <Text className="regular small">{title}</Text>
+          <Text className="regular small nowrap">{title}</Text>
         </>
       )}
     </TagContainer>

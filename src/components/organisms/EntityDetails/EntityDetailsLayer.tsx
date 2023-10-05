@@ -5,7 +5,9 @@ import useWebSocket from 'react-use-websocket';
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
+
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Entity} from '@models/entity';
 import {ExecutionMetrics} from '@models/metrics';
@@ -51,20 +53,21 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
 
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const wsRoot = useWsEndpoint();
 
   const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
-    {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable}
+    {pollingInterval: PollingIntervals.long, skip: !isSystemAvailable}
   );
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
-    {skip: !isClusterAvailable}
+    {skip: !isSystemAvailable}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
-    skip: !isClusterAvailable,
+    skip: !isSystemAvailable,
   });
   const isV2 = isTestSuiteV2(rawDetails);
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);
@@ -181,7 +184,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
       retryOnError: true,
       queryParams: token ? {token} : {},
     },
-    !tokenLoading
+    !tokenLoading && isClusterAvailable
   );
 
   useEffect(() => {

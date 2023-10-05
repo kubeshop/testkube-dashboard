@@ -4,7 +4,9 @@ import {useUpdate} from 'react-use';
 
 import {config} from '@constants/config';
 
-import {DashboardContext, MainContext} from '@contexts';
+import {DashboardContext} from '@contexts';
+
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
@@ -43,8 +45,8 @@ export interface AppProps {}
 const App: React.FC<AppProps> = () => {
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
-  const {isClusterAvailable} = useContext(MainContext);
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const [LogOutputProvider] = initializeLogOutputStore(undefined, [location.pathname]);
 

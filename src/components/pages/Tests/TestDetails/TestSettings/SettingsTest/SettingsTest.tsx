@@ -30,8 +30,8 @@ const SettingsTest: React.FC = () => {
 
   return (
     <>
-      <TestType type={details.type} updateTest={updateTest} />
-      <Source details={details} updateTest={updateTest} />
+      <TestType type={details.type} updateTest={updateTest} readOnly={details.readOnly} />
+      <Source details={details} updateTest={updateTest} readOnly={details.readOnly} />
     </>
   );
 };

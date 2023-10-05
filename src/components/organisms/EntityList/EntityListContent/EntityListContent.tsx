@@ -1,12 +1,11 @@
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 
 import {isEqual, merge} from 'lodash';
 
-import {MainContext} from '@contexts';
-
 import {Button} from '@custom-antd';
 
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {EntityListBlueprint} from '@models/entity';
@@ -54,7 +53,8 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
-  const {isClusterAvailable} = useContext(MainContext);
+  const isReadable = useSystemAccess(SystemAccess.system);
+  const isWritable = useSystemAccess(SystemAccess.agent);
   const apiEndpoint = useApiEndpoint();
   const mayCreate = usePermission(Permissions.createEntity);
 
@@ -127,7 +127,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   useTrackTimeAnalytics(`${entity}-list`);
 
   const createButton = mayCreate ? (
-    <Button $customType="primary" onClick={onAdd} data-test={dataTest} disabled={!isClusterAvailable}>
+    <Button $customType="primary" onClick={onAdd} data-test={dataTest} disabled={!isWritable}>
       {addEntityButtonText}
     </Button>
   ) : null;
@@ -147,7 +147,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
             <Filters
               setFilters={setQueryFilters}
               filters={queryFilters}
-              isFiltersDisabled={isEmptyData || !isClusterAvailable}
+              isFiltersDisabled={isEmptyData || !isReadable}
             />
           </StyledFiltersSection>
         </PageToolbar>
@@ -159,7 +159,13 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         data={data}
         Component={CardComponent}
         componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
-        empty={isFiltersEmpty ? <EmptyData action={onAdd} /> : <EmptyDataWithFilters resetFilters={resetFilters} />}
+        empty={
+          isFiltersEmpty ? (
+            <EmptyData action={onAdd} isClusterAvailable={isWritable} />
+          ) : (
+            <EmptyDataWithFilters resetFilters={resetFilters} />
+          )
+        }
         itemHeight={163.85}
         loadingInitially={isFirstTimeLoading}
         loadingMore={isLoadingNext}

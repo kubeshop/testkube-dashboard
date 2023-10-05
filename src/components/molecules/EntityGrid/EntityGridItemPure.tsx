@@ -1,6 +1,6 @@
 import React, {FC, forwardRef, memo, useCallback} from 'react';
 
-import {ExecutorIcon, StatusIcon} from '@atoms';
+import {ExecutorIcon, StatusIcon, Tag} from '@atoms';
 
 import {Text} from '@custom-antd';
 
@@ -47,6 +47,8 @@ interface EntityGridItemPureProps {
   onClick: (item: Item) => void;
   onAbort: (item: Item) => void;
   dataTest: string;
+  outOfSync?: boolean;
+  isAgentAvailable?: boolean;
 }
 
 const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
@@ -57,7 +59,7 @@ const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
 const isRunningStatus = (status: string) => ['running', 'queued'].includes(status);
 
 const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
-  const {item, latestExecution, onClick, onAbort, dataTest, metrics} = props;
+  const {item, latestExecution, onClick, onAbort, dataTest, metrics, outOfSync, isAgentAvailable} = props;
 
   const status =
     (latestExecution as Execution)?.executionResult?.status ||
@@ -85,10 +87,21 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
           <ItemColumn $isStretch>
             <StatusIcon status={status} />
             <EntityGridItemTestIcon item={item} />
-            <div style={{overflow: 'hidden', flex: 1, display: 'flex'}}>
+            <div style={{overflow: 'hidden', flex: 1, display: 'flex', alignItems: 'center', gap: '10px'}}>
               <Text className="regular big" ellipsis title={item.name}>
                 {item.name}
               </Text>
+              {outOfSync ? (
+                <Tag
+                  title="read-only"
+                  type="warning"
+                  tooltipMessage={
+                    isAgentAvailable
+                      ? 'This test is not currently present on your agent. You are only able to see historical data.'
+                      : 'This test is potentially not in sync with the data on your local cluster. You are only able to see historical data.'
+                  }
+                />
+              ) : null}
             </div>
           </ItemColumn>
           <ExecutionTimeItemColumn>
@@ -96,6 +109,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
             {isRunning ? (
               <DotsDropdown
                 placement="bottomRight"
+                disabled={outOfSync}
                 items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]}
               />
             ) : null}

@@ -8,6 +8,8 @@ import {MutationDefinition} from '@reduxjs/toolkit/query';
 
 import {Skeleton} from '@custom-antd';
 
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
+
 import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
@@ -23,6 +25,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
   const {executions, id, isFirstTimeLoading} = useEntityDetailsPick('executions', 'id', 'isFirstTimeLoading');
   const {id: execId, open} = useExecutionDetailsPick('id', 'open');
+  const isWritable = useSystemAccess(SystemAccess.agent);
 
   const rowSelection: TableRowSelection<any> = {
     selectedRowKeys: execId ? [execId] : [],
@@ -63,7 +66,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
       columns={[
         {
           render: data => {
-            return <TableRow data={data} onAbortExecution={onAbortExecution} />;
+            return <TableRow data={data} onAbortExecution={isWritable ? onAbortExecution : undefined} />;
           },
         },
       ]}

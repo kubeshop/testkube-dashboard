@@ -20,7 +20,11 @@ type PostRunFormValues = {
   command: string;
 };
 
-const PostRun: React.FC = () => {
+interface PostRunProps {
+  readOnly?: boolean;
+}
+
+const PostRun: React.FC<PostRunProps> = ({readOnly}) => {
   const {details} = useEntityDetailsPick('details');
   const isPostRunAvailable = usePermission(Permissions.editEntity);
 
@@ -59,6 +63,7 @@ const PostRun: React.FC = () => {
       form={form}
       initialValues={{command}}
       disabled={!isPostRunAvailable}
+      readOnly={readOnly}
       onConfirm={onSave}
     >
       <FormItem name="command" label="Command">

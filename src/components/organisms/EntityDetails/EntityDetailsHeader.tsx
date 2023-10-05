@@ -5,7 +5,7 @@ import {Select, Space} from 'antd';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import {ExecutorIcon} from '@atoms';
+import {ExecutorIcon, Tag} from '@atoms';
 
 import {Button, Text} from '@custom-antd';
 
@@ -39,6 +39,8 @@ interface EntityDetailsHeaderProps {
   onBack: () => void;
   useAbortAllExecutions: UseMutation<MutationDefinition<any, any, any, any, any>>;
   onEditTest: () => void;
+  outOfSync?: boolean;
+  isAgentAvailable?: boolean;
 }
 
 const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
@@ -47,6 +49,8 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   onBack,
   useAbortAllExecutions,
   onEditTest,
+  outOfSync,
+  isAgentAvailable,
 }) => {
   const mayRun = usePermission(Permissions.runEntity);
   const {entity, details} = useEntityDetailsPick('entity', 'details');
@@ -64,6 +68,19 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
     <PageHeader
       onBack={onBack}
       title={details!.name}
+      pageTitleAddon={
+        outOfSync ? (
+          <Tag
+            title="read-only"
+            type="warning"
+            tooltipMessage={
+              isAgentAvailable
+                ? 'This test is not currently present on your agent. You are only able to see historical data.'
+                : 'This test is potentially not in sync with the data on your local cluster. You are only able to see historical data.'
+            }
+          />
+        ) : undefined
+      }
       extra={[
         <Select
           placeholder="Last 7/30/90/Year/All days"
@@ -80,12 +97,13 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
             {key: 2, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>},
           ]}
           wrapperStyle={{backgroundColor: Colors.slate800}}
+          disabled={outOfSync}
         />,
         <Button
           key="run-now-button"
           type="primary"
           onClick={onRun}
-          disabled={!details}
+          disabled={!details || outOfSync}
           hidden={!mayRun}
           loading={isRunning}
         >

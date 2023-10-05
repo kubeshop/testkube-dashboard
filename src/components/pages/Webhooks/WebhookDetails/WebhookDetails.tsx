@@ -1,11 +1,10 @@
-import {FC, useContext} from 'react';
+import {FC} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Tabs} from 'antd';
 
-import {MainContext} from '@contexts';
-
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {SettingsLayout} from '@molecules';
 
@@ -24,7 +23,7 @@ import GeneralTab from './GeneralTab';
 import WebhookDefinition from './WebhookDefinition';
 
 const WebhookDetails: FC = () => {
-  const {isClusterAvailable} = useContext(MainContext);
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const {id: name, settingsTab = 'general'} = useParams() as {id: string; settingsTab?: string};
 
   const {data: webhook, error} = useGetWebhookDetailsQuery(name, {skip: !isClusterAvailable});

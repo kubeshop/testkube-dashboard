@@ -4,11 +4,24 @@ import {EmptyListContent, HelpCard} from '@molecules';
 
 import {externalLinks} from '@utils/externalLinks';
 
-const EmptyTests: FC<{action: () => void}> = ({action}) => {
+interface EmptyTestsProps {
+  action: () => void;
+  isClusterAvailable?: boolean;
+}
+
+const EmptyTests: FC<EmptyTestsProps> = ({action, isClusterAvailable}) => {
   return (
     <EmptyListContent
-      title="Create your first test in a few easy steps."
-      description="Simply define your test, add any variables, execute it and view the results!"
+      title={
+        isClusterAvailable
+          ? 'Create your first test in a few easy steps.'
+          : 'This environment does not have any tests defined.'
+      }
+      description={
+        isClusterAvailable
+          ? 'Simply define your test, add any variables, execute it and view the results!'
+          : 'To add a test, connect an agent to this environment.'
+      }
       buttonText="Add a new test"
       emptyListReadonlyTitle="No tests found"
       emptyListReadonlyDescription="We could not find any tests in this environment."

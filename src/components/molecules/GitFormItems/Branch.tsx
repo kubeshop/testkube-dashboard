@@ -9,10 +9,11 @@ import {TooltipStatus, getValidationTooltip} from './tooltipUtils';
 type BranchProps = {
   status?: TooltipStatus;
   message?: string;
+  disabled?: boolean;
 };
 
 const Branch: React.FC<BranchProps> = props => {
-  const {status = TooltipStatus.None, message} = props;
+  const {status = TooltipStatus.None, message, disabled} = props;
 
   return (
     <FormItem
@@ -24,7 +25,7 @@ const Branch: React.FC<BranchProps> = props => {
       tooltip={getValidationTooltip(status, message)}
       key="branch"
     >
-      <Input placeholder="e.g.: main" />
+      <Input placeholder="e.g.: main" disabled={disabled} />
     </FormItem>
   );
 };

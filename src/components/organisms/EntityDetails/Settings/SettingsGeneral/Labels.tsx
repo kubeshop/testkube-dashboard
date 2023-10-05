@@ -22,10 +22,11 @@ import {displayDefaultNotificationFlow} from '@utils/notification';
 
 interface LabelsProps {
   label: string;
+  readOnly?: boolean;
   useUpdateEntity: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
-const Labels: FC<LabelsProps> = ({label, useUpdateEntity}) => {
+const Labels: FC<LabelsProps> = ({label, useUpdateEntity, readOnly}) => {
   const [form] = Form.useForm();
   const {details} = useEntityDetailsPick('details');
   const mayEdit = usePermission(Permissions.editEntity);
@@ -46,6 +47,7 @@ const Labels: FC<LabelsProps> = ({label, useUpdateEntity}) => {
       .then(() => notificationCall('passed', `${capitalize(label)} was successfully updated.`));
   };
 
+  // TODO: Disable LabelsSelect when it is disabled
   return (
     <CardForm
       name="labels-form"
@@ -54,10 +56,11 @@ const Labels: FC<LabelsProps> = ({label, useUpdateEntity}) => {
       form={form}
       initialValues={{labels: composeLabels(details?.labels || {})}}
       disabled={!mayEdit}
+      readOnly={readOnly}
       onConfirm={onSave}
     >
       <FormItem name="labels">
-        <LabelsSelect />
+        <LabelsSelect disabled={!mayEdit || readOnly} />
       </FormItem>
     </CardForm>
   );

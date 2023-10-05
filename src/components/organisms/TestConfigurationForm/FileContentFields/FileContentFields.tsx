@@ -7,9 +7,11 @@ import {FormItem} from '@custom-antd';
 
 import {required} from '@utils/form';
 
+import {Props} from '../utils';
+
 import {onFileChange} from './utils';
 
-const FileContentFields: React.FC = () => {
+const FileContentFields: React.FC<Partial<Props>> = ({disabled}) => {
   return (
     <FormItem noStyle shouldUpdate={(prevValues, currentValues) => prevValues.testSource !== currentValues.testSource}>
       {form => {
@@ -17,6 +19,7 @@ const FileContentFields: React.FC = () => {
           <FormItem name="file" label="File" rules={[required]} required>
             <UploadWithInput
               onFileChange={(file: UploadChangeParam | null) => onFileChange(file, form as FormInstance)}
+              disabled={disabled}
             />
           </FormItem>
         );

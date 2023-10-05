@@ -11,6 +11,7 @@ export type Props = {
   isClearedUsername: boolean;
   setIsClearedToken: React.Dispatch<React.SetStateAction<boolean>>;
   setIsClearedUsername: React.Dispatch<React.SetStateAction<boolean>>;
+  disabled?: boolean;
 };
 
 export const getAdditionalFieldsComponent: (
