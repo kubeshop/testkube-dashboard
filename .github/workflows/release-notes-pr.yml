@@ -1,0 +1,48 @@
+name: Show changelog in PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  show-log:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check out GitHub repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Build log
+        run: |
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "CHANGELOG<<$EOF" >> "$GITHUB_ENV"
+          echo "$(git --no-pager log "origin/${{ github.base_ref }}..HEAD" --pretty='format:|[**`%h`**](https://github.com/kubeshop/testkube-dashboard/commit/%h) | %s |' 2>&1 | sed 's/ (#\([0-9]*\))[^"]/|([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/g' | sed 's/Merge pull request #\([0-9]*\)\(.*\)/Merge pull request #\1\2 | ([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/')" >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
+
+          echo "FULL_CHANGELOG<<$EOF" >> "$GITHUB_ENV"
+          echo "$(git --no-pager log "origin/${{ github.base_ref }}..HEAD" --pretty='format:|[**`%h`**](https://github.com/kubeshop/testkube-dashboard/commit/%h)| %ci | %an | %s |' 2>&1 | sed 's/ (#\([0-9]*\))[^"]/|([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/g' | sed 's/Merge pull request #\([0-9]*\)\(.*\)/Merge pull request #\1\2 | ([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/')" >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
+
+      - name: Add comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          header: Changelog
+          message: |
+            ### Changelog
+            | Commit | Description | PR |
+            |-|-|-|
+            ${{env.CHANGELOG}}
+
+            <details>
+              <summary>Details</summary>
+
+              | Commit | Date | Author | Description | PR |
+              |-|-|-|-|-|
+              ${{env.FULL_CHANGELOG}}
+            </details>
