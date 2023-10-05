@@ -59,9 +59,11 @@ const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = pro
           <Text className="regular middle text-center" color={Colors.slate400}>
             {description}
           </Text>
-          <Button $customType="primary" onClick={onButtonClick} disabled={!isClusterAvailable}>
-            {buttonText}
-          </Button>
+          {isClusterAvailable ? (
+            <Button $customType="primary" onClick={onButtonClick}>
+              {buttonText}
+            </Button>
+          ) : null}
           <StyledHelpCardsContainer>
             {children}
             <StyledLastHelpCardContainer>

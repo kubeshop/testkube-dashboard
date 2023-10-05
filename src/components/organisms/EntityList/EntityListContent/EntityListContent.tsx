@@ -159,7 +159,13 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
         data={data}
         Component={CardComponent}
         componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
-        empty={isFiltersEmpty ? <EmptyData action={onAdd} /> : <EmptyDataWithFilters resetFilters={resetFilters} />}
+        empty={
+          isFiltersEmpty ? (
+            <EmptyData action={onAdd} isClusterAvailable={isWritable} />
+          ) : (
+            <EmptyDataWithFilters resetFilters={resetFilters} />
+          )
+        }
         itemHeight={163.85}
         loadingInitially={isFirstTimeLoading}
         loadingMore={isLoadingNext}
