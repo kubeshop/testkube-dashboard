@@ -152,7 +152,7 @@ const AppRoot: React.FC = () => {
     .append(FeatureFlagsProvider, {})
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
-    .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
+    .append(PermissionsProvider as any, {scope: permissionsScope, resolver: permissionsResolver})
     .append(MainContext.Provider, {value: mainContextValue})
     .append(ClusterDetailsProvider, {})
     .append(ExecutorsProvider, {})
