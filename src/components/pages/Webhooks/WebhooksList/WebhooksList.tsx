@@ -63,7 +63,12 @@ const WebhooksList: FC = () => {
       }
       headerButton={
         mayCreate ? (
-          <Button $customType="primary" onClick={openCreateModal} disabled={!isClusterAvailable}>
+          <Button
+            data-test="webhooks-add-button"
+            $customType="primary"
+            onClick={openCreateModal}
+            disabled={!isClusterAvailable}
+          >
             Create a new webhook
           </Button>
         ) : null

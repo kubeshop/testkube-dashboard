@@ -46,6 +46,8 @@ export const ModalOutlet: FC = () => {
       width={config.width}
       title={config.title}
       content={config.content}
+      dataTestModalRoot={config.dataTestModalRoot}
+      dataTestCloseBtn={config.dataTestCloseBtn}
       isModalVisible={open}
       setIsModalVisible={setOpen}
     />
