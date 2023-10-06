@@ -64,7 +64,12 @@ const TriggersList: React.FC = () => {
       }
       headerButton={
         mayCreate ? (
-          <Button $customType="primary" onClick={openCreateModal} disabled={!isClusterAvailable}>
+          <Button
+            data-test="triggers-add-button"
+            $customType="primary"
+            onClick={openCreateModal}
+            disabled={!isClusterAvailable}
+          >
             Create a new trigger
           </Button>
         ) : null

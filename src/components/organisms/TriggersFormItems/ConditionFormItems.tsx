@@ -26,11 +26,21 @@ const ConditionFormItems = () => {
 
   return (
     <>
-      <Form.Item label="K8s resource" required name="resource" rules={[required]}>
+      <Form.Item
+        label="K8s resource"
+        data-test="triggers-add-modal-condition-resource"
+        required
+        name="resource"
+        rules={[required]}
+      >
         <Select options={resourcesOptions} placeholder="Select a K8s resource" />
       </Form.Item>
       <Space size={16} direction="vertical" style={{width: '100%'}}>
-        <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
+        <TriggerSelectorSwitcher
+          data-test="triggers-add-modal-condition-selector-switch"
+          value={switcherValue}
+          onChange={setSwitcherValue}
+        />
         {switcherValue === 'label' ? (
           <Form.Item
             label={
@@ -39,14 +49,21 @@ const ConditionFormItems = () => {
                 <LabelSelectorHelpIcon />
               </>
             }
-            required
             name="resourceLabelSelector"
+            data-test="triggers-add-modal-condition-selector-label-identifier"
+            required
             rules={[required]}
           >
             <LabelsSelect />
           </Form.Item>
         ) : (
-          <Form.Item label="Resource identifier" required name="resourceNameSelector" rules={[required]}>
+          <Form.Item
+            label="Resource identifier"
+            name="resourceNameSelector"
+            data-test="triggers-add-modal-condition-selector-name-identifier"
+            required
+            rules={[required]}
+          >
             <Input placeholder="e.g.: namespace/resource-name" />
           </Form.Item>
         )}
@@ -61,7 +78,12 @@ const ConditionFormItems = () => {
               : [];
 
           return (
-            <Form.Item label="Triggered event" name="event" rules={[required]}>
+            <Form.Item
+              label="Triggered event"
+              name="event"
+              data-test="triggers-add-modal-condition-event"
+              rules={[required]}
+            >
               <Select
                 options={eventsOptions}
                 disabled={eventsOptions.length === 0 ? true : undefined}

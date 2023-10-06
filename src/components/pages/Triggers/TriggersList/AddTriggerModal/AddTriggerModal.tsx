@@ -116,6 +116,7 @@ const AddTriggerModal: React.FC = () => {
           ) : null}
           <Text className="regular middle">Name</Text>
           <Input
+            data-test="triggers-add-modal-name"
             placeholder="e.g.: container-deployment-xyz"
             value={name}
             onChange={event => {

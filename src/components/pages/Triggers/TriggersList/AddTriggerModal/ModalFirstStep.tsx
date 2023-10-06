@@ -34,6 +34,7 @@ const ModalFirstStep: React.FC<ModalFirstStepProps> = props => {
       >
         {({getFieldsValue, validateFields}) => (
           <Button
+            data-test="triggers-add-modal-next:first"
             $customType="primary"
             onClick={() => {
               validateFields().then(() => {

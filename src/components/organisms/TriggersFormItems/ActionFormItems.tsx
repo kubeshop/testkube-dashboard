@@ -33,17 +33,39 @@ const ActionFormItems = () => {
 
   return (
     <>
-      <Form.Item label="Testkube action" required name="action" rules={[required]}>
+      <Form.Item
+        label="Testkube action"
+        data-test="triggers-add-modal-action"
+        required
+        name="action"
+        rules={[required]}
+      >
         <Select options={actionOptions} placeholder="Select a testkube related action" />
       </Form.Item>
       <Space size={16} direction="vertical" style={{width: '100%'}}>
-        <TriggerSelectorSwitcher value={switcherValue} onChange={setSwitcherValue} />
+        <TriggerSelectorSwitcher
+          data-test="triggers-add-modal-action-switch"
+          value={switcherValue}
+          onChange={setSwitcherValue}
+        />
         {switcherValue === 'label' ? (
-          <Form.Item label="Testkube resource" required name="testLabelSelector" rules={[required]}>
+          <Form.Item
+            label="Testkube resource"
+            data-test="triggers-add-modal-action-label-selector"
+            required
+            name="testLabelSelector"
+            rules={[required]}
+          >
             <LabelsSelect />
           </Form.Item>
         ) : (
-          <Form.Item label="Testkube resource" required name="testNameSelector" rules={[required]}>
+          <Form.Item
+            label="Testkube resource"
+            data-test="triggers-add-modal-action-name-selector"
+            required
+            name="testNameSelector"
+            rules={[required]}
+          >
             <ResourceTriggerSelect />
           </Form.Item>
         )}
