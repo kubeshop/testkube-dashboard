@@ -27,6 +27,7 @@ const ModalSecondStep: React.FC<ModalSecondStepProps> = props => {
         {({isFieldsTouched}) => (
           <StyledButtonsContainer>
             <Button
+              data-test="webhooks-add-modal-back:second"
               $customType="secondary"
               onClick={() => {
                 setCurrentStep(StepsEnum.condition);
@@ -35,6 +36,7 @@ const ModalSecondStep: React.FC<ModalSecondStepProps> = props => {
               Back
             </Button>
             <Button
+              data-test="webhooks-add-modal-next:second"
               htmlType="submit"
               $customType="primary"
               loading={isLoading}

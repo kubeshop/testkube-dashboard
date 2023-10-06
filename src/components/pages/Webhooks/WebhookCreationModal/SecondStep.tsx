@@ -11,11 +11,12 @@ interface SecondStepProps {
 export const SecondStep: FC<SecondStepProps> = ({onStepChange}) => {
   return (
     <FullWidthSpace size={20} direction="vertical">
-      <FormItem label="URI" name="uri" required rules={[requiredNoText, url]}>
+      <FormItem label="URI" name="uri" required rules={[requiredNoText, url]} data-test="webhooks-add-modal-url">
         <Input placeholder="Webhook URI" />
       </FormItem>
       <FullWidthSpace size={15} justify="flex-end">
         <Button
+          data-test="webhooks-add-modal-back:second"
           onClick={() => {
             onStepChange(0);
           }}
@@ -23,7 +24,9 @@ export const SecondStep: FC<SecondStepProps> = ({onStepChange}) => {
         >
           Back
         </Button>
-        <Button htmlType="submit">Submit</Button>
+        <Button data-test="webhooks-add-modal-next:second" htmlType="submit">
+          Submit
+        </Button>
       </FullWidthSpace>
     </FullWidthSpace>
   );

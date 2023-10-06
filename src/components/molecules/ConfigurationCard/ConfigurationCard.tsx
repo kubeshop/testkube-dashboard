@@ -101,10 +101,16 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
 
                 return (
                   <StyledFooterButtonsContainer>
-                    <Button onClick={onCancel} $customType="secondary" hidden={!onCancel || buttonsDisabled}>
+                    <Button
+                      data-test="configuration-card-cancel-button"
+                      $customType="secondary"
+                      hidden={!onCancel || buttonsDisabled}
+                      onClick={onCancel}
+                    >
                       Cancel
                     </Button>
                     <Button
+                      data-test="configuration-card-confirm-button"
                       $customType={isWarning ? 'warning' : 'primary'}
                       disabled={buttonsDisabled}
                       loading={loading}

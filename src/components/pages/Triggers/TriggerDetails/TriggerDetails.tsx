@@ -54,6 +54,7 @@ const TriggerDetails = () => {
 
       <PageHeader onBack={back} title={name} />
       <Tabs
+        data-test="triggers-details-tabs"
         destroyInactiveTabPane
         items={[
           {

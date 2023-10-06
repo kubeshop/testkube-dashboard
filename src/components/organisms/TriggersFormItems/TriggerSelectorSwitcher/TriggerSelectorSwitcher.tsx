@@ -6,10 +6,11 @@ type TriggerSelectorSwitcherProps = {
 };
 
 const TriggerSelectorSwitcher: React.FC<TriggerSelectorSwitcherProps> = props => {
-  const {value, onChange} = props;
+  const {value, onChange, ...rest} = props;
 
   return (
     <Segmented
+      {...rest}
       options={[
         {label: 'BY LABEL', value: 'label'},
         {label: 'BY NAME', value: 'name'},

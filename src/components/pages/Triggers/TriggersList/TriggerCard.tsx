@@ -12,8 +12,10 @@ interface TriggerCardProps {
 }
 
 const TriggerCard: FC<TriggerCardProps> = ({item, onClick}) => (
-  <TriggerContainer onClick={() => onClick(item)} key={item.name}>
-    <Text className="regular big">{item.name}</Text>
+  <TriggerContainer data-test={`triggers-list-item:${item.name}`} onClick={() => onClick(item)} key={item.name}>
+    <Text className="regular big" data-test="triggers-list-item-name">
+      {item.name}
+    </Text>
   </TriggerContainer>
 );
 

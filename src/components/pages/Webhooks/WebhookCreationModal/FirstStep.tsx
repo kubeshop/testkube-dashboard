@@ -33,15 +33,22 @@ export const FirstStep: FC<FirstStepProps> = ({onStepChange}) => (
           Resource identifier <LabelSelectorHelpIcon />
         </>
       }
+      data-test="webhooks-add-modal-resource"
       required
     >
       <LabelsSelect placeholder="All resources" stylePlaceholderAsValue />
     </FormItem>
     <FormItem noStyle shouldUpdate>
       {({getFieldError}) => (
-        <FormItem name="events" required rules={[requiredNoText]} label="Triggered events">
+        <FormItem
+          name="events"
+          required
+          rules={[requiredNoText]}
+          label="Triggered events"
+          data-test="webhooks-add-modal-events"
+        >
           <CreatableMultiSelect
-            placeholder="Select Testkube resource"
+            placeholder="Select events"
             options={webhookEvents}
             menuPlacement="top"
             formatCreateLabel={val => val}
@@ -52,6 +59,7 @@ export const FirstStep: FC<FirstStepProps> = ({onStepChange}) => (
     </FormItem>
     <FullWidthSpace justify="flex-end">
       <Button
+        data-test="webhooks-add-modal-next:first"
         onClick={() => {
           onStepChange(1);
         }}

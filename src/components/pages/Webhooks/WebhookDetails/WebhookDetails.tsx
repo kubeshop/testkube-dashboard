@@ -51,6 +51,7 @@ const WebhookDetails: FC = () => {
       <PageHeader onBack={back} title={name} />
 
       <Tabs
+        data-test="webhooks-details-tabs"
         activeKey="settings"
         onChange={setTab}
         destroyInactiveTabPane

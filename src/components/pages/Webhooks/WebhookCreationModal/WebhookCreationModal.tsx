@@ -87,7 +87,7 @@ const WebhookCreationModal: FC = () => {
       disabled={isLoading}
     >
       <FullWidthSpace direction="vertical" size={20}>
-        <FormItem name="name" label="Name" rules={[requiredNoText]} required>
+        <FormItem name="name" label="Name" data-test="webhooks-add-modal-name" rules={[requiredNoText]} required>
           <Input placeholder="e.g.: container-deployment-xyz" autoComplete="off" />
         </FormItem>
         <Steps

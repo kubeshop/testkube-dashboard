@@ -23,7 +23,7 @@ const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
   const labels = useMemo(() => decodeSelector(selector), [selector]);
 
   return (
-    <WebhookContainer onClick={() => onClick(item)} key={name}>
+    <WebhookContainer data-test={`webhooks-list-item:${name}`} onClick={() => onClick(item)} key={name}>
       <ItemRow $flex={1}>
         <ItemColumn $isStretch>
           <Text className="regular big">{name}</Text>
@@ -35,7 +35,7 @@ const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
             <Text className="small" color={Colors.slate500}>
               URL
             </Text>
-            <Text className="regular big" color={Colors.slate400}>
+            <Text className="regular big" color={Colors.slate400} data-test="webhooks-list-item-url">
               {uri}
             </Text>
           </StyledMetricItem>
@@ -43,7 +43,9 @@ const WebhookCard: FC<WebhookCardProps> = ({item, onClick}) => {
             <Text className="small" color={Colors.slate500}>
               RESOURCE <LabelSelectorHelpIcon />
             </Text>
-            {selector ? <LabelsList labels={labels} /> : <Text className="small">All resources</Text>}
+            <div data-test="webhooks-list-item-selector">
+              {selector ? <LabelsList labels={labels} /> : <Text className="small">All resources</Text>}
+            </div>
           </StyledMetricItem>
         </ItemColumn>
       </ItemRow>
