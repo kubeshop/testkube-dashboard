@@ -16,7 +16,7 @@ export const SecondStep: FC<SecondStepProps> = ({onStepChange}) => {
       </FormItem>
       <FullWidthSpace size={15} justify="flex-end">
         <Button
-          data-test="webhooks-add-modal-next:second"
+          data-test="webhooks-add-modal-back:second"
           onClick={() => {
             onStepChange(0);
           }}
@@ -24,7 +24,9 @@ export const SecondStep: FC<SecondStepProps> = ({onStepChange}) => {
         >
           Back
         </Button>
-        <Button htmlType="submit">Submit</Button>
+        <Button data-test="webhooks-add-modal-next:second" htmlType="submit">
+          Submit
+        </Button>
       </FullWidthSpace>
     </FullWidthSpace>
   );
