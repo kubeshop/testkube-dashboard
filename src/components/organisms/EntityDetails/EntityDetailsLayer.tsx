@@ -50,24 +50,24 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
   const [executions, setExecutions] = useEntityDetailsField('executions');
+  const [storeDetails] = useEntityDetailsField('details');
   const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
 
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
-  const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const wsRoot = useWsEndpoint();
 
   const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
-    {pollingInterval: PollingIntervals.long, skip: !isSystemAvailable}
+    {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable && Boolean(executions)}
   );
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
-    {skip: !isSystemAvailable}
+    {skip: !isClusterAvailable && Boolean(metrics)}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
-    skip: !isSystemAvailable,
+    skip: !isClusterAvailable && Boolean(storeDetails),
   });
   const isV2 = isTestSuiteV2(rawDetails);
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);
