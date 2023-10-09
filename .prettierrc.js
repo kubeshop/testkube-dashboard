@@ -1,4 +1,15 @@
 module.exports = {
+  importOrder: [
+    '^@sentry',
+    '^react',
+    '^(antd|@ant-design)',
+    '^@reduxjs',
+    '<THIRD_PARTY_MODULES>',
+    '^\\.\\.(\\/)?',
+    '^\\.\\/',
+    '^.$',
+  ],
+
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 

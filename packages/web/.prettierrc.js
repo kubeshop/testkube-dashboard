@@ -9,6 +9,7 @@ const paths = original
   .filter((x, i, a) => a.indexOf(x) === i);
 
 module.exports = {
+  ...require('../../.prettierrc'),
   importOrder: [
     '^@sentry',
     '^react',
@@ -20,5 +21,4 @@ module.exports = {
     '^\\.\\/',
     '^.$',
   ],
-  ...require('../../.prettierrc'),
 };
