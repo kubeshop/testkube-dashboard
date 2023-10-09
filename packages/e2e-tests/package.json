@@ -3,10 +3,6 @@
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "playwright test --ui --debug",
-    "e2e": "playwright test"
-  },
   "publishConfig": {
     "access": "restricted"
   },
@@ -14,6 +10,8 @@
   "author": "Kubeshop",
   "license": "ISC",
   "scripts": {
+    "start": "playwright test --ui --debug",
+    "e2e": "playwright test",
     "lint": "eslint --max-warnings 0 \"{fixtures,helpers,pages,tests}/**/*.{js,jsx,ts,tsx}\" --cache --cache-location=node_modules/.cache/.eslint-src",
     "ts-check": "tsc --build tsconfig.json --force",
     "format:check": "prettier \"./{fixtures,helpers,pages,tests}/**/*.{js,jsx,ts,tsx}\" --cache --check",
