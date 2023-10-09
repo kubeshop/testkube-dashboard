@@ -1,5 +1,5 @@
 import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
-import {useAsync, useInterval} from 'react-use';
+import {useAsync} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
@@ -66,7 +66,10 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   );
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
-    {skip: !isSystemAvailable || (!isClusterAvailable && Boolean(metrics))}
+    {
+      pollingInterval: PollingIntervals.everyTwoSeconds,
+      skip: !isSystemAvailable || (!isClusterAvailable && Boolean(metrics)),
+    }
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
@@ -205,8 +208,6 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   useEffect(() => {
     safeRefetch(refetch);
   }, [entity, daysFilterValue]);
-
-  useInterval(() => safeRefetch(refetchMetrics), 2000);
 
   useEffect(() => {
     setIsFirstTimeLoading(true);
