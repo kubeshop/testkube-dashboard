@@ -55,8 +55,8 @@
   "scripts": {
     "start": "npm run -w @testkube/web start",
     "build": "npm run --workspaces --if-present build",
-    "test": "npm run --workspaces --if-present test",
-    "test:watch": "npm run -w @testkube/web test:watch",
+    "test": "npx jest",
+    "test:watch": "npx jest --watch --detectOpenHandles",
     "test:update": "npm run -w @testkube/web test:update",
     "e2e": "npm run -w @testkube/e2e-tests e2e",
     "e2e:watch": "npm run -w @testkube/e2e-tests start",
@@ -71,7 +71,7 @@
   },
   "wallaby": {
     "testFramework": {
-      "configFile": "packages/web/jest.config.js"
+      "configFile": "./jest.config.js"
     }
   }
 }
