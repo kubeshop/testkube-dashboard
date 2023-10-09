@@ -62,18 +62,21 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
 
   const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
-    {pollingInterval: PollingIntervals.long, skip: !isSystemAvailable || (!isClusterAvailable && Boolean(executions))}
+    {
+      pollingInterval: PollingIntervals.long,
+      skip: !isSystemAvailable || (storeDetails?.readOnly && Boolean(executions)),
+    }
   );
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
     {
       pollingInterval: PollingIntervals.everyTwoSeconds,
-      skip: !isSystemAvailable || (!isClusterAvailable && Boolean(metrics)),
+      skip: !isSystemAvailable || (storeDetails?.readOnly && Boolean(metrics)),
     }
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
-    skip: !isSystemAvailable || (!isClusterAvailable && Boolean(storeDetails)),
+    skip: !isSystemAvailable || (storeDetails?.readOnly && Boolean(storeDetails)),
   });
   const isV2 = isTestSuiteV2(rawDetails);
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);
@@ -190,7 +193,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
       retryOnError: true,
       queryParams: token ? {token} : {},
     },
-    !tokenLoading && isClusterAvailable
+    !tokenLoading && isClusterAvailable && !storeDetails?.readOnly
   );
 
   useEffect(() => {
