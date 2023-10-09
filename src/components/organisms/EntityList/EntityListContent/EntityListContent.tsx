@@ -126,11 +126,12 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
 
   useTrackTimeAnalytics(`${entity}-list`);
 
-  const createButton = mayCreate ? (
-    <Button $customType="primary" onClick={onAdd} data-test={dataTest} disabled={!isWritable}>
-      {addEntityButtonText}
-    </Button>
-  ) : null;
+  const createButton =
+    mayCreate && isWritable ? (
+      <Button $customType="primary" onClick={onAdd} data-test={dataTest}>
+        {addEntityButtonText}
+      </Button>
+    ) : null;
 
   return (
     <PageWrapper>
