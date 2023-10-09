@@ -1,14 +1,17 @@
 {
-  "name": "dashboard-e2e-playwright",
-  "version": "1.0.0",
+  "name": "@testkube/e2e-tests",
+  "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "playwright test --ui --debug",
-    "test": "playwright test"
+    "e2e": "playwright test"
   },
-  "keywords": [],
-  "author": "",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "private": true,
+  "author": "Kubeshop",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "1.32.3",
