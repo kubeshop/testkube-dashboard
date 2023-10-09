@@ -61,6 +61,7 @@
     "e2e:watch": "npm run -w @testkube/e2e-tests start",
     "e2e:install": "npx playwright install",
     "lint": "npm run --workspaces --if-present lint",
+    "stylelint": "npm run --workspaces --if-present stylelint",
     "format:check": "npm run --workspaces --if-present format:check",
     "format:all": "npm run --workspaces --if-present format:all",
     "ts-check": "npm run --workspaces --if-present ts-check",
