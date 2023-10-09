@@ -1,7 +1,7 @@
 import config from '../config';
 
 export default {
-  'test-trigger-deployment-creation-name-test-name': {
+  'trigger-deployment-creation-name-test-name': {
     name: 'temp-trigger-depl-cr-name-test-name',
     namespace: config.namespace,
     resource: 'deployment',
@@ -9,7 +9,7 @@ export default {
     action: 'run',
     execution: 'test',
     testSelector: {
-      name: 'test',
+      name: 'artillery-executor-smoke',
       namespace: 'testkube',
     },
     resourceSelector: {

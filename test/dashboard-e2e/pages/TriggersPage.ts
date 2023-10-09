@@ -8,10 +8,10 @@ export class TriggersPage {
   }
 
   public async openCreateTriggerDialog(): Promise<void> {
-    await this.page.click('xpath=//button//span[text()="Create a new trigger"]'); //TODO: data-test needed
+    await this.page.click('xpath=//button[@data-test="triggers-add-button"]');
   }
 
   public async openTriggerDetails(triggerName: string): Promise<void> {
-    await this.page.click(`xpath=//span[text()="${triggerName}"]`); //TODO: data-test needed
+    await this.page.click(`xpath=//div[@data-test="triggers-list-item:${triggerName}"]`);
   }
 }

@@ -19,27 +19,27 @@ export class CreateWebhookPage {
     await this.clickCreateWebhookButton();
   }
 
-  public async setBasicInput(value: string | number, inputName: string): Promise<void> {
+  async setBasicInput(value: string | number, inputName: string): Promise<void> {
     //TODO: move to common helpers
     await this.page.locator(`[id="webhook-creation-modal_${inputName}"]`).fill(`${value}`);
   }
 
-  public async clickNextButton() {
+  async clickNextButton() {
     await this.page.click('//button//span[text()="Next"]'); //TODO: data-test
   }
 
-  public async clickCreateWebhookButton() {
+  async clickCreateWebhookButton() {
     await this.page.click('//button//span[text()="Submit"]'); //TODO: data-test
   }
 
-  public async selectResourceIdentifier(resources: Record<string, string>): Promise<void> {
+  async selectResourceIdentifier(resources: Record<string, string>): Promise<void> {
     const multiSelectElementSelector = 'xpath=//div[@id="webhook-creation-modal_selector"]';
     const multiSelectInputSelector = 'xpath=//div[@id="webhook-creation-modal_selector"]//input';
 
     await this.selectLabels(resources, multiSelectElementSelector, multiSelectInputSelector);
   }
 
-  public async selectTriggeredEvents(events: string[]): Promise<void> {
+  async selectTriggeredEvents(events: string[]): Promise<void> {
     console.log('selectTriggeredEvents');
     const multiSelectElementSelector = 'xpath=//div[@id="webhook-creation-modal_events"]';
 
@@ -50,7 +50,7 @@ export class CreateWebhookPage {
     }
   }
 
-  public async selectMultiSelectValue(value: string, multiSelectElement: string): Promise<void> {
+  async selectMultiSelectValue(value: string, multiSelectElement: string): Promise<void> {
     console.log('selectMultiSelectValue value: ');
     console.log(value);
     await this.page.click(multiSelectElement);
@@ -59,7 +59,7 @@ export class CreateWebhookPage {
     await this.page.click(`${multiSelectElement}//div[contains(@class,"option") and text()="${value}"]`);
   }
 
-  public async selectLabels(
+   async selectLabels(
     labels: Record<string, string>,
     labelSelectElement: string,
     labelSelectInputElement: string
@@ -70,7 +70,7 @@ export class CreateWebhookPage {
     }
   }
 
-  public async selectCreateLabel(
+  async selectCreateLabel(
     value: string,
     multiSelectElement: string,
     multiSelectInputSelector: string
