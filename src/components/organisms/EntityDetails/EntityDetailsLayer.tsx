@@ -44,30 +44,33 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
 }) => {
   const {navigate} = useContext(DashboardContext);
 
-  const [EntityStoreProvider, {sync: useEntityDetailsSync, useField: useEntityDetailsField}] =
-    initializeEntityDetailsStore({entity, id}, [entity, id, navigate, useGetEntityDetails]);
+  const [
+    EntityStoreProvider,
+    {sync: useEntityDetailsSync, useField: useEntityDetailsField, pick: useEntityDetailsPick},
+  ] = initializeEntityDetailsStore({entity, id}, [entity, id, navigate, useGetEntityDetails]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
   const [executions, setExecutions] = useEntityDetailsField('executions');
-  const [storeDetails] = useEntityDetailsField('details');
+  const {details: storeDetails} = useEntityDetailsPick('details');
   const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
 
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const wsRoot = useWsEndpoint();
 
   const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
-    {pollingInterval: PollingIntervals.long, skip: !isClusterAvailable && Boolean(executions)}
+    {pollingInterval: PollingIntervals.long, skip: !isSystemAvailable || (!isClusterAvailable && Boolean(executions))}
   );
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
-    {skip: !isClusterAvailable && Boolean(metrics)}
+    {skip: !isSystemAvailable || (!isClusterAvailable && Boolean(metrics))}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
-    skip: !isClusterAvailable && Boolean(storeDetails),
+    skip: !isSystemAvailable || (!isClusterAvailable && Boolean(storeDetails)),
   });
   const isV2 = isTestSuiteV2(rawDetails);
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);

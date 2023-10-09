@@ -35,9 +35,9 @@ const PageDescription: FC = () => (
 
 const TestsList: FC = () => {
   const isAvailable = useSystemAccess(SystemAccess.agent);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
   const [storeTests] = useTestsField('tests');
-  const skip = !isAvailable && Boolean(storeTests);
 
   const {
     data: tests,
@@ -46,7 +46,7 @@ const TestsList: FC = () => {
     error,
   } = useGetTestsQuery(filters, {
     pollingInterval: PollingIntervals.everySecond,
-    skip,
+    skip: !isSystemAvailable || (!isAvailable && Boolean(storeTests)),
   });
   useTestsSync({tests});
 
