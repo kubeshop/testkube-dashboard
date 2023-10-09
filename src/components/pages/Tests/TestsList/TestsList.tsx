@@ -88,7 +88,7 @@ const TestsList: FC = () => {
       queryFilters={filters}
       setQueryFilters={setFilters}
       data={tests}
-      isLoading={isLoading}
+      isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
     />
