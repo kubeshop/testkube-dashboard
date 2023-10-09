@@ -43,7 +43,6 @@
     "less": "4.1.2",
     "postcss-styled-syntax": "0.4.0",
     "react-scripts": "5.0.1",
-    "ts-jest": "^29.1.1",
     "tsconfig-paths-webpack-plugin": "^4.0.1"
   },
   "dependencies": {
