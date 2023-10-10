@@ -1,10 +1,11 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {FilterFilled} from '@ant-design/icons';
 
-import {Button, Input, Title} from '@custom-antd';
+import {AutoComplete, Button, Title} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Entity} from '@models/entityMap';
 import {FilterProps} from '@models/filters';
@@ -12,6 +13,10 @@ import {FilterProps} from '@models/filters';
 import {FilterMenuFooter, StyledFilterDropdown, StyledFilterLabel, StyledFilterMenu} from '@molecules/FilterMenu';
 
 import {initialPageSize} from '@redux/initialState';
+
+import {useGetLabelsQuery} from '@services/labels';
+
+import {PollingIntervals} from '@src/utils/numbers';
 
 import Colors from '@styles/Colors';
 
@@ -26,7 +31,12 @@ const defaultKeyValuePair: Entity = {
 
 const LabelsFilter: React.FC<FilterProps> = props => {
   const {setFilters, filters, isFiltersDisabled, width} = props;
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
+  const {data} = useGetLabelsQuery(null, {
+    pollingInterval: PollingIntervals.default,
+    skip: !isClusterAvailable,
+  });
   const [isVisible, setVisibilityState] = useState(false);
   const [labelsMapping, setLabelsMapping] = useState<Entity[]>([]);
 
@@ -65,35 +75,54 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     setLabelsMapping(mapping.length === 0 ? [defaultKeyValuePair] : mapping);
   }, [filters.selector]);
 
-  const renderKeyValueInputs = labelsMapping.map((item, index) => {
-    const key = `key-value-pair${index}`;
+  const keysLabels = useMemo(() => Object.keys(data ?? {}).map(key => ({key, label: key, value: key})), [data]);
 
-    return (
-      <StyledKeyValueRow key={key}>
-        <Input
-          width="220px"
-          onChange={event => onKeyChange(event.target.value, index)}
-          value={item.key}
-          data-cy={`key-input-${index}`}
-          placeholder="Key"
-        />
-        <Input
-          width="220px"
-          onChange={event => onValueChange(event.target.value, index)}
-          value={item.value}
-          data-cy={`value-input-${index}`}
-          placeholder="Value"
-        />
-        {index > 0 ? (
-          <Button $customType="tertiary" onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`}>
-            &#10005;
-          </Button>
-        ) : (
-          <EmptyButton />
-        )}
-      </StyledKeyValueRow>
-    );
-  });
+  const ValuesLabels = useMemo(
+    () => (data ? keysLabels.map(item => data[item.key].map(v => ({key: item.key, value: v}))).flat() : []),
+    [keysLabels]
+  );
+
+  const renderKeyValueInputs = useMemo(
+    () =>
+      labelsMapping.map((item, index) => {
+        const key = `key-value-pair${index}`;
+
+        const keyOptions = keysLabels.filter(f => f.key.startsWith(item.key));
+
+        const valuesOptions = ValuesLabels.filter(
+          f => f.key.startsWith(item.key) && f.value.startsWith(item.value)
+        ).map(v => ({key: v.value, label: v.value, value: v.value}));
+
+        return (
+          <StyledKeyValueRow key={key}>
+            <AutoComplete
+              width="220px"
+              options={keyOptions}
+              onChange={event => onKeyChange(event, index)}
+              value={item.key}
+              data-cy={`key-input-${index}`}
+              placeholder="Key"
+            />
+            <AutoComplete
+              width="220px"
+              options={valuesOptions}
+              onChange={event => onValueChange(event, index)}
+              value={item.value}
+              data-cy={`value-input-${index}`}
+              placeholder="Value"
+            />
+            {index > 0 ? (
+              <Button $customType="tertiary" onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`}>
+                &#10005;
+              </Button>
+            ) : (
+              <EmptyButton />
+            )}
+          </StyledKeyValueRow>
+        );
+      }),
+    [labelsMapping, keysLabels, ValuesLabels]
+  );
 
   const applyFilters = () => {
     const selector = encodeSelectorArray(labelsMapping);
