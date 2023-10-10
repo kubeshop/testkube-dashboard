@@ -25,16 +25,18 @@ module.exports = {
           ],
           features: ['caretOperations', 'clipboard', 'contextmenu', 'hover', 'indentation', 'lineSelection', 'suggest']
         }),
-        sentryWebpackPlugin({
-          org: 'kubeshop',
-          project: 'testkube-oss',
-          include: './build',
-          release: {name: process.env.REACT_APP_VERSION},
-          authToken: process.env.SENTRY_AUTH_TOKEN,
-          disabled: !process.env.SENTRY_AUTH_TOKEN || !process.env.REACT_APP_VERSION,
-          telemetry: false,
-        }),
-      ],
+        process.env.SENTRY_AUTH_TOKEN && process.env.REACT_APP_VERSION
+            ? sentryWebpackPlugin({
+                org: 'kubeshop',
+                project: 'testkube-oss',
+                include: './build',
+                release: {name: process.env.REACT_APP_VERSION},
+                authToken: process.env.SENTRY_AUTH_TOKEN,
+                disabled: !process.env.SENTRY_AUTH_TOKEN || !process.env.REACT_APP_VERSION,
+                telemetry: false,
+              })
+            : null,
+      ].filter(Boolean),
     },
     configure: webpackConfig => {
       webpackConfig.entry = [

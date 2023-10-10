@@ -1,29 +1,33 @@
 ARG TARGET=nginx:alpine
 
+FROM node:20 as deps-reader
+
+COPY . /app
+RUN find /app -type f ! \( -name 'package*.json' -o -name '.npmrc' \) -delete && find /app -type d | xargs rmdir -p 2>/dev/null || true
+
 FROM node:20 as build
-WORKDIR /app
 
 ARG SENTRY_AUTH_TOKEN
 ARG REACT_APP_SENTRY_DSN
 ARG REACT_APP_GTM_ID
 ARG REACT_APP_VERSION
 
-ENV PATH /app/node_modules/.bin:$PATH
-COPY ./package*.json /app/
-# install  dependencies
-RUN npm install --legacy-peer-deps
-# copy everything to /app directory
+WORKDIR /app
+
+COPY --from=deps-reader /app /app
+RUN npm install --no-audit
+
 COPY . /app
-RUN npm run build
+RUN npm run -w @testkube/web build
 
 FROM $TARGET
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/nginx.conf /etc/nginx/nginx.conf.tmpl
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/packages/web/build /usr/share/nginx/html
 EXPOSE 8080
 WORKDIR /usr/share/nginx/html
-COPY ./scripts/env.sh .
-COPY ./scripts/inject-base-href.sh .
+COPY ./packages/web/scripts/env.sh .
+COPY ./packages/web/scripts/inject-base-href.sh .
 RUN chmod +x env.sh inject-base-href.sh && chmod ugo+w /etc/nginx/nginx.conf index.html
 
 RUN touch ./env-config.js
