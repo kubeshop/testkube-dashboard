@@ -8,7 +8,7 @@ export default {
     event: 'created',
     action: 'run',
     execution: 'test',
-    concurrencyPolicy: "",
+    concurrencyPolicy: '',
     testSelector: {
       name: 'postman-executor-smoke',
       namespace: 'testkube',

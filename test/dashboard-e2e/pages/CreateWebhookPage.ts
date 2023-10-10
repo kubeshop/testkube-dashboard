@@ -20,16 +20,15 @@ export class CreateWebhookPage {
   }
 
   async setBasicInput(value: string | number, inputName: string): Promise<void> {
-    //TODO: move to common helpers
     await this.page.locator(`[id="webhook-creation-modal_${inputName}"]`).fill(`${value}`);
   }
 
   async clickNextButton() {
-    await this.page.click('//button//span[text()="Next"]'); //TODO: data-test
+    await this.page.click('//button[@data-test="webhooks-add-modal-next:first"]');
   }
 
   async clickCreateWebhookButton() {
-    await this.page.click('//button//span[text()="Submit"]'); //TODO: data-test
+    await this.page.click('//button[@data-test="webhooks-add-modal-next:second"]');
   }
 
   async selectResourceIdentifier(resources: Record<string, string>): Promise<void> {
@@ -40,19 +39,14 @@ export class CreateWebhookPage {
   }
 
   async selectTriggeredEvents(events: string[]): Promise<void> {
-    console.log('selectTriggeredEvents');
     const multiSelectElementSelector = 'xpath=//div[@id="webhook-creation-modal_events"]';
 
     for (const eventName of events) {
-      console.log('selectTriggeredEvents for - eventName: ');
-      console.log(eventName);
       await this.selectMultiSelectValue(eventName, multiSelectElementSelector); // eslint-disable-line no-await-in-loop
     }
   }
 
   async selectMultiSelectValue(value: string, multiSelectElement: string): Promise<void> {
-    console.log('selectMultiSelectValue value: ');
-    console.log(value);
     await this.page.click(multiSelectElement);
     await this.page.locator(`${multiSelectElement}//input`).fill(value);
 
@@ -71,8 +65,6 @@ export class CreateWebhookPage {
   }
 
   async selectCreateLabel(value: string, multiSelectElement: string, multiSelectInputSelector: string): Promise<void> {
-    console.log('selectCreateLabel value: ');
-    console.log(value);
     await this.page.click(multiSelectElement);
     await this.page.locator(multiSelectInputSelector).fill(value);
 

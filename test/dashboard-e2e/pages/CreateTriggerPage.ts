@@ -25,23 +25,29 @@ export class CreateTriggerPage {
   }
 
   async setResource(resourceType: string) {
-    await this.page.click(`xpath=//div[@data-test="triggers-add-modal-condition-resource"]//div[contains(@class,"control-input-content")]`);
+    await this.page.click(
+      `xpath=//div[@data-test="triggers-add-modal-condition-resource"]//div[contains(@class,"control-input-content")]`
+    );
     await this.page.click(`xpath=//div[contains(@class,"ant-select-item-option") and @title="${resourceType}"]`); //TODO: data-test (for rc-virtual-list)
   }
 
-  async setResourceSelector(resourceSelector: {name: string, namespace: string}) {
+  async setResourceSelector(resourceSelector: {name: string; namespace: string}) {
     if (resourceSelector.name) {
-      const resourceSelectorString = `${resourceSelector.namespace}/${resourceSelector.name}`
+      const resourceSelectorString = `${resourceSelector.namespace}/${resourceSelector.name}`;
       await this.page.click(
         `xpath=//div[@data-test="triggers-add-modal-condition-selector-switch"]//div[@title="BY NAME"]`
       );
-      await this.page.locator(`xpath=//input[@id="add-trigger-form_resourceNameSelector"]`).fill(resourceSelectorString);
-    } //TODO: resourceSelector: labelSelector
+      await this.page
+        .locator(`xpath=//input[@id="add-trigger-form_resourceNameSelector"]`)
+        .fill(resourceSelectorString);
+    }
   }
 
   async setTriggerEvent(triggerEvent: string) {
     await this.page.click(`xpath=//input[@id="add-trigger-form_event"]`);
-    await this.page.click(`xpath=//div[@class="rc-virtual-list"]//div[contains(@class,"item-option") and @title="${triggerEvent}"]`); //TODO: data-test (for rc-virtual-list)
+    await this.page.click(
+      `xpath=//div[@class="rc-virtual-list"]//div[contains(@class,"item-option") and @title="${triggerEvent}"]`
+    ); //TODO: data-test (for rc-virtual-list)
   }
 
   async clickNextButton() {
@@ -50,7 +56,9 @@ export class CreateTriggerPage {
 
   async setTriggerAction(action: string, execution: string) {
     await this.page.click(`xpath=//input[@id="add-trigger-form_action"]`);
-    await this.page.click(`xpath=//div[@class="rc-virtual-list"]//div[contains(@class,"item-option") and @title="${action} ${execution}"]`);
+    await this.page.click(
+      `xpath=//div[@class="rc-virtual-list"]//div[contains(@class,"item-option") and @title="${action} ${execution}"]`
+    );
   }
 
   async setTestSelector(testSelector: {name: string}) {
