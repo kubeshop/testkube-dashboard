@@ -41,6 +41,7 @@ export class CreateWebhookPage {
   async selectTriggeredEvents(events: string[]): Promise<void> {
     const multiSelectElementSelector = 'xpath=//div[@id="webhook-creation-modal_events"]';
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const eventName of events) {
       await this.selectMultiSelectValue(eventName, multiSelectElementSelector); // eslint-disable-line no-await-in-loop
     }

@@ -28,7 +28,7 @@ export class CreateTriggerPage {
     await this.page.click(
       `xpath=//div[@data-test="triggers-add-modal-condition-resource"]//div[contains(@class,"control-input-content")]`
     );
-    await this.page.click(`xpath=//div[contains(@class,"ant-select-item-option") and @title="${resourceType}"]`); //TODO: data-test (for rc-virtual-list)
+    await this.page.click(`xpath=//div[contains(@class,"ant-select-item-option") and @title="${resourceType}"]`); // TODO: data-test (for rc-virtual-list)
   }
 
   async setResourceSelector(resourceSelector: {name: string; namespace: string}) {
@@ -47,7 +47,7 @@ export class CreateTriggerPage {
     await this.page.click(`xpath=//input[@id="add-trigger-form_event"]`);
     await this.page.click(
       `xpath=//div[@class="rc-virtual-list"]//div[contains(@class,"item-option") and @title="${triggerEvent}"]`
-    ); //TODO: data-test (for rc-virtual-list)
+    ); // TODO: data-test (for rc-virtual-list)
   }
 
   async clickNextButton() {

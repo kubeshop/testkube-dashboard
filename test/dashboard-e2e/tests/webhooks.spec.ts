@@ -30,7 +30,7 @@ test(`Create a webhook`, async ({page}) => {
 
   const createWebhookPage = new CreateWebhookPage(page);
   await createWebhookPage.createWebhook(webhookData);
-  await page.waitForURL(`**/webhooks/${realWebhookName}/settings/general`); //TODO: common path array
+  await page.waitForURL(`**/webhooks/${realWebhookName}/settings/general`); // TODO: common path config
 
   const createdWebhookData = await api.getWebhookData(realWebhookName);
   await validateWebhook(webhookData, createdWebhookData);

@@ -8,10 +8,10 @@ export class WebhooksPage {
   }
 
   public async openCreateWebhookDialog(): Promise<void> {
-    await this.page.click('xpath=//button//span[text()="Create a new webhook"]'); //TODO: data-test needed
+    await this.page.click('xpath=//button[@data-test="webhooks-add-button"]');
   }
 
   public async openWebhookDetails(webhookName: string): Promise<void> {
-    await this.page.click(`xpath=//span[text()="${webhookName}"]`); //TODO: data-test needed
+    await this.page.click(`xpath=//div[contains(@data-test,"webhooks-list-item")]//span[text()="${webhookName}"]`);
   }
 }
