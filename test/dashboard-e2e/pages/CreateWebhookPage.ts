@@ -59,7 +59,7 @@ export class CreateWebhookPage {
     await this.page.click(`${multiSelectElement}//div[contains(@class,"option") and text()="${value}"]`);
   }
 
-   async selectLabels(
+  async selectLabels(
     labels: Record<string, string>,
     labelSelectElement: string,
     labelSelectInputElement: string
@@ -70,11 +70,7 @@ export class CreateWebhookPage {
     }
   }
 
-  async selectCreateLabel(
-    value: string,
-    multiSelectElement: string,
-    multiSelectInputSelector: string
-  ): Promise<void> {
+  async selectCreateLabel(value: string, multiSelectElement: string, multiSelectInputSelector: string): Promise<void> {
     console.log('selectCreateLabel value: ');
     console.log(value);
     await this.page.click(multiSelectElement);

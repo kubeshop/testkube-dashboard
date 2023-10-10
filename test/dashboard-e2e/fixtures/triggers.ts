@@ -8,8 +8,9 @@ export default {
     event: 'created',
     action: 'run',
     execution: 'test',
+    concurrencyPolicy: "",
     testSelector: {
-      name: 'artillery-executor-smoke',
+      name: 'postman-executor-smoke',
       namespace: 'testkube',
     },
     resourceSelector: {
