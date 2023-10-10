@@ -67,7 +67,6 @@
     }
   },
   "include": [
-    "src",
-    "test/dashboard-e2e"
+    "src"
   ]
 }
