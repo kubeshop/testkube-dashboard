@@ -2,7 +2,7 @@ import {StateCreator} from 'zustand';
 
 import {Webhook} from '@models/webhook';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 interface WebhooksSlice {
   current?: Webhook;

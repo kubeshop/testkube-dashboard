@@ -19,5 +19,8 @@ const packages = readdirSync(join(__dirname, 'packages')).filter(name =>
 );
 
 module.exports = {
-  projects: packages.map(name => readConfig(join(__dirname, 'packages', name, 'jest.config.js'))),
+  projects: packages.map(name => ({
+    ...readConfig(join(__dirname, 'packages', name, 'jest.config.js')),
+    rootDir: join(__dirname, 'packages', name),
+  })),
 };

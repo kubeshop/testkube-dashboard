@@ -5,6 +5,7 @@
 .idea
 docs
 
+Dockerfile
 .DS_Store
 **/.env.*
 
@@ -15,3 +16,5 @@ docs
 **/build
 **/dist
 *.log
+
+**/.eslintcache

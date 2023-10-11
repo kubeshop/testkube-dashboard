@@ -4,7 +4,7 @@ import {TestFilters, TestWithExecution} from '@models/test';
 
 import {initialPageSize} from '@redux/initialState';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 interface TestsSlice {
   tests?: TestWithExecution[];
