@@ -12,7 +12,7 @@ if [ -f "$rootDir/.env" ]; then
 fi
 
 OUT="$1"
-VARIABLES="$(env | grep '^REACT_APP_')"
+VARIABLES="$(env | grep '^REACT_APP_' | sed 's/=.*//')"
 
 set -- $VARIABLES
 echo "window._env_ = {" > "$OUT"
