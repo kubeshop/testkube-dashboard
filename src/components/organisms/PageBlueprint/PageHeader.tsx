@@ -1,7 +1,7 @@
 import React, {FC, ReactNode, memo} from 'react';
 
 import {LoadingOutlined} from '@ant-design/icons';
-import {PageHeaderProps as AntdPageHeaderProps} from 'antd';
+import {PageHeaderProps as AntdPageHeaderProps, Tooltip} from 'antd';
 
 import {FullWidthSpace, Text} from '@custom-antd';
 
@@ -24,9 +24,11 @@ const PageHeader: FC<PageHeaderProps> = ({title, pageTitleAddon, description, lo
           {title} <LoadingOutlined />
         </>
       ) : (
-        <PageTitle>
-          {title} {pageTitleAddon}
-        </PageTitle>
+        <Tooltip title={title}>
+          <PageTitle>
+            {title} {pageTitleAddon}
+          </PageTitle>
+        </Tooltip>
       )
     }
   >

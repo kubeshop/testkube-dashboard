@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 
 import {Select, Space} from 'antd';
 
@@ -52,6 +52,7 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   const {entity, details} = useEntityDetailsPick('entity', 'details');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
   const testIcon = useExecutorIcon(details);
+  const {executions} = useEntityDetailsPick('executions');
 
   const [abortAllExecutions] = useAbortAllExecutions();
   const onAbortAllExecutionsClick = () => {
@@ -59,6 +60,18 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
       notificationCall('failed', `Something went wrong during ${entity} execution abortion`);
     });
   };
+
+  const entityOptionsMenu = useMemo(
+    () =>
+      [
+        {key: 1, label: <span onClick={onEditTest}>Edit Test</span>},
+        executions.totals.running && {
+          key: 2,
+          label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>,
+        },
+      ].filter(Boolean),
+    [executions.totals.running]
+  );
 
   return (
     <PageHeader
@@ -75,10 +88,7 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
         />,
         <DotsDropdown
           key="entity-options"
-          items={[
-            {key: 1, label: <span onClick={onEditTest}>Edit Test</span>},
-            {key: 2, label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>},
-          ]}
+          items={entityOptionsMenu}
           wrapperStyle={{backgroundColor: Colors.slate800}}
         />,
         <Button
