@@ -39,3 +39,4 @@ export {default as InlineNotification} from './InlineNotification';
 export {default as AiInsightsTab} from './AiInsightsTab';
 export {default as SummaryGrid} from './SummaryGrid';
 export {default as LabelSelectorHelpIcon} from './LabelSelectorHelpIcon';
+export {default as DeleteModal} from './DeleteModal';
