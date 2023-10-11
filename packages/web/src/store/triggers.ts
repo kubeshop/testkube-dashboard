@@ -2,7 +2,7 @@ import {StateCreator} from 'zustand';
 
 import {TestTrigger, TriggersKeyMap} from '@models/triggers';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 interface TriggersSlice {
   keyMap?: TriggersKeyMap;

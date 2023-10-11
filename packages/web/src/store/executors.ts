@@ -3,9 +3,9 @@ import {StateCreator} from 'zustand';
 
 import {Executor, ExecutorFeature} from '@models/executors';
 
-import {connectStore, createStoreFactory} from '@store/utils';
-
 import {isURL} from '@utils/strings';
+
+import {connectStore, createStoreFactory} from './utils';
 
 interface ExecutorsSlice {
   executors?: Executor[];

@@ -34,6 +34,9 @@ module.exports = {
     'unused-imports/no-unused-imports-ts': 'warn',
     'react/jsx-curly-brace-presence': 'warn', // should be warned and allowed for compilation
     'spaced-comment': 'warn', // should be warned and allowed for compilation
+    'no-dupe-class-members': 'off', // false positives, when using TypeScript methods with multiple signatures
+    'no-useless-constructor': 'off', // false positives, when using TypeScript properties declaration in arguments
+    'no-empty-function': 'off', // false positives, when using TypeScript properties declaration in arguments
     'react/no-unused-prop-types': 'off', // false positives, when components are wrapped with memo/forwardRef
     'react/self-closing-comp': 'warn', // should be warned and allowed for compilation
     'react/jsx-props-no-spreading': 0,

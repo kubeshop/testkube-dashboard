@@ -1,4 +1,4 @@
-ARG TARGET=nginx:alpine
+ARG TARGET=nginx:1.25.2-alpine
 
 FROM node:20 as deps-reader
 
@@ -21,25 +21,29 @@ COPY . /app
 RUN npm run -w @testkube/web build
 
 FROM $TARGET
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/nginx.conf.tmpl
-COPY --from=build /app/packages/web/build /usr/share/nginx/html
+
 EXPOSE 8080
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY nginx/nginx.conf /etc/nginx/nginx.conf.tmpl
+COPY --from=build /app/packages/web/build /app/build
+
+COPY ./packages/web/scripts/env.sh /app/init/
+COPY ./packages/web/scripts/inject-base-href.sh /app/init/
+
+RUN chmod +x /app/init/env.sh /app/init/inject-base-href.sh && \
+    chmod ugo+w /etc/nginx/nginx.conf /app/build/index.html && \
+    touch /app/build/env-config.js && chmod a+w /app/build/env-config.js
+
 WORKDIR /usr/share/nginx/html
-COPY ./packages/web/scripts/env.sh .
-COPY ./packages/web/scripts/inject-base-href.sh .
-RUN chmod +x env.sh inject-base-href.sh && chmod ugo+w /etc/nginx/nginx.conf index.html
-
-RUN touch ./env-config.js
-RUN chmod a+w ./env-config.js
-
-
 
 CMD [ \
   "/bin/sh", \
   "-c", \
-  "/usr/share/nginx/html/env.sh && \
-   /usr/share/nginx/html/inject-base-href.sh && \
-  export DISABLE_IPV6=\"$([[ \"$ENABLE_IPV6\" = \"true\" ]] && echo \"false\" || echo \"true\")\" && \
+  "cp -R /app/build/. /usr/share/nginx/html && \
+   sh /app/init/env.sh env-config.js && \
+   sh /app/init/inject-base-href.sh && \
+   export DISABLE_IPV6=\"$([[ \"$ENABLE_IPV6\" = \"true\" ]] && echo \"false\" || echo \"true\")\" && \
    envsubst '$DISABLE_IPV6' < /etc/nginx/nginx.conf.tmpl | sed -e '1h;2,$H;$!d;g' -e 's/# cut true.*# end//g' > /etc/nginx/nginx.conf && \
    nginx -g \"daemon off;\"" ]

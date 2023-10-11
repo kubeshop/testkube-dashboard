@@ -2,7 +2,7 @@ import {StateCreator} from 'zustand';
 
 import {SourceWithRepository} from '@models/sources';
 
-import {connectStore, createStoreFactory} from '@store/utils';
+import {connectStore, createStoreFactory} from './utils';
 
 interface SourcesSlice {
   sources?: SourceWithRepository[];

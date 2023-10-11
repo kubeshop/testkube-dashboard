@@ -26,7 +26,7 @@
   },
   "private": true,
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "7.21.0-placeholder-for-preset-env.2",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.0",
     "@craco/craco": "7.1.0",
     "@sentry/webpack-plugin": "^2.6.2",
     "@types/file-saver": "^2.0.5",
@@ -84,7 +84,7 @@
     "zustand": "^4.4.1"
   },
   "scripts": {
-    "start": "sh scripts/env.sh && cp env-config.js ./public/ && npm run less && NODE_OPTIONS=--openssl-legacy-provider craco start",
+    "start": "sh scripts/env.sh public/env-config.js && npm run less && NODE_OPTIONS=--openssl-legacy-provider craco start",
     "build": "npm run less && NODE_OPTIONS=--openssl-legacy-provider PUBLIC_URL=. craco --max_old_space_size=4096 build",
     "test": "craco test --watchAll=false",
     "test:watch": "craco test --detectOpenHandles",
