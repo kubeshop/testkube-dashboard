@@ -1,6 +1,14 @@
 import superagent from 'superagent';
 
-import type {ExecutorData, TestData, TestExecutionListResponse, TestSourceData, TestSuiteData} from '../types';
+import type {
+  ExecutorData,
+  TestData,
+  TestExecutionListResponse,
+  TestSourceData,
+  TestSuiteData,
+  TriggerData,
+  WebhookData,
+} from '../types';
 
 export class ApiHelpers {
   public apiUrl: string;
@@ -84,6 +92,14 @@ export class ApiHelpers {
     return this.makeGet(`${this.apiUrl}/executors`);
   }
 
+  public async getTriggers(): Promise<TriggerData[]> {
+    return this.makeGet(`${this.apiUrl}/triggers`);
+  }
+
+  public async getWebhooks(): Promise<WebhookData[]> {
+    return this.makeGet(`${this.apiUrl}/webhooks`);
+  }
+
   public async createTest(testData: Partial<TestData>): Promise<TestData> {
     return this.makePost(`${this.apiUrl}/tests`, testData);
   }
@@ -110,6 +126,14 @@ export class ApiHelpers {
 
   public async removeExecutor(executorName: string): Promise<any> {
     return this.makeDelete(`${this.apiUrl}/executors/${executorName}`);
+  }
+
+  public async removeTrigger(triggerName: string): Promise<any> {
+    return this.makeDelete(`${this.apiUrl}/triggers/${triggerName}`);
+  }
+
+  public async removeWebhook(webhookName: string): Promise<any> {
+    return this.makeDelete(`${this.apiUrl}/webhooks/${webhookName}`);
   }
 
   public async updateTest(testData: Partial<TestData>): Promise<any> {
@@ -156,6 +180,24 @@ export class ApiHelpers {
     }
   }
 
+  public async isTriggerCreated(triggerName: string): Promise<boolean> {
+    try {
+      const currentTriggers = await this.getTriggers();
+      return currentTriggers.some(({name}) => name === triggerName);
+    } catch (e) {
+      throw Error(`isTriggerCreated failed for "${triggerName}" with: "${e}"`);
+    }
+  }
+
+  public async isWebhookCreated(webhookName: string): Promise<boolean> {
+    try {
+      const currentWebhooks = await this.getWebhooks();
+      return currentWebhooks.some(({name}) => name === webhookName);
+    } catch (e) {
+      throw Error(`isWebhookCreated failed for "${webhookName}" with: "${e}"`);
+    }
+  }
+
   public async assureTestNotCreated(testName: string): Promise<void> {
     try {
       if (await this.isTestCreated(testName)) {
@@ -194,6 +236,26 @@ export class ApiHelpers {
       }
     } catch (e) {
       throw Error(`assureExecutorNotCreated failed for "${executorName}" with: "${e}"`);
+    }
+  }
+
+  public async assureTriggerNotCreated(triggerName: string): Promise<void> {
+    try {
+      if (await this.isTriggerCreated(triggerName)) {
+        await this.removeTrigger(triggerName);
+      }
+    } catch (e) {
+      throw Error(`assureTriggerNotCreated failed for "${triggerName}" with: "${e}"`);
+    }
+  }
+
+  public async assureWebhookNotCreated(webhookName: string): Promise<void> {
+    try {
+      if (await this.isWebhookCreated(webhookName)) {
+        await this.removeWebhook(webhookName);
+      }
+    } catch (e) {
+      throw Error(`assureWebhookNotCreated failed for "${webhookName}" with: "${e}"`);
     }
   }
 
@@ -242,6 +304,14 @@ export class ApiHelpers {
 
   public async getExecutorData(executorName: string): Promise<ExecutorData> {
     return this.makeGet(`${this.apiUrl}/executors/${executorName}`);
+  }
+
+  public async getTriggerData(triggerName: string): Promise<TestData> {
+    return this.makeGet(`${this.apiUrl}/triggers/${triggerName}`);
+  }
+
+  public async getWebhookData(webhookName: string): Promise<TestData> {
+    return this.makeGet(`${this.apiUrl}/webhooks/${webhookName}`);
   }
 
   public async getTestExecutions(testName: string): Promise<TestExecutionListResponse> {
