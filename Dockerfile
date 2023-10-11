@@ -34,7 +34,8 @@ COPY ./packages/web/scripts/inject-base-href.sh /app/init/
 
 RUN chmod +x /app/init/env.sh /app/init/inject-base-href.sh && \
     chmod ugo+w /etc/nginx/nginx.conf /app/build/index.html && \
-    touch /app/build/env-config.js && chmod a+w /app/build/env-config.js
+    touch /app/build/env-config.js && chmod a+w /app/build/env-config.js && \
+    mkdir /app/nginx && cp -R /etc/nginx/. /app/nginx
 
 WORKDIR /usr/share/nginx/html
 
@@ -42,6 +43,7 @@ CMD [ \
   "/bin/sh", \
   "-c", \
   "cp -R /app/build/. /usr/share/nginx/html && \
+   cp -R /app/nginx/. /etc/nginx && \
    sh /app/init/env.sh env-config.js && \
    sh /app/init/inject-base-href.sh && \
    export DISABLE_IPV6=\"$([[ \"$ENABLE_IPV6\" = \"true\" ]] && echo \"false\" || echo \"true\")\" && \
