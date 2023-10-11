@@ -6,9 +6,11 @@ import {NamePath} from 'antd/lib/form/interface';
 import {isEqual} from 'lodash';
 
 import {RTKResponse} from '@models/fetch';
+import {Option} from '@models/form';
 import {Repository} from '@models/repository';
 
 import {TooltipStatus} from '@molecules/GitFormItems/tooltipUtils';
+import {labelRegex} from '@molecules/LabelsSelect/utils';
 
 export type ValidationState = {
   message: string;
@@ -36,7 +38,7 @@ const getErrorMessage = (rawErrorString: string, searchString: string) => {
 };
 
 const useValidateRepository = (
-  getFieldValue: (name: NamePath) => string,
+  getFieldValue: (name: NamePath) => string | Option,
   setValidationState: React.Dispatch<React.SetStateAction<ValidationState>>,
   validateRepository: (repository: Repository) => Promise<RTKResponse<void>>
 ) => {
@@ -68,17 +70,31 @@ const useValidateRepository = (
     return {
       type: 'git',
       ...fieldsNames.reduce((acc, name) => {
-        if (name === 'token' && current.tokenSecret) {
+        if (name === 'token') {
+          const tokenObject = current[name] as Option;
+          if (labelRegex.test(String(tokenObject.value))) {
+            return {
+              ...acc,
+              tokenSecret: current.tokenSecret,
+            };
+          }
           return {
             ...acc,
-            tokenSecret: current.tokenSecret,
+            token: tokenObject.value,
           };
         }
 
-        if (name === 'username' && current.usernameSecret) {
+        if (name === 'username') {
+          const usernameObject = current[name] as Option;
+          if (labelRegex.test(String(usernameObject.value))) {
+            return {
+              ...acc,
+              usernameSecret: current.usernameSecret,
+            };
+          }
           return {
             ...acc,
-            usernameSecret: current.usernameSecret,
+            username: usernameObject.value,
           };
         }
 
@@ -193,8 +209,8 @@ const useValidateRepository = (
       setValidationState(prevValidationState => ({
         ...prevValidationState,
         uri: validationState.uri || prevValidationState.uri,
-        token: validationState.token || (current.token === '' ? '' : prevValidationState.token),
-        username: validationState.username || (current.username === '' ? '' : prevValidationState.username),
+        token: validationState.token || (!current.token ? '' : prevValidationState.token),
+        username: validationState.username || (!current.username ? '' : prevValidationState.username),
         branch: validationState.branch || prevValidationState.branch,
         path: validationState.path || (current.path === '' ? '' : prevValidationState.path),
       }));

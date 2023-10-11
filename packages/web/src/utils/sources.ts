@@ -129,7 +129,7 @@ export const getSourceFormValues = (entityDetails: Test, testSources: SourceWith
   return {
     source: content.type,
     ...content.repository,
-    ...getSecretsFromRepository(content?.repository),
+    ...getSecretsFromRepository(content?.repository, entityDetails?.namespace),
   };
 };
 
@@ -174,22 +174,26 @@ export const formatSecrets = (token?: Option, username?: Option, namespace?: str
   return secrets;
 };
 
-export const getSecretsFromRepository = (repository?: Repository) => {
+export const getSecretsFromRepository = (repository?: Repository, namespace?: string) => {
   const secrets: {
     token?: Option;
     username?: Option;
+    tokenSecret?: Repository['tokenSecret'];
+    usernameSecret?: Repository['usernameSecret'];
   } = {};
 
   const tokenSecret = repository?.tokenSecret;
   if (tokenSecret?.name) {
     const keyValuePair = `${tokenSecret.name}:${tokenSecret.key}`;
     secrets.token = {value: keyValuePair, label: keyValuePair};
+    secrets.tokenSecret = {...repository?.tokenSecret, namespace};
   }
 
   const usernameSecret = repository?.usernameSecret;
   if (usernameSecret?.name) {
     const keyValuePair = `${usernameSecret.name}:${usernameSecret.key}`;
     secrets.username = {value: keyValuePair, label: keyValuePair};
+    secrets.usernameSecret = {...repository?.usernameSecret, namespace};
   }
 
   return secrets;

@@ -22,7 +22,13 @@ const SourceEdit: React.FC<Partial<Props>> = props => {
   return (
     <StyledFormSpace size={24} direction="vertical">
       <Repository message={validationState.message} status={validationState.uri} />
-      <SecretFormItem name="token" label="Git Token" message={validationState.message} status={validationState.token} />
+      <SecretFormItem
+        name="token"
+        label="Git Token"
+        message={validationState.message}
+        status={validationState.token}
+        disabled={disabled}
+      />
       <SecretFormItem
         name="username"
         label="Git Username"
