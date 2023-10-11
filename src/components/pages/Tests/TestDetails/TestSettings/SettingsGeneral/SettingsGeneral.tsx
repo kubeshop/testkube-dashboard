@@ -17,6 +17,7 @@ const SettingsGeneral: React.FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
   const deleteTestExtension = usePluginSlot('deleteTestExtension');
+  const [deleteTest] = useDeleteTestMutation();
 
   return (
     <>
@@ -33,7 +34,7 @@ const SettingsGeneral: React.FC = () => {
             label="test"
             description="The test will be permanently deleted, including its deployments analytical history. This action is irreversible and can not be undone."
             redirectUrl="/tests"
-            useDeleteMutation={useDeleteTestMutation}
+            onDelete={deleteTest}
           />
         )
       ) : null}

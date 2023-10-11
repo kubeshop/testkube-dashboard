@@ -11,6 +11,7 @@ import NameNType from './NameNType';
 const General: React.FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {current} = useExecutorsPick('current');
+  const [deleteExecutor] = useDeleteExecutorMutation();
   return (
     <>
       <NameNType />
@@ -20,7 +21,7 @@ const General: React.FC = () => {
           label="executor"
           description="The executor will be permanently deleted. All your tests will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
           redirectUrl="/executors"
-          useDeleteMutation={useDeleteExecutorMutation}
+          onDelete={deleteExecutor}
         />
       ) : null}
     </>

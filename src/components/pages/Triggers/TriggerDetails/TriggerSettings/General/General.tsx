@@ -11,6 +11,7 @@ import Name from './Name';
 const General: React.FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {current} = useTriggersPick('current');
+  const [deleteTrigger] = useDeleteTriggerMutation();
 
   return (
     <>
@@ -21,7 +22,7 @@ const General: React.FC = () => {
           label="trigger"
           description="This trigger will be permanently deleted. All your automation linked to this trigger will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
           redirectUrl="/triggers"
-          useDeleteMutation={useDeleteTriggerMutation}
+          onDelete={deleteTrigger}
         />
       ) : null}
     </>
