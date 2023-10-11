@@ -10,8 +10,6 @@ import {Repository} from '@models/repository';
 
 import {TooltipStatus} from '@molecules/GitFormItems/tooltipUtils';
 
-import {dummySecret} from '@utils/sources';
-
 export type ValidationState = {
   message: string;
   uri?: TooltipStatus;
@@ -70,14 +68,14 @@ const useValidateRepository = (
     return {
       type: 'git',
       ...fieldsNames.reduce((acc, name) => {
-        if (name === 'token' && current[name] === dummySecret && current.tokenSecret) {
+        if (name === 'token' && current.tokenSecret) {
           return {
             ...acc,
             tokenSecret: current.tokenSecret,
           };
         }
 
-        if (name === 'username' && current[name] === dummySecret && current.usernameSecret) {
+        if (name === 'username' && current.usernameSecret) {
           return {
             ...acc,
             usernameSecret: current.usernameSecret,

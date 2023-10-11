@@ -1,4 +1,4 @@
-import {memo, useMemo, useState} from 'react';
+import {memo, useMemo} from 'react';
 
 import {Form, Select} from 'antd';
 
@@ -78,9 +78,6 @@ const Source: React.FC<SourceProps> = props => {
     ),
   ];
 
-  const [isClearedToken, setIsClearedToken] = useState(!additionalFormValues.token);
-  const [isClearedUsername, setIsClearedUsername] = useState(!additionalFormValues.username);
-
   const onSave = () => {
     const values = form.getFieldsValue();
     const {testSource: newTestSource} = values;
@@ -93,8 +90,6 @@ const Source: React.FC<SourceProps> = props => {
 
   const onCancel = () => {
     form.resetFields();
-    setIsClearedUsername(!additionalFormValues.username);
-    setIsClearedToken(!additionalFormValues.token);
   };
 
   const footer = (
@@ -115,9 +110,6 @@ const Source: React.FC<SourceProps> = props => {
       initialValues={{testSource: source, ...additionalFormValues}}
       disabled={!mayEdit}
       readOnly={readOnly}
-      wasTouched={Boolean(
-        (isClearedToken && additionalFormValues.token) || (isClearedUsername && additionalFormValues.username)
-      )}
       onConfirm={onSave}
       onCancel={onCancel}
     >
@@ -140,10 +132,6 @@ const Source: React.FC<SourceProps> = props => {
           const childrenProps: Record<SourceType, Partial<Props>> = {
             git: {
               executorType,
-              isClearedToken,
-              isClearedUsername,
-              setIsClearedToken,
-              setIsClearedUsername,
               getFieldValue,
               disabled: !mayEdit || readOnly,
             },

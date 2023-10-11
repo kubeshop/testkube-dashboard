@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 
 import {CreatableMultiSelect} from '@atoms';
-import {LabelsMultiValueLabel, LabelsOption} from '@atoms/CreatableMultiSelect/CustomComponents';
+import {LabelsMultiValueLabel, LabelsOption} from '@atoms/ReactSelect/CustomComponents';
 
 import {useLastCallback} from '@hooks/useLastCallback';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';

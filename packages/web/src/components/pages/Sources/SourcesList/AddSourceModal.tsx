@@ -1,7 +1,6 @@
 import React, {useRef, useState} from 'react';
 
-import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
-import {Input as AntdInput, Form} from 'antd';
+import {Form} from 'antd';
 
 import {Button, Input} from '@custom-antd';
 
@@ -10,10 +9,11 @@ import useInViewport from '@hooks/useInViewport';
 
 import {useModal} from '@modal/hooks';
 
+import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 import {SourceWithRepository} from '@models/sources';
 
-import {Hint, NotificationContent} from '@molecules';
+import {Hint, NotificationContent, SecretSelect} from '@molecules';
 
 import {useCreateSourceMutation} from '@services/sources';
 
@@ -22,14 +22,15 @@ import {useClusterDetailsPick} from '@store/clusterDetails';
 import {externalLinks} from '@utils/externalLinks';
 import {k8sResourceNameMaxLength, k8sResourceNamePattern, required} from '@utils/form';
 import {displayDefaultNotificationFlow} from '@utils/notification';
+import {formatSecrets} from '@utils/sources';
 
 import {AddSourceModalContainer} from './SourcesList.styled';
 
 type AddSourceFormValues = {
   name: string;
   uri: string;
-  token?: string;
-  username?: string;
+  token?: Option;
+  username?: Option;
 };
 
 const AddSourceModal: React.FC = () => {
@@ -53,8 +54,7 @@ const AddSourceModal: React.FC = () => {
       repository: {
         type: 'git',
         uri,
-        username: username || undefined,
-        token: token || undefined,
+        ...formatSecrets(token, username),
       },
       namespace,
     };
@@ -95,13 +95,10 @@ const AddSourceModal: React.FC = () => {
           <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
         </Form.Item>
         <Form.Item label="Git username" name="username">
-          <Input placeholder="e.g.: my-user-name" />
+          <SecretSelect />
         </Form.Item>
         <Form.Item label="Git token" name="token">
-          <AntdInput.Password
-            placeholder="e.g.: some-token"
-            iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-          />
+          <SecretSelect />
         </Form.Item>
         <Form.Item
           style={{
