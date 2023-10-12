@@ -2,7 +2,7 @@ import {FC, useMemo} from 'react';
 
 import {Form} from 'antd';
 
-import {CreatableMultiSelect} from '@atoms';
+import {CreatableMultiSelect, ExternalLink} from '@atoms';
 
 import {FormItem} from '@custom-antd';
 
@@ -15,6 +15,8 @@ import {CardForm} from '@organisms';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateWebhookMutation} from '@services/webhooks';
+
+import {externalLinks} from '@src/utils/externalLinks';
 
 import {useWebhooksPick} from '@store/webhooks';
 
@@ -68,6 +70,14 @@ const Condition: FC = () => {
       initialValues={{events: initialEvents, labels: initialLabels}}
       disabled={!mayEdit}
       onConfirm={onFinish}
+      footer={
+        <>
+          Learn more about{' '}
+          <ExternalLink href={externalLinks.notificationsAndWebhooks} target="_blank">
+            Webhook condition.
+          </ExternalLink>
+        </>
+      }
     >
       <FormItem
         name="labels"

@@ -3,6 +3,8 @@ import {FC} from 'react';
 import {DeleteOutlined} from '@ant-design/icons';
 import {Form, Input} from 'antd';
 
+import ExternalLink from '@atoms/ExternalLink';
+
 import {Button, FormIconWrapper, FormItem, FormRow, FullWidthSpace} from '@custom-antd';
 
 import {notificationCall} from '@molecules';
@@ -12,6 +14,8 @@ import {CardForm} from '@organisms';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateWebhookMutation} from '@services/webhooks';
+
+import {externalLinks} from '@src/utils/externalLinks';
 
 import {useWebhooksPick} from '@store/webhooks';
 
@@ -48,6 +52,14 @@ const Headers: FC = () => {
       initialValues={{headers: decomposeHeaders(current!.headers ?? {})}}
       disabled={!mayEdit}
       onConfirm={onFinish}
+      footer={
+        <>
+          Learn more about{' '}
+          <ExternalLink href={externalLinks.notificationsAndWebhooks} target="_blank">
+            Webhook http headers.
+          </ExternalLink>
+        </>
+      }
     >
       <Form.List name="headers">
         {(fields, {add, remove}) => (
