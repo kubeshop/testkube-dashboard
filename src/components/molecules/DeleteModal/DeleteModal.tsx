@@ -1,37 +1,28 @@
 import {Space} from 'antd';
 
-import {Button, Modal} from '@custom-antd';
-import {ModalProps} from '@custom-antd/Modal/Modal';
+import {Button} from '@custom-antd';
 
 import {DeleteModalWrapper} from './DeleteModal.styled';
 
-interface DeleteModalProps extends ModalProps {
+interface DeleteModalProps {
   onDelete: () => void;
+  onCancel: () => void;
+  content: React.ReactNode;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({onDelete, setIsModalVisible, content, ...modalProps}) => {
-  const onCancel = () => {
-    setIsModalVisible(false);
-  };
-
+const DeleteModal: React.FC<DeleteModalProps> = ({onCancel, onDelete, content, ...modalProps}) => {
   return (
-    <Modal
-      setIsModalVisible={setIsModalVisible}
-      {...modalProps}
-      content={
-        <DeleteModalWrapper>
-          {content}
-          <Space style={{justifyContent: 'flex-end'}}>
-            <Button $customType="secondary" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button $customType="warning" onClick={onDelete}>
-              Delete
-            </Button>
-          </Space>
-        </DeleteModalWrapper>
-      }
-    />
+    <DeleteModalWrapper>
+      {content}
+      <Space style={{justifyContent: 'flex-end'}}>
+        <Button $customType="secondary" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button $customType="warning" onClick={onDelete}>
+          Delete
+        </Button>
+      </Space>
+    </DeleteModalWrapper>
   );
 };
 

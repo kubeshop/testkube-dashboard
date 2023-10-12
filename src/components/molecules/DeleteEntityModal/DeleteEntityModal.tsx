@@ -18,6 +18,7 @@ import Colors from '@styles/Colors';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 
 const DeleteEntityModal: React.FC<{
+  onCancel: () => void;
   onDelete: (id: string) => Promise<any>;
   name: string;
   entityLabel: string;
@@ -25,7 +26,7 @@ const DeleteEntityModal: React.FC<{
   idToDelete?: string;
   onConfirm?: any;
 }> = props => {
-  const {onDelete, name, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
+  const {onDelete, name, onCancel, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
   const {close} = useModal();
   const back = useDashboardNavigate(defaultStackRoute);
@@ -55,6 +56,7 @@ const DeleteEntityModal: React.FC<{
   return (
     <DeleteModal
       onDelete={deleteCallback}
+      onCancel={onCancel}
       content={
         <FullWidthSpace
           size={24}

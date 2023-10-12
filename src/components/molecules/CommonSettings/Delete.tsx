@@ -15,10 +15,20 @@ interface DeleteProps {
 }
 
 const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, onDelete}) => {
-  const {open} = useModal({
+  const {open, close} = useModal({
     title: `Delete this ${label}`,
     width: 600,
-    content: <DeleteEntityModal defaultStackRoute={redirectUrl} onDelete={onDelete} name={name} entityLabel={label} />,
+    content: (
+      <DeleteEntityModal
+        defaultStackRoute={redirectUrl}
+        onCancel={() => {
+          close();
+        }}
+        onDelete={onDelete}
+        name={name}
+        entityLabel={label}
+      />
+    ),
   });
 
   return (
