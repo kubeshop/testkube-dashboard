@@ -25,7 +25,7 @@ interface DeleteModalProps {
   subtitle?: React.ReactNode;
   actionText?: string;
   actionDisabled?: boolean;
-  defaultStackRoute: string;
+  defaultStackRoute?: string;
   successMessage: string;
   deleteOnEnter?: boolean;
   idToDelete: string;
@@ -47,7 +47,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   idToDelete,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const back = useDashboardNavigate(defaultStackRoute);
+  const back = useDashboardNavigate(defaultStackRoute || '');
   const onEvent = usePressEnter();
 
   const onDeleteCallback = async () => {
@@ -59,7 +59,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
         onClose();
         if (onConfirm) {
           onConfirm();
-        } else {
+        } else if (defaultStackRoute) {
           back();
         }
       })
