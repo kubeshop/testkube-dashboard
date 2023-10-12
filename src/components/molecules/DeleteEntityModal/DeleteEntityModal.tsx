@@ -6,67 +6,34 @@ import {capitalize} from 'lodash';
 
 import {FullWidthSpace, Text} from '@custom-antd';
 
-import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
-import usePressEnter from '@hooks/usePressEnter';
-
-import {useModal} from '@modal/hooks';
-
-import {DeleteModal, notificationCall} from '@molecules';
+import {DeleteModal} from '@molecules';
 
 import Colors from '@styles/Colors';
 
-import {displayDefaultNotificationFlow} from '@utils/notification';
-
 const DeleteEntityModal: React.FC<{
-  onCancel: () => void;
+  onClose: () => void;
   onDelete: (id: string) => Promise<any>;
   name: string;
   entityLabel: string;
   defaultStackRoute: string;
   idToDelete?: string;
-  onConfirm?: any;
+  onConfirm?: () => void;
 }> = props => {
-  const {onDelete, name, onCancel, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
-
-  const {close} = useModal();
-  const back = useDashboardNavigate(defaultStackRoute);
-
-  const onEvent = usePressEnter();
+  const {onDelete, name, onClose, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
   const [checkName, setName] = useState('');
 
-  const deleteCallback = () => {
-    onDelete(idToDelete || name)
-      .then(displayDefaultNotificationFlow)
-      .then(() => {
-        notificationCall('passed', `${capitalize(entityLabel)} was successfully deleted.`);
-        close();
-
-        if (onConfirm) {
-          onConfirm();
-        } else {
-          back();
-        }
-      })
-      .catch(error => {
-        notificationCall('failed', error.title, error.message);
-      });
-  };
-
   return (
     <DeleteModal
-      onDelete={deleteCallback}
-      onCancel={onCancel}
+      onDelete={onDelete}
+      onClose={onClose}
+      onConfirm={onConfirm}
+      successMessage={`${capitalize(entityLabel)} was successfully deleted.`}
+      defaultStackRoute={defaultStackRoute}
+      idToDelete={idToDelete || name}
+      actionDisabled={checkName !== name}
       content={
-        <FullWidthSpace
-          size={24}
-          direction="vertical"
-          onKeyPress={event => {
-            if (name === checkName) {
-              onEvent(event, deleteCallback);
-            }
-          }}
-        >
+        <FullWidthSpace size={24} direction="vertical">
           <Text className="regular middle" color={Colors.slate400}>
             Do you really want to delete this {entityLabel}?
             <br />

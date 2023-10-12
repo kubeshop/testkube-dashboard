@@ -21,7 +21,7 @@ const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, onDelet
     content: (
       <DeleteEntityModal
         defaultStackRoute={redirectUrl}
-        onCancel={() => {
+        onClose={() => {
           close();
         }}
         onDelete={onDelete}
