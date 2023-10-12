@@ -1,8 +1,9 @@
-import {PluginScopeRootScope} from './symbols';
+import {PluginScopeCallSync, PluginScopeRootScope, PluginScopeSyncData} from './symbols';
 import type {GetAccessibleData, PluginScope, PluginScopeConfig, PluginSlotRecord, PluginState} from './types';
 
 export class LimitedPluginScope<T extends PluginState> implements PluginScope<T> {
-  private readonly [PluginScopeRootScope]: PluginScope<T>;
+  private readonly [PluginScopeRootScope]: PluginScope<T>; // TODO: Check if root is needed here
+  private readonly [PluginScopeSyncData]: Map<any, any> = new Map();
   public readonly slots: PluginSlotRecord<T>;
   public readonly data: GetAccessibleData<T>;
 
@@ -39,12 +40,20 @@ export class LimitedPluginScope<T extends PluginState> implements PluginScope<T>
     this.slots = slots as PluginSlotRecord<T>;
   }
 
+  public [PluginScopeCallSync](): void {
+    Array.from(this[PluginScopeSyncData].keys()).forEach(fn => {
+      this[PluginScopeSyncData].set(fn, fn());
+    });
+  }
+
   /**
    * Transfer data from React to the plugin context.
    */
   public sync<U>(fn: () => U, defaultValue: U): () => U;
   public sync<U>(fn: () => U, defaultValue?: undefined): () => U | undefined;
   public sync<U>(fn: () => U, defaultValue?: U): () => U | undefined {
-    return this[PluginScopeRootScope].sync(fn, defaultValue);
+    const wrappedFn = () => fn();
+    this[PluginScopeSyncData].set(wrappedFn, undefined);
+    return () => this[PluginScopeSyncData].get(wrappedFn) ?? defaultValue;
   }
 }

@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren, ReactElement, useContext} from 'react';
+import {FC, PropsWithChildren, ReactElement, createContext, useContext} from 'react';
 import {useInterval} from 'react-use';
 
 import {act, render, renderHook} from '@testing-library/react';
@@ -330,10 +330,39 @@ describe('plugins', () => {
       expect(renderedItems.map(x => x.textContent)).toEqual(['test-name', 'test-name-2']);
     });
 
-    xit('should sync on the level of the child scope that has requested sync', () => {
-      // module1(XYZProvider + sync1) -> module2(XYZProvider + sync2):
-      // - sync1 should use first provider
-      // - sync2 should use second provider
+    it('should sync on the level of the child scope that has requested sync', () => {
+      const XyzContext = createContext<number>(0);
+      const XyzContextReporter: FC<PropsWithChildren<{report: (value: number) => void}>> = ({report, children}) => {
+        report(useContext(XyzContext));
+        return <>{children}</>;
+      };
+
+      const base = createPlugin('base').define(slot<string>()('slot')).init();
+      const stub = external<typeof base>();
+      const plugin1 = createPlugin('plugin1')
+        .provider(<XyzContext.Provider value={1} />)
+        .needs(stub.slots('slot'))
+        .init(tk => {
+          const getContext = tk.sync(() => useContext(XyzContext));
+          tk.slots.slot.add('one', {enabled: () => getContext() === 1});
+          tk.slots.slot.add('two', {enabled: () => getContext() === 2});
+        });
+      const plugin2 = createPlugin('plugin1')
+        .provider(<XyzContext.Provider value={2} />)
+        .needs(stub.slots('slot'))
+        .init(tk => {
+          const getContext = tk.sync(() => useContext(XyzContext));
+          tk.slots.slot.add('one', {enabled: () => getContext() === 1});
+          tk.slots.slot.add('two', {enabled: () => getContext() === 2});
+        });
+
+      const resolver = create([base, plugin1, plugin2]);
+      const [Provider, {initialize}] = resolver.resolve();
+      const scope = initialize();
+
+      render(<Provider root={scope} />);
+
+      expect(scope.slots.slot.all()).toEqual(['one', 'two']);
     });
 
     xit('should support nested root scopes', () => {});

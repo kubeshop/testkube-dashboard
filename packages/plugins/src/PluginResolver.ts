@@ -1,8 +1,9 @@
 import {FC, PropsWithChildren, createElement} from 'react';
 
 import type {GetPluginState, Plugin} from './internal/Plugin';
+import {PluginLocalProvider} from './internal/PluginLocalProvider';
 import {PluginRootScope} from './internal/PluginRootScope';
-import {PluginRootScopeProvider, PluginRootScopeSyncProvider} from './internal/PluginRootScopeProvider';
+import {PluginRootScopeProvider} from './internal/PluginRootScopeProvider';
 import {detectCircularDependencies} from './internal/detectCircularDependencies';
 import {detectDirectDependencies} from './internal/detectDirectDependencies';
 import {detectResources} from './internal/detectResources';
@@ -14,7 +15,6 @@ import type {
   GetSlots,
   PluginProvider,
   PluginRoute,
-  PluginScopeConfig,
   PluginState,
 } from './internal/types';
 
@@ -52,13 +52,7 @@ export class PluginResolver<T extends PluginState> {
 
     // Utils
     const createInitializer = (plugin: Plugin<any>): ((root: PluginRootScope<T>) => void) => {
-      const config: PluginScopeConfig<any> = {
-        externalSlots: Object.keys(plugin[PluginDetails].externalSlots),
-        slots: Object.keys(plugin[PluginDetails].slots),
-        externalData: Object.keys(plugin[PluginDetails].externalData),
-        data: Object.keys(plugin[PluginDetails].data),
-      };
-      return root => plugin[PluginInit](root.children(config));
+      return root => plugin[PluginInit](root.children(plugin));
     };
 
     // Detect sources of different resources
@@ -119,6 +113,7 @@ export class PluginResolver<T extends PluginState> {
 
       // Include dependencies
       providers.push(...next[PluginDetails].providers);
+      providers.push({type: PluginLocalProvider, props: {plugin: next}});
       routes.push(...next[PluginDetails].routes); // TODO: Shouldn't routes be ordered independently?
       initializers.push(createInitializer(next));
       Object.assign(initialData, {...next[PluginDetails].data});
@@ -139,7 +134,7 @@ export class PluginResolver<T extends PluginState> {
     };
 
     const Provider: FC<PropsWithChildren<{root: PluginRootScope<T>}>> = ({root, children}) => {
-      let current = createElement(PluginRootScopeSyncProvider, null, children);
+      let current = children;
       for (let i = providers.length - 1; i >= 0; i -= 1) {
         current = createElement(providers[i].type, providers[i].props, current);
       }

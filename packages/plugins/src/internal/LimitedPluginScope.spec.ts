@@ -1,5 +1,6 @@
 import {LimitedPluginScope} from './LimitedPluginScope';
 import {PluginSlot} from './PluginSlot';
+import {PluginScopeCallSync} from './symbols';
 import {PluginScope, PluginScopeConfig} from './types';
 
 const dummyStorage = {};
@@ -84,14 +85,45 @@ describe('plugins', () => {
       expect(scope.slots).not.toHaveProperty('slot2');
     });
 
-    it('should correctly pass down request for synchronizing data', () => {
+    it('should return default value before synchronization', () => {
       const root = createScope({});
       const config = createConfig({});
       const scope = new LimitedPluginScope(root, config);
-      const syncFn = () => 1;
-      const result = scope.sync(syncFn, 123);
-      expect(root.sync.mock.calls).toEqual([[syncFn, 123]]);
-      expect(result).toBe(root.sync.mock.results[0].value);
+      const fn1 = jest.fn(() => Math.random());
+      const fn2 = jest.fn(() => Math.random());
+      const fnSync1 = scope.sync(fn1);
+      const fnSync2 = scope.sync(fn2, 1.5);
+      expect(fn1).not.toHaveBeenCalled();
+      expect(fn2).not.toHaveBeenCalled();
+      expect(fnSync1()).toBe(undefined);
+      expect(fnSync2()).toBe(1.5);
+    });
+
+    it('should return cached value after synchronization', () => {
+      const root = createScope({});
+      const config = createConfig({});
+      const scope = new LimitedPluginScope(root, config);
+      const fn1 = jest.fn(() => Math.random());
+      const fn2 = jest.fn(() => Math.random());
+      const fnSync1 = scope.sync(fn1);
+      const fnSync2 = scope.sync(fn2, 1.5);
+      scope[PluginScopeCallSync]();
+      expect(fn1).toHaveBeenCalledTimes(1);
+      expect(fn2).toHaveBeenCalledTimes(1);
+      expect(fnSync1()).toBe(fn1.mock.results[0].value);
+      expect(fnSync2()).toBe(fn2.mock.results[0].value);
+    });
+
+    it('should replace value after multiple synchronizations', () => {
+      const root = createScope({});
+      const config = createConfig({});
+      const scope = new LimitedPluginScope(root, config);
+      const fn = jest.fn(() => Math.random());
+      const fnSync = scope.sync(fn);
+      scope[PluginScopeCallSync]();
+      scope[PluginScopeCallSync]();
+      expect(fn).toHaveBeenCalledTimes(2);
+      expect(fnSync()).toBe(fn.mock.results[1].value);
     });
 
     it('should not copy root scope storages', () => {

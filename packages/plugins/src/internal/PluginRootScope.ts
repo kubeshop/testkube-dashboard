@@ -1,21 +1,15 @@
 import {LimitedPluginScope} from './LimitedPluginScope';
+import type {Plugin} from './Plugin';
 import {PluginSlot} from './PluginSlot';
-import {PluginScopeCallSync, PluginScopeSlotData, PluginScopeSyncData} from './symbols';
-import type {
-  GetAccessibleData,
-  GetAccessibleSlots,
-  PluginScope,
-  PluginScopeConfig,
-  PluginSlotRecord,
-  PluginState,
-} from './types';
+import {PluginDetails, PluginScopeChildrenScope, PluginScopeSlotData} from './symbols';
+import type {GetAccessibleData, GetAccessibleSlots, PluginScope, PluginSlotRecord, PluginState} from './types';
 
 // TODO: Keep current route information here
 // TODO: Allow scope inheritance (parent scope)
 export class PluginRootScope<T extends PluginState> implements PluginScope<T> {
   public readonly slots: PluginSlotRecord<T>;
   public readonly data: GetAccessibleData<T>;
-  private [PluginScopeSyncData]: Map<any, any> = new Map();
+  public [PluginScopeChildrenScope]: Map<Plugin<any>, LimitedPluginScope<any>> = new Map();
   private [PluginScopeSlotData]: Record<string, any> = {};
 
   public constructor(slots: (keyof GetAccessibleSlots<T>)[]) {
@@ -30,23 +24,24 @@ export class PluginRootScope<T extends PluginState> implements PluginScope<T> {
   // TODO: Throw error when `sync` called outside of plugin initialization
   public sync<U>(fn: () => U, defaultValue: U): () => U;
   public sync<U>(fn: () => U, defaultValue?: undefined): () => U | undefined;
+  // eslint-disable-next-line class-methods-use-this
   public sync<U>(fn: () => U, defaultValue?: U): () => U | undefined {
-    const wrappedFn = () => fn();
-    this[PluginScopeSyncData].set(wrappedFn, undefined);
-    return () => this[PluginScopeSyncData].get(wrappedFn) ?? defaultValue;
-  }
-
-  // TODO: Consider running that on children level instead
-  public [PluginScopeCallSync](): void {
-    Array.from(this[PluginScopeSyncData].keys()).forEach(fn => {
-      this[PluginScopeSyncData].set(fn, fn());
-    });
+    return () => defaultValue;
   }
 
   /**
    * Create child context, that will have access only to part of the scope.
    */
-  public children<U extends PluginState>(config: PluginScopeConfig<U>): LimitedPluginScope<U> {
-    return new LimitedPluginScope(this, config);
+  public children<U extends PluginState>(plugin: Plugin<U>): LimitedPluginScope<U> {
+    const childScope = new LimitedPluginScope(this, {
+      externalSlots: Object.keys(plugin[PluginDetails].externalSlots),
+      slots: Object.keys(plugin[PluginDetails].slots),
+      externalData: Object.keys(plugin[PluginDetails].externalData),
+      data: Object.keys(plugin[PluginDetails].data),
+    });
+
+    this[PluginScopeChildrenScope].set(plugin, childScope);
+
+    return childScope;
   }
 }
