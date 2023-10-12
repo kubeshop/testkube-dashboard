@@ -32,6 +32,7 @@ const DeleteEntityModal: React.FC<{
       defaultStackRoute={defaultStackRoute}
       idToDelete={idToDelete || name}
       actionDisabled={checkName !== name}
+      deleteOnEnter
       content={
         <FullWidthSpace size={24} direction="vertical">
           <Text className="regular middle" color={Colors.slate400}>

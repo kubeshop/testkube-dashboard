@@ -77,9 +77,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           size={contentSize || 16}
           direction="vertical"
           onKeyPress={event => {
-            if (!actionDisabled && deleteOnEnter) {
-              onEvent(event, onDeleteCallback);
-            }
+            onEvent(event, onDeleteCallback);
           }}
         >
           <Text className="regular middle" color={Colors.slate400}>
