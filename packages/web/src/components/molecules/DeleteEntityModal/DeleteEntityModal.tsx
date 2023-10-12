@@ -53,7 +53,6 @@ const DeleteEntityModal: React.FC<{
         </FullWidthSpace>
       }
     />
-
   );
 };
 
