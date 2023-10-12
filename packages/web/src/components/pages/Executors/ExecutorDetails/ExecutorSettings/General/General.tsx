@@ -12,6 +12,7 @@ const General: React.FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {current} = useExecutorsPick('current');
   const [deleteExecutor] = useDeleteExecutorMutation();
+
   return (
     <>
       <NameNType />

@@ -11,8 +11,6 @@ interface DeleteProps {
   description: string;
   label: string;
   redirectUrl: string;
-  onDelete: (id: string) => Promise<any>;
-}
 
 const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, onDelete}) => {
   const {open, close} = useModal({
