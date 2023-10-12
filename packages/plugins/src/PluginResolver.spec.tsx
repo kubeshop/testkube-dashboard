@@ -82,7 +82,7 @@ const foo = connectStore(createFooStore);
 describe('plugins', () => {
   describe('PluginResolver', () => {
     it('should register all data', () => {
-      jest.spyOn(console, 'warn');
+      jest.spyOn(console, 'warn').mockImplementation();
 
       const plugins = [p('name3', 500), p('name2'), p('name1', -300)];
       const resolver = create(plugins);
@@ -100,7 +100,7 @@ describe('plugins', () => {
     });
 
     it('should correctly order registered plugins (without dependencies)', () => {
-      jest.spyOn(console, 'warn');
+      jest.spyOn(console, 'warn').mockImplementation();
 
       const plugins = [p('name3', 500), p('name2'), p('name1', -300), p('name0', -Infinity), p('name4', Infinity)];
       const resolver = create(plugins);
@@ -123,7 +123,7 @@ describe('plugins', () => {
     });
 
     it('should correctly order registered plugins (based on dependencies)', () => {
-      jest.spyOn(console, 'warn');
+      jest.spyOn(console, 'warn').mockImplementation();
 
       const plugins = [
         p('name3', 500),
@@ -152,7 +152,7 @@ describe('plugins', () => {
     });
 
     it('should try to order plugins with circular dependencies anyway', () => {
-      jest.spyOn(console, 'warn');
+      jest.spyOn(console, 'warn').mockImplementation();
 
       const plugins = [
         p('name3', 500),
@@ -190,7 +190,7 @@ describe('plugins', () => {
     });
 
     it('should detect missing slot', () => {
-      const warnSpy = jest.spyOn(console, 'warn');
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
       const plugins = [
         p('name0', 500, $ => $.define(s('slot1', 'slot2'))),
@@ -206,7 +206,7 @@ describe('plugins', () => {
     });
 
     it('should detect missing data', () => {
-      const warnSpy = jest.spyOn(console, 'warn');
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
       const plugins = [
         p('name0', 500, $ => $.define(d('value1', 'value2'))),
@@ -222,7 +222,7 @@ describe('plugins', () => {
     });
 
     it('should detect circular dependencies', () => {
-      const warnSpy = jest.spyOn(console, 'warn');
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
       const plugins = [
         p('name0', 500, $ => $.define(d('value1')).needs(d('value2'))),
@@ -248,6 +248,7 @@ describe('plugins', () => {
     });
 
     it('should be able to synchronize React hook value across modules', () => {
+      jest.spyOn(console, 'warn').mockImplementation();
       jest.useFakeTimers();
 
       const CountIncrement: FC<{children?: ReactElement}> = ({children = null}) => {
