@@ -1,0 +1,98 @@
+name: Add changelog to the release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  show-log:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          strip_v: true
+
+      - name: Check out GitHub repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Get previous tag
+        run: |
+          set -e
+
+          strip_v() { echo "$1" | sed "s/^v//"; }
+          find_tag() { git --no-pager tag --sort=-v:refname | grep -E "^v?$(echo "$1" | sed "s/\./\\\\./g")" | head -n 1; }
+
+          VERSION="${{ steps.tag.outputs.tag }}"
+
+          IFS=. read major minor patch <<< "$VERSION"
+
+          is_previous_tag() {
+            if [ -z "$1" ]; then
+              return 1
+            fi
+            CMP_VERSION="$(strip_v $1)"
+            IFS=. read pmajor pminor ppatch <<< "$CMP_VERSION"
+            [ "$pmajor" -lt "$major" ] && return 0
+            [ "$pmajor" -gt "$major" ] && return 1
+            [ "$pminor" -lt "$minor" ] && return 0
+            [ "$pminor" -gt "$minor" ] && return 1
+            [ "$ppatch" -lt "$patch" ] && return 0
+            return 1
+          }
+
+          PREV_TAG=""
+          while read prefix; do
+            CHECK=$(find_tag "$prefix")
+            if [ -z "$PREV_TAG" ] && is_previous_tag "$CHECK"; then
+              echo "PREV_TAG=$CHECK" >> "$GITHUB_ENV"
+              exit 0
+            fi
+          done <<EOF
+            $major.$minor.$(($patch - 1))$
+            $major.$minor.
+            $major.$(($minor - 1)).
+            $major.
+            $(($major - 1)).
+
+          EOF
+
+          >&2 echo "Could not find a previous tag for $TAG"
+          exit 1
+
+      - name: Build log
+        run: |
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "CHANGELOG<<$EOF" >> "$GITHUB_ENV"
+          echo "$(git --no-pager log "refs/tags/${{ env.PREV_TAG }}..HEAD" --pretty='format:|[**`%h`**](https://github.com/kubeshop/testkube-dashboard/commit/%h) | %s |' 2>&1 | sed 's/ (#\([0-9]*\))[^"]/|([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/g' | sed 's/Merge pull request #\([0-9]*\)\(.*\)/Merge pull request #\1\2 | ([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/')" >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
+
+          echo "FULL_CHANGELOG<<$EOF" >> "$GITHUB_ENV"
+          echo "$(git --no-pager log "refs/tags/${{ env.PREV_TAG }}..HEAD" --pretty='format:|[**`%h`**](https://github.com/kubeshop/testkube-dashboard/commit/%h)| %ci | %an | %s |' 2>&1 | sed 's/ (#\([0-9]*\))[^"]/|([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/g' | sed 's/Merge pull request #\([0-9]*\)\(.*\)/Merge pull request #\1\2 | ([#\1](https:\/\/github.com\/kubeshop\/testkube-dashboard\/pull\/\1))/')" >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
+
+      - name: Add release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "### Changelog" >> message
+          echo "| Commit | Description | PR |" >> message
+          echo "|-|-|-|" >> message
+          echo "$CHANGELOG" >> message
+          echo "" >> message
+          echo "<details>" >> message
+          echo "  <summary>Details</summary>" >> message
+          echo "" >> message
+          echo "  | Commit | Date | Author | Description | PR |" >> message
+          echo "  |-|-|-|-|-|" >> message
+          echo "  $FULL_CHANGELOG" >> message
+          echo "</details>" >> message
+
+          gh release create -d -F message -t "Version ${{ steps.tag.outputs.tag }}" ${GITHUB_REF#refs/*/}

@@ -1,27 +1,24 @@
 {
-  "name": "testkube-dashboard",
-  "version": "1.9.0",
+  "name": "@testkube/root",
+  "version": "0.0.0",
   "author": "Kubeshop",
   "description": "Simple dashboard for TestKube",
   "contributors": [
     "ole@kubeshop.io"
   ],
+  "publishConfig": {
+    "access": "restricted"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:kubeshop/testkube-dashboard.git"
   },
   "workspaces": [
-    "test/dashboard-e2e"
+    "packages/*"
   ],
   "engines": {
     "node": "^18.13.0 || ^20.0.0",
     "npm": ">=9.0.0"
-  },
-  "overrides": {
-    "cosmiconfig": "8.2.0",
-    "react-error-overlay": "6.0.9",
-    "minimist": "1.2.6",
-    "immer": "9.0.12"
   },
   "private": true,
   "devDependencies": {
@@ -34,20 +31,8 @@
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
-    "@types/file-saver": "^2.0.5",
     "@types/jest": "27.0.2",
-    "@types/lodash.debounce": "^4.0.7",
-    "@types/node": "17.0.12",
-    "@types/react": "18.0.9",
-    "@types/react-beautiful-dnd": "^13.1.2",
-    "@types/react-dom": "18.0.5",
-    "@types/react-gtm-module": "^2.0.1",
-    "@types/react-helmet": "^6.1.5",
-    "@types/react-router-dom": "5.3.3",
-    "@types/react-syntax-highlighter": "^15.5.5",
-    "@types/react-transition-group": "4.4.4",
-    "@types/semver": "^7.5.0",
-    "@types/styled-components": "5.1.18",
+    "@types/node": "20.8.3",
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
     "eslint-config-airbnb": "18.2.1",
@@ -58,98 +43,35 @@
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-unused-imports": "2.0.0",
-    "file-loader": "6.2.0",
     "husky": "8.0.3",
-    "less": "4.1.2",
-    "postcss-styled-syntax": "0.4.0",
     "prettier": "2.8.8",
-    "react-scripts": "5.0.1",
     "stylelint": "15.10.1",
     "stylelint-config-recommended": "11.0.0",
     "stylelint-config-standard": "31.0.0",
     "stylelint-config-styled-components": "0.1.1",
     "ts-jest": "^29.1.1",
-    "tsconfig-paths-webpack-plugin": "^4.0.1",
     "typescript": "5.0.2"
   },
-  "dependencies": {
-    "@ant-design/icons": "4.7.0",
-    "@fingerprintjs/fingerprintjs": "^3.3.5",
-    "@reduxjs/toolkit": "1.9.1",
-    "@sentry/integrations": "^7.64.0",
-    "@sentry/react": "^7.64.0",
-    "ansi-to-react": "^6.1.6",
-    "antd": "^4.24.12",
-    "axios": "0.27.2",
-    "classnames": "2.3.1",
-    "cron-parser": "^4.8.1",
-    "date-fns": "^2.28.0",
-    "file-saver": "^2.0.5",
-    "framer-motion": "^4.1.17",
-    "lodash.debounce": "^4.0.8",
-    "monaco-editor": "^0.40.0",
-    "monaco-editor-webpack-plugin": "^7.1.0",
-    "monaco-yaml": "^4.0.4",
-    "node-fetch": "^2.6.12",
-    "query-string": "7.1.1",
-    "react": "18.1.0",
-    "react-dom": "18.1.0",
-    "react-gtm-module": "^2.0.11",
-    "react-helmet": "^6.1.0",
-    "react-monaco-editor": "^0.53.0",
-    "react-redux": "8.0.1",
-    "react-router-dom": "6.3.0",
-    "react-select": "^5.4.0",
-    "react-transition-group": "4.4.2",
-    "react-use": "17.4.0",
-    "react-use-websocket": "^4.2.0",
-    "reactflow": "^11.7.4",
-    "semver": "^7.5.4",
-    "strip-ansi": "^7.0.1",
-    "styled-components": "5.3.5",
-    "zustand": "^4.4.1"
-  },
   "scripts": {
-    "start": "sh scripts/env.sh && cp env-config.js ./public/ && npm run less && NODE_OPTIONS=--openssl-legacy-provider craco start",
-    "build": "npm run less && NODE_OPTIONS=--openssl-legacy-provider PUBLIC_URL=. craco --max_old_space_size=4096 build",
-    "test": "craco test --watchAll=false",
-    "test:watch": "craco test --detectOpenHandles",
-    "test:coverage": "craco test --coverage --watchAll=false",
-    "test:update": "craco test --updateSnapshot",
-    "e2e": "npm --prefix test/dashboard-e2e test",
-    "e2e:watch": "npm --prefix test/dashboard-e2e start",
+    "start": "npm run -w @testkube/web start",
+    "build": "npm run --workspaces --if-present build",
+    "test": "npx jest",
+    "test:watch": "npx jest --watch --detectOpenHandles",
+    "test:update": "npm run -w @testkube/web test:update",
+    "e2e": "npm run -w @testkube/e2e-tests e2e",
+    "e2e:watch": "npm run -w @testkube/e2e-tests start",
     "e2e:install": "npx playwright install",
-    "eject": "react-scripts eject",
-    "lint": "npm run lint:config && npm run lint:src",
-    "lint:config": "eslint --max-warnings 0 . --cache --cache-location=node_modules/.cache/.eslint-config",
-    "lint:src": "eslint --max-warnings 0 \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache --cache-location=node_modules/.cache/.eslint-src",
-    "lintfix": "eslint --fix \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
-    "stylelint": "stylelint \"./src/**/*.{ts,tsx}\"",
-    "ts-check": "tsc --build tsconfig.check.json --force",
+    "lint": "npm run --workspaces --if-present lint",
+    "stylelint": "npm run --workspaces --if-present stylelint",
+    "format:check": "npm run --workspaces --if-present format:check",
+    "format:all": "npm run --workspaces --if-present format:all",
+    "ts-check": "npm run --workspaces --if-present ts-check",
     "precommit": "npm run format:all && npm run lint",
-    "format:check": "prettier \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache --check",
-    "format:all": "prettier --write \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache",
-    "prepare": "husky install || exit 0",
-    "release:patch": "standard-version --release-as patch",
-    "release:minor": "standard-version --release-as minor",
-    "release:major": "standard-version --release-as major",
-    "less": "lessc --js src/antd-theme/antd-customized.less src/antd-theme/antd-customized.css"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "prepare": "husky install || exit 0"
   },
   "wallaby": {
     "testFramework": {
-      "configFile": "jest.config.js"
+      "configFile": "./jest.config.js"
     }
   }
 }

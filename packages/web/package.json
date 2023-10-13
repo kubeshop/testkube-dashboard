@@ -1,0 +1,119 @@
+{
+  "name": "@testkube/web",
+  "version": "0.0.0",
+  "author": "Kubeshop",
+  "description": "Simple dashboard for TestKube",
+  "contributors": [
+    "ole@kubeshop.io"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kubeshop/testkube-dashboard.git",
+    "path": "packages/web"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "engines": {
+    "node": "^18.13.0 || ^20.0.0",
+    "npm": ">=9.0.0"
+  },
+  "overrides": {
+    "cosmiconfig": "8.2.0",
+    "react-error-overlay": "6.0.9",
+    "minimist": "1.2.6",
+    "immer": "9.0.12"
+  },
+  "private": true,
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.0",
+    "@craco/craco": "7.1.0",
+    "@sentry/webpack-plugin": "^2.6.2",
+    "@types/file-saver": "^2.0.5",
+    "@types/lodash.debounce": "^4.0.7",
+    "@types/react": "18.0.9",
+    "@types/react-beautiful-dnd": "^13.1.2",
+    "@types/react-dom": "18.0.5",
+    "@types/react-gtm-module": "^2.0.1",
+    "@types/react-helmet": "^6.1.5",
+    "@types/react-syntax-highlighter": "^15.5.5",
+    "@types/react-transition-group": "4.4.4",
+    "@types/semver": "^7.5.0",
+    "@types/styled-components": "5.1.18",
+    "file-loader": "6.2.0",
+    "less": "4.1.2",
+    "postcss-styled-syntax": "0.4.0",
+    "react-scripts": "5.0.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.1"
+  },
+  "dependencies": {
+    "@ant-design/icons": "4.7.0",
+    "@fingerprintjs/fingerprintjs": "^3.3.5",
+    "@reduxjs/toolkit": "1.9.1",
+    "@sentry/integrations": "^7.64.0",
+    "@sentry/react": "^7.64.0",
+    "ansi-to-react": "^6.1.6",
+    "antd": "^4.24.12",
+    "axios": "0.27.2",
+    "classnames": "2.3.1",
+    "cron-parser": "^4.8.1",
+    "date-fns": "^2.28.0",
+    "file-saver": "^2.0.5",
+    "framer-motion": "^4.1.17",
+    "lodash.debounce": "^4.0.8",
+    "monaco-editor": "^0.40.0",
+    "monaco-editor-webpack-plugin": "^7.1.0",
+    "monaco-yaml": "^4.0.4",
+    "node-fetch": "^2.6.12",
+    "query-string": "7.1.1",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-gtm-module": "^2.0.11",
+    "react-helmet": "^6.1.0",
+    "react-monaco-editor": "^0.53.0",
+    "react-redux": "8.0.1",
+    "react-router-dom": "6.16.0",
+    "react-select": "^5.4.0",
+    "react-transition-group": "4.4.2",
+    "react-use": "17.4.0",
+    "react-use-websocket": "^4.2.0",
+    "reactflow": "^11.7.4",
+    "semver": "^7.5.4",
+    "strip-ansi": "^7.0.1",
+    "styled-components": "5.3.5",
+    "zustand": "^4.4.1"
+  },
+  "scripts": {
+    "start": "sh scripts/env.sh public/env-config.js && npm run less && NODE_OPTIONS=--openssl-legacy-provider craco start",
+    "build": "npm run less && NODE_OPTIONS=--openssl-legacy-provider PUBLIC_URL=. craco --max_old_space_size=4096 build",
+    "test": "craco test --watchAll=false",
+    "test:watch": "craco test --detectOpenHandles",
+    "test:coverage": "craco test --coverage --watchAll=false",
+    "test:update": "craco test --updateSnapshot",
+    "lint": "npm run lint:config && npm run lint:src",
+    "lint:config": "eslint --max-warnings 0 *.js --cache --cache-location=node_modules/.cache/.eslint-config",
+    "lint:src": "eslint --max-warnings 0 \"{src,test}/**/*.{js,jsx,ts,tsx}\" --cache --cache-location=node_modules/.cache/.eslint-src",
+    "stylelint": "stylelint \"./src/**/*.{ts,tsx}\"",
+    "ts-check": "tsc --build tsconfig.check.json --force",
+    "format:check": "prettier \"./src/**/*.{js,jsx,ts,tsx}\" --cache --check",
+    "format:all": "prettier --write \"./src/**/*.{js,jsx,ts,tsx}\" --cache",
+    "less": "lessc --js src/antd-theme/antd-customized.less src/antd-theme/antd-customized.css"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "wallaby": {
+    "testFramework": {
+      "configFile": "./jest.config.js"
+    }
+  }
+}

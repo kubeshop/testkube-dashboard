@@ -1,0 +1,28 @@
+{
+  "name": "@testkube/e2e-tests",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "private": true,
+  "author": "Kubeshop",
+  "license": "ISC",
+  "scripts": {
+    "start": "playwright test --ui --debug",
+    "e2e": "playwright test",
+    "lint": "eslint --max-warnings 0 \"{fixtures,helpers,pages,tests}/**/*.{js,jsx,ts,tsx}\" --cache --cache-location=node_modules/.cache/.eslint-src",
+    "ts-check": "tsc --build tsconfig.json --force",
+    "format:check": "prettier \"./{fixtures,helpers,pages,tests}/**/*.{js,jsx,ts,tsx}\" --cache --check",
+    "format:all": "prettier --write \"./{fixtures,helpers,pages,tests}/**/*.{js,jsx,ts,tsx}\" --cache"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.32.3",
+    "@types/superagent": "^4.1.18",
+    "@types/uuid": "^9.0.2",
+    "dotenv": "16.0.3",
+    "superagent": "8.0.0",
+    "uuid": "9.0.0"
+  }
+}
