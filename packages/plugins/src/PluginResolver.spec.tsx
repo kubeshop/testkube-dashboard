@@ -253,6 +253,19 @@ describe('plugins', () => {
       );
     });
 
+    it('should not detect missing data or slots for outer modules', () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+      const plugins = [
+        p('name0', 500, $ => $.outer(d('value1', 'value2'))),
+        p('name1', 0, $ => $.outer(s('slot1', 'slot3'))),
+      ];
+      const resolver = create(plugins);
+      resolver.resolve();
+
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
     it('should detect circular dependencies', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
