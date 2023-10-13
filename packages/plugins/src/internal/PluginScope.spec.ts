@@ -47,35 +47,53 @@ describe('plugins', () => {
     it('should make inherited slots accessible', () => {
       const parent = create({slots: ['slot1', 'slot2']});
       const child = create({inheritedSlots: ['slot1', 'slot2']}, parent);
+
+      parent.slots.slot1?.add('value1');
+      child.slots.slot1?.add('value1');
+
       expect(Object.keys(child.slots)).toEqual(['slot1', 'slot2']);
-      expect(child.slots.slot1).toBe(parent.slots.slot1);
-      expect(child.slots.slot2).toBe(parent.slots.slot2);
+      expect(child.slots.slot1?.all()).toEqual(parent.slots.slot1?.all());
+      expect(child.slots.slot2?.all()).toEqual(parent.slots.slot2?.all());
     });
 
     it('should make inherited slots accessible few levels down', () => {
       const root = create({slots: ['slot1']});
       const parent = create({inheritedSlots: ['slot1']}, root);
       const child = create({inheritedSlots: ['slot1']}, parent);
+
+      root.slots.slot1?.add('value1');
+      parent.slots.slot1?.add('value2');
+      child.slots.slot1?.add('value3');
+
       expect(Object.keys(parent.slots)).toEqual(['slot1']);
       expect(Object.keys(child.slots)).toEqual(['slot1']);
-      expect(child.slots.slot1).toBe(root.slots.slot1);
+      expect(child.slots.slot1?.all()).toEqual(root.slots.slot1?.all());
     });
 
     it('should make outer slots accessible', () => {
       const parent = create({slots: ['slot1', 'slot2']});
       const child = create({outerSlots: ['slot1', 'slot2']}, parent);
+
+      parent.slots.slot1?.add('value2');
+      child.slots.slot1?.add('value3');
+
       expect(Object.keys(child.slots)).toEqual(['slot1', 'slot2']);
-      expect(child.slots.slot1).toBe(parent.slots.slot1);
-      expect(child.slots.slot2).toBe(parent.slots.slot2);
+      expect(child.slots.slot1?.all()).toEqual(parent.slots.slot1?.all());
+      expect(child.slots.slot2?.all()).toEqual(parent.slots.slot2?.all());
     });
 
     it('should make outer slots accessible few levels down', () => {
       const root = create({slots: ['slot1']});
       const parent = create({outerSlots: ['slot1']}, root);
       const child = create({outerSlots: ['slot1']}, parent);
+
+      root.slots.slot1?.add('value1');
+      parent.slots.slot1?.add('value2');
+      child.slots.slot1?.add('value3');
+
       expect(Object.keys(parent.slots)).toEqual(['slot1']);
       expect(Object.keys(child.slots)).toEqual(['slot1']);
-      expect(child.slots.slot1).toBe(root.slots.slot1);
+      expect(child.slots.slot1?.all()).toEqual(root.slots.slot1?.all());
     });
 
     it('should allow accessing parent slots even if not specified (optional)', () => {
@@ -160,10 +178,19 @@ describe('plugins', () => {
 
       child.data.key1 = 'own';
 
+      root.slots.slot1?.add('slot1');
+      root.slots.slot2?.add('slot2');
+      root.slots.slot3?.add('slot3');
+      root.slots.slot4?.add('slot4');
+
+      child.slots.slot1?.add('cslot1');
+      child.slots.slot2?.add('cslot2');
+      child.slots.slot3?.add('cslot3');
+
       expect(Object.keys(child.slots)).toEqual(['slot1', 'slot2', 'slot3', 'slotUnknown']);
-      expect(child.slots.slot1).toBe(root.slots.slot1);
-      expect(child.slots.slot2).toBe(root.slots.slot2);
-      expect(child.slots.slot3).toBe(root.slots.slot3);
+      expect(child.slots.slot1.all()).toEqual(root.slots.slot1!.all());
+      expect(child.slots.slot2.all()).toEqual(root.slots.slot2!.all());
+      expect(child.slots.slot3!.all()).toEqual(root.slots.slot3!.all());
       expect(child.slots.slotUnknown).toBe(undefined);
 
       expect(Object.keys(child.data)).toEqual(['key1', 'key2', 'key3']);

@@ -2,9 +2,11 @@ import type {GetPluginState, Plugin} from './Plugin';
 import {PluginSlot} from './PluginSlot';
 import {
   PluginDetails,
+  PluginScopeAttachProducer,
   PluginScopeCallSync,
   PluginScopeChildrenScope,
   PluginScopeData,
+  PluginScopeDestroy,
   PluginScopeDisableNewSync,
   PluginScopeDisableNewSyncStatus,
   PluginScopeParentScope,
@@ -71,12 +73,12 @@ export class PluginScope<T extends PluginScopeState> {
 
     const slots: any = {};
     config.slots.forEach(key => {
-      slots[key] = new PluginSlot(key as string, this[PluginScopeSlotData]);
+      slots[key] = new PluginSlot(key as string, this[PluginScopeSlotData])[PluginScopeAttachProducer](this);
     });
     config.inheritedSlots.concat(config.outerSlots).forEach(key => {
       Object.defineProperty(slots, key, {
         enumerable: true,
-        get: () => this[PluginScopeParentScope]?.slots[key],
+        get: () => this[PluginScopeParentScope]?.slots[key]?.[PluginScopeAttachProducer](this),
       });
     });
     this.slots = slots;
@@ -95,6 +97,17 @@ export class PluginScope<T extends PluginScopeState> {
 
   public [PluginScopeDisableNewSync](): void {
     this[PluginScopeDisableNewSyncStatus] = true;
+  }
+
+  /**
+   * Destroy slot data produced through this scope.
+   */
+  public destroy(): void {
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+    for (let key in this.slots) {
+      this.slots[key]?.[PluginScopeDestroy](this);
+    }
+    Array.from(this[PluginScopeChildrenScope].values()).forEach(child => child.destroy());
   }
 
   /**

@@ -5,7 +5,8 @@ describe('plugins', () => {
     it('should correctly order added elements', () => {
       const storage: any = {};
       const slot = new PluginSlot('key1', storage);
-      slot.add('item500', {order: 500, enabled: () => true});
+      const alwaysTrue = () => true;
+      slot.add('item500', {order: 500, enabled: alwaysTrue});
       slot.add('item0');
       slot.add('item-300', {order: -300});
       slot.add('item-Infinity', {order: -Infinity, enabled: false});
@@ -15,7 +16,7 @@ describe('plugins', () => {
         {value: 'item-Infinity', metadata: {order: -Infinity, enabled: false}},
         {value: 'item-300', metadata: {order: -300}},
         {value: 'item0', metadata: {order: 0}},
-        {value: 'item500', metadata: {order: 500, enabled: expect.any(Function)}},
+        {value: 'item500', metadata: {order: 500, enabled: alwaysTrue}},
         {value: 'itemInfinity', metadata: {order: Infinity}},
       ]);
     });

@@ -444,9 +444,7 @@ describe('plugins', () => {
     });
   });
 
-  // TODO: Handle destroying of lower scope,
-  //       with deletion of its slots updates to the outer scope.
-  xit('should be able to destroy items of the lower scope in the root scope', () => {
+  it('should be able to clear items of the lower scope in the root scope', () => {
     // Prepare root scope
     const rootPlugin = createPlugin('root')
       .data({rootKey: 'rootValue', key1: 'value1'})
@@ -465,7 +463,6 @@ describe('plugins', () => {
       .outer(rootStub.data('rootKey'))
       .outer(rootStub.slots('rootSlot'))
       .data({key1: 'value2'})
-      .define(data<() => void>()('hook'))
       .define(slot<string>()('slot1'))
       .init(tk => {
         tk.slots.rootSlot!.add('lowerRootSlotItem1');
@@ -474,12 +471,14 @@ describe('plugins', () => {
     const [LowerProvider, {initialize: initializeLower}] = new PluginResolver().register(lowerPlugin).resolve();
     const lowerScope = initializeLower(rootScope);
 
-    // TODO: Consider if we allow that at all
-    lowerScope.data.hook();
+    lowerScope.slots.rootSlot?.add('dynamicItemForDeletion');
+    rootScope.slots.rootSlot.add('dynamicItemToPreserve');
 
-    // lowerScope[PluginScopeDestroy]();
+    lowerScope.destroy();
 
-    expect(rootScope.slots.rootSlot?.all()).toEqual(['rootRootSlotItem1']);
+    expect(rootScope.slots.rootSlot?.all()).toEqual(['rootRootSlotItem1', 'dynamicItemToPreserve']);
+    expect(lowerScope.slots.rootSlot?.all()).toEqual(['rootRootSlotItem1', 'dynamicItemToPreserve']);
     expect(rootScope.slots.slot1?.all()).toEqual(['rootSlot1Item1']);
+    expect(lowerScope.slots.slot1.all()).toEqual([]);
   });
 });

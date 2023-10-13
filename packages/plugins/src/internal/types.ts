@@ -1,6 +1,7 @@
 import type {ReactElement} from 'react';
 
 import type {PluginSlot} from './PluginSlot';
+import {PluginScopeProducer} from './symbols';
 
 export interface PluginRouteMetadata {
   readonly order?: number;
@@ -14,6 +15,7 @@ export interface PluginSlotMetadata {
 export interface PluginSlotContainer<T> {
   value: T;
   metadata: PluginSlotMetadata;
+  readonly [PluginScopeProducer]?: any;
 }
 
 export interface PluginRoute {
