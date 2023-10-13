@@ -32,7 +32,7 @@
     "test": "jest",
     "lint": "eslint --max-warnings 0 \"*.{js,jsx,ts,tsx}\" \"src/**/*.{js,jsx,ts,tsx}\" --cache",
     "stylelint": "stylelint \"*.{js,jsx,ts,tsx}\" \"./src/**/*.{ts,tsx}\"",
-    "ts-check": "tsc --build tsconfig.check.json --force",
+    "ts-check": "tsc --build",
     "format:check": "prettier \"*.{js,jsx,ts,tsx}\" \"./src/**/*.{js,jsx,ts,tsx}\" --cache --check",
     "format:all": "prettier --write \"*.{js,jsx,ts,tsx}\" \"./src/**/*.{js,jsx,ts,tsx}\" --cache"
   },
