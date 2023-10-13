@@ -256,5 +256,27 @@ describe('plugins', () => {
         new Error('The sync() factory may be executed only during initialization.')
       );
     });
+
+    it('should allow destroying items produced by specific scope or its children', () => {
+      const root = create({slots: ['slot1']});
+      const separate = create({inheritedSlots: ['slot1']}, root);
+      const parent = create({slots: ['slot2'], inheritedSlots: ['slot1']}, root);
+      const detachedChild = create({inheritedSlots: ['slot1', 'slot2']}, parent);
+      const child = parent.children(createPlugin('test').needs(slot()('slot1')).needs(slot()('slot2')).init());
+
+      root.slots.slot1?.add('root');
+      separate.slots.slot1?.add('separate');
+      parent.slots.slot1?.add('parent');
+      detachedChild.slots.slot1?.add('detachedChild');
+      child.slots.slot1?.add('child');
+      parent.slots.slot2?.add('parent');
+      detachedChild.slots.slot2?.add('detachedChild');
+      child.slots.slot2?.add('child');
+
+      parent.destroy();
+
+      expect(root.slots.slot1?.all()).toEqual(['root', 'separate', 'detachedChild']);
+      expect(parent.slots.slot2?.all()).toEqual(['detachedChild']);
+    });
   });
 });
