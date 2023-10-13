@@ -6,6 +6,7 @@ import type {
   AppendData,
   AppendRoute,
   JoinExternalState,
+  JoinOuterState,
   JoinState,
   PluginDetails,
   PluginProvider,
@@ -97,6 +98,20 @@ export class PluginBuilder<T extends PluginState> {
   }
 
   /**
+   * Declare using data and slots from the plugin of outer scope.
+   *
+   * That won't trigger warnings neither when plugin not found,
+   * nor when it is declared above the current plugin system context.
+   */
+  public outer<U extends PluginState>(state: U): PluginBuilder<JoinOuterState<T, U>> {
+    return new PluginBuilder<JoinOuterState<T, U>>({
+      ...this.plugin,
+      outerSlots: {...this.plugin.outerSlots, ...state.slots},
+      outerData: {...this.plugin.outerData, ...state.data},
+    });
+  }
+
+  /**
    * Initialize the plugin.
    * Mark as complete and integrate.
    */
@@ -106,6 +121,8 @@ export class PluginBuilder<T extends PluginState> {
     data: {[K in keyof T['data']]: T['data'][K]};
     externalSlots: {[K in keyof T['externalSlots']]: T['externalSlots'][K]};
     externalData: {[K in keyof T['externalData']]: T['externalData'][K]};
+    outerSlots: {[K in keyof T['outerSlots']]: T['outerSlots'][K]};
+    outerData: {[K in keyof T['outerData']]: T['outerData'][K]};
   }> {
     return new Plugin(this.plugin, fn) as any;
   }

@@ -5,6 +5,8 @@ import {pick} from './internal/utils';
 const empty: EmptyPluginState = {
   externalSlots: {},
   externalData: {},
+  outerSlots: {},
+  outerData: {},
   data: {},
   slots: {},
   urls: {},

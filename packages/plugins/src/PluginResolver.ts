@@ -10,8 +10,13 @@ import {detectResources} from './internal/detectResources';
 import {PluginDetails, PluginInit, PluginScopeDisableNewSync} from './internal/symbols';
 import type {
   AppendData,
+  AppendOuterData,
+  AppendOuterSlots,
   AppendSlots,
+  EmptyPluginState,
   GetData,
+  GetOuterData,
+  GetOuterSlots,
   GetSlots,
   PluginProvider,
   PluginRoute,
@@ -21,16 +26,26 @@ import type {
 
 interface ResolvedPlugins<T extends PluginState> {
   routes: PluginRoute[];
-  initialize: () => PluginScope<PluginScopeStateFor<T>>; // TODO: Consider passing there the parent scope
+  initialize: (
+    parent?: PluginScope<any> | null
+  ) => PluginScope<{[K in keyof PluginScopeStateFor<T>]: PluginScopeStateFor<T>[K]}>;
 }
 
-export class PluginResolver<T extends PluginState> {
+export class PluginResolver<T extends PluginState = EmptyPluginState> {
   private plugins: Plugin<any>[] = [];
 
   // TODO: Allow passing plugin configuration
   public register<U extends Plugin<any>>(
     plugin: U
-  ): PluginResolver<AppendData<AppendSlots<T, GetSlots<GetPluginState<U>>>, GetData<GetPluginState<U>>>> {
+  ): PluginResolver<
+    AppendOuterSlots<
+      AppendOuterData<
+        AppendData<AppendSlots<T, GetSlots<GetPluginState<U>>>, GetData<GetPluginState<U>>>,
+        GetOuterData<GetPluginState<U>>
+      >,
+      GetOuterSlots<GetPluginState<U>>
+    >
+  > {
     if (this.plugins.includes(plugin)) {
       // eslint-disable-next-line no-console
       console.warn(`The "${plugin[PluginDetails].name}" plugin is already registered.`);
@@ -62,26 +77,22 @@ export class PluginResolver<T extends PluginState> {
     };
 
     // Detect sources of different resources
-    const {slots: slotSource, data: dataSource} = detectResources(this.plugins);
+    const {slots: slotSource, data: dataSource, outerData, outerSlots} = detectResources(this.plugins);
 
     // Detect direct dependencies for each plugin
     const {hard: deps, loose: looseDeps} = detectDirectDependencies(this.plugins);
 
     // Detect missing and duplicated slots & data
-    // TODO: Regarding messages below - maybe the resource could be treat as optional,
-    //       when it is both declared and external?
     this.plugins.forEach(plugin => {
       const config = plugin[PluginDetails];
       Object.keys(config.externalData)
         .filter(name => !dataSource[name])
         .forEach(name => {
-          // TODO: Consider if that should be error. Maybe `optionalData` would be helpful?
           warnings.push(`${config.name}: required "${name}" data is not registered.`);
         });
       Object.keys(config.externalSlots)
         .filter(name => !slotSource[name])
         .forEach(name => {
-          // TODO: Consider if that should be error. Maybe `optionalSlots` would be helpful?
           warnings.push(`${config.name}: required "${name}" slot is not registered.`);
         });
       Object.keys(config.data)
@@ -130,13 +141,14 @@ export class PluginResolver<T extends PluginState> {
       console.warn(`Detected problems with plugins:\n${warnings.join('\n')}`);
     }
 
-    const initialize = () => {
-      const root: RootScopeType = new PluginScope(null, {
+    const initialize = (parent: PluginScope<any> | null = null) => {
+      const root: RootScopeType = new PluginScope(parent, {
         slots: Object.keys(slotSource) as any,
         data: Object.keys(dataSource) as any,
         inheritedData: [],
-        inheritedSlots: [],
-        inheritedReadonlyData: [],
+        inheritedSlots: outerSlots,
+        outerSlots: [],
+        inheritedReadonlyData: outerData,
       });
       Object.keys(initialData).forEach((key: keyof RootScopeType['data']) => {
         root.data[key] = initialData[key]!;

@@ -7,6 +7,8 @@ import {PluginState} from './types';
 const emptyState = {
   externalSlots: {},
   externalData: {},
+  outerSlots: {},
+  outerData: {},
   data: {},
   slots: {},
   urls: {},

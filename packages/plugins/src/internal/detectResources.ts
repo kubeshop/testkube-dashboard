@@ -4,11 +4,15 @@ import {PluginDetails} from './symbols';
 export interface PluginResourcesMapping {
   slots: Record<string, Plugin<any>[]>;
   data: Record<string, Plugin<any>[]>;
+  outerSlots: string[];
+  outerData: string[];
 }
 
 export const detectResources = (plugins: Plugin<any>[]): PluginResourcesMapping => {
   const slots: Record<string, Plugin<any>[]> = {};
   const data: Record<string, Plugin<any>[]> = {};
+  const outerSlots: string[] = [];
+  const outerData: string[] = [];
 
   plugins.forEach(plugin => {
     Object.keys(plugin[PluginDetails].slots).forEach(key => {
@@ -21,5 +25,18 @@ export const detectResources = (plugins: Plugin<any>[]): PluginResourcesMapping 
     });
   });
 
-  return {slots, data};
+  plugins.forEach(plugin => {
+    Object.keys(plugin[PluginDetails].outerSlots).forEach(key => {
+      if (!slots[key] && !outerSlots.includes(key)) {
+        outerSlots.push(key);
+      }
+    });
+    Object.keys(plugin[PluginDetails].outerData).forEach(key => {
+      if (!data[key] && !outerData.includes(key)) {
+        outerData.push(key);
+      }
+    });
+  });
+
+  return {slots, data, outerSlots, outerData};
 };

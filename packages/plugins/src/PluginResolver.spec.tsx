@@ -20,6 +20,8 @@ import {data, external, slot} from './utils';
 const emptyState = {
   externalSlots: {},
   externalData: {},
+  outerSlots: {},
+  outerData: {},
   data: {},
   slots: {},
   urls: {},
@@ -33,7 +35,7 @@ const s = (...names: string[]): PluginState =>
 const r = (name: string) => <div data-testid={`route-${name}`} />;
 
 const create = (plugins: Plugin<any>[]) =>
-  plugins.reduce((resolver, plugin) => resolver.register(plugin), new PluginResolver());
+  plugins.reduce((resolver, plugin) => resolver.register(plugin), new PluginResolver<PluginState>());
 const p = (
   name: string,
   order: number = 0,
@@ -150,6 +152,35 @@ describe('plugins', () => {
         {path: '/test/name1', element: r('name1'), metadata: {}},
       ]);
       expect(domOrderFor('p-', result.container)).toEqual(['name2', 'name0', 'name3', 'name4', 'name1']);
+    });
+
+    it('should correctly order registered plugins (based on dependencies, ignoring optional)', () => {
+      jest.spyOn(console, 'warn').mockImplementation();
+
+      const plugins = [
+        p('name3', 500),
+        p('name2', 0, $ => $.define(d('value'))),
+        p('name1', -300, $ => $.needs(s('slot'))),
+        p('name0', -Infinity, $ => $.outer(d('value'))),
+        p('name4', Infinity, $ => $.define(s('slot'))),
+      ];
+      const resolver = create(plugins);
+      const [Provider, {routes, initialize}] = resolver.resolve();
+      const scope = initialize();
+      const result = render(
+        <Provider root={scope}>
+          <div data-testid="inner" />
+        </Provider>
+      );
+
+      expect(routes).toEqual([
+        {path: '/test/name0', element: r('name0'), metadata: {}},
+        {path: '/test/name2', element: r('name2'), metadata: {}},
+        {path: '/test/name3', element: r('name3'), metadata: {}},
+        {path: '/test/name4', element: r('name4'), metadata: {}},
+        {path: '/test/name1', element: r('name1'), metadata: {}},
+      ]);
+      expect(domOrderFor('p-', result.container)).toEqual(['name0', 'name2', 'name3', 'name4', 'name1']);
     });
 
     it('should try to order plugins with circular dependencies anyway', () => {
@@ -362,6 +393,82 @@ describe('plugins', () => {
       expect(scope.slots.slot.all()).toEqual(['one', 'two']);
     });
 
-    xit('should support nested root scopes', () => {});
+    it('should support nested root scopes', () => {
+      // Prepare root scope
+      const rootPlugin = createPlugin('root')
+        .data({rootKey: 'rootValue', key1: 'value1'})
+        .define(slot<string>()('rootSlot'))
+        .define(slot<string>()('slot1'))
+        .init(tk => {
+          tk.slots.rootSlot.add('rootRootSlotItem1');
+          tk.slots.slot1.add('rootSlot1Item1');
+        });
+      const [RootProvider, {initialize: initializeRoot}] = new PluginResolver().register(rootPlugin).resolve();
+      const rootScope = initializeRoot();
+      const rootStub = external<typeof rootPlugin>();
+
+      // Prepare lower scope
+      const lowerPlugin = createPlugin('lower')
+        .outer(rootStub.data('rootKey'))
+        .outer(rootStub.slots('rootSlot'))
+        .data({key1: 'value2'})
+        .define(slot<string>()('slot1'))
+        .init(tk => {
+          tk.slots.rootSlot!.add('lowerRootSlotItem1');
+          tk.slots.slot1.add('lowerSlot1Item1');
+        });
+      const [LowerProvider, {initialize: initializeLower}] = new PluginResolver().register(lowerPlugin).resolve();
+      const lowerScope = initializeLower(rootScope);
+
+      expect(lowerScope.slots.rootSlot?.all()).toEqual(['rootRootSlotItem1', 'lowerRootSlotItem1']);
+      expect(rootScope.slots.rootSlot?.all()).toEqual(['rootRootSlotItem1', 'lowerRootSlotItem1']);
+      expect(lowerScope.slots.slot1?.all()).toEqual(['lowerSlot1Item1']);
+      expect(rootScope.slots.slot1?.all()).toEqual(['rootSlot1Item1']);
+      expect(lowerScope.data.rootKey).toEqual('rootValue');
+      expect(rootScope.data.rootKey).toEqual('rootValue');
+      expect(lowerScope.data.key1).toEqual('value2');
+      expect(rootScope.data.key1).toEqual('value1');
+    });
+  });
+
+  // TODO: Handle destroying of lower scope,
+  //       with deletion of its slots updates to the outer scope.
+  xit('should be able to destroy items of the lower scope in the root scope', () => {
+    // Prepare root scope
+    const rootPlugin = createPlugin('root')
+      .data({rootKey: 'rootValue', key1: 'value1'})
+      .define(slot<string>()('rootSlot'))
+      .define(slot<string>()('slot1'))
+      .init(tk => {
+        tk.slots.rootSlot.add('rootRootSlotItem1');
+        tk.slots.slot1.add('rootSlot1Item1');
+      });
+    const [RootProvider, {initialize: initializeRoot}] = new PluginResolver().register(rootPlugin).resolve();
+    const rootScope = initializeRoot();
+    const rootStub = external<typeof rootPlugin>();
+
+    // Prepare lower scope
+    const lowerPlugin = createPlugin('lower')
+      .outer(rootStub.data('rootKey'))
+      .outer(rootStub.slots('rootSlot'))
+      .data({key1: 'value2'})
+      .define(data<() => void>()('hook'))
+      .define(slot<string>()('slot1'))
+      .init(tk => {
+        tk.slots.rootSlot!.add('lowerRootSlotItem1');
+        tk.slots.slot1.add('lowerSlot1Item1');
+        // TODO: Consider if we allow that at all
+        tk.data.hook = () => tk.slots.rootSlot!.add('dynamic slot alignment');
+      });
+    const [LowerProvider, {initialize: initializeLower}] = new PluginResolver().register(lowerPlugin).resolve();
+    const lowerScope = initializeLower(rootScope);
+
+    // TODO: Consider if we allow that at all
+    lowerScope.data.hook();
+
+    // lowerScope[PluginScopeDestroy]();
+
+    expect(rootScope.slots.rootSlot?.all()).toEqual(['rootRootSlotItem1']);
+    expect(rootScope.slots.slot1?.all()).toEqual(['rootSlot1Item1']);
   });
 });

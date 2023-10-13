@@ -73,7 +73,7 @@ export class PluginScope<T extends PluginScopeState> {
     config.slots.forEach(key => {
       slots[key] = new PluginSlot(key as string, this[PluginScopeSlotData]);
     });
-    config.inheritedSlots.forEach(key => {
+    config.inheritedSlots.concat(config.outerSlots).forEach(key => {
       Object.defineProperty(slots, key, {
         enumerable: true,
         get: () => this[PluginScopeParentScope]?.slots[key],
@@ -117,8 +117,11 @@ export class PluginScope<T extends PluginScopeState> {
       data: [],
       slots: [],
       inheritedSlots: Object.keys(plugin[PluginDetails].slots).concat(Object.keys(plugin[PluginDetails].externalSlots)),
+      outerSlots: Object.keys(plugin[PluginDetails].outerSlots),
       inheritedData: Object.keys(plugin[PluginDetails].data),
-      inheritedReadonlyData: Object.keys(plugin[PluginDetails].externalData),
+      inheritedReadonlyData: Object.keys(plugin[PluginDetails].externalData).concat(
+        Object.keys(plugin[PluginDetails].outerData)
+      ),
     });
     this[PluginScopeChildrenScope].set(plugin, scope);
     return scope;

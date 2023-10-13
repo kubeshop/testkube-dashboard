@@ -17,6 +17,8 @@ const empty = () =>
     data: {},
     externalData: {},
     externalSlots: {},
+    outerData: {},
+    outerSlots: {},
     urls: {},
     routes: [],
     providers: [],
@@ -141,12 +143,19 @@ describe('plugins', () => {
     it('should not lose track of any assigned props', () => {
       const Provider: FC<PropsWithChildren<{value: string}>> = () => <div />;
       const element = <div />;
-      const parent = create().data({key1: 'value1'}).define(slot()('slot1')).init();
+      const parent = create()
+        .data({key1: 'value1'})
+        .data({key3: 'value3'})
+        .define(slot()('slot1'))
+        .define(slot()('slot3'))
+        .init();
       const stub = external<typeof parent>();
       const plugin = create()
         .order(500)
         .needs(stub.data('key1'))
         .needs(stub.slots('slot1'))
+        .outer(stub.data('key3'))
+        .outer(stub.slots('slot3'))
         .define(slot()('slot2'))
         .define(data()('data2'))
         .data({data3: 'value'})
@@ -159,6 +168,8 @@ describe('plugins', () => {
         order: 500,
         externalData: {key1: undefined},
         externalSlots: {slot1: undefined},
+        outerData: {key3: undefined},
+        outerSlots: {slot3: undefined},
         data: {data2: undefined, data3: 'value'},
         slots: {slot2: undefined},
         urls: {'/path1': true},
@@ -167,6 +178,8 @@ describe('plugins', () => {
       });
       expect(Object.keys(readDetails(plugin).externalData)).toEqual(['key1']);
       expect(Object.keys(readDetails(plugin).externalSlots)).toEqual(['slot1']);
+      expect(Object.keys(readDetails(plugin).outerData)).toEqual(['key3']);
+      expect(Object.keys(readDetails(plugin).outerSlots)).toEqual(['slot3']);
       expect(Object.keys(readDetails(plugin).data)).toEqual(['data2', 'data3']);
       expect(Object.keys(readDetails(plugin).slots)).toEqual(['slot2']);
     });

@@ -16,6 +16,8 @@ describe('plugins', () => {
         slots: {},
         externalData: {},
         externalSlots: {},
+        outerData: {},
+        outerSlots: {},
         urls: {},
         routes: [],
         providers: [],

@@ -12,6 +12,8 @@ export const createPlugin = (name: string, version: string | null = null) =>
 
     externalData: {},
     externalSlots: {},
+    outerData: {},
+    outerSlots: {},
     data: {},
     slots: {},
     urls: {},

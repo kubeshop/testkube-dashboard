@@ -13,6 +13,7 @@ const create = (config: Partial<PluginScopeConfig<any>>, parent: PluginScope<any
     inheritedData: [],
     inheritedSlots: [],
     inheritedReadonlyData: [],
+    outerSlots: [],
     ...config,
   });
 
@@ -30,7 +31,17 @@ describe('plugins', () => {
     });
 
     it('should not create slots for inherited slots', () => {
-      expect(create({inheritedSlots: ['slot1', 'slot2']}).slots).toEqual({});
+      expect(create({inheritedSlots: ['slot1', 'slot2']}).slots).toEqual({
+        slot1: undefined,
+        slot2: undefined,
+      });
+    });
+
+    it('should not create slots for inherited slots', () => {
+      expect(create({outerSlots: ['slot1', 'slot2']}).slots).toEqual({
+        slot1: undefined,
+        slot2: undefined,
+      });
     });
 
     it('should make inherited slots accessible', () => {
@@ -45,6 +56,23 @@ describe('plugins', () => {
       const root = create({slots: ['slot1']});
       const parent = create({inheritedSlots: ['slot1']}, root);
       const child = create({inheritedSlots: ['slot1']}, parent);
+      expect(Object.keys(parent.slots)).toEqual(['slot1']);
+      expect(Object.keys(child.slots)).toEqual(['slot1']);
+      expect(child.slots.slot1).toBe(root.slots.slot1);
+    });
+
+    it('should make outer slots accessible', () => {
+      const parent = create({slots: ['slot1', 'slot2']});
+      const child = create({outerSlots: ['slot1', 'slot2']}, parent);
+      expect(Object.keys(child.slots)).toEqual(['slot1', 'slot2']);
+      expect(child.slots.slot1).toBe(parent.slots.slot1);
+      expect(child.slots.slot2).toBe(parent.slots.slot2);
+    });
+
+    it('should make outer slots accessible few levels down', () => {
+      const root = create({slots: ['slot1']});
+      const parent = create({outerSlots: ['slot1']}, root);
+      const child = create({outerSlots: ['slot1']}, parent);
       expect(Object.keys(parent.slots)).toEqual(['slot1']);
       expect(Object.keys(child.slots)).toEqual(['slot1']);
       expect(child.slots.slot1).toBe(root.slots.slot1);
@@ -119,27 +147,37 @@ describe('plugins', () => {
         .needs(slot<string>()('slot2'))
         .define(data<string>()('key1'))
         .needs(data<string>()('key2'))
+        .outer(data<string>()('key3'))
+        .outer(slot<string>()('slot3'))
+        .outer(slot<string>()('slotUnknown'))
         .init();
-      const root = create({slots: ['slot1', 'slot2', 'slot3'], data: ['key1', 'key2', 'key3']});
+      const root = create({slots: ['slot1', 'slot2', 'slot3', 'slot4'], data: ['key1', 'key2', 'key3', 'key4']});
       root.data.key1 = 'value1';
       root.data.key2 = 'value2';
+      root.data.key3 = 'value3';
       const child = root.children(plugin);
       root.data.key2 = 'next';
 
       child.data.key1 = 'own';
 
-      expect(Object.keys(child.slots)).toEqual(['slot1', 'slot2']);
+      expect(Object.keys(child.slots)).toEqual(['slot1', 'slot2', 'slot3', 'slotUnknown']);
       expect(child.slots.slot1).toBe(root.slots.slot1);
       expect(child.slots.slot2).toBe(root.slots.slot2);
+      expect(child.slots.slot3).toBe(root.slots.slot3);
+      expect(child.slots.slotUnknown).toBe(undefined);
 
-      expect(Object.keys(child.data)).toEqual(['key1', 'key2']);
+      expect(Object.keys(child.data)).toEqual(['key1', 'key2', 'key3']);
       expect(child.data.key1).toBe('own');
       expect(child.data.key1).toBe(root.data.key1);
       expect(child.data.key2).toBe(root.data.key2);
       expect(() => {
-        child.data.key2 = 'abc';
+        (child.data as any).key2 = 'abc';
       }).toThrow(new Error('The "key2" value is read-only.'));
       expect(child.data.key2).toBe(root.data.key2);
+      expect(() => {
+        (child.data as any).key3 = 'abc';
+      }).toThrow(new Error('The "key3" value is read-only.'));
+      expect(child.data.key3).toBe(root.data.key3);
     });
 
     it('should keep children scope for plugin in parent scope', () => {
