@@ -1,13 +1,13 @@
 import {useContext} from 'react';
 
-import type {LimitedPluginScope} from './internal/LimitedPluginScope';
+import type {LocalPluginScope} from './internal/LocalPluginScope';
 import type {GetPluginState, Plugin} from './internal/Plugin';
 import {PluginRootContext} from './internal/PluginRootScopeProvider';
 import type {GetSlots} from './internal/types';
 
 export const createUseData =
   <T extends Plugin<any>>() =>
-  (): LimitedPluginScope<GetPluginState<T>>['data'] =>
+  (): LocalPluginScope<GetPluginState<T>>['data'] =>
     useContext(PluginRootContext).root.data;
 export const createUseSlot =
   <T extends Plugin<any>>() =>

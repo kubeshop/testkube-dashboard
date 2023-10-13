@@ -1,4 +1,4 @@
-import {LimitedPluginScope} from './LimitedPluginScope';
+import {LocalPluginScope} from './LocalPluginScope';
 import {PluginSlot} from './PluginSlot';
 import {PluginScopeCallSync} from './symbols';
 import {PluginScope, PluginScopeConfig} from './types';
@@ -25,11 +25,11 @@ const createConfig = (config: Partial<PluginScopeConfig<any>>): PluginScopeConfi
 });
 
 describe('plugins', () => {
-  describe('LimitedPluginScope', () => {
+  describe('LocalPluginScope', () => {
     it('should correctly expose getters for internal data', () => {
       const root = createScope({data: {value: 'abc', value2: 'def'}});
       const config = createConfig({data: ['value']});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       root.data.value = 'xyz';
       expect(scope.data.value).toEqual('xyz');
       expect(scope.data.value2).toBe(undefined);
@@ -39,7 +39,7 @@ describe('plugins', () => {
     it('should correctly expose setters for internal data', () => {
       const root = createScope({data: {value: 'abc', value2: 'def'}});
       const config = createConfig({data: ['value']});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       scope.data.value = 'xyz';
       scope.data.value2 = 'abrakadabra';
       expect(root.data.value).toEqual('xyz');
@@ -50,7 +50,7 @@ describe('plugins', () => {
     it('should correctly expose getters for external data', () => {
       const root = createScope({data: {value: 'abc', value2: 'def'}});
       const config = createConfig({externalData: ['value']});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       root.data.value = 'xyz';
       expect(scope.data.value).toEqual('xyz');
       expect(scope.data.value2).toBe(undefined);
@@ -60,7 +60,7 @@ describe('plugins', () => {
     it('should correctly block setters for external data', () => {
       const root = createScope({data: {value: 'abc', value2: 'def'}});
       const config = createConfig({externalData: ['value']});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       expect(() => {
         scope.data.value = 'xyz';
       }).toThrow();
@@ -70,7 +70,7 @@ describe('plugins', () => {
     it('should correctly expose slots for internal data', () => {
       const root = createScope({slots: {slot1: createSlot('slot1'), slot2: createSlot('slot2')}});
       const config = createConfig({slots: ['slot1']});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       expect(scope.slots.slot1).toBe(root.slots.slot1);
       expect(scope.slots.slot2).toBe(undefined);
       expect(scope.slots).not.toHaveProperty('slot2');
@@ -79,7 +79,7 @@ describe('plugins', () => {
     it('should correctly expose slots for external data', () => {
       const root = createScope({slots: {slot1: createSlot('slot1'), slot2: createSlot('slot2')}});
       const config = createConfig({externalSlots: ['slot1']});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       expect(scope.slots.slot1).toBe(root.slots.slot1);
       expect(scope.slots.slot2).toBe(undefined);
       expect(scope.slots).not.toHaveProperty('slot2');
@@ -88,7 +88,7 @@ describe('plugins', () => {
     it('should return default value before synchronization', () => {
       const root = createScope({});
       const config = createConfig({});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       const fn1 = jest.fn(() => Math.random());
       const fn2 = jest.fn(() => Math.random());
       const fnSync1 = scope.sync(fn1);
@@ -102,7 +102,7 @@ describe('plugins', () => {
     it('should return cached value after synchronization', () => {
       const root = createScope({});
       const config = createConfig({});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       const fn1 = jest.fn(() => Math.random());
       const fn2 = jest.fn(() => Math.random());
       const fnSync1 = scope.sync(fn1);
@@ -117,7 +117,7 @@ describe('plugins', () => {
     it('should replace value after multiple synchronizations', () => {
       const root = createScope({});
       const config = createConfig({});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       const fn = jest.fn(() => Math.random());
       const fnSync = scope.sync(fn);
       scope[PluginScopeCallSync]();
@@ -129,7 +129,7 @@ describe('plugins', () => {
     it('should not copy root scope storages', () => {
       const root = createScope({data: {value1: 123}, slots: {slot1: createSlot('slot1')}});
       const config = createConfig({data: ['value1'], slots: ['slot1']});
-      const scope = new LimitedPluginScope(root, config);
+      const scope = new LocalPluginScope(root, config);
       expect(scope.data).not.toBe(root.data);
       expect(scope.slots).not.toBe(root.slots);
     });

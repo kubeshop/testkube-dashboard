@@ -1,7 +1,7 @@
 import {PluginScopeCallSync, PluginScopeRootScope, PluginScopeSyncData} from './symbols';
 import type {GetAccessibleData, PluginScope, PluginScopeConfig, PluginSlotRecord, PluginState} from './types';
 
-export class LimitedPluginScope<T extends PluginState> implements PluginScope<T> {
+export class LocalPluginScope<T extends PluginState> implements PluginScope<T> {
   private readonly [PluginScopeRootScope]: PluginScope<T>; // TODO: Check if root is needed here
   private readonly [PluginScopeSyncData]: Map<any, any> = new Map();
   public readonly slots: PluginSlotRecord<T>;

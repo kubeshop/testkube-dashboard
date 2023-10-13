@@ -1,4 +1,4 @@
-import {LimitedPluginScope} from './LimitedPluginScope';
+import {LocalPluginScope} from './LocalPluginScope';
 import type {Plugin} from './Plugin';
 import {PluginSlot} from './PluginSlot';
 import {PluginDetails, PluginScopeChildrenScope, PluginScopeSlotData} from './symbols';
@@ -9,7 +9,7 @@ import type {GetAccessibleData, GetAccessibleSlots, PluginScope, PluginSlotRecor
 export class PluginRootScope<T extends PluginState> implements PluginScope<T> {
   public readonly slots: PluginSlotRecord<T>;
   public readonly data: GetAccessibleData<T>;
-  public [PluginScopeChildrenScope]: Map<Plugin<any>, LimitedPluginScope<any>> = new Map();
+  public [PluginScopeChildrenScope]: Map<Plugin<any>, LocalPluginScope<any>> = new Map();
   private [PluginScopeSlotData]: Record<string, any> = {};
 
   public constructor(slots: (keyof GetAccessibleSlots<T>)[]) {
@@ -32,8 +32,8 @@ export class PluginRootScope<T extends PluginState> implements PluginScope<T> {
   /**
    * Create child context, that will have access only to part of the scope.
    */
-  public children<U extends PluginState>(plugin: Plugin<U>): LimitedPluginScope<U> {
-    const childScope = new LimitedPluginScope(this, {
+  public children<U extends PluginState>(plugin: Plugin<U>): LocalPluginScope<U> {
+    const childScope = new LocalPluginScope(this, {
       externalSlots: Object.keys(plugin[PluginDetails].externalSlots),
       slots: Object.keys(plugin[PluginDetails].slots),
       externalData: Object.keys(plugin[PluginDetails].externalData),
