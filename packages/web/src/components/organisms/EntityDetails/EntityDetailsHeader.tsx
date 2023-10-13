@@ -69,12 +69,12 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
     () =>
       [
         {key: 1, label: <span onClick={onEditTest}>Edit Test</span>},
-        executions.totals.running && {
+        executions?.totals?.running && {
           key: 2,
           label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>,
         },
       ].filter(Boolean),
-    [executions.totals.running]
+    [executions?.totals?.running]
   );
 
   return (
