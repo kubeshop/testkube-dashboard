@@ -77,7 +77,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const keysLabels = useMemo(() => Object.keys(data ?? {}).map(key => ({key, label: key, value: key})), [data]);
 
-  const ValuesLabels = useMemo(
+  const valuesLabels = useMemo(
     () => (data ? keysLabels.map(item => data[item.key].map(v => ({key: item.key, value: v}))).flat() : []),
     [keysLabels]
   );
@@ -89,9 +89,9 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
         const keyOptions = keysLabels.filter(f => f.key.startsWith(item.key));
 
-        const valuesOptions = ValuesLabels.filter(
-          f => f.key.startsWith(item.key) && f.value.startsWith(item.value)
-        ).map(v => ({key: v.value, label: v.value, value: v.value}));
+        const valuesOptions = valuesLabels
+          .filter(f => f.key.startsWith(item.key) && f.value.startsWith(item.value))
+          .map(v => ({key: v.value, label: v.value, value: v.value}));
 
         return (
           <StyledKeyValueRow key={key}>
@@ -121,7 +121,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
           </StyledKeyValueRow>
         );
       }),
-    [labelsMapping, keysLabels, ValuesLabels]
+    [labelsMapping, keysLabels, valuesLabels]
   );
 
   const applyFilters = () => {
