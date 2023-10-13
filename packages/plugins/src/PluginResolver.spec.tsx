@@ -333,10 +333,6 @@ describe('plugins', () => {
 
     it('should sync on the level of the child scope that has requested sync', () => {
       const XyzContext = createContext<number>(0);
-      const XyzContextReporter: FC<PropsWithChildren<{report: (value: number) => void}>> = ({report, children}) => {
-        report(useContext(XyzContext));
-        return <>{children}</>;
-      };
 
       const base = createPlugin('base').define(slot<string>()('slot')).init();
       const stub = external<typeof base>();
