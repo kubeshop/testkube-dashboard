@@ -6,3 +6,4 @@ node_modules
 playwright-report
 test-results
 dashboard-e2e/fixtures/files
+package-lock.json
