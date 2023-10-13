@@ -85,7 +85,7 @@ const foo = connectStore(createFooStore);
 describe('plugins', () => {
   describe('PluginResolver', () => {
     it('should register all data', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [p('name3', 500), p('name2'), p('name1', -300)];
       const resolver = create(plugins);
@@ -103,7 +103,7 @@ describe('plugins', () => {
     });
 
     it('should correctly order registered plugins (without dependencies)', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [p('name3', 500), p('name2'), p('name1', -300), p('name0', -Infinity), p('name4', Infinity)];
       const resolver = create(plugins);
@@ -126,7 +126,7 @@ describe('plugins', () => {
     });
 
     it('should correctly order registered plugins (based on dependencies)', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
         p('name3', 500),
@@ -155,7 +155,7 @@ describe('plugins', () => {
     });
 
     it('should correctly order registered plugins (based on dependencies, ignoring optional)', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
         p('name3', 500),
@@ -184,7 +184,7 @@ describe('plugins', () => {
     });
 
     it('should try to order plugins with circular dependencies anyway', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
         p('name3', 500),
@@ -222,7 +222,7 @@ describe('plugins', () => {
     });
 
     it('should detect missing slot', () => {
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
         p('name0', 500, $ => $.define(s('slot1', 'slot2'))),
@@ -238,7 +238,7 @@ describe('plugins', () => {
     });
 
     it('should detect missing data', () => {
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
         p('name0', 500, $ => $.define(d('value1', 'value2'))),
@@ -254,7 +254,7 @@ describe('plugins', () => {
     });
 
     it('should not detect missing data or slots for outer modules', () => {
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
         p('name0', 500, $ => $.outer(d('value1', 'value2'))),
@@ -267,7 +267,7 @@ describe('plugins', () => {
     });
 
     it('should detect circular dependencies', () => {
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
         p('name0', 500, $ => $.define(d('value1')).needs(d('value2'))),
@@ -293,7 +293,7 @@ describe('plugins', () => {
     });
 
     it('should be able to synchronize React hook value across modules', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'warn').mockImplementation().mockClear();
       jest.useFakeTimers();
 
       const CountIncrement: FC<{children?: ReactElement}> = ({children = null}) => {
@@ -470,8 +470,6 @@ describe('plugins', () => {
       .init(tk => {
         tk.slots.rootSlot!.add('lowerRootSlotItem1');
         tk.slots.slot1.add('lowerSlot1Item1');
-        // TODO: Consider if we allow that at all
-        tk.data.hook = () => tk.slots.rootSlot!.add('dynamic slot alignment');
       });
     const [LowerProvider, {initialize: initializeLower}] = new PluginResolver().register(lowerPlugin).resolve();
     const lowerScope = initializeLower(rootScope);
