@@ -2,12 +2,12 @@ import {FC, PropsWithChildren, createElement} from 'react';
 
 import type {GetPluginState, Plugin} from './internal/Plugin';
 import {PluginLocalProvider} from './internal/PluginLocalProvider';
-import {PluginRootScope} from './internal/PluginRootScope';
-import {PluginRootScopeProvider} from './internal/PluginRootScopeProvider';
+import {PluginScope} from './internal/PluginScope';
+import {PluginScopeProvider} from './internal/PluginScopeProvider';
 import {detectCircularDependencies} from './internal/detectCircularDependencies';
 import {detectDirectDependencies} from './internal/detectDirectDependencies';
 import {detectResources} from './internal/detectResources';
-import {PluginDetails, PluginInit} from './internal/symbols';
+import {PluginDetails, PluginInit, PluginScopeDisableNewSync} from './internal/symbols';
 import type {
   AppendData,
   AppendSlots,
@@ -15,12 +15,13 @@ import type {
   GetSlots,
   PluginProvider,
   PluginRoute,
+  PluginScopeStateFor,
   PluginState,
 } from './internal/types';
 
 interface ResolvedPlugins<T extends PluginState> {
   routes: PluginRoute[];
-  initialize: () => PluginRootScope<T>; // TODO: Consider passing there the parent scope
+  initialize: () => PluginScope<PluginScopeStateFor<T>>; // TODO: Consider passing there the parent scope
 }
 
 export class PluginResolver<T extends PluginState> {
@@ -43,16 +44,21 @@ export class PluginResolver<T extends PluginState> {
 
   // TODO: Allow passing `baseUrl`
   // TODO: Allow passing parent scope
-  public resolve(): [FC<PropsWithChildren<{root: PluginRootScope<T>}>>, ResolvedPlugins<T>] {
-    const initializers: ((context: PluginRootScope<T>) => void)[] = [];
-    const initialData: Partial<PluginRootScope<T>['data']> = {};
+  public resolve(): [FC<PropsWithChildren<{root: PluginScope<PluginScopeStateFor<T>>}>>, ResolvedPlugins<T>] {
+    type RootScopeType = PluginScope<PluginScopeStateFor<T>>;
+    const initializers: ((context: RootScopeType) => void)[] = [];
+    const initialData: Partial<RootScopeType['data']> = {};
     const providers: PluginProvider<any>[] = [];
     const routes: PluginRoute[] = [];
     const warnings: string[] = [];
 
     // Utils
-    const createInitializer = (plugin: Plugin<any>): ((root: PluginRootScope<T>) => void) => {
-      return root => plugin[PluginInit](root.children(plugin));
+    const createInitializer = (plugin: Plugin<any>): ((root: RootScopeType) => void) => {
+      return root => {
+        const scope = root.children(plugin);
+        plugin[PluginInit](scope);
+        scope[PluginScopeDisableNewSync]();
+      };
     };
 
     // Detect sources of different resources
@@ -125,20 +131,26 @@ export class PluginResolver<T extends PluginState> {
     }
 
     const initialize = () => {
-      const root: PluginRootScope<T> = new PluginRootScope(Object.keys(slotSource));
-      Object.keys(initialData).forEach((key: keyof PluginRootScope<T>['data']) => {
+      const root: RootScopeType = new PluginScope(null, {
+        slots: Object.keys(slotSource) as any,
+        data: Object.keys(dataSource) as any,
+        inheritedData: [],
+        inheritedSlots: [],
+        inheritedReadonlyData: [],
+      });
+      Object.keys(initialData).forEach((key: keyof RootScopeType['data']) => {
         root.data[key] = initialData[key]!;
       });
       initializers.forEach(init => init(root));
       return root;
     };
 
-    const Provider: FC<PropsWithChildren<{root: PluginRootScope<T>}>> = ({root, children}) => {
+    const Provider: FC<PropsWithChildren<{root: RootScopeType}>> = ({root, children}) => {
       let current = children;
       for (let i = providers.length - 1; i >= 0; i -= 1) {
         current = createElement(providers[i].type, providers[i].props, current);
       }
-      return createElement(PluginRootScopeProvider, {root}, current);
+      return createElement(PluginScopeProvider, {root}, current);
     };
 
     return [Provider, {routes, initialize}];

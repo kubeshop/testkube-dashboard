@@ -1,6 +1,7 @@
 import {Plugin} from './Plugin';
+import {PluginScope} from './PluginScope';
 import {PluginDetails as PluginDetailsSymbol, PluginInit} from './symbols';
-import {PluginDetails, PluginScope} from './types';
+import {PluginDetails} from './types';
 
 describe('plugins', () => {
   describe('Plugin', () => {

@@ -86,21 +86,40 @@ export type JoinExternalState<T extends PluginState, U extends PluginState> = Ap
   GetData<U>
 >;
 
-export type PluginSlotRecord<T extends PluginState> = {
-  readonly [K in keyof GetAccessibleSlots<T>]: PluginSlot<GetAccessibleSlots<T>[K]>;
+export interface PluginScopeState {
+  slots: Record<string, any>;
+  inheritedSlots: Record<string, any>;
+  data: Record<string, any>;
+  inheritedData: Record<string, any>;
+  inheritedReadonlyData: Record<string, any>;
+}
+
+export type PluginScopeStateFor<T extends PluginState> = {
+  slots: {};
+  inheritedSlots: T['slots'] & T['externalSlots'];
+  data: {};
+  inheritedData: T['data'] & T['externalData'];
+  inheritedReadonlyData: {};
 };
 
-export interface PluginScope<T extends PluginState> {
-  readonly slots: PluginSlotRecord<T>;
-  readonly data: GetAccessibleData<T>;
-  sync<U>(fn: () => U, defaultValue: U): () => U;
-  sync<U>(fn: () => U, defaultValue?: undefined): () => U | undefined;
-  sync<U>(fn: () => U, defaultValue?: U): () => U | undefined;
+export interface PluginScopeConfig<T extends PluginScopeState> {
+  slots: (keyof T['slots'])[];
+  inheritedSlots: (keyof T['inheritedSlots'])[];
+  data: (keyof T['data'])[];
+  inheritedData: (keyof T['inheritedData'])[];
+  inheritedReadonlyData: (keyof T['inheritedReadonlyData'])[];
 }
 
-export interface PluginScopeConfig<T extends PluginState> {
-  data: (keyof T['data'])[];
-  externalData: (keyof T['externalData'])[];
-  slots: (keyof T['slots'])[];
-  externalSlots: (keyof T['externalSlots'])[];
-}
+export type PluginScopeSlotRecord<T extends PluginScopeState> = {
+  [K in keyof T['slots'] | keyof T['inheritedSlots']]: T['slots'] extends Record<K, any>
+    ? PluginSlot<T['slots'][K]>
+    : PluginSlot<T['inheritedSlots'][K]>;
+};
+
+export type PluginScopeDataRecord<T extends PluginScopeState> = {
+  readonly [K in keyof T['inheritedReadonlyData']]: T['inheritedReadonlyData'][K];
+} & {
+  [K in keyof T['data'] | keyof T['inheritedData']]: T['data'] extends Record<K, any>
+    ? T['data'][K]
+    : T['inheritedData'][K];
+};

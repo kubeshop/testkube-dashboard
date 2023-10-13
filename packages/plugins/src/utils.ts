@@ -17,7 +17,7 @@ export const external = <T extends Plugin<any>>() => ({
     ...empty,
     slots: pick({} as Record<K, any>, names),
   }),
-  data: <K extends keyof GetData<GetPluginState<T>>>(
+  data: <K extends keyof GetPluginState<T>['data']>(
     ...names: K[]
   ): AppendData<EmptyPluginState, Pick<GetData<GetPluginState<T>>, K>> => ({
     ...empty,

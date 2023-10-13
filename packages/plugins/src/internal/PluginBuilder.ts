@@ -1,6 +1,7 @@
 import type {ReactElement} from 'react';
 
 import {Plugin} from './Plugin';
+import {PluginScope} from './PluginScope';
 import type {
   AppendData,
   AppendRoute,
@@ -9,7 +10,7 @@ import type {
   PluginDetails,
   PluginProvider,
   PluginRouteMetadata,
-  PluginScope,
+  PluginScopeStateFor,
   PluginState,
 } from './types';
 
@@ -99,7 +100,7 @@ export class PluginBuilder<T extends PluginState> {
    * Initialize the plugin.
    * Mark as complete and integrate.
    */
-  public init(fn: (tk: PluginScope<T>) => void = () => {}): Plugin<{
+  public init(fn: (tk: PluginScope<PluginScopeStateFor<T>>) => void = () => {}): Plugin<{
     urls: {[K in keyof T['urls']]: T['urls'][K]};
     slots: {[K in keyof T['slots']]: T['slots'][K]};
     data: {[K in keyof T['data']]: T['data'][K]};

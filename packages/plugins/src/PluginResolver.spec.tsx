@@ -12,8 +12,9 @@ import {createPlugin} from './createPlugin';
 import {createUseSlot} from './hooks';
 import {Plugin} from './internal/Plugin';
 import {PluginBuilder} from './internal/PluginBuilder';
-import {PluginRootContext} from './internal/PluginRootScopeProvider';
-import {PluginScope, PluginState} from './internal/types';
+import {PluginScope} from './internal/PluginScope';
+import {PluginScopeContext} from './internal/PluginScopeProvider';
+import {PluginState} from './internal/types';
 import {data, external, slot} from './utils';
 
 const emptyState = {
@@ -241,7 +242,7 @@ describe('plugins', () => {
       const resolver = create(plugins);
       const [Provider, {routes, initialize}] = resolver.resolve();
       const scope = initialize();
-      const {result} = renderHook(() => useContext(PluginRootContext), {
+      const {result} = renderHook(() => useContext(PluginScopeContext), {
         wrapper: ({children}) => <Provider root={scope}>{children}</Provider>,
       });
       expect(result.current.root).toBe(scope);

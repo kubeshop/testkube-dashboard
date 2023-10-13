@@ -1,7 +1,7 @@
 import {renderHook} from '@testing-library/react';
 
 import {createUseData, createUseSlot, createUseSlotFirst} from './hooks';
-import {PluginRootContext} from './internal/PluginRootScopeProvider';
+import {PluginScopeContext} from './internal/PluginScopeProvider';
 
 describe('plugins', () => {
   describe('hooks', () => {
@@ -11,7 +11,7 @@ describe('plugins', () => {
       it('should return the whole data object', () => {
         const root: any = {data: {key1: 'def'}};
         const {result} = renderHook(() => useData(), {
-          wrapper: ({children}) => <PluginRootContext.Provider value={{root}}>{children}</PluginRootContext.Provider>,
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
         });
         expect(result.current).toEqual(root.data);
       });
@@ -23,7 +23,7 @@ describe('plugins', () => {
       it('should return all items from the slot', () => {
         const root: any = {slots: {slot1: {all: jest.fn(() => ['value1', 'value2'])}}};
         const {result} = renderHook(() => useSlot('slot1'), {
-          wrapper: ({children}) => <PluginRootContext.Provider value={{root}}>{children}</PluginRootContext.Provider>,
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
         });
         expect(result.current).toEqual(['value1', 'value2']);
       });
@@ -31,7 +31,7 @@ describe('plugins', () => {
       it('should return empty list for unknown slot', () => {
         const root: any = {slots: {slot1: {all: jest.fn(() => ['value1', 'value2'])}}};
         const {result} = renderHook(() => useSlot('slotUnknown'), {
-          wrapper: ({children}) => <PluginRootContext.Provider value={{root}}>{children}</PluginRootContext.Provider>,
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
         });
         expect(result.current).toEqual([]);
       });
@@ -43,7 +43,7 @@ describe('plugins', () => {
       it('should return the first item from the slot', () => {
         const root: any = {slots: {slot1: {first: jest.fn(() => 'value1')}}};
         const {result} = renderHook(() => useSlotFirst('slot1'), {
-          wrapper: ({children}) => <PluginRootContext.Provider value={{root}}>{children}</PluginRootContext.Provider>,
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
         });
         expect(result.current).toEqual('value1');
       });
@@ -51,7 +51,7 @@ describe('plugins', () => {
       it('should return nothing from unknown slot', () => {
         const root: any = {slots: {slot1: {first: jest.fn(() => 'value1')}}};
         const {result} = renderHook(() => useSlotFirst('slotUnknown'), {
-          wrapper: ({children}) => <PluginRootContext.Provider value={{root}}>{children}</PluginRootContext.Provider>,
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
         });
         expect(result.current).toEqual(undefined);
       });
