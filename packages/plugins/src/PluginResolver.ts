@@ -141,6 +141,11 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       console.warn(`Detected problems with plugins:\n${warnings.join('\n')}`);
     }
 
+    // TODO: Consider registering in the parent scope,
+    //       so the destroy & events would be propagated from there too.
+    //       ...
+    //       Alternatively, the lower scope could listen to events,
+    //       and just transfer them down.
     const initialize = (parent: PluginScope<any> | null = null) => {
       const root: RootScopeType = new PluginScope(parent, {
         slots: Object.keys(slotSource) as any,

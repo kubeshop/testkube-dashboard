@@ -17,21 +17,6 @@ import {PluginScopeContext} from './internal/PluginScopeProvider';
 import {PluginState} from './internal/types';
 import {data, external, slot} from './utils';
 
-const emptyState = {
-  externalSlots: {},
-  externalData: {},
-  outerSlots: {},
-  outerData: {},
-  data: {},
-  slots: {},
-  urls: {},
-};
-
-const d = (...names: string[]) =>
-  names.reduce((acc, name) => ({...acc, data: {...acc.data, ...data()(name).data}}), {...emptyState, data: {}});
-const s = (...names: string[]): PluginState =>
-  names.reduce((acc, name) => ({...acc, slots: {...acc.slots, ...slot()(name).slots}}), {...emptyState, slots: {}});
-
 const r = (name: string) => <div data-testid={`route-${name}`} />;
 
 const create = (plugins: Plugin<any>[]) =>
@@ -51,8 +36,8 @@ const p = (
         props: {},
       })
   )
-    .define(s(`s-${name}`))
-    .define(d(`d-${name}`))
+    .define(slot()(`s-${name}`))
+    .define(data()(`d-${name}`))
     .data({[`v-${name}`]: true})
     .init(tk => {
       tk.data[`d-${name}`] = true;
@@ -130,10 +115,10 @@ describe('plugins', () => {
 
       const plugins = [
         p('name3', 500),
-        p('name2', 0, $ => $.define(d('value'))),
-        p('name1', -300, $ => $.needs(s('slot'))),
-        p('name0', -Infinity, $ => $.needs(d('value'))),
-        p('name4', Infinity, $ => $.define(s('slot'))),
+        p('name2', 0, $ => $.define(data()('value'))),
+        p('name1', -300, $ => $.needs(slot()('slot'))),
+        p('name0', -Infinity, $ => $.needs(data()('value'))),
+        p('name4', Infinity, $ => $.define(slot()('slot'))),
       ];
       const resolver = create(plugins);
       const [Provider, {routes, initialize}] = resolver.resolve();
@@ -159,10 +144,10 @@ describe('plugins', () => {
 
       const plugins = [
         p('name3', 500),
-        p('name2', 0, $ => $.define(d('value'))),
-        p('name1', -300, $ => $.needs(s('slot'))),
-        p('name0', -Infinity, $ => $.outer(d('value'))),
-        p('name4', Infinity, $ => $.define(s('slot'))),
+        p('name2', 0, $ => $.define(data()('value'))),
+        p('name1', -300, $ => $.needs(slot()('slot'))),
+        p('name0', -Infinity, $ => $.outer(data()('value'))),
+        p('name4', Infinity, $ => $.define(slot()('slot'))),
       ];
       const resolver = create(plugins);
       const [Provider, {routes, initialize}] = resolver.resolve();
@@ -188,10 +173,10 @@ describe('plugins', () => {
 
       const plugins = [
         p('name3', 500),
-        p('name2', 0, $ => $.define(d('value2')).needs(d('value0'))),
-        p('name1', -300, $ => $.needs(s('slot'))),
-        p('name0', -Infinity, $ => $.define(d('value0')).needs(d('value2'))),
-        p('name4', Infinity, $ => $.define(s('slot'))),
+        p('name2', 0, $ => $.define(data()('value2')).needs(data()('value0'))),
+        p('name1', -300, $ => $.needs(slot()('slot'))),
+        p('name0', -Infinity, $ => $.define(data()('value0')).needs(data()('value2'))),
+        p('name4', Infinity, $ => $.define(slot()('slot'))),
       ];
       const resolver = create(plugins);
       const [Provider, {routes, initialize}] = resolver.resolve();
@@ -225,9 +210,9 @@ describe('plugins', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
-        p('name0', 500, $ => $.define(s('slot1', 'slot2'))),
-        p('name1', 0, $ => $.needs(s('slot1', 'slot3'))),
-        p('name2', 0, $ => $.needs(s('slot4'))),
+        p('name0', 500, $ => $.define(slot()('slot1', 'slot2'))),
+        p('name1', 0, $ => $.needs(slot()('slot1', 'slot3'))),
+        p('name2', 0, $ => $.needs(slot()('slot4'))),
       ];
       const resolver = create(plugins);
       resolver.resolve();
@@ -241,9 +226,9 @@ describe('plugins', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
-        p('name0', 500, $ => $.define(d('value1', 'value2'))),
-        p('name1', 0, $ => $.needs(d('value1', 'value3'))),
-        p('name2', 0, $ => $.needs(d('value4'))),
+        p('name0', 500, $ => $.define(data()('value1', 'value2'))),
+        p('name1', 0, $ => $.needs(data()('value1', 'value3'))),
+        p('name2', 0, $ => $.needs(data()('value4'))),
       ];
       const resolver = create(plugins);
       resolver.resolve();
@@ -257,8 +242,8 @@ describe('plugins', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
-        p('name0', 500, $ => $.outer(d('value1', 'value2'))),
-        p('name1', 0, $ => $.outer(s('slot1', 'slot3'))),
+        p('name0', 500, $ => $.outer(data()('value1', 'value2'))),
+        p('name1', 0, $ => $.outer(slot()('slot1', 'slot3'))),
       ];
       const resolver = create(plugins);
       resolver.resolve();
@@ -270,8 +255,8 @@ describe('plugins', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
-        p('name0', 500, $ => $.define(d('value1')).needs(d('value2'))),
-        p('name1', 0, $ => $.define(d('value2')).needs(d('value1'))),
+        p('name0', 500, $ => $.define(data()('value1')).needs(data()('value2'))),
+        p('name1', 0, $ => $.define(data()('value2')).needs(data()('value1'))),
       ];
       const resolver = create(plugins);
       resolver.resolve();
@@ -479,6 +464,44 @@ describe('plugins', () => {
     expect(rootScope.slots.rootSlot?.all()).toEqual(['rootRootSlotItem1', 'dynamicItemToPreserve']);
     expect(lowerScope.slots.rootSlot?.all()).toEqual(['rootRootSlotItem1', 'dynamicItemToPreserve']);
     expect(rootScope.slots.slot1?.all()).toEqual(['rootSlot1Item1']);
+    expect(lowerScope.slots.slot1.all()).toEqual([]);
+  });
+
+  it('should destroy the lower scope when outer is getting destroyed', () => {
+    // Prepare root scope
+    const rootPlugin = createPlugin('root')
+      .data({rootKey: 'rootValue', key1: 'value1'})
+      .define(slot<string>()('rootSlot'))
+      .define(slot<string>()('slot1'))
+      .init(tk => {
+        tk.slots.rootSlot.add('rootRootSlotItem1');
+        tk.slots.slot1.add('rootSlot1Item1');
+      });
+    const [RootProvider, {initialize: initializeRoot}] = new PluginResolver().register(rootPlugin).resolve();
+    const rootScope = initializeRoot();
+    const rootStub = external<typeof rootPlugin>();
+
+    // Prepare lower scope
+    const lowerPlugin = createPlugin('lower')
+      .outer(rootStub.data('rootKey'))
+      .outer(rootStub.slots('rootSlot'))
+      .data({key1: 'value2'})
+      .define(slot<string>()('slot1'))
+      .init(tk => {
+        tk.slots.rootSlot!.add('lowerRootSlotItem1');
+        tk.slots.slot1.add('lowerSlot1Item1');
+      });
+    const [LowerProvider, {initialize: initializeLower}] = new PluginResolver().register(lowerPlugin).resolve();
+    const lowerScope = initializeLower(rootScope);
+
+    lowerScope.slots.rootSlot?.add('dynamicItemForDeletion');
+    rootScope.slots.rootSlot.add('dynamicItemToPreserve');
+
+    rootScope.destroy();
+
+    expect(rootScope.slots.rootSlot?.all()).toEqual([]);
+    expect(lowerScope.slots.rootSlot?.all()).toEqual([]);
+    expect(rootScope.slots.slot1?.all()).toEqual([]);
     expect(lowerScope.slots.slot1.all()).toEqual([]);
   });
 });

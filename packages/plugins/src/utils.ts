@@ -33,13 +33,13 @@ export const external = <T extends Plugin<any>>() => ({
 
 export const slot =
   <T = any>() =>
-  <K extends string>(name: K): AppendSlots<EmptyPluginState, Record<K, T>> => ({
+  <K extends string>(...names: K[]): AppendSlots<EmptyPluginState, Record<K, T>> => ({
     ...empty,
-    slots: {[name]: undefined} as any,
+    slots: pick({} as Record<K, any>, names) as any,
   });
 export const data =
   <T = any>() =>
-  <K extends string>(name: K): AppendData<EmptyPluginState, Record<K, T>> => ({
+  <K extends string>(...names: K[]): AppendData<EmptyPluginState, Record<K, T>> => ({
     ...empty,
-    data: {[name]: undefined} as any,
+    data: pick({} as Record<K, any>, names) as any,
   });

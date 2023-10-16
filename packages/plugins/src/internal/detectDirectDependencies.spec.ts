@@ -2,33 +2,17 @@ import {createPlugin} from '../createPlugin';
 import {data, slot} from '../utils';
 
 import {detectDirectDependencies} from './detectDirectDependencies';
-import {PluginState} from './types';
-
-const emptyState = {
-  externalSlots: {},
-  externalData: {},
-  outerSlots: {},
-  outerData: {},
-  data: {},
-  slots: {},
-  urls: {},
-};
-
-const d = (...names: string[]) =>
-  names.reduce((acc, name) => ({...acc, data: {...acc.data, ...data()(name).data}}), {...emptyState, data: {}});
-const s = (...names: string[]): PluginState =>
-  names.reduce((acc, name) => ({...acc, slots: {...acc.slots, ...slot()(name).slots}}), {...emptyState, slots: {}});
 
 describe('plugins', () => {
   describe('detectDirectDependencies', () => {
     it('should list direct dependencies for multiple plugins', () => {
       const plugins = [
-        createPlugin('test-name-1').define(d('key1', 'key2')).define(s('slot1', 'slot2')).init(),
-        createPlugin('test-name-1').needs(d('key1', 'key3')).needs(s('slot1', 'slot3')).init(),
-        createPlugin('test-name-1').define(d('key4')).init(),
-        createPlugin('test-name-1').define(d('key2')).init(),
-        createPlugin('test-name-1').needs(d('key2')).init(),
-        createPlugin('test-name-1').needs(s('slot2')).init(),
+        createPlugin('test-name-1').define(data()('key1', 'key2')).define(slot()('slot1', 'slot2')).init(),
+        createPlugin('test-name-1').needs(data()('key1', 'key3')).needs(slot()('slot1', 'slot3')).init(),
+        createPlugin('test-name-1').define(data()('key4')).init(),
+        createPlugin('test-name-1').define(data()('key2')).init(),
+        createPlugin('test-name-1').needs(data()('key2')).init(),
+        createPlugin('test-name-1').needs(slot()('slot2')).init(),
       ];
       expect(detectDirectDependencies(plugins)).toEqual({
         hard: new Map([
