@@ -494,8 +494,8 @@ describe('plugins', () => {
     const [LowerProvider, {initialize: initializeLower}] = new PluginResolver().register(lowerPlugin).resolve();
     const lowerScope = initializeLower(rootScope);
 
-    lowerScope.slots.rootSlot?.add('dynamicItemForDeletion');
-    rootScope.slots.rootSlot.add('dynamicItemToPreserve');
+    lowerScope.slots.rootSlot?.add('dynamicLowerItemForDeletion');
+    rootScope.slots.rootSlot.add('dynamicRootItemToDeletion');
 
     rootScope.destroy();
 
