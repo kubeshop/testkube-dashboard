@@ -8,6 +8,7 @@
    3. [Components](#components)
    4. [Routing](#routing)
    5. [Providers](#providers)
+      1. [Zustand stores](#zustand-stores)
    6. [Unit testing](#unit-testing)
 2. [Resolving plugins](#resolving-plugins)
    1. [Basic](#basic)
@@ -231,7 +232,7 @@ To add such provider, you may use `.provider()` method:
 
 ```tsx
 import {createContext} from 'react';
-import {createPlugin} from '@testkube/createPlugin';
+import {createPlugin} from '@testkube/plugins';
 
 const SomeContext = createContext();
 
@@ -241,6 +242,28 @@ export default createPlugin('some-name')
 
     // You may use alternative JSX syntax too, the children will be added automatically anyway.
     .provider(<SomeContext.Provider value={{foo: 'bar'}} />)
+
+    .init();
+```
+
+#### Zustand stores
+
+As we are commonly using Zustand as the data store,
+there is a helpful provider to automatically inject it.
+
+It allows passing dependencies and initial state too, so it's able to even recreate the store after changes.
+
+```tsx
+import {createPlugin, StoreProvider} from '@testkube/plugins';
+
+import {initializeSomeStore, useSomeStorePick} from './store';
+
+export default createPlugin('some-name')
+    // Inject the store
+    .provider(<StoreProvider store={initializeSomeStore} />)
+
+    // Expose public interface for other plugins
+    .data({useSomeStorePick})
 
     .init();
 ```
