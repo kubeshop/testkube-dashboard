@@ -12,18 +12,22 @@ const empty: EmptyPluginState = {
   urls: {},
 };
 
+type PluginDataName<T extends Plugin<any>> = keyof GetData<GetPluginState<T>>;
+type PluginSlotName<T extends Plugin<any>> = keyof GetSlots<GetPluginState<T>>;
+type ArrayElement<T> = T extends Array<infer V> ? V : never;
+
 export const external = <T extends Plugin<any>>() => ({
-  slots: <K extends keyof GetSlots<GetPluginState<T>>>(
-    ...names: K[]
-  ): AppendSlots<EmptyPluginState, Pick<GetSlots<GetPluginState<T>>, K>> => ({
+  slots: <U extends PluginSlotName<T>[]>(
+    ...names: U
+  ): AppendSlots<EmptyPluginState, Pick<GetSlots<GetPluginState<T>>, ArrayElement<U>>> => ({
     ...empty,
-    slots: pick({} as Record<K, any>, names),
+    slots: pick({} as Record<ArrayElement<U>, any>, names as any),
   }),
-  data: <K extends keyof GetPluginState<T>['data']>(
-    ...names: K[]
-  ): AppendData<EmptyPluginState, Pick<GetData<GetPluginState<T>>, K>> => ({
+  data: <U extends PluginDataName<T>[]>(
+    ...names: U
+  ): AppendData<EmptyPluginState, Pick<GetData<GetPluginState<T>>, ArrayElement<U>>> => ({
     ...empty,
-    data: pick({} as Record<K, any>, names),
+    data: pick({} as Record<ArrayElement<U>, any>, names as any),
   }),
 });
 
