@@ -280,7 +280,7 @@ describe('plugins', () => {
 
       parent.destroy();
 
-      expect(root[PluginScopeChildrenScope]).toEqual([separate]);
+      expect(root[PluginScopeChildrenScope]).toEqual(new Set([separate]));
       expect(root.slots.slot1?.all()).toEqual(['root', 'separate']);
       expect(parent.slots.slot2?.all()).toEqual([]);
     });

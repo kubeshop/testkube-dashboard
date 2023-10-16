@@ -31,7 +31,7 @@ export class PluginScope<T extends PluginScopeState> {
   private readonly [PluginScopeSlotData]: Record<string, any> = {};
   private readonly [PluginScopeSyncData]: Map<Function, any> = new Map();
   private readonly [PluginScopeChildrenPluginMapScope]: Map<Plugin<any>, PluginScope<any>> = new Map();
-  private readonly [PluginScopeChildrenScope]: PluginScope<any>[] = [];
+  private readonly [PluginScopeChildrenScope]: Set<PluginScope<any>> = new Set();
   private [PluginScopeDisableNewSyncStatus] = false;
   public readonly slots: PluginScopeSlotRecord<T>;
   public readonly data: PluginScopeDataRecord<T>;
@@ -97,14 +97,11 @@ export class PluginScope<T extends PluginScopeState> {
   }
 
   public [PluginScopeRegisterChildrenScope](child: PluginScope<any>): void {
-    this[PluginScopeChildrenScope].push(child);
+    this[PluginScopeChildrenScope].add(child);
   }
 
   public [PluginScopeUnregisterChildrenScope](child: PluginScope<any>): void {
-    const index = this[PluginScopeChildrenScope].indexOf(child);
-    if (index !== -1) {
-      this[PluginScopeChildrenScope].splice(index, 1);
-    }
+    this[PluginScopeChildrenScope].delete(child);
   }
 
   public [PluginScopeCallSync](): void {
@@ -129,8 +126,8 @@ export class PluginScope<T extends PluginScopeState> {
       this.slots[key]?.[PluginScopeDestroy](this);
     }
     this[PluginScopeChildrenPluginMapScope].clear();
-    const children = this[PluginScopeChildrenScope].slice();
-    this[PluginScopeChildrenScope].splice(0, this[PluginScopeChildrenScope].length);
+    const children = Array.from(this[PluginScopeChildrenScope]);
+    this[PluginScopeChildrenScope].clear();
     children.forEach(child => child.destroy());
   }
 
