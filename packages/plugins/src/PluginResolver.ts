@@ -1,5 +1,6 @@
 import {FC, PropsWithChildren, createElement} from 'react';
 
+import {ConditionalProvider} from './internal/ConditionalProvider';
 import type {GetPluginState, Plugin} from './internal/Plugin';
 import {PluginLocalProvider} from './internal/PluginLocalProvider';
 import {PluginScope} from './internal/PluginScope';
@@ -63,7 +64,8 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     type RootScopeType = PluginScope<PluginScopeStateFor<T>>;
     const initializers: ((context: RootScopeType) => void)[] = [];
     const initialData: Partial<RootScopeType['data']> = {};
-    const providers: PluginProvider<any>[] = [];
+    const staticProviders: PluginProvider<any>[] = [];
+    const dynamicProviders: PluginProvider<any>[] = [];
     const routes: PluginRoute[] = [];
     const warnings: string[] = [];
 
@@ -128,9 +130,19 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
         looseDeps.get(x)!.delete(next);
       });
 
+      // Group providers
+      const ownStaticProviders = next[PluginDetails].providers.filter(x => !x.metadata.enabled);
+      const ownDynamicProviders = next[PluginDetails].providers.filter(x => x.metadata.enabled);
+
       // Include dependencies
-      providers.push(...next[PluginDetails].providers);
-      providers.push({type: PluginLocalProvider, props: {plugin: next}});
+      staticProviders.push(...ownStaticProviders.map(x => x.provider));
+
+      if (ownDynamicProviders.length === 0) {
+        staticProviders.push({type: PluginLocalProvider, props: {plugin: next}});
+      } else {
+        dynamicProviders.push(...ownDynamicProviders.map(provider => ({type: ConditionalProvider, props: {provider}})));
+        dynamicProviders.push({type: PluginLocalProvider, props: {plugin: next}});
+      }
       routes.push(...next[PluginDetails].routes); // TODO: Shouldn't routes be ordered independently?
       initializers.push(createInitializer(next));
       Object.assign(initialData, {...next[PluginDetails].data});
@@ -161,6 +173,8 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       initializers.forEach(init => init(root));
       return root;
     };
+
+    const providers = staticProviders.concat(dynamicProviders);
 
     const Provider: FC<PropsWithChildren<{root: RootScopeType}>> = ({root, children}) => {
       let current = children;

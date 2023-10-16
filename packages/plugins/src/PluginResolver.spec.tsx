@@ -14,8 +14,13 @@ import {Plugin} from './internal/Plugin';
 import {PluginBuilder} from './internal/PluginBuilder';
 import {PluginScope} from './internal/PluginScope';
 import {PluginScopeContext} from './internal/PluginScopeProvider';
-import {PluginState} from './internal/types';
+import {PluginProvider, PluginState} from './internal/types';
 import {data, external, slot} from './utils';
+
+const mockProvider = (testId: string): PluginProvider<{}> => ({
+  type: (({children}) => <div data-testid={testId}>{children}</div>) as FC<PropsWithChildren<{}>>,
+  props: {},
+});
 
 const r = (name: string) => <div data-testid={`route-${name}`} />;
 
@@ -31,10 +36,7 @@ const p = (
     createPlugin(name)
       .order(order)
       .route(`/test/${name}`, r(name))
-      .provider({
-        type: (({children}) => <div data-testid={`p-${name}`}>{children}</div>) as FC<PropsWithChildren<{}>>,
-        props: {},
-      })
+      .provider(mockProvider(`p-${name}`))
   )
     .define(slot()(`s-${name}`))
     .define(data()(`d-${name}`))
@@ -503,5 +505,59 @@ describe('plugins', () => {
     expect(lowerScope.slots.rootSlot?.all()).toEqual([]);
     expect(rootScope.slots.slot1?.all()).toEqual([]);
     expect(lowerScope.slots.slot1.all()).toEqual([]);
+  });
+
+  it('should allow specifying conditional providers', () => {
+    const plugin = createPlugin('plugin')
+      .define(data()('value'))
+      .provider(mockProvider('p-enabled'), {enabled: () => true})
+      .provider(mockProvider('p-disabled'), {enabled: () => false})
+      .provider(mockProvider('p-dynamic'), {
+        enabled: tk => tk.data.value === 1,
+      })
+      .init();
+    const [Provider, {initialize}] = new PluginResolver().register(plugin).resolve();
+    const scope = initialize();
+    const result = render(<Provider root={scope} />);
+
+    expect(result.queryByTestId('p-enabled')).toBeTruthy();
+    expect(result.queryByTestId('p-disabled')).toBeFalsy();
+    expect(result.queryByTestId('p-dynamic')).toBeFalsy();
+
+    scope.data.value = 1;
+    result.rerender(<Provider root={scope} />);
+
+    expect(result.queryByTestId('p-enabled')).toBeTruthy();
+    expect(result.queryByTestId('p-disabled')).toBeFalsy();
+    expect(result.queryByTestId('p-dynamic')).toBeTruthy();
+  });
+
+  it('should put conditional providers after the static', () => {
+    const plugin1 = createPlugin('plugin1')
+      .provider(mockProvider('p-dynamic1'), {enabled: () => true})
+      .provider(mockProvider('p-static1'))
+      .provider(mockProvider('p-dynamic2'), {enabled: () => true})
+      .provider(mockProvider('p-static2'))
+      .init();
+    const plugin2 = createPlugin('plugin2')
+      .provider(mockProvider('p-static3'))
+      .provider(mockProvider('p-dynamic3'), {enabled: () => true})
+      .provider(mockProvider('p-static4'))
+      .provider(mockProvider('p-dynamic4'), {enabled: () => true})
+      .init();
+    const [Provider, {initialize}] = new PluginResolver().register(plugin1).register(plugin2).resolve();
+    const scope = initialize();
+    const result = render(<Provider root={scope} />);
+
+    expect(domOrderFor('p-', result.container)).toEqual([
+      'static1',
+      'static2',
+      'static3',
+      'static4',
+      'dynamic1',
+      'dynamic2',
+      'dynamic3',
+      'dynamic4',
+    ]);
   });
 });

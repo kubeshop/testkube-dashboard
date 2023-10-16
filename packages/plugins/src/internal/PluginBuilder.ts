@@ -14,6 +14,7 @@ import type {
   PluginScopeStateFor,
   PluginState,
 } from './types';
+import {PluginProviderMetadata} from './types';
 
 // TODO: Allow declaring plugin configuration
 export class PluginBuilder<T extends PluginState> {
@@ -55,12 +56,13 @@ export class PluginBuilder<T extends PluginState> {
    * Append React provider,
    * that will wrap all the components inside.
    *
-   * TODO: Allow passing providers to specific routes, based on function.
+   * It may have condition,
+   * but conditional providers are included after those without condition.
    */
-  public provider<U>(provider: PluginProvider<U>): PluginBuilder<T> {
+  public provider<U>(provider: PluginProvider<U>, metadata: PluginProviderMetadata<T> = {}): PluginBuilder<T> {
     return new PluginBuilder({
       ...this.plugin,
-      providers: [...this.plugin.providers, provider],
+      providers: [...this.plugin.providers, {provider, metadata}],
     });
   }
 

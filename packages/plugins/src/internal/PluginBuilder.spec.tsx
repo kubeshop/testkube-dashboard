@@ -63,7 +63,10 @@ describe('plugins', () => {
         .init();
       expect(readDetails(plugin)).toEqual(
         expect.objectContaining({
-          providers: [<Provider value="text1" />, {type: Provider, props: {value: 'text2'}}],
+          providers: [
+            {provider: <Provider value="text1" />, metadata: {}},
+            {provider: {type: Provider, props: {value: 'text2'}}, metadata: {}},
+          ],
         })
       );
     });
@@ -173,7 +176,7 @@ describe('plugins', () => {
         data: {data2: undefined, data3: 'value'},
         slots: {slot2: undefined},
         urls: {'/path1': true},
-        providers: [<Provider value="text" />],
+        providers: [{provider: <Provider value="text" />, metadata: {}}],
         routes: [{path: '/path1', element, metadata: {}}],
       });
       expect(Object.keys(readDetails(plugin).externalData)).toEqual(['key1']);

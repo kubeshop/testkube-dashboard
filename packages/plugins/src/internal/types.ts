@@ -1,5 +1,6 @@
 import type {ReactElement} from 'react';
 
+import {PluginScope} from './PluginScope';
 import type {PluginSlot} from './PluginSlot';
 import {PluginScopeProducer} from './symbols';
 
@@ -10,6 +11,10 @@ export interface PluginRouteMetadata {
 export interface PluginSlotMetadata {
   readonly enabled?: (() => boolean | null | undefined) | boolean;
   readonly order?: number;
+}
+
+export interface PluginProviderMetadata<T extends PluginState> {
+  readonly enabled?: (plugin: PluginScope<PluginScopeStateFor<T>>) => boolean | null | undefined;
 }
 
 export interface PluginSlotContainer<T> {
@@ -27,6 +32,11 @@ export interface PluginRoute {
 export interface PluginProvider<T> {
   type: (props: T) => ReactElement | null;
   props: T;
+}
+
+export interface PluginProviderContainer<T, U extends PluginState> {
+  provider: PluginProvider<T>;
+  metadata: PluginProviderMetadata<U>;
 }
 
 export interface PluginState {
@@ -64,7 +74,7 @@ export interface PluginDetails<T extends PluginState> extends PluginState {
 
   // Keep the data
   readonly routes: readonly PluginRoute[];
-  readonly providers: readonly PluginProvider<any>[];
+  readonly providers: readonly PluginProviderContainer<any, T>[];
 
   // Keep the state
   readonly externalData: T['externalData'];
