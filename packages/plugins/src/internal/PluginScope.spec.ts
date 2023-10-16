@@ -3,7 +3,12 @@ import {data, slot} from '../utils';
 
 import {PluginScope} from './PluginScope';
 import {PluginSlot} from './PluginSlot';
-import {PluginScopeCallSync, PluginScopeChildrenScope, PluginScopeDisableNewSync} from './symbols';
+import {
+  PluginScopeCallSync,
+  PluginScopeChildrenPluginMapScope,
+  PluginScopeChildrenScope,
+  PluginScopeDisableNewSync,
+} from './symbols';
 import {PluginScopeConfig} from './types';
 
 const create = (config: Partial<PluginScopeConfig<any>>, parent: PluginScope<any> | null = null) =>
@@ -211,7 +216,7 @@ describe('plugins', () => {
       const plugin = createPlugin('test').init();
       const parent = create({});
       const child = parent.children(plugin);
-      expect(parent[PluginScopeChildrenScope].get(plugin)).toBe(child);
+      expect(parent[PluginScopeChildrenPluginMapScope].get(plugin)).toBe(child);
     });
 
     it('should return default value before synchronization', () => {
@@ -261,22 +266,23 @@ describe('plugins', () => {
       const root = create({slots: ['slot1']});
       const separate = create({inheritedSlots: ['slot1']}, root);
       const parent = create({slots: ['slot2'], inheritedSlots: ['slot1']}, root);
-      const detachedChild = create({inheritedSlots: ['slot1', 'slot2']}, parent);
+      const directChild = create({inheritedSlots: ['slot1', 'slot2']}, parent);
       const child = parent.children(createPlugin('test').needs(slot()('slot1')).needs(slot()('slot2')).init());
 
       root.slots.slot1?.add('root');
       separate.slots.slot1?.add('separate');
       parent.slots.slot1?.add('parent');
-      detachedChild.slots.slot1?.add('detachedChild');
+      directChild.slots.slot1?.add('directChild');
       child.slots.slot1?.add('child');
       parent.slots.slot2?.add('parent');
-      detachedChild.slots.slot2?.add('detachedChild');
+      directChild.slots.slot2?.add('directChild');
       child.slots.slot2?.add('child');
 
       parent.destroy();
 
-      expect(root.slots.slot1?.all()).toEqual(['root', 'separate', 'detachedChild']);
-      expect(parent.slots.slot2?.all()).toEqual(['detachedChild']);
+      expect(root[PluginScopeChildrenScope]).toEqual([separate]);
+      expect(root.slots.slot1?.all()).toEqual(['root', 'separate']);
+      expect(parent.slots.slot2?.all()).toEqual([]);
     });
   });
 });
