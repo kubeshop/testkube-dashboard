@@ -1,4 +1,7 @@
 import type {ReactElement} from 'react';
+import {createElement} from 'react';
+
+import {usePluginScope} from '../hooks';
 
 import {Plugin} from './Plugin';
 import {PluginScope} from './PluginScope';
@@ -59,7 +62,21 @@ export class PluginBuilder<T extends PluginState> {
    * It may have condition,
    * but conditional providers are included after those without condition.
    */
-  public provider<U>(provider: PluginProvider<U>, metadata: PluginProviderMetadata<T> = {}): PluginBuilder<T> {
+  public provider<U>(
+    rawProvider: PluginProvider<U> | ((tk: PluginScope<PluginScopeStateFor<T>>) => PluginProvider<U>),
+    metadata: PluginProviderMetadata<T> = {}
+  ): PluginBuilder<T> {
+    const provider =
+      typeof rawProvider === 'function'
+        ? ({
+            type: (props: any) => {
+              // eslint-disable-next-line react-hooks/rules-of-hooks
+              const {type: Provider, props: innerProps} = rawProvider(usePluginScope());
+              return createElement(Provider as any, {...innerProps, ...props});
+            },
+            props: {},
+          } as unknown as PluginProvider<U>)
+        : rawProvider;
     return new PluginBuilder({
       ...this.plugin,
       providers: [...this.plugin.providers, {provider, metadata}],

@@ -560,4 +560,22 @@ describe('plugins', () => {
       'dynamic4',
     ]);
   });
+
+  it('should allow reading the scope in the provider definition', () => {
+    const Context = createContext<any>(null);
+    const Reader: FC = () => <div data-testid={useContext(Context)} />;
+    const plugin = createPlugin('plugin')
+      .data({value: 'some1'})
+      .provider(tk => <Context.Provider value={tk.data.value} />)
+      .init();
+    const [Provider, {initialize}] = new PluginResolver().register(plugin).resolve();
+    const scope = initialize();
+    const result = render(
+      <Provider root={scope}>
+        <Reader />
+      </Provider>
+    );
+
+    expect(result.queryByTestId('some1')).toBeTruthy();
+  });
 });

@@ -242,6 +242,8 @@ export default createPlugin('some-name')
 
     // You may use alternative JSX syntax too, the children will be added automatically anyway.
     .provider(<SomeContext.Provider value={{foo: 'bar'}} />)
+        
+    // Additionally
 
     .init();
 ```
@@ -261,6 +263,10 @@ import {initializeSomeStore, useSomeStorePick} from './store';
 export default createPlugin('some-name')
     // Inject the store
     .provider(<StoreProvider store={initializeSomeStore} />)
+
+    // Such store may be reset by some data too
+    .needs(data<string>()('environmentId'))
+    .provider(tk => <StoreProvider store={initializeSomeStore} dependencies={[tk.data.environmentId]} />)
 
     // Expose public interface for other plugins
     .data({useSomeStorePick})
