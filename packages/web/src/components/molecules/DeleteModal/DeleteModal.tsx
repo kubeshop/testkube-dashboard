@@ -71,15 +71,15 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
       });
   };
   return (
-    <DeleteModalWrapper>
+    <DeleteModalWrapper
+      onKeyPress={event => {
+        if (deleteOnEnter) {
+          onEvent(event, onDeleteCallback);
+        }
+      }}
+    >
       {content || (
-        <FullWidthSpace
-          size={contentSize || 16}
-          direction="vertical"
-          onKeyPress={event => {
-            onEvent(event, onDeleteCallback);
-          }}
-        >
+        <FullWidthSpace size={contentSize || 16} direction="vertical">
           <Text className="regular middle" color={Colors.slate400}>
             {title}
           </Text>

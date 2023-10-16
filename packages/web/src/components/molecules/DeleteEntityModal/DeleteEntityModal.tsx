@@ -6,12 +6,13 @@ import {capitalize} from 'lodash';
 
 import {FullWidthSpace, Text} from '@custom-antd';
 
+import {useModal} from '@modal/hooks';
+
 import {DeleteModal} from '@molecules';
 
 import Colors from '@styles/Colors';
 
 const DeleteEntityModal: React.FC<{
-  onClose: () => void;
   onDelete: (id: string) => Promise<any>;
   name: string;
   entityLabel: string;
@@ -19,14 +20,15 @@ const DeleteEntityModal: React.FC<{
   idToDelete?: string;
   onConfirm?: () => void;
 }> = props => {
-  const {onDelete, name, onClose, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
+  const {onDelete, name, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
+  const {close} = useModal();
   const [checkName, setName] = useState('');
 
   return (
     <DeleteModal
       onDelete={onDelete}
-      onClose={onClose}
+      onClose={close}
       onConfirm={onConfirm}
       successMessage={`${capitalize(entityLabel)} was successfully deleted.`}
       defaultStackRoute={defaultStackRoute}
