@@ -15,7 +15,7 @@ import {notificationCall} from '..';
 
 import {DeleteModalWrapper} from './DeleteModal.styled';
 
-interface DeleteModalProps {
+export interface DeleteModalProps {
   onDelete: (id: string) => Promise<any>;
   onClose: () => void;
   onConfirm?: () => void;
@@ -80,19 +80,25 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     >
       {content || (
         <FullWidthSpace size={contentSize || 16} direction="vertical">
-          <Text className="regular middle" color={Colors.slate400}>
+          <Text data-testid="delete-content-title" className="regular middle" color={Colors.slate400}>
             {title}
           </Text>
-          <Text className="regular middle" color={Colors.slate400}>
+          <Text data-testid="delete-content-subtitle" className="regular middle" color={Colors.slate400}>
             {subtitle}
           </Text>
         </FullWidthSpace>
       )}
       <Space style={{justifyContent: 'flex-end'}}>
-        <Button $customType="secondary" onClick={onClose}>
+        <Button data-testid="delete-cancel-btn" $customType="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <Button $customType="warning" onClick={onDeleteCallback} disabled={actionDisabled} loading={isLoading}>
+        <Button
+          data-testid="delete-action-btn"
+          $customType="warning"
+          onClick={onDeleteCallback}
+          disabled={actionDisabled}
+          loading={isLoading}
+        >
           {actionText || 'Delete'}
         </Button>
       </Space>

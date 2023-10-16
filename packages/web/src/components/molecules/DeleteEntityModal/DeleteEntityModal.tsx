@@ -12,14 +12,16 @@ import {DeleteModal} from '@molecules';
 
 import Colors from '@styles/Colors';
 
-const DeleteEntityModal: React.FC<{
+export interface DeleteEntityModalProps {
   onDelete: (id: string) => Promise<any>;
   name: string;
   entityLabel: string;
   defaultStackRoute: string;
   idToDelete?: string;
   onConfirm?: () => void;
-}> = props => {
+}
+
+const DeleteEntityModal: React.FC<DeleteEntityModalProps> = props => {
   const {onDelete, name, onConfirm, entityLabel, defaultStackRoute, idToDelete} = props;
 
   const {close} = useModal();
@@ -37,16 +39,17 @@ const DeleteEntityModal: React.FC<{
       deleteOnEnter
       content={
         <FullWidthSpace size={24} direction="vertical">
-          <Text className="regular middle" color={Colors.slate400}>
+          <Text data-testid="delete-entity-title" className="regular middle" color={Colors.slate400}>
             Do you really want to delete this {entityLabel}?
             <br />
             All your historical and analytical data will also be removed.
           </Text>
-          <Text className="regular middle" color={Colors.slate400}>
+          <Text data-testid="delete-entity-subtitle" className="regular middle" color={Colors.slate400}>
             Please enter the name of this {entityLabel} (<span style={{color: Colors.whitePure}}>{name}</span>) to
             delete it forever.
           </Text>
           <Input
+            data-testid="delete-entity-input"
             placeholder={`${capitalize(entityLabel)} name`}
             onChange={e => {
               setName(e.target.value);

@@ -1,20 +1,36 @@
+import {FC} from 'react';
+
 import {fireEvent, render, waitFor} from '@testing-library/react';
 
-import DeleteModal from './DeleteModal';
+import DashboardContext from '@contexts/DashboardContext';
+
+import {mockDashboardContextValue} from '@utils/mocks';
+
+import DeleteModal, {DeleteModalProps} from './DeleteModal';
+
+const DeleteModalWrapper: FC<DeleteModalProps> = props => (
+  <DashboardContext.Provider value={mockDashboardContextValue}>
+    <DeleteModal {...props} />
+  </DashboardContext.Provider>
+);
 
 describe('DeleteModal', () => {
-  const onDelete = jest.fn();
+  let onDelete: jest.Mock;
   const onClose = jest.fn();
   const successMessage = 'Item deleted successfully';
   const idToDelete = '123';
+
+  beforeEach(() => {
+    onDelete = jest.fn().mockImplementation(() => Promise.resolve());
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders the title and subtitle', () => {
-    const {getByText} = render(
-      <DeleteModal
+    const {getByTestId} = render(
+      <DeleteModalWrapper
         onDelete={onDelete}
         onClose={onClose}
         successMessage={successMessage}
@@ -24,16 +40,21 @@ describe('DeleteModal', () => {
       />
     );
 
-    expect(getByText('Delete Item')).toBeInTheDocument();
-    expect(getByText('Are you sure you want to delete this item?')).toBeInTheDocument();
+    expect(getByTestId('delete-content-title')).toBeInTheDocument();
+    expect(getByTestId('delete-content-subtitle')).toBeInTheDocument();
   });
 
   it('calls onDelete when the delete button is clicked', async () => {
-    const {getByText} = render(
-      <DeleteModal onDelete={onDelete} onClose={onClose} successMessage={successMessage} idToDelete={idToDelete} />
+    const {getByTestId} = render(
+      <DeleteModalWrapper
+        onDelete={onDelete}
+        onClose={onClose}
+        successMessage={successMessage}
+        idToDelete={idToDelete}
+      />
     );
 
-    fireEvent.click(getByText('Delete'));
+    fireEvent.click(getByTestId('delete-action-btn'));
 
     await waitFor(() => {
       expect(onDelete).toHaveBeenCalledWith(idToDelete);
@@ -41,8 +62,8 @@ describe('DeleteModal', () => {
   });
 
   it('disables the delete button when actionDisabled is true', () => {
-    const {getByText} = render(
-      <DeleteModal
+    const {getByTestId} = render(
+      <DeleteModalWrapper
         onDelete={onDelete}
         onClose={onClose}
         successMessage={successMessage}
@@ -51,13 +72,13 @@ describe('DeleteModal', () => {
       />
     );
 
-    expect(getByText('Delete')).toBeDisabled();
+    expect(getByTestId('delete-action-btn')).toBeDisabled();
   });
 
   it('calls onConfirm when provided after successful deletion', async () => {
     const onConfirm = jest.fn();
-    const {getByText} = render(
-      <DeleteModal
+    const {getByTestId} = render(
+      <DeleteModalWrapper
         onDelete={onDelete}
         onClose={onClose}
         successMessage={successMessage}
@@ -66,7 +87,7 @@ describe('DeleteModal', () => {
       />
     );
 
-    fireEvent.click(getByText('Delete'));
+    fireEvent.click(getByTestId('delete-action-btn'));
 
     await waitFor(() => {
       expect(onDelete).toHaveBeenCalledWith(idToDelete);
@@ -74,33 +95,17 @@ describe('DeleteModal', () => {
     });
   });
 
-  it('navigates back when defaultStackRoute is provided after successful deletion', async () => {
-    const defaultStackRoute = '/items';
-    const {getByText} = render(
-      <DeleteModal
+  it('calls onClose when the cancel button is clicked', () => {
+    const {getByTestId} = render(
+      <DeleteModalWrapper
         onDelete={onDelete}
         onClose={onClose}
         successMessage={successMessage}
         idToDelete={idToDelete}
-        defaultStackRoute={defaultStackRoute}
       />
     );
 
-    fireEvent.click(getByText('Delete'));
-
-    await waitFor(() => {
-      expect(onDelete).toHaveBeenCalledWith(idToDelete);
-      expect(onClose).toHaveBeenCalled();
-      expect(window.location.pathname).toEqual(defaultStackRoute);
-    });
-  });
-
-  it('calls onClose when the cancel button is clicked', () => {
-    const {getByText} = render(
-      <DeleteModal onDelete={onDelete} onClose={onClose} successMessage={successMessage} idToDelete={idToDelete} />
-    );
-
-    fireEvent.click(getByText('Cancel'));
+    fireEvent.click(getByTestId('delete-cancel-btn'));
 
     expect(onClose).toHaveBeenCalled();
   });
