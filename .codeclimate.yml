@@ -1,0 +1,47 @@
+version: '2'
+
+checks:
+  method-complexity:
+    config:
+      threshold: 13
+  method-lines:
+    config:
+      threshold: 100
+  similar-code:
+    config:
+      threshold: 45
+  identical-code:
+    config:
+      threshold: 25
+
+plugins:
+  nodesecurity:
+    enabled: true
+  git-legal:
+    enabled: true
+  fixme:
+    enabled: true
+    config:
+      strings:
+        - FIXME
+        - TODO
+  shellcheck:
+    enabled: true
+  structure:
+    enabled: true
+
+exclude_patterns:
+  - '**/node_modules/'
+  - '**/dist/'
+  - '**/build/'
+  - '**/coverage/'
+  - '**/playwright-report/'
+  - 'packages/e2e-tests/'
+  - '**/spec/'
+  - '**/*.d.ts'
+  - '**/*.spec.ts'
+  - '**/*.spec.tsx'
+  - '**/.prettierrc.js'
+  - '**/commitlint.config.js'
+  - '**/jest.config.js'
+  - '**/craco.config.js'
