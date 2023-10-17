@@ -1,0 +1,56 @@
+{
+  "name": "@testkube/plugins",
+  "version": "0.0.0",
+  "author": "Kubeshop",
+  "description": "Plugins Toolkit for the Testkube Dashboard",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kubeshop/testkube-dashboard.git",
+    "path": "packages/plugins"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "private": true,
+  "engines": {
+    "node": "^18.13.0 || ^20.0.0",
+    "npm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "5.16.5",
+    "react": "18.1.0",
+    "react-use": "17.4.0",
+    "zustand": "^4.4.1"
+  },
+  "dependencies": {
+    "@testkube/plugins": "*"
+  },
+  "peerDependencies": {
+    "react": "18.1.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint --max-warnings 0 \"*.{js,jsx,ts,tsx}\" \"src/**/*.{js,jsx,ts,tsx}\" --cache",
+    "stylelint": "stylelint \"*.{js,jsx,ts,tsx}\" \"./src/**/*.{ts,tsx}\"",
+    "ts-check": "tsc --build",
+    "format:check": "prettier \"*.{js,jsx,ts,tsx}\" \"./src/**/*.{js,jsx,ts,tsx}\" --cache --check",
+    "format:all": "prettier --write \"*.{js,jsx,ts,tsx}\" \"./src/**/*.{js,jsx,ts,tsx}\" --cache"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "wallaby": {
+    "testFramework": {
+      "configFile": "./jest.config.js"
+    }
+  }
+}
