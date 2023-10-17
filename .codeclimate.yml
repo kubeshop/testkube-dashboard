@@ -34,8 +34,10 @@ plugins:
     enabled: true
 
 exclude_patterns:
+  - '**/node_modules/'
   - '**/dist/'
   - '**/build/'
+  - '**/coverage/'
   - '**/spec/'
   - '**/*.d.ts'
   - '**/*.spec.ts'
