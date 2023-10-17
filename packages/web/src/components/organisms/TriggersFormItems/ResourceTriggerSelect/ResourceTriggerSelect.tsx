@@ -59,7 +59,7 @@ const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
       {testsData.length > 0 ? (
         <OptGroup label="Tests">
           {testsData.map(item => (
-            <Option key={item.name}>
+            <Option key={item.name} title={item.name}>
               <StyledResourceOptionWrapper>
                 <ExecutorIcon type={getTestExecutorIcon(executors, item.type)} />
                 <Text className="regular middle">{item.name}</Text>
@@ -71,7 +71,7 @@ const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
       {testSuitesData.length > 0 ? (
         <OptGroup label="Test Suites">
           {testSuitesData.map(item => (
-            <Option key={item.name}>
+            <Option key={item.name} title={item.name}>
               <StyledResourceOptionWrapper>
                 <TestSuitesIcon fill={Colors.slate100} />
                 <Text className="regular middle">{item.name}</Text>
