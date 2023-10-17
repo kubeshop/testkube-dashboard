@@ -79,7 +79,7 @@
     "react-use-websocket": "^4.2.0",
     "reactflow": "^11.7.4",
     "semver": "^7.5.4",
-    "strip-ansi": "^7.0.1",
+    "strip-ansi": "^6.0.1",
     "styled-components": "5.3.5",
     "zustand": "^4.4.1"
   },

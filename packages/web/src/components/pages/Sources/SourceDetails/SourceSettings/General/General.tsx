@@ -12,6 +12,7 @@ import NameNType from './NameNUrl';
 const General: React.FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {current} = useSourcesPick('current');
+  const [deleteSource] = useDeleteSourceMutation();
 
   return (
     <>
@@ -23,7 +24,7 @@ const General: React.FC = () => {
           label="source"
           description="This source will be permanently deleted. All your tests linked to this source will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
           redirectUrl="/sources"
-          useDeleteMutation={useDeleteSourceMutation}
+          onDelete={deleteSource}
         />
       ) : null}
     </>

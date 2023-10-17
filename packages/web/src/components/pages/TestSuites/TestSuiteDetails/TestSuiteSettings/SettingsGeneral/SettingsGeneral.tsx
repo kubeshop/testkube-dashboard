@@ -19,6 +19,7 @@ const SettingsGeneral: FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
   const deleteTestSuiteExtension = usePluginSlot('deleteTestSuiteExtension');
+  const [deleteTestSuite] = useDeleteTestSuiteMutation();
 
   return (
     <>
@@ -33,7 +34,7 @@ const SettingsGeneral: FC = () => {
             label="test suite"
             description="The test suite will be permanently deleted, including its deployments analytical history. This action is irreversible and can not be undone."
             redirectUrl="/test-suites"
-            useDeleteMutation={useDeleteTestSuiteMutation}
+            onDelete={deleteTestSuite}
           />
         )
       ) : null}
