@@ -91,7 +91,7 @@ export default createPlugin('some-plugin-name')
         console.log(tk.data.some1Fn());
         
         // Read data from external plugin in outer system.
-        console.log(tk.organization)
+        console.log(tk.data.organizationId);
         
         // Read all available values from the current slot.
         console.log(tk.slots.warnings.all());
