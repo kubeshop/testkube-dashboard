@@ -56,6 +56,7 @@
     "start": "npm run -w @testkube/web start",
     "build": "npm run --workspaces --if-present build",
     "test": "npx jest",
+    "test:coverage": "npx jest --collect-coverage --coverage-reporters lcov",
     "test:watch": "npx jest --watch --detectOpenHandles",
     "test:update": "npm run -w @testkube/web test:update",
     "e2e": "npm run -w @testkube/e2e-tests e2e",
