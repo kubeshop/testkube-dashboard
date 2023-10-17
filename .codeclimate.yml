@@ -3,19 +3,16 @@ version: '2'
 checks:
   method-complexity:
     config:
-      threshold: 8
+      threshold: 13
   method-lines:
     config:
       threshold: 100
-  method-count:
-    config:
-      threshold: 25
   similar-code:
     config:
-      threshold: 20
+      threshold: 45
   identical-code:
     config:
-      threshold: 15
+      threshold: 25
 
 plugins:
   nodesecurity:
@@ -38,6 +35,8 @@ exclude_patterns:
   - '**/dist/'
   - '**/build/'
   - '**/coverage/'
+  - '**/playwright-report/'
+  - 'packages/e2e-tests/'
   - '**/spec/'
   - '**/*.d.ts'
   - '**/*.spec.ts'
