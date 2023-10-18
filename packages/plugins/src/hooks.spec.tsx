@@ -21,15 +21,52 @@ describe('plugins', () => {
       const useSlot = createUseSlot();
 
       it('should return all items from the slot', () => {
-        const root: any = {slots: {slot1: {all: jest.fn(() => ['value1', 'value2'])}}};
+        const root: any = {slots: {slot1: {allRaw: jest.fn(() => [{value: 'value1'}, {value: 'value2'}])}}};
         const {result} = renderHook(() => useSlot('slot1'), {
           wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
         });
         expect(result.current).toEqual(['value1', 'value2']);
       });
 
+      it('should memoize the array', () => {
+        const items = [{value: 'value1'}, {value: 'value2'}];
+        const root: any = {slots: {slot1: {allRaw: jest.fn(() => [...items])}}};
+        const {result, rerender} = renderHook(() => useSlot('slot1'), {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        const prevResult = result.current;
+        rerender();
+        expect(result.current).toBe(prevResult);
+      });
+
+      it('should change the array if the values count is changed', () => {
+        const items = [{value: 'value1'}, {value: 'value2'}];
+        const root: any = {slots: {slot1: {allRaw: jest.fn(() => [...items])}}};
+        const {result, rerender} = renderHook(() => useSlot('slot1'), {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        const prevResult = result.current;
+        items.push({value: 'value3'});
+        rerender();
+        expect(result.current).not.toBe(prevResult);
+        expect(result.current).toEqual(['value1', 'value2', 'value3']);
+      });
+
+      it('should change the array if some item is changed', () => {
+        const items = [{value: 'value1'}, {value: 'value2'}];
+        const root: any = {slots: {slot1: {allRaw: jest.fn(() => [...items])}}};
+        const {result, rerender} = renderHook(() => useSlot('slot1'), {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        const prevResult = result.current;
+        items[0] = {value: 'value3'};
+        rerender();
+        expect(result.current).not.toBe(prevResult);
+        expect(result.current).toEqual(['value3', 'value2']);
+      });
+
       it('should return empty list for unknown slot', () => {
-        const root: any = {slots: {slot1: {all: jest.fn(() => ['value1', 'value2'])}}};
+        const root: any = {slots: {slot1: {allRaw: jest.fn(() => [{value: 'value1'}, {value: 'value2'}])}}};
         const {result} = renderHook(() => useSlot('slotUnknown'), {
           wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
         });
