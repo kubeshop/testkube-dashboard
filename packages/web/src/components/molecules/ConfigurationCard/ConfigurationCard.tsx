@@ -28,6 +28,7 @@ import {
 type ConfigurationCardProps = {
   title: ReactNode;
   description: ReactNode;
+  name: string;
   isWarning?: boolean;
   footer?: ReactNode;
   headerAction?: ReactNode;
@@ -45,6 +46,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     errors,
     title,
     description,
+    name,
     headerAction,
     onCancel,
     footer,
@@ -66,10 +68,10 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     <StyledContainer isWarning={isWarning}>
       <StyledHeaderContainer ref={topRef}>
         <StyledHeader>
-          <Text className="regular big" color={Colors.slate50}>
+          <Text data-testid={`${name}-card-title`} className="regular big" color={Colors.slate50}>
             {title}
           </Text>
-          <Text className="regular middle" color={Colors.slate400}>
+          <Text data-testid={`${name}-card-description`} className="regular middle" color={Colors.slate400}>
             {description}
           </Text>
         </StyledHeader>
@@ -102,7 +104,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                 return (
                   <StyledFooterButtonsContainer>
                     <Button
-                      data-test="configuration-card-cancel-button"
+                      data-testid="configuration-card-cancel-button"
                       $customType="secondary"
                       hidden={!onCancel || buttonsDisabled}
                       onClick={onCancel}
@@ -110,7 +112,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                       Cancel
                     </Button>
                     <Button
-                      data-test="configuration-card-confirm-button"
+                      data-testid="configuration-card-confirm-button"
                       $customType={isWarning ? 'warning' : 'primary'}
                       disabled={buttonsDisabled}
                       loading={loading}

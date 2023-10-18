@@ -15,6 +15,7 @@ const ConnectCloud: React.FC = () => {
     <ConfigurationCard
       title="Connect to Testkube Cloud"
       description="Connect your current Testkube instance to Testkube Cloud. You can always safely disconnect."
+      name="connect-cloud-card"
       footer={
         <Text className="regular middle" color={Colors.slate400}>
           Learn more about{' '}

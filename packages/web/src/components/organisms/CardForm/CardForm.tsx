@@ -122,11 +122,13 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
       onFieldsChange={onFieldsChange}
       onValuesChange={onValuesChange}
       onFinish={confirm}
+      data-testid={`${name}`}
     >
       <Form.Item noStyle shouldUpdate>
         <ConfigurationCard
           title={title}
           description={description}
+          name={name}
           footer={footer}
           headerAction={headerAction}
           confirmLabel={confirmLabel}
