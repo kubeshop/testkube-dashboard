@@ -1,5 +1,7 @@
 import {FC, useCallback} from 'react';
 
+import {useLegacySlotFirst} from '@testkube/web/src/legacyHooks';
+
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
@@ -12,8 +14,6 @@ import {notificationCall} from '@molecules';
 import {EntityListContent} from '@organisms';
 
 import {Error} from '@pages';
-
-import {usePluginSlot} from '@plugins/hooks';
 
 import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
 
@@ -30,7 +30,7 @@ const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 const TestSuitesList: FC = () => {
   const isAvailable = useSystemAccess(SystemAccess.agent);
   const [filters, setFilters] = useTestSuitesField('filters');
-  const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
+  const pageTitleAddon = useLegacySlotFirst('testSuitesListTitleAddon');
 
   const {
     data: testSuites,

@@ -2,7 +2,7 @@ import {FC} from 'react';
 
 import {useModal} from '@modal/hooks';
 
-import {DeleteEntityModal} from '@molecules';
+import DeleteEntityModal from '@molecules/DeleteEntityModal';
 
 import {CardForm} from '@organisms';
 

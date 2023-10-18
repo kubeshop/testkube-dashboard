@@ -1,5 +1,7 @@
 import {FC} from 'react';
 
+import {useLegacySlotFirst} from '@testkube/web/src/legacyHooks';
+
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Delete} from '@molecules/CommonSettings';
@@ -7,8 +9,6 @@ import {Delete} from '@molecules/CommonSettings';
 import {Labels, NameNDescription} from '@organisms/EntityDetails';
 
 import {Permissions, usePermission} from '@permissions/base';
-
-import {usePluginSlot} from '@plugins/hooks';
 
 import {useDeleteTestSuiteMutation, useUpdateTestSuiteMutation} from '@services/testSuites';
 
@@ -18,7 +18,7 @@ const SettingsGeneral: FC = () => {
   const isWritable = useSystemAccess(SystemAccess.agent);
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
-  const deleteTestSuiteExtension = usePluginSlot('deleteTestSuiteExtension');
+  const deleteTestSuiteExtension = useLegacySlotFirst('deleteTestSuiteExtension');
   const [deleteTestSuite] = useDeleteTestSuiteMutation();
 
   return (

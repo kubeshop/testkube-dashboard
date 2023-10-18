@@ -17,7 +17,13 @@ import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
-import {initializeEntityDetailsStore} from '@store/entityDetails';
+import {
+  useEntityDetailsField,
+  useEntityDetailsInstance,
+  useEntityDetailsPick,
+  useEntityDetailsReset,
+  useEntityDetailsSync,
+} from '@store/entityDetails';
 
 import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
@@ -44,10 +50,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
 }) => {
   const {navigate} = useContext(DashboardContext);
 
-  const [
-    EntityStoreProvider,
-    {sync: useEntityDetailsSync, useField: useEntityDetailsField, pick: useEntityDetailsPick},
-  ] = initializeEntityDetailsStore({entity, id}, [entity, id, navigate, useGetEntityDetails]);
+  useEntityDetailsReset({entity, id}, [entity, id, navigate, useGetEntityDetails]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
@@ -217,15 +220,15 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
       setIsFirstTimeLoading(false);
     }
     setExecutions(rawExecutions);
-  }, [useEntityDetailsSync, rawExecutions]);
+  }, [useEntityDetailsInstance(), rawExecutions]);
 
   useEffect(() => {
     setMetrics(rawMetrics);
-  }, [useEntityDetailsSync, rawMetrics]);
+  }, [useEntityDetailsInstance(), rawMetrics]);
 
   useEntityDetailsSync({details, isV2, error});
 
-  return <EntityStoreProvider>{children}</EntityStoreProvider>;
+  return <>{children}</>;
 };
 
 export default EntityDetailsLayer;

@@ -1,10 +1,10 @@
+import {useLegacySlotFirst} from '@testkube/web/src/legacyHooks';
+
 import {Delete} from '@molecules/CommonSettings';
 
 import {Labels, NameNDescription} from '@organisms/EntityDetails';
 
 import {Permissions, usePermission} from '@permissions/base';
-
-import {usePluginSlot} from '@plugins/hooks';
 
 import {useDeleteTestMutation, useUpdateTestMutation} from '@services/tests';
 
@@ -16,7 +16,7 @@ import Timeout from './Timeout';
 const SettingsGeneral: React.FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
-  const deleteTestExtension = usePluginSlot('deleteTestExtension');
+  const deleteTestExtension = useLegacySlotFirst('deleteTestExtension');
   const [deleteTest] = useDeleteTestMutation();
 
   return (

@@ -31,7 +31,6 @@ import {useGetSourcesQuery} from '@services/sources';
 
 import {useClusterDetailsPick} from '@store/clusterDetails';
 import {useExecutorsSync} from '@store/executors';
-import {initializeLogOutputStore} from '@store/logOutput';
 import {useSourcesSync} from '@store/sources';
 
 import {composeProviders} from '@utils/composeProviders';
@@ -40,15 +39,11 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
 
-export interface AppProps {}
-
-const App: React.FC<AppProps> = () => {
+const App: React.FC = () => {
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
-
-  const [LogOutputProvider] = initializeLogOutputStore(undefined, [location.pathname]);
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
     pollingInterval: PollingIntervals.long,
@@ -66,7 +61,7 @@ const App: React.FC<AppProps> = () => {
 
   const update = useUpdate();
 
-  const {open: openEndpointModal, close: closeEndpointModal} = useModal({
+  const {open: openEndpointModal} = useModal({
     title: 'Testkube API endpoint',
     width: 693,
     content: <EndpointModal />,
@@ -115,43 +110,44 @@ const App: React.FC<AppProps> = () => {
 
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
-    .append(LogOutputProvider, {})
 
     .render(
       <Suspense fallback={<Loading />}>
-        {!isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
-          <MessagePanelWrapper>
-            <MessagePanel
-              buttons={[
-                {
-                  type: 'secondary',
-                  text: 'Learn more',
-                  isLink: true,
-                  linkConfig: {
-                    href: 'https://testkube.io/get-started',
-                    target: '_blank',
+        {
+          /* TODO: Move as a plugin */ !isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
+            <MessagePanelWrapper>
+              <MessagePanel
+                buttons={[
+                  {
+                    type: 'secondary',
+                    text: 'Learn more',
+                    isLink: true,
+                    linkConfig: {
+                      href: 'https://testkube.io/get-started',
+                      target: '_blank',
+                    },
                   },
-                },
-                {
-                  type: 'primary',
-                  text: 'Connect to Testkube Cloud',
-                  isLink: true,
-                  linkConfig: {
-                    href: 'https://cloud.testkube.io/system-init?cloudMigrate=true',
-                    target: '_blank',
+                  {
+                    type: 'primary',
+                    text: 'Connect to Testkube Cloud',
+                    isLink: true,
+                    linkConfig: {
+                      href: 'https://cloud.testkube.io/system-init?cloudMigrate=true',
+                      target: '_blank',
+                    },
                   },
-                },
-              ]}
-              onClose={() => {
-                localStorage.setItem(config.isTestkubeCloudLaunchBannerHidden, 'true');
-                update();
-              }}
-              type="default"
-              title="🎉 We have just launched Testkube Cloud! 🎉"
-              description="One centralized place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
-            />
-          </MessagePanelWrapper>
-        ) : null}
+                ]}
+                onClose={() => {
+                  localStorage.setItem(config.isTestkubeCloudLaunchBannerHidden, 'true');
+                  update();
+                }}
+                type="default"
+                title="🎉 We have just launched Testkube Cloud! 🎉"
+                description="One centralized place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
+              />
+            </MessagePanelWrapper>
+          ) : null
+        }
         <Routes>
           <Route path="tests/*" element={<Tests />} />
           <Route path="test-suites/*" element={<TestSuites />} />

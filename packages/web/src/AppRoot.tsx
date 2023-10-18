@@ -7,6 +7,11 @@ import {Content} from 'antd/lib/layout/layout';
 
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
+import {PluginResolver} from '@testkube/plugins';
+
+import LegacyPlugin from '@testkube/web/src/legacy';
+import LegacyOssOnlyPlugin from '@testkube/web/src/legacyOssOnly';
+
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
 
 import {FeatureFlagsProvider} from '@feature-flags';
@@ -22,23 +27,10 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import PluginsContext from '@plugins/context';
-import createAiInsightsPlugin from '@plugins/definitions/ai-insights';
-import createPluginManager from '@plugins/manager';
-import {Plugin} from '@plugins/types';
-
 import {resetRtkCache, store} from '@redux/store';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
 import {useGetClusterConfigQuery} from '@services/config';
-
-import {initializeClusterDetailsStore} from '@store/clusterDetails';
-import {initializeExecutorsStore} from '@store/executors';
-import {initializeSourcesStore} from '@store/sources';
-import {initializeTestSuitesStore} from '@store/testSuites';
-import {initializeTestsStore} from '@store/tests';
-import {initializeTriggersStore} from '@store/triggers';
-import {initializeWebhooksStore} from '@store/webhooks';
 
 import {useTelemetry, useTelemetryValue} from '@telemetry/hooks';
 
@@ -57,16 +49,6 @@ const AppRoot: React.FC = () => {
   const navigate = useLastCallback(useNavigate());
   const telemetry = useTelemetry();
   const apiEndpoint = useApiEndpoint();
-
-  // TODO: Unify all store providers and move them there?
-  //       Otherwise, these are not available from modals.
-  const [ExecutorsProvider] = initializeExecutorsStore({}, [apiEndpoint]);
-  const [SourcesProvider] = initializeSourcesStore({}, [apiEndpoint]);
-  const [TestsProvider] = initializeTestsStore({}, [apiEndpoint]);
-  const [TestSuitesProvider] = initializeTestSuitesStore({}, [apiEndpoint]);
-  const [TriggersProvider] = initializeTriggersStore({}, [apiEndpoint]);
-  const [WebhooksProvider] = initializeWebhooksStore({}, [apiEndpoint]);
-  const [ClusterDetailsProvider] = initializeClusterDetailsStore({}, [apiEndpoint]);
 
   const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
     skip: !apiEndpoint,
@@ -129,38 +111,29 @@ const AppRoot: React.FC = () => {
       location,
       baseUrl: '',
       showLogoInSider: true,
-      showSocialLinksInSider: true,
       showTestkubeCloudBanner: true,
     }),
     [navigate, location]
   );
 
-  const plugins: Plugin[] = useMemo(() => [createAiInsightsPlugin()], []);
-
-  const scope = useMemo(() => {
-    const pluginManager = createPluginManager();
-    plugins.forEach(plugin => pluginManager.add(plugin));
-    return pluginManager.setup();
-  }, [plugins]);
+  // TODO: Recover createAiInsightsPlugin()
+  // TODO: Allow passing parent scope from Cloud
+  const [PluginSystemProvider, root] = useMemo(() => {
+    const [Provider, {initialize, routes}] = new PluginResolver()
+      .register(LegacyPlugin)
+      .register(LegacyOssOnlyPlugin)
+      .resolve();
+    const scope = initialize();
+    return [Provider, scope];
+  }, []);
 
   return composeProviders()
-    .append(PluginsContext.Provider, {
-      value: {
-        scope,
-      },
-    })
     .append(FeatureFlagsProvider, {})
     .append(ConfigContext.Provider, {value: config})
     .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(MainContext.Provider, {value: mainContextValue})
-    .append(ClusterDetailsProvider, {})
-    .append(ExecutorsProvider, {})
-    .append(SourcesProvider, {})
-    .append(TestsProvider, {})
-    .append(TestSuitesProvider, {})
-    .append(TriggersProvider, {})
-    .append(WebhooksProvider, {})
+    .append(PluginSystemProvider, {root})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})
     .render(

@@ -7,11 +7,11 @@ import {Button, FullWidthSpace, Text} from '@custom-antd';
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import usePressEnter from '@hooks/usePressEnter';
 
+import {notificationCall} from '@molecules/Notification';
+
 import Colors from '@styles/Colors';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-
-import {notificationCall} from '..';
 
 import {DeleteModalWrapper} from './DeleteModal.styled';
 

@@ -3,7 +3,6 @@ export const mockDashboardContextValue = {
   location: {pathname: '/testroute', search: '', key: '', hash: '', location: '', state: {}},
   baseUrl: '',
   showLogoInSider: true,
-  showSocialLinksInSider: true,
   showTestkubeCloudBanner: true,
 };
 
