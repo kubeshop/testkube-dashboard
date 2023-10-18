@@ -126,7 +126,7 @@ const AppRoot: React.FC = () => {
 
   // TODO: Recover createAiInsightsPlugin()
   // TODO: Allow passing parent scope from Cloud
-  const [PluginSystemProvider, root] = useMemo(() => {
+  const [PluginSystemProvider, root, routing] = useMemo(() => {
     const [Provider, {initialize, routes}] = new PluginResolver()
       .register(LegacyOssOnlyPlugin)
       .register(GeneralPlugin)
@@ -139,7 +139,7 @@ const AppRoot: React.FC = () => {
       .register(TestsAndTestSuitesPlugin)
       .resolve();
     const scope = initialize();
-    return [Provider, scope];
+    return [Provider, scope, routes] as const;
   }, []);
 
   return composeProviders()
@@ -158,7 +158,7 @@ const AppRoot: React.FC = () => {
           <StyledLayoutContentWrapper>
             <Content>
               <ErrorBoundary>
-                <App />
+                <App routes={routing} />
               </ErrorBoundary>
             </Content>
           </StyledLayoutContentWrapper>

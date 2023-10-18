@@ -1,6 +1,8 @@
 import React, {Suspense, useContext, useEffect} from 'react';
-import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
+import {Route, Routes, useLocation} from 'react-router-dom';
 import {useUpdate} from 'react-use';
+
+import {PluginRoute} from '@testkube/plugins/src/internal/types';
 
 import {config} from '@constants/config';
 
@@ -12,18 +14,7 @@ import {useModal} from '@modal/hooks';
 
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 
-import {
-  EndpointProcessing,
-  Executors,
-  GlobalSettings,
-  Loading,
-  NotFound,
-  Sources,
-  TestSuites,
-  Tests,
-  Triggers,
-  Webhooks,
-} from '@pages';
+import {Loading, NotFound} from '@pages';
 
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
@@ -39,7 +30,11 @@ import {PollingIntervals} from '@utils/numbers';
 
 import {MessagePanelWrapper} from './App.styled';
 
-const App: React.FC = () => {
+interface AppProps {
+  routes: PluginRoute[];
+}
+
+const App: React.FC<AppProps> = ({routes}) => {
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const {showTestkubeCloudBanner} = useContext(DashboardContext);
@@ -149,18 +144,9 @@ const App: React.FC = () => {
           ) : null
         }
         <Routes>
-          <Route path="tests/*" element={<Tests />} />
-          <Route path="test-suites/*" element={<TestSuites />} />
-          <Route path="executors/*" element={<Executors />} />
-          <Route path="sources/*" element={<Sources />} />
-          <Route path="triggers/*" element={<Triggers />} />
-          <Route path="webhooks/*" element={<Webhooks />} />
-          <Route path="settings" element={<GlobalSettings />} />
-          <Route
-            path="/apiEndpoint"
-            element={isApiEndpointLocked() ? <Navigate to="/" replace /> : <EndpointProcessing />}
-          />
-          <Route path="/" element={<Navigate to="/tests" replace />} />
+          {routes.map(route => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
           <Route path="*" element={<NotFound />} />
         </Routes>
         <div id="log-output-container" />

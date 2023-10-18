@@ -11,10 +11,16 @@ import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
 
+import TestSuiteDetails from '@pages/TestSuites/TestSuiteDetails';
+import TestSuitesList from '@pages/TestSuites/TestSuitesList';
+import TestDetails from '@pages/Tests/TestDetails';
 import TestExecutionArtifacts from '@pages/Tests/TestDetails/TestExecution/TestExecutionArtifacts';
+import TestsList from '@pages/Tests/TestsList';
 
 import type ExecutorsPlugin from '@plugins/executors/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
+
+import DashboardRewrite from '@src/DashboardRewrite';
 
 import {
   initializeEntityDetailsStore,
@@ -51,12 +57,40 @@ import {decomposeVariables} from '@utils/variables';
 const generalStub = external<typeof GeneralPlugin>();
 const executorsStub = external<typeof ExecutorsPlugin>();
 
-// TODO: Add routes
 // TODO: Split
 export default createPlugin('oss/tests-and-test-suites')
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
   .needs(executorsStub.data('useExecutors'))
+
+  // Backwards compatibility
+  .route('/tests/executions/:id', <DashboardRewrite pattern="/tests/:id" keepQuery />)
+  .route(
+    '/tests/executions/:id/execution/:execId',
+    <DashboardRewrite pattern="/tests/:id/executions/:execId" keepQuery />
+  )
+  .route('/test-suites/executions/:id', <DashboardRewrite pattern="/test-suites/:id" keepQuery />)
+  .route(
+    '/test-suites/executions/:id/execution/:execId',
+    <DashboardRewrite pattern="/test-suites/:id/executions/:execId" keepQuery />
+  )
+
+  .route('/tests', <TestsList />)
+  .route('/tests/:id', <TestDetails tab="executions" />)
+  .route('/tests/:id/executions', <TestDetails tab="executions" />)
+  .route('/tests/:id/executions/:execId', <TestDetails tab="executions" />)
+  .route('/tests/:id/executions/:execId/:execDetailsTab', <TestDetails tab="executions" />)
+  .route('/tests/:id/commands', <TestDetails tab="commands" />)
+  .route('/tests/:id/settings', <TestDetails tab="settings" />)
+  .route('/tests/:id/settings/:settingsTab', <TestDetails tab="settings" />)
+
+  .route('/test-suites', <TestSuitesList />)
+  .route('/test-suites/:id', <TestSuiteDetails tab="executions" />)
+  .route('/test-suites/:id/executions', <TestSuiteDetails tab="executions" />)
+  .route('/test-suites/:id/executions/:execId', <TestSuiteDetails tab="executions" />)
+  .route('/test-suites/:id/commands', <TestSuiteDetails tab="commands" />)
+  .route('/test-suites/:id/settings', <TestSuiteDetails tab="settings" />)
+  .route('/test-suites/:id/settings/:settingsTab', <TestSuiteDetails tab="settings" />)
 
   .define(data<(tab: string) => void>()('setExecutionTab'))
   .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testExecutionTabs'))
