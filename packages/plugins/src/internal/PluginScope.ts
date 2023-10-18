@@ -1,3 +1,5 @@
+import {FC, ReactElement, ReactNode, createElement} from 'react';
+
 import type {GetPluginState, Plugin} from './Plugin';
 import {PluginSlot} from './PluginSlot';
 import {
@@ -159,5 +161,15 @@ export class PluginScope<T extends PluginScopeState> {
     });
     this[PluginScopeChildrenPluginMapScope].set(plugin, scope);
     return scope;
+  }
+
+  /**
+   * Render React node based on the slot.
+   * Remember, it is not optimized - each render() will return different <Component />.
+   * It should be used only for static render.
+   */
+  public render(fn: () => ReactElement): ReactNode {
+    const Component: FC = () => fn();
+    return createElement(Component);
   }
 }
