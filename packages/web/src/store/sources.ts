@@ -4,7 +4,7 @@ import {SourceWithRepository} from '@models/sources';
 
 import {connectStore, createStoreFactory} from './utils';
 
-interface SourcesSlice {
+export interface SourcesSlice {
   sources?: SourceWithRepository[];
   current?: SourceWithRepository;
 }

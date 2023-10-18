@@ -6,7 +6,7 @@ import {initialPageSize} from '@redux/initialState';
 
 import {connectStore, createStoreFactory} from './utils';
 
-interface TestsSlice {
+export interface TestsSlice {
   tests?: TestWithExecution[];
   filters: TestFilters;
 }
