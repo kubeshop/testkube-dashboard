@@ -28,16 +28,6 @@ describe('Delete', () => {
     </DashboardContext.Provider>
   );
 
-  const OpenDialogWrapper: React.FC<DeleteProps> = props => (
-    <DashboardContext.Provider value={mockDashboardContextValue}>
-      <NavigationContext.Provider value={mockNavigationContextValue}>
-        <ModalContext.Provider value={{...mockModalContextValue, open: true}}>
-          <Delete {...props} />
-        </ModalContext.Provider>
-      </NavigationContext.Provider>
-    </DashboardContext.Provider>
-  );
-
   it('should render the component', () => {
     const {getByTestId} = render(
       <DeleteWrapper
