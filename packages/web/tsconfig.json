@@ -50,7 +50,6 @@
       "@pages/*": ["src/components/pages/*"],
       "@permissions": ["src/permissions/"],
       "@permissions/*": ["src/permissions/*"],
-      "@plugins": ["src/plugins/"],
       "@plugins/*": ["src/plugins/*"],
       "@redux": ["src/redux/"],
       "@redux/*": ["src/redux/*"],
@@ -64,10 +63,8 @@
       "@telemetry/*": ["src/telemetry/*"],
       "@utils": ["src/utils/"],
       "@utils/*": ["src/utils/*"],
-      "@testkube/web/src/legacy": ["src/legacy"],
       "@testkube/web/src/legacyOssOnly": ["src/legacyOssOnly"],
       "@testkube/web/src/legacyCloudOnly": ["src/legacyCloudOnly"],
-      "@testkube/web/src/legacyHooks": ["src/legacyHooks"],
     }
   },
   "include": [

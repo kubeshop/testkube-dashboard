@@ -2,12 +2,12 @@ import {createPlugin, external} from '@testkube/plugins';
 
 import {ReactComponent as SettingIcon} from '@icons/setting.svg';
 
-import type LegacyPlugin from './legacy';
+import type GeneralPlugin from '@plugins/general/plugin';
 
-const legacyStub = external<typeof LegacyPlugin>();
+const generalStub = external<typeof GeneralPlugin>();
 
 export default createPlugin('web-legacy-cloud-only')
-  .needs(legacyStub.slots('siderItems'))
+  .needs(generalStub.slots('siderItems'))
 
   // Finish
   .init(tk => {

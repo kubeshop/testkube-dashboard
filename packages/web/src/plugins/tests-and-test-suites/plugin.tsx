@@ -1,15 +1,9 @@
-import {FC, ReactNode} from 'react';
+import {ReactNode} from 'react';
 
-import {StoreProvider, createPlugin, data, slot} from '@testkube/plugins';
+import {StoreProvider, createPlugin, data, external, slot} from '@testkube/plugins';
 
-import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
-import {ReactComponent as SourcesIcon} from '@assets/sources.svg';
 import {ReactComponent as TestSuitesIcon} from '@assets/test-suites-icon.svg';
 import {ReactComponent as TestsIcon} from '@assets/tests-icon.svg';
-import {ReactComponent as TriggersIcon} from '@assets/triggers.svg';
-import {ReactComponent as WebhooksIcon} from '@assets/webhooks.svg';
-
-import {IconProps} from '@atoms/Icon/types';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
@@ -19,15 +13,9 @@ import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
 
 import TestExecutionArtifacts from '@pages/Tests/TestDetails/TestExecution/TestExecutionArtifacts';
 
-import {useApiEndpoint} from '@services/apiEndpoint';
+import type ExecutorsPlugin from '@plugins/executors/plugin';
+import type GeneralPlugin from '@plugins/general/plugin';
 
-import {
-  initializeClusterDetailsStore,
-  useClusterDetails,
-  useClusterDetailsField,
-  useClusterDetailsPick,
-  useClusterDetailsSync,
-} from '@store/clusterDetails';
 import {
   initializeEntityDetailsStore,
   useEntityDetails,
@@ -43,20 +31,12 @@ import {
   useExecutionDetailsSync,
 } from '@store/executionDetails';
 import {
-  initializeExecutorsStore,
-  useExecutors,
-  useExecutorsField,
-  useExecutorsPick,
-  useExecutorsSync,
-} from '@store/executors';
-import {
   initializeLogOutputStore,
   useLogOutput,
   useLogOutputField,
   useLogOutputPick,
   useLogOutputSync,
 } from '@store/logOutput';
-import {initializeSourcesStore, useSources, useSourcesField, useSourcesPick, useSourcesSync} from '@store/sources';
 import {
   initializeTestSuitesStore,
   useTestSuites,
@@ -65,57 +45,26 @@ import {
   useTestSuitesSync,
 } from '@store/testSuites';
 import {initializeTestsStore, useTests, useTestsField, useTestsPick, useTestsSync} from '@store/tests';
-import {
-  initializeTriggersStore,
-  useTriggers,
-  useTriggersField,
-  useTriggersPick,
-  useTriggersSync,
-} from '@store/triggers';
-import {
-  initializeWebhooksStore,
-  useWebhooks,
-  useWebhooksField,
-  useWebhooksPick,
-  useWebhooksSync,
-} from '@store/webhooks';
 
 import {decomposeVariables} from '@utils/variables';
 
-export default createPlugin('web-legacy')
-  // General
-  .data({useDashboardNavigate})
-  .data({useApiEndpoint})
-  .define(
-    slot<{
-      path: string;
-      icon: FC<{style: any}>;
-      title: string;
-      additionalClassName?: string;
-      active?: RegExp;
-    }>()('siderItems')
-  )
-  .define(
-    slot<{
-      icon: IconProps['name'];
-      title?: string;
-      size?: number;
-      onClick?: () => void;
-      dropdownComponent?: ReactNode;
-    }>()('siderOtherItems')
-  )
+const generalStub = external<typeof GeneralPlugin>();
+const executorsStub = external<typeof ExecutorsPlugin>();
 
-  // Cluster details
-  .provider(tk => <StoreProvider store={initializeClusterDetailsStore} dependencies={[tk.data.useApiEndpoint()]} />)
-  .data({useClusterDetails, useClusterDetailsPick, useClusterDetailsField, useClusterDetailsSync})
+// TODO: Add routes
+// TODO: Split
+export default createPlugin('oss/tests-and-test-suites')
+  .needs(generalStub.slots('siderItems'))
+  .needs(generalStub.data('useApiEndpoint'))
+  .needs(executorsStub.data('useExecutors'))
 
-  // Tests & Test Suites
   .define(data<(tab: string) => void>()('setExecutionTab'))
   .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testExecutionTabs'))
   .define(slot<ReactNode>()('testExecutionLogOutputBanner'))
   .define(slot<ReactNode>()('deleteTestExtension'))
   .define(slot<ReactNode>()('deleteTestSuiteExtension'))
   .define(slot<ReactNode>()('testSuitesListTitleAddon'))
+
   .provider(tk => <StoreProvider store={initializeTestsStore} dependencies={[tk.data.useApiEndpoint()]} />)
   .data({useTests, useTestsPick, useTestsField, useTestsSync})
   .provider(tk => <StoreProvider store={initializeTestSuitesStore} dependencies={[tk.data.useApiEndpoint()]} />)
@@ -132,25 +81,6 @@ export default createPlugin('web-legacy')
   ))
   .data({useLogOutput, useLogOutputPick, useLogOutputField, useLogOutputSync})
 
-  // Executors
-  .provider(tk => <StoreProvider store={initializeExecutorsStore} dependencies={[tk.data.useApiEndpoint()]} />)
-  .data({useExecutors, useExecutorsPick, useExecutorsField, useExecutorsSync})
-
-  // Test Sources
-  .provider(tk => <StoreProvider store={initializeSourcesStore} dependencies={[tk.data.useApiEndpoint()]} />)
-  .data({useSources, useSourcesPick, useSourcesField, useSourcesSync})
-
-  // Triggers
-  .provider(tk => <StoreProvider store={initializeTriggersStore} dependencies={[tk.data.useApiEndpoint()]} />)
-  .data({useTriggers, useTriggersPick, useTriggersField, useTriggersSync})
-
-  // Webhooks
-  .provider(tk => <StoreProvider store={initializeWebhooksStore} dependencies={[tk.data.useApiEndpoint()]} />)
-  .data({useWebhooks, useWebhooksPick, useWebhooksField, useWebhooksSync})
-
-  // Settings
-
-  // Finish
   .init(tk => {
     // TODO: Instead of using tk.sync, use all the necessities directly in the plugin components
     tk.data.setExecutionTab = tk.sync(() => {
@@ -159,17 +89,8 @@ export default createPlugin('web-legacy')
       return useDashboardNavigate((next: string) => `/tests/${entityId}/executions/${id}/${next}`);
     });
 
-    // TODO: Each of these should be injected from separate plugin
-    const siderItems = [
-      {path: '/tests', icon: TestsIcon, title: 'Tests'},
-      {path: '/test-suites', icon: TestSuitesIcon, title: 'Test Suites'},
-      {path: '/executors', icon: ExecutorsIcon, title: 'Executors'},
-      {path: '/triggers', icon: TriggersIcon, title: 'Triggers'},
-      {path: '/webhooks', icon: WebhooksIcon, title: 'Webhooks'},
-      {path: '/sources', icon: SourcesIcon, title: 'Sources'},
-    ];
-
-    siderItems.forEach((item, index) => tk.slots.siderItems.add(item, {order: index * 2}));
+    tk.slots.siderItems.add({path: '/tests', icon: TestsIcon, title: 'Tests'}, {order: -120});
+    tk.slots.siderItems.add({path: '/test-suites', icon: TestSuitesIcon, title: 'Test Suites'}, {order: -100});
 
     // TODO: Consider wrapping the components to read data directly there and avoid tk.sync
     // TODO: Inject these from separate plugins
@@ -203,7 +124,7 @@ export default createPlugin('web-legacy')
     });
     const mayHaveArtifacts = tk.sync(() => {
       const {testType} = tk.data.useExecutionDetails(x => x.data as Execution) || {};
-      const {featuresMap} = tk.data.useExecutorsPick('featuresMap');
+      const featuresMap = tk.data.useExecutors(x => x.featuresMap);
       const {details} = tk.data.useEntityDetailsPick('details');
       return featuresMap[testType]?.includes('artifacts') || details?.readOnly;
     });

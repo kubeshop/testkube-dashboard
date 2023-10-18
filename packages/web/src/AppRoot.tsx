@@ -9,7 +9,6 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 import {PluginResolver} from '@testkube/plugins';
 
-import LegacyPlugin from '@testkube/web/src/legacy';
 import LegacyOssOnlyPlugin from '@testkube/web/src/legacyOssOnly';
 
 import {ConfigContext, DashboardContext, MainContext} from '@contexts';
@@ -26,6 +25,15 @@ import {Sider} from '@organisms';
 import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
+
+import ClusterPlugin from '@plugins/cluster/plugin';
+import ExecutorsPlugin from '@plugins/executors/plugin';
+import GeneralPlugin from '@plugins/general/plugin';
+import SettingsPlugin from '@plugins/settings/plugin';
+import TestSourcesPlugin from '@plugins/test-sources/plugin';
+import TestsAndTestSuitesPlugin from '@plugins/tests-and-test-suites/plugin';
+import TriggersPlugin from '@plugins/triggers/plugin';
+import WebhooksPlugin from '@plugins/webhooks/plugin';
 
 import {resetRtkCache, store} from '@redux/store';
 
@@ -120,8 +128,15 @@ const AppRoot: React.FC = () => {
   // TODO: Allow passing parent scope from Cloud
   const [PluginSystemProvider, root] = useMemo(() => {
     const [Provider, {initialize, routes}] = new PluginResolver()
-      .register(LegacyPlugin)
       .register(LegacyOssOnlyPlugin)
+      .register(GeneralPlugin)
+      .register(ClusterPlugin)
+      .register(ExecutorsPlugin)
+      .register(WebhooksPlugin)
+      .register(TriggersPlugin)
+      .register(TestSourcesPlugin)
+      .register(SettingsPlugin)
+      .register(TestsAndTestSuitesPlugin)
       .resolve();
     const scope = initialize();
     return [Provider, scope];

@@ -2,8 +2,6 @@ import {useContext, useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
-import {useLegacySlot} from '@testkube/web/src/legacyHooks';
-
 import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 
 import {Icon} from '@atoms';
@@ -11,6 +9,8 @@ import {Icon} from '@atoms';
 import {DashboardContext} from '@contexts';
 
 import {FullWidthSpace} from '@custom-antd';
+
+import {useGeneralSlot} from '@plugins/general/hooks';
 
 import {
   StyledLogo,
@@ -29,8 +29,8 @@ const DEFAULT_ICON_STYLE = {
 
 const Sider: React.FC = () => {
   const {showLogoInSider} = useContext(DashboardContext);
-  const siderMenuList = useLegacySlot('siderItems');
-  const otherMenuItems = useLegacySlot('siderOtherItems');
+  const siderMenuList = useGeneralSlot('siderItems');
+  const otherMenuItems = useGeneralSlot('siderOtherItems');
 
   const renderedMenuItems = useMemo(() => {
     return siderMenuList.map(route => {

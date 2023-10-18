@@ -7,26 +7,21 @@ import Text from '@custom-antd/Typography/Text';
 
 import {DropdownListItem} from '@organisms/Sider/Sider.styled';
 
+import type GeneralPlugin from '@plugins/general/plugin';
+
 import Colors from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
 
-import type LegacyPlugin from './legacy';
+const generalStub = external<typeof GeneralPlugin>();
 
-const legacyStub = external<typeof LegacyPlugin>();
-
-export default createPlugin('web-legacy-oss-only')
-  .needs(legacyStub.slots('siderOtherItems'))
-  .needs(legacyStub.data('useDashboardNavigate'))
+export default createPlugin('web-general-oss-only')
+  .needs(generalStub.slots('siderOtherItems'))
+  .needs(generalStub.data('useDashboardNavigate'))
 
   // Finish
   .init(tk => {
     // TODO: Separate in specific plugins?
-    tk.slots.siderOtherItems.add({
-      icon: 'cog',
-      title: 'Settings',
-      onClick: tk.sync(() => tk.data.useDashboardNavigate('/settings')),
-    });
     tk.slots.siderOtherItems.add({
       icon: 'documentation',
       dropdownComponent: (
