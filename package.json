@@ -45,6 +45,7 @@
     "eslint-plugin-unused-imports": "2.0.0",
     "husky": "8.0.3",
     "prettier": "2.8.8",
+    "serve": "^14.2.1",
     "stylelint": "15.10.1",
     "stylelint-config-recommended": "11.0.0",
     "stylelint-config-standard": "31.0.0",
@@ -55,6 +56,7 @@
   "scripts": {
     "start": "npm run -w @testkube/web start",
     "build": "npm run --workspaces --if-present build",
+    "start:prod": "npm run -w @testkube/web build && serve -p 3000 -s -n packages/web/build",
     "test": "npx jest",
     "test:coverage": "npx jest --collect-coverage --coverage-reporters lcov",
     "test:watch": "npx jest --watch --detectOpenHandles",
