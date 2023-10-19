@@ -24,7 +24,7 @@ export default createPlugin('oss/executors')
 
   .route('/executors', <ExecutorsList />)
   .route('/executors/:id', <ExecutorDetails />)
-  .route('/executors/settings/:settingsTab', <ExecutorDetails />)
+  .route('/executors/:id/settings/:settingsTab', <ExecutorDetails />)
 
   .provider(tk => <StoreProvider store={initializeExecutorsStore} dependencies={[tk.data.useApiEndpoint()]} />)
   .data({useExecutors, useExecutorsPick, useExecutorsField, useExecutorsSync})
