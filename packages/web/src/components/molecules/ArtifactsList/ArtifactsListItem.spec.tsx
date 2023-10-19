@@ -15,7 +15,7 @@ describe('ArtifactsListItem', () => {
   const testSuiteName = 'test-suite-name';
 
   function createAutoResetSpy(): jest.SpyInstance {
-    const fetchMock = jest.fn();
+    const fetchMock = jest.fn(() => Promise.reject(new Error('mockImplementation required')));
     beforeEach(() => {
       fetchMock.mockReset();
     });
