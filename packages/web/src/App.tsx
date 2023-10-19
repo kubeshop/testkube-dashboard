@@ -1,12 +1,8 @@
-import React, {Suspense, useContext, useEffect} from 'react';
+import React, {Suspense, useEffect} from 'react';
 import {Route, Routes, useLocation} from 'react-router-dom';
 import {useUpdate} from 'react-use';
 
 import {PluginRoute} from '@testkube/plugins/src/internal/types';
-
-import {config} from '@constants/config';
-
-import {DashboardContext} from '@contexts';
 
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
@@ -15,6 +11,8 @@ import {useModal} from '@modal/hooks';
 import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
 
 import {Loading, NotFound} from '@pages';
+
+import {useGeneralSlot} from '@plugins/general/hooks';
 
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 import {useGetExecutorsQuery} from '@services/executors';
@@ -37,7 +35,6 @@ interface AppProps {
 const App: React.FC<AppProps> = ({routes}) => {
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
-  const {showTestkubeCloudBanner} = useContext(DashboardContext);
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
@@ -63,8 +60,6 @@ const App: React.FC<AppProps> = ({routes}) => {
     dataTestCloseBtn: 'endpoint-modal-close-button',
     dataTestModalRoot: 'endpoint-modal',
   });
-
-  const isTestkubeCloudLaunchBannerHidden = localStorage.getItem(config.isTestkubeCloudLaunchBannerHidden);
 
   useEffect(() => {
     safeRefetch(refetchExecutors);
@@ -103,46 +98,27 @@ const App: React.FC<AppProps> = ({routes}) => {
       });
   }, [apiEndpoint, isClusterAvailable]);
 
+  const banners = useGeneralSlot('banners').filter(banner => localStorage.getItem(banner.key) !== 'true');
+
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
 
     .render(
       <Suspense fallback={<Loading />}>
-        {
-          /* TODO: Move as a plugin */ !isTestkubeCloudLaunchBannerHidden && showTestkubeCloudBanner ? (
-            <MessagePanelWrapper>
+        {banners.length > 0 ? (
+          <MessagePanelWrapper>
+            {banners.map(({key, ...props}) => (
               <MessagePanel
-                buttons={[
-                  {
-                    type: 'secondary',
-                    text: 'Learn more',
-                    isLink: true,
-                    linkConfig: {
-                      href: 'https://testkube.io/get-started',
-                      target: '_blank',
-                    },
-                  },
-                  {
-                    type: 'primary',
-                    text: 'Connect to Testkube Cloud',
-                    isLink: true,
-                    linkConfig: {
-                      href: 'https://cloud.testkube.io/system-init?cloudMigrate=true',
-                      target: '_blank',
-                    },
-                  },
-                ]}
+                key={key}
+                {...props}
                 onClose={() => {
-                  localStorage.setItem(config.isTestkubeCloudLaunchBannerHidden, 'true');
+                  localStorage.setItem(key, 'true');
                   update();
                 }}
-                type="default"
-                title="🎉 We have just launched Testkube Cloud! 🎉"
-                description="One centralized place for all your local Testkube instances. Fully integrated users, roles and permissions - and much more...."
               />
-            </MessagePanelWrapper>
-          ) : null
-        }
+            ))}
+          </MessagePanelWrapper>
+        ) : null}
         <Routes>
           {routes.map(route => (
             <Route key={route.path} path={route.path} element={route.element} />

@@ -26,6 +26,7 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
+import CloudBannerPlugin from '@plugins/cloud-banner/plugin';
 import ClusterPlugin from '@plugins/cluster/plugin';
 import ExecutorsPlugin from '@plugins/executors/plugin';
 import GeneralPlugin from '@plugins/general/plugin';
@@ -118,7 +119,6 @@ const AppRoot: React.FC = () => {
       navigate,
       location,
       baseUrl: '',
-      showTestkubeCloudBanner: true,
     }),
     [navigate, location]
   );
@@ -136,6 +136,7 @@ const AppRoot: React.FC = () => {
       .register(TestSourcesPlugin)
       .register(SettingsPlugin)
       .register(TestsAndTestSuitesPlugin)
+      .register(CloudBannerPlugin)
       .resolve();
     const scope = initialize();
     return [Provider, scope, routes] as const;

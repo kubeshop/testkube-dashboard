@@ -7,5 +7,8 @@ export const StyledLayoutContentWrapper = styled(Layout)`
 `;
 
 export const MessagePanelWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   padding: 20px 30px 0 0;
 `;

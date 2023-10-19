@@ -25,7 +25,7 @@ interface ButtonWithLinkConfig extends ButtonConfig {
   };
 }
 
-interface MessagePanelProps {
+export interface MessagePanelProps {
   title: string;
   description: React.ReactNode;
   type?: 'warning' | 'error' | 'default';

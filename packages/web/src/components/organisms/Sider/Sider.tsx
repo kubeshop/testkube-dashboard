@@ -80,9 +80,7 @@ const Sider: React.FC = () => {
           <FullWidthSpace size={30} direction="vertical">
             {siderLogo ? (
               <StyledLogo>
-                <SiderLink href="/">
-                  {siderLogo}
-                </SiderLink>
+                <SiderLink href="/">{siderLogo}</SiderLink>
               </StyledLogo>
             ) : null}
             {renderedMenuItems}

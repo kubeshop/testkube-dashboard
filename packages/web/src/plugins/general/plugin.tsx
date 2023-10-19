@@ -7,6 +7,8 @@ import {IconProps} from '@atoms/Icon/types';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
+import {MessagePanelProps} from '@molecules/MessagePanel/MessagePanel';
+
 import {EndpointProcessing} from '@pages';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
@@ -23,6 +25,8 @@ export default createPlugin('oss/general')
   .route('/', <Navigate to="/tests" replace />)
 
   .define(slot<ReactNode>()('siderLogo'))
+
+  .define(slot<{key: string} & Omit<MessagePanelProps, 'onClose'>>()('banners'))
 
   .define(
     slot<{

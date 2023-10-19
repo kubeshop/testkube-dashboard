@@ -5,8 +5,6 @@ interface DashboardContextData {
   navigate: NavigateFunction;
   location: Location;
   baseUrl: string;
-
-  showTestkubeCloudBanner: boolean;
 }
 
 const DashboardContext = createContext<DashboardContextData>(undefined!);
