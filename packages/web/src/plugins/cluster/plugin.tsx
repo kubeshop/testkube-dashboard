@@ -15,6 +15,8 @@ const generalStub = external<typeof GeneralPlugin>();
 // TODO: Add provider for loading the Cluster Details automatically
 export default createPlugin('oss/cluster')
   .needs(generalStub.data('useApiEndpoint'))
+
   .provider(tk => <StoreProvider store={initializeClusterDetailsStore} dependencies={[tk.data.useApiEndpoint()]} />)
   .data({useClusterDetails, useClusterDetailsPick, useClusterDetailsField, useClusterDetailsSync})
+
   .init();

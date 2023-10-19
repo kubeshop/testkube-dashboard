@@ -22,6 +22,8 @@ export default createPlugin('oss/general')
   // TODO: Use first route from the sider instead
   .route('/', <Navigate to="/tests" replace />)
 
+  .define(slot<ReactNode>()('siderLogo'))
+
   .define(
     slot<{
       path: string;

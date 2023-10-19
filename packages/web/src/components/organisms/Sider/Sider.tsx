@@ -1,16 +1,12 @@
-import {useContext, useMemo} from 'react';
+import {useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
-import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
-
 import {Icon} from '@atoms';
-
-import {DashboardContext} from '@contexts';
 
 import {FullWidthSpace} from '@custom-antd';
 
-import {useGeneralSlot} from '@plugins/general/hooks';
+import {useGeneralSlot, useGeneralSlotFirst} from '@plugins/general/hooks';
 
 import {
   StyledLogo,
@@ -28,7 +24,7 @@ const DEFAULT_ICON_STYLE = {
 };
 
 const Sider: React.FC = () => {
-  const {showLogoInSider} = useContext(DashboardContext);
+  const siderLogo = useGeneralSlotFirst('siderLogo');
   const siderMenuList = useGeneralSlot('siderItems');
   const otherMenuItems = useGeneralSlot('siderOtherItems');
 
@@ -82,10 +78,10 @@ const Sider: React.FC = () => {
       <StyledSiderChildContainer>
         <StyledNavigationMenu>
           <FullWidthSpace size={30} direction="vertical">
-            {showLogoInSider ? (
+            {siderLogo ? (
               <StyledLogo>
-                <SiderLink href="/tests">
-                  <Logo />
+                <SiderLink href="/">
+                  {siderLogo}
                 </SiderLink>
               </StyledLogo>
             ) : null}

@@ -6,7 +6,6 @@ interface DashboardContextData {
   location: Location;
   baseUrl: string;
 
-  showLogoInSider: boolean;
   showTestkubeCloudBanner: boolean;
 }
 

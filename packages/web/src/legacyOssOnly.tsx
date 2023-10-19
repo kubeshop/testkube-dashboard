@@ -3,6 +3,8 @@ import {Popover} from 'antd';
 
 import {createPlugin, external} from '@testkube/plugins';
 
+import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
+
 import Text from '@custom-antd/Typography/Text';
 
 import {DropdownListItem} from '@organisms/Sider/Sider.styled';
@@ -16,11 +18,13 @@ import {externalLinks} from '@utils/externalLinks';
 const generalStub = external<typeof GeneralPlugin>();
 
 export default createPlugin('web-general-oss-only')
-  .needs(generalStub.slots('siderOtherItems'))
+  .needs(generalStub.slots('siderOtherItems', 'siderLogo'))
   .needs(generalStub.data('useDashboardNavigate'))
 
   // Finish
   .init(tk => {
+    tk.slots.siderLogo.add(<Logo />);
+
     // TODO: Separate in specific plugins?
     tk.slots.siderOtherItems.add({
       icon: 'documentation',

@@ -118,7 +118,6 @@ const AppRoot: React.FC = () => {
       navigate,
       location,
       baseUrl: '',
-      showLogoInSider: true,
       showTestkubeCloudBanner: true,
     }),
     [navigate, location]

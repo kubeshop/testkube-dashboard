@@ -2,7 +2,6 @@ export const mockDashboardContextValue = {
   navigate: jest.fn(),
   location: {pathname: '/testroute', search: '', key: '', hash: '', location: '', state: {}},
   baseUrl: '',
-  showLogoInSider: true,
   showTestkubeCloudBanner: true,
 };
 
