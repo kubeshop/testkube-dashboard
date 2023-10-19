@@ -98,6 +98,7 @@ const App: React.FC<AppProps> = ({routes}) => {
       });
   }, [apiEndpoint, isClusterAvailable]);
 
+  // TODO: Unify the banners with LogOutput and others
   const banners = useGeneralSlot('banners').filter(banner => localStorage.getItem(banner.key) !== 'true');
 
   return composeProviders()

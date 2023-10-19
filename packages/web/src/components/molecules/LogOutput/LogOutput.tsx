@@ -1,4 +1,4 @@
-import React, {ReactNode, memo, useCallback, useEffect, useRef, useState} from 'react';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {CSSTransition} from 'react-transition-group';
 import {useAsync, useInterval} from 'react-use';
@@ -7,6 +7,10 @@ import useWebSocket from 'react-use-websocket';
 import {isEqual} from 'lodash';
 
 import {Coordinates} from '@models/config';
+
+import {MessagePanel} from '@molecules/index';
+
+import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
@@ -20,7 +24,6 @@ import LogOutputPure from './LogOutputPure';
 import {useCountLines, useLastLines} from './utils';
 
 export type LogOutputProps = {
-  banner?: ReactNode;
   logOutput?: string;
   executionId?: string;
   isRunning?: boolean;
@@ -28,7 +31,11 @@ export type LogOutputProps = {
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = 'No logs', executionId, isRunning = false, initialLines = 300, banner} = props;
+  const {logOutput = 'No logs', executionId, isRunning = false, initialLines = 300} = props;
+  // TODO: Unify the banners with LogOutput and others
+  const banners = useTestsSlot('testExecutionLogOutputBanners').filter(
+    banner => localStorage.getItem(banner.key) !== 'true'
+  );
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -123,7 +130,19 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   return (
     <>
       <LogOutputWrapper>
-        {banner ? <DrawerBannerContainer>{banner}</DrawerBannerContainer> : null}
+        {banners.length > 0 ? (
+          <DrawerBannerContainer>
+            {banners.map(({key, ...bannerProps}) => (
+              <MessagePanel
+                key={key}
+                {...bannerProps}
+                onClose={() => {
+                  localStorage.setItem(key, 'true');
+                }}
+              />
+            ))}
+          </DrawerBannerContainer>
+        ) : null}
         <LogOutputPure
           ref={containerRef}
           logs={logs}

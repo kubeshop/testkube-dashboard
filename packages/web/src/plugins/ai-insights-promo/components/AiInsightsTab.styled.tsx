@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import Colors from '@styles/Colors';
+import Colors from '@testkube/web/src/styles/Colors';
 
 export const AiInsightContainer = styled.div`
   width: 100%;

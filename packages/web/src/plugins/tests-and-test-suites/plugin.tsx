@@ -10,6 +10,7 @@ import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
+import {MessagePanelProps} from '@molecules/MessagePanel/MessagePanel';
 
 import TestSuiteDetails from '@pages/TestSuites/TestSuiteDetails';
 import TestSuitesList from '@pages/TestSuites/TestSuitesList';
@@ -94,7 +95,7 @@ export default createPlugin('oss/tests-and-test-suites')
 
   .define(data<(tab: string) => void>()('setExecutionTab'))
   .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testExecutionTabs'))
-  .define(slot<ReactNode>()('testExecutionLogOutputBanner'))
+  .define(slot<{key: string} & Omit<MessagePanelProps, 'onClose'>>()('testExecutionLogOutputBanners'))
   .define(slot<ReactNode>()('deleteTestExtension'))
   .define(slot<ReactNode>()('deleteTestSuiteExtension'))
   .define(slot<ReactNode>()('testSuitesListTitleAddon'))
@@ -139,15 +140,7 @@ export default createPlugin('oss/tests-and-test-suites')
             id,
             executionResult: {status, output, errorMessage},
           } = execution;
-          const logBanner = tk.slots.testExecutionLogOutputBanner.first();
-          return (
-            <LogOutput
-              logOutput={output || errorMessage}
-              executionId={id}
-              isRunning={status === 'running'}
-              banner={logBanner}
-            />
-          );
+          return <LogOutput logOutput={output || errorMessage} executionId={id} isRunning={status === 'running'} />;
         }),
       },
       {order: -Infinity}
@@ -179,7 +172,7 @@ export default createPlugin('oss/tests-and-test-suites')
           );
         }),
       },
-      {order: 0, enabled: mayHaveArtifacts}
+      {order: -100, enabled: mayHaveArtifacts}
     );
     tk.slots.testExecutionTabs.add(
       {
@@ -195,7 +188,7 @@ export default createPlugin('oss/tests-and-test-suites')
           return <CLICommands isExecutions type={testType} id={id} modifyMap={{status}} />;
         }),
       },
-      {order: 2, enabled: () => !isReadOnlyEntity()}
+      {order: -80, enabled: () => !isReadOnlyEntity()}
     );
     const getDecomposedVars = tk.sync(() => {
       const {variables} = tk.data.useExecutionDetails(x => x.data as Execution) || {};
@@ -209,6 +202,6 @@ export default createPlugin('oss/tests-and-test-suites')
           return <ExecutionsVariablesList variables={getDecomposedVars()!} />;
         }),
       },
-      {order: 4, enabled: () => Boolean(getDecomposedVars()?.length)}
+      {order: -60, enabled: () => Boolean(getDecomposedVars()?.length)}
     );
   });

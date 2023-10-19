@@ -26,6 +26,7 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
+import AiInsightsPromoPlugin from '@plugins/ai-insights-promo/plugin';
 import CloudBannerPlugin from '@plugins/cloud-banner/plugin';
 import ClusterPlugin from '@plugins/cluster/plugin';
 import ExecutorsPlugin from '@plugins/executors/plugin';
@@ -123,21 +124,21 @@ const AppRoot: React.FC = () => {
     [navigate, location]
   );
 
-  // TODO: Recover createAiInsightsPlugin()
   // TODO: Allow passing parent scope from Cloud
   const [PluginSystemProvider, root, routing] = useMemo(() => {
-    const [Provider, {initialize, routes}] = new PluginResolver()
-      .register(LegacyOssOnlyPlugin)
-      .register(GeneralPlugin)
-      .register(ClusterPlugin)
-      .register(ExecutorsPlugin)
-      .register(WebhooksPlugin)
-      .register(TriggersPlugin)
-      .register(TestSourcesPlugin)
-      .register(SettingsPlugin)
-      .register(TestsAndTestSuitesPlugin)
-      .register(CloudBannerPlugin)
-      .resolve();
+    const [Provider, {initialize, routes}] = PluginResolver.of(
+      LegacyOssOnlyPlugin,
+      GeneralPlugin,
+      ClusterPlugin,
+      ExecutorsPlugin,
+      WebhooksPlugin,
+      TriggersPlugin,
+      TestSourcesPlugin,
+      SettingsPlugin,
+      TestsAndTestSuitesPlugin,
+      CloudBannerPlugin,
+      AiInsightsPromoPlugin
+    ).resolve();
     const scope = initialize();
     return [Provider, scope, routes] as const;
   }, []);
