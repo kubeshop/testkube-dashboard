@@ -87,33 +87,63 @@ export class PluginBuilder<T extends PluginState> {
    * Register public data in context of the plugin.
    * It will initialize them with the provided values.
    */
-  public data<U extends Record<string, any>>(data: U): PluginBuilder<AppendData<T, U>> {
+  public data<U extends Record<string, any>>(
+    data: U
+  ): PluginBuilder<{
+    urls: {[K in keyof AppendData<T, U>['urls']]: AppendData<T, U>['urls'][K]};
+    slots: {[K in keyof AppendData<T, U>['slots']]: AppendData<T, U>['slots'][K]};
+    data: {[K in keyof AppendData<T, U>['data']]: AppendData<T, U>['data'][K]};
+    externalSlots: {[K in keyof AppendData<T, U>['externalSlots']]: AppendData<T, U>['externalSlots'][K]};
+    externalData: {[K in keyof AppendData<T, U>['externalData']]: AppendData<T, U>['externalData'][K]};
+    outerSlots: {[K in keyof AppendData<T, U>['outerSlots']]: AppendData<T, U>['outerSlots'][K]};
+    outerData: {[K in keyof AppendData<T, U>['outerData']]: AppendData<T, U>['outerData'][K]};
+  }> {
     return new PluginBuilder<AppendData<T, U>>({
       ...this.plugin,
       data: {...this.plugin.data, ...data},
-    });
+    }) as any;
   }
 
   /**
    * Define slots and dynamic data in the context of the plugin.
    */
-  public define<U extends PluginState>(state: U): PluginBuilder<JoinState<T, U>> {
+  public define<U extends PluginState>(
+    state: U
+  ): PluginBuilder<{
+    urls: {[K in keyof JoinState<T, U>['urls']]: JoinState<T, U>['urls'][K]};
+    slots: {[K in keyof JoinState<T, U>['slots']]: JoinState<T, U>['slots'][K]};
+    data: {[K in keyof JoinState<T, U>['data']]: JoinState<T, U>['data'][K]};
+    externalSlots: {[K in keyof JoinState<T, U>['externalSlots']]: JoinState<T, U>['externalSlots'][K]};
+    externalData: {[K in keyof JoinState<T, U>['externalData']]: JoinState<T, U>['externalData'][K]};
+    outerSlots: {[K in keyof JoinState<T, U>['outerSlots']]: JoinState<T, U>['outerSlots'][K]};
+    outerData: {[K in keyof JoinState<T, U>['outerData']]: JoinState<T, U>['outerData'][K]};
+  }> {
     return new PluginBuilder<JoinState<T, U>>({
       ...this.plugin,
       slots: {...this.plugin.slots, ...state.slots},
       data: {...this.plugin.data, ...state.data},
-    });
+    }) as any;
   }
 
   /**
    * Declare using data and slots from the external plugin.
    */
-  public needs<U extends PluginState>(state: U): PluginBuilder<JoinExternalState<T, U>> {
+  public needs<U extends PluginState>(
+    state: U
+  ): PluginBuilder<{
+    urls: {[K in keyof JoinExternalState<T, U>['urls']]: JoinExternalState<T, U>['urls'][K]};
+    slots: {[K in keyof JoinExternalState<T, U>['slots']]: JoinExternalState<T, U>['slots'][K]};
+    data: {[K in keyof JoinExternalState<T, U>['data']]: JoinExternalState<T, U>['data'][K]};
+    externalSlots: {[K in keyof JoinExternalState<T, U>['externalSlots']]: JoinExternalState<T, U>['externalSlots'][K]};
+    externalData: {[K in keyof JoinExternalState<T, U>['externalData']]: JoinExternalState<T, U>['externalData'][K]};
+    outerSlots: {[K in keyof JoinExternalState<T, U>['outerSlots']]: JoinExternalState<T, U>['outerSlots'][K]};
+    outerData: {[K in keyof JoinExternalState<T, U>['outerData']]: JoinExternalState<T, U>['outerData'][K]};
+  }> {
     return new PluginBuilder<JoinExternalState<T, U>>({
       ...this.plugin,
       externalSlots: {...this.plugin.externalSlots, ...state.slots},
       externalData: {...this.plugin.externalData, ...state.data},
-    });
+    }) as any;
   }
 
   /**
@@ -122,12 +152,22 @@ export class PluginBuilder<T extends PluginState> {
    * That won't trigger warnings neither when plugin not found,
    * nor when it is declared above the current plugin system context.
    */
-  public outer<U extends PluginState>(state: U): PluginBuilder<JoinOuterState<T, U>> {
+  public outer<U extends PluginState>(
+    state: U
+  ): PluginBuilder<{
+    urls: {[K in keyof JoinOuterState<T, U>['urls']]: JoinOuterState<T, U>['urls'][K]};
+    slots: {[K in keyof JoinOuterState<T, U>['slots']]: JoinOuterState<T, U>['slots'][K]};
+    data: {[K in keyof JoinOuterState<T, U>['data']]: JoinOuterState<T, U>['data'][K]};
+    externalSlots: {[K in keyof JoinOuterState<T, U>['externalSlots']]: JoinOuterState<T, U>['externalSlots'][K]};
+    externalData: {[K in keyof JoinOuterState<T, U>['externalData']]: JoinOuterState<T, U>['externalData'][K]};
+    outerSlots: {[K in keyof JoinOuterState<T, U>['outerSlots']]: JoinOuterState<T, U>['outerSlots'][K]};
+    outerData: {[K in keyof JoinOuterState<T, U>['outerData']]: JoinOuterState<T, U>['outerData'][K]};
+  }> {
     return new PluginBuilder<JoinOuterState<T, U>>({
       ...this.plugin,
       outerSlots: {...this.plugin.outerSlots, ...state.slots},
       outerData: {...this.plugin.outerData, ...state.data},
-    });
+    }) as any;
   }
 
   /**

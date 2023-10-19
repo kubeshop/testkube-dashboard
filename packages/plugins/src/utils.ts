@@ -16,16 +16,21 @@ type PluginDataName<T extends Plugin<any>> = keyof GetData<GetPluginState<T>>;
 type PluginSlotName<T extends Plugin<any>> = keyof GetSlots<GetPluginState<T>>;
 type ArrayElement<T> = T extends Array<infer V> ? V : never;
 
+type SlotStub<T extends Plugin<any>, U extends PluginSlotName<T>[]> = AppendSlots<
+  EmptyPluginState,
+  Pick<GetSlots<GetPluginState<T>>, ArrayElement<U>>
+>;
+type DataStub<T extends Plugin<any>, U extends PluginSlotName<T>[]> = AppendData<
+  EmptyPluginState,
+  Pick<GetData<GetPluginState<T>>, ArrayElement<U>>
+>;
+
 export const external = <T extends Plugin<any>>() => ({
-  slots: <U extends PluginSlotName<T>[]>(
-    ...names: U
-  ): AppendSlots<EmptyPluginState, Pick<GetSlots<GetPluginState<T>>, ArrayElement<U>>> => ({
+  slots: <U extends PluginSlotName<T>[]>(...names: U): {[K in keyof SlotStub<T, U>]: SlotStub<T, U>[K]} => ({
     ...empty,
     slots: pick({} as Record<ArrayElement<U>, any>, names as any),
   }),
-  data: <U extends PluginDataName<T>[]>(
-    ...names: U
-  ): AppendData<EmptyPluginState, Pick<GetData<GetPluginState<T>>, ArrayElement<U>>> => ({
+  data: <U extends PluginDataName<T>[]>(...names: U): {[K in keyof DataStub<T, U>]: DataStub<T, U>[K]} => ({
     ...empty,
     data: pick({} as Record<ArrayElement<U>, any>, names as any),
   }),

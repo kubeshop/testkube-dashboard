@@ -40,6 +40,7 @@ type RegisterPlugin<T extends PluginState, U extends Plugin<any>> = AppendOuterS
   GetOuterSlots<GetPluginState<U>>
 >;
 
+// TODO: Handle TS2589: Type instantiation is excessively deep and possibly infinite.
 export class PluginResolver<T extends PluginState = EmptyPluginState> {
   private plugins: Plugin<any>[] = [];
 
@@ -193,5 +194,9 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     };
 
     return [Provider, {routes, initialize}];
+  }
+
+  public static of(...plugins: Plugin<any>[]): PluginResolver<any> {
+    return plugins.reduce((resolver, plugin) => resolver.register(plugin), new PluginResolver<any>());
   }
 }
