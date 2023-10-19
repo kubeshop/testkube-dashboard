@@ -32,21 +32,29 @@ interface ResolvedPlugins<T extends PluginState> {
   ) => PluginScope<{[K in keyof PluginScopeStateFor<T>]: PluginScopeStateFor<T>[K]}>;
 }
 
+type RegisterPlugin<T extends PluginState, U extends Plugin<any>> = AppendOuterSlots<
+  AppendOuterData<
+    AppendData<AppendSlots<T, GetSlots<GetPluginState<U>>>, GetData<GetPluginState<U>>>,
+    GetOuterData<GetPluginState<U>>
+  >,
+  GetOuterSlots<GetPluginState<U>>
+>;
+
 export class PluginResolver<T extends PluginState = EmptyPluginState> {
   private plugins: Plugin<any>[] = [];
 
   // TODO: Allow passing plugin configuration
   public register<U extends Plugin<any>>(
     plugin: U
-  ): PluginResolver<
-    AppendOuterSlots<
-      AppendOuterData<
-        AppendData<AppendSlots<T, GetSlots<GetPluginState<U>>>, GetData<GetPluginState<U>>>,
-        GetOuterData<GetPluginState<U>>
-      >,
-      GetOuterSlots<GetPluginState<U>>
-    >
-  > {
+  ): PluginResolver<{
+    urls: {[K in keyof RegisterPlugin<T, U>['urls']]: RegisterPlugin<T, U>['urls'][K]};
+    slots: {[K in keyof RegisterPlugin<T, U>['slots']]: RegisterPlugin<T, U>['slots'][K]};
+    data: {[K in keyof RegisterPlugin<T, U>['data']]: RegisterPlugin<T, U>['data'][K]};
+    externalSlots: {[K in keyof RegisterPlugin<T, U>['externalSlots']]: RegisterPlugin<T, U>['externalSlots'][K]};
+    externalData: {[K in keyof RegisterPlugin<T, U>['externalData']]: RegisterPlugin<T, U>['externalData'][K]};
+    outerSlots: {[K in keyof RegisterPlugin<T, U>['outerSlots']]: RegisterPlugin<T, U>['outerSlots'][K]};
+    outerData: {[K in keyof RegisterPlugin<T, U>['outerData']]: RegisterPlugin<T, U>['outerData'][K]};
+  }> {
     if (this.plugins.includes(plugin)) {
       // eslint-disable-next-line no-console
       console.warn(`The "${plugin[PluginDetails].name}" plugin is already registered.`);
