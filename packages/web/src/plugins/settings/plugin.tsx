@@ -22,6 +22,7 @@ export default createPlugin('oss/settings')
         icon: 'cog',
         title: 'Settings',
         onClick: () => getOpenSettings()!(),
+        active: /^\/settings/,
       },
       {order: -100}
     );

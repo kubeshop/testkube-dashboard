@@ -1,8 +1,10 @@
-import {useMemo} from 'react';
+import {useContext, useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
 import {Icon} from '@atoms';
+
+import {DashboardContext} from '@contexts';
 
 import {FullWidthSpace} from '@custom-antd';
 
@@ -24,6 +26,7 @@ const DEFAULT_ICON_STYLE = {
 };
 
 const Sider: React.FC = () => {
+  const {location} = useContext(DashboardContext);
   const siderLogo = useGeneralSlotFirst('siderLogo');
   const siderMenuList = useGeneralSlot('siderItems');
   const otherMenuItems = useGeneralSlot('siderOtherItems');
@@ -52,7 +55,7 @@ const Sider: React.FC = () => {
 
   const renderedOtherMenuItems = useMemo(() => {
     return otherMenuItems.map(otherMenuItem => {
-      const {icon, onClick, size = 20, dropdownComponent, title} = otherMenuItem;
+      const {icon, onClick, size = 20, dropdownComponent, title, active} = otherMenuItem;
 
       if (dropdownComponent) {
         return (
@@ -62,8 +65,13 @@ const Sider: React.FC = () => {
         );
       }
 
+      // TODO: Build as separate component
       return (
-        <StyledOtherItem key={icon} $size={size}>
+        <StyledOtherItem
+          key={icon}
+          $size={size}
+          className={active?.test(location.pathname) || active?.test(window.location.pathname) ? 'active' : undefined}
+        >
           <Tooltip title={title} placement="right">
             {/* @ts-ignore */}
             <Icon name={icon} onClick={onClick} />
@@ -71,7 +79,7 @@ const Sider: React.FC = () => {
         </StyledOtherItem>
       );
     });
-  }, []);
+  }, [location.pathname, window.location.pathname]);
 
   return (
     <StyledSider width={100} data-cy="navigation-sider">

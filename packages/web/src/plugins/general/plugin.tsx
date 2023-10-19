@@ -44,6 +44,7 @@ export default createPlugin('oss/general')
       size?: number;
       onClick?: () => void;
       dropdownComponent?: ReactNode;
+      active?: RegExp;
     }>()('siderOtherItems')
   )
   .init();
