@@ -8,7 +8,7 @@ import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
-import {EndpointModal, MessagePanel, notificationCall} from '@molecules';
+import {EndpointModal, notificationCall} from '@molecules';
 
 import {Loading, NotFound} from '@pages';
 
@@ -18,6 +18,8 @@ import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from
 import {useGetExecutorsQuery} from '@services/executors';
 import {useGetSourcesQuery} from '@services/sources';
 
+import {BannerList} from '@src/App.styled';
+
 import {useClusterDetailsPick} from '@store/clusterDetails';
 import {useExecutorsSync} from '@store/executors';
 import {useSourcesSync} from '@store/sources';
@@ -25,8 +27,6 @@ import {useSourcesSync} from '@store/sources';
 import {composeProviders} from '@utils/composeProviders';
 import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
-
-import {MessagePanelWrapper} from './App.styled';
 
 interface AppProps {
   routes: PluginRoute[];
@@ -98,28 +98,12 @@ const App: React.FC<AppProps> = ({routes}) => {
       });
   }, [apiEndpoint, isClusterAvailable]);
 
-  // TODO: Unify the banners with LogOutput and others
-  const banners = useGeneralSlot('banners').filter(banner => localStorage.getItem(banner.key) !== 'true');
-
   return composeProviders()
     .append(Suspense, {fallback: <Loading />})
 
     .render(
       <Suspense fallback={<Loading />}>
-        {banners.length > 0 ? (
-          <MessagePanelWrapper>
-            {banners.map(({key, ...props}) => (
-              <MessagePanel
-                key={key}
-                {...props}
-                onClose={() => {
-                  localStorage.setItem(key, 'true');
-                  update();
-                }}
-              />
-            ))}
-          </MessagePanelWrapper>
-        ) : null}
+        <BannerList items={useGeneralSlot('banners')} onClose={update} />
         <Routes>
           {routes.map(route => (
             <Route key={route.path} path={route.path} element={route.element} />

@@ -8,8 +8,6 @@ import {isEqual} from 'lodash';
 
 import {Coordinates} from '@models/config';
 
-import {MessagePanel} from '@molecules/index';
-
 import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
@@ -19,7 +17,7 @@ import {useLogOutputPick} from '@store/logOutput';
 import {getRtkIdToken} from '@utils/rtk';
 
 import FullscreenLogOutput from './FullscreenLogOutput';
-import {DrawerBannerContainer, LogOutputWrapper} from './LogOutput.styled';
+import {BannerList, LogOutputWrapper} from './LogOutput.styled';
 import LogOutputPure from './LogOutputPure';
 import {useCountLines, useLastLines} from './utils';
 
@@ -32,10 +30,7 @@ export type LogOutputProps = {
 
 const LogOutput: React.FC<LogOutputProps> = props => {
   const {logOutput = 'No logs', executionId, isRunning = false, initialLines = 300} = props;
-  // TODO: Unify the banners with LogOutput and others
-  const banners = useTestsSlot('testExecutionLogOutputBanners').filter(
-    banner => localStorage.getItem(banner.key) !== 'true'
-  );
+  const banners = useTestsSlot('testExecutionLogOutputBanners');
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -130,19 +125,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   return (
     <>
       <LogOutputWrapper>
-        {banners.length > 0 ? (
-          <DrawerBannerContainer>
-            {banners.map(({key, ...bannerProps}) => (
-              <MessagePanel
-                key={key}
-                {...bannerProps}
-                onClose={() => {
-                  localStorage.setItem(key, 'true');
-                }}
-              />
-            ))}
-          </DrawerBannerContainer>
-        ) : null}
+        <BannerList items={banners} />
         <LogOutputPure
           ref={containerRef}
           logs={logs}

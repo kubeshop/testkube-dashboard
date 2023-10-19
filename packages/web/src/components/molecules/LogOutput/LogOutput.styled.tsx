@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import {AnsiClassesMapping} from '@atoms';
 
+import DecayingMessagePanelList from '@molecules/DecayingMessagePanelList';
+
 import Colors from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
@@ -120,9 +122,6 @@ export const StyledExpandAltOutlined = styled(ExpandAltOutlined)`
   }
 `;
 
-export const DrawerBannerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+export const BannerList = styled(DecayingMessagePanelList)`
   margin-bottom: 30px;
 `;
