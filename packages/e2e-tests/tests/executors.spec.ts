@@ -1,4 +1,4 @@
-import {test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import {ExecutorGeneralSettingsPage} from 'pages/ExecutorGeneralSettingsPage';
 
 import config from '../config';
@@ -40,7 +40,32 @@ test(`Create custom container executor`, async ({page}) => {
   await api.removeExecutor(realExecutorName);
 });
 
-test.skip(`Custom container executor - general settings`, async ({page}) => {});
+test(`Custom container executor - general settings`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  await api.assureExecutorCreated(executorData);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
+
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
+
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+  const executorNameInput = await executorGeneralSettingsPage.getExecutorName();
+
+  expect(executorNameInput).toBe(executorData.name);
+
+  const executorTypeInput = await executorGeneralSettingsPage.getExecutorType();
+  expect(executorTypeInput).not.toBeNull();
+
+  // Cleanup
+  await api.removeExecutor(realExecutorName);
+});
 
 test(`Custom container executor - delete executor`, async ({page}) => {
   const executorName = 'container-executor-curl-1';
@@ -61,7 +86,7 @@ test(`Custom container executor - delete executor`, async ({page}) => {
   await executorGeneralSettingsPage.deleteExecutor(realExecutorName);
 
   await page.waitForURL(`**/executors`);
-  const isDeleted = !(await api.isTestSourceCreated(realExecutorName));
+  const isDeleted = !(await api.isExecutorCreated(realExecutorName));
   expect(isDeleted).toBeTruthy();
 });
 
