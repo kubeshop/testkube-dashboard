@@ -36,6 +36,7 @@ const DeleteEntityModal: React.FC<DeleteEntityModalProps> = props => {
       defaultStackRoute={defaultStackRoute}
       idToDelete={idToDelete || name}
       actionDisabled={checkName !== name}
+      data-testid="delete-entity-modal"
       deleteOnEnter
       content={
         <FullWidthSpace size={24} direction="vertical">

@@ -6,7 +6,7 @@ import {DeleteEntityModal} from '@molecules';
 
 import {CardForm} from '@organisms';
 
-interface DeleteProps {
+export interface DeleteProps {
   name: string;
   description: string;
   label: string;
@@ -15,7 +15,7 @@ interface DeleteProps {
 }
 
 const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, onDelete}) => {
-  const {open, close} = useModal({
+  const {open} = useModal({
     title: `Delete this ${label}`,
     width: 600,
     content: <DeleteEntityModal defaultStackRoute={redirectUrl} onDelete={onDelete} name={name} entityLabel={label} />,
