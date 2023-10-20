@@ -14,7 +14,7 @@ interface CustomExecutorCardProps {
 }
 
 const CustomExecutorCard: FC<CustomExecutorCardProps> = ({item, onClick}) => (
-  <CustomExecutorContainer onClick={() => onClick(item)} key={item.name}>
+  <CustomExecutorContainer onClick={() => onClick(item)} key={item.name} data-test={item.name}>
     <Text className="regular big">{item.name}</Text>
     <Text color={Colors.slate500}>{item.executor.executorType}</Text>
     <Text color={Colors.slate500}>{item.executor.image}</Text>

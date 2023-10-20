@@ -12,6 +12,6 @@ export class ExecutorsPage {
   }
 
   public async openExecutorSettings(executorName: string): Promise<void> {
-    await this.page.click(`xpath=//div/span[text()="${executorName}"]`);
+    await this.page.click(`div[data-test="${executorName}"]`);
   }
 }
