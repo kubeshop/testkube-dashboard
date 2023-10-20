@@ -56,12 +56,8 @@ test(`Custom container executor - general settings`, async ({page}) => {
   await executorsPage.openExecutorSettings(realExecutorName);
 
   const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
-  const executorNameInput = await executorGeneralSettingsPage.getExecutorName();
 
-  expect(executorNameInput).toBe(executorData.name);
-
-  const executorTypeInput = await executorGeneralSettingsPage.getExecutorType();
-  expect(executorTypeInput).not.toBeNull();
+  await executorGeneralSettingsPage.validateExecutorGeneralSettings(executorData.name, executorData.types[0]);
 
   // Cleanup
   await api.removeExecutor(realExecutorName);

@@ -1,4 +1,4 @@
-import type {Page} from '@playwright/test';
+import {type Page, expect} from '@playwright/test';
 
 export class ExecutorGeneralSettingsPage {
   public readonly page: Page;
@@ -7,12 +7,17 @@ export class ExecutorGeneralSettingsPage {
     this.page = page;
   }
 
-  public async getExecutorName(): Promise<string | null> {
-    return this.page.locator('input[id="general-settings-name-type_name"]').inputValue();
-  }
+  public async validateExecutorGeneralSettings(executorName: string, executorType: string): Promise<void> {
+    const executorNameLocator = this.page.locator(
+      `//input[@id="general-settings-name-type_name" and @value="${executorName}"]`
+    );
 
-  public async getExecutorType(): Promise<string | null> {
-    return this.page.locator('input[id="general-settings-name-type_type"]').inputValue();
+    expect(executorNameLocator.isVisible()).toBeTruthy();
+
+    const executorTypeLocator = this.page.locator(
+      `//input[@id="general-settings-name-type_type" and @value="${executorType}"]`
+    );
+    expect(executorTypeLocator.isVisible()).toBeTruthy();
   }
 
   public async deleteExecutor(executorName: string): Promise<void> {
