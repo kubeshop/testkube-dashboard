@@ -20,6 +20,17 @@ export class ExecutorGeneralSettingsPage {
     expect(executorTypeLocator.isVisible()).toBeTruthy();
   }
 
+  public async selectContainerImageTab(): Promise<void> {
+    await this.page.click('div[data-test="sidebar-navigation-link:container-image"]');
+  }
+
+  public async validateContainerImageSettings(containerImage: string): Promise<void> {
+    const containerImageLocator = this.page.locator(
+      `//input[@id="container-image-settings-name-type_container_image" and @value="${containerImage}"]`
+    );
+    expect(containerImageLocator.isVisible()).toBeTruthy();
+  }
+
   public async deleteExecutor(executorName: string): Promise<void> {
     await this.page.click('button[data-testid="configuration-card-confirm-button"]');
     await this.page.getByTestId('delete-entity-input').fill(executorName);

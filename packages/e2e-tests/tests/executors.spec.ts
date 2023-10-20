@@ -86,7 +86,30 @@ test(`Custom container executor - delete executor`, async ({page}) => {
   expect(isDeleted).toBeTruthy();
 });
 
-test.skip(`Custom container executor - container image`, async ({page}) => {});
+test(`Custom container executor - container image`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  await api.assureExecutorCreated(executorData);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
+
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
+
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+
+  await executorGeneralSettingsPage.selectContainerImageTab();
+
+  await executorGeneralSettingsPage.validateContainerImageSettings(executorData.image);
+
+  // Cleanup
+  await api.removeExecutor(realExecutorName);
+});
 
 test.skip(`Custom container executor - command and arguments`, async ({page}) => {});
 
