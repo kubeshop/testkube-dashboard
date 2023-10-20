@@ -24,6 +24,7 @@ const YourInstallation: React.FC = () => {
     <ConfigurationCard
       title="Your installation"
       description="Details about your current Testkube installation"
+      name="installation-card"
       readOnly
     >
       <FullWidthSpace size={32} direction="vertical">

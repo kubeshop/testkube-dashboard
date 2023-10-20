@@ -18,7 +18,7 @@ interface AiInsightsTabProps {
 const AiInsightsTab = () => {
   return (
     <AiInsightContainer>
-      <AiInsightContent>
+      <AiInsightContent data-testid="ai-insights-tab-oss">
         <LockedIcon />
         <Text className="big bold"> This feature is available only in Testkube Cloud.</Text>
         <Text color={Colors.slate400}>
@@ -30,6 +30,7 @@ const AiInsightsTab = () => {
         </Text>
         <Button
           type="primary"
+          data-testid="cloud-cta-button"
           onClick={() => {
             window.open(externalLinks.testkubeCloud, '_blank');
           }}
