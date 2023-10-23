@@ -16,7 +16,6 @@ describe('Delete', () => {
   const description = 'This is a test';
   const label = 'Test';
 
-  // FIXME: Apply required plugin data
   const DeleteWrapper: React.FC<DeleteProps> = props => (
     <NavigationContext.Provider value={mockNavigationContextValue}>
       <ModalContext.Provider value={mockModalContextValue}>
