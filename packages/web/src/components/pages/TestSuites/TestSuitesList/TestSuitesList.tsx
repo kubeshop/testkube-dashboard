@@ -84,7 +84,7 @@ const TestSuitesList: FC = () => {
       queryFilters={filters}
       setQueryFilters={setFilters}
       data={testSuites}
-      isLoading={isLoading}
+      isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
     />

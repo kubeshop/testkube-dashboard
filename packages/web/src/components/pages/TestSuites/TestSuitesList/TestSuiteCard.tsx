@@ -18,14 +18,15 @@ export interface TestSuiteCardProps {
 }
 
 const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick, onAbort}) => {
-  const isFresh = useSystemAccess(SystemAccess.agent);
+  const isAgentAvailable = useSystemAccess(SystemAccess.agent);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
 
   const ref = useRef(null);
   const isInViewport = useInViewport(ref);
 
   const {data: metrics} = useGetTestSuiteExecutionMetricsQuery(
     {id: testSuite.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isFresh, pollingInterval: PollingIntervals.halfMin}
+    {skip: !isInViewport || !isSystemAvailable, pollingInterval: PollingIntervals.halfMin}
   );
 
   return (
@@ -37,7 +38,8 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       onAbort={onAbort}
       metrics={metrics}
       dataTest="test-suites-list-item"
-      outOfSync={!isFresh}
+      outOfSync={testSuite.readOnly}
+      isAgentAvailable={isAgentAvailable}
     />
   );
 };
