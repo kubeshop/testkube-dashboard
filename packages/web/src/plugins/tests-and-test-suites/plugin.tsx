@@ -20,6 +20,10 @@ import TestsList from '@pages/Tests/TestsList';
 
 import type ExecutorsPlugin from '@plugins/executors/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
+import RtkPlugin from '@plugins/rtk/plugin';
+
+import {testSuitesApi} from '@services/testSuites';
+import {testsApi} from '@services/tests';
 
 import DashboardRewrite from '@src/DashboardRewrite';
 
@@ -54,9 +58,6 @@ import {
 import {initializeTestsStore, useTests, useTestsField, useTestsPick, useTestsSync} from '@store/tests';
 
 import {decomposeVariables} from '@utils/variables';
-import RtkPlugin from "@plugins/rtk/plugin";
-import {testSuitesApi} from "@services/testSuites";
-import {testsApi} from "@services/tests";
 
 const generalStub = external<typeof GeneralPlugin>();
 const executorsStub = external<typeof ExecutorsPlugin>();
