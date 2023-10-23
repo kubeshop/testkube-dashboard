@@ -1,10 +1,7 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import {Provider as ReduxProvider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import 'reactflow/dist/style.css';
-
-import {store} from '@redux/store';
 
 import {GlobalStyle} from '@styles/globalStyles';
 
@@ -38,12 +35,10 @@ import env from './env';
         debug={env.debugTelemetry}
         paused
       >
-        <ReduxProvider store={store}>
-          <BrowserRouter basename={basename}>
-            <GlobalStyle />
-            <AppRoot />
-          </BrowserRouter>
-        </ReduxProvider>
+        <BrowserRouter basename={basename}>
+          <GlobalStyle />
+          <AppRoot />
+        </BrowserRouter>
       </TelemetryProvider>
     </React.StrictMode>
   );

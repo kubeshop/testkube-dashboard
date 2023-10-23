@@ -31,6 +31,7 @@ import type {
 } from './types';
 
 // TODO: Keep current route information here
+// TODO: Optimize types by passing just a resolved subset down
 export class PluginScope<T extends PluginScopeState> {
   private readonly [PluginScopeParentScope]: PluginScope<T> | null;
   private readonly [PluginScopeData]: PluginScopeDataRecord<T>;

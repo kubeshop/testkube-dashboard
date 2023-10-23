@@ -54,15 +54,20 @@ import {
 import {initializeTestsStore, useTests, useTestsField, useTestsPick, useTestsSync} from '@store/tests';
 
 import {decomposeVariables} from '@utils/variables';
+import RtkPlugin from "@plugins/rtk/plugin";
+import {testSuitesApi} from "@services/testSuites";
+import {testsApi} from "@services/tests";
 
 const generalStub = external<typeof GeneralPlugin>();
 const executorsStub = external<typeof ExecutorsPlugin>();
+const rtkStub = external<typeof RtkPlugin>();
 
 // TODO: Split
 export default createPlugin('oss/tests-and-test-suites')
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
   .needs(executorsStub.data('useExecutors'))
+  .needs(rtkStub.slots('rtkServices'))
 
   // Backwards compatibility
   .route('/tests/executions/:id', <DashboardRewrite pattern="/tests/:id" keepQuery />)
@@ -117,6 +122,9 @@ export default createPlugin('oss/tests-and-test-suites')
   .data({useLogOutput, useLogOutputPick, useLogOutputField, useLogOutputSync})
 
   .init(tk => {
+    tk.slots.rtkServices.add(testSuitesApi);
+    tk.slots.rtkServices.add(testsApi);
+
     // TODO: Instead of using tk.sync, use all the necessities directly in the plugin components
     tk.data.setExecutionTab = tk.sync(() => {
       const entityId = tk.data.useEntityDetails(x => x.id);

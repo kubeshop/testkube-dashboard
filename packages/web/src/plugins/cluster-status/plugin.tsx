@@ -5,21 +5,26 @@ import {createPlugin, data, external} from '@testkube/plugins';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import type GeneralPlugin from '@plugins/general/plugin';
+import type RtkPlugin from '@plugins/rtk/plugin';
 
-import {useGetClusterConfigQuery} from '@services/config';
+import {configApi, useGetClusterConfigQuery} from '@services/config';
 
 import {safeRefetch} from '@utils/fetchUtils';
 
 const generalStub = external<typeof GeneralPlugin>();
+const rtkStub = external<typeof RtkPlugin>();
 
 export default createPlugin('oss/cluster-status')
   .needs(generalStub.data('useApiEndpoint'))
+  .needs(rtkStub.slots('rtkServices'))
 
   .define(data<boolean>()('isClusterAvailable', 'isSystemAvailable', 'isTelemetryEnabled'))
 
   .data({useSystemAccess, SystemAccess})
 
   .init(tk => {
+    tk.slots.rtkServices.add(configApi);
+
     // TODO: Move to provider?
     tk.sync(() => {
       const apiEndpoint = tk.data.useApiEndpoint();

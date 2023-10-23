@@ -9,8 +9,10 @@ import SourcesList from '@pages/Sources/SourcesList/SourcesList';
 
 import type ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
+import RtkPlugin from '@plugins/rtk/plugin';
 
-import {useGetSourcesQuery} from '@services/sources';
+import {repositoryApi} from '@services/repository';
+import {sourcesApi, useGetSourcesQuery} from '@services/sources';
 
 import {initializeSourcesStore, useSources, useSourcesField, useSourcesPick, useSourcesSync} from '@store/sources';
 
@@ -19,11 +21,13 @@ import {PollingIntervals} from '@utils/numbers';
 
 const generalStub = external<typeof GeneralPlugin>();
 const clusterStatusStub = external<typeof ClusterStatusPlugin>();
+const rtkStub = external<typeof RtkPlugin>();
 
 export default createPlugin('oss/test-sources')
   .needs(clusterStatusStub.data('useSystemAccess', 'SystemAccess'))
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
+  .needs(rtkStub.slots('rtkServices'))
 
   .route('/sources', <SourcesList />)
   .route('/sources/:id', <SourceDetails />)
@@ -33,6 +37,9 @@ export default createPlugin('oss/test-sources')
   .data({useSources, useSourcesPick, useSourcesField, useSourcesSync})
 
   .init(tk => {
+    tk.slots.rtkServices.add(sourcesApi);
+    tk.slots.rtkServices.add(repositoryApi);
+
     tk.slots.siderItems.add({path: '/sources', icon: SourcesIcon, title: 'Sources'}, {order: -20});
 
     // TODO: Move as provider?

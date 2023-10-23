@@ -9,8 +9,9 @@ import ExecutorsList from '@pages/Executors/ExecutorsList/ExecutorsList';
 
 import type ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
+import RtkPlugin from '@plugins/rtk/plugin';
 
-import {useGetExecutorsQuery} from '@services/executors';
+import {executorsApi, useGetExecutorsQuery} from '@services/executors';
 
 import {
   initializeExecutorsStore,
@@ -25,11 +26,13 @@ import {PollingIntervals} from '@utils/numbers';
 
 const generalStub = external<typeof GeneralPlugin>();
 const clusterStatusStub = external<typeof ClusterStatusPlugin>();
+const rtkStub = external<typeof RtkPlugin>();
 
 export default createPlugin('oss/executors')
   .needs(clusterStatusStub.data('useSystemAccess', 'SystemAccess'))
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
+  .needs(rtkStub.slots('rtkServices'))
 
   .route('/executors', <ExecutorsList />)
   .route('/executors/:id', <ExecutorDetails />)
@@ -39,6 +42,8 @@ export default createPlugin('oss/executors')
   .data({useExecutors, useExecutorsPick, useExecutorsField, useExecutorsSync})
 
   .init(tk => {
+    tk.slots.rtkServices.add(executorsApi);
+
     tk.slots.siderItems.add({path: '/executors', icon: ExecutorsIcon, title: 'Executors'}, {order: -80});
 
     // TODO: Move as provider?

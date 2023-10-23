@@ -29,16 +29,14 @@ import ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import ClusterPlugin from '@plugins/cluster/plugin';
 import ExecutorsPlugin from '@plugins/executors/plugin';
 import GeneralPlugin from '@plugins/general/plugin';
+import LabelsPlugin from '@plugins/labels/plugin';
+import RtkPlugin from '@plugins/rtk/plugin';
 import SettingsPlugin from '@plugins/settings/plugin';
 import TelemetryPlugin from '@plugins/telemetry/plugin';
 import TestSourcesPlugin from '@plugins/test-sources/plugin';
 import TestsAndTestSuitesPlugin from '@plugins/tests-and-test-suites/plugin';
 import TriggersPlugin from '@plugins/triggers/plugin';
 import WebhooksPlugin from '@plugins/webhooks/plugin';
-
-import {resetRtkCache, store} from '@redux/store';
-
-import {useApiEndpoint} from '@services/apiEndpoint';
 
 import {composeProviders} from '@utils/composeProviders';
 import {externalLinks} from '@utils/externalLinks';
@@ -51,12 +49,6 @@ const AppRoot: React.FC = () => {
 
   const location = useLocation();
   const navigate = useLastCallback(useNavigate());
-  const apiEndpoint = useApiEndpoint();
-
-  // Reset the in-memory API cache on API endpoint change
-  useMemo(() => {
-    resetRtkCache(store);
-  }, [apiEndpoint]);
 
   const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
   const permissionsScope = useMemo(() => ({}), []);
@@ -80,7 +72,7 @@ const AppRoot: React.FC = () => {
 
   // TODO: Allow passing parent scope from Cloud
   const [PluginSystemProvider, root, routing] = useMemo(() => {
-    const [Provider, {initialize, routes}] = PluginResolver.of(
+    const plugins = [
       ClusterStatusPlugin,
       TelemetryPlugin,
       LegacyOssOnlyPlugin,
@@ -93,8 +85,11 @@ const AppRoot: React.FC = () => {
       SettingsPlugin,
       TestsAndTestSuitesPlugin,
       CloudBannerPlugin,
-      AiInsightsPromoPlugin
-    ).resolve();
+      AiInsightsPromoPlugin,
+      LabelsPlugin,
+      RtkPlugin,
+    ];
+    const [Provider, {initialize, routes}] = PluginResolver.of(...plugins).resolve();
     const scope = initialize();
     return [Provider, scope, routes] as const;
   }, []);
