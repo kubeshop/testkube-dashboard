@@ -111,6 +111,60 @@ test(`Custom container executor - container image`, async ({page}) => {
   await api.removeExecutor(realExecutorName);
 });
 
-test.skip(`Custom container executor - command and arguments`, async ({page}) => {});
+test(`Custom container executor - command and arguments`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  const command = 'echo 3600';
+  const argument = '--arg1';
 
-test.skip(`Custom container executor - definition`, async ({page}) => {});
+  await api.assureExecutorCreated(executorData);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
+
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
+
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+  await executorGeneralSettingsPage.selectCommandAndArgumentsTab();
+
+  await executorGeneralSettingsPage.setCommand(command);
+  await executorGeneralSettingsPage.validateCommand(command);
+
+  await executorGeneralSettingsPage.addArgument(argument);
+  await executorGeneralSettingsPage.validateArgument(argument);
+
+  // Cleanup
+  await api.removeExecutor(realExecutorName);
+});
+
+test(`Custom container executor - definition`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  await api.assureExecutorCreated(executorData);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
+
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
+
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+  await executorGeneralSettingsPage.selectDefinitionTab();
+  const definition = `  features:
+  - artifacts`;
+
+  await executorGeneralSettingsPage.setDefinition(definition);
+  await executorGeneralSettingsPage.validateDefinition(definition);
+
+  // cleanup
+  await api.removeExecutor(realExecutorName);
+});
