@@ -2,13 +2,14 @@ import {FC} from 'react';
 
 import {fireEvent, render, waitFor} from '@testing-library/react';
 
+import {PluginScopeMockProvider} from '@testkube/plugins/test';
+
 import DeleteModal, {DeleteModalProps} from './DeleteModal';
 
 const DeleteModalWrapper: FC<DeleteModalProps> = props => (
-  // FIXME: Apply the plugin instead
-  // <DashboardContext.Provider value={mockDashboardContextValue}>
-  <DeleteModal {...props} />
-  // </DashboardContext.Provider>
+  <PluginScopeMockProvider data={{navigate: jest.fn()}}>
+    <DeleteModal {...props} />
+  </PluginScopeMockProvider>
 );
 
 describe('DeleteModal', () => {

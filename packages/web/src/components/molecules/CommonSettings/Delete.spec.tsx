@@ -18,13 +18,11 @@ describe('Delete', () => {
 
   // FIXME: Apply required plugin data
   const DeleteWrapper: React.FC<DeleteProps> = props => (
-    // <DashboardContext.Provider value={mockDashboardContextValue}>
     <NavigationContext.Provider value={mockNavigationContextValue}>
       <ModalContext.Provider value={mockModalContextValue}>
         <Delete {...props} />
       </ModalContext.Provider>
     </NavigationContext.Provider>
-    // </DashboardContext.Provider>
   );
 
   it('should render the component', () => {

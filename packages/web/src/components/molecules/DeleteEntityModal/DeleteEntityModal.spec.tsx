@@ -2,6 +2,8 @@ import React, {FC} from 'react';
 
 import {fireEvent, render, waitFor} from '@testing-library/react';
 
+import {PluginScopeMockProvider} from '@testkube/plugins/test';
+
 import ModalContext from '@modal/context';
 
 import {mockModalContextValue} from '@utils/mocks';
@@ -20,13 +22,12 @@ describe('DeleteEntityModal', () => {
     onDelete = jest.fn().mockImplementation(() => Promise.resolve());
   });
 
-  // FIXME: Apply proper plugin instead
   const DeleteEntityModalWrapper: FC<DeleteEntityModalProps> = props => (
-    // <DashboardContext.Provider value={mockDashboardContextValue}>
-    <ModalContext.Provider value={mockModalContextValue}>
-      <DeleteEntityModal {...props} />
-    </ModalContext.Provider>
-    // </DashboardContext.Provider>
+    <PluginScopeMockProvider data={{navigate: jest.fn()}}>
+      <ModalContext.Provider value={mockModalContextValue}>
+        <DeleteEntityModal {...props} />
+      </ModalContext.Provider>
+    </PluginScopeMockProvider>
   );
 
   afterEach(() => {

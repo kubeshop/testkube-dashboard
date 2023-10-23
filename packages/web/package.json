@@ -52,6 +52,7 @@
     "@reduxjs/toolkit": "1.9.1",
     "@sentry/integrations": "^7.64.0",
     "@sentry/react": "^7.64.0",
+    "@testkube/plugins": "*",
     "ansi-to-react": "^6.1.6",
     "antd": "^4.24.12",
     "axios": "0.27.2",
