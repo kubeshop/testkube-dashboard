@@ -40,22 +40,4 @@ describe('useCopyToClipboard', () => {
     expect(result.current.isCopied).toBe(false);
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
   });
-
-  //   it('should reset isCopied after timeout', () => {
-  //     jest.useFakeTimers();
-  //     const textToCopy = 'Hello, world!';
-  //     const timeoutInMs = 5000;
-  //     const {result} = renderHook(() => useCopyToClipboard(textToCopy, {timeoutInMs}));
-
-  //     act(() => {
-  //       result.current.setCopyToClipboardState(true);
-  //     });
-
-  //     expect(result.current.isCopied).toBe(true);
-
-  //     jest.advanceTimersByTime(6000);
-
-  //     console.log('timeout finished in test');
-  //     expect(result.current.isCopied).toBe(false);
-  //   });
 });
