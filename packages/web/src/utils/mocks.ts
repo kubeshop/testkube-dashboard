@@ -1,9 +1,3 @@
-export const mockDashboardContextValue = {
-  navigate: jest.fn(),
-  location: {pathname: '/testroute', search: '', key: '', hash: '', location: '', state: {}},
-  baseUrl: '',
-};
-
 export const mockModalContextValue = {
   setOpen: jest.fn(),
   setConfig: jest.fn(),
