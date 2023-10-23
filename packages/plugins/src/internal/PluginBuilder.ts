@@ -7,7 +7,6 @@ import {Plugin} from './Plugin';
 import {PluginScope} from './PluginScope';
 import type {
   AppendData,
-  AppendRoute,
   JoinExternalState,
   JoinOuterState,
   JoinState,
@@ -42,17 +41,15 @@ export class PluginBuilder<T extends PluginState> {
    *
    * TODO: Allow passing configuration (modifiers) to route.
    *       The keys for configuration could be declared too from external/internal modules.
+   *
+   * TODO: Return PluginBuilder<AppendRoute<T>> (but performance is low)
    */
-  public route<U extends string>(
-    path: U,
-    element: ReactElement,
-    metadata: PluginRouteMetadata = {}
-  ): PluginBuilder<AppendRoute<T, U>> {
+  public route<U extends string>(path: U, element: ReactElement, metadata: PluginRouteMetadata = {}): PluginBuilder<T> {
     return new PluginBuilder({
       ...this.plugin,
       routes: [...this.plugin.routes, {path, element, metadata}],
       urls: {...this.plugin.urls, [path]: true},
-    });
+    }) as any;
   }
 
   /**
@@ -75,7 +72,7 @@ export class PluginBuilder<T extends PluginState> {
               return createElement(Provider as any, {...innerProps, ...props});
             },
             props: {},
-          } as unknown as PluginProvider<U>)
+          } as any)
         : rawProvider;
     return new PluginBuilder({
       ...this.plugin,
@@ -90,15 +87,15 @@ export class PluginBuilder<T extends PluginState> {
   public data<U extends Record<string, any>>(
     data: U
   ): PluginBuilder<{
-    urls: {[K in keyof AppendData<T, U>['urls']]: AppendData<T, U>['urls'][K]};
-    slots: {[K in keyof AppendData<T, U>['slots']]: AppendData<T, U>['slots'][K]};
+    urls: T['urls'];
+    slots: T['slots'];
     data: {[K in keyof AppendData<T, U>['data']]: AppendData<T, U>['data'][K]};
-    externalSlots: {[K in keyof AppendData<T, U>['externalSlots']]: AppendData<T, U>['externalSlots'][K]};
-    externalData: {[K in keyof AppendData<T, U>['externalData']]: AppendData<T, U>['externalData'][K]};
-    outerSlots: {[K in keyof AppendData<T, U>['outerSlots']]: AppendData<T, U>['outerSlots'][K]};
-    outerData: {[K in keyof AppendData<T, U>['outerData']]: AppendData<T, U>['outerData'][K]};
+    externalSlots: T['externalSlots'];
+    externalData: T['externalData'];
+    outerSlots: T['outerSlots'];
+    outerData: T['outerData'];
   }> {
-    return new PluginBuilder<AppendData<T, U>>({
+    return new PluginBuilder({
       ...this.plugin,
       data: {...this.plugin.data, ...data},
     }) as any;
@@ -110,19 +107,19 @@ export class PluginBuilder<T extends PluginState> {
   public define<U extends PluginState>(
     state: U
   ): PluginBuilder<{
-    urls: {[K in keyof JoinState<T, U>['urls']]: JoinState<T, U>['urls'][K]};
+    urls: T['urls'];
     slots: {[K in keyof JoinState<T, U>['slots']]: JoinState<T, U>['slots'][K]};
     data: {[K in keyof JoinState<T, U>['data']]: JoinState<T, U>['data'][K]};
-    externalSlots: {[K in keyof JoinState<T, U>['externalSlots']]: JoinState<T, U>['externalSlots'][K]};
-    externalData: {[K in keyof JoinState<T, U>['externalData']]: JoinState<T, U>['externalData'][K]};
-    outerSlots: {[K in keyof JoinState<T, U>['outerSlots']]: JoinState<T, U>['outerSlots'][K]};
-    outerData: {[K in keyof JoinState<T, U>['outerData']]: JoinState<T, U>['outerData'][K]};
+    externalSlots: T['externalSlots'];
+    externalData: T['externalData'];
+    outerSlots: T['outerSlots'];
+    outerData: T['outerData'];
   }> {
-    return new PluginBuilder<JoinState<T, U>>({
+    return new PluginBuilder({
       ...this.plugin,
       slots: {...this.plugin.slots, ...state.slots},
       data: {...this.plugin.data, ...state.data},
-    }) as any;
+    });
   }
 
   /**
@@ -131,19 +128,19 @@ export class PluginBuilder<T extends PluginState> {
   public needs<U extends PluginState>(
     state: U
   ): PluginBuilder<{
-    urls: {[K in keyof JoinExternalState<T, U>['urls']]: JoinExternalState<T, U>['urls'][K]};
-    slots: {[K in keyof JoinExternalState<T, U>['slots']]: JoinExternalState<T, U>['slots'][K]};
-    data: {[K in keyof JoinExternalState<T, U>['data']]: JoinExternalState<T, U>['data'][K]};
+    urls: T['urls'];
+    slots: T['slots'];
+    data: T['data'];
     externalSlots: {[K in keyof JoinExternalState<T, U>['externalSlots']]: JoinExternalState<T, U>['externalSlots'][K]};
     externalData: {[K in keyof JoinExternalState<T, U>['externalData']]: JoinExternalState<T, U>['externalData'][K]};
-    outerSlots: {[K in keyof JoinExternalState<T, U>['outerSlots']]: JoinExternalState<T, U>['outerSlots'][K]};
-    outerData: {[K in keyof JoinExternalState<T, U>['outerData']]: JoinExternalState<T, U>['outerData'][K]};
+    outerSlots: T['outerSlots'];
+    outerData: T['outerData'];
   }> {
-    return new PluginBuilder<JoinExternalState<T, U>>({
+    return new PluginBuilder({
       ...this.plugin,
       externalSlots: {...this.plugin.externalSlots, ...state.slots},
       externalData: {...this.plugin.externalData, ...state.data},
-    }) as any;
+    });
   }
 
   /**
@@ -155,34 +152,26 @@ export class PluginBuilder<T extends PluginState> {
   public outer<U extends PluginState>(
     state: U
   ): PluginBuilder<{
-    urls: {[K in keyof JoinOuterState<T, U>['urls']]: JoinOuterState<T, U>['urls'][K]};
-    slots: {[K in keyof JoinOuterState<T, U>['slots']]: JoinOuterState<T, U>['slots'][K]};
-    data: {[K in keyof JoinOuterState<T, U>['data']]: JoinOuterState<T, U>['data'][K]};
-    externalSlots: {[K in keyof JoinOuterState<T, U>['externalSlots']]: JoinOuterState<T, U>['externalSlots'][K]};
-    externalData: {[K in keyof JoinOuterState<T, U>['externalData']]: JoinOuterState<T, U>['externalData'][K]};
+    urls: T['urls'];
+    slots: T['slots'];
+    data: T['data'];
+    externalSlots: T['externalSlots'];
+    externalData: T['externalData'];
     outerSlots: {[K in keyof JoinOuterState<T, U>['outerSlots']]: JoinOuterState<T, U>['outerSlots'][K]};
     outerData: {[K in keyof JoinOuterState<T, U>['outerData']]: JoinOuterState<T, U>['outerData'][K]};
   }> {
-    return new PluginBuilder<JoinOuterState<T, U>>({
+    return new PluginBuilder({
       ...this.plugin,
       outerSlots: {...this.plugin.outerSlots, ...state.slots},
       outerData: {...this.plugin.outerData, ...state.data},
-    }) as any;
+    });
   }
 
   /**
    * Initialize the plugin.
    * Mark as complete and integrate.
    */
-  public init(fn: (tk: PluginScope<PluginScopeStateFor<T>>) => void = () => {}): Plugin<{
-    urls: {[K in keyof T['urls']]: T['urls'][K]};
-    slots: {[K in keyof T['slots']]: T['slots'][K]};
-    data: {[K in keyof T['data']]: T['data'][K]};
-    externalSlots: {[K in keyof T['externalSlots']]: T['externalSlots'][K]};
-    externalData: {[K in keyof T['externalData']]: T['externalData'][K]};
-    outerSlots: {[K in keyof T['outerSlots']]: T['outerSlots'][K]};
-    outerData: {[K in keyof T['outerData']]: T['outerData'][K]};
-  }> {
+  public init(fn: (tk: PluginScope<PluginScopeStateFor<T>>) => void = () => {}): Plugin<T> {
     return new Plugin(this.plugin, fn) as any;
   }
 }

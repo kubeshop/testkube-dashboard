@@ -23,13 +23,13 @@ export interface MockPluginSlot<T> extends PluginSlot<T> {
   allRaw: jest.MockedFunction<PluginSlot<T>['allRaw']>;
 }
 
-export type MockPluginScopeSlotRecord<T extends PluginScopeState> = {
-  [K in keyof T['slots'] | keyof T['inheritedSlots'] | keyof T['outerSlots']]: T['slots'] extends Record<K, any>
-    ? MockPluginSlot<T['slots'][K]>
-    : T['inheritedSlots'] extends Record<K, any>
-    ? MockPluginSlot<T['inheritedSlots'][K]>
-    : MockPluginSlot<T['outerSlots'][K]> | undefined;
+export type MockPluginScopeSlotMap<T extends Record<string, any>, U = never> = {
+  [K in keyof T]: MockPluginSlot<T[K]> | U;
 };
+
+export type MockPluginScopeSlotRecord<T extends PluginScopeState> = MockPluginScopeSlotMap<T['slots']> &
+  MockPluginScopeSlotMap<T['inheritedSlots']> &
+  MockPluginScopeSlotMap<T['outerSlots'], undefined>;
 
 export interface MockPluginScope<T extends PluginScopeState> extends PluginScope<T> {
   slots: MockPluginScopeSlotRecord<T>;
@@ -44,7 +44,10 @@ export const createPluginScopeMock = <T extends Record<string, any>, U extends R
   data = {} as any,
   slots = {} as any,
 }: MockPluginScopeConfig<T, U> = {}): MockPluginScope<
-  EmptyPluginScopeState & {data: T; slots: {[K in keyof U]: [U[K]] extends [never[]] ? any : U[K] extends Array<infer R> ? R : never}}
+  EmptyPluginScopeState & {
+    data: T;
+    slots: {[K in keyof U]: [U[K]] extends [never[]] ? any : U[K] extends Array<infer R> ? R : never};
+  }
 > => {
   const scope = new PluginScope(null, {
     data: Object.keys(data),

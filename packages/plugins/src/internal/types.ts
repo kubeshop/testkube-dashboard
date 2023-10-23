@@ -120,8 +120,8 @@ export interface PluginScopeState {
 }
 
 export type PluginScopeStateFor<T extends PluginState> = {
-  slots: {};
-  inheritedSlots: T['slots'] & T['externalSlots'];
+  slots: T['slots'];
+  inheritedSlots: T['externalSlots'];
   outerSlots: T['outerSlots'];
   data: {};
   inheritedData: T['data'];
@@ -137,18 +137,14 @@ export interface PluginScopeConfig<T extends PluginScopeState> {
   inheritedReadonlyData: (keyof T['inheritedReadonlyData'])[];
 }
 
-export type PluginScopeSlotRecord<T extends PluginScopeState> = {
-  [K in keyof T['slots'] | keyof T['inheritedSlots'] | keyof T['outerSlots']]: T['slots'] extends Record<K, any>
-    ? PluginSlot<T['slots'][K]>
-    : T['inheritedSlots'] extends Record<K, any>
-    ? PluginSlot<T['inheritedSlots'][K]>
-    : PluginSlot<T['outerSlots'][K]> | undefined;
-};
+type PluginScopeSlotMap<T extends Record<string, any>, U = never> = {[K in keyof T]: PluginSlot<T[K]> | U};
 
-export type PluginScopeDataRecord<T extends PluginScopeState> = {
-  readonly [K in keyof T['inheritedReadonlyData']]: T['inheritedReadonlyData'][K];
-} & {
-  [K in keyof T['data'] | keyof T['inheritedData']]: T['data'] extends Record<K, any>
-    ? T['data'][K]
-    : T['inheritedData'][K];
-};
+export type PluginScopeSlotRecord<T extends PluginScopeState> = PluginScopeSlotMap<T['slots']> &
+  PluginScopeSlotMap<T['inheritedSlots']> &
+  PluginScopeSlotMap<T['outerSlots'], undefined>;
+
+type PluginScopeDataMap<T extends Record<string, any>> = {[K in keyof T]: T[K]};
+
+export type PluginScopeDataRecord<T extends PluginScopeState> = PluginScopeDataMap<T['data']> &
+  PluginScopeDataMap<T['inheritedData']> &
+  Readonly<PluginScopeDataMap<T['inheritedReadonlyData']>>;
