@@ -16,3 +16,7 @@ export const PluginScopeProducerDataCache = Symbol.for('map of slots data to pro
 export const PluginScopeProducerCache = Symbol.for('map of slots for producers');
 export const PluginScopeAttachProducer = Symbol.for('attach the producer');
 export const PluginScopeDestroy = Symbol.for('destroy the state produced through PluginScope');
+export const PluginScopeScheduleUpdate = Symbol.for('schedule informing about change');
+export const PluginScopeEmitChange = Symbol.for('inform about data change');
+export const PluginScopeSubscribeChange = Symbol.for('subscribe to data change');
+export const PluginScopeListeners = Symbol.for('subscription listeners list');

@@ -61,6 +61,11 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       console.warn(`The "${plugin[PluginDetails].name}" plugin is already registered.`);
       return this;
     }
+
+    if (!plugin[PluginDetails]) {
+      throw Object.assign(new Error('Invalid plugin passed for registration'), {plugin});
+    }
+
     const order = plugin[PluginDetails].order || 0;
     const index = this.plugins.findIndex(x => x[PluginDetails].order > order);
     this.plugins.splice(index === -1 ? this.plugins.length : index, 0, plugin);

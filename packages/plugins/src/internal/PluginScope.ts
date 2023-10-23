@@ -12,9 +12,13 @@ import {
   PluginScopeDestroy,
   PluginScopeDisableNewSync,
   PluginScopeDisableNewSyncStatus,
+  PluginScopeEmitChange,
+  PluginScopeListeners,
   PluginScopeParentScope,
   PluginScopeRegisterChildrenScope,
+  PluginScopeScheduleUpdate,
   PluginScopeSlotData,
+  PluginScopeSubscribeChange,
   PluginScopeSyncData,
   PluginScopeUnregisterChildrenScope,
 } from './symbols';
@@ -34,9 +38,11 @@ export class PluginScope<T extends PluginScopeState> {
   private readonly [PluginScopeSyncData]: Map<Function, any> = new Map();
   private readonly [PluginScopeChildrenPluginMapScope]: Map<Plugin<any>, PluginScope<any>> = new Map();
   private readonly [PluginScopeChildrenScope]: Set<PluginScope<any>> = new Set();
+  private readonly [PluginScopeListeners]: Set<() => void> = new Set();
   private [PluginScopeDisableNewSyncStatus] = false;
   public readonly slots: PluginScopeSlotRecord<T>;
   public readonly data: PluginScopeDataRecord<T>;
+  private updateHandler: number = 0;
 
   public constructor(parent: PluginScope<T> | null, config: PluginScopeConfig<T>) {
     this[PluginScopeParentScope] = parent;
@@ -52,7 +58,10 @@ export class PluginScope<T extends PluginScopeState> {
         enumerable: true,
         get: () => this[PluginScopeData][key],
         set: (value: any) => {
-          this[PluginScopeData][key] = value;
+          if (this[PluginScopeData][key] !== value) {
+            this[PluginScopeData][key] = value;
+            this[PluginScopeEmitChange]();
+          }
         },
       });
     });
@@ -116,10 +125,34 @@ export class PluginScope<T extends PluginScopeState> {
     this[PluginScopeDisableNewSyncStatus] = true;
   }
 
+  // TODO: Optimize this mechanism
+  private [PluginScopeScheduleUpdate](): void {
+    if (!this.updateHandler) {
+      this.updateHandler = requestAnimationFrame(() => {
+        this[PluginScopeListeners].forEach(listener => listener());
+        this.updateHandler = 0;
+      });
+    }
+  }
+
+  public [PluginScopeEmitChange](): void {
+    this[PluginScopeScheduleUpdate]();
+    this[PluginScopeChildrenScope].forEach(child => child[PluginScopeEmitChange]());
+  }
+
+  public [PluginScopeSubscribeChange](listener: () => void): () => void {
+    const wrappedFn = () => listener();
+    this[PluginScopeListeners].add(wrappedFn);
+    return () => this[PluginScopeListeners].delete(wrappedFn);
+  }
+
   /**
    * Destroy slot data produced through this scope.
    */
   public destroy(): void {
+    cancelAnimationFrame(this.updateHandler);
+    this[PluginScopeListeners].clear();
+
     if (this[PluginScopeParentScope]) {
       this[PluginScopeParentScope][PluginScopeUnregisterChildrenScope](this);
     }

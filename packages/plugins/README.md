@@ -197,9 +197,15 @@ import {FC} from 'react';
 import {useData, useSlot, useSlotFirst} from '../hooks';
 
 export const SomeComponent: FC = () => {
-   const {value1} = useData();
+   // Reading slots
    const slot1Data = useSlot('slot1');
    const slotFirst = useSlotFirst('slot1'); // faster equivalent of: useSlot('slot1')[0]
+   
+   // Reading data
+   const {value1} = useData(); // easiest, but slowest - it will re-render every time the scope data are changed in any way
+   const {value2} = useData.pick('value2', 'value3'); // pick selected keys - it will re-render only when one of them changes
+   const value3 = useData.select(x => x.value3); // select some value - it will re-render when result identity is changed
+   const {value4, value5} = useData.shallow(x => ({value4: x.value4, value5: x.value5})); // same as .select(), but it will only re-render when result values 
 
    return slot1Data.map(x => <div key={x.id}>{x.name} {value1 === x.id ? ' (current)' : null}</div>);
 };
