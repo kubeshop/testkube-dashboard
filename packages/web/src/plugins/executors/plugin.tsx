@@ -1,3 +1,5 @@
+import {useEffect} from 'react';
+
 import {StoreProvider, createPlugin, external} from '@testkube/plugins';
 
 import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
@@ -5,7 +7,10 @@ import {ReactComponent as ExecutorsIcon} from '@assets/executor.svg';
 import ExecutorDetails from '@pages/Executors/ExecutorDetails';
 import ExecutorsList from '@pages/Executors/ExecutorsList/ExecutorsList';
 
+import type ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
+
+import {useGetExecutorsQuery} from '@services/executors';
 
 import {
   initializeExecutorsStore,
@@ -15,10 +20,14 @@ import {
   useExecutorsSync,
 } from '@store/executors';
 
-const generalStub = external<typeof GeneralPlugin>();
+import {safeRefetch} from '@utils/fetchUtils';
+import {PollingIntervals} from '@utils/numbers';
 
-// TODO: Make provider for fetching executors automatically
+const generalStub = external<typeof GeneralPlugin>();
+const clusterStatusStub = external<typeof ClusterStatusPlugin>();
+
 export default createPlugin('oss/executors')
+  .needs(clusterStatusStub.data('useSystemAccess', 'SystemAccess'))
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
 
@@ -31,4 +40,17 @@ export default createPlugin('oss/executors')
 
   .init(tk => {
     tk.slots.siderItems.add({path: '/executors', icon: ExecutorsIcon, title: 'Executors'}, {order: -80});
+
+    // TODO: Move as provider?
+    tk.sync(() => {
+      const {useApiEndpoint, useSystemAccess, SystemAccess} = tk.data;
+      const {data: executors, refetch} = useGetExecutorsQuery(null, {
+        pollingInterval: PollingIntervals.long,
+        skip: !useSystemAccess(SystemAccess.agent),
+      });
+      useExecutorsSync({executors});
+      useEffect(() => {
+        safeRefetch(refetch);
+      }, [useApiEndpoint()]);
+    });
   });

@@ -2,6 +2,8 @@ import {useMemo} from 'react';
 
 import {createPlugin, data, external} from '@testkube/plugins';
 
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
+
 import type GeneralPlugin from '@plugins/general/plugin';
 
 import {useGetClusterConfigQuery} from '@services/config';
@@ -15,6 +17,8 @@ export default createPlugin('oss/cluster-status')
 
   .define(data<boolean>()('isClusterAvailable', 'isSystemAvailable', 'isTelemetryEnabled'))
 
+  .data({useSystemAccess, SystemAccess})
+
   .init(tk => {
     // TODO: Move to provider?
     tk.sync(() => {
@@ -23,7 +27,6 @@ export default createPlugin('oss/cluster-status')
         skip: !apiEndpoint,
       });
 
-      // TODO: IMPORTANT - TRIGGER UPDATE AFTER CHANGING PLUGIN DATA!
       tk.data.isTelemetryEnabled = Boolean(clusterConfig?.enableTelemetry);
       tk.data.isClusterAvailable = Boolean(clusterConfig);
       tk.data.isSystemAvailable = Boolean(clusterConfig);

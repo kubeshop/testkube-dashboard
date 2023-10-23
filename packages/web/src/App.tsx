@@ -15,18 +15,12 @@ import {Loading, NotFound} from '@pages';
 import {useGeneralSlot} from '@plugins/general/hooks';
 
 import {getApiDetails, getApiEndpoint, isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
-import {useGetExecutorsQuery} from '@services/executors';
-import {useGetSourcesQuery} from '@services/sources';
 
 import {BannerList} from '@src/App.styled';
 
 import {useClusterDetailsPick} from '@store/clusterDetails';
-import {useExecutorsSync} from '@store/executors';
-import {useSourcesSync} from '@store/sources';
 
 import {composeProviders} from '@utils/composeProviders';
-import {safeRefetch} from '@utils/fetchUtils';
-import {PollingIntervals} from '@utils/numbers';
 
 interface AppProps {
   routes: PluginRoute[];
@@ -36,18 +30,6 @@ const App: React.FC<AppProps> = ({routes}) => {
   const location = useLocation();
   const apiEndpoint = useApiEndpoint();
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
-
-  const {data: executors, refetch: refetchExecutors} = useGetExecutorsQuery(null, {
-    pollingInterval: PollingIntervals.long,
-    skip: !isClusterAvailable,
-  });
-  useExecutorsSync({executors});
-
-  const {data: sources, refetch: refetchSources} = useGetSourcesQuery(null, {
-    pollingInterval: PollingIntervals.long,
-    skip: !isClusterAvailable,
-  });
-  useSourcesSync({sources});
 
   const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
@@ -60,11 +42,6 @@ const App: React.FC<AppProps> = ({routes}) => {
     dataTestCloseBtn: 'endpoint-modal-close-button',
     dataTestModalRoot: 'endpoint-modal',
   });
-
-  useEffect(() => {
-    safeRefetch(refetchExecutors);
-    safeRefetch(refetchSources);
-  }, [apiEndpoint]);
 
   useEffect(() => {
     // Do not fire the effect if new endpoint is just being set up.
