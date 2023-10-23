@@ -3,11 +3,9 @@ import {UNSAFE_NavigationContext as NavigationContext} from 'react-router-dom';
 
 import {fireEvent, render, waitFor} from '@testing-library/react';
 
-import DashboardContext from '@contexts/DashboardContext';
-
 import ModalContext from '@modal/context';
 
-import {mockDashboardContextValue, mockModalContextValue, mockNavigationContextValue} from '@utils/mocks';
+import {mockModalContextValue, mockNavigationContextValue} from '@utils/mocks';
 
 import Delete, {DeleteProps} from './Delete';
 
@@ -18,14 +16,15 @@ describe('Delete', () => {
   const description = 'This is a test';
   const label = 'Test';
 
+  // FIXME: Apply required plugin data
   const DeleteWrapper: React.FC<DeleteProps> = props => (
-    <DashboardContext.Provider value={mockDashboardContextValue}>
-      <NavigationContext.Provider value={mockNavigationContextValue}>
-        <ModalContext.Provider value={mockModalContextValue}>
-          <Delete {...props} />
-        </ModalContext.Provider>
-      </NavigationContext.Provider>
-    </DashboardContext.Provider>
+    // <DashboardContext.Provider value={mockDashboardContextValue}>
+    <NavigationContext.Provider value={mockNavigationContextValue}>
+      <ModalContext.Provider value={mockModalContextValue}>
+        <Delete {...props} />
+      </ModalContext.Provider>
+    </NavigationContext.Provider>
+    // </DashboardContext.Provider>
   );
 
   it('should render the component', () => {

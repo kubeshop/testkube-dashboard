@@ -1,14 +1,13 @@
-import {useContext, useMemo} from 'react';
+import {useMemo} from 'react';
 
 import {Tooltip} from 'antd';
 
 import {Icon} from '@atoms';
 
-import {DashboardContext} from '@contexts';
-
 import {FullWidthSpace} from '@custom-antd';
 
 import {useGeneralSlot, useGeneralSlotFirst} from '@plugins/general/hooks';
+import {useRouterPlugin} from '@plugins/router/hooks';
 
 import {
   StyledLogo,
@@ -26,7 +25,7 @@ const DEFAULT_ICON_STYLE = {
 };
 
 const Sider: React.FC = () => {
-  const {location} = useContext(DashboardContext);
+  const {location} = useRouterPlugin.pick('location');
   const siderLogo = useGeneralSlotFirst('siderLogo');
   const siderMenuList = useGeneralSlot('siderItems');
   const otherMenuItems = useGeneralSlot('siderOtherItems');

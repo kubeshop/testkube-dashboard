@@ -1,8 +1,8 @@
-import {AnchorHTMLAttributes, MouseEvent, useCallback, useContext} from 'react';
+import {AnchorHTMLAttributes, MouseEvent, useCallback} from 'react';
 
 import classNames from 'classnames';
 
-import {DashboardContext} from '@contexts';
+import {useRouterPlugin} from '@plugins/router/hooks';
 
 export interface SiderLinkProps {
   href: string;
@@ -16,7 +16,7 @@ const SiderLink: React.FC<SiderLinkProps & AnchorHTMLAttributes<HTMLAnchorElemen
   children,
   ...rest
 }) => {
-  const {baseUrl, navigate, location} = useContext(DashboardContext);
+  const {baseUrl, navigate, location} = useRouterPlugin.pick('baseUrl', 'navigate', 'location');
   const finalClassName = classNames(className, {
     active:
       location.pathname === href ||

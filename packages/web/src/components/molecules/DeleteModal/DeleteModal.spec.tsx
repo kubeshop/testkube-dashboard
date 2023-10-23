@@ -2,16 +2,13 @@ import {FC} from 'react';
 
 import {fireEvent, render, waitFor} from '@testing-library/react';
 
-import DashboardContext from '@contexts/DashboardContext';
-
-import {mockDashboardContextValue} from '@utils/mocks';
-
 import DeleteModal, {DeleteModalProps} from './DeleteModal';
 
 const DeleteModalWrapper: FC<DeleteModalProps> = props => (
-  <DashboardContext.Provider value={mockDashboardContextValue}>
-    <DeleteModal {...props} />
-  </DashboardContext.Provider>
+  // FIXME: Apply the plugin instead
+  // <DashboardContext.Provider value={mockDashboardContextValue}>
+  <DeleteModal {...props} />
+  // </DashboardContext.Provider>
 );
 
 describe('DeleteModal', () => {

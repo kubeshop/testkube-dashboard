@@ -1,8 +1,6 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {ExternalLink} from '@atoms';
-
-import {DashboardContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
@@ -19,6 +17,8 @@ import {Error} from '@pages';
 
 import {Permissions, usePermission} from '@permissions/base';
 
+import {useRouterPlugin} from '@plugins/router/hooks';
+
 import {useGetSourcesQuery} from '@services/sources';
 
 import {externalLinks} from '@utils/externalLinks';
@@ -30,7 +30,7 @@ import SourceCard from './SourceCard';
 
 const Sources: React.FC = () => {
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
-  const {location} = useContext(DashboardContext);
+  const {location} = useRouterPlugin.pick('location');
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/sources/${name}`);
 
   const {data: sources, refetch, error, isLoading} = useGetSourcesQuery(null, {skip: !isClusterAvailable});

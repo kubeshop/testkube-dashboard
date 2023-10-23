@@ -1,5 +1,4 @@
 import {useMemo} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
 
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
@@ -8,12 +7,11 @@ import {PluginResolver} from '@testkube/plugins';
 
 import LegacyOssOnlyPlugin from '@testkube/web/src/legacyOssOnly';
 
-import {ConfigContext, DashboardContext} from '@contexts';
+import {ConfigContext} from '@contexts';
 
 import {FeatureFlagsProvider} from '@feature-flags';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
-import {useLastCallback} from '@hooks/useLastCallback';
 
 import {ModalHandler, ModalOutletProvider} from '@modal/context';
 
@@ -30,6 +28,7 @@ import ClusterPlugin from '@plugins/cluster/plugin';
 import ExecutorsPlugin from '@plugins/executors/plugin';
 import GeneralPlugin from '@plugins/general/plugin';
 import LabelsPlugin from '@plugins/labels/plugin';
+import RouterPlugin from '@plugins/router/plugin';
 import RtkPlugin from '@plugins/rtk/plugin';
 import SettingsPlugin from '@plugins/settings/plugin';
 import TelemetryPlugin from '@plugins/telemetry/plugin';
@@ -47,9 +46,6 @@ import {StyledLayoutContentWrapper} from './App.styled';
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
-  const location = useLocation();
-  const navigate = useLastCallback(useNavigate());
-
   const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
   const permissionsScope = useMemo(() => ({}), []);
 
@@ -61,18 +57,10 @@ const AppRoot: React.FC = () => {
     []
   );
 
-  const dashboardValue = useMemo(
-    () => ({
-      navigate,
-      location,
-      baseUrl: '',
-    }),
-    [navigate, location]
-  );
-
   // TODO: Allow passing parent scope from Cloud
   const [PluginSystemProvider, root, routing] = useMemo(() => {
     const plugins = [
+      RouterPlugin,
       ClusterStatusPlugin,
       TelemetryPlugin,
       LegacyOssOnlyPlugin,
@@ -97,7 +85,6 @@ const AppRoot: React.FC = () => {
   return composeProviders()
     .append(FeatureFlagsProvider, {})
     .append(ConfigContext.Provider, {value: config})
-    .append(DashboardContext.Provider, {value: dashboardValue})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(PluginSystemProvider, {root})
     .append(ModalHandler, {})

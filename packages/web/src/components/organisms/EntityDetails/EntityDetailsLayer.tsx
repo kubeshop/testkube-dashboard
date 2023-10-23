@@ -1,11 +1,9 @@
-import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
+import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
-
-import {DashboardContext} from '@contexts';
 
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
@@ -14,6 +12,8 @@ import {ExecutionMetrics} from '@models/metrics';
 import {Test} from '@models/test';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from '@models/websocket';
+
+import {useRouterPlugin} from '@plugins/router/hooks';
 
 import {useWsEndpoint} from '@services/apiEndpoint';
 
@@ -48,7 +48,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   useGetExecutions,
   children,
 }) => {
-  const {navigate} = useContext(DashboardContext);
+  const {navigate} = useRouterPlugin.pick('navigate');
 
   useEntityDetailsReset({entity, id}, [entity, id, navigate, useGetEntityDetails]);
 
