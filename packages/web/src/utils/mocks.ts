@@ -1,3 +1,5 @@
+import {MainContextProps} from '@contexts/MainContext';
+
 export const mockDashboardContextValue = {
   navigate: jest.fn(),
   location: {pathname: '/testroute', search: '', key: '', hash: '', location: '', state: {}},
@@ -27,4 +29,10 @@ export const mockNavigationContextValue = {
     replace: jest.fn(),
   },
   static: true,
+};
+
+export const mockMainContextValue: MainContextProps = {
+  clusterVersion: 'v1.2.3',
+  isClusterAvailable: true,
+  isSystemAvailable: true,
 };
