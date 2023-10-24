@@ -1,3 +1,4 @@
+export * from './src/createDataPlugin';
 export * from './src/createPlugin';
 export * from './src/hooks';
 export * from './src/utils';
