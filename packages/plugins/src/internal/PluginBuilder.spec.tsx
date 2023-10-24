@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren} from 'react';
 
-import {data, external, slot} from '../utils';
+import {config, data, external, slot} from '../utils';
 
 import {Plugin} from './Plugin';
 import {PluginBuilder} from './PluginBuilder';
@@ -13,6 +13,7 @@ const empty = () =>
     name: 'test-name',
     order: 0,
     version: null,
+    config: {},
     slots: {},
     data: {},
     externalData: {},
@@ -140,7 +141,23 @@ describe('plugins', () => {
     it('should pass initialization function', () => {
       const init = jest.fn();
       const plugin = create().init(init);
-      expect(plugin[PluginInit]).toBe(init);
+      const arg1: any = {a: 10};
+      const arg2: any = {b: 10};
+      plugin[PluginInit](arg1, arg2);
+      expect(init).toHaveBeenCalledTimes(1);
+      expect(init.mock.calls[0][0]).toBe(arg1);
+      expect(init.mock.calls[0][1]).not.toBe(arg2);
+      expect(init.mock.calls[0][1]).toEqual(arg2);
+    });
+
+    it('should apply defaults to the configuration', () => {
+      const init = jest.fn();
+      const plugin = create().define(config()('abc', 'def')).define(config()('xyz', 'def')).init(init);
+      const arg1: any = {a: 10};
+      const arg2: any = {b: 10, xyz: 'override'};
+      plugin[PluginInit](arg1, arg2);
+      expect(init.mock.calls[0][1]).not.toBe(arg2);
+      expect(init.mock.calls[0][1]).toEqual({...arg2, abc: 'def'});
     });
 
     it('should not lose track of any assigned props', () => {
@@ -169,6 +186,7 @@ describe('plugins', () => {
         name: empty().name,
         version: empty().version,
         order: 500,
+        config: {},
         externalData: {key1: undefined},
         externalSlots: {slot1: undefined},
         outerData: {key3: undefined},

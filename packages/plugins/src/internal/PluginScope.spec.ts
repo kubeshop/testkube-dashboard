@@ -8,6 +8,7 @@ import {
   PluginScopeChildrenPluginMapScope,
   PluginScopeChildrenScope,
   PluginScopeDisableNewSync,
+  PluginScopeSubscribeChange,
 } from './symbols';
 import {PluginScopeConfig} from './types';
 
@@ -21,6 +22,8 @@ const create = (config: Partial<PluginScopeConfig<any>>, parent: PluginScope<any
     outerSlots: [],
     ...config,
   });
+
+const frame = () => new Promise(resolve => requestAnimationFrame(resolve));
 
 describe('plugins', () => {
   describe('PluginScope', () => {
@@ -283,6 +286,52 @@ describe('plugins', () => {
       expect(root[PluginScopeChildrenScope]).toEqual(new Set([separate]));
       expect(root.slots.slot1?.all()).toEqual(['root', 'separate']);
       expect(parent.slots.slot2?.all()).toEqual([]);
+    });
+
+    it('should emit information about scope change', async () => {
+      const root = create({data: ['key1']});
+      const parent = create({inheritedData: ['key1']}, root);
+      const child = create({inheritedData: ['key1']}, parent);
+      const listener = jest.fn();
+      child[PluginScopeSubscribeChange](listener);
+      child.data.key1 = 'value1';
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit information about parent scope change', async () => {
+      const root = create({data: ['key1']});
+      const parent = create({inheritedData: ['key1']}, root);
+      const child = create({inheritedData: ['key1']}, parent);
+      const listener = jest.fn();
+      child[PluginScopeSubscribeChange](listener);
+      parent.data.key1 = 'value1';
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit information about (nested) children scope change', async () => {
+      const root = create({data: ['key1']});
+      const parent = create({inheritedData: ['key1']}, root);
+      const child = create({inheritedData: ['key1']}, parent);
+      const listener = jest.fn();
+      root[PluginScopeSubscribeChange](listener);
+      parent[PluginScopeSubscribeChange](listener);
+      child.data.key1 = 'value1';
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(2);
+    });
+
+    it('should unregister listener', async () => {
+      const root = create({data: ['key1']});
+      const parent = create({inheritedData: ['key1']}, root);
+      const child = create({inheritedData: ['key1']}, parent);
+      const listener = jest.fn();
+      const unsubscribe = child[PluginScopeSubscribeChange](listener);
+      unsubscribe();
+      parent.data.key1 = 'value1';
+      await frame();
+      expect(listener).not.toHaveBeenCalled();
     });
   });
 });

@@ -40,6 +40,9 @@ export interface PluginProviderContainer<T, U extends PluginState> {
 }
 
 export interface PluginState {
+  // Setup
+  readonly config: Record<string, any>;
+
   // Dependencies
   readonly externalData: Record<string, any>;
   readonly externalSlots: Record<string, any>;
@@ -57,6 +60,7 @@ export interface PluginState {
 }
 
 export interface EmptyPluginState extends PluginState {
+  readonly config: {};
   readonly externalData: {};
   readonly externalSlots: {};
   readonly outerData: {};
@@ -120,8 +124,8 @@ export interface PluginScopeState {
 }
 
 export type PluginScopeStateFor<T extends PluginState> = {
-  slots: {};
-  inheritedSlots: T['slots'] & T['externalSlots'];
+  slots: T['slots'];
+  inheritedSlots: T['externalSlots'];
   outerSlots: T['outerSlots'];
   data: {};
   inheritedData: T['data'];
@@ -137,18 +141,27 @@ export interface PluginScopeConfig<T extends PluginScopeState> {
   inheritedReadonlyData: (keyof T['inheritedReadonlyData'])[];
 }
 
-export type PluginScopeSlotRecord<T extends PluginScopeState> = {
-  [K in keyof T['slots'] | keyof T['inheritedSlots'] | keyof T['outerSlots']]: T['slots'] extends Record<K, any>
-    ? PluginSlot<T['slots'][K]>
-    : T['inheritedSlots'] extends Record<K, any>
-    ? PluginSlot<T['inheritedSlots'][K]>
-    : PluginSlot<T['outerSlots'][K]> | undefined;
+type PluginScopeSlotMap<T extends Record<string, any>, U = never> = {[K in keyof T]: PluginSlot<T[K]> | U};
+
+export type PluginScopeSlotRecord<T extends PluginScopeState> = PluginScopeSlotMap<T['slots']> &
+  PluginScopeSlotMap<T['inheritedSlots']> &
+  PluginScopeSlotMap<T['outerSlots'], undefined>;
+
+type PluginScopeDataMap<T extends Record<string, any>> = {[K in keyof T]: T[K]};
+
+export type PluginScopeDataRecord<T extends PluginScopeState> = PluginScopeDataMap<T['data']> &
+  PluginScopeDataMap<T['inheritedData']> &
+  Readonly<PluginScopeDataMap<T['inheritedReadonlyData']>>;
+
+type PluginConfigInputRequiredKeys<T extends Record<string, any>> = {
+  [K in keyof T]: undefined extends T[K] ? K : never;
+}[keyof T];
+export type PluginConfigInput<T extends Record<string, any>> = {
+  [K in PluginConfigInputRequiredKeys<T>]: Exclude<T[K], undefined>;
+} & {
+  [K in Exclude<keyof T, PluginConfigInputRequiredKeys<T>>]?: T[K];
 };
 
-export type PluginScopeDataRecord<T extends PluginScopeState> = {
-  readonly [K in keyof T['inheritedReadonlyData']]: T['inheritedReadonlyData'][K];
-} & {
-  [K in keyof T['data'] | keyof T['inheritedData']]: T['data'] extends Record<K, any>
-    ? T['data'][K]
-    : T['inheritedData'][K];
+export type PluginConfig<T extends Record<string, any>> = {
+  [K in keyof T]-?: Exclude<T[K], undefined>;
 };

@@ -10,9 +10,9 @@ describe('plugins', () => {
       const scope = {} as PluginScope<any>;
       const init = jest.fn();
       const plugin = new Plugin(config, init);
-      plugin[PluginInit](scope);
+      plugin[PluginInit](scope, {});
       expect(init).toHaveBeenCalledTimes(1);
-      expect(init).toHaveBeenCalledWith(scope);
+      expect(init).toHaveBeenCalledWith(scope, {});
     });
 
     it('should expose details', () => {
