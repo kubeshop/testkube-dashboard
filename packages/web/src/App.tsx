@@ -14,20 +14,17 @@ interface AppProps {
   routes: PluginRoute[];
 }
 
-const App: React.FC<AppProps> = ({routes}) => {
-  const update = useUpdate();
-  return (
-    <Suspense fallback={<Loading />}>
-      <BannerList items={useGeneralSlot('banners')} onClose={update} />
-      <Routes>
-        {routes.map(route => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <div id="log-output-container" />
-    </Suspense>
-  );
-};
+const App: React.FC<AppProps> = ({routes}) => (
+  <Suspense fallback={<Loading />}>
+    <BannerList items={useGeneralSlot('banners')} onClose={useUpdate()} />
+    <Routes>
+      {routes.map(route => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+    <div id="log-output-container" />
+  </Suspense>
+);
 
 export default App;
