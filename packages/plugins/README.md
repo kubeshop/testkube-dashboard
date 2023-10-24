@@ -122,6 +122,38 @@ export default createPlugin('some-plugin-name')
     });
 ```
 
+Additionally, there is a helper to create a simple plugin that exposes some data for usage:
+
+```ts
+import {createDataPlugin} from '@testkube/plugins';
+
+export interface SomeConfigurationData {
+    baseUrl: string;
+    otherConfiguration: string;
+    anotherConfiguration: string;
+}
+
+export default createDataPlugin('some-configuration')({
+  baseUrl: undefined,
+  otherConfiguration: 'defaultValue',
+  anotherConfiguration: 'anotherDefaultValue',
+});
+```
+
+Such plugin may be instantiated similarly to other plugins:
+
+```ts
+import DataPlugin from 'some/path/there';
+
+// [...]
+PluginResolver.of(
+    DataPlugin.configure({
+      baseUrl: 'requiredBaseUrl',
+      anotherConfiguration: 'overrideAnotherConfigurationDefaults',
+    })
+)
+```
+
 ### Dependencies
 
 There are two methods in the plugin definition to declare dependency:
