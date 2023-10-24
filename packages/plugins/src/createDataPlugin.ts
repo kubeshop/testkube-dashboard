@@ -9,7 +9,7 @@ export const createDataPlugin =
   <U extends {[K in keyof T]: T[K] | undefined}>(value: U): Plugin<EmptyPluginState & {config: T | U}> =>
     Object.keys(value)
       .reduce(
-        (builder, key) => builder.define(config()(key, value[key])).define(data()(key)),
+        (builder, key) => builder.order(-Infinity).define(config()(key, value[key])).define(data()(key)),
         createPlugin(name) as PluginBuilder<any>
       )
       .init((tk, cfg) => {

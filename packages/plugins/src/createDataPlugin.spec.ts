@@ -14,6 +14,7 @@ describe('plugins', () => {
       const [, {initialize}] = PluginResolver.of(
         plugin.configure({value1: 'test1', value2: 'test2', value3: undefined})
       ).resolve();
+      expect(plugin[PluginDetails].order).toEqual(-Infinity);
       expect(plugin[PluginDetails].config).toEqual({
         value1: undefined,
         value2: 'defaultValue2',
