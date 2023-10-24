@@ -45,7 +45,6 @@ import {StyledLayoutContentWrapper} from './App.styled';
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
-  // TODO: Allow passing parent scope from Cloud
   const plugins = useMemo(
     () => [
       ConfigPlugin.configure({discordUrl: externalLinks.discord}),
