@@ -11,8 +11,6 @@ import env from '@env';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 
-import {ModalHandler, ModalOutletProvider} from '@modal/context';
-
 import {Sider} from '@organisms';
 
 import {ErrorBoundary} from '@pages';
@@ -28,6 +26,7 @@ import ExecutorsPlugin from '@plugins/executors/plugin';
 import FeatureFlagsPlugin from '@plugins/feature-flags/plugin';
 import GeneralPlugin from '@plugins/general/plugin';
 import LabelsPlugin from '@plugins/labels/plugin';
+import ModalPlugin from '@plugins/modal/plugin';
 import PermissionsPlugin from '@plugins/permissions/plugin';
 import RouterPlugin from '@plugins/router/plugin';
 import RtkPlugin from '@plugins/rtk/plugin';
@@ -69,6 +68,7 @@ const AppRoot: React.FC = () => {
       AiInsightsPromoPlugin,
       LabelsPlugin,
       RtkPlugin,
+      ModalPlugin,
     ];
     const [Provider, {initialize, routes}] = PluginResolver.of(...plugins).resolve();
     const scope = initialize();
@@ -77,8 +77,6 @@ const AppRoot: React.FC = () => {
 
   return composeProviders()
     .append(PluginSystemProvider, {root})
-    .append(ModalHandler, {})
-    .append(ModalOutletProvider, {})
     .render(
       <>
         <Layout>
