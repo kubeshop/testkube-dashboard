@@ -19,7 +19,7 @@ import {Sider} from '@organisms';
 
 import {ErrorBoundary} from '@pages';
 
-import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
+import {BasePermissionsResolver} from '@permissions/base';
 
 import AiInsightsPromoPlugin from '@plugins/ai-insights-promo/plugin';
 import CloudBannerPlugin from '@plugins/cloud-banner/plugin';
@@ -29,6 +29,7 @@ import ConfigPlugin from '@plugins/config/plugin';
 import ExecutorsPlugin from '@plugins/executors/plugin';
 import GeneralPlugin from '@plugins/general/plugin';
 import LabelsPlugin from '@plugins/labels/plugin';
+import PermissionsPlugin from '@plugins/permissions/plugin';
 import RouterPlugin from '@plugins/router/plugin';
 import RtkPlugin from '@plugins/rtk/plugin';
 import SettingsPlugin from '@plugins/settings/plugin';
@@ -47,14 +48,12 @@ import {StyledLayoutContentWrapper} from './App.styled';
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
-  const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
-  const permissionsScope = useMemo(() => ({}), []);
-
   // TODO: Allow passing parent scope from Cloud
   const [PluginSystemProvider, root, routing] = useMemo(() => {
     const plugins = [
       ConfigPlugin.configure({discordUrl: externalLinks.discord}),
       RouterPlugin.configure({baseUrl: env.basename || ''}),
+      PermissionsPlugin.configure({resolver: new BasePermissionsResolver()}),
       ClusterStatusPlugin,
       TelemetryPlugin,
       LegacyOssOnlyPlugin,
@@ -70,7 +69,7 @@ const AppRoot: React.FC = () => {
       AiInsightsPromoPlugin,
       LabelsPlugin,
       RtkPlugin,
-    ] as const;
+    ];
     const [Provider, {initialize, routes}] = PluginResolver.of(...plugins).resolve();
     const scope = initialize();
     return [Provider, scope, routes] as const;
@@ -78,7 +77,6 @@ const AppRoot: React.FC = () => {
 
   return composeProviders()
     .append(FeatureFlagsProvider, {})
-    .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(PluginSystemProvider, {root})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})
