@@ -1,6 +1,6 @@
 import {createDataPlugin} from '@testkube/plugins';
 
-interface OssConfig {
+export interface OssConfig {
   pageTitle: string;
   discordUrl: string;
 }
