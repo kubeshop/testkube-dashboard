@@ -73,6 +73,13 @@ export default createPlugin('some-plugin-name')
     // Inject provider that will wrap all the components inside
     .provider(<SomeReactProvider value={10} />)
 
+    // Inject provider with forcing different order.
+    // By default all providers have such order: 0.
+    // It's worth to use it, when the provider creates a context,
+    // and such context doesn't have any dependencies.
+    // Thanks to that, context is widely accessible.
+    .provider(<SomeReactContext.Provider value={{}} />, {order: -50})
+
     // Inject provider that will wrap all the components inside.
     // Append only if `someVariable` is set to 'xyz'.
     .provider(<SomeConditionalReactProvider value={10} />, {

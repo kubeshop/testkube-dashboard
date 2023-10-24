@@ -9,7 +9,13 @@ import {detectCircularDependencies} from './internal/detectCircularDependencies'
 import {detectDirectDependencies} from './internal/detectDirectDependencies';
 import {detectResources} from './internal/detectResources';
 import {PluginDetails, PluginInit, PluginScopeDisableNewSync} from './internal/symbols';
-import type {EmptyPluginState, PluginProvider, PluginRoute, PluginScopeStateFor, PluginState} from './internal/types';
+import type {
+  EmptyPluginState,
+  PluginProviderContainer,
+  PluginRoute,
+  PluginScopeStateFor,
+  PluginState,
+} from './internal/types';
 
 interface ResolvedPlugins<T extends PluginState> {
   routes: PluginRoute[];
@@ -65,8 +71,8 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     type RootScopeType = PluginScope<PluginScopeStateFor<T>>;
     const initializers: ((context: RootScopeType) => void)[] = [];
     const initialData: Partial<RootScopeType['data']> = {};
-    const staticProviders: PluginProvider<any>[] = [];
-    const dynamicProviders: PluginProvider<any>[] = [];
+    const staticProviders: PluginProviderContainer<any, T>[] = [];
+    const dynamicProviders: PluginProviderContainer<any, T>[] = [];
     const routes: PluginRoute[] = [];
     const warnings: string[] = [];
     const plugins = this.plugins.map(x => x.plugin);
@@ -140,13 +146,18 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       const ownDynamicProviders = next.plugin[PluginDetails].providers.filter(x => x.metadata.enabled);
 
       // Include dependencies
-      staticProviders.push(...ownStaticProviders.map(x => x.provider));
+      staticProviders.push(...ownStaticProviders);
 
       if (ownDynamicProviders.length === 0) {
-        staticProviders.push({type: PluginLocalProvider, props: {plugin: next.plugin}});
+        staticProviders.push({provider: {type: PluginLocalProvider, props: {plugin: next.plugin}}, metadata: {}});
       } else {
-        dynamicProviders.push(...ownDynamicProviders.map(provider => ({type: ConditionalProvider, props: {provider}})));
-        dynamicProviders.push({type: PluginLocalProvider, props: {plugin: next.plugin}});
+        dynamicProviders.push(
+          ...ownDynamicProviders.map(provider => ({
+            provider: {type: ConditionalProvider, props: {provider}},
+            metadata: provider.metadata,
+          }))
+        );
+        dynamicProviders.push({provider: {type: PluginLocalProvider, props: {plugin: next.plugin}}, metadata: {}});
       }
       routes.push(...next.plugin[PluginDetails].routes); // TODO: Shouldn't routes be ordered independently?
       initializers.push(createInitializer(next));
@@ -179,12 +190,28 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       return root;
     };
 
+    // Sort the providers
+    staticProviders.sort((a, b) =>
+      (a.metadata.order || 0) === (b.metadata.order || 0)
+        ? 0
+        : (a.metadata.order || 0) > (b.metadata.order || 0)
+        ? 1
+        : -1
+    );
+    dynamicProviders.sort((a, b) =>
+      (a.metadata.order || 0) === (b.metadata.order || 0)
+        ? 0
+        : (a.metadata.order || 0) > (b.metadata.order || 0)
+        ? 1
+        : -1
+    );
+
     const providers = staticProviders.concat(dynamicProviders);
 
     const Provider: FC<PropsWithChildren<{root: RootScopeType}>> = ({root, children}) => {
       let current = children;
       for (let i = providers.length - 1; i >= 0; i -= 1) {
-        current = createElement(providers[i].type, providers[i].props, current);
+        current = createElement(providers[i].provider.type, providers[i].provider.props, current);
       }
       return createElement(PluginScopeProvider, {root}, current);
     };

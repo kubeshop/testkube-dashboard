@@ -561,6 +561,39 @@ describe('plugins', () => {
     ]);
   });
 
+  it('should allow passing independent order for providers', () => {
+    const plugin1 = createPlugin('plugin1')
+      .order(Infinity)
+      .provider(mockProvider('p-dynamic1-5'), {enabled: () => true, order: -5})
+      .provider(mockProvider('p-static1-5'), {order: -5})
+      .provider(mockProvider('p-dynamic2'), {enabled: () => true})
+      .provider(mockProvider('p-static2'))
+      .init();
+    const plugin2 = createPlugin('plugin2')
+      .order(-Infinity)
+      .provider(mockProvider('p-dynamic3'), {enabled: () => true})
+      .provider(mockProvider('p-static3+5'), {order: 5})
+      .provider(mockProvider('p-dynamic4'), {enabled: () => true})
+      .provider(mockProvider('p-static4'))
+      .provider(mockProvider('p-static5-6'), {order: -6})
+      .init();
+    const [Provider, {initialize}] = new PluginResolver().register(plugin1).register(plugin2).resolve();
+    const scope = initialize();
+    const result = render(<Provider root={scope} />);
+
+    expect(domOrderFor('p-', result.container)).toEqual([
+      'static5-6',
+      'static1-5',
+      'static4',
+      'static2',
+      'static3+5',
+      'dynamic1-5',
+      'dynamic3',
+      'dynamic4',
+      'dynamic2',
+    ]);
+  });
+
   it('should allow reading the scope in the provider definition', () => {
     const Context = createContext<any>(null);
     const Reader: FC = () => <div data-testid={useContext(Context)} />;
