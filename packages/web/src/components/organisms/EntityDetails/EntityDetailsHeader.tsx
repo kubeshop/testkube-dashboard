@@ -103,8 +103,8 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
           key="run-now-button"
           type="primary"
           onClick={onRun}
-          disabled={!details || outOfSync}
-          hidden={!mayRun}
+          disabled={!details}
+          hidden={!mayRun || outOfSync}
           loading={isRunning}
         >
           Run now

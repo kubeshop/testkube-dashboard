@@ -71,7 +71,7 @@ const TestModal: React.FC<TestModalProps> = props => {
           >
             Cancel
           </Button>
-          <Button $customType="primary" onClick={onConfirm}>
+          <Button $customType="primary" onClick={onConfirm} disabled={!testValue}>
             Add Test
           </Button>
         </>
