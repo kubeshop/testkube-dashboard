@@ -6,7 +6,7 @@ import {config, data} from './utils';
 
 export const createDataPlugin =
   <T extends Record<string, any>>(name: string) =>
-  <U extends {[K in keyof T]: T[K] | undefined}>(value: U): Plugin<EmptyPluginState & {config: T | U}> =>
+  <U extends {[K in keyof T]: T[K] | undefined}>(value: U): Plugin<EmptyPluginState & {config: T | U} & {data: T}> =>
     Object.keys(value)
       .reduce(
         (builder, key) => builder.order(-Infinity).define(config()(key, value[key])).define(data()(key)),
