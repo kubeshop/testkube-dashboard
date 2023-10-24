@@ -1,10 +1,8 @@
-import {PropsWithChildren, ReactElement, useContext} from 'react';
+import {PropsWithChildren, ReactElement} from 'react';
 
 import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
 
 import {ExternalLink} from '@atoms';
-
-import {ConfigContext} from '@contexts';
 
 import {Button, Text, Title} from '@custom-antd';
 
@@ -14,6 +12,8 @@ import {HelpCard} from '@molecules';
 import {StyledHelpCardsContainer, StyledLastHelpCardContainer} from '@molecules/HelpCard/HelpCard.styled';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useConfigPlugin} from '@plugins/config/hooks';
 
 import Colors from '@styles/Colors';
 
@@ -46,7 +46,7 @@ const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = pro
     actionType,
   } = props;
 
-  const {discordUrl} = useContext(ConfigContext);
+  const discordUrl = useConfigPlugin.select(x => x.discordUrl);
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const isActionAvailable = usePermission(actionTypeToPermission[actionType]);
 

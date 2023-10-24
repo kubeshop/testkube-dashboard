@@ -7,8 +7,6 @@ import {PluginResolver} from '@testkube/plugins';
 
 import LegacyOssOnlyPlugin from '@testkube/web/src/legacyOssOnly';
 
-import {ConfigContext} from '@contexts';
-
 import env from '@env';
 
 import {FeatureFlagsProvider} from '@feature-flags';
@@ -23,6 +21,7 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
+import ConfigPlugin from '@plugins/config/plugin';
 import AiInsightsPromoPlugin from '@plugins/ai-insights-promo/plugin';
 import CloudBannerPlugin from '@plugins/cloud-banner/plugin';
 import ClusterStatusPlugin from '@plugins/cluster-status/plugin';
@@ -51,17 +50,10 @@ const AppRoot: React.FC = () => {
   const permissionsResolver = useMemo(() => new BasePermissionsResolver(), []);
   const permissionsScope = useMemo(() => ({}), []);
 
-  const config = useMemo(
-    () => ({
-      pageTitle: 'Testkube',
-      discordUrl: externalLinks.discord,
-    }),
-    []
-  );
-
   // TODO: Allow passing parent scope from Cloud
   const [PluginSystemProvider, root, routing] = useMemo(() => {
     const plugins = [
+      ConfigPlugin.configure({discordUrl: externalLinks.discord}),
       RouterPlugin.configure({baseUrl: env.basename || ''}),
       ClusterStatusPlugin,
       TelemetryPlugin,
@@ -86,7 +78,6 @@ const AppRoot: React.FC = () => {
 
   return composeProviders()
     .append(FeatureFlagsProvider, {})
-    .append(ConfigContext.Provider, {value: config})
     .append(PermissionsProvider, {scope: permissionsScope, resolver: permissionsResolver})
     .append(PluginSystemProvider, {root})
     .append(ModalHandler, {})
