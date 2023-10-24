@@ -45,7 +45,18 @@ export class PluginBuilder<T extends PluginState> {
    *
    * TODO: Return PluginBuilder<AppendRoute<T>> (but performance is low)
    */
-  public route<U extends string>(path: U, element: ReactElement, metadata: PluginRouteMetadata = {}): PluginBuilder<T> {
+  public route<U extends string>(
+    path: U,
+    rawElement: ReactElement | ((tk: PluginScope<PluginScopeStateFor<T>>) => ReactElement),
+    metadata: PluginRouteMetadata = {}
+  ): PluginBuilder<T> {
+    const element =
+      typeof rawElement === 'function'
+        ? (() => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            return createElement(() => rawElement(usePluginScope()));
+          })()
+        : rawElement;
     return new PluginBuilder({
       ...this.plugin,
       routes: [...this.plugin.routes, {path, element, metadata}],
