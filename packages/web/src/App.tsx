@@ -20,8 +20,6 @@ import {BannerList} from '@src/App.styled';
 
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
-import {composeProviders} from '@utils/composeProviders';
-
 interface AppProps {
   routes: PluginRoute[];
 }
@@ -75,21 +73,18 @@ const App: React.FC<AppProps> = ({routes}) => {
       });
   }, [apiEndpoint, isClusterAvailable]);
 
-  return composeProviders()
-    .append(Suspense, {fallback: <Loading />})
-
-    .render(
-      <Suspense fallback={<Loading />}>
-        <BannerList items={useGeneralSlot('banners')} onClose={update} />
-        <Routes>
-          {routes.map(route => (
-            <Route key={route.path} path={route.path} element={route.element} />
-          ))}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <div id="log-output-container" />
-      </Suspense>
-    );
+  return (
+    <Suspense fallback={<Loading />}>
+      <BannerList items={useGeneralSlot('banners')} onClose={update} />
+      <Routes>
+        {routes.map(route => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <div id="log-output-container" />
+    </Suspense>
+  );
 };
 
 export default App;

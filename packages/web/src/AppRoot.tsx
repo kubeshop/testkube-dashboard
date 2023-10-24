@@ -3,7 +3,7 @@ import {useMemo} from 'react';
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
-import {PluginResolver} from '@testkube/plugins';
+import {usePluginSystem} from '@testkube/plugins/src/usePluginSystem';
 
 import LegacyOssOnlyPlugin from '@testkube/web/src/legacyOssOnly';
 
@@ -37,7 +37,6 @@ import TestsAndTestSuitesPlugin from '@plugins/tests-and-test-suites/plugin';
 import TriggersPlugin from '@plugins/triggers/plugin';
 import WebhooksPlugin from '@plugins/webhooks/plugin';
 
-import {composeProviders} from '@utils/composeProviders';
 import {externalLinks} from '@utils/externalLinks';
 
 import App from './App';
@@ -47,8 +46,8 @@ const AppRoot: React.FC = () => {
   useAxiosInterceptors();
 
   // TODO: Allow passing parent scope from Cloud
-  const [PluginSystemProvider, root, routing] = useMemo(() => {
-    const plugins = [
+  const plugins = useMemo(
+    () => [
       ConfigPlugin.configure({discordUrl: externalLinks.discord}),
       RouterPlugin.configure({baseUrl: env.basename || ''}),
       PermissionsPlugin.configure({resolver: new BasePermissionsResolver()}),
@@ -69,28 +68,25 @@ const AppRoot: React.FC = () => {
       LabelsPlugin,
       RtkPlugin,
       ModalPlugin,
-    ];
-    const [Provider, {initialize, routes}] = PluginResolver.of(...plugins).resolve();
-    const scope = initialize();
-    return [Provider, scope, routes] as const;
-  }, []);
+    ],
+    []
+  );
+  const [PluginProvider, {routes}] = usePluginSystem(plugins);
 
-  return composeProviders()
-    .append(PluginSystemProvider, {root})
-    .render(
-      <>
-        <Layout>
-          <Sider />
-          <StyledLayoutContentWrapper>
-            <Content>
-              <ErrorBoundary>
-                <App routes={routing} />
-              </ErrorBoundary>
-            </Content>
-          </StyledLayoutContentWrapper>
-        </Layout>
-      </>
-    );
+  return (
+    <PluginProvider>
+      <Layout>
+        <Sider />
+        <StyledLayoutContentWrapper>
+          <Content>
+            <ErrorBoundary>
+              <App routes={routes} />
+            </ErrorBoundary>
+          </Content>
+        </StyledLayoutContentWrapper>
+      </Layout>
+    </PluginProvider>
+  );
 };
 
 export default AppRoot;
