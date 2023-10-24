@@ -24,7 +24,7 @@ Remember, to have `antd`/`react`/`react-dom` installed as dev/peer dependencies 
 The plugin definition is fully type-safe. The plugin may define different parts of itself, as follows:
 
 ```tsx
-import {StoreProvider, createPlugin, data, external, slot} from '@testkube/plugins';
+import {StoreProvider, createPlugin, data, external, slot, config} from '@testkube/plugins';
 
 // Remember to use `import type`, as you won't need to include the external plugin in code
 import type SomePlugin from '@testkube/some-plugin';
@@ -42,6 +42,10 @@ export default createPlugin('some-plugin-name')
     // Set plugin's priority to order with other plugins.
     // By default it's 0, and the plugins are ordered from -Infinity to Infinity.
     .order(-100)
+  
+    // Define local configuration
+    .define(config<string>()('requiredKey'))
+    .define(config<string>()('optionalKey', 'defaultValue'))
 
     // Declare initial data for the plugin
     .data({someVariable: 'abc', someFn: () => 5})
@@ -79,7 +83,10 @@ export default createPlugin('some-plugin-name')
     .route('/tests', <TestsPage />)
 
     // Configure the plugin
-    .init(tk => {
+    .init((tk, cfg) => {
+        // Read the local plugin configuration
+        console.log(cfg.baseUrl);
+      
         // Change current value of the `someVariable`
         tk.data.someVariable = 'xyz';
         
@@ -303,8 +310,14 @@ import SomePlugin2 from '@testkube/some-plugin-2';
 // - `Provider` is a context provider for the root scope
 const [Provider, {initialize, routes}] = new PluginResolver()
     .register(SomePlugin1)
-    .register(SomePlugin2)
+    .register(SomePlugin2, {configKey: 'configValue'})
     .resolve();
+
+// // Alternatively, you may use `PluginResolver.of`:
+// const [Provider, {initialize, routes}] = PluginResolver.of(
+//   SomePlugin1,
+//   SomePlugin2.configure({configKey: 'configValue'})
+// ).resolve();
 
 export const App: FC = () => {
     const scope = useMemo(() => initialize(), []);

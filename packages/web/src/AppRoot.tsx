@@ -9,6 +9,8 @@ import LegacyOssOnlyPlugin from '@testkube/web/src/legacyOssOnly';
 
 import {ConfigContext} from '@contexts';
 
+import env from '@env';
+
 import {FeatureFlagsProvider} from '@feature-flags';
 
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
@@ -60,7 +62,7 @@ const AppRoot: React.FC = () => {
   // TODO: Allow passing parent scope from Cloud
   const [PluginSystemProvider, root, routing] = useMemo(() => {
     const plugins = [
-      RouterPlugin,
+      RouterPlugin.configure({baseUrl: env.basename || ''}),
       ClusterStatusPlugin,
       TelemetryPlugin,
       LegacyOssOnlyPlugin,
@@ -76,7 +78,7 @@ const AppRoot: React.FC = () => {
       AiInsightsPromoPlugin,
       LabelsPlugin,
       RtkPlugin,
-    ];
+    ] as const;
     const [Provider, {initialize, routes}] = PluginResolver.of(...plugins).resolve();
     const scope = initialize();
     return [Provider, scope, routes] as const;

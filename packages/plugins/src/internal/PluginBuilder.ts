@@ -10,6 +10,7 @@ import type {
   JoinExternalState,
   JoinOuterState,
   JoinState,
+  PluginConfig,
   PluginDetails,
   PluginProvider,
   PluginRouteMetadata,
@@ -87,6 +88,7 @@ export class PluginBuilder<T extends PluginState> {
   public data<U extends Record<string, any>>(
     data: U
   ): PluginBuilder<{
+    config: T['config'];
     urls: T['urls'];
     slots: T['slots'];
     data: {[K in keyof AppendData<T, U>['data']]: AppendData<T, U>['data'][K]};
@@ -102,11 +104,12 @@ export class PluginBuilder<T extends PluginState> {
   }
 
   /**
-   * Define slots and dynamic data in the context of the plugin.
+   * Define local configuration, slots and dynamic data in the context of the plugin.
    */
   public define<U extends PluginState>(
     state: U
   ): PluginBuilder<{
+    config: T['config'] & U['config'];
     urls: T['urls'];
     slots: {[K in keyof JoinState<T, U>['slots']]: JoinState<T, U>['slots'][K]};
     data: {[K in keyof JoinState<T, U>['data']]: JoinState<T, U>['data'][K]};
@@ -117,9 +120,10 @@ export class PluginBuilder<T extends PluginState> {
   }> {
     return new PluginBuilder({
       ...this.plugin,
+      config: {...this.plugin.config, ...state.config},
       slots: {...this.plugin.slots, ...state.slots},
       data: {...this.plugin.data, ...state.data},
-    });
+    }) as any;
   }
 
   /**
@@ -128,6 +132,7 @@ export class PluginBuilder<T extends PluginState> {
   public needs<U extends PluginState>(
     state: U
   ): PluginBuilder<{
+    config: T['config'];
     urls: T['urls'];
     slots: T['slots'];
     data: T['data'];
@@ -152,6 +157,7 @@ export class PluginBuilder<T extends PluginState> {
   public outer<U extends PluginState>(
     state: U
   ): PluginBuilder<{
+    config: T['config'];
     urls: T['urls'];
     slots: T['slots'];
     data: T['data'];
@@ -171,7 +177,9 @@ export class PluginBuilder<T extends PluginState> {
    * Initialize the plugin.
    * Mark as complete and integrate.
    */
-  public init(fn: (tk: PluginScope<PluginScopeStateFor<T>>) => void = () => {}): Plugin<T> {
+  public init(
+    fn: (tk: PluginScope<PluginScopeStateFor<T>>, config: PluginConfig<T['config']>) => void = () => {}
+  ): Plugin<T> {
     return new Plugin(this.plugin, fn) as any;
   }
 }

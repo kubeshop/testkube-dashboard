@@ -15,7 +15,7 @@ import {PluginBuilder} from './internal/PluginBuilder';
 import {PluginScope} from './internal/PluginScope';
 import {PluginScopeContext} from './internal/PluginScopeProvider';
 import {PluginProvider, PluginState} from './internal/types';
-import {data, external, slot} from './utils';
+import {config, data, external, slot} from './utils';
 
 const mockProvider = (testId: string): PluginProvider<{}> => ({
   type: (({children}) => <div data-testid={testId}>{children}</div>) as FC<PropsWithChildren<{}>>,
@@ -577,5 +577,19 @@ describe('plugins', () => {
     );
 
     expect(result.queryByTestId('some1')).toBeTruthy();
+  });
+
+  it('should throw error when there is missing configuration', () => {
+    const plugin = createPlugin('a').define(config()('abc')).define(config()('def')).init();
+    expect(() => {
+      new PluginResolver().register(plugin).resolve();
+    }).toThrow(`The "a" plugin is missing configuration: abc, def`);
+  });
+
+  it('should not throw error when there is missing optional configuration', () => {
+    const plugin = createPlugin('a').define(config()('abc', 'default')).define(config()('def', 'another')).init();
+    expect(() => {
+      new PluginResolver().register(plugin).resolve();
+    }).not.toThrow();
   });
 });

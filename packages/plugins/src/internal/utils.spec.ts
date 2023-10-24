@@ -1,4 +1,4 @@
-import {pick, shallowEqual} from './utils';
+import {defaults, pick, shallowEqual} from './utils';
 
 describe('plugins', () => {
   describe('pick', () => {
@@ -37,6 +37,40 @@ describe('plugins', () => {
       const inner = {b: 10};
       expect(shallowEqual({a: inner}, {a: inner})).toBe(true);
       expect(shallowEqual({a: {...inner}}, {a: {...inner}})).toBe(false);
+    });
+  });
+
+  describe('defaults', () => {
+    it('should create a new object', () => {
+      const a = {a: 10, b: 20};
+      const b = {a: 40};
+      defaults(a, b);
+      expect(a).toEqual({a: 10, b: 20});
+    });
+
+    it('should override with defined values', () => {
+      const a = {
+        a1: undefined,
+        a2: undefined,
+        a3: undefined,
+        b1: 'value',
+        b2: 'value',
+        b3: 'value',
+      };
+      const b = {
+        a1: 'override',
+        a2: undefined,
+        b1: 'override',
+        b2: undefined,
+      };
+      expect(defaults(a, b)).toEqual({
+        a1: 'override',
+        a2: undefined,
+        a3: undefined,
+        b1: 'override',
+        b2: 'value',
+        b3: 'value',
+      });
     });
   });
 });

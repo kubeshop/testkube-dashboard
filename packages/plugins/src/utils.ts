@@ -3,6 +3,7 @@ import type {EmptyPluginState} from './internal/types';
 import {pick} from './internal/utils';
 
 const empty: EmptyPluginState = {
+  config: {},
   externalSlots: {},
   externalData: {},
   outerSlots: {},
@@ -42,4 +43,13 @@ export const data =
   <K extends string>(...names: K[]): EmptyPluginState & {data: Record<K, T>} => ({
     ...empty,
     data: pick({} as Record<K, any>, names) as any,
+  });
+export const config =
+  <T = any>() =>
+  <K extends string, U extends T | undefined>(
+    name: K,
+    defaultValue?: U
+  ): EmptyPluginState & {config: Record<K, T | U>} => ({
+    ...empty,
+    config: {[name]: defaultValue} as any,
   });

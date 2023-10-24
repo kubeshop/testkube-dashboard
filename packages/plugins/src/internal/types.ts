@@ -40,6 +40,9 @@ export interface PluginProviderContainer<T, U extends PluginState> {
 }
 
 export interface PluginState {
+  // Setup
+  readonly config: Record<string, any>;
+
   // Dependencies
   readonly externalData: Record<string, any>;
   readonly externalSlots: Record<string, any>;
@@ -57,6 +60,7 @@ export interface PluginState {
 }
 
 export interface EmptyPluginState extends PluginState {
+  readonly config: {};
   readonly externalData: {};
   readonly externalSlots: {};
   readonly outerData: {};
@@ -148,3 +152,16 @@ type PluginScopeDataMap<T extends Record<string, any>> = {[K in keyof T]: T[K]};
 export type PluginScopeDataRecord<T extends PluginScopeState> = PluginScopeDataMap<T['data']> &
   PluginScopeDataMap<T['inheritedData']> &
   Readonly<PluginScopeDataMap<T['inheritedReadonlyData']>>;
+
+type PluginConfigInputRequiredKeys<T extends Record<string, any>> = {
+  [K in keyof T]: undefined extends T[K] ? K : never;
+}[keyof T];
+export type PluginConfigInput<T extends Record<string, any>> = {
+  [K in PluginConfigInputRequiredKeys<T>]: Exclude<T[K], undefined>;
+} & {
+  [K in Exclude<keyof T, PluginConfigInputRequiredKeys<T>>]?: T[K];
+};
+
+export type PluginConfig<T extends Record<string, any>> = {
+  [K in keyof T]-?: Exclude<T[K], undefined>;
+};

@@ -21,3 +21,16 @@ export const shallowEqual = (a: any, b: any): boolean => {
   const bKeys = Object.keys(b);
   return aKeys.length === bKeys.length && aKeys.every(key => a[key] === b[key]);
 };
+
+export const defaults = <T extends Record<string, any>, U extends Record<string, any>>(
+  a: T,
+  b: U
+): {[K in keyof T]: U extends Record<K, any> ? U[K] : T[K]} => {
+  const result: any = {...a};
+  Object.keys(b).forEach(key => {
+    if (b[key] !== undefined) {
+      result[key] = b[key];
+    }
+  });
+  return result;
+};
