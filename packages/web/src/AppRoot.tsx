@@ -9,8 +9,6 @@ import LegacyOssOnlyPlugin from '@testkube/web/src/legacyOssOnly';
 
 import env from '@env';
 
-import {FeatureFlagsProvider} from '@feature-flags';
-
 import {useAxiosInterceptors} from '@hooks/useAxiosInterceptors';
 
 import {ModalHandler, ModalOutletProvider} from '@modal/context';
@@ -27,6 +25,7 @@ import ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import ClusterPlugin from '@plugins/cluster/plugin';
 import ConfigPlugin from '@plugins/config/plugin';
 import ExecutorsPlugin from '@plugins/executors/plugin';
+import FeatureFlagsPlugin from '@plugins/feature-flags/plugin';
 import GeneralPlugin from '@plugins/general/plugin';
 import LabelsPlugin from '@plugins/labels/plugin';
 import PermissionsPlugin from '@plugins/permissions/plugin';
@@ -54,6 +53,7 @@ const AppRoot: React.FC = () => {
       ConfigPlugin.configure({discordUrl: externalLinks.discord}),
       RouterPlugin.configure({baseUrl: env.basename || ''}),
       PermissionsPlugin.configure({resolver: new BasePermissionsResolver()}),
+      FeatureFlagsPlugin,
       ClusterStatusPlugin,
       TelemetryPlugin,
       LegacyOssOnlyPlugin,
@@ -76,7 +76,6 @@ const AppRoot: React.FC = () => {
   }, []);
 
   return composeProviders()
-    .append(FeatureFlagsProvider, {})
     .append(PluginSystemProvider, {root})
     .append(ModalHandler, {})
     .append(ModalOutletProvider, {})
