@@ -21,11 +21,11 @@ import {ErrorBoundary} from '@pages';
 
 import {BasePermissionsResolver, PermissionsProvider} from '@permissions/base';
 
-import ConfigPlugin from '@plugins/config/plugin';
 import AiInsightsPromoPlugin from '@plugins/ai-insights-promo/plugin';
 import CloudBannerPlugin from '@plugins/cloud-banner/plugin';
 import ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import ClusterPlugin from '@plugins/cluster/plugin';
+import ConfigPlugin from '@plugins/config/plugin';
 import ExecutorsPlugin from '@plugins/executors/plugin';
 import GeneralPlugin from '@plugins/general/plugin';
 import LabelsPlugin from '@plugins/labels/plugin';
