@@ -40,6 +40,7 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       dataTest="test-suites-list-item"
       outOfSync={testSuite.readOnly}
       isAgentAvailable={isAgentAvailable}
+      entityLabel="test suite"
     />
   );
 };

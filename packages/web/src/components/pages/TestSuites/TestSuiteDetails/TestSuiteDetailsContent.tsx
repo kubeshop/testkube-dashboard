@@ -68,6 +68,7 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
           onBack={back}
           useAbortAllExecutions={useAbortAllTestSuiteExecutionsMutation}
           onEditTest={onEditTest}
+          entityLabel="test suite"
         />
         <SummaryGrid metrics={metrics} />
         <Tabs

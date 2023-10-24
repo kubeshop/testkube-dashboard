@@ -40,6 +40,7 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, on
       dataTest="tests-list-item"
       outOfSync={test.readOnly}
       isAgentAvailable={isAgentAvailable}
+      entityLabel="test"
     />
   );
 };
