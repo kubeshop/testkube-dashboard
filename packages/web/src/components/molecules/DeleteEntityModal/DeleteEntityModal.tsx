@@ -8,7 +8,7 @@ import {FullWidthSpace, Text} from '@custom-antd';
 
 import {useModal} from '@modal/hooks';
 
-import {DeleteModal} from '@molecules';
+import DeleteModal from '@molecules/DeleteModal';
 
 import Colors from '@styles/Colors';
 

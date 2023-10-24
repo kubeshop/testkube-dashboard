@@ -8,7 +8,7 @@ import {Labels, NameNDescription} from '@organisms/EntityDetails';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {usePluginSlot} from '@plugins/hooks';
+import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
 import {useDeleteTestSuiteMutation, useUpdateTestSuiteMutation} from '@services/testSuites';
 
@@ -18,7 +18,8 @@ const SettingsGeneral: FC = () => {
   const isAgentAvailable = useSystemAccess(SystemAccess.agent);
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
-  const deleteTestSuiteExtension = usePluginSlot('deleteTestSuiteExtension');
+  // TODO: Instead, use always the slot, and register current <Delete /> as fallback
+  const deleteTestSuiteExtension = useTestsSlot('deleteTestSuiteExtension');
   const [deleteTestSuite] = useDeleteTestSuiteMutation();
   const isReadOnly = !isAgentAvailable || details?.readOnly;
 

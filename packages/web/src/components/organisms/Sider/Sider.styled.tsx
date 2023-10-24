@@ -91,9 +91,10 @@ export const StyledSiderLink = styled(SiderLink)`
 
   &.active,
   &:hover {
+    cursor: pointer;
+
     svg {
       fill: ${Colors.whitePure};
-
       transition: 0.3s all;
     }
   }
@@ -108,22 +109,17 @@ export const StyledOtherItem = styled.div<{
 
   transition: 0.3s;
 
-  svg {
+  svg,
+  .anticon svg {
     width: ${({$size}) => $size}px;
     height: ${({$size}) => $size}px;
-
     fill: #64748b;
-
-    cursor: pointer;
-
-    &:hover {
-      fill: ${Colors.whitePure};
-
-      transition: 0.3s all;
-    }
   }
 
-  &.active {
+  &.active,
+  &:hover {
+    cursor: pointer;
+
     svg {
       fill: ${Colors.whitePure};
 

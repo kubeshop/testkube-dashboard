@@ -22,9 +22,11 @@ const createExecutionDetailsSlice: StateCreator<ExecutionDetailsSlice> = set => 
 
 const createExecutionDetailsStore = createStoreFactory('executionDetails', createExecutionDetailsSlice);
 export const {
+  useInstance: useExecutionDetailsInstance,
   use: useExecutionDetails,
   useField: useExecutionDetailsField,
   pick: useExecutionDetailsPick,
   sync: useExecutionDetailsSync,
   init: initializeExecutionDetailsStore,
+  reset: useExecutionDetailsReset,
 } = connectStore(createExecutionDetailsStore);

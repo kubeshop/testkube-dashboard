@@ -2,11 +2,11 @@ import React, {FC} from 'react';
 
 import {fireEvent, render, waitFor} from '@testing-library/react';
 
-import DashboardContext from '@contexts/DashboardContext';
+import {PluginScopeMockProvider} from '@testkube/plugins/test';
 
 import ModalContext from '@modal/context';
 
-import {mockDashboardContextValue, mockModalContextValue} from '@utils/mocks';
+import {mockModalContextValue} from '@utils/mocks';
 
 import DeleteEntityModal, {DeleteEntityModalProps} from './DeleteEntityModal';
 
@@ -23,11 +23,11 @@ describe('DeleteEntityModal', () => {
   });
 
   const DeleteEntityModalWrapper: FC<DeleteEntityModalProps> = props => (
-    <DashboardContext.Provider value={mockDashboardContextValue}>
+    <PluginScopeMockProvider data={{navigate: jest.fn()}}>
       <ModalContext.Provider value={mockModalContextValue}>
         <DeleteEntityModal {...props} />
       </ModalContext.Provider>
-    </DashboardContext.Provider>
+    </PluginScopeMockProvider>
   );
 
   afterEach(() => {

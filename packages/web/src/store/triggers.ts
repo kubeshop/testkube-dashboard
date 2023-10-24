@@ -4,7 +4,7 @@ import {TestTrigger, TriggersKeyMap} from '@models/triggers';
 
 import {connectStore, createStoreFactory} from './utils';
 
-interface TriggersSlice {
+export interface TriggersSlice {
   keyMap?: TriggersKeyMap;
   current?: TestTrigger;
 }

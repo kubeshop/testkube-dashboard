@@ -2,16 +2,14 @@ import {FC} from 'react';
 
 import {fireEvent, render, waitFor} from '@testing-library/react';
 
-import DashboardContext from '@contexts/DashboardContext';
-
-import {mockDashboardContextValue} from '@utils/mocks';
+import {PluginScopeMockProvider} from '@testkube/plugins/test';
 
 import DeleteModal, {DeleteModalProps} from './DeleteModal';
 
 const DeleteModalWrapper: FC<DeleteModalProps> = props => (
-  <DashboardContext.Provider value={mockDashboardContextValue}>
+  <PluginScopeMockProvider data={{navigate: jest.fn()}}>
     <DeleteModal {...props} />
-  </DashboardContext.Provider>
+  </PluginScopeMockProvider>
 );
 
 describe('DeleteModal', () => {
