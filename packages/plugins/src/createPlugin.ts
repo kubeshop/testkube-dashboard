@@ -10,6 +10,7 @@ export const createPlugin = (name: string, version: string | null = null) =>
     routes: [],
     providers: [],
 
+    config: {},
     externalData: {},
     externalSlots: {},
     outerData: {},

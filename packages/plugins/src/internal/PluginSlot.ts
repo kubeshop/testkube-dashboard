@@ -10,9 +10,6 @@ import type {PluginSlotContainer, PluginSlotMetadata} from './types';
 const isSlotEnabled = (metadata: PluginSlotMetadata): boolean =>
   typeof metadata.enabled === 'function' ? Boolean(metadata.enabled()) : metadata.enabled == null || metadata.enabled;
 
-// Use WeakMap when it's possible, for older browsers use the Map at least.
-const PseudoWeakMap = typeof WeakMap === 'undefined' ? Map : WeakMap;
-
 export class PluginSlot<T> {
   private [PluginScopeProducerCache]: Map<any, PluginSlot<any>>;
   private [PluginScopeProducerDataCache]: WeakMap<PluginSlotContainer<T>, any>;
@@ -23,7 +20,7 @@ export class PluginSlot<T> {
     private readonly storage: Record<string, PluginSlotContainer<T>[]>,
     producer?: any,
     producersCache: Map<any, PluginSlot<T>> = new Map(),
-    producersDataCache: WeakMap<PluginSlotContainer<T>, any> = new PseudoWeakMap()
+    producersDataCache: WeakMap<PluginSlotContainer<T>, any> = new WeakMap()
   ) {
     this[PluginScopeProducer] = producer;
     this[PluginScopeProducerCache] = producersCache;
@@ -64,9 +61,13 @@ export class PluginSlot<T> {
     this.storage[this.key].splice(index === -1 ? this.storage[this.key].length : index, 0, item);
   }
 
-  public all(): T[] {
+  public allRaw(): PluginSlotContainer<T>[] {
     const all = this.storage[this.key] || [];
-    return all.filter(item => isSlotEnabled(item.metadata)).map(item => item.value);
+    return all.filter(item => isSlotEnabled(item.metadata));
+  }
+
+  public all(): T[] {
+    return this.allRaw().map(item => item.value);
   }
 
   public first(): T | undefined {

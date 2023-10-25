@@ -7,10 +7,10 @@ import {Plugin} from './Plugin';
 import {PluginScope} from './PluginScope';
 import type {
   AppendData,
-  AppendRoute,
   JoinExternalState,
   JoinOuterState,
   JoinState,
+  PluginConfig,
   PluginDetails,
   PluginProvider,
   PluginRouteMetadata,
@@ -42,17 +42,26 @@ export class PluginBuilder<T extends PluginState> {
    *
    * TODO: Allow passing configuration (modifiers) to route.
    *       The keys for configuration could be declared too from external/internal modules.
+   *
+   * TODO: Return PluginBuilder<AppendRoute<T>> (but performance is low)
    */
   public route<U extends string>(
     path: U,
-    element: ReactElement,
+    rawElement: ReactElement | ((tk: PluginScope<PluginScopeStateFor<T>>) => ReactElement),
     metadata: PluginRouteMetadata = {}
-  ): PluginBuilder<AppendRoute<T, U>> {
+  ): PluginBuilder<T> {
+    const element =
+      typeof rawElement === 'function'
+        ? (() => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            return createElement(() => rawElement(usePluginScope()));
+          })()
+        : rawElement;
     return new PluginBuilder({
       ...this.plugin,
       routes: [...this.plugin.routes, {path, element, metadata}],
       urls: {...this.plugin.urls, [path]: true},
-    });
+    }) as any;
   }
 
   /**
@@ -75,7 +84,7 @@ export class PluginBuilder<T extends PluginState> {
               return createElement(Provider as any, {...innerProps, ...props});
             },
             props: {},
-          } as unknown as PluginProvider<U>)
+          } as any)
         : rawProvider;
     return new PluginBuilder({
       ...this.plugin,
@@ -87,29 +96,63 @@ export class PluginBuilder<T extends PluginState> {
    * Register public data in context of the plugin.
    * It will initialize them with the provided values.
    */
-  public data<U extends Record<string, any>>(data: U): PluginBuilder<AppendData<T, U>> {
-    return new PluginBuilder<AppendData<T, U>>({
+  public data<U extends Record<string, any>>(
+    data: U
+  ): PluginBuilder<{
+    config: T['config'];
+    urls: T['urls'];
+    slots: T['slots'];
+    data: {[K in keyof AppendData<T, U>['data']]: AppendData<T, U>['data'][K]};
+    externalSlots: T['externalSlots'];
+    externalData: T['externalData'];
+    outerSlots: T['outerSlots'];
+    outerData: T['outerData'];
+  }> {
+    return new PluginBuilder({
       ...this.plugin,
       data: {...this.plugin.data, ...data},
-    });
+    }) as any;
   }
 
   /**
-   * Define slots and dynamic data in the context of the plugin.
+   * Define local configuration, slots and dynamic data in the context of the plugin.
    */
-  public define<U extends PluginState>(state: U): PluginBuilder<JoinState<T, U>> {
-    return new PluginBuilder<JoinState<T, U>>({
+  public define<U extends PluginState>(
+    state: U
+  ): PluginBuilder<{
+    config: T['config'] & U['config'];
+    urls: T['urls'];
+    slots: {[K in keyof JoinState<T, U>['slots']]: JoinState<T, U>['slots'][K]};
+    data: {[K in keyof JoinState<T, U>['data']]: JoinState<T, U>['data'][K]};
+    externalSlots: T['externalSlots'];
+    externalData: T['externalData'];
+    outerSlots: T['outerSlots'];
+    outerData: T['outerData'];
+  }> {
+    return new PluginBuilder({
       ...this.plugin,
+      config: {...this.plugin.config, ...state.config},
       slots: {...this.plugin.slots, ...state.slots},
       data: {...this.plugin.data, ...state.data},
-    });
+    }) as any;
   }
 
   /**
    * Declare using data and slots from the external plugin.
    */
-  public needs<U extends PluginState>(state: U): PluginBuilder<JoinExternalState<T, U>> {
-    return new PluginBuilder<JoinExternalState<T, U>>({
+  public needs<U extends PluginState>(
+    state: U
+  ): PluginBuilder<{
+    config: T['config'];
+    urls: T['urls'];
+    slots: T['slots'];
+    data: T['data'];
+    externalSlots: {[K in keyof JoinExternalState<T, U>['externalSlots']]: JoinExternalState<T, U>['externalSlots'][K]};
+    externalData: {[K in keyof JoinExternalState<T, U>['externalData']]: JoinExternalState<T, U>['externalData'][K]};
+    outerSlots: T['outerSlots'];
+    outerData: T['outerData'];
+  }> {
+    return new PluginBuilder({
       ...this.plugin,
       externalSlots: {...this.plugin.externalSlots, ...state.slots},
       externalData: {...this.plugin.externalData, ...state.data},
@@ -122,8 +165,19 @@ export class PluginBuilder<T extends PluginState> {
    * That won't trigger warnings neither when plugin not found,
    * nor when it is declared above the current plugin system context.
    */
-  public outer<U extends PluginState>(state: U): PluginBuilder<JoinOuterState<T, U>> {
-    return new PluginBuilder<JoinOuterState<T, U>>({
+  public outer<U extends PluginState>(
+    state: U
+  ): PluginBuilder<{
+    config: T['config'];
+    urls: T['urls'];
+    slots: T['slots'];
+    data: T['data'];
+    externalSlots: T['externalSlots'];
+    externalData: T['externalData'];
+    outerSlots: {[K in keyof JoinOuterState<T, U>['outerSlots']]: JoinOuterState<T, U>['outerSlots'][K]};
+    outerData: {[K in keyof JoinOuterState<T, U>['outerData']]: JoinOuterState<T, U>['outerData'][K]};
+  }> {
+    return new PluginBuilder({
       ...this.plugin,
       outerSlots: {...this.plugin.outerSlots, ...state.slots},
       outerData: {...this.plugin.outerData, ...state.data},
@@ -134,15 +188,9 @@ export class PluginBuilder<T extends PluginState> {
    * Initialize the plugin.
    * Mark as complete and integrate.
    */
-  public init(fn: (tk: PluginScope<PluginScopeStateFor<T>>) => void = () => {}): Plugin<{
-    urls: {[K in keyof T['urls']]: T['urls'][K]};
-    slots: {[K in keyof T['slots']]: T['slots'][K]};
-    data: {[K in keyof T['data']]: T['data'][K]};
-    externalSlots: {[K in keyof T['externalSlots']]: T['externalSlots'][K]};
-    externalData: {[K in keyof T['externalData']]: T['externalData'][K]};
-    outerSlots: {[K in keyof T['outerSlots']]: T['outerSlots'][K]};
-    outerData: {[K in keyof T['outerData']]: T['outerData'][K]};
-  }> {
+  public init(
+    fn: (tk: PluginScope<PluginScopeStateFor<T>>, config: PluginConfig<T['config']>) => void = () => {}
+  ): Plugin<T> {
     return new Plugin(this.plugin, fn) as any;
   }
 }

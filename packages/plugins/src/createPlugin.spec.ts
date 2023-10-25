@@ -12,6 +12,7 @@ describe('plugins', () => {
         name: 'test-name',
         version: 'test-version',
         order: 0,
+        config: {},
         data: {},
         slots: {},
         externalData: {},
