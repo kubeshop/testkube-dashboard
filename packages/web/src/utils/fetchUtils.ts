@@ -99,7 +99,7 @@ export function memoizeQuery<T extends UseQuery<any>>(
     useMemo(() => {
       if (dataRef.current !== result.data) {
         const next = result.data == null ? result.data : transformData(result.data);
-        if (!isEqual(next, transformedRef.current)) {
+        if (!isEqual(next, transformedRef.current) && next != null) {
           transformedRef.current = next;
         }
       }

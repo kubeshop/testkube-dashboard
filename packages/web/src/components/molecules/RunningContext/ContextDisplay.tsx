@@ -31,9 +31,7 @@ const ContextDisplay: FC<ContextDisplayProps> = ({url, label, tooltip, wrap, tex
   const item = isExternal ? (
     <ExternalLink href={url}>{content || label}</ExternalLink>
   ) : url ? (
-    <a href="#" onClick={navigate}>
-      {content || label}
-    </a>
+    <a onClick={navigate}>{content || label}</a>
   ) : (
     content || label
   );
