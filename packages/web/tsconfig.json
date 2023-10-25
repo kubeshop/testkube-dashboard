@@ -48,6 +48,7 @@
       "@pages/*": ["src/components/pages/*"],
       "@permissions": ["src/permissions/"],
       "@permissions/*": ["src/permissions/*"],
+      "@plugins": ["src/plugins"],
       "@plugins/*": ["src/plugins/*"],
       "@redux": ["src/redux/"],
       "@redux/*": ["src/redux/*"],
