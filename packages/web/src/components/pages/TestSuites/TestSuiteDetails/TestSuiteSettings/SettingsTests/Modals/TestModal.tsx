@@ -8,7 +8,7 @@ import {Button, Modal, Text} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
 
-import {TestSuiteStepTest} from '@models/test';
+import {TestSuiteStepTest, TestWithExecution} from '@models/test';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
@@ -47,11 +47,13 @@ const TestModal: React.FC<TestModalProps> = props => {
   };
 
   const allTestsData: TestSuiteStepTest[] = useMemo(() => {
-    return (allTestsList || []).map(item => ({
-      name: item.test.name,
-      namespace: item.test.namespace,
-      type: getTestExecutorIcon(executors, item.test.type),
-    }));
+    return (allTestsList || [])
+      .filter((t: TestWithExecution) => !t.test.readOnly)
+      .map(item => ({
+        name: item.test.name,
+        namespace: item.test.namespace,
+        type: getTestExecutorIcon(executors, item.test.type),
+      }));
   }, [allTestsList]);
 
   return (
@@ -84,7 +86,7 @@ const TestModal: React.FC<TestModalProps> = props => {
         >
           <Select onChange={setTestValue} value={testValue} showSearch placeholder="Select a test..." size="middle">
             {allTestsData.map(item => (
-              <Option value={item.name} key={item.name} title={item.name}>
+              <Option value={item.name} key={item.name}>
                 <StyledOptionWrapper>
                   <ExecutorIcon type={item.type} />
                   <Text className="regular middle">{item.name}</Text>
