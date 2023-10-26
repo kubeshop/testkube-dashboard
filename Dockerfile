@@ -1,4 +1,4 @@
-ARG TARGET=nginx:1.25.2-alpine
+ARG TARGET=nginx:1.25.3-alpine
 
 FROM node:20 as deps-reader
 
