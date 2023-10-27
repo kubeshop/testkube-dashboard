@@ -28,11 +28,9 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
 const TestSuitesList: FC = () => {
-  const isAvailable = useSystemAccess(SystemAccess.agent);
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
-  const [storeTestSuites] = useTestSuitesField('testSuites');
 
   const {
     data: testSuites,
@@ -41,7 +39,7 @@ const TestSuitesList: FC = () => {
     isFetching,
   } = useGetTestSuitesQuery(filters || null, {
     pollingInterval: PollingIntervals.everySecond,
-    skip: !isSystemAvailable || (!isAvailable && Boolean(storeTestSuites)),
+    skip: !isSystemAvailable,
   });
   useTestSuitesSync({testSuites});
 

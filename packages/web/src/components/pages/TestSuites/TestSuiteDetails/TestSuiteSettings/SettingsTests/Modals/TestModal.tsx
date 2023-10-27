@@ -86,7 +86,7 @@ const TestModal: React.FC<TestModalProps> = props => {
         >
           <Select onChange={setTestValue} value={testValue} showSearch placeholder="Select a test..." size="middle">
             {allTestsData.map(item => (
-              <Option value={item.name} key={item.name}>
+              <Option value={item.name} key={item.name} title={item.name}>
                 <StyledOptionWrapper>
                   <ExecutorIcon type={item.type} />
                   <Text className="regular middle">{item.name}</Text>

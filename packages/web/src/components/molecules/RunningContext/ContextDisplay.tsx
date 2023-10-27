@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, MouseEvent, ReactNode, useCallback} from 'react';
 import {To} from 'react-router';
 
 import {Tooltip} from 'antd';
@@ -20,6 +20,15 @@ export interface ContextDisplayProps {
 const ContextDisplay: FC<ContextDisplayProps> = ({url, label, tooltip, wrap, text}) => {
   const isExternal = typeof url === 'string' && hasProtocol(url);
   const navigate = useDashboardNavigate(url || '');
+
+  const onClick = useCallback(
+    (event: MouseEvent) => {
+      event.preventDefault();
+      navigate();
+    },
+    [navigate]
+  );
+
   const content = tooltip ? (
     <Tooltip title={tooltip}>
       <span>{text}</span>
@@ -31,7 +40,9 @@ const ContextDisplay: FC<ContextDisplayProps> = ({url, label, tooltip, wrap, tex
   const item = isExternal ? (
     <ExternalLink href={url}>{content || label}</ExternalLink>
   ) : url ? (
-    <a onClick={navigate}>{content || label}</a>
+    <a href="#" onClick={onClick}>
+      {content || label}
+    </a>
   ) : (
     content || label
   );

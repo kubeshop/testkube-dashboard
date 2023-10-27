@@ -2,8 +2,6 @@ import React, {FC} from 'react';
 
 import {Tabs} from 'antd';
 
-import {Tab} from 'rc-tabs/lib/interface';
-
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {useLastCallback} from '@hooks/useLastCallback';
 import useRunEntity from '@hooks/useRunEntity';
@@ -75,25 +73,27 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
           activeKey={tab}
           onChange={setTab}
           destroyInactiveTabPane
-          items={
-            [
-              {
-                key: 'executions',
-                label: 'Recent executions',
-                children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestSuiteExecutionMutation} />,
-              },
-              !details.readOnly && {
-                key: 'commands',
-                label: 'CLI Commands',
-                children: <CLICommands name={details!.name} bg={Colors.slate800} />,
-              },
-              {
-                key: 'settings',
-                label: 'Settings',
-                children: <TestSuiteSettings active={settingsTab} onChange={setSettingsTab} />,
-              },
-            ].filter(Boolean) as Tab[]
-          }
+          items={[
+            {
+              key: 'executions',
+              label: 'Recent executions',
+              children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestSuiteExecutionMutation} />,
+            },
+            ...(details.readOnly
+              ? []
+              : [
+                  {
+                    key: 'commands',
+                    label: 'CLI Commands',
+                    children: <CLICommands name={details!.name} bg={Colors.slate800} />,
+                  },
+                ]),
+            {
+              key: 'settings',
+              label: 'Settings',
+              children: <TestSuiteSettings active={settingsTab} onChange={setSettingsTab} />,
+            },
+          ]}
         />
       </PageWrapper>
       <TestSuiteExecutionDrawer />
