@@ -15,17 +15,18 @@ import {useDeleteTestSuiteMutation, useUpdateTestSuiteMutation} from '@services/
 import {useEntityDetailsPick} from '@store/entityDetails';
 
 const SettingsGeneral: FC = () => {
-  const isWritable = useSystemAccess(SystemAccess.agent);
+  const isAgentAvailable = useSystemAccess(SystemAccess.agent);
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
   const deleteTestSuiteExtension = usePluginSlot('deleteTestSuiteExtension');
   const [deleteTestSuite] = useDeleteTestSuiteMutation();
+  const isReadOnly = !isAgentAvailable || details?.readOnly;
 
   return (
     <>
-      <NameNDescription label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} readOnly={!isWritable} />
-      <Labels label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} readOnly={!isWritable} />
-      {mayDelete && isWritable ? (
+      <NameNDescription label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} readOnly={isReadOnly} />
+      <Labels label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} readOnly={isReadOnly} />
+      {mayDelete ? (
         deleteTestSuiteExtension !== undefined ? (
           deleteTestSuiteExtension
         ) : (

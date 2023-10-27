@@ -49,6 +49,7 @@ interface EntityGridItemPureProps {
   dataTest: string;
   outOfSync?: boolean;
   isAgentAvailable?: boolean;
+  entityLabel: string;
 }
 
 const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
@@ -59,7 +60,7 @@ const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
 const isRunningStatus = (status: string) => ['running', 'queued'].includes(status);
 
 const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
-  const {item, latestExecution, onClick, onAbort, dataTest, metrics, outOfSync, isAgentAvailable} = props;
+  const {item, latestExecution, onClick, onAbort, dataTest, metrics, outOfSync, isAgentAvailable, entityLabel} = props;
 
   const status =
     (latestExecution as Execution)?.executionResult?.status ||
@@ -97,8 +98,8 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
                   type="warning"
                   tooltipMessage={
                     isAgentAvailable
-                      ? 'This test is not currently present on your agent. You are only able to see historical data.'
-                      : 'This test is potentially not in sync with the data on your local cluster. You are only able to see historical data.'
+                      ? `This ${entityLabel} is not currently present on your agent. You are only able to see historical data.`
+                      : `This ${entityLabel} is potentially not in sync with the data on your local cluster. You are only able to see historical data.`
                   }
                 />
               ) : null}

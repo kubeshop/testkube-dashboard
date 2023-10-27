@@ -8,7 +8,7 @@ import {Button, Modal, Text} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
 
-import {TestSuiteStepTest} from '@models/test';
+import {TestSuiteStepTest, TestWithExecution} from '@models/test';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
@@ -47,11 +47,13 @@ const TestModal: React.FC<TestModalProps> = props => {
   };
 
   const allTestsData: TestSuiteStepTest[] = useMemo(() => {
-    return (allTestsList || []).map(item => ({
-      name: item.test.name,
-      namespace: item.test.namespace,
-      type: getTestExecutorIcon(executors, item.test.type),
-    }));
+    return (allTestsList || [])
+      .filter((t: TestWithExecution) => !t.test.readOnly)
+      .map(item => ({
+        name: item.test.name,
+        namespace: item.test.namespace,
+        type: getTestExecutorIcon(executors, item.test.type),
+      }));
   }, [allTestsList]);
 
   return (
@@ -71,7 +73,7 @@ const TestModal: React.FC<TestModalProps> = props => {
           >
             Cancel
           </Button>
-          <Button $customType="primary" onClick={onConfirm}>
+          <Button $customType="primary" onClick={onConfirm} disabled={!testValue}>
             Add Test
           </Button>
         </>

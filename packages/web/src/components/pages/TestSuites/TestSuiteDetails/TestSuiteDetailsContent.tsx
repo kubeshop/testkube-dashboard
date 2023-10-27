@@ -33,7 +33,7 @@ interface TestSuiteDetailsContentProps {
 const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, settingsTab}) => {
   const {id, details, error, metrics} = useEntityDetailsPick('id', 'details', 'error', 'metrics');
   const [isRunning, run] = useRunEntity('test-suites', details);
-  const isFresh = useSystemAccess(SystemAccess.agent);
+  const isAgentAvailable = useSystemAccess(SystemAccess.agent);
 
   const setTab = useDashboardNavigate((next: string) => `/test-suites/${id}/${next}`);
   const setSettingsTab = useDashboardNavigate((next: string) => `/test-suites/${id}/settings/${next}`);
@@ -60,11 +60,13 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
 
         <EntityDetailsHeader
           isRunning={isRunning}
-          outOfSync={!isFresh}
+          outOfSync={details.readOnly}
+          isAgentAvailable={isAgentAvailable}
           onRun={run}
           onBack={back}
           useAbortAllExecutions={useAbortAllTestSuiteExecutionsMutation}
           onEditTest={onEditTest}
+          entityLabel="test suite"
         />
         <SummaryGrid metrics={metrics} />
         <Tabs
@@ -77,11 +79,15 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
               label: 'Recent executions',
               children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestSuiteExecutionMutation} />,
             },
-            {
-              key: 'commands',
-              label: 'CLI Commands',
-              children: <CLICommands name={details!.name} bg={Colors.slate800} />,
-            },
+            ...(details.readOnly
+              ? []
+              : [
+                  {
+                    key: 'commands',
+                    label: 'CLI Commands',
+                    children: <CLICommands name={details!.name} bg={Colors.slate800} />,
+                  },
+                ]),
             {
               key: 'settings',
               label: 'Settings',
