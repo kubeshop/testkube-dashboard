@@ -71,7 +71,7 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
       onBack={onBack}
       title={details!.name}
       pageTitleAddon={
-        outOfSync ? (
+        !isAgentAvailable || outOfSync ? (
           <Tag
             title="read-only"
             type="warning"
