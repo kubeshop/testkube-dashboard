@@ -38,7 +38,7 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, on
       onAbort={onAbort}
       metrics={metrics}
       dataTest="tests-list-item"
-      outOfSync={test.readOnly}
+      outOfSync={!isAgentAvailable || test.readOnly}
       isAgentAvailable={isAgentAvailable}
       entityLabel="test"
     />

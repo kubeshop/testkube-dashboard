@@ -38,7 +38,7 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       onAbort={onAbort}
       metrics={metrics}
       dataTest="test-suites-list-item"
-      outOfSync={testSuite.readOnly}
+      outOfSync={!isAgentAvailable || testSuite.readOnly}
       isAgentAvailable={isAgentAvailable}
       entityLabel="test suite"
     />
