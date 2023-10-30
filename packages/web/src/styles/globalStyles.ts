@@ -119,6 +119,7 @@ export const GlobalStyle = createGlobalStyle`
     0%, 30% {
       opacity: 0;
     }
+
     100% {
       opacity: 1;
     }
