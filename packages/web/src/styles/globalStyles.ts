@@ -116,10 +116,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   @keyframes opacity-in {
-    from {
+    0%, 30% {
       opacity: 0;
     }
-    to {
+    100% {
       opacity: 1;
     }
   }
