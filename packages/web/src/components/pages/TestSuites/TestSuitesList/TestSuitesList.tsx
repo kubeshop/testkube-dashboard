@@ -1,4 +1,5 @@
 import {FC, useCallback} from 'react';
+import {useUnmount} from 'react-use';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
@@ -31,6 +32,10 @@ const TestSuitesList: FC = () => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = useTestsSlotFirst('testSuitesListTitleAddon');
+
+  useUnmount(() => {
+    setFilters({...filters, pageSize: initialFilters.pageSize});
+  });
 
   const {
     data: testSuites,
