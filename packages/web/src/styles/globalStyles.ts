@@ -115,6 +115,15 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  @keyframes opacity-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   /* Tabs */
 
   .ant-tabs {
