@@ -45,6 +45,7 @@ export const StyledPageHeader = styled(AntdPageHeader)`
 export const PageTitle = styled(Paragraph)`
   min-width: 0;
   flex: 1;
+
   &.ant-typography,
   .ant-typography p {
     margin-bottom: 0;
