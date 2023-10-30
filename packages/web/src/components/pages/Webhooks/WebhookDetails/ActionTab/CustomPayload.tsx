@@ -2,7 +2,7 @@ import React, {FC, Suspense} from 'react';
 
 import {Form} from 'antd';
 
-import {MonacoEditor} from '@atoms';
+import {ExternalLink, MonacoEditor} from '@atoms';
 
 import {notificationCall} from '@molecules';
 import DefinitionSkeleton from '@molecules/Definition/DefinitionSkeleton';
@@ -12,6 +12,8 @@ import {CardForm} from '@organisms';
 import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateWebhookMutation} from '@services/webhooks';
+
+import {externalLinks} from '@src/utils/externalLinks';
 
 import {useWebhooksPick} from '@store/webhooks';
 
@@ -44,6 +46,14 @@ const CustomPayload: FC = () => {
       initialValues={{payloadTemplate: current!.payloadTemplate || ''}}
       disabled={!mayEdit}
       onConfirm={onFinish}
+      footer={
+        <>
+          Learn more about{' '}
+          <ExternalLink href={`${externalLinks.notificationsAndWebhooks}/#webhook-payload`} target="_blank">
+            webhooks custom payload.
+          </ExternalLink>
+        </>
+      }
     >
       <Suspense fallback={<DefinitionSkeleton />}>
         <Form.Item name="payloadTemplate">
