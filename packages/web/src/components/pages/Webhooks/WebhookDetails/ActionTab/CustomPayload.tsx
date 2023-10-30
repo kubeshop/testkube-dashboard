@@ -49,7 +49,7 @@ const CustomPayload: FC = () => {
       footer={
         <>
           Learn more about{' '}
-          <ExternalLink href={externalLinks.notificationsAndWebhooks} target="_blank">
+          <ExternalLink href={`${externalLinks.notificationsAndWebhooks}/#webhook-payload`} target="_blank">
             webhooks custom payload.
           </ExternalLink>
         </>

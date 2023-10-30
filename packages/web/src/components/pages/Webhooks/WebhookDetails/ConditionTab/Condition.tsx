@@ -73,7 +73,7 @@ const Condition: FC = () => {
       footer={
         <>
           Learn more about{' '}
-          <ExternalLink href={externalLinks.notificationsAndWebhooks} target="_blank">
+          <ExternalLink href={`${externalLinks.notificationsAndWebhooks}/#resource-selector-labels`} target="_blank">
             Webhook condition.
           </ExternalLink>
         </>

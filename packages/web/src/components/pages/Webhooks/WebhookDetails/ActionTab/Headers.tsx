@@ -55,7 +55,7 @@ const Headers: FC = () => {
       footer={
         <>
           Learn more about{' '}
-          <ExternalLink href={externalLinks.notificationsAndWebhooks} target="_blank">
+          <ExternalLink href={`${externalLinks.notificationsAndWebhooks}/#uri-and-http-headers`} target="_blank">
             Webhook http headers.
           </ExternalLink>
         </>
