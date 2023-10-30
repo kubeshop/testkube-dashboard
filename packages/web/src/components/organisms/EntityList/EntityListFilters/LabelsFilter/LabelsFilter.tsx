@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from 'react';
 
 import {FilterFilled} from '@ant-design/icons';
 
-import {AutoComplete, Button, Title} from '@custom-antd';
+import {Button, Title} from '@custom-antd';
 
 import usePressEnter from '@hooks/usePressEnter';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
@@ -22,7 +22,7 @@ import Colors from '@styles/Colors';
 
 import {decodeSelectorArray, encodeSelectorArray} from '@utils/selectors';
 
-import {EmptyButton, StyledKeyValueRow, StyledLabelsMenuContainer} from './LabelsFilter.styled';
+import {AutoComplete, EmptyButton, StyledKeyValueRow, StyledLabelsMenuContainer} from './LabelsFilter.styled';
 
 const defaultKeyValuePair: Entity = {
   key: '',
@@ -100,7 +100,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
               options={keyOptions}
               onChange={event => onKeyChange(event, index)}
               value={item.key}
-              data-cy={`key-input-${index}`}
+              data-testid={`key-input-${index}`}
               placeholder="Key"
             />
             <AutoComplete
@@ -108,11 +108,11 @@ const LabelsFilter: React.FC<FilterProps> = props => {
               options={valuesOptions}
               onChange={event => onValueChange(event, index)}
               value={item.value}
-              data-cy={`value-input-${index}`}
+              data-testid={`value-input-${index}`}
               placeholder="Value"
             />
             {index > 0 ? (
-              <Button $customType="tertiary" onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`}>
+              <Button $customType="tertiary" onClick={() => onDeleteRow(index)} data-testid={`delete-row-${index}`}>
                 &#10005;
               </Button>
             ) : (
@@ -138,7 +138,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
 
   const menu = (
     <StyledFilterMenu
-      data-cy="labels-filter-dropdown"
+      data-testid="labels-filter-dropdown"
       onKeyPress={event => {
         onEvent(event, applyFilters);
       }}
@@ -167,7 +167,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
     >
       <StyledFilterLabel
         onClick={e => e.preventDefault()}
-        data-cy="labels-filter-button"
+        data-testid="labels-filter-button"
         isFiltersDisabled={isFiltersDisabled}
       >
         Labels <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
