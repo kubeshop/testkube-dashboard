@@ -1,6 +1,6 @@
 import React, {PropsWithChildren, ReactElement, createContext, useContext, useMemo, useRef} from 'react';
 
-import {usePermissionsPlugin} from '@plugins/permissions/hooks';
+import {usePermissionsPlugin} from '../plugins/permissions/hooks';
 
 // Interface
 
