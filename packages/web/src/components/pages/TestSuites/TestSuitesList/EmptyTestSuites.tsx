@@ -27,6 +27,7 @@ const EmptyTestSuites: FC<EmptyTestSuitesProps> = ({action, isClusterAvailable})
       emptyListReadonlyTitle="No test suites found"
       onButtonClick={action}
       actionType="create"
+      isReadOnly={!isClusterAvailable}
     >
       <HelpCard isLink link={externalLinks.createTestSuite}>
         Learn how to add test suites
