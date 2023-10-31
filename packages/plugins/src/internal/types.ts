@@ -15,6 +15,7 @@ export interface PluginSlotMetadata {
 
 export interface PluginProviderMetadata<T extends PluginState> {
   readonly enabled?: (plugin: PluginScope<PluginScopeStateFor<T>>) => boolean | null | undefined;
+  readonly route?: (route: PluginRoute) => boolean;
   readonly order?: number;
 }
 

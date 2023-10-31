@@ -73,6 +73,8 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     const initialData: Partial<RootScopeType['data']> = {};
     const staticProviders: PluginProviderContainer<any, T>[] = [];
     const dynamicProviders: PluginProviderContainer<any, T>[] = [];
+    const staticLayouts: PluginProviderContainer<any, T>[] = [];
+    const dynamicLayouts: PluginProviderContainer<any, T>[] = [];
     const routes: PluginRoute[] = [];
     const warnings: string[] = [];
     const plugins = this.plugins.map(x => x.plugin);
@@ -142,8 +144,20 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       });
 
       // Group providers
-      const ownStaticProviders = next.plugin[PluginDetails].providers.filter(x => !x.metadata.enabled);
-      const ownDynamicProviders = next.plugin[PluginDetails].providers.filter(x => x.metadata.enabled);
+      const {providers} = next.plugin[PluginDetails];
+      const ownStaticProviders = providers.filter(({metadata: m}) => !m.route && !m.enabled);
+      const ownDynamicProviders = providers.filter(({metadata: m}) => !m.route && m.enabled);
+      const ownStaticLayouts = providers.filter(({metadata: m}) => m.route && !m.enabled);
+      const ownDynamicLayouts = providers.filter(({metadata: m}) => m.route && m.enabled);
+
+      // Include layouts
+      staticLayouts.push(...ownStaticLayouts);
+      dynamicLayouts.push(
+        ...ownDynamicLayouts.map(layout => ({
+          provider: {type: ConditionalProvider, props: {provider: layout}},
+          metadata: layout.metadata,
+        }))
+      );
 
       // Include dependencies
       staticProviders.push(...ownStaticProviders);
@@ -191,22 +205,27 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     };
 
     // Sort the providers
-    staticProviders.sort((a, b) =>
-      (a.metadata.order || 0) === (b.metadata.order || 0)
-        ? 0
-        : (a.metadata.order || 0) > (b.metadata.order || 0)
-        ? 1
-        : -1
-    );
-    dynamicProviders.sort((a, b) =>
-      (a.metadata.order || 0) === (b.metadata.order || 0)
-        ? 0
-        : (a.metadata.order || 0) > (b.metadata.order || 0)
-        ? 1
-        : -1
-    );
+    const orderCmp = (
+      {metadata: {order: o1 = 0}}: {metadata: {order?: number}},
+      {metadata: {order: o2 = 0}}: {metadata: {order?: number}}
+    ) => (o1 === o2 ? 0 : o1 > o2 ? 1 : -1);
+    staticProviders.sort(orderCmp);
+    dynamicProviders.sort(orderCmp);
+    staticLayouts.sort(orderCmp);
+    dynamicLayouts.sort(orderCmp);
 
     const providers = staticProviders.concat(dynamicProviders);
+    const layouts = staticLayouts.concat(dynamicLayouts);
+
+    // Apply route layouts
+    routes.forEach((route, index) => {
+      const ownLayouts = layouts.filter(x => x.metadata.route!(route));
+      let current = route.element;
+      for (let i = ownLayouts.length - 1; i >= 0; i -= 1) {
+        current = createElement(ownLayouts[i].provider.type, ownLayouts[i].provider.props, current);
+      }
+      routes[index] = {...route, element: current};
+    });
 
     const Provider: FC<PropsWithChildren<{root: RootScopeType}>> = ({root, children}) => {
       let current = children;
