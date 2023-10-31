@@ -25,6 +25,7 @@ import FeatureFlagsPlugin from '@plugins/feature-flags/plugin';
 import ModalPlugin from '@plugins/modal/plugin';
 import PermissionsPlugin from '@plugins/permissions/plugin';
 import RouterPlugin from '@plugins/router/plugin';
+import RtkResetOnApiChangePlugin from '@plugins/rtk-reset-on-api-change/plugin';
 import RtkPlugin from '@plugins/rtk/plugin';
 import SettingsPlugin from '@plugins/settings/plugin';
 import SiderCloudMigratePlugin from '@plugins/sider-cloud-migrate/plugin';
@@ -47,6 +48,7 @@ const AppRoot: React.FC = () => {
       ConfigPlugin.configure({discordUrl: externalLinks.discord}),
       RouterPlugin.configure({baseUrl: env.basename || ''}),
       PermissionsPlugin.configure({resolver: new BasePermissionsResolver()}),
+      RtkResetOnApiChangePlugin,
       RtkPlugin,
       ModalPlugin,
       SiderLogoPlugin.configure({logo: <Logo />}),
