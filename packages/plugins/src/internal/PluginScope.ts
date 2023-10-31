@@ -35,7 +35,7 @@ import type {
 export class PluginScope<T extends PluginScopeState> {
   private readonly [PluginScopeParentScope]: PluginScope<T> | null;
   private readonly [PluginScopeData]: PluginScopeDataRecord<T>;
-  private readonly [PluginScopeSlotData]: Record<string, any> = {};
+  private readonly [PluginScopeSlotData]: Map<string, any> = new Map();
   private readonly [PluginScopeSyncData]: Map<Function, any> = new Map();
   private readonly [PluginScopeChildrenPluginMapScope]: Map<Plugin<any>, PluginScope<any>> = new Map();
   private readonly [PluginScopeChildrenScope]: Set<PluginScope<any>> = new Set();
@@ -50,6 +50,13 @@ export class PluginScope<T extends PluginScopeState> {
     if (parent) {
       parent[PluginScopeRegisterChildrenScope](this);
     }
+
+    // FIXME Hack to watch for slot changes
+    const originalSet = this[PluginScopeSlotData].set.bind(this[PluginScopeSlotData]);
+    this[PluginScopeSlotData].set = (...args) => {
+      this[PluginScopeEmitChange]();
+      return originalSet(...args);
+    };
 
     const ownData: any = {};
     const data: any = {};

@@ -333,5 +333,38 @@ describe('plugins', () => {
       await frame();
       expect(listener).not.toHaveBeenCalled();
     });
+
+    it('should emit information about slots change', async () => {
+      const root = create({slots: ['key1']});
+      const parent = create({inheritedSlots: ['key1']}, root);
+      const child = create({inheritedSlots: ['key1']}, parent);
+      const listener = jest.fn();
+      root[PluginScopeSubscribeChange](listener);
+      root.slots.key1.add('value1');
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit information about slots change in parent', async () => {
+      const root = create({slots: ['key1']});
+      const parent = create({inheritedSlots: ['key1']}, root);
+      const child = create({inheritedSlots: ['key1']}, parent);
+      const listener = jest.fn();
+      parent[PluginScopeSubscribeChange](listener);
+      root.slots.key1.add('value1');
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit information about slots change in parent (nested)', async () => {
+      const root = create({slots: ['key1']});
+      const parent = create({inheritedSlots: ['key1']}, root);
+      const child = create({inheritedSlots: ['key1']}, parent);
+      const listener = jest.fn();
+      child[PluginScopeSubscribeChange](listener);
+      root.slots.key1.add('value1');
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
   });
 });

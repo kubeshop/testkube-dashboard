@@ -17,7 +17,7 @@ export class PluginSlot<T> {
 
   public constructor(
     private readonly key: string,
-    private readonly storage: Record<string, PluginSlotContainer<T>[]>,
+    private readonly storage: Map<string, PluginSlotContainer<T>[]>,
     producer?: any,
     producersCache: Map<any, PluginSlot<T>> = new Map(),
     producersDataCache: WeakMap<PluginSlotContainer<T>, any> = new WeakMap()
@@ -33,8 +33,9 @@ export class PluginSlot<T> {
   }
 
   public [PluginScopeDestroy](producer: any): void {
-    this.storage[this.key] = (this.storage[this.key] || []).filter(
-      item => this[PluginScopeProducerDataCache].get(item) !== producer
+    this.storage.set(
+      this.key,
+      (this.storage.get(this.key) || []).filter(item => this[PluginScopeProducerDataCache].get(item) !== producer)
     );
   }
 
@@ -50,19 +51,19 @@ export class PluginSlot<T> {
 
   public add(value: T, metadata: PluginSlotMetadata = {}): void {
     // Ensure new identity of slot in the storage
-    this.storage[this.key] = this.storage[this.key] || [];
-    this.storage[this.key] = this.storage[this.key].slice();
+    const slot = (this.storage.get(this.key) || []).slice();
 
     // Append the new value
     const order = metadata.order || 0;
-    const index = this.storage[this.key].findIndex(x => x.metadata.order! > order);
+    const index = slot.findIndex(x => x.metadata.order! > order);
     const item = {value, metadata: {...metadata, order}};
     this[PluginScopeProducerDataCache].set(item, this[PluginScopeProducer]);
-    this.storage[this.key].splice(index === -1 ? this.storage[this.key].length : index, 0, item);
+    slot.splice(index === -1 ? slot.length : index, 0, item);
+    this.storage.set(this.key, slot);
   }
 
   public allRaw(): PluginSlotContainer<T>[] {
-    const all = this.storage[this.key] || [];
+    const all = this.storage.get(this.key) || [];
     return all.filter(item => isSlotEnabled(item.metadata));
   }
 
@@ -71,7 +72,7 @@ export class PluginSlot<T> {
   }
 
   public first(): T | undefined {
-    const all = this.storage[this.key] || [];
+    const all = this.storage.get(this.key) || [];
     return all.find(item => isSlotEnabled(item.metadata))?.value;
   }
 }
