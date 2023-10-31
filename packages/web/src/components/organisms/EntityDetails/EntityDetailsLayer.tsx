@@ -62,15 +62,18 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
 
   const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
-    {pollingInterval: PollingIntervals.long, skip: !isSystemAvailable || (!isClusterAvailable && Boolean(executions))}
+    {
+      pollingInterval: PollingIntervals.long,
+      skip: !isSystemAvailable,
+    }
   );
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
-    {skip: !isSystemAvailable || (!isClusterAvailable && Boolean(metrics))}
+    {skip: !isSystemAvailable}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
-    skip: !isSystemAvailable || (!isClusterAvailable && Boolean(storeDetails)),
+    skip: !isSystemAvailable,
   });
   const isV2 = isTestSuiteV2(rawDetails);
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);

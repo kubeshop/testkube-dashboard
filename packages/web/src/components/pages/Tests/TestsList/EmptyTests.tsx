@@ -27,6 +27,7 @@ const EmptyTests: FC<EmptyTestsProps> = ({action, isClusterAvailable}) => {
       emptyListReadonlyDescription="We could not find any tests in this environment."
       onButtonClick={action}
       actionType="create"
+      isReadOnly={!isClusterAvailable}
     >
       <HelpCard isLink link={externalLinks.createTest}>
         Learn how to add tests
