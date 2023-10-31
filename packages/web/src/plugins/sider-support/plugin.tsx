@@ -7,8 +7,8 @@ import Text from '@custom-antd/Typography/Text';
 
 import {DropdownListItem} from '@organisms/Sider/Sider.styled';
 
-import ConfigPlugin from '@plugins/config/plugin';
-import GeneralPlugin from '@plugins/general/plugin';
+import type ConfigPlugin from '@plugins/config/plugin';
+import type GeneralPlugin from '@plugins/general/plugin';
 
 import Colors from '@styles/Colors';
 

@@ -6,7 +6,7 @@ import WebhookDetails from '@pages/Webhooks/WebhookDetails/WebhookDetails';
 import WebhooksList from '@pages/Webhooks/WebhooksList';
 
 import type GeneralPlugin from '@plugins/general/plugin';
-import RtkPlugin from '@plugins/rtk/plugin';
+import type RtkPlugin from '@plugins/rtk/plugin';
 
 import {webhooksApi} from '@services/webhooks';
 

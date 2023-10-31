@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 
 import {config, createPlugin, external} from '@testkube/plugins';
 
-import GeneralPlugin from '@plugins/general/plugin';
+import type GeneralPlugin from '@plugins/general/plugin';
 
 const generalStub = external<typeof GeneralPlugin>();
 

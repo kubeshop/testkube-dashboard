@@ -3,7 +3,7 @@ import {useMemo} from 'react';
 import {createPlugin, external} from '@testkube/plugins';
 
 import type GeneralPlugin from '@plugins/general/plugin';
-import RtkPlugin from '@plugins/rtk/plugin';
+import type RtkPlugin from '@plugins/rtk/plugin';
 
 const generalStub = external<typeof GeneralPlugin>();
 const rtkStub = external<typeof RtkPlugin>();

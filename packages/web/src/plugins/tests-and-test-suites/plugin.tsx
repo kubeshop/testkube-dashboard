@@ -20,7 +20,7 @@ import TestsList from '@pages/Tests/TestsList';
 
 import type ExecutorsPlugin from '@plugins/executors/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
-import RtkPlugin from '@plugins/rtk/plugin';
+import type RtkPlugin from '@plugins/rtk/plugin';
 
 import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';

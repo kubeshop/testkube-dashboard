@@ -9,7 +9,7 @@ import ExecutorsList from '@pages/Executors/ExecutorsList/ExecutorsList';
 
 import type ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
-import RtkPlugin from '@plugins/rtk/plugin';
+import type RtkPlugin from '@plugins/rtk/plugin';
 
 import {executorsApi, useGetExecutorsQuery} from '@services/executors';
 

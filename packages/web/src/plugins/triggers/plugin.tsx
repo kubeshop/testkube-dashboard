@@ -6,7 +6,7 @@ import TriggerDetails from '@pages/Triggers/TriggerDetails';
 import TriggersList from '@pages/Triggers/TriggersList';
 
 import type GeneralPlugin from '@plugins/general/plugin';
-import RtkPlugin from '@plugins/rtk/plugin';
+import type RtkPlugin from '@plugins/rtk/plugin';
 
 import {triggersApi} from '@services/triggers';
 

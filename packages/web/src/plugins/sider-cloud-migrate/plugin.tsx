@@ -1,6 +1,6 @@
 import {createPlugin, external} from '@testkube/plugins';
 
-import GeneralPlugin from '@plugins/general/plugin';
+import type GeneralPlugin from '@plugins/general/plugin';
 
 import {externalLinks} from '@utils/externalLinks';
 

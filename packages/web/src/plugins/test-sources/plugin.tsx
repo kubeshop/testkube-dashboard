@@ -9,7 +9,7 @@ import SourcesList from '@pages/Sources/SourcesList/SourcesList';
 
 import type ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
-import RtkPlugin from '@plugins/rtk/plugin';
+import type RtkPlugin from '@plugins/rtk/plugin';
 
 import {repositoryApi} from '@services/repository';
 import {sourcesApi, useGetSourcesQuery} from '@services/sources';
