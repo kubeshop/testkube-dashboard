@@ -3,7 +3,7 @@ import {useMemo} from 'react';
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
-import {usePluginSystem} from '@testkube/plugins/src/usePluginSystem';
+import {usePluginSystem} from '@testkube/plugins';
 
 import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 
