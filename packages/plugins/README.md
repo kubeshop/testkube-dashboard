@@ -80,6 +80,11 @@ export default createPlugin('some-plugin-name')
     // Thanks to that, context is widely accessible.
     .provider(<SomeReactContext.Provider value={{}} />, {order: -50})
 
+    // Inject provider that is decorating the route element.
+    // It will ba appended to all `route()`s that are matching provided pattern
+    .layout('/some/url/is/here', <SomeReactProvider value={10} />)
+    .layout('/some/url/:name', <SomeReactProvider value={10} />)
+
     // Inject provider that will wrap all the components inside.
     // Append only if `someVariable` is set to 'xyz'.
     .provider(<SomeConditionalReactProvider value={10} />, {
