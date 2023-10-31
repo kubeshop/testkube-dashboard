@@ -209,10 +209,10 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       }
 
       const root: RootScopeType = new PluginScope(parent, {
-        slots: Object.keys(slotSource) as any,
-        data: Object.keys(dataSource) as any,
-        inheritedData: [],
-        inheritedSlots: optionalSlots,
+        slots: Object.keys(slotSource).filter(key => !missingSlots[key]) as any,
+        data: Object.keys(dataSource).filter(key => !missingData[key]) as any,
+        inheritedData: Object.keys(missingData),
+        inheritedSlots: optionalSlots.concat(Object.keys(missingSlots)),
         optionalSlots: [],
         inheritedReadonlyData: optionalData,
       });

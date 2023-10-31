@@ -1,7 +1,7 @@
 import React, {FC, ReactNode} from 'react';
 import {Navigate} from 'react-router-dom';
 
-import {createPlugin, slot} from '@testkube/plugins';
+import {createPlugin, external, slot} from '@testkube/plugins';
 
 import {IconProps} from '@atoms/Icon/types';
 
@@ -11,9 +11,15 @@ import {MessagePanelProps} from '@molecules/MessagePanel/MessagePanel';
 
 import {EndpointProcessing} from '@pages';
 
+import type PermissionsStub from '@plugins/permissions/plugin';
+
 import {isApiEndpointLocked, useApiEndpoint} from '@services/apiEndpoint';
 
+const permissionsStub = external<typeof PermissionsStub>();
+
 export default createPlugin('dashboard/general')
+  .needs(permissionsStub.data('permissionsScope'))
+
   .data({useDashboardNavigate})
   .data({useApiEndpoint})
 
