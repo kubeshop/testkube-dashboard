@@ -18,6 +18,7 @@ import type {
   PluginState,
 } from './types';
 import {PluginProviderMetadata} from './types';
+import {getPathPatternMatcher} from './utils';
 
 // TODO: Allow declaring plugin configuration
 export class PluginBuilder<T extends PluginState> {
@@ -89,6 +90,24 @@ export class PluginBuilder<T extends PluginState> {
     return new PluginBuilder({
       ...this.plugin,
       providers: [...this.plugin.providers, {provider, metadata}],
+    });
+  }
+
+  /**
+   * Add a provider, that will decorate specific routes.
+   * It will apply to all routes that will match :path pattern.
+   *
+   * It's a sugar syntax for building such matcher in `metadata.route`.
+   */
+  public layout<U>(
+    path: string,
+    rawProvider: PluginProvider<U> | ((tk: PluginScope<PluginScopeStateFor<T>>) => PluginProvider<U>),
+    metadata: PluginProviderMetadata<T> = {}
+  ): PluginBuilder<T> {
+    const match = getPathPatternMatcher(path);
+    return this.provider(rawProvider, {
+      ...metadata,
+      route: metadata.route ? route => match(route.path) && metadata.route!(route) : route => match(route.path),
     });
   }
 

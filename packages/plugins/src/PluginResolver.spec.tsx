@@ -625,6 +625,37 @@ describe('plugins', () => {
     expect(domOrderFor('', resultNone.container)).toEqual(['route-none']);
   });
 
+  it('should apply route providers to the route (layout())', () => {
+    const plugin1 = createPlugin('plugin1')
+      .layout('/prefix/*', mockProvider('p-1'), {enabled: () => true})
+      .layout('/prefix/another', mockProvider('p-2'))
+      .layout('/prefix/*', mockProvider('p-3'))
+      .route('/prefix/something', r('something'))
+      .init();
+    const plugin2 = createPlugin('plugin1')
+      .route('/prefix/another', r('another'))
+      .route('/prefix/xyz', r('xyz'))
+      .route('/none', r('none'))
+      .init();
+    const [Provider, {initialize, routes}] = new PluginResolver().register(plugin1).register(plugin2).resolve();
+    const scope = initialize();
+    const resultBare = render(<Provider root={scope} />);
+    const resultSomething = render(
+      <Provider root={scope}>{routes.find(x => x.path === '/prefix/something')!.element}</Provider>
+    );
+    const resultAnother = render(
+      <Provider root={scope}>{routes.find(x => x.path === '/prefix/another')!.element}</Provider>
+    );
+    const resultXyz = render(<Provider root={scope}>{routes.find(x => x.path === '/prefix/xyz')!.element}</Provider>);
+    const resultNone = render(<Provider root={scope}>{routes.find(x => x.path === '/none')!.element}</Provider>);
+
+    expect(domOrderFor('', resultBare.container)).toEqual([]);
+    expect(domOrderFor('', resultSomething.container)).toEqual(['p-3', 'p-1', 'route-something']);
+    expect(domOrderFor('', resultAnother.container)).toEqual(['p-2', 'p-3', 'p-1', 'route-another']);
+    expect(domOrderFor('', resultXyz.container)).toEqual(['p-3', 'p-1', 'route-xyz']);
+    expect(domOrderFor('', resultNone.container)).toEqual(['route-none']);
+  });
+
   it('should allow reading the scope in the provider definition', () => {
     const Context = createContext<any>(null);
     const Reader: FC = () => <div data-testid={useContext(Context)} />;

@@ -34,3 +34,13 @@ export const defaults = <T extends Record<string, any>, U extends Record<string,
   });
   return result;
 };
+
+export const getPathPatternMatcher = (pattern: string): ((path: string) => boolean) => {
+  const regex = new RegExp(
+    `^${pattern
+      .replace(/\//g, '\\/')
+      .replace(/:[^\/]+/g, '[^\\/]+')
+      .replace(/\*/, '.+')}$`
+  );
+  return (path: string) => regex.test(path);
+};
