@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren, createElement, useMemo, useRef} from 'react';
+import {FC, PropsWithChildren, createElement, useEffect, useMemo, useRef} from 'react';
 
 import {PluginResolver} from './PluginResolver';
 import {PluginEntry} from './internal/Plugin';
@@ -19,7 +19,14 @@ export const usePluginSystem = (
     () => PluginResolver.of(...pluginsRef.current).resolve(),
     [pluginsRef.current]
   );
+
+  // TODO: Nicer way of destroying previous scope.
+  const prevScope = useRef<PluginScope<any> | null>(null);
+  useMemo(() => prevScope.current?.destroy(), [initialize, parent]);
   const scope = useMemo(() => initialize(parent), [initialize, parent]);
+  useEffect(() => () => scope.destroy(), []);
+  prevScope.current = scope;
+
   const Provider: FC<PropsWithChildren<{}>> = useMemo(
     () =>
       ({children}) =>
