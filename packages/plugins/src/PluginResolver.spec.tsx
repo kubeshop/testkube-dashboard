@@ -148,7 +148,7 @@ describe('plugins', () => {
         p('name3', 500),
         p('name2', 0, $ => $.define(data()('value'))),
         p('name1', -300, $ => $.needs(slot()('slot'))),
-        p('name0', -Infinity, $ => $.outer(data()('value'))),
+        p('name0', -Infinity, $ => $.optional(data()('value'))),
         p('name4', Infinity, $ => $.define(slot()('slot'))),
       ];
       const resolver = create(plugins);
@@ -246,8 +246,8 @@ describe('plugins', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
-        p('name0', 500, $ => $.outer(data()('value1', 'value2'))),
-        p('name1', 0, $ => $.outer(slot()('slot1', 'slot3'))),
+        p('name0', 500, $ => $.optional(data()('value1', 'value2'))),
+        p('name1', 0, $ => $.optional(slot()('slot1', 'slot3'))),
       ];
       const resolver = create(plugins);
       const [, {initialize}] = resolver.resolve();
@@ -457,8 +457,8 @@ describe('plugins', () => {
 
       // Prepare lower scope
       const lowerPlugin = createPlugin('lower')
-        .outer(rootStub.data('rootKey'))
-        .outer(rootStub.slots('rootSlot'))
+        .optional(rootStub.data('rootKey'))
+        .optional(rootStub.slots('rootSlot'))
         .data({key1: 'value2'})
         .define(slot<string>()('slot1'))
         .init(tk => {
@@ -495,8 +495,8 @@ describe('plugins', () => {
 
     // Prepare lower scope
     const lowerPlugin = createPlugin('lower')
-      .outer(rootStub.data('rootKey'))
-      .outer(rootStub.slots('rootSlot'))
+      .optional(rootStub.data('rootKey'))
+      .optional(rootStub.slots('rootSlot'))
       .data({key1: 'value2'})
       .define(slot<string>()('slot1'))
       .init(tk => {
@@ -533,8 +533,8 @@ describe('plugins', () => {
 
     // Prepare lower scope
     const lowerPlugin = createPlugin('lower')
-      .outer(rootStub.data('rootKey'))
-      .outer(rootStub.slots('rootSlot'))
+      .optional(rootStub.data('rootKey'))
+      .optional(rootStub.slots('rootSlot'))
       .data({key1: 'value2'})
       .define(slot<string>()('slot1'))
       .init(tk => {

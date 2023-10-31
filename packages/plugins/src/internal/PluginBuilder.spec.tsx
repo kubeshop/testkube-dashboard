@@ -18,8 +18,8 @@ const empty = () =>
     data: {},
     externalData: {},
     externalSlots: {},
-    outerData: {},
-    outerSlots: {},
+    optionalData: {},
+    optionalSlots: {},
     urls: {},
     routes: [],
     providers: [],
@@ -174,8 +174,8 @@ describe('plugins', () => {
         .order(500)
         .needs(stub.data('key1'))
         .needs(stub.slots('slot1'))
-        .outer(stub.data('key3'))
-        .outer(stub.slots('slot3'))
+        .optional(stub.data('key3'))
+        .optional(stub.slots('slot3'))
         .define(slot()('slot2'))
         .define(data()('data2'))
         .data({data3: 'value'})
@@ -189,8 +189,8 @@ describe('plugins', () => {
         config: {},
         externalData: {key1: undefined},
         externalSlots: {slot1: undefined},
-        outerData: {key3: undefined},
-        outerSlots: {slot3: undefined},
+        optionalData: {key3: undefined},
+        optionalSlots: {slot3: undefined},
         data: {data2: undefined, data3: 'value'},
         slots: {slot2: undefined},
         urls: {'/path1': true},
@@ -199,8 +199,8 @@ describe('plugins', () => {
       });
       expect(Object.keys(readDetails(plugin).externalData)).toEqual(['key1']);
       expect(Object.keys(readDetails(plugin).externalSlots)).toEqual(['slot1']);
-      expect(Object.keys(readDetails(plugin).outerData)).toEqual(['key3']);
-      expect(Object.keys(readDetails(plugin).outerSlots)).toEqual(['slot3']);
+      expect(Object.keys(readDetails(plugin).optionalData)).toEqual(['key3']);
+      expect(Object.keys(readDetails(plugin).optionalSlots)).toEqual(['slot3']);
       expect(Object.keys(readDetails(plugin).data)).toEqual(['data2', 'data3']);
       expect(Object.keys(readDetails(plugin).slots)).toEqual(['slot2']);
     });

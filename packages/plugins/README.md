@@ -30,13 +30,13 @@ import {StoreProvider, createPlugin, data, external, slot, config} from '@testku
 import type SomePlugin from '@testkube/some-plugin';
 
 // Remember to use `import type`, as you won't need to include the external plugin in code
-import type SomeCloudPlugin from '@testkube-cloud/some-cloud-plugin';
+import type SomeOtherPlugin from '@testkube-cloud/some-other-plugin';
 
 // Load types from external plugin
 const somePluginStub = external<typeof SomePlugin>();
 
 // Load types from external plugin
-const someOuterStub = external<typeof SomeCloudPlugin>();
+const someOtherStub = external<typeof SomeOtherPlugin>();
 
 export default createPlugin('some-plugin-name')
     // Set plugin's priority to order with other plugins.
@@ -63,12 +63,8 @@ export default createPlugin('some-plugin-name')
     // Declare injecting to slot of a different plugin
     .needs(somePluginStub.slot('someSlot', 'someOtherSlot'))
     
-    // Declare dependency from the plugin,
-    // that is in another plugins system above.
-    // Most likely, you will use it only while creating Dashboard plugin,
-    // that will interact with internal Cloud data.
-    // Alternatively, it may be used to get data from optional plugins.
-    .outer(someOuterStub.data('organizationId'))
+    // Declare optional dependency..
+    .optional(someOtherStub.data('organizationId'))
     
     // Inject provider that will wrap all the components inside
     .provider(<SomeReactProvider value={10} />)
@@ -109,7 +105,7 @@ export default createPlugin('some-plugin-name')
         console.log(tk.data.some1Variable);
         console.log(tk.data.some1Fn());
         
-        // Read data from external plugin in outer system.
+        // Read optional data from external plugin.
         console.log(tk.data.organizationId);
         
         // Read all available values from the current slot.
@@ -170,8 +166,8 @@ PluginResolver.of(
 
 There are two methods in the plugin definition to declare dependency:
 
-* `.needs(/* dependency */)` - required dependency in the same system
-* `.outer(/* dependency */)` - optional dependency, that may be included even from higher scope (Cloud -> OSS)
+* `.needs(/* dependency */)` - required dependency, either from a sibling or in the parent scope
+* `.optional(/* dependency */)` - optional dependency
 
 These methods take a parameter, that declares what are the dependencies used by the plugin.
 
@@ -377,7 +373,7 @@ export const App: FC = () => {
 ### Nested systems
 
 When you want to have nested systems, it is possible to build them, and even access from the lower system to the upper.
-It may be helpful, when i.e. Cloud solution is using OSS solution, and some of the OSS plugins needs to access the Cloud scope (like organizations list), with `.outer()` (as described [above](#dependencies)).
+It may be helpful, when i.e. Cloud solution is using OSS solution, and some of the OSS plugins needs to access the Cloud scope (like organizations list), with `.needs()` or `.optional()` (as described [above](#dependencies)).
 
 ```tsx
 import {FC, useMemo} from 'react';

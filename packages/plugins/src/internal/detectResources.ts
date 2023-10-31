@@ -4,15 +4,15 @@ import {PluginDetails} from './symbols';
 export interface PluginResourcesMapping {
   slots: Record<string, Plugin<any>[]>;
   data: Record<string, Plugin<any>[]>;
-  outerSlots: string[];
-  outerData: string[];
+  optionalSlots: string[];
+  optionalData: string[];
 }
 
 export const detectResources = (plugins: Plugin<any>[]): PluginResourcesMapping => {
   const slots: Record<string, Plugin<any>[]> = {};
   const data: Record<string, Plugin<any>[]> = {};
-  const outerSlots: string[] = [];
-  const outerData: string[] = [];
+  const optionalSlots: string[] = [];
+  const optionalData: string[] = [];
 
   plugins.forEach(plugin => {
     Object.keys(plugin[PluginDetails].slots).forEach(key => {
@@ -26,17 +26,17 @@ export const detectResources = (plugins: Plugin<any>[]): PluginResourcesMapping 
   });
 
   plugins.forEach(plugin => {
-    Object.keys(plugin[PluginDetails].outerSlots).forEach(key => {
-      if (!slots[key] && !outerSlots.includes(key)) {
-        outerSlots.push(key);
+    Object.keys(plugin[PluginDetails].optionalSlots).forEach(key => {
+      if (!slots[key] && !optionalSlots.includes(key)) {
+        optionalSlots.push(key);
       }
     });
-    Object.keys(plugin[PluginDetails].outerData).forEach(key => {
-      if (!data[key] && !outerData.includes(key)) {
-        outerData.push(key);
+    Object.keys(plugin[PluginDetails].optionalData).forEach(key => {
+      if (!data[key] && !optionalData.includes(key)) {
+        optionalData.push(key);
       }
     });
   });
 
-  return {slots, data, outerSlots, outerData};
+  return {slots, data, optionalSlots, optionalData};
 };

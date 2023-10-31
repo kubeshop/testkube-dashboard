@@ -13,7 +13,7 @@ describe('plugins', () => {
         slots: [],
         inheritedData: [],
         inheritedSlots: [],
-        outerSlots: [],
+        optionalSlots: [],
         inheritedReadonlyData: [],
       });
       const {result} = renderHook(() => useContext(PluginScopeContext), {

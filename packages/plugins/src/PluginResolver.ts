@@ -37,8 +37,8 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     data: T['data'] & GetPluginState<U>['data'];
     externalSlots: T['externalSlots'] & GetPluginState<U>['externalSlots'];
     externalData: T['externalData'] & GetPluginState<U>['externalData'];
-    outerSlots: T['outerSlots'] & GetPluginState<U>['outerSlots'];
-    outerData: T['outerData'] & GetPluginState<U>['outerData'];
+    optionalSlots: T['optionalSlots'] & GetPluginState<U>['optionalSlots'];
+    optionalData: T['optionalData'] & GetPluginState<U>['optionalData'];
   }> {
     // TODO: Shouldn't allow to have multiple instances of the same plugin?
     if (this.plugins.some(x => x.plugin === plugin)) {
@@ -89,7 +89,7 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     };
 
     // Detect sources of different resources
-    const {slots: slotSource, data: dataSource, outerData, outerSlots} = detectResources(plugins);
+    const {slots: slotSource, data: dataSource, optionalData, optionalSlots} = detectResources(plugins);
 
     // Detect direct dependencies for each plugin
     const {hard: deps, loose: looseDeps} = detectDirectDependencies(plugins);
@@ -212,9 +212,9 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
         slots: Object.keys(slotSource) as any,
         data: Object.keys(dataSource) as any,
         inheritedData: [],
-        inheritedSlots: outerSlots,
-        outerSlots: [],
-        inheritedReadonlyData: outerData,
+        inheritedSlots: optionalSlots,
+        optionalSlots: [],
+        inheritedReadonlyData: optionalData,
       });
       Object.keys(initialData).forEach((key: keyof RootScopeType['data']) => {
         root.data[key] = initialData[key]!;
