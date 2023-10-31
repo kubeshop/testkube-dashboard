@@ -6,7 +6,7 @@ import {Labels, NameNDescription} from '@organisms/EntityDetails';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
 import {useDeleteTestMutation, useUpdateTestMutation} from '@services/tests';
 
@@ -20,7 +20,7 @@ const SettingsGeneral: React.FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
   // TODO: Instead, use always the slot, and register current <Delete /> as fallback
-  const deleteTestExtension = useTestsSlot('deleteTestExtension');
+  const deleteTestExtension = useTestsSlotFirst('deleteTestExtension');
   const [deleteTest] = useDeleteTestMutation();
   const isReadOnly = !isAgentAvailable || details?.readOnly;
 
