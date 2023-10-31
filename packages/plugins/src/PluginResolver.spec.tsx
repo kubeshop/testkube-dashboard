@@ -217,7 +217,8 @@ describe('plugins', () => {
         p('name2', 0, $ => $.needs(slot()('slot4'))),
       ];
       const resolver = create(plugins);
-      resolver.resolve();
+      const [, {initialize}] = resolver.resolve();
+      initialize();
 
       expect(warnSpy).toHaveBeenCalledWith(
         'Detected problems with plugins:\nname1: required "slot3" slot is not registered.\nname2: required "slot4" slot is not registered.'
@@ -233,14 +234,15 @@ describe('plugins', () => {
         p('name2', 0, $ => $.needs(data()('value4'))),
       ];
       const resolver = create(plugins);
-      resolver.resolve();
+      const [, {initialize}] = resolver.resolve();
+      initialize();
 
       expect(warnSpy).toHaveBeenCalledWith(
         'Detected problems with plugins:\nname1: required "value3" data is not registered.\nname2: required "value4" data is not registered.'
       );
     });
 
-    it('should not detect missing data or slots for outer modules', () => {
+    it('should not detect missing data or slots for optional modules', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
@@ -248,9 +250,54 @@ describe('plugins', () => {
         p('name1', 0, $ => $.outer(slot()('slot1', 'slot3'))),
       ];
       const resolver = create(plugins);
-      resolver.resolve();
+      const [, {initialize}] = resolver.resolve();
+      initialize();
 
       expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not detect missing data or slots when these are declared above modules', () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
+
+      const rootPlugins = [
+        p('name0', 500, $ => $.define(data()('value1', 'value2'))),
+        p('name1', 0, $ => $.define(slot()('slot1', 'slot2'))),
+      ];
+      const [, {initialize: initializeRoot}] = create(rootPlugins).resolve();
+      const root = initializeRoot();
+
+      const plugins = [
+        p('name2', 500, $ => $.needs(data()('value1', 'value2'))),
+        p('name3', 0, $ => $.needs(slot()('slot1', 'slot2'))),
+      ];
+      const resolver = create(plugins);
+      const [, {initialize}] = resolver.resolve();
+      initialize(root);
+
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('should detect missing data or slots when part is not declared in above modules', () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
+
+      const rootPlugins = [
+        p('name0', 500, $ => $.define(data()('value1'))),
+        p('name1', 0, $ => $.define(slot()('slot1'))),
+      ];
+      const [, {initialize: initializeRoot}] = create(rootPlugins).resolve();
+      const root = initializeRoot();
+
+      const plugins = [
+        p('name2', 500, $ => $.needs(data()('value1', 'value2'))),
+        p('name3', 0, $ => $.needs(slot()('slot1', 'slot2'))),
+      ];
+      const resolver = create(plugins);
+      const [, {initialize}] = resolver.resolve();
+      initialize(root);
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Detected problems with plugins:\nname2: required "value2" data is not registered.\nname3: required "slot2" slot is not registered.'
+      );
     });
 
     it('should detect circular dependencies', () => {
@@ -261,7 +308,8 @@ describe('plugins', () => {
         p('name1', 0, $ => $.define(data()('value2')).needs(data()('value1'))),
       ];
       const resolver = create(plugins);
-      resolver.resolve();
+      const [, {initialize}] = resolver.resolve();
+      initialize();
 
       expect(warnSpy).toHaveBeenCalledWith(
         'Detected problems with plugins:\ncircular dependency: name1 ➟ name0\ncircular dependency: name0 ➟ name1'

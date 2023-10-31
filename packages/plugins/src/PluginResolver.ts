@@ -94,18 +94,22 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     // Detect direct dependencies for each plugin
     const {hard: deps, loose: looseDeps} = detectDirectDependencies(plugins);
 
-    // Detect missing and duplicated slots & data
+    // Detect duplicated slots & data
+    const missingSlots: Record<string, string[]> = {};
+    const missingData: Record<string, string[]> = {};
     plugins.forEach(plugin => {
       const config = plugin[PluginDetails];
       Object.keys(config.externalData)
         .filter(name => !dataSource[name])
         .forEach(name => {
-          warnings.push(`${config.name}: required "${name}" data is not registered.`);
+          missingData[name] = missingData[name] || [];
+          missingData[name].push(config.name);
         });
       Object.keys(config.externalSlots)
         .filter(name => !slotSource[name])
         .forEach(name => {
-          warnings.push(`${config.name}: required "${name}" slot is not registered.`);
+          missingSlots[name] = missingSlots[name] || [];
+          missingSlots[name].push(config.name);
         });
       Object.keys(config.data)
         .filter(name => dataSource[name].length > 1)
@@ -178,17 +182,32 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       Object.assign(initialData, {...next.plugin[PluginDetails].data});
     }
 
-    if (warnings.length > 0) {
-      // eslint-disable-next-line no-console
-      console.warn(`Detected problems with plugins:\n${warnings.join('\n')}`);
-    }
-
     // TODO: Consider registering in the parent scope,
     //       so the destroy & events would be propagated from there too.
     //       ...
     //       Alternatively, the lower scope could listen to events,
     //       and just transfer them down.
     const initialize = (parent: PluginScope<any> | null = null) => {
+      const localWarnings = [...warnings];
+      Object.entries(missingData).forEach(([key, names]) => {
+        if (!parent || !(key in parent.data)) {
+          names.forEach(name => {
+            localWarnings.push(`${name}: required "${key}" data is not registered.`);
+          });
+        }
+      });
+      Object.entries(missingSlots).forEach(([key, names]) => {
+        if (!parent || !(key in parent.slots)) {
+          names.forEach(name => {
+            localWarnings.push(`${name}: required "${key}" slot is not registered.`);
+          });
+        }
+      });
+      if (localWarnings.length > 0) {
+        // eslint-disable-next-line no-console
+        console.warn(`Detected problems with plugins:\n${localWarnings.join('\n')}`);
+      }
+
       const root: RootScopeType = new PluginScope(parent, {
         slots: Object.keys(slotSource) as any,
         data: Object.keys(dataSource) as any,
