@@ -1,14 +1,16 @@
-import {FC, PropsWithChildren, createElement, useEffect, useMemo, useRef} from 'react';
+import {FC, PropsWithChildren, ReactElement, createElement, useEffect, useMemo, useRef, useState} from 'react';
 
 import {PluginResolver} from './PluginResolver';
 import {PluginEntry} from './internal/Plugin';
 import {PluginScope} from './internal/PluginScope';
 import {PluginRoute} from './internal/types';
 
+type PluginSystemFC = FC<PropsWithChildren<{initFallback?: ReactElement<any, any> | null}>>;
+
 export const usePluginSystem = (
   plugins: PluginEntry<any>[],
   parent: PluginScope<any> | null = null
-): [FC<PropsWithChildren<{}>>, {scope: PluginScope<any>; routes: PluginRoute[]}] => {
+): [PluginSystemFC, {scope: PluginScope<any>; routes: PluginRoute[]}] => {
   // Preserve plugins identity
   const pluginsRef = useRef(plugins);
   if (pluginsRef.current.length !== plugins.length || pluginsRef.current.some((x, i) => x !== plugins[i])) {
@@ -24,13 +26,21 @@ export const usePluginSystem = (
   const prevScope = useRef<PluginScope<any> | null>(null);
   useMemo(() => prevScope.current?.destroy(), [initialize, parent]);
   const scope = useMemo(() => initialize(parent), [initialize, parent]);
-  useEffect(() => () => scope.destroy(), []);
   prevScope.current = scope;
 
-  const Provider: FC<PropsWithChildren<{}>> = useMemo(
+  const Provider: PluginSystemFC = useMemo(
     () =>
-      ({children}) =>
-        createElement(PluginSystemProvider, {root: scope}, children),
+      ({initFallback, children}) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const [initialized, setInitialized] = useState(false);
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useEffect(() => {
+          setInitialized(true);
+        }, []);
+        return initFallback != null && !initialized
+          ? initFallback
+          : createElement(PluginSystemProvider, {root: scope}, children);
+      },
     [PluginSystemProvider, scope]
   );
 
