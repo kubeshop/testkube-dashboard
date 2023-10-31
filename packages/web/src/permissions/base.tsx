@@ -1,5 +1,7 @@
 import React, {PropsWithChildren, ReactElement, createContext, useContext, useMemo, useRef} from 'react';
 
+import {usePermissionsPlugin} from '@plugins/permissions/hooks';
+
 // Interface
 
 export enum Permissions {
@@ -54,7 +56,10 @@ export function PermissionsProvider<T extends PermissionsResolver<any, any>>(
 export function createUsePermissionHook<T extends PermissionsResolver<any, any>>(): PermissionsResolverFn<T> {
   // @ts-ignore: FIXME later
   return (permission, scope?): boolean => {
-    const {scope: baseScope, resolver} = useContext<PermissionsContextData<T>>(PermissionsContext);
+    const {resolver} = useContext<PermissionsContextData<T>>(PermissionsContext);
+
+    // TODO: Use mechanism detached of plugins
+    const baseScope = usePermissionsPlugin.select(x => x.permissionsScope);
 
     // It's much more convenient to avoid caching the scope object in each component for comparison.
     // To simplify that, the scope will be cached based on identity of the properties.
