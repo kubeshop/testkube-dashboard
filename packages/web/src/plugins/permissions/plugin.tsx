@@ -10,7 +10,7 @@ export default createPlugin('oss/permissions')
   .define(data<Record<string, any>>()('permissionsScope'))
   .define(data<(scope: Record<string, any>) => void>()('setPermissionsScope'))
 
-  .provider(tk => <PermissionsProvider scope={tk.data.permissionsScope} resolver={tk.data.permissionsResolver} />)
+  .provider(tk => <PermissionsProvider resolver={tk.data.permissionsResolver} />)
 
   .init((tk, cfg) => {
     tk.data.permissionsScope = cfg.initialScope;
