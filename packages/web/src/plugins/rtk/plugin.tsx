@@ -3,11 +3,7 @@ import {Provider as ReduxProvider} from 'react-redux';
 
 import {Store, configureStore} from '@reduxjs/toolkit';
 
-import {createPlugin, createUseSlot, data, external, slot} from '@testkube/plugins';
-
-import type GeneralPlugin from '@plugins/general/plugin';
-
-const generalStub = external<typeof GeneralPlugin>();
+import {createPlugin, createUseSlot, data, slot} from '@testkube/plugins';
 
 export interface RtkService {
   reducerPath: string;
@@ -47,7 +43,10 @@ export default createPlugin('oss/rtk')
   .init(tk => {
     tk.data.resetRtkCache = () => {
       tk.slots.rtkServices.all().forEach(service => {
-        tk.data.rtkStore?.dispatch(service.util?.resetApiState());
+        const action = service.util?.resetApiState();
+        if (action) {
+          tk.data.rtkStore?.dispatch(action);
+        }
       });
     };
   });
