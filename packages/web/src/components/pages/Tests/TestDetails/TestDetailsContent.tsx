@@ -10,6 +10,8 @@ import useRunEntity from '@hooks/useRunEntity';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
+import {Entity} from '@models/entity';
+
 import {CLICommands, SummaryGrid} from '@molecules';
 
 import {PageWrapper} from '@organisms';
@@ -28,11 +30,12 @@ import TestExecutionDrawer from './TestExecution/TestExecutionDrawer';
 import TestSettings from './TestSettings';
 
 interface TestDetailsContentProps {
+  entity: Entity;
   tab?: string;
   settingsTab?: string;
 }
 
-const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => {
+const TestDetailsContent: FC<TestDetailsContentProps> = ({entity, tab, settingsTab}) => {
   const {id, details, error, metrics} = useEntityDetailsPick('id', 'details', 'error', 'metrics');
   const [isRunning, run] = useRunEntity('tests', details);
   const isAgentAvailable = useSystemAccess(SystemAccess.agent);
@@ -61,6 +64,7 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
         <PageMetadata title={details?.name} description={details?.description} />
 
         <EntityDetailsHeader
+          entity={entity}
           isRunning={isRunning}
           outOfSync={details.readOnly}
           isAgentAvailable={isAgentAvailable}

@@ -11,6 +11,7 @@ import {Button, Text} from '@custom-antd';
 
 import useExecutorIcon from '@hooks/useExecutorIcon';
 
+import {Entity} from '@models/entity';
 import {Option as OptionType} from '@models/form';
 
 import {DotsDropdown, LabelsList, notificationCall} from '@molecules';
@@ -34,6 +35,7 @@ const filterOptions: OptionType[] = [
 ];
 
 interface EntityDetailsHeaderProps {
+  entity: Entity;
   isRunning?: boolean;
   onRun: () => void;
   onBack: () => void;
@@ -64,11 +66,10 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
       notificationCall('failed', `Something went wrong during ${entity} execution abortion`);
     });
   };
-
   const entityOptionsMenu = useMemo(
     () =>
       [
-        {key: 1, label: <span onClick={onEditTest}>Edit Test</span>},
+        {key: 1, label: <span onClick={onEditTest}>Edit {entity === 'tests' ? 'Test' : 'Test Suite'}</span>},
         executions?.totals?.running && {
           key: 2,
           label: <span onClick={onAbortAllExecutionsClick}>Abort all executions</span>,
