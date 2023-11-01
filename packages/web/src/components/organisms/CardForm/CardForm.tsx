@@ -55,7 +55,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   isWarning,
   confirmLabel,
   spacing,
-  monitLeave,
+  monitLeave = true,
   monitLeaveMessage = 'You have unsaved changes. Are you sure you want to leave?',
   children,
   onFieldsChange,
