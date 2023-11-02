@@ -69,6 +69,11 @@ export default createPlugin('some-plugin-name')
     // Inject provider that will wrap all the components inside
     .provider(<SomeReactProvider value={10} />)
 
+    // Inject provider that is just manipulating data.
+    .provider(({scope, useData, useSlot, useSlotFirst}) => {
+        scope.data.otherVariable = `${useData.select(x => x.someFn())} apples`;
+    })
+
     // Inject provider with forcing different order.
     // By default all providers have such order: 0.
     // It's worth to use it, when the provider creates a context,
@@ -124,7 +129,7 @@ export default createPlugin('some-plugin-name')
        
         // When you need to call the React hooks in this place,
         // You may use .sync() helper.
-        // It's not fast option, but it's very convenient.
+        // Using .provider() is more convenient though.
         const isLoading = tk.sync(() => useSomeStoreData('loading'));
         tk.slots.somePluginStub.someOtherSlot.add(<>Loading...</>, {enabled: isLoading});
     });

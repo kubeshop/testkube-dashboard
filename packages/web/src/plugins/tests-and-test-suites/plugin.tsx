@@ -106,18 +106,26 @@ export default createPlugin('oss/tests-and-test-suites')
   .define(slot<ReactNode>()('deleteTestSuiteExtension'))
   .define(slot<ReactNode>()('testSuitesListTitleAddon'))
 
-  .provider(tk => <StoreProvider store={initializeTestsStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeTestsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useTests, useTestsPick, useTestsField, useTestsSync})
-  .provider(tk => <StoreProvider store={initializeTestSuitesStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeTestSuitesStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useTestSuites, useTestSuitesPick, useTestSuitesField, useTestSuitesSync})
-  .provider(tk => <StoreProvider store={initializeEntityDetailsStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeEntityDetailsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useEntityDetails, useEntityDetailsPick, useEntityDetailsField, useEntityDetailsSync})
-  .provider(tk => <StoreProvider store={initializeExecutionDetailsStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeExecutionDetailsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useExecutionDetails, useExecutionDetailsPick, useExecutionDetailsField, useExecutionDetailsSync})
-  .provider(tk => (
+  .provider(({useData}) => (
     <StoreProvider
       store={initializeLogOutputStore}
-      dependencies={[tk.data.useApiEndpoint(), window.location.pathname]}
+      dependencies={[useData.select(x => x.useApiEndpoint)(), window.location.pathname]}
     />
   ))
   .data({useLogOutput, useLogOutputPick, useLogOutputField, useLogOutputSync})

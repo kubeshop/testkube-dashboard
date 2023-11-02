@@ -31,7 +31,9 @@ export default createPlugin('oss/webhooks')
   .route('/webhooks/:id/settings', <WebhookDetails />)
   .route('/webhooks/:id/settings/:settingsTab', <WebhookDetails />)
 
-  .provider(tk => <StoreProvider store={initializeWebhooksStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeWebhooksStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useWebhooks, useWebhooksPick, useWebhooksField, useWebhooksSync})
 
   .init(tk => {

@@ -1,4 +1,4 @@
-import {Fragment, useEffect} from 'react';
+import {useEffect} from 'react';
 import {Location, NavigateFunction} from 'react-router';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 
@@ -16,23 +16,21 @@ export default createPlugin('oss/router')
   .provider(<ReactRouterLayer />)
 
   // Scroll to top on a navigation to a new page
-  .provider(tk => {
+  .provider(() => {
     const loc = useLocation();
     useEffect(() => {
       window.scrollTo(0, 0);
     }, [loc.pathname]);
-    return {type: Fragment, props: {}};
   })
 
   .define(data<Location>()('location'))
   .define(data<NavigateFunction>()('navigate'))
   .define(data<Record<string, string | undefined>>()('params'))
 
-  .provider(tk => {
-    tk.data.navigate = useLastCallback(useNavigate());
-    tk.data.location = useLocation();
-    tk.data.params = useParams();
-    return {type: Fragment, props: {}};
+  .provider(({scope}) => {
+    scope.data.navigate = useLastCallback(useNavigate());
+    scope.data.location = useLocation();
+    scope.data.params = useParams();
   })
 
   .init((tk, cfg) => {

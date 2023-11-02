@@ -709,7 +709,7 @@ describe('plugins', () => {
     const Reader: FC = () => <div data-testid={useContext(Context)} />;
     const plugin = createPlugin('plugin')
       .data({value: 'some1'})
-      .provider(tk => <Context.Provider value={tk.data.value} />)
+      .provider(({useData}) => <Context.Provider value={useData.select(x => x.value)} />)
       .init();
     const [Provider, {initialize}] = new PluginResolver().register(plugin).resolve();
     const scope = initialize();

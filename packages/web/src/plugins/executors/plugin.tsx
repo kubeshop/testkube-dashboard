@@ -38,24 +38,28 @@ export default createPlugin('dashboard/executors')
   .route('/executors/:id', <ExecutorDetails />)
   .route('/executors/:id/settings/:settingsTab', <ExecutorDetails />)
 
-  .provider(tk => <StoreProvider store={initializeExecutorsStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeExecutorsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useExecutors, useExecutorsPick, useExecutorsField, useExecutorsSync})
+
+  .provider(({useData}) => {
+    const {useApiEndpoint, useSystemAccess, SystemAccess} = useData.pick(
+      'useApiEndpoint',
+      'useSystemAccess',
+      'SystemAccess'
+    );
+    const {data: executors, refetch} = useGetExecutorsQuery(null, {
+      pollingInterval: PollingIntervals.long,
+      skip: !useSystemAccess(SystemAccess.agent),
+    });
+    useExecutorsSync({executors});
+    useEffect(() => {
+      safeRefetch(refetch);
+    }, [useApiEndpoint()]);
+  })
 
   .init(tk => {
     tk.slots.rtkServices.add(executorsApi);
-
     tk.slots.siderItems.add({path: '/executors', icon: ExecutorsIcon, title: 'Executors'}, {order: -80});
-
-    // TODO: Move as provider?
-    tk.sync(() => {
-      const {useApiEndpoint, useSystemAccess, SystemAccess} = tk.data;
-      const {data: executors, refetch} = useGetExecutorsQuery(null, {
-        pollingInterval: PollingIntervals.long,
-        skip: !useSystemAccess(SystemAccess.agent),
-      });
-      useExecutorsSync({executors});
-      useEffect(() => {
-        safeRefetch(refetch);
-      }, [useApiEndpoint()]);
-    });
   });

@@ -29,54 +29,59 @@ export default createPlugin('dashboard/cluster')
   .needs(generalStub.data('useApiEndpoint'))
   .needs(clusterStatusStub.data('isClusterAvailable'))
 
-  .provider(tk => <StoreProvider store={initializeClusterDetailsStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeClusterDetailsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useClusterDetails, useClusterDetailsPick, useClusterDetailsField, useClusterDetailsSync})
 
-  .init(tk => {
-    // TODO: Consider provider
-    tk.sync(() => {
-      const {useApiEndpoint, location, isClusterAvailable} = tk.data;
-      const apiEndpoint = useApiEndpoint();
-      const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
+  .provider(({useData}) => {
+    const {useApiEndpoint, location, isClusterAvailable} = useData.pick(
+      'useApiEndpoint',
+      'location',
+      'isClusterAvailable'
+    );
+    const apiEndpoint = useApiEndpoint();
+    const {setClusterDetails} = useClusterDetailsPick('setClusterDetails');
 
-      const {open: openEndpointModal} = useModal({
-        title: 'Testkube API endpoint',
-        width: 693,
-        content: <EndpointModal />,
-        dataTestCloseBtn: 'endpoint-modal-close-button',
-        dataTestModalRoot: 'endpoint-modal',
-      });
-
-      useEffect(() => {
-        // Do not fire the effect if new endpoint is just being set up.
-        if (location.pathname === '/apiEndpoint') {
-          return;
-        }
-
-        if (!apiEndpoint && !isApiEndpointLocked()) {
-          openEndpointModal();
-          return;
-        }
-
-        // Avoid loading API details when we know the cluster is not available.
-        if (!isClusterAvailable) {
-          return;
-        }
-
-        getApiDetails(apiEndpoint!)
-          .then(setClusterDetails)
-          .catch(() => {
-            // Handle race condition
-            if (getApiEndpoint() !== apiEndpoint) {
-              return;
-            }
-
-            // Display popup
-            notificationCall('failed', 'Could not receive data from the specified API endpoint');
-            if (!isApiEndpointLocked()) {
-              openEndpointModal();
-            }
-          });
-      }, [apiEndpoint, isClusterAvailable]);
+    const {open: openEndpointModal} = useModal({
+      title: 'Testkube API endpoint',
+      width: 693,
+      content: <EndpointModal />,
+      dataTestCloseBtn: 'endpoint-modal-close-button',
+      dataTestModalRoot: 'endpoint-modal',
     });
-  });
+
+    useEffect(() => {
+      // Do not fire the effect if new endpoint is just being set up.
+      if (location.pathname === '/apiEndpoint') {
+        return;
+      }
+
+      if (!apiEndpoint && !isApiEndpointLocked()) {
+        openEndpointModal();
+        return;
+      }
+
+      // Avoid loading API details when we know the cluster is not available.
+      if (!isClusterAvailable) {
+        return;
+      }
+
+      getApiDetails(apiEndpoint!)
+        .then(setClusterDetails)
+        .catch(() => {
+          // Handle race condition
+          if (getApiEndpoint() !== apiEndpoint) {
+            return;
+          }
+
+          // Display popup
+          notificationCall('failed', 'Could not receive data from the specified API endpoint');
+          if (!isApiEndpointLocked()) {
+            openEndpointModal();
+          }
+        });
+    }, [apiEndpoint, isClusterAvailable]);
+  })
+
+  .init();

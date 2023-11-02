@@ -12,10 +12,10 @@ export default createPlugin('oss/rtk-reset-on-api-change')
   .needs(generalStub.data('useApiEndpoint'))
   .needs(rtkStub.data('resetRtkCache'))
 
-  .init(tk => {
+  .provider(({useData}) => {
     // Reset the in-memory API cache on API endpoint change
-    tk.sync(() => {
-      const {resetRtkCache, useApiEndpoint} = tk.data;
-      useMemo(resetRtkCache, [useApiEndpoint()]);
-    });
-  });
+    const {resetRtkCache, useApiEndpoint} = useData.pick('resetRtkCache', 'useApiEndpoint');
+    useMemo(resetRtkCache, [useApiEndpoint()]);
+  })
+
+  .init();

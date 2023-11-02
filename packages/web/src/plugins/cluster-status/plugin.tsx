@@ -22,23 +22,22 @@ export default createPlugin('dashboard/cluster-status')
 
   .data({useSystemAccess, SystemAccess})
 
+  .provider(({useData, scope}) => {
+    const apiEndpoint = useData.select(x => x.useApiEndpoint)();
+    const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
+      skip: !apiEndpoint,
+    });
+
+    scope.data.isTelemetryEnabled = Boolean(clusterConfig?.enableTelemetry);
+    scope.data.isClusterAvailable = Boolean(clusterConfig);
+    scope.data.isSystemAvailable = Boolean(clusterConfig);
+
+    // FIXME: Hack - for some reason, useEffect was not called on API endpoint change.
+    useMemo(() => {
+      setTimeout(() => safeRefetch(refetchClusterConfig));
+    }, [apiEndpoint]);
+  })
+
   .init(tk => {
     tk.slots.rtkServices.add(configApi);
-
-    // TODO: Move to provider?
-    tk.sync(() => {
-      const apiEndpoint = tk.data.useApiEndpoint();
-      const {currentData: clusterConfig, refetch: refetchClusterConfig} = useGetClusterConfigQuery(undefined, {
-        skip: !apiEndpoint,
-      });
-
-      tk.data.isTelemetryEnabled = Boolean(clusterConfig?.enableTelemetry);
-      tk.data.isClusterAvailable = Boolean(clusterConfig);
-      tk.data.isSystemAvailable = Boolean(clusterConfig);
-
-      // FIXME: Hack - for some reason, useEffect was not called on API endpoint change.
-      useMemo(() => {
-        setTimeout(() => safeRefetch(refetchClusterConfig));
-      }, [apiEndpoint]);
-    });
   });

@@ -41,6 +41,25 @@ export interface PluginProviderContainer<T, U extends PluginState> {
   metadata: PluginProviderMetadata<U>;
 }
 
+export interface PluginProviderDataHook<T extends PluginState> {
+  (): PluginScopeDataRecord<PluginScopeStateFor<T>>;
+  select<U>(
+    select?: (data: PluginScopeDataRecord<PluginScopeStateFor<T>>) => U,
+    equalityFn?: (prev: U, next: U) => boolean
+  ): U;
+  shallow<U>(select?: (data: PluginScopeDataRecord<PluginScopeStateFor<T>>) => U): U;
+  pick<K extends keyof PluginScopeDataRecord<PluginScopeStateFor<T>>>(
+    ...keys: K[]
+  ): Pick<PluginScopeDataRecord<PluginScopeStateFor<T>>, K>;
+}
+
+export interface PluginProviderHooks<T extends PluginState> {
+  scope: PluginScope<PluginScopeStateFor<T>>;
+  useData: PluginProviderDataHook<T>;
+  useSlot: <K extends keyof GetSlots<T>>(name: K) => GetSlots<T>[K][];
+  useSlotFirst: <K extends keyof GetSlots<T>>(name: K) => GetSlots<T>[K] | undefined;
+}
+
 export interface PluginState {
   // Setup
   readonly config: Record<string, any>;

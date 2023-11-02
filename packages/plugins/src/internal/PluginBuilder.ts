@@ -1,7 +1,7 @@
 import type {ReactElement} from 'react';
-import {createElement} from 'react';
+import {Fragment, createElement} from 'react';
 
-import {usePluginScope} from '../hooks';
+import {createUseData, createUseSlot, createUseSlotFirst, usePluginScope} from '../hooks';
 
 import {Plugin} from './Plugin';
 import {PluginScope} from './PluginScope';
@@ -17,7 +17,7 @@ import type {
   PluginScopeStateFor,
   PluginState,
 } from './types';
-import {PluginProviderMetadata} from './types';
+import {PluginProviderHooks, PluginProviderMetadata} from './types';
 import {getPathPatternMatcher} from './utils';
 
 // TODO: Allow declaring plugin configuration
@@ -73,15 +73,26 @@ export class PluginBuilder<T extends PluginState> {
    * but conditional providers are included after those without condition.
    */
   public provider<U>(
-    rawProvider: PluginProvider<U> | ((tk: PluginScope<PluginScopeStateFor<T>>) => PluginProvider<U>),
+    rawProvider: PluginProvider<U> | ((hooks: PluginProviderHooks<T>) => PluginProvider<U> | void),
     metadata: PluginProviderMetadata<T> = {}
   ): PluginBuilder<T> {
+    const useData = createUseData<Plugin<T>>();
+    const useSlot = createUseSlot<Plugin<T>>();
+    const useSlotFirst = createUseSlotFirst<Plugin<T>>();
     const provider =
       typeof rawProvider === 'function'
         ? ({
             type: (props: any) => {
-              // eslint-disable-next-line react-hooks/rules-of-hooks
-              const {type: Provider, props: innerProps} = rawProvider(usePluginScope());
+              const {type: Provider, props: innerProps} = rawProvider({
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                scope: usePluginScope(),
+                useData,
+                useSlot,
+                useSlotFirst,
+              }) || {
+                type: Fragment,
+                props: {},
+              };
               return createElement(Provider as any, {...innerProps, ...props});
             },
             props: {},
@@ -101,7 +112,7 @@ export class PluginBuilder<T extends PluginState> {
    */
   public layout<U>(
     path: string,
-    rawProvider: PluginProvider<U> | ((tk: PluginScope<PluginScopeStateFor<T>>) => PluginProvider<U>),
+    rawProvider: PluginProvider<U> | ((tk: PluginProviderHooks<T>) => PluginProvider<U>),
     metadata: PluginProviderMetadata<T> = {}
   ): PluginBuilder<T> {
     const match = getPathPatternMatcher(path);

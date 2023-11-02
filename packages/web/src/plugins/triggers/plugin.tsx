@@ -30,7 +30,9 @@ export default createPlugin('oss/triggers')
   .route('/triggers/:id', <TriggerDetails />)
   .route('/triggers/:id/settings/:settingsTab', <TriggerDetails />)
 
-  .provider(tk => <StoreProvider store={initializeTriggersStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeTriggersStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useTriggers, useTriggersPick, useTriggersField, useTriggersSync})
 
   .init(tk => {

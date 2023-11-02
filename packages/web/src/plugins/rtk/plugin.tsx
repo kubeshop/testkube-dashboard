@@ -22,10 +22,10 @@ export default createPlugin('oss/rtk')
   .define(data<Store>()('rtkStore'))
   .define(data<() => void>()('resetRtkCache'))
 
-  .provider(tk => {
+  .provider(({scope, useData}) => {
     // TODO: Extract to 'init'?
     const services = useOwnSlot('rtkServices');
-    tk.data.rtkStore = useMemo(
+    scope.data.rtkStore = useMemo(
       () =>
         configureStore({
           reducer: services.reduce((reducers, service) => ({...reducers, [service.reducerPath]: service.reducer}), {}),
@@ -37,7 +37,7 @@ export default createPlugin('oss/rtk')
       [services]
     );
 
-    return {type: ReduxProvider as any, props: {store: tk.data.rtkStore}};
+    return {type: ReduxProvider as any, props: {store: useData.select(x => x.rtkStore)}};
   })
 
   .init(tk => {

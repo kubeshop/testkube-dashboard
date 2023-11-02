@@ -19,37 +19,38 @@ export default createPlugin('oss/telemetry')
 
   .data({useTelemetry})
 
-  .init(tk => {
-    // TODO: Move to provider?
+  .provider(({useData}) => {
     // Pause/resume telemetry based on the cluster settings
-    tk.sync(() => {
-      const telemetry = tk.data.useTelemetry();
-      useEffect(() => {
-        if (tk.data.isTelemetryEnabled) {
-          telemetry.resume();
-        } else {
-          telemetry.pause();
-        }
-      }, [tk.data.isTelemetryEnabled]);
-    });
+    const {isTelemetryEnabled} = useData.pick('useTelemetry', 'isTelemetryEnabled');
+    const telemetry = useTelemetry();
+    useEffect(() => {
+      if (isTelemetryEnabled) {
+        telemetry.resume();
+      } else {
+        telemetry.pause();
+      }
+    }, [isTelemetryEnabled]);
+  })
 
+  .provider(({useData}) => {
     // TODO: Consider if it shouldn't be separate plugin
-    tk.sync(() => {
-      const telemetry = tk.data.useTelemetry();
+    const {isTelemetryEnabled} = useData.pick('useTelemetry', 'isTelemetryEnabled');
+    const telemetry = useTelemetry();
 
-      // TODO: Consider separate plugin and avoiding useAsync
-      const {value: visitorId} = useAsync(async () => {
-        const fp = await FingerprintJS.load();
-        const value = await fp.get();
-        return value.visitorId;
-      });
-
-      useTelemetryValue('userID', visitorId, true);
-      useTelemetryValue('browserName', window.navigator.userAgent);
-
-      const {pathname, search} = window.location;
-      useEffect(() => {
-        telemetry.pageView(`${pathname}${anonymizeQueryString(search)}`);
-      }, [pathname, tk.data.isTelemetryEnabled]);
+    // TODO: Consider separate plugin and avoiding useAsync
+    const {value: visitorId} = useAsync(async () => {
+      const fp = await FingerprintJS.load();
+      const value = await fp.get();
+      return value.visitorId;
     });
-  });
+
+    useTelemetryValue('userID', visitorId, true);
+    useTelemetryValue('browserName', window.navigator.userAgent);
+
+    const {pathname, search} = window.location;
+    useEffect(() => {
+      telemetry.pageView(`${pathname}${anonymizeQueryString(search)}`);
+    }, [pathname, isTelemetryEnabled]);
+  })
+
+  .init();

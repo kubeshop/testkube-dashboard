@@ -33,25 +33,30 @@ export default createPlugin('oss/test-sources')
   .route('/sources/:id', <SourceDetails />)
   .route('/sources/:id/settings/:settingsTab', <SourceDetails />)
 
-  .provider(tk => <StoreProvider store={initializeSourcesStore} dependencies={[tk.data.useApiEndpoint()]} />)
+  .provider(({useData}) => (
+    <StoreProvider store={initializeSourcesStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
+  ))
   .data({useSources, useSourcesPick, useSourcesField, useSourcesSync})
+
+  .provider(({useData}) => {
+    const {useApiEndpoint, useSystemAccess, SystemAccess} = useData.pick(
+      'useApiEndpoint',
+      'useSystemAccess',
+      'SystemAccess'
+    );
+    const {data: sources, refetch} = useGetSourcesQuery(null, {
+      pollingInterval: PollingIntervals.long,
+      skip: !useSystemAccess(SystemAccess.agent),
+    });
+    useSourcesSync({sources});
+    useEffect(() => {
+      safeRefetch(refetch);
+    }, [useApiEndpoint()]);
+  })
 
   .init(tk => {
     tk.slots.rtkServices.add(sourcesApi);
     tk.slots.rtkServices.add(repositoryApi);
 
     tk.slots.siderItems.add({path: '/sources', icon: SourcesIcon, title: 'Sources'}, {order: -20});
-
-    // TODO: Move as provider?
-    tk.sync(() => {
-      const {useApiEndpoint, useSystemAccess, SystemAccess} = tk.data;
-      const {data: sources, refetch} = useGetSourcesQuery(null, {
-        pollingInterval: PollingIntervals.long,
-        skip: !useSystemAccess(SystemAccess.agent),
-      });
-      useSourcesSync({sources});
-      useEffect(() => {
-        safeRefetch(refetch);
-      }, [useApiEndpoint()]);
-    });
   });
