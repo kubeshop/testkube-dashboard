@@ -3,7 +3,7 @@ import {Provider as ReduxProvider} from 'react-redux';
 
 import {Store, configureStore} from '@reduxjs/toolkit';
 
-import {createPlugin, createUseSlot, data, slot} from '@testkube/plugins';
+import {createPlugin, data, slot} from '@testkube/plugins';
 
 export interface RtkService {
   reducerPath: string;
@@ -11,8 +11,6 @@ export interface RtkService {
   reducer: any;
   util: {resetApiState: () => any};
 }
-
-const useOwnSlot = createUseSlot();
 
 // TODO: Load base URL from the plugin instead of global scope
 export default createPlugin('oss/rtk')
@@ -22,9 +20,8 @@ export default createPlugin('oss/rtk')
   .define(data<Store>()('rtkStore'))
   .define(data<() => void>()('resetRtkCache'))
 
-  .provider(({scope, useData}) => {
-    // TODO: Extract to 'init'?
-    const services = useOwnSlot('rtkServices');
+  .provider(({scope, useData, useSlot}) => {
+    const services = useSlot('rtkServices');
     scope.data.rtkStore = useMemo(
       () =>
         configureStore({
@@ -37,7 +34,7 @@ export default createPlugin('oss/rtk')
       [services]
     );
 
-    return {type: ReduxProvider as any, props: {store: useData.select(x => x.rtkStore)}};
+    return {type: ReduxProvider as any, props: {store: scope.data.rtkStore}};
   })
 
   .init(tk => {
