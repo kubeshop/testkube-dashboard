@@ -1,7 +1,7 @@
 import type {ReactElement} from 'react';
-import {createElement} from 'react';
+import {Fragment, createElement} from 'react';
 
-import {usePluginScope} from '../hooks';
+import {createUseData, createUseSlot, createUseSlotFirst, usePluginScope} from '../hooks';
 
 import {Plugin} from './Plugin';
 import {PluginScope} from './PluginScope';
@@ -17,7 +17,8 @@ import type {
   PluginScopeStateFor,
   PluginState,
 } from './types';
-import {PluginProviderMetadata} from './types';
+import {PluginProviderHooks, PluginProviderMetadata} from './types';
+import {getPathPatternMatcher} from './utils';
 
 // TODO: Allow declaring plugin configuration
 export class PluginBuilder<T extends PluginState> {
@@ -72,15 +73,26 @@ export class PluginBuilder<T extends PluginState> {
    * but conditional providers are included after those without condition.
    */
   public provider<U>(
-    rawProvider: PluginProvider<U> | ((tk: PluginScope<PluginScopeStateFor<T>>) => PluginProvider<U>),
+    rawProvider: PluginProvider<U> | ((hooks: PluginProviderHooks<T>) => PluginProvider<U> | void),
     metadata: PluginProviderMetadata<T> = {}
   ): PluginBuilder<T> {
+    const useData = createUseData<Plugin<T>>();
+    const useSlot = createUseSlot<Plugin<T>>();
+    const useSlotFirst = createUseSlotFirst<Plugin<T>>();
     const provider =
       typeof rawProvider === 'function'
         ? ({
             type: (props: any) => {
-              // eslint-disable-next-line react-hooks/rules-of-hooks
-              const {type: Provider, props: innerProps} = rawProvider(usePluginScope());
+              const {type: Provider, props: innerProps} = rawProvider({
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                scope: usePluginScope(),
+                useData,
+                useSlot,
+                useSlotFirst,
+              }) || {
+                type: Fragment,
+                props: {},
+              };
               return createElement(Provider as any, {...innerProps, ...props});
             },
             props: {},
@@ -89,6 +101,24 @@ export class PluginBuilder<T extends PluginState> {
     return new PluginBuilder({
       ...this.plugin,
       providers: [...this.plugin.providers, {provider, metadata}],
+    });
+  }
+
+  /**
+   * Add a provider, that will decorate specific routes.
+   * It will apply to all routes that will match :path pattern.
+   *
+   * It's a sugar syntax for building such matcher in `metadata.route`.
+   */
+  public layout<U>(
+    path: string,
+    rawProvider: PluginProvider<U> | ((tk: PluginProviderHooks<T>) => PluginProvider<U>),
+    metadata: PluginProviderMetadata<T> = {}
+  ): PluginBuilder<T> {
+    const match = getPathPatternMatcher(path);
+    return this.provider(rawProvider, {
+      ...metadata,
+      route: metadata.route ? route => match(route.path) && metadata.route!(route) : route => match(route.path),
     });
   }
 
@@ -105,8 +135,8 @@ export class PluginBuilder<T extends PluginState> {
     data: {[K in keyof AppendData<T, U>['data']]: AppendData<T, U>['data'][K]};
     externalSlots: T['externalSlots'];
     externalData: T['externalData'];
-    outerSlots: T['outerSlots'];
-    outerData: T['outerData'];
+    optionalSlots: T['optionalSlots'];
+    optionalData: T['optionalData'];
   }> {
     return new PluginBuilder({
       ...this.plugin,
@@ -126,8 +156,8 @@ export class PluginBuilder<T extends PluginState> {
     data: {[K in keyof JoinState<T, U>['data']]: JoinState<T, U>['data'][K]};
     externalSlots: T['externalSlots'];
     externalData: T['externalData'];
-    outerSlots: T['outerSlots'];
-    outerData: T['outerData'];
+    optionalSlots: T['optionalSlots'];
+    optionalData: T['optionalData'];
   }> {
     return new PluginBuilder({
       ...this.plugin,
@@ -149,8 +179,8 @@ export class PluginBuilder<T extends PluginState> {
     data: T['data'];
     externalSlots: {[K in keyof JoinExternalState<T, U>['externalSlots']]: JoinExternalState<T, U>['externalSlots'][K]};
     externalData: {[K in keyof JoinExternalState<T, U>['externalData']]: JoinExternalState<T, U>['externalData'][K]};
-    outerSlots: T['outerSlots'];
-    outerData: T['outerData'];
+    optionalSlots: T['optionalSlots'];
+    optionalData: T['optionalData'];
   }> {
     return new PluginBuilder({
       ...this.plugin,
@@ -160,12 +190,11 @@ export class PluginBuilder<T extends PluginState> {
   }
 
   /**
-   * Declare using data and slots from the plugin of outer scope.
+   * Declare using data and slots that are optional.
    *
-   * That won't trigger warnings neither when plugin not found,
-   * nor when it is declared above the current plugin system context.
+   * That won't trigger warnings neither when plugin not found.
    */
-  public outer<U extends PluginState>(
+  public optional<U extends PluginState>(
     state: U
   ): PluginBuilder<{
     config: T['config'];
@@ -174,13 +203,13 @@ export class PluginBuilder<T extends PluginState> {
     data: T['data'];
     externalSlots: T['externalSlots'];
     externalData: T['externalData'];
-    outerSlots: {[K in keyof JoinOuterState<T, U>['outerSlots']]: JoinOuterState<T, U>['outerSlots'][K]};
-    outerData: {[K in keyof JoinOuterState<T, U>['outerData']]: JoinOuterState<T, U>['outerData'][K]};
+    optionalSlots: {[K in keyof JoinOuterState<T, U>['optionalSlots']]: JoinOuterState<T, U>['optionalSlots'][K]};
+    optionalData: {[K in keyof JoinOuterState<T, U>['optionalData']]: JoinOuterState<T, U>['optionalData'][K]};
   }> {
     return new PluginBuilder({
       ...this.plugin,
-      outerSlots: {...this.plugin.outerSlots, ...state.slots},
-      outerData: {...this.plugin.outerData, ...state.data},
+      optionalSlots: {...this.plugin.optionalSlots, ...state.slots},
+      optionalData: {...this.plugin.optionalData, ...state.data},
     });
   }
 

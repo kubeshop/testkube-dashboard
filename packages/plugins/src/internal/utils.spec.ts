@@ -1,4 +1,4 @@
-import {defaults, pick, shallowEqual} from './utils';
+import {defaults, getPathPatternMatcher, pick, shallowEqual} from './utils';
 
 describe('plugins', () => {
   describe('pick', () => {
@@ -71,6 +71,21 @@ describe('plugins', () => {
         b2: 'value',
         b3: 'value',
       });
+    });
+  });
+
+  describe('getPathPatternMatcher', () => {
+    const match = (a: string, b: string) => getPathPatternMatcher(a)(b);
+
+    it('should work properly match paths', () => {
+      expect(match('/a/b', '/a/b')).toBe(true);
+      expect(match('/a/:var', '/a/b')).toBe(true);
+      expect(match('/a/:var1', '/a/:var2')).toBe(true);
+      expect(match('/a/b', '/a/:var2')).toBe(false);
+      expect(match('/a/b', '/a')).toBe(false);
+      expect(match('/something/else', '/something/else/nested')).toBe(false);
+      expect(match('/something/else/*', '/something/else/nested')).toBe(true);
+      expect(match('/something/else/*', '/something/else/nested/even/deeper')).toBe(true);
     });
   });
 });

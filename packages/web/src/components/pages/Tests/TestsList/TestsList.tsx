@@ -1,4 +1,5 @@
 import {FC, useCallback} from 'react';
+import {useUnmount} from 'react-use';
 
 import {ExternalLink} from '@atoms';
 
@@ -36,6 +37,10 @@ const PageDescription: FC = () => (
 const TestsList: FC = () => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
+
+  useUnmount(() => {
+    setFilters({...filters, pageSize: initialFilters.pageSize});
+  });
 
   const {
     data: tests,

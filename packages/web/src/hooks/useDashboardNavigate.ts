@@ -1,7 +1,6 @@
-import {useContext} from 'react';
 import {NavigateOptions, To} from 'react-router';
 
-import {DashboardContext} from '@contexts';
+import {useRouterPlugin} from '@plugins/router/hooks';
 
 import {useLastCallback} from './useLastCallback';
 
@@ -14,7 +13,7 @@ export function useDashboardNavigate(
   to: To | ((...args: any) => To | number) | number,
   options?: NavigateOptions
 ): (...args: any) => void {
-  const {navigate} = useContext(DashboardContext);
+  const navigate = useRouterPlugin.select(x => x.navigate);
   const build = typeof to === 'function' ? to : () => to;
   return useLastCallback((...args) => navigate(build(...args) as any, options));
 }

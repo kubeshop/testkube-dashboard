@@ -6,6 +6,7 @@ import {createPluginScopeMock} from '../test/createPluginScopeMock';
 
 import {createUseData, createUseSlot, createUseSlotFirst} from './hooks';
 import {PluginScopeContext} from './internal/PluginScopeProvider';
+import {PluginScopeAttachProducer, PluginScopeDestroy} from './internal/symbols';
 
 const useRenderCount = () => {
   const ref = useRef(0);
@@ -298,6 +299,64 @@ describe('plugins', () => {
         });
         expect(result.current).toEqual([]);
       });
+
+      it('should re-render when added a new item', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1');
+
+        const {result} = renderHook(() => [useRenderCount(), useSlot('slot1')], {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        await act(async () => {
+          root.slots.slot1.add('value2');
+          await frame();
+        });
+        expect(result.current).toEqual([2, ['value1', 'value2']]);
+      });
+
+      it('should re-render when deleted an item', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1');
+        root.slots.slot1[PluginScopeAttachProducer]({}).add('value2');
+
+        const {result} = renderHook(() => [useRenderCount(), useSlot('slot1')], {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        await act(async () => {
+          root.slots.slot1[PluginScopeDestroy](root);
+          await frame();
+        });
+        expect(result.current).toEqual([2, ['value2']]);
+      });
+
+      it('should not re-render when deleted a disabled item', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1', {enabled: false});
+        root.slots.slot1[PluginScopeAttachProducer]({}).add('value2');
+
+        const {result} = renderHook(() => [useRenderCount(), useSlot('slot1')], {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        await act(async () => {
+          root.slots.slot1[PluginScopeDestroy](root);
+          await frame();
+        });
+        expect(result.current).toEqual([1, ['value2']]);
+      });
+
+      it('should not re-render when adding a disabled item', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1');
+
+        const {result} = renderHook(() => [useRenderCount(), useSlot('slot1')], {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        await act(async () => {
+          root.slots.slot1.add('value2', {enabled: false});
+          await frame();
+        });
+        expect(result.current).toEqual([1, ['value1']]);
+      });
     });
 
     describe('useSlotFirst', () => {
@@ -317,6 +376,64 @@ describe('plugins', () => {
           wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
         });
         expect(result.current).toEqual(undefined);
+      });
+
+      it('should re-render when added a new first item', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1');
+
+        const {result} = renderHook(() => [useRenderCount(), useSlotFirst('slot1')], {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        await act(async () => {
+          root.slots.slot1.add('value2', {order: -1});
+          await frame();
+        });
+        expect(result.current).toEqual([2, 'value2']);
+      });
+
+      it('should re-render when deleted a first item', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1');
+        root.slots.slot1[PluginScopeAttachProducer]({}).add('value2');
+
+        const {result} = renderHook(() => [useRenderCount(), useSlotFirst('slot1')], {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        await act(async () => {
+          root.slots.slot1[PluginScopeDestroy](root);
+          await frame();
+        });
+        expect(result.current).toEqual([2, 'value2']);
+      });
+
+      it('should not re-render when added a new item, but it is not first', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1');
+
+        const {result} = renderHook(() => [useRenderCount(), useSlotFirst('slot1')], {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        await act(async () => {
+          root.slots.slot1.add('value2');
+          await frame();
+        });
+        expect(result.current).toEqual([1, 'value1']);
+      });
+
+      it('should not re-render when deleted an item, but it is not first', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1[PluginScopeAttachProducer]({}).add('value1');
+        root.slots.slot1.add('value2');
+
+        const {result} = renderHook(() => [useRenderCount(), useSlotFirst('slot1')], {
+          wrapper: ({children}) => <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>,
+        });
+        await act(async () => {
+          root.slots.slot1[PluginScopeDestroy](root);
+          await frame();
+        });
+        expect(result.current).toEqual([1, 'value1']);
       });
     });
   });

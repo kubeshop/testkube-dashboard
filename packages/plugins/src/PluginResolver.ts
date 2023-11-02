@@ -37,8 +37,8 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     data: T['data'] & GetPluginState<U>['data'];
     externalSlots: T['externalSlots'] & GetPluginState<U>['externalSlots'];
     externalData: T['externalData'] & GetPluginState<U>['externalData'];
-    outerSlots: T['outerSlots'] & GetPluginState<U>['outerSlots'];
-    outerData: T['outerData'] & GetPluginState<U>['outerData'];
+    optionalSlots: T['optionalSlots'] & GetPluginState<U>['optionalSlots'];
+    optionalData: T['optionalData'] & GetPluginState<U>['optionalData'];
   }> {
     // TODO: Shouldn't allow to have multiple instances of the same plugin?
     if (this.plugins.some(x => x.plugin === plugin)) {
@@ -73,6 +73,8 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     const initialData: Partial<RootScopeType['data']> = {};
     const staticProviders: PluginProviderContainer<any, T>[] = [];
     const dynamicProviders: PluginProviderContainer<any, T>[] = [];
+    const staticLayouts: PluginProviderContainer<any, T>[] = [];
+    const dynamicLayouts: PluginProviderContainer<any, T>[] = [];
     const routes: PluginRoute[] = [];
     const warnings: string[] = [];
     const plugins = this.plugins.map(x => x.plugin);
@@ -87,23 +89,27 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     };
 
     // Detect sources of different resources
-    const {slots: slotSource, data: dataSource, outerData, outerSlots} = detectResources(plugins);
+    const {slots: slotSource, data: dataSource, optionalData, optionalSlots} = detectResources(plugins);
 
     // Detect direct dependencies for each plugin
     const {hard: deps, loose: looseDeps} = detectDirectDependencies(plugins);
 
-    // Detect missing and duplicated slots & data
+    // Detect duplicated slots & data
+    const missingSlots: Record<string, string[]> = {};
+    const missingData: Record<string, string[]> = {};
     plugins.forEach(plugin => {
       const config = plugin[PluginDetails];
       Object.keys(config.externalData)
         .filter(name => !dataSource[name])
         .forEach(name => {
-          warnings.push(`${config.name}: required "${name}" data is not registered.`);
+          missingData[name] = missingData[name] || [];
+          missingData[name].push(config.name);
         });
       Object.keys(config.externalSlots)
         .filter(name => !slotSource[name])
         .forEach(name => {
-          warnings.push(`${config.name}: required "${name}" slot is not registered.`);
+          missingSlots[name] = missingSlots[name] || [];
+          missingSlots[name].push(config.name);
         });
       Object.keys(config.data)
         .filter(name => dataSource[name].length > 1)
@@ -142,8 +148,20 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       });
 
       // Group providers
-      const ownStaticProviders = next.plugin[PluginDetails].providers.filter(x => !x.metadata.enabled);
-      const ownDynamicProviders = next.plugin[PluginDetails].providers.filter(x => x.metadata.enabled);
+      const {providers} = next.plugin[PluginDetails];
+      const ownStaticProviders = providers.filter(({metadata: m}) => !m.route && !m.enabled);
+      const ownDynamicProviders = providers.filter(({metadata: m}) => !m.route && m.enabled);
+      const ownStaticLayouts = providers.filter(({metadata: m}) => m.route && !m.enabled);
+      const ownDynamicLayouts = providers.filter(({metadata: m}) => m.route && m.enabled);
+
+      // Include layouts
+      staticLayouts.push(...ownStaticLayouts);
+      dynamicLayouts.push(
+        ...ownDynamicLayouts.map(layout => ({
+          provider: {type: ConditionalProvider, props: {provider: layout}},
+          metadata: layout.metadata,
+        }))
+      );
 
       // Include dependencies
       staticProviders.push(...ownStaticProviders);
@@ -164,24 +182,39 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
       Object.assign(initialData, {...next.plugin[PluginDetails].data});
     }
 
-    if (warnings.length > 0) {
-      // eslint-disable-next-line no-console
-      console.warn(`Detected problems with plugins:\n${warnings.join('\n')}`);
-    }
-
     // TODO: Consider registering in the parent scope,
     //       so the destroy & events would be propagated from there too.
     //       ...
     //       Alternatively, the lower scope could listen to events,
     //       and just transfer them down.
     const initialize = (parent: PluginScope<any> | null = null) => {
+      const localWarnings = [...warnings];
+      Object.entries(missingData).forEach(([key, names]) => {
+        if (!parent || !(key in parent.data)) {
+          names.forEach(name => {
+            localWarnings.push(`${name}: required "${key}" data is not registered.`);
+          });
+        }
+      });
+      Object.entries(missingSlots).forEach(([key, names]) => {
+        if (!parent || !(key in parent.slots)) {
+          names.forEach(name => {
+            localWarnings.push(`${name}: required "${key}" slot is not registered.`);
+          });
+        }
+      });
+      if (localWarnings.length > 0) {
+        // eslint-disable-next-line no-console
+        console.warn(`Detected problems with plugins:\n${localWarnings.join('\n')}`);
+      }
+
       const root: RootScopeType = new PluginScope(parent, {
-        slots: Object.keys(slotSource) as any,
-        data: Object.keys(dataSource) as any,
-        inheritedData: [],
-        inheritedSlots: outerSlots,
-        outerSlots: [],
-        inheritedReadonlyData: outerData,
+        slots: Object.keys(slotSource).filter(key => !missingSlots[key]) as any,
+        data: Object.keys(dataSource).filter(key => !missingData[key]) as any,
+        inheritedData: Object.keys(missingData),
+        inheritedSlots: optionalSlots.concat(Object.keys(missingSlots)),
+        optionalSlots: [],
+        inheritedReadonlyData: optionalData,
       });
       Object.keys(initialData).forEach((key: keyof RootScopeType['data']) => {
         root.data[key] = initialData[key]!;
@@ -191,22 +224,27 @@ export class PluginResolver<T extends PluginState = EmptyPluginState> {
     };
 
     // Sort the providers
-    staticProviders.sort((a, b) =>
-      (a.metadata.order || 0) === (b.metadata.order || 0)
-        ? 0
-        : (a.metadata.order || 0) > (b.metadata.order || 0)
-        ? 1
-        : -1
-    );
-    dynamicProviders.sort((a, b) =>
-      (a.metadata.order || 0) === (b.metadata.order || 0)
-        ? 0
-        : (a.metadata.order || 0) > (b.metadata.order || 0)
-        ? 1
-        : -1
-    );
+    const orderCmp = (
+      {metadata: {order: o1 = 0}}: {metadata: {order?: number}},
+      {metadata: {order: o2 = 0}}: {metadata: {order?: number}}
+    ) => (o1 === o2 ? 0 : o1 > o2 ? 1 : -1);
+    staticProviders.sort(orderCmp);
+    dynamicProviders.sort(orderCmp);
+    staticLayouts.sort(orderCmp);
+    dynamicLayouts.sort(orderCmp);
 
     const providers = staticProviders.concat(dynamicProviders);
+    const layouts = staticLayouts.concat(dynamicLayouts);
+
+    // Apply route layouts
+    routes.forEach((route, index) => {
+      const ownLayouts = layouts.filter(x => x.metadata.route!(route));
+      let current = route.element;
+      for (let i = ownLayouts.length - 1; i >= 0; i -= 1) {
+        current = createElement(ownLayouts[i].provider.type, ownLayouts[i].provider.props, current);
+      }
+      routes[index] = {...route, element: current};
+    });
 
     const Provider: FC<PropsWithChildren<{root: RootScopeType}>> = ({root, children}) => {
       let current = children;

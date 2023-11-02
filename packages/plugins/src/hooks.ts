@@ -77,19 +77,46 @@ export const createUseData = <T extends Plugin<any>>() => {
   });
 };
 
-export const createUseSlot =
-  <T extends Plugin<any>>() =>
-  <K extends keyof GetSlots<GetPluginState<T>>>(key: K): GetSlots<GetPluginState<T>>[K][] => {
-    const results = usePluginScope<T>().slots[key]?.allRaw();
+export const createUseSlot = <T extends Plugin<any>>() => {
+  const useSubscription = createUseSubscription();
+  return <K extends keyof GetSlots<GetPluginState<T>>>(key: K): GetSlots<GetPluginState<T>>[K][] => {
+    const [incr, setIncr] = useState(0);
+    const scope = usePluginScope<T>();
     const resultsRef = useRef<PluginSlotContainer<T>[]>();
-    if (results?.length !== resultsRef.current?.length || resultsRef.current?.some((x, i) => results![i] !== x)) {
-      resultsRef.current = results;
-    }
+    const updateResults = () => {
+      const results = scope.slots[key]?.allRaw();
+      if (results?.length !== resultsRef.current?.length || resultsRef.current?.some((x, i) => results![i] !== x)) {
+        resultsRef.current = results;
+      }
+    };
+    updateResults();
+    useSubscription(() => {
+      const prevResults = resultsRef.current;
+      updateResults();
+      if (prevResults !== resultsRef.current) {
+        setIncr((incr + 1) % 10000);
+      }
+    });
+
     return useMemo(() => resultsRef.current?.map(x => x.value) || [], [resultsRef.current]);
   };
+};
 
-export const createUseSlotFirst =
-  <T extends Plugin<any>>() =>
-  <K extends keyof GetSlots<GetPluginState<T>>>(key: K): GetSlots<GetPluginState<T>>[K] | undefined =>
-    usePluginScope<T>().slots[key]?.first();
+export const createUseSlotFirst = <T extends Plugin<any>>() => {
+  const useSubscription = createUseSubscription();
+  return <K extends keyof GetSlots<GetPluginState<T>>>(key: K): GetSlots<GetPluginState<T>>[K] | undefined => {
+    const [incr, setIncr] = useState(0);
+    const prevRef = useRef<GetSlots<GetPluginState<T>>[K] | undefined>();
+    const scope = usePluginScope<T>();
+    prevRef.current = scope.slots[key]?.first();
+    useSubscription(() => {
+      const nextValue = scope.slots[key]?.first();
+      if (nextValue !== prevRef.current) {
+        prevRef.current = nextValue;
+        setIncr((incr + 1) % 10000);
+      }
+    });
+    return prevRef.current;
+  };
+};
 // TODO: createUseRoute

@@ -1,7 +1,7 @@
-import React, {FC, useContext} from 'react';
+import React, {FC} from 'react';
 import {Helmet} from 'react-helmet';
 
-import {ConfigContext} from '@contexts';
+import {useConfigPlugin} from '@plugins/config/hooks';
 
 interface HeadProps {
   title?: string;
@@ -9,7 +9,7 @@ interface HeadProps {
 }
 
 const PageMetadata: FC<HeadProps> = ({title, description}) => {
-  const {pageTitle: mainPageTitle} = useContext(ConfigContext);
+  const mainPageTitle = useConfigPlugin.select(x => x.pageTitle);
   return (
     <Helmet>
       <title>{title ? `${title} | ${mainPageTitle}` : mainPageTitle}</title>

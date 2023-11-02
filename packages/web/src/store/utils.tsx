@@ -1,4 +1,14 @@
-import {Context, FC, PropsWithChildren, createContext, useCallback, useContext, useLayoutEffect, useMemo} from 'react';
+import {
+  Context,
+  FC,
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {useLatest} from 'react-use';
 
 import {capitalize, pick} from 'lodash';
@@ -11,7 +21,7 @@ type HasAnyKeys<T, K extends string | number | symbol, True, False> = keyof T ex
   ? False
   : True;
 
-type Store<T> = StoreApi<T>;
+type Store<T> = StoreApi<T> & {reset: (stateOverrides?: Partial<T>) => void};
 type StoreFn<T> = () => Store<T>;
 
 type StoreFactory<T> = (initialState?: Partial<T>) => Store<T>;
@@ -20,6 +30,7 @@ type StoreContextProvider = FC<PropsWithChildren<{}>>;
 
 type StoreGet<T> = <U>(selector: (state: T) => U) => U;
 type StoreSync<T> = (data: Partial<T>) => boolean;
+type StoreReset<T> = (data?: Partial<T>, deps?: any[]) => void;
 type StoreSetValue<T, K extends keyof T> = (value: T[K] | ((prev: T[K], state: T) => T[K])) => void;
 type StoreSetFactory<T> = <K extends keyof T>(key: K) => StoreSetValue<T, K>;
 type StoreField<T, K extends keyof T> = [T[K], StoreSetValue<T, K>];
@@ -37,12 +48,23 @@ const internalSet = <T, K extends keyof T>(api: StoreApi<T>, state: T, key: K, v
 
 export const createStoreFactory =
   <T,>(name: string, createSlice: StateCreator<T>): StoreFactory<T> =>
-  (initialState?) =>
-    create<T>()(
+  (initialState?) => {
+    const resetStoreSymbol = Symbol('reset store to initial state');
+    const store = create<T>()(
       devtools(
         (...a) => ({
           ...createSlice(...a),
           ...initialState,
+          [resetStoreSymbol]: (stateOverrides: Partial<T>) =>
+            a[0](
+              {
+                ...createSlice(...a),
+                ...initialState,
+                ...stateOverrides,
+                [resetStoreSymbol]: (a[1]() as any)[resetStoreSymbol],
+              },
+              true
+            ),
         }),
         {
           name: `${name} - Zustand Store`,
@@ -50,6 +72,10 @@ export const createStoreFactory =
         }
       )
     );
+    return Object.assign(store, {
+      reset: (stateOverrides: Partial<T> = {}) => (store.getState() as any)[resetStoreSymbol](stateOverrides),
+    });
+  };
 
 class StoreFactoryBuilder<T> {
   private readonly name: string;
@@ -131,19 +157,32 @@ const createUseStoreField =
   key =>
     [createUseStoreGet(useStore)(state => state[key]), createUseStoreSetter(useStore)(key)];
 
+const createUseStoreReset =
+  <T,>(useStore: StoreFn<T>): StoreReset<T> =>
+  (stateOverrides, deps = []) => {
+    const store = useStore();
+    useLayoutEffect(() => store.reset(stateOverrides), deps);
+  };
+
 const createStoreHooks = <T,>(useStore: StoreFn<T>) => ({
+  useInstance: useStore,
   use: createUseStoreGet(useStore),
   useField: createUseStoreField(useStore),
   pick: createUseStorePick(useStore),
   sync: createUseStoreSync(useStore),
+  reset: createUseStoreReset(useStore),
 });
 
 export const connectStore = <T,>(createStore: StoreFactory<T>) => {
   const StoreContext = createStoreContext<T>();
 
   const useInitializeStore = (initialState?: Partial<T>, deps: any[] = []) => {
+    // Set up helper for resetting the store
+    const [incr, setIncr] = useState(0);
+    const reset = () => setIncr(Math.random());
+
     // Build the store
-    const store = useMemo(() => createStore(initialState), deps);
+    const store = useMemo(() => Object.assign(createStore(initialState), reset), [...deps, incr]);
     const storeRef = useLatest(store);
 
     const Provider: StoreContextProvider = useMemo(

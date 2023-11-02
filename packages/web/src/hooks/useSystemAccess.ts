@@ -1,6 +1,4 @@
-import {useContext} from 'react';
-
-import {MainContext} from '@contexts';
+import {useClusterStatusPlugin} from '@plugins/cluster-status/hooks';
 
 export enum SystemAccess {
   offline = 0,
@@ -9,7 +7,10 @@ export enum SystemAccess {
 }
 
 const useCurrentSystemAccess = () => {
-  const {isSystemAvailable, isClusterAvailable} = useContext(MainContext);
+  const {isSystemAvailable, isClusterAvailable} = useClusterStatusPlugin.pick(
+    'isSystemAvailable',
+    'isClusterAvailable'
+  );
   if (!isSystemAvailable) {
     return SystemAccess.offline;
   }

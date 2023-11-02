@@ -15,8 +15,8 @@ describe('plugins', () => {
       expect(detectResources(plugins)).toEqual({
         slots: {slot1: [plugins[0], plugins[1]], slot2: [plugins[0]], slot3: [plugins[1]], slot4: [plugins[3]]},
         data: {key1: [plugins[0], plugins[1]], key2: [plugins[0]], key3: [plugins[1]], key4: [plugins[2]]},
-        outerSlots: [],
-        outerData: [],
+        optionalSlots: [],
+        optionalData: [],
       });
     });
 
@@ -27,16 +27,16 @@ describe('plugins', () => {
         createPlugin('test-name-3').define(data()('key4')).init(),
         createPlugin('test-name-4')
           .define(slot()('slot4'))
-          .outer(data()('key3', 'key5'))
-          .outer(slot()('slot3', 'slot5'))
+          .optional(data()('key3', 'key5'))
+          .optional(slot()('slot3', 'slot5'))
           .init(),
       ];
       expect(detectResources(plugins)).toEqual({
         slots: {slot1: [plugins[0], plugins[1]], slot2: [plugins[0]], slot3: [plugins[1]], slot4: [plugins[3]]},
         data: {key1: [plugins[0], plugins[1]], key2: [plugins[0]], key3: [plugins[1]], key4: [plugins[2]]},
         // Ignore existing `key3`/`slot3` and expose unknown `key5`/`slot5`
-        outerSlots: ['slot5'],
-        outerData: ['key5'],
+        optionalSlots: ['slot5'],
+        optionalData: ['key5'],
       });
     });
   });

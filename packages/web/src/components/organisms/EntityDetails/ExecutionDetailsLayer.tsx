@@ -10,7 +10,7 @@ import {Entity} from '@models/entity';
 
 import {notificationCall} from '@molecules';
 
-import {initializeExecutionDetailsStore} from '@store/executionDetails';
+import {useExecutionDetailsPick, useExecutionDetailsReset, useExecutionDetailsSync} from '@store/executionDetails';
 
 import {isExecutionFinished} from '@utils/isExecutionFinished';
 import {PollingIntervals} from '@utils/numbers';
@@ -30,7 +30,7 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
   useGetExecutionDetails,
   children,
 }) => {
-  const [ExecutionStoreProvider, {pick, sync}] = initializeExecutionDetailsStore(
+  useExecutionDetailsReset(
     {
       id: execId,
       open: useDashboardNavigate((targetId: string) => `/${entity}/${id}/executions/${targetId}`),
@@ -41,7 +41,7 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
 
   const isClusterAvailable = useSystemAccess(SystemAccess.system);
 
-  const {data} = pick('data');
+  const {data} = useExecutionDetailsPick('data');
   const {data: rawFetchedData, error} = useGetExecutionDetails(execId!, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable || !execId || (data?.id === execId && isExecutionFinished(data)),
@@ -49,7 +49,7 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
   const fetchedData = rawFetchedData?.id === execId ? rawFetchedData : null;
   const isV2 = isTestSuiteV2Execution(fetchedData);
   const result = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(fetchedData) : fetchedData), [fetchedData]);
-  sync({data: result, error});
+  useExecutionDetailsSync({data: result, error});
 
   useEffect(() => {
     if (error) {
@@ -64,7 +64,7 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
     }
   }, [error]);
 
-  return <ExecutionStoreProvider>{children}</ExecutionStoreProvider>;
+  return <>{children}</>;
 };
 
 export default ExecutionDetailsLayer;

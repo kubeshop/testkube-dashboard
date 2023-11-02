@@ -50,7 +50,7 @@ const domOrderFor = (prefix: string, element: HTMLElement): string[] => {
   const arr: string[] = [];
   let container: HTMLElement | null = element;
   while (container) {
-    container = container.querySelector(`[data-testid^=${prefix}]`);
+    container = container.querySelector(prefix ? `[data-testid^=${prefix}]` : '[data-testid]');
     if (container) {
       arr.push(container.getAttribute('data-testid')!.substring(prefix.length));
     }
@@ -148,7 +148,7 @@ describe('plugins', () => {
         p('name3', 500),
         p('name2', 0, $ => $.define(data()('value'))),
         p('name1', -300, $ => $.needs(slot()('slot'))),
-        p('name0', -Infinity, $ => $.outer(data()('value'))),
+        p('name0', -Infinity, $ => $.optional(data()('value'))),
         p('name4', Infinity, $ => $.define(slot()('slot'))),
       ];
       const resolver = create(plugins);
@@ -217,7 +217,8 @@ describe('plugins', () => {
         p('name2', 0, $ => $.needs(slot()('slot4'))),
       ];
       const resolver = create(plugins);
-      resolver.resolve();
+      const [, {initialize}] = resolver.resolve();
+      initialize();
 
       expect(warnSpy).toHaveBeenCalledWith(
         'Detected problems with plugins:\nname1: required "slot3" slot is not registered.\nname2: required "slot4" slot is not registered.'
@@ -233,24 +234,70 @@ describe('plugins', () => {
         p('name2', 0, $ => $.needs(data()('value4'))),
       ];
       const resolver = create(plugins);
-      resolver.resolve();
+      const [, {initialize}] = resolver.resolve();
+      initialize();
 
       expect(warnSpy).toHaveBeenCalledWith(
         'Detected problems with plugins:\nname1: required "value3" data is not registered.\nname2: required "value4" data is not registered.'
       );
     });
 
-    it('should not detect missing data or slots for outer modules', () => {
+    it('should not detect missing data or slots for optional modules', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
 
       const plugins = [
-        p('name0', 500, $ => $.outer(data()('value1', 'value2'))),
-        p('name1', 0, $ => $.outer(slot()('slot1', 'slot3'))),
+        p('name0', 500, $ => $.optional(data()('value1', 'value2'))),
+        p('name1', 0, $ => $.optional(slot()('slot1', 'slot3'))),
       ];
       const resolver = create(plugins);
-      resolver.resolve();
+      const [, {initialize}] = resolver.resolve();
+      initialize();
 
       expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not detect missing data or slots when these are declared above modules', () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
+
+      const rootPlugins = [
+        p('name0', 500, $ => $.define(data()('value1', 'value2'))),
+        p('name1', 0, $ => $.define(slot()('slot1', 'slot2'))),
+      ];
+      const [, {initialize: initializeRoot}] = create(rootPlugins).resolve();
+      const root = initializeRoot();
+
+      const plugins = [
+        p('name2', 500, $ => $.needs(data()('value1', 'value2'))),
+        p('name3', 0, $ => $.needs(slot()('slot1', 'slot2'))),
+      ];
+      const resolver = create(plugins);
+      const [, {initialize}] = resolver.resolve();
+      initialize(root);
+
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('should detect missing data or slots when part is not declared in above modules', () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation().mockClear();
+
+      const rootPlugins = [
+        p('name0', 500, $ => $.define(data()('value1'))),
+        p('name1', 0, $ => $.define(slot()('slot1'))),
+      ];
+      const [, {initialize: initializeRoot}] = create(rootPlugins).resolve();
+      const root = initializeRoot();
+
+      const plugins = [
+        p('name2', 500, $ => $.needs(data()('value1', 'value2'))),
+        p('name3', 0, $ => $.needs(slot()('slot1', 'slot2'))),
+      ];
+      const resolver = create(plugins);
+      const [, {initialize}] = resolver.resolve();
+      initialize(root);
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Detected problems with plugins:\nname2: required "value2" data is not registered.\nname3: required "slot2" slot is not registered.'
+      );
     });
 
     it('should detect circular dependencies', () => {
@@ -261,7 +308,8 @@ describe('plugins', () => {
         p('name1', 0, $ => $.define(data()('value2')).needs(data()('value1'))),
       ];
       const resolver = create(plugins);
-      resolver.resolve();
+      const [, {initialize}] = resolver.resolve();
+      initialize();
 
       expect(warnSpy).toHaveBeenCalledWith(
         'Detected problems with plugins:\ncircular dependency: name1 ➟ name0\ncircular dependency: name0 ➟ name1'
@@ -409,8 +457,8 @@ describe('plugins', () => {
 
       // Prepare lower scope
       const lowerPlugin = createPlugin('lower')
-        .outer(rootStub.data('rootKey'))
-        .outer(rootStub.slots('rootSlot'))
+        .optional(rootStub.data('rootKey'))
+        .optional(rootStub.slots('rootSlot'))
         .data({key1: 'value2'})
         .define(slot<string>()('slot1'))
         .init(tk => {
@@ -447,8 +495,8 @@ describe('plugins', () => {
 
     // Prepare lower scope
     const lowerPlugin = createPlugin('lower')
-      .outer(rootStub.data('rootKey'))
-      .outer(rootStub.slots('rootSlot'))
+      .optional(rootStub.data('rootKey'))
+      .optional(rootStub.slots('rootSlot'))
       .data({key1: 'value2'})
       .define(slot<string>()('slot1'))
       .init(tk => {
@@ -485,8 +533,8 @@ describe('plugins', () => {
 
     // Prepare lower scope
     const lowerPlugin = createPlugin('lower')
-      .outer(rootStub.data('rootKey'))
-      .outer(rootStub.slots('rootSlot'))
+      .optional(rootStub.data('rootKey'))
+      .optional(rootStub.slots('rootSlot'))
       .data({key1: 'value2'})
       .define(slot<string>()('slot1'))
       .init(tk => {
@@ -594,12 +642,74 @@ describe('plugins', () => {
     ]);
   });
 
+  it('should apply route providers to the route', () => {
+    const plugin1 = createPlugin('plugin1')
+      .provider(mockProvider('p-1'), {route: route => /^\/prefix/.test(route.path), enabled: () => true})
+      .provider(mockProvider('p-2'), {route: route => /^\/prefix\/another/.test(route.path)})
+      .provider(mockProvider('p-3'), {route: route => /^\/prefix/.test(route.path)})
+      .route('/prefix/something', r('something'))
+      .init();
+    const plugin2 = createPlugin('plugin1')
+      .route('/prefix/another', r('another'))
+      .route('/prefix/xyz', r('xyz'))
+      .route('/none', r('none'))
+      .init();
+    const [Provider, {initialize, routes}] = new PluginResolver().register(plugin1).register(plugin2).resolve();
+    const scope = initialize();
+    const resultBare = render(<Provider root={scope} />);
+    const resultSomething = render(
+      <Provider root={scope}>{routes.find(x => x.path === '/prefix/something')!.element}</Provider>
+    );
+    const resultAnother = render(
+      <Provider root={scope}>{routes.find(x => x.path === '/prefix/another')!.element}</Provider>
+    );
+    const resultXyz = render(<Provider root={scope}>{routes.find(x => x.path === '/prefix/xyz')!.element}</Provider>);
+    const resultNone = render(<Provider root={scope}>{routes.find(x => x.path === '/none')!.element}</Provider>);
+
+    expect(domOrderFor('', resultBare.container)).toEqual([]);
+    expect(domOrderFor('', resultSomething.container)).toEqual(['p-3', 'p-1', 'route-something']);
+    expect(domOrderFor('', resultAnother.container)).toEqual(['p-2', 'p-3', 'p-1', 'route-another']);
+    expect(domOrderFor('', resultXyz.container)).toEqual(['p-3', 'p-1', 'route-xyz']);
+    expect(domOrderFor('', resultNone.container)).toEqual(['route-none']);
+  });
+
+  it('should apply route providers to the route (layout())', () => {
+    const plugin1 = createPlugin('plugin1')
+      .layout('/prefix/*', mockProvider('p-1'), {enabled: () => true})
+      .layout('/prefix/another', mockProvider('p-2'))
+      .layout('/prefix/*', mockProvider('p-3'))
+      .route('/prefix/something', r('something'))
+      .init();
+    const plugin2 = createPlugin('plugin1')
+      .route('/prefix/another', r('another'))
+      .route('/prefix/xyz', r('xyz'))
+      .route('/none', r('none'))
+      .init();
+    const [Provider, {initialize, routes}] = new PluginResolver().register(plugin1).register(plugin2).resolve();
+    const scope = initialize();
+    const resultBare = render(<Provider root={scope} />);
+    const resultSomething = render(
+      <Provider root={scope}>{routes.find(x => x.path === '/prefix/something')!.element}</Provider>
+    );
+    const resultAnother = render(
+      <Provider root={scope}>{routes.find(x => x.path === '/prefix/another')!.element}</Provider>
+    );
+    const resultXyz = render(<Provider root={scope}>{routes.find(x => x.path === '/prefix/xyz')!.element}</Provider>);
+    const resultNone = render(<Provider root={scope}>{routes.find(x => x.path === '/none')!.element}</Provider>);
+
+    expect(domOrderFor('', resultBare.container)).toEqual([]);
+    expect(domOrderFor('', resultSomething.container)).toEqual(['p-3', 'p-1', 'route-something']);
+    expect(domOrderFor('', resultAnother.container)).toEqual(['p-2', 'p-3', 'p-1', 'route-another']);
+    expect(domOrderFor('', resultXyz.container)).toEqual(['p-3', 'p-1', 'route-xyz']);
+    expect(domOrderFor('', resultNone.container)).toEqual(['route-none']);
+  });
+
   it('should allow reading the scope in the provider definition', () => {
     const Context = createContext<any>(null);
     const Reader: FC = () => <div data-testid={useContext(Context)} />;
     const plugin = createPlugin('plugin')
       .data({value: 'some1'})
-      .provider(tk => <Context.Provider value={tk.data.value} />)
+      .provider(({useData}) => <Context.Provider value={useData.select(x => x.value)} />)
       .init();
     const [Provider, {initialize}] = new PluginResolver().register(plugin).resolve();
     const scope = initialize();

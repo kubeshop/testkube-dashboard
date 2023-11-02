@@ -1,21 +1,26 @@
 import {renderHook} from '@testing-library/react';
 
-import MainContext from '@contexts/MainContext';
-
-import {mockMainContextValue} from '@src/utils/mocks';
+import {PluginScopeMockProvider} from '@testkube/plugins/test';
 
 import useClusterVersionMatch from './useClusterVersionMatch';
 
 describe('useClusterVersionMatch', () => {
-  const wrapper = ({children}: {children: any}) => (
-    <MainContext.Provider value={mockMainContextValue}>{children}</MainContext.Provider>
-  );
+  const createWrapper =
+    (version: string | undefined) =>
+    ({children}: {children: any}) =>
+      (
+        <PluginScopeMockProvider data={{useClusterDetails: (fn: any) => fn({version})}}>
+          {children}
+        </PluginScopeMockProvider>
+      );
 
   it('should return true if the cluster version matches the required version', () => {
     const requiredVersion = 'v1.2.3';
     const clusterVersion = 'v1.2.3';
 
-    const {result} = renderHook(() => useClusterVersionMatch(requiredVersion, clusterVersion), {wrapper});
+    const {result} = renderHook(() => useClusterVersionMatch(requiredVersion), {
+      wrapper: createWrapper(clusterVersion),
+    });
 
     expect(result.current).toBe(true);
   });
@@ -23,24 +28,18 @@ describe('useClusterVersionMatch', () => {
   it('should return false if the cluster version does not match the required version', () => {
     const requiredVersion = 'v1.20.0';
 
-    const {result} = renderHook(() => useClusterVersionMatch(requiredVersion), {wrapper});
+    const {result} = renderHook(() => useClusterVersionMatch(requiredVersion), {wrapper: createWrapper('v1.2.3')});
 
     expect(result.current).toBe(false);
   });
 
   it('should return false if the cluster version does not match the required version', () => {
     const requiredVersion = 'v1.20.0';
-    const defaultClusterVersion = 'v1.19.0';
-    const emptyWrapper = ({children}: {children: any}) => (
-      <MainContext.Provider value={{...mockMainContextValue, clusterVersion: undefined}}>
-        {children}
-      </MainContext.Provider>
-    );
 
-    const {result} = renderHook(() => useClusterVersionMatch(requiredVersion, defaultClusterVersion), {
-      wrapper: emptyWrapper,
+    const {result} = renderHook(() => useClusterVersionMatch(requiredVersion, true), {
+      wrapper: createWrapper(undefined),
     });
 
-    expect(result.current).toBe('v1.19.0');
+    expect(result.current).toBe(true);
   });
 });

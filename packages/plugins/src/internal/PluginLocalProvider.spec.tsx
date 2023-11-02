@@ -16,7 +16,7 @@ describe('plugins', () => {
         data: [],
         inheritedData: [],
         inheritedSlots: [],
-        outerSlots: [],
+        optionalSlots: [],
         inheritedReadonlyData: [],
       });
       const child = root.children(plugin);
@@ -37,7 +37,7 @@ describe('plugins', () => {
         slots: [],
         data: [],
         inheritedData: [],
-        outerSlots: [],
+        optionalSlots: [],
         inheritedSlots: [],
         inheritedReadonlyData: [],
       });

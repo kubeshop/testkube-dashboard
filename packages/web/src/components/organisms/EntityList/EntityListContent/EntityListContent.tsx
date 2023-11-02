@@ -49,7 +49,7 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
     onItemAbort,
   } = props;
 
-  const [isFirstTimeLoading, setFirstTimeLoading] = useState(true);
+  const [isFirstTimeLoading, setFirstTimeLoading] = useState(!data?.length);
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isLoadingNext, setIsLoadingNext] = useState(false);
 
@@ -107,7 +107,9 @@ const EntityListContent: React.FC<EntityListBlueprint> = props => {
   }, [data, isLoading, isFetching]);
 
   useEffect(() => {
-    setFirstTimeLoading(true);
+    if (isLoading) {
+      setFirstTimeLoading(true);
+    }
   }, [entity, apiEndpoint]);
 
   useEffect(() => {

@@ -35,7 +35,7 @@ import type {
 export class PluginScope<T extends PluginScopeState> {
   private readonly [PluginScopeParentScope]: PluginScope<T> | null;
   private readonly [PluginScopeData]: PluginScopeDataRecord<T>;
-  private readonly [PluginScopeSlotData]: Record<string, any> = {};
+  private readonly [PluginScopeSlotData]: Map<string, any> = new Map();
   private readonly [PluginScopeSyncData]: Map<Function, any> = new Map();
   private readonly [PluginScopeChildrenPluginMapScope]: Map<Plugin<any>, PluginScope<any>> = new Map();
   private readonly [PluginScopeChildrenScope]: Set<PluginScope<any>> = new Set();
@@ -50,6 +50,13 @@ export class PluginScope<T extends PluginScopeState> {
     if (parent) {
       parent[PluginScopeRegisterChildrenScope](this);
     }
+
+    // FIXME Hack to watch for slot changes
+    const originalSet = this[PluginScopeSlotData].set.bind(this[PluginScopeSlotData]);
+    this[PluginScopeSlotData].set = (...args) => {
+      this[PluginScopeEmitChange]();
+      return originalSet(...args);
+    };
 
     const ownData: any = {};
     const data: any = {};
@@ -94,7 +101,7 @@ export class PluginScope<T extends PluginScopeState> {
     config.slots.forEach(key => {
       slots[key] = new PluginSlot(key as string, this[PluginScopeSlotData])[PluginScopeAttachProducer](this);
     });
-    config.inheritedSlots.concat(config.outerSlots).forEach(key => {
+    config.inheritedSlots.concat(config.optionalSlots).forEach(key => {
       Object.defineProperty(slots, key, {
         enumerable: true,
         get: () => this[PluginScopeParentScope]?.slots[key]?.[PluginScopeAttachProducer](this),
@@ -187,10 +194,10 @@ export class PluginScope<T extends PluginScopeState> {
       data: [],
       slots: [],
       inheritedSlots: Object.keys(plugin[PluginDetails].slots).concat(Object.keys(plugin[PluginDetails].externalSlots)),
-      outerSlots: Object.keys(plugin[PluginDetails].outerSlots),
+      optionalSlots: Object.keys(plugin[PluginDetails].optionalSlots),
       inheritedData: Object.keys(plugin[PluginDetails].data),
       inheritedReadonlyData: Object.keys(plugin[PluginDetails].externalData).concat(
-        Object.keys(plugin[PluginDetails].outerData)
+        Object.keys(plugin[PluginDetails].optionalData)
       ),
     });
     this[PluginScopeChildrenPluginMapScope].set(plugin, scope);

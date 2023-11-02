@@ -15,6 +15,7 @@ export interface PluginSlotMetadata {
 
 export interface PluginProviderMetadata<T extends PluginState> {
   readonly enabled?: (plugin: PluginScope<PluginScopeStateFor<T>>) => boolean | null | undefined;
+  readonly route?: (route: PluginRoute) => boolean;
   readonly order?: number;
 }
 
@@ -40,6 +41,25 @@ export interface PluginProviderContainer<T, U extends PluginState> {
   metadata: PluginProviderMetadata<U>;
 }
 
+export interface PluginProviderDataHook<T extends PluginState> {
+  (): PluginScopeDataRecord<PluginScopeStateFor<T>>;
+  select<U>(
+    select?: (data: PluginScopeDataRecord<PluginScopeStateFor<T>>) => U,
+    equalityFn?: (prev: U, next: U) => boolean
+  ): U;
+  shallow<U>(select?: (data: PluginScopeDataRecord<PluginScopeStateFor<T>>) => U): U;
+  pick<K extends keyof PluginScopeDataRecord<PluginScopeStateFor<T>>>(
+    ...keys: K[]
+  ): Pick<PluginScopeDataRecord<PluginScopeStateFor<T>>, K>;
+}
+
+export interface PluginProviderHooks<T extends PluginState> {
+  scope: PluginScope<PluginScopeStateFor<T>>;
+  useData: PluginProviderDataHook<T>;
+  useSlot: <K extends keyof GetSlots<T>>(name: K) => GetSlots<T>[K][];
+  useSlotFirst: <K extends keyof GetSlots<T>>(name: K) => GetSlots<T>[K] | undefined;
+}
+
 export interface PluginState {
   // Setup
   readonly config: Record<string, any>;
@@ -49,8 +69,8 @@ export interface PluginState {
   readonly externalSlots: Record<string, any>;
 
   // Optional dependencies (may be used for data from the parent scope of the own root scope)
-  readonly outerData: Record<string, any>;
-  readonly outerSlots: Record<string, any>;
+  readonly optionalData: Record<string, any>;
+  readonly optionalSlots: Record<string, any>;
 
   // Public interface
   readonly data: Record<string, any>;
@@ -64,8 +84,8 @@ export interface EmptyPluginState extends PluginState {
   readonly config: {};
   readonly externalData: {};
   readonly externalSlots: {};
-  readonly outerData: {};
-  readonly outerSlots: {};
+  readonly optionalData: {};
+  readonly optionalSlots: {};
   readonly data: {};
   readonly slots: {};
   readonly urls: {};
@@ -91,17 +111,17 @@ export interface PluginDetails<T extends PluginState> extends PluginState {
 
 export type GetData<T extends PluginState> = T['data'];
 export type GetExternalData<T extends PluginState> = T['externalData'];
-export type GetOuterData<T extends PluginState> = T['outerData'];
+export type GetOuterData<T extends PluginState> = T['optionalData'];
 export type GetSlots<T extends PluginState> = T['slots'];
-export type GetOuterSlots<T extends PluginState> = T['outerSlots'];
+export type GetOuterSlots<T extends PluginState> = T['optionalSlots'];
 
 export type AppendRoute<T extends PluginState, U extends string> = T & {urls: Record<U, true>};
 export type AppendData<T extends PluginState, U extends Record<string, any>> = T & {data: U};
 export type AppendSlots<T extends PluginState, U extends Record<string, any>> = T & {slots: U};
 export type AppendExternalData<T extends PluginState, U extends Record<string, any>> = T & {externalData: U};
 export type AppendExternalSlots<T extends PluginState, U extends Record<string, any>> = T & {externalSlots: U};
-export type AppendOuterData<T extends PluginState, U extends Record<string, any>> = T & {outerData: U};
-export type AppendOuterSlots<T extends PluginState, U extends Record<string, any>> = T & {outerSlots: U};
+export type AppendOuterData<T extends PluginState, U extends Record<string, any>> = T & {optionalData: U};
+export type AppendOuterSlots<T extends PluginState, U extends Record<string, any>> = T & {optionalSlots: U};
 export type JoinState<T extends PluginState, U extends PluginState> = AppendData<
   AppendSlots<T, GetSlots<U>>,
   GetData<U>
@@ -118,7 +138,7 @@ export type JoinOuterState<T extends PluginState, U extends PluginState> = Appen
 export interface PluginScopeState {
   slots: Record<string, any>;
   inheritedSlots: Record<string, any>;
-  outerSlots: Record<string, any>;
+  optionalSlots: Record<string, any>;
   data: Record<string, any>;
   inheritedData: Record<string, any>;
   inheritedReadonlyData: Record<string, any>;
@@ -127,16 +147,16 @@ export interface PluginScopeState {
 export type PluginScopeStateFor<T extends PluginState> = {
   slots: T['slots'];
   inheritedSlots: T['externalSlots'];
-  outerSlots: T['outerSlots'];
+  optionalSlots: T['optionalSlots'];
   data: {};
   inheritedData: T['data'];
-  inheritedReadonlyData: T['externalData'] & Partial<T['outerData']>;
+  inheritedReadonlyData: T['externalData'] & Partial<T['optionalData']>;
 };
 
 export interface PluginScopeConfig<T extends PluginScopeState> {
   slots: (keyof T['slots'])[];
   inheritedSlots: (keyof T['inheritedSlots'])[];
-  outerSlots: (keyof T['outerSlots'])[];
+  optionalSlots: (keyof T['optionalSlots'])[];
   data: (keyof T['data'])[];
   inheritedData: (keyof T['inheritedData'])[];
   inheritedReadonlyData: (keyof T['inheritedReadonlyData'])[];
@@ -146,7 +166,7 @@ type PluginScopeSlotMap<T extends Record<string, any>, U = never> = {[K in keyof
 
 export type PluginScopeSlotRecord<T extends PluginScopeState> = PluginScopeSlotMap<T['slots']> &
   PluginScopeSlotMap<T['inheritedSlots']> &
-  PluginScopeSlotMap<T['outerSlots'], undefined>;
+  PluginScopeSlotMap<T['optionalSlots'], undefined>;
 
 type PluginScopeDataMap<T extends Record<string, any>> = {[K in keyof T]: T[K]};
 

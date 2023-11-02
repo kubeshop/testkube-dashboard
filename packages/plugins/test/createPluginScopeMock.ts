@@ -5,7 +5,7 @@ import {PluginScopeState} from '../src/internal/types';
 export interface EmptyPluginScopeState extends PluginScopeState {
   slots: {};
   inheritedSlots: {};
-  outerSlots: {};
+  optionalSlots: {};
   data: {};
   inheritedData: {};
   inheritedReadonlyData: {};
@@ -29,7 +29,7 @@ export type MockPluginScopeSlotMap<T extends Record<string, any>, U = never> = {
 
 export type MockPluginScopeSlotRecord<T extends PluginScopeState> = MockPluginScopeSlotMap<T['slots']> &
   MockPluginScopeSlotMap<T['inheritedSlots']> &
-  MockPluginScopeSlotMap<T['outerSlots'], undefined>;
+  MockPluginScopeSlotMap<T['optionalSlots'], undefined>;
 
 export interface MockPluginScope<T extends PluginScopeState> extends PluginScope<T> {
   slots: MockPluginScopeSlotRecord<T>;
@@ -55,7 +55,7 @@ export const createPluginScopeMock = <T extends Record<string, any>, U extends R
     inheritedData: [],
     inheritedSlots: [],
     inheritedReadonlyData: [],
-    outerSlots: [],
+    optionalSlots: [],
   });
   Object.entries(data).forEach(([key, value]) => {
     scope.data[key] = value;

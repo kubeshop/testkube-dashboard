@@ -1,11 +1,11 @@
-import {useContext, useMemo} from 'react';
+import {useMemo} from 'react';
 
 import qs from 'query-string';
 
-import {DashboardContext} from '@contexts';
+import {useRouterPlugin} from '@plugins/router/hooks';
 
 const useURLSearchParams = () => {
-  const {location} = useContext(DashboardContext);
+  const {location} = useRouterPlugin.pick('location');
   const {search} = location;
 
   const query = useMemo(() => new URLSearchParams(search).toString(), [search]);

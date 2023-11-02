@@ -19,7 +19,7 @@ const create = (config: Partial<PluginScopeConfig<any>>, parent: PluginScope<any
     inheritedData: [],
     inheritedSlots: [],
     inheritedReadonlyData: [],
-    outerSlots: [],
+    optionalSlots: [],
     ...config,
   });
 
@@ -46,7 +46,7 @@ describe('plugins', () => {
     });
 
     it('should not create slots for inherited slots', () => {
-      expect(create({outerSlots: ['slot1', 'slot2']}).slots).toEqual({
+      expect(create({optionalSlots: ['slot1', 'slot2']}).slots).toEqual({
         slot1: undefined,
         slot2: undefined,
       });
@@ -80,7 +80,7 @@ describe('plugins', () => {
 
     it('should make outer slots accessible', () => {
       const parent = create({slots: ['slot1', 'slot2']});
-      const child = create({outerSlots: ['slot1', 'slot2']}, parent);
+      const child = create({optionalSlots: ['slot1', 'slot2']}, parent);
 
       parent.slots.slot1?.add('value2');
       child.slots.slot1?.add('value3');
@@ -92,8 +92,8 @@ describe('plugins', () => {
 
     it('should make outer slots accessible few levels down', () => {
       const root = create({slots: ['slot1']});
-      const parent = create({outerSlots: ['slot1']}, root);
-      const child = create({outerSlots: ['slot1']}, parent);
+      const parent = create({optionalSlots: ['slot1']}, root);
+      const child = create({optionalSlots: ['slot1']}, parent);
 
       root.slots.slot1?.add('value1');
       parent.slots.slot1?.add('value2');
@@ -173,9 +173,9 @@ describe('plugins', () => {
         .needs(slot<string>()('slot2'))
         .define(data<string>()('key1'))
         .needs(data<string>()('key2'))
-        .outer(data<string>()('key3'))
-        .outer(slot<string>()('slot3'))
-        .outer(slot<string>()('slotUnknown'))
+        .optional(data<string>()('key3'))
+        .optional(slot<string>()('slot3'))
+        .optional(slot<string>()('slotUnknown'))
         .init();
       const root = create({slots: ['slot1', 'slot2', 'slot3', 'slot4'], data: ['key1', 'key2', 'key3', 'key4']});
       root.data.key1 = 'value1';
@@ -332,6 +332,39 @@ describe('plugins', () => {
       parent.data.key1 = 'value1';
       await frame();
       expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('should emit information about slots change', async () => {
+      const root = create({slots: ['key1']});
+      const parent = create({inheritedSlots: ['key1']}, root);
+      const child = create({inheritedSlots: ['key1']}, parent);
+      const listener = jest.fn();
+      root[PluginScopeSubscribeChange](listener);
+      root.slots.key1.add('value1');
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit information about slots change in parent', async () => {
+      const root = create({slots: ['key1']});
+      const parent = create({inheritedSlots: ['key1']}, root);
+      const child = create({inheritedSlots: ['key1']}, parent);
+      const listener = jest.fn();
+      parent[PluginScopeSubscribeChange](listener);
+      root.slots.key1.add('value1');
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit information about slots change in parent (nested)', async () => {
+      const root = create({slots: ['key1']});
+      const parent = create({inheritedSlots: ['key1']}, root);
+      const child = create({inheritedSlots: ['key1']}, parent);
+      const listener = jest.fn();
+      child[PluginScopeSubscribeChange](listener);
+      root.slots.key1.add('value1');
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
     });
   });
 });

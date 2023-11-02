@@ -1,11 +1,10 @@
-import {useContext} from 'react';
-
 import {satisfies as matchesVersion} from 'semver';
 
-import {MainContext} from '@contexts';
+import {useClusterPlugin} from '@plugins/cluster/hooks';
 
 const useClusterVersionMatch = <T>(match: string, defaults?: T): boolean | T => {
-  const {clusterVersion} = useContext(MainContext);
+  const useClusterDetails = useClusterPlugin.select(x => x.useClusterDetails);
+  const clusterVersion = useClusterDetails(x => x.version);
   return clusterVersion == null ? (defaults as T) : matchesVersion(clusterVersion, match);
 };
 

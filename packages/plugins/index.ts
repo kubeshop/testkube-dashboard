@@ -4,4 +4,5 @@ export * from './src/hooks';
 export * from './src/utils';
 export * from './src/StoreProvider';
 export * from './src/PluginResolver';
+export * from './src/usePluginSystem';
 export type {Plugin, PluginEntry} from './src/internal/Plugin';

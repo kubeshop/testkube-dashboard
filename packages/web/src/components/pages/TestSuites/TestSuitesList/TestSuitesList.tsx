@@ -1,4 +1,5 @@
 import {FC, useCallback} from 'react';
+import {useUnmount} from 'react-use';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
@@ -13,7 +14,7 @@ import {EntityListContent} from '@organisms';
 
 import {Error} from '@pages';
 
-import {usePluginSlot} from '@plugins/hooks';
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
 import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
 
@@ -30,7 +31,11 @@ const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 const TestSuitesList: FC = () => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestSuitesField('filters');
-  const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
+  const pageTitleAddon = useTestsSlotFirst('testSuitesListTitleAddon');
+
+  useUnmount(() => {
+    setFilters({...filters, pageSize: initialFilters.pageSize});
+  });
 
   const {
     data: testSuites,
