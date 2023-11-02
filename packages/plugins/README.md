@@ -324,7 +324,7 @@ export default createPlugin('some-name')
 
     // Such store may be reset by some data too
     .needs(data<string>()('environmentId'))
-    .provider(tk => <StoreProvider store={initializeSomeStore} dependencies={[tk.data.environmentId]} />)
+    .provider(({useData}) => <StoreProvider store={initializeSomeStore} dependencies={[useData.select(x => x.environmentId)]} />)
 
     // Expose public interface for other plugins
     .data({useSomeStorePick})
