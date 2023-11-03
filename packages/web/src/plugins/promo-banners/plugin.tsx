@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useEvent} from 'react-use';
 
 import {config, createPlugin, data, external, slot} from '@testkube/plugins';
@@ -33,7 +32,7 @@ export default createPlugin('oss/promo-banners')
   .define(config<number>()('rotationTime'))
   .needs(generalStub.slots('contentTop'))
   .needs(testsStub.slots('logOutputTop'))
-  .needs(testsStub.data('useExecutionDetails', 'useEntityDetails'))
+  .needs(testsStub.data('useExecutionDetails'))
 
   .define(slot<PromoBanner>()('banners'))
 
@@ -48,16 +47,6 @@ export default createPlugin('oss/promo-banners')
         order: -1 * banner.priority + (banner.critical ? -1e9 : 0),
       });
     });
-  })
-
-  // Persist state in the local storage
-  .provider(({useData}) => {
-    const {bannersClosedAt} = useData.pick('bannersClosedAt');
-    useMemo(() => {
-      if (hasLocalStorage) {
-        localStorage.setItem(bannersClosedAtKey, JSON.stringify(bannersClosedAt));
-      }
-    }, [bannersClosedAt]);
   })
 
   .define(data<() => boolean>()('bannersIsTestFailed'))
@@ -78,10 +67,10 @@ export default createPlugin('oss/promo-banners')
 
     // Prepare helper for closing the banner
     tk.data.bannersClose = id => {
-      tk.data.bannersClosedAt = {
-        ...tk.data.bannersClosedAt,
-        [id]: Date.now(),
-      };
+      tk.data.bannersClosedAt = {...tk.data.bannersClosedAt, [id]: Date.now()};
+      if (hasLocalStorage) {
+        localStorage.setItem(bannersClosedAtKey, JSON.stringify(tk.data.bannersClosedAt));
+      }
     };
 
     // Push information about rotation time
