@@ -19,12 +19,12 @@ import {BasePermissionsResolver} from '@permissions/base';
 
 import {basePlugins} from '@plugins';
 import AiInsightsPromoPlugin from '@plugins/ai-insights-promo/plugin';
-import CloudBannerPlugin from '@plugins/cloud-banner/plugin';
 import ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import ConfigPlugin from '@plugins/config/plugin';
 import FeatureFlagsPlugin from '@plugins/feature-flags/plugin';
 import ModalPlugin from '@plugins/modal/plugin';
 import PermissionsPlugin from '@plugins/permissions/plugin';
+import PromoBannersPlugin from '@plugins/promo-banners/plugin';
 import RouterPlugin from '@plugins/router/plugin';
 import RtkResetOnApiChangePlugin from '@plugins/rtk-reset-on-api-change/plugin';
 import RtkPlugin from '@plugins/rtk/plugin';
@@ -59,9 +59,9 @@ const AppRoot: React.FC = () => {
       SiderCloudMigratePlugin,
       FeatureFlagsPlugin,
       SettingsPlugin,
-      CloudBannerPlugin,
       AiInsightsPromoPlugin,
       StatusPagesPromoPlugin,
+      PromoBannersPlugin.configure({rotationTime: env.bannersRotationTime}),
     ],
     []
   );

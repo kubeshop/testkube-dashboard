@@ -67,7 +67,12 @@ const MessagePanel: React.FC<MessagePanelProps> = props => {
           {buttons.map(button => {
             if ('isLink' in button) {
               return (
-                <a key={button.linkConfig.href} href={button.linkConfig.href} target={button.linkConfig.target}>
+                <a
+                  key={button.linkConfig.href}
+                  href={button.linkConfig.href}
+                  target={button.linkConfig.target}
+                  onClick={button.onClick}
+                >
                   <Button $customType={button.type} key={button.type}>
                     {button.text}
                   </Button>
