@@ -22,6 +22,17 @@ export const DecayingContainer = styled.div`
   }
 `;
 
+export const CardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+`;
+
 export const ContentContainer = styled(FullWidthSpace)`
   display: flex;
   flex-direction: column;
@@ -38,5 +49,5 @@ export const ContentContainer = styled(FullWidthSpace)`
 export const HelpContainer = styled.div`
   margin-top: 50px;
   width: 600px;
-  max-width: 100%;
+  max-width: calc(100vw - 80px);
 `;

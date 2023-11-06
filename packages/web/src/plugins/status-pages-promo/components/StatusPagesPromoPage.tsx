@@ -1,5 +1,6 @@
 import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
-import {ReactComponent as StatusPagesMock} from '@assets/statusPagesMock.svg';
+import {ReactComponent as MockCard1} from '@assets/status-pages-mock-1.svg';
+import {ReactComponent as MockCard2} from '@assets/status-pages-mock-2.svg';
 
 import {ExternalLink} from '@atoms';
 
@@ -15,7 +16,7 @@ import Colors from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
 
-import {ContentContainer, DecayingContainer, HelpContainer} from './StatusPagesPromoPage.styled';
+import {CardContainer, ContentContainer, DecayingContainer, HelpContainer} from './StatusPagesPromoPage.styled';
 
 const StatusPagesPromoPage = () => (
   <PageBlueprint
@@ -28,7 +29,10 @@ const StatusPagesPromoPage = () => (
     }
   >
     <DecayingContainer>
-      <StatusPagesMock />
+      <CardContainer>
+        <MockCard1 />
+        <MockCard2 />
+      </CardContainer>
     </DecayingContainer>
 
     <ContentContainer size={32}>
