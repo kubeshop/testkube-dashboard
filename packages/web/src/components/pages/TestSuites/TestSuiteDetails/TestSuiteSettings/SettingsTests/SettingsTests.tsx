@@ -92,7 +92,7 @@ const SettingsTests = () => {
 
   const [steps, setSteps] = useState(initialSteps);
 
-  const wasTouched = useMemo(() => steps !== initialSteps, [steps, initialSteps]);
+  const wasTouched = steps !== initialSteps;
 
   useEffect(() => {
     setSteps(initialSteps);
