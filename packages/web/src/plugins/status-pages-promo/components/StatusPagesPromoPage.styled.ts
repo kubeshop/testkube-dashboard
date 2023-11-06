@@ -9,14 +9,11 @@ export const DecayingContainer = styled.div`
   display: flex;
   justify-content: center;
 
-  &:after {
+  &::after {
     content: '';
     display: block;
     position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     z-index: 2;
     background: linear-gradient(180deg, transparent 0%, ${Colors.mainBackground} 85%);
   }
