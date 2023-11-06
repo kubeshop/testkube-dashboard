@@ -29,6 +29,7 @@ export enum externalLinks {
   organizationMembers = 'https://docs.testkube.io/testkube-cloud/articles/organization-management#members',
   environmentMembers = 'https://docs.testkube.io/testkube-cloud/articles/environment-management#managing-environment-member-roles',
   notificationsAndWebhooks = 'https://docs.testkube.io/articles/webhooks',
+  statusPages = 'https://docs.testkube.io/testkube-cloud/articles/status-pages',
 }
 
 const crdCdn = `https://raw.githubusercontent.com/kubeshop/testkube-operator/${encodeURIComponent(

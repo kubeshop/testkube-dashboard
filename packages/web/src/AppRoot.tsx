@@ -32,6 +32,7 @@ import SettingsPlugin from '@plugins/settings/plugin';
 import SiderCloudMigratePlugin from '@plugins/sider-cloud-migrate/plugin';
 import SiderLogoPlugin from '@plugins/sider-logo/plugin';
 import SiderSupportPlugin from '@plugins/sider-support/plugin';
+import StatusPagesPromoPlugin from '@plugins/status-pages-promo/plugin';
 
 import {TelemetryProvider} from '@telemetry/provider';
 
@@ -60,6 +61,7 @@ const AppRoot: React.FC = () => {
       SettingsPlugin,
       CloudBannerPlugin,
       AiInsightsPromoPlugin,
+      StatusPagesPromoPlugin,
     ],
     []
   );
