@@ -58,7 +58,7 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   const {entity, details} = useEntityDetailsPick('entity', 'details');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
   const testIcon = useExecutorIcon(details);
-  const isTestSuiteEmpty = entity === 'test-suites' && (!details.steps || details.steps.length === 0);
+  const isTestSuiteEmpty = entity === 'test-suites' && !details.steps?.length;
 
   const [abortAllExecutions] = useAbortAllExecutions();
   const onAbortAllExecutionsClick = () => {
@@ -109,6 +109,8 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
           disabled={!details || isTestSuiteEmpty}
           hidden={!mayRun || outOfSync}
           loading={isRunning}
+          tooltip={isTestSuiteEmpty ? 'Empty test suite. Add a test before running.' : undefined}
+          tooltipPlacement="bottomLeft"
         >
           Run now
         </Button>,
