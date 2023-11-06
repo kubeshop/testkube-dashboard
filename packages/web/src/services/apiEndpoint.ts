@@ -15,9 +15,9 @@ import env from '../env';
 export type ApiEndpointListener = (apiEndpoint: string | null) => void;
 
 export interface ApiDetails {
-  commit: string;
+  commit?: string;
   context: string;
-  helmchartVersion: string;
+  helmchartVersion?: string;
   namespace: string;
   version: string;
   url: string;
@@ -124,7 +124,7 @@ export async function getApiDetails(apiEndpoint: string): Promise<ApiDetails> {
   const data = await fetch(`${url}/info`, {
     headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
   }).then(res => res.json());
-  if (!data?.version || !data?.commit) {
+  if (!data?.version) {
     throw new Error('Received invalid data from the provided API endpoint');
   }
 
