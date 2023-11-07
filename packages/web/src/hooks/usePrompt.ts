@@ -6,7 +6,7 @@
  */
 import {useContext, useEffect, useMemo, useRef} from 'react';
 import {UNSAFE_NavigationContext as NavigationContext, Navigator} from 'react-router-dom';
-import {useUnmount} from 'react-use';
+import {usePrevious, useUnmount} from 'react-use';
 
 import {useLastCallback} from '@hooks/useLastCallback';
 
@@ -56,13 +56,12 @@ const applyNavigatorBlockers = (navigator: Navigator): NavigatorWithBlockers => 
 export const usePrompt = (message: string, when: BlockerCondition = () => false) => {
   const {navigator} = useContext(NavigationContext);
   const enhancedNavigator = useMemo(() => applyNavigatorBlockers(navigator), [navigator]);
-  const unsubscribe = useRef(() => {});
   const rule = useLastCallback(when);
 
-  useEffect(() => {
-    unsubscribe.current();
-    unsubscribe.current = enhancedNavigator.$block(message, rule);
+  const unsubscribe = useRef(() => {});
+  const prevMessage = usePrevious(message);
 
+  useEffect(() => {
     const listener = (event: BeforeUnloadEvent) => {
       if (rule()) {
         event.preventDefault();
@@ -72,7 +71,12 @@ export const usePrompt = (message: string, when: BlockerCondition = () => false)
     };
     window.addEventListener('beforeunload', listener);
     return () => window.removeEventListener('beforeunload', listener);
-  }, [message, rule]);
+  }, [message]);
+
+  if (prevMessage !== message) {
+    unsubscribe.current();
+    unsubscribe.current = enhancedNavigator.$block(message, rule);
+  }
 
   useUnmount(unsubscribe.current);
 };
