@@ -1,5 +1,7 @@
 import {ReactComponent as LockedIcon} from '@assets/lockedIcon.svg';
 
+import ExternalLink from '@atoms/ExternalLink';
+
 import {Button, Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
@@ -15,10 +17,7 @@ const AiInsightsTab = () => (
       <Text className="big bold"> This feature is available only in Testkube Cloud.</Text>
       <Text color={Colors.slate400}>
         Start using Testkube Cloud to get AI insights for your test executions, as well as other exclusive features.
-        <a href={externalLinks.testkubeCloud} target="_blank">
-          {' '}
-          Learn more
-        </a>
+        <ExternalLink href={externalLinks.testkubeCloud}> Learn more</ExternalLink>
       </Text>
       <Button
         type="primary"

@@ -2,7 +2,7 @@ const ExternalLink: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = pr
   const {children, ...rest} = props;
 
   return (
-    <a target="_blank" {...rest}>
+    <a target="_blank" rel="noopener" {...rest}>
       {children}
     </a>
   );

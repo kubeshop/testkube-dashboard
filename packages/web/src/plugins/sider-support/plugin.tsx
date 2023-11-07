@@ -3,6 +3,8 @@ import {Popover} from 'antd';
 
 import {createPlugin, external} from '@testkube/plugins';
 
+import ExternalLink from '@atoms/ExternalLink';
+
 import Text from '@custom-antd/Typography/Text';
 
 import {DropdownListItem} from '@organisms/Sider/Sider.styled';
@@ -31,25 +33,25 @@ export default createPlugin('dashboard/sider-support')
           content={
             <>
               <DropdownListItem>
-                <a href={externalLinks.documentation} target="_blank">
+                <ExternalLink href={externalLinks.documentation}>
                   <Text color={Colors.slate300} className="regular middle">
                     Documentation
                   </Text>
-                </a>
+                </ExternalLink>
               </DropdownListItem>
               <DropdownListItem>
-                <a href={tk.data.discordUrl} target="_blank">
+                <ExternalLink href={tk.data.discordUrl}>
                   <Text color={Colors.slate300} className="regular middle">
                     Discord community
                   </Text>
-                </a>
+                </ExternalLink>
               </DropdownListItem>
               <DropdownListItem>
-                <a href={externalLinks.github} target="_blank">
+                <ExternalLink href={externalLinks.github}>
                   <Text color={Colors.slate300} className="regular middle">
                     GitHub
                   </Text>
-                </a>
+                </ExternalLink>
               </DropdownListItem>
             </>
           }
