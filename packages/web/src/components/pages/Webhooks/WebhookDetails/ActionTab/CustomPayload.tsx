@@ -2,7 +2,9 @@ import React, {FC, Suspense} from 'react';
 
 import {Form} from 'antd';
 
-import {ExternalLink, MonacoEditor} from '@atoms';
+import {MonacoEditor} from '@testkube/code-editor';
+
+import {ExternalLink} from '@atoms';
 
 import {notificationCall} from '@molecules';
 import DefinitionSkeleton from '@molecules/Definition/DefinitionSkeleton';

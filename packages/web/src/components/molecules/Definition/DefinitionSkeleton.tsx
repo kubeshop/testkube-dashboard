@@ -1,6 +1,6 @@
-import {lineHeight} from '@atoms/MonacoEditor';
-
 import {Skeleton} from '@custom-antd';
+
+const lineHeight = 22;
 
 const DefinitionSkeleton = () => {
   return (

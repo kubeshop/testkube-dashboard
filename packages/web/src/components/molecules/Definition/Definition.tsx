@@ -6,6 +6,8 @@ import {UseMutation, UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHook
 import {JSONSchema4} from 'json-schema';
 import {capitalize} from 'lodash';
 
+import {KubernetesResourceEditor, getMonacoEditor} from '@testkube/code-editor';
+
 import {Pre} from '@atoms';
 
 import {FullWidthSpace} from '@custom-antd';
@@ -19,8 +21,6 @@ import {CardForm} from '@organisms';
 
 import {safeRefetch} from '@utils/fetchUtils';
 import {displayDefaultNotificationFlow} from '@utils/notification';
-
-import KubernetesResourceEditor from '../KubernetesResourceEditor';
 
 import DefinitionSkeleton from './DefinitionSkeleton';
 
@@ -73,8 +73,8 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
   }, [definition]);
 
   const onSave = async () => {
-    const monaco = await import('react-monaco-editor').then(editor => editor.monaco);
-    const markerErrors = monaco.editor.getModelMarkers({owner: 'yaml'});
+    const monaco = await getMonacoEditor();
+    const markerErrors = monaco.getModelMarkers({owner: 'yaml'});
 
     if (markerErrors.length > 0) {
       // eslint-disable-next-line prefer-promise-reject-errors
