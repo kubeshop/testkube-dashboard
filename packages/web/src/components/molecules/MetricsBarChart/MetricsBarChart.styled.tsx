@@ -57,8 +57,7 @@ export const AxisLabel = styled.div<{$top: number}>`
 
 export const SvgWrapper = styled.div<{$isDetailsView?: boolean}>`
   display: flex;
-  flex-direction: row-reverse;
-  flex-wrap: nowrap;
+  flex-flow: row-reverse nowrap;
   align-items: flex-end;
   width: fit-content;
 
