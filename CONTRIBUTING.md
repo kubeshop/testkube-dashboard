@@ -42,7 +42,7 @@ Either way, it may be useful to have [**Testkube CLI**](https://docs.testkube.io
 
 To run the Testkube, you need to have Kubernetes cluster, and `kubectl` connected to it.
 
-> **Running Kubernetes cluster locally**
+> :eight_spoked_asterisk: **Running Kubernetes cluster locally**
 > 
 > For local development it may be easiest to use [**K3D**](https://k3d.io/v5.6.0/), [**Minikube**](https://minikube.sigs.k8s.io/docs/start/),
 > or the one built in [Docker Desktop](https://docs.docker.com/desktop/kubernetes/) (but it's heavy).
@@ -107,7 +107,7 @@ We aim into having unit tests for every new feature, along with the Pull Request
 * To run unit tests, you may run `npm test` command
 * To run unit tests with watching for a changes, you may run `npm run test:watch` command
 
-> **Technical debt**
+> :warning: **Technical debt**
 > 
 > Unfortunately, we have a technical debt for old components,
 > that are not well covered. We try to write unit tests for them in spare time or when editing,
@@ -121,7 +121,7 @@ We aim into having unit tests for bigger features, after the release.
 
 During the Pull Request checks, the E2E tests are run against generated [**Vercel preview**](#preview) and `demo.testkube.dev`'s API.
 
-> **Technical debt**
+> :warning: **Technical debt**
 >
 > We have some critical paths not covered, and we aim into covering them before new features,
 > in spare time, or allocated time after other features.
@@ -148,25 +148,25 @@ It has telemetry disabled - to override it, add `?~gtm_id=GTM-PQK4DKN&~disable_t
 * [**Jest**](https://jestjs.io/) and [**Testing Library**](https://testing-library.com/) - we use for unit tests
 * [**Playwright**](https://playwright.dev/) - we use for E2E tests
 
-> **Deprecation: Create React App**
+> :warning: **Deprecation: Create React App**
 > 
 > As CRA is deprecated for long time, we plan to move to [**Vite**](https://vitejs.dev/).
 > 
 > It has a significant effort though, especially that we are using Monaco Editor with its [**Webpack plugin**](https://www.npmjs.com/package/monaco-editor-webpack-plugin) to reduce bundle size.
 
-> **Deprecation: RTK Query**
+> :warning: **Deprecation: RTK Query**
 > 
 > We plan to move to GraphQL (probably with Apollo) mutations, queries and subscriptions,
 > but we need to finish ongoing back-end work before.
 
-> **Deprecation: Antd 4.x**
+> :warning: **Deprecation: Antd 4.x**
 > 
 > The Antd 5.x is alive for a long time, so we may consider migrating there.
 > It will require significant effort though.
 >
 > As a side note, after migrating, we would like to have light/dark mode introduced.
 
-> **Consideration: Zustand**
+> :warning: **Consideration: Zustand**
 > 
 > We may consider getting rid of Zustand,
 > as our [**plugin system**](#plugins-system) is able to store the data in a similar way.
@@ -183,12 +183,12 @@ The package that is exactly the Dashboard, is called [`web`](packages/web).
 Running `npm install` from the root directory will install all the dependencies for all packages,
 while running different commands like `npm run lint` or `npm test` will do that for all packages too.
 
-> **Technical debt: Monolithic `web`**
+> :warning: **Technical debt: Monolithic `web`**
 > 
 > The mono-repository has been introduced lately, so we had no time yet to split the code to corresponding packages.
 > We should improve that in the coming weeks.
 
-> **We plan to use [**nx**](https://nx.dev/) in future**
+> :warning: **We plan to use [**nx**](https://nx.dev/) in future**
 > 
 > Thanks to that, we will be able to build boilerplate code for i.e. plugins automatically.
 
@@ -211,14 +211,14 @@ At the moment the plugins are created in [`packages/web/src/plugins`](packages/w
 
 To add a new plugin, update the list in [`packages/web/src/AppRoot.tsx`](packages/web/src/AppRoot.tsx#L47) file.
 
-> **Technical debt: all the plugins are in `web` package**
+> :warning: **Technical debt: all the plugins are in `web` package**
 > 
 > At the moment, because of issues with TypeScript types across packages (due to aliases in `web` package),
 > all the plugins are in [`packages/web/src/plugins`](packages/web/src/plugins) directory.
 > 
 > We plan to move them to separate packages in the future.
 
-> **Future enhancement**
+> :eight_spoked_asterisk: **Future enhancement**
 > 
 > We want to allow community plugins as well.
 
@@ -250,7 +250,7 @@ For new features, we are able to use feature flags.
 * The feature flags are added by [**GTM**](https://tagmanager.google.com/), mostly from the [**PostHog**](https://posthog.com/)
 * To switch the feature flag locally, you may dispatch the feature-flags event (like `const event = new Event('feature-flags'); event.data = {flag1: true}; window.dispatchEvent(event)`)
 
-> **Future enhancement**
+> :eight_spoked_asterisk: **Future enhancement**
 > 
 > We could allow feature flags in a similar way as we handle environment variables overrides in the query string.
 
@@ -280,4 +280,4 @@ Additionally, for internal project tracking we are using [**Linear**](https://li
 
 ### Error Reporting
 
-The errors are automatically reported in the Sentry organization.
+The errors are automatically reported in the Sentry organization, and assigned to specific releases.
