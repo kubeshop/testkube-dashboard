@@ -10,6 +10,7 @@ export interface ExecutionDetailsSlice {
   data: Execution | TestSuiteExecution | null;
   error: any;
   open: (id: string) => void;
+  openByName: (name: string) => void;
   close: () => void;
 }
 
@@ -17,6 +18,7 @@ const createExecutionDetailsSlice: StateCreator<ExecutionDetailsSlice> = set => 
   data: null,
   error: null,
   open: () => {},
+  openByName: () => {},
   close: () => {},
 });
 

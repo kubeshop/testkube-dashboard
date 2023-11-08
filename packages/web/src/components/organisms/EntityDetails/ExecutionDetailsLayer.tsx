@@ -4,12 +4,14 @@ import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
+import {useLastCallback} from '@hooks/useLastCallback';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Entity} from '@models/entity';
 
 import {notificationCall} from '@molecules';
 
+import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick, useExecutionDetailsReset, useExecutionDetailsSync} from '@store/executionDetails';
 
 import {isExecutionFinished} from '@utils/isExecutionFinished';
@@ -30,10 +32,18 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
   useGetExecutionDetails,
   children,
 }) => {
+  const {executions} = useEntityDetailsPick('executions');
+  const open = useDashboardNavigate((targetId: string) => `/${entity}/${id}/executions/${targetId}`);
   useExecutionDetailsReset(
     {
       id: execId,
-      open: useDashboardNavigate((targetId: string) => `/${entity}/${id}/executions/${targetId}`),
+      open,
+      openByName: useLastCallback((name: string) => {
+        const targetRecord = executions.results?.find((item: any) => item.name === name);
+        if (targetRecord) {
+          open(targetRecord.id);
+        }
+      }),
       close: useDashboardNavigate(`/${entity}/${id}`),
     },
     [execId, useGetExecutionDetails]

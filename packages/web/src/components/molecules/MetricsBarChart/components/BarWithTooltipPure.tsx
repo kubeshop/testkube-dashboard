@@ -13,7 +13,6 @@ import {formatExecutionDate} from '@utils/formatDate';
 import {
   BarDate,
   ClickableBar,
-  ClickableBarWrapper,
   StyledPopoverContainer,
   StyledPopoverContent,
   StyledPopoverHeader,
@@ -24,23 +23,13 @@ import type {BarConfig} from './BarWithTooltip';
 const tooltipYOffsetMargin = 5;
 
 type BarConfigPure = BarConfig & {
-  executions: any;
   onSelect: (id: string) => void;
 };
 
 const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
-  const {width, height, color, tooltipData, hoverColor, date, chartHeight, executions, onSelect} = props;
-  const {status, duration, name, startTime} = tooltipData;
+  const {width, height, color, status, duration, name, startTime, chartHeight, hoverColor, date, onSelect} = props;
 
-  const onBarClicked = useCallback(() => {
-    if (executions?.results) {
-      const targetRecord = executions.results.find((item: any) => item.name === name);
-
-      if (targetRecord) {
-        onSelect(targetRecord.id);
-      }
-    }
-  }, [executions?.results, onSelect, name]);
+  const onBarClicked = useCallback(() => onSelect(name), [onSelect, name]);
 
   const popoverContent = useMemo(
     () => (
@@ -64,14 +53,9 @@ const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
 
   return (
     <Popover content={popoverContent} align={{offset: [0, chartHeight - height - tooltipYOffsetMargin]}}>
-      <ClickableBarWrapper borderTop={chartHeight - height} hoverColor={hoverColor} onClick={onBarClicked}>
-        <ClickableBar style={{height, width}} $color={color} hoverColor={hoverColor} />
-        {date ? (
-          <BarDate $height={height}>
-            <Text color={Colors.slate400}>{date}</Text>
-          </BarDate>
-        ) : null}
-      </ClickableBarWrapper>
+      <ClickableBar style={{height, width}} $color={color} hoverColor={hoverColor} onClick={onBarClicked}>
+        {date ? <BarDate $height={height}>{date}</BarDate> : undefined}
+      </ClickableBar>
     </Popover>
   );
 });

@@ -29,27 +29,25 @@ export const getAxisPosition = (
 };
 
 export const metricsLogarithmization = (data: ExecutionMetrics[], minValueDivider: number) => {
-  return data
-    .map(item => {
-      // items with no duration set to 1 sec execution
-      if (!item.durationMs || item.durationMs <= secondInMs) {
-        return {
-          ...item,
-          logDuration: 1,
-          durationS: 1,
-        };
-      }
-      /*
-        Division each value by some number makes chart look more proportional
-      */
-      const durationS = item.durationMs / secondInMs;
-      const logDuration = Math.log(item.durationMs / minValueDivider);
-
+  return data.map(item => {
+    // items with no duration set to 1 sec execution
+    if (!item.durationMs || item.durationMs <= secondInMs) {
       return {
         ...item,
-        logDuration,
-        durationS,
+        logDuration: 1,
+        durationS: 1,
       };
-    })
-    .reverse();
+    }
+    /*
+        Division each value by some number makes chart look more proportional
+      */
+    const durationS = item.durationMs / secondInMs;
+    const logDuration = Math.log(item.durationMs / minValueDivider);
+
+    return {
+      ...item,
+      logDuration,
+      durationS,
+    };
+  });
 };
