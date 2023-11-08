@@ -4,9 +4,8 @@
  *
  * To overcome that, this implementation is working well for our router.
  */
-import {useContext, useEffect, useMemo, useRef} from 'react';
+import {useContext, useEffect, useMemo} from 'react';
 import {UNSAFE_NavigationContext as NavigationContext, Navigator} from 'react-router-dom';
-import {usePrevious, useUnmount} from 'react-use';
 
 import {useLastCallback} from '@hooks/useLastCallback';
 
@@ -58,10 +57,8 @@ export const usePrompt = (message: string, when: BlockerCondition = () => false)
   const enhancedNavigator = useMemo(() => applyNavigatorBlockers(navigator), [navigator]);
   const rule = useLastCallback(when);
 
-  const unsubscribe = useRef(() => {});
-  const prevMessage = usePrevious(message);
-
   useEffect(() => {
+    const unsubscribe = enhancedNavigator.$block(message, rule);
     const listener = (event: BeforeUnloadEvent) => {
       if (rule()) {
         event.preventDefault();
@@ -70,13 +67,9 @@ export const usePrompt = (message: string, when: BlockerCondition = () => false)
       }
     };
     window.addEventListener('beforeunload', listener);
-    return () => window.removeEventListener('beforeunload', listener);
-  }, [message]);
-
-  if (prevMessage !== message) {
-    unsubscribe.current();
-    unsubscribe.current = enhancedNavigator.$block(message, rule);
-  }
-
-  useUnmount(unsubscribe.current);
+    return () => {
+      window.removeEventListener('beforeunload', listener);
+      unsubscribe();
+    };
+  }, [message, rule]);
 };
