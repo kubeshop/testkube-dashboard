@@ -77,7 +77,7 @@ const Chart: React.FC<ChartProps> = props => {
 
   return (
     <SvgWrapper $isDetailsView={isDetailsView}>
-      <div ref={scrollRef} />
+      <span ref={scrollRef} />
       {renderedBarChart}
     </SvgWrapper>
   );

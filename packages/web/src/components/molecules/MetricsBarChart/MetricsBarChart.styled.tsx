@@ -66,7 +66,7 @@ export const SvgWrapper = styled.div<{$isDetailsView?: boolean}>`
 `;
 
 export const BarWrapper = styled.div<{$margin: number}>`
-  &:not(:last-child) {
+  &:not(:first-of-type) {
     margin-right: ${props => props.$margin}px;
   }
 `;
