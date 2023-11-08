@@ -1,6 +1,6 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 
-import {Table} from 'antd';
+import {Table, TablePaginationConfig} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
@@ -21,17 +21,32 @@ interface ExecutionsTableProps {
   useAbortExecution: UseMutation<MutationDefinition<any, any, any, any, any>>;
 }
 
+const getKey = (record: any) => record.id;
+
 const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecution}) => {
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
   const {executions, id, isFirstTimeLoading} = useEntityDetailsPick('executions', 'id', 'isFirstTimeLoading');
   const {id: execId, open} = useExecutionDetailsPick('id', 'open');
   const isWritable = useSystemAccess(SystemAccess.agent);
 
-  const rowSelection: TableRowSelection<any> = {
-    selectedRowKeys: execId ? [execId] : [],
-    columnWidth: 0,
-    renderCell: () => null,
-  };
+  const rowSelection: TableRowSelection<any> = useMemo(
+    () => ({
+      selectedRowKeys: execId ? [execId] : [],
+      columnWidth: 0,
+      renderCell: () => null,
+    }),
+    [execId]
+  );
+
+  const pagination: TablePaginationConfig = useMemo(
+    () => ({
+      pageSize: 10,
+      current: currentPage,
+      onChange: setCurrentPage,
+      showSizeChanger: false,
+    }),
+    [currentPage]
+  );
 
   const isEmptyExecutions = !executions?.results || !executions?.results.length;
 
@@ -44,6 +59,21 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
     },
     [id, abortExecution]
   );
+
+  const columns = useMemo(
+    () => [
+      {render: (data: any) => <TableRow data={data} onAbortExecution={isWritable ? onAbortExecution : undefined} />},
+    ],
+    [onAbortExecution, isWritable]
+  );
+
+  const onRow = useMemo(
+    () => (record: any) => ({
+      onClick: () => open(record.id),
+    }),
+    [open]
+  );
+
   if (isFirstTimeLoading) {
     return (
       <>
@@ -63,30 +93,11 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
       className="custom-table"
       showHeader={false}
       dataSource={executions?.results}
-      columns={[
-        {
-          render: data => {
-            return <TableRow data={data} onAbortExecution={isWritable ? onAbortExecution : undefined} />;
-          },
-        },
-      ]}
-      onRow={(record: any) => ({
-        onClick: () => {
-          open(record.id);
-        },
-      })}
-      rowSelection={{...rowSelection}}
-      rowKey={record => {
-        return record.id;
-      }}
-      pagination={{
-        pageSize: 10,
-        current: currentPage,
-        onChange: current => {
-          setCurrentPage(current);
-        },
-        showSizeChanger: false,
-      }}
+      columns={columns}
+      onRow={onRow}
+      rowSelection={rowSelection}
+      rowKey={getKey}
+      pagination={pagination}
     />
   );
 };
