@@ -239,6 +239,14 @@ To add a new plugin, update the list in [`packages/web/src/AppRoot.tsx`](package
 > </details>
 
 > <details>
+> <summary>:warning: <strong>Technical debt: some plugins are more like stubs</strong></summary>
+> 
+> We have introduced the system lately, and most of the functionality is not migrated fully.
+> Most often it's referring the components that are not lying directly in the plugin directory,
+> but instead refer to the files from general codebase.
+> </details>
+
+> <details>
 > <summary>:eight_spoked_asterisk: <strong>Future enhancement</strong></summary>
 > 
 > We want to allow community plugins as well.
