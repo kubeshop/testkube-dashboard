@@ -29,7 +29,8 @@ const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, onDelet
       confirmLabel="Delete"
       isWarning
       onConfirm={open}
-      skipTouchedValidation
+      monitLeave={false}
+      wasTouched
     />
   );
 };

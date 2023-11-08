@@ -34,7 +34,6 @@ type ConfigurationCardProps = {
   headerAction?: ReactNode;
   confirmLabel?: string;
   wasTouched?: boolean;
-  skipTouchedValidation?: boolean;
   children?: ReactNode;
   readOnly?: boolean;
   loading?: boolean;
@@ -54,7 +53,6 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     children,
     confirmLabel = 'Save',
     wasTouched,
-    skipTouchedValidation = false,
     isWarning = false,
     readOnly = false,
     loading = false,
@@ -101,8 +99,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
           {readOnly ? null : (
             <Form.Item noStyle shouldUpdate>
               {({isFieldsTouched, getFieldsValue}) => {
-                const buttonsDisabled =
-                  loading || (skipTouchedValidation || wasTouched ? false : getFieldsValue() && !isFieldsTouched());
+                const buttonsDisabled = loading || (wasTouched ? false : getFieldsValue() && !isFieldsTouched());
 
                 return (
                   <StyledFooterButtonsContainer>
