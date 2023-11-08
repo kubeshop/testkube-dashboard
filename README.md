@@ -59,16 +59,20 @@ By default, Dashboard is installed in your cluster along with your Testkube syst
 To use the bundled Dashboard, run `testkube dashboard` command with [**Testkube CLI**](https://docs.testkube.io/articles/install-cli/),
 to forward the UI and API ports from the Kubernetes cluster.
 
-> :warning: **Testkube Cloud and Enterprise**
+> <details>
+> <summary>:warning: <strong>Testkube Cloud and Enterprise</strong></summary>
 > 
 > This Dashboard works only for the Testkube Open Source installations.
 > To manage the Testkube in Enterprise or Cloud offering, use their corresponding dashboards:
 > * [**cloud.testkube.io**](https://cloud.testkube.io?utm_source=github-dashboard) for Testkube Cloud
 > * Your Enterprise URL for Testkube Enterprise
+> </details>
 
-> :eight_spoked_asterisk: **Disable bundling dashboard**
+> <details>
+> <summary>:eight_spoked_asterisk: <strong>Disable bundling dashboard</strong></summary>
 > 
 > To disable Dashboard installation with the Testkube system, you may use `testkube-dashboard.enabled=false` value in the [**Helm chart**](https://github.com/kubeshop/helm-charts/tree/main/charts/testkube).
+> </details>
 
 ### Repository
 
@@ -86,7 +90,8 @@ npm start
 
 To learn more about the Testkube Dashboard development and architecture, see the [**Contribution manual**](CONTRIBUTING.md).
 
-> :eight_spoked_asterisk: **Environment variables**
+> <details>
+> <summary>:eight_spoked_asterisk: <strong>Environment variables</strong></summary>
 > 
 > To configure your [**environment variables**](#environment-variables), either:
 > * create `.env` file in the repository, or
@@ -96,6 +101,7 @@ To learn more about the Testkube Dashboard development and architecture, see the
 >
 > Please note, that you may want to use [**Create React App's varisbles**](https://create-react-app.dev/docs/advanced-configuration/) too,
 > i.e. `BROWSER=none` to avoid opening the browser.
+> </details>
 
 ### Docker
 
@@ -110,9 +116,11 @@ docker run --rm \
   kubeshop/testkube-dashboard:latest
 ```
 
-> :warning: **Environment variables**
+> <details>
+> <summary>:warning: <strong>Environment variables</strong></summary>
 > 
 > To override the [**build time environment variables**](#build-time-variables) too, you need to [**build the Docker image**](#building-docker-image) on your own.
+> </details>
 
 ## Configuring Application
 
@@ -126,7 +134,8 @@ while the rest may be modified for the running application.
 The latest variables are listed in [**env.ts**](packages/web/src/env.ts) file,
 but for simplicity we keep them documented below too.
 
-> :eight_spoked_asterisk: **Deep-linking overrides**
+> <details>
+> <summary>:eight_spoked_asterisk: <strong>Deep-linking overrides</strong></summary>
 > 
 > You may temporarily override the variables in the running application using the query string.
 > The Dashboard seeks for query params starting with `~` and try to override any matching known variable.
@@ -136,6 +145,7 @@ but for simplicity we keep them documented below too.
 > Short name from the tables above may be used.
 > 
 > As an example, to change the API endpoint, you may use `https://demo.testkube.io?~api_server_endpoint=http://localhost:8088`.
+> </details>
 
 #### Build Time Variables
 
@@ -166,10 +176,12 @@ docker build \
   -t kubeshop/testkube-dashboard:latest .
 ```
 
-> :eight_spoked_asterisk: **Environment variables**
+> <details>
+> <summary>:eight_spoked_asterisk: <strong>Environment variables</strong></summary>
 > 
 > When you are building images with `docker build`, you may either both set the [**build time variables**](#build-time-variables),
 > and set defaults for the [**dynamic variables**](#dynamic-variables).
+> </details>
 
 ## Learn more
 
