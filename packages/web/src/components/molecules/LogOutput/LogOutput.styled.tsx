@@ -4,8 +4,6 @@ import styled from 'styled-components';
 
 import {AnsiClassesMapping} from '@atoms';
 
-import DecayingMessagePanelList from '@molecules/DecayingMessagePanelList';
-
 import Colors from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
@@ -120,8 +118,4 @@ export const StyledExpandAltOutlined = styled(ExpandAltOutlined)`
   &:hover {
     border-color: ${Colors.indigo400};
   }
-`;
-
-export const BannerList = styled(DecayingMessagePanelList)`
-  margin-bottom: 30px;
 `;

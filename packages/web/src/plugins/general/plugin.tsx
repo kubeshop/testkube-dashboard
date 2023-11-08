@@ -7,8 +7,6 @@ import {IconProps} from '@atoms/Icon/types';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 
-import {MessagePanelProps} from '@molecules/MessagePanel/MessagePanel';
-
 import {EndpointProcessing} from '@pages';
 
 import type PermissionsStub from '@plugins/permissions/plugin';
@@ -26,8 +24,7 @@ export default createPlugin('dashboard/general')
   .route('/apiEndpoint', tk => (isApiEndpointLocked() ? <Navigate to="/" replace /> : <EndpointProcessing />))
 
   .define(slot<ReactNode>()('siderLogo'))
-
-  .define(slot<{key: string} & Omit<MessagePanelProps, 'onClose'>>()('banners'))
+  .define(slot<ReactNode>()('contentTop'))
 
   .define(
     slot<{

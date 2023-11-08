@@ -10,7 +10,6 @@ import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
-import {MessagePanelProps} from '@molecules/MessagePanel/MessagePanel';
 
 import TestSuiteDetails from '@pages/TestSuites/TestSuiteDetails';
 import TestSuitesList from '@pages/TestSuites/TestSuitesList';
@@ -101,7 +100,7 @@ export default createPlugin('oss/tests-and-test-suites')
 
   .define(data<(tab: string) => void>()('setExecutionTab'))
   .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testExecutionTabs'))
-  .define(slot<{key: string} & Omit<MessagePanelProps, 'onClose'>>()('testExecutionLogOutputBanners'))
+  .define(slot<ReactNode>()('logOutputTop'))
   .define(slot<ReactNode>()('deleteTestExtension'))
   .define(slot<ReactNode>()('deleteTestSuiteExtension'))
   .define(slot<ReactNode>()('testSuitesListTitleAddon'))

@@ -18,6 +18,10 @@ export const build: BuildTimeEnvironment = {
 export const dynamic: DynamicEnvironment = {
   apiUrl: getValue('REACT_APP_API_SERVER_ENDPOINT', provided?.REACT_APP_API_SERVER_ENDPOINT),
   basename: getValue('REACT_APP_ROOT_ROUTE', provided?.REACT_APP_ROOT_ROUTE),
+  bannersRotationTime: parseInt(
+    getValue('REACT_APP_BANNERS_ROTATION_TIME', provided?.REACT_APP_BANNERS_ROTATION_TIME) || 7 * 24 * 3600 * 1000,
+    10
+  ),
   disableTelemetry: getValue('REACT_APP_DISABLE_TELEMETRY', provided?.REACT_APP_DISABLE_TELEMETRY) === 'true',
   crdOperatorRevision: getValue('REACT_APP_CRD_OPERATOR_REVISION', provided?.REACT_APP_CRD_OPERATOR_REVISION) || 'main',
   debugTelemetry:
@@ -34,6 +38,7 @@ export interface BuildTimeEnvironment {
 export interface DynamicEnvironment {
   apiUrl: string;
   basename: string;
+  bannersRotationTime: number;
   disableTelemetry: boolean;
   crdOperatorRevision: string;
   debugTelemetry: boolean;

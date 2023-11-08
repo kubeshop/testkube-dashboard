@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
+import React, {Fragment, createElement, memo, useCallback, useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {CSSTransition} from 'react-transition-group';
 import {useAsync, useInterval} from 'react-use';
@@ -17,7 +17,7 @@ import {useLogOutputPick} from '@store/logOutput';
 import {getRtkIdToken} from '@utils/rtk';
 
 import FullscreenLogOutput from './FullscreenLogOutput';
-import {BannerList, LogOutputWrapper} from './LogOutput.styled';
+import {LogOutputWrapper} from './LogOutput.styled';
 import LogOutputPure from './LogOutputPure';
 import {useCountLines, useLastLines} from './utils';
 
@@ -30,7 +30,6 @@ export type LogOutputProps = {
 
 const LogOutput: React.FC<LogOutputProps> = props => {
   const {logOutput = 'No logs', executionId, isRunning = false, initialLines = 300} = props;
-  const banners = useTestsSlot('testExecutionLogOutputBanners');
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -125,7 +124,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   return (
     <>
       <LogOutputWrapper>
-        <BannerList items={banners} />
+        {/* eslint-disable-next-line react/no-array-index-key */}
+        {useTestsSlot('logOutputTop').map((element, i) => createElement(Fragment, {key: i}, element))}
         <LogOutputPure
           ref={containerRef}
           logs={logs}
