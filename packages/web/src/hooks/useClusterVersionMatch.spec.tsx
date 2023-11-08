@@ -42,4 +42,18 @@ describe('useClusterVersionMatch', () => {
 
     expect(result.current).toBe(true);
   });
+
+  it('should use default value for commit hash', () => {
+    const requiredVersion = 'v1.20.0';
+
+    const {result: result1} = renderHook(() => useClusterVersionMatch(requiredVersion, true), {
+      wrapper: createWrapper('9f0b87f'),
+    });
+    const {result: result2} = renderHook(() => useClusterVersionMatch(requiredVersion, false), {
+      wrapper: createWrapper('9f0b87f'),
+    });
+
+    expect(result1.current).toBe(true);
+    expect(result2.current).toBe(false);
+  });
 });
