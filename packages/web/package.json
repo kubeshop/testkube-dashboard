@@ -82,6 +82,7 @@
     "semver": "^7.5.4",
     "strip-ansi": "^6.0.1",
     "styled-components": "5.3.5",
+    "yaml": "^2.3.4",
     "zustand": "^4.4.1"
   },
   "scripts": {

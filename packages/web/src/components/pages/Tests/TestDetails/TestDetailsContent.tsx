@@ -24,6 +24,7 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
+import CICDSettings from './CICDIntegrations/CICDSettings';
 import TestExecutionDrawer from './TestExecution/TestExecutionDrawer';
 import TestSettings from './TestSettings';
 
@@ -81,6 +82,11 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
                 key: 'executions',
                 label: 'Recent executions',
                 children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestExecutionMutation} />,
+              },
+              {
+                key: 'ci-cd',
+                label: 'CI/CD Integration',
+                children: <CICDSettings />,
               },
               !details.readOnly && {
                 key: 'commands',
