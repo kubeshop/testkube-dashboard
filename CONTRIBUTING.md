@@ -244,6 +244,8 @@ To add a new plugin, update the list in [`packages/web/src/AppRoot.tsx`](package
 > We have introduced the system lately, and most of the functionality is not migrated fully.
 > Most often it's referring the components that are not lying directly in the plugin directory,
 > but instead refer to the files from general codebase.
+> 
+> We plan to migrate them with time.
 > </details>
 
 > <details>
