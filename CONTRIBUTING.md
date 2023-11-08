@@ -1,6 +1,6 @@
 # Contributing to Testkube Dashboard
 
-This document helps to start development of the 
+This document helps to start development of the Testkube Dashboard.
 
 ## Table of Contents
 
