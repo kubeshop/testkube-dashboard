@@ -24,6 +24,7 @@ interface CardFormProps {
   disabled?: boolean;
   readOnly?: boolean;
   wasTouched?: boolean;
+  skipTouchedValidation?: boolean;
   isWarning?: boolean;
   form?: FormInstance;
   labelAlign?: FormLabelAlign;
@@ -52,6 +53,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   disabled,
   readOnly,
   wasTouched,
+  skipTouchedValidation,
   isWarning,
   confirmLabel,
   spacing,
@@ -133,6 +135,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
           headerAction={headerAction}
           confirmLabel={confirmLabel}
           wasTouched={wasTouched}
+          skipTouchedValidation={skipTouchedValidation}
           readOnly={readOnly}
           loading={loading}
           isWarning={isWarning}
