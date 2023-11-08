@@ -61,6 +61,7 @@ to forward the UI and API ports from the Kubernetes cluster.
 
 > <details>
 > <summary>:warning: <strong>Testkube Cloud and Enterprise</strong></summary>
+> <br>
 > 
 > This Dashboard works only for the Testkube Open Source installations.
 > To manage the Testkube in Enterprise or Cloud offering, use their corresponding dashboards:
@@ -70,6 +71,7 @@ to forward the UI and API ports from the Kubernetes cluster.
 
 > <details>
 > <summary>:eight_spoked_asterisk: <strong>Disable bundling dashboard</strong></summary>
+> <br>
 > 
 > To disable Dashboard installation with the Testkube system, you may use `testkube-dashboard.enabled=false` value in the [**Helm chart**](https://github.com/kubeshop/helm-charts/tree/main/charts/testkube).
 > </details>
@@ -92,6 +94,7 @@ To learn more about the Testkube Dashboard development and architecture, see the
 
 > <details>
 > <summary>:eight_spoked_asterisk: <strong>Environment variables</strong></summary>
+> <br>
 > 
 > To configure your [**environment variables**](#environment-variables), either:
 > * create `.env` file in the repository, or
@@ -118,6 +121,7 @@ docker run --rm \
 
 > <details>
 > <summary>:warning: <strong>Environment variables</strong></summary>
+> <br>
 > 
 > To override the [**build time environment variables**](#build-time-variables) too, you need to [**build the Docker image**](#building-docker-image) on your own.
 > </details>
@@ -136,6 +140,7 @@ but for simplicity we keep them documented below too.
 
 > <details>
 > <summary>:eight_spoked_asterisk: <strong>Deep-linking overrides</strong></summary>
+> <br>
 > 
 > You may temporarily override the variables in the running application using the query string.
 > The Dashboard seeks for query params starting with `~` and try to override any matching known variable.
@@ -178,6 +183,7 @@ docker build \
 
 > <details>
 > <summary>:eight_spoked_asterisk: <strong>Environment variables</strong></summary>
+> <br>
 > 
 > When you are building images with `docker build`, you may either both set the [**build time variables**](#build-time-variables),
 > and set defaults for the [**dynamic variables**](#dynamic-variables).

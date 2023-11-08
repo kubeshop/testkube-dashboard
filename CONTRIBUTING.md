@@ -43,7 +43,8 @@ Either way, it may be useful to have [**Testkube CLI**](https://docs.testkube.io
 To run the Testkube, you need to have Kubernetes cluster, and `kubectl` connected to it.
 
 > <details>
-> <summary>:eight_spoked_asterisk: <strong>Running Kubernetes cluster locally</strong>
+> <summary>:eight_spoked_asterisk: <strong>Running Kubernetes cluster locally</strong></summary>
+> <br>
 > 
 > For local development it may be easiest to use [**K3D**](https://k3d.io/v5.6.0/), [**Minikube**](https://minikube.sigs.k8s.io/docs/start/),
 > or the one built in [Docker Desktop](https://docs.docker.com/desktop/kubernetes/) (but it's heavy).
@@ -111,6 +112,7 @@ We aim into having unit tests for every new feature, along with the Pull Request
 
 > <details>
 > <summary>:warning: <strong>Technical debt</strong></summary>
+> <br>
 >
 > Unfortunately, we have a technical debt for old components,
 > that are not well covered. We try to write unit tests for them in spare time or when editing,
@@ -127,6 +129,7 @@ During the Pull Request checks, the E2E tests are run against generated [**Verce
 
 > <details>
 > <summary>:warning: <strong>Technical debt</strong></summary>
+> <br>
 >
 > We have some critical paths not covered, and we aim into covering them before new features,
 > in spare time, or allocated time after other features.
@@ -156,6 +159,7 @@ It has telemetry disabled - to override it, add `?~gtm_id=GTM-PQK4DKN&~disable_t
 
 > <details>
 > <summary>:warning: <strong>Deprecation: Create React App</strong></summary>
+> <br>
 > 
 > As CRA is deprecated for long time, we plan to move to [**Vite**](https://vitejs.dev/).
 > 
@@ -164,6 +168,7 @@ It has telemetry disabled - to override it, add `?~gtm_id=GTM-PQK4DKN&~disable_t
 
 > <details>
 > <summary>:warning: <strong>Deprecation: RTK Query</strong></summary>
+> <br>
 > 
 > We plan to move to GraphQL (probably with Apollo) mutations, queries and subscriptions,
 > but we need to finish ongoing back-end work before.
@@ -171,6 +176,7 @@ It has telemetry disabled - to override it, add `?~gtm_id=GTM-PQK4DKN&~disable_t
 
 > <details>
 > <summary>:warning: <strong>Deprecation: Antd 4.x</strong></summary>
+> <br>
 > 
 > The Antd 5.x is alive for a long time, so we may consider migrating there.
 > It will require significant effort though.
@@ -180,6 +186,7 @@ It has telemetry disabled - to override it, add `?~gtm_id=GTM-PQK4DKN&~disable_t
 
 > <details>
 > <summary>:warning: <strong>Consideration: Zustand</strong></summary>
+> <br>
 > 
 > We may consider getting rid of Zustand,
 > as our [**plugin system**](#plugins-system) is able to store the data in a similar way.
@@ -199,6 +206,7 @@ while running different commands like `npm run lint` or `npm test` will do that 
 
 > <details>
 > <summary>:warning: <strong>Technical debt: Monolithic `web`</strong></summary>
+> <br>
 > 
 > The mono-repository has been introduced lately, so we had no time yet to split the code to corresponding packages.
 > We should improve that in the coming weeks.
@@ -206,6 +214,7 @@ while running different commands like `npm run lint` or `npm test` will do that 
 
 > <details>
 > <summary>:warning: <strong>We plan to use <a href="https://nx.dev">nx</a> in future</strong></summary>
+> <br>
 > 
 > Thanks to that, we will be able to build boilerplate code for i.e. plugins automatically.
 > </details>
@@ -231,6 +240,7 @@ To add a new plugin, update the list in [`packages/web/src/AppRoot.tsx`](package
 
 > <details>
 > <summary>:warning: <strong>Technical debt: all the plugins are in `web` package</strong></summary>
+> <br>
 > 
 > At the moment, because of issues with TypeScript types across packages (due to aliases in `web` package),
 > all the plugins are in [`packages/web/src/plugins`](packages/web/src/plugins) directory.
@@ -240,6 +250,7 @@ To add a new plugin, update the list in [`packages/web/src/AppRoot.tsx`](package
 
 > <details>
 > <summary>:warning: <strong>Technical debt: some plugins are more like stubs</strong></summary>
+> <br>
 > 
 > We have introduced the system lately, and most of the functionality is not migrated fully.
 > Most often it's referring the components that are not lying directly in the plugin directory,
@@ -250,6 +261,7 @@ To add a new plugin, update the list in [`packages/web/src/AppRoot.tsx`](package
 
 > <details>
 > <summary>:eight_spoked_asterisk: <strong>Future enhancement</strong></summary>
+> <br>
 > 
 > We want to allow community plugins as well.
 > </details>
@@ -284,6 +296,7 @@ For new features, we are able to use feature flags.
 
 > <details>
 > <summary>:eight_spoked_asterisk: <strong>Future enhancement</strong></summary>
+> <br>
 > 
 > We could allow feature flags in a similar way as we handle environment variables overrides in the query string.
 > </details>
