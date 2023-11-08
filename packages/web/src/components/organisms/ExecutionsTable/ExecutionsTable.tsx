@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {memo, useCallback, useMemo} from 'react';
 
 import {Table, TablePaginationConfig} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
@@ -102,4 +102,4 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
   );
 };
 
-export default ExecutionsTable;
+export default memo(ExecutionsTable);
