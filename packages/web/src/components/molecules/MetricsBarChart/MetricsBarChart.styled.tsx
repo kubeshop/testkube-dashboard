@@ -57,7 +57,10 @@ export const AxisLabel = styled.div<{$top: number}>`
 
 export const SvgWrapper = styled.div<{$isDetailsView?: boolean}>`
   display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
   align-items: flex-end;
+  width: fit-content;
 
   ${props => (props.$isDetailsView ? 'padding-bottom: 50px;' : '')}
   ${props => (props.$isDetailsView ? 'padding-left: 75px;' : '')}
@@ -73,30 +76,16 @@ export const ClickableBar = styled.div<{
   $color: StatusColors;
   hoverColor: SecondaryStatusColors;
 }>`
-  transition: 0.3s;
+  position: relative;
+  transition: 0.3s background-color linear;
   cursor: pointer;
+  margin-right: 3px;
 
   background-color: ${props => props.$color};
   border-bottom: 3px solid ${props => props.$color};
 
   &:hover {
     background-color: ${props => props.hoverColor} !important;
-  }
-`;
-
-export const ClickableBarWrapper = styled.span<{borderTop: number; hoverColor: SecondaryStatusColors}>`
-  position: relative;
-
-  border-top: ${props => (props.borderTop ? `${props.borderTop}px` : '1px')} solid transparent;
-
-  padding-right: 3px;
-
-  cursor: pointer;
-
-  &:hover {
-    & > ${ClickableBar} {
-      background-color: ${props => props.hoverColor} !important;
-    }
   }
 `;
 
@@ -126,12 +115,13 @@ export const StyledPopoverContent = styled.div`
   gap: 4px;
 `;
 
-export const BarDate = styled.div<{
-  $height: number;
-}>`
+export const BarDate = styled.div.attrs<{$height: number}>(({$height}) => ({
+  style: {top: `${$height + 15}px`},
+}))<{$height: number}>`
   position: absolute;
-  top: ${({$height}) => $height + 15}px;
   left: -5px;
+  color: ${Colors.slate400};
+  font-size: 12px;
 
   white-space: nowrap;
 

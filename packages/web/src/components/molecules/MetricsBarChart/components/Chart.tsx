@@ -32,26 +32,16 @@ const Chart: React.FC<ChartProps> = props => {
   const renderedBarChart = useMemo(() => {
     let prevDay = getDayOfYear(new Date(chartData[0].startTime));
 
-    return chartData.map((barItem, index) => {
+    return chartData.map(barItem => {
       const {durationS, logDuration, status, name, startTime} = barItem;
 
       const barColor = StatusColors[status as keyof typeof StatusColors];
       const barHoverColor = SecondaryStatusColors[status as keyof typeof SecondaryStatusColors];
 
-      /*
-        if execution is running, bar height is 50% of chartHeight
-        PROPORTION ---- heightInPx / chartHeightInPx = logDurationInMs / maxValueInMs
-        so we basically say that bar value in px relates to 100% that is chartHeight
-        the same as bar value in milliseconds relates to 100% that is max Value in data set
-        we take that greatest value is basically set to 100% of chart height
-      */
-
       const height =
         status === 'running' || status === 'aborting' ? chartHeight / 2 : (logDuration * chartHeight) / maxValue;
 
       const formattedDuration = status === 'running' || status === 'aborting' ? 'running' : formatDuration(durationS);
-
-      const key = `${name}-bar-${index}`;
 
       const barProps = {
         height,
@@ -62,31 +52,33 @@ const Chart: React.FC<ChartProps> = props => {
       };
 
       if (isDetailsView) {
-        let showDate = false;
         const startTimeDate = new Date(startTime);
-        if (prevDay !== getDayOfYear(startTimeDate)) {
+        const showDate = prevDay !== getDayOfYear(startTimeDate);
+        if (showDate) {
           prevDay = getDayOfYear(startTimeDate);
-          showDate = true;
         }
         return (
           <BarWithTooltip
-            key={key}
-            chartHeight={chartHeight}
-            tooltipData={{duration: formattedDuration, status, name, startTime}}
+            key={name}
+            name={name}
+            status={status}
+            duration={formattedDuration}
+            startTime={startTime}
             date={showDate ? format(startTimeDate, 'd.M.yy') : undefined}
+            chartHeight={chartHeight}
             {...barProps}
           />
         );
       }
 
-      return <Bar $margin={barProps.margin} style={{height, width: barWidth, background: barProps.color}} key={key} />;
+      return <Bar $margin={barProps.margin} style={{height, width: barWidth, background: barProps.color}} key={name} />;
     });
-  }, [chartData]);
+  }, [chartData, barWidth, chartHeight, maxValue, barMargin, isDetailsView]);
 
   return (
     <SvgWrapper $isDetailsView={isDetailsView}>
-      {renderedBarChart}
       <div ref={scrollRef} />
+      {renderedBarChart}
     </SvgWrapper>
   );
 };

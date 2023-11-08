@@ -1,3 +1,7 @@
+import {memo} from 'react';
+
+import {useLastCallback} from '@hooks/useLastCallback';
+
 import {useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
@@ -10,7 +14,10 @@ export type BarConfig = {
   height: number;
   color: StatusColors;
   hoverColor: SecondaryStatusColors;
-  tooltipData: any;
+  status: any;
+  duration: string;
+  name: string;
+  startTime: number;
   date?: string;
   chartHeight: number;
 };
@@ -18,7 +25,13 @@ export type BarConfig = {
 const BarWithTooltip: React.FC<BarConfig> = props => {
   const {executions} = useEntityDetailsPick('executions');
   const {open} = useExecutionDetailsPick('open');
-  return <BarWithTooltipPure {...props} executions={executions} onSelect={open} />;
+  const onSelect = useLastCallback((name: string) => {
+    const targetRecord = executions.results?.find((item: any) => item.name === name);
+    if (targetRecord) {
+      open(targetRecord.id);
+    }
+  });
+  return <BarWithTooltipPure {...props} onSelect={onSelect} />;
 };
 
-export default BarWithTooltip;
+export default memo(BarWithTooltip);
