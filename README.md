@@ -101,7 +101,7 @@ To learn more about the Testkube Dashboard development and architecture, see the
 > 
 > You may use both [**build time**](#build-time-variables) and [**dynamic variables**](#dynamic-variables) here.
 >
-> Please note, that you may want to use [**Create React App's varisbles**](https://create-react-app.dev/docs/advanced-configuration/) too,
+> Please note, that you may want to use [**Create React App's variables**](https://create-react-app.dev/docs/advanced-configuration/) too,
 > i.e. `BROWSER=none` to avoid opening the browser.
 > </details>
 
