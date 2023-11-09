@@ -154,6 +154,8 @@ but for simplicity we keep them documented below too.
 
 #### Build Time Variables
 
+The build time environments are loaded from `process.env` during build time.
+
 | Name                   | Short Name   | Description                                                               |
 |------------------------|--------------|---------------------------------------------------------------------------|
 | `REACT_APP_SENTRY_DSN` | `sentry_dsn` | [**Sentry**](https://sentry.io/) DSN for error reporting                  |
@@ -161,6 +163,8 @@ but for simplicity we keep them documented below too.
 | `REACT_APP_VERSION`    | `version`    | Dashboard version used for reporting and displaying                       |
 
 #### Dynamic Variables
+
+The dynamic variables are loaded from automatically generated `env-config.js` file.
 
 | Name                              | Short Name              | Description                                                                                                                               |
 |-----------------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
