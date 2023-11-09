@@ -20,7 +20,11 @@ export const useDisplayedPromoBanner = (position: PromoBannerPosition): PromoBan
   );
   const highPriorityBanner = useMemo(() => visibleBanners.find(x => x.critical), [visibleBanners]);
   const firstBanner = useMemo(
-    () => matchingBanners.sort((a, b) => (bannersClosedAt[a.id] || 0) - (bannersClosedAt[b.id] || 0)).shift(),
+    () =>
+      matchingBanners
+        .filter(x => !bannersClosedAt[x.id] || x.recurring)
+        .sort((a, b) => (bannersClosedAt[a.id] || 0) - (bannersClosedAt[b.id] || 0))
+        .shift(),
     [matchingBanners, bannersClosedAt]
   );
 
