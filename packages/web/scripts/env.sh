@@ -17,7 +17,7 @@ VARIABLES="$(env | grep '^REACT_APP_' | sed 's/=.*//')"
 set -- $VARIABLES
 echo "window._env_ = {" > "$OUT"
 while [ -n "$1" ]; do
-  value="$(eval "echo \"\$$1\"")"
+  value="$(eval "echo \"\$$1\" | sed \"s/'/\\\\\\'/g\"")"
   echo "$1: '$value'," >> "$OUT"
   shift
 done
