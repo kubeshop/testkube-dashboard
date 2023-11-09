@@ -127,6 +127,10 @@ We aim into having unit tests for bigger features, after the release.
 
 During the Pull Request checks, the E2E tests are run against generated [**Vercel preview**](#preview) and `demo.testkube.dev`'s API.
 
+* Before running E2E tests, you need to install browser for Playwright with `npx playwright install` command
+* To run E2E tests, you may run `npm run e2e` command
+* To run E2E tests with better interface for development, you may run `npm run e2e:watch`
+
 > <details>
 > <summary>:warning: <strong>Technical debt</strong></summary>
 > <br>
