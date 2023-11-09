@@ -79,7 +79,7 @@ to forward the UI and API ports from the Kubernetes cluster.
 
 To run the Testkube Dashboard for development:
 * Install Node 20.x
-* Fork the repository and clone it (or just clone it, if you are Testkube member or )
+* Fork the repository and clone it (or just clone it, if you are Testkube member or want to read it only)
 * Install NPM dependencies
 * Run `npm start` command
 
