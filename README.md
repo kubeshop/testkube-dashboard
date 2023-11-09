@@ -34,7 +34,6 @@ Dashboard to manage your [**Testkube**](https://testkube.io) cluster and monitor
 
 The Dashboard is deployed as an application in the cluster.
 It runs in a browser, and it communicates with the [**Testkube API Server**](https://github.com/kubeshop/testkube) via Ingress Controller (either provided or bundled).
-A simple read-only dashboard for real-time TestKube results.
 
 ## Table of Contents
 
