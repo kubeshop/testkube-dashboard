@@ -27,6 +27,7 @@ export interface PromoBanner {
   id: string;
   permanent?: boolean;
   critical?: boolean;
+  recurring?: boolean;
   priority: number;
   position: PromoBannerPosition;
   condition: PromoBannerCondition;

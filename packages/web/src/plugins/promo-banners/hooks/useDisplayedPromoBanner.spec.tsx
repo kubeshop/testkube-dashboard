@@ -9,6 +9,7 @@ import {useDisplayedPromoBanner} from '@plugins/promo-banners/hooks/useDisplayed
 
 const criticalBanner: PromoBanner = {
   id: 'critical-test-id',
+  recurring: true,
   critical: true,
   title: 'test-title',
   description: 'test-description',
@@ -20,6 +21,7 @@ const criticalBanner: PromoBanner = {
 
 const bannerLog: PromoBanner = {
   id: 'regular-test-id',
+  recurring: true,
   title: 'test-title',
   description: 'test-description',
   type: PromoBannerType.warning,
@@ -30,6 +32,7 @@ const bannerLog: PromoBanner = {
 
 const banner: PromoBanner = {
   id: 'regular-test-id',
+  recurring: true,
   title: 'test-title',
   description: 'test-description',
   type: PromoBannerType.warning,
@@ -40,6 +43,7 @@ const banner: PromoBanner = {
 
 const banner2: PromoBanner = {
   id: 'regular-test-id-2',
+  recurring: true,
   title: 'test-title',
   description: 'test-description',
   type: PromoBannerType.warning,
@@ -50,6 +54,7 @@ const banner2: PromoBanner = {
 
 const testFailedBanner: PromoBanner = {
   id: 'regular-test-id',
+  recurring: true,
   title: 'test-title',
   description: 'test-description',
   type: PromoBannerType.warning,
@@ -141,6 +146,38 @@ describe('plugins.promo-banner', () => {
         }),
       });
       expect(result.current).toBe(banner2);
+    });
+
+    it('should ignore non-recurring banner when rotation time passed and all has been seen (other option)', () => {
+      const {result} = renderHook(() => useDisplayedPromoBanner('top'), {
+        wrapper: createWrapper([banner, {...banner2, recurring: false}], {
+          rotationTime: 1000,
+          closedAt: {
+            [banner.id]: Date.now() - 1000,
+            [banner2.id]: Date.now() - 2000,
+          },
+        }),
+      });
+      expect(result.current).toBe(banner);
+    });
+
+    it('should ignore non-recurring banner when rotation time passed and all has been seen (no options)', () => {
+      const {result} = renderHook(() => useDisplayedPromoBanner('top'), {
+        wrapper: createWrapper(
+          [
+            {...banner, recurring: false},
+            {...banner2, recurring: false},
+          ],
+          {
+            rotationTime: 1000,
+            closedAt: {
+              [banner.id]: Date.now() - 1000,
+              [banner2.id]: Date.now() - 2000,
+            },
+          }
+        ),
+      });
+      expect(result.current).toBe(undefined);
     });
 
     it('should show the critical banner even when shortly regular banner was closed', () => {
