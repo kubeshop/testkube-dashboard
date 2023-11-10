@@ -357,6 +357,29 @@ describe('plugins', () => {
         });
         expect(result.current).toEqual([1, ['value1']]);
       });
+
+      it('should use defaults', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1', {order: 30});
+
+        const {result} = renderHook(
+          () => [
+            useRenderCount(),
+            useSlot('slot1', [
+              {value: 'value2', metadata: {order: 28, enabled: () => false}},
+              {value: 'value3', metadata: {order: 29}},
+              {value: 'value4', metadata: {order: 30}},
+              {value: 'value5', metadata: {order: 31}},
+            ]),
+          ],
+          {
+            wrapper: ({children}) => (
+              <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>
+            ),
+          }
+        );
+        expect(result.current).toEqual([1, ['value3', 'value4', 'value1', 'value5']]);
+      });
     });
 
     describe('useSlotFirst', () => {
@@ -433,6 +456,48 @@ describe('plugins', () => {
           root.slots.slot1[PluginScopeDestroy](root);
           await frame();
         });
+        expect(result.current).toEqual([1, 'value1']);
+      });
+
+      it('should use defaults (first in default)', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1', {order: 30});
+
+        const {result} = renderHook(
+          () => [
+            useRenderCount(),
+            useSlotFirst('slot1', [
+              {value: 'value3', metadata: {order: 31}},
+              {value: 'value2', metadata: {order: 30}},
+            ]),
+          ],
+          {
+            wrapper: ({children}) => (
+              <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>
+            ),
+          }
+        );
+        expect(result.current).toEqual([1, 'value2']);
+      });
+
+      it('should use defaults (first in own)', async () => {
+        const root = createPluginScopeMock({slots: {slot1: []}});
+        root.slots.slot1.add('value1', {order: 30});
+
+        const {result} = renderHook(
+          () => [
+            useRenderCount(),
+            useSlotFirst('slot1', [
+              {value: 'value2', metadata: {order: 31}},
+              {value: 'value3', metadata: {order: 32}},
+            ]),
+          ],
+          {
+            wrapper: ({children}) => (
+              <PluginScopeContext.Provider value={{root}}>{children}</PluginScopeContext.Provider>
+            ),
+          }
+        );
         expect(result.current).toEqual([1, 'value1']);
       });
     });
