@@ -1,8 +1,6 @@
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 
 import {Tabs} from 'antd';
-
-import {Tab} from 'rc-tabs/lib/interface';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {useLastCallback} from '@hooks/useLastCallback';
@@ -17,6 +15,8 @@ import {EntityDetailsHeader, EntityDetailsWrapper, RecentExecutionsTab} from '@o
 
 import {Error, Loading} from '@pages';
 import PageMetadata from '@pages/PageMetadata';
+
+import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
 import {useAbortAllTestExecutionsMutation, useAbortTestExecutionMutation} from '@services/tests';
 
@@ -48,6 +48,40 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
     setSettingsTab('test');
   });
 
+  const defaultTabs = useMemo(
+    () => [
+      {
+        value: {
+          key: 'executions',
+          label: 'Recent executions',
+          children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestExecutionMutation} />,
+        },
+        metadata: {order: -Infinity},
+      },
+      {
+        value: {
+          key: 'commands',
+          label: 'CLI Commands',
+          children: <CLICommands name={details?.name!} bg={Colors.slate800} />,
+        },
+        metadata: {
+          order: -100,
+          enabled: details && !details.readOnly,
+        },
+      },
+      {
+        value: {
+          key: 'settings',
+          label: 'Settings',
+          children: <TestSettings active={settingsTab} onChange={setSettingsTab} />,
+        },
+        metadata: {order: 50},
+      },
+    ],
+    [details, run, settingsTab, setSettingsTab]
+  );
+  const tabs = useTestsSlot('testDetailsTabs', defaultTabs);
+
   if (error) {
     return <Error title={error?.data?.title || 'Error'} description={error?.data?.detail || ''} />;
   }
@@ -71,30 +105,7 @@ const TestDetailsContent: FC<TestDetailsContentProps> = ({tab, settingsTab}) => 
           entityLabel="test"
         />
         <SummaryGrid metrics={metrics} />
-        <Tabs
-          activeKey={tab}
-          onChange={setTab}
-          destroyInactiveTabPane
-          items={
-            [
-              {
-                key: 'executions',
-                label: 'Recent executions',
-                children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestExecutionMutation} />,
-              },
-              !details.readOnly && {
-                key: 'commands',
-                label: 'CLI Commands',
-                children: <CLICommands name={details!.name} bg={Colors.slate800} />,
-              },
-              {
-                key: 'settings',
-                label: 'Settings',
-                children: <TestSettings active={settingsTab} onChange={setSettingsTab} />,
-              },
-            ].filter(Boolean) as Tab[]
-          }
-        />
+        <Tabs activeKey={tab} onChange={setTab} destroyInactiveTabPane items={tabs} />
       </PageWrapper>
       <TestExecutionDrawer />
     </EntityDetailsWrapper>

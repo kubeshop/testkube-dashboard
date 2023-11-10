@@ -100,6 +100,8 @@ export default createPlugin('oss/tests-and-test-suites')
 
   .define(data<(tab: string) => void>()('setExecutionTab'))
   .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testExecutionTabs'))
+  .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testDetailsTabs'))
+  .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testSuiteDetailsTabs'))
   .define(slot<ReactNode>()('logOutputTop'))
   .define(slot<ReactNode>()('deleteTestExtension'))
   .define(slot<ReactNode>()('deleteTestSuiteExtension'))
