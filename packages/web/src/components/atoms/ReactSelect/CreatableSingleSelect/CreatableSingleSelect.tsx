@@ -7,7 +7,9 @@ import usePressEnter from '@hooks/usePressEnter';
 import {Option} from '@models/form';
 
 import CustomSingleValue from '../CustomComponents/SingleValue';
-import {DefaultDropdownIndicator, DefaultOptionComponent} from '../DefaultComponents';
+import {DefaultClearIndicator, DefaultOptionComponent} from '../DefaultComponents';
+import ClearIndicator from '../DefaultComponents/ClearIndicator';
+import MultiValueRemove from '../DefaultComponents/MultiValueRemove';
 import {customSingleValueStyles, customTheme} from '../ReactSelect.styled';
 
 type SingleSelectProps = {
@@ -59,13 +61,23 @@ const CreatableSingleSelect: React.FC<SingleSelectProps> = props => {
     }
   };
 
+  const selectionStyles = {
+    clearIndicator: (base: any, state: any) => ({
+      ...base,
+      cursor: 'pointer',
+      color: state.isFocused ? 'red' : 'green',
+      fontWeight: 500,
+    }),
+    // Add more custom styles here if needed
+  };
+
   return (
     <CreatableSelect
       ref={ref}
       value={value}
       defaultValue={defaultValue}
       menuPlacement={menuPlacement}
-      isClearable={false}
+      isClearable
       onChange={onChange}
       placeholder={placeholder}
       options={options}
@@ -80,11 +92,14 @@ const CreatableSingleSelect: React.FC<SingleSelectProps> = props => {
       styles={customSingleValueStyles(validation, stylePlaceholderAsValue)}
       components={{
         Option: CustomOptionComponent,
-        DropdownIndicator: DefaultDropdownIndicator,
+        // removing default dropdown indicator
+        DropdownIndicator: () => null,
+        ClearIndicator: DefaultClearIndicator,
         SingleValue: CustomSingleValue,
       }}
       data-test={dataTest}
       isDisabled={disabled}
+      noOptionsMessage={() => null}
     />
   );
 };

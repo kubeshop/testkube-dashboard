@@ -104,10 +104,6 @@ export type GetSourceFormValues = {
 export const getSourceFormValues = (entityDetails: Test, testSources: SourceWithRepository[]): GetSourceFormValues => {
   const {content} = entityDetails;
 
-  if (!content?.type) {
-    return {source: ''};
-  }
-
   if (entityDetails.source) {
     const sourceDetails = testSources.find(source => source.name === entityDetails.source);
 
@@ -117,6 +113,10 @@ export const getSourceFormValues = (entityDetails: Test, testSources: SourceWith
       commit: content?.repository?.commit || sourceDetails?.repository?.commit,
       path: content?.repository?.path || sourceDetails?.repository?.commit,
     };
+  }
+
+  if (!content?.type) {
+    return {source: ''};
   }
 
   if (content.type === 'string') {
