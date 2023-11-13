@@ -8,17 +8,16 @@ import {Option} from '@models/form';
 
 import CustomSingleValue from '../CustomComponents/SingleValue';
 import {DefaultClearIndicator, DefaultOptionComponent} from '../DefaultComponents';
-import ClearIndicator from '../DefaultComponents/ClearIndicator';
-import MultiValueRemove from '../DefaultComponents/MultiValueRemove';
 import {customSingleValueStyles, customTheme} from '../ReactSelect.styled';
 
 type SingleSelectProps = {
   options?: Option[];
   placeholder: string;
-  formatCreateLabel: (inputString: string) => string;
+  formatCreateLabel: (input: string) => string;
   value?: Option;
   defaultValue?: Option;
   onChange?: (value: any) => void;
+  onCreateOption?: (input: string) => void;
   validateCreation?: (inputValue: string) => boolean;
   CustomOptionComponent?: (props: OptionProps<Option>) => JSX.Element;
   isLoading?: boolean;
@@ -37,6 +36,7 @@ const CreatableSingleSelect: React.FC<SingleSelectProps> = props => {
     value,
     defaultValue,
     onChange,
+    onCreateOption,
     validateCreation,
     CustomOptionComponent = DefaultOptionComponent,
     validation,
@@ -61,16 +61,6 @@ const CreatableSingleSelect: React.FC<SingleSelectProps> = props => {
     }
   };
 
-  const selectionStyles = {
-    clearIndicator: (base: any, state: any) => ({
-      ...base,
-      cursor: 'pointer',
-      color: state.isFocused ? 'red' : 'green',
-      fontWeight: 500,
-    }),
-    // Add more custom styles here if needed
-  };
-
   return (
     <CreatableSelect
       ref={ref}
@@ -79,6 +69,7 @@ const CreatableSingleSelect: React.FC<SingleSelectProps> = props => {
       menuPlacement={menuPlacement}
       isClearable
       onChange={onChange}
+      onCreateOption={onCreateOption}
       placeholder={placeholder}
       options={options}
       createOptionPosition="first"
