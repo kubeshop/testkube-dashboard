@@ -43,6 +43,7 @@ import {StyledLayoutContentWrapper} from './App.styled';
 
 const AppRoot: React.FC = () => {
   useAxiosInterceptors();
+  // new commit
 
   const plugins = useMemo(
     () => [
