@@ -12,7 +12,6 @@ import {useGetClusterSecretsQuery} from '@services/secrets';
 type SecretSelectProps = {
   value?: Option;
   onChange?: (value: Option) => void;
-  onCreateSecret?: (input: string) => void;
   options?: Option[];
   placeholder?: string;
   validation?: boolean;
@@ -22,8 +21,7 @@ type SecretSelectProps = {
 };
 
 const SecretSelect: React.FC<SecretSelectProps> = props => {
-  const {onChange, onCreateSecret, value, options, validation, menuPlacement, disabled, stylePlaceholderAsValue} =
-    props;
+  const {onChange, value, options, validation, menuPlacement, disabled, stylePlaceholderAsValue} = props;
 
   const {data, isFetching} = useGetClusterSecretsQuery();
 
@@ -42,11 +40,15 @@ const SecretSelect: React.FC<SecretSelectProps> = props => {
     <CreatableSingleSelect
       value={value}
       onChange={change}
+      onBlur={(event: any) => {
+        if (event.target.value) {
+          onChange?.({label: event.target.value, value: event.target.value});
+        }
+      }}
       placeholder="Select or create a secret"
       formatCreateLabel={(input: string) => {
         return `Create: Store ${input} as a secret in the Kubernetes secret store`;
       }}
-      onCreateOption={onCreateSecret}
       options={formattedOptions}
       CustomOptionComponent={SecretOption}
       isLoading={isFetching}

@@ -17,6 +17,7 @@ type SingleSelectProps = {
   value?: Option;
   defaultValue?: Option;
   onChange?: (value: any) => void;
+  onBlur?: (event: any) => void;
   onCreateOption?: (input: string) => void;
   validateCreation?: (inputValue: string) => boolean;
   CustomOptionComponent?: (props: OptionProps<Option>) => JSX.Element;
@@ -36,6 +37,7 @@ const CreatableSingleSelect: React.FC<SingleSelectProps> = props => {
     value,
     defaultValue,
     onChange,
+    onBlur,
     onCreateOption,
     validateCreation,
     CustomOptionComponent = DefaultOptionComponent,
@@ -69,6 +71,7 @@ const CreatableSingleSelect: React.FC<SingleSelectProps> = props => {
       menuPlacement={menuPlacement}
       isClearable
       onChange={onChange}
+      onBlur={onBlur}
       onCreateOption={onCreateOption}
       placeholder={placeholder}
       options={options}
