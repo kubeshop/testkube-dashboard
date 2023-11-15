@@ -18,7 +18,7 @@ const SecretOption = (props: OptionProps<Option>) => {
   return (
     // @ts-ignore
     <StyledOption ref={innerRef} {...innerProps} data-test={`secret-option-${children}`}>
-      {isKeyValuePair && isChildren ? <SplitLabelText value={children} /> : children}
+      {isKeyValuePair && isChildren ? <SplitLabelText value={children} isBordered /> : children}
     </StyledOption>
   );
 };
