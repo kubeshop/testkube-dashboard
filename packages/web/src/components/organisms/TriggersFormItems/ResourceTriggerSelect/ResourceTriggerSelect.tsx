@@ -24,6 +24,7 @@ import {StyledResourceOptionWrapper} from './ResourceTriggerSelect.styled';
 const {Option, OptGroup} = Select;
 
 interface ResourceTriggerSelectProps {
+  actionValue: string;
   disabled?: boolean;
   value?: string;
   onChange?: (value: string) => void;
@@ -55,8 +56,8 @@ const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
   }, [testSuites]);
 
   return (
-    <Select optionLabelProp="key" placeholder="Your testkube resource" {...props}>
-      {testsData.length > 0 ? (
+    <Select optionLabelProp="key" placeholder="Your testkube resource" showSearch {...props}>
+      {testsData.length > 0 && props.actionValue === 'run test' ? (
         <OptGroup label="Tests">
           {testsData.map(item => (
             <Option key={item.name} title={item.name}>
@@ -68,7 +69,7 @@ const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
           ))}
         </OptGroup>
       ) : null}
-      {testSuitesData.length > 0 ? (
+      {testSuitesData.length > 0 && props.actionValue === 'run testsuite' ? (
         <OptGroup label="Test Suites">
           {testSuitesData.map(item => (
             <Option key={item.name} title={item.name}>
