@@ -99,6 +99,11 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
     return executors.find((executor: Executor) => executor.executor?.types?.includes(form.getFieldValue('testType')));
   }, [form.getFieldValue('testType')]);
 
+  const isContainerExecutor = useMemo(
+    () => selectedExecutor?.executor.executorType === 'container',
+    [selectedExecutor]
+  );
+
   return (
     <Form form={form} layout="vertical" name="test-creation" onFinish={onSave} style={{flex: 1}} labelAlign="right">
       <div ref={topRef} />
@@ -114,7 +119,14 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
           <Input placeholder="e.g.: my-test" autoComplete="off" />
         </FormItem>
         <FormItem name="testType" label="Type" rules={[required]} required>
-          <Select placeholder="Select from available executors..." showSearch options={remappedExecutors} />
+          <Select
+            onChange={() => {
+              form.validateFields(['testSource']);
+            }}
+            placeholder="Select from available executors..."
+            showSearch
+            options={remappedExecutors}
+          />
         </FormItem>
         <FormItem
           noStyle
@@ -135,7 +147,12 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
             ];
 
             return (
-              <FormItem rules={[required]} label="Source" name="testSource" required>
+              <FormItem
+                rules={!isContainerExecutor ? [required] : []}
+                label="Source"
+                name="testSource"
+                required={!isContainerExecutor}
+              >
                 <Select placeholder="Select a source..." options={options} showSearch />
               </FormItem>
             );
