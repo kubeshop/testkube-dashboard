@@ -1,11 +1,9 @@
-import React, {FC, PropsWithChildren, useContext, useEffect, useMemo} from 'react';
+import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
 import {UseQuery} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {QueryDefinition} from '@reduxjs/toolkit/query';
-
-import {DashboardContext} from '@contexts';
 
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
@@ -15,9 +13,17 @@ import {Test} from '@models/test';
 import {TestSuiteExecution} from '@models/testSuiteExecution';
 import {WSDataWithTestExecution, WSDataWithTestSuiteExecution, WSEventType} from '@models/websocket';
 
+import {useRouterPlugin} from '@plugins/router/hooks';
+
 import {useWsEndpoint} from '@services/apiEndpoint';
 
-import {initializeEntityDetailsStore} from '@store/entityDetails';
+import {
+  useEntityDetailsField,
+  useEntityDetailsInstance,
+  useEntityDetailsPick,
+  useEntityDetailsReset,
+  useEntityDetailsSync,
+} from '@store/entityDetails';
 
 import {safeRefetch} from '@utils/fetchUtils';
 import {PollingIntervals} from '@utils/numbers';
@@ -42,12 +48,9 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   useGetExecutions,
   children,
 }) => {
-  const {navigate} = useContext(DashboardContext);
+  const {navigate} = useRouterPlugin.pick('navigate');
 
-  const [
-    EntityStoreProvider,
-    {sync: useEntityDetailsSync, useField: useEntityDetailsField, pick: useEntityDetailsPick},
-  ] = initializeEntityDetailsStore({entity, id}, [entity, id, navigate, useGetEntityDetails]);
+  useEntityDetailsReset({entity, id}, [entity, id, navigate, useGetEntityDetails]);
 
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
@@ -62,15 +65,18 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
 
   const {data: rawExecutions, refetch} = useGetExecutions(
     {id, last: daysFilterValue},
-    {pollingInterval: PollingIntervals.long, skip: !isSystemAvailable || (!isClusterAvailable && Boolean(executions))}
+    {
+      pollingInterval: PollingIntervals.long,
+      skip: !isSystemAvailable,
+    }
   );
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
-    {skip: !isSystemAvailable || (!isClusterAvailable && Boolean(metrics))}
+    {skip: !isSystemAvailable}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
-    skip: !isSystemAvailable || (!isClusterAvailable && Boolean(storeDetails)),
+    skip: !isSystemAvailable,
   });
   const isV2 = isTestSuiteV2(rawDetails);
   const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);
@@ -217,15 +223,15 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
       setIsFirstTimeLoading(false);
     }
     setExecutions(rawExecutions);
-  }, [useEntityDetailsSync, rawExecutions]);
+  }, [useEntityDetailsInstance(), rawExecutions]);
 
   useEffect(() => {
     setMetrics(rawMetrics);
-  }, [useEntityDetailsSync, rawMetrics]);
+  }, [useEntityDetailsInstance(), rawMetrics]);
 
   useEntityDetailsSync({details, isV2, error});
 
-  return <EntityStoreProvider>{children}</EntityStoreProvider>;
+  return <>{children}</>;
 };
 
 export default EntityDetailsLayer;

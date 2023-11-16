@@ -17,4 +17,7 @@ Dockerfile
 **/dist
 *.log
 
+# generated
+/coverage
+packages/*/coverage
 **/.eslintcache

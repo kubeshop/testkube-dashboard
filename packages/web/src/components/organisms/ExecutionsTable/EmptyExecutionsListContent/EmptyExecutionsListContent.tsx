@@ -20,6 +20,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
   const {id, entity, details} = useEntityDetailsPick('id', 'entity', 'details');
   const onAddSteps = useDashboardNavigate(`/${entity}/${id}/settings/tests`);
   const mayRun = usePermission(Permissions.runEntity);
+  const isReadOnly = details?.readOnly;
 
   if (!details) {
     return null;
@@ -45,11 +46,16 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
   if (entity === 'tests') {
     return (
       <EmptyListContent
-        title="Trigger your first run"
-        description="Your test has no past executions. Trigger the first run!"
+        title={isReadOnly ? 'No past executions' : 'Trigger your first run'}
+        description={
+          isReadOnly
+            ? 'Adjust the timeframe to view older executions.'
+            : 'Your test has no past executions. Trigger the first run!'
+        }
         buttonText="Run this test now"
         onButtonClick={onRun}
         actionType="run"
+        isReadOnly={isReadOnly}
       />
     );
   }
@@ -62,6 +68,7 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
         buttonText="Add your tests to this suite"
         onButtonClick={onAddSteps}
         actionType="create"
+        isReadOnly={isReadOnly}
       >
         <HelpCard isLink link={externalLinks.createTestSuite}>
           Learn how to add test suites
@@ -72,11 +79,16 @@ const EmptyExecutionsListContent: React.FC<EmptyExecutionsListContentProps> = pr
 
   return (
     <EmptyListContent
-      title="Trigger your first run"
-      description="Your test suite has no past executions. Trigger the first run!"
+      title={isReadOnly ? 'No past executions' : 'Trigger your first run'}
+      description={
+        isReadOnly
+          ? 'Adjust the timeframe to view older executions.'
+          : 'Your test suite has no past executions. Trigger the first run!'
+      }
       buttonText="Run this test suite"
       onButtonClick={onRun}
       actionType="run"
+      isReadOnly={isReadOnly}
     />
   );
 };

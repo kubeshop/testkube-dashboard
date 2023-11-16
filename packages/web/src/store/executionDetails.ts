@@ -10,6 +10,7 @@ export interface ExecutionDetailsSlice {
   data: Execution | TestSuiteExecution | null;
   error: any;
   open: (id: string) => void;
+  openByName: (name: string) => void;
   close: () => void;
 }
 
@@ -17,14 +18,17 @@ const createExecutionDetailsSlice: StateCreator<ExecutionDetailsSlice> = set => 
   data: null,
   error: null,
   open: () => {},
+  openByName: () => {},
   close: () => {},
 });
 
 const createExecutionDetailsStore = createStoreFactory('executionDetails', createExecutionDetailsSlice);
 export const {
+  useInstance: useExecutionDetailsInstance,
   use: useExecutionDetails,
   useField: useExecutionDetailsField,
   pick: useExecutionDetailsPick,
   sync: useExecutionDetailsSync,
   init: initializeExecutionDetailsStore,
+  reset: useExecutionDetailsReset,
 } = connectStore(createExecutionDetailsStore);

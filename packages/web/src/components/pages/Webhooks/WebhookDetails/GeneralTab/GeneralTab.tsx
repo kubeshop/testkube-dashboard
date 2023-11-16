@@ -13,6 +13,7 @@ import Name from './Name';
 const GeneralTab: FC = () => {
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {current} = useWebhooksPick('current');
+  const [deleteWebhook] = useDeleteWebhookMutation();
   return (
     <>
       <Name />
@@ -22,7 +23,7 @@ const GeneralTab: FC = () => {
           label="webhook"
           description="This webhook will be permanently deleted. All your automation linked to this webhook will fail from here on and you need to adapt them manually. This action is irreversible and can not be undone."
           redirectUrl="/webhooks"
-          useDeleteMutation={useDeleteWebhookMutation}
+          onDelete={deleteWebhook}
         />
       ) : null}
     </>

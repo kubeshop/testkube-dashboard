@@ -1,8 +1,6 @@
-import {useContext, useEffect} from 'react';
+import {useEffect} from 'react';
 
 import {ExternalLink} from '@atoms';
-
-import {DashboardContext} from '@contexts';
 
 import {Button} from '@custom-antd';
 
@@ -19,6 +17,8 @@ import {Error} from '@pages';
 
 import {Permissions, usePermission} from '@permissions/base';
 
+import {useRouterPlugin} from '@plugins/router/hooks';
+
 import {useGetTriggersListQuery} from '@services/triggers';
 
 import {externalLinks} from '@utils/externalLinks';
@@ -30,7 +30,7 @@ import TriggerCard from './TriggerCard';
 
 const TriggersList: React.FC = () => {
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
-  const {location} = useContext(DashboardContext);
+  const {location} = useRouterPlugin.pick('location');
   const openDetails = useDashboardNavigate(({name}: {name: string}) => `/triggers/${name}`);
 
   const {data: triggers, refetch, error, isLoading} = useGetTriggersListQuery(null, {skip: !isClusterAvailable});

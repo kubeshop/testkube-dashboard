@@ -1,4 +1,5 @@
 import {Button as AntdButton, ButtonProps as AntdButtonProps} from 'antd';
+import {TooltipPlacement} from 'antd/es/tooltip';
 
 import styled from 'styled-components';
 
@@ -8,6 +9,8 @@ export interface ICustomButtonProps extends AntdButtonProps {
   $customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'warning' | 'github' | 'gitlab';
   hidden?: boolean;
   $withPadding?: boolean;
+  tooltip?: string;
+  tooltipPlacement?: TooltipPlacement;
 }
 
 const buttonTypesStyles: Record<string, string> = {

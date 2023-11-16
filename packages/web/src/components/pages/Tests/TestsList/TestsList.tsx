@@ -1,4 +1,5 @@
 import {FC, useCallback} from 'react';
+import {useUnmount} from 'react-use';
 
 import {ExternalLink} from '@atoms';
 
@@ -34,10 +35,12 @@ const PageDescription: FC = () => (
 );
 
 const TestsList: FC = () => {
-  const isAvailable = useSystemAccess(SystemAccess.agent);
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
-  const [storeTests] = useTestsField('tests');
+
+  useUnmount(() => {
+    setFilters({...filters, pageSize: initialFilters.pageSize});
+  });
 
   const {
     data: tests,
@@ -46,7 +49,7 @@ const TestsList: FC = () => {
     error,
   } = useGetTestsQuery(filters, {
     pollingInterval: PollingIntervals.everySecond,
-    skip: !isSystemAvailable || (!isAvailable && Boolean(storeTests)),
+    skip: !isSystemAvailable,
   });
   useTestsSync({tests});
 

@@ -1,3 +1,5 @@
+import {LoadingOutlined} from '@ant-design/icons';
+
 import styled from 'styled-components';
 
 import Colors from '@styles/Colors';
@@ -104,4 +106,8 @@ export const StyledEntityGridLoaderContainer = styled.div`
   justify-content: center;
   font-size: 30px;
   min-height: 80px;
+`;
+
+export const LazyLoadingOutlined = styled(LoadingOutlined)`
+  animation: 500ms linear opacity-in, 750ms linear spin infinite;
 `;

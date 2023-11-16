@@ -1,19 +1,17 @@
-import {PropsWithChildren, ReactElement, useContext} from 'react';
+import {PropsWithChildren, ReactElement} from 'react';
 
 import {ReactComponent as CreateTestIcon} from '@assets/create-test.svg';
 
 import {ExternalLink} from '@atoms';
 
-import {ConfigContext} from '@contexts';
-
 import {Button, Text, Title} from '@custom-antd';
-
-import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {HelpCard} from '@molecules';
 import {StyledHelpCardsContainer, StyledLastHelpCardContainer} from '@molecules/HelpCard/HelpCard.styled';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useConfigPlugin} from '@plugins/config/hooks';
 
 import Colors from '@styles/Colors';
 
@@ -27,6 +25,7 @@ type EmptyListContentProps = {
   emptyListReadonlyTitle?: string;
   emptyListReadonlyDescription?: string;
   actionType: 'create' | 'run';
+  isReadOnly?: boolean;
 };
 
 const actionTypeToPermission: Record<EmptyListContentProps['actionType'], Permissions> = {
@@ -44,10 +43,10 @@ const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = pro
     emptyListReadonlyTitle,
     emptyListReadonlyDescription,
     actionType,
+    isReadOnly,
   } = props;
 
-  const {discordUrl} = useContext(ConfigContext);
-  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+  const discordUrl = useConfigPlugin.select(x => x.discordUrl);
   const isActionAvailable = usePermission(actionTypeToPermission[actionType]);
 
   return (
@@ -59,7 +58,7 @@ const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = pro
           <Text className="regular middle text-center" color={Colors.slate400}>
             {description}
           </Text>
-          {isClusterAvailable ? (
+          {!isReadOnly ? (
             <Button $customType="primary" onClick={onButtonClick}>
               {buttonText}
             </Button>

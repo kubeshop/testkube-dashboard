@@ -38,13 +38,17 @@ const ArtifactsListItem: React.FC<ArtifactsListItemProps> = ({artifact, executio
   };
 
   return (
-    <ArtifactsListItemContainer className={isDownloading ? 'disabled' : ''} onClick={() => handleDownload()}>
+    <ArtifactsListItemContainer
+      className={isDownloading ? 'disabled' : ''}
+      onClick={() => handleDownload()}
+      data-testid="artifact-list-item"
+    >
       <StyledSpace size={15}>
-        <FileOutlined />
+        <FileOutlined data-testid="artifact-type-icon" />
         <Text className="regular" color={Colors.slate300}>
           {name}
         </Text>
-        {isDownloading ? <StyledLoader /> : <StyledDownloadIcon />}
+        {isDownloading ? <StyledLoader /> : <StyledDownloadIcon data-testid="artifact-download-icon" />}
       </StyledSpace>
     </ArtifactsListItemContainer>
   );

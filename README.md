@@ -1,110 +1,213 @@
-# TestKube Dashboard
+<p align="center">
+  <img src="docs/testkube-logo.svg" alt="Testkube Logo" width="80"/>
+</p>
 
-![Build Status](https://github.com/kubeshop/testkube-dashboard/actions/workflows/build.yml/badge.svg?event=push)
-![Tests Status](https://github.com/kubeshop/testkube-dashboard/actions/workflows/test.yml/badge.svg?event=push)
-![Docker Status](https://github.com/kubeshop/testkube-dashboard/actions/workflows/docker-build-tag.yml/badge.svg?branch=main&event=push)
+<p align="center">
+  Welcome to Testkube - Your friendly cloud-native testing framework for Kubernetes
+</p>
 
-A simple read-only dashboard for real-time TestKube results.
+<p align="center">
+  <a href="https://testkube.io">Website</a> |
+  <a href="https://kubeshop.github.io/testkube">Documentation</a> |
+  <a href="https://twitter.com/testkube_io">Twitter</a> |
+  <a href="https://discord.gg/hfq44wtR6Q">Discord</a> |
+  <a href="https://kubeshop.io/category/testkube">Blog</a>
+</p>
 
-The TestKube Dashboard is deployed as a standalone web application in a cluster running TestKube. It runs in the browser
-and communicates with the TestKube api-server via an Ingress controller (either provided or bundled):
+<p align="center">
+  <img title="Build Status" src="https://github.com/kubeshop/testkube-dashboard/actions/workflows/build.yml/badge.svg?event=push"/>
+  <img title="Tests Status" src="https://github.com/kubeshop/testkube-dashboard/actions/workflows/test.yml/badge.svg?event=push"/>
+  <img title="E2E Tests Status" src="https://github.com/kubeshop/testkube-dashboard/actions/workflows/pr_checks.yml/badge.svg?event=push"/>
+</p>
 
-![img.png](docs/images/very-high-level-architecture.png)
+<p align="center">
+  <img title="MIT license" src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
+  <a href="https://github.com/kubeshop/testkube-dashboard/releases"><img title="Release" src="https://img.shields.io/github/v/release/kubeshop/testkube-dashboard"/></a>
+  <a href="https://github.com/kubeshop/testkube-dashboard/releases"><img title="Release date" src="https://img.shields.io/github/release-date/kubeshop/testkube-dashboard"/></a>
+</p>
 
-Available operations for the api-server are in its
-[OpenAPI Definition](https://github.com/kubeshop/testkube/blob/main/api/v1/testkube.yaml)
+<hr>
 
-## Development setup
+# Testkube Dashboard
 
-During development one can bypass the Ingress and interact with the api-server directly:
+Dashboard to manage your [**Testkube**](https://testkube.io) cluster and monitor its real-time results.
 
-- Install TestKube in your cluster - see [TestKube Installation](https://docs.testkube.io/articles/getting-started-overview/)
-- Expose the api-server with
+The Dashboard is deployed as an application in the cluster.
+It runs in a browser, and it communicates with the [**Testkube API Server**](https://github.com/kubeshop/testkube) via Ingress Controller (either provided or bundled).
 
-```shell
-kubectl-testkube dashboard
-```
+## Table of Contents
 
-(here we're exposing the testkube-api-server running in the TestKube namespace on port 8080 locally)
+1. [Running Dashboard](#running-dashboard)
+   1. [Bundled](#bundled) 
+   2. [Repository](#repository)
+   3. [Docker](#docker)
+2. [Configuring Application](#configuring-application)
+   1. [Environment Variables](#environment-variables)
+   2. [Building Docker Image](#building-docker-image)
+3. [Learn More](#learn-more)
+   1. [Contributing and Architecture](#contributing-and-architecture)
+   2. [Telemetry](#telemetry)
+   3. [Testkube](#testkube)
 
-![img.png](docs/images/dev-architecture.png)
+## Running Dashboard
 
-## Packaging / Running under Docker
+### Bundled
 
-Package this into a Docker image using the provided [Dockerfile](Dockerfile) with
+By default, Dashboard is installed in your cluster along with your Testkube system.
 
-```
-docker build -t kubeshop/testkube-dashboard .
-```
+To use the bundled Dashboard, run `testkube dashboard` command with [**Testkube CLI**](https://docs.testkube.io/articles/install-cli/),
+to forward the UI and API ports from the Kubernetes cluster.
 
-Run locally on port 3001 with
+> <details>
+> <summary>:warning: <strong>Testkube Cloud and Enterprise</strong></summary>
+> <br>
+> 
+> This Dashboard works only for the Testkube Open Source installations.
+> To manage the Testkube in Enterprise or Cloud offering, use their corresponding dashboards:
+> * [**cloud.testkube.io**](https://cloud.testkube.io?utm_source=github-dashboard) for Testkube Cloud
+> * Your Enterprise URL for Testkube Enterprise
+> </details>
 
-```
-docker run -it -p 3001:80 kubeshop/testkube-dashboard:latest
-```
+> <details>
+> <summary>:eight_spoked_asterisk: <strong>Disable bundling dashboard</strong></summary>
+> <br>
+> 
+> To disable Dashboard installation with the Testkube system, you may use `testkube-dashboard.enabled=false` value in the [**Helm chart**](https://github.com/kubeshop/helm-charts/tree/main/charts/testkube).
+> </details>
 
-## Deploying under Kubernetes
+### Repository
 
-Push to DockerHub
-
-```
-docker push testkube/testkube-dashboard
-```
-
-Deploy the included manifest to your cluster:
-
-```
-kubectl apply -f manifests/deployment.yaml
-```
-
-Access using port-forwarding :
-
-```
-kubectl port-forward service/testkube-dashboard 8080:80
-```
-
-(this example forwards on port 8080)
-
-## Quick start
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the
-[Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
-
-Eslint/Prettier/Husky/Craco/etc configuration was copied from [Monokle](https://github.com/kubeshop/monokle) project
-
-In order to be able to run this application locally without docker, just close this repo and then let the magic start
-:fireworks: :tada:
+To run the Testkube Dashboard for development:
+* Install Node 20.x
+* Fork the repository and clone it (or just clone it, if you are Testkube member or want to read it only)
+* Install NPM dependencies
+* Run `npm start` command
 
 ```bash
-git clone git@github.com:kubeshop/testkube-dashboard.git && cd kubetest-dashboard
+git clone git@github.com:kubeshop/testkube-dashboard.git && cd testkube-dashboard
 npm install
-npm run start
+npm start
 ```
 
-To be able to run the application with mocked data, you just need to switch commands and use:
+To learn more about the Testkube Dashboard development and architecture, see the [**Contribution manual**](CONTRIBUTING.md).
+
+> <details>
+> <summary>:eight_spoked_asterisk: <strong>Environment variables</strong></summary>
+> <br>
+> 
+> To configure your [**environment variables**](#environment-variables), either:
+> * create `.env` file in the repository, or
+> * export the environment variables globally
+> 
+> You may use both [**build time**](#build-time-variables) and [**dynamic variables**](#dynamic-variables) here.
+>
+> Please note, that you may want to use [**Create React App's variables**](https://create-react-app.dev/docs/advanced-configuration/) too,
+> i.e. `BROWSER=none` to avoid opening the browser.
+> </details>
+
+### Docker
+
+The Docker images for the Testkube Dashboard are deployed to the Docker Hub as [**kubeshop/testkube-dashboard**](https://hub.docker.com/r/kubeshop/testkube-dashboard).
+
+To start Dashboard using Docker, run the image with the [**dynamic environment variables**](#dynamic-variables) you would like to pass, i.e.:
 
 ```bash
-npm run start:mock-app
+docker run --rm \
+  -p 8080:8080 \
+  -e REACT_APP_API_SERVER_ENDPOINT=https://demo.testkube.io/results/v1 \
+  kubeshop/testkube-dashboard:latest
 ```
 
-After this, you should get an open navigator with the link: `http://localhost:3000/`.
+> <details>
+> <summary>:warning: <strong>Environment variables</strong></summary>
+> <br>
+> 
+> To override the [**build time environment variables**](#build-time-variables) too, you need to [**build the Docker image**](#building-docker-image) on your own.
+> </details>
 
-## Commands:
+## Configuring Application
 
-| Command                  |           description            |
-| ------------------------ | :------------------------------: |
-| `npm run lint`           |           lint project           |
-| `npm run lintfix`        |     fix lint of the project      |
-| `npm run stylelint`      |    fix styles of the project     |
-| `npm run start`          |          start the app           |
-| `npm run test`           |       run test of the app        |
-| `npm run test:watch`     |         watch jest test          |
-| `npm run test:coverage`  |        run test coverage         |
-| `npm run test:update`    |       run coverage update        |
-| `npm run build`          | build the app under build folder |
+### Environment Variables
 
-## Deployment application
+All the Dashboard is configured with the environment variables.
 
-If you want to see a live demo,
-the last release is automatically deployed [**:link: demo.testkube.io**](https://demo.testkube.io),
-while the latest changes from the `develop` branch are available on [**:link: dev.testkube.io**](https://dev.testkube.io).
+Part of them is included directly in the production build,
+while the rest may be modified for the running application.
+
+The latest variables are listed in [**env.ts**](packages/web/src/env.ts) file,
+but for simplicity we keep them documented below too.
+
+> <details>
+> <summary>:eight_spoked_asterisk: <strong>Deep-linking overrides</strong></summary>
+> <br>
+> 
+> You may temporarily override the variables in the running application using the query string.
+> The Dashboard seeks for query params starting with `~` and try to override any matching known variable.
+>
+> The query param name should be a variable name,
+> but for simplicity it may omit `REACT_APP_` prefix and is case-insensitive.
+> Short name from the tables above may be used.
+> 
+> As an example, to change the API endpoint, you may use `https://demo.testkube.io?~api_server_endpoint=http://localhost:8088`.
+> </details>
+
+#### Build Time Variables
+
+The build time environments are loaded from `process.env` during build time.
+
+| Name                   | Short Name   | Description                                                               |
+|------------------------|--------------|---------------------------------------------------------------------------|
+| `REACT_APP_SENTRY_DSN` | `sentry_dsn` | [**Sentry**](https://sentry.io/) DSN for error reporting                  |
+| `REACT_APP_GTM_ID`     | `gtm_id`     | [**Google Tag Manager**](https://tagmanager.google.com/) ID for telemetry |
+| `REACT_APP_VERSION`    | `version`    | Dashboard version used for reporting and displaying                       |
+
+#### Dynamic Variables
+
+The dynamic variables are loaded from automatically generated `env-config.js` file.
+
+| Name                              | Short Name              | Description                                                                                                                               |
+|-----------------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| `REACT_APP_API_SERVER_ENDPOINT`   | `api_server_endpoint`   | URL for the Testkube API Server                                                                                                           |
+| `REACT_APP_DISABLE_TELEMETRY`     | `disable_telemetry`     | Force disabling telemetry in the Dashboard                                                                                                |
+| `REACT_APP_DEBUG_TELEMETRY`       | `debug_telemetry`       | Display debugging information about telemetry in the console log                                                                          |
+| `REACT_APP_CRD_OPERATOR_REVISION` | `crd_operator_revision` | [**testkube-operator**](https://github.com/kubeshop/testkube-operator/tree/main/config/crd)'s branch for getting the JSON Schema for CRDs |
+| `REACT_APP_ROUTE_BASENAME`        | `route_basename`        | Basename for the application. Use only when your Dashboard is accessible via different path than `/`                                      |
+
+### Building Docker Image
+
+To build the Docker image of Testkube Dashboard locally,
+simply build the [**Dockerfile**](Dockerfile), optionally with the [**environment variables**](#environment-variables) from above.
+
+```bash
+docker build \
+  --build-arg REACT_APP_API_SERVER_ENDPOINT=https://demo.testkube.io/results/v1 \
+  -t kubeshop/testkube-dashboard:latest .
+```
+
+> <details>
+> <summary>:eight_spoked_asterisk: <strong>Environment variables</strong></summary>
+> <br>
+> 
+> When you are building images with `docker build`, you may either both set the [**build time variables**](#build-time-variables),
+> and set defaults for the [**dynamic variables**](#dynamic-variables).
+> </details>
+
+## Learn more
+
+### Contributing and Architecture
+
+To learn more about the Testkube Dashboard development and architecture, see the [**Contribution manual**](CONTRIBUTING.md).
+
+### Telemetry
+
+To learn more about what custom events we expose to [**Google Tag Manager**](https://tagmanager.google.com/),
+see [**Telemetry**](telemetry.md) document.
+
+### Testkube
+
+* For the documentation of the Testkube system, see [**docs.testkube.io**](https://docs.testkube.io).
+* To see the live demo, you may take a look at [**demo.testkube.io**](https://demo.testkube.io) *(some API endpoints are disabled there though, to avoid modifications)*
+
+> **Unleash the power of cloud native testing in Kubernetes with Testkube.**
+>
+> Consider [**Testkube Cloud**](https://cloud.testkube.io?utm_source=github-dashboard) for simpler integration and more features!

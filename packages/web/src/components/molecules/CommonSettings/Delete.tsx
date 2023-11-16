@@ -1,34 +1,24 @@
 import {FC} from 'react';
 
-import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
-import {MutationDefinition} from '@reduxjs/toolkit/query';
-
 import {useModal} from '@modal/hooks';
 
-import {DeleteEntityModal} from '@molecules';
+import DeleteEntityModal from '@molecules/DeleteEntityModal';
 
 import {CardForm} from '@organisms';
 
-interface DeleteProps {
+export interface DeleteProps {
   name: string;
   description: string;
   label: string;
   redirectUrl: string;
-  useDeleteMutation: UseMutation<MutationDefinition<string, any, any, void>>;
+  onDelete: (id: string) => Promise<any>;
 }
 
-const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDeleteMutation}) => {
+const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, onDelete}) => {
   const {open} = useModal({
     title: `Delete this ${label}`,
     width: 600,
-    content: (
-      <DeleteEntityModal
-        defaultStackRoute={redirectUrl}
-        useDeleteMutation={useDeleteMutation}
-        name={name}
-        entityLabel={label}
-      />
-    ),
+    content: <DeleteEntityModal defaultStackRoute={redirectUrl} onDelete={onDelete} name={name} entityLabel={label} />,
   });
 
   return (
@@ -38,8 +28,9 @@ const Delete: FC<DeleteProps> = ({name, description, label, redirectUrl, useDele
       description={description}
       confirmLabel="Delete"
       isWarning
-      wasTouched
       onConfirm={open}
+      monitLeave={false}
+      wasTouched
     />
   );
 };

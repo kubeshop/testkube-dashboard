@@ -1,4 +1,5 @@
-import {useEntityDetailsPick} from '@store/entityDetails';
+import {memo} from 'react';
+
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import {SecondaryStatusColors, StatusColors} from '@styles/Colors';
@@ -10,15 +11,17 @@ export type BarConfig = {
   height: number;
   color: StatusColors;
   hoverColor: SecondaryStatusColors;
-  tooltipData: any;
+  status: any;
+  duration: string;
+  name: string;
+  startTime: number;
   date?: string;
   chartHeight: number;
 };
 
 const BarWithTooltip: React.FC<BarConfig> = props => {
-  const {executions} = useEntityDetailsPick('executions');
-  const {open} = useExecutionDetailsPick('open');
-  return <BarWithTooltipPure {...props} executions={executions} onSelect={open} />;
+  const {openByName} = useExecutionDetailsPick('openByName');
+  return <BarWithTooltipPure {...props} onSelect={openByName} />;
 };
 
-export default BarWithTooltip;
+export default memo(BarWithTooltip);

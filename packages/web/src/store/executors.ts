@@ -7,7 +7,7 @@ import {isURL} from '@utils/strings';
 
 import {connectStore, createStoreFactory} from './utils';
 
-interface ExecutorsSlice {
+export interface ExecutorsSlice {
   executors?: Executor[];
   current?: Executor;
   featuresMap: Record<string, ExecutorFeature[]>;

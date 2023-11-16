@@ -1,4 +1,5 @@
 import {FC, useCallback} from 'react';
+import {useUnmount} from 'react-use';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
@@ -13,7 +14,7 @@ import {EntityListContent} from '@organisms';
 
 import {Error} from '@pages';
 
-import {usePluginSlot} from '@plugins/hooks';
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
 import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
 
@@ -28,9 +29,13 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
 const TestSuitesList: FC = () => {
-  const isAvailable = useSystemAccess(SystemAccess.agent);
+  const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestSuitesField('filters');
-  const pageTitleAddon = usePluginSlot('testSuitesListTitleAddon');
+  const pageTitleAddon = useTestsSlotFirst('testSuitesListTitleAddon');
+
+  useUnmount(() => {
+    setFilters({...filters, pageSize: initialFilters.pageSize});
+  });
 
   const {
     data: testSuites,
@@ -39,7 +44,7 @@ const TestSuitesList: FC = () => {
     isFetching,
   } = useGetTestSuitesQuery(filters || null, {
     pollingInterval: PollingIntervals.everySecond,
-    skip: !isAvailable,
+    skip: !isSystemAvailable,
   });
   useTestSuitesSync({testSuites});
 
@@ -82,7 +87,7 @@ const TestSuitesList: FC = () => {
       queryFilters={filters}
       setQueryFilters={setFilters}
       data={testSuites}
-      isLoading={isLoading}
+      isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
     />

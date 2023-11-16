@@ -43,6 +43,7 @@ interface EntityDetailsHeaderProps {
   onEditTest: () => void;
   outOfSync?: boolean;
   isAgentAvailable?: boolean;
+  entityLabel: string;
 }
 
 const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
@@ -53,12 +54,16 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   onEditTest,
   outOfSync,
   isAgentAvailable,
+  entityLabel,
 }) => {
   const mayRun = usePermission(Permissions.runEntity);
   const {entity, details} = useEntityDetailsPick('entity', 'details');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
   const testIcon = useExecutorIcon(details);
+
   const {executions} = useEntityDetailsPick('executions');
+
+  const isTestSuiteEmpty = entity === 'test-suites' && !details.steps?.length;
 
   const [abortAllExecutions] = useAbortAllExecutions();
   const onAbortAllExecutionsClick = () => {
@@ -83,14 +88,14 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
       onBack={onBack}
       title={details!.name}
       pageTitleAddon={
-        outOfSync ? (
+        !isAgentAvailable || outOfSync ? (
           <Tag
             title="read-only"
             type="warning"
             tooltipMessage={
               isAgentAvailable
-                ? 'This test is not currently present on your agent. You are only able to see historical data.'
-                : 'This test is potentially not in sync with the data on your local cluster. You are only able to see historical data.'
+                ? `This ${entityLabel} is not currently present on your agent. You are only able to see historical data.`
+                : `This ${entityLabel} is potentially not in sync with the data on your local cluster. You are only able to see historical data.`
             }
           />
         ) : undefined
@@ -114,9 +119,11 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
           key="run-now-button"
           type="primary"
           onClick={onRun}
-          disabled={!details || outOfSync}
-          hidden={!mayRun}
+          disabled={!details || isTestSuiteEmpty}
+          hidden={!mayRun || outOfSync}
           loading={isRunning}
+          tooltip={isTestSuiteEmpty ? 'Empty test suite. Add a test before running.' : undefined}
+          tooltipPlacement="bottomLeft"
         >
           Run now
         </Button>,

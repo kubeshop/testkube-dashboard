@@ -120,10 +120,19 @@ const TestSuiteStepsFlow: React.FC<TestSuiteStepsFlowProps> = props => {
         ];
       }
       if (node.type === 'step') {
-        const nextIntersection = nodes.find(x => x.type === 'intersection' && x.data.group === node.data.group + 1)!;
-        const nextNode = nodes.find(x => x.type === 'step' && x.data.group === node.data.group + 1)!;
-        const nextItem = nextIntersection || nextNode;
-        return nextItem ? [...result, {id: `${node.id}-${nextItem.id}`, source: node.id, target: nextItem.id}] : result;
+        const nextIntersections = nodes.filter(x => x.type === 'intersection' && x.data.group === node.data.group + 1)!;
+        const nextNodes = nodes.filter(x => x.type === 'step' && x.data.group === node.data.group + 1)!;
+        const nextItems = nextIntersections.length > 0 ? nextIntersections : nextNodes;
+        return nextItems
+          ? [
+              ...result,
+              ...nextItems.map(nextItem => ({
+                id: `${node.id}-${nextItem.id}`,
+                source: node.id,
+                target: nextItem.id,
+              })),
+            ]
+          : result;
       }
       return result;
     }, [] as Edge[]);

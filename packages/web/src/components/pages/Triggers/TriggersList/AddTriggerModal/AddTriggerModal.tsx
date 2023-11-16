@@ -1,8 +1,6 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {Form, Space, Steps} from 'antd';
-
-import {DashboardContext} from '@contexts';
 
 import {Input, Text} from '@custom-antd';
 
@@ -15,6 +13,8 @@ import {useModal} from '@modal/hooks';
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {NotificationContent} from '@molecules';
+
+import {useRouterPlugin} from '@plugins/router/hooks';
 
 import {useCreateTriggerMutation, useGetTriggersKeyMapQuery} from '@services/triggers';
 
@@ -41,7 +41,7 @@ interface FirstStepValues {
 const AddTriggerModal: React.FC = () => {
   const {namespace} = useClusterDetailsPick('namespace');
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
-  const {location} = useContext(DashboardContext);
+  const {location} = useRouterPlugin.pick('location');
   const openDetails = useDashboardNavigate((name: string) => `/triggers/${name}`);
   const {close} = useModal();
 

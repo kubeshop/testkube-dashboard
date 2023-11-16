@@ -40,6 +40,7 @@ export type TestSuite = {
   params?: EntityMap;
   created: string;
   variables: Variables;
+  readOnly?: boolean;
 };
 
 export type TestSuiteWithExecution = {

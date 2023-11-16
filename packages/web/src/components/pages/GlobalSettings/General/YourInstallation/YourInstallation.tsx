@@ -18,12 +18,15 @@ const YourInstallation: React.FC = () => {
 
   const apiVersion = `${versionRegex.test(version) ? 'v' : version ? '#' : ''}${version}`;
   const dashboardVersion = `${versionRegex.test(env.version) ? 'v' : ''}${env.version}`;
-  const helmChartVersion = `${versionRegex.test(helmchartVersion) ? 'v' : ''}${helmchartVersion}`;
+  const helmChartVersion = helmchartVersion
+    ? `${versionRegex.test(helmchartVersion) ? 'v' : ''}${helmchartVersion}`
+    : '-';
 
   return (
     <ConfigurationCard
       title="Your installation"
       description="Details about your current Testkube installation"
+      name="installation-card"
       readOnly
     >
       <FullWidthSpace size={32} direction="vertical">
