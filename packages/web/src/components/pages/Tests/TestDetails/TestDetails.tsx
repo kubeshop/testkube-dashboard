@@ -33,7 +33,7 @@ const TestDetails: FC<TestDetailsProps> = ({tab}) => {
         execId={execId}
         useGetExecutionDetails={useGetTestExecutionByIdQuery}
       >
-        <TestDetailsContent tab={tab} settingsTab={settingsTab} />
+        <TestDetailsContent entity="tests" tab={tab} settingsTab={settingsTab} />
       </ExecutionDetailsLayer>
     </EntityDetailsLayer>
   );
