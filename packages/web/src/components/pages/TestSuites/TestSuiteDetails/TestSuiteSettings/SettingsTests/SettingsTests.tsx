@@ -37,8 +37,9 @@ import {EmptyTestsContainer} from './SettingsTests.styled';
 import TestSuiteStepsFlow from './TestSuiteStepsFlow';
 
 const SettingsTests = () => {
-  const isWritable = useSystemAccess(SystemAccess.agent);
+  const isAgentAvailable = useSystemAccess(SystemAccess.agent);
   const {details, isV2: rawIsV2} = useEntityDetailsPick('details', 'isV2') as {details: TestSuite; isV2: boolean};
+  const isWritable = isAgentAvailable && !details?.readOnly;
 
   const isV2 = useClusterVersionMatch('<1.13.0', rawIsV2);
 

@@ -1,4 +1,4 @@
-import {FC, memo, useContext, useMemo} from 'react';
+import {FC, memo, useMemo} from 'react';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
 
@@ -6,11 +6,11 @@ import classNames from 'classnames';
 
 import {ExecutorIcon, StatusIcon} from '@atoms';
 
-import {DashboardContext} from '@contexts';
-
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
 import {ExecutionName} from '@molecules';
+
+import {useRouterPlugin} from '@plugins/router/hooks';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
@@ -31,7 +31,7 @@ type ExecutionStepsListProps = {
 const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
   const {executionSteps} = props;
 
-  const {navigate} = useContext(DashboardContext);
+  const {navigate} = useRouterPlugin.pick('navigate');
 
   const {executors = []} = useExecutorsPick('executors');
 

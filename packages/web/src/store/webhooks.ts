@@ -4,7 +4,7 @@ import {Webhook} from '@models/webhook';
 
 import {connectStore, createStoreFactory} from './utils';
 
-interface WebhooksSlice {
+export interface WebhooksSlice {
   current?: Webhook;
 }
 

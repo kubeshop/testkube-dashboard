@@ -21,5 +21,7 @@ yarn-debug.log*
 yarn-error.log*
 *.swp
 
-# cache
-.eslintcache
+# generated
+/coverage
+packages/*/coverage
+**/.eslintcache

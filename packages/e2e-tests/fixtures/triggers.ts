@@ -11,7 +11,7 @@ export default {
     concurrencyPolicy: '',
     testSelector: {
       name: 'postman-executor-smoke',
-      namespace: 'testkube',
+      ...(config.cloudContext ? {} : {namespace: config.namespace}),
     },
     resourceSelector: {
       name: 'non-existant-resource',

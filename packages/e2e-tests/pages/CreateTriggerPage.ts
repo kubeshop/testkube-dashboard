@@ -1,4 +1,5 @@
 import type {Page} from '@playwright/test';
+import {setTimeout as timeout} from 'node:timers/promises';
 
 import type {TriggerData} from '../types';
 
@@ -65,10 +66,27 @@ export class CreateTriggerPage {
     if (testSelector.name) {
       await this.page.click(`xpath=//div[@data-test="triggers-add-modal-action-switch"]//div[@title="BY NAME"]`);
       await this.page.click(`xpath=//input[@id="add-trigger-form_testNameSelector"]`);
-      await this.page.click(
-        `xpath=//div[@class="rc-virtual-list"]//div[contains(@class,"option-content")]//span[text()="${testSelector.name}"]`
-      );
+      await this.scrollSelectionTo(testSelector.name, 'testNameSelector');
     }
+  }
+
+  async scrollSelectionTo(value: string | number, inputName: string): Promise<void> {
+    const scrollSelector = `#add-trigger-form_${inputName}_list ~ .rc-virtual-list .rc-virtual-list-holder`;
+    await this.page.locator(scrollSelector).waitFor();
+    await timeout(100);
+    await this.page.evaluate(`
+      const container = document.querySelector(${JSON.stringify(scrollSelector)});
+      const scroll = (to) => {
+        if (!container || to > container.scrollHeight || container.querySelector('.rc-virtual-list-holder-inner div[title="${value}"]')) {
+          return;
+        }
+        container.scrollTop = to;
+        to += container.clientHeight;
+        setTimeout(() => scroll(to), 50);
+      };
+      scroll(0);
+    `);
+    await this.page.click(`#add-trigger-form_${inputName}_list ~ .rc-virtual-list div[title="${value}"]`);
   }
 
   async clickCreateButton() {

@@ -8,6 +8,8 @@ import useRunEntity from '@hooks/useRunEntity';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
+import {Entity} from '@models/entity';
+
 import {CLICommands, SummaryGrid} from '@molecules';
 
 import {PageWrapper} from '@organisms';
@@ -26,14 +28,15 @@ import TestSuiteExecutionDrawer from './TestSuiteExecution/TestSuiteExecutionDra
 import TestSuiteSettings from './TestSuiteSettings';
 
 interface TestSuiteDetailsContentProps {
+  entity: Entity;
   tab?: string;
   settingsTab?: string;
 }
 
-const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, settingsTab}) => {
+const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({entity, tab, settingsTab}) => {
   const {id, details, error, metrics} = useEntityDetailsPick('id', 'details', 'error', 'metrics');
   const [isRunning, run] = useRunEntity('test-suites', details);
-  const isFresh = useSystemAccess(SystemAccess.agent);
+  const isAgentAvailable = useSystemAccess(SystemAccess.agent);
 
   const setTab = useDashboardNavigate((next: string) => `/test-suites/${id}/${next}`);
   const setSettingsTab = useDashboardNavigate((next: string) => `/test-suites/${id}/settings/${next}`);
@@ -59,12 +62,15 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
         <PageMetadata title={details?.name} description={details?.description} />
 
         <EntityDetailsHeader
+          entity={entity}
           isRunning={isRunning}
-          outOfSync={!isFresh}
+          outOfSync={details.readOnly}
+          isAgentAvailable={isAgentAvailable}
           onRun={run}
           onBack={back}
           useAbortAllExecutions={useAbortAllTestSuiteExecutionsMutation}
           onEditTest={onEditTest}
+          entityLabel="test suite"
         />
         <SummaryGrid metrics={metrics} />
         <Tabs
@@ -77,11 +83,15 @@ const TestSuiteDetailsContent: FC<TestSuiteDetailsContentProps> = ({tab, setting
               label: 'Recent executions',
               children: <RecentExecutionsTab onRun={run} useAbortExecution={useAbortTestSuiteExecutionMutation} />,
             },
-            {
-              key: 'commands',
-              label: 'CLI Commands',
-              children: <CLICommands name={details!.name} bg={Colors.slate800} />,
-            },
+            ...(details.readOnly
+              ? []
+              : [
+                  {
+                    key: 'commands',
+                    label: 'CLI Commands',
+                    children: <CLICommands name={details!.name} bg={Colors.slate800} />,
+                  },
+                ]),
             {
               key: 'settings',
               label: 'Settings',

@@ -93,17 +93,19 @@ export function memoizeQuery<T extends UseQuery<any>>(
     type U = ReturnType<T>['data'];
     const result = (hook as any)(...args);
 
-    const dataRef = useRef<U>(result.data);
+    const dataRef = useRef<U | null>(null);
     const transformedRef = useRef<U>(result.data);
 
     useMemo(() => {
-      if (dataRef.current !== result.data) {
+      // TODO: Think how to implement `skip: isClusterAvailable || somethin` the other way
+      if (dataRef.current !== result.data && (result.data != null || !args[1]?.skip)) {
         const next = result.data == null ? result.data : transformData(result.data);
         if (!isEqual(next, transformedRef.current)) {
           transformedRef.current = next;
         }
+        dataRef.current = result.data;
       }
-    }, [result.data]);
+    }, [result.data, args[1]?.skip]);
 
     return {...result, data: transformedRef.current};
   }) as any;

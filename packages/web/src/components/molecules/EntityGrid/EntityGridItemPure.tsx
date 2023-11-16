@@ -22,6 +22,7 @@ import {
   ItemColumn,
   ItemRow,
   ItemWrapper,
+  LazyLoadingOutlined,
   RowsWrapper,
   StyledMetricItem,
 } from './EntityGrid.styled';
@@ -49,6 +50,7 @@ interface EntityGridItemPureProps {
   dataTest: string;
   outOfSync?: boolean;
   isAgentAvailable?: boolean;
+  entityLabel: string;
 }
 
 const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
@@ -59,7 +61,7 @@ const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
 const isRunningStatus = (status: string) => ['running', 'queued'].includes(status);
 
 const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
-  const {item, latestExecution, onClick, onAbort, dataTest, metrics, outOfSync, isAgentAvailable} = props;
+  const {item, latestExecution, onClick, onAbort, dataTest, metrics, outOfSync, isAgentAvailable, entityLabel} = props;
 
   const status =
     (latestExecution as Execution)?.executionResult?.status ||
@@ -97,8 +99,8 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
                   type="warning"
                   tooltipMessage={
                     isAgentAvailable
-                      ? 'This test is not currently present on your agent. You are only able to see historical data.'
-                      : 'This test is potentially not in sync with the data on your local cluster. You are only able to see historical data.'
+                      ? `This ${entityLabel} is not currently present on your agent. You are only able to see historical data.`
+                      : `This ${entityLabel} is potentially not in sync with the data on your local cluster. You are only able to see historical data.`
                   }
                 />
               ) : null}
@@ -125,7 +127,15 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
                 pass/fail ratio
               </Text>
               <Text className="big regular">
-                {metrics?.passFailRatio ? `${metrics?.passFailRatio.toFixed(2)}%` : '0%'}
+                {metrics ? (
+                  metrics.passFailRatio ? (
+                    `${metrics.passFailRatio.toFixed(2)}%`
+                  ) : (
+                    '0%'
+                  )
+                ) : (
+                  <LazyLoadingOutlined />
+                )}
               </Text>
             </StyledMetricItem>
             <StyledMetricItem>
@@ -133,14 +143,22 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
                 p50
               </Text>
               <Text className="big regular">
-                {metrics?.executionDurationP50ms ? formatDuration(metrics?.executionDurationP50ms / 1000) : '-'}
+                {metrics ? (
+                  metrics.executionDurationP50ms ? (
+                    formatDuration(metrics?.executionDurationP50ms / 1000)
+                  ) : (
+                    '-'
+                  )
+                ) : (
+                  <LazyLoadingOutlined />
+                )}
               </Text>
             </StyledMetricItem>
             <StyledMetricItem>
               <Text className="small uppercase" color={Colors.slate500}>
                 failed executions
               </Text>
-              <Text className="big regular">{metrics?.failedExecutions || '-'}</Text>
+              <Text className="big regular">{metrics ? metrics.failedExecutions || '-' : <LazyLoadingOutlined />}</Text>
             </StyledMetricItem>
             <StyledMetricItem>
               <MetricsBarChart data={executions} chartHeight={38} barWidth={6} />

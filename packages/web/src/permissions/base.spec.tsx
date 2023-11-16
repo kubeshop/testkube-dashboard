@@ -1,5 +1,7 @@
 import {render} from '@testing-library/react';
 
+import {PluginScopeMockProvider} from '@testkube/plugins/test';
+
 import {BasePermissionsResolver, Permissions, PermissionsProvider, PermissionsResolver, usePermission} from './base';
 
 // The original renderHook method from '@testing-library/react' doesn't allow passing props to wrapper,
@@ -18,9 +20,11 @@ const renderUsePermissionHook = (props: TestProps<any>) => {
   };
 
   const Test = ({scope, resolver, ...rest}: TestProps<any>) => (
-    <PermissionsProvider scope={scope} resolver={resolver}>
-      <TestInner scope={scope} resolver={resolver} {...rest} />
-    </PermissionsProvider>
+    <PluginScopeMockProvider data={{permissionsScope: scope}}>
+      <PermissionsProvider resolver={resolver}>
+        <TestInner scope={scope} resolver={resolver} {...rest} />
+      </PermissionsProvider>
+    </PluginScopeMockProvider>
   );
 
   const x = render(<Test {...props} />);

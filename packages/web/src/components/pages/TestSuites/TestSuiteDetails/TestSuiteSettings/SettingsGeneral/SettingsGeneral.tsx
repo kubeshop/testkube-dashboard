@@ -8,23 +8,26 @@ import {Labels, NameNDescription} from '@organisms/EntityDetails';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {usePluginSlot} from '@plugins/hooks';
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
 import {useDeleteTestSuiteMutation, useUpdateTestSuiteMutation} from '@services/testSuites';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
 
 const SettingsGeneral: FC = () => {
-  const isWritable = useSystemAccess(SystemAccess.agent);
+  const isAgentAvailable = useSystemAccess(SystemAccess.agent);
   const mayDelete = usePermission(Permissions.deleteEntity);
   const {details} = useEntityDetailsPick('details');
-  const deleteTestSuiteExtension = usePluginSlot('deleteTestSuiteExtension');
+  // TODO: Instead, use always the slot, and register current <Delete /> as fallback
+  const deleteTestSuiteExtension = useTestsSlotFirst('deleteTestSuiteExtension');
+  const [deleteTestSuite] = useDeleteTestSuiteMutation();
+  const isReadOnly = !isAgentAvailable || details?.readOnly;
 
   return (
     <>
-      <NameNDescription label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} readOnly={!isWritable} />
-      <Labels label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} readOnly={!isWritable} />
-      {mayDelete && isWritable ? (
+      <NameNDescription label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} readOnly={isReadOnly} />
+      <Labels label="test suite" useUpdateEntity={useUpdateTestSuiteMutation} readOnly={isReadOnly} />
+      {mayDelete ? (
         deleteTestSuiteExtension !== undefined ? (
           deleteTestSuiteExtension
         ) : (
@@ -33,7 +36,7 @@ const SettingsGeneral: FC = () => {
             label="test suite"
             description="The test suite will be permanently deleted, including its deployments analytical history. This action is irreversible and can not be undone."
             redirectUrl="/test-suites"
-            useDeleteMutation={useDeleteTestSuiteMutation}
+            onDelete={deleteTestSuite}
           />
         )
       ) : null}

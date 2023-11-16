@@ -33,7 +33,7 @@ const TestSuiteDetails: FC<TestSuiteDetailsProps> = ({tab}) => {
         execId={execId}
         useGetExecutionDetails={useGetTestSuiteExecutionByIdQuery}
       >
-        <TestSuiteDetailsContent tab={tab} settingsTab={settingsTab} />
+        <TestSuiteDetailsContent entity="test-suites" tab={tab} settingsTab={settingsTab} />
       </ExecutionDetailsLayer>
     </EntityDetailsLayer>
   );
