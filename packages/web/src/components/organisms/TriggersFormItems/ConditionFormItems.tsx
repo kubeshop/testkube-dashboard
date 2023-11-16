@@ -88,6 +88,7 @@ const ConditionFormItems = () => {
                 options={eventsOptions}
                 disabled={eventsOptions.length === 0 ? true : undefined}
                 placeholder="Select cluster event"
+                showSearch
               />
             </Form.Item>
           );
