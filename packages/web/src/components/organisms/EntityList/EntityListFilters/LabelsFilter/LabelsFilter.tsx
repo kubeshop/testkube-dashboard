@@ -90,7 +90,7 @@ const LabelsFilter: React.FC<FilterProps> = props => {
         const keyOptions = keysLabels.filter(f => f.key.startsWith(item.key));
 
         const valuesOptions = valuesLabels
-          .filter(f => f.key.startsWith(item.key) && f.value.startsWith(item.value))
+          .filter(f => f.key === item.key && f.value.startsWith(item.value))
           .map(v => ({key: v.value, label: v.value, value: v.value}));
 
         return (
