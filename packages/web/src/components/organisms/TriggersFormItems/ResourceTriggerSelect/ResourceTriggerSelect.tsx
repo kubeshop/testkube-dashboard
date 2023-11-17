@@ -24,46 +24,43 @@ import {StyledResourceOptionWrapper} from './ResourceTriggerSelect.styled';
 const {Option, OptGroup} = Select;
 
 interface ResourceTriggerSelectProps {
-  $allowTests: boolean;
-  $allowTestSuites: boolean;
-  disabled?: boolean;
-  value?: string;
-  onChange?: (value: string) => void;
+  allowTests: boolean;
+  allowTestSuites: boolean;
 }
 
 const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = props => {
-  const {$allowTestSuites, $allowTests, disabled, value, onChange, ...rest} = props;
+  const {allowTestSuites, allowTests, ...rest} = props;
 
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const {executors = []} = useExecutorsPick('executors');
 
-  const {data: tests = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable || !$allowTests});
-  const {data: testSuites = []} = useGetAllTestSuitesQuery(null, {
-    skip: !isClusterAvailable || !$allowTestSuites,
+  const {data: tests} = useGetAllTestsQuery(null, {skip: !isClusterAvailable || !allowTests});
+  const {data: testSuites} = useGetAllTestSuitesQuery(null, {
+    skip: !isClusterAvailable || !allowTestSuites,
   });
 
   const testsData = useMemo(() => {
-    if (!$allowTests) return [];
+    if (!allowTests || !tests) return [];
 
     return tests.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
       type: item.test.type,
     }));
-  }, [tests, $allowTests]);
+  }, [tests, allowTests]);
 
   const testSuitesData = useMemo(() => {
-    if (!$allowTestSuites) return [];
+    if (!allowTestSuites || !testSuites) return [];
 
     return testSuites.map(item => ({
       name: item.testSuite.name,
       namespace: item.testSuite.namespace,
     }));
-  }, [testSuites, $allowTestSuites]);
+  }, [testSuites, allowTestSuites]);
 
   return (
-    <Select optionLabelProp="key" placeholder="Your testkube resource" showSearch {...props}>
+    <Select optionLabelProp="key" placeholder="Your testkube resource" showSearch {...rest}>
       {testsData.length > 0 ? (
         <OptGroup label="Tests">
           {testsData.map(item => (

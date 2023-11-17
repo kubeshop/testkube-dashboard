@@ -14,11 +14,11 @@ import TriggerSelectorSwitcher from './TriggerSelectorSwitcher';
 const ActionFormItems = () => {
   const {keyMap} = useTriggersPick('keyMap');
 
-  const [actionValue, setActionValue] = useState<string>('');
   const [switcherValue, setSwitcherValue] = useState('label');
 
   const form = Form.useFormInstance();
 
+  const actionValue = Form.useWatch('action', form);
   const nameSelector = form.getFieldValue('testNameSelector');
 
   useEffect(() => {
@@ -47,12 +47,7 @@ const ActionFormItems = () => {
         name="action"
         rules={[required]}
       >
-        <Select
-          value={actionValue}
-          onChange={value => setActionValue(value)}
-          options={actionOptions}
-          placeholder="Select a testkube related action"
-        />
+        <Select options={actionOptions} placeholder="Select a testkube related action" />
       </Form.Item>
       <Space size={16} direction="vertical" style={{width: '100%'}}>
         <TriggerSelectorSwitcher
@@ -79,8 +74,8 @@ const ActionFormItems = () => {
             rules={[required]}
           >
             <ResourceTriggerSelect
-              $allowTests={actionValue === 'run test'}
-              $allowTestSuites={actionValue === 'run testsuite'}
+              allowTests={actionValue === 'run test'}
+              allowTestSuites={actionValue === 'run testsuite'}
             />
           </Form.Item>
         )}
