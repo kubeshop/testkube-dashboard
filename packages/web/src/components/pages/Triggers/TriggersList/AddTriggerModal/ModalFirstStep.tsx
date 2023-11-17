@@ -37,10 +37,12 @@ const ModalFirstStep: React.FC<ModalFirstStepProps> = props => {
             data-test="triggers-add-modal-next:first"
             $customType="primary"
             onClick={() => {
-              validateFields().then(() => {
-                setCurrentStep(StepsEnum.action);
-                setFirstStepValues(getFieldsValue());
-              });
+              validateFields()
+                .then(() => {
+                  setCurrentStep(StepsEnum.action);
+                  setFirstStepValues(getFieldsValue());
+                })
+                .catch(() => {});
             }}
           >
             Next

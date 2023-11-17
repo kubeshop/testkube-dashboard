@@ -48,9 +48,12 @@ const WebhookCreationModal: FC = () => {
       return;
     }
 
-    form.validateFields().then(() => {
-      setStep(WebhookCreationModalSteps.Action);
-    });
+    form
+      .validateFields()
+      .then(() => {
+        setStep(WebhookCreationModalSteps.Action);
+      })
+      .catch(() => {});
   };
 
   const onFinish = () => {
