@@ -1,5 +1,6 @@
 import type {PluginEntry} from '@testkube/plugins';
 
+import AboutPlugin from '@plugins/about/plugin';
 import ClusterPlugin from '@plugins/cluster/plugin';
 import ExecutorsPlugin from '@plugins/executors/plugin';
 import GeneralPlugin from '@plugins/general/plugin';
@@ -11,6 +12,7 @@ import TriggersPlugin from '@plugins/triggers/plugin';
 import WebhooksPlugin from '@plugins/webhooks/plugin';
 
 export const basePlugins: PluginEntry<any>[] = [
+  AboutPlugin,
   TelemetryPlugin,
   GeneralPlugin,
   ClusterPlugin,
