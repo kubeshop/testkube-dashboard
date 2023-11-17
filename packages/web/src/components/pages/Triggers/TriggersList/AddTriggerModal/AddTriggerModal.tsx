@@ -82,16 +82,16 @@ const AddTriggerModal: React.FC = () => {
     };
     createTrigger(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => openDetails(res.data.name))
+      .then(res => {
+        openDetails(res.data.name);
+        close();
+      })
       .catch(err => {
         setError(err);
 
         if (!inTopInViewport && topRef && topRef.current) {
           topRef.current.scrollIntoView();
         }
-      })
-      .finally(() => {
-        close();
       });
   };
 
