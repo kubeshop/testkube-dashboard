@@ -148,7 +148,7 @@ const TestCreationForm: React.FC<TestCreationFormProps> = props => {
 
             return (
               <FormItem
-                rules={!isContainerExecutor ? [required] : []}
+                rules={isContainerExecutor ? [] : [required]}
                 label="Source"
                 name="testSource"
                 required={!isContainerExecutor}
