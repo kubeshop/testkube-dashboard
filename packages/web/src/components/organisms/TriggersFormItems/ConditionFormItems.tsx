@@ -33,7 +33,7 @@ const ConditionFormItems = () => {
         name="resource"
         rules={[required]}
       >
-        <Select options={resourcesOptions} placeholder="Select a K8s resource" />
+        <Select options={resourcesOptions} placeholder="Select a K8s resource" showSearch />
       </Form.Item>
       <Space size={16} direction="vertical" style={{width: '100%'}}>
         <TriggerSelectorSwitcher
@@ -88,6 +88,7 @@ const ConditionFormItems = () => {
                 options={eventsOptions}
                 disabled={eventsOptions.length === 0 ? true : undefined}
                 placeholder="Select cluster event"
+                showSearch
               />
             </Form.Item>
           );

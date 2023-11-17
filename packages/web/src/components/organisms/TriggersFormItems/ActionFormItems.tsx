@@ -16,11 +16,18 @@ const ActionFormItems = () => {
 
   const [switcherValue, setSwitcherValue] = useState('label');
 
-  const nameSelector = Form.useFormInstance().getFieldValue('testNameSelector');
+  const form = Form.useFormInstance();
+
+  const actionValue = Form.useWatch('action', form);
+  const nameSelector = Form.useWatch('testNameSelector', form);
 
   useEffect(() => {
     setSwitcherValue(nameSelector ? 'name' : 'label');
   }, [nameSelector]);
+
+  useEffect(() => {
+    form.resetFields(['testNameSelector']);
+  }, [actionValue]);
 
   const actionOptions = keyMap?.actions
     .map((actionItem: string) =>
@@ -66,7 +73,10 @@ const ActionFormItems = () => {
             name="testNameSelector"
             rules={[required]}
           >
-            <ResourceTriggerSelect />
+            <ResourceTriggerSelect
+              allowTests={actionValue === 'run test'}
+              allowTestSuites={actionValue === 'run testsuite'}
+            />
           </Form.Item>
         )}
       </Space>
