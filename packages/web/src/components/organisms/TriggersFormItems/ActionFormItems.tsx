@@ -19,7 +19,7 @@ const ActionFormItems = () => {
   const form = Form.useFormInstance();
 
   const actionValue = Form.useWatch('action', form);
-  const nameSelector = form.getFieldValue('testNameSelector');
+  const nameSelector = Form.useWatch('testNameSelector', form);
 
   useEffect(() => {
     setSwitcherValue(nameSelector ? 'name' : 'label');
