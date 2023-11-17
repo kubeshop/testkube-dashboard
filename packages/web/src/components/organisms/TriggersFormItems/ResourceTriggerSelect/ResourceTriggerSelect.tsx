@@ -24,40 +24,47 @@ import {StyledResourceOptionWrapper} from './ResourceTriggerSelect.styled';
 const {Option, OptGroup} = Select;
 
 interface ResourceTriggerSelectProps {
-  actionValue: string;
+  $allowTests: boolean;
+  $allowTestSuites: boolean;
   disabled?: boolean;
   value?: string;
   onChange?: (value: string) => void;
 }
 
-const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
+const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = props => {
+  const {$allowTestSuites, $allowTests, disabled, value, onChange, ...rest} = props;
+
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
 
   const {executors = []} = useExecutorsPick('executors');
 
-  const {data: tests = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable});
+  const {data: tests = []} = useGetAllTestsQuery(null, {skip: !isClusterAvailable || !$allowTests});
   const {data: testSuites = []} = useGetAllTestSuitesQuery(null, {
-    skip: !isClusterAvailable,
+    skip: !isClusterAvailable || !$allowTestSuites,
   });
 
   const testsData = useMemo(() => {
+    if (!$allowTests) return [];
+
     return tests.map(item => ({
       name: item.test.name,
       namespace: item.test.namespace,
       type: item.test.type,
     }));
-  }, [tests]);
+  }, [tests, $allowTests]);
 
   const testSuitesData = useMemo(() => {
+    if (!$allowTestSuites) return [];
+
     return testSuites.map(item => ({
       name: item.testSuite.name,
       namespace: item.testSuite.namespace,
     }));
-  }, [testSuites]);
+  }, [testSuites, $allowTestSuites]);
 
   return (
     <Select optionLabelProp="key" placeholder="Your testkube resource" showSearch {...props}>
-      {testsData.length > 0 && props.actionValue === 'run test' ? (
+      {testsData.length > 0 ? (
         <OptGroup label="Tests">
           {testsData.map(item => (
             <Option key={item.name} title={item.name}>
@@ -69,7 +76,7 @@ const ResourceTriggerSelect: FC<ResourceTriggerSelectProps> = ({...props}) => {
           ))}
         </OptGroup>
       ) : null}
-      {testSuitesData.length > 0 && props.actionValue === 'run testsuite' ? (
+      {testSuitesData.length > 0 ? (
         <OptGroup label="Test Suites">
           {testSuitesData.map(item => (
             <Option key={item.name} title={item.name}>
