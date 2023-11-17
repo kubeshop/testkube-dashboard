@@ -85,6 +85,11 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
 
 export const getSourcePayload = (values: any, testSources: SourceWithRepository[]) => {
   const {testSource} = values;
+
+  if (!testSource) {
+    return {};
+  }
+
   const isCustomGit = testSource.includes(customGitSourceString);
 
   const testSourceSpecificFields = getTestSourceSpecificFields(values, isCustomGit);
@@ -107,7 +112,7 @@ export const getSourcePayload = (values: any, testSources: SourceWithRepository[
 };
 
 export const getCustomSourceField = (testSource: string) => {
-  const isCustomTestSource = testSource.includes(customGitSourceString);
+  const isCustomTestSource = testSource?.includes(customGitSourceString);
 
   return isCustomTestSource ? {source: testSource.replace(customGitSourceString, '')} : {source: ''};
 };
