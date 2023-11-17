@@ -22,6 +22,7 @@ import Colors from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
+import {prettifyArguments} from '@utils/prettifyArguments';
 
 import {ArgumentsWrapper} from './Arguments.styled';
 
@@ -83,12 +84,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   };
 
   const prettifyArgs = () => {
-    const args = form
-      .getFieldValue('args')
-      .replace(/(".*?")|('.*?')|\s/g, (_: string, str1: string, str2: string) => str1 || str2 || '\n')
-      .replace(/\n{2,}/g, '\n')
-      .trim();
-    form.setFieldValue('args', args);
+    form.setFieldValue('args', prettifyArguments(form.getFieldValue('args')));
     setPrettifiedState(true);
   };
 
