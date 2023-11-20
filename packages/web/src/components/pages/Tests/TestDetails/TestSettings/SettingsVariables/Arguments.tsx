@@ -1,10 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import {Form, Input} from 'antd';
 
 import {ExternalLink} from '@atoms';
 
 import {Button, FullWidthSpace, Text} from '@custom-antd';
+
+import {useLastCallback} from '@hooks/useLastCallback';
 
 import {Test} from '@models/test';
 
@@ -43,14 +45,20 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const [updateTest] = useUpdateTestMutation();
 
   const entityArgs = details.executionRequest?.args || [];
-  const initialArgValue = entityArgs.join(' ') || '';
+  const initialArgs = useMemo(() => entityArgs?.join('\n') || '', [entityArgs]);
 
-  const [argsValue, setArgsValue] = useState(initialArgValue);
-  const [isPrettified, setPrettifiedState] = useState(true);
+  const currentArgs = Form.useWatch('args', form) || '';
+  const currentArgsInline = currentArgs.replace(/\s+/g, ' ').trim();
+  const isPrettified = useMemo(() => currentArgs === prettifyArguments(currentArgs), [currentArgs]);
 
   const onSaveForm = () => {
     const values = form.getFieldsValue();
-    const argVal = !values.args.length ? [] : values.args.trim().split('\n');
+    const argVal = values.args?.trim().split('\n').filter(Boolean) || [];
+
+    // Reset the form when there is no actual change
+    if (argVal.join('\n') === initialArgs) {
+      form.resetFields();
+    }
 
     const successRecord = {
       ...details,
@@ -70,27 +78,10 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       });
   };
 
-  const onChange = () => {
-    if (isPrettified) {
-      setPrettifiedState(false);
-    }
-    const args = (form.getFieldValue('args') as string).replace(/\s+/g, ' ').trim();
-    setArgsValue(args);
-  };
+  const onPrettify = useLastCallback(() => form.setFieldValue('args', prettifyArguments(currentArgs)));
+  const onCancel = useLastCallback(() => form.resetFields());
 
-  const onCancel = () => {
-    setArgsValue(entityArgs.join(' '));
-    form.setFieldValue(['args'], entityArgs.join(' '));
-  };
-
-  const prettifyArgs = () => {
-    form.setFieldValue('args', prettifyArguments(form.getFieldValue('args')));
-    setPrettifiedState(true);
-  };
-
-  useEffect(() => {
-    prettifyArgs();
-  }, []);
+  useEffect(() => form.resetFields(), [details]);
 
   const footer = (
     <>
@@ -105,15 +96,14 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       description="Define arguments which will be passed to the test executor."
       footer={footer}
       form={form}
-      initialValues={{args: initialArgValue}}
+      initialValues={{args: initialArgs}}
       disabled={!mayEdit}
       readOnly={readOnly}
-      onFieldsChange={onChange}
       onConfirm={onSaveForm}
       onCancel={onCancel}
     >
       <ArgumentsWrapper>
-        <CopyCommand command={argsValue} isBordered additionalPrefix="executor-binary" />
+        <CopyCommand command={currentArgsInline} isBordered additionalPrefix="executor-binary" />
         <FullWidthSpace size={16} direction="vertical">
           <Text className="regular middle" color={Colors.slate400}>
             Arguments passed to the executor (concat and passed directly to the executor)
@@ -131,7 +121,7 @@ value
 `}
             />
           </Form.Item>
-          <Button onClick={prettifyArgs} $customType="secondary" disabled={isPrettified || readOnly}>
+          <Button onClick={onPrettify} $customType="secondary" disabled={isPrettified || readOnly}>
             Prettify
           </Button>
         </FullWidthSpace>
