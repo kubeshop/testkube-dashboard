@@ -31,7 +31,7 @@ type ExecutionStepsListProps = {
 const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
   const {executionSteps} = props;
 
-  const {navigate} = useRouterPlugin.pick('navigate');
+  const {baseUrl, navigate} = useRouterPlugin.pick('baseUrl', 'navigate');
 
   const {executors = []} = useExecutorsPick('executors');
 
@@ -68,10 +68,9 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
           })
           .map(({status, icon, name, url}, index) => (
             <ExecutionStepsListItemExecution
-              // eslint-disable-next-line react/no-array-index-key
-              key={`item-${index}`}
+              key={url}
               className={classNames({clickable: url})}
-              onClick={url ? () => navigate(url) : undefined}
+              href={url ? `${baseUrl}${url}` : '#'}
             >
               <StyledSpace size={15}>
                 {status ? <StatusIcon status={status} /> : null}
