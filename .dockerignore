@@ -1,0 +1,23 @@
+.git
+.github
+.husky
+.vscode
+.idea
+docs
+
+Dockerfile
+.DS_Store
+**/.env.*
+
+**/antd-theme/antd-customized.css
+**/env-config.js
+**/node_modules
+**/playwright-report
+**/build
+**/dist
+*.log
+
+# generated
+/coverage
+packages/*/coverage
+**/.eslintcache

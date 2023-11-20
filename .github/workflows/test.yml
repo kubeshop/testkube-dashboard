@@ -42,5 +42,12 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Testing dashboard
-        if: always()
-        run: npm run test
+        run: npm run test:coverage
+
+      - name: Send coverage to CodeClimate
+        uses: paambaati/codeclimate-action@v5
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageLocations: |
+            ${{github.workspace}}/coverage/lcov.info:lcov

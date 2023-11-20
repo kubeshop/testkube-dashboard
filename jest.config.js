@@ -1,23 +1,60 @@
-/**
- * Build Jest configuration, that could be used outside CRA/Craco.
- * It may be used i.e. for Wallaby.js automatic configuration.
- *
- * @see {@link https://wallabyjs.com/}
- */
-process.env.NODE_ENV = process.env.NODE_ENV || 'test';
+const {dirname, resolve, join} = require('node:path');
+const {readdirSync, existsSync} = require('node:fs');
+const micromatch = require('micromatch');
+const glob = require('glob');
 
-const {loadCracoConfig} = require('@craco/craco/dist/lib/config');
-const {getCraPaths, loadJestConfigProvider} = require('@craco/craco/dist/lib/cra');
-const {validateCraVersion} = require('@craco/craco/dist/lib/validate-cra-version');
-const {overridePaths} = require('@craco/craco/dist/lib/features/paths/override');
-const {overrideJest} = require('@craco/craco/dist/lib/features/jest/override');
-const {mergeJestConfig} = require('@craco/craco/dist/lib/features/jest/merge-jest-config');
+function readConfig(filePath) {
+  const absFilePath = resolve(filePath);
+  const prevCwd = process.cwd();
+  process.chdir(dirname(absFilePath));
+  Object.keys(require.cache).forEach(key => {
+    delete require.cache[key];
+  });
+  // eslint-disable-next-line import/no-dynamic-require, global-require
+  const result = require(absFilePath);
+  process.chdir(prevCwd);
+  return result;
+}
 
-const context = {env: process.env.NODE_ENV};
-const cracoConfig = loadCracoConfig(context);
-validateCraVersion(cracoConfig);
-context.paths = getCraPaths(cracoConfig);
-context.paths = overridePaths(cracoConfig, context);
-overrideJest(cracoConfig, context);
+function escapeRegexWord(filePath) {
+  return filePath.replace(/[^a-z0-9]/gi, $ => `\\${$}`);
+}
 
-module.exports = mergeJestConfig(cracoConfig, loadJestConfigProvider(cracoConfig), context);
+const packages = readdirSync(join(__dirname, 'packages')).filter(name =>
+  existsSync(join(__dirname, 'packages', name, 'jest.config.js'))
+);
+
+const projects = packages.map(name => ({
+  ...readConfig(join(__dirname, 'packages', name, 'jest.config.js')),
+  rootDir: join(__dirname, 'packages', name),
+}));
+
+const files = glob.sync(`${join(__dirname, 'packages')}/**`, {ignore: '**/node_modules/**'});
+
+const coveragePatterns = projects.map(project =>
+  (project.collectCoverageFrom || []).map(pattern => {
+    if (pattern.includes('<rootDir>')) {
+      return pattern.replace('<rootDir>', project.rootDir);
+    }
+    if (/^!?\//.test(pattern)) {
+      return pattern;
+    }
+    return pattern.startsWith('!') ? `!${project.rootDir}/${pattern.substring(1)}` : `${project.rootDir}/${pattern}`;
+  })
+);
+
+const coverageFiles = coveragePatterns.flatMap(patterns =>
+  files.filter(filePath => micromatch.isMatch(filePath, patterns))
+);
+
+module.exports = {
+  projects,
+  // Hack to inherit coverage patterns from projects
+  collectCoverageFrom: ['**/*.{ts,tsx}'],
+  coveragePathIgnorePatterns: [
+    `^(?!${escapeRegexWord(__dirname)}\\/${coverageFiles
+      .map(filePath => filePath.replace(`${__dirname}/`, ''))
+      .map(escapeRegexWord)
+      .join('|')})$).*$`,
+  ],
+};
