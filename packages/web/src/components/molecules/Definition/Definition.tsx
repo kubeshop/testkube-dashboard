@@ -70,6 +70,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
 
   useEffect(() => {
     setValue(definition);
+    setWasTouched(false);
   }, [definition]);
 
   const onSave = async () => {
