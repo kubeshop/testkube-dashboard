@@ -1,3 +1,5 @@
+import {NavLink} from 'react-router-dom';
+
 import {Space} from 'antd';
 
 import styled from 'styled-components';
@@ -42,7 +44,7 @@ export const ExecutionStepsListItem = styled.ul`
   }
 `;
 
-export const ExecutionStepsListItemExecution = styled.li`
+export const ExecutionStepsListItemExecution = styled(NavLink)`
   display: flex;
   align-items: center;
 

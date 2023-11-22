@@ -26,6 +26,7 @@ interface ButtonWithLinkConfig extends ButtonConfig {
 }
 
 export interface MessagePanelProps {
+  id?: string;
   title: string;
   description: React.ReactNode;
   type?: 'warning' | 'error' | 'default';
@@ -50,10 +51,10 @@ const textColorForType: Record<string, Record<string, Colors>> = {
 };
 
 const MessagePanel: React.FC<MessagePanelProps> = props => {
-  const {type = 'error', title, description, position = 'inline', buttons, onClose} = props;
+  const {id, type = 'error', title, description, position = 'inline', buttons, onClose} = props;
 
   return (
-    <MessagePanelWrapper className={`${type} ${position}`}>
+    <MessagePanelWrapper id={id} className={`${type} ${position}`}>
       <MessageDescription>
         <Text className="bold middle" color={textColorForType[type].header}>
           {title}
@@ -68,6 +69,7 @@ const MessagePanel: React.FC<MessagePanelProps> = props => {
             if ('isLink' in button) {
               return (
                 <a
+                  id={button.id}
                   key={button.linkConfig.href}
                   href={button.linkConfig.href}
                   target={button.linkConfig.target}
@@ -81,7 +83,7 @@ const MessagePanel: React.FC<MessagePanelProps> = props => {
             }
 
             return (
-              <Button $customType={button.type} key={button.type} onClick={button.onClick}>
+              <Button $customType={button.type} key={button.type} id={button.id} onClick={button.onClick}>
                 {button.text}
               </Button>
             );
