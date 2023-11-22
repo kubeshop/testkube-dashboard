@@ -10,8 +10,6 @@ import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
 import {ExecutionName} from '@molecules';
 
-import {useRouterPlugin} from '@plugins/router/hooks';
-
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
 import {useExecutorsPick} from '@store/executors';
@@ -30,8 +28,6 @@ type ExecutionStepsListProps = {
 
 const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
   const {executionSteps} = props;
-
-  const {navigate} = useRouterPlugin.pick('navigate');
 
   const {executors = []} = useExecutorsPick('executors');
 
@@ -67,12 +63,8 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
             };
           })
           .map(({status, icon, name, url}, index) => (
-            <ExecutionStepsListItemExecution
-              // eslint-disable-next-line react/no-array-index-key
-              key={`item-${index}`}
-              className={classNames({clickable: url})}
-              onClick={url ? () => navigate(url) : undefined}
-            >
+            // eslint-disable-next-line react/no-array-index-key
+            <ExecutionStepsListItemExecution key={index} to={url ?? ''} className={classNames({clickable: url})}>
               <StyledSpace size={15}>
                 {status ? <StatusIcon status={status} /> : null}
                 {icon}
