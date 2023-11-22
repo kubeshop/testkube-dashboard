@@ -1,5 +1,4 @@
 import {FC, memo, useMemo} from 'react';
-import {NavLink} from 'react-router-dom';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
 
@@ -64,15 +63,14 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
             };
           })
           .map(({status, icon, name, url}, index) => (
-            <ExecutionStepsListItemExecution key={url ?? index} className={classNames({clickable: url})}>
-              <NavLink to={url ?? ''}>
-                <StyledSpace size={15}>
-                  {status ? <StatusIcon status={status} /> : null}
-                  {icon}
-                  <ExecutionName name={name} />
-                  {url ? <StyledExternalLinkIcon /> : <div />}
-                </StyledSpace>
-              </NavLink>
+            // eslint-disable-next-line react/no-array-index-key
+            <ExecutionStepsListItemExecution key={index} to={url ?? ''} className={classNames({clickable: url})}>
+              <StyledSpace size={15}>
+                {status ? <StatusIcon status={status} /> : null}
+                {icon}
+                <ExecutionName name={name} />
+                {url ? <StyledExternalLinkIcon /> : <div />}
+              </StyledSpace>
             </ExecutionStepsListItemExecution>
           ));
 
