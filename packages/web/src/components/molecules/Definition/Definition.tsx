@@ -11,6 +11,7 @@ import {Pre} from '@atoms';
 import {FullWidthSpace} from '@custom-antd';
 
 import useClusterVersionMatch from '@hooks/useClusterVersionMatch';
+import {useLastCallback} from '@hooks/useLastCallback';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {InlineNotification, notificationCall} from '@molecules';
@@ -64,13 +65,16 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
     skip: !isReadable,
   });
 
+  const resetValue = useLastCallback(() => {
+    setValue(definition);
+    setWasTouched(false);
+  });
+
   useEffect(() => {
     safeRefetch(refetch);
   }, []);
 
-  useEffect(() => {
-    setValue(definition);
-  }, [definition]);
+  useEffect(resetValue, [definition]);
 
   const onSave = async () => {
     const monaco = await import('react-monaco-editor').then(editor => editor.monaco);
@@ -122,10 +126,7 @@ const Definition: React.FC<PropsWithChildren<DefinitionProps>> = props => {
         title="Definition"
         description={`Validate and update your ${label} configuration`}
         onConfirm={onSave}
-        onCancel={() => {
-          setValue(definition);
-          setWasTouched(false);
-        }}
+        onCancel={resetValue}
         readOnly={!isSupported || readOnly}
         wasTouched={wasTouched}
       >
