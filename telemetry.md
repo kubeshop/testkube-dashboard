@@ -103,5 +103,38 @@
       <td><code>eventModel.duration</code></td>
       <td>Time spent on the page (in ms)</td>
     </tr>
+    <tr valign="top">
+      <td>
+        <strong>promoBannerCloseClick</strong><br>
+        <code>tk.ui.promoBannerCloseClick</code>
+      </td>
+      <td>
+        Fired when the user clicks "X" button in promo banner.
+      </td>
+      <td><code>eventModel.id</code></td>
+      <td>The unique ID for the promo banner</td>
+    </tr>
+    <tr valign="top">
+      <td>
+        <strong>promoBannerPrimaryClick</strong><br>
+        <code>tk.ui.promoBannerPrimaryClick</code>
+      </td>
+      <td>
+        Fired when the user clicks the primary button in the promo banner.
+      </td>
+      <td><code>eventModel.id</code></td>
+      <td>The unique ID for the promo banner</td>
+    </tr>
+    <tr valign="top">
+      <td>
+        <strong>promoBannerSecondaryClick</strong><br>
+        <code>tk.ui.promoBannerSecondaryClick</code>
+      </td>
+      <td>
+        Fired when the user clicks the secondary button in the promo banner.
+      </td>
+      <td><code>eventModel.id</code></td>
+      <td>The unique ID for the promo banner</td>
+    </tr>
   </tbody>
 </table>
