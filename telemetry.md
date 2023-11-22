@@ -116,17 +116,6 @@
     </tr>
     <tr valign="top">
       <td>
-        <strong>promoBannerCloseClick</strong><br>
-        <code>tk.ui.promoBannerCloseClick</code>
-      </td>
-      <td>
-        Fired when the user clicks "X" button in promo banner.
-      </td>
-      <td><code>eventModel.id</code></td>
-      <td>The unique ID for the promo banner</td>
-    </tr>
-    <tr valign="top">
-      <td>
         <strong>promoBannerPrimaryClick</strong><br>
         <code>tk.ui.promoBannerPrimaryClick</code>
       </td>
