@@ -16,7 +16,12 @@ import {useTelemetry} from '@telemetry/hooks';
 
 import CopyCommand from './CopyCommand';
 
-type CLIScriptModifier = 'isFinished' | 'canHaveArtifacts' | 'isRunPermission' | 'isDeletePermission';
+type CLIScriptModifier =
+  | 'isFinished'
+  | 'canHaveArtifacts'
+  | 'isRunPermission'
+  | 'isDeletePermission'
+  | 'isEditPermission';
 
 type CLIScript = {
   label: string;
@@ -44,6 +49,11 @@ const testSuiteScripts: CLIScript[] = [
     command: (name: string, args: string[]) => `kubectl testkube run testsuite ${name} ${args.join(' ')}`,
   },
   {
+    label: 'Update test suite',
+    modify: 'isEditPermission',
+    command: (name: string, args: string[]) => `kubectl testkube update testsuite --name ${name} ${args.join(' ')}`,
+  },
+  {
     label: 'Delete test suite',
     command: (name: string, args: string[]) => `kubectl testkube delete testsuite ${name} ${args.join(' ')}`,
     modify: 'isDeletePermission',
@@ -59,6 +69,11 @@ const testScripts: CLIScript[] = [
   {
     label: 'Get test',
     command: (name: string, args: string[]) => `kubectl testkube get test ${name} ${args.join(' ')}`,
+  },
+  {
+    label: 'Update test',
+    command: (name: string, args: string[]) => `kubectl testkube update test --name ${name} ${args.join(' ')}`,
+    modify: 'isEditPermission',
   },
   {
     label: 'List executions',
@@ -107,12 +122,16 @@ const modifyActions: Record<CLIScriptModifier, (arg: boolean | string) => boolea
   isDeletePermission: hasPermission => {
     return !hasPermission;
   },
+  isEditPermission: hasPermission => {
+    return !hasPermission;
+  },
 };
 
 const CLICommands: React.FC<CLICommandsProps> = props => {
   const {isExecutions, type, name, id, modifyMap, bg} = props;
   const mayRun = usePermission(Permissions.runEntity);
   const mayDelete = usePermission(Permissions.deleteEntity);
+  const mayEdit = usePermission(Permissions.editEntity);
 
   const {entity} = useEntityDetailsPick('entity');
   const telemetry = useTelemetry();
@@ -126,6 +145,7 @@ const CLICommands: React.FC<CLICommandsProps> = props => {
     isFinished: modifyMap?.status,
     isRunPermission: mayRun,
     isDeletePermission: mayDelete,
+    isEditPermission: mayEdit,
   };
 
   const renderedCLICommands = useMemo(() => {
