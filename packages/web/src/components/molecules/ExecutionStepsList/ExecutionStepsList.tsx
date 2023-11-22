@@ -1,4 +1,5 @@
 import {FC, memo, useMemo} from 'react';
+import {NavLink} from 'react-router-dom';
 
 import {ClockCircleOutlined} from '@ant-design/icons';
 
@@ -9,8 +10,6 @@ import {ExecutorIcon, StatusIcon} from '@atoms';
 import {TestSuiteStepExecutionResult} from '@models/testSuite';
 
 import {ExecutionName} from '@molecules';
-
-import {useRouterPlugin} from '@plugins/router/hooks';
 
 import {getTestExecutorIcon} from '@redux/utils/executorIcon';
 
@@ -30,8 +29,6 @@ type ExecutionStepsListProps = {
 
 const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
   const {executionSteps} = props;
-
-  const {baseUrl, navigate} = useRouterPlugin.pick('baseUrl', 'navigate');
 
   const {executors = []} = useExecutorsPick('executors');
 
@@ -67,17 +64,15 @@ const ExecutionStepsList: FC<ExecutionStepsListProps> = props => {
             };
           })
           .map(({status, icon, name, url}, index) => (
-            <ExecutionStepsListItemExecution
-              key={url}
-              className={classNames({clickable: url})}
-              href={url ? `${baseUrl}${url}` : '#'}
-            >
-              <StyledSpace size={15}>
-                {status ? <StatusIcon status={status} /> : null}
-                {icon}
-                <ExecutionName name={name} />
-                {url ? <StyledExternalLinkIcon /> : <div />}
-              </StyledSpace>
+            <ExecutionStepsListItemExecution key={url ?? index} className={classNames({clickable: url})}>
+              <NavLink to={url ?? ''}>
+                <StyledSpace size={15}>
+                  {status ? <StatusIcon status={status} /> : null}
+                  {icon}
+                  <ExecutionName name={name} />
+                  {url ? <StyledExternalLinkIcon /> : <div />}
+                </StyledSpace>
+              </NavLink>
             </ExecutionStepsListItemExecution>
           ));
 

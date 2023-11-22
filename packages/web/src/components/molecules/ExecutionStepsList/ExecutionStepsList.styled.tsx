@@ -42,7 +42,7 @@ export const ExecutionStepsListItem = styled.ul`
   }
 `;
 
-export const ExecutionStepsListItemExecution = styled.a`
+export const ExecutionStepsListItemExecution = styled.li`
   display: flex;
   align-items: center;
 
