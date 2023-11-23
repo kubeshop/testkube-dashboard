@@ -66,3 +66,17 @@ export type ExecutionRequest = {
   httpsProxy: string;
   activeDeadlineSeconds?: number;
 };
+
+export type ExecutionTotals = {
+  results: number;
+  passed: number;
+  failed: number;
+  queued: number;
+  running: number;
+};
+
+export type TextExecutionsResponse = {
+  results: Execution[];
+  totals: ExecutionTotals;
+  filtered: ExecutionTotals;
+};

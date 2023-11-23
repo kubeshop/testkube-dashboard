@@ -6,11 +6,13 @@ import {TableRowSelection} from 'antd/lib/table/interface';
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import {MutationDefinition} from '@reduxjs/toolkit/query';
 
-import debounce from 'lodash.debounce';
+import EmptyDataWithFilters from '@atoms/EmptyDataWithFilters';
 
 import {Skeleton} from '@custom-antd';
 
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
+
+import {ExecutionStatusEnum} from '@models/execution';
 
 import {useGetTestExecutionsByIdQuery} from '@services/tests';
 
@@ -27,9 +29,13 @@ interface ExecutionsTableProps {
 
 const getKey = (record: any) => record.id;
 
+type Filters = {
+  textSearch?: string;
+  status?: ExecutionStatusEnum;
+};
+
 const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecution}) => {
-  const [textSearch, _setTextSearch] = useState<string>();
-  const setTextSearch = useCallback(debounce(_setTextSearch, 300), [_setTextSearch]);
+  const [filters, setFilters] = useState<Filters | undefined>({});
 
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
   const {
@@ -40,17 +46,34 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
   const {id: execId, open} = useExecutionDetailsPick('id', 'open');
   const isWritable = useSystemAccess(SystemAccess.agent);
 
-  const {data: filteredExecutions} = useGetTestExecutionsByIdQuery(
+  const isFiltering = useMemo(
+    () => Boolean(filters && (filters.textSearch?.trim().length || filters.status)),
+    [filters]
+  );
+
+  const {data: filteredExecutions, isLoading: isFilteringLoading} = useGetTestExecutionsByIdQuery(
     {
       id: id!,
-      textSearch,
+      ...filters,
     },
     {
-      skip: !id || !textSearch || !textSearch.trim().length,
+      skip: !id || !isFiltering,
     }
   );
 
-  const executions = useMemo(() => filteredExecutions || entityExecutions, [filteredExecutions, entityExecutions]);
+  const executions = useMemo(
+    () => (isFiltering ? filteredExecutions : entityExecutions),
+    [isFiltering, filteredExecutions, entityExecutions]
+  );
+
+  const isEmptyExecutions = useMemo(() => !isFiltering && !executions?.results.length, [executions, isFiltering]);
+
+  const isTableVisible = useMemo(() => {
+    if (isEmptyExecutions) return false;
+    if (isFiltering && isFilteringLoading) return false;
+    if (isFiltering && !isFilteringLoading && !filteredExecutions?.results.length) return false;
+    return true;
+  }, [isEmptyExecutions, isFiltering, isFiltering, filteredExecutions]);
 
   const rowSelection: TableRowSelection<any> = useMemo(
     () => ({
@@ -70,8 +93,6 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
     }),
     [currentPage]
   );
-
-  const isEmptyExecutions = !executions?.results || !executions?.results.length;
 
   const [abortExecution] = useAbortExecution();
   const onAbortExecution = useCallback(
@@ -98,32 +119,45 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
   );
 
   if (isFirstTimeLoading) {
-    return (
-      <>
-        <Skeleton additionalStyles={{lineHeight: 40}} />
-        <Skeleton additionalStyles={{lineHeight: 40}} />
-        <Skeleton additionalStyles={{lineHeight: 40}} />
-      </>
-    );
+    return <LoadingSkeleton />;
   }
 
-  if (isEmptyExecutions) {
+  if (isEmptyExecutions && !isFiltering) {
     return <EmptyExecutionsListContent onRun={onRun} />;
   }
 
   return (
     <>
-      <Input value={textSearch} onChange={e => setTextSearch(e.target.value)} />
-      <Table
-        className="custom-table"
-        showHeader={false}
-        dataSource={executions?.results}
-        columns={columns}
-        onRow={onRow}
-        rowSelection={rowSelection}
-        rowKey={getKey}
-        pagination={pagination}
-      />
+      <Input value={filters?.textSearch} onChange={e => setFilters({...filters, textSearch: e.target.value})} />
+
+      {isFiltering && isFilteringLoading && <LoadingSkeleton />}
+
+      {isFiltering && !isFilteringLoading && !filteredExecutions?.results.length && (
+        <EmptyDataWithFilters resetFilters={() => setFilters(undefined)} />
+      )}
+
+      {isTableVisible && (
+        <Table
+          className="custom-table"
+          showHeader={false}
+          dataSource={executions?.results}
+          columns={columns}
+          onRow={onRow}
+          rowSelection={rowSelection}
+          rowKey={getKey}
+          pagination={pagination}
+        />
+      )}
+    </>
+  );
+};
+
+const LoadingSkeleton = () => {
+  return (
+    <>
+      <Skeleton additionalStyles={{lineHeight: 40}} />
+      <Skeleton additionalStyles={{lineHeight: 40}} />
+      <Skeleton additionalStyles={{lineHeight: 40}} />
     </>
   );
 };
