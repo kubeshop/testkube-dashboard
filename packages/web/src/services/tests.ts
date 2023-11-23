@@ -1,6 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Artifact} from '@models/artifact';
+import {ExecutionStatusEnum} from '@models/execution';
 import {MetadataResponse, YamlEditBody} from '@models/fetch';
 import {Test, TestFilters, TestWithExecution} from '@models/test';
 
@@ -38,11 +39,31 @@ export const testsApi = createApi({
       providesTags: (res, err, id) => [{type: 'Test', id}],
     }),
     getTestExecutionsById: builder.query({
-      query: ({id, last = 7, pageSize = 1000}) => {
+      query: ({
+        id,
+        last = 7,
+        pageSize = 1000,
+        textSearch,
+        status,
+      }: {
+        id: string;
+        last?: number;
+        pageSize?: number;
+        textSearch?: string;
+        status?: ExecutionStatusEnum;
+      }) => {
         const queryParams = new URLSearchParams({
-          last,
-          pageSize,
+          last: last.toString(),
+          pageSize: pageSize.toString(),
         });
+
+        if (textSearch) {
+          queryParams.append('textSearch', textSearch);
+        }
+
+        if (status) {
+          queryParams.append('status', status);
+        }
 
         return {
           url: `/tests/${id}/executions?${queryParams.toString()}`,
