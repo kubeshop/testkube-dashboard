@@ -1,6 +1,7 @@
 import React, {memo, useCallback, useMemo, useState} from 'react';
 
-import {Input, Table, TablePaginationConfig} from 'antd';
+import {SearchOutlined} from '@ant-design/icons';
+import {Table, TablePaginationConfig} from 'antd';
 import {TableRowSelection} from 'antd/lib/table/interface';
 
 import {UseMutation} from '@reduxjs/toolkit/dist/query/react/buildHooks';
@@ -16,11 +17,17 @@ import {ExecutionStatusEnum} from '@models/execution';
 
 import {useGetTestExecutionsByIdQuery} from '@services/tests';
 
+import Colors from '@src/styles/Colors';
+
 import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
+import ExecutionStatusFilter from './ExecutionStatusFilter';
+import * as S from './ExecutionsTable.styled';
 import TableRow from './TableRow';
+
+// import StatusFilter from '@organisms/EntityList/EntityListFilters/StatusFilter';
 
 interface ExecutionsTableProps {
   onRun: () => void;
@@ -30,12 +37,17 @@ interface ExecutionsTableProps {
 const getKey = (record: any) => record.id;
 
 type Filters = {
-  textSearch?: string;
-  status?: ExecutionStatusEnum;
+  textSearch: string;
+  status: ExecutionStatusEnum[];
+};
+
+const initialFilters: Filters = {
+  textSearch: '',
+  status: [],
 };
 
 const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecution}) => {
-  const [filters, setFilters] = useState<Filters | undefined>({});
+  const [filters, setFilters] = useState<Filters>(initialFilters);
 
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
   const {
@@ -46,10 +58,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
   const {id: execId, open} = useExecutionDetailsPick('id', 'open');
   const isWritable = useSystemAccess(SystemAccess.agent);
 
-  const isFiltering = useMemo(
-    () => Boolean(filters && (filters.textSearch?.trim().length || filters.status)),
-    [filters]
-  );
+  const isFiltering = useMemo(() => Boolean(filters.textSearch.trim().length || filters.status.length), [filters]);
 
   const {data: filteredExecutions, isLoading: isFilteringLoading} = useGetTestExecutionsByIdQuery(
     {
@@ -128,12 +137,22 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
 
   return (
     <>
-      <Input value={filters?.textSearch} onChange={e => setFilters({...filters, textSearch: e.target.value})} />
+      <S.FiltersContainer>
+        <S.SearchInput
+          prefix={<SearchOutlined style={{color: Colors.slate500}} />}
+          placeholder="Search"
+          value={filters?.textSearch}
+          onChange={e => setFilters({...filters, textSearch: e.target.value})}
+        />
+        <S.StatusFilterContainer>
+          <ExecutionStatusFilter filters={filters} setFilters={setFilters} isFiltersDisabled={false} />
+        </S.StatusFilterContainer>
+      </S.FiltersContainer>
 
       {isFiltering && isFilteringLoading && <LoadingSkeleton />}
 
       {isFiltering && !isFilteringLoading && !filteredExecutions?.results.length && (
-        <EmptyDataWithFilters resetFilters={() => setFilters(undefined)} />
+        <EmptyDataWithFilters resetFilters={() => setFilters(initialFilters)} />
       )}
 
       {isTableVisible && (

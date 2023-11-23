@@ -40,7 +40,7 @@ export const testsApi = createApi({
     }),
     getTestExecutionsById: builder.query<
       TextExecutionsResponse,
-      {id: string; last?: number; pageSize?: number; textSearch?: string; status?: ExecutionStatusEnum}
+      {id: string; last?: number; pageSize?: number; textSearch?: string; status?: ExecutionStatusEnum[]}
     >({
       query: ({id, last = 7, pageSize = 1000, textSearch, status}) => {
         const queryParams = new URLSearchParams({
@@ -52,8 +52,8 @@ export const testsApi = createApi({
           queryParams.append('textSearch', textSearch);
         }
 
-        if (status) {
-          queryParams.append('status', status);
+        if (status?.length) {
+          status.forEach(s => queryParams.append('status', s));
         }
 
         return {

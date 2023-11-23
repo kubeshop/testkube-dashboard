@@ -4,7 +4,7 @@ import {StyledSpace} from './FilterMenuFooter.styled';
 
 type FilterMenuFooterProps = {
   onReset: () => void;
-  onOk: () => void;
+  onOk?: () => void;
   onCancel?: () => void;
 };
 
@@ -20,9 +20,11 @@ const FilterMenuFooter: React.FC<FilterMenuFooterProps> = props => {
       <Button $customType="secondary" onClick={onReset}>
         Reset
       </Button>
-      <Button $customType="primary" onClick={onOk}>
-        Ok
-      </Button>
+      {onOk && (
+        <Button $customType="primary" onClick={onOk}>
+          Ok
+        </Button>
+      )}
     </StyledSpace>
   );
 };
