@@ -9,24 +9,24 @@ describe('AiInsightsTab', () => {
     expect(ossAiTab).toBeInTheDocument();
   });
 
-  it('should render the "This feature is available only in Testkube Cloud." text', () => {
+  it('should render the "This feature is available only in Testkube Pro." text', () => {
     render(<AiInsightsTab />);
-    const text = screen.getByText(/This feature is available only in Testkube Cloud./i);
+    const text = screen.getByText(/This feature is available only in Testkube Pro./i);
     expect(text).toBeInTheDocument();
   });
 
-  it('should render the "Start using Testkube Cloud to get AI insights for your test executions, as well as other exclusive features." text', () => {
+  it('should render the "Start using Testkube Pro to get AI insights for your test executions, as well as other exclusive features." text', () => {
     render(<AiInsightsTab />);
     const text = screen.getByText(
-      /Start using Testkube Cloud to get AI insights for your test executions, as well as other exclusive features./i
+      /Start using Testkube Pro to get AI insights for your test executions, as well as other exclusive features./i
     );
     expect(text).toBeInTheDocument();
   });
 
-  it('should render the "Go to Testkube Cloud" button', () => {
+  it('should render the "Go to Testkube Pro" button', () => {
     render(<AiInsightsTab />);
     const button = screen.getByTestId('cloud-cta-button');
     expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent('Go to Testkube Cloud');
+    expect(button).toHaveTextContent('Go to Testkube Pro');
   });
 });

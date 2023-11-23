@@ -12,7 +12,7 @@ export default createPlugin('oss/sider-cloud-migrate')
   .init(tk => {
     tk.slots.siderOtherItems.add({
       icon: 'cloudMigrate',
-      title: 'Connect to Testkube Cloud',
+      title: 'Connect to Testkube Pro',
       size: 32,
       onClick: () => window.open(externalLinks.OSStoCloudMigration),
     });
