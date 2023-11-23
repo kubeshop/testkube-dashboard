@@ -3,6 +3,8 @@ import {useSearchParams} from 'react-router-dom';
 
 import {isEqual, merge} from 'lodash';
 
+import EmptyDataWithFilters from '@atoms/EmptyDataWithFilters';
+
 import {Button} from '@custom-antd';
 
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
@@ -24,7 +26,6 @@ import {useApiEndpoint} from '@services/apiEndpoint';
 
 import Filters from '../EntityListFilters';
 
-import EmptyDataWithFilters from './EmptyDataWithFilters';
 import {StyledFiltersSection} from './EntityListContent.styled';
 
 const EntityListContent: React.FC<EntityListBlueprint> = props => {
