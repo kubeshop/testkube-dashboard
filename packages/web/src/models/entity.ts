@@ -35,8 +35,8 @@ export interface EntityViewBlueprint {
 }
 
 export interface EntityFilters {
-  setFilters: any;
-  filters: any;
+  setFilters: (filters: TestFilters | TestSuiteFilters) => void;
+  filters: TestFilters | TestSuiteFilters;
   disabled: boolean;
   width?: string;
 }
