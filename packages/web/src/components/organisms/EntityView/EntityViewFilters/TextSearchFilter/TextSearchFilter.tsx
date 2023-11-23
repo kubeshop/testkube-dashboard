@@ -4,14 +4,14 @@ import {useDebounce} from 'react-use';
 import {SearchOutlined} from '@ant-design/icons';
 import {Input} from 'antd';
 
-import {FilterProps} from '@models/filters';
+import {EntityFilters} from '@models/entity';
 
 import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
 
-const TextSearchFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters, isFiltersDisabled} = props;
+const TextSearchFilter: React.FC<EntityFilters> = props => {
+  const {filters, setFilters, disabled} = props;
 
   const [inputValue, setInputValue] = useState(filters.textSearch);
 
@@ -26,6 +26,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
     300,
     [inputValue]
   );
+
   useEffect(cancel, []);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const TextSearchFilter: React.FC<FilterProps> = props => {
       onChange={onChange}
       value={inputValue}
       data-cy="search-filter"
-      disabled={isFiltersDisabled}
+      disabled={disabled}
     />
   );
 };

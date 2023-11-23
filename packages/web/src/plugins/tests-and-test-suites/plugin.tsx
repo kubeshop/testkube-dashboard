@@ -16,7 +16,7 @@ import TestSuiteDetails from '@pages/TestSuites/TestSuiteDetails';
 import TestSuitesList from '@pages/TestSuites/TestSuitesList';
 import TestDetails from '@pages/Tests/TestDetails';
 import TestExecutionArtifacts from '@pages/Tests/TestDetails/TestExecution/TestExecutionArtifacts';
-import TestsList from '@pages/Tests/TestsList';
+import TestsPage from '@pages/Tests/TestsPage';
 
 import type ExecutorsPlugin from '@plugins/executors/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
@@ -82,7 +82,7 @@ export default createPlugin('oss/tests-and-test-suites')
     <DashboardRewrite pattern="/test-suites/:id/executions/:execId" keepQuery />
   )
 
-  .route('/tests', <TestsList />)
+  .route('/tests', <TestsPage />)
   .route('/tests/:id', <TestDetails tab="executions" />)
   .route('/tests/:id/executions', <TestDetails tab="executions" />)
   .route('/tests/:id/executions/:execId', <TestDetails tab="executions" />)

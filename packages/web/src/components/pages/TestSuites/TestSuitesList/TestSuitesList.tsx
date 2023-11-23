@@ -10,7 +10,7 @@ import {TestSuite} from '@models/testSuite';
 
 import {notificationCall} from '@molecules';
 
-import {EntityListContent} from '@organisms';
+import {EntityView} from '@organisms';
 
 import {Error} from '@pages';
 
@@ -58,20 +58,23 @@ const TestSuitesList: FC = () => {
 
   const [abortAll] = useAbortAllTestSuiteExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: TestSuite) => `/test-suites/${item.name}`);
-  const onItemAbort = useCallback((item: TestSuite) => {
-    abortAll({id: item.name})
-      .unwrap()
-      .catch(() => {
-        notificationCall('failed', 'Something went wrong during test suite execution abortion');
-      });
-  }, []);
+  const onItemAbort = useCallback(
+    (item: TestSuite) => {
+      abortAll({id: item.name})
+        .unwrap()
+        .catch(() => {
+          notificationCall('failed', 'Something went wrong during test suite execution abortion');
+        });
+    },
+    [abortAll]
+  );
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
 
   return (
-    <EntityListContent
+    <EntityView
       itemKey="testSuite.name"
       CardComponent={TestSuiteCard}
       onItemClick={onItemClick}
@@ -80,16 +83,17 @@ const TestSuitesList: FC = () => {
       pageTitle="Test Suites"
       pageTitleAddon={pageTitleAddon}
       addEntityButtonText="Add a new test suite"
-      pageDescription={PageDescription}
+      pageDescription={<PageDescription />}
       emptyDataComponent={EmptyTestSuites}
       initialFiltersState={initialFilters}
       dataTest="add-a-new-test-suite-btn"
       queryFilters={filters}
       setQueryFilters={setFilters}
-      data={testSuites}
+      data={testSuites ?? []}
       isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
+      type="grid"
     />
   );
 };

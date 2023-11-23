@@ -12,7 +12,7 @@ import {Test} from '@models/test';
 
 import {notificationCall} from '@molecules';
 
-import {EntityListContent} from '@organisms';
+import {EntityView} from '@organisms';
 
 import {Error} from '@pages';
 
@@ -63,20 +63,23 @@ const TestsList: FC = () => {
 
   const [abortAll] = useAbortAllTestExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: Test) => `/tests/${item.name}`);
-  const onItemAbort = useCallback((item: Test) => {
-    abortAll({id: item.name})
-      .unwrap()
-      .catch(() => {
-        notificationCall('failed', 'Something went wrong during test execution abortion');
-      });
-  }, []);
+  const onItemAbort = useCallback(
+    (item: Test) => {
+      abortAll({id: item.name})
+        .unwrap()
+        .catch(() => {
+          notificationCall('failed', 'Something went wrong during test execution abortion');
+        });
+    },
+    [abortAll]
+  );
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
 
   return (
-    <EntityListContent
+    <EntityView
       itemKey="test.name"
       CardComponent={TestCard}
       onItemClick={onItemClick}
@@ -84,16 +87,17 @@ const TestsList: FC = () => {
       entity="tests"
       pageTitle="Tests"
       addEntityButtonText="Add a new test"
-      pageDescription={PageDescription}
+      pageDescription={<PageDescription />}
       emptyDataComponent={EmptyTests}
       initialFiltersState={initialFilters}
       dataTest="add-a-new-test-btn"
       queryFilters={filters}
       setQueryFilters={setFilters}
-      data={tests}
+      data={tests ?? []}
       isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
+      type="grid"
     />
   );
 };

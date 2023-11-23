@@ -65,3 +65,8 @@ export type TestSuiteStepTest = {
   namespace: Test['namespace'];
   type?: Test['type'];
 };
+
+export enum TestsView {
+  LIST = 'list',
+  TABLE = 'table',
+}

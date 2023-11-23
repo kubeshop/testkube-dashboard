@@ -61,7 +61,7 @@ export const AppliedFiltersNotification = styled.div`
   background-color: ${Colors.purple};
 `;
 
-export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean}>`
+export const StyledFilterLabel = styled.div<{$disabled: boolean}>`
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -71,14 +71,14 @@ export const StyledFilterLabel = styled.div<{isFiltersDisabled: boolean}>`
   border-radius: 4px;
   padding: 11px;
 
-  background-color: ${props => (props.isFiltersDisabled ? Colors.slate800disabled : Colors.slate800)};
+  background-color: ${props => (props.$disabled ? Colors.slate800disabled : Colors.slate800)};
 
   color: ${Colors.slate500};
-  cursor: ${props => (props.isFiltersDisabled ? 'not-allowed' : 'pointer')};
+  cursor: ${props => (props.$disabled ? 'not-allowed' : 'pointer')};
   transition: 0.3s ease;
 
   ${props =>
-    props.isFiltersDisabled
+    props.$disabled
       ? ''
       : `
       &:hover {

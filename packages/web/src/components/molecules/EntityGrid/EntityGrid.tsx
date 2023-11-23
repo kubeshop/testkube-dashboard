@@ -53,7 +53,7 @@ function EntityGridBase<T extends {item: any}>(props: EntityGridProps<T>): React
         const itemProps = {...componentProps, item} as T;
         return <Component {...itemProps} key={itemKey ? getIn(item, itemKey) : `item-${index}`} />;
       }),
-    [data]
+    [Component, componentProps, data, itemKey]
   );
 
   if (loadingInitially) {

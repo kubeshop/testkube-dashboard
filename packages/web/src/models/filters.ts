@@ -1,6 +1,6 @@
 export type FilterProps = {
   setFilters: any;
   filters: any;
-  isFiltersDisabled: boolean;
+  disabled: boolean;
   width?: string;
 };

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import {maxDevice} from '@styles/MediaQueries';
+import {maxDevice} from '@src/styles/MediaQueries';
 
 export const FiltersContainer = styled.div`
   display: inline-flex;
