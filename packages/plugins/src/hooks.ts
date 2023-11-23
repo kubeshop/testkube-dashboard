@@ -79,12 +79,16 @@ export const createUseData = <T extends Plugin<any>>() => {
 
 export const createUseSlot = <T extends Plugin<any>>() => {
   const useSubscription = createUseSubscription();
-  return <K extends keyof GetSlots<GetPluginState<T>>>(key: K): GetSlots<GetPluginState<T>>[K][] => {
+  return <K extends keyof GetSlots<GetPluginState<T>>>(
+    key: K,
+    defaults: PluginSlotContainer<GetSlots<GetPluginState<T>>[K]>[] = []
+  ): GetSlots<GetPluginState<T>>[K][] => {
     const [incr, setIncr] = useState(0);
     const scope = usePluginScope<T>();
     const resultsRef = useRef<PluginSlotContainer<T>[]>();
     const updateResults = () => {
-      const results = scope.slots[key]?.allRaw();
+      // @ts-ignore: FIXME something is wrong with types
+      const results = scope.slots[key]?.allRaw(defaults);
       if (results?.length !== resultsRef.current?.length || resultsRef.current?.some((x, i) => results![i] !== x)) {
         resultsRef.current = results;
       }
@@ -104,13 +108,18 @@ export const createUseSlot = <T extends Plugin<any>>() => {
 
 export const createUseSlotFirst = <T extends Plugin<any>>() => {
   const useSubscription = createUseSubscription();
-  return <K extends keyof GetSlots<GetPluginState<T>>>(key: K): GetSlots<GetPluginState<T>>[K] | undefined => {
+  return <K extends keyof GetSlots<GetPluginState<T>>>(
+    key: K,
+    defaults: PluginSlotContainer<GetSlots<GetPluginState<T>>[K]>[] = []
+  ): GetSlots<GetPluginState<T>>[K] | undefined => {
     const [incr, setIncr] = useState(0);
     const prevRef = useRef<GetSlots<GetPluginState<T>>[K] | undefined>();
     const scope = usePluginScope<T>();
-    prevRef.current = scope.slots[key]?.first();
+    // @ts-ignore: FIXME something is wrong with types
+    prevRef.current = scope.slots[key]?.first(defaults);
     useSubscription(() => {
-      const nextValue = scope.slots[key]?.first();
+      // @ts-ignore: FIXME something is wrong with types
+      const nextValue = scope.slots[key]?.first(defaults);
       if (nextValue !== prevRef.current) {
         prevRef.current = nextValue;
         setIncr((incr + 1) % 10000);

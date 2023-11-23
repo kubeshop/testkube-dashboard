@@ -62,17 +62,24 @@ export class PluginSlot<T> {
     this.storage.set(this.key, slot);
   }
 
-  public allRaw(): PluginSlotContainer<T>[] {
+  public allRaw(defaults: PluginSlotContainer<T>[] = []): PluginSlotContainer<T>[] {
     const all = this.storage.get(this.key) || [];
-    return all.filter(item => isSlotEnabled(item.metadata));
+    const filtered = all.filter(item => isSlotEnabled(item.metadata));
+    defaults.forEach(item => {
+      if (isSlotEnabled(item.metadata || {})) {
+        const order = item.metadata.order || 0;
+        const index = filtered.findIndex(x => x.metadata.order! >= order);
+        filtered.splice(index === -1 ? filtered.length : index, 0, item);
+      }
+    });
+    return filtered;
   }
 
   public all(): T[] {
     return this.allRaw().map(item => item.value);
   }
 
-  public first(): T | undefined {
-    const all = this.storage.get(this.key) || [];
-    return all.find(item => isSlotEnabled(item.metadata))?.value;
+  public first(defaults: PluginSlotContainer<T>[] = []): T | undefined {
+    return this.allRaw(defaults)[0]?.value;
   }
 }

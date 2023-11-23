@@ -61,16 +61,16 @@ const AddSourceModal: React.FC = () => {
 
     createSource(body)
       .then(displayDefaultNotificationFlow)
-      .then(res => openDetails(res.data.metadata.name))
+      .then(res => {
+        openDetails(res.data.metadata.name);
+        close();
+      })
       .catch(err => {
         setError(err);
 
         if (!inTopInViewport && topRef && topRef.current) {
           topRef.current.scrollIntoView();
         }
-      })
-      .finally(() => {
-        close();
       });
   };
 

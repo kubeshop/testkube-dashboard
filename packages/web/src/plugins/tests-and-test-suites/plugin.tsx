@@ -1,4 +1,5 @@
 import {ReactNode} from 'react';
+import {useParams} from 'react-router-dom';
 
 import {StoreProvider, createPlugin, data, external, slot} from '@testkube/plugins';
 
@@ -89,6 +90,7 @@ export default createPlugin('oss/tests-and-test-suites')
   .route('/tests/:id/commands', <TestDetails tab="commands" />)
   .route('/tests/:id/settings', <TestDetails tab="settings" />)
   .route('/tests/:id/settings/:settingsTab', <TestDetails tab="settings" />)
+  .route('/tests/:id/:tab', () => <TestDetails tab={useParams().tab} />)
 
   .route('/test-suites', <TestSuitesList />)
   .route('/test-suites/:id', <TestSuiteDetails tab="executions" />)
@@ -100,6 +102,8 @@ export default createPlugin('oss/tests-and-test-suites')
 
   .define(data<(tab: string) => void>()('setExecutionTab'))
   .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testExecutionTabs'))
+  .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testDetailsTabs'))
+  .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testSuiteDetailsTabs'))
   .define(slot<ReactNode>()('logOutputTop'))
   .define(slot<ReactNode>()('deleteTestExtension'))
   .define(slot<ReactNode>()('deleteTestSuiteExtension'))

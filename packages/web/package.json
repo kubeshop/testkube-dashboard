@@ -40,6 +40,7 @@
     "@types/react-transition-group": "4.4.4",
     "@types/semver": "^7.5.0",
     "@types/styled-components": "5.1.18",
+    "babel-plugin-styled-components": "^2.1.4",
     "file-loader": "6.2.0",
     "less": "4.1.2",
     "postcss-styled-syntax": "0.4.0",

@@ -24,9 +24,11 @@ const PageHeader: FC<PageHeaderProps> = ({title, pageTitleAddon, description, lo
           {title} <LoadingOutlined />
         </>
       ) : (
-        <PageTitle>
-          {title} {pageTitleAddon}
-        </PageTitle>
+        <>
+          <PageTitle ellipsis={{tooltip: title}}>
+            {title} {pageTitleAddon}
+          </PageTitle>
+        </>
       )
     }
   >
