@@ -21,15 +21,15 @@ export enum externalLinks {
   variables = 'https://docs.testkube.io/articles/adding-tests-variables/',
   customExecutor = 'https://docs.testkube.io/test-types/container-executor#creating-a-custom-executor',
   dashboardNotWorking = 'https://docs.testkube.io/articles/common-issues/#why-is-the-testkube-dashboard-not-working-or-does-not-return-results',
-  transitionFromOSS = 'https://docs.testkube.io/testkube-cloud/articles/transition-from-oss',
-  cloudIntro = 'https://docs.testkube.io/testkube-cloud/articles/intro',
+  transitionFromOSS = 'https://docs.testkube.io/testkube-pro/articles/transition-from-oss',
+  cloudIntro = 'https://docs.testkube.io/testkube-pro/articles/intro',
   testTriggers = 'https://docs.testkube.io/articles/test-triggers',
   addingTimeout = 'https://docs.testkube.io/articles/adding-timeout/',
   contactUs = 'https://calendly.com/bruno-at-kubeshop/15-minute-meeting',
-  organizationMembers = 'https://docs.testkube.io/testkube-cloud/articles/organization-management#members',
-  environmentMembers = 'https://docs.testkube.io/testkube-cloud/articles/environment-management#managing-environment-member-roles',
+  organizationMembers = 'https://docs.testkube.io/testkube-pro/articles/organization-management#members',
+  environmentMembers = 'https://docs.testkube.io/testkube-pro/articles/environment-management#managing-environment-member-roles',
   notificationsAndWebhooks = 'https://docs.testkube.io/articles/webhooks',
-  statusPages = 'https://docs.testkube.io/testkube-cloud/articles/status-pages',
+  statusPages = 'https://docs.testkube.io/testkube-pro/articles/status-pages',
 }
 
 const crdCdn = `https://raw.githubusercontent.com/kubeshop/testkube-operator/${encodeURIComponent(
