@@ -78,11 +78,15 @@ module.exports = {
     },
   },
   babel: {
-    plugins: [
-      process.env.NODE_ENV === 'development'
-        ? ['babel-plugin-styled-components', {displayName: true, namespace: 'dev'}]
-        : [{}],
-    ],
+    loaderOptions: babelLoaderOptions => {
+      if (process.env.NODE_ENV === 'development') {
+        if (!babelLoaderOptions.plugins) {
+          babelLoaderOptions.plugins = [];
+        }
+        babelLoaderOptions.plugins.push('babel-plugin-styled-components');
+      }
+      return babelLoaderOptions;
+    },
   },
   jest: {
     configure: config => ({
