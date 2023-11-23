@@ -78,7 +78,6 @@ module.exports = {
     },
   },
   babel: {
-    presets: [],
     plugins: [
       process.env.NODE_ENV === 'development'
         ? ['babel-plugin-styled-components', {displayName: true, namespace: 'dev'}]
