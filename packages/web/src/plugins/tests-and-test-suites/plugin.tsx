@@ -16,7 +16,7 @@ import TestSuiteDetails from '@pages/TestSuites/TestSuiteDetails';
 import TestSuitesList from '@pages/TestSuites/TestSuitesList';
 import TestDetails from '@pages/Tests/TestDetails';
 import TestExecutionArtifacts from '@pages/Tests/TestDetails/TestExecution/TestExecutionArtifacts';
-import TestsPage from '@pages/Tests/TestsPage';
+import TestsList from '@pages/Tests/TestsList';
 
 import type ExecutorsPlugin from '@plugins/executors/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
@@ -82,7 +82,7 @@ export default createPlugin('oss/tests-and-test-suites')
     <DashboardRewrite pattern="/test-suites/:id/executions/:execId" keepQuery />
   )
 
-  .route('/tests', <TestsPage />)
+  .route('/tests', <TestsList />)
   .route('/tests/:id', <TestDetails tab="executions" />)
   .route('/tests/:id/executions', <TestDetails tab="executions" />)
   .route('/tests/:id/executions/:execId', <TestDetails tab="executions" />)
@@ -108,6 +108,8 @@ export default createPlugin('oss/tests-and-test-suites')
   .define(slot<ReactNode>()('deleteTestExtension'))
   .define(slot<ReactNode>()('deleteTestSuiteExtension'))
   .define(slot<ReactNode>()('testSuitesListTitleAddon'))
+  .define(slot<ReactNode>()('entityViewComponent'))
+  .define(slot<ReactNode>()('entityViewSwitch'))
 
   .provider(({useData}) => (
     <StoreProvider store={initializeTestsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />

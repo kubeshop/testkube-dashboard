@@ -18,7 +18,6 @@ export interface EntityViewBlueprint {
   itemKey: string;
   pageTitle: string;
   queryFilters: TestFilters | TestSuiteFilters;
-  type: 'grid' | 'table';
   addEntityButtonText?: string;
   dataTest?: string;
   pageDescription?: ReactNode;

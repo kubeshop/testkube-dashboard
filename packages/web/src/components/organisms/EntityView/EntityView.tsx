@@ -20,6 +20,8 @@ import PageMetadata from '@pages/PageMetadata';
 
 import {Permissions, usePermission} from '@permissions/base';
 
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
+
 import {initialPageSize} from '@redux/initialState';
 
 import {useApiEndpoint} from '@services/apiEndpoint';
@@ -43,7 +45,6 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
     pageTitle,
     pageTitleAddon,
     queryFilters,
-    type,
   } = props;
   const {onAdd, onItemAbort, onItemClick, setQueryFilters} = props;
 
@@ -139,6 +140,33 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
     }
   }, [isFetching]);
 
+  const entityGrid = useMemo(
+    () => (
+      <EntityGrid
+        itemKey={itemKey}
+        maxColumns={2}
+        data={data}
+        Component={CardComponent}
+        componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
+        empty={
+          isFiltersEmpty ? (
+            <EmptyData action={onAdd} isClusterAvailable={isWritable} />
+          ) : (
+            <EmptyDataWithFilters resetFilters={resetFilters} />
+          )
+        }
+        itemHeight={163.85}
+        loadingInitially={isFirstTimeLoading}
+        loadingMore={isLoadingNext}
+        hasMore={!isLoadingNext && data && queryFilters.pageSize <= data.length}
+        onScrollEnd={onScrollBottom}
+      />
+    ),
+    []
+  );
+
+  const viewComponent = useTestsSlotFirst('entityViewComponent', [{value: entityGrid, metadata: {order: 2}}]);
+
   return (
     <PageWrapper>
       <PageMetadata title={pageTitle} />
@@ -160,28 +188,7 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
         </PageToolbar>
       </PageHeader>
 
-      {type === 'grid' ? (
-        <EntityGrid
-          itemKey={itemKey}
-          maxColumns={2}
-          data={data}
-          Component={CardComponent}
-          componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
-          empty={
-            isFiltersEmpty ? (
-              <EmptyData action={onAdd} isClusterAvailable={isWritable} />
-            ) : (
-              <EmptyDataWithFilters resetFilters={resetFilters} />
-            )
-          }
-          itemHeight={163.85}
-          loadingInitially={isFirstTimeLoading}
-          loadingMore={isLoadingNext}
-          hasMore={!isLoadingNext && data && queryFilters.pageSize <= data.length}
-          onScrollEnd={onScrollBottom}
-        />
-      ) : // TODO: Implement Table view
-      null}
+      {viewComponent}
     </PageWrapper>
   );
 };

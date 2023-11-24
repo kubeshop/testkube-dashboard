@@ -93,7 +93,6 @@ const TestSuitesList: FC = () => {
       isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
-      type="grid"
     />
   );
 };
