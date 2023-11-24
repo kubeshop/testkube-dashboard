@@ -75,17 +75,14 @@ const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
     setWasTouched(true);
   };
 
-  const [nextExecution, isValidFormat] = useMemo(() => {
+  const [cronExpression, isValidFormat] = useMemo(() => {
     if (!cronString) {
-      return ['Not scheduled', true];
+      return [undefined, true];
     }
-
     try {
-      const nextDate = parser.parseExpression(cronString).next().toDate();
-
-      return [nextDate, true];
+      return [parser.parseExpression(cronString), true];
     } catch (e) {
-      return ['Invalid cron format', false];
+      return [undefined, false];
     }
   }, [cronString]);
 
@@ -158,7 +155,7 @@ const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
             <StyledColumn>
               <Text className="middle regular">Next Execution</Text>
               <Text style={{color: Colors.slate400}} className="middle regular">
-                <NextExecution value={nextExecution} />
+                <NextExecution expression={cronExpression} error={!isValidFormat} />
               </Text>
             </StyledColumn>
           </StyledRow>
