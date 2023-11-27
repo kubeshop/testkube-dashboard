@@ -162,7 +162,22 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
         onScrollEnd={onScrollBottom}
       />
     ),
-    []
+    [
+      CardComponent,
+      EmptyData,
+      data,
+      isFiltersEmpty,
+      isFirstTimeLoading,
+      isLoadingNext,
+      isWritable,
+      itemKey,
+      onAdd,
+      onItemAbort,
+      onItemClick,
+      onScrollBottom,
+      queryFilters.pageSize,
+      resetFilters,
+    ]
   );
 
   const viewComponent = useTestsSlotFirst('entityViewComponent', [{value: entityGrid, metadata: {order: 2}}]);
