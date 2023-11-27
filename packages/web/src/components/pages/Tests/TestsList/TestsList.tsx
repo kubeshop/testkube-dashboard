@@ -34,7 +34,13 @@ const PageDescription: FC = () => (
   </>
 );
 
-const TestsList: FC = () => {
+interface TestsListProps {
+  isListLoading?: boolean;
+}
+
+const TestsList: FC<TestsListProps> = props => {
+  const {isListLoading} = props;
+
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
 
@@ -97,6 +103,7 @@ const TestsList: FC = () => {
       isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
+      isListLoading={isListLoading ?? false}
     />
   );
 };

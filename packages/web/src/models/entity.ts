@@ -14,6 +14,7 @@ export interface EntityViewBlueprint {
   entity: Entity;
   initialFiltersState: TestFilters | TestSuiteFilters;
   isFetching: boolean;
+  isListLoading: boolean;
   isLoading: boolean;
   itemKey: string;
   pageTitle: string;
