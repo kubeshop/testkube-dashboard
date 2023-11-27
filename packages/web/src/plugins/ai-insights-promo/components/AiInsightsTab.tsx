@@ -14,9 +14,9 @@ const AiInsightsTab = () => (
   <AiInsightContainer>
     <AiInsightContent data-testid="ai-insights-tab-oss">
       <LockedIcon />
-      <Text className="big bold"> This feature is available only in Testkube Cloud.</Text>
+      <Text className="big bold"> This feature is available only in Testkube Pro.</Text>
       <Text color={Colors.slate400}>
-        Start using Testkube Cloud to get AI insights for your test executions, as well as other exclusive features.
+        Start using Testkube Pro to get AI insights for your test executions, as well as other exclusive features.
         <ExternalLink href={externalLinks.testkubeCloud}> Learn more</ExternalLink>
       </Text>
       <Button
@@ -26,7 +26,7 @@ const AiInsightsTab = () => (
           window.open(externalLinks.testkubeCloud, '_blank');
         }}
       >
-        Go to Testkube Cloud
+        Go to Testkube Pro
       </Button>
     </AiInsightContent>
   </AiInsightContainer>
