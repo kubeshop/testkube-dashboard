@@ -3,6 +3,8 @@ import type {Execution, ExecutionRequest, ExecutionStatusEnum} from '@models/exe
 import type {Repository} from '@models/repository';
 import type {Variables} from '@models/variable';
 
+import {TestSuiteWithExecution} from './testSuite';
+
 export type TestContentTypeEnum = 'file-uri' | 'git-file' | 'git-dir' | 'string';
 
 export type TestContent = {
@@ -69,4 +71,8 @@ export type TestSuiteStepTest = {
 export enum TestsView {
   LIST = 'list',
   TABLE = 'table',
+}
+
+export function isTestWithExecution(arg: TestWithExecution | TestSuiteWithExecution): arg is TestWithExecution {
+  return 'test' in arg;
 }

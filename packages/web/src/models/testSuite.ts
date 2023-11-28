@@ -2,6 +2,7 @@ import type {EntityMap} from '@models/entityMap';
 import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import type {Execution} from './execution';
+import {TestWithExecution} from './test';
 import type {Variables} from './variable';
 
 export interface TestSuiteStep {
@@ -57,3 +58,9 @@ export type TestSuiteFilters = {
   endDate: null;
   status: Array<string>;
 };
+
+export function isTestSuiteWithExecution(
+  arg: TestWithExecution | TestSuiteWithExecution
+): arg is TestSuiteWithExecution {
+  return 'testSuite' in arg;
+}
