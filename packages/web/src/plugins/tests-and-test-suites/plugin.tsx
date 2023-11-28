@@ -99,6 +99,7 @@ export default createPlugin('oss/tests-and-test-suites')
   .route('/test-suites/:id/commands', <TestSuiteDetails tab="commands" />)
   .route('/test-suites/:id/settings', <TestSuiteDetails tab="settings" />)
   .route('/test-suites/:id/settings/:settingsTab', <TestSuiteDetails tab="settings" />)
+  .route('/test-suites/:id/:tab', () => <TestSuiteDetails tab={useParams().tab} />)
 
   .define(data<(tab: string) => void>()('setExecutionTab'))
   .define(slot<{key: string; label: ReactNode; children: ReactNode}>()('testExecutionTabs'))
