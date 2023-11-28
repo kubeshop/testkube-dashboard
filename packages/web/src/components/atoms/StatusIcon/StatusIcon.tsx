@@ -93,13 +93,14 @@ const iconStyles: Record<string, IconStyle> = {
 
 type StatusIconProps = {
   status: IconProps['name'];
+  size?: 'small' | 'large';
 };
 
 const StatusIcon: React.FC<StatusIconProps> = props => {
-  const {status} = props;
+  const {status, size = 'large'} = props;
 
   return (
-    <StyledStatusIcon style={iconStyles[status]}>
+    <StyledStatusIcon $size={size} style={iconStyles[status]}>
       <Icon name={status} />
     </StyledStatusIcon>
   );
