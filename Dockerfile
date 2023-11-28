@@ -33,9 +33,12 @@ COPY ./packages/web/scripts/env.sh /app/init/
 COPY ./packages/web/scripts/inject-base-href.sh /app/init/
 
 RUN chmod +x /app/init/env.sh /app/init/inject-base-href.sh && \
-    chmod ugo+w /etc/nginx/nginx.conf /app/build/index.html && \
+    chmod a+w /etc/nginx/nginx.conf /app/build/index.html && \
     touch /app/build/env-config.js && chmod a+w /app/build/env-config.js && \
-    mkdir /app/nginx && cp -R /etc/nginx/. /app/nginx
+    mkdir /app/nginx && cp -R /etc/nginx/. /app/nginx && \
+    rm -rf /etc/nginx /usr/share/nginx/html && \
+    mkdir -p /etc/nginx /usr/share/nginx/html && \
+    chmod -R a+w /usr/share/nginx/html /etc/nginx
 
 WORKDIR /usr/share/nginx/html
 
