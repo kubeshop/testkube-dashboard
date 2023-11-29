@@ -1,4 +1,4 @@
-import {FC, useCallback} from 'react';
+import {FC, useCallback, useMemo, useState} from 'react';
 import {useUnmount} from 'react-use';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
@@ -6,6 +6,7 @@ import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
+import {Metrics} from '@models/metrics';
 import {TestSuite} from '@models/testSuite';
 
 import {notificationCall} from '@molecules';
@@ -25,6 +26,8 @@ import {PollingIntervals} from '@utils/numbers';
 import EmptyTestSuites from './EmptyTestSuites';
 import TestSuiteCard from './TestSuiteCard';
 import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
+import TestSuiteMetricsLayer from './metrics/TestSuiteMetricsLayer';
+import {TestSuitesMetricsContext} from './metrics/TestSuitesMetricsContext';
 
 const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
 
@@ -34,6 +37,16 @@ interface TestSuitesListProps {
 
 const TestSuitesList: FC<TestSuitesListProps> = props => {
   const {isListLoading} = props;
+
+  const [metrics, setMetrics] = useState<Record<string, Metrics>>({});
+
+  const metricsContextValue = useMemo(
+    () => ({
+      metrics,
+      setMetrics,
+    }),
+    [metrics]
+  );
 
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestSuitesField('filters');
@@ -80,27 +93,33 @@ const TestSuitesList: FC<TestSuitesListProps> = props => {
   }
 
   return (
-    <EntityView
-      itemKey="testSuite.name"
-      CardComponent={TestSuiteCard}
-      onItemClick={onItemClick}
-      onItemAbort={onItemAbort}
-      entity="test-suites"
-      pageTitle="Test Suites"
-      pageTitleAddon={pageTitleAddon}
-      addEntityButtonText="Add a new test suite"
-      pageDescription={<PageDescription />}
-      emptyDataComponent={EmptyTestSuites}
-      initialFiltersState={initialFilters}
-      dataTest="add-a-new-test-suite-btn"
-      queryFilters={filters}
-      setQueryFilters={setFilters}
-      data={testSuites ?? []}
-      isLoading={isLoading || !isSystemAvailable}
-      isFetching={isFetching}
-      onAdd={openCreateModal}
-      isListLoading={isListLoading ?? false}
-    />
+    <TestSuitesMetricsContext.Provider value={metricsContextValue}>
+      {testSuites?.map(testSuite => (
+        <TestSuiteMetricsLayer key={testSuite.testSuite.name} name={testSuite.testSuite.name} />
+      ))}
+
+      <EntityView
+        itemKey="testSuite.name"
+        CardComponent={TestSuiteCard}
+        onItemClick={onItemClick}
+        onItemAbort={onItemAbort}
+        entity="test-suites"
+        pageTitle="Test Suites"
+        pageTitleAddon={pageTitleAddon}
+        addEntityButtonText="Add a new test suite"
+        pageDescription={<PageDescription />}
+        emptyDataComponent={EmptyTestSuites}
+        initialFiltersState={initialFilters}
+        dataTest="add-a-new-test-suite-btn"
+        queryFilters={filters}
+        setQueryFilters={setFilters}
+        data={testSuites ?? []}
+        isLoading={isLoading || !isSystemAvailable}
+        isFetching={isFetching}
+        onAdd={openCreateModal}
+        isListLoading={isListLoading ?? false}
+      />
+    </TestSuitesMetricsContext.Provider>
   );
 };
 

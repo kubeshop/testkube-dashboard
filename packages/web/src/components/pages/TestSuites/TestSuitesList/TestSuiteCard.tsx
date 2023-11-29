@@ -1,15 +1,12 @@
-import React, {FC, useRef} from 'react';
+import {FC, useRef} from 'react';
 
-import useInViewport from '@hooks/useInViewport';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {TestSuiteWithExecution} from '@models/testSuite';
 
 import EntityGridItemPure, {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 
-import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuites';
-
-import {PollingIntervals} from '@utils/numbers';
+import {useTestSuitesMetricsContext} from './metrics/TestSuitesMetricsContext';
 
 export interface TestSuiteCardProps {
   item: TestSuiteWithExecution;
@@ -19,15 +16,10 @@ export interface TestSuiteCardProps {
 
 const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick, onAbort}) => {
   const isAgentAvailable = useSystemAccess(SystemAccess.agent);
-  const isSystemAvailable = useSystemAccess(SystemAccess.system);
 
   const ref = useRef(null);
-  const isInViewport = useInViewport(ref);
 
-  const {data: metrics} = useGetTestSuiteExecutionMetricsQuery(
-    {id: testSuite.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isSystemAvailable, pollingInterval: PollingIntervals.halfMin}
-  );
+  const {metrics} = useTestSuitesMetricsContext();
 
   return (
     <EntityGridItemPure
@@ -36,7 +28,7 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       latestExecution={latestExecution}
       onClick={onClick}
       onAbort={onAbort}
-      metrics={metrics}
+      metrics={metrics[testSuite.name]}
       dataTest="test-suites-list-item"
       outOfSync={!isAgentAvailable || testSuite.readOnly}
       isAgentAvailable={isAgentAvailable}

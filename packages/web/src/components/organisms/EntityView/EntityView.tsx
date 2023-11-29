@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {cloneElement, isValidElement, useCallback, useEffect, useMemo, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {useEffectOnce} from 'react-use';
 
@@ -210,7 +210,17 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
         </PageToolbar>
       </PageHeader>
 
-      {viewComponent}
+      {isValidElement(viewComponent)
+        ? cloneElement(viewComponent, {
+            data,
+            loadingInitially: isFirstTimeLoading,
+            empty: isFiltersEmpty ? (
+              <EmptyData action={onAdd} isClusterAvailable={isWritable} />
+            ) : (
+              <EmptyDataWithFilters resetFilters={resetFilters} />
+            ),
+          } as Partial<unknown>)
+        : null}
     </PageWrapper>
   );
 };
