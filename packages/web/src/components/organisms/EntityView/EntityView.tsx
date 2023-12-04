@@ -219,6 +219,9 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
             ) : (
               <EmptyDataWithFilters resetFilters={resetFilters} />
             ),
+            hasMore: !isLoadingNext && data && queryFilters.pageSize <= data.length,
+            loadingMore: isLoadingNext,
+            onScrollEnd: onScrollBottom,
           } as Partial<unknown>)
         : null}
     </PageWrapper>
