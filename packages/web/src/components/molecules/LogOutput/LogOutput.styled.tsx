@@ -5,16 +5,6 @@ import styled from 'styled-components';
 import {AnsiClassesMapping} from '@atoms';
 
 import Colors from '@styles/Colors';
-import {invisibleScroll} from '@styles/globalStyles';
-
-export const BaseLogOutputStyles = `
-  display: flex;
-  flex-direction: column;
-
-  overflow: auto;
-
-  ${invisibleScroll}
-`;
 
 export const LogOutputWrapper = styled.div`
   height: 100%;
@@ -27,25 +17,20 @@ export const StyledLogOutputContainer = styled.div`
   max-height: 100%;
   flex: 1;
   border-radius: 4px;
-  overflow: auto;
-  ${invisibleScroll}
-`;
-
-export const StyledLogTextContainer = styled.div`
-  height: 100%;
-  flex: 1;
   background-color: ${Colors.slate900};
-
-  ${BaseLogOutputStyles}
+  overflow: hidden;
 `;
 
 export const StyledPreLogText = styled.pre`
   display: flex;
   flex-direction: column;
-  overflow: initial;
+  flex: 1;
+  height: 100%;
+  overflow: scroll;
 
   padding: 10px;
   font-size: 12px;
+  margin: 0;
 
   ${AnsiClassesMapping}
 `;
