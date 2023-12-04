@@ -13,10 +13,11 @@ type LabelsListProps = {
   howManyLabelsToShow?: number;
   shouldSkipLabels?: boolean;
   className?: string;
+  type?: 'primary' | 'secondary';
 };
 
 const LabelsList: React.FC<LabelsListProps> = props => {
-  const {labels, howManyLabelsToShow = 3, shouldSkipLabels = false, className = ''} = props;
+  const {labels, howManyLabelsToShow = 3, shouldSkipLabels = false, className = '', type = 'primary'} = props;
 
   const labelKeys: EntityKey[] = Object.keys(labels);
 
@@ -28,7 +29,7 @@ const LabelsList: React.FC<LabelsListProps> = props => {
         }
       }
 
-      return <LabelListItem key={labelKey} labelKey={labelKey} labelValue={labels[labelKey]} />;
+      return <LabelListItem key={labelKey} labelKey={labelKey} labelValue={labels[labelKey]} type={type} />;
     })
     .filter(labelComponent => labelComponent);
 
@@ -37,7 +38,7 @@ const LabelsList: React.FC<LabelsListProps> = props => {
 
   const renderedSkippedLabels = skippedLabelsArray
     ? skippedLabelsArray.map(([labelKey]) => {
-        return <LabelListItem key={labelKey} labelKey={labelKey} labelValue={labels[labelKey]} />;
+        return <LabelListItem key={labelKey} labelKey={labelKey} labelValue={labels[labelKey]} type={type} />;
       })
     : null;
 
@@ -56,6 +57,7 @@ const LabelsList: React.FC<LabelsListProps> = props => {
                 key="skipped-labels-number"
                 isSkippedMode={shouldSkipLabels}
                 skippedLabelsNumber={skippedLabelsNumber}
+                type={type}
               />
             </div>
           </Popover>
