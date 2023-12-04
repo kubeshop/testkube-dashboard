@@ -22,7 +22,7 @@ export const StyledLogOutputContainer = styled.div`
   overflow: hidden;
 `;
 
-export const StyledPreLogText = styled.pre`
+export const StyledPreLogText = styled.pre<{$wrap?: boolean}>`
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -32,6 +32,13 @@ export const StyledPreLogText = styled.pre`
   padding: 10px;
   font-size: 12px;
   margin: 0;
+
+  ${({$wrap}) =>
+    $wrap
+      ? `
+        word-wrap: break-word;
+        white-space: initial;`
+      : ''}
 
   ${AnsiClassesMapping}
   ${invisibleScroll}
