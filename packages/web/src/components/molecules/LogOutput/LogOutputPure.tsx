@@ -15,12 +15,13 @@ export interface LogOutputPureProps {
   lines: number;
   initialLines: number;
   hideActions?: boolean;
+  wrap?: boolean;
   onExpand: () => void;
 }
 
 const LogOutputPure = memo(
   forwardRef<HTMLDivElement, LogOutputPureProps>(
-    ({className, hideActions, logs, visibleLogs, expanded, lines, initialLines, onExpand}, ref) => {
+    ({className, hideActions, logs, visibleLogs, expanded, wrap, lines, initialLines, onExpand}, ref) => {
       const scrollableRef = useRef<HTMLPreElement | null>(null);
       const isScrolledToBottom = useScrolledToBottom(scrollableRef?.current);
 
@@ -42,7 +43,7 @@ const LogOutputPure = memo(
         <StyledLogOutputContainer className={className} ref={ref}>
           {hideActions ? null : <LogOutputHeader logOutput={logs} />}
           {visibleLogs ? (
-            <StyledPreLogText data-test="log-output" ref={scrollableRef}>
+            <StyledPreLogText data-test="log-output" $wrap={wrap} ref={scrollableRef}>
               {!expanded && lines >= initialLines ? (
                 <>
                   <a href="#" onClick={expand}>
