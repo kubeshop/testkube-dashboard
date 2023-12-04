@@ -48,16 +48,12 @@ const NameNDescription: React.FC<NameNDescriptionProps> = ({label, useUpdateEnti
 
   const onSave = () => {
     const values = form.getFieldsValue();
-
     return updateEntity({
       id: details.name,
       data: {
         ...details,
         name: values.name,
         description: values.description,
-        executionRequest: {
-          description: values.description,
-        },
       },
     })
       .then(displayDefaultNotificationFlow)
