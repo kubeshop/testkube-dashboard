@@ -58,5 +58,5 @@ export function validateWebhook(webhookData: Partial<WebhookData>, createdWebhoo
 }
 
 export function validateTrigger(triggerData: Partial<TriggerData>, createdTriggerData: TriggerData): void {
-  expect(triggerData).toEqual(createdTriggerData);
+  expect(createdTriggerData).toEqual(triggerData);
 }

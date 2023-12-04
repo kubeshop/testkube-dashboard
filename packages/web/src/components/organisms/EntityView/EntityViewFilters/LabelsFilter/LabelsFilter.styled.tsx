@@ -1,3 +1,5 @@
+import {AutoComplete as AntAutoComplete, AutoCompleteProps} from 'antd';
+
 import styled from 'styled-components';
 
 export const EmptyButton = styled.div`
@@ -16,4 +18,16 @@ export const LabelsMenuContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   padding: 24px;
+`;
+
+export interface ICustomAutoCompleteProps extends AutoCompleteProps {
+  color?: string;
+  width?: string;
+}
+
+export const AutoComplete = styled(AntAutoComplete)<ICustomAutoCompleteProps>`
+  ${props => (props.width ? `width: ${props.width};` : '')}
+  .ant-input {
+    ${props => (props.color ? `color: ${props.color};` : '')}
+  }
 `;

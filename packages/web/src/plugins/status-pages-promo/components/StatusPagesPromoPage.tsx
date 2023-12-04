@@ -45,7 +45,7 @@ const StatusPagesPromoPage = () => (
       </Text>
 
       <Text className="regular middle text-center" color={Colors.slate400}>
-        Status pages work only on Testkube Cloud.
+        Status pages work only on Testkube Pro.
       </Text>
 
       <Button

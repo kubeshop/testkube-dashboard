@@ -13,13 +13,13 @@ import {externalLinks} from '@utils/externalLinks';
 const ConnectCloud: React.FC = () => {
   return (
     <ConfigurationCard
-      title="Connect to Testkube Cloud"
-      description="Connect your current Testkube instance to Testkube Cloud. You can always safely disconnect."
+      title="Connect to Testkube Pro"
+      description="Connect your current Testkube instance to Testkube Pro. You can always safely disconnect."
       name="connect-cloud-card"
       footer={
         <Text className="regular middle" color={Colors.slate400}>
           Learn more about{' '}
-          <ExternalLink href={externalLinks.transitionFromOSS}>connecting to Testkube Cloud</ExternalLink>
+          <ExternalLink href={externalLinks.transitionFromOSS}>connecting to Testkube Pro</ExternalLink>
         </Text>
       }
       readOnly
@@ -32,11 +32,11 @@ const ConnectCloud: React.FC = () => {
             <Text className="regular middle" color={Colors.slate400}>
               Multiple environments, Teams, RBAC and unique collaboration features.
             </Text>
-            <ExternalLink href={externalLinks.cloudIntro}>Learn more about Testkube Cloud</ExternalLink>
+            <ExternalLink href={externalLinks.cloudIntro}>Learn more about Testkube Pro</ExternalLink>
           </FullWidthSpace>
         </FullWidthSpace>
         <Button $customType="primary" onClick={() => window.open(externalLinks.OSStoCloudMigration, '_self')}>
-          Connect your Testkube Cloud account
+          Connect your Testkube Pro account
         </Button>
       </FullWidthSpace>
     </ConfigurationCard>

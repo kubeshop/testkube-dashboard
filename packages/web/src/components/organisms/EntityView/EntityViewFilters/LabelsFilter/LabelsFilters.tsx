@@ -1,8 +1,10 @@
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {FilterFilled} from '@ant-design/icons';
 
-import {Button, Input, Title} from '@custom-antd';
+import {Button, Title} from '@custom-antd';
+
+import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {EntityFilters} from '@models/entity';
 import {Entity} from '@models/entityMap';
@@ -11,9 +13,13 @@ import {FilterMenuFooter, StyledFilterDropdown, StyledFilterLabel, StyledFilterM
 
 import {initialPageSize} from '@redux/initialState';
 
+import {useGetLabelsQuery} from '@services/labels';
+
+import {PollingIntervals} from '@src/utils/numbers';
+
 import Colors from '@styles/Colors';
 
-import {encodeSelectorArray} from '@utils/selectors';
+import {decodeSelectorArray, encodeSelectorArray} from '@utils/selectors';
 
 import * as S from './LabelsFilter.styled';
 
@@ -24,6 +30,13 @@ const defaultKeyValuePair: Entity = {
 
 const LabelsFilter: React.FC<EntityFilters> = props => {
   const {disabled, filters, setFilters} = props;
+
+  const isClusterAvailable = useSystemAccess(SystemAccess.agent);
+
+  const {data} = useGetLabelsQuery(null, {
+    pollingInterval: PollingIntervals.default,
+    skip: !isClusterAvailable,
+  });
 
   const [isVisible, setIsVisible] = useState(false);
   const [labelsMapping, setLabelsMapping] = useState<Entity[]>([]);
@@ -77,29 +90,44 @@ const LabelsFilter: React.FC<EntityFilters> = props => {
     setFilters({...filters, selector: '', pageSize: initialPageSize});
   }, [filters, onOpenChange, setFilters]);
 
+  const keysLabels = useMemo(() => Object.keys(data ?? {}).map(key => ({key, label: key, value: key})), [data]);
+
+  const valuesLabels = useMemo(
+    () => (data ? keysLabels.map(item => data[item.key].map(v => ({key: item.key, value: v}))).flat() : []),
+    [keysLabels]
+  );
+
   const renderedKeyValueInputs = useMemo(
     () =>
       labelsMapping.map((item, index) => {
         const key = `key-value-pair${index}`;
 
+        const keyOptions = keysLabels.filter(f => f.key.startsWith(item.key));
+
+        const valuesOptions = valuesLabels
+          .filter(f => f.key === item.key && f.value.startsWith(item.value))
+          .map(v => ({key: v.value, label: v.value, value: v.value}));
+
         return (
           <S.KeyValueRow key={key}>
-            <Input
+            <S.AutoComplete
               width="220px"
-              onChange={event => onKeyChange(event.target.value, index)}
+              options={keyOptions}
+              onChange={event => onKeyChange(event, index)}
               value={item.key}
-              data-cy={`key-input-${index}`}
+              data-testid={`key-input-${index}`}
               placeholder="Key"
             />
-            <Input
+            <S.AutoComplete
               width="220px"
-              onChange={event => onValueChange(event.target.value, index)}
+              options={valuesOptions}
+              onChange={event => onValueChange(event, index)}
               value={item.value}
-              data-cy={`value-input-${index}`}
+              data-testid={`value-input-${index}`}
               placeholder="Value"
             />
             {index > 0 ? (
-              <Button $customType="tertiary" onClick={() => onDeleteRow(index)} data-cy={`delete-row-${index}`}>
+              <Button $customType="tertiary" onClick={() => onDeleteRow(index)} data-testid={`delete-row-${index}`}>
                 &#10005;
               </Button>
             ) : (
@@ -114,7 +142,7 @@ const LabelsFilter: React.FC<EntityFilters> = props => {
   const menu = useMemo(
     () => (
       <StyledFilterMenu
-        data-cy="labels-filter-dropdown"
+        data-testid="labels-filter-dropdown"
         onKeyDown={e => {
           if (e.key === 'Enter') {
             applyFilters();
@@ -135,6 +163,11 @@ const LabelsFilter: React.FC<EntityFilters> = props => {
     [applyFilters, onAddRow, renderedKeyValueInputs, resetFilters]
   );
 
+  useEffect(() => {
+    const mapping = decodeSelectorArray(filters.selector);
+    setLabelsMapping(mapping.length === 0 ? [defaultKeyValuePair] : mapping);
+  }, [filters.selector]);
+
   return (
     <StyledFilterDropdown
       overlay={menu}
@@ -144,7 +177,7 @@ const LabelsFilter: React.FC<EntityFilters> = props => {
       open={isVisible}
       disabled={disabled}
     >
-      <StyledFilterLabel data-cy="labels-filter-button" $disabled={disabled} onClick={e => e.preventDefault()}>
+      <StyledFilterLabel data-testid="labels-filter-button" $disabled={disabled} onClick={e => e.preventDefault()}>
         Labels <FilterFilled style={{color: filters.selector.length > 0 ? Colors.purple : Colors.slate500}} />
       </StyledFilterLabel>
     </StyledFilterDropdown>

@@ -77,6 +77,17 @@ module.exports = {
       return webpackConfig;
     },
   },
+  babel: {
+    loaderOptions: babelLoaderOptions => {
+      if (process.env.NODE_ENV === 'development') {
+        if (!babelLoaderOptions.plugins) {
+          babelLoaderOptions.plugins = [];
+        }
+        babelLoaderOptions.plugins.push('babel-plugin-styled-components');
+      }
+      return babelLoaderOptions;
+    },
+  },
   jest: {
     configure: config => ({
       ...config,
