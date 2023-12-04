@@ -14,12 +14,13 @@ export interface LogOutputPureProps {
   expanded: boolean;
   lines: number;
   initialLines: number;
+  hideActions?: boolean;
   onExpand: () => void;
 }
 
 const LogOutputPure = memo(
   forwardRef<HTMLDivElement, LogOutputPureProps>(
-    ({className, logs, visibleLogs, expanded, lines, initialLines, onExpand}, ref) => {
+    ({className, hideActions, logs, visibleLogs, expanded, lines, initialLines, onExpand}, ref) => {
       const scrollableRef = useRef<HTMLDivElement | null>(null);
       const isScrolledToBottom = useScrolledToBottom(scrollableRef?.current);
 
@@ -39,7 +40,7 @@ const LogOutputPure = memo(
 
       return (
         <StyledLogOutputContainer className={className} ref={ref}>
-          <LogOutputHeader logOutput={logs} />
+          {hideActions ? null : <LogOutputHeader logOutput={logs} />}
 
           <StyledLogTextContainer ref={scrollableRef}>
             {visibleLogs ? (
