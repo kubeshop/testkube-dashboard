@@ -36,8 +36,8 @@ export const StyledPreLogText = styled.pre<{$wrap?: boolean}>`
   ${({$wrap}) =>
     $wrap
       ? `
-        word-wrap: break-word;
-        white-space: initial;`
+        word-break: break-all;
+        white-space: break-spaces;`
       : ''}
 
   ${AnsiClassesMapping}
