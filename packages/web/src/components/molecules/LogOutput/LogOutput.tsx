@@ -1,8 +1,7 @@
-import React, {Fragment, createElement, memo, useCallback, useEffect, useRef, useState} from 'react';
+import React, {Fragment, createElement, memo, useCallback, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {CSSTransition} from 'react-transition-group';
-import {useAsync, useInterval} from 'react-use';
-import useWebSocket from 'react-use-websocket';
+import {useInterval} from 'react-use';
 
 import {isEqual} from 'lodash';
 
@@ -10,15 +9,12 @@ import {Coordinates} from '@models/config';
 
 import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
-import {useWsEndpoint} from '@services/apiEndpoint';
-
 import {useLogOutputPick} from '@store/logOutput';
-
-import {getRtkIdToken} from '@utils/rtk';
 
 import FullscreenLogOutput from './FullscreenLogOutput';
 import {LogOutputWrapper} from './LogOutput.styled';
 import LogOutputPure from './LogOutputPure';
+import {useLogsStream} from './useLogsStream';
 import {useCountLines, useLastLines} from './utils';
 
 export type LogOutputProps = {
@@ -33,59 +29,17 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const wsRoot = useWsEndpoint();
-
   const {isFullscreen} = useLogOutputPick('isFullscreen');
 
   const [rect, setRect] = useState<Coordinates | undefined>();
-  const [logs, setLogs] = useState('');
-  const [shouldConnect, setShouldConnect] = useState(false);
+  const streamLogs = useLogsStream(executionId, isRunning);
+  const logs = isRunning && executionId ? streamLogs : logOutput;
 
   const [expanded, setExpanded] = useState(false);
   const lines = useCountLines(logs);
   const visibleLogs = useLastLines(logs, expanded || isRunning ? Infinity : initialLines);
 
   const onExpand = useCallback(() => setExpanded(true), []);
-
-  // TODO: Consider getting token different way than using the one from RTK
-  const {value: token, loading: tokenLoading} = useAsync(getRtkIdToken);
-  useWebSocket(
-    `${wsRoot}/executions/${executionId}/logs/stream`,
-    {
-      onMessage: e => {
-        const logData = e.data;
-
-        setLogs(prev => {
-          if (prev) {
-            try {
-              const dataToJSON = JSON.parse(logData);
-              const potentialOutput = dataToJSON?.result?.output || dataToJSON?.output;
-
-              if (potentialOutput) {
-                return potentialOutput;
-              }
-
-              return `${prev}\n${dataToJSON.content}`;
-            } catch (err) {
-              // It may be just an output directly, so we have to ignore it
-            }
-            return `${prev}\n${logData}`;
-          }
-
-          return `${logData}`;
-        });
-      },
-      shouldReconnect: () => true,
-      retryOnError: true,
-      queryParams: token ? {token} : {},
-    },
-    shouldConnect && !tokenLoading
-  );
-
-  useEffect(() => {
-    setLogs(isRunning ? '' : logOutput);
-    setShouldConnect(isRunning);
-  }, [isRunning, executionId]);
 
   useInterval(() => {
     const clientRect = containerRef?.current?.getBoundingClientRect();
