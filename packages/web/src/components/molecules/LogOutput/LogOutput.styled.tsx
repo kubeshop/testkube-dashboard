@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import {AnsiClassesMapping} from '@atoms';
 
 import Colors from '@styles/Colors';
+import {invisibleScroll} from '@styles/globalStyles';
 
 export const LogOutputWrapper = styled.div`
   height: 100%;
@@ -33,6 +34,7 @@ export const StyledPreLogText = styled.pre`
   margin: 0;
 
   ${AnsiClassesMapping}
+  ${invisibleScroll}
 `;
 
 export const StyledLogOutputActionsContainer = styled.ul`
