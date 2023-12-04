@@ -4,7 +4,7 @@ import Ansi from 'ansi-to-react';
 
 import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 
-import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
+import {StyledLogOutputContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
 
 export interface LogOutputPureProps {
@@ -21,7 +21,7 @@ export interface LogOutputPureProps {
 const LogOutputPure = memo(
   forwardRef<HTMLDivElement, LogOutputPureProps>(
     ({className, hideActions, logs, visibleLogs, expanded, lines, initialLines, onExpand}, ref) => {
-      const scrollableRef = useRef<HTMLDivElement | null>(null);
+      const scrollableRef = useRef<HTMLPreElement | null>(null);
       const isScrolledToBottom = useScrolledToBottom(scrollableRef?.current);
 
       const expand = useCallback(
@@ -41,22 +41,19 @@ const LogOutputPure = memo(
       return (
         <StyledLogOutputContainer className={className} ref={ref}>
           {hideActions ? null : <LogOutputHeader logOutput={logs} />}
-
-          <StyledLogTextContainer ref={scrollableRef}>
-            {visibleLogs ? (
-              <StyledPreLogText data-test="log-output">
-                {!expanded && lines >= initialLines ? (
-                  <>
-                    <a href="#" onClick={expand}>
-                      Click to show all {lines} lines...
-                    </a>
-                    <br />
-                  </>
-                ) : null}
-                <Ansi useClasses>{visibleLogs}</Ansi>
-              </StyledPreLogText>
-            ) : null}
-          </StyledLogTextContainer>
+          {visibleLogs ? (
+            <StyledPreLogText data-test="log-output" ref={scrollableRef}>
+              {!expanded && lines >= initialLines ? (
+                <>
+                  <a href="#" onClick={expand}>
+                    Click to show all {lines} lines...
+                  </a>
+                  <br />
+                </>
+              ) : null}
+              <Ansi useClasses>{visibleLogs}</Ansi>
+            </StyledPreLogText>
+          ) : null}
         </StyledLogOutputContainer>
       );
     }
