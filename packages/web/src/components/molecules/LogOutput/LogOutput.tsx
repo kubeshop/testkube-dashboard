@@ -1,11 +1,8 @@
 import React, {Fragment, createElement, memo, useCallback, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {CSSTransition} from 'react-transition-group';
-import {useInterval} from 'react-use';
 
-import {isEqual} from 'lodash';
-
-import {Coordinates} from '@models/config';
+import {useClientRect} from '@hooks/useClientRect';
 
 import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
@@ -13,7 +10,7 @@ import {useLogOutputPick} from '@store/logOutput';
 
 import FullscreenLogOutput from './FullscreenLogOutput';
 import {LogOutputWrapper} from './LogOutput.styled';
-import LogOutputPure from './LogOutputPure';
+import LogOutputPure, {LogOutputPureProps} from './LogOutputPure';
 import {useLogsStream} from './useLogsStream';
 import {useCountLines, useLastLines} from './utils';
 
@@ -31,7 +28,6 @@ const LogOutput: React.FC<LogOutputProps> = props => {
 
   const {isFullscreen} = useLogOutputPick('isFullscreen');
 
-  const [rect, setRect] = useState<Coordinates | undefined>();
   const streamLogs = useLogsStream(executionId, isRunning);
   const logs = isRunning && executionId ? streamLogs : logOutput;
 
@@ -40,18 +36,16 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const visibleLogs = useLastLines(logs, expanded || isRunning ? Infinity : initialLines);
 
   const onExpand = useCallback(() => setExpanded(true), []);
+  const rect = useClientRect(containerRef);
 
-  useInterval(() => {
-    const clientRect = containerRef?.current?.getBoundingClientRect();
-    if (clientRect && !isEqual(clientRect, rect)) {
-      setRect({
-        top: clientRect.top,
-        left: clientRect.left,
-        width: clientRect.width,
-        height: clientRect.height,
-      });
-    }
-  }, 200);
+  const options: LogOutputPureProps = {
+    logs,
+    visibleLogs,
+    expanded,
+    lines,
+    initialLines,
+    onExpand,
+  };
 
   const fullscreenLogRef = useRef<HTMLDivElement>(null);
   const fullscreenLog = (
@@ -62,16 +56,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       classNames="full-screen-log-output"
       unmountOnExit
     >
-      <FullscreenLogOutput
-        ref={fullscreenLogRef}
-        $rect={rect}
-        logs={logs}
-        visibleLogs={visibleLogs}
-        expanded={expanded}
-        lines={lines}
-        initialLines={initialLines}
-        onExpand={onExpand}
-      />
+      <FullscreenLogOutput ref={fullscreenLogRef} $rect={rect} {...options} />
     </CSSTransition>
   );
 
@@ -80,15 +65,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       <LogOutputWrapper>
         {/* eslint-disable-next-line react/no-array-index-key */}
         {useTestsSlot('logOutputTop').map((element, i) => createElement(Fragment, {key: i}, element))}
-        <LogOutputPure
-          ref={containerRef}
-          logs={logs}
-          visibleLogs={visibleLogs}
-          expanded={expanded}
-          lines={lines}
-          initialLines={initialLines}
-          onExpand={onExpand}
-        />
+        <LogOutputPure ref={containerRef} {...options} />
       </LogOutputWrapper>
       {createPortal(fullscreenLog, document.querySelector('#log-output-container')!)}
     </>
