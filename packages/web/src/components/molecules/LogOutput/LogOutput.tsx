@@ -1,6 +1,5 @@
 import React, {Fragment, createElement, memo, useCallback, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
-import {CSSTransition} from 'react-transition-group';
 
 import {useClientRect} from '@hooks/useClientRect';
 
@@ -8,7 +7,7 @@ import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
 import {useLogOutputPick} from '@store/logOutput';
 
-import FullscreenLogOutput from './FullscreenLogOutput';
+import {AnimatedFullscreenLogOutput} from './AnimatedFullscreenLogOutput';
 import {LogOutputWrapper} from './LogOutput.styled';
 import LogOutputPure, {LogOutputPureProps} from './LogOutputPure';
 import {useLogsStream} from './useLogsStream';
@@ -47,18 +46,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     onExpand,
   };
 
-  const fullscreenLogRef = useRef<HTMLDivElement>(null);
-  const fullscreenLog = (
-    <CSSTransition
-      nodeRef={fullscreenLogRef}
-      in={isFullscreen}
-      timeout={500}
-      classNames="full-screen-log-output"
-      unmountOnExit
-    >
-      <FullscreenLogOutput ref={fullscreenLogRef} $rect={rect} {...options} />
-    </CSSTransition>
-  );
+  const fullscreenContainer = document.querySelector('#log-output-container')!;
 
   return (
     <>
@@ -67,7 +55,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
         {useTestsSlot('logOutputTop').map((element, i) => createElement(Fragment, {key: i}, element))}
         <LogOutputPure ref={containerRef} {...options} />
       </LogOutputWrapper>
-      {createPortal(fullscreenLog, document.querySelector('#log-output-container')!)}
+      {createPortal(<AnimatedFullscreenLogOutput $rect={rect} in={isFullscreen} {...options} />, fullscreenContainer)}
     </>
   );
 };
