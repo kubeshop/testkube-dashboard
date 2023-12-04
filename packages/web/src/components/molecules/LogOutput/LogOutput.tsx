@@ -18,10 +18,11 @@ export type LogOutputProps = {
   executionId?: string;
   isRunning?: boolean;
   initialLines?: number;
+  hideActions?: boolean;
 };
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = 'No logs', executionId, isRunning = false, initialLines = 300} = props;
+  const {logOutput = 'No logs', executionId, hideActions = false, isRunning = false, initialLines = 300} = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +39,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const rect = useClientRect(containerRef);
 
   const options: LogOutputPureProps = {
+    hideActions,
     logs,
     visibleLogs,
     expanded,
