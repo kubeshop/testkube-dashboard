@@ -105,7 +105,9 @@ export const Console: FC<ConsoleProps> = ({start = 1, content, LineComponent = C
     <ConsoleContainer>
       {lines.map((line, lineIndex) => (
         // eslint-disable-next-line react/no-array-index-key
-        <LineComponent key={lineIndex} number={start + lineIndex} maxDigits={maxDigits}>{line}</LineComponent>
+        <LineComponent key={lineIndex} number={start + lineIndex} maxDigits={maxDigits}>
+          {line}
+        </LineComponent>
       ))}
     </ConsoleContainer>
   );
