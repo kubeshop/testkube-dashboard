@@ -104,13 +104,14 @@ const buttonTypesStyles: Record<string, string> = {
 export const AntdCustomStyledButton = styled(AntdButton)<ICustomButtonProps>`
   ${props => buttonTypesStyles[props.$customType || 'primary']};
 
-  ${({$withPadding}) =>
-    $withPadding
-      ? ''
-      : `
-    padding: 0;
-    height: unset;
-  `};
+  ${({$withPadding}) => {
+    if (!$withPadding) {
+      return `
+        padding: 0;
+        height: unset;
+      `;
+    }
+  }}
 
   width: ${({$fullWidth}) => ($fullWidth ? '100%' : 'auto')};
 `;
