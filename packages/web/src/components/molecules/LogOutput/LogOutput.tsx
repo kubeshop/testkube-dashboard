@@ -20,8 +20,11 @@ export type LogOutputProps = {
   initialLines?: number;
   hideActions?: boolean;
   wrap?: boolean;
+  LineComponent?: Parameters<typeof LogOutputPure>[0]['LineComponent'];
+  ExpandComponent?: Parameters<typeof LogOutputPure>[0]['ExpandComponent'];
 };
 
+// TODO: Add lazy loading of lines (when wrap: false)
 const LogOutput: React.FC<LogOutputProps> = props => {
   const {
     logOutput = 'No logs',
@@ -30,6 +33,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     hideActions = false,
     isRunning = false,
     initialLines = 300,
+    LineComponent,
+    ExpandComponent,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,8 +58,10 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     expanded,
     lines,
     initialLines,
-    onExpand,
     wrap,
+    LineComponent,
+    ExpandComponent,
+    onExpand,
   };
 
   const fullscreenContainer = document.querySelector('#log-output-container')!;

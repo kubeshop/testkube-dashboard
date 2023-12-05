@@ -23,15 +23,12 @@ export const StyledLogOutputContainer = styled.div`
 `;
 
 export const StyledPreLogText = styled.pre<{$wrap?: boolean}>`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: 100%;
+  display: block;
+  height: calc(100% - 20px);
   overflow: scroll;
 
-  padding: 10px;
+  margin: 10px;
   font-size: 12px;
-  margin: 0;
 
   ${({$wrap}) =>
     $wrap
@@ -69,7 +66,7 @@ export const StyledLogOutputHeaderContainer = styled.div<{$isFullscreen?: boolea
   `
       : `
   position: relative;
-  float: right;
+  z-index: 2;
   `}
 
   display: flex;
