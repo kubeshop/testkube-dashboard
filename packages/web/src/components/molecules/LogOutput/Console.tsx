@@ -140,6 +140,7 @@ export const ConsoleContainer = styled.code<{$wrap?: boolean}>`
 
 const ConsoleContent = styled.div`
   width: min-content;
+  min-width: 100%;
 `;
 
 const PlaceholderContainer = styled.div`
