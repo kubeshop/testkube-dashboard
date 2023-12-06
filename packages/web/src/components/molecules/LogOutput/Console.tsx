@@ -214,8 +214,8 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       placeholder.style.width = 'min-content';
       const detectedBaseWidth = placeholder.getBoundingClientRect().width;
       placeholder.style.width = '';
-      placeholderContent.textContent = '\n'.repeat(totalVisualLinesCount + 1);
-      const detectedLineHeight = placeholder.getBoundingClientRect().height / totalVisualLinesCount;
+      placeholderContent.textContent = '\n'.repeat(totalVisualLinesCount + 1001);
+      const detectedLineHeight = placeholder.getBoundingClientRect().height / (totalVisualLinesCount + 1000);
       let detectedMaxCharacters = Infinity;
       if (wrap) {
         for (let i = 1; i < 10000; i += 1) {
