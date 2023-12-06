@@ -188,13 +188,27 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const clientWidth = containerRef.current?.clientWidth || 0;
   const domScrollTop = containerRef.current?.scrollTop || 0;
 
+  // TODO: When not wrapped, line numbers are not sticky
+  // TODO: Set up minimum width based on maximum number of characters (when not wrapped)
+  // Keep information about line width
+  const characterWidthRef = useRef(0);
+  const baseWidthRef = useRef(0);
+  const maxCharactersCount = useMemo(() => lines.reduce((acc, line) => Math.max(acc, line.chars), 0), [lines]);
+  const minWidth = wrap ? 0 : baseWidthRef.current + characterWidthRef.current * maxCharactersCount;
+
   // Recalculate line height and max characters
   const placeholderRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (placeholderRef.current) {
       placeholderRef.current.style.display = 'block';
-      const placeholder = placeholderRef.current.children[0];
+      const placeholder = placeholderRef.current.children[0] as HTMLElement;
       const placeholderContent = Array.from(placeholder.querySelectorAll('*')).find(x => x.textContent === 'dummy')!;
+      placeholderContent.textContent = '0'.repeat(1000);
+      const detectedCharacterWidth = placeholderContent.getBoundingClientRect().width / 1000;
+      placeholderContent.textContent = '';
+      placeholder.style.width = 'min-content';
+      const detectedBaseWidth = placeholder.getBoundingClientRect().width;
+      placeholder.style.width = '';
       placeholderContent.textContent = '\n'.repeat(totalVisualLinesCount + 1);
       const detectedLineHeight = placeholder.getBoundingClientRect().height / totalVisualLinesCount;
       let detectedMaxCharacters = Infinity;
@@ -210,6 +224,14 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       }
       placeholderContent.textContent = 'dummy';
       placeholderRef.current.style.display = '';
+      if (characterWidthRef.current !== detectedCharacterWidth) {
+        characterWidthRef.current = detectedCharacterWidth;
+        rerender();
+      }
+      if (baseWidthRef.current !== detectedBaseWidth) {
+        baseWidthRef.current = detectedBaseWidth;
+        rerender();
+      }
       if (lineMaxCharactersRef.current !== detectedMaxCharacters) {
         lineMaxCharactersRef.current = detectedMaxCharacters;
         rerender();
@@ -253,7 +275,10 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
 
   const paddingTop = Math.max(0, Math.floor(beforeVisualLinesCount * lineHeight));
   const paddingBottom = Math.max(0, Math.floor(afterVisualLinesCount * lineHeight));
-  const styleTop = useMemo(() => ({height: `${paddingTop}px`}), [beforeVisualLinesCount, paddingTop]);
+  const styleTop = useMemo(
+    () => ({height: `${paddingTop}px`, width: `${minWidth}px`}),
+    [beforeVisualLinesCount, paddingTop, minWidth]
+  );
   const styleBottom = useMemo(() => ({height: `${paddingBottom}px`}), [afterVisualLinesCount, paddingBottom]);
 
   useEffect(() => {
