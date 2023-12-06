@@ -200,7 +200,10 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     if (placeholderRef.current) {
       placeholderRef.current.style.display = 'block';
       const placeholder = placeholderRef.current.children[0] as HTMLElement;
-      const placeholderContent = Array.from(placeholder.querySelectorAll('*')).find(x => x.textContent === 'dummy')!;
+      const placeholderContent = Array.from(placeholder.querySelectorAll('*')).find(
+        x => x.textContent === 'dummy'
+      ) as HTMLElement;
+      placeholderContent.style.whiteSpace = 'nowrap';
       placeholderContent.textContent = '0'.repeat(1000);
       const detectedCharacterWidth = placeholderContent.getBoundingClientRect().width / 1000;
       placeholderContent.textContent = '';
