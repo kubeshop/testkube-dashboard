@@ -1,8 +1,8 @@
-import React, {FC, forwardRef, memo, useEffect, useRef} from 'react';
+import React, {FC, RefObject, forwardRef, memo, useEffect, useImperativeHandle, useRef} from 'react';
 
 import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
 
-import {Console} from './Console';
+import {Console, ConsoleRef} from './Console';
 import {ConsoleLine} from './ConsoleLine';
 import {ExpandButton} from './ExpandButton';
 import {StyledLogOutputContainer, StyledPreLogText} from './LogOutput.styled';
@@ -22,8 +22,13 @@ export interface LogOutputPureProps {
   onExpand: () => void;
 }
 
+export interface LogOutputPureRef {
+  containerRef: RefObject<HTMLDivElement | null>;
+  console: ConsoleRef | null;
+}
+
 const LogOutputPure = memo(
-  forwardRef<HTMLDivElement, LogOutputPureProps>(
+  forwardRef<LogOutputPureRef, LogOutputPureProps>(
     (
       {
         className,
@@ -40,26 +45,45 @@ const LogOutputPure = memo(
       },
       ref
     ) => {
-      const scrollableRef = useRef<HTMLPreElement | null>(null);
-      const isScrolledToBottom = useScrolledToBottom(scrollableRef?.current);
+      const consoleRef = useRef<ConsoleRef | null>(null);
+      const containerRef = useRef<HTMLDivElement | null>(null);
+      const isScrolledToBottom = useScrolledToBottom(consoleRef.current?.container);
+      const start = expanded || lines < initialLines ? 1 : lines - initialLines + 1;
+
+      useImperativeHandle(
+        ref,
+        () => ({
+          containerRef,
+          get console() {
+            return consoleRef.current;
+          },
+        }),
+        [consoleRef.current]
+      );
 
       useEffect(() => {
-        if (scrollableRef?.current && isScrolledToBottom) {
-          scrollableRef.current.scrollTop = scrollableRef.current.scrollHeight;
+        if (isScrolledToBottom) {
+          consoleRef.current?.scrollToEnd();
         }
       }, [visibleLogs]);
 
-      const start = expanded || lines < initialLines ? 1 : lines - initialLines + 1;
-
       return (
-        <StyledLogOutputContainer className={className} ref={ref}>
+        <StyledLogOutputContainer className={className} ref={containerRef}>
           {hideActions ? null : <LogOutputHeader logOutput={logs} />}
           {visibleLogs ? (
-            <StyledPreLogText data-test="log-output" $wrap={wrap} ref={scrollableRef}>
-              {start === 1 ? null : (
-                <ExpandComponent totalLines={lines} visibleLines={initialLines} onClick={onExpand} />
-              )}
-              <Console start={start} content={visibleLogs} LineComponent={LineComponent} />
+            <StyledPreLogText data-test="log-output">
+              <Console
+                prepend={
+                  start === 1 ? null : (
+                    <ExpandComponent totalLines={lines} visibleLines={initialLines} onClick={onExpand} />
+                  )
+                }
+                wrap={wrap}
+                start={start}
+                content={visibleLogs}
+                LineComponent={LineComponent}
+                ref={consoleRef}
+              />
             </StyledPreLogText>
           ) : null}
         </StyledLogOutputContainer>
