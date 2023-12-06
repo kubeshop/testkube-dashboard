@@ -188,8 +188,6 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const clientWidth = containerRef.current?.clientWidth || 0;
   const domScrollTop = containerRef.current?.scrollTop || 0;
 
-  // TODO: When not wrapped, line numbers are not sticky
-  // TODO: Set up minimum width based on maximum number of characters (when not wrapped)
   // Keep information about line width
   const characterWidthRef = useRef(0);
   const baseWidthRef = useRef(0);
