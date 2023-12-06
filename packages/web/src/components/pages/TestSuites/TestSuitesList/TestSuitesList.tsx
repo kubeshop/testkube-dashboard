@@ -1,4 +1,4 @@
-import {FC, useCallback} from 'react';
+import {FC, cloneElement, isValidElement, useCallback} from 'react';
 import {useUnmount} from 'react-use';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
@@ -32,6 +32,8 @@ const TestSuitesList: FC = () => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = useTestsSlotFirst('testSuitesListTitleAddon');
+
+  const entityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
 
   useUnmount(() => {
     setFilters({...filters, pageSize: initialFilters.pageSize});
@@ -68,6 +70,16 @@ const TestSuitesList: FC = () => {
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+
+  if (entityPromoComponent) {
+    return (
+      <>
+        {isValidElement(entityPromoComponent)
+          ? cloneElement(entityPromoComponent, {list: 'test-suites'} as Partial<unknown>)
+          : null}
+      </>
+    );
   }
 
   return (

@@ -1,7 +1,9 @@
-import React, {FC} from 'react';
+import {FC, cloneElement, isValidElement} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {EntityDetailsLayer, ExecutionDetailsLayer} from '@organisms/EntityDetails';
+
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
 import {
   useGetTestSuiteDetailsQuery,
@@ -18,6 +20,19 @@ interface TestSuiteDetailsProps {
 
 const TestSuiteDetails: FC<TestSuiteDetailsProps> = ({tab}) => {
   const {id, execId, settingsTab} = useParams();
+
+  const entityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+
+  if (entityPromoComponent) {
+    return (
+      <>
+        {isValidElement(entityPromoComponent)
+          ? cloneElement(entityPromoComponent, {list: 'test-suites'} as Partial<unknown>)
+          : null}
+      </>
+    );
+  }
+
   return (
     <EntityDetailsLayer
       entity="test-suites"
