@@ -310,20 +310,19 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       },
       scrollToStart: () => {
         if (containerRef.current) {
-          containerRef.current.scrollTop = 0;
+          containerRef.current.scrollTo(0, 0);
         }
       },
       scrollToEnd: () => {
         if (containerRef.current) {
-          // FIXME: For some reason with bigger number of lines - need to be called twice
-          containerRef.current.scrollTop = containerRef.current?.scrollHeight;
+          containerRef.current.scrollTo(0, containerRef.current?.scrollHeight);
         }
       },
       scrollToLine: line => {
         const container = containerRef.current;
         if (container) {
           container.scrollTo(
-            container.scrollLeft,
+            0,
             lineHeight * (countVisualLines(lines, lineMaxCharacters, 0, line) - 1) -
               container.clientHeight / 2 +
               lineHeight / 2
