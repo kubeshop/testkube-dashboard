@@ -123,8 +123,7 @@ const ansiToLines = (input: string) => {
 
 export const ConsoleContainer = styled.code<{$wrap?: boolean}>`
   display: block;
-  width: min-content;
-  min-width: 100%;
+  width: 100%;
   height: 100%;
   overflow: auto;
 
@@ -137,6 +136,10 @@ export const ConsoleContainer = styled.code<{$wrap?: boolean}>`
 
   ${AnsiClassesMapping}
   ${invisibleScroll}
+`;
+
+const ConsoleContent = styled.div`
+  width: min-content;
 `;
 
 const PlaceholderContainer = styled.div`
@@ -207,6 +210,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       placeholderContent.textContent = '0'.repeat(1000);
       const detectedCharacterWidth = placeholderContent.getBoundingClientRect().width / 1000;
       placeholderContent.textContent = '';
+      placeholderContent.style.whiteSpace = '';
       placeholder.style.width = 'min-content';
       const detectedBaseWidth = placeholder.getBoundingClientRect().width;
       placeholder.style.width = '';
@@ -332,20 +336,22 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
 
   return (
     <ConsoleContainer $wrap={wrap} ref={containerRef}>
-      <div style={styleTop}>
-        <PlaceholderContainer ref={placeholderRef}>
-          <LineComponent number={1} maxDigits={maxDigits}>
-            dummy
+      <ConsoleContent>
+        <div style={styleTop}>
+          <PlaceholderContainer ref={placeholderRef}>
+            <LineComponent number={1} maxDigits={maxDigits}>
+              dummy
+            </LineComponent>
+          </PlaceholderContainer>
+        </div>
+        {displayedLines.map((line, lineIndex) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <LineComponent key={start + lineIndex} number={start + lineIndex + 1} maxDigits={maxDigits}>
+            {line.nodes}
           </LineComponent>
-        </PlaceholderContainer>
-      </div>
-      {displayedLines.map((line, lineIndex) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <LineComponent key={start + lineIndex} number={start + lineIndex + 1} maxDigits={maxDigits}>
-          {line.nodes}
-        </LineComponent>
-      ))}
-      <div style={styleBottom} />
+        ))}
+        <div style={styleBottom} />
+      </ConsoleContent>
     </ConsoleContainer>
   );
 });
