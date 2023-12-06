@@ -9,13 +9,13 @@ import {useLogOutputPick} from '@store/logOutput';
 
 import {AnimatedFullscreenLogOutput} from './AnimatedFullscreenLogOutput';
 import {LogOutputWrapper} from './LogOutput.styled';
-import LogOutputPure from './LogOutputPure';
+import LogOutputPure, {LogOutputPureRef} from './LogOutputPure';
 import {LogOutputProps, useLogOutput} from './useLogOutput';
 
 // TODO: Add virtual scroll for lines (when wrap: false)
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const rect = useClientRect(containerRef);
+  const logRef = useRef<LogOutputPureRef>(null);
+  const rect = useClientRect(logRef.current?.containerRef);
   const options = useLogOutput(props);
   const {isFullscreen} = useLogOutputPick('isFullscreen');
   const fullscreenContainer = document.querySelector('#log-output-container')!;
@@ -25,7 +25,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       <LogOutputWrapper>
         {/* eslint-disable-next-line react/no-array-index-key */}
         {useTestsSlot('logOutputTop').map((element, i) => createElement(Fragment, {key: i}, element))}
-        <LogOutputPure ref={containerRef} {...options} />
+        <LogOutputPure ref={logRef} {...options} />
       </LogOutputWrapper>
       {createPortal(<AnimatedFullscreenLogOutput $rect={rect} in={isFullscreen} {...options} />, fullscreenContainer)}
     </>

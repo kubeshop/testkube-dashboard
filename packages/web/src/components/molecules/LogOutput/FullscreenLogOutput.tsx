@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 import {Coordinates} from '@models/config';
 
@@ -7,7 +7,7 @@ import {maxDevice} from '@styles/MediaQueries';
 
 import LogOutputPure from './LogOutputPure';
 
-const FullscreenLogOutput = styled(LogOutputPure)<{$rect?: Coordinates}>`
+export const fullscreenLogOutputStyles = css<{$rect?: Coordinates}>`
   position: fixed;
   z-index: 1001;
 
@@ -29,7 +29,8 @@ const FullscreenLogOutput = styled(LogOutputPure)<{$rect?: Coordinates}>`
     width: calc(100% - 100px);
     height: 100%;
 
-    transition: top 0.4s ease-in-out, left 0.3s ease-in-out 0.4s, height 0.4s ease-in-out, width 0.3s ease-in-out 0.4s;
+    transition: border 0.4s ease-in-out, top 0.4s ease-in-out, left 0.3s ease-in-out 0.4s, height 0.4s ease-in-out,
+      width 0.3s ease-in-out 0.4s;
   }
 
   &.full-screen-log-output-exit {
@@ -47,7 +48,8 @@ const FullscreenLogOutput = styled(LogOutputPure)<{$rect?: Coordinates}>`
     width: ${({$rect}) => $rect?.width}px;
     height: ${({$rect}) => $rect?.height}px;
 
-    transition: top 0.2s ease-in-out 0.2s, left 0.2s ease-in-out, height 0.2s ease-in-out 0.2s, width 0.2s ease-in-out;
+    transition: border 0.4s ease-in-out, top 0.2s ease-in-out 0.2s, left 0.2s ease-in-out, height 0.2s ease-in-out 0.2s,
+      width 0.2s ease-in-out;
   }
 
   &.full-screen-log-output-exit-done {
@@ -69,6 +71,10 @@ const FullscreenLogOutput = styled(LogOutputPure)<{$rect?: Coordinates}>`
       width: calc(100% - 60px);
     }
   }
+`;
+
+const FullscreenLogOutput = styled(LogOutputPure)<{$rect?: Coordinates}>`
+  ${fullscreenLogOutputStyles}
 `;
 
 export default FullscreenLogOutput;

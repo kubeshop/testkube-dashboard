@@ -53,6 +53,7 @@ enum Colors {
   blue500 = '#3b82f6',
 
   emerald900 = '#064E3B',
+  emerald700 = '#0F766E',
   emerald500 = '#10B981',
 
   teal300 = '#5eead4',

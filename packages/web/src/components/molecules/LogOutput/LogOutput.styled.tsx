@@ -2,10 +2,7 @@ import {ExpandAltOutlined, FullscreenExitOutlined} from '@ant-design/icons';
 
 import styled from 'styled-components';
 
-import {AnsiClassesMapping} from '@atoms';
-
 import Colors from '@styles/Colors';
-import {invisibleScroll} from '@styles/globalStyles';
 
 export const LogOutputWrapper = styled.div`
   height: 100%;
@@ -22,23 +19,12 @@ export const StyledLogOutputContainer = styled.div`
   overflow: hidden;
 `;
 
-export const StyledPreLogText = styled.pre<{$wrap?: boolean}>`
+export const StyledPreLogText = styled.pre`
   display: block;
   height: calc(100% - 20px);
-  overflow: scroll;
 
   margin: 10px;
   font-size: 12px;
-
-  ${({$wrap}) =>
-    $wrap
-      ? `
-        word-break: break-all;
-        white-space: break-spaces;`
-      : ''}
-
-  ${AnsiClassesMapping}
-  ${invisibleScroll}
 `;
 
 export const StyledLogOutputActionsContainer = styled.ul`

@@ -1,15 +1,37 @@
-import {FC, PropsWithChildren, ReactElement, cloneElement, useMemo} from 'react';
+import {
+  FC,
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+  cloneElement,
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from 'react';
 
 import Anser, {AnserJsonEntry} from 'anser';
 import {escapeCarriageReturn} from 'escape-carriage';
 import styled from 'styled-components';
 
+import AnsiClassesMapping from '@atoms/TestkubeTheme/AnsiClassesMapping';
+
+import {invisibleScroll} from '@styles/globalStyles';
+
 import {ConsoleLine} from './ConsoleLine';
 
-interface ConsoleProps {
+export interface ConsoleProps {
+  prepend?: ReactNode;
+  wrap?: boolean;
   content: string;
   start?: number;
   LineComponent?: FC<PropsWithChildren<{number: number; maxDigits: number}>>;
+}
+
+export interface ConsoleRef {
+  container: HTMLDivElement | null;
+  scrollToEnd: () => void;
+  scrollToLine: (line: number) => void;
 }
 
 function createClass(bundle: AnserJsonEntry): string | undefined {
@@ -91,24 +113,66 @@ const ansiToLines = (input: string) => {
   return lines;
 };
 
-export const ConsoleContainer = styled.code`
+export const ConsoleContainer = styled.code<{$wrap?: boolean}>`
   display: block;
   width: min-content;
   min-width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  ${({$wrap}) =>
+    $wrap
+      ? `
+        word-break: break-all;
+        white-space: break-spaces;`
+      : ''}
+
+  ${AnsiClassesMapping}
+  ${invisibleScroll}
 `;
 
 // TODO: Optimize to process only newly added content
-export const Console: FC<ConsoleProps> = ({start = 1, content, LineComponent = ConsoleLine}) => {
-  const lines = useMemo(() => ansiToLines(escapeCarriageReturn(content)), [content]);
-  const maxDigits = `${start + lines.length}`.length;
-  return (
-    <ConsoleContainer>
-      {lines.map((line, lineIndex) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <LineComponent key={lineIndex} number={start + lineIndex} maxDigits={maxDigits}>
-          {line}
-        </LineComponent>
-      ))}
-    </ConsoleContainer>
-  );
-};
+export const Console = forwardRef<ConsoleRef, ConsoleProps>(
+  ({start = 1, content, wrap, prepend, LineComponent = ConsoleLine}, ref) => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const lines = useMemo(() => ansiToLines(escapeCarriageReturn(content)), [content]);
+    const maxDigits = `${start + lines.length}`.length;
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        get container() {
+          return containerRef.current;
+        },
+        scrollToEnd: () => {
+          if (containerRef.current) {
+            containerRef.current.scrollTop = containerRef.current?.scrollHeight;
+          }
+        },
+        scrollToLine: line => {
+          const container = containerRef.current;
+          const element = container?.children[line - start + 1] as HTMLElement;
+          if (element && container) {
+            container.scrollTo(
+              container.scrollLeft,
+              element.offsetTop - container.clientHeight / 2 + element.clientHeight / 2
+            );
+          }
+        },
+      }),
+      [start, lines, wrap]
+    );
+
+    return (
+      <ConsoleContainer $wrap={wrap} ref={containerRef}>
+        <div>{prepend}</div>
+        {lines.map((line, lineIndex) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <LineComponent key={lineIndex} number={start + lineIndex} maxDigits={maxDigits}>
+            {line}
+          </LineComponent>
+        ))}
+      </ConsoleContainer>
+    );
+  }
+);
