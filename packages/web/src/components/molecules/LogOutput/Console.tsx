@@ -143,6 +143,10 @@ const ConsoleContent = styled.div`
   min-width: 100%;
 `;
 
+const ConsoleSpace = styled.div`
+  width: 100%;
+`;
+
 const PlaceholderContainer = styled.div`
   display: none;
 `;
@@ -217,13 +221,14 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       placeholder.style.width = '';
       placeholderContent.textContent = '\n'.repeat(totalVisualLinesCount + 1001);
       const detectedLineHeight = placeholder.getBoundingClientRect().height / (totalVisualLinesCount + 1000);
+      placeholderContent.textContent = '';
       let detectedMaxCharacters = Infinity;
       if (wrap) {
-        for (let i = 1; i < 10000; i += 1) {
+        for (let i = 0; i < 10000; i += 1) {
           placeholderContent.textContent += '0';
-          const newDetectedLineHeight = placeholder.getBoundingClientRect().height;
-          if (newDetectedLineHeight !== detectedLineHeight) {
-            detectedMaxCharacters = i - 1;
+          const newDetectedLineHeight = placeholder.clientHeight;
+          if (Math.abs(newDetectedLineHeight - detectedLineHeight) > 1) {
+            detectedMaxCharacters = i;
             break;
           }
         }
@@ -263,9 +268,30 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const rerenderDebounce = useMemo(() => debounce(rerender, 5), []);
   useEvent('scroll', rerenderDebounce, containerRef?.current);
 
+  // Compute visual position of real lines
+  const positions = useMemo(() => {
+    const result: Record<number, number> = {};
+    for (let i = 0; i < lines.length; i += 1) {
+      result[i] = (result[i - 1] || 0) + Math.max(1, Math.ceil(lines[i].chars / lineMaxCharacters));
+    }
+    return result;
+  }, [lines, lineMaxCharacters]);
+  const findRealLineAt = (visualLine: number): number => {
+    if (!wrap) {
+      return visualLine;
+    }
+    for (let i = 0; i < visualLine; i += 1) {
+      if (positions[i] >= visualLine) {
+        return i;
+      }
+    }
+    return lines.length - 1;
+  };
+
   // Compute current position
   const viewportLines = Math.ceil(clientHeight / lineHeight);
-  const start = Math.max(0, Math.floor(scrollTop / lineHeight) - prerender);
+  const visualStart = Math.max(0, Math.floor(scrollTop / lineHeight));
+  const start = Math.max(0, findRealLineAt(visualStart) - prerender);
   const end = Math.min(start + viewportLines + 2 * prerender, lines.length);
 
   const beforeVisualLinesCount = useMemo(
@@ -337,20 +363,19 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   return (
     <ConsoleContainer $wrap={wrap} ref={containerRef}>
       <ConsoleContent>
-        <div style={styleTop}>
-          <PlaceholderContainer ref={placeholderRef}>
-            <LineComponent number={1} maxDigits={maxDigits}>
-              dummy
-            </LineComponent>
-          </PlaceholderContainer>
-        </div>
+        <PlaceholderContainer ref={placeholderRef}>
+          <LineComponent number={1} maxDigits={maxDigits}>
+            dummy
+          </LineComponent>
+        </PlaceholderContainer>
+        <ConsoleSpace style={styleTop} />
         {displayedLines.map((line, lineIndex) => (
           // eslint-disable-next-line react/no-array-index-key
           <LineComponent key={start + lineIndex} number={start + lineIndex + 1} maxDigits={maxDigits}>
             {line.nodes}
           </LineComponent>
         ))}
-        <div style={styleBottom} />
+        <ConsoleSpace style={styleBottom} />
       </ConsoleContent>
     </ConsoleContainer>
   );
