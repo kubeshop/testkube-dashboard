@@ -280,7 +280,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     if (!wrap) {
       return visualLine;
     }
-    for (let i = 0; i < visualLine; i += 1) {
+    for (let i = 0; i <= visualLine; i += 1) {
       if (positions[i] >= visualLine) {
         return i;
       }
