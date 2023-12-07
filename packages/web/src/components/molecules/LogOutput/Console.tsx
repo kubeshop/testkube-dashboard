@@ -19,6 +19,8 @@ import styled from 'styled-components';
 
 import AnsiClassesMapping from '@atoms/TestkubeTheme/AnsiClassesMapping';
 
+import {useLastCallback} from '@hooks/useLastCallback';
+
 import {invisibleScroll} from '@styles/globalStyles';
 
 import {ConsoleLine} from './ConsoleLine';
@@ -320,6 +322,23 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     }
   }, [scrollTop]);
 
+  const scrollToLine = useLastCallback((line: number) => {
+    const container = containerRef.current;
+    if (container) {
+      container.scrollTo(0, lineHeight * positions[line - 1] - container.clientHeight / 2 + lineHeight / 2);
+    }
+  });
+  const getLineRect = useLastCallback((line: number) => {
+    const container = containerRef.current;
+    if (container) {
+      return {
+        top: lineHeight * positions[line - 1],
+        height: lineHeight * ((positions[line] || positions[line - 1] + 1) - positions[line - 1]), // TODO: Calculate size
+      };
+    }
+    return {top: NaN, height: NaN};
+  });
+
   useImperativeHandle(
     ref,
     () => ({
@@ -346,25 +365,17 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
           containerRef.current.scrollTo(0, containerRef.current?.scrollHeight);
         }
       },
-      scrollToLine: line => {
-        const container = containerRef.current;
-        if (container) {
-          container.scrollTo(0, lineHeight * positions[line - 1] - container.clientHeight / 2 + lineHeight / 2);
-        }
-      },
-      getLineRect: line => {
-        const container = containerRef.current;
-        if (container) {
-          return {
-            top: lineHeight * positions[line - 1],
-            height: lineHeight * ((positions[line] || positions[line - 1] + 1) - positions[line - 1]), // TODO: Calculate size
-          };
-        }
-        return {top: NaN, height: NaN};
-      },
+      scrollToLine,
+      getLineRect,
     }),
-    [lines, wrap, lineHeight, lineMaxCharacters, positions]
+    []
   );
+
+  // Emit dummy 'resize' event on client size change
+  useEffect(() => {
+    let t = setTimeout(() => containerRef.current?.dispatchEvent(new Event('resize')));
+    return () => clearTimeout(t);
+  }, [wrap, totalVisualLinesCount]);
 
   return (
     <ConsoleContainer $wrap={wrap} ref={containerRef}>
