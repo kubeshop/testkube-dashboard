@@ -12,10 +12,9 @@ import {LogOutputWrapper} from './LogOutput.styled';
 import LogOutputPure, {LogOutputPureRef} from './LogOutputPure';
 import {LogOutputProps, useLogOutput} from './useLogOutput';
 
-// TODO: Add virtual scroll for lines (when wrap: false)
 const LogOutput: React.FC<LogOutputProps> = props => {
   const logRef = useRef<LogOutputPureRef>(null);
-  const rect = useClientRect(logRef.current?.containerRef);
+  const rect = useClientRect(logRef.current?.container);
   const options = useLogOutput(props);
   const {isFullscreen} = useLogOutputPick('isFullscreen');
   const fullscreenContainer = document.querySelector('#log-output-container')!;

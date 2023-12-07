@@ -10,7 +10,7 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import {useEvent, useInterval, useUpdate} from 'react-use';
+import {useEvent, useInterval, useMount, useUpdate} from 'react-use';
 
 import Anser, {AnserJsonEntry} from 'anser';
 import {escapeCarriageReturn} from 'escape-carriage';
@@ -338,6 +338,18 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     }
     return {top: NaN, height: NaN};
   });
+  const isScrolledToEnd = () => {
+    return (
+      Math.abs(
+        containerRef.current?.scrollTop! + containerRef.current?.clientHeight! - containerRef.current?.scrollHeight!
+      ) < 2
+    );
+  };
+  const scrollToEnd = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo(0, containerRef.current?.scrollHeight);
+    }
+  };
 
   useImperativeHandle(
     ref,
@@ -348,23 +360,13 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       isScrolledToStart() {
         return containerRef.current?.scrollTop === 0;
       },
-      isScrolledToEnd() {
-        return (
-          Math.abs(
-            containerRef.current?.scrollTop! + containerRef.current?.clientHeight! - containerRef.current?.scrollHeight!
-          ) < 2
-        );
-      },
       scrollToStart: () => {
         if (containerRef.current) {
           containerRef.current.scrollTo(0, 0);
         }
       },
-      scrollToEnd: () => {
-        if (containerRef.current) {
-          containerRef.current.scrollTo(0, containerRef.current?.scrollHeight);
-        }
-      },
+      scrollToEnd,
+      isScrolledToEnd,
       scrollToLine,
       getLineRect,
     }),
@@ -376,6 +378,15 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     let t = setTimeout(() => containerRef.current?.dispatchEvent(new Event('resize')));
     return () => clearTimeout(t);
   }, [wrap, totalVisualLinesCount]);
+
+  // Scroll to bottom after logs change
+  useEffect(() => {
+    if (isScrolledToEnd()) {
+      scrollToEnd();
+    }
+  }, [lines]);
+
+  useMount(scrollToEnd);
 
   return (
     <ConsoleContainer $wrap={wrap} ref={containerRef}>
