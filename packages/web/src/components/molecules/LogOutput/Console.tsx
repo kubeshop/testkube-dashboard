@@ -32,6 +32,7 @@ export interface ConsoleProps {
 
 export interface ConsoleRef {
   container: HTMLDivElement | null;
+  getLineRect: (line: number) => {top: number; height: number};
   scrollToStart: () => void;
   scrollToEnd: () => void;
   scrollToLine: (line: number) => void;
@@ -348,16 +349,21 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       scrollToLine: line => {
         const container = containerRef.current;
         if (container) {
-          container.scrollTo(
-            0,
-            lineHeight * (countVisualLines(lines, lineMaxCharacters, 0, line) - 1) -
-              container.clientHeight / 2 +
-              lineHeight / 2
-          );
+          container.scrollTo(0, lineHeight * positions[line - 1] - container.clientHeight / 2 + lineHeight / 2);
         }
       },
+      getLineRect: line => {
+        const container = containerRef.current;
+        if (container) {
+          return {
+            top: lineHeight * positions[line - 1],
+            height: lineHeight * ((positions[line] || positions[line - 1] + 1) - positions[line - 1]), // TODO: Calculate size
+          };
+        }
+        return {top: NaN, height: NaN};
+      },
     }),
-    [lines, wrap, lineHeight, lineMaxCharacters]
+    [lines, wrap, lineHeight, lineMaxCharacters, positions]
   );
 
   return (
