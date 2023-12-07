@@ -21,6 +21,7 @@ import Colors from '@styles/Colors';
 
 import {decodeSelectorArray, encodeSelectorArray} from '@utils/selectors';
 
+import KeyValueInput from './KeyValueInput';
 import * as S from './LabelsFilter.styled';
 
 const defaultKeyValuePair: Entity = {
@@ -55,35 +56,6 @@ const LabelsFilter: React.FC<EntityFilters> = props => {
     setLabelsMapping([...labelsMapping, defaultKeyValuePair]);
   }, [labelsMapping]);
 
-  const onDeleteRow = useCallback(
-    (index: number) => {
-      setLabelsMapping([...labelsMapping.slice(0, index), ...labelsMapping.slice(index + 1)]);
-    },
-    [labelsMapping]
-  );
-
-  const onKeyChange = useCallback(
-    (key: string, index: number) => {
-      setLabelsMapping([
-        ...labelsMapping.slice(0, index),
-        {key, value: labelsMapping[index].value},
-        ...labelsMapping.slice(index + 1),
-      ]);
-    },
-    [labelsMapping]
-  );
-
-  const onValueChange = useCallback(
-    (value: string, index: number) => {
-      setLabelsMapping([
-        ...labelsMapping.slice(0, index),
-        {key: labelsMapping[index].key, value},
-        ...labelsMapping.slice(index + 1),
-      ]);
-    },
-    [labelsMapping]
-  );
-
   const resetFilters = useCallback(() => {
     setLabelsMapping([defaultKeyValuePair]);
     onOpenChange(false);
@@ -94,7 +66,7 @@ const LabelsFilter: React.FC<EntityFilters> = props => {
 
   const valuesLabels = useMemo(
     () => (data ? keysLabels.map(item => data[item.key].map(v => ({key: item.key, value: v}))).flat() : []),
-    [keysLabels]
+    [data, keysLabels]
   );
 
   const renderedKeyValueInputs = useMemo(
@@ -109,34 +81,19 @@ const LabelsFilter: React.FC<EntityFilters> = props => {
           .map(v => ({key: v.value, label: v.value, value: v.value}));
 
         return (
-          <S.KeyValueRow key={key}>
-            <S.AutoComplete
-              width="220px"
-              options={keyOptions}
-              onChange={event => onKeyChange(event, index)}
-              value={item.key}
-              data-testid={`key-input-${index}`}
-              placeholder="Key"
-            />
-            <S.AutoComplete
-              width="220px"
-              options={valuesOptions}
-              onChange={event => onValueChange(event, index)}
-              value={item.value}
-              data-testid={`value-input-${index}`}
-              placeholder="Value"
-            />
-            {index > 0 ? (
-              <Button $customType="tertiary" onClick={() => onDeleteRow(index)} data-testid={`delete-row-${index}`}>
-                &#10005;
-              </Button>
-            ) : (
-              <S.EmptyButton />
-            )}
-          </S.KeyValueRow>
+          <KeyValueInput
+            key={key}
+            index={index}
+            keyOptions={keyOptions}
+            valuesOptions={valuesOptions}
+            itemKey={item.key}
+            itemValue={item.value}
+            labelsMapping={labelsMapping}
+            setLabelsMapping={setLabelsMapping}
+          />
         );
       }),
-    [labelsMapping, onDeleteRow, onKeyChange, onValueChange]
+    [keysLabels, labelsMapping, valuesLabels]
   );
 
   const menu = useMemo(
