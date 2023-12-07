@@ -22,6 +22,7 @@ export const DecayingContainer = styled.div`
 export const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 32px;
 
   svg {

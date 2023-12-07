@@ -1,4 +1,4 @@
-import {FC, useCallback, useMemo, useState} from 'react';
+import {FC, cloneElement, isValidElement, useCallback, useMemo, useState} from 'react';
 import {useUnmount} from 'react-use';
 
 import {ExternalLink} from '@atoms';
@@ -16,6 +16,8 @@ import {notificationCall} from '@molecules';
 import {EntityView} from '@organisms';
 
 import {Error} from '@pages';
+
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
 import {useAbortAllTestExecutionsMutation, useGetTestsQuery} from '@services/tests';
 
@@ -57,6 +59,8 @@ const TestsList: FC<TestsListProps> = props => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
 
+  const entityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+
   useUnmount(() => {
     setFilters({...filters, pageSize: initialFilters.pageSize});
   });
@@ -95,6 +99,16 @@ const TestsList: FC<TestsListProps> = props => {
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
+  }
+
+  if (entityPromoComponent) {
+    return (
+      <>
+        {isValidElement(entityPromoComponent)
+          ? cloneElement(entityPromoComponent, {list: 'tests'} as Partial<unknown>)
+          : null}
+      </>
+    );
   }
 
   return (

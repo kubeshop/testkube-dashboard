@@ -29,6 +29,7 @@ interface CardFormProps {
   labelAlign?: FormLabelAlign;
   layout?: FormLayout;
   initialValues?: any;
+  confirmDisabled?: boolean;
   confirmLabel?: string;
   monitLeave?: boolean;
   monitLeaveMessage?: string;
@@ -53,6 +54,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
   readOnly,
   wasTouched,
   isWarning,
+  confirmDisabled,
   confirmLabel,
   spacing,
   monitLeave = true,
@@ -132,6 +134,7 @@ const CardForm: FC<PropsWithChildren<CardFormProps>> = ({
           footer={footer}
           headerAction={headerAction}
           confirmLabel={confirmLabel}
+          confirmDisabled={confirmDisabled}
           wasTouched={wasTouched}
           readOnly={readOnly}
           loading={loading}

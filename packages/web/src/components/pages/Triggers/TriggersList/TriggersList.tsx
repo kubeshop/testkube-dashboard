@@ -82,7 +82,7 @@ const TriggersList: React.FC = () => {
         componentProps={{onClick: openDetails}}
         empty={<EmptyTriggers onButtonClick={openCreateModal} />}
         itemHeight={66}
-        loadingInitially={isLoading || !isClusterAvailable}
+        loadingInitially={isLoading}
       />
     </PageBlueprint>
   );

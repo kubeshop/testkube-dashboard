@@ -7,6 +7,7 @@ import Colors from '@styles/Colors';
 
 export interface ICustomButtonProps extends AntdButtonProps {
   $customType?: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'warning' | 'github' | 'gitlab';
+  $fullWidth?: boolean;
   hidden?: boolean;
   $withPadding?: boolean;
   tooltip?: string;
@@ -102,11 +103,15 @@ const buttonTypesStyles: Record<string, string> = {
 
 export const AntdCustomStyledButton = styled(AntdButton)<ICustomButtonProps>`
   ${props => buttonTypesStyles[props.$customType || 'primary']};
-  ${props =>
-    !props.$withPadding
-      ? `
-  padding: 0;
-  height: unset;
-  `
-      : ''};
+
+  ${({$withPadding}) => {
+    if (!$withPadding) {
+      return `
+        padding: 0;
+        height: unset;
+      `;
+    }
+  }}
+
+  width: ${({$fullWidth}) => ($fullWidth ? '100%' : 'auto')};
 `;

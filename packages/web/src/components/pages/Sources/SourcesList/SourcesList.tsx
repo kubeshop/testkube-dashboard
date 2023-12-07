@@ -77,7 +77,7 @@ const Sources: React.FC = () => {
         componentProps={{onClick: openDetails}}
         empty={<EmptySources onButtonClick={openCreateModal} />}
         itemHeight={66}
-        loadingInitially={isLoading || !isClusterAvailable}
+        loadingInitially={isLoading}
       />
     </PageBlueprint>
   );

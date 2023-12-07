@@ -111,6 +111,7 @@ export default createPlugin('oss/tests-and-test-suites')
   .define(slot<ReactNode>()('testSuitesListTitleAddon'))
   .define(slot<ReactNode>()('entityViewComponent'))
   .define(slot<ReactNode>()('entityViewSwitch'))
+  .define(slot<ReactNode>()('entityListPromoComponent'))
 
   .provider(({useData}) => (
     <StoreProvider store={initializeTestsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />
