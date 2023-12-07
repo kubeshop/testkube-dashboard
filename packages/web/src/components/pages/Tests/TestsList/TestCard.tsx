@@ -19,7 +19,7 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, on
 
   const ref = useRef(null);
 
-  const {metrics} = useTestsMetricsContext();
+  const {testsMetrics} = useTestsMetricsContext();
 
   return (
     <EntityGridItemPure
@@ -28,7 +28,7 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, on
       latestExecution={latestExecution}
       onClick={onClick}
       onAbort={onAbort}
-      metrics={metrics[test.name]}
+      metrics={testsMetrics[test.name]}
       dataTest="tests-list-item"
       outOfSync={!isAgentAvailable || test.readOnly}
       isAgentAvailable={isAgentAvailable}

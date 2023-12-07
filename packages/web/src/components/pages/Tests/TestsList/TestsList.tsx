@@ -46,14 +46,14 @@ interface TestsListProps {
 const TestsList: FC<TestsListProps> = props => {
   const {isListLoading} = props;
 
-  const [metrics, setMetrics] = useState<Record<string, Metrics>>({});
+  const [testsMetrics, setTestsMetrics] = useState<Record<string, Metrics>>({});
 
   const metricsContextValue = useMemo(
     () => ({
-      metrics,
-      setMetrics,
+      testsMetrics,
+      setTestsMetrics,
     }),
-    [metrics]
+    [testsMetrics]
   );
 
   const isSystemAvailable = useSystemAccess(SystemAccess.system);

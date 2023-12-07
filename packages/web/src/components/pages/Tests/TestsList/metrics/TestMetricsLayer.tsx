@@ -17,7 +17,7 @@ type TestMetricsLayerProps = {
 const TestMetricsLayer: React.FC<TestMetricsLayerProps> = props => {
   const {name} = props;
 
-  const {metrics, setMetrics} = useTestsMetricsContext();
+  const {testsMetrics, setTestsMetrics} = useTestsMetricsContext();
 
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
 
@@ -27,14 +27,14 @@ const TestMetricsLayer: React.FC<TestMetricsLayerProps> = props => {
   );
 
   useEffect(() => {
-    if (isEqual(metrics[name], data)) {
+    if (isEqual(testsMetrics[name], data)) {
       return;
     }
 
-    if (metrics) {
-      setMetrics(prevMetrics => ({...prevMetrics, [name]: data}));
+    if (testsMetrics) {
+      setTestsMetrics(prevMetrics => ({...prevMetrics, [name]: data}));
     }
-  }, [data, metrics, name, setMetrics]);
+  }, [data, testsMetrics, name, setTestsMetrics]);
 
   return null;
 };

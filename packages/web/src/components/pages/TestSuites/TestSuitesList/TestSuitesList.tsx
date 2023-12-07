@@ -38,14 +38,14 @@ interface TestSuitesListProps {
 const TestSuitesList: FC<TestSuitesListProps> = props => {
   const {isListLoading} = props;
 
-  const [metrics, setMetrics] = useState<Record<string, Metrics>>({});
+  const [testSuitesMetrics, setTestSuitesMetrics] = useState<Record<string, Metrics>>({});
 
   const metricsContextValue = useMemo(
     () => ({
-      metrics,
-      setMetrics,
+      testSuitesMetrics,
+      setTestSuitesMetrics,
     }),
-    [metrics]
+    [testSuitesMetrics]
   );
 
   const isSystemAvailable = useSystemAccess(SystemAccess.system);

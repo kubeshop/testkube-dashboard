@@ -3,13 +3,13 @@ import {createContext, useContext} from 'react';
 import {Metrics} from '@models/metrics';
 
 export type TestsMetricsContextValueType = {
-  metrics: Record<string, Metrics>;
-  setMetrics: React.Dispatch<React.SetStateAction<Record<string, Metrics>>>;
+  testsMetrics: Record<string, Metrics>;
+  setTestsMetrics: React.Dispatch<React.SetStateAction<Record<string, Metrics>>>;
 };
 
 export const testsMetricsContextDefaultValue: TestsMetricsContextValueType = {
-  metrics: {},
-  setMetrics: () => {},
+  testsMetrics: {},
+  setTestsMetrics: () => {},
 };
 
 export const TestsMetricsContext = createContext<TestsMetricsContextValueType>(testsMetricsContextDefaultValue);

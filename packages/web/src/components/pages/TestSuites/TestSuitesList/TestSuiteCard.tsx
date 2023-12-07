@@ -19,7 +19,7 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
 
   const ref = useRef(null);
 
-  const {metrics} = useTestSuitesMetricsContext();
+  const {testSuitesMetrics} = useTestSuitesMetricsContext();
 
   return (
     <EntityGridItemPure
@@ -28,7 +28,7 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       latestExecution={latestExecution}
       onClick={onClick}
       onAbort={onAbort}
-      metrics={metrics[testSuite.name]}
+      metrics={testSuitesMetrics[testSuite.name]}
       dataTest="test-suites-list-item"
       outOfSync={!isAgentAvailable || testSuite.readOnly}
       isAgentAvailable={isAgentAvailable}
