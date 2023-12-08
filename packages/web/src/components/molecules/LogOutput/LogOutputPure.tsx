@@ -1,6 +1,7 @@
 import React, {forwardRef, memo, useImperativeHandle, useRef} from 'react';
 
-import {Console, ConsoleRef} from './Console';
+import {Console, ConsoleRef} from '@molecules/Console/Console';
+
 import {StyledLogOutputContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
 

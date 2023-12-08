@@ -21,6 +21,8 @@ import AnsiClassesMapping from '@atoms/TestkubeTheme/AnsiClassesMapping';
 
 import {useLastCallback} from '@hooks/useLastCallback';
 
+import {LogProcessor} from '@molecules/Console/LogProcessor';
+
 import {invisibleScroll} from '@styles/globalStyles';
 
 import {ConsoleLine} from './ConsoleLine';
@@ -154,34 +156,16 @@ const PlaceholderContainer = styled.div`
   display: none;
 `;
 
-const countVisualLines = (lines: {chars: number}[], maxCharacters: number, start = 0, end = lines.length): number => {
-  if (!Number.isFinite(maxCharacters) || maxCharacters === 0) {
-    return end - start;
-  }
-  if (end > lines.length) {
-    end = lines.length;
-  }
-  let count = 0;
-  for (let i = start; i < end; i += 1) {
-    if (lines[i].chars === 0) {
-      count += 1;
-    } else {
-      count += Math.ceil(lines[i].chars / maxCharacters);
-    }
-  }
-  return count;
-};
-
 // TODO: Optimize to process only newly added content
 export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, LineComponent = ConsoleLine}, ref) => {
+  const processor = useMemo(() => LogProcessor.from(escapeCarriageReturn(content)), [content]);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const lines = useMemo(() => ansiToLines(escapeCarriageReturn(content)), [content]);
-  const maxDigits = `${lines.length + 1}`.length;
+  const maxDigits = processor.maxDigits;
 
   const rerender = useUpdate();
 
   // Configure
-  const prerender = 10;
+  const prerender = 30; // TODO: Dynamic based on viewport?
 
   // Keep information about line display
   const lineHeightRef = useRef(1000);
@@ -192,7 +176,10 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const lineMaxCharacters = lineMaxCharactersRef.current;
 
   // Count max visual lines
-  const totalVisualLinesCount = useMemo(() => countVisualLines(lines, lineMaxCharacters), [lines, lineMaxCharacters]);
+  const totalVisualLinesCount = useMemo(
+    () => processor.countVisualLines(lineMaxCharacters),
+    [processor, lineMaxCharacters]
+  );
 
   // Get information about current viewport
   const clientHeight = containerRef.current?.clientHeight || 0;
@@ -202,7 +189,10 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   // Keep information about line width
   const characterWidthRef = useRef(0);
   const baseWidthRef = useRef(0);
-  const maxCharactersCount = useMemo(() => lines.reduce((acc, line) => Math.max(acc, line.chars), 0), [lines]);
+  const maxCharactersCount = useMemo(
+    () => (wrap ? lineMaxCharacters : processor.getMaxLineLength()),
+    [wrap, lineMaxCharacters, processor]
+  );
   const minWidth = wrap ? 0 : baseWidthRef.current + characterWidthRef.current * maxCharactersCount;
 
   // Recalculate line height and max characters
@@ -271,42 +261,24 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const rerenderDebounce = useMemo(() => debounce(rerender, 5), []);
   useEvent('scroll', rerenderDebounce, containerRef?.current);
 
-  // Compute visual position of real lines
-  const positions = useMemo(() => {
-    const result: Record<number, number> = {};
-    for (let i = 0; i < lines.length; i += 1) {
-      result[i] = (result[i - 1] || 0) + Math.max(1, Math.ceil(lines[i].chars / lineMaxCharacters));
-    }
-    return result;
-  }, [lines, lineMaxCharacters]);
-  const findRealLineAt = (visualLine: number): number => {
-    if (!wrap) {
-      return visualLine;
-    }
-    for (let i = 0; i <= visualLine; i += 1) {
-      if (positions[i] >= visualLine) {
-        return i;
-      }
-    }
-    return lines.length - 1;
-  };
-
   // Compute current position
   const viewportLines = Math.ceil(clientHeight / lineHeight);
-  const visualStart = Math.max(0, Math.floor(scrollTop / lineHeight));
-  const start = Math.max(0, findRealLineAt(visualStart) - prerender);
-  const end = Math.min(start + viewportLines + 2 * prerender, lines.length);
-
-  const beforeVisualLinesCount = useMemo(
-    () => countVisualLines(lines, lineMaxCharacters, 0, start),
-    [lines, lineMaxCharacters, start]
+  const viewportStart = Math.floor(scrollTop / lineHeight) - prerender;
+  const viewportEnd = viewportStart + viewportLines + 2 * prerender;
+  // TODO: getEstimatedVisualLineAt? getVisualRangeAt? getEstimatedVisualRangeAt?
+  const {index: start, start: visualStart} = useMemo(
+    () => processor.getVisualLineAt(lineMaxCharacters, viewportStart),
+    [processor, lineMaxCharacters, viewportStart]
   );
-  const afterVisualLinesCount = useMemo(
-    () => countVisualLines(lines, lineMaxCharacters, end),
-    [lines, lineMaxCharacters, end]
+  const {index: end, end: visualEnd} = useMemo(
+    () => processor.getVisualLineAt(lineMaxCharacters, viewportEnd),
+    [processor, lineMaxCharacters, viewportEnd]
   );
 
-  const displayedLines = useMemo(() => lines.slice(start, end), [start, end, lines]);
+  const beforeVisualLinesCount = visualStart;
+  const afterVisualLinesCount = totalVisualLinesCount - visualEnd;
+
+  const displayedLines = useMemo(() => processor.getProcessedLines(start, end + 1), [processor, start, end]);
 
   const paddingTop = Math.max(0, Math.floor(beforeVisualLinesCount * lineHeight));
   const paddingBottom = Math.max(0, Math.floor(afterVisualLinesCount * lineHeight));
@@ -325,15 +297,20 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const scrollToLine = useLastCallback((line: number) => {
     const container = containerRef.current;
     if (container) {
-      container.scrollTo(0, lineHeight * positions[line - 1] - container.clientHeight / 2 + lineHeight / 2);
+      container.scrollTo(
+        0,
+        lineHeight * processor.countVisualLines(lineMaxCharacters, 0, line - 1) -
+          container.clientHeight / 2 +
+          lineHeight / 2
+      );
     }
   });
   const getLineRect = useLastCallback((line: number) => {
     const container = containerRef.current;
     if (container) {
       return {
-        top: lineHeight * positions[line - 1],
-        height: lineHeight * ((positions[line] || positions[line - 1] + 1) - positions[line - 1]), // TODO: Calculate size
+        top: lineHeight * processor.countVisualLines(lineMaxCharacters, 0, line - 1),
+        height: lineHeight * processor.countVisualLines(lineMaxCharacters, line, line - 1),
       };
     }
     return {top: NaN, height: NaN};
@@ -380,11 +357,12 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   }, [wrap, totalVisualLinesCount]);
 
   // Scroll to bottom after logs change
+  const scrolledToEnd = isScrolledToEnd();
   useEffect(() => {
-    if (isScrolledToEnd()) {
+    if (scrolledToEnd) {
       scrollToEnd();
     }
-  }, [lines]);
+  }, [content]);
 
   useMount(scrollToEnd);
 
