@@ -10,7 +10,7 @@ import type {Execution} from '@models/execution';
 import type {ExecutionMetrics} from '@models/metrics';
 import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
-import {DotsDropdown, LabelsList, MetricsBarChart} from '@molecules';
+import {LabelsList, MetricsBarChart} from '@molecules';
 
 import Colors from '@styles/Colors';
 
@@ -26,11 +26,13 @@ import {
   RowsWrapper,
   StyledMetricItem,
 } from './EntityGrid.styled';
+import EntityGridItemDropdown from './EntityGridItemDropdown';
 import EntityGridItemExecutionTime from './EntityGridItemExecutionTime';
 
 export interface Item {
   type?: string;
   name: string;
+  namespace?: string;
   labels?: Record<string, string>;
 }
 
@@ -58,8 +60,6 @@ const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
   return item.type ? <ExecutorIcon type={icon} /> : null;
 });
 
-const isRunningStatus = (status: string) => ['running', 'queued'].includes(status);
-
 const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
   const {item, latestExecution, onClick, onAbort, dataTest, metrics, outOfSync, isAgentAvailable, entityLabel} = props;
 
@@ -68,19 +68,10 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
     (latestExecution as TestSuiteExecution)?.status ||
     'pending';
   const executions = metrics?.executions;
-  const isRunning = isRunningStatus(status) || executions?.some(execution => isRunningStatus(execution.status));
 
   const click = useCallback(() => {
     onClick(item);
   }, [onClick, item]);
-
-  const abort = useCallback(
-    (event: React.MouseEvent<HTMLSpanElement>) => {
-      event.stopPropagation();
-      onAbort(item);
-    },
-    [onAbort, item]
-  );
 
   return (
     <ItemWrapper onClick={click} ref={ref} data-test={dataTest}>
@@ -108,13 +99,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
           </ItemColumn>
           <ExecutionTimeItemColumn>
             <EntityGridItemExecutionTime time={latestExecution?.startTime} />
-            {isRunning ? (
-              <DotsDropdown
-                placement="bottomRight"
-                disabled={outOfSync}
-                items={[{key: 1, label: <span onClick={abort}>Abort all executions</span>}]}
-              />
-            ) : null}
+            <EntityGridItemDropdown entityLabel={entityLabel} item={item} outOfSync={outOfSync} onAbort={onAbort} />
           </ExecutionTimeItemColumn>
         </ItemRow>
         <RowsWrapper>

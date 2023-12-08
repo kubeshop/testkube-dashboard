@@ -238,6 +238,11 @@ export const GlobalStyle = createGlobalStyle`
         background: ${Colors.slate700};
       }
     }
+
+    .ant-dropdown-menu-item-divider {
+      margin: 0;
+      background-color: ${Colors.slate500};
+    }
   }
 
   .ant-dropdown-menu {
