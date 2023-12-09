@@ -1,9 +1,8 @@
 import {
   FC,
   PropsWithChildren,
-  ReactElement,
-  cloneElement,
   forwardRef,
+  memo,
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
@@ -12,7 +11,6 @@ import {
 } from 'react';
 import {useEvent, useInterval, useMount, useUpdate} from 'react-use';
 
-import Anser, {AnserJsonEntry} from 'anser';
 import {escapeCarriageReturn} from 'escape-carriage';
 import debounce from 'lodash.debounce';
 import styled from 'styled-components';
@@ -22,6 +20,8 @@ import AnsiClassesMapping from '@atoms/TestkubeTheme/AnsiClassesMapping';
 import {useLastCallback} from '@hooks/useLastCallback';
 
 import {LogProcessor} from '@molecules/Console/LogProcessor';
+import {LogProcessorLine} from '@molecules/Console/LogProcessorLine';
+import {useLogLinesPosition} from '@molecules/Console/useLogLinesPosition';
 
 import {invisibleScroll} from '@styles/globalStyles';
 
@@ -36,6 +36,7 @@ export interface ConsoleProps {
 
 export interface ConsoleRef {
   container: HTMLDivElement | null;
+  getVisualLinesCount: () => number;
   getLineRect: (line: number) => {top: number; height: number};
   scrollToStart: () => void;
   scrollToEnd: () => void;
@@ -43,88 +44,6 @@ export interface ConsoleRef {
   isScrolledToStart: () => boolean;
   isScrolledToEnd: () => boolean;
 }
-
-function createClass(bundle: AnserJsonEntry): string | undefined {
-  let classNames: string = '';
-
-  if (bundle.bg) {
-    classNames += `${bundle.bg}-bg `;
-  }
-  if (bundle.fg) {
-    classNames += `${bundle.fg}-fg `;
-  }
-  if (bundle.decoration) {
-    classNames += `ansi-${bundle.decoration} `;
-  }
-
-  return classNames ? classNames.substring(0, classNames.length - 1) : undefined;
-}
-
-const ansiToLines = (input: string) => {
-  const anser = new Anser();
-  const options = {json: true, remove_empty: true, use_classes: true};
-  const lines: {chars: number; nodes: ReactElement[]}[] = [];
-
-  // Parse
-  let line: {chars: number; nodes: ReactElement[]} = {chars: 0, nodes: []};
-  let lastIndex = 0;
-  let className: string | undefined;
-  let isEscaping = false;
-  const apply = (i: number) => {
-    if (lastIndex === i) {
-      return;
-    }
-    const content = input.substring(lastIndex, i);
-    if (isEscaping) {
-      const match = anser.processChunkJson(content, options, true);
-      const newClassName = createClass(match);
-      isEscaping = false;
-      line.chars += match.content.length;
-      // Optimize for cases where consecutive characters have same color codes
-      if (newClassName === className && match.content !== '' && line.nodes.length) {
-        line.nodes[line.nodes.length - 1] = cloneElement(
-          line.nodes[line.nodes.length - 1],
-          {},
-          line.nodes[line.nodes.length - 1].props.children + match.content
-        );
-      } else if (match.content !== '') {
-        className = newClassName;
-        line.nodes.push(
-          <span key={line.nodes.length} className={className}>
-            {match.content}
-          </span>
-        );
-      }
-    } else {
-      line.chars += content.length;
-      line.nodes.push(
-        <span key={line.nodes.length} className={className}>
-          {content}
-        </span>
-      );
-    }
-    lastIndex = i;
-  };
-  for (let i = 0; i < input.length; i += 1) {
-    if (input[i] === '\n') {
-      apply(i + 1);
-      line.chars -= 1;
-      lines.push(line);
-      line = {chars: 0, nodes: []};
-    } else if (input.charCodeAt(i) === 0x1b && input[i + 1] === '[') {
-      apply(i);
-      isEscaping = true;
-      i += 1;
-      lastIndex = i + 1;
-    }
-  }
-
-  apply(input.length);
-  if (line.chars > 0) {
-    lines.push(line);
-  }
-  return lines;
-};
 
 export const ConsoleContainer = styled.code<{$wrap?: boolean}>`
   display: block;
@@ -156,6 +75,22 @@ const PlaceholderContainer = styled.div`
   display: none;
 `;
 
+const ConsoleLines: FC<{
+  lines: LogProcessorLine[];
+  start: number;
+  maxDigits: number;
+  LineComponent: ConsoleProps['LineComponent'];
+}> = memo(({lines, start, maxDigits, LineComponent = ConsoleLine}) => (
+  <>
+    {lines.map((line, lineIndex) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <LineComponent key={start + lineIndex} number={start + lineIndex + 1} maxDigits={maxDigits}>
+        {line.nodes}
+      </LineComponent>
+    ))}
+  </>
+));
+
 // TODO: Optimize to process only newly added content
 export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, LineComponent = ConsoleLine}, ref) => {
   const processor = useMemo(() => LogProcessor.from(escapeCarriageReturn(content)), [content]);
@@ -175,11 +110,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const lineMaxCharactersRef = useRef(Infinity);
   const lineMaxCharacters = lineMaxCharactersRef.current;
 
-  // Count max visual lines
-  const totalVisualLinesCount = useMemo(
-    () => processor.countVisualLines(lineMaxCharacters),
-    [processor, lineMaxCharacters]
-  );
+  const {getTop, getSize, getVisualLine, total} = useLogLinesPosition(processor, lineMaxCharacters);
 
   // Get information about current viewport
   const clientHeight = containerRef.current?.clientHeight || 0;
@@ -212,8 +143,8 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       placeholder.style.width = 'min-content';
       const detectedBaseWidth = placeholder.getBoundingClientRect().width;
       placeholder.style.width = '';
-      placeholderContent.textContent = '\n'.repeat(totalVisualLinesCount + 1001);
-      const detectedLineHeight = placeholder.getBoundingClientRect().height / (totalVisualLinesCount + 1000);
+      placeholderContent.textContent = '\n'.repeat(total + 1001);
+      const detectedLineHeight = placeholder.getBoundingClientRect().height / (total + 1000);
       placeholderContent.textContent = '';
       let detectedMaxCharacters = Infinity;
       if (wrap) {
@@ -248,7 +179,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   }, [clientHeight, clientWidth, wrap]);
 
   // Limit the scrollTop
-  const scrollTop = Math.min(domScrollTop, totalVisualLinesCount * lineHeight - clientHeight);
+  const scrollTop = Math.min(domScrollTop, total * lineHeight - clientHeight);
 
   // TODO: Observe for the resize instead
   useInterval(() => {
@@ -263,20 +194,19 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
 
   // Compute current position
   const viewportLines = Math.ceil(clientHeight / lineHeight);
-  const viewportStart = Math.floor(scrollTop / lineHeight) - prerender;
-  const viewportEnd = viewportStart + viewportLines + 2 * prerender;
-  // TODO: getEstimatedVisualLineAt? getVisualRangeAt? getEstimatedVisualRangeAt?
+  const viewportStart = Math.max(Math.floor(scrollTop / lineHeight) - prerender, 0);
+  const viewportEnd = Math.min(viewportStart + viewportLines + 2 * prerender, total - 1);
   const {index: start, start: visualStart} = useMemo(
-    () => processor.getVisualLineAt(lineMaxCharacters, viewportStart),
+    () => getVisualLine(viewportStart + 1),
     [processor, lineMaxCharacters, viewportStart]
   );
   const {index: end, end: visualEnd} = useMemo(
-    () => processor.getVisualLineAt(lineMaxCharacters, viewportEnd),
+    () => getVisualLine(viewportEnd + 1),
     [processor, lineMaxCharacters, viewportEnd]
   );
 
   const beforeVisualLinesCount = visualStart;
-  const afterVisualLinesCount = totalVisualLinesCount - visualEnd;
+  const afterVisualLinesCount = total - visualEnd;
 
   const displayedLines = useMemo(() => processor.getProcessedLines(start, end + 1), [processor, start, end]);
 
@@ -297,24 +227,13 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const scrollToLine = useLastCallback((line: number) => {
     const container = containerRef.current;
     if (container) {
-      container.scrollTo(
-        0,
-        lineHeight * processor.countVisualLines(lineMaxCharacters, 0, line - 1) -
-          container.clientHeight / 2 +
-          lineHeight / 2
-      );
+      container.scrollTo(0, lineHeight * getTop(line) - container.clientHeight / 2 + lineHeight / 2);
     }
   });
-  const getLineRect = useLastCallback((line: number) => {
-    const container = containerRef.current;
-    if (container) {
-      return {
-        top: lineHeight * processor.countVisualLines(lineMaxCharacters, 0, line - 1),
-        height: lineHeight * processor.countVisualLines(lineMaxCharacters, line, line - 1),
-      };
-    }
-    return {top: NaN, height: NaN};
-  });
+  const getLineRect = useLastCallback((line: number) => ({
+    top: getTop(line),
+    height: getSize(line),
+  }));
   const isScrolledToEnd = () => {
     return (
       Math.abs(
@@ -327,6 +246,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       containerRef.current.scrollTo(0, containerRef.current?.scrollHeight);
     }
   };
+  const getVisualLinesCount = useLastCallback(() => total);
 
   useImperativeHandle(
     ref,
@@ -346,6 +266,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       isScrolledToEnd,
       scrollToLine,
       getLineRect,
+      getVisualLinesCount,
     }),
     []
   );
@@ -354,7 +275,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   useEffect(() => {
     let t = setTimeout(() => containerRef.current?.dispatchEvent(new Event('resize')));
     return () => clearTimeout(t);
-  }, [wrap, totalVisualLinesCount]);
+  }, [wrap, total]);
 
   // Scroll to bottom after logs change
   const scrolledToEnd = isScrolledToEnd();
@@ -375,12 +296,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
           </LineComponent>
         </PlaceholderContainer>
         <ConsoleSpace style={styleTop} />
-        {displayedLines.map((line, lineIndex) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <LineComponent key={start + lineIndex} number={start + lineIndex + 1} maxDigits={maxDigits}>
-            {line.nodes}
-          </LineComponent>
-        ))}
+        <ConsoleLines lines={displayedLines} start={start} maxDigits={maxDigits} LineComponent={LineComponent} />
         <ConsoleSpace style={styleBottom} />
       </ConsoleContent>
     </ConsoleContainer>
