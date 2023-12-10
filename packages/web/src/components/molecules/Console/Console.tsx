@@ -9,10 +9,9 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import {useEvent, useInterval, useMount, useUpdate} from 'react-use';
+import {useEvent, useInterval, useMount, useRafState, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
-import debounce from 'lodash.debounce';
 import styled from 'styled-components';
 
 import AnsiClassesMapping from '@atoms/TestkubeTheme/AnsiClassesMapping';
@@ -188,14 +187,25 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     }
   }, 50);
 
-  // TODO: Rerender only on actual change
-  const rerenderDebounce = useMemo(() => debounce(rerender, 5), []);
-  useEvent('scroll', rerenderDebounce, containerRef?.current);
-
-  // Compute current position
   const viewportLines = Math.ceil(clientHeight / lineHeight);
   const viewportStart = Math.max(Math.floor(scrollTop / lineHeight) - prerender, 0);
   const viewportEnd = Math.min(viewportStart + viewportLines + 2 * prerender, total - 1);
+
+  const [, setIncr] = useRafState(0);
+  useEvent(
+    'scroll',
+    useLastCallback(() => {
+      const newDomScrollTop = containerRef.current?.scrollTop || 0;
+      const newScrollTop = Math.min(newDomScrollTop, total * lineHeight - clientHeight);
+      const newViewportStart = Math.max(Math.floor(newScrollTop / lineHeight) - prerender, 0);
+      if (newViewportStart !== viewportStart) {
+        setIncr(Math.random());
+      }
+    }),
+    containerRef?.current
+  );
+
+  // Compute current position
   const {index: start, start: visualStart} = useMemo(
     () => getVisualLine(viewportStart + 1),
     [processor, lineMaxCharacters, viewportStart]
