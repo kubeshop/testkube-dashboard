@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC, ReactNode} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {StoreProvider, createPlugin, data, external, slot} from '@testkube/plugins';
@@ -11,6 +11,8 @@ import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
+
+import {ViewComponentBaseProps} from '@organisms/EntityView/EntityView';
 
 import TestSuiteDetails from '@pages/TestSuites/TestSuiteDetails';
 import TestSuitesList from '@pages/TestSuites/TestSuitesList';
@@ -109,9 +111,9 @@ export default createPlugin('oss/tests-and-test-suites')
   .define(slot<ReactNode>()('deleteTestExtension'))
   .define(slot<ReactNode>()('deleteTestSuiteExtension'))
   .define(slot<ReactNode>()('testSuitesListTitleAddon'))
-  .define(slot<ReactNode>()('entityViewComponent'))
+  .define(slot<FC<ViewComponentBaseProps>>()('entityViewComponent'))
   .define(slot<ReactNode>()('entityViewSwitch'))
-  .define(slot<ReactNode>()('entityListPromoComponent'))
+  .define(slot<FC<{list?: 'tests' | 'test-suites'}>>()('entityListPromoComponent'))
 
   .provider(({useData}) => (
     <StoreProvider store={initializeTestsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />

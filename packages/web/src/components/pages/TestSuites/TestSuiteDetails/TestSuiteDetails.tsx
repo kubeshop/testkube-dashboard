@@ -1,4 +1,3 @@
-import {FC, cloneElement, isValidElement} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {EntityDetailsLayer, ExecutionDetailsLayer} from '@organisms/EntityDetails';
@@ -18,19 +17,13 @@ interface TestSuiteDetailsProps {
   tab?: string;
 }
 
-const TestSuiteDetails: FC<TestSuiteDetailsProps> = ({tab}) => {
+const TestSuiteDetails: React.FC<TestSuiteDetailsProps> = ({tab}) => {
   const {id, execId, settingsTab} = useParams();
 
-  const entityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+  const EntityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
 
-  if (entityPromoComponent) {
-    return (
-      <>
-        {isValidElement(entityPromoComponent)
-          ? cloneElement(entityPromoComponent, {list: 'test-suites'} as Partial<unknown>)
-          : null}
-      </>
-    );
+  if (EntityPromoComponent) {
+    return <EntityPromoComponent list="test-suites" />;
   }
 
   return (

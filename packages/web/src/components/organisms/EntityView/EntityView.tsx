@@ -1,4 +1,4 @@
-import {cloneElement, isValidElement, useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {useEffectOnce} from 'react-use';
 
@@ -158,47 +158,22 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
     setFirstTimeLoading(true);
   }, [isListLoading]);
 
-  const entityGrid = useMemo(
-    () => (
-      <EntityGrid
-        itemKey={itemKey}
-        maxColumns={2}
-        data={data}
-        Component={CardComponent}
-        componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
-        empty={
-          isFiltersEmpty ? (
-            <EmptyData action={onAdd} isClusterAvailable={isWritable} />
-          ) : (
-            <EmptyDataWithFilters resetFilters={resetFilters} />
-          )
-        }
-        itemHeight={163.85}
-        loadingInitially={isFirstTimeLoading}
-        loadingMore={isLoadingNext}
-        hasMore={!isLoadingNext && data && queryFilters.pageSize <= data.length}
-        onScrollEnd={onScrollBottom}
-      />
-    ),
-    [
-      CardComponent,
-      EmptyData,
-      data,
-      isFiltersEmpty,
-      isFirstTimeLoading,
-      isLoadingNext,
-      isWritable,
-      itemKey,
-      onAdd,
-      onItemAbort,
-      onItemClick,
-      onScrollBottom,
-      queryFilters.pageSize,
-      resetFilters,
-    ]
+  const DefaultViewComponent: React.FC<ViewComponentBaseProps> = useMemo(
+    () => componentProps =>
+      (
+        <EntityGrid
+          {...componentProps}
+          itemKey={itemKey}
+          maxColumns={2}
+          Component={CardComponent}
+          componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
+          itemHeight={163.85}
+        />
+      ),
+    [CardComponent, EmptyData]
   );
 
-  const viewComponent = useTestsSlotFirst('entityViewComponent', [{value: entityGrid, metadata: {order: 2}}]);
+  const ViewComponent = useTestsSlotFirst('entityViewComponent', [{value: DefaultViewComponent, metadata: {order: 2}}]);
 
   return (
     <PageWrapper>
@@ -221,20 +196,22 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
         </PageToolbar>
       </PageHeader>
 
-      {isValidElement(viewComponent)
-        ? cloneElement(viewComponent, {
-            data,
-            loadingInitially: isFirstTimeLoading,
-            empty: isFiltersEmpty ? (
+      {ViewComponent && (
+        <ViewComponent
+          data={data}
+          loadingInitially={isFirstTimeLoading}
+          empty={
+            isFiltersEmpty ? (
               <EmptyData action={onAdd} isClusterAvailable={isWritable} />
             ) : (
               <EmptyDataWithFilters resetFilters={resetFilters} />
-            ),
-            hasMore: !isLoadingNext && data && queryFilters.pageSize <= data.length,
-            loadingMore: isLoadingNext,
-            onScrollEnd: onScrollBottom,
-          } as ViewComponentBaseProps)
-        : null}
+            )
+          }
+          hasMore={!isLoadingNext && data && queryFilters.pageSize <= data.length}
+          loadingMore={isLoadingNext}
+          onScrollEnd={onScrollBottom}
+        />
+      )}
     </PageWrapper>
   );
 };

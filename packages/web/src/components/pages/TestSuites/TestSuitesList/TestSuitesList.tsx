@@ -1,4 +1,4 @@
-import {FC, cloneElement, isValidElement, useCallback, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {useUnmount} from 'react-use';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
@@ -29,13 +29,13 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 import TestSuiteMetricsLayer from './metrics/TestSuiteMetricsLayer';
 import {TestSuitesMetricsContext} from './metrics/TestSuitesMetricsContext';
 
-const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
+const PageDescription: React.FC = () => <>Explore your test suites at a glance...</>;
 
 interface TestSuitesListProps {
   isListLoading?: boolean;
 }
 
-const TestSuitesList: FC<TestSuitesListProps> = props => {
+const TestSuitesList: React.FC<TestSuitesListProps> = props => {
   const {isListLoading} = props;
 
   const [testSuitesMetrics, setTestSuitesMetrics] = useState<Record<string, Metrics>>({});
@@ -52,7 +52,7 @@ const TestSuitesList: FC<TestSuitesListProps> = props => {
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = useTestsSlotFirst('testSuitesListTitleAddon');
 
-  const entityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+  const EntityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
 
   useUnmount(() => {
     setFilters({...filters, pageSize: initialFilters.pageSize});
@@ -94,14 +94,8 @@ const TestSuitesList: FC<TestSuitesListProps> = props => {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
 
-  if (entityPromoComponent) {
-    return (
-      <>
-        {isValidElement(entityPromoComponent)
-          ? cloneElement(entityPromoComponent, {list: 'test-suites'} as Partial<unknown>)
-          : null}
-      </>
-    );
+  if (EntityPromoComponent) {
+    return <EntityPromoComponent list="test-suites" />;
   }
 
   return (

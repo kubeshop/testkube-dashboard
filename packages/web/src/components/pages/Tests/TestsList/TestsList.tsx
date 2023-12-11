@@ -1,4 +1,4 @@
-import {FC, cloneElement, isValidElement, useCallback, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {useUnmount} from 'react-use';
 
 import {ExternalLink} from '@atoms';
@@ -32,7 +32,7 @@ import TestCreationModalContent from './TestCreationModalContent';
 import TestMetricsLayer from './metrics/TestMetricsLayer';
 import {TestsMetricsContext} from './metrics/TestsMetricsContext';
 
-const PageDescription: FC = () => (
+const PageDescription: React.FC = () => (
   <>
     Explore your tests at a glance... Learn more about{' '}
     <ExternalLink href={externalLinks.documentation}>testing with Testkube</ExternalLink>
@@ -43,7 +43,7 @@ interface TestsListProps {
   isListLoading?: boolean;
 }
 
-const TestsList: FC<TestsListProps> = props => {
+const TestsList: React.FC<TestsListProps> = props => {
   const {isListLoading} = props;
 
   const [testsMetrics, setTestsMetrics] = useState<Record<string, Metrics>>({});
@@ -59,7 +59,7 @@ const TestsList: FC<TestsListProps> = props => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
 
-  const entityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+  const EntityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
 
   useUnmount(() => {
     setFilters({...filters, pageSize: initialFilters.pageSize});
@@ -101,14 +101,8 @@ const TestsList: FC<TestsListProps> = props => {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
 
-  if (entityPromoComponent) {
-    return (
-      <>
-        {isValidElement(entityPromoComponent)
-          ? cloneElement(entityPromoComponent, {list: 'tests'} as Partial<unknown>)
-          : null}
-      </>
-    );
+  if (EntityPromoComponent) {
+    return <EntityPromoComponent list="tests" />;
   }
 
   return (
