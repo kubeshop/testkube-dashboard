@@ -1,4 +1,4 @@
-import {useCallback, useMemo} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 
 import {ItemType} from 'antd/lib/menu/hooks/useItems';
 
@@ -24,6 +24,8 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
   const [abortAllTestExecutions] = useAbortAllTestExecutionsMutation();
   const [abortAllTestSuiteExecutions] = useAbortAllTestSuiteExecutionsMutation();
 
+  const [open, setOpen] = useState(false);
+
   const editNavigate = useDashboardNavigate(
     () =>
       `/${entityLabel === 'test' ? 'tests' : 'test-suites'}/${name}/settings/${
@@ -40,6 +42,7 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
   const onAbort = useCallback(
     (event: React.MouseEvent<HTMLSpanElement>) => {
       event.stopPropagation();
+      setOpen(false);
 
       if (entityLabel === 'test') {
         abortAllTestExecutions({id: name})
@@ -61,6 +64,7 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
   const onEdit = useCallback(
     (event: React.MouseEvent<HTMLSpanElement>) => {
       event.stopPropagation();
+      setOpen(false);
       editNavigate();
     },
     [editNavigate]
@@ -69,6 +73,7 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
   const onRun = useCallback(
     (event: React.MouseEvent<HTMLSpanElement>) => {
       event.stopPropagation();
+      setOpen(false);
       run();
     },
     [run]
@@ -95,7 +100,15 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
     [entityLabel, isRunning, onAbort, onEdit, onRun]
   );
 
-  return <DotsDropdown placement="bottomRight" disabled={outOfSync} items={dropdownItems} />;
+  return (
+    <DotsDropdown
+      open={open}
+      placement="bottomRight"
+      disabled={outOfSync}
+      items={dropdownItems}
+      onOpenChange={setOpen}
+    />
+  );
 };
 
 export default EntityDropdown;

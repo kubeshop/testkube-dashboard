@@ -24,6 +24,8 @@ interface DotsDropdownProps {
   trigger?: ('click' | 'hover' | 'contextMenu')[];
   overlayClassName?: string;
   disabled?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const DotsDropdown: React.FC<DotsDropdownProps> = ({
@@ -34,6 +36,8 @@ const DotsDropdown: React.FC<DotsDropdownProps> = ({
   trigger = ['click'],
   overlayClassName = 'light-dropdown',
   disabled,
+  open,
+  onOpenChange,
 }) => {
   return (
     <Dropdown
@@ -44,6 +48,8 @@ const DotsDropdown: React.FC<DotsDropdownProps> = ({
       }}
       placement={placement}
       disabled={disabled}
+      open={open}
+      onOpenChange={onOpenChange}
     >
       <DotsWrapper style={wrapperStyle} onClick={event => event.stopPropagation()}>
         <Dots color={Colors.grey450} withPadding={withPadding} disabled={disabled} />
