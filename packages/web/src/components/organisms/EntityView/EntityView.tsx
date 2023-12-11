@@ -10,6 +10,8 @@ import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
 import {EntityViewBlueprint} from '@models/entity';
+import {TestWithExecution} from '@models/test';
+import {TestSuiteWithExecution} from '@models/testSuite';
 
 import EntityGrid from '@molecules/EntityGrid';
 
@@ -28,6 +30,15 @@ import {useApiEndpoint} from '@services/apiEndpoint';
 import EmptyDataWithFilters from './EmptyDataWithFilters';
 import * as S from './EntityView.styled';
 import EntityViewFilters from './EntityViewFilters';
+
+export type ViewComponentBaseProps = {
+  data?: TestWithExecution[] | TestSuiteWithExecution[];
+  empty?: JSX.Element;
+  hasMore?: boolean;
+  loadingInitially?: boolean;
+  loadingMore?: boolean;
+  onScrollEnd?: () => void;
+};
 
 const EntityView: React.FC<EntityViewBlueprint> = props => {
   const {
@@ -222,7 +233,7 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
             hasMore: !isLoadingNext && data && queryFilters.pageSize <= data.length,
             loadingMore: isLoadingNext,
             onScrollEnd: onScrollBottom,
-          } as Partial<unknown>)
+          } as ViewComponentBaseProps)
         : null}
     </PageWrapper>
   );
