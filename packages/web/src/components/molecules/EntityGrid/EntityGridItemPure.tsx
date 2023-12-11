@@ -1,6 +1,6 @@
-import React, {FC, forwardRef, memo, useCallback} from 'react';
+import {FC, forwardRef, memo, useCallback} from 'react';
 
-import {ExecutorIcon, StatusIcon, Tag} from '@atoms';
+import {EntityDropdown, ExecutorIcon, StatusIcon, Tag} from '@atoms';
 
 import {Text} from '@custom-antd';
 
@@ -26,7 +26,6 @@ import {
   RowsWrapper,
   StyledMetricItem,
 } from './EntityGrid.styled';
-import EntityGridItemDropdown from './EntityGridItemDropdown';
 import EntityGridItemExecutionTime from './EntityGridItemExecutionTime';
 
 export interface Item {
@@ -99,7 +98,13 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
           </ItemColumn>
           <ExecutionTimeItemColumn>
             <EntityGridItemExecutionTime time={latestExecution?.startTime} />
-            <EntityGridItemDropdown entityLabel={entityLabel} item={item} outOfSync={outOfSync} onAbort={onAbort} />
+            <EntityDropdown
+              entityLabel={entityLabel}
+              name={item.name}
+              namespace={item.namespace}
+              outOfSync={outOfSync}
+              type={item.type}
+            />
           </ExecutionTimeItemColumn>
         </ItemRow>
         <RowsWrapper>
