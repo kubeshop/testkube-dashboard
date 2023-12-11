@@ -26,11 +26,8 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
 
   const [open, setOpen] = useState(false);
 
-  const editNavigate = useDashboardNavigate(
-    () =>
-      `/${entityLabel === 'test' ? 'tests' : 'test-suites'}/${name}/settings/${
-        entityLabel === 'test' ? 'test' : 'tests'
-      }`
+  const editNavigate = useDashboardNavigate(() =>
+    entityLabel === 'test' ? `/tests/${name}/settings/test` : `/test-suites/${name}/settings/tests`
   );
 
   const [isRunning, run] = useRunEntity(entityLabel === 'test' ? 'tests' : 'test-suites', {
