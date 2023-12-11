@@ -3,7 +3,6 @@ import {useSearchParams} from 'react-router-dom';
 import {useEffectOnce} from 'react-use';
 
 import {isEqual, merge} from 'lodash';
-import styled from 'styled-components';
 
 import {Button} from '@custom-antd';
 
@@ -27,6 +26,7 @@ import {initialPageSize} from '@redux/initialState';
 import {useApiEndpoint} from '@services/apiEndpoint';
 
 import EmptyDataWithFilters from './EmptyDataWithFilters';
+import * as S from './EntityView.styled';
 import EntityViewFilters from './EntityViewFilters';
 
 const EntityView: React.FC<EntityViewBlueprint> = props => {
@@ -200,13 +200,13 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
         loading={isApplyingFilters && !isFirstTimeLoading}
       >
         <PageToolbar extra={createButton}>
-          <FiltersSection>
+          <S.FiltersSection>
             <EntityViewFilters
               setFilters={setQueryFilters}
               filters={queryFilters}
               disabled={isEmptyData || !isReadable}
             />
-          </FiltersSection>
+          </S.FiltersSection>
         </PageToolbar>
       </PageHeader>
 
@@ -229,13 +229,3 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
 };
 
 export default EntityView;
-
-// Styled Components
-
-const FiltersSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-`;
