@@ -7,6 +7,7 @@ enum Colors {
   slate400 = '#94A3B8',
   slate500 = '#64748B',
   slate600 = '#475569',
+  slate600quarteralpha = 'rgba(71,85,105, 0.25)',
   slate700 = '#334155',
   slate800 = '#1E293B',
   slate200halfalpha = 'rgba(226,232,240, 0.5)',
