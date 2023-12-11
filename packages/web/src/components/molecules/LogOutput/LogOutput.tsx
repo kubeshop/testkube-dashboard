@@ -7,7 +7,7 @@ import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
 import {useLogOutputPick} from '@store/logOutput';
 
-import {AnimatedFullscreenLogOutput} from './AnimatedFullscreenLogOutput';
+import FullscreenLogOutput from './FullscreenLogOutput';
 import {LogOutputWrapper} from './LogOutput.styled';
 import LogOutputPure, {LogOutputPureRef} from './LogOutputPure';
 import {LogOutputProps, useLogOutput} from './useLogOutput';
@@ -26,7 +26,12 @@ const LogOutput: React.FC<LogOutputProps> = props => {
         {useTestsSlot('logOutputTop').map((element, i) => createElement(Fragment, {key: i}, element))}
         <LogOutputPure ref={logRef} {...options} />
       </LogOutputWrapper>
-      {createPortal(<AnimatedFullscreenLogOutput $rect={rect} in={isFullscreen} {...options} />, fullscreenContainer)}
+      {isFullscreen
+        ? createPortal(
+            <FullscreenLogOutput $rect={rect} className="full-screen-log-output-enter-done" {...options} />,
+            fullscreenContainer
+          )
+        : null}
     </>
   );
 };
