@@ -7,4 +7,9 @@ export const Line = styled.div`
   width: 100%;
 `;
 
-export const ConsoleLine: FC<PropsWithChildren<{}>> = memo(({children}) => <Line>{children}</Line>);
+export const ConsoleLine: FC<PropsWithChildren<{}>> = memo(({children}) => (
+  <Line>
+    <span>{children}</span>
+    {'\n'}
+  </Line>
+));
