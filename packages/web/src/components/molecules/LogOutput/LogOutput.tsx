@@ -1,8 +1,6 @@
 import React, {Fragment, createElement, memo, useRef} from 'react';
 import {createPortal} from 'react-dom';
 
-import {useClientRect} from '@hooks/useClientRect';
-
 import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
 import {useLogOutputPick} from '@store/logOutput';
@@ -14,7 +12,6 @@ import {LogOutputProps, useLogOutput} from './useLogOutput';
 
 const LogOutput: React.FC<LogOutputProps> = props => {
   const logRef = useRef<LogOutputPureRef>(null);
-  const rect = useClientRect(logRef.current?.container);
   const options = useLogOutput(props);
   const {isFullscreen} = useLogOutputPick('isFullscreen');
   const fullscreenContainer = document.querySelector('#log-output-container')!;
@@ -26,12 +23,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
         {useTestsSlot('logOutputTop').map((element, i) => createElement(Fragment, {key: i}, element))}
         <LogOutputPure ref={logRef} {...options} />
       </LogOutputWrapper>
-      {isFullscreen
-        ? createPortal(
-            <FullscreenLogOutput $rect={rect} className="full-screen-log-output-enter-done" {...options} />,
-            fullscreenContainer
-          )
-        : null}
+      {isFullscreen ? createPortal(<FullscreenLogOutput {...options} />, fullscreenContainer) : null}
     </>
   );
 };
