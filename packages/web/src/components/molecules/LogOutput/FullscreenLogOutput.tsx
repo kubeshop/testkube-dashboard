@@ -18,4 +18,6 @@ export const fullscreenLogOutputStyles = css`
   }
 `;
 
-export default styled(LogOutputPure)`${fullscreenLogOutputStyles}`;
+export default styled(LogOutputPure)`
+  ${fullscreenLogOutputStyles}
+`;
