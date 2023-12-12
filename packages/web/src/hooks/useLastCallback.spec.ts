@@ -27,4 +27,9 @@ describe('useLastCallback', () => {
     expect(callback1).toHaveBeenCalledTimes(1);
     expect(callback2).toHaveBeenCalledTimes(1);
   });
+
+  it('should not fail without a callback', () => {
+    const {result, rerender} = renderHook(cb => useLastCallback(undefined));
+    expect(() => result.current()).not.toThrow();
+  });
 });
