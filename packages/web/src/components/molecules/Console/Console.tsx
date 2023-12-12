@@ -55,6 +55,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     characterWidth: 1000,
     maxCharacters: Infinity,
     lineHeight: 1000,
+    lines: 0,
   });
 
   const {getTop, getSize, getVisualLine, total} = useLogLinesPosition(processor, maxCharacters);
@@ -157,7 +158,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   useEffect(() => {
     const t = setTimeout(() => containerRef.current?.dispatchEvent(new Event('reposition')), 1);
     return () => clearTimeout(t);
-  }, [viewportStart, viewportEnd, scrollTop, clientHeight]);
+  }, [viewportStart, viewportEnd, scrollTop, clientHeight, total]);
 
   // Re-render on scroll
   const rerenderDebounce = useMemo(() => debounce(rerender, 5), []);

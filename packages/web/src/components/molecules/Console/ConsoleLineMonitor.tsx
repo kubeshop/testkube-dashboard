@@ -13,6 +13,7 @@ export interface ConsoleLineDimensions {
   characterWidth: number;
   baseWidth: number;
   lineHeight: number;
+  lines: number;
 }
 
 export interface ConsoleLineTemplateProps {
@@ -28,15 +29,16 @@ export const ConsoleLineMonitor: FC<ConsoleLineTemplateProps> = ({Component, max
   const widthFrameRef = useRef<HTMLIFrameElement>(null);
   const update = useLastCallback(useUpdate());
 
-  const width = widthFrameRef.current?.clientWidth;
-  const height = heightFrameRef.current?.clientHeight;
+  const width = widthFrameRef.current?.clientWidth || 0;
+  const height = heightFrameRef.current?.clientHeight || 0;
 
   const baseWidth = useRef<number>(0);
   const lineHeight = useRef<number>(1000);
   const characterWidth = useRef<number>(1000);
   const maxCharacters = useRef<number>(Infinity);
+  const lines = useRef<number>(0);
 
-  const linesCount = 10 ** Math.max(maxDigits + 1, 3);
+  const linesCount = 10 ** Math.max(Math.min(maxDigits, 6), 3);
 
   const lastEmitted = useRef<ConsoleLineDimensions>();
   const emit = () => {
@@ -45,6 +47,7 @@ export const ConsoleLineMonitor: FC<ConsoleLineTemplateProps> = ({Component, max
       lineHeight: lineHeight.current,
       characterWidth: characterWidth.current,
       maxCharacters: wrap ? maxCharacters.current : Infinity,
+      lines: lines.current,
     };
     if (!isEqual(lastEmitted.current, next)) {
       lastEmitted.current = next;
@@ -79,6 +82,7 @@ export const ConsoleLineMonitor: FC<ConsoleLineTemplateProps> = ({Component, max
     use((placeholder, element) => {
       element.textContent = '\n'.repeat(linesCount - 1);
       lineHeight.current = placeholder.getBoundingClientRect().height / linesCount;
+      lines.current = (height || 0) / lineHeight.current;
     });
   }, [height, linesCount]);
 
