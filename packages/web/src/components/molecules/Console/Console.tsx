@@ -12,7 +12,7 @@ import {
 import {useEvent, usePrevious, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
-import debounce from 'lodash.debounce';
+import {debounce} from 'lodash';
 
 import {useLastCallback} from '@hooks/useLastCallback';
 
