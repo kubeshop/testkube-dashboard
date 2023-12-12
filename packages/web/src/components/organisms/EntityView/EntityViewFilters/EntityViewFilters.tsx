@@ -19,6 +19,7 @@ const EntityViewFilters: FC<EntityFilters> = props => {
       <TextSearchFilter {...rest} disabled={disabled} />
       <LabelsFilter {...rest} disabled={disabled} />
       <StatusFilter {...rest} disabled={disabled} />
+
       {switchComponent ?? null}
     </S.FiltersContainer>
   );
