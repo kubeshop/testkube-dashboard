@@ -31,5 +31,8 @@ describe('useLastCallback', () => {
   it('should not fail without a callback', () => {
     const {result, rerender} = renderHook(cb => useLastCallback(undefined));
     expect(() => result.current()).not.toThrow();
+
+    rerender(null);
+    expect(() => result.current()).not.toThrow();
   });
 });

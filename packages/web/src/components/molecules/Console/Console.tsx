@@ -9,11 +9,12 @@ import {
   useRef,
   useState,
 } from 'react';
-import {useEvent, usePrevious, useUpdate} from 'react-use';
+import {usePrevious, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
 import {debounce} from 'lodash';
 
+import {useEventCallback} from '@hooks/useEventCallback';
 import {useLastCallback} from '@hooks/useLastCallback';
 
 import * as S from './Console.styled';
@@ -160,13 +161,13 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
 
   // Re-render on scroll
   const rerenderDebounce = useMemo(() => debounce(rerender, 5), []);
-  const onScroll = useLastCallback(() => {
+  const onScroll = () => {
     const viewport = getViewport();
     if (viewport.start !== viewportStart || viewport.end !== viewportEnd) {
       rerenderDebounce();
     }
-  });
-  useEvent('scroll', onScroll, containerRef?.current);
+  };
+  useEventCallback('scroll', onScroll, containerRef?.current);
 
   return (
     <S.Container $wrap={wrap} ref={containerRef}>

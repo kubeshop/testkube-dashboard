@@ -1,8 +1,9 @@
 import {FC, PropsWithChildren, useLayoutEffect, useRef} from 'react';
-import {useEvent, useUpdate} from 'react-use';
+import {useUpdate} from 'react-use';
 
 import {isEqual} from 'lodash';
 
+import {useEventCallback} from '@hooks/useEventCallback';
 import {useLastCallback} from '@hooks/useLastCallback';
 
 import * as S from './Console.styled';
@@ -63,8 +64,8 @@ export const ConsoleLineMonitor: FC<ConsoleLineTemplateProps> = ({Component, max
     }
   };
 
-  useEvent('resize', update, widthFrameRef.current?.contentWindow);
-  useEvent('resize', update, heightFrameRef.current?.contentWindow);
+  useEventCallback('resize', update, widthFrameRef.current?.contentWindow);
+  useEventCallback('resize', update, heightFrameRef.current?.contentWindow);
 
   useLayoutEffect(() => {
     use((placeholder, element) => {
