@@ -11,10 +11,9 @@ import {useTestSuitesMetricsContext} from './metrics/TestSuitesMetricsContext';
 export interface TestSuiteCardProps {
   item: TestSuiteWithExecution;
   onClick: (item: Item) => void;
-  onAbort: (item: Item) => void;
 }
 
-const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick, onAbort}) => {
+const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick}) => {
   const isAgentAvailable = useSystemAccess(SystemAccess.agent);
 
   const ref = useRef(null);
@@ -27,7 +26,6 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       item={testSuite}
       latestExecution={latestExecution}
       onClick={onClick}
-      onAbort={onAbort}
       metrics={testSuitesMetrics[testSuite.name]}
       dataTest="test-suites-list-item"
       outOfSync={!isAgentAvailable || testSuite.readOnly}

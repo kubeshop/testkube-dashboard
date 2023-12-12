@@ -58,7 +58,7 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
     pageTitleAddon,
     queryFilters,
   } = props;
-  const {onAdd, onItemAbort, onItemClick, setQueryFilters} = props;
+  const {onAdd, onItemClick, setQueryFilters} = props;
 
   const [isApplyingFilters, setIsApplyingFilters] = useState(false);
   const [isFirstTimeLoading, setFirstTimeLoading] = useState(!data?.length);
@@ -166,7 +166,7 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
           itemKey={itemKey}
           maxColumns={2}
           Component={CardComponent}
-          componentProps={{onClick: onItemClick, onAbort: onItemAbort}}
+          componentProps={{onClick: onItemClick}}
           itemHeight={163.85}
         />
       ),

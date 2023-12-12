@@ -11,10 +11,9 @@ import {useTestsMetricsContext} from './metrics/TestsMetricsContext';
 export interface TestCardProps {
   item: TestWithExecution;
   onClick: (item: Item) => void;
-  onAbort: (item: Item) => void;
 }
 
-const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, onAbort}) => {
+const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick}) => {
   const isAgentAvailable = useSystemAccess(SystemAccess.agent);
 
   const ref = useRef(null);
@@ -27,7 +26,6 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick, on
       item={test}
       latestExecution={latestExecution}
       onClick={onClick}
-      onAbort={onAbort}
       metrics={testsMetrics[test.name]}
       dataTest="tests-list-item"
       outOfSync={!isAgentAvailable || test.readOnly}

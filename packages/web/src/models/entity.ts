@@ -8,7 +8,7 @@ import {Item} from '@molecules/EntityGrid/EntityGridItemPure';
 export type Entity = 'test-suites' | 'tests';
 
 export interface EntityViewBlueprint {
-  CardComponent: FC<{item: any; onClick: (item: Item) => void; onAbort: (item: Item) => void}>;
+  CardComponent: FC<{item: any; onClick: (item: Item) => void}>;
   data: TestSuiteWithExecution[] | TestWithExecution[];
   emptyDataComponent: FC<{action: () => void; isClusterAvailable?: boolean}>;
   entity: Entity;
@@ -25,7 +25,6 @@ export interface EntityViewBlueprint {
   pageTitleAddon?: ReactNode;
   onAdd: () => void;
   onItemClick: (item: any) => void;
-  onItemAbort: (item: any) => void;
 
   /**
    * RTK action to set query filters to the Redux store

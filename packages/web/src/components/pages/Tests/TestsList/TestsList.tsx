@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {useUnmount} from 'react-use';
 
 import {ExternalLink} from '@atoms';
@@ -10,8 +10,6 @@ import {useModal} from '@modal/hooks';
 
 import {Metrics} from '@models/metrics';
 import {Test} from '@models/test';
-
-import {notificationCall} from '@molecules';
 
 import {EntityView} from '@organisms';
 
@@ -86,16 +84,6 @@ const TestsList: React.FC<TestsListProps> = props => {
 
   const [abortAll] = useAbortAllTestExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: Test) => `/tests/${item.name}`);
-  const onItemAbort = useCallback(
-    (item: Test) => {
-      abortAll({id: item.name})
-        .unwrap()
-        .catch(() => {
-          notificationCall('failed', 'Something went wrong during test execution abortion');
-        });
-    },
-    [abortAll]
-  );
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
@@ -115,7 +103,6 @@ const TestsList: React.FC<TestsListProps> = props => {
         itemKey="test.name"
         CardComponent={TestCard}
         onItemClick={onItemClick}
-        onItemAbort={onItemAbort}
         entity="tests"
         pageTitle="Tests"
         addEntityButtonText="Add a new test"

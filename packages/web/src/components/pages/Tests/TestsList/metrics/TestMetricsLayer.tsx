@@ -23,7 +23,7 @@ const TestMetricsLayer: React.FC<TestMetricsLayerProps> = props => {
 
   const {data} = useGetTestExecutionMetricsQuery(
     {id: name, last: 7, limit: 13},
-    {skip: !isSystemAvailable, pollingInterval: PollingIntervals.halfMin}
+    {skip: !isSystemAvailable, pollingInterval: PollingIntervals.default}
   );
 
   useEffect(() => {

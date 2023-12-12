@@ -5,6 +5,8 @@ import {ItemType} from 'antd/lib/menu/hooks/useItems';
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import useRunEntity from '@hooks/useRunEntity';
 
+import {ExecutionMetrics} from '@models/metrics';
+
 import {DotsDropdown, notificationCall} from '@molecules';
 
 import {useAbortAllTestSuiteExecutionsMutation} from '@services/testSuites';
@@ -13,13 +15,14 @@ import {useAbortAllTestExecutionsMutation} from '@services/tests';
 type EntityDropdownProps = {
   entityLabel: string;
   name: string;
+  executions?: ExecutionMetrics[];
   namespace?: string;
   outOfSync?: boolean;
   type?: string;
 };
 
 const EntityDropdown: React.FC<EntityDropdownProps> = props => {
-  const {entityLabel, name, namespace, outOfSync, type} = props;
+  const {entityLabel, executions, name, namespace, outOfSync, type} = props;
 
   const [abortAllTestExecutions] = useAbortAllTestExecutionsMutation();
   const [abortAllTestSuiteExecutions] = useAbortAllTestSuiteExecutionsMutation();
@@ -30,7 +33,7 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
     entityLabel === 'test' ? `/tests/${name}/settings/test` : `/test-suites/${name}/settings/tests`
   );
 
-  const [isRunning, run] = useRunEntity(entityLabel === 'test' ? 'tests' : 'test-suites', {
+  const [, run] = useRunEntity(entityLabel === 'test' ? 'tests' : 'test-suites', {
     name,
     namespace,
     type,
@@ -87,14 +90,14 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
         label: <span onClick={onEdit}>Edit {entityLabel}</span>,
       },
 
-      ...(isRunning
+      ...(executions?.find(e => e.status === 'running')
         ? [
             {key: 'divider', type: 'divider'},
             {key: 'abort-executions', label: <span onClick={onAbort}>Abort all executions</span>},
           ]
         : []),
     ],
-    [entityLabel, isRunning, onAbort, onEdit, onRun]
+    [entityLabel, executions, onAbort, onEdit, onRun]
   );
 
   return (

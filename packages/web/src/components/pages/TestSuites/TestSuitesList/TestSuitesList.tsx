@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {useUnmount} from 'react-use';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
@@ -8,8 +8,6 @@ import {useModal} from '@modal/hooks';
 
 import {Metrics} from '@models/metrics';
 import {TestSuite} from '@models/testSuite';
-
-import {notificationCall} from '@molecules';
 
 import {EntityView} from '@organisms';
 
@@ -79,16 +77,6 @@ const TestSuitesList: React.FC<TestSuitesListProps> = props => {
 
   const [abortAll] = useAbortAllTestSuiteExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: TestSuite) => `/test-suites/${item.name}`);
-  const onItemAbort = useCallback(
-    (item: TestSuite) => {
-      abortAll({id: item.name})
-        .unwrap()
-        .catch(() => {
-          notificationCall('failed', 'Something went wrong during test suite execution abortion');
-        });
-    },
-    [abortAll]
-  );
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
@@ -108,7 +96,6 @@ const TestSuitesList: React.FC<TestSuitesListProps> = props => {
         itemKey="testSuite.name"
         CardComponent={TestSuiteCard}
         onItemClick={onItemClick}
-        onItemAbort={onItemAbort}
         entity="test-suites"
         pageTitle="Test Suites"
         pageTitleAddon={pageTitleAddon}

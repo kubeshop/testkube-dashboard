@@ -47,7 +47,6 @@ interface EntityGridItemPureProps {
   latestExecution?: TestSuiteExecution | Execution;
   metrics?: Metrics;
   onClick: (item: Item) => void;
-  onAbort: (item: Item) => void;
   dataTest: string;
   outOfSync?: boolean;
   isAgentAvailable?: boolean;
@@ -60,7 +59,7 @@ const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
 });
 
 const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((props, ref) => {
-  const {item, latestExecution, onClick, onAbort, dataTest, metrics, outOfSync, isAgentAvailable, entityLabel} = props;
+  const {item, latestExecution, onClick, dataTest, metrics, outOfSync, isAgentAvailable, entityLabel} = props;
 
   const status =
     (latestExecution as Execution)?.executionResult?.status ||
@@ -100,6 +99,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
             <EntityGridItemExecutionTime time={latestExecution?.startTime} />
             <EntityDropdown
               entityLabel={entityLabel}
+              executions={executions}
               name={item.name}
               namespace={item.namespace}
               outOfSync={outOfSync}
