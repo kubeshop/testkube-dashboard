@@ -9,7 +9,7 @@ export const FiltersContainer = styled.div`
   align-items: center;
 
   & > * {
-    width: 296px;
+    width: 248px;
   }
 
   @media ${maxDevice.tablet} {
