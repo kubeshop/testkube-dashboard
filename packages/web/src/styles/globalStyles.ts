@@ -179,8 +179,12 @@ export const GlobalStyle = createGlobalStyle`
 
   /* Table */
 
+  .ant-table-row .ant-table-column-sort {
+    background-color: transparent;
+  }
+
   .ant-table-thead .ant-table-cell {
-    background-color: ${Colors.slate800};
+    background-color: ${Colors.slate800} !important;
     color: ${Colors.slate400};
 
     font-weight: 400;
