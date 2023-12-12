@@ -76,16 +76,13 @@ export const ConsoleLineMonitor: FC<ConsoleLineTemplateProps> = ({Component, max
 
   useLayoutEffect(() => {
     use((placeholder, element) => {
-      // Compute line height
       element.textContent = '\n'.repeat(linesCount - 1);
-      lineHeight.current = element.getBoundingClientRect().height / linesCount;
-      placeholder.style.whiteSpace = '';
+      lineHeight.current = placeholder.getBoundingClientRect().height / linesCount;
     });
   }, [height, linesCount]);
 
   useLayoutEffect(() => {
     use((placeholder, element) => {
-      // Compute character width
       placeholder.style.whiteSpace = 'nowrap';
       element.textContent = '0'.repeat(2000);
       characterWidth.current = element.getBoundingClientRect().width / 2000;
@@ -100,7 +97,6 @@ export const ConsoleLineMonitor: FC<ConsoleLineTemplateProps> = ({Component, max
       return;
     }
     use((placeholder, element) => {
-      // Compute max characters
       const estimated = Math.floor((width! - baseWidth.current) / characterWidth.current) - 5;
       element.textContent = '0'.repeat(estimated - 1);
       for (let i = estimated; i < 1000; i += 1) {
