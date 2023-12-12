@@ -135,12 +135,6 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     []
   );
 
-  // Emit dummy 'resize' event on client size change
-  useEffect(() => {
-    let t = setTimeout(() => containerRef.current?.dispatchEvent(new Event('resize')));
-    return () => clearTimeout(t);
-  }, [wrap, total]);
-
   // Keep the scroll position
   const clientHeight = containerRef.current?.clientHeight || 0;
   const domScrollTop = containerRef.current?.scrollTop || 0;
@@ -156,6 +150,13 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       scrollToEnd();
     }
   }, [content]);
+
+  // Inform about position change
+  // FIXME
+  useEffect(() => {
+    const t = setTimeout(() => containerRef.current?.dispatchEvent(new Event('reposition')), 1);
+    return () => clearTimeout(t);
+  }, [viewportStart, viewportEnd, scrollTop, clientHeight]);
 
   // Re-render on scroll
   const rerenderDebounce = useMemo(() => debounce(rerender, 5), []);
