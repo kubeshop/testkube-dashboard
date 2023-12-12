@@ -2,9 +2,10 @@ import {FC, PropsWithChildren, useLayoutEffect, useRef} from 'react';
 import {useEvent, useUpdate} from 'react-use';
 
 import {isEqual} from 'lodash';
-import styled, {css} from 'styled-components';
 
 import {useLastCallback} from '@hooks/useLastCallback';
+
+import * as S from './Console.styled';
 
 export interface ConsoleLineDimensions {
   maxCharacters: number;
@@ -20,44 +21,7 @@ export interface ConsoleLineTemplateProps {
   onChange: (dimensions: ConsoleLineDimensions) => void;
 }
 
-const hiddenCss = css`
-  visibility: hidden;
-  opacity: 0;
-  user-select: none;
-  pointer-events: none;
-  overflow: hidden;
-`;
-
-const PlaceholderContainer = styled.div`
-  display: none;
-  ${hiddenCss}
-`;
-
-const Monitor = styled.iframe`
-  border: 0;
-  width: 100%;
-  height: 100%;
-`;
-
-const HeightMonitor = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  ${hiddenCss}
-`;
-
-const WidthMonitor = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  height: 0;
-  ${hiddenCss}
-`;
-
-export const ConsoleLineTemplate: FC<ConsoleLineTemplateProps> = ({Component, maxDigits, wrap, onChange}) => {
+export const ConsoleLineMonitor: FC<ConsoleLineTemplateProps> = ({Component, maxDigits, wrap, onChange}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const heightFrameRef = useRef<HTMLIFrameElement>(null);
   const widthFrameRef = useRef<HTMLIFrameElement>(null);
@@ -151,17 +115,17 @@ export const ConsoleLineTemplate: FC<ConsoleLineTemplateProps> = ({Component, ma
 
   return (
     <>
-      <HeightMonitor>
-        <Monitor ref={heightFrameRef} />
-      </HeightMonitor>
-      <WidthMonitor>
-        <Monitor ref={widthFrameRef} />
-      </WidthMonitor>
-      <PlaceholderContainer ref={containerRef}>
+      <S.HeightMonitor>
+        <S.Monitor ref={heightFrameRef} />
+      </S.HeightMonitor>
+      <S.WidthMonitor>
+        <S.Monitor ref={widthFrameRef} />
+      </S.WidthMonitor>
+      <S.PlaceholderContainer ref={containerRef}>
         <Component number={1} maxDigits={maxDigits}>
           dummy
         </Component>
-      </PlaceholderContainer>
+      </S.PlaceholderContainer>
     </>
   );
 };

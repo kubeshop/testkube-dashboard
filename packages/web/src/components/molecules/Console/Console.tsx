@@ -2,7 +2,6 @@ import {
   FC,
   PropsWithChildren,
   forwardRef,
-  memo,
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
@@ -14,20 +13,15 @@ import {useEvent, usePrevious, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
 import debounce from 'lodash.debounce';
-import styled from 'styled-components';
-
-import AnsiClassesMapping from '@atoms/TestkubeTheme/AnsiClassesMapping';
 
 import {useLastCallback} from '@hooks/useLastCallback';
 
-import {ConsoleLineDimensions, ConsoleLineTemplate} from '@molecules/Console/ConsoleLineTemplate';
-import {LogProcessor} from '@molecules/Console/LogProcessor';
-import {LogProcessorLine} from '@molecules/Console/LogProcessorLine';
-import {useLogLinesPosition} from '@molecules/Console/useLogLinesPosition';
-
-import {invisibleScroll} from '@styles/globalStyles';
-
+import * as S from './Console.styled';
 import {ConsoleLine} from './ConsoleLine';
+import {ConsoleLineDimensions, ConsoleLineMonitor} from './ConsoleLineMonitor';
+import {ConsoleLines} from './ConsoleLines';
+import {LogProcessor} from './LogProcessor';
+import {useLogLinesPosition} from './useLogLinesPosition';
 
 export interface ConsoleProps {
   wrap?: boolean;
@@ -46,48 +40,6 @@ export interface ConsoleRef {
   isScrolledToStart: () => boolean;
   isScrolledToEnd: () => boolean;
 }
-
-export const ConsoleContainer = styled.code<{$wrap?: boolean}>`
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-
-  ${({$wrap}) =>
-    $wrap
-      ? `
-        word-break: break-all;
-        white-space: break-spaces;`
-      : ''}
-
-  ${AnsiClassesMapping}
-  ${invisibleScroll}
-`;
-
-const ConsoleContent = styled.div`
-  width: min-content;
-  min-width: 100%;
-`;
-
-const ConsoleSpace = styled.div`
-  width: 100%;
-`;
-
-const ConsoleLines: FC<{
-  lines: LogProcessorLine[];
-  start: number;
-  maxDigits: number;
-  LineComponent: ConsoleProps['LineComponent'];
-}> = memo(({lines, start, maxDigits, LineComponent = ConsoleLine}) => (
-  <>
-    {lines.map((line, lineIndex) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <LineComponent key={start + lineIndex} number={start + lineIndex + 1} maxDigits={maxDigits}>
-        {line.nodes}
-      </LineComponent>
-    ))}
-  </>
-));
 
 // TODO: Optimize to process only newly added content
 export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, LineComponent = ConsoleLine}, ref) => {
@@ -216,13 +168,13 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   useEvent('scroll', onScroll, containerRef?.current);
 
   return (
-    <ConsoleContainer $wrap={wrap} ref={containerRef}>
-      <ConsoleContent>
-        <ConsoleLineTemplate Component={LineComponent} maxDigits={maxDigits} wrap={wrap} onChange={setDimensions} />
-        <ConsoleSpace style={styleTop} />
+    <S.Container $wrap={wrap} ref={containerRef}>
+      <S.Content>
+        <ConsoleLineMonitor Component={LineComponent} maxDigits={maxDigits} wrap={wrap} onChange={setDimensions} />
+        <S.Space style={styleTop} />
         <ConsoleLines lines={displayed} start={start} maxDigits={maxDigits} LineComponent={LineComponent} />
-        <ConsoleSpace style={styleBottom} />
-      </ConsoleContent>
-    </ConsoleContainer>
+        <S.Space style={styleBottom} />
+      </S.Content>
+    </S.Container>
   );
 });

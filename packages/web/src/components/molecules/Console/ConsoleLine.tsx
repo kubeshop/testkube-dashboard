@@ -1,15 +1,10 @@
 import {FC, PropsWithChildren, memo} from 'react';
 
-import styled from 'styled-components';
-
-export const Line = styled.div`
-  position: relative;
-  width: 100%;
-`;
+import * as S from './Console.styled';
 
 export const ConsoleLine: FC<PropsWithChildren<{}>> = memo(({children}) => (
-  <Line>
+  <S.Line>
     <span>{children}</span>
     {'\n'}
-  </Line>
+  </S.Line>
 ));

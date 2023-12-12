@@ -1,7 +1,6 @@
 import {LogProcessorLine} from './LogProcessorLine';
 import {ANSI_MARKER} from './utils';
 
-// TODO: Avoid lazy processing?
 export class LogProcessor {
   private activeLine: LogProcessorLine | undefined = undefined;
   public lines: LogProcessorLine[] = [];

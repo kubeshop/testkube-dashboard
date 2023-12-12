@@ -20,7 +20,6 @@ function buildClassName(bundle: AnserJsonEntry): string | undefined {
   return className ? className.substring(0, className.length - 1) : undefined;
 }
 
-// TODO: performance improvement - instead of noAsciiDecode: boolean, noAsciiUntil: number
 export class LogProcessorLine {
   private source: string;
   private start: number;
