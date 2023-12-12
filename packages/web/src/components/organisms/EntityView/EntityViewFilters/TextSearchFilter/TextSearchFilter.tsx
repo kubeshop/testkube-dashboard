@@ -2,13 +2,14 @@ import {useEffect, useState} from 'react';
 import {useDebounce} from 'react-use';
 
 import {SearchOutlined} from '@ant-design/icons';
-import {Input} from 'antd';
 
 import {EntityFilters} from '@models/entity';
 
 import {initialPageSize} from '@redux/initialState';
 
 import Colors from '@styles/Colors';
+
+import * as S from './TextSearchFilter.styled';
 
 const TextSearchFilter: React.FC<EntityFilters> = props => {
   const {filters, setFilters, disabled} = props;
@@ -34,7 +35,7 @@ const TextSearchFilter: React.FC<EntityFilters> = props => {
   }, [filters]);
 
   return (
-    <Input
+    <S.SearchInput
       prefix={<SearchOutlined style={{color: Colors.slate500}} />}
       placeholder="Search"
       onChange={onChange}

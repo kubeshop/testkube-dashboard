@@ -4,8 +4,6 @@ import {useEffectOnce} from 'react-use';
 
 import {isEqual, merge} from 'lodash';
 
-import {Button} from '@custom-antd';
-
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 import useTrackTimeAnalytics from '@hooks/useTrackTimeAnalytics';
 
@@ -74,9 +72,9 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
   const createButton = useMemo(() => {
     if (canCreateEntity && isWritable) {
       return (
-        <Button $customType="primary" onClick={onAdd} data-test={dataTest}>
+        <S.AddButton $customType="primary" onClick={onAdd} data-test={dataTest}>
           {addEntityButtonText}
-        </Button>
+        </S.AddButton>
       );
     }
 
