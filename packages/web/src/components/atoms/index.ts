@@ -18,3 +18,4 @@ export {default as CommandInput} from './CommandInput';
 export {default as MonacoEditor} from './MonacoEditor';
 export {default as IconLabel} from './IconLabel';
 export {default as Tag} from './Tag';
+export {default as InstallationInfoItem} from './InstallationInfoItem';
