@@ -19,3 +19,4 @@ export {default as MonacoEditor} from './MonacoEditor';
 export {default as IconLabel} from './IconLabel';
 export {default as Tag} from './Tag';
 export {default as EntityDropdown} from './EntityDropdown';
+export {default as InstallationInfoItem} from './InstallationInfoItem';

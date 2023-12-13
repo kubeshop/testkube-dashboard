@@ -2,23 +2,25 @@ import {Text} from '@custom-antd';
 
 import Colors from '@styles/Colors';
 
-import {YourInstallationItemContainer} from './YourInstallation.styled';
+import * as S from './InstallationInfoItem.styled';
 
-type YourInstallationItemProps = {
+type InstallationInfoItemProps = {
   label: string;
   value?: string;
 };
 
-const YourInstallationItem: React.FC<YourInstallationItemProps> = props => {
+const InstallationInfoItem: React.FC<InstallationInfoItemProps> = props => {
   const {label, value} = props;
+
   return (
-    <YourInstallationItemContainer>
+    <S.Container>
       <Text className="regular middle" color={Colors.slate400}>
         {label}
       </Text>
+
       <Text className="regular middle">{value}</Text>
-    </YourInstallationItemContainer>
+    </S.Container>
   );
 };
 
-export default YourInstallationItem;
+export default InstallationInfoItem;
