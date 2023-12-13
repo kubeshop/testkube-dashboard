@@ -1,9 +1,11 @@
-import React, {Fragment, createElement, memo, useRef} from 'react';
+import React, {Fragment, createElement, memo, useEffect, useRef} from 'react';
 import {createPortal} from 'react-dom';
+
+import {useSearch} from '@molecules/LogOutput/useSearch';
 
 import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
-import {useLogOutputPick} from '@store/logOutput';
+import {useLogOutputField, useLogOutputPick, useLogOutputSync} from '@store/logOutput';
 
 import FullscreenLogOutput from './FullscreenLogOutput';
 import {LogOutputWrapper} from './LogOutput.styled';
@@ -15,6 +17,34 @@ const LogOutput: React.FC<LogOutputProps> = props => {
   const options = useLogOutput(props);
   const {isFullscreen} = useLogOutputPick('isFullscreen');
   const fullscreenContainer = document.querySelector('#log-output-container')!;
+
+  // Search logic
+  const [, setSearching] = useLogOutputField('searching');
+  const [searchQuery] = useLogOutputField('searchQuery');
+
+  useEffect(() => {
+    if (!searchQuery) {
+      setSearching(false);
+    }
+  }, [searchQuery]);
+  const search = useSearch({searchQuery, output: options.logs});
+  useLogOutputSync({
+    searching: search.loading,
+    searchResults: search.list,
+    searchLinesMap: search.map,
+  });
+
+  const [searchIndex, setSearchIndex] = useLogOutputField('searchIndex');
+  useEffect(() => {
+    if (search.list.length === 0) {
+      // Do nothing
+    } else if (searchIndex >= search.list.length) {
+      setSearchIndex(0);
+    } else {
+      const highlight = search.list[searchIndex];
+      logRef.current?.console?.scrollToLine(highlight.line);
+    }
+  }, [searchIndex, searchQuery, search.loading, logRef.current?.console]);
 
   return (
     <>

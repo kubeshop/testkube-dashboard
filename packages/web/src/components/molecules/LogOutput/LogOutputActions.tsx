@@ -9,6 +9,7 @@ import useSecureContext from '@hooks/useSecureContext';
 
 import FullscreenAction from './FullscreenAction';
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
+import SearchAction from './SearchAction';
 
 type LogOutputActionsProps = {
   logOutput: string;
@@ -22,6 +23,7 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
 
   return (
     <StyledLogOutputActionsContainer>
+      <SearchAction />
       {isSecureContext ? (
         <CopyButton content={strippedLogOutput} />
       ) : (

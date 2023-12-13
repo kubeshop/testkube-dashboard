@@ -2,6 +2,7 @@ import styled, {css} from 'styled-components';
 
 import AnsiClassesMapping from '@atoms/TestkubeTheme/AnsiClassesMapping';
 
+import Colors from '@styles/Colors';
 import {invisibleScroll} from '@styles/globalStyles';
 
 export const Container = styled.code<{$wrap?: boolean}>`
@@ -30,9 +31,15 @@ export const Space = styled.div`
   width: 100%;
 `;
 
-export const Line = styled.div`
+export const Line = styled.div<{$highlighted: boolean}>`
   position: relative;
   width: 100%;
+
+  ${({$highlighted}) => ($highlighted ? `background: rgb(255 255 255 / 5%)` : '')}
+`;
+
+export const Keyword = styled.span`
+  box-shadow: inset 0 -2px 0 0 ${Colors.indigo400};
 `;
 
 const hiddenCss = css`

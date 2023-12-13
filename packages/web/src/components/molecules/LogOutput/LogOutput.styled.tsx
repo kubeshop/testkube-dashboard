@@ -1,4 +1,4 @@
-import {ExpandAltOutlined, FullscreenExitOutlined} from '@ant-design/icons';
+import {ExpandAltOutlined, FullscreenExitOutlined, SearchOutlined} from '@ant-design/icons';
 
 import styled from 'styled-components';
 
@@ -94,5 +94,66 @@ export const StyledExpandAltOutlined = styled(ExpandAltOutlined)`
 
   &:hover {
     border-color: ${Colors.indigo400};
+  }
+`;
+
+export const StyledSearchOutlined = styled(SearchOutlined)`
+  border-radius: 2px;
+
+  padding: 4px;
+  margin: 6px;
+
+  font-size: 22px;
+  right: 70px;
+
+  border: 1px solid transparent;
+  transition: 0.3s;
+
+  &:hover {
+    border-color: ${Colors.indigo400};
+  }
+`;
+
+export const StyledSearchInput = styled.input.attrs({type: 'text'})`
+  padding: 0 10px;
+  width: 150px;
+  height: 25px;
+  margin-left: 10px;
+  line-height: 23px;
+  border: 1px solid ${Colors.slate700};
+  background: ${Colors.slate900};
+  border-radius: 3px;
+
+  &:focus {
+    outline: none;
+    border-color: ${Colors.indigo400};
+  }
+`;
+
+export const StyledSearchContainer = styled.div`
+  position: absolute;
+  top: 22px;
+  right: 70px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+`;
+
+export const StyledSearchResults = styled.div`
+  font-size: 0.7em;
+  margin-right: 10px;
+`;
+
+export const SearchArrowButton = styled.button.attrs({type: 'button'})`
+  background: transparent;
+  border: 0;
+  outline: 0;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  cursor: pointer;
+
+  &:hover {
+    background: ${Colors.slate800};
   }
 `;
