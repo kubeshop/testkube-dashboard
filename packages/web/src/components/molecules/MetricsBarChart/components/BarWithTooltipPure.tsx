@@ -27,7 +27,7 @@ type BarConfigPure = BarConfig & {
 };
 
 const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
-  const {width, height, color, status, duration, name, startTime, chartHeight, hoverColor, date, onSelect} = props;
+  const {width, height, color, status, duration, name, startTime, hoverColor, date, onSelect} = props;
 
   const onBarClicked = useCallback(() => onSelect(name), [onSelect, name]);
 
@@ -52,7 +52,7 @@ const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
   );
 
   return (
-    <Popover content={popoverContent} align={{offset: [0, chartHeight - height - tooltipYOffsetMargin]}}>
+    <Popover content={popoverContent} align={{offset: [0, tooltipYOffsetMargin]}}>
       <ClickableBar style={{height, width}} $color={color} hoverColor={hoverColor} onClick={onBarClicked}>
         {date ? <BarDate $height={height}>{date}</BarDate> : undefined}
       </ClickableBar>
