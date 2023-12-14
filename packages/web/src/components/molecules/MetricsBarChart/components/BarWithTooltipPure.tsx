@@ -52,7 +52,7 @@ const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
   );
 
   return (
-    <Popover content={popoverContent} align={{offset: [0, chartHeight - height - tooltipYOffsetMargin]}}>
+    <Popover content={popoverContent} align={{offset: [0, tooltipYOffsetMargin]}}>
       <ClickableBar style={{height, width}} $color={color} hoverColor={hoverColor} onClick={onBarClicked}>
         {date ? <BarDate $height={height}>{date}</BarDate> : undefined}
       </ClickableBar>
