@@ -27,7 +27,7 @@ type BarConfigPure = BarConfig & {
 };
 
 const BarWithTooltipPure: React.FC<BarConfigPure> = memo(props => {
-  const {width, height, color, status, duration, name, startTime, chartHeight, hoverColor, date, onSelect} = props;
+  const {width, height, color, status, duration, name, startTime, hoverColor, date, onSelect} = props;
 
   const onBarClicked = useCallback(() => onSelect(name), [onSelect, name]);
 
