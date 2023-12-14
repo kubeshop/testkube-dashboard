@@ -50,7 +50,7 @@ const TestSuitesList: React.FC<TestSuitesListProps> = props => {
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = useTestsSlotFirst('testSuitesListTitleAddon');
 
-  const EntityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+  const EntityPromoComponent = useTestsSlotFirst('EntityListPromoComponent');
 
   useUnmount(() => {
     setFilters({...filters, pageSize: initialFilters.pageSize});

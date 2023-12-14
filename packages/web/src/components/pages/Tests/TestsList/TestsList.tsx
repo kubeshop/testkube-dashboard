@@ -17,7 +17,7 @@ import {Error} from '@pages';
 
 import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
-import {useAbortAllTestExecutionsMutation, useGetTestsQuery} from '@services/tests';
+import {useGetTestsQuery} from '@services/tests';
 
 import {initialFilters, useTestsField, useTestsSync} from '@store/tests';
 
@@ -57,7 +57,7 @@ const TestsList: React.FC<TestsListProps> = props => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
 
-  const EntityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+  const EntityPromoComponent = useTestsSlotFirst('EntityListPromoComponent');
 
   useUnmount(() => {
     setFilters({...filters, pageSize: initialFilters.pageSize});
@@ -82,7 +82,6 @@ const TestsList: React.FC<TestsListProps> = props => {
     dataTestModalRoot: 'add-a-new-test-modal',
   });
 
-  const [abortAll] = useAbortAllTestExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: Test) => `/tests/${item.name}`);
 
   if (error) {

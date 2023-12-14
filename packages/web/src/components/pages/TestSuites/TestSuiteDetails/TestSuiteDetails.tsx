@@ -20,7 +20,7 @@ interface TestSuiteDetailsProps {
 const TestSuiteDetails: React.FC<TestSuiteDetailsProps> = ({tab}) => {
   const {id, execId, settingsTab} = useParams();
 
-  const EntityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+  const EntityPromoComponent = useTestsSlotFirst('EntityListPromoComponent');
 
   if (EntityPromoComponent) {
     return <EntityPromoComponent list="test-suites" />;

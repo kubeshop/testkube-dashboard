@@ -51,7 +51,7 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
     isListLoading,
     isLoading,
     itemKey,
-    pageDescription: PageDescription,
+    pageDescription,
     pageTitle,
     pageTitleAddon,
     queryFilters,
@@ -171,7 +171,7 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
     [CardComponent, EmptyData]
   );
 
-  const ViewComponent = useTestsSlotFirst('entityViewComponent', [{value: DefaultViewComponent, metadata: {order: 2}}]);
+  const ViewComponent = useTestsSlotFirst('EntityViewComponent', [{value: DefaultViewComponent, metadata: {order: 2}}]);
 
   return (
     <PageWrapper>
@@ -180,7 +180,7 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
       <PageHeader
         title={pageTitle}
         pageTitleAddon={pageTitleAddon}
-        description={PageDescription}
+        description={pageDescription}
         loading={isApplyingFilters && !isFirstTimeLoading}
       >
         <PageToolbar extra={createButton}>

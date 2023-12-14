@@ -1,7 +1,5 @@
 import {useEffect} from 'react';
 
-import {isEqual} from 'lodash';
-
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuites';
@@ -27,10 +25,6 @@ const TestSuiteMetricsLayer: React.FC<TestSuiteMetricsLayerProps> = props => {
   );
 
   useEffect(() => {
-    if (isEqual(testSuitesMetrics[name], data)) {
-      return;
-    }
-
     if (testSuitesMetrics) {
       setTestSuitesMetrics(prevMetrics => ({...prevMetrics, [name]: data}));
     }

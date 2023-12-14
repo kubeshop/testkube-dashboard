@@ -53,7 +53,7 @@ const StatusFilter: React.FC<EntityFilters> = props => {
           <StyledFilterCheckbox
             checked={filters.status.includes(status)}
             onChange={() => handleClick(status)}
-            data-cy={status}
+            data-testid={status}
           >
             {capitalize(status)}
           </StyledFilterCheckbox>

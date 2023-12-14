@@ -90,7 +90,7 @@ const EntityDropdown: React.FC<EntityDropdownProps> = props => {
         label: <span onClick={onEdit}>Edit {entityLabel}</span>,
       },
 
-      ...(executions?.find(e => e.status === 'running')
+      ...(executions?.some(e => e.status === 'running')
         ? [
             {key: 'divider', type: 'divider'},
             {key: 'abort-executions', label: <span onClick={onAbort}>Abort all executions</span>},

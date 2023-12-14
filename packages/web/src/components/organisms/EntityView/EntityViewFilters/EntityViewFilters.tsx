@@ -15,12 +15,12 @@ const EntityViewFilters: FC<EntityFilters> = props => {
   const switchComponent = useTestsSlotFirst('entityViewSwitch');
 
   return (
-    <S.FiltersContainer>
+    <S.FiltersContainer $hasSwitch={Boolean(switchComponent)}>
       <TextSearchFilter {...rest} disabled={disabled} />
       <LabelsFilter {...rest} disabled={disabled} />
       <StatusFilter {...rest} disabled={disabled} />
 
-      {switchComponent ?? null}
+      {switchComponent}
     </S.FiltersContainer>
   );
 };
