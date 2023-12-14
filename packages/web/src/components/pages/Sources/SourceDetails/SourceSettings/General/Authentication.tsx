@@ -1,7 +1,8 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {Form} from 'antd';
 
+import {Option} from '@models/form';
 import {ErrorNotificationConfig} from '@models/notifications';
 
 import {SecretFormItem, notificationCall} from '@molecules';
@@ -15,11 +16,11 @@ import {useUpdateSourceMutation} from '@services/sources';
 import {useSourcesPick} from '@store/sources';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
-import {dummySecret} from '@utils/sources';
+import {formatSecrets, getSecretsFromRepository} from '@utils/sources';
 
 type AuthenticationFormValues = {
-  token: string;
-  username: string;
+  token: Option;
+  username: Option;
 };
 
 const Authentication: React.FC = () => {
@@ -32,19 +33,14 @@ const Authentication: React.FC = () => {
   const [updateSource] = useUpdateSourceMutation();
 
   const repository = current!.repository;
-  const {tokenSecret, usernameSecret} = repository || {};
-  const defaults = {
-    token: tokenSecret ? dummySecret : '',
-    username: usernameSecret ? dummySecret : '',
-  };
+  const [defaults, setDefaults] = useState(getSecretsFromRepository(repository));
 
-  const [isClearedToken, setIsClearedToken] = useState(!tokenSecret);
-  const [isClearedUsername, setIsClearedUsername] = useState(!usernameSecret);
+  useEffect(() => {
+    setDefaults(getSecretsFromRepository(repository));
+  }, [repository]);
 
   const onCancel = () => {
     form.resetFields();
-    setIsClearedToken(!tokenSecret);
-    setIsClearedUsername(!usernameSecret);
   };
 
   const onFinish = () => {
@@ -53,14 +49,13 @@ const Authentication: React.FC = () => {
     if (!current) {
       return new Promise<ErrorNotificationConfig>(() => ({title: 'Something went wrong'}));
     }
-    const token = values.token || '';
-    const username = values.username || '';
+    const token = values.token;
+    const username = values.username;
     const body = {
       ...current,
       repository: {
         ...current.repository,
-        ...(!tokenSecret || isClearedToken ? {token, tokenSecret: undefined} : {}),
-        ...(!usernameSecret || isClearedUsername ? {username, usernameSecret: undefined} : {}),
+        ...formatSecrets(token, username),
       },
     };
 
@@ -78,22 +73,11 @@ const Authentication: React.FC = () => {
       form={form}
       initialValues={defaults}
       disabled={!mayEdit}
-      wasTouched={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
       onConfirm={onFinish}
       onCancel={onCancel}
     >
-      <SecretFormItem
-        name="username"
-        label="Git username"
-        isClearedValue={isClearedUsername}
-        setIsClearedValue={setIsClearedUsername}
-      />
-      <SecretFormItem
-        name="token"
-        label="Git token"
-        isClearedValue={isClearedToken}
-        setIsClearedValue={setIsClearedToken}
-      />
+      <SecretFormItem name="username" label="Git username" />
+      <SecretFormItem name="token" label="Git token" />
     </CardForm>
   );
 };

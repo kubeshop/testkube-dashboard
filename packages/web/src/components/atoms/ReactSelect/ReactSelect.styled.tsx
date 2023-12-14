@@ -34,7 +34,35 @@ export const StyledMultiLabel = styled.div`
   padding: 3px 5px;
 `;
 
-export const customStyles: (
+const singleValueStyles: StylesConfig<Option, true, GroupBase<Option>> = {
+  singleValue: styles => ({
+    ...styles,
+    color: Colors.slate200,
+  }),
+};
+
+const multiValueStyles: StylesConfig<Option, true, GroupBase<Option>> = {
+  multiValue: styles => ({
+    ...styles,
+    background: 'transparent',
+    border: `1px solid ${Colors.slate700}`,
+  }),
+  multiValueLabel: styles => ({
+    ...styles,
+    color: Colors.slate200,
+    fontWeight: 400,
+    fontSize: 12,
+  }),
+  multiValueRemove: styles => ({
+    ...styles,
+    '&:hover': {
+      backgroundColor: 'transparent',
+      cursor: 'pointer',
+    },
+  }),
+};
+
+const customStyles: (
   validation?: boolean,
   stylePlaceholderAsValue?: boolean
 ) => StylesConfig<Option, true, GroupBase<Option>> = (validation = true, stylePlaceholderAsValue = false) => ({
@@ -65,24 +93,6 @@ export const customStyles: (
   }),
   menu: styles => ({...styles, backgroundColor: Colors.slate800}),
   menuList: styles => ({...styles, padding: 0}),
-  multiValue: styles => ({
-    ...styles,
-    background: 'transparent',
-    border: `1px solid ${Colors.slate700}`,
-  }),
-  multiValueLabel: styles => ({
-    ...styles,
-    color: Colors.slate200,
-    fontWeight: 400,
-    fontSize: 12,
-  }),
-  multiValueRemove: styles => ({
-    ...styles,
-    '&:hover': {
-      backgroundColor: 'transparent',
-      cursor: 'pointer',
-    },
-  }),
   noOptionsMessage: styles => ({
     ...styles,
     fontWeight: 400,
@@ -100,6 +110,22 @@ export const customStyles: (
       backgroundColor: Colors.slate700,
     },
   }),
+});
+
+export const customMultiValueStyles: (
+  validation?: boolean,
+  stylePlaceholderAsValue?: boolean
+) => StylesConfig<Option, true, GroupBase<Option>> = (validation = true, stylePlaceholderAsValue = false) => ({
+  ...customStyles(validation, stylePlaceholderAsValue),
+  ...multiValueStyles,
+});
+
+export const customSingleValueStyles: (
+  validation?: boolean,
+  stylePlaceholderAsValue?: boolean
+) => StylesConfig<Option, true, GroupBase<Option>> = (validation = true, stylePlaceholderAsValue = false) => ({
+  ...customStyles(validation, stylePlaceholderAsValue),
+  ...singleValueStyles,
 });
 
 export const customTheme: ThemeConfig = theme => {

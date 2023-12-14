@@ -12,6 +12,7 @@ import type GeneralPlugin from '@plugins/general/plugin';
 import type RtkPlugin from '@plugins/rtk/plugin';
 
 import {repositoryApi} from '@services/repository';
+import {secretsApi} from '@services/secrets';
 import {sourcesApi, useGetSourcesQuery} from '@services/sources';
 
 import {initializeSourcesStore, useSources, useSourcesField, useSourcesPick, useSourcesSync} from '@store/sources';
@@ -56,6 +57,7 @@ export default createPlugin('oss/test-sources')
 
   .init(tk => {
     tk.slots.rtkServices.add(sourcesApi);
+    tk.slots.rtkServices.add(secretsApi);
     tk.slots.rtkServices.add(repositoryApi);
 
     tk.slots.siderItems.add({path: '/sources', icon: SourcesIcon, title: 'Sources'}, {order: -20});

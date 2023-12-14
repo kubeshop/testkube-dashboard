@@ -10,16 +10,7 @@ import {StyledFormSpace} from '../TestConfigurationForm.styled';
 import {Props} from '../utils';
 
 const SourceEdit: React.FC<Partial<Props>> = props => {
-  const {
-    executorType,
-    isClearedToken,
-    setIsClearedToken,
-    isClearedUsername,
-    setIsClearedUsername,
-    getFieldValue,
-    disabled,
-  } = props as Props;
-
+  const {executorType, getFieldValue, disabled} = props as Props;
   const [validationState, setValidationState] = useState<ValidationState>({
     message: '',
   });
@@ -34,8 +25,6 @@ const SourceEdit: React.FC<Partial<Props>> = props => {
       <SecretFormItem
         name="token"
         label="Git Token"
-        isClearedValue={isClearedToken}
-        setIsClearedValue={setIsClearedToken}
         message={validationState.message}
         status={validationState.token}
         disabled={disabled}
@@ -43,8 +32,6 @@ const SourceEdit: React.FC<Partial<Props>> = props => {
       <SecretFormItem
         name="username"
         label="Git Username"
-        isClearedValue={isClearedUsername}
-        setIsClearedValue={setIsClearedUsername}
         message={validationState.message}
         status={validationState.username}
         disabled={disabled}

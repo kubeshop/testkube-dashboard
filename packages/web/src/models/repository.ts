@@ -1,3 +1,5 @@
+import {SecretRef} from './secretRef';
+
 export type RepositoryTypeEnum = 'git';
 
 export type Repository = {
@@ -8,16 +10,8 @@ export type Repository = {
   path?: string;
   username?: string;
   token?: string;
-  tokenSecret?: {
-    namespace?: string;
-    name: string;
-    key?: string;
-  };
-  usernameSecret?: {
-    namespace?: string;
-    name: string;
-    key?: string;
-  };
+  tokenSecret?: Partial<SecretRef>;
+  usernameSecret?: Partial<SecretRef>;
   certificateSecret?: string;
   workingDir?: string;
   authType?: string;

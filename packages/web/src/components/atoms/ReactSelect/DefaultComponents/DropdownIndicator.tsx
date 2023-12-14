@@ -1,6 +1,6 @@
 import {DownOutlined} from '@ant-design/icons';
 
-import {DropdownWrapper} from '../CreatableMultiSelect.styled';
+import {DropdownWrapper} from '../ReactSelect.styled';
 
 const DropdownIndicator = () => {
   return (

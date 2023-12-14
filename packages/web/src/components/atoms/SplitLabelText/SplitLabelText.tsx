@@ -12,10 +12,11 @@ type SplitLabelProps = {
   value: string;
   textClassName?: string;
   disabled?: boolean;
+  isBordered?: boolean;
 };
 
 const SplitLabelText: React.FC<SplitLabelProps> = props => {
-  const {value, textClassName = 'regular', disabled = false} = props;
+  const {value, textClassName = 'regular', disabled = false, isBordered = false} = props;
 
   if (!labelRegex.test(value)) {
     return (
@@ -28,7 +29,7 @@ const SplitLabelText: React.FC<SplitLabelProps> = props => {
   const [key, ...rest] = value.split(':');
 
   return (
-    <SplitLabelTextContainer>
+    <SplitLabelTextContainer $isBordered={isBordered}>
       <Text color={disabled ? Colors.slate500 : Colors.slate400} className={textClassName}>
         {key}:{' '}
       </Text>

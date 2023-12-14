@@ -4,7 +4,7 @@ import {SplitLabelText} from '@atoms';
 
 import {Option} from '@models/form';
 
-import {StyledMultiLabel} from '../CreatableMultiSelect.styled';
+import {StyledMultiLabel} from '../ReactSelect.styled';
 
 const LabelsMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
   const {children} = props;

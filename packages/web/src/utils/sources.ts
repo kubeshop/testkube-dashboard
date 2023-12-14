@@ -7,6 +7,7 @@ import {SourceWithRepository} from '@models/sources';
 import {Test} from '@models/test';
 
 import {notificationCall} from '@molecules';
+import {labelRegex} from '@molecules/LabelsSelect/utils';
 
 import {SourceType} from '@organisms/TestConfigurationForm/utils';
 
@@ -29,7 +30,7 @@ export const testSourceBaseOptions: Option[] = [
   {value: 'string', label: 'String'},
 ];
 
-export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) => {
+export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean, namespace?: string) => {
   const {testSource, username, token, string, file, testType, name, ...rest} = values;
 
   if (rest.commit) {
@@ -49,29 +50,7 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
   if (testSource === 'string' || testSource === 'file-uri') {
     return {data: string || file.fileContent, repository: {}};
   }
-
-  const secrets: {
-    tokenSecret?: Partial<SecretRef>;
-    token?: string;
-    usernameSecret?: Partial<SecretRef>;
-    username?: string;
-  } = {};
-
-  if (token !== undefined && token !== null) {
-    if (token === '') {
-      secrets.tokenSecret = {};
-    } else if (!token.includes('*')) {
-      secrets.token = token;
-    }
-  }
-
-  if (username !== undefined && username !== null) {
-    if (username === '') {
-      secrets.usernameSecret = {};
-    } else if (!username.includes('*')) {
-      secrets.username = username;
-    }
-  }
+  const secrets = formatSecrets(token, username, namespace);
 
   return {
     data: '',
@@ -83,7 +62,7 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
   };
 };
 
-export const getSourcePayload = (values: any, testSources: SourceWithRepository[]) => {
+export const getSourcePayload = (values: any, testSources: SourceWithRepository[], namespace?: string) => {
   const {testSource} = values;
 
   if (!testSource) {
@@ -92,7 +71,7 @@ export const getSourcePayload = (values: any, testSources: SourceWithRepository[
 
   const isCustomGit = testSource.includes(customGitSourceString);
 
-  const testSourceSpecificFields = getTestSourceSpecificFields(values, isCustomGit);
+  const testSourceSpecificFields = getTestSourceSpecificFields(values, isCustomGit, namespace);
 
   if (isCustomGit) {
     const isTestSourceExists = testSources.some(sourceItem => {
@@ -117,26 +96,18 @@ export const getCustomSourceField = (testSource: string) => {
   return isCustomTestSource ? {source: testSource.replace(customGitSourceString, '')} : {source: ''};
 };
 
-export const dummySecret = '******';
-
 export type GetSourceFormValues = {
   source: string;
   branch?: string;
   commit?: string;
   path?: string;
   string?: string;
-  token?: string;
-  username?: string;
-  tokenSecret?: Repository['tokenSecret'];
-  usernameSecret?: Repository['usernameSecret'];
+  token?: Option | string;
+  username?: Option | string;
 };
 
 export const getSourceFormValues = (entityDetails: Test, testSources: SourceWithRepository[]): GetSourceFormValues => {
   const {content} = entityDetails;
-
-  if (!content?.type) {
-    return {source: ''};
-  }
 
   if (entityDetails.source) {
     const sourceDetails = testSources.find(source => source.name === entityDetails.source);
@@ -149,6 +120,10 @@ export const getSourceFormValues = (entityDetails: Test, testSources: SourceWith
     };
   }
 
+  if (!content?.type) {
+    return {source: ''};
+  }
+
   if (content.type === 'string') {
     return {
       source: content.type,
@@ -156,27 +131,10 @@ export const getSourceFormValues = (entityDetails: Test, testSources: SourceWith
     };
   }
 
-  const secrets: {
-    token?: string;
-    username?: string;
-    tokenSecret?: Repository['tokenSecret'];
-    usernameSecret?: Repository['usernameSecret'];
-  } = {};
-
-  if (content?.repository?.tokenSecret?.name) {
-    secrets.token = dummySecret;
-    secrets.tokenSecret = {...content?.repository?.tokenSecret, namespace: entityDetails?.namespace};
-  }
-
-  if (content?.repository?.usernameSecret?.name) {
-    secrets.username = dummySecret;
-    secrets.usernameSecret = {...content?.repository?.usernameSecret, namespace: entityDetails?.namespace};
-  }
-
   return {
     source: content.type,
     ...content.repository,
-    ...secrets,
+    ...getSecretsFromRepository(content?.repository, entityDetails?.namespace),
   };
 };
 
@@ -188,4 +146,60 @@ export const getSourceFieldValue = (getFieldValue: (name: NamePath) => SourceTyp
   }
 
   return testSourceValue.includes(customGitSourceString) ? 'custom' : testSourceValue;
+};
+
+export const formatSecrets = (token?: Option, username?: Option, namespace?: string) => {
+  const secrets: {
+    tokenSecret?: Partial<SecretRef>;
+    token?: string;
+    usernameSecret?: Partial<SecretRef>;
+    username?: string;
+  } = {};
+
+  const tokenValue = String(token?.value);
+  const usernameValue = String(username?.value);
+
+  if (token) {
+    if (labelRegex.test(tokenValue)) {
+      const [secretName, key] = tokenValue.split(':');
+      secrets.tokenSecret = {name: secretName, key, namespace};
+    } else {
+      secrets.token = tokenValue;
+    }
+  }
+
+  if (username) {
+    if (labelRegex.test(usernameValue)) {
+      const [secretName, key] = usernameValue.split(':');
+      secrets.usernameSecret = {name: secretName, key, namespace};
+    } else {
+      secrets.username = usernameValue;
+    }
+  }
+  return secrets;
+};
+
+export const getSecretsFromRepository = (repository?: Repository, namespace?: string) => {
+  const secrets: {
+    token?: Option;
+    username?: Option;
+    tokenSecret?: Repository['tokenSecret'];
+    usernameSecret?: Repository['usernameSecret'];
+  } = {};
+
+  const tokenSecret = repository?.tokenSecret;
+  if (tokenSecret?.name) {
+    const keyValuePair = `${tokenSecret.name}:${tokenSecret.key}`;
+    secrets.token = {value: keyValuePair, label: keyValuePair};
+    secrets.tokenSecret = {...repository?.tokenSecret, namespace};
+  }
+
+  const usernameSecret = repository?.usernameSecret;
+  if (usernameSecret?.name) {
+    const keyValuePair = `${usernameSecret.name}:${usernameSecret.key}`;
+    secrets.username = {value: keyValuePair, label: keyValuePair};
+    secrets.usernameSecret = {...repository?.usernameSecret, namespace};
+  }
+
+  return secrets;
 };
