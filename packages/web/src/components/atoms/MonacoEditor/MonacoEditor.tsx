@@ -21,7 +21,7 @@ export const lineHeight = 22;
 
 const options = {
   contextmenu: true,
-  fontFamily: 'Roboto Mono, Monaco, monospace',
+  fontFamily: '"IBM Plex Mono", Monaco, monospace',
   fontSize: 13,
   lineHeight,
   minimap: {

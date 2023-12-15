@@ -7,7 +7,7 @@ export const ArgumentsWrapper = styled.div`
   .args-textarea {
     color: ${Colors.slate50};
 
-    font-family: ${Fonts.robotoMono};
+    font-family: ${Fonts.mono};
 
     resize: none;
   }

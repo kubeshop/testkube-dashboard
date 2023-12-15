@@ -1,142 +1,59 @@
-import React, {Fragment, createElement, memo, useCallback, useEffect, useRef, useState} from 'react';
+import React, {Fragment, createElement, memo, useEffect, useRef} from 'react';
 import {createPortal} from 'react-dom';
-import {CSSTransition} from 'react-transition-group';
-import {useAsync, useInterval} from 'react-use';
-import useWebSocket from 'react-use-websocket';
 
-import {isEqual} from 'lodash';
-
-import {Coordinates} from '@models/config';
+import {useSearch} from '@molecules/LogOutput/useSearch';
 
 import {useTestsSlot} from '@plugins/tests-and-test-suites/hooks';
 
-import {useWsEndpoint} from '@services/apiEndpoint';
-
-import {useLogOutputPick} from '@store/logOutput';
-
-import {getRtkIdToken} from '@utils/rtk';
+import {useLogOutputField, useLogOutputPick, useLogOutputSync} from '@store/logOutput';
 
 import FullscreenLogOutput from './FullscreenLogOutput';
 import {LogOutputWrapper} from './LogOutput.styled';
-import LogOutputPure from './LogOutputPure';
-import {useCountLines, useLastLines} from './utils';
-
-export type LogOutputProps = {
-  logOutput?: string;
-  executionId?: string;
-  isRunning?: boolean;
-  initialLines?: number;
-};
+import LogOutputPure, {LogOutputPureRef} from './LogOutputPure';
+import {LogOutputProps, useLogOutput} from './useLogOutput';
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {logOutput = 'No logs', executionId, isRunning = false, initialLines = 300} = props;
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const wsRoot = useWsEndpoint();
-
+  const logRef = useRef<LogOutputPureRef>(null);
+  const options = useLogOutput(props);
   const {isFullscreen} = useLogOutputPick('isFullscreen');
+  const fullscreenContainer = document.querySelector('#log-output-container')!;
 
-  const [rect, setRect] = useState<Coordinates | undefined>();
-  const [logs, setLogs] = useState('');
-  const [shouldConnect, setShouldConnect] = useState(false);
-
-  const [expanded, setExpanded] = useState(false);
-  const lines = useCountLines(logs);
-  const visibleLogs = useLastLines(logs, expanded || isRunning ? Infinity : initialLines);
-
-  const onExpand = useCallback(() => setExpanded(true), []);
-
-  // TODO: Consider getting token different way than using the one from RTK
-  const {value: token, loading: tokenLoading} = useAsync(getRtkIdToken);
-  useWebSocket(
-    `${wsRoot}/executions/${executionId}/logs/stream`,
-    {
-      onMessage: e => {
-        const logData = e.data;
-
-        setLogs(prev => {
-          if (prev) {
-            try {
-              const dataToJSON = JSON.parse(logData);
-              const potentialOutput = dataToJSON?.result?.output || dataToJSON?.output;
-
-              if (potentialOutput) {
-                return potentialOutput;
-              }
-
-              return `${prev}\n${dataToJSON.content}`;
-            } catch (err) {
-              // It may be just an output directly, so we have to ignore it
-            }
-            return `${prev}\n${logData}`;
-          }
-
-          return `${logData}`;
-        });
-      },
-      shouldReconnect: () => true,
-      retryOnError: true,
-      queryParams: token ? {token} : {},
-    },
-    shouldConnect && !tokenLoading
-  );
+  // Search logic
+  const [, setSearching] = useLogOutputField('searching');
+  const [searchQuery] = useLogOutputField('searchQuery');
 
   useEffect(() => {
-    setLogs(isRunning ? '' : logOutput);
-    setShouldConnect(isRunning);
-  }, [isRunning, executionId]);
-
-  useInterval(() => {
-    const clientRect = containerRef?.current?.getBoundingClientRect();
-    if (clientRect && !isEqual(clientRect, rect)) {
-      setRect({
-        top: clientRect.top,
-        left: clientRect.left,
-        width: clientRect.width,
-        height: clientRect.height,
-      });
+    if (!searchQuery) {
+      setSearching(false);
     }
-  }, 200);
+  }, [searchQuery]);
+  const search = useSearch({searchQuery, output: options.logs});
+  useLogOutputSync({
+    searching: search.loading,
+    searchResults: search.list,
+    searchLinesMap: search.map,
+  });
 
-  const fullscreenLogRef = useRef<HTMLDivElement>(null);
-  const fullscreenLog = (
-    <CSSTransition
-      nodeRef={fullscreenLogRef}
-      in={isFullscreen}
-      timeout={500}
-      classNames="full-screen-log-output"
-      unmountOnExit
-    >
-      <FullscreenLogOutput
-        ref={fullscreenLogRef}
-        $rect={rect}
-        logs={logs}
-        visibleLogs={visibleLogs}
-        expanded={expanded}
-        lines={lines}
-        initialLines={initialLines}
-        onExpand={onExpand}
-      />
-    </CSSTransition>
-  );
+  const [searchIndex, setSearchIndex] = useLogOutputField('searchIndex');
+  useEffect(() => {
+    if (search.list.length === 0) {
+      // Do nothing
+    } else if (searchIndex >= search.list.length) {
+      setSearchIndex(0);
+    } else {
+      const highlight = search.list[searchIndex];
+      logRef.current?.console?.scrollToLine(highlight.line);
+    }
+  }, [searchIndex, searchQuery, search.loading, logRef.current?.console]);
 
   return (
     <>
       <LogOutputWrapper>
         {/* eslint-disable-next-line react/no-array-index-key */}
         {useTestsSlot('logOutputTop').map((element, i) => createElement(Fragment, {key: i}, element))}
-        <LogOutputPure
-          ref={containerRef}
-          logs={logs}
-          visibleLogs={visibleLogs}
-          expanded={expanded}
-          lines={lines}
-          initialLines={initialLines}
-          onExpand={onExpand}
-        />
+        <LogOutputPure ref={logRef} {...options} />
       </LogOutputWrapper>
-      {createPortal(fullscreenLog, document.querySelector('#log-output-container')!)}
+      {isFullscreen ? createPortal(<FullscreenLogOutput {...options} />, fullscreenContainer) : null}
     </>
   );
 };
