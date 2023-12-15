@@ -46,8 +46,9 @@ export const createSearchScannerFn = (
     var batch = 300;
     var queue = new Array(batch);
     var count = 0;
-    var lastFlush = 0;
+    var nextFlush = 50000;
     var flush = function () {
+      nextFlush = (Math.floor(i / 50000) + 1) * 50000;
       if (count === batch) {
         postMessage(queue);
       } else if (count > 0) {
@@ -65,9 +66,6 @@ export const createSearchScannerFn = (
     var ansi = ${ansiRegex.toString()};
     var omitted = 0;
     for (var i = 0; i < c.length; i++) {
-      if (${condition}) {
-        push({line: l, start: i - omitted - lineStart, end: i - omitted - lineStart + ${searchQuery.length}});
-      }
       if (c.charCodeAt(i) === 0x1b) {
         ansi.lastIndex = i;
         var result = ansi.exec(c);
@@ -75,14 +73,17 @@ export const createSearchScannerFn = (
           i += result[0].length - 1;
           omitted += result[0].length;
         }
+        continue;
+      }
+      if (${condition}) {
+        push({line: l, start: i - omitted - lineStart, end: i - omitted - lineStart + ${searchQuery.length}});
       }
       if (c[i] === "\\n") {
         l++;
         lineStart = i + 1;
         omitted = 0;
       }
-      if (i - lastFlush > 10000) {
-        lastFlush = i;
+      if (i > nextFlush) {
         flush();
       }
     }
