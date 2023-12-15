@@ -15,10 +15,9 @@ import {initialPageSize} from '@redux/initialState';
 
 import {useGetLabelsQuery} from '@services/labels';
 
-import {PollingIntervals} from '@src/utils/numbers';
-
 import Colors from '@styles/Colors';
 
+import {PollingIntervals} from '@utils/numbers';
 import {decodeSelectorArray, encodeSelectorArray} from '@utils/selectors';
 
 import KeyValueInput from './KeyValueInput';

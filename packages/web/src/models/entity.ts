@@ -9,7 +9,7 @@ export type Entity = 'test-suites' | 'tests';
 
 export interface EntityViewBlueprint {
   CardComponent: FC<{item: any; onClick: (item: Item) => void}>;
-  data: TestSuiteWithExecution[] | TestWithExecution[];
+  data: TestSuiteWithExecution[] | TestWithExecution[] | undefined;
   emptyDataComponent: FC<{action: () => void; isClusterAvailable?: boolean}>;
   entity: Entity;
   initialFiltersState: TestFilters | TestSuiteFilters;

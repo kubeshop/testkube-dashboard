@@ -86,7 +86,7 @@ const TestSuitesList: React.FC<TestSuitesListProps> = props => {
       dataTest="add-a-new-test-suite-btn"
       queryFilters={filters}
       setQueryFilters={setFilters}
-      data={testSuites ?? []}
+      data={testSuites}
       isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}

@@ -7,7 +7,7 @@ import useInViewport from '@hooks/useInViewport';
 import useRunEntity from '@hooks/useRunEntity';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
-import {ActionsDropdown} from '@models/actionsDropdown';
+import {ActionsDropdownProps} from '@models/actionsDropdown';
 import {ExecutionMetrics} from '@models/metrics';
 
 import DotsDropdown from '@molecules/DotsDropdown';
@@ -15,9 +15,9 @@ import {notificationCall} from '@molecules/Notification';
 
 import {useAbortAllTestExecutionsMutation, useGetTestExecutionMetricsQuery} from '@services/tests';
 
-import {PollingIntervals} from '@src/utils/numbers';
+import {PollingIntervals} from '@utils/numbers';
 
-const TestActionsDropdown: React.FC<ActionsDropdown> = props => {
+const TestActionsDropdown: React.FC<ActionsDropdownProps> = props => {
   const {name, namespace, outOfSync, type} = props;
 
   const [abortAllTestExecutions] = useAbortAllTestExecutionsMutation();
@@ -49,9 +49,7 @@ const TestActionsDropdown: React.FC<ActionsDropdown> = props => {
 
     abortAllTestExecutions({id: name})
       .unwrap()
-      .then(() => {
-        refetch();
-      })
+      .then(refetch)
       .catch(() => {
         notificationCall('failed', 'Something went wrong during test execution abortion');
       });

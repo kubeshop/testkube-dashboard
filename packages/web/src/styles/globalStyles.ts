@@ -184,7 +184,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .ant-table-thead .ant-table-cell {
-    background-color: ${Colors.slate800} !important;
+    background-color: ${Colors.slate800};
     color: ${Colors.slate400};
 
     font-weight: 400;

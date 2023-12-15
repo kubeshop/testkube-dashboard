@@ -68,11 +68,6 @@ export type TestSuiteStepTest = {
   type?: Test['type'];
 };
 
-export enum TestsView {
-  LIST = 'list',
-  TABLE = 'table',
-}
-
 export function isTestWithExecution(arg: TestWithExecution | TestSuiteWithExecution): arg is TestWithExecution {
   return 'test' in arg;
 }

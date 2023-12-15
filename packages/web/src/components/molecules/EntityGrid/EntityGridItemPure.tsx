@@ -6,15 +6,12 @@ import {Text} from '@custom-antd';
 
 import useExecutorIcon from '@hooks/useExecutorIcon';
 
-import {ActionsDropdown} from '@models/actionsDropdown';
+import {ActionsDropdownProps} from '@models/actionsDropdown';
 import type {Execution} from '@models/execution';
 import type {ExecutionMetrics} from '@models/metrics';
 import type {TestSuiteExecution} from '@models/testSuiteExecution';
 
 import {LabelsList, MetricsBarChart} from '@molecules';
-
-import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuites';
-import {useGetTestExecutionMetricsQuery} from '@services/tests';
 
 import Colors from '@styles/Colors';
 
@@ -55,7 +52,7 @@ interface EntityGridItemPureProps {
   outOfSync?: boolean;
   isAgentAvailable?: boolean;
   entityLabel: string;
-  DropdownComponent: React.FC<ActionsDropdown>;
+  DropdownComponent: React.FC<ActionsDropdownProps>;
 }
 
 const EntityGridItemTestIcon: FC<{item: Item}> = memo(({item}) => {
@@ -112,15 +109,7 @@ const EntityGridItemPure = forwardRef<HTMLDivElement, EntityGridItemPureProps>((
           </ItemColumn>
           <ExecutionTimeItemColumn>
             <EntityGridItemExecutionTime time={latestExecution?.startTime} />
-            <DropdownComponent
-              name={item.name}
-              namespace={item.namespace}
-              outOfSync={outOfSync}
-              type={item.type}
-              useGetMetricsQuery={
-                entityLabel === 'test' ? useGetTestExecutionMetricsQuery : useGetTestSuiteExecutionMetricsQuery
-              }
-            />
+            <DropdownComponent name={item.name} namespace={item.namespace} outOfSync={outOfSync} type={item.type} />
           </ExecutionTimeItemColumn>
         </ItemRow>
         <RowsWrapper>

@@ -92,7 +92,7 @@ const TestsList: React.FC<TestsListProps> = props => {
       dataTest="add-a-new-test-btn"
       queryFilters={filters}
       setQueryFilters={setFilters}
-      data={tests ?? []}
+      data={tests}
       isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}

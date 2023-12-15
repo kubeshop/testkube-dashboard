@@ -10,7 +10,7 @@ import TestSuiteActionsDropdown from '@molecules/TestSuiteActionsDropdown';
 
 import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuites';
 
-import {PollingIntervals} from '@src/utils/numbers';
+import {PollingIntervals} from '@utils/numbers';
 
 export interface TestSuiteCardProps {
   item: TestSuiteWithExecution;
