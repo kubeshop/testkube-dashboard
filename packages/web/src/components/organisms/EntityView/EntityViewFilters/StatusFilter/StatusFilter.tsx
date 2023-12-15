@@ -4,7 +4,7 @@ import {FilterFilled} from '@ant-design/icons';
 
 import {capitalize} from 'lodash';
 
-import {FilterProps} from '@models/filters';
+import {EntityFilters} from '@models/entity';
 
 import {
   FilterMenuFooter,
@@ -21,8 +21,8 @@ import Colors from '@styles/Colors';
 
 const statusList = ['queued', 'running', 'passed', 'failed', 'aborted'];
 
-const StatusFilter: React.FC<FilterProps> = props => {
-  const {filters, setFilters, isFiltersDisabled} = props;
+const StatusFilter: React.FC<EntityFilters> = props => {
+  const {filters, setFilters, disabled} = props;
 
   const [isVisible, setVisibilityState] = useState(false);
 
@@ -53,7 +53,7 @@ const StatusFilter: React.FC<FilterProps> = props => {
           <StyledFilterCheckbox
             checked={filters.status.includes(status)}
             onChange={() => handleClick(status)}
-            data-cy={status}
+            data-testid={status}
           >
             {capitalize(status)}
           </StyledFilterCheckbox>
@@ -74,8 +74,6 @@ const StatusFilter: React.FC<FilterProps> = props => {
     </StyledFilterMenu>
   );
 
-  const isFilterApplied = filters.status.length > 0;
-
   return (
     <StyledFilterDropdown
       overlay={menu}
@@ -83,14 +81,10 @@ const StatusFilter: React.FC<FilterProps> = props => {
       placement="bottom"
       onOpenChange={onOpenChange}
       open={isVisible}
-      disabled={isFiltersDisabled}
+      disabled={disabled}
     >
-      <StyledFilterLabel
-        onClick={e => e.preventDefault()}
-        data-cy="status-filter-button"
-        isFiltersDisabled={isFiltersDisabled}
-      >
-        Status <FilterFilled style={{color: isFilterApplied ? Colors.purple : Colors.slate500}} />
+      <StyledFilterLabel onClick={e => e.preventDefault()} data-cy="status-filter-button" $disabled={disabled}>
+        Status <FilterFilled style={{color: filters.status.length > 0 ? Colors.purple : Colors.slate500}} />
       </StyledFilterLabel>
     </StyledFilterDropdown>
   );

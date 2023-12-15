@@ -1,4 +1,4 @@
-import React, {FC, useRef} from 'react';
+import {FC, useRef} from 'react';
 
 import useInViewport from '@hooks/useInViewport';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
@@ -6,6 +6,7 @@ import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 import {TestSuiteWithExecution} from '@models/testSuite';
 
 import EntityGridItemPure, {Item} from '@molecules/EntityGrid/EntityGridItemPure';
+import TestSuiteActionsDropdown from '@molecules/TestSuiteActionsDropdown';
 
 import {useGetTestSuiteExecutionMetricsQuery} from '@services/testSuites';
 
@@ -14,10 +15,9 @@ import {PollingIntervals} from '@utils/numbers';
 export interface TestSuiteCardProps {
   item: TestSuiteWithExecution;
   onClick: (item: Item) => void;
-  onAbort: (item: Item) => void;
 }
 
-const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick, onAbort}) => {
+const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecution}, onClick}) => {
   const isAgentAvailable = useSystemAccess(SystemAccess.agent);
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
 
@@ -35,12 +35,12 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
       item={testSuite}
       latestExecution={latestExecution}
       onClick={onClick}
-      onAbort={onAbort}
       metrics={metrics}
       dataTest="test-suites-list-item"
       outOfSync={!isAgentAvailable || testSuite.readOnly}
       isAgentAvailable={isAgentAvailable}
       entityLabel="test suite"
+      DropdownComponent={TestSuiteActionsDropdown}
     />
   );
 };

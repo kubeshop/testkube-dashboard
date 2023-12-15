@@ -1,4 +1,3 @@
-import {FC, cloneElement, isValidElement, useCallback} from 'react';
 import {useUnmount} from 'react-use';
 
 import {ExternalLink} from '@atoms';
@@ -10,15 +9,13 @@ import {useModal} from '@modal/hooks';
 
 import {Test} from '@models/test';
 
-import {notificationCall} from '@molecules';
-
-import {EntityListContent} from '@organisms';
+import {EntityView} from '@organisms';
 
 import {Error} from '@pages';
 
 import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
-import {useAbortAllTestExecutionsMutation, useGetTestsQuery} from '@services/tests';
+import {useGetTestsQuery} from '@services/tests';
 
 import {initialFilters, useTestsField, useTestsSync} from '@store/tests';
 
@@ -29,18 +26,24 @@ import EmptyTests from './EmptyTests';
 import TestCard from './TestCard';
 import TestCreationModalContent from './TestCreationModalContent';
 
-const PageDescription: FC = () => (
+const PageDescription: React.FC = () => (
   <>
     Explore your tests at a glance... Learn more about{' '}
     <ExternalLink href={externalLinks.documentation}>testing with Testkube</ExternalLink>
   </>
 );
 
-const TestsList: FC = () => {
+interface TestsListProps {
+  isListLoading?: boolean;
+}
+
+const TestsList: React.FC<TestsListProps> = props => {
+  const {isListLoading} = props;
+
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
 
-  const entityPromoComponent = useTestsSlotFirst('entityListPromoComponent');
+  const EntityPromoComponent = useTestsSlotFirst('EntityListPromoComponent');
 
   useUnmount(() => {
     setFilters({...filters, pageSize: initialFilters.pageSize});
@@ -65,49 +68,35 @@ const TestsList: FC = () => {
     dataTestModalRoot: 'add-a-new-test-modal',
   });
 
-  const [abortAll] = useAbortAllTestExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: Test) => `/tests/${item.name}`);
-  const onItemAbort = useCallback((item: Test) => {
-    abortAll({id: item.name})
-      .unwrap()
-      .catch(() => {
-        notificationCall('failed', 'Something went wrong during test execution abortion');
-      });
-  }, []);
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
 
-  if (entityPromoComponent) {
-    return (
-      <>
-        {isValidElement(entityPromoComponent)
-          ? cloneElement(entityPromoComponent, {list: 'tests'} as Partial<unknown>)
-          : null}
-      </>
-    );
+  if (EntityPromoComponent) {
+    return <EntityPromoComponent list="tests" />;
   }
 
   return (
-    <EntityListContent
+    <EntityView
       itemKey="test.name"
       CardComponent={TestCard}
       onItemClick={onItemClick}
-      onItemAbort={onItemAbort}
       entity="tests"
       pageTitle="Tests"
       addEntityButtonText="Add a new test"
-      pageDescription={PageDescription}
+      pageDescription={<PageDescription />}
       emptyDataComponent={EmptyTests}
       initialFiltersState={initialFilters}
       dataTest="add-a-new-test-btn"
       queryFilters={filters}
       setQueryFilters={setFilters}
       data={tests}
-      isLoading={isLoading}
+      isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
+      isListLoading={isListLoading ?? false}
     />
   );
 };

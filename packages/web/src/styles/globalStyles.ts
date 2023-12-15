@@ -179,6 +179,10 @@ export const GlobalStyle = createGlobalStyle`
 
   /* Table */
 
+  .ant-table-row .ant-table-column-sort {
+    background-color: transparent;
+  }
+
   .ant-table-thead .ant-table-cell {
     background-color: ${Colors.slate800};
     color: ${Colors.slate400};
@@ -237,6 +241,11 @@ export const GlobalStyle = createGlobalStyle`
       .ant-dropdown-menu-item {
         background: ${Colors.slate700};
       }
+    }
+
+    .ant-dropdown-menu-item-divider {
+      margin: 0;
+      background-color: ${Colors.slate500};
     }
   }
 
