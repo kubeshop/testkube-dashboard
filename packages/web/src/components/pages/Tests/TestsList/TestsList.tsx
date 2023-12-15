@@ -1,4 +1,3 @@
-import {useMemo, useState} from 'react';
 import {useUnmount} from 'react-use';
 
 import {ExternalLink} from '@atoms';
@@ -8,7 +7,6 @@ import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {useModal} from '@modal/hooks';
 
-import {Metrics} from '@models/metrics';
 import {Test} from '@models/test';
 
 import {EntityView} from '@organisms';
@@ -27,8 +25,6 @@ import {PollingIntervals} from '@utils/numbers';
 import EmptyTests from './EmptyTests';
 import TestCard from './TestCard';
 import TestCreationModalContent from './TestCreationModalContent';
-import TestMetricsLayer from './metrics/TestMetricsLayer';
-import {TestsMetricsContext} from './metrics/TestsMetricsContext';
 
 const PageDescription: React.FC = () => (
   <>
@@ -43,16 +39,6 @@ interface TestsListProps {
 
 const TestsList: React.FC<TestsListProps> = props => {
   const {isListLoading} = props;
-
-  const [testsMetrics, setTestsMetrics] = useState<Record<string, Metrics>>({});
-
-  const metricsContextValue = useMemo(
-    () => ({
-      testsMetrics,
-      setTestsMetrics,
-    }),
-    [testsMetrics]
-  );
 
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestsField('filters');
@@ -93,31 +79,25 @@ const TestsList: React.FC<TestsListProps> = props => {
   }
 
   return (
-    <TestsMetricsContext.Provider value={metricsContextValue}>
-      {tests?.map(test => (
-        <TestMetricsLayer key={test.test.name} name={test.test.name} />
-      ))}
-
-      <EntityView
-        itemKey="test.name"
-        CardComponent={TestCard}
-        onItemClick={onItemClick}
-        entity="tests"
-        pageTitle="Tests"
-        addEntityButtonText="Add a new test"
-        pageDescription={<PageDescription />}
-        emptyDataComponent={EmptyTests}
-        initialFiltersState={initialFilters}
-        dataTest="add-a-new-test-btn"
-        queryFilters={filters}
-        setQueryFilters={setFilters}
-        data={tests ?? []}
-        isLoading={isLoading || !isSystemAvailable}
-        isFetching={isFetching}
-        onAdd={openCreateModal}
-        isListLoading={isListLoading ?? false}
-      />
-    </TestsMetricsContext.Provider>
+    <EntityView
+      itemKey="test.name"
+      CardComponent={TestCard}
+      onItemClick={onItemClick}
+      entity="tests"
+      pageTitle="Tests"
+      addEntityButtonText="Add a new test"
+      pageDescription={<PageDescription />}
+      emptyDataComponent={EmptyTests}
+      initialFiltersState={initialFilters}
+      dataTest="add-a-new-test-btn"
+      queryFilters={filters}
+      setQueryFilters={setFilters}
+      data={tests ?? []}
+      isLoading={isLoading || !isSystemAvailable}
+      isFetching={isFetching}
+      onAdd={openCreateModal}
+      isListLoading={isListLoading ?? false}
+    />
   );
 };
 
