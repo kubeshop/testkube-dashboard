@@ -201,10 +201,10 @@ export class PluginScope<T extends PluginScopeState> {
   public syncSubscribe<U>(fn: () => U, defaultValue?: undefined): () => U | undefined;
   public syncSubscribe<U>(fn: () => U, defaultValue?: U): () => U | undefined {
     if (this[PluginScopeDisableNewSyncStatus]) {
-      throw new Error('The sync() factory may be executed only during initialization.');
+      throw new Error('The syncSubscribe() factory may be executed only during initialization.');
     }
 
-    const wrappedFn = (prevValue: U | undefined) => {
+    const wrappedFn = (prevValue: U | undefined = defaultValue) => {
       const nextValue = fn();
       let root: PluginScope<any> = this;
       while (root[PluginScopeParentScope]) {
