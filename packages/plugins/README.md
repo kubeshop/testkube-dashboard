@@ -136,7 +136,7 @@ export default createPlugin('some-plugin-name')
         // When you need to ensure that the slot usage will be updated immediately after .sync() change,
         // you may use .syncSubscribe() function instead.
         // It's a bit slower, as it will emit the change to all scopes.
-        const isLoadingAsap = tk.sync(() => useSomeStoreData('loading'));
+        const isLoadingAsap = tk.syncSubscribe(() => useSomeStoreData('loading'));
         tk.slots.somePluginStub.someOtherSlot.add(<>Loading...</>, {enabled: isLoadingAsap});
     });
 ```
