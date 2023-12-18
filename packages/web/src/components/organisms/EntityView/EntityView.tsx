@@ -48,7 +48,6 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
     entity,
     initialFiltersState,
     isFetching,
-    isListLoading,
     isLoading,
     itemKey,
     pageDescription,
@@ -149,12 +148,6 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
       setIsApplyingFilters(false);
     }
   }, [isFetching]);
-
-  useEffect(() => {
-    if (!isListLoading) return;
-
-    setFirstTimeLoading(true);
-  }, [isListLoading]);
 
   const DefaultViewComponent: React.FC<ViewComponentBaseProps> = useMemo(
     () => componentProps =>

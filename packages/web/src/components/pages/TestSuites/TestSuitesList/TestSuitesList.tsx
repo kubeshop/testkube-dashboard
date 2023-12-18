@@ -25,13 +25,7 @@ import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
 const PageDescription: React.FC = () => <>Explore your test suites at a glance...</>;
 
-interface TestSuitesListProps {
-  isListLoading?: boolean;
-}
-
-const TestSuitesList: React.FC<TestSuitesListProps> = props => {
-  const {isListLoading} = props;
-
+const TestSuitesList: React.FC = () => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = useTestsSlotFirst('testSuitesListTitleAddon');
@@ -90,7 +84,6 @@ const TestSuitesList: React.FC<TestSuitesListProps> = props => {
       isLoading={isLoading || !isSystemAvailable}
       isFetching={isFetching}
       onAdd={openCreateModal}
-      isListLoading={isListLoading ?? false}
     />
   );
 };
