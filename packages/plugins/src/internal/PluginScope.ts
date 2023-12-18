@@ -125,7 +125,7 @@ export class PluginScope<T extends PluginScopeState> {
 
   public [PluginScopeCallSync](): void {
     Array.from(this[PluginScopeSyncData].keys()).forEach(fn => {
-      this[PluginScopeSyncData].set(fn, fn());
+      this[PluginScopeSyncData].set(fn, fn(this[PluginScopeSyncData].get(fn)));
     });
   }
 
@@ -185,6 +185,36 @@ export class PluginScope<T extends PluginScopeState> {
     }
 
     const wrappedFn = () => fn();
+    this[PluginScopeSyncData].set(wrappedFn, undefined);
+    return () => this[PluginScopeSyncData].get(wrappedFn) ?? defaultValue;
+  }
+
+  /**
+   * Transfer data from React to the plugin context.
+   *
+   * The difference from sync() is, that it will emit change in the scope when the value is different.
+   * It's a bit slower, as it's trigger a change on the root scope afterward.
+   *
+   * TODO: Consider using Observables instead, that could be passed to Slot.enabled?
+   */
+  public syncSubscribe<U>(fn: () => U, defaultValue: U): () => U;
+  public syncSubscribe<U>(fn: () => U, defaultValue?: undefined): () => U | undefined;
+  public syncSubscribe<U>(fn: () => U, defaultValue?: U): () => U | undefined {
+    if (this[PluginScopeDisableNewSyncStatus]) {
+      throw new Error('The syncSubscribe() factory may be executed only during initialization.');
+    }
+
+    const wrappedFn = (prevValue: U | undefined = defaultValue) => {
+      const nextValue = fn();
+      let root: PluginScope<any> = this;
+      while (root[PluginScopeParentScope]) {
+        root = root[PluginScopeParentScope];
+      }
+      if (prevValue !== nextValue) {
+        root[PluginScopeEmitChange]();
+      }
+      return nextValue;
+    };
     this[PluginScopeSyncData].set(wrappedFn, undefined);
     return () => this[PluginScopeSyncData].get(wrappedFn) ?? defaultValue;
   }
