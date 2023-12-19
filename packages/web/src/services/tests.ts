@@ -37,6 +37,19 @@ export const testsApi = createApi({
       }),
       providesTags: (res, err, id) => [{type: 'Test', id}],
     }),
+    getTestExecutions: builder.query({
+      query: ({last = 7, pageSize = 1000}) => {
+        const queryParams = new URLSearchParams({
+          last,
+          pageSize,
+        });
+
+        return {
+          url: `/executions?${queryParams.toString()}`,
+        };
+      },
+      providesTags: (res, err) => [{type: 'TestExecution', id: 'LIST'}],
+    }),
     getTestExecutionsById: builder.query({
       query: ({id, last = 7, pageSize = 1000}) => {
         const queryParams = new URLSearchParams({
@@ -161,6 +174,7 @@ export const testsApi = createApi({
 testsApi.useGetTestQuery = memoizeQuery(testsApi.useGetTestQuery);
 testsApi.useGetTestsQuery = memoizeQuery(testsApi.useGetTestsQuery);
 testsApi.useGetAllTestsQuery = memoizeQuery(testsApi.useGetAllTestsQuery);
+testsApi.useGetTestExecutionsQuery = memoizeQuery(testsApi.useGetTestExecutionsQuery);
 testsApi.useGetTestExecutionsByIdQuery = memoizeQuery(testsApi.useGetTestExecutionsByIdQuery, executions =>
   // Limit to show maximum of 1000 latest executions
   executions.results?.length > 1000 ? {...executions, results: executions.results.slice(0, 1000)} : executions
@@ -177,6 +191,7 @@ export const {
   useGetTestQuery,
   useGetTestsQuery,
   useGetAllTestsQuery,
+  useGetTestExecutionsQuery,
   useGetTestExecutionsByIdQuery,
   useGetTestExecutionByIdQuery,
   useGetTestExecutionArtifactsQuery,

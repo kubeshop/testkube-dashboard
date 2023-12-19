@@ -119,7 +119,8 @@ export const testSuitesApi = createApi({
     getTestSuiteExecutionsByTestSuiteId: builder.query({
       query: ({id, last = 7, pageSize = 1000}) => {
         const queryParams = new URLSearchParams({
-          id,
+          // optional field "id"
+          ...(id && id),
           last,
           pageSize,
         });
