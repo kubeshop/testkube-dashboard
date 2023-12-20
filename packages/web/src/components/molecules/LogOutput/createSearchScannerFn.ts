@@ -93,6 +93,8 @@ export const createSearchScannerFn = (
   `
   );
   return (content: string) => {
-    [currentLineNumber, lineStartIndex] = scan(currentLineNumber, lineStartIndex, content, push);
+    const result = scan(currentLineNumber, lineStartIndex, content, push);
+    currentLineNumber = result[0];
+    lineStartIndex = result[1];
   };
 };
