@@ -28,6 +28,14 @@ import {prettifyArguments} from '@utils/prettifyArguments';
 
 import {ArgumentsWrapper} from './Arguments.styled';
 
+const formatArgsArray = (args: string[]) => {
+  return args.map(arg => {
+    const trimmedArg = arg.replace(/\s+/g, ' ').trim();
+
+    return arg.includes(' ') && !/^(['"]).*\1$/.test(arg) ? `"${trimmedArg}"` : trimmedArg;
+  });
+};
+
 type ArgumentsFormValues = {
   args: string;
 };
@@ -45,17 +53,13 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const [updateTest] = useUpdateTestMutation();
 
   const entityArgs = details.executionRequest?.args || [];
-  const initialArgs = useMemo(() => entityArgs?.join('\n') || '', [entityArgs]);
+  const initialArgs = useMemo(() => formatArgsArray(entityArgs)?.join('\n') || '', [entityArgs]);
 
   const currentArgs = Form.useWatch('args', form) || '';
 
   const formattedArgs = useMemo(() => {
     const currentArgsArray = currentArgs.split('\n').filter(Boolean);
-    return currentArgsArray.map(arg => {
-      const trimmedArg = arg.replace(/\s+/g, ' ').trim();
-
-      return arg.includes(' ') ? `"${trimmedArg}"` : trimmedArg;
-    });
+    return formatArgsArray(currentArgsArray);
   }, [currentArgs]);
 
   const isPrettified = useMemo(() => currentArgs === prettifyArguments(currentArgs), [currentArgs]);
