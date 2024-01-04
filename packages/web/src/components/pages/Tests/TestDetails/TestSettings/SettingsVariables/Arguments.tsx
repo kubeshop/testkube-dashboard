@@ -56,17 +56,15 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const initialArgs = useMemo(() => formatArgsArray(entityArgs)?.join('\n') || '', [entityArgs]);
 
   const currentArgs = Form.useWatch('args', form) || '';
-
-  const formattedArgs = useMemo(() => {
-    const currentArgsArray = currentArgs.split('\n').filter(Boolean);
-    return formatArgsArray(currentArgsArray);
-  }, [currentArgs]);
+  const currentArgsInline = currentArgs.replace(/\s+/g, ' ').trim();
 
   const isPrettified = useMemo(() => currentArgs === prettifyArguments(currentArgs), [currentArgs]);
 
   const onSaveForm = async () => {
+    const argVal = currentArgs?.trim().split('\n').filter(Boolean) || [];
+
     // Reset the form when there is no actual change
-    if (formattedArgs.join('\n') === initialArgs) {
+    if (argVal.join('\n') === initialArgs) {
       form.resetFields();
     }
 
@@ -74,7 +72,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       ...details,
       executionRequest: {
         ...details.executionRequest,
-        args: formattedArgs,
+        args: argVal,
       },
     };
 
@@ -112,7 +110,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       onCancel={onCancel}
     >
       <ArgumentsWrapper>
-        <CopyCommand command={formattedArgs.join(' ')} isBordered additionalPrefix="executor-binary" />
+        <CopyCommand command={currentArgsInline} isBordered additionalPrefix="executor-binary" />
         <FullWidthSpace size={16} direction="vertical">
           <Text className="regular middle" color={Colors.slate400}>
             Arguments passed to the executor (concat and passed directly to the executor)
