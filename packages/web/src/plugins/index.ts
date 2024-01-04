@@ -12,7 +12,7 @@ import WebhooksPlugin from '@plugins/webhooks/plugin';
 
 export const basePlugins: PluginEntry<any>[] = [
   TelemetryPlugin,
-  GeneralPlugin.configure({preventDefaultRedirect: true}),
+  GeneralPlugin,
   ClusterPlugin,
   ExecutorsPlugin,
   WebhooksPlugin,

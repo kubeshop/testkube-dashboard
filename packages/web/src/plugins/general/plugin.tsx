@@ -1,7 +1,7 @@
 import React, {FC, ReactNode} from 'react';
 import {Navigate} from 'react-router-dom';
 
-import {config, createPlugin, data, external, slot} from '@testkube/plugins';
+import {createPlugin, external, slot} from '@testkube/plugins';
 
 import {IconProps} from '@atoms/Icon/types';
 
@@ -23,7 +23,6 @@ export default createPlugin('dashboard/general')
 
   .route('/apiEndpoint', tk => (isApiEndpointLocked() ? <Navigate to="/" replace /> : <EndpointProcessing />))
 
-  .define(config<Boolean>()('preventDefaultRedirect', false))
   .define(slot<ReactNode>()('siderLogo'))
   .define(slot<ReactNode>()('contentTop'))
 
@@ -46,15 +45,6 @@ export default createPlugin('dashboard/general')
       active?: RegExp;
     }>()('siderOtherItems')
   )
-  .define(data<Boolean>()('preventDefaultRedirect'))
-  .route('/', tk =>
-    !tk.data.preventDefaultRedirect ? (
-      <Navigate to={tk.slots.siderItems.first()?.path || '/tests'} replace />
-    ) : (
-      <Navigate to="/" />
-    )
-  )
+  .route('/', tk => <Navigate to={tk.slots.siderItems.first()?.path || '/tests'} replace />)
 
-  .init((tk, cfg) => {
-    tk.data.preventDefaultRedirect = cfg.preventDefaultRedirect;
-  });
+  .init();
