@@ -30,9 +30,14 @@ import {ArgumentsWrapper} from './Arguments.styled';
 
 const formatArgsArray = (args: string[]) => {
   return args.map(arg => {
-    const trimmedArg = arg.replace(/\s+/g, ' ').trim();
+    const trimmedArg = arg.replace(/\s+|(?<=[^'])['"](?=[^'])/g, match => {
+      if (match.trim() === '') {
+        return ' '; // Replaces multiple spaces with a single space
+      }
+      return `\\${match}`; // Escapes quotes
+    });
 
-    return arg.includes(' ') && !/^(['"]).*\1$/.test(arg) ? `"${trimmedArg}"` : trimmedArg;
+    return arg.includes(' ') ? `"${trimmedArg}"` : trimmedArg;
   });
 };
 
