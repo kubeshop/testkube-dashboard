@@ -48,15 +48,17 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const initialArgs = useMemo(() => entityArgs?.join('\n') || '', [entityArgs]);
 
   const currentArgs = Form.useWatch('args', form) || '';
-  const currentArgsInline = currentArgs.replace(/\s+/g, ' ').trim();
+  const currentArgsArray =
+    currentArgs
+      .split('\n')
+      .map(arg => (arg.includes(' ') ? `"${arg}"` : arg))
+      .filter(Boolean) || [];
+
   const isPrettified = useMemo(() => currentArgs === prettifyArguments(currentArgs), [currentArgs]);
 
-  const onSaveForm = () => {
-    const values = form.getFieldsValue();
-    const argVal = values.args?.trim().split('\n').filter(Boolean) || [];
-
+  const onSaveForm = async () => {
     // Reset the form when there is no actual change
-    if (argVal.join('\n') === initialArgs) {
+    if (currentArgsArray.join('\n') === initialArgs) {
       form.resetFields();
     }
 
@@ -64,18 +66,17 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       ...details,
       executionRequest: {
         ...details.executionRequest,
-        args: argVal,
+        args: currentArgsArray,
       },
     };
 
-    return updateTest({
+    const res = await updateTest({
       id: details.name,
       data: successRecord,
-    })
-      .then(displayDefaultNotificationFlow)
-      .then(() => {
-        notificationCall('passed', 'Variables were successfully updated.');
-      });
+    });
+
+    displayDefaultNotificationFlow(res);
+    notificationCall('passed', 'Variables were successfully updated.');
   };
 
   const onPrettify = useLastCallback(() => form.setFieldValue('args', prettifyArguments(currentArgs)));
@@ -103,7 +104,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       onCancel={onCancel}
     >
       <ArgumentsWrapper>
-        <CopyCommand command={currentArgsInline} isBordered additionalPrefix="executor-binary" />
+        <CopyCommand command={currentArgsArray.join(' ')} isBordered additionalPrefix="executor-binary" />
         <FullWidthSpace size={16} direction="vertical">
           <Text className="regular middle" color={Colors.slate400}>
             Arguments passed to the executor (concat and passed directly to the executor)
