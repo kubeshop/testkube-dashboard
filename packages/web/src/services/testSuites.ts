@@ -120,7 +120,7 @@ export const testSuitesApi = createApi({
       query: ({id, last = 7, pageSize = 1000}) => {
         const queryParams = new URLSearchParams({
           // optional field "id"
-          ...(id && id),
+          ...(id ? {id} : null),
           last,
           pageSize,
         });
