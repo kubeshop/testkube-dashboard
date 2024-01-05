@@ -18,12 +18,11 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
-import {escapeArguments} from '@src/utils/escapeArguments';
-
 import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
+import {escapeArguments} from '@utils/escapeArguments';
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {prettifyArguments} from '@utils/prettifyArguments';
