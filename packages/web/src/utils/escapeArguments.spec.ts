@@ -19,11 +19,11 @@ describe('utils', () => {
     });
 
     it('should handle array with multiple arguments with quotes', () => {
-      expect(escapeArguments(['ab"c', 'de"f'])).toEqual(['ab"c', 'de"f']);
+      expect(escapeArguments(['ab"c', 'de"f'])).toEqual(['ab\\"c', 'de\\"f']);
     });
 
     it('should handle array with multiple arguments with spaces and quotes', () => {
-      expect(escapeArguments(['ab"c', 'de f'])).toEqual(['ab"c', '"de f"']);
+      expect(escapeArguments(['ab"c', 'de f'])).toEqual(['ab\\"c', '"de f"']);
     });
   });
 });
