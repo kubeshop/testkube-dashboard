@@ -23,14 +23,11 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 import Colors from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
+import {formatArgumentsArray} from '@utils/formatArgumentsArray';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {prettifyArguments} from '@utils/prettifyArguments';
 
 import {ArgumentsWrapper} from './Arguments.styled';
-
-const formatArgsArray = (args: string[]) => {
-  return args.map(arg => (arg.includes(' ') ? `"${arg}"` : arg));
-};
 
 type ArgumentsFormValues = {
   args: string;
@@ -49,11 +46,15 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const [updateTest] = useUpdateTestMutation();
 
   const entityArgs = details.executionRequest?.args || [];
-  const initialArgs = useMemo(() => formatArgsArray(entityArgs)?.join('\n') || '', [entityArgs]);
+  const initialArgs = useMemo(() => formatArgumentsArray(entityArgs)?.join('\n') || '', [entityArgs]);
 
   const currentArgs = Form.useWatch('args', form) || '';
 
-  const isPrettified = useMemo(() => currentArgs === prettifyArguments(currentArgs), [currentArgs]);
+  // Above
+  const prettifiedArgs = useMemo(() => prettifyArguments(currentArgs), [currentArgs]); // and replace `isPrettified` to not use `useMemo`
+  const currentArgsInline = useMemo(() => prettifiedArgs.replace(/\n+/g, ' '), [prettifiedArgs]);
+
+  const isPrettified = Boolean(currentArgs === prettifyArguments(currentArgs));
 
   const onSaveForm = async () => {
     const argVal = currentArgs?.trim().split('\n').filter(Boolean) || [];
@@ -105,7 +106,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       onCancel={onCancel}
     >
       <ArgumentsWrapper>
-        <CopyCommand command={currentArgs} isBordered additionalPrefix="executor-binary" />
+        <CopyCommand command={currentArgsInline} isBordered additionalPrefix="executor-binary" />
         <FullWidthSpace size={16} direction="vertical">
           <Text className="regular middle" color={Colors.slate400}>
             Arguments passed to the executor (concat and passed directly to the executor)
