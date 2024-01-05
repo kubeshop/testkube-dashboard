@@ -18,12 +18,13 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateTestMutation} from '@services/tests';
 
+import {escapeArguments} from '@src/utils/escapeArguments';
+
 import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
 import {externalLinks} from '@utils/externalLinks';
-import {formatArgumentsArray} from '@utils/formatArgumentsArray';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {prettifyArguments} from '@utils/prettifyArguments';
 
@@ -46,7 +47,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const [updateTest] = useUpdateTestMutation();
 
   const entityArgs = details.executionRequest?.args || [];
-  const initialArgs = useMemo(() => formatArgumentsArray(entityArgs)?.join('\n') || '', [entityArgs]);
+  const initialArgs = useMemo(() => escapeArguments(entityArgs)?.join('\n') || '', [entityArgs]);
 
   const currentArgs = Form.useWatch('args', form) || '';
 

@@ -1,3 +1,3 @@
-export const formatArgumentsArray = (args: string[]) => {
+export const escapeArguments = (args: string[]) => {
   return args.map(arg => (arg.includes(' ') ? `"${arg}"` : arg));
 };
