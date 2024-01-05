@@ -29,16 +29,7 @@ import {prettifyArguments} from '@utils/prettifyArguments';
 import {ArgumentsWrapper} from './Arguments.styled';
 
 const formatArgsArray = (args: string[]) => {
-  return args.map(arg => {
-    const trimmedArg = arg.replace(/\s+|(?<=[^'])['"](?=[^'])/g, match => {
-      if (match.trim() === '') {
-        return ' '; // Replaces multiple spaces with a single space
-      }
-      return `\\${match}`; // Escapes quotes
-    });
-
-    return arg.includes(' ') ? `"${trimmedArg}"` : trimmedArg;
-  });
+  return args.map(arg => (arg.includes(' ') ? `"${arg}"` : arg));
 };
 
 type ArgumentsFormValues = {
@@ -61,7 +52,6 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const initialArgs = useMemo(() => formatArgsArray(entityArgs)?.join('\n') || '', [entityArgs]);
 
   const currentArgs = Form.useWatch('args', form) || '';
-  const currentArgsInline = currentArgs.replace(/\s+/g, ' ').trim();
 
   const isPrettified = useMemo(() => currentArgs === prettifyArguments(currentArgs), [currentArgs]);
 
@@ -115,7 +105,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       onCancel={onCancel}
     >
       <ArgumentsWrapper>
-        <CopyCommand command={currentArgsInline} isBordered additionalPrefix="executor-binary" />
+        <CopyCommand command={currentArgs} isBordered additionalPrefix="executor-binary" />
         <FullWidthSpace size={16} direction="vertical">
           <Text className="regular middle" color={Colors.slate400}>
             Arguments passed to the executor (concat and passed directly to the executor)
