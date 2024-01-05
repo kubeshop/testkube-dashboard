@@ -50,11 +50,10 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
 
   const currentArgs = Form.useWatch('args', form) || '';
 
-  // Above
-  const prettifiedArgs = useMemo(() => prettifyArguments(currentArgs), [currentArgs]); // and replace `isPrettified` to not use `useMemo`
+  const prettifiedArgs = useMemo(() => prettifyArguments(currentArgs), [currentArgs]);
   const currentArgsInline = useMemo(() => prettifiedArgs.replace(/\n+/g, ' '), [prettifiedArgs]);
 
-  const isPrettified = Boolean(currentArgs === prettifyArguments(currentArgs));
+  const isPrettified = currentArgs === prettifiedArgs;
 
   const onSaveForm = async () => {
     const argVal = currentArgs?.trim().split('\n').filter(Boolean) || [];
