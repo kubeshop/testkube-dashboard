@@ -9,11 +9,23 @@ export const ConsoleLines: FC<{
   start: number;
   maxDigits: number;
   LineComponent: ConsoleProps['LineComponent'];
-}> = memo(({lines, start, maxDigits, LineComponent = ConsoleLine}) => (
+  onLineClick?: (line: number) => void;
+  selectedLine?: number;
+}> = memo(({lines, start, maxDigits, LineComponent = ConsoleLine, onLineClick, selectedLine}) => (
   <>
     {lines.map((line, lineIndex) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <LineComponent key={start + lineIndex} number={start + lineIndex + 1} maxDigits={maxDigits}>
+      <LineComponent
+        // eslint-disable-next-line react/no-array-index-key
+        key={start + lineIndex}
+        number={start + lineIndex + 1}
+        maxDigits={maxDigits}
+        onLineClick={() => {
+          if (onLineClick) {
+            onLineClick(start + lineIndex + 1);
+          }
+        }}
+        selectedLine={selectedLine}
+      >
         {line.nodes}
       </LineComponent>
     ))}

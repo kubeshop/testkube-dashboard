@@ -11,6 +11,7 @@ export interface LogOutputPureProps {
   hideActions?: boolean;
   wrap?: boolean;
   LineComponent?: Parameters<typeof Console>[0]['LineComponent'];
+  isRunning?: boolean;
 }
 
 export interface LogOutputPureRef {
@@ -19,34 +20,42 @@ export interface LogOutputPureRef {
 }
 
 const LogOutputPure = memo(
-  forwardRef<LogOutputPureRef, LogOutputPureProps>(({className, hideActions, logs, wrap, LineComponent}, ref) => {
-    const consoleRef = useRef<ConsoleRef | null>(null);
-    const containerRef = useRef<HTMLDivElement | null>(null);
+  forwardRef<LogOutputPureRef, LogOutputPureProps>(
+    ({className, isRunning, hideActions, logs, wrap, LineComponent}, ref) => {
+      const consoleRef = useRef<ConsoleRef | null>(null);
+      const containerRef = useRef<HTMLDivElement | null>(null);
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        get container() {
-          return containerRef.current;
-        },
-        get console() {
-          return consoleRef.current;
-        },
-      }),
-      []
-    );
+      useImperativeHandle(
+        ref,
+        () => ({
+          get container() {
+            return containerRef.current;
+          },
+          get console() {
+            return consoleRef.current;
+          },
+        }),
+        []
+      );
 
-    return (
-      <StyledLogOutputContainer className={className} ref={containerRef}>
-        {hideActions ? null : <LogOutputHeader logOutput={logs} />}
-        {logs ? (
-          <StyledPreLogText data-test="log-output">
-            <Console wrap={wrap} content={logs} LineComponent={LineComponent} ref={consoleRef} />
-          </StyledPreLogText>
-        ) : null}
-      </StyledLogOutputContainer>
-    );
-  })
+      return (
+        <StyledLogOutputContainer className={className} ref={containerRef}>
+          {hideActions ? null : <LogOutputHeader logOutput={logs} />}
+          {logs ? (
+            <StyledPreLogText data-test="log-output">
+              <Console
+                wrap={wrap}
+                content={logs}
+                LineComponent={LineComponent}
+                ref={consoleRef}
+                isRunning={isRunning}
+              />
+            </StyledPreLogText>
+          ) : null}
+        </StyledLogOutputContainer>
+      );
+    }
+  )
 );
 
 export default LogOutputPure;
