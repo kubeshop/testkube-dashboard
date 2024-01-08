@@ -9,9 +9,9 @@ export const ConsoleLines: FC<{
   start: number;
   maxDigits: number;
   LineComponent: ConsoleProps['LineComponent'];
-  onLineClick?: (line: number) => void;
+  onSelectLine?: (line: number) => void;
   selectedLine?: number;
-}> = memo(({lines, start, maxDigits, LineComponent = ConsoleLine, onLineClick, selectedLine}) => (
+}> = memo(({lines, start, maxDigits, LineComponent = ConsoleLine, onSelectLine, selectedLine}) => (
   <>
     {lines.map((line, lineIndex) => (
       <LineComponent
@@ -19,9 +19,9 @@ export const ConsoleLines: FC<{
         key={start + lineIndex}
         number={start + lineIndex + 1}
         maxDigits={maxDigits}
-        onLineClick={() => {
-          if (onLineClick) {
-            onLineClick(start + lineIndex + 1);
+        onSelectLine={() => {
+          if (onSelectLine) {
+            onSelectLine(start + lineIndex + 1);
           }
         }}
         selectedLine={selectedLine}

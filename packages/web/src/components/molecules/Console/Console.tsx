@@ -32,7 +32,7 @@ export interface ConsoleProps {
   content: string;
   start?: number;
   LineComponent?: FC<
-    PropsWithChildren<{number: number; maxDigits: number; selectedLine?: number; onLineClick?: (line: number) => void}>
+    PropsWithChildren<{number: number; maxDigits: number; selectedLine?: number; onSelectLine?: (line: number) => void}>
   >;
   isRunning?: boolean;
 }
@@ -112,9 +112,10 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(
         if (isRunning) {
           return;
         }
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('logLine', line.toString());
 
+        const urlParams = new URLSearchParams(window.location.search);
+
+        setSelectedLine(line);
         copyToClipboard(
           `${window.location.origin}${window.location.pathname}?${urlParams.toString()}${window.location.hash}`
         );
@@ -183,7 +184,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(
     useLayoutEffect(() => {
       const checkForQueryParam = () => {
         const queryParams = new URLSearchParams(window.location.search);
-        const logLineParam = queryParams.get('logLine');
+        const logLineParam = queryParams.get('L');
 
         if (logLineParam) {
           const logLine = parseInt(logLineParam, 10);
@@ -230,7 +231,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(
             start={start}
             maxDigits={maxDigits}
             LineComponent={LineComponent}
-            onLineClick={onLineClick}
+            onSelectLine={onLineClick}
             selectedLine={selectedLine}
           />
           <S.Space style={styleBottom} />
