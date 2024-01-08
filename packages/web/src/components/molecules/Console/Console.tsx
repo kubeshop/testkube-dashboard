@@ -10,15 +10,13 @@ import {
   useRef,
   useState,
 } from 'react';
-import {useCopyToClipboard, usePrevious, useUpdate} from 'react-use';
+import {usePrevious, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
 import {debounce} from 'lodash';
 
 import {useEventCallback} from '@hooks/useEventCallback';
 import {useLastCallback} from '@hooks/useLastCallback';
-
-import {notificationCall} from '@molecules';
 
 import * as S from './Console.styled';
 import {ConsoleLine} from './ConsoleLine';
@@ -105,23 +103,15 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(
     const styleTop = useMemo(() => ({height: `${beforePx}px`, width: `${minWidth}px`}), [beforePx, minWidth]);
     const styleBottom = useMemo(() => ({height: `${afterPx}px`}), [afterPx]);
 
-    const [, copyToClipboard] = useCopyToClipboard();
-
     const onLineClick = useCallback(
       (line: number) => {
         if (isRunning) {
           return;
         }
 
-        const urlParams = new URLSearchParams(window.location.search);
-
         setSelectedLine(line);
-        copyToClipboard(
-          `${window.location.origin}${window.location.pathname}?${urlParams.toString()}${window.location.hash}`
-        );
-        notificationCall('success', `Log line copied to clipboard!`);
       },
-      [copyToClipboard, isRunning]
+      [isRunning]
     );
 
     const scrollToLine = useLastCallback((line: number) => {
