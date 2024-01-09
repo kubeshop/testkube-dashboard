@@ -65,8 +65,10 @@ enum Colors {
   indigo200 = '#C7D2FE',
   indigo300 = '#A5B4FC',
   indigo400 = '#818CF8',
+  indigo500 = '#6366F1',
   indigo600 = '#4F46E5',
-  indigo700 = '#303F9F',
+  indigo700 = '#4338CA',
+  indigo800 = '#3730A3',
   indigo900 = '#312e81',
 
   amber100 = '#FEF3C7',
