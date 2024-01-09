@@ -13,8 +13,6 @@ import LogOutputPure, {LogOutputPureRef} from './LogOutputPure';
 import {LogOutputProps, useLogOutput} from './useLogOutput';
 
 const LogOutput: React.FC<LogOutputProps> = props => {
-  const {isRunning} = props;
-
   const logRef = useRef<LogOutputPureRef>(null);
   const options = useLogOutput(props);
   const {isFullscreen} = useLogOutputPick('isFullscreen');
@@ -28,7 +26,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     if (!searchQuery) {
       setSearching(false);
     }
-  }, [searchQuery]);
+  }, [searchQuery, setSearching]);
+
   const search = useSearch({searchQuery, output: options.logs});
   useLogOutputSync({
     searching: search.loading,
@@ -53,7 +52,7 @@ const LogOutput: React.FC<LogOutputProps> = props => {
       <LogOutputWrapper>
         {/* eslint-disable-next-line react/no-array-index-key */}
         {useTestsSlot('logOutputTop').map((element, i) => createElement(Fragment, {key: i}, element))}
-        <LogOutputPure ref={logRef} {...options} isRunning={isRunning} />
+        <LogOutputPure ref={logRef} {...options} />
       </LogOutputWrapper>
       {isFullscreen ? createPortal(<FullscreenLogOutput {...options} />, fullscreenContainer) : null}
     </>
