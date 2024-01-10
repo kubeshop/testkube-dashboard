@@ -174,12 +174,15 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       const multiLineMatch = logLines.match(/^(\d+)-(\d+)$/);
 
       if (multiLineMatch) {
-        const [, , endLineNumber] = multiLineMatch;
-        scrollToLine(Number(endLineNumber));
+        const [, firstLineNumber, secondLineNumber] = multiLineMatch;
+        const middleNumber = Math.floor((Number(firstLineNumber) + Number(secondLineNumber)) / 2);
+        scrollToLine(middleNumber);
       }
     };
 
-    checkForQueryParam();
+    setTimeout(() => {
+      checkForQueryParam();
+    }, 0);
   }, [scrollToLine]);
 
   // Inform about position change
