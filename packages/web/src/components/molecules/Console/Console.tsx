@@ -159,13 +159,23 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
 
   useLayoutEffect(() => {
     const checkForQueryParam = () => {
-      const logLineParam = searchParamsRef.current.get('L');
+      const logLines = searchParamsRef.current.get('L');
 
-      if (logLineParam) {
-        const logLine = parseInt(logLineParam, 10);
-        if (logLine) {
-          scrollToLine(logLine);
-        }
+      if (!logLines) return;
+
+      const singleLineMatch = logLines.match(/^(\d+)$/);
+
+      if (singleLineMatch) {
+        const [_, lineNumber] = singleLineMatch;
+        scrollToLine(Number(lineNumber));
+        return;
+      }
+
+      const multiLineMatch = logLines.match(/^(\d+)-(\d+)$/);
+
+      if (multiLineMatch) {
+        const [, , endLineNumber] = multiLineMatch;
+        scrollToLine(Number(endLineNumber));
       }
     };
 
