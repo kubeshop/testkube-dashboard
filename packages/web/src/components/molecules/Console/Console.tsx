@@ -29,7 +29,7 @@ export interface ConsoleProps {
   wrap?: boolean;
   content: string;
   start?: number;
-  LineComponent?: FC<PropsWithChildren<{number: number; maxDigits: number; onClick?: (line: number) => void}>>;
+  LineComponent?: FC<PropsWithChildren<{number: number; maxDigits: number}>>;
 }
 
 export interface ConsoleRef {
