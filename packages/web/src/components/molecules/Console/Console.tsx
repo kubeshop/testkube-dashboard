@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import {useSearchParams} from 'react-router-dom';
 import {usePrevious, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
@@ -71,6 +72,9 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     return {start: viewportStart, end: viewportEnd};
   };
   const getViewportLast = () => Math.ceil(Math.min(1 + getViewportTop() + getViewportHeight(), total));
+
+  const [searchParams] = useSearchParams();
+  const searchParamsRef = useRef(searchParams);
 
   // Keep information about line width
   const maxCharactersCount = useMemo(() => processor.getMaxLineLength(), [processor]);
@@ -152,6 +156,21 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       scrollToEnd();
     }
   }, [content]);
+
+  useLayoutEffect(() => {
+    const checkForQueryParam = () => {
+      const logLineParam = searchParamsRef.current.get('L');
+
+      if (logLineParam) {
+        const logLine = parseInt(logLineParam, 10);
+        if (logLine) {
+          scrollToLine(logLine);
+        }
+      }
+    };
+
+    checkForQueryParam();
+  }, [scrollToLine]);
 
   // Inform about position change
   // FIXME

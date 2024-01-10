@@ -12,8 +12,12 @@ export const ConsoleLines: FC<{
 }> = memo(({lines, start, maxDigits, LineComponent = ConsoleLine}) => (
   <>
     {lines.map((line, lineIndex) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <LineComponent key={start + lineIndex} number={start + lineIndex + 1} maxDigits={maxDigits}>
+      <LineComponent
+        // eslint-disable-next-line react/no-array-index-key
+        key={start + lineIndex}
+        number={start + lineIndex + 1}
+        maxDigits={maxDigits}
+      >
         {line.nodes}
       </LineComponent>
     ))}

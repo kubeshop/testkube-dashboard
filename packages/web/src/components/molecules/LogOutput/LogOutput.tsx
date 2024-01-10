@@ -26,7 +26,8 @@ const LogOutput: React.FC<LogOutputProps> = props => {
     if (!searchQuery) {
       setSearching(false);
     }
-  }, [searchQuery]);
+  }, [searchQuery, setSearching]);
+
   const search = useSearch({searchQuery, output: options.logs});
   useLogOutputSync({
     searching: search.loading,
