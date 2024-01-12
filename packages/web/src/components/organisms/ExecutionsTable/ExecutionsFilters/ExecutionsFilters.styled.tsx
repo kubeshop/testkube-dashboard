@@ -8,7 +8,7 @@ export const FiltersContainer = styled.div`
   grid-column-gap: 16px;
   align-items: center;
   width: 100%;
-  margin: 8px 0 24px 0;
+  margin: 8px 0 24px;
 `;
 
 export const SearchInput = styled(Input)`
