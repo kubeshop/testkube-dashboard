@@ -1,5 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
+import {ExecutionStatusEnum, ExecutionsResponse} from '@models/execution';
 import {MetadataResponse, YamlEditBody} from '@models/fetch';
 import {Test} from '@models/test';
 import {TestSuiteFilters, TestSuiteWithExecution} from '@models/testSuite';
@@ -116,14 +117,25 @@ export const testSuitesApi = createApi({
       }),
       invalidatesTags: (res, err, {name: id}) => [{type: 'TestSuite', id}],
     }),
-    getTestSuiteExecutionsByTestSuiteId: builder.query({
-      query: ({id, last = 7, pageSize = 1000}) => {
+    getTestSuiteExecutionsByTestSuiteId: builder.query<
+      ExecutionsResponse,
+      {id: string; last?: number; pageSize?: number; textSearch?: string; status?: ExecutionStatusEnum[]}
+    >({
+      query: ({id, last = 7, pageSize = 1000, textSearch, status}) => {
         const queryParams = new URLSearchParams({
           // optional field "id"
           ...(id ? {id} : null),
-          last,
-          pageSize,
+          last: last.toString(),
+          pageSize: pageSize.toString(),
         });
+
+        if (textSearch) {
+          queryParams.append('textSearch', textSearch);
+        }
+
+        if (status?.length) {
+          status.forEach(s => queryParams.append('status', s));
+        }
 
         return {
           url: `/test-suite-executions?${queryParams.toString()}`,

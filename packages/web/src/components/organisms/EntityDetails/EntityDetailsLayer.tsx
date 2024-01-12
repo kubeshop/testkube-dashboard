@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
+import {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {useAsync, useInterval} from 'react-use';
 import useWebSocket from 'react-use-websocket';
 
@@ -55,21 +55,27 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
   const [metrics, setMetrics] = useEntityDetailsField('metrics');
   const [, setCurrentPage] = useEntityDetailsField('currentPage');
   const [executions, setExecutions] = useEntityDetailsField('executions');
-  const {details: storeDetails} = useEntityDetailsPick('details');
+  const [, setExecutionsLoading] = useEntityDetailsField('executionsLoading');
   const [, setIsFirstTimeLoading] = useEntityDetailsField('isFirstTimeLoading');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
+  const {executionsFilters} = useEntityDetailsPick('executionsFilters');
 
   const isClusterAvailable = useSystemAccess(SystemAccess.agent);
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const wsRoot = useWsEndpoint();
 
-  const {data: rawExecutions, refetch} = useGetExecutions(
-    {id, last: daysFilterValue},
+  const {
+    data: rawExecutions,
+    isFetching,
+    refetch,
+  } = useGetExecutions(
+    {id, last: daysFilterValue, ...executionsFilters},
     {
       pollingInterval: PollingIntervals.long,
       skip: !isSystemAvailable,
     }
   );
+
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
     {skip: !isSystemAvailable}
@@ -78,8 +84,9 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
     pollingInterval: PollingIntervals.long,
     skip: !isSystemAvailable,
   });
+
   const isV2 = isTestSuiteV2(rawDetails);
-  const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [rawDetails]);
+  const details = useMemo(() => (isV2 ? convertTestSuiteV2ExecutionToV3(rawDetails) : rawDetails), [isV2, rawDetails]);
 
   const onWebSocketData = (wsData: WSDataWithTestExecution | WSDataWithTestSuiteExecution) => {
     try {
@@ -195,6 +202,10 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
     },
     !tokenLoading && isClusterAvailable
   );
+
+  useEffect(() => {
+    setExecutionsLoading(isFetching);
+  }, [isFetching, setExecutionsLoading]);
 
   useEffect(() => {
     if (execId && executions?.results.length > 0) {
