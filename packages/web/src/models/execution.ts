@@ -5,7 +5,9 @@ import type {TestContent} from '@models/test';
 import type {TestExecutor} from '@models/testExecutors';
 import type {Variables} from '@models/variable';
 
-export type ExecutionStatusEnum = 'running' | 'passed' | 'failed' | 'queued' | 'cancelled' | 'aborted' | 'pending';
+export const executionStatusList = ['running', 'passed', 'failed', 'queued', 'timeout', 'aborted'] as const;
+
+export type ExecutionStatusEnum = (typeof executionStatusList)[number];
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
 export type ExecutionStepResultStatusEnum = 'success' | 'error';
 
@@ -65,4 +67,18 @@ export type ExecutionRequest = {
   httpProxy: string;
   httpsProxy: string;
   activeDeadlineSeconds?: number;
+};
+
+export type ExecutionTotals = {
+  results: number;
+  passed: number;
+  failed: number;
+  queued: number;
+  running: number;
+};
+
+export type ExecutionsResponse = {
+  results: Execution[];
+  totals: ExecutionTotals;
+  filtered: ExecutionTotals;
 };
