@@ -33,6 +33,7 @@ export enum externalLinks {
   integrationWithGithubActions = 'https://docs.testkube.io/articles/github-actions',
   integrationWithGitlabCI = 'https://docs.testkube.io/articles/gitlab',
   integrationWithJenkins = 'https://docs.testkube.io/articles/jenkins',
+  integrationWithCircleCI = 'https://docs.testkube.io/articles/circleci',
 }
 
 const crdCdn = `https://raw.githubusercontent.com/kubeshop/testkube-operator/${encodeURIComponent(
