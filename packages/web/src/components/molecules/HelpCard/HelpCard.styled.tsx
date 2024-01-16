@@ -15,7 +15,7 @@ export const StyledHelpCardContainer = styled.div<{isLink?: boolean}>`
   width: 100%;
 
   background-color: ${Colors.slate800};
-  cursor: ${props => (props.isLink ? 'pointer' : 'default')};
+  cursor: ${props => (props.isLink ? 'pointer' : 'inherit')};
 
   font-size: 12px;
   color: ${Colors.slate200};
