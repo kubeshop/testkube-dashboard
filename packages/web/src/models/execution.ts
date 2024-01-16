@@ -46,6 +46,8 @@ export type Execution = {
   number: number;
   variables?: Variables;
   runningContext: any;
+  status: ExecutionStatusEnum;
+  durationMs: number;
 };
 
 export type ExecutionRequest = {

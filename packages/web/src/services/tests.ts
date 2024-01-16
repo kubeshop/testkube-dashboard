@@ -55,9 +55,9 @@ export const testsApi = createApi({
       ExecutionsResponse,
       {id: string; last?: number; pageSize?: number; textSearch?: string; status?: ExecutionStatusEnum[]}
     >({
-      query: ({id, last = 7, pageSize = 1000, textSearch, status}) => {
+      query: ({id, last, pageSize = 1000, textSearch, status}) => {
         const queryParams = new URLSearchParams({
-          last: last.toString(),
+          ...(last ? {last: last.toString()} : null),
           pageSize: pageSize.toString(),
         });
 
@@ -91,9 +91,9 @@ export const testsApi = createApi({
       providesTags: (res, err, id) => [{type: 'TestExecution', id}],
     }),
     getTestExecutionMetrics: builder.query({
-      query: ({id, last = 7, limit = 1000}) => {
+      query: ({id, last, limit = 1000}) => {
         const queryParams = new URLSearchParams({
-          last,
+          ...(last ? {last: last.toString()} : null),
           limit,
         });
 

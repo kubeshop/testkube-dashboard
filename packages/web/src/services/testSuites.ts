@@ -119,13 +119,13 @@ export const testSuitesApi = createApi({
     }),
     getTestSuiteExecutionsByTestSuiteId: builder.query<
       ExecutionsResponse,
-      {id: string; last?: number; pageSize?: number; textSearch?: string; status?: ExecutionStatusEnum[]}
+      {id?: string; last?: number; pageSize?: number; textSearch?: string; status?: ExecutionStatusEnum[]}
     >({
-      query: ({id, last = 7, pageSize = 1000, textSearch, status}) => {
+      query: ({id, last, pageSize = 1000, textSearch, status}) => {
         const queryParams = new URLSearchParams({
           // optional field "id"
           ...(id ? {id} : null),
-          last: last.toString(),
+          ...(last ? {last: last.toString()} : null),
           pageSize: pageSize.toString(),
         });
 
