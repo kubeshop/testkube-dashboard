@@ -66,7 +66,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
   const handleDownloadAll = async () => {
     try {
       setIsDownloading(true);
-      await downloadArtifactArchive(`${testName}-${startTime}-${testExecutionId}.tar.gz`, testExecutionId);
+      await downloadArtifactArchive(testExecutionId, testName, testSuiteName);
     } catch (err) {
       displayDefaultErrorNotification(err as DefaultRequestError);
     } finally {

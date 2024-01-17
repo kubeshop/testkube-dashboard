@@ -53,16 +53,6 @@ export const downloadArtifact = async (
   await downloadPotentialFile(response, fileName);
 };
 
-export const downloadArtifactArchive = async (fileName: string, executionId: string) => {
-  const url = `/executions/${executionId}/artifact-archive`;
-  const finalUrl = `${getApiEndpoint()}${getRtkBaseUrl(undefined)}${url}`;
-  const idToken = await getRtkIdToken();
-
-  // Call the API to retrieve file or signed URL
-  const response = await fetch(finalUrl, {
-    headers: idToken ? {authorization: `Bearer ${idToken}`} : {},
-  });
-
-  // Download the file
-  await downloadPotentialFile(response, fileName);
+export const downloadArtifactArchive = async (executionId: string, testName?: string, testSuiteName?: string) => {
+  await downloadArtifact('artifacts.tar.gz', executionId, testName, testSuiteName);
 };
