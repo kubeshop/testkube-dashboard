@@ -33,7 +33,7 @@ export interface PromoBanner {
   condition: PromoBannerCondition;
   type: PromoBannerType;
   title: string;
-  description: string;
+  description: JSX.Element | string;
   primaryLink?: {
     label: string;
     url: string;
