@@ -45,5 +45,6 @@ export default createPlugin('dashboard/general')
       active?: RegExp;
     }>()('siderOtherItems')
   )
+  .route('/', tk => <Navigate to={tk.slots.siderItems.first()?.path || '/tests'} replace />)
 
   .init();
