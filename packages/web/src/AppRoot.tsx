@@ -21,6 +21,7 @@ import {basePlugins} from '@plugins';
 import AiInsightsPromoPlugin from '@plugins/ai-insights-promo/plugin';
 import ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import ConfigPlugin from '@plugins/config/plugin';
+import defaultRoutePlugin from '@plugins/default-route/default-route.plugin';
 import FeatureFlagsPlugin from '@plugins/feature-flags/plugin';
 import ModalPlugin from '@plugins/modal/plugin';
 import PermissionsPlugin from '@plugins/permissions/plugin';
@@ -47,6 +48,7 @@ const AppRoot: React.FC = () => {
   const plugins = useMemo(
     () => [
       ...basePlugins,
+      defaultRoutePlugin,
       ClusterStatusPlugin,
       ConfigPlugin.configure({discordUrl: externalLinks.discord}),
       RouterPlugin.configure({baseUrl: env.basename || ''}),
