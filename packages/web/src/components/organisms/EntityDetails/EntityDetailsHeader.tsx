@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import {FC, useEffect, useMemo} from 'react';
 
 import {Select, Space} from 'antd';
 
@@ -60,6 +60,28 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   const {entity, details} = useEntityDetailsPick('entity', 'details');
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
   const testIcon = useExecutorIcon(details);
+
+  useEffect(() => {
+    if (!details) return;
+
+    const latestExecutionStartTime = details.status?.latestExecution.startTime;
+
+    if (!latestExecutionStartTime) return;
+
+    const latestExecutionStartTimeDate = new Date(latestExecutionStartTime);
+    const differenceInDays = Math.round((Date.now() - latestExecutionStartTimeDate.getTime()) / (1000 * 3600 * 24));
+
+    for (let i = 0; i < filterOptions.length; i += 1) {
+      if (Number(filterOptions[i].value) >= differenceInDays) {
+        setDaysFilterValue(Number(filterOptions[i].value));
+        return;
+      }
+
+      if (filterOptions[i].value === 0) {
+        setDaysFilterValue(0);
+      }
+    }
+  }, [details, setDaysFilterValue]);
 
   const {executions} = useEntityDetailsPick('executions');
 
