@@ -8,10 +8,10 @@ import {connectStore, createStoreFactory} from './utils';
 
 export interface EntityDetailsSlice {
   currentPage: number;
-  daysFilterValue: number;
   entity: Entity;
   isFirstTimeLoading: boolean;
   isV2: boolean;
+  daysFilterValue?: number;
   details?: any;
   error?: any;
   executions?: any;
@@ -26,7 +26,7 @@ export interface EntityDetailsSlice {
 
 const createEntityDetailsSlice: StateCreator<EntityDetailsSlice> = set => ({
   currentPage: 1,
-  daysFilterValue: 7,
+  daysFilterValue: undefined,
   entity: 'tests',
   isFirstTimeLoading: true,
   isV2: false,
