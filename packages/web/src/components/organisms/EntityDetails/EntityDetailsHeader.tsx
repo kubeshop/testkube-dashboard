@@ -61,28 +61,6 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
   const [daysFilterValue, setDaysFilterValue] = useEntityDetailsField('daysFilterValue');
   const testIcon = useExecutorIcon(details);
 
-  useEffect(() => {
-    if (!details) return;
-
-    const latestExecutionStartTime = details.status?.latestExecution.startTime;
-
-    if (!latestExecutionStartTime) return;
-
-    const latestExecutionStartTimeDate = new Date(latestExecutionStartTime);
-    const differenceInDays = Math.round((Date.now() - latestExecutionStartTimeDate.getTime()) / (1000 * 3600 * 24));
-
-    for (let i = 0; i < filterOptions.length; i += 1) {
-      if (Number(filterOptions[i].value) >= differenceInDays) {
-        setDaysFilterValue(Number(filterOptions[i].value));
-        return;
-      }
-
-      if (filterOptions[i].value === 0) {
-        setDaysFilterValue(0);
-      }
-    }
-  }, [details, setDaysFilterValue]);
-
   const {executions} = useEntityDetailsPick('executions');
 
   const isTestSuiteEmpty = entity === 'test-suites' && !details.steps?.length;
@@ -104,6 +82,28 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
       ].filter(Boolean),
     [executions?.totals?.running]
   );
+
+  useEffect(() => {
+    if (!details) return;
+
+    const latestExecutionStartTime = details.status?.latestExecution.startTime;
+
+    if (!latestExecutionStartTime) return;
+
+    const latestExecutionStartTimeDate = new Date(latestExecutionStartTime);
+    const differenceInDays = Math.round((Date.now() - latestExecutionStartTimeDate.getTime()) / (1000 * 3600 * 24));
+
+    for (let i = 0; i < filterOptions.length; i += 1) {
+      if (Number(filterOptions[i].value) >= differenceInDays) {
+        setDaysFilterValue(Number(filterOptions[i].value));
+        return;
+      }
+
+      if (filterOptions[i].value === 0) {
+        setDaysFilterValue(0);
+      }
+    }
+  }, [details, setDaysFilterValue]);
 
   return (
     <PageHeader
