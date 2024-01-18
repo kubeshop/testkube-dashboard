@@ -88,7 +88,10 @@ const EntityDetailsHeader: FC<EntityDetailsHeaderProps> = ({
 
     const latestExecutionStartTime = details.status?.latestExecution.startTime;
 
-    if (!latestExecutionStartTime) return;
+    if (!latestExecutionStartTime) {
+      setDaysFilterValue(0);
+      return;
+    }
 
     const latestExecutionStartTimeDate = new Date(latestExecutionStartTime);
     const differenceInDays = Math.round((Date.now() - latestExecutionStartTimeDate.getTime()) / (1000 * 3600 * 24));
