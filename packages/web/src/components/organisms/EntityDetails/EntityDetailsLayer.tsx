@@ -72,7 +72,7 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
     {id, last: daysFilterValue, ...executionsFilters},
     {
       pollingInterval: PollingIntervals.long,
-      skip: !isSystemAvailable || !daysFilterValue,
+      skip: !isSystemAvailable || daysFilterValue === undefined,
     }
   );
 

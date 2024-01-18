@@ -29,12 +29,11 @@ const getKey = (record: any) => record.id;
 const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecution}) => {
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
   const [executionsFilters, setExecutionsFilters] = useEntityDetailsField('executionsFilters');
-  const {daysFilterValue, executions, executionsLoading, id, isFirstTimeLoading} = useEntityDetailsPick(
+  const {executions, executionsLoading, id, isFirstTimeLoading} = useEntityDetailsPick(
     'executions',
     'id',
     'isFirstTimeLoading',
-    'executionsLoading',
-    'daysFilterValue'
+    'executionsLoading'
   );
   const {id: execId, open} = useExecutionDetailsPick('id', 'open');
   const isWritable = useSystemAccess(SystemAccess.agent);
@@ -100,7 +99,7 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
     <>
       <ExecutionsFilters />
 
-      {(isFiltering && executionsLoading) || !daysFilterValue ? (
+      {isFiltering && executionsLoading ? (
         <LoadingSkeleton />
       ) : isFiltering && !executionsLoading && !executions?.results.length ? (
         <EmptyDataWithFilters resetFilters={() => setExecutionsFilters({textSearch: '', status: []})} />
