@@ -30,7 +30,7 @@ const filterOptions: OptionType[] = [
   {value: 7, label: 'Timeframe: last 7 days', key: 'last7Days'},
   {value: 30, label: 'Timeframe: last 30 days', key: 'last30Days'},
   {value: 90, label: 'Timeframe: last 90 days', key: 'last90Days'},
-  {value: 365, label: 'Timeframe: this year', key: 'thisYear'},
+  {value: 365, label: 'Timeframe: last 12 months', key: 'last12Months'},
   {value: 0, label: 'See all executions', key: 'allDays'},
 ];
 
