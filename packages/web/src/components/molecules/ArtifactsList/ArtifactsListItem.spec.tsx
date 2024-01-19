@@ -1,14 +1,15 @@
-import React from 'react';
-
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+
+import {Artifact} from '@models/artifact';
 
 import ArtifactsListItem from './ArtifactsListItem';
 
 describe('ArtifactsListItem', () => {
-  const artifact = {
+  const artifact: Artifact = {
     description: 'artifact-description',
     name: 'artifact-name',
     size: 123,
+    status: 'ready',
   };
   const executionId = '123';
   const testName = 'test-name';

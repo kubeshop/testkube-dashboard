@@ -8,6 +8,8 @@ import {ArtifactsList} from '@molecules';
 
 import {useGetTestExecutionArtifactsQuery} from '@services/tests';
 
+import {PollingIntervals} from '@src/utils/numbers';
+
 type TestExecutionArtifactsProps = {
   id: string;
   testName?: string;
@@ -22,7 +24,10 @@ const TestExecutionArtifacts: React.FC<TestExecutionArtifactsProps> = props => {
 
   const [artifacts, setArtifacts] = useState<Artifact[]>([]);
 
-  const {data, isLoading, error} = useGetTestExecutionArtifactsQuery(id, {skip: !isSystemAvailable});
+  const {data, isLoading, error} = useGetTestExecutionArtifactsQuery(id, {
+    skip: !isSystemAvailable,
+    pollingInterval: PollingIntervals.everyTwoSeconds,
+  });
 
   useEffect(() => {
     if (error) {

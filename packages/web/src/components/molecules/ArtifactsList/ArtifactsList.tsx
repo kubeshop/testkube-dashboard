@@ -1,5 +1,7 @@
 import {useMemo, useState} from 'react';
 
+import {LoadingOutlined} from '@ant-design/icons';
+
 import {Button, Skeleton, Text} from '@custom-antd';
 
 import {Artifact} from '@models/artifact';
@@ -10,7 +12,7 @@ import Colors from '@styles/Colors';
 
 import {DefaultRequestError, displayDefaultErrorNotification} from '@utils/notification';
 
-import {ArtifactsListContainer} from './ArtifactsList.styled';
+import * as S from './ArtifactsList.styled';
 import ArtifactsListItem from './ArtifactsListItem';
 import {StyledDownloadAllContainer} from './ArtifactsListItem.styled';
 
@@ -46,22 +48,37 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
       );
     }
 
-    return artifacts.map((artifact, index) => {
-      const {name} = artifact;
+    const processingArtifacts = artifacts.filter(artifact => artifact.status === 'processing');
 
-      const listItemKey = `${name} - ${index}`;
+    return (
+      <>
+        {processingArtifacts.length > 0 && (
+          <S.ProcessingContainer className="semibold middle" color={Colors.whitePure}>
+            <LoadingOutlined />
+            We are currently processing your artifacts...
+          </S.ProcessingContainer>
+        )}
 
-      return (
-        <ArtifactsListItem
-          artifact={artifact}
-          key={listItemKey}
-          executionId={testExecutionId}
-          testName={testName}
-          testSuiteName={testSuiteName}
-        />
-      );
-    });
-  }, [artifacts, testExecutionId, isLoading]);
+        {artifacts
+          .filter(artifact => artifact.status === 'ready')
+          .map((artifact, index) => {
+            const {name} = artifact;
+
+            const listItemKey = `${name} - ${index}`;
+
+            return (
+              <ArtifactsListItem
+                artifact={artifact}
+                key={listItemKey}
+                executionId={testExecutionId}
+                testName={testName}
+                testSuiteName={testSuiteName}
+              />
+            );
+          })}
+      </>
+    );
+  }, [isLoading, artifacts, testExecutionId, testName, testSuiteName]);
 
   const handleDownloadAll = async () => {
     try {
@@ -75,14 +92,14 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
   };
 
   return (
-    <ArtifactsListContainer>
+    <S.ArtifactsListContainer>
       {artifacts.length > 1 ? (
         <StyledDownloadAllContainer>
           <Button onClick={handleDownloadAll}>{!isDownloading ? 'Download all' : 'Downloading...'}</Button>
         </StyledDownloadAllContainer>
       ) : null}
       {renderedArtifactsList}
-    </ArtifactsListContainer>
+    </S.ArtifactsListContainer>
   );
 };
 
