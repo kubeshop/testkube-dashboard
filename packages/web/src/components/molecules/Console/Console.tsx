@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import {useParams, useSearchParams} from 'react-router-dom';
+import {useSearchParams} from 'react-router-dom';
 import {usePrevious, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
@@ -48,8 +48,6 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const processor = useMemo(() => LogProcessor.from(escapeCarriageReturn(content)), [content]);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const maxDigits = processor.maxDigits;
-
-  const {execDetailsTab} = useParams();
 
   const rerender = useUpdate();
 
@@ -205,10 +203,27 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   useEventCallback('scroll', onScroll, containerRef?.current);
 
   useEffect(() => {
-    if (execDetailsTab !== 'log-output') return;
+    const observer = new IntersectionObserver(
+      entries => {
+        const isIntersecting = entries[0].isIntersecting;
 
-    rerenderDebounce();
-  }, [execDetailsTab, rerenderDebounce]);
+        if (isIntersecting) {
+          rerenderDebounce();
+        }
+      },
+      {root: null, rootMargin: '0px', threshold: 0.5}
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <S.Container $wrap={wrap} ref={containerRef}>
