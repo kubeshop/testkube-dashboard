@@ -10,7 +10,7 @@ import {
   useState,
 } from 'react';
 import {useSearchParams} from 'react-router-dom';
-import {usePrevious, useUpdate} from 'react-use';
+import {useIntersection, usePrevious, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
 import {debounce} from 'lodash';
@@ -50,6 +50,12 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const maxDigits = processor.maxDigits;
 
   const rerender = useUpdate();
+
+  const intersection = useIntersection(containerRef, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1,
+  });
 
   const [{baseWidth, characterWidth, maxCharacters, lineHeight}, setDimensions] = useState<ConsoleLineDimensions>({
     baseWidth: 0,
@@ -203,27 +209,10 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   useEventCallback('scroll', onScroll, containerRef?.current);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        const isIntersecting = entries[0].isIntersecting;
+    if (!intersection?.isIntersecting) return;
 
-        if (isIntersecting) {
-          rerenderDebounce();
-        }
-      },
-      {root: null, rootMargin: '0px', threshold: 0.5}
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, []);
+    rerenderDebounce();
+  }, [intersection, rerenderDebounce]);
 
   return (
     <S.Container $wrap={wrap} ref={containerRef}>
