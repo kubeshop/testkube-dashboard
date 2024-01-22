@@ -171,11 +171,11 @@ export default createPlugin('oss/tests-and-test-suites')
       },
       {order: -Infinity}
     );
-    const isReadOnlyEntity = tk.sync(() => {
+    const isReadOnlyEntity = tk.syncSubscribe(() => {
       const {details} = tk.data.useEntityDetailsPick('details');
       return details?.readOnly;
     });
-    const mayHaveArtifacts = tk.sync(() => {
+    const mayHaveArtifacts = tk.syncSubscribe(() => {
       const {testType} = tk.data.useExecutionDetails(x => x.data as Execution) || {};
       const featuresMap = tk.data.useExecutors(x => x.featuresMap);
       const {details} = tk.data.useEntityDetailsPick('details');
