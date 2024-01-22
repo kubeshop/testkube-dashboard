@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import {useSearchParams} from 'react-router-dom';
+import {useParams, useSearchParams} from 'react-router-dom';
 import {usePrevious, useUpdate} from 'react-use';
 
 import {escapeCarriageReturn} from 'escape-carriage';
@@ -48,6 +48,8 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const processor = useMemo(() => LogProcessor.from(escapeCarriageReturn(content)), [content]);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const maxDigits = processor.maxDigits;
+
+  const {execDetailsTab} = useParams();
 
   const rerender = useUpdate();
 
@@ -193,7 +195,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   }, [viewportStart, viewportEnd, scrollTop, clientHeight, total]);
 
   // Re-render on scroll
-  const rerenderDebounce = useMemo(() => debounce(rerender, 5), []);
+  const rerenderDebounce = useMemo(() => debounce(rerender, 5), [rerender]);
   const onScroll = () => {
     const viewport = getViewport();
     if (viewport.start !== viewportStart || viewport.end !== viewportEnd) {
@@ -201,6 +203,12 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
     }
   };
   useEventCallback('scroll', onScroll, containerRef?.current);
+
+  useEffect(() => {
+    if (execDetailsTab !== 'log-output') return;
+
+    rerenderDebounce();
+  }, [execDetailsTab, rerenderDebounce]);
 
   return (
     <S.Container $wrap={wrap} ref={containerRef}>
