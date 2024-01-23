@@ -3,7 +3,7 @@ import env from '../env';
 export enum externalLinks {
   documentation = 'https://docs.testkube.io/',
   github = 'https://github.com/kubeshop/testkube',
-  discord = 'https://discord.com/invite/hfq44wtR6Q',
+  slack = 'https://join.slack.com/t/testkubeworkspace/shared_invite/zt-2arhz5vmu-U2r3WZ69iPya5Fw0hMhRDg',
   containerExecutor = 'https://docs.testkube.io/test-types/container-executor',
   dashboardDocumentation = 'https://docs.testkube.io/articles/testkube-dashboard',
   integrations = 'https://testkube.io/integrations',

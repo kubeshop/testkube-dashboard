@@ -46,7 +46,7 @@ const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = pro
     isReadOnly,
   } = props;
 
-  const discordUrl = useConfigPlugin.select(x => x.discordUrl);
+  const slackUrl = useConfigPlugin.select(x => x.slackUrl);
   const isActionAvailable = usePermission(actionTypeToPermission[actionType]);
 
   return (
@@ -66,9 +66,9 @@ const EmptyListContent: React.FC<PropsWithChildren<EmptyListContentProps>> = pro
           <StyledHelpCardsContainer>
             {children}
             <StyledLastHelpCardContainer>
-              <HelpCard isHelp link={discordUrl}>
+              <HelpCard isHelp link={slackUrl}>
                 Need help getting started? Want to talk to Testkube engineers?{' '}
-                <ExternalLink href={discordUrl}>Find us on Discord</ExternalLink>
+                <ExternalLink href={slackUrl}>Find us on Slack</ExternalLink>
               </HelpCard>
             </StyledLastHelpCardContainer>
           </StyledHelpCardsContainer>

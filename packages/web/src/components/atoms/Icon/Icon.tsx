@@ -10,7 +10,7 @@ import {IconProps} from './types';
 const {
   CogIcon,
   DocumentationIcon,
-  DiscordIcon,
+  SlackIcon,
   GitHubIcon,
   PassedStatusIcon,
   FailedStatusIcon,
@@ -25,7 +25,7 @@ const {
 const iconsMap: Record<IconProps['name'], IconComponentProps['component']> = {
   cog: CogIcon,
   documentation: DocumentationIcon,
-  discord: DiscordIcon,
+  slack: SlackIcon,
   github: GitHubIcon,
   passed: PassedStatusIcon,
   failed: FailedStatusIcon,

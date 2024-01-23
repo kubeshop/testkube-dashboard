@@ -48,7 +48,7 @@ const AppRoot: React.FC = () => {
     () => [
       ...basePlugins,
       ClusterStatusPlugin,
-      ConfigPlugin.configure({discordUrl: externalLinks.discord}),
+      ConfigPlugin.configure({slackUrl: externalLinks.slack}),
       RouterPlugin.configure({baseUrl: env.basename || ''}),
       PermissionsPlugin.configure({resolver: new BasePermissionsResolver()}),
       RtkResetOnApiChangePlugin,
