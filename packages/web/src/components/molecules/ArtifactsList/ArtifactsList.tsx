@@ -60,7 +60,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
         )}
 
         {artifacts
-          .filter(artifact => artifact.status === 'ready')
+          .filter(artifact => !artifact.status || artifact.status === 'ready')
           .map((artifact, index) => {
             const {name} = artifact;
 
