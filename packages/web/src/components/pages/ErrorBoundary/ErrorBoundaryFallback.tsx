@@ -13,7 +13,7 @@ import Colors from '@styles/Colors';
 import {StyledErrorContainer, StyledErrorDescription, StyledErrorImage} from './ErrorBoundary.styled';
 
 const ErrorBoundaryFallback: React.FC = () => {
-  const discordUrl = useConfigPlugin.select(x => x.discordUrl);
+  const slackUrl = useConfigPlugin.select(x => x.slackUrl);
   const back = useDashboardNavigate('/');
 
   return (
@@ -27,8 +27,8 @@ const ErrorBoundaryFallback: React.FC = () => {
         refreshing this page.
       </StyledErrorDescription>
       <StyledErrorDescription>
-        Feel free to reach out to us on <ExternalLink href={discordUrl}>Discord</ExternalLink> if the error continuous
-        to exist.
+        Feel free to reach out to us on <ExternalLink href={slackUrl}>Slack</ExternalLink> if the error continuous to
+        exist.
       </StyledErrorDescription>
       <Button type="primary" onClick={back}>
         Back to the Dashboard

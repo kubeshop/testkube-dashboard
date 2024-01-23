@@ -21,7 +21,7 @@ const configStub = external<typeof ConfigPlugin>();
 
 export default createPlugin('dashboard/sider-support')
   .needs(generalStub.slots('siderOtherItems'))
-  .needs(configStub.data('discordUrl'))
+  .needs(configStub.data('slackUrl'))
 
   .init(tk => {
     tk.slots.siderOtherItems.add({
@@ -40,9 +40,9 @@ export default createPlugin('dashboard/sider-support')
                 </ExternalLink>
               </DropdownListItem>
               <DropdownListItem>
-                <ExternalLink href={tk.data.discordUrl}>
+                <ExternalLink href={tk.data.slackUrl}>
                   <Text color={Colors.slate300} className="regular middle">
-                    Discord community
+                    Slack community
                   </Text>
                 </ExternalLink>
               </DropdownListItem>
