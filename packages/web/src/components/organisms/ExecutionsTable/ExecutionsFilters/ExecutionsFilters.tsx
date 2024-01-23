@@ -42,7 +42,6 @@ const ExecutionsFilters: React.FC = () => {
         data-cy="executions-search-filter"
         value={searchInputValue}
         onChange={onChange}
-        disabled={executionsLoading}
       />
       <ExecutionsStatusFilter />
     </S.FiltersContainer>
