@@ -1,5 +1,7 @@
 import {memo} from 'react';
 
+import {InstallationInfoItem} from '@atoms';
+
 import {FullWidthSpace} from '@custom-antd';
 
 import env from '@env';
@@ -9,7 +11,6 @@ import {ConfigurationCard} from '@molecules';
 import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import {YourInstallationContainer} from './YourInstallation.styled';
-import YourInstallationItem from './YourInstallationItem';
 
 const YourInstallation: React.FC = () => {
   const {namespace, version, helmchartVersion} = useClusterDetailsPick('version', 'helmchartVersion', 'namespace');
@@ -31,10 +32,10 @@ const YourInstallation: React.FC = () => {
     >
       <FullWidthSpace size={32} direction="vertical">
         <YourInstallationContainer>
-          <YourInstallationItem label="Namespace" value={namespace} />
-          <YourInstallationItem label="API Version" value={apiVersion} />
-          <YourInstallationItem label="Dashboard Version" value={dashboardVersion} />
-          <YourInstallationItem label="Helm Chart Version" value={helmChartVersion} />
+          <InstallationInfoItem label="Namespace" value={namespace} />
+          <InstallationInfoItem label="API Version" value={apiVersion} />
+          <InstallationInfoItem label="Dashboard Version" value={dashboardVersion} />
+          <InstallationInfoItem label="Helm Chart Version" value={helmChartVersion} />
         </YourInstallationContainer>
       </FullWidthSpace>
     </ConfigurationCard>

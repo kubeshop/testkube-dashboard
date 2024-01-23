@@ -2,10 +2,10 @@ import {createDataPlugin} from '@testkube/plugins';
 
 export interface OssConfig {
   pageTitle: string;
-  discordUrl: string;
+  slackUrl: string;
 }
 
 export default createDataPlugin<OssConfig>('dashboard/config')({
   pageTitle: 'Testkube',
-  discordUrl: undefined,
+  slackUrl: undefined,
 });

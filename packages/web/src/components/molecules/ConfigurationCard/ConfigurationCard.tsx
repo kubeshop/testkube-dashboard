@@ -33,6 +33,7 @@ type ConfigurationCardProps = {
   footer?: ReactNode;
   headerAction?: ReactNode;
   confirmLabel?: string;
+  confirmDisabled?: boolean;
   wasTouched?: boolean;
   children?: ReactNode;
   readOnly?: boolean;
@@ -56,6 +57,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
     isWarning = false,
     readOnly = false,
     loading = false,
+    confirmDisabled = false,
   } = props;
   const topRef = useRef<HTMLDivElement>(null);
   const inTopInViewport = useInViewport(topRef);
@@ -114,7 +116,7 @@ const ConfigurationCard: React.FC<ConfigurationCardProps> = props => {
                     <Button
                       data-testid="configuration-card-confirm-button"
                       $customType={isWarning ? 'warning' : 'primary'}
-                      disabled={buttonsDisabled}
+                      disabled={buttonsDisabled || confirmDisabled}
                       loading={loading}
                       htmlType="submit"
                     >

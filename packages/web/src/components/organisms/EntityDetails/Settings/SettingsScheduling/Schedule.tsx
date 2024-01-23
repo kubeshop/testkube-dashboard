@@ -148,7 +148,7 @@ const Schedule: React.FC<ScheduleProps> = ({label, useUpdateEntity}) => {
                   </Tooltip>
                 ) : null}
               </Text>
-              <Text style={{fontFamily: Fonts.robotoMono, color: Colors.slate400}} className="middle regular">
+              <Text style={{fontFamily: Fonts.mono, color: Colors.slate400}} className="middle regular">
                 {cronString}
               </Text>
             </StyledColumn>

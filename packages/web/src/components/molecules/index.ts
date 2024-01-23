@@ -39,3 +39,5 @@ export {default as InlineNotification} from './InlineNotification';
 export {default as SummaryGrid} from './SummaryGrid';
 export {default as LabelSelectorHelpIcon} from './LabelSelectorHelpIcon';
 export {default as DeleteModal} from './DeleteModal';
+export {default as TestActionsDropdown} from './TestActionsDropdown';
+export {default as TestSuiteActionsDropdown} from './TestSuiteActionsDropdown';

@@ -1,6 +1,7 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 
 import {Artifact} from '@models/artifact';
+import {ExecutionStatusEnum, ExecutionsResponse} from '@models/execution';
 import {MetadataResponse, YamlEditBody} from '@models/fetch';
 import {Test, TestFilters, TestWithExecution} from '@models/test';
 
@@ -37,12 +38,36 @@ export const testsApi = createApi({
       }),
       providesTags: (res, err, id) => [{type: 'Test', id}],
     }),
-    getTestExecutionsById: builder.query({
-      query: ({id, last = 7, pageSize = 1000}) => {
+    getTestExecutions: builder.query({
+      query: ({last = 7, pageSize = 1000}) => {
         const queryParams = new URLSearchParams({
           last,
           pageSize,
         });
+
+        return {
+          url: `/executions?${queryParams.toString()}`,
+        };
+      },
+      providesTags: (res, err) => [{type: 'TestExecution', id: 'LIST'}],
+    }),
+    getTestExecutionsById: builder.query<
+      ExecutionsResponse,
+      {id: string; last?: number; pageSize?: number; textSearch?: string; status?: ExecutionStatusEnum[]}
+    >({
+      query: ({id, last, pageSize = 1000, textSearch, status}) => {
+        const queryParams = new URLSearchParams({
+          ...(last ? {last: last.toString()} : null),
+          pageSize: pageSize.toString(),
+        });
+
+        if (textSearch) {
+          queryParams.append('textSearch', textSearch);
+        }
+
+        if (status?.length) {
+          status.forEach(s => queryParams.append('status', s));
+        }
 
         return {
           url: `/tests/${id}/executions?${queryParams.toString()}`,
@@ -66,9 +91,9 @@ export const testsApi = createApi({
       providesTags: (res, err, id) => [{type: 'TestExecution', id}],
     }),
     getTestExecutionMetrics: builder.query({
-      query: ({id, last = 7, limit = 1000}) => {
+      query: ({id, last, limit = 1000}) => {
         const queryParams = new URLSearchParams({
-          last,
+          ...(last ? {last: last.toString()} : null),
           limit,
         });
 
@@ -161,6 +186,7 @@ export const testsApi = createApi({
 testsApi.useGetTestQuery = memoizeQuery(testsApi.useGetTestQuery);
 testsApi.useGetTestsQuery = memoizeQuery(testsApi.useGetTestsQuery);
 testsApi.useGetAllTestsQuery = memoizeQuery(testsApi.useGetAllTestsQuery);
+testsApi.useGetTestExecutionsQuery = memoizeQuery(testsApi.useGetTestExecutionsQuery);
 testsApi.useGetTestExecutionsByIdQuery = memoizeQuery(testsApi.useGetTestExecutionsByIdQuery, executions =>
   // Limit to show maximum of 1000 latest executions
   executions.results?.length > 1000 ? {...executions, results: executions.results.slice(0, 1000)} : executions
@@ -177,6 +203,7 @@ export const {
   useGetTestQuery,
   useGetTestsQuery,
   useGetAllTestsQuery,
+  useGetTestExecutionsQuery,
   useGetTestExecutionsByIdQuery,
   useGetTestExecutionByIdQuery,
   useGetTestExecutionArtifactsQuery,

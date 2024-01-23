@@ -36,7 +36,7 @@ const WebhooksList: FC = () => {
     data: webhooks,
     error,
     isLoading,
-  } = useGetWebhooksQuery(null, {pollingInterval: PollingIntervals.everyTwoSeconds});
+  } = useGetWebhooksQuery(null, {pollingInterval: PollingIntervals.everyTwoSeconds, skip: !isClusterAvailable});
 
   const mayCreate = usePermission(Permissions.createEntity);
 
@@ -81,7 +81,7 @@ const WebhooksList: FC = () => {
         componentProps={{onClick: openDetails}}
         empty={<EmptyWebhooks onButtonClick={openCreateModal} />}
         itemHeight={125}
-        loadingInitially={isLoading || !isClusterAvailable}
+        loadingInitially={isLoading}
       />
     </PageBlueprint>
   );

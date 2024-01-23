@@ -22,6 +22,7 @@ import {useEntityDetailsPick} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
+import {escapeArguments} from '@utils/escapeArguments';
 import {externalLinks} from '@utils/externalLinks';
 import {displayDefaultNotificationFlow} from '@utils/notification';
 import {prettifyArguments} from '@utils/prettifyArguments';
@@ -45,15 +46,17 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const [updateTest] = useUpdateTestMutation();
 
   const entityArgs = details.executionRequest?.args || [];
-  const initialArgs = useMemo(() => entityArgs?.join('\n') || '', [entityArgs]);
+  const initialArgs = useMemo(() => escapeArguments(entityArgs)?.join('\n') || '', [entityArgs]);
 
   const currentArgs = Form.useWatch('args', form) || '';
-  const currentArgsInline = currentArgs.replace(/\s+/g, ' ').trim();
-  const isPrettified = useMemo(() => currentArgs === prettifyArguments(currentArgs), [currentArgs]);
 
-  const onSaveForm = () => {
-    const values = form.getFieldsValue();
-    const argVal = values.args?.trim().split('\n').filter(Boolean) || [];
+  const prettifiedArgs = useMemo(() => prettifyArguments(currentArgs), [currentArgs]);
+  const currentArgsInline = useMemo(() => prettifiedArgs.replace(/\n+/g, ' '), [prettifiedArgs]);
+
+  const isPrettified = currentArgs === prettifiedArgs;
+
+  const onSaveForm = async () => {
+    const argVal = currentArgs?.trim().split('\n').filter(Boolean) || [];
 
     // Reset the form when there is no actual change
     if (argVal.join('\n') === initialArgs) {
@@ -68,14 +71,13 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
       },
     };
 
-    return updateTest({
+    const res = await updateTest({
       id: details.name,
       data: successRecord,
-    })
-      .then(displayDefaultNotificationFlow)
-      .then(() => {
-        notificationCall('passed', 'Variables were successfully updated.');
-      });
+    });
+
+    displayDefaultNotificationFlow(res);
+    notificationCall('passed', 'Variables were successfully updated.');
   };
 
   const onPrettify = useLastCallback(() => form.setFieldValue('args', prettifyArguments(currentArgs)));

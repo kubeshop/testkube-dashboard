@@ -7,7 +7,7 @@ import PageHeader from './PageHeader';
 
 type PageBlueprintProps = {
   title: string;
-  description: React.ReactNode;
+  description?: React.ReactNode;
   headerButton?: React.ReactNode;
 };
 

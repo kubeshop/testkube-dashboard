@@ -1,4 +1,3 @@
-import {FC, useCallback} from 'react';
 import {useUnmount} from 'react-use';
 
 import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
@@ -8,15 +7,13 @@ import {useModal} from '@modal/hooks';
 
 import {TestSuite} from '@models/testSuite';
 
-import {notificationCall} from '@molecules';
-
-import {EntityListContent} from '@organisms';
+import {EntityView} from '@organisms';
 
 import {Error} from '@pages';
 
 import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
-import {useAbortAllTestSuiteExecutionsMutation, useGetTestSuitesQuery} from '@services/testSuites';
+import {useGetTestSuitesQuery} from '@services/testSuites';
 
 import {initialFilters, useTestSuitesField, useTestSuitesSync} from '@store/testSuites';
 
@@ -26,12 +23,14 @@ import EmptyTestSuites from './EmptyTestSuites';
 import TestSuiteCard from './TestSuiteCard';
 import TestSuiteCreationModalContent from './TestSuiteCreationModalContent';
 
-const PageDescription: FC = () => <>Explore your test suites at a glance...</>;
+const PageDescription: React.FC = () => <>Explore your test suites at a glance...</>;
 
-const TestSuitesList: FC = () => {
+const TestSuitesList: React.FC = () => {
   const isSystemAvailable = useSystemAccess(SystemAccess.system);
   const [filters, setFilters] = useTestSuitesField('filters');
   const pageTitleAddon = useTestsSlotFirst('testSuitesListTitleAddon');
+
+  const EntityPromoComponent = useTestsSlotFirst('EntityListPromoComponent');
 
   useUnmount(() => {
     setFilters({...filters, pageSize: initialFilters.pageSize});
@@ -56,31 +55,26 @@ const TestSuitesList: FC = () => {
     dataTestModalRoot: 'add-a-new-test-suite-modal',
   });
 
-  const [abortAll] = useAbortAllTestSuiteExecutionsMutation();
   const onItemClick = useDashboardNavigate((item: TestSuite) => `/test-suites/${item.name}`);
-  const onItemAbort = useCallback((item: TestSuite) => {
-    abortAll({id: item.name})
-      .unwrap()
-      .catch(() => {
-        notificationCall('failed', 'Something went wrong during test suite execution abortion');
-      });
-  }, []);
 
   if (error) {
     return <Error title={(error as any)?.data?.title} description={(error as any)?.data?.detail} />;
   }
 
+  if (EntityPromoComponent) {
+    return <EntityPromoComponent list="test-suites" />;
+  }
+
   return (
-    <EntityListContent
+    <EntityView
       itemKey="testSuite.name"
       CardComponent={TestSuiteCard}
       onItemClick={onItemClick}
-      onItemAbort={onItemAbort}
       entity="test-suites"
       pageTitle="Test Suites"
       pageTitleAddon={pageTitleAddon}
       addEntityButtonText="Add a new test suite"
-      pageDescription={PageDescription}
+      pageDescription={<PageDescription />}
       emptyDataComponent={EmptyTestSuites}
       initialFiltersState={initialFilters}
       dataTest="add-a-new-test-suite-btn"

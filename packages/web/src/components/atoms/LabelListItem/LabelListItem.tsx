@@ -9,16 +9,17 @@ type LabelListItemProps = {
   labelValue?: EntityValue;
   isSkippedMode?: boolean;
   skippedLabelsNumber?: number;
+  type?: 'primary' | 'secondary';
 };
 
 const LabelListItem: React.FC<LabelListItemProps> = props => {
-  const {labelKey = '', labelValue = '', isSkippedMode = false, skippedLabelsNumber = 0} = props;
+  const {labelKey = '', labelValue = '', isSkippedMode = false, skippedLabelsNumber = 0, type = 'primary'} = props;
 
   const value = isSkippedMode ? `+${skippedLabelsNumber} more` : labelValue ? `${labelKey}: ${labelValue}` : labelKey;
 
   return (
-    <StyledLabelListItem isSkippedMode={isSkippedMode}>
-      <SplitLabelText value={value} />
+    <StyledLabelListItem $type={type}>
+      <SplitLabelText type={type} value={value} />
     </StyledLabelListItem>
   );
 };

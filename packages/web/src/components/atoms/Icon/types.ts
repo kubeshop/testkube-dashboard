@@ -4,7 +4,7 @@ export type IconProps = {
   name:
     | 'cog'
     | 'documentation'
-    | 'discord'
+    | 'slack'
     | 'github'
     | 'passed'
     | 'failed'

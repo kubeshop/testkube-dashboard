@@ -18,8 +18,8 @@ import {ReactComponent as TracetestIcon} from '@assets/tracetestIcon.svg';
 import {StyledExecutorIcon} from './ExecutorIcon.styled';
 
 type ExecutorIconProps = {
+  size?: 'large' | 'small';
   type?: string;
-  noWidth?: boolean;
 };
 
 export const executorIcons: Record<string, JSX.Element> = {
@@ -39,7 +39,7 @@ export const executorIcons: Record<string, JSX.Element> = {
 };
 
 const ExecutorIcon: React.FC<ExecutorIconProps> = props => {
-  const {type, noWidth = false} = props;
+  const {size = 'large', type} = props;
 
   const icon = type ? executorIcons[type] : <DefaultIcon />;
 
@@ -47,7 +47,7 @@ const ExecutorIcon: React.FC<ExecutorIconProps> = props => {
     return <DefaultIcon />;
   }
   return (
-    <StyledExecutorIcon $noWidth={noWidth} className="dashboard-test-runner">
+    <StyledExecutorIcon $size={size} className="dashboard-test-runner">
       {icon || <DefaultIcon />}
     </StyledExecutorIcon>
   );

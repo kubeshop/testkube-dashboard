@@ -11,17 +11,23 @@ type HelpCardTypes = {
   isHelp?: boolean;
   link?: string;
   customLinkIcon?: JSX.Element;
+  prefix?: JSX.Element;
+  suffix?: JSX.Element;
 };
 const HelpCard: React.FC<PropsWithChildren<HelpCardTypes>> = props => {
-  const {isLink, isHelp, children, link, customLinkIcon: CustomLinkIcon} = props;
+  const {prefix, suffix, isLink, isHelp, children, link, customLinkIcon: CustomLinkIcon} = props;
 
   const redirectToLink = () => {
+    if (!isLink) {
+      return;
+    }
     window.open(link, '_blank');
   };
 
   return (
     <StyledHelpCardContainer isLink={Boolean(link)} onClick={redirectToLink}>
-      {isLink && !CustomLinkIcon ? (
+      {prefix && prefix}
+      {isLink && !CustomLinkIcon && !prefix ? (
         <IconWrapper>
           <HelpLinkIcon />
         </IconWrapper>
@@ -33,6 +39,7 @@ const HelpCard: React.FC<PropsWithChildren<HelpCardTypes>> = props => {
       ) : null}
       <StyledChildrenContainer>{children}</StyledChildrenContainer>
       {isLink ? <IconWrapper>{CustomLinkIcon || <LinkIcon />}</IconWrapper> : null}
+      {suffix && suffix}
     </StyledHelpCardContainer>
   );
 };

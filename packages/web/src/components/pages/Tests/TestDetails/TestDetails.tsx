@@ -1,7 +1,8 @@
-import React, {FC} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {EntityDetailsLayer, ExecutionDetailsLayer} from '@organisms/EntityDetails';
+
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
 import {
   useGetTestExecutionByIdQuery,
@@ -16,8 +17,14 @@ interface TestDetailsProps {
   tab?: string;
 }
 
-const TestDetails: FC<TestDetailsProps> = ({tab}) => {
+const TestDetails: React.FC<TestDetailsProps> = ({tab}) => {
   const {id, execId, settingsTab} = useParams();
+  const EntityPromoComponent = useTestsSlotFirst('EntityListPromoComponent');
+
+  if (EntityPromoComponent) {
+    return <EntityPromoComponent list="tests" />;
+  }
+
   return (
     <EntityDetailsLayer
       entity="tests"

@@ -265,6 +265,103 @@ describe('plugins', () => {
       );
     });
 
+    it('should return default value before synchronization (syncSubscribe)', () => {
+      const scope = create({});
+      const fn1 = jest.fn(() => Math.random());
+      const fn2 = jest.fn(() => Math.random());
+      const fnSync1 = scope.syncSubscribe(fn1);
+      const fnSync2 = scope.syncSubscribe(fn2, 1.5);
+      expect(fn1).not.toHaveBeenCalled();
+      expect(fn2).not.toHaveBeenCalled();
+      expect(fnSync1()).toBe(undefined);
+      expect(fnSync2()).toBe(1.5);
+    });
+
+    it('should return cached value after synchronization (syncSubscribe)', () => {
+      const scope = create({});
+      const fn1 = jest.fn(() => Math.random());
+      const fn2 = jest.fn(() => Math.random());
+      const fnSync1 = scope.syncSubscribe(fn1);
+      const fnSync2 = scope.syncSubscribe(fn2, 1.5);
+      scope[PluginScopeCallSync]();
+      expect(fn1).toHaveBeenCalledTimes(1);
+      expect(fn2).toHaveBeenCalledTimes(1);
+      expect(fnSync1()).toBe(fn1.mock.results[0].value);
+      expect(fnSync2()).toBe(fn2.mock.results[0].value);
+    });
+
+    it('should replace value after multiple synchronizations (syncSubscribe)', () => {
+      const scope = create({});
+      const fn = jest.fn(() => Math.random());
+      const fnSync = scope.syncSubscribe(fn);
+      scope[PluginScopeCallSync]();
+      scope[PluginScopeCallSync]();
+      expect(fn).toHaveBeenCalledTimes(2);
+      expect(fnSync()).toBe(fn.mock.results[1].value);
+    });
+
+    it('should emit change in root scope on initial run when its different than default (syncSubscribe)', async () => {
+      const root = create({});
+      const middle = create({}, root);
+      const scope = create({}, middle);
+      const listener = jest.fn();
+      root[PluginScopeSubscribeChange](listener);
+      scope.syncSubscribe(() => 10);
+      scope[PluginScopeCallSync]();
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not emit change in root scope on initial run when its same as default (syncSubscribe)', async () => {
+      const root = create({});
+      const middle = create({}, root);
+      const scope = create({}, middle);
+      const listener = jest.fn();
+      root[PluginScopeSubscribeChange](listener);
+      scope.syncSubscribe(() => 10, 10);
+      scope[PluginScopeCallSync]();
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(0);
+    });
+
+    it('should not emit change in root scope when there is no change (syncSubscribe)', async () => {
+      const root = create({});
+      const middle = create({}, root);
+      const scope = create({}, middle);
+      const listener = jest.fn();
+      root[PluginScopeSubscribeChange](listener);
+      const value = 10;
+      const fn = jest.fn(() => value);
+      scope.syncSubscribe(fn, value);
+      scope[PluginScopeCallSync]();
+      scope[PluginScopeCallSync]();
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(0);
+    });
+
+    it('should emit change in root scope when there is a change (syncSubscribe)', async () => {
+      const root = create({});
+      const middle = create({}, root);
+      const scope = create({}, middle);
+      const listener = jest.fn();
+      root[PluginScopeSubscribeChange](listener);
+      let value = 10;
+      scope.syncSubscribe(() => value, value);
+      scope[PluginScopeCallSync]();
+      value = 123;
+      scope[PluginScopeCallSync]();
+      await frame();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not allow synchronization after plugin initialization (syncSubscribe)', () => {
+      const scope = create({});
+      scope[PluginScopeDisableNewSync]();
+      expect(() => scope.syncSubscribe(() => {})).toThrow(
+        new Error('The syncSubscribe() factory may be executed only during initialization.')
+      );
+    });
+
     it('should allow destroying items produced by specific scope or its children', () => {
       const root = create({slots: ['slot1']});
       const separate = create({inheritedSlots: ['slot1']}, root);

@@ -7,6 +7,7 @@ enum Colors {
   slate400 = '#94A3B8',
   slate500 = '#64748B',
   slate600 = '#475569',
+  slate600quarteralpha = 'rgba(71,85,105, 0.25)',
   slate700 = '#334155',
   slate800 = '#1E293B',
   slate200halfalpha = 'rgba(226,232,240, 0.5)',
@@ -15,6 +16,7 @@ enum Colors {
   slate800disabled = 'rgba(30, 41, 59, 0.5)',
   slate850 = '#0f172a',
   slate900 = '#0F172A',
+  slate950 = '#0b101d',
 
   sky900 = '#0C4A6E',
   sky700 = '#0369A1',
@@ -52,6 +54,7 @@ enum Colors {
   blue500 = '#3b82f6',
 
   emerald900 = '#064E3B',
+  emerald700 = '#0F766E',
   emerald500 = '#10B981',
 
   teal300 = '#5eead4',
@@ -62,8 +65,10 @@ enum Colors {
   indigo200 = '#C7D2FE',
   indigo300 = '#A5B4FC',
   indigo400 = '#818CF8',
+  indigo500 = '#6366F1',
   indigo600 = '#4F46E5',
-  indigo700 = '#303F9F',
+  indigo700 = '#4338CA',
+  indigo800 = '#3730A3',
   indigo900 = '#312e81',
 
   amber100 = '#FEF3C7',

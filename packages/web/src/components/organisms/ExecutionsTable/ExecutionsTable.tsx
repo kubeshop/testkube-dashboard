@@ -10,10 +10,13 @@ import {Skeleton} from '@custom-antd';
 
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
+import EmptyDataWithFilters from '@organisms/EntityView/EmptyDataWithFilters';
+
 import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
 import {useExecutionDetailsPick} from '@store/executionDetails';
 
 import EmptyExecutionsListContent from './EmptyExecutionsListContent';
+import ExecutionsFilters from './ExecutionsFilters';
 import TableRow from './TableRow';
 
 interface ExecutionsTableProps {
@@ -25,7 +28,13 @@ const getKey = (record: any) => record.id;
 
 const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecution}) => {
   const [currentPage, setCurrentPage] = useEntityDetailsField('currentPage');
-  const {executions, id, isFirstTimeLoading} = useEntityDetailsPick('executions', 'id', 'isFirstTimeLoading');
+  const [executionsFilters, setExecutionsFilters] = useEntityDetailsField('executionsFilters');
+  const {executions, executionsLoading, id, isFirstTimeLoading} = useEntityDetailsPick(
+    'executions',
+    'id',
+    'isFirstTimeLoading',
+    'executionsLoading'
+  );
   const {id: execId, open} = useExecutionDetailsPick('id', 'open');
   const isWritable = useSystemAccess(SystemAccess.agent);
 
@@ -45,10 +54,14 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
       onChange: setCurrentPage,
       showSizeChanger: false,
     }),
-    [currentPage]
+    [currentPage, setCurrentPage]
   );
 
-  const isEmptyExecutions = !executions?.results || !executions?.results.length;
+  const isFiltering = useMemo(
+    () => Boolean(executionsFilters.textSearch.trim().length || executionsFilters.status.length),
+    [executionsFilters]
+  );
+  const isEmptyExecutions = useMemo(() => !isFiltering && !executions?.results.length, [executions, isFiltering]);
 
   const [abortExecution] = useAbortExecution();
   const onAbortExecution = useCallback(
@@ -75,30 +88,44 @@ const ExecutionsTable: React.FC<ExecutionsTableProps> = ({onRun, useAbortExecuti
   );
 
   if (isFirstTimeLoading) {
-    return (
-      <>
-        <Skeleton additionalStyles={{lineHeight: 40}} />
-        <Skeleton additionalStyles={{lineHeight: 40}} />
-        <Skeleton additionalStyles={{lineHeight: 40}} />
-      </>
-    );
+    return <LoadingSkeleton />;
   }
 
-  if (isEmptyExecutions) {
+  if (isEmptyExecutions && !isFiltering) {
     return <EmptyExecutionsListContent onRun={onRun} />;
   }
 
   return (
-    <Table
-      className="custom-table"
-      showHeader={false}
-      dataSource={executions?.results}
-      columns={columns}
-      onRow={onRow}
-      rowSelection={rowSelection}
-      rowKey={getKey}
-      pagination={pagination}
-    />
+    <>
+      <ExecutionsFilters />
+
+      {isFiltering && executionsLoading ? (
+        <LoadingSkeleton />
+      ) : isFiltering && !executionsLoading && !executions?.results.length ? (
+        <EmptyDataWithFilters resetFilters={() => setExecutionsFilters({textSearch: '', status: []})} />
+      ) : (
+        <Table
+          className="custom-table"
+          showHeader={false}
+          dataSource={executions?.results}
+          columns={columns}
+          onRow={onRow}
+          rowSelection={rowSelection}
+          rowKey={getKey}
+          pagination={pagination}
+        />
+      )}
+    </>
+  );
+};
+
+const LoadingSkeleton = () => {
+  return (
+    <>
+      <Skeleton additionalStyles={{lineHeight: 40}} />
+      <Skeleton additionalStyles={{lineHeight: 40}} />
+      <Skeleton additionalStyles={{lineHeight: 40}} />
+    </>
   );
 };
 

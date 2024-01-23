@@ -36,7 +36,7 @@ const StringContentFields: React.FC<Partial<Props>> = props => {
   const placeholder = stringPlaceholders[executorType!] || 'String...';
   return (
     <FormItem name="string" label="String" rules={[required]} required>
-      <TextArea rows={11} placeholder={placeholder} style={{fontFamily: Fonts.robotoMono}} disabled={disabled} />
+      <TextArea rows={11} placeholder={placeholder} style={{fontFamily: Fonts.mono}} disabled={disabled} />
     </FormItem>
   );
 };

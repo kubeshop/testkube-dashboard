@@ -1,61 +1,59 @@
-import React, {MouseEvent, forwardRef, memo, useCallback, useEffect, useRef} from 'react';
+import {forwardRef, memo, useImperativeHandle, useRef} from 'react';
 
-import Ansi from 'ansi-to-react';
+import {LoadingOutlined} from '@ant-design/icons';
 
-import {useScrolledToBottom} from '@hooks/useScrolledToBottom';
+import {Console, ConsoleRef} from '@molecules/Console/Console';
 
-import {StyledLogOutputContainer, StyledLogTextContainer, StyledPreLogText} from './LogOutput.styled';
+import {StyledLogOutputContainer, StyledPreLogText} from './LogOutput.styled';
 import LogOutputHeader from './LogOutputHeader';
+import * as S from './LogOutputPure.styled';
 
 export interface LogOutputPureProps {
-  className?: string;
   logs: string;
-  visibleLogs: string;
-  expanded: boolean;
-  lines: number;
-  initialLines: number;
-  onExpand: () => void;
+  className?: string;
+  hideActions?: boolean;
+  isRunning?: boolean;
+  wrap?: boolean;
+  LineComponent?: Parameters<typeof Console>[0]['LineComponent'];
+}
+
+export interface LogOutputPureRef {
+  container: HTMLDivElement | null;
+  console: ConsoleRef | null;
 }
 
 const LogOutputPure = memo(
-  forwardRef<HTMLDivElement, LogOutputPureProps>(
-    ({className, logs, visibleLogs, expanded, lines, initialLines, onExpand}, ref) => {
-      const scrollableRef = useRef<HTMLDivElement | null>(null);
-      const isScrolledToBottom = useScrolledToBottom(scrollableRef?.current);
+  forwardRef<LogOutputPureRef, LogOutputPureProps>(
+    ({className, hideActions, isRunning, logs, wrap, LineComponent}, ref) => {
+      const consoleRef = useRef<ConsoleRef | null>(null);
+      const containerRef = useRef<HTMLDivElement | null>(null);
 
-      const expand = useCallback(
-        (event: MouseEvent) => {
-          event.preventDefault();
-          onExpand?.();
-        },
-        [onExpand]
+      useImperativeHandle(
+        ref,
+        () => ({
+          get container() {
+            return containerRef.current;
+          },
+          get console() {
+            return consoleRef.current;
+          },
+        }),
+        []
       );
 
-      useEffect(() => {
-        if (scrollableRef?.current && isScrolledToBottom) {
-          scrollableRef.current.scrollTop = scrollableRef.current.scrollHeight;
-        }
-      }, [visibleLogs]);
-
       return (
-        <StyledLogOutputContainer className={className} ref={ref}>
-          <LogOutputHeader logOutput={logs} />
-
-          <StyledLogTextContainer ref={scrollableRef}>
-            {visibleLogs ? (
-              <StyledPreLogText data-test="log-output">
-                {!expanded && lines >= initialLines ? (
-                  <>
-                    <a href="#" onClick={expand}>
-                      Click to show all {lines} lines...
-                    </a>
-                    <br />
-                  </>
-                ) : null}
-                <Ansi useClasses>{visibleLogs}</Ansi>
-              </StyledPreLogText>
-            ) : null}
-          </StyledLogTextContainer>
+        <StyledLogOutputContainer className={className} ref={containerRef}>
+          {hideActions ? null : <LogOutputHeader logOutput={logs} />}
+          {logs ? (
+            <StyledPreLogText data-test="log-output">
+              <Console wrap={wrap} content={logs} LineComponent={LineComponent} ref={consoleRef} />
+            </StyledPreLogText>
+          ) : isRunning ? (
+            <S.InitialisingLogContainer>
+              <LoadingOutlined />
+              Initialising your test execution
+            </S.InitialisingLogContainer>
+          ) : null}
         </StyledLogOutputContainer>
       );
     }
