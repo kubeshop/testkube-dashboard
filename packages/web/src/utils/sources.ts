@@ -46,7 +46,7 @@ export const getTestSourceSpecificFields = (values: any, isCustomGit?: boolean) 
     };
   }
 
-  if (testSource === 'string' || testSource === 'file-uri') {
+  if (testSource === 'file-uri') {
     return {data: string || file.fileContent, repository: {}};
   }
 
