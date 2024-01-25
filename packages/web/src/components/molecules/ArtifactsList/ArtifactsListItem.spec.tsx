@@ -6,14 +6,12 @@ import ArtifactsListItem from './ArtifactsListItem';
 
 describe('ArtifactsListItem', () => {
   const artifact: Artifact = {
-    description: 'artifact-description',
+    executionName: 'execution-id-123',
     name: 'artifact-name',
     size: 123,
     status: 'ready',
   };
   const executionId = '123';
-  const testName = 'test-name';
-  const testSuiteName = 'test-suite-name';
 
   function createAutoResetSpy(): jest.SpyInstance {
     const fetchMock = jest.fn(() => Promise.reject(new Error('mockImplementation required')));
