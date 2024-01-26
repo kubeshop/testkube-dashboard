@@ -98,6 +98,7 @@ const ArtifactsList: React.FC<ArtifactsListBaseProps> = props => {
           <Button onClick={handleDownloadAll}>{!isDownloading ? 'Download all' : 'Downloading...'}</Button>
         </StyledDownloadAllContainer>
       ) : null}
+
       {renderedArtifactsList}
     </S.ArtifactsListContainer>
   );
