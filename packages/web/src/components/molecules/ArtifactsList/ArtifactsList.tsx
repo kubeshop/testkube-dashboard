@@ -53,7 +53,7 @@ const ArtifactsList: React.FC<ArtifactsListBaseProps> = props => {
     return (
       <>
         {processingArtifacts.length > 0 && (
-          <S.ProcessingContainer className="semibold middle" color={Colors.whitePure}>
+          <S.ProcessingContainer>
             <LoadingOutlined />
             We are currently processing your artifacts...
           </S.ProcessingContainer>
