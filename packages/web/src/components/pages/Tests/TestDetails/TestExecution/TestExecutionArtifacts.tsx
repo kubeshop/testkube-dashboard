@@ -1,10 +1,13 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import {Artifact} from '@models/artifact';
 
 import {ArtifactsList} from '@molecules';
+import {ArtifactsListBaseProps} from '@molecules/ArtifactsList/ArtifactsList';
+
+import {useTestsSlotFirst} from '@plugins/tests-and-test-suites/hooks';
 
 import {useGetTestExecutionArtifactsQuery} from '@services/tests';
 
@@ -37,8 +40,21 @@ const TestExecutionArtifacts: React.FC<TestExecutionArtifactsProps> = props => {
     }
   }, [data, error]);
 
+  const DefaultArtifactsListComponent: React.FC<ArtifactsListBaseProps> = useMemo(
+    () => componentProps => <ArtifactsList {...componentProps} />,
+    []
+  );
+
+  const ViewComponent = useTestsSlotFirst('ArtifactsListComponent', [
+    {value: DefaultArtifactsListComponent, metadata: {order: 2}},
+  ]);
+
+  if (!ViewComponent) {
+    return null;
+  }
+
   return (
-    <ArtifactsList
+    <ViewComponent
       artifacts={artifacts}
       testExecutionId={id}
       isLoading={isLoading}

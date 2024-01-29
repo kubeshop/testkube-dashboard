@@ -1,6 +1,6 @@
 export type Artifact = {
-  description: string;
+  executionName: string;
   name: string;
   size: number;
-  status: 'ready' | 'failed' | 'processing';
+  status?: 'ready' | 'failed' | 'processing';
 };
