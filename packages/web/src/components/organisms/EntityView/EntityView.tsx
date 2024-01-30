@@ -161,7 +161,7 @@ const EntityView: React.FC<EntityViewBlueprint> = props => {
           itemHeight={163.85}
         />
       ),
-    [CardComponent, EmptyData]
+    [CardComponent, itemKey, onItemClick]
   );
 
   const ViewComponent = useTestsSlotFirst('EntityViewComponent', [{value: DefaultViewComponent, metadata: {order: 2}}]);

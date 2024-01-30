@@ -11,6 +11,7 @@ import {useDashboardNavigate} from '@hooks/useDashboardNavigate';
 import {Execution} from '@models/execution';
 
 import {CLICommands, ExecutionsVariablesList, LogOutput} from '@molecules';
+import {ArtifactsListBaseProps} from '@molecules/ArtifactsList/ArtifactsList';
 
 import {ViewComponentBaseProps} from '@organisms/EntityView/EntityView';
 
@@ -114,6 +115,7 @@ export default createPlugin('oss/tests-and-test-suites')
   .define(slot<FC<ViewComponentBaseProps>>()('EntityViewComponent'))
   .define(slot<ReactNode>()('entityViewSwitch'))
   .define(slot<FC<{list?: 'tests' | 'test-suites'}>>()('EntityListPromoComponent'))
+  .define(slot<FC<ArtifactsListBaseProps>>()('ArtifactsListComponent'))
 
   .provider(({useData}) => (
     <StoreProvider store={initializeTestsStore} dependencies={[useData.select(x => x.useApiEndpoint)()]} />

@@ -16,7 +16,7 @@ import * as S from './ArtifactsList.styled';
 import ArtifactsListItem from './ArtifactsListItem';
 import {StyledDownloadAllContainer} from './ArtifactsListItem.styled';
 
-type ArtifactsListProps = {
+export type ArtifactsListBaseProps = {
   artifacts: Artifact[];
   testExecutionId: string;
   isLoading?: boolean;
@@ -25,7 +25,7 @@ type ArtifactsListProps = {
   startTime?: string;
 };
 
-const ArtifactsList: React.FC<ArtifactsListProps> = props => {
+const ArtifactsList: React.FC<ArtifactsListBaseProps> = props => {
   const {artifacts, testExecutionId, testName, testSuiteName, isLoading, startTime} = props;
 
   const [isDownloading, setIsDownloading] = useState(false);
@@ -53,14 +53,14 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
     return (
       <>
         {processingArtifacts.length > 0 && (
-          <S.ProcessingContainer className="semibold middle" color={Colors.whitePure}>
+          <S.ProcessingContainer>
             <LoadingOutlined />
             We are currently processing your artifacts...
           </S.ProcessingContainer>
         )}
 
         {artifacts
-          .filter(artifact => artifact.status === 'ready')
+          .filter(artifact => !artifact.status || artifact.status === 'ready')
           .map((artifact, index) => {
             const {name} = artifact;
 
@@ -98,6 +98,7 @@ const ArtifactsList: React.FC<ArtifactsListProps> = props => {
           <Button onClick={handleDownloadAll}>{!isDownloading ? 'Download all' : 'Downloading...'}</Button>
         </StyledDownloadAllContainer>
       ) : null}
+
       {renderedArtifactsList}
     </S.ArtifactsListContainer>
   );

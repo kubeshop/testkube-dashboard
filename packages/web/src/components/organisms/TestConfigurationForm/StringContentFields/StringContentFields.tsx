@@ -4,8 +4,6 @@ import {FormItem} from '@custom-antd';
 
 import Fonts from '@styles/Fonts';
 
-import {required} from '@utils/form';
-
 import {Props} from '../utils';
 
 export const stringPlaceholders: Record<string, string> = {
@@ -35,7 +33,7 @@ const StringContentFields: React.FC<Partial<Props>> = props => {
 
   const placeholder = stringPlaceholders[executorType!] || 'String...';
   return (
-    <FormItem name="string" label="String" rules={[required]} required>
+    <FormItem name="string" label="String">
       <TextArea rows={11} placeholder={placeholder} style={{fontFamily: Fonts.mono}} disabled={disabled} />
     </FormItem>
   );

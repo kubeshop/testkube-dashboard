@@ -30,6 +30,7 @@ export enum externalLinks {
   environmentMembers = 'https://docs.testkube.io/testkube-pro/articles/environment-management#managing-environment-member-roles',
   notificationsAndWebhooks = 'https://docs.testkube.io/articles/webhooks',
   statusPages = 'https://docs.testkube.io/testkube-pro/articles/status-pages',
+  integrationOverview = 'https://docs.testkube.io/articles/cicd-overview',
   integrationWithGithubActions = 'https://docs.testkube.io/articles/github-actions',
   integrationWithGitlabCI = 'https://docs.testkube.io/articles/gitlab',
   integrationWithJenkins = 'https://docs.testkube.io/articles/jenkins',

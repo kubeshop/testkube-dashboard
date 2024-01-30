@@ -3,7 +3,7 @@ import {useDebounce} from 'react-use';
 
 import {SearchOutlined} from '@ant-design/icons';
 
-import {useEntityDetailsField, useEntityDetailsPick} from '@store/entityDetails';
+import {useEntityDetailsField} from '@store/entityDetails';
 
 import Colors from '@styles/Colors';
 
@@ -12,7 +12,6 @@ import ExecutionsStatusFilter from './ExecutionsStatusFilter';
 
 const ExecutionsFilters: React.FC = () => {
   const [executionsFilters, setExecutionsFilters] = useEntityDetailsField('executionsFilters');
-  const {executionsLoading} = useEntityDetailsPick('executionsLoading');
 
   const [searchInputValue, setSearchInputValue] = useState(executionsFilters.textSearch);
 
@@ -42,7 +41,6 @@ const ExecutionsFilters: React.FC = () => {
         data-cy="executions-search-filter"
         value={searchInputValue}
         onChange={onChange}
-        disabled={executionsLoading}
       />
       <ExecutionsStatusFilter />
     </S.FiltersContainer>
