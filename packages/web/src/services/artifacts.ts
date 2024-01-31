@@ -32,9 +32,13 @@ export const getResponsefileUrl = async (response: Response) => {
     throw new Error('Something went wrong');
   }
 
-  const data = await response.json();
-  const fileUrl = data.data?.url || data.url;
+  if (response.headers.get('content-type') === 'application/json') {
+    const data = await response.json();
+    const fileUrl = data.data?.url || data.url;
+    return fileUrl;
+  }
 
+  const fileUrl = window.URL.createObjectURL(await response.blob());
   return fileUrl;
 };
 
