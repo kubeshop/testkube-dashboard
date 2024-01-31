@@ -39,9 +39,9 @@ export const testsApi = createApi({
       providesTags: (res, err, id) => [{type: 'Test', id}],
     }),
     getTestExecutions: builder.query({
-      query: ({last = 7, pageSize = 1000}) => {
+      query: ({last, pageSize = 1000}) => {
         const queryParams = new URLSearchParams({
-          last,
+          ...(last ? {last: last.toString()} : null),
           pageSize,
         });
 
