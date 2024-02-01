@@ -51,7 +51,12 @@ describe('ArtifactsListItem', () => {
 
   it('calls downloadArtifact when download icon is clicked', async () => {
     fetchMock.mockImplementationOnce(async () => {
-      return {json: Promise.resolve({}), ok: true};
+      return {
+        ok: true,
+        status: 200,
+        headers: new Headers({'content-type': 'application/json'}),
+        json: () => Promise.resolve({}),
+      };
     });
     const artifactItem = render(<ArtifactsListItem artifact={artifact} executionId={executionId} />);
     const itemContainer = artifactItem.getByTestId('artifact-list-item');
