@@ -1,7 +1,5 @@
 import {useMemo, useState} from 'react';
 
-import {LoadingOutlined} from '@ant-design/icons';
-
 import {Button, Skeleton, Text} from '@custom-antd';
 
 import {Artifact} from '@models/artifact';
@@ -48,36 +46,21 @@ const ArtifactsList: React.FC<ArtifactsListBaseProps> = props => {
       );
     }
 
-    const processingArtifacts = artifacts.filter(artifact => artifact.status === 'processing');
+    return artifacts.map((artifact, index) => {
+      const {name} = artifact;
 
-    return (
-      <>
-        {processingArtifacts.length > 0 && (
-          <S.ProcessingContainer>
-            <LoadingOutlined />
-            We are currently processing your artifacts...
-          </S.ProcessingContainer>
-        )}
+      const listItemKey = `${name} - ${index}`;
 
-        {artifacts
-          .filter(artifact => !artifact.status || artifact.status === 'ready')
-          .map((artifact, index) => {
-            const {name} = artifact;
-
-            const listItemKey = `${name} - ${index}`;
-
-            return (
-              <ArtifactsListItem
-                artifact={artifact}
-                key={listItemKey}
-                executionId={testExecutionId}
-                testName={testName}
-                testSuiteName={testSuiteName}
-              />
-            );
-          })}
-      </>
-    );
+      return (
+        <ArtifactsListItem
+          artifact={artifact}
+          key={listItemKey}
+          executionId={testExecutionId}
+          testName={testName}
+          testSuiteName={testSuiteName}
+        />
+      );
+    });
   }, [isLoading, artifacts, testExecutionId, testName, testSuiteName]);
 
   const handleDownloadAll = async () => {
