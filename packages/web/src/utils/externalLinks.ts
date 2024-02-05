@@ -34,6 +34,7 @@ export enum externalLinks {
   integrationWithGithubActions = 'https://docs.testkube.io/articles/github-actions',
   integrationWithGitlabCI = 'https://docs.testkube.io/articles/gitlab',
   integrationWithJenkins = 'https://docs.testkube.io/articles/jenkins',
+  integrationWithAzure = 'https://docs.testkube.io/articles/azure',
   integrationWithCircleCI = 'https://docs.testkube.io/articles/circleci',
 }
 
