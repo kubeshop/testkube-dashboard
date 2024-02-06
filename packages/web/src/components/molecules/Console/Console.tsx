@@ -54,6 +54,7 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const rerender = useUpdate();
 
   const [, setSelectedContent] = useLogOutputField('selectedContent');
+  const [, setIsScrolling] = useLogOutputField('isScrolling');
 
   const intersection = useIntersection(containerRef, {
     root: null,
@@ -235,10 +236,15 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   // Re-render on scroll
   const rerenderDebounce = useMemo(() => debounce(rerender, 5), [rerender]);
   const onScroll = () => {
+    setIsScrolling(true);
     const viewport = getViewport();
     if (viewport.start !== viewportStart || viewport.end !== viewportEnd) {
       rerenderDebounce();
     }
+
+    setTimeout(() => {
+      setIsScrolling(false);
+    }, 500);
   };
   useEventCallback('scroll', onScroll, containerRef?.current);
 
