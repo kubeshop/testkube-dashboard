@@ -18,6 +18,8 @@ import {debounce} from 'lodash';
 import {useEventCallback} from '@hooks/useEventCallback';
 import {useLastCallback} from '@hooks/useLastCallback';
 
+import {useLogOutputField} from '@store/logOutput';
+
 import * as S from './Console.styled';
 import {ConsoleLine} from './ConsoleLine';
 import {ConsoleLineDimensions, ConsoleLineMonitor} from './ConsoleLineMonitor';
@@ -50,6 +52,8 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
   const maxDigits = processor.maxDigits;
 
   const rerender = useUpdate();
+
+  const [, setSelectedContent] = useLogOutputField('selectedContent');
 
   const intersection = useIntersection(containerRef, {
     root: null,
@@ -190,6 +194,36 @@ export const Console = forwardRef<ConsoleRef, ConsoleProps>(({content, wrap, Lin
       checkForQueryParam();
     }, 0);
   }, [scrollToLine]);
+
+  useEffect(() => {
+    const lines = searchParams.get('L');
+
+    if (!lines) return;
+
+    const processedLines = processor.getProcessedLines();
+
+    const singleLineMatch = lines.match(/^(\d+)$/);
+
+    if (singleLineMatch) {
+      const [_, lineNumber] = singleLineMatch;
+      const startChar = processedLines[Number(lineNumber) - 1].start;
+      const endChar = processedLines[Number(lineNumber) - 1].end;
+
+      setSelectedContent(content.substring(startChar, endChar));
+      return;
+    }
+
+    const multiLineMatch = lines.match(/^(\d+)-(\d+)$/);
+
+    if (multiLineMatch) {
+      const [_, firstLineNumber, secondLineNumber] = multiLineMatch;
+      const isInversed = Number(firstLineNumber) > Number(secondLineNumber);
+      const startChar = processedLines[Number(isInversed ? secondLineNumber : firstLineNumber) - 1].start;
+      const endChar = processedLines[Number(isInversed ? firstLineNumber : secondLineNumber) - 1].end;
+
+      setSelectedContent(content.substring(startChar, endChar));
+    }
+  }, [content, processor, searchParams, setSelectedContent]);
 
   // Inform about position change
   // FIXME

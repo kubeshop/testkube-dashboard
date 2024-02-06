@@ -512,4 +512,14 @@ export const GlobalStyle = createGlobalStyle`
   .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner:hover {
     background: ${Colors.slate400};
   }
+
+  /* Log Share Popover */
+
+  .log-share-popover {
+    .ant-popover-title {
+      border-bottom: none;
+      padding: 0;
+      min-width: 40px;
+    }
+  }
 `;
