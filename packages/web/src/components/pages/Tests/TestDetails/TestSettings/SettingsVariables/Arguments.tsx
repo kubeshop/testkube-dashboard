@@ -47,15 +47,21 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateTest] = useUpdateTestMutation();
+  const executorName = details.labels ? details.labels['executor'] : '';
 
-  const {data: executorDetails = ''} = useGetExecutorDetailsQuery(details.labels['executor'], {});
+  const {data: executorDetails = ''} = useGetExecutorDetailsQuery(executorName, {
+    skip: executorName === '',
+  });
 
   const entityArgs = details.executionRequest?.args || [];
   const initialArgs = useMemo(() => escapeArguments(entityArgs)?.join('\n') || '', [entityArgs]);
-  const initialArgsMode = useMemo(() => details.executionRequest?.args_mode, [details.executionRequest?.args_mode]);
+  const initialArgsMode = useMemo(
+    () => details.executionRequest?.args_mode || 'append',
+    [details.executionRequest?.args_mode]
+  );
 
   const currentArgs = Form.useWatch('args', form) || '';
-  const argsMode = Form.useWatch('argsMode', form) || '';
+  const argsMode = Form.useWatch('argsMode', form) || 'append';
 
   const prettifiedArgs = useMemo(() => prettifyArguments(currentArgs), [currentArgs]);
   const currentArgsInline = useMemo(() => prettifiedArgs.replace(/\n+/g, ' '), [prettifiedArgs]);
@@ -141,7 +147,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
             command={currentArgsInline}
             isBordered
             additionalPrefix={`executor-binary ${
-              argsMode === 'append' && executorDetails?.executor ? executorDetails.executor.args.join(' ') : ''
+              argsMode === 'append' ? executorDetails?.executor.args.join(' ') : ''
             }`}
           />
 
