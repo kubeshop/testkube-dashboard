@@ -513,13 +513,5 @@ export const GlobalStyle = createGlobalStyle`
     background: ${Colors.slate400};
   }
 
-  /* Log Share Popover */
-
-  .log-share-popover {
-    .ant-popover-title {
-      border-bottom: none;
-      padding: 0;
-      min-width: 40px;
-    }
-  }
+  
 `;
