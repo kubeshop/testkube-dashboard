@@ -17,6 +17,7 @@ import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
+import {useGetExecutorDetailsQuery} from '@services/executors';
 import {useUpdateTestMutation} from '@services/tests';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
@@ -46,6 +47,8 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateTest] = useUpdateTestMutation();
+
+  const {data: executorDetails = ''} = useGetExecutorDetailsQuery(details.labels['executor'], {});
 
   const entityArgs = details.executionRequest?.args || [];
   const initialArgs = useMemo(() => escapeArguments(entityArgs)?.join('\n') || '', [entityArgs]);
@@ -116,7 +119,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
           label={
             <FormItemLabel
               text="Mode"
-              tooltipMessage="Choose between appending arguments to the executor or overriding them"
+              tooltipMessage="Choose between appending arguments to the executor or replacing them"
             />
           }
         >
@@ -137,7 +140,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
           <CopyCommand
             command={currentArgsInline}
             isBordered
-            additionalPrefix={`executor-binary ${argsMode === 'append' ? '<executor-args>' : ''}`}
+            additionalPrefix={`executor-binary ${argsMode === 'append' ? executorDetails.executor.args.join(' ') : ''}`}
           />
 
           <Text className="regular middle" color={Colors.slate400}>
