@@ -140,7 +140,9 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
           <CopyCommand
             command={currentArgsInline}
             isBordered
-            additionalPrefix={`executor-binary ${argsMode === 'append' ? executorDetails.executor.args.join(' ') : ''}`}
+            additionalPrefix={`executor-binary ${
+              argsMode === 'append' && executorDetails?.executor ? executorDetails.executor.args.join(' ') : ''
+            }`}
           />
 
           <Text className="regular middle" color={Colors.slate400}>
