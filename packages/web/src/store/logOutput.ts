@@ -16,7 +16,6 @@ export interface LogOutputSlice {
   searchResults: SearchResult[];
   searchLinesMap: Record<number, SearchResult[]>;
   selectedContent?: string;
-  isScrolling: boolean;
 }
 
 // TODO: Consider getting rid of that
@@ -27,7 +26,6 @@ const createLogOutputSlice: StateCreator<LogOutputSlice> = set => ({
   searchQuery: '',
   searchResults: [],
   searchLinesMap: {},
-  isScrolling: false,
 });
 
 const createLogOutputStore = createStoreFactory('logOutput', createLogOutputSlice);
