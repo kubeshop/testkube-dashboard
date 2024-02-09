@@ -22,8 +22,8 @@ function buildClassName(bundle: AnserJsonEntry): string | undefined {
 
 export class LogProcessorLine {
   private source: string;
-  private start: number;
-  private end: number;
+  public start: number;
+  public end: number;
   private noAsciiDecode: boolean;
   public processed = false;
   public chars: number;

@@ -512,4 +512,6 @@ export const GlobalStyle = createGlobalStyle`
   .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner:hover {
     background: ${Colors.slate400};
   }
+
+  
 `;

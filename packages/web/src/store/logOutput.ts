@@ -15,6 +15,7 @@ export interface LogOutputSlice {
   searching: boolean;
   searchResults: SearchResult[];
   searchLinesMap: Record<number, SearchResult[]>;
+  selectedContent?: string;
 }
 
 // TODO: Consider getting rid of that
