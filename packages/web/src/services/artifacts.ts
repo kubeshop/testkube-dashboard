@@ -2,15 +2,45 @@ import {getApiEndpoint} from '@services/apiEndpoint';
 
 import {getRtkBaseUrl, getRtkIdToken} from '@utils/rtk';
 
-const downloadFile = async (blob: Blob, fileName: string): Promise<void> => {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+export const fetchContentFromSignedURL = async (signedURL: string): Promise<Blob> => {
+  const response = await fetch(signedURL);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch content from signed URL: ${response.status} ${response.statusText}`);
+  }
+
+  return response.blob();
+};
+
+export const getResponseFileUrl = async (response: Response) => {
+  if (!response.status || response.status >= 300) {
+    throw new Error('Something went wrong');
+  }
+
+  if (response.headers.get('content-type') === 'application/json') {
+    const data = await response.json();
+    const fileUrl = data.data?.url || data.url;
+    return fileUrl;
+  }
+
+  const fileUrl = window.URL.createObjectURL(await response.blob());
+  return fileUrl;
+};
+
+const downloadFile = async (signedURL: string, fileName: string): Promise<void> => {
+  try {
+    const content = await fetchContentFromSignedURL(signedURL);
+    const url = URL.createObjectURL(content);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (error: any) {
+    throw new Error(`Error on opening the file: ${error.message}`);
+  }
 };
 
 export const downloadArtifact = async (
@@ -33,7 +63,8 @@ export const downloadArtifact = async (
       throw new Error(`Failed to download artifact: ${response.status} ${response.statusText}`);
     }
 
-    await downloadFile(await response.blob(), fileName);
+    const fileURL = await getResponseFileUrl(response);
+    await downloadFile(fileURL, fileName);
   } catch (error: any) {
     throw new Error(`Error on downloading the content: ${error.message}`);
   }
@@ -50,7 +81,8 @@ export const downloadArtifactArchive = async (fileName: string, executionId: str
       throw new Error(`Failed to download artifact archive: ${response.status} ${response.statusText}`);
     }
 
-    await downloadFile(await response.blob(), fileName);
+    const fileURL = await getResponseFileUrl(response);
+    await downloadFile(fileURL, fileName);
   } catch (error: any) {
     throw new Error(`Error on downloading the content: ${error.message}`);
   }
