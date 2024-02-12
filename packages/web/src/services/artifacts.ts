@@ -12,7 +12,7 @@ export const fetchContentFromSignedURL = async (signedURL: string): Promise<Blob
   return response.blob();
 };
 
-export const getResponseFileUrl = async (response: Response) => {
+const getResponseFileUrlAndDownloadContent = async (response: Response, fileName: string) => {
   if (!response.status || response.status >= 300) {
     throw new Error('Something went wrong');
   }
@@ -20,11 +20,13 @@ export const getResponseFileUrl = async (response: Response) => {
   if (response.headers.get('content-type') === 'application/json') {
     const data = await response.json();
     const fileUrl = data.data?.url || data.url;
-    return fileUrl;
+    await downloadFile(fileUrl, fileName);
+    return;
   }
 
   const fileUrl = window.URL.createObjectURL(await response.blob());
-  return fileUrl;
+  await downloadFile(fileUrl, fileName);
+  URL.revokeObjectURL(fileUrl);
 };
 
 const downloadFile = async (signedURL: string, fileName: string): Promise<void> => {
@@ -63,8 +65,7 @@ export const downloadArtifact = async (
       throw new Error(`Failed to download artifact: ${response.status} ${response.statusText}`);
     }
 
-    const fileURL = await getResponseFileUrl(response);
-    await downloadFile(fileURL, fileName);
+    await getResponseFileUrlAndDownloadContent(response, fileName);
   } catch (error: any) {
     throw new Error(`Error on downloading the content: ${error.message}`);
   }
@@ -81,8 +82,7 @@ export const downloadArtifactArchive = async (fileName: string, executionId: str
       throw new Error(`Failed to download artifact archive: ${response.status} ${response.statusText}`);
     }
 
-    const fileURL = await getResponseFileUrl(response);
-    await downloadFile(fileURL, fileName);
+    await getResponseFileUrlAndDownloadContent(response, fileName);
   } catch (error: any) {
     throw new Error(`Error on downloading the content: ${error.message}`);
   }
