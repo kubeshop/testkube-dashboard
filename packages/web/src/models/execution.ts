@@ -10,7 +10,7 @@ export const executionStatusList = ['running', 'passed', 'failed', 'queued', 'ti
 export type ExecutionStatusEnum = (typeof executionStatusList)[number];
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
 export type ExecutionStepResultStatusEnum = 'success' | 'error';
-export type ExecutionArgsModeEnum = 'append' | 'override';
+export type ExecutionArgsModeEnum = 'append' | 'replace';
 
 export type ExecutionStepResult = {
   name: string;

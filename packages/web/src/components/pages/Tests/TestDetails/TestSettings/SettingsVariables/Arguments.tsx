@@ -17,7 +17,7 @@ import {CardForm} from '@organisms';
 
 import {Permissions, usePermission} from '@permissions/base';
 
-import {useGetExecutorDetailsQuery} from '@services/executors';
+import {useGetExecutorDetailsByTestTypeQuery} from '@services/executors';
 import {useUpdateTestMutation} from '@services/tests';
 
 import {useEntityDetailsPick} from '@store/entityDetails';
@@ -47,11 +47,8 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
   const mayEdit = usePermission(Permissions.editEntity);
 
   const [updateTest] = useUpdateTestMutation();
-  const executorName = details.labels ? details.labels['executor'] : '';
 
-  const {data: executorDetails = ''} = useGetExecutorDetailsQuery(executorName, {
-    skip: executorName === '',
-  });
+  const {data: executorDetails} = useGetExecutorDetailsByTestTypeQuery(encodeURIComponent(details.type));
 
   const entityArgs = details.executionRequest?.args || [];
   const initialArgs = useMemo(() => escapeArguments(entityArgs)?.join('\n') || '', [entityArgs]);
@@ -136,8 +133,8 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
                 value: 'append',
               },
               {
-                label: 'Override',
-                value: 'override',
+                label: 'Replace',
+                value: 'replace',
               },
             ]}
           />
@@ -147,7 +144,7 @@ const Arguments: React.FC<ArgumentsProps> = ({readOnly}) => {
             command={currentArgsInline}
             isBordered
             additionalPrefix={`executor-binary ${
-              argsMode === 'append' ? executorDetails?.executor.args.join(' ') : ''
+              argsMode === 'append' && executorDetails?.executor.args ? executorDetails?.executor.args.join(' ') : ''
             }`}
           />
 
