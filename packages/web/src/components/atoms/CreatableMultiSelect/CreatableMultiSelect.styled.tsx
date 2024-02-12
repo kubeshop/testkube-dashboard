@@ -34,26 +34,20 @@ export const StyledMultiLabel = styled.div`
   padding: 3px 5px;
 `;
 
-export const customStyles: (
-  validation?: boolean,
-  stylePlaceholderAsValue?: boolean
-) => StylesConfig<Option, true, GroupBase<Option>> = (validation = true, stylePlaceholderAsValue = false) => ({
+export const customStyles: (stylePlaceholderAsValue?: boolean) => StylesConfig<Option, true, GroupBase<Option>> = (
+  stylePlaceholderAsValue = false
+) => ({
   container: styles => ({...styles, width: '100%'}),
   input: styles => ({...styles, color: Colors.slate200, fontWeight: 400}),
   valueContainer: (styles, props) => ({
     ...styles,
     backgroundColor: props.isDisabled ? 'transparent' : Colors.slate800,
+    gap: '4px',
   }),
   placeholder: styles => ({
     ...styles,
     color: stylePlaceholderAsValue ? Colors.slate200 : Colors.slate500,
     fontWeight: 400,
-  }),
-  control: (styles, props) => ({
-    ...styles,
-    borderColor: validation ? 'transparent' : Colors.pink500,
-    backgroundColor: props.isDisabled ? '#1e293b80' : Colors.slate800,
-    minHeight: '44px',
   }),
   indicatorSeparator: styles => ({...styles, width: 0}),
   dropdownIndicator: styles => ({

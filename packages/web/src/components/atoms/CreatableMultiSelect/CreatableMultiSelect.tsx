@@ -6,6 +6,8 @@ import usePressEnter from '@hooks/usePressEnter';
 
 import {Option} from '@models/form';
 
+import Colors from '@src/styles/Colors';
+
 import {customStyles, customTheme} from './CreatableMultiSelect.styled';
 import {
   DefaultDropdownIndicator,
@@ -91,7 +93,15 @@ const CreatableMultiSelect: React.FC<MultiSelectProps> = props => {
       }}
       formatCreateLabel={formatCreateLabel}
       theme={customTheme}
-      styles={customStyles(validation, stylePlaceholderAsValue)}
+      styles={{
+        ...customStyles(stylePlaceholderAsValue),
+        control: (styles, p) => ({
+          ...styles,
+          borderColor: validation ? Colors.pink500 : 'transparent',
+          backgroundColor: p.isDisabled ? '#1e293b80' : Colors.slate800,
+          minHeight: '44px',
+        }),
+      }}
       components={{
         Option: CustomOptionComponent,
         MultiValueLabel: CustomMultiValueLabelComponent,
