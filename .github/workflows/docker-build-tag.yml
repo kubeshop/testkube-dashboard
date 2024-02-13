@@ -2,10 +2,8 @@ name: Publish Docker image
 
 on:
   push:
-#    tags:
-#      - "v[0-9]+.[0-9]+.[0-9]+"
-    branches:
-      - fix-ci
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   build_multi_platform_images:
@@ -19,11 +17,11 @@ jobs:
           - name: "amd64"
             path: nginx:alpine
     steps:
-#      - name: Get tag
-#        id: tag
-#        uses: dawidd6/action-get-tag@v1
-#        with:
-#          strip_v: true
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          strip_v: true
 
       - name: Check out GitHub repo
         uses: actions/checkout@v4
@@ -42,17 +40,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Push README to Dockerhub
-#        uses: christian-korneck/update-container-description-action@v1
-#        env:
-#          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
-#          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
-#        with:
-#          destination_container_repo: ${{ github.repository }}
-#          provider: dockerhub
-#          short_description: 'Testkube Kubernetes Dashboard'
-#          readme_file: './README.md'
+
+      - name: Push README to Dockerhub
+        uses: christian-korneck/update-container-description-action@v1
+        env:
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
+        with:
+          destination_container_repo: ${{ github.repository }}
+          provider: dockerhub
+          short_description: 'Testkube Kubernetes Dashboard'
+          readme_file: './README.md'
 
       - name: Build image and push to Docker Hub
         uses: docker/build-push-action@v5
@@ -65,62 +63,62 @@ jobs:
             REACT_APP_SENTRY_DSN=${{ secrets.REACT_APP_SENTRY_DSN }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
           platforms: ${{ matrix.name }}
-          tags: ${{ github.repository }}:test-${{ matrix.name }}
+          tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
           cache-from: type=gha,scope=${{ matrix.name }}
           cache-to: type=gha,mode=max,scope=${{ matrix.name }}
 
-#  create_manifest:
-#    needs: build_multi_platform_images
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Get tag
-#        id: tag
-#        uses: dawidd6/action-get-tag@v1
-#        with:
-#          strip_v: true
-#
-#      - name: Log in to Docker Hub
-#        uses: docker/login-action@v2
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Create Docker manifest and push multi-arch image to Registry
-#        run: |
-#          docker manifest create ${{ github.repository }}:${{steps.tag.outputs.tag}} --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
-#          docker manifest push -p ${{ github.repository }}:${{steps.tag.outputs.tag}}
-#
-#          docker manifest create ${{ github.repository }}:latest --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
-#          docker manifest push -p ${{ github.repository }}:latest
-#
-#  releasing_helm_chart_dashboard:
-#    needs: create_manifest
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Get tag
-#        id: tag
-#        uses: dawidd6/action-get-tag@v1
-#        with:
-#          strip_v: false
-#
-#      - name: Editing helm-release repo with version based on a Tag pushed.
-#        run: |
-#          # Setting up Git:
-#          git clone https://kubeshop-bot:$GH_TOKEN@github.com/kubeshop/helm-charts
-#          cd ./helm-charts
-#          git config user.name "kubeshop-bot"
-#          git config user.email "kubeshop-bot@kubeshop.io"
-#
-#          export GH_TOKEN
-#          export RELEASE_VERSION
-#          export SERVICE
-#
-#          git fetch origin main
-#          git checkout main
-#          cd ./scripts
-#          ./chart_releaser.sh --helm-chart-folder testkube-$SERVICE
-#
-#        env:
-#          SERVICE: dashboard
-#          GH_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-#          RELEASE_VERSION: ${{ steps.tag.outputs.tag }}
+  create_manifest:
+    needs: build_multi_platform_images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          strip_v: true
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create Docker manifest and push multi-arch image to Registry
+        run: |
+          docker manifest create ${{ github.repository }}:${{steps.tag.outputs.tag}} --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
+          docker manifest push -p ${{ github.repository }}:${{steps.tag.outputs.tag}}
+
+          docker manifest create ${{ github.repository }}:latest --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-arm64 --amend ${{ github.repository }}:${{steps.tag.outputs.tag}}-amd64
+          docker manifest push -p ${{ github.repository }}:latest
+
+  releasing_helm_chart_dashboard:
+    needs: create_manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          strip_v: false
+
+      - name: Editing helm-release repo with version based on a Tag pushed.
+        run: |
+          # Setting up Git:
+          git clone https://kubeshop-bot:$GH_TOKEN@github.com/kubeshop/helm-charts
+          cd ./helm-charts
+          git config user.name "kubeshop-bot"
+          git config user.email "kubeshop-bot@kubeshop.io"
+
+          export GH_TOKEN
+          export RELEASE_VERSION
+          export SERVICE
+
+          git fetch origin main
+          git checkout main
+          cd ./scripts
+          ./chart_releaser.sh --helm-chart-folder testkube-$SERVICE
+
+        env:
+          SERVICE: dashboard
+          GH_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+          RELEASE_VERSION: ${{ steps.tag.outputs.tag }}
