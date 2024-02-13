@@ -24,13 +24,13 @@ jobs:
           strip_v: true
 
       - name: Check out GitHub repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
         with:
           driver-opts: |
             image=moby/buildkit:v0.10.6
@@ -53,7 +53,7 @@ jobs:
           readme_file: './README.md'
 
       - name: Build image and push to Docker Hub
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           push: true
           build-args: |
@@ -62,6 +62,7 @@ jobs:
             REACT_APP_GTM_ID=${{ secrets.REACT_APP_GOOGLE_ANALYTICS_ID }}
             REACT_APP_SENTRY_DSN=${{ secrets.REACT_APP_SENTRY_DSN }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+          platforms: ${{ matrix.name }}
           tags: ${{ github.repository }}:${{steps.tag.outputs.tag}}-${{ matrix.name }}
           cache-from: type=gha,scope=${{ matrix.name }}
           cache-to: type=gha,mode=max,scope=${{ matrix.name }}

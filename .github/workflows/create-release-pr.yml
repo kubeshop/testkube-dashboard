@@ -24,7 +24,7 @@ jobs:
           echo "VERSION=$(echo "$VERSION" | sed "s/^v//")" >> "$GITHUB_ENV"
 
       - name: Check out GitHub repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ env.source-branch }}
           fetch-depth: 0
