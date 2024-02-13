@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: "arm64"
+          - name: "arm64v8"
             path: arm64v8/nginx:1.25.3-alpine3.18
           - name: "amd64"
             path: nginx:alpine
