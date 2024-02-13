@@ -10,6 +10,7 @@ import ExecutorsList from '@pages/Executors/ExecutorsList/ExecutorsList';
 import type ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
 import type RtkPlugin from '@plugins/rtk/plugin';
+import {RtkService} from '@plugins/rtk/plugin';
 
 import {executorsApi, useGetExecutorsQuery} from '@services/executors';
 
@@ -60,6 +61,6 @@ export default createPlugin('dashboard/executors')
   })
 
   .init(tk => {
-    tk.slots.rtkServices.add(executorsApi);
+    tk.slots.rtkServices.add(executorsApi, {}, (object: RtkService) => object.reducerPath === 'executorsApi');
     tk.slots.siderItems.add({path: '/executors', icon: ExecutorsIcon, title: 'Executors'}, {order: -80});
   });

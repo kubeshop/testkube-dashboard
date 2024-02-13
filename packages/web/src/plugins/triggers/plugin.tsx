@@ -7,6 +7,7 @@ import TriggersList from '@pages/Triggers/TriggersList';
 
 import type GeneralPlugin from '@plugins/general/plugin';
 import type RtkPlugin from '@plugins/rtk/plugin';
+import {RtkService} from '@plugins/rtk/plugin';
 
 import {triggersApi} from '@services/triggers';
 
@@ -36,6 +37,6 @@ export default createPlugin('oss/triggers')
   .data({useTriggers, useTriggersPick, useTriggersField, useTriggersSync})
 
   .init(tk => {
-    tk.slots.rtkServices.add(triggersApi);
+    tk.slots.rtkServices.add(triggersApi, {}, (object: RtkService) => object.reducerPath === 'triggersApi');
     tk.slots.siderItems.add({path: '/triggers', icon: TriggersIcon, title: 'Triggers'}, {order: -60});
   });

@@ -49,7 +49,7 @@ export class PluginSlot<T> {
     return slot;
   }
 
-  public add(value: T, metadata: PluginSlotMetadata = {}): void {
+  public add(value: T, metadata: PluginSlotMetadata = {}, uniqueValidation?: (object: T) => boolean): void {
     // Ensure new identity of slot in the storage
     const slot = (this.storage.get(this.key) || []).slice();
 
@@ -57,6 +57,13 @@ export class PluginSlot<T> {
     const order = metadata.order || 0;
     const index = slot.findIndex(x => x.metadata.order! > order);
     const item = {value, metadata: {...metadata, order}};
+    if (uniqueValidation) {
+      // remove value from this.storage[this.key] if it exists
+      const duplicateIndex = slot.findIndex(x => uniqueValidation(x.value));
+      if (duplicateIndex !== -1) {
+        slot.splice(duplicateIndex, 1);
+      }
+    }
     this[PluginScopeProducerDataCache].set(item, this[PluginScopeProducer]);
     slot.splice(index === -1 ? slot.length : index, 0, item);
     this.storage.set(this.key, slot);

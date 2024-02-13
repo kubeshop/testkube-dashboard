@@ -22,6 +22,7 @@ export default createPlugin('oss/rtk')
 
   .provider(({scope, useData, useSlot}) => {
     const services = useSlot('rtkServices');
+    console.log('RTK Services: ', services);
     scope.data.rtkStore = useMemo(
       () =>
         configureStore({
@@ -42,6 +43,7 @@ export default createPlugin('oss/rtk')
       tk.slots.rtkServices.all().forEach(service => {
         const action = service.util?.resetApiState();
         if (action) {
+          console.log('Dispatching reset action: ', action, 'to store: ', tk.data.rtkStore);
           tk.data.rtkStore?.dispatch(action);
         }
       });

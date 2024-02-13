@@ -24,6 +24,7 @@ import TestsList from '@pages/Tests/TestsList';
 import type ExecutorsPlugin from '@plugins/executors/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
 import type RtkPlugin from '@plugins/rtk/plugin';
+import {RtkService} from '@plugins/rtk/plugin';
 
 import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
@@ -142,8 +143,8 @@ export default createPlugin('oss/tests-and-test-suites')
   .data({useLogOutput, useLogOutputPick, useLogOutputField, useLogOutputSync})
 
   .init(tk => {
-    tk.slots.rtkServices.add(testSuitesApi);
-    tk.slots.rtkServices.add(testsApi);
+    tk.slots.rtkServices.add(testSuitesApi, {}, (object: RtkService) => object.reducerPath === 'testSuitesApi');
+    tk.slots.rtkServices.add(testsApi, {}, (object: RtkService) => object.reducerPath === 'testsApi');
 
     // TODO: Instead of using tk.sync, use all the necessities directly in the plugin components
     tk.data.setExecutionTab = tk.sync(() => {
