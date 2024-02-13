@@ -56,7 +56,6 @@ export default createPlugin('oss/rtk')
         const action = service.util?.resetApiState();
         console.log('resetting');
         if (action) {
-          console.log('Dispatching reset action: ', action, 'to store: ', tk.data.rtkStore);
           tk.data.rtkStore?.dispatch(action);
         }
       });
