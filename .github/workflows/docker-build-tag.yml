@@ -15,7 +15,7 @@ jobs:
       matrix:
         include:
           - name: "arm64"
-            path: arm64v8/nginx:alpine
+            path: arm64v8/nginx:1.25.3-alpine3.18
           - name: "amd64"
             path: nginx:alpine
     steps:
