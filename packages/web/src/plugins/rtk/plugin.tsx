@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import {useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import {Provider as ReduxProvider} from 'react-redux';
 
 import {Store, configureStore} from '@reduxjs/toolkit';
@@ -36,13 +36,25 @@ export default createPlugin('oss/rtk')
       [services]
     );
 
+    useEffect(() => {
+      services.forEach(service => {
+        const action = service.util?.resetApiState();
+        if (action) {
+          scope.data.rtkStore.dispatch(action);
+        }
+      });
+    }, [services]);
+
     return {type: ReduxProvider as any, props: {store: scope.data.rtkStore}};
   })
 
   .init(tk => {
+    console.log('init RTK store');
     tk.data.resetRtkCache = () => {
+      console.log('resetting');
       tk.slots.rtkServices.all().forEach(service => {
         const action = service.util?.resetApiState();
+        console.log('resetting');
         if (action) {
           console.log('Dispatching reset action: ', action, 'to store: ', tk.data.rtkStore);
           tk.data.rtkStore?.dispatch(action);
