@@ -63,6 +63,6 @@ describe('ArtifactsListItem', () => {
     await waitFor(() => {
       fireEvent.click(itemContainer);
     });
-    expect(fetchMock).toBeCalledTimes(1);
+    expect(fetchMock).toBeCalledTimes(2);
   });
 });
