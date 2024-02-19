@@ -10,6 +10,7 @@ export const executionStatusList = ['running', 'passed', 'failed', 'queued', 'ti
 export type ExecutionStatusEnum = (typeof executionStatusList)[number];
 export type ExecutionResultOutputTypeEnum = 'text/plain' | 'application/junit+xml' | 'application/json';
 export type ExecutionStepResultStatusEnum = 'success' | 'error';
+export type ExecutionArgsModeEnum = 'append' | 'replace';
 
 export type ExecutionStepResult = {
   name: string;
@@ -35,6 +36,7 @@ export type Execution = {
   name: string;
   envs: EntityMap;
   args: Args;
+  args_mode?: ExecutionArgsModeEnum;
   params: EntityMap;
   paramsFile: string;
   content: TestContent;
@@ -62,6 +64,7 @@ export type ExecutionRequest = {
   testSecretUUID: string;
   testSuiteSecretUUID: string;
   args: Args;
+  args_mode?: ExecutionArgsModeEnum;
   image: string;
   envs: EntityMap;
   secretEnvs: EntityMap;
