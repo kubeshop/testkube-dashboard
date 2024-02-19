@@ -64,7 +64,6 @@ import {decomposeVariables} from '@utils/variables';
 
 const generalStub = external<typeof GeneralPlugin>();
 const executorsStub = external<typeof ExecutorsPlugin>();
-const rtkStub = external<typeof RtkPlugin>();
 
 // TODO: Split
 export default createPlugin('oss/tests-and-test-suites')

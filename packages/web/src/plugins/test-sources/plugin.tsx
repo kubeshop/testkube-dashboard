@@ -21,7 +21,6 @@ import {PollingIntervals} from '@utils/numbers';
 
 const generalStub = external<typeof GeneralPlugin>();
 const clusterStatusStub = external<typeof ClusterStatusPlugin>();
-const rtkStub = external<typeof RtkPlugin>();
 
 export default createPlugin('oss/test-sources')
   .needs(clusterStatusStub.data('useSystemAccess', 'SystemAccess'))

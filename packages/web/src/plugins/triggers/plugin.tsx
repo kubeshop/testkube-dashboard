@@ -19,7 +19,6 @@ import {
 } from '@store/triggers';
 
 const generalStub = external<typeof GeneralPlugin>();
-const rtkStub = external<typeof RtkPlugin>();
 
 export default createPlugin('oss/triggers')
   .needs(generalStub.slots('siderItems'))
