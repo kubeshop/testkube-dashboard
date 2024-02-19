@@ -71,7 +71,6 @@ export default createPlugin('oss/tests-and-test-suites')
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
   .needs(executorsStub.data('useExecutors'))
-  .needs(rtkStub.slots('rtkServices'))
 
   // Backwards compatibility
   .route('/tests/executions/:id', <DashboardRewrite pattern="/tests/:id" keepQuery />)
@@ -234,8 +233,7 @@ export default createPlugin('oss/tests-and-test-suites')
     );
   });
 
-RtkPlugin.setGlobals(globals => ({
-  ...globals,
+RtkPlugin.overlay.appendContext({
   testsApi,
   testSuitesApi,
-}));
+});

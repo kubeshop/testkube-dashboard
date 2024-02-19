@@ -26,13 +26,11 @@ import {PollingIntervals} from '@utils/numbers';
 
 const generalStub = external<typeof GeneralPlugin>();
 const clusterStatusStub = external<typeof ClusterStatusPlugin>();
-const rtkStub = external<typeof RtkPlugin>();
 
 export default createPlugin('dashboard/executors')
   .needs(clusterStatusStub.data('useSystemAccess', 'SystemAccess'))
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
-  .needs(rtkStub.slots('rtkServices'))
 
   .route('/executors', <ExecutorsList />)
   .route('/executors/:id', <ExecutorDetails />)
@@ -60,11 +58,7 @@ export default createPlugin('dashboard/executors')
   })
 
   .init(tk => {
-    // tk.slots.rtkServices.add(executorsApi);
     tk.slots.siderItems.add({path: '/executors', icon: ExecutorsIcon, title: 'Executors'}, {order: -80});
   });
 
-RtkPlugin.setGlobals(globals => ({
-  ...globals,
-  executorsApi,
-}));
+RtkPlugin.overlay.appendContext({executorsApi});

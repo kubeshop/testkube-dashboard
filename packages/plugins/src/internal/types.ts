@@ -78,8 +78,6 @@ export interface PluginState {
 
   // Routing
   readonly urls: Record<string, true>;
-
-  globals?: Record<string, any>;
 }
 
 export interface EmptyPluginState extends PluginState {

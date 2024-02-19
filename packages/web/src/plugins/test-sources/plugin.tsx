@@ -27,7 +27,6 @@ export default createPlugin('oss/test-sources')
   .needs(clusterStatusStub.data('useSystemAccess', 'SystemAccess'))
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
-  .needs(rtkStub.slots('rtkServices'))
 
   .route('/sources', <SourcesList />)
   .route('/sources/:id', <SourceDetails />)
@@ -55,14 +54,10 @@ export default createPlugin('oss/test-sources')
   })
 
   .init(tk => {
-    // tk.slots.rtkServices.add(sourcesApi);
-    // tk.slots.rtkServices.add(repositoryApi);
-
     tk.slots.siderItems.add({path: '/sources', icon: SourcesIcon, title: 'Sources'}, {order: -20});
   });
 
-RtkPlugin.setGlobals(globals => ({
-  ...globals,
+RtkPlugin.overlay.appendContext({
   sourcesApi,
   repositoryApi,
-}));
+});

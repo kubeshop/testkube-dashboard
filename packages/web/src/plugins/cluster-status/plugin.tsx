@@ -12,11 +12,9 @@ import {configApi, useGetClusterConfigQuery} from '@services/config';
 import {safeRefetch} from '@utils/fetchUtils';
 
 const generalStub = external<typeof GeneralPlugin>();
-const rtkStub = external<typeof RtkPlugin>();
 
 export default createPlugin('dashboard/cluster-status')
   .needs(generalStub.data('useApiEndpoint'))
-  .needs(rtkStub.slots('rtkServices'))
 
   .define(data<boolean>()('isClusterAvailable', 'isSystemAvailable', 'isTelemetryEnabled'))
 
@@ -38,11 +36,6 @@ export default createPlugin('dashboard/cluster-status')
     }, [apiEndpoint]);
   })
 
-  .init(tk => {
-    // tk.slots.rtkServices.add(configApi);
-  });
+  .init();
 
-RtkPlugin.setGlobals(globals => ({
-  ...globals,
-  configApi,
-}));
+RtkPlugin.overlay.appendContext({configApi});

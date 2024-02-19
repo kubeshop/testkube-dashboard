@@ -24,7 +24,6 @@ const rtkStub = external<typeof RtkPlugin>();
 export default createPlugin('oss/triggers')
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
-  .needs(rtkStub.slots('rtkServices'))
 
   .route('/triggers', <TriggersList />)
   .route('/triggers/:id', <TriggerDetails />)
@@ -36,11 +35,9 @@ export default createPlugin('oss/triggers')
   .data({useTriggers, useTriggersPick, useTriggersField, useTriggersSync})
 
   .init(tk => {
-    // tk.slots.rtkServices.add(triggersApi);
     tk.slots.siderItems.add({path: '/triggers', icon: TriggersIcon, title: 'Triggers'}, {order: -60});
   });
 
-RtkPlugin.setGlobals(globals => ({
-  ...globals,
+RtkPlugin.overlay.appendContext({
   triggersApi,
-}));
+});

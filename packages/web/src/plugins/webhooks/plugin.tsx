@@ -19,12 +19,10 @@ import {
 } from '@store/webhooks';
 
 const generalStub = external<typeof GeneralPlugin>();
-const rtkStub = external<typeof RtkPlugin>();
 
 export default createPlugin('oss/webhooks')
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
-  .needs(rtkStub.slots('rtkServices'))
 
   .route('/webhooks', <WebhooksList />)
   .route('/webhooks/:id', <WebhookDetails />)
@@ -37,12 +35,9 @@ export default createPlugin('oss/webhooks')
   .data({useWebhooks, useWebhooksPick, useWebhooksField, useWebhooksSync})
 
   .init(tk => {
-    // tk.slots.rtkServices.add(webhooksApi);
-
     tk.slots.siderItems.add({path: '/webhooks', icon: WebhooksIcon, title: 'Webhooks'}, {order: -40});
   });
 
-RtkPlugin.setGlobals(globals => ({
-  ...globals,
+RtkPlugin.overlay.appendContext({
   webhooksApi,
-}));
+});
