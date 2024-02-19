@@ -9,7 +9,7 @@ import SourcesList from '@pages/Sources/SourcesList/SourcesList';
 
 import type ClusterStatusPlugin from '@plugins/cluster-status/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
-import type RtkPlugin from '@plugins/rtk/plugin';
+import RtkPlugin from '@plugins/rtk/plugin';
 
 import {repositoryApi} from '@services/repository';
 import {sourcesApi, useGetSourcesQuery} from '@services/sources';
@@ -55,8 +55,14 @@ export default createPlugin('oss/test-sources')
   })
 
   .init(tk => {
-    tk.slots.rtkServices.add(sourcesApi);
-    tk.slots.rtkServices.add(repositoryApi);
+    // tk.slots.rtkServices.add(sourcesApi);
+    // tk.slots.rtkServices.add(repositoryApi);
 
     tk.slots.siderItems.add({path: '/sources', icon: SourcesIcon, title: 'Sources'}, {order: -20});
   });
+
+RtkPlugin.setGlobals(globals => ({
+  ...globals,
+  sourcesApi,
+  repositoryApi,
+}));

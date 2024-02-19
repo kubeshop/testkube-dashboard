@@ -5,7 +5,7 @@ import {createPlugin, data, external} from '@testkube/plugins';
 import {SystemAccess, useSystemAccess} from '@hooks/useSystemAccess';
 
 import type GeneralPlugin from '@plugins/general/plugin';
-import type RtkPlugin from '@plugins/rtk/plugin';
+import RtkPlugin from '@plugins/rtk/plugin';
 
 import {configApi, useGetClusterConfigQuery} from '@services/config';
 
@@ -39,5 +39,10 @@ export default createPlugin('dashboard/cluster-status')
   })
 
   .init(tk => {
-    tk.slots.rtkServices.add(configApi);
+    // tk.slots.rtkServices.add(configApi);
   });
+
+RtkPlugin.setGlobals(globals => ({
+  ...globals,
+  configApi,
+}));

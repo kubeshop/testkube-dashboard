@@ -13,10 +13,20 @@ export class Plugin<T extends PluginState> {
   ) {
     this[PluginInit] = (tk, cfg) => initFn(tk, defaults(this[PluginDetailsSymbol].config, cfg) as any);
     this[PluginDetailsSymbol] = config;
+    // this[PluginDetailsSymbol].slots
   }
 
   public configure(config: PluginConfigInput<T['config']>): PluginEntryObject<T> {
     return {plugin: this, config};
+  }
+
+  public getGlobals() {
+    return this[PluginDetailsSymbol].globals || {};
+  }
+
+  public setGlobals(replaceGlobals: (oldGlobals: Record<string, any>) => Record<string, any>) {
+    if (!this[PluginDetailsSymbol].globals) this[PluginDetailsSymbol].globals = {};
+    this[PluginDetailsSymbol].globals = replaceGlobals(this[PluginDetailsSymbol].globals);
   }
 }
 
