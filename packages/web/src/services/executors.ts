@@ -49,6 +49,11 @@ export const executorsApi = createApi({
       }),
       providesTags: (res, err, id) => [{type: 'Executor', id}],
     }),
+    getExecutorDetailsByTestType: builder.query<any, string>({
+      query: testType => ({
+        url: `/executor-by-types?testType=${testType}`,
+      }),
+    }),
     deleteExecutor: builder.mutation<void, string>({
       query: id => ({
         url: `/executors/${id}`,
@@ -82,6 +87,7 @@ export const {
   useCreateExecutorMutation,
   useGetExecutorDefinitionQuery,
   useGetExecutorDetailsQuery,
+  useGetExecutorDetailsByTestTypeQuery,
   useDeleteExecutorMutation,
   useUpdateCustomExecutorMutation,
   useUpdateExecutorDefinitionMutation,
