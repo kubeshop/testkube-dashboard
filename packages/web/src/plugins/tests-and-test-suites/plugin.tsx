@@ -140,9 +140,6 @@ export default createPlugin('oss/tests-and-test-suites')
   .data({useLogOutput, useLogOutputPick, useLogOutputField, useLogOutputSync})
 
   .init(tk => {
-    // tk.slots.rtkServices.add(testSuitesApi);
-    // tk.slots.rtkServices.add(testsApi);
-
     // TODO: Instead of using tk.sync, use all the necessities directly in the plugin components
     tk.data.setExecutionTab = tk.sync(() => {
       const entityId = tk.data.useEntityDetails(x => x.id);

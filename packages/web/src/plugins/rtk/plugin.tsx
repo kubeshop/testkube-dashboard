@@ -3,8 +3,6 @@ import {Provider as ReduxProvider} from 'react-redux';
 
 import {configureStore} from '@reduxjs/toolkit';
 
-import {createLogger} from 'redux-logger';
-
 import {createPlugin} from '@testkube/plugins';
 
 export interface RtkService {
@@ -23,18 +21,7 @@ rtkPlugin.overlay.provider(() => {
   const store = useRef(
     configureStore({
       reducer: services.reduce((reducers, service) => ({...reducers, [service.reducerPath]: service.reducer}), {}),
-      middleware: getDefaultMiddleware => [
-        ...getDefaultMiddleware(),
-        createLogger({
-          predicate: (_, action) => {
-            return (
-              action.type.startsWith('testsApi/executeQuery') || action.type.startsWith('testSuitesApi/executeQuery')
-            );
-          },
-          collapsed: true,
-        }),
-        ...services.map(service => service.middleware),
-      ],
+      middleware: getDefaultMiddleware => [...getDefaultMiddleware(), ...services.map(service => service.middleware)],
     })
   );
 
