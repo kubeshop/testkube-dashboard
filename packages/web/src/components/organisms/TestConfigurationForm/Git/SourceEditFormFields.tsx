@@ -6,6 +6,8 @@ import {Path, Repository, Revision, SecretFormItem} from '@molecules';
 
 import {useValidateRepositoryMutation} from '@services/repository';
 
+import {useClusterDetailsPick} from '@store/clusterDetails';
+
 import {StyledFormSpace} from '../TestConfigurationForm.styled';
 import {Props} from '../utils';
 
@@ -24,6 +26,8 @@ const SourceEdit: React.FC<Partial<Props>> = props => {
     message: '',
   });
 
+  const {disableSecretCreation} = useClusterDetailsPick('disableSecretCreation');
+
   const [validateRepository] = useValidateRepositoryMutation();
 
   useValidateRepository(getFieldValue, setValidationState, validateRepository);
@@ -38,7 +42,7 @@ const SourceEdit: React.FC<Partial<Props>> = props => {
         setIsClearedValue={setIsClearedToken}
         message={validationState.message}
         status={validationState.token}
-        disabled={disabled}
+        disabled={disabled || disableSecretCreation}
       />
       <SecretFormItem
         name="username"
@@ -47,7 +51,7 @@ const SourceEdit: React.FC<Partial<Props>> = props => {
         setIsClearedValue={setIsClearedUsername}
         message={validationState.message}
         status={validationState.username}
-        disabled={disabled}
+        disabled={disabled || disableSecretCreation}
       />
       <Revision
         message={validationState.message}

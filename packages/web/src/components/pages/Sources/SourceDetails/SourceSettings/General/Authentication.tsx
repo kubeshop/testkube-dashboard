@@ -12,6 +12,7 @@ import {Permissions, usePermission} from '@permissions/base';
 
 import {useUpdateSourceMutation} from '@services/sources';
 
+import {useClusterDetailsPick} from '@store/clusterDetails';
 import {useSourcesPick} from '@store/sources';
 
 import {displayDefaultNotificationFlow} from '@utils/notification';
@@ -28,6 +29,7 @@ const Authentication: React.FC = () => {
   const [form] = Form.useForm<AuthenticationFormValues>();
 
   const {current} = useSourcesPick('current');
+  const {disableSecretCreation} = useClusterDetailsPick('disableSecretCreation');
 
   const [updateSource] = useUpdateSourceMutation();
 
@@ -77,20 +79,20 @@ const Authentication: React.FC = () => {
       spacing={24}
       form={form}
       initialValues={defaults}
-      disabled={!mayEdit}
+      disabled={!mayEdit || disableSecretCreation}
       wasTouched={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
       onConfirm={onFinish}
       onCancel={onCancel}
     >
       <SecretFormItem
         name="username"
-        label="Git username"
+        label="Git Username"
         isClearedValue={isClearedUsername}
         setIsClearedValue={setIsClearedUsername}
       />
       <SecretFormItem
         name="token"
-        label="Git token"
+        label="Git Token"
         isClearedValue={isClearedToken}
         setIsClearedValue={setIsClearedToken}
       />
