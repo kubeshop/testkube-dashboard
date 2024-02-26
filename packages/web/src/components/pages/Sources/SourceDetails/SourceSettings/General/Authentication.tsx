@@ -79,7 +79,7 @@ const Authentication: React.FC = () => {
       spacing={24}
       form={form}
       initialValues={defaults}
-      disabled={!mayEdit}
+      disabled={!mayEdit || disableSecretCreation}
       wasTouched={Boolean((tokenSecret && isClearedToken) || (usernameSecret && isClearedUsername))}
       onConfirm={onFinish}
       onCancel={onCancel}
@@ -89,14 +89,12 @@ const Authentication: React.FC = () => {
         label="Git Username"
         isClearedValue={isClearedUsername}
         setIsClearedValue={setIsClearedUsername}
-        disabled={disableSecretCreation}
       />
       <SecretFormItem
         name="token"
         label="Git Token"
         isClearedValue={isClearedToken}
         setIsClearedValue={setIsClearedToken}
-        disabled={disableSecretCreation}
       />
     </CardForm>
   );
