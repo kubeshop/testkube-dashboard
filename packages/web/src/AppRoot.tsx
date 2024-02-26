@@ -3,7 +3,7 @@ import {useMemo} from 'react';
 import {Layout} from 'antd';
 import {Content} from 'antd/lib/layout/layout';
 
-import {usePluginSystem} from '@testkube/plugins';
+import {usePluginOverlay, usePluginSystem} from '@testkube/plugins';
 
 import {ReactComponent as Logo} from '@assets/testkube-symbol-color.svg';
 
@@ -26,7 +26,6 @@ import ModalPlugin from '@plugins/modal/plugin';
 import PermissionsPlugin from '@plugins/permissions/plugin';
 import PromoBannersPlugin from '@plugins/promo-banners/plugin';
 import RouterPlugin from '@plugins/router/plugin';
-import RtkResetOnApiChangePlugin from '@plugins/rtk-reset-on-api-change/plugin';
 import RtkPlugin from '@plugins/rtk/plugin';
 import SettingsPlugin from '@plugins/settings/plugin';
 import SiderCloudMigratePlugin from '@plugins/sider-cloud-migrate/plugin';
@@ -51,7 +50,6 @@ const AppRoot: React.FC = () => {
       ConfigPlugin.configure({slackUrl: externalLinks.slack}),
       RouterPlugin.configure({baseUrl: env.basename || ''}),
       PermissionsPlugin.configure({resolver: new BasePermissionsResolver()}),
-      RtkResetOnApiChangePlugin,
       RtkPlugin,
       ModalPlugin,
       SiderLogoPlugin.configure({logo: <Logo />}),
@@ -67,6 +65,8 @@ const AppRoot: React.FC = () => {
   );
   const [PluginProvider, {routes}] = usePluginSystem(plugins);
 
+  const PluginOverlayProvider = usePluginOverlay(plugins);
+
   return (
     <ErrorBoundary>
       <TelemetryProvider
@@ -76,18 +76,20 @@ const AppRoot: React.FC = () => {
         debug={env.debugTelemetry}
         paused
       >
-        <PluginProvider>
-          <Layout>
-            <Sider />
-            <StyledLayoutContentWrapper>
-              <Content>
-                <ErrorBoundary>
-                  <App routes={routes} />
-                </ErrorBoundary>
-              </Content>
-            </StyledLayoutContentWrapper>
-          </Layout>
-        </PluginProvider>
+        <PluginOverlayProvider>
+          <PluginProvider>
+            <Layout>
+              <Sider />
+              <StyledLayoutContentWrapper>
+                <Content>
+                  <ErrorBoundary>
+                    <App routes={routes} />
+                  </ErrorBoundary>
+                </Content>
+              </StyledLayoutContentWrapper>
+            </Layout>
+          </PluginProvider>
+        </PluginOverlayProvider>
       </TelemetryProvider>
     </ErrorBoundary>
   );

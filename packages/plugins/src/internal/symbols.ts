@@ -20,3 +20,4 @@ export const PluginScopeScheduleUpdate = Symbol.for('schedule informing about ch
 export const PluginScopeEmitChange = Symbol.for('inform about data change');
 export const PluginScopeSubscribeChange = Symbol.for('subscribe to data change');
 export const PluginScopeListeners = Symbol.for('subscription listeners list');
+export const PluginOverlayContext = Symbol.for('context used only for overlay');

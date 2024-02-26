@@ -44,6 +44,7 @@ const TestSuitesList: React.FC = () => {
   } = useGetTestSuitesQuery(filters || null, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isSystemAvailable,
+    refetchOnMountOrArgChange: true,
   });
   useTestSuitesSync({testSuites});
 

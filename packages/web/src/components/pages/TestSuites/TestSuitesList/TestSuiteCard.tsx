@@ -26,7 +26,11 @@ const TestSuiteCard: FC<TestSuiteCardProps> = ({item: {testSuite, latestExecutio
 
   const {data: metrics} = useGetTestSuiteExecutionMetricsQuery(
     {id: testSuite.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isSystemAvailable, pollingInterval: PollingIntervals.halfMin}
+    {
+      skip: !isInViewport || !isSystemAvailable,
+      pollingInterval: PollingIntervals.halfMin,
+      refetchOnMountOrArgChange: true,
+    }
   );
 
   return (

@@ -73,16 +73,18 @@ const EntityDetailsLayer: FC<PropsWithChildren<EntityDetailsLayerProps>> = ({
     {
       pollingInterval: PollingIntervals.long,
       skip: !isSystemAvailable || daysFilterValue === undefined,
+      refetchOnMountOrArgChange: true,
     }
   );
 
   const {data: rawMetrics, refetch: refetchMetrics} = useGetMetrics(
     {id, last: daysFilterValue},
-    {skip: !isSystemAvailable}
+    {skip: !isSystemAvailable, refetchOnMountOrArgChange: true}
   );
   const {data: rawDetails, error} = useGetEntityDetails(id, {
     pollingInterval: PollingIntervals.long,
     skip: !isSystemAvailable,
+    refetchOnMountOrArgChange: true,
   });
 
   const isV2 = isTestSuiteV2(rawDetails);

@@ -51,6 +51,7 @@ const LabelsSelect: React.FC<LabelsSelectProps> = props => {
   const {data, isFetching} = useGetLabelsQuery(null, {
     pollingInterval: PollingIntervals.default,
     skip: Boolean(options) || !isClusterAvailable,
+    refetchOnMountOrArgChange: true,
   });
 
   const formattedValue = useMemo(() => (value || []).map(label => ({label, value: label})), [value]);
