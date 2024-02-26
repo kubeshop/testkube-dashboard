@@ -33,7 +33,7 @@ type AddSourceFormValues = {
 };
 
 const AddSourceModal: React.FC = () => {
-  const {namespace} = useClusterDetailsPick('namespace');
+  const {disableSecretCreation, namespace} = useClusterDetailsPick('disableSecretCreation', 'namespace');
   const [form] = Form.useForm<AddSourceFormValues>();
   const openDetails = useDashboardNavigate((name: string) => `/sources/${name}`);
   const {close} = useModal();
@@ -94,13 +94,14 @@ const AddSourceModal: React.FC = () => {
         <Form.Item label="Git repository URL" required name="uri" rules={[required]}>
           <Input placeholder="e.g.: https://github.com/myCompany/myRepo.git" />
         </Form.Item>
-        <Form.Item label="Git username" name="username">
-          <Input placeholder="e.g.: my-user-name" />
+        <Form.Item label="Git Username" name="username">
+          <Input placeholder="e.g.: my-user-name" disabled={disableSecretCreation} />
         </Form.Item>
-        <Form.Item label="Git token" name="token">
+        <Form.Item label="Git Token" name="token">
           <AntdInput.Password
             placeholder="e.g.: some-token"
             iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+            disabled={disableSecretCreation}
           />
         </Form.Item>
         <Form.Item
