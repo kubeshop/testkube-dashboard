@@ -36,6 +36,7 @@ const LabelsFilter: React.FC<EntityFilters> = props => {
   const {data} = useGetLabelsQuery(null, {
     pollingInterval: PollingIntervals.default,
     skip: !isClusterAvailable,
+    refetchOnMountOrArgChange: true,
   });
 
   const [isVisible, setIsVisible] = useState(false);

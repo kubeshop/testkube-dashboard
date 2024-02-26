@@ -36,7 +36,11 @@ const WebhooksList: FC = () => {
     data: webhooks,
     error,
     isLoading,
-  } = useGetWebhooksQuery(null, {pollingInterval: PollingIntervals.everyTwoSeconds, skip: !isClusterAvailable});
+  } = useGetWebhooksQuery(null, {
+    pollingInterval: PollingIntervals.everyTwoSeconds,
+    skip: !isClusterAvailable,
+    refetchOnMountOrArgChange: true,
+  });
 
   const mayCreate = usePermission(Permissions.createEntity);
 

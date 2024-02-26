@@ -51,6 +51,7 @@ const TestsList: React.FC = () => {
   } = useGetTestsQuery(filters, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isSystemAvailable,
+    refetchOnMountOrArgChange: true,
   });
   useTestsSync({tests});
 

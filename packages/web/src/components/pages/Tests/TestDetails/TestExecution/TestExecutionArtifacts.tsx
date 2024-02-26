@@ -30,6 +30,7 @@ const TestExecutionArtifacts: React.FC<TestExecutionArtifactsProps> = props => {
   const {data, isLoading, error} = useGetTestExecutionArtifactsQuery(id, {
     skip: !isSystemAvailable,
     pollingInterval: PollingIntervals.everyTwoSeconds,
+    refetchOnMountOrArgChange: true,
   });
 
   useEffect(() => {
