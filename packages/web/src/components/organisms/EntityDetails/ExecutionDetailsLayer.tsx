@@ -55,6 +55,7 @@ const ExecutionDetailsLayer: FC<PropsWithChildren<ExecutionDetailsLayerProps>> =
   const {data: rawFetchedData, error} = useGetExecutionDetails(execId!, {
     pollingInterval: PollingIntervals.everySecond,
     skip: !isClusterAvailable || !execId || (data?.id === execId && isExecutionFinished(data)),
+    refetchOnMountOrArgChange: true,
   });
   const fetchedData = rawFetchedData?.id === execId ? rawFetchedData : null;
   const isV2 = isTestSuiteV2Execution(fetchedData);

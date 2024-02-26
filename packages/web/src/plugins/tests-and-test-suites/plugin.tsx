@@ -23,7 +23,7 @@ import TestsList from '@pages/Tests/TestsList';
 
 import type ExecutorsPlugin from '@plugins/executors/plugin';
 import type GeneralPlugin from '@plugins/general/plugin';
-import type RtkPlugin from '@plugins/rtk/plugin';
+import RtkPlugin from '@plugins/rtk/plugin';
 
 import {testSuitesApi} from '@services/testSuites';
 import {testsApi} from '@services/tests';
@@ -64,14 +64,12 @@ import {decomposeVariables} from '@utils/variables';
 
 const generalStub = external<typeof GeneralPlugin>();
 const executorsStub = external<typeof ExecutorsPlugin>();
-const rtkStub = external<typeof RtkPlugin>();
 
 // TODO: Split
 export default createPlugin('oss/tests-and-test-suites')
   .needs(generalStub.slots('siderItems'))
   .needs(generalStub.data('useApiEndpoint'))
   .needs(executorsStub.data('useExecutors'))
-  .needs(rtkStub.slots('rtkServices'))
 
   // Backwards compatibility
   .route('/tests/executions/:id', <DashboardRewrite pattern="/tests/:id" keepQuery />)
@@ -142,9 +140,6 @@ export default createPlugin('oss/tests-and-test-suites')
   .data({useLogOutput, useLogOutputPick, useLogOutputField, useLogOutputSync})
 
   .init(tk => {
-    tk.slots.rtkServices.add(testSuitesApi);
-    tk.slots.rtkServices.add(testsApi);
-
     // TODO: Instead of using tk.sync, use all the necessities directly in the plugin components
     tk.data.setExecutionTab = tk.sync(() => {
       const entityId = tk.data.useEntityDetails(x => x.id);
@@ -233,3 +228,8 @@ export default createPlugin('oss/tests-and-test-suites')
       {order: -60, enabled: () => Boolean(getDecomposedVars()?.length)}
     );
   });
+
+RtkPlugin.overlay.appendContext({
+  testsApi,
+  testSuitesApi,
+});

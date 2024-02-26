@@ -21,6 +21,7 @@ export interface ApiDetails {
   namespace: string;
   version: string;
   url: string;
+  disableSecretCreation?: boolean;
 }
 
 interface ApiEndpointConfig {

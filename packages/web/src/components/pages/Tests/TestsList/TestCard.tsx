@@ -26,7 +26,11 @@ const TestCard: FC<TestCardProps> = ({item: {test, latestExecution}, onClick}) =
 
   const {data: metrics} = useGetTestExecutionMetricsQuery(
     {id: test.name, last: 7, limit: 13},
-    {skip: !isInViewport || !isSystemAvailable, pollingInterval: PollingIntervals.halfMin}
+    {
+      skip: !isInViewport || !isSystemAvailable,
+      pollingInterval: PollingIntervals.halfMin,
+      refetchOnMountOrArgChange: true,
+    }
   );
 
   return (

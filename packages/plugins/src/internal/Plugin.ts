@@ -1,3 +1,4 @@
+import {PluginOverlay} from './PluginOverlay';
 import type {PluginScope} from './PluginScope';
 import {PluginDetails as PluginDetailsSymbol, PluginInit} from './symbols';
 import type {PluginConfig, PluginConfigInput, PluginDetails, PluginScopeStateFor, PluginState} from './types';
@@ -6,6 +7,8 @@ import {defaults} from './utils';
 export class Plugin<T extends PluginState> {
   public readonly [PluginInit]: (context: PluginScope<PluginScopeStateFor<T>>, config: T['config']) => void;
   public readonly [PluginDetailsSymbol]: PluginDetails<T>;
+
+  public readonly overlay = new PluginOverlay();
 
   public constructor(
     config: PluginDetails<T>,
