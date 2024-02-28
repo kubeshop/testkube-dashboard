@@ -174,7 +174,11 @@ const SettingsTests = () => {
     <CardForm
       name="define-tests-form"
       title="Tests"
-      description="Define the tests and their order of execution for this test suite"
+      description={
+        <>
+          Define the tests and their order of execution for this test suite. Learn more about <ExternalLink href={externalLinks.testSuitesTestSteps}>parameterising them.</ExternalLink>
+        </>
+      }
       footer={footer}
       disabled={!mayEdit}
       readOnly={!isWritable}
