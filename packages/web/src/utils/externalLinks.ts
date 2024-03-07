@@ -36,7 +36,7 @@ export enum externalLinks {
   integrationWithJenkins = 'https://docs.testkube.io/articles/jenkins',
   integrationWithAzure = 'https://docs.testkube.io/articles/azure',
   integrationWithCircleCI = 'https://docs.testkube.io/articles/circleci',
-  testSuitesTestSteps = 'https://docs.testkube.io/testkube-pro/articles/running-parallel-tests-with-test-suite#test-suite-steps',
+  testSuitesTestSteps = 'https://docs.testkube.io/articles/creating-test-suites#test-suite-steps',
 }
 
 const crdCdn = `https://raw.githubusercontent.com/kubeshop/testkube-operator/${encodeURIComponent(
