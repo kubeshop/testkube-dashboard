@@ -1,4 +1,5 @@
-import {test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
+import {ExecutorGeneralSettingsPage} from 'pages/ExecutorGeneralSettingsPage';
 
 import config from '../config';
 import {ApiHelpers} from '../helpers/api-helpers';
@@ -39,12 +40,131 @@ test(`Create custom container executor`, async ({page}) => {
   await api.removeExecutor(realExecutorName);
 });
 
-test.skip(`Custom container executor - general settings`, async ({page}) => {});
+test(`Custom container executor - general settings`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  await api.assureExecutorCreated(executorData);
 
-test.skip(`Custom container executor - delete executor`, async ({page}) => {});
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
 
-test.skip(`Custom container executor - container image`, async ({page}) => {});
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
 
-test.skip(`Custom container executor - command and arguments`, async ({page}) => {});
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
 
-test.skip(`Custom container executor - definition`, async ({page}) => {});
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+
+  await executorGeneralSettingsPage.validateExecutorGeneralSettings(executorData.name, executorData.types[0]);
+
+  // Cleanup
+  await api.removeExecutor(realExecutorName);
+});
+
+test(`Custom container executor - delete executor`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  await api.assureExecutorCreated(executorData);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
+
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
+
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+  await executorGeneralSettingsPage.deleteExecutor(realExecutorName);
+
+  await page.waitForURL(`**/executors`);
+  const isDeleted = !(await api.isExecutorCreated(realExecutorName));
+  expect(isDeleted).toBeTruthy();
+});
+
+test(`Custom container executor - container image`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  await api.assureExecutorCreated(executorData);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
+
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
+
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+
+  await executorGeneralSettingsPage.selectContainerImageTab();
+
+  await executorGeneralSettingsPage.validateContainerImageSettings(executorData.image);
+
+  // Cleanup
+  await api.removeExecutor(realExecutorName);
+});
+
+test(`Custom container executor - command and arguments`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  const command = 'echo 3600';
+  const argument = '--arg1';
+
+  await api.assureExecutorCreated(executorData);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
+
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
+
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+  await executorGeneralSettingsPage.selectCommandAndArgumentsTab();
+
+  await executorGeneralSettingsPage.setCommand(command);
+  await executorGeneralSettingsPage.validateCommand(command);
+
+  await executorGeneralSettingsPage.addArgument(argument);
+  await executorGeneralSettingsPage.validateArgument(argument);
+
+  // Cleanup
+  await api.removeExecutor(realExecutorName);
+});
+
+test(`Custom container executor - definition`, async ({page}) => {
+  const executorName = 'container-executor-curl-1';
+  const executorData = testDataHandler.getExecutor(executorName);
+  const realExecutorName = executorData.name;
+  await api.assureExecutorCreated(executorData);
+
+  const mainPage = new MainPage(page);
+  await mainPage.visitMainPage();
+
+  const navigationSiderPage = new NavigationSiderPage(page);
+  await navigationSiderPage.openMenuItem('executors');
+
+  const executorsPage = new ExecutorsPage(page);
+  await executorsPage.openExecutorSettings(realExecutorName);
+
+  const executorGeneralSettingsPage = new ExecutorGeneralSettingsPage(page);
+  await executorGeneralSettingsPage.selectDefinitionTab();
+  const definition = `  features:
+  - artifacts`;
+
+  await executorGeneralSettingsPage.setDefinition(definition);
+  await executorGeneralSettingsPage.validateDefinition(definition);
+
+  // cleanup
+  await api.removeExecutor(realExecutorName);
+});

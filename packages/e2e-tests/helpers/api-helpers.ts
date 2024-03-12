@@ -108,6 +108,10 @@ export class ApiHelpers {
     return this.makePost(`${this.apiUrl}/test-sources`, testSourceData);
   }
 
+  public async createExecutor(executorData: Partial<ExecutorData>): Promise<ExecutorData> {
+    return this.makePost(`${this.apiUrl}/executors`, executorData);
+  }
+
   public async abortTest(testName: string, executionId: string): Promise<any> {
     return this.makePatch(`${this.apiUrl}/tests/${testName}/executions/${executionId}`);
   }
@@ -142,6 +146,10 @@ export class ApiHelpers {
 
   public async updateTestSource(testSourceData: Partial<TestSourceData>): Promise<any> {
     return this.makePatch(`${this.apiUrl}/test-sources/${testSourceData.name}`, testSourceData);
+  }
+
+  public async updateExecutor(executorData: Partial<ExecutorData>): Promise<any> {
+    return this.makePatch(`${this.apiUrl}/executors/${executorData.name}`, executorData);
   }
 
   public async isTestCreated(testName: string): Promise<boolean> {
@@ -287,6 +295,20 @@ export class ApiHelpers {
       }
     } catch (e) {
       throw Error(`assureTestSourceCreated failed for "${testSourceData.name}" with: "${e}"`);
+    }
+  }
+
+  public async assureExecutorCreated(executorData: Partial<ExecutorData>): Promise<void> {
+    try {
+      const alreadyCreated = await this.isExecutorCreated(executorData.name);
+
+      if (alreadyCreated) {
+        await this.updateExecutor(executorData);
+      } else {
+        await this.createExecutor(executorData);
+      }
+    } catch (e) {
+      throw Error(`assureExecutorCreated failed for "${executorData.name}" with: "${e}"`);
     }
   }
 

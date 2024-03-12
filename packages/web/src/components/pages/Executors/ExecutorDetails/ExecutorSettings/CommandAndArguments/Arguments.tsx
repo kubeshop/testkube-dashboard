@@ -66,13 +66,17 @@ const Arguments: React.FC = () => {
                     <Input placeholder="Your argument value" />
                   </FormItem>
                   <FormIconWrapper>
-                    <DeleteOutlined onClick={() => remove(name)} style={{fontSize: 21}} />
+                    <DeleteOutlined
+                      onClick={() => remove(name)}
+                      style={{fontSize: 21}}
+                      data-testid="delete-argument-button"
+                    />
                   </FormIconWrapper>
                 </FormRow>
               );
             })}
             <StyledButtonsContainer>
-              <Button $customType="secondary" onClick={() => add('')}>
+              <Button $customType="secondary" onClick={() => add('')} data-testid="add-argument-button">
                 Add a new argument
               </Button>
             </StyledButtonsContainer>
