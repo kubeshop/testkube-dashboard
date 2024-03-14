@@ -1,4 +1,12 @@
 <p align="center">
+  :warning: <strong>The Open Source version of the Testkube Dashboard is being deprecated.
+  <br />
+  For further details and next steps, please refer to <a href="https://testkube.io/blog/testkube-dashboard-announcement">our official announcement</a>.</strong>
+</p>
+
+---
+
+<p align="center">
   <img src="docs/testkube-logo.svg" alt="Testkube Logo" width="80"/>
 </p>
 
