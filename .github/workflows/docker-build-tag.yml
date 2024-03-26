@@ -107,4 +107,4 @@ jobs:
           token: ${{ secrets.CI_BOT_TOKEN }}
           repository: kubeshop/testkube-dashboard-chart
           event-type: trigger-workflow-dashboard-chart
-          client-payload: '{"app_version": "${{ steps.tag.outputs.tag  }}"}'
+          client-payload: '{"app_version": "${{ steps.tag.outputs.tag }}"}'
