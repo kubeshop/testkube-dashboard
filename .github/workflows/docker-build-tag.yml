@@ -108,25 +108,3 @@ jobs:
           repository: kubeshop/testkube-dashboard-chart
           event-type: trigger-workflow-dashboard-chart
           client-payload: '{"app_version": "${{ steps.tag.outputs.tag  }}"}'
-
-#      - name: Editing helm-release repo with version based on a Tag pushed.
-#        run: |
-#          # Setting up Git:
-#          git clone https://kubeshop-bot:$GH_TOKEN@github.com/kubeshop/testkube-dashboard-chart
-#          cd ./testkube-dashboard-chart
-#          git config user.name "kubeshop-bot"
-#          git config user.email "kubeshop-bot@kubeshop.io"
-#
-#          export GH_TOKEN
-#          export RELEASE_VERSION
-#          export SERVICE
-#
-#          git fetch origin main
-#          git checkout main
-#          cd ./scripts
-#          ./chart_releaser.sh
-#
-#        env:
-#          SERVICE: dashboard
-#          GH_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-#          RELEASE_VERSION: ${{ steps.tag.outputs.tag }}

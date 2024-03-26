@@ -93,6 +93,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.CI_BOT_TOKEN }}
-          repository: kubeshop/helm-charts
-          event-type: trigger-workflow-dashboard-pre-release
-          client-payload: '{"image_tag_dashboard": "${{ steps.tag.outputs.tag }}"}'
+          repository: kubeshop/testkube-dashboard-chart
+          event-type: trigger-workflow-dashboard-chart
+          client-payload: '{"app_version": "${{ steps.tag.outputs.tag  }}"}'
