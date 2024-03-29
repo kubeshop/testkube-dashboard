@@ -8,7 +8,7 @@ import {getRtkIdToken} from '@utils/rtk';
 
 export type LogLine = {content: string; source?: string};
 
-export const useLogsV2 = (executionId?: string, enabled?: boolean) => {
+export const useLogsV2 = (executionId?: string, isRunning?: boolean) => {
   const wsRoot = useWsEndpoint();
   const [logs, setLogs] = useState<LogLine[]>([]);
 
@@ -21,7 +21,7 @@ export const useLogsV2 = (executionId?: string, enabled?: boolean) => {
         const logData = JSON.parse(e.data);
         setLogs(prev => [...prev, logData]);
       },
-      shouldReconnect: () => true,
+      shouldReconnect: () => Boolean(isRunning),
       retryOnError: true,
       queryParams: token ? {token} : {},
     },
