@@ -6,6 +6,9 @@ import {GlobalStyle} from '@styles/globalStyles';
 
 import AppRoot from './AppRoot';
 import './antd-theme/antd-customized.css';
+import {initializeApiInfoData} from './utils/apiInfo';
+
+initializeApiInfoData();
 
 (async () => {
   const container = document.getElementById('root');
