@@ -10,7 +10,6 @@ enum Colors {
   slate600quarteralpha = 'rgba(71,85,105, 0.25)',
   slate700 = '#334155',
   slate800 = '#1E293B',
-  slate200halfalpha = 'rgba(226,232,240, 0.5)',
   slate800halfalpha = 'rgba(30,41,59, 0.5)',
   slate801 = 'rgba(30, 41, 59, 0.5)',
   slate800disabled = 'rgba(30, 41, 59, 0.5)',
@@ -18,44 +17,67 @@ enum Colors {
   slate900 = '#0F172A',
   slate950 = '#0b101d',
 
-  sky900 = '#0C4A6E',
-  sky700 = '#0369A1',
-  sky600 = '#0284C7',
-  sky500 = '#0EA5E9',
-  sky400 = '#38BDF8',
+  sky50 = '#F0F9FF',
+  sky100 = '#E0F2FE',
+  sky200 = '#BAE6FD',
   sky300 = '#7DD3FC',
+  sky400 = '#38BDF8',
+  sky500 = '#0EA5E9',
+  sky600 = '#0284C7',
+  sky700 = '#0369A1',
+  sky800 = '#075985',
+  sky900 = '#0C4A6E',
 
-  pink900 = '#831843',
-  pink800 = '#9D174D',
-  pink700 = '#BE185D',
-  pink600 = '#DB2777',
-  pink500 = '#EC4899',
-  pink400 = '#F472B6',
+  pink50 = '#FDF2F8',
+  pink100 = '#FCE7F3',
+  pink200 = '#FBCFE8',
   pink300 = '#F9A8D4',
+  pink400 = '#F472B6',
+  pink500 = '#EC4899',
+  pink600 = '#DB2777',
+  pink700 = '#BE185D',
+  pink800 = '#9D174D',
+  pink900 = '#831843',
 
-  lime900 = '#365314',
-  lime700 = '#4D7C0F',
-  lime600 = '#65A30D',
-  lime500 = '#84CC16',
-  lime400 = '#A3E635',
+  lime50 = '#F7FEE7',
+  lime100 = '#ECFCCB',
+  lime200 = '#D9F99D',
   lime300 = '#BEF264',
+  lime400 = '#A3E635',
+  lime500 = '#84CC16',
+  lime600 = '#65A30D',
+  lime700 = '#4D7C0F',
+  lime800 = '#3F6212',
+  lime900 = '#365314',
 
-  yellow900 = '#713F12',
-  yellow600 = '#CA8A04',
-  yellow500 = '#EAB308',
-  yellow400 = '#FACC15',
+  yellow50 = '#FEFCE8',
+  yellow100 = '#FEF9C3',
+  yellow200 = '#FEF08A',
   yellow300 = '#FDE047',
+  yellow400 = '#FACC15',
+  yellow500 = '#EAB308',
+  yellow600 = '#CA8A04',
+  yellow700 = '#A16207',
+  yellow800 = '#854D0E',
+  yellow900 = '#713F12',
 
-  cyan900 = '#164E63',
-  cyan500 = '#06B6D4',
-  cyan300 = '#67E8F9',
   cyan50 = '#ECFEFF',
+  cyan100 = '#CFFAFE',
+  cyan200 = '#A5F3FC',
+  cyan300 = '#67E8F9',
+  cyan400 = '#22D3EE',
+  cyan500 = '#06B6D4',
+  cyan600 = '#0891B2',
+  cyan700 = '#0E7490',
+  cyan800 = '#155E75',
+  cyan900 = '#164E63',
 
   blue500 = '#3b82f6',
+  blue6 = '#1890FC', // Daybreak Blue
 
-  emerald900 = '#064E3B',
-  emerald700 = '#0F766E',
   emerald500 = '#10B981',
+  emerald700 = '#0F766E',
+  emerald900 = '#064E3B',
 
   teal300 = '#5eead4',
   teal900 = '#164e63',
@@ -71,15 +93,27 @@ enum Colors {
   indigo800 = '#3730A3',
   indigo900 = '#312e81',
 
+  amber50 = '#FFFBEB',
   amber100 = '#FEF3C7',
   amber200 = '#FDE68A',
   amber300 = '#FCD34D',
   amber400 = '#fbbf24',
   amber500 = '#F59E0B',
   amber600 = '#D97706',
+  amber700 = '#B45309',
   amber800 = '#92400E',
   amber900 = '#78350F',
   amber90099 = '#78350F99',
+
+  rose100 = '#FFE4E6',
+  rose200 = '#FECDD3',
+  rose300 = '#FDA4AF',
+  rose400 = '#fb7185',
+  rose500 = '#F43F5E',
+  rose600 = '#e11d48',
+  rose700 = '#be123c',
+  rose800 = '#9f1239',
+  rose900 = '#881337',
 
   violet400 = '#a78bfa',
   violet800 = '#5B21B6',
@@ -92,60 +126,31 @@ enum Colors {
   grey500 = '#C5C8CB',
   grey450 = '#DBDBDB',
   grey400 = '#DBE0DE',
+  grey300 = '#E1E6E4',
   grey200 = '#F3F5F4',
   grey100 = '#F9FAFA',
   grey7 = '#7D7D7D', // gray, gray 7 https://www.figma.com/file/3UVW3KVNob7QjgvH62blGU/add-left-and-right-toolbars?node-id=3%3A5926
-  grey3 = '#262626', // gray, gray 3
-  greySecondary = '#ADADAD',
   greyCode = '#DADADA',
   greyBG = '#434343',
-  greyBGSecondary = '#1d1d1d',
 
   // Notifications
   greenOkay = '#09B89D',
-  greenOkayCompliment = '#B2DFD3',
 
-  successGreen = '#94D89C',
   errorRed = '#DB539C',
   lightGrey = '#DEDEDE',
   darkGrey = '#393939',
 
   redError = '#E65A6D',
-  redErrorCompliment = '#F4BAB8',
 
   whitePure = '#FFFFFF',
   blackPure = '#000000',
-  blackPearl = '#111D2C',
-
-  blue6 = '#1890FC', // Daybreak Blue
-  blue10 = '#B7E3FA',
 
   highlightGreen = '#33BCB7',
 
   purple = '#7984F4',
-  purpleSecondary = '#4628AF',
 
-  selectionGradient = 'linear-gradient(90deg, #3C9AE8 0%, #84E2D8 100%)',
-  selectionGradientHover = 'linear-gradient(90deg, #3C9AE8 50%, #84E2D8 100%)',
-  highlightGradient = 'linear-gradient(90deg, #113536 0%, #000000 100%)',
-  highlightGradientHover = 'linear-gradient(90deg, #113536 50%, #000000 100%)',
-  diffBackground = '#2B2611',
-  diffBackgroundHover = '#27220F',
-
-  dashboardTableBackground = '#1D1D1D',
   greyBorder = '#434343',
   greyHover = '#303030',
-  greyDisabled = '#5A5A5A',
-
-  rose100 = '#FFE4E6',
-  rose200 = '#FECDD3',
-  rose300 = '#FDA4AF',
-  rose400 = '#fb7185',
-  rose500 = '#F43F5E',
-  rose600 = '#e11d48',
-  rose700 = '#be123c',
-  rose800 = '#9f1239',
-  rose900 = '#881337',
 }
 
 export enum BackgroundColors {
@@ -208,9 +213,5 @@ export enum SecondaryStatusColors {
 export enum BorderColors {
   greyBorder = Colors.darkGrey,
 }
-
-const borders = {
-  greyBorder: `1px solid ${BorderColors.greyBorder}`,
-};
 
 export default Colors;

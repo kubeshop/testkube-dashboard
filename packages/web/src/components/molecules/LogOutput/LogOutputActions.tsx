@@ -7,6 +7,8 @@ import {CopyButton, DownloadButton} from '@atoms';
 import useLocation from '@hooks/useLocation';
 import useSecureContext from '@hooks/useSecureContext';
 
+import {isFeatureEnabled} from '@src/utils/apiInfo';
+
 import FullscreenAction from './FullscreenAction';
 import {StyledLogOutputActionsContainer} from './LogOutput.styled';
 import SearchAction from './SearchAction';
@@ -21,15 +23,18 @@ const LogOutputActions: React.FC<LogOutputActionsProps> = props => {
   const isSecureContext = useSecureContext();
   const filename = useLocation().lastPathSegment;
 
+  const isV2 = isFeatureEnabled('logsV2');
+
   return (
     <StyledLogOutputActionsContainer>
-      <SearchAction />
+      {isV2 ? null : <SearchAction />}
       {isSecureContext ? (
         <CopyButton content={strippedLogOutput} />
       ) : (
         <DownloadButton filename={filename} extension="log" content={strippedLogOutput} />
       )}
-      <FullscreenAction key="fullscreen-log-action" />
+
+      {isV2 ? null : <FullscreenAction key="fullscreen-log-action" />}
     </StyledLogOutputActionsContainer>
   );
 };
