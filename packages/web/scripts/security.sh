@@ -1,18 +1,17 @@
 #!/bin/sh
 
-tempFile=$(mktemp)
+tempFile=$(mktemp /etc/nginx/tempfile.XXXXXXXX)
+
 cat > "${tempFile}" <<EOF
 
         add_header X-Frame-Options "SAMEORIGIN";
         add_header X-Content-Type-Options "nosniff";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
-        add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'self'; connect-src 'self' http://${API_DOMAIN} https://${API_DOMAIN} ws://${API_DOMAIN} wss://${API_DOMAIN} blob:;";
+        add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' blob:;";
 EOF
 
 if [ "${ENABLE_SECURITY_HEADERS}" = "true" ]; then
-  if grep -q "#SecurityHeaders" /etc/nginx/nginx.conf.tmpl; then
-    sed -i "/#SecurityHeaders/r ${tempFile}" /etc/nginx/nginx.conf.tmpl
-  fi
+  sed -i "/#SecurityHeaders/r ${tempFile}" /etc/nginx/nginx.conf.tmpl
 fi
 
 rm "${tempFile}"
