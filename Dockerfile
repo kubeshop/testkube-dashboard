@@ -31,6 +31,7 @@ COPY --from=build /app/packages/web/build /app/build
 
 COPY ./packages/web/scripts/env.sh /app/init/
 COPY ./packages/web/scripts/inject-base-href.sh /app/init/
+COPY ./packages/web/scripts/security.sh /app/init/
 
 RUN chmod +x /app/init/env.sh /app/init/inject-base-href.sh && \
     chmod a+w /etc/nginx/nginx.conf /app/build/index.html && \
@@ -49,6 +50,7 @@ CMD [ \
    cp -R /app/nginx/. /etc/nginx && \
    sh /app/init/env.sh env-config.js && \
    sh /app/init/inject-base-href.sh && \
+   sh /app/init/security.sh && \
    export DISABLE_IPV6=\"$([[ \"$ENABLE_IPV6\" = \"true\" ]] && echo \"false\" || echo \"true\")\" && \
    envsubst '$DISABLE_IPV6' < /etc/nginx/nginx.conf.tmpl | sed -e '1h;2,$H;$!d;g' -e 's/# cut true.*# end//g' > /etc/nginx/nginx.conf && \
    nginx -g \"daemon off;\"" ]
