@@ -1,3 +1,5 @@
+import {useMemo} from 'react';
+
 import {DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, PauseOutlined, RightOutlined} from '@ant-design/icons';
 import {Form, FormInstance, Input, Select} from 'antd';
 
@@ -6,6 +8,8 @@ import {Button, FormIconWrapper, FormRow, FullWidthSpace, Text} from '@custom-an
 import {VariableInForm} from '@models/variable';
 
 import {Permissions, usePermission} from '@permissions/base';
+
+import {useClusterDetailsPick} from '@store/clusterDetails';
 
 import Colors from '@styles/Colors';
 
@@ -26,6 +30,15 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
 
   const isButtonVisible = usePermission(Permissions.editEntity);
 
+  const {disableSecretCreation} = useClusterDetailsPick('disableSecretCreation');
+
+  const options = useMemo(() => {
+    if (disableSecretCreation) {
+      return typeOptions.filter(option => option.value !== 1);
+    }
+    return typeOptions;
+  }, [typeOptions]);
+
   return (
     <Form.List name="variables-list" initialValue={data}>
       {(fields, {add, remove}) => (
@@ -40,7 +53,7 @@ const VariablesFormList: React.FC<VariablesFormListProps> = props => {
                       style={{minWidth: 160, maxWidth: 160, flex: 1, marginBottom: '0'}}
                       rules={[required]}
                     >
-                      <Select options={typeOptions} />
+                      <Select options={options} />
                     </Form.Item>
                     <StyledKeyFormItem
                       {...restField}
