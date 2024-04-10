@@ -2,12 +2,12 @@
 
 ## Data layer
 
-| Name          | Description                                                                                             | Example                                                                                                                 |
-|---------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| Name          | Description                                                                                              | Example                                                                                                                 |
+| ------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `userID`      | User's fingerprint using [**FingerprintJS**](https://www.npmjs.com/package/@fingerprintjs/fingerprintjs) | `6cdf3bbba90bebbcaa11e260a47d734e`                                                                                      |
-| `browserName` | User agent                                                                                              | `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36` |
-| `appName`     | Application name                                                                                        | `testkube:ui/oss`, `testkube:ui/cloud` or `testkube:ui/enterprise`                                                      |
-| `appVersion`  | Application version                                                                                     | `a7268ce`, `1.1.2-rc-ead479f` or `1.12.2`                                                                               | 
+| `browserName` | User agent                                                                                               | `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36` |
+| `appName`     | Application name                                                                                         | `testkube:ui/oss`, `testkube:ui/cloud` or `testkube:ui/enterprise`                                                      |
+| `appVersion`  | Application version                                                                                      | `a7268ce`, `1.1.2-rc-ead479f` or `1.12.2`                                                                               |
 
 ## Events
 
