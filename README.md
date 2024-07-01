@@ -36,6 +36,14 @@
 
 <hr>
 
+> **Please note that as of Testkube 1.17, the Testkube Dashboard is no longer included with the Open-Source version of Testkube -
+> [read the announcement](https://testkube.io/blog/testkube-dashboard-announcement)**
+>
+> **The below documentation applies to Testkube 1.16 only**
+>
+> Go to [Testkube Open Source](https://docs.testkube.io/articles/open-source-or-pro) for documentation on
+> the current Testkube Open Source offering.
+
 # Testkube Dashboard
 
 Dashboard to manage your [**Testkube**](https://testkube.io) cluster and monitor its real-time results.
