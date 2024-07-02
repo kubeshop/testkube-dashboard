@@ -10,4 +10,8 @@ export class ExecutorsPage {
   public async openCreateExecutorDialog(): Promise<void> {
     await this.page.click('xpath=//button//span[contains(text(),"Create a new executor")]'); // TODO: data-test
   }
+
+  public async openExecutorSettings(executorName: string): Promise<void> {
+    await this.page.click(`div[data-test="${executorName}"]`);
+  }
 }
