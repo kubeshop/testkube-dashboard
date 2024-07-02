@@ -1,11 +1,11 @@
 ARG TARGET=nginx:1.25.3-alpine
 
-FROM node:20 as deps-reader
+FROM node:22 as deps-reader
 
 COPY . /app
 RUN find /app -type f ! \( -name 'package*.json' -o -name '.npmrc' \) -delete && find /app -type d | xargs rmdir -p 2>/dev/null || true
 
-FROM node:20 as build
+FROM node:22 as build
 
 ARG SENTRY_AUTH_TOKEN
 ARG REACT_APP_SENTRY_DSN
